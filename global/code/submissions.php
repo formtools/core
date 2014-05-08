@@ -574,19 +574,23 @@ function ft_get_search_submission_ids($form_id, $view_id, $results_per_page, $or
 {
   global $g_table_prefix;
 
-  // sorting by column, format: col_x-desc / col_y-asc
-  list($column, $direction) = split("-", $order);
-  $field_info = ft_get_form_field_by_colname($form_id, $column);
+	$order_by = "submission_id";
+	if (!empty($order))
+	{
+	  // sorting by column, format: col_x-desc / col_y-asc
+	  list($column, $direction) = split("-", $order);
+	  $field_info = ft_get_form_field_by_colname($form_id, $column);
 
-  if ($field_info["data_type"] == "number")
-    $order_by = "CAST($column as SIGNED) $direction";
-  else
-    $order_by = "$column $direction";
+	  if ($field_info["data_type"] == "number")
+	    $order_by = "CAST($column as SIGNED) $direction";
+	  else
+	    $order_by = "$column $direction";
 
-  // important! If the ORDER BY column wasn't the submission_id, we need to add
-  // the submission ID as the secondary sorting column
-  if ($column != "submission_id")
-    $order_by .= ", submission_id";
+	  // important! If the ORDER BY column wasn't the submission_id, we need to add
+	  // the submission ID as the secondary sorting column
+	  if ($column != "submission_id")
+	    $order_by .= ", submission_id";
+	}
 
   // determine the LIMIT clause
   $limit_clause = "";

@@ -993,11 +993,28 @@ function _ft_update_view_filter_settings($view_id, $info)
       $sql_operator = "";
       switch ($operator)
       {
-        case "equals":     $sql_operator = "LIKE ";    $join = " OR ";  break;
-        case "not_equals": $sql_operator = "NOT LIKE"; $join = " AND "; break;
-        case "like":       $sql_operator = "LIKE";     $join = " OR ";  break;
-        case "not_like":   $sql_operator = "NOT LIKE"; $join = " AND "; break;
+        case "equals":
+          $sql_operator = "=";
+          $null_test = "IS NULL";
+          $join = " OR ";
+          break;
+        case "not_equals":
+          $sql_operator = "!=";
+          $null_test = "IS NOT NULL";
+          $join = " AND ";
+          break;
+        case "like":
+          $sql_operator = "LIKE";
+          $null_test = "IS NULL";
+          $join = " OR ";
+          break;
+        case "not_like":
+          $sql_operator = "NOT LIKE";
+          $null_test = "IS NOT NULL";
+          $join = " AND ";
+          break;
       }
+
       $sql_statements_arr = array();
       $values_arr = explode("|", $values);
       $field_name = $field_columns[$field_id];
@@ -1005,9 +1022,31 @@ function _ft_update_view_filter_settings($view_id, $info)
       foreach ($values_arr as $value)
       {
         // if this is a LIKE operator (not_like, like), wrap the value in %..%
+        $escaped_value = $value;
         if ($operator == "like" || $operator == "not_like")
-          $value = "%$value%";
-        $sql_statements_arr[] = "$field_name $sql_operator '$value'";
+          $escaped_value = "%$value%";
+
+        $trimmed_value = trim($value);
+
+        // NOT LIKE and != need to be handled separately. By default, Form Tools sets new blank field values to NULL.
+        // But SQL queries that test for != "Yes" or NOT LIKE "Yes" should intuitively return ALL results without
+        // "Yes" - and that includes NULL values. So, we need to add an additional check to also return null values
+        if ($operator == "not_like" || $operator == "not_equals")
+        {
+        	// empty string being searched AGAINST; i.e. checking the field is NOT empty or LIKE empty
+          if (empty($trimmed_value))
+            $sql_statements_arr[] = "$field_name $sql_operator '$escaped_value' OR $field_name IS NOT NULL";
+          else
+            $sql_statements_arr[] = "$field_name $sql_operator '$escaped_value' OR $field_name IS NULL";
+        }
+        else
+        {
+          // if the value is EMPTY, we need to add an additional IS NULL / IS NOT NULL check
+          if (empty($trimmed_value))
+            $sql_statements_arr[] = "$field_name $sql_operator '$escaped_value' OR $field_name $null_test";
+          else
+            $sql_statements_arr[] = "$field_name $sql_operator '$escaped_value'";
+        }
       }
 
       $sql = join($join, $sql_statements_arr);

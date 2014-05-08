@@ -68,34 +68,61 @@ ms.get_selected_submissions = function()
  */
 ms.delete_submissions = function(page)
 {
-  // if empty, alert the user and return
-  if (!ms.selected_submission_ids.length)
+	// find out if there are submissions selected on another page
+	var num_selected_on_other_pages = 0;
+	var selected_ids_on_page = ms.get_selected_submissions();
+
+	if (ms.all_submissions_in_result_set_selected)
+	{
+    // find out how many submissions in the ms.all_submissions_selected_omit_list are found
+		// on other pages
+		var other_pages_omit_list_count = 0;
+		for (var i=0; i<ms.all_submissions_selected_omit_list.length; i++)
+		{
+		  if (!ms.page_submission_ids.include(ms.all_submissions_selected_omit_list[i]))
+			  other_pages_omit_list_count++;
+		}
+
+		// now calculate the total selected on other pages
+		num_selected_on_other_pages = ms.search_num_results - (other_pages_omit_list_count + ms.num_results_per_page);
+  }
+	else
+	{
+  	for (var i=0; i<ms.selected_submission_ids.length; i++)
+  	{
+  	  if (!selected_ids_on_page.include(ms.selected_submission_ids[i]))
+  		  num_selected_on_other_pages++;
+  	}
+  }
+
+  // if there are none selected, alert the user and return
+  if (!ms.selected_submission_ids.length && !num_selected_on_other_pages)
   {
     ft.display_message("ft_message", false, g.messages["validation_select_submissions_to_delete"]);
     return;
   }
-  
-	// find out if there are submissions selected on another page 
-	var selected_ids_on_page = ms.get_selected_submissions();
-	var num_selected_on_other_pages = 0;
-	for (var i=0; i<ms.selected_submission_ids.length; i++)
-	{
-	  if (!selected_ids_on_page.include(ms.selected_submission_ids[i]))
-		  num_selected_on_other_pages++;
-	}
-	
+
 	if (num_selected_on_other_pages > 0)
 	{
-	  // if the user has submissions selected on this page AND other pages, give them 
-		// the option to either delete ALL submissions or just those selected on this page. 
+	  // if the user has submissions selected on this page AND other pages, give them
+		// the option to either delete ALL submissions or just those selected on this page.
 		if (selected_ids_on_page.length)
 		{
       var message = g.messages["confirm_delete_submissions_on_other_pages"].replace(/\{\$num_selected_on_page\}/, selected_ids_on_page.length);
       message = message.replace(/\{\$num_selected_on_other_pages\}/, num_selected_on_other_pages);
 		  message = message.replace(/\{\$delete_all_submissions_onclick\}/, "onclick=\"window.location='?delete'\"");
-			
+
 			var id_string = selected_ids_on_page.join(",");
 		  message = message.replace(/\{\$delete_submissions_on_page_onclick\}/, "onclick=\"window.location='?delete=" + id_string + "'\"");
+
+		  ft.display_message("ft_message", false, message);
+			return;
+		}
+		else
+		{
+      var message = g.messages["confirm_delete_submissions_on_other_pages2"].replace(/\{\$num_selected_on_page\}/, selected_ids_on_page.length);
+      message = message.replace(/\{\$num_selected_on_other_pages\}/, num_selected_on_other_pages);
+		  message = message.replace(/\{\$delete_all_submissions_onclick\}/, "onclick=\"window.location='?delete'\"");
 
 		  ft.display_message("ft_message", false, message);
 			return;

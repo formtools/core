@@ -97,6 +97,16 @@ function ft_upgrade_form_tools()
             ");
       }
 
+      // bug #117
+      if ($existing_version_info["release_date"] < 20090627)
+      {
+      	mysql_query("
+          ALTER TABLE {$g_table_prefix}view_filters`
+          CHANGE operator operator ENUM('equals', 'not_equals', 'like', 'not_like', 'before', 'after' )
+          CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'equals'
+            ");
+      }
+
       if ($existing_version_info["full"] != $g_current_version)
       {
         mysql_query("
@@ -106,7 +116,6 @@ function ft_upgrade_form_tools()
                   ");
         $is_upgraded = true;
       }
-
     }
   }
 

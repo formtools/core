@@ -345,7 +345,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%view_filters (
   filter_id mediumint(8) unsigned NOT NULL auto_increment,
   view_id mediumint(8) unsigned NOT NULL,
   field_id mediumint(8) unsigned NOT NULL,
-  operator enum('equals','not_equals','like','before','after') NOT NULL default 'equals',
+  operator enum('equals','not_equals','like','not_like','before','after') NOT NULL default 'equals',
   filter_values mediumtext NOT NULL,
   filter_sql mediumtext NOT NULL,
   PRIMARY KEY  (filter_id)

@@ -228,7 +228,7 @@ $page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_pa
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download", "validation_select_submissions_to_delete",
         "confirm_delete_submission", "confirm_delete_submissions", "phrase_select_all_X_results",
         "phrase_select_all_on_page", "phrase_all_X_results_selected", "phrase_row_selected", "phrase_rows_selected",
-        "confirm_delete_submissions_on_other_pages");
+        "confirm_delete_submissions_on_other_pages", "confirm_delete_submissions_on_other_pages2");
 $page_vars["head_string"] = '<script type="text/javascript" src="../../global/scripts/manage_submissions.js"></script>';
 $page_vars["head_js"] =<<< EOF
 var rules = [];
