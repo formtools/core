@@ -32,6 +32,7 @@
       <table class="list_table" cellpadding="1" cellspacing="1" border="0" width="100%">
       {* loop through the submission and display all the contents *}
       {foreach from=$submission_tab_fields key=k item=submission_field}
+        {assign var=field_id value=$submission_field.field_id}
 
         <tr>
           <td width="150" class="pad_left_small">{$submission_field.field_title}</td>
@@ -39,25 +40,25 @@
 
           {if $submission_field.field_type == "select"}
 
-            {submission_dropdown name=$submission_field.col_name field_id=$submission_field.field_id
+            {submission_dropdown name=$submission_field.col_name field_id=$field_id
               selected=$submission_field.content orientation=$submission_field.option_orientation
               is_editable=$submission_field.is_editable}
 
           {elseif $submission_field.field_type == "radio-buttons"}
 
-            {submission_radios name=$submission_field.col_name field_id=$submission_field.field_id
+            {submission_radios name=$submission_field.col_name field_id=$field_id
               selected=$submission_field.content orientation=$submission_field.option_orientation
               is_editable=$submission_field.is_editable}
 
           {elseif $submission_field.field_type == "checkboxes"}
 
-            {submission_checkboxes name=$submission_field.col_name field_id=$submission_field.field_id
+            {submission_checkboxes name=$submission_field.col_name field_id=$field_id
               selected=$submission_field.content orientation=$submission_field.option_orientation
               is_editable=$submission_field.is_editable}
 
           {elseif $submission_field.field_type == "multi-select"}
 
-            {submission_dropdown_multiple name=$submission_field.col_name field_id=$submission_field.field_id
+            {submission_dropdown_multiple name=$submission_field.col_name field_id=$field_id
               selected=$submission_field.content orientation=$submission_field.option_orientation
               is_editable=$submission_field.is_editable}
 
@@ -79,7 +80,7 @@
 
           {elseif $submission_field.field_type == "image"}
 
-            {module_function name="display_image" type="main_thumb" extended_field_info=$image_field_info[$submission_field.field_id] field_id=$submission_field.field_id
+            {module_function name="display_image" type="main_thumb" extended_field_info=$image_field_info[$field_id] field_id=$field_id
               image_info_string=$submission_field.content}
 
           {elseif $submission_field.field_type == "system"}
@@ -102,7 +103,7 @@
                 <table cellspacing="0" cellpadding="0">
                 <tr>
                   <td><input type="text" style="width: 110px;" name="{$submission_field.col_name}" id="{$submission_field.col_name}" value="{$submission_field.content}" /></td>
-                  <td><img src="{$theme_url}/images/calendar_icon.gif" id="date_image_{$submission_field.field_id}" style="cursor:pointer" /></td>
+                  <td><img src="{$theme_url}/images/calendar_icon.gif" id="date_image_{$field_id}" style="cursor:pointer" /></td>
                 </tr>
                 </table>
                 <script type="text/javascript">
@@ -111,7 +112,7 @@
                    showsTime      :    true,
                    timeFormat     :    "24",
                    ifFormat       :    "%Y-%m-%d %H:%M:00",
-                   button         :    "date_image_{$submission_field.field_id}",
+                   button         :    "date_image_{$field_id}",
                    align          :    "tr",
                    singleClick    :    true
                 {literal}});{/literal}
@@ -126,7 +127,7 @@
                 <table cellspacing="0" cellpadding="0">
                 <tr>
                   <td><input type="text" style="width: 110px;" name="{$submission_field.col_name}" id="{$submission_field.col_name}" value="{$submission_field.content}" /></td>
-                  <td><img src="{$theme_url}/images/calendar_icon.gif" id="date_image_{$submission_field.field_id}" style="cursor:pointer" /></td>
+                  <td><img src="{$theme_url}/images/calendar_icon.gif" id="date_image_{$field_id}" style="cursor:pointer" /></td>
                 </tr>
                 </table>
                 <script type="text/javascript">
@@ -135,7 +136,7 @@
                    showsTime      :    true,
                    timeFormat     :    "24",
                    ifFormat       :    "%Y-%m-%d %H:%M:00",
-                   button         :    "date_image_{$submission_field.field_id}",
+                   button         :    "date_image_{$field_id}",
                    align          :    "tr",
                    singleClick    :    true
                 {literal}});{/literal}
@@ -149,7 +150,7 @@
           {elseif $submission_field.field_type == "wysiwyg"}
             {if $submission_field.is_editable == "yes"}
               {* TODO: don't hardcode the height here.... *}
-              <textarea name="{$submission_field.col_name}" id="field_{$submission_field.field_id}_wysiwyg" style="width: 100%; height: 160px">{$submission_field.content}</textarea>
+              <textarea name="{$submission_field.col_name}" id="field_{$field_id}_wysiwyg" style="width: 100%; height: 160px">{$submission_field.content}</textarea>
             {else}
               {$submission_field.content}
             {/if}

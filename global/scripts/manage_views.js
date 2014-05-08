@@ -131,13 +131,21 @@ view_ns.add_view_field = function(field_id)
   var td4 = document.createElement("td");
   td4.setAttribute("align", "center");
 
-  // the Submission ID and Last Modified fields CANNOT be edited, so omit the
+  // the Submission ID and Last Modified fields CANNOT be edited, so check it's another field
   if (field_id != view_ns.submission_id_field_id && field_id != view_ns.last_modified_date_field_id)
   {
+    var may_edit_submissions = $("cmes").checked;
+
     var inp = document.createElement("input");
     inp.setAttribute("type", "checkbox");
     inp.setAttribute("name", "field_" + field_id + "_is_editable");
-    inp.setAttribute("checked", true);
+    inp.setAttribute("id", "field_" + field_id + "_is_editable");
+
+    if (may_edit_submissions)
+      inp.setAttribute("checked", true);
+    else
+      inp.setAttribute("disabled", true);
+
     td4.appendChild(inp);
   }
 
