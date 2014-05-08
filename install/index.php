@@ -17,7 +17,6 @@ if (isset($_POST["next"]))
 	exit;
 }
 
-
 $page_vars = array();
 $page_vars["step"] = 1;
 $page_vars["available_languages"] = ft_install_get_languages();
