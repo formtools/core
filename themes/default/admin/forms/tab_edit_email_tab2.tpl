@@ -1,6 +1,6 @@
             {if !$form_info.user_email_field}
               <div class="box">
-                {$LANG.notify_no_user_email_fields_configured}
+                {eval_smarty_string placeholder_str=$LANG.notify_no_user_email_fields_configured}
               </div>
             {/if}
 

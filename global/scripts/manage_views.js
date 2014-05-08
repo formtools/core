@@ -638,13 +638,13 @@ view_ns.process_form = function(f)
   rules.push("required,num_submissions_per_page," + g.messages['validation_no_num_submissions_per_page']);
 
   if (!rsv.validate(f, rules))
-    return ft.change_inner_tab(1, 4); // this always returns false
+    return ft.change_inner_tab(1, 4, "edit_view_tab"); // this always returns false
 
   // 2. Fields tab
   if (view_ns.field_ids.length == 0)
   {
     ft.display_message("ft_message", false, g.messages["validation_no_view_fields"]);
-    return ft.change_inner_tab(2, 4);
+    return ft.change_inner_tab(2, 4, "edit_view_tab");
   }
 
   // check that at least one field is marked as a column
@@ -657,7 +657,7 @@ view_ns.process_form = function(f)
   if (!has_column_checked)
   {
     ft.display_message("ft_message", false, g.messages["validation_no_column_selected"]);
-    return ft.change_inner_tab(2, 4); // this always returns false
+    return ft.change_inner_tab(2, 4, "edit_view_tab"); // this always returns false
   }
 
   // select all clients

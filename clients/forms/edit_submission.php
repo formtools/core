@@ -23,7 +23,6 @@ if (!ft_check_view_contains_submission($form_id, $view_id, $submission_id))
 	exit;
 }
 
-
 // store this submission ID
 $_SESSION["ft"]["last_submission_id"] = $submission_id;
 

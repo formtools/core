@@ -93,7 +93,7 @@ page.onsubmit_check_email_settings = function(f)
   rules.push("required,view_mapping_type,{$LANG["validation_no_email_template_view_mapping_value"]}");
   rules.push("if:view_mapping_type=specific,required,view_mapping_view_id,{$LANG["validation_no_email_template_view_id"]}");
   if (!rsv.validate(f, rules))
-    return ft.change_inner_tab(1, 5); // this always returns false;
+    return ft.change_inner_tab(1, 5, "edit_email_tab"); // this always returns false;
 
   // Headers tab
   var rules = [];
@@ -104,12 +104,12 @@ page.onsubmit_check_email_settings = function(f)
   rules.push("if:email_reply_to=custom,required,custom_reply_to_email,{$LANG["validation_no_custom_reply_to_email"]}");
   rules.push("if:email_reply_to=custom,valid_email,custom_reply_to_email,{$LANG["validation_invalid_custom_reply_to_email"]}");
   if (!rsv.validate(f, rules))
-    return ft.change_inner_tab(2, 5); // this always returns false
+    return ft.change_inner_tab(2, 5, "edit_email_tab"); // this always returns false
 
   var rules = [];
   rules.push("function,page.check_one_template_defined");
   if (!rsv.validate(f, rules))
-    return ft.change_inner_tab(3, 5); // this always returns false
+    return ft.change_inner_tab(3, 5, "edit_email_tab"); // this always returns false
 
   return true;
 }

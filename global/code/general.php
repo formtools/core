@@ -25,7 +25,7 @@
  */
 function ft_db_connect()
 {
-	global $g_db_hostname, $g_db_username, $g_db_password, $g_db_name, $g_unicode, $g_db_ssl,
+  global $g_db_hostname, $g_db_username, $g_db_password, $g_db_name, $g_unicode, $g_db_ssl,
 	  $g_check_ft_sessions;
 
 	if ($g_db_ssl)
@@ -1061,7 +1061,7 @@ function ft_generate_password($length = 8)
 function ft_get_js_webpage_parse_method($form_url)
 {
   // set a 1 minute maximum execution time for this request
-  set_time_limit(60);
+  @set_time_limit(60);
 
 	$scrape_method = "";
 

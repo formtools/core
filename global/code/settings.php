@@ -448,9 +448,9 @@ function ft_update_wysiwyg_settings($infohash)
  */
 function ft_update_theme_settings($infohash)
 {
-	global $g_table_prefix, $g_root_url, $LANG;
+	global $g_table_prefix, $g_root_url, $g_root_dir, $LANG;
 
-  // lots to validate! First, check the default admin & client themes have been entered.
+  // lots to validate! First, check the default admin & client themes have been entered
 	$rules = array();
 	$rules[] = "required,admin_theme,{$LANG["validation_no_admin_theme"]}";
 	$rules[] = "required,default_client_theme,{$LANG["validation_no_default_client_theme"]}";
@@ -566,10 +566,20 @@ function ft_update_theme_settings($infohash)
     WHERE  setting_name = 'default_theme'
       ");
 
-  // finally, update the enabled themes list
+  // finally, update the enabled themes list. Only set the theme as enabled if the
+  // cache folder is writable
   mysql_query("UPDATE {$g_table_prefix}themes SET is_enabled = 'no'");
   foreach ($enabled_themes as $theme)
   {
+  	$cache_folder = "$g_root_dir/themes/$theme/cache";
+
+    // try and set the cache folder as writable
+    if (!is_writable($cache_folder))
+      @chmod($cache_folder, 0777);
+
+  	if (!is_writable($cache_folder))
+  	  continue;
+
     mysql_query("
       UPDATE {$g_table_prefix}themes
       SET    is_enabled = 'yes'

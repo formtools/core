@@ -123,11 +123,17 @@ function ft_update_theme_list()
 			$theme_version      = $info["theme_version"];
 			$supports_ft_versions = $info["supports_ft_versions"];
 
-			mysql_query("
-				INSERT INTO {$g_table_prefix}themes (theme_folder, theme_name, author, theme_link, description, is_enabled, theme_version,
-				  supports_ft_versions)
-				VALUES ('$folder', '$theme_name', '$theme_author', '$theme_link', '$theme_description', 'yes', '$theme_version',
-				  '$supports_ft_versions')
+			// try and set the cache folder as writable
+			if (!is_writable("$themes_folder/$folder/cache/"))
+				@chmod("$themes_folder/$folder/cache/", 0777);
+
+      $cache_folder_writable = (is_writable("$themes_folder/$folder/cache/")) ? "yes" : "no";
+
+		  mysql_query("
+				INSERT INTO {$g_table_prefix}themes (theme_folder, theme_name, author, theme_link, description, is_enabled,
+				  theme_version, supports_ft_versions)
+				VALUES ('$folder', '$theme_name', '$theme_author', '$theme_link', '$theme_description',
+				  '$cache_folder_writable', '$theme_version', '$supports_ft_versions')
 					");
 	  }
 	}
@@ -172,7 +178,7 @@ function ft_display_page($template, $page_vars, $theme = "")
 	if (!isset($_SESSION["ft"]["account"]["account_type"]))
 	  $_SESSION["ft"]["account"]["account_type"] = "";
 
-		
+
 	// common variables. These are sent to EVERY templates
 	$g_smarty->template_dir = "$g_root_dir/themes/$theme";
 	$g_smarty->compile_dir  = "$g_root_dir/themes/$theme/cache";
@@ -424,4 +430,3 @@ function _ft_get_theme_info_file_contents($summary_file)
 
   return $info;
 }
-

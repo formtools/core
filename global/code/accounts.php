@@ -91,8 +91,10 @@ function ft_login($infohash, $login_as_client = false)
 {
   global $g_root_url, $g_table_prefix, $LANG;
 
-  $username = ft_sanitize($infohash["username"]);
+  $username = strip_tags($infohash["username"]);
+  $username = ft_sanitize($username);
   $password = isset($infohash["password"]) ? ft_sanitize($infohash["password"]) : "";
+  $password = strip_tags($password);
 
   // extract info about this user's account
   $query = mysql_query("

@@ -35,7 +35,7 @@
           {assign var='theme_info' value=$themes[$index]}
 
           <tr>
-            <td><a href="{$g_root_url}/themes/{$theme_info.theme_folder}/about/screenshot.gif" rel="lightbox" title="{$theme_info.theme_name|escape}"><img src="{$g_root_url}/themes/{$theme_info.theme_folder}/about/thumbnail.gif" border="0" /></a></td>
+            <td valign="top"><a href="{$g_root_url}/themes/{$theme_info.theme_folder}/about/screenshot.gif" rel="lightbox" title="{$theme_info.theme_name|escape}"><img src="{$g_root_url}/themes/{$theme_info.theme_folder}/about/thumbnail.gif" border="0" /></a></td>
             <td valign="top" class="pad_left">
               <div>
                 <span class="bold">{$theme_info.theme_name}</span>
@@ -44,9 +44,20 @@
               </div>
               {if $theme_info.author}<div>{$LANG.word_author_c} {$theme_info.author}</div>{/if}
               {if $theme_info.description}<p>{$theme_info.description}</p>{/if}
+
+							{if !$theme_info.cache_folder_writable}
+							  <div class="error">
+								  <div style="padding: 6px">
+								    {eval_smarty_string placeholder_str=$LANG.notify_theme_cache_folder_not_writable
+								      folder="`$g_root_dir`/themes/`$theme_info.theme_folder`/cache/"}
+									</div>
+								</div>
+							{/if}
             </td>
             <td valign="top" align="center">
-              <input type="checkbox" name="is_enabled[]" value="{$theme_info.theme_folder}" {if $theme_info.is_enabled == 'yes'}checked{/if} />
+              <input type="checkbox" name="is_enabled[]" value="{$theme_info.theme_folder}"
+							  {if $theme_info.is_enabled == 'yes'}checked{/if}
+								{if !$theme_info.cache_folder_writable}disabled{/if} />
             </td>
           </tr>
 

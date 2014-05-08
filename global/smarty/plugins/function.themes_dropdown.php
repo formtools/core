@@ -6,7 +6,7 @@
  * File:     function.themes_dropdown
  * Type:     function
  * Name:     themes_dropdown
- * Purpose:  displays a list of available themes.
+ * Purpose:  displays a list of enabled themes. 
  * -------------------------------------------------------------
  */
 function smarty_function_themes_dropdown($params, &$smarty)
@@ -41,6 +41,9 @@ function smarty_function_themes_dropdown($params, &$smarty)
 
   foreach ($themes as $theme)
   {
+	if ($theme["is_enabled"] == "no")
+	  continue;
+
   	$selected = ($theme["theme_folder"] == $default_value) ? "selected" : "";
   	$dd .= "<option value=\"{$theme["theme_folder"]}\" {$selected}>{$theme["theme_name"]}</option>";
   }
@@ -49,4 +52,3 @@ function smarty_function_themes_dropdown($params, &$smarty)
 	return $dd;
 }
 
-?>

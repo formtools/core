@@ -880,7 +880,7 @@ function ft_set_form_field_types($form_id, $info)
   extract(ft_process_hooks("start", compact("info", "form_id"), array("info")), EXTR_OVERWRITE);
 
   // set a 5 minute maximum execution time for this request
-  set_time_limit(300);
+  @set_time_limit(300);
 
   $info = ft_sanitize($info);
   $form_fields = ft_get_form_fields($form_id);

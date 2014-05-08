@@ -240,5 +240,3 @@ page_ns.toggle_view_type = function(form_type)
 	";
 
 ft_display_page("admin/forms/edit.tpl", $page_vars);
-
-?>

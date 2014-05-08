@@ -12,6 +12,7 @@
 
 // -------------------------------------------------------------------------------------------------
 
+
 /**
  * This function is called after creating a new form (ft_finalize_form), and creates a default
  * View - one containing all fields and assigned to all clients that are assigned to the form.

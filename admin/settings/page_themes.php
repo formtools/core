@@ -15,6 +15,15 @@ if (isset($_GET["mass_assign"]))
 
 $themes = ft_get_themes();
 
+// check permissions on all the themes
+$updated_themes = array();
+foreach ($themes as $theme_info)
+{
+	$cache_folder = "$g_root_dir/themes/{$theme_info["theme_folder"]}/cache";
+	$theme_info["cache_folder_writable"] = is_writable($cache_folder);
+	$updated_themes[] = $theme_info;
+}
+
 // compile the header information
 $page_vars = array();
 $page_vars["page"] = "themes";
@@ -22,7 +31,7 @@ $page_vars["page_url"] = ft_get_page_url("settings_themes");
 $page_vars["tabs"] = $tabs;
 $page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_themes"]}";
 $page_vars["nav_page"] = "program_settings";
-$page_vars["themes"] = $themes;
+$page_vars["themes"] = $updated_themes;
 $page_vars["js_messages"] = "";
 $page_vars["admin_theme"]  = $_SESSION["ft"]["account"]["theme"];
 $page_vars["client_theme"] = $_SESSION["ft"]["settings"]["default_theme"];
