@@ -156,12 +156,12 @@ $g_sql[] = "CREATE TABLE %PREFIX%forms (
 $g_sql[] = "CREATE TABLE %PREFIX%hooks (
   hook_id mediumint(8) unsigned NOT NULL auto_increment,
   hook_type enum('code','template') NOT NULL default 'code',
-  action_location enum('start','end') NOT NULL,
+  action_location varchar(100) NOT NULL,
   module_folder varchar(255) NOT NULL,
   core_function varchar(255) NOT NULL,
   hook_function varchar(255) NOT NULL,
   priority tinyint(4) NOT NULL default '50',
-  PRIMARY KEY  (`hook_id`)
+  PRIMARY KEY  (hook_id)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%menu_items (
@@ -173,7 +173,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%menu_items (
   url varchar(255) default NULL,
   is_submenu enum('yes','no') NOT NULL default 'no',
   list_order smallint(5) unsigned default NULL,
-  PRIMARY KEY  (menu_item_id)
+  PRIMARY KEY (menu_item_id)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (1, 1, 'Forms', 'admin_forms', '', '/admin/forms/', 'no', 1)";
