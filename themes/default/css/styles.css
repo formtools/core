@@ -174,22 +174,18 @@ table.add_form_nav td.unselected {
 }
 .title a:link, .title a:visited { text-decoration: none; }
 .title a:hover { border-bottom: 1px solid #336699; }
-
 .subtitle {
 	font-size: 8pt;
 	color: #4b6c4e;
 	letter-spacing: 1px;
 }
-
 .underline {
 	border-bottom: 1px solid #cccccc;
 }
-
 .heading {
 	font-size: 10pt;
 	font-weight: bold;
 }
-
 .large_text { font-size: 12pt; }
 
 /*----------------- tabs -------------------*/
@@ -309,27 +305,22 @@ a#logout_link { color: #990000; }
   border: 1px solid #336699;
 }
 
-
 /*-------------- print page ----------------*/
 .print_title {
 	font-family: arial;
 	font-size: 14px;
 	font-weight: bold;
 }
-
 .print_table {
 	border: 1px solid #dddddd;
 }
-
 .print_table th {
 	border: 1px solid #cccccc;
 	background-color: #efefef;
 }
-
 .print_table td {
 	border: 1px solid #cccccc;
 }
-
 .print_th {
 	text-align: left;
 	width: 30%;
@@ -344,43 +335,34 @@ a#logout_link { color: #990000; }
 	background-color: #efefef;
 	padding: 5px;
 }
-
 .next_step {
 	color: #336699;
 	font-weight: bold;
 }
-
 .ul_no_indent {
 	padding-left: 0px;
 	margin-left: 20px;
 }
-
 .highlighted_text {
 	color: #cc0000;
 }
-
 .strong_button {
 	font-weight: bold;
 	color: #336699;
 }
-
 .page_break {
 	page-break-after: always;
 }
-
 .submission_id {
 	color: #666666;
   width: 45px;
 }
 .dates { width: 120px; }
 .submission_date { width: 100px; }
-
 .ip_address { width: 80px; }
-
 #nav_previous_page {
 	color: #cccccc;
 }
-
 #nav_next_page {
 	color: #cccccc;
 }
@@ -411,10 +393,7 @@ a#logout_link { color: #990000; }
 
 /*----------- Edit Form: email tab styles -----------*/
 .template { font-size: 11px; color: #666666; font-family: "Courier New"; }
-
-
 .inner_tab_set { border: 1px solid #dddddd; }
-
 .inner_tab_selected {
 	position: absolute;
 	text-align: center;
@@ -441,7 +420,6 @@ a#logout_link { color: #990000; }
 	text-decoration: none;
 	color: #666666;
 }
-
 .incomplete {
 	color: #cc0000;
 	width: 200px;
@@ -450,10 +428,8 @@ a#logout_link { color: #990000; }
 	background-color: #ffffcc;
 	text-align: center;
 }
-
 tr.selected_row_color { background-color: #c6f1c9; }
 tr.unselected_row_color { background-color: #f2f2f2; }
-
 div#list_nav { line-height: 19px; margin-top: 2px; }
 div#list_nav span { font-size: 11pt; }
 #list_nav a:visited, #list_nav a:link { text-decoration: none }

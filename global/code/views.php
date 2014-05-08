@@ -791,7 +791,7 @@ function _ft_update_view_main_settings($view_id, $info)
   $access_type              = $info["access_type"];
   $may_delete_submissions   = $info["may_delete_submissions"];
   $may_edit_submissions     = isset($info["may_edit_submissions"]) ? "yes" : "no";
-  $may_add_submissions      = isset($info["may_add_submissions"]) ? "yes" : "no";
+  $may_add_submissions      = $info["may_add_submissions"];
 
   // do a little error checking on the num submissions field. If it's invalid, just set to to 10 without
   // informing them - it's not really necessary, I don't think

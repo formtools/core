@@ -339,4 +339,3 @@ switch ($action)
     }
     break;
 }
-

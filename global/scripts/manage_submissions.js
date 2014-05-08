@@ -443,8 +443,6 @@ ms._update_select_all_button = function(flag)
 /**
  * Deletes a submission file or image.
  *
- * TODO make this support Image Manager
- *
  * @param field_id
  * @param file_type "file" or "image"
  * @param force_delete

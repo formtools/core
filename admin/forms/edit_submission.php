@@ -35,7 +35,7 @@ $tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
 $_SESSION["ft"]["last_submission_id"] = $submission_id;
 
 // get a list of all editable fields in the View. This is used both for security purposes
-// for the update function and o determine whether the page contains any editable fields
+// for the update function and to determine whether the page contains any editable fields
 $editable_field_ids = _ft_get_editable_view_fields($view_id);
 
 // get the tabs for this View

@@ -49,7 +49,7 @@ function smarty_function_submission_checkboxes($params, &$smarty)
 	foreach ($options as $option)
 	{
 		// generate a unique ID for this option (used for the label)
-		$id = "field{$field_id}_$count";
+		$id = "{$name}_$count";
 
 		$dd_str .= "<input type=\"checkbox\" name=\"{$name}[]\" value=\"{$option['option_value']}\" id=\"$id\"";
 		if (in_array($option['option_value'], $selected_vals))
