@@ -64,7 +64,7 @@
 
   </form>
 
-  <form action="http://ft2.formtools.org/upgrade.php" id="upgrade_form" method="post" target="_blank">
+  <form action="http://www.formtools.org/upgrade.php" id="upgrade_form" method="post" target="_blank">
     {foreach from=$upgrade_info item=info name=row}
       <input type="hidden" name="{$info.k}" value="{$info.v}" />
     {/foreach}

@@ -193,7 +193,7 @@ $page_vars["edit_submission_page_label"] = $edit_submission_page_label;
 $page_vars["submission_tab_fields"] = $submission_tab_fields;
 $page_vars["submission_tab_field_id_str"] = join(",", $submission_tab_field_ids);
 $page_vars["tab_number"] = $tab_number;
-$page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected");
+$page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected", "confirm_delete_submission_file");
 $page_vars["head_title"] = $edit_submission_page_label;
 $page_vars["head_string"] =<<<EOF
   <script type="text/javascript" src="$g_root_url/global/tiny_mce/tiny_mce.js"></script>

@@ -459,7 +459,7 @@ function ft_upload_submission_file($form_id, $submission_id, $field_id, $fileinf
     $unique_filename = ft_get_unique_filename($file_upload_dir, $filename);
 
     // copy file to uploads folder and remove temporary file
-    if (rename($tmp_filename, "$file_upload_dir/$unique_filename"))
+    if (@rename($tmp_filename, "$file_upload_dir/$unique_filename"))
     {
       @chmod("$file_upload_dir/$unique_filename", 0777);
 

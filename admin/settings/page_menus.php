@@ -22,19 +22,17 @@ $page_vars["menus"] = $menus["results"];
 $page_vars["total_num_menus"] = $menus["num_results"];
 $page_vars["pagination"] = ft_get_page_nav($menus["num_results"], $_SESSION["ft"]["settings"]["num_menus_per_page"], $menu_page, "page=menus", "menu_page");
 
-$page_vars["head_js"] = "
+$page_vars["head_js"] =<<< EOF
 var page_ns = {};
 page_ns.delete_menu = function(menu_id)
 {
-  var answer = confirm(\"{$LANG["confirm_delete_menu"]}\");
-
-  if (answer)
+  if (confirm("{$LANG["confirm_delete_menu"]}"))
   {
     window.location = 'index.php?page=menus&delete=' + menu_id;
   }
 
   return false;
 }
-";
+EOF;
 
 ft_display_page("admin/settings/index.tpl", $page_vars);

@@ -820,7 +820,7 @@ $LANG["text_no_modules_found"] = "No modules were found. Try broadening your sea
 $LANG["text_no_recipients_added"] = "No recipients have been added.";
 $LANG["text_no_search_results"] = "There are no results with this search criteria / View.";
 $LANG["text_no_submissions_found"] = "Sorry, no submissions were found.";
-$LANG["text_no_themes"] = "You do not have any themes defined. Click the button below to refresh your theme list, or check the <a href=\"http://www.formtools.org/userdoc.php\">Form Tools user documentation</a> for information about adding themes.";
+$LANG["text_no_themes"] = "You do not have any themes defined. Click the button below to refresh your theme list, or check the <a href=\"http://docs.formtools.org/userdoc/?page=themes\">Form Tools user documentation</a> for information about adding themes.";
 $LANG["text_public_form_omit_list_page"] = "<b>Public</b> forms give you the benefit of letting all client accounts access them without having to manually assign each client to them. This page lets you pinpoint those clients who may not access this form, even though the form is marked as public.";
 $LANG["text_public_view_omit_list_page"] = "Public Views give you the benefit of letting all client accounts access them without having to manually assign each client to them. This page lets you pinpoint those clients who may not access this particular View.";
 $LANG["text_reason_files_not_moved"] = "The most likely cause of this is either the permissions on the files have been changed or they no longer exist.";
@@ -991,6 +991,7 @@ $LANG["confirm_delete_email_template"] = "Are you sure you want to delete this e
 $LANG["confirm_delete_field_option_group"] = "Are you sure you want to delete this field option group?";
 $LANG["confirm_delete_menu"] = "Are you sure you want to delete this client menu?";
 $LANG["confirm_delete_submission"] = "Are you sure you want to delete this submission?";
+$LANG["confirm_delete_submission_file"] = "Are you sure you want to delete this file?";
 $LANG["confirm_delete_submissions"] = "Are you sure you want to delete these submissions?";
 $LANG["confirm_delete_submissions_on_other_pages"] = "<b>Warning!</b> You have selected <b>{\$num_selected_on_page}</b> submissions on this page and <b>{\$num_selected_on_other_pages}</b> on other pages. Please choose one of the following options:<div class=\"margin_top_large\"><input type=\"button\" value=\"Delete All Selected Submissions\" {\$delete_all_submissions_onclick} /> <input type=\"button\" value=\"Only Delete Submissions Selected on this Page\" {\$delete_submissions_on_page_onclick} /> <input type=\"button\" value=\"Cancel\" onclick=\"return ft.hide_message('ft_message')\" /></div>";
 $LANG["confirm_delete_submissions_on_other_pages2"] = "<b>Warning!</b> You haven't selected any submissions on this page but you've selected <b>{\$num_selected_on_other_pages}</b> on other pages. Please confirm you want to delete these submissions. <div class=\"margin_top_large\"><input type=\"button\" value=\"Delete All Selected Submissions\" {\$delete_all_submissions_onclick} /> <input type=\"button\" value=\"Cancel\" onclick=\"return ft.hide_message('ft_message')\" /></div>";

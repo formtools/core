@@ -25,6 +25,12 @@ if (empty($view_id))
 }
 
 $submission_id = $request["submission_id"];
+if (empty($submission_id))
+{
+  header("location: submissions.php");
+  exit;
+}
+
 $tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
 
 // store this submission ID
@@ -203,7 +209,7 @@ $page_vars["edit_submission_page_label"] = $edit_submission_page_label;
 $page_vars["submission_tab_fields"] = $submission_tab_fields;
 $page_vars["submission_tab_field_id_str"] = join(",", $submission_tab_field_ids);
 $page_vars["tab_number"] = $tab_number;
-$page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected");
+$page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected", "confirm_delete_submission_file");
 $page_vars["head_title"] = $edit_submission_page_label;
 $page_vars["head_string"] = "<script type=\"text/javascript\" src=\"$g_root_url/global/tiny_mce/tiny_mce.js\"></script>
   <script type=\"text/javascript\" src=\"$g_root_url/global/scripts/wysiwyg_settings.js\"></script>
