@@ -149,6 +149,8 @@ function ft_update_client($account_id, $info)
       break;
   }
 
+  extract(ft_process_hooks("end", compact("account_id", "info"), array("success", "message")), EXTR_OVERWRITE);
+
   // update sessions
   $_SESSION["ft"]["settings"] = ft_get_settings();
   $_SESSION["ft"]["account"]  = ft_get_account_info($account_id);
@@ -156,8 +158,6 @@ function ft_update_client($account_id, $info)
 
   // TODO
   //$_SESSION["ft"]["account"]["password"] = md5($password);
-
-  extract(ft_process_hooks("end", compact("account_id", "info"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }

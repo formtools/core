@@ -1,15 +1,16 @@
 /**
  * File:        manage_views.js
  * Abstract:    contains all JS for adding/editing Views. Note: this file also contains the JS that
- * 						  used to be in the filters.js file, since filters are now associated with Views, not
- * 						  individual clients.
- * Assumptions: - g.root_url is defined
+ *              used to be in the filters.js file, since filters are now associated with Views, not
+ *              individual clients.
+ * Assumptions: g.root_url is defined
  */
 
 // the Views JS namespace
 var view_ns = {};
 
-view_ns.num_filter_rows = 0; // the number of filters currently displayed (overwritten by calling page)
+view_ns.num_standard_filter_rows   = 0; // the number of standard filters currently displayed (overwritten by calling page)
+view_ns.num_client_map_filter_rows = 0; // the number of client map filters currently displayed (overwritten by calling page)
 view_ns.field_ids       = []; // stores the fields IDs currently in the view
 view_ns.all_form_fields = []; // all form fields
 view_ns.view_tabs       = []; // the view tabs. This is change dynamically in the page
@@ -100,9 +101,7 @@ view_ns.add_view_field = function(field_id)
   var tbody = $("view_fields_table").getElementsByTagName("tbody")[0];
   var row = document.createElement("tr");
   row.setAttribute("id", "field_row_" + field_id);
-
   var num_fields = view_ns.field_ids.length;
-
 
   // [1] Order column
   var td1 = document.createElement("td");
@@ -409,35 +408,36 @@ view_ns.update_field_tabs = function()
 
 
 /**
- * Used to add rows to the filters table on the Edit View page.
+ * Used to add rows to the standard filters table on the Edit View page (the first table). This is separated from the
+ * client map filter table because the content is sufficiently different.
  *
  * @param integer num_rows the number of rows to add
  */
-view_ns.add_filters = function(num_rows)
+view_ns.add_standard_filters = function(num_rows)
 {
   // check num_rows is an integer
   if (num_rows.match(/\D/) || num_rows == 0 || num_rows == "")
   {
     ft.display_message("ft_message", false, g.messages["validation_num_rows_to_add"]);
-    $("num_filter_rows").focus();
+    $("num_standard_filter_rows").focus();
     return;
   }
 
-  var tbody = $("filters_table").getElementsByTagName("tbody")[0];
+  var tbody = $("standard_filters_table").getElementsByTagName("tbody")[0];
 
   for (var i=1; i<=num_rows; i++)
   {
-    var currRow = ++view_ns.num_filter_rows;
+    var currRow = ++view_ns.num_standard_filter_rows;
 
     var row = document.createElement("tr");
-    row.setAttribute("id", "row_" + currRow);
+    row.setAttribute("id", "standard_row_" + currRow);
 
     // [1] first <td> cell: form field dropdown (defaulted to "please select")
     var td2 = document.createElement("td");
     var dd2 = document.createElement("select");
-    dd2.setAttribute("name", "filter_" + currRow + "_field_id");
-    dd2.setAttribute("id", "filter_" + currRow + "_field_id");
-    dd2.onchange = view_ns.change_filter_field.bind(this, currRow);
+    dd2.setAttribute("name", "standard_filter_" + currRow + "_field_id");
+    dd2.setAttribute("id", "standard_filter_" + currRow + "_field_id");
+    dd2.onchange = view_ns.change_standard_filter_field.bind(this, currRow);
 
     var default_option = document.createElement("option");
     default_option.setAttribute("value", "");
@@ -461,10 +461,10 @@ view_ns.add_filters = function(num_rows)
 
     // -- first section: DATE operators
     var first_div = document.createElement("div");
-    first_div.setAttribute("id", "filter_" + currRow + "_operators_dates_div");
+    first_div.setAttribute("id", "standard_filter_" + currRow + "_operators_dates_div");
     first_div.style.cssText = "display: none";
     var operator_dd = document.createElement("select");
-    operator_dd.setAttribute("name", "filter_" + currRow + "_operator_date");
+    operator_dd.setAttribute("name", "standard_filter_" + currRow + "_operator_date");
     var option1 = document.createElement("option");
     option1.setAttribute("value", "before");
     option1.appendChild(document.createTextNode(g.messages["word_before"]));
@@ -477,9 +477,9 @@ view_ns.add_filters = function(num_rows)
 
     // -- second section: REGULAR operators
     var second_div = document.createElement("div");
-    second_div.setAttribute("id", "filter_" + currRow + "_operators_div");
+    second_div.setAttribute("id", "standard_filter_" + currRow + "_operators_div");
     var operator_dd = document.createElement("select");
-    operator_dd.setAttribute("name", "filter_" + currRow + "_operator");
+    operator_dd.setAttribute("name", "standard_filter_" + currRow + "_operator");
     var option1 = document.createElement("option");
     option1.setAttribute("value", "equals");
     option1.appendChild(document.createTextNode(g.messages["word_equals"]));
@@ -505,7 +505,7 @@ view_ns.add_filters = function(num_rows)
 
     // -- first section: DATE textbox & select image
     var first_div = document.createElement("div");
-    first_div.setAttribute("id", "filter_" + currRow + "_values_dates_div");
+    first_div.setAttribute("id", "standard_filter_" + currRow + "_values_dates_div");
     first_div.style.cssText = "display: none";
 
     var table = document.createElement("table");
@@ -517,15 +517,15 @@ view_ns.add_filters = function(num_rows)
 
      var inp = document.createElement("input");
     inp.setAttribute("type", "text");
-    inp.setAttribute("name", "filter_" + currRow + "_filter_date_values");
-    inp.setAttribute("id", "date_" + currRow);
+    inp.setAttribute("name", "standard_filter_" + currRow + "_filter_date_values");
+    inp.setAttribute("id", "standard_date_" + currRow);
     inp.style.cssText = "width: 120px";
     tr_td1.appendChild(inp);
 
     var tr_td2 = document.createElement("td");
     var img = document.createElement("img");
     img.setAttribute("src", g.root_url + "/themes/" + g.theme_folder + "/images/calendar_icon.gif");
-    img.setAttribute("id", "date_image_" + currRow);
+    img.setAttribute("id", "standard_date_image_" + currRow);
     img.setAttribute("border", "0");
     tr_td2.appendChild(img);
 
@@ -537,10 +537,10 @@ view_ns.add_filters = function(num_rows)
 
     // -- second section: REGULAR textbox
     var second_div = document.createElement("div");
-    second_div.setAttribute("id", "filter_" + currRow + "_values_div");
+    second_div.setAttribute("id", "standard_filter_" + currRow + "_values_div");
     var inp2 = document.createElement("input");
     inp2.setAttribute("type", "text");
-    inp2.setAttribute("name", "filter_" + currRow + "_filter_values");
+    inp2.setAttribute("name", "standard_filter_" + currRow + "_filter_values");
     inp2.setAttribute("style", "width: 120px;");
     second_div.appendChild(inp2);
     td4.appendChild(first_div);
@@ -553,7 +553,7 @@ view_ns.add_filters = function(num_rows)
     td5.className = "del"; // for IE
     var delete_link = document.createElement("a");
     delete_link.setAttribute("href", "#");
-    delete_link.onclick = view_ns.delete_filter_row.bind(this, currRow);
+    delete_link.onclick = view_ns.delete_filter_row.bind(this, "standard", currRow);
 
     delete_link.appendChild(document.createTextNode(g.messages["word_remove"].toUpperCase()));
     td5.appendChild(delete_link);
@@ -569,31 +569,168 @@ view_ns.add_filters = function(num_rows)
 
     // init a Calendar for this row
     Calendar.setup({
-       inputField     :    "date_" + currRow,
+       inputField     :    "standard_date_" + currRow,
        showsTime      :    true,
        timeFormat     :    "24",
        ifFormat       :    "%Y-%m-%d %H:%M:00",
-       button         :    "date_image_" + currRow,
+       button         :    "standard_date_image_" + currRow,
        align          :    "Bl",
        singleClick    :    true
     });
   }
 
   // update the filter count
-  $("num_filters").value = view_ns.num_filter_rows;
+  $("num_standard_filters").value = view_ns.num_standard_filter_rows;
 }
 
 
 /**
- * Called by the form field dropdown onchange handler; shows the appropriate operators and
- * values section.
+ * Used to add rows to the client map filters table on the Edit View page.
+ * 
+ * @param integer num_rows the number of rows to add
+ */
+view_ns.add_client_map_filters = function(num_rows)
+{
+  // check num_rows is an integer
+  if (num_rows.match(/\D/) || num_rows == 0 || num_rows == "")
+  {
+    ft.display_message("ft_message", false, g.messages["validation_num_rows_to_add"]);
+    $("num_client_map_filter_rows").focus();
+    return;
+  }
+
+  var tbody = $("client_map_filters_table").getElementsByTagName("tbody")[0];
+
+  for (var i=1; i<=num_rows; i++)
+  {
+    var currRow = ++view_ns.num_client_map_filter_rows;
+
+    var row = document.createElement("tr");
+    row.setAttribute("id", "client_map_row_" + currRow);
+
+    // [1] first <td> cell: form field dropdown (defaulted to "please select")
+    var td2 = document.createElement("td");
+    var dd2 = document.createElement("select");
+    dd2.setAttribute("name", "client_map_filter_" + currRow + "_field_id");
+    dd2.setAttribute("id", "client_map_filter_" + currRow + "_field_id");
+
+    var default_option = document.createElement("option");
+    default_option.setAttribute("value", "");
+    default_option.appendChild(document.createTextNode(g.messages["phrase_please_select"]));
+    dd2.appendChild(default_option);
+
+    // now add all form fields (even if they're not included in the View)
+    for (j=0; j<view_ns.all_form_fields.length; j++)
+    {
+      field_id   = view_ns.all_form_fields[j][0];
+      field_name = view_ns.all_form_fields[j][1];
+      dd2.options[j+1] = new Option(field_name, field_id);
+    }
+    td2.appendChild(dd2);
+
+    // [3] third <td> cell: operator dropdown
+
+    // TODO What if submission_date is first?
+    var td3 = document.createElement("td");
+
+    // -- second section: REGULAR operators
+    var div = document.createElement("div");
+    div.setAttribute("id", "client_map_filter_" + currRow + "_operators_div");
+    var operator_dd = document.createElement("select");
+    operator_dd.setAttribute("name", "client_map_filter_" + currRow + "_operator");
+    var option1 = document.createElement("option");
+    option1.setAttribute("value", "equals");
+    option1.appendChild(document.createTextNode(g.messages["word_equals"]));
+    var option2 = document.createElement("option");
+    option2.setAttribute("value", "not_equals");
+    option2.appendChild(document.createTextNode(g.messages["phrase_not_equal"]));
+    var option3 = document.createElement("option");
+    option3.setAttribute("value", "like");
+    option3.appendChild(document.createTextNode(g.messages["word_like"]));
+    var option4 = document.createElement("option");
+    option4.setAttribute("value", "not_like");
+    option4.appendChild(document.createTextNode(g.messages["phrase_not_like"]));
+    operator_dd.appendChild(option1);
+    operator_dd.appendChild(option2);
+    operator_dd.appendChild(option3);
+    operator_dd.appendChild(option4);
+    div.appendChild(operator_dd);
+    td3.appendChild(div);
+
+    // [4] fourth <td> cell: select dropdown
+    var td4 = document.createElement("td");
+    var dd = document.createElement("select");
+    dd.setAttribute("name", "client_map_filter_" + currRow + "_client_field");
+    dd.setAttribute("style", "width: 150px;");
+    var default_option = document.createElement("option");
+    default_option.setAttribute("value", "");
+    default_option.appendChild(document.createTextNode(g.messages["phrase_please_select"]));
+    dd.appendChild(default_option);
+
+		// add in the contents of the page_ns.clientFields array. For extensibility with
+		// other modules, the options are grouped in optgroups.
+	  var current_section = null;
+		var optgroup = null;
+    for (var j=0; j<page_ns.clientFields.length; j++)
+    {
+		  if (page_ns.clientFields[j].section != current_section)
+      {
+			  if (current_section != null)
+				  dd.appendChild(optgroup);
+
+        optgroup = document.createElement("optgroup");
+				current_section = page_ns.clientFields[j].section;
+			  optgroup.setAttribute("label", current_section);
+			}
+			
+      var option = document.createElement("option");
+      option.setAttribute("value", page_ns.clientFields[j].val);
+      option.appendChild(document.createTextNode(page_ns.clientFields[j].text));
+      optgroup.appendChild(option);
+    }
+
+	  dd.appendChild(optgroup);
+    
+    // add any additional fields defined in the page (from the Extended Client Fields module)
+    td4.appendChild(dd);
+
+    // [5] a delete column
+    var td5 = document.createElement("td");
+    td5.setAttribute("align", "center");
+    td5.setAttribute("class", "del"); // for Mozilla
+    td5.className = "del"; // for IE
+    var delete_link = document.createElement("a");
+    delete_link.setAttribute("href", "#");
+    delete_link.onclick = view_ns.delete_filter_row.bind(this, "client_map", currRow);
+
+    delete_link.appendChild(document.createTextNode(g.messages["word_remove"].toUpperCase()));
+    td5.appendChild(delete_link);
+
+    // add the table data cells to the row
+    row.appendChild(td2);
+    row.appendChild(td3);
+    row.appendChild(td4);
+    row.appendChild(td5);
+
+    // add the row to the table
+    tbody.appendChild(row);
+  }
+
+  // update the filter count
+  $("num_client_map_filters").value = view_ns.num_client_map_filter_rows;
+}
+
+
+/**
+ * Called by the form field dropdown onchange handler on the standard View filters table; shows the appropriate
+ * operators and values section.
  *
  * @param integer row the row number
  * @param integer field_id the unique field ID
  */
-view_ns.change_filter_field = function(row)
+view_ns.change_standard_filter_field = function(row)
 {
-  var field_id = $("filter_" + row + "_field_id").value;
+  var field_id = $("standard_filter_" + row + "_field_id").value;
 
   // find out if this field is the submission date or not
   var is_date_field = false;
@@ -608,17 +745,17 @@ view_ns.change_filter_field = function(row)
 
   if (is_date_field)
   {
-    $("filter_" + row + "_operators_div").style.display = "none";
-    $("filter_" + row + "_operators_dates_div").style.display = "block";
-    $("filter_" + row + "_values_div").style.display = "none";
-    $("filter_" + row + "_values_dates_div").style.display = "block";
+    $("standard_filter_" + row + "_operators_div").style.display = "none";
+    $("standard_filter_" + row + "_operators_dates_div").style.display = "block";
+    $("standard_filter_" + row + "_values_div").style.display = "none";
+    $("standard_filter_" + row + "_values_dates_div").style.display = "block";
   }
   else
   {
-    $("filter_" + row + "_operators_div").style.display = "block";
-    $("filter_" + row + "_operators_dates_div").style.display = "none";
-    $("filter_" + row + "_values_div").style.display = "block";
-    $("filter_" + row + "_values_dates_div").style.display = "none";
+    $("standard_filter_" + row + "_operators_div").style.display = "block";
+    $("standard_filter_" + row + "_operators_dates_div").style.display = "none";
+    $("standard_filter_" + row + "_values_div").style.display = "block";
+    $("standard_filter_" + row + "_values_dates_div").style.display = "none";
   }
 }
 
@@ -632,16 +769,28 @@ view_ns.change_filter_field = function(row)
  * that lets the PHP function know how the MAX rows to loop over. It ignored the empty rows.
  * So again, it's fine that the actual number of rows passed is less.
  *
+ * @param string table "standard", "client_map"
  * @param integer row the row number
  */
-view_ns.delete_filter_row = function(row)
+view_ns.delete_filter_row = function(table, row)
 {
   // get the current table
-  var tbody = $("filters_table").getElementsByTagName("tbody")[0];
-
-  for (i=tbody.childNodes.length-1; i>0; i--)
+  var table_id = null;
+  if (table == "standard")
   {
-    if (tbody.childNodes[i].id == "row_" + row)
+    table_id = "standard_filters_table";
+    row_id_prefix = "standard_";
+  }
+  else
+  {
+    table_id = "client_map_filters_table";
+    row_id_prefix = "client_map_";
+  }
+
+  var tbody = $(table_id).getElementsByTagName("tbody")[0];
+  for (var i=tbody.childNodes.length-1; i>0; i--)
+  {
+    if (tbody.childNodes[i].id == row_id_prefix + "row_" + row)
       tbody.removeChild(tbody.childNodes[i]);
   }
 
@@ -692,4 +841,26 @@ view_ns.process_form = function(f)
   $("field_ids").value = view_ns.field_ids.join(",");
 
   return true;
+}
+
+
+view_ns.toggle_filter_section = function(section)
+{
+  if (section == "client_map")
+    var section_id = "client_map_filters"; 
+  else
+    var section_id = "standard_filters"; 
+		  
+  var display_setting = $(section_id).getStyle('display');
+  var is_visible = false;
+
+  if (display_setting == 'none')
+  {
+    Effect.BlindDown($(section_id));
+    is_visible = true;
+  }
+  else
+    Effect.BlindUp($(section_id));
+
+  return false;
 }

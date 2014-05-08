@@ -18,6 +18,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="shortcut icon" href="{$theme_url}/images/favicon.ico" >
 
+  {template_hook location="head_top"}
   <script type="text/javascript">
   //<![CDATA[
   var g = {literal}{}{/literal};
@@ -39,6 +40,7 @@
   {$head_js}
   {$head_css}
 
+  {template_hook location="head_bottom"}
 </head>
 <body>
 

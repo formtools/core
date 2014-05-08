@@ -17,8 +17,13 @@ $view_fields   = $view_info["fields"];
 $form_database_column_info = ft_get_form_column_names($form_id);
 $view_clients  = ft_get_view_clients($view_id);
 $view_tabs     = ft_get_view_tabs($view_id);
-$filters       = ft_get_view_filters($view_id);
-$num_filters   = count($filters);
+
+// this returns ALL filters: standard and client map
+$standard_filters   = ft_get_view_filters($view_id, "standard");
+$client_map_filters = ft_get_view_filters($view_id, "client_map");
+$num_standard_filters = count($standard_filters);
+$num_client_map_filters = count($client_map_filters);
+
 $edit_view_tab = ft_load_field("edit_view_tab", "edit_view_tab", 1);
 $view_omit_list = ft_get_public_view_omit_list($view_id);
 $num_clients_on_omit_list = count($view_omit_list);
@@ -74,7 +79,8 @@ for ($i=1; $i<=count($view_tabs); $i++)
 }
 
 // for the filters
-$js_string .= "view_ns.num_filter_rows = $num_filters;\n";
+$js_string .= "view_ns.num_standard_filter_rows = $num_standard_filters;\n";
+$js_string .= "view_ns.num_client_map_filter_rows = $num_client_map_filters;\n";
 
 // build the selected users <options>
 $selected_users_str = "";
@@ -157,6 +163,10 @@ for ($i=0; $i<$num_views; $i++)
   }
 }
 
+$extended_client_fields_module_installed = false;
+if (ft_check_module_enabled("extended_client_fields"))
+  $extended_client_fields_module_installed = true;
+
 // -----------------------------------------------------------------------------------------------
 
 // compile the templates information
@@ -165,11 +175,14 @@ $page_vars["page_url"]   = ft_get_page_url("edit_view");
 $page_vars["tabs"]       = $tabs;
 $page_vars["form_id"]    = $form_id;
 $page_vars["view_id"]    = $view_id;
+$page_vars["extended_client_fields_module_installed"] = $extended_client_fields_module_installed;
 $page_vars["head_title"] = "{$LANG["phrase_edit_form"]} - {$LANG["phrase_edit_view"]}";
 $page_vars["available_fields"] = $available_fields;
 $page_vars["no_available_fields"] = $no_available_fields;
-$page_vars["filters"]     = $filters;
-$page_vars["num_filters"] = $num_filters;
+$page_vars["standard_filters"]     = $standard_filters;
+$page_vars["client_map_filters"]   = $client_map_filters;
+$page_vars["num_standard_filters"] = $num_standard_filters;
+$page_vars["num_client_map_filters"] = $num_client_map_filters;
 $page_vars["edit_view_tab"] = $edit_view_tab;
 $page_vars["has_tabs"]    = $has_tabs;
 $page_vars["form_info"]   = $form_info;
@@ -184,32 +197,41 @@ $page_vars["available_users"] = $available_users_str;
 $page_vars["form_database_column_info"] = $form_database_column_info;
 $page_vars["selected_user_ids"] = $selected_user_ids;
 $page_vars["num_clients_on_omit_list"] = $num_clients_on_omit_list;
-$page_vars["head_string"] = "
-  <script type=\"text/javascript\" src=\"{$g_root_url}/global/scripts/manage_views.js\"></script>
-  <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$g_root_url}/global/jscalendar/skins/aqua/theme.css\" title=\"Aqua\" />
-  <script type=\"text/javascript\" src=\"{$g_root_url}/global/jscalendar/calendar.js\"></script>
-  <script type=\"text/javascript\" src=\"{$g_root_url}//global/jscalendar/calendar-setup.js\"></script>
-  <script type=\"text/javascript\" src=\"{$g_root_url}/global/jscalendar/lang/calendar-en.js\"></script>";
+$page_vars["head_string"] =<<< EOF
+  <script src="{$g_root_url}/global/scripts/manage_views.js?v=2"></script>
+  <link rel="stylesheet" type="text/css" media="all" href="{$g_root_url}/global/jscalendar/skins/aqua/theme.css" title="Aqua" />
+  <script src="{$g_root_url}/global/jscalendar/calendar.js"></script>
+  <script src="{$g_root_url}/global/jscalendar/calendar-setup.js"></script>
+  <script src="{$g_root_url}/global/jscalendar/lang/calendar-en.js"></script>
+EOF;
 
 $replacements = array("user_doc_link" => "http://docs.formtools.org/userdoc/index.php?page=view_filters");
 $page_vars["text_filters_tips"] = ft_eval_smarty_string($LANG["text_filters_tips"], $replacements);
-$replacements = array("number" => "<input type=\"text\" name=\"num_filter_rows\" id=\"num_filter_rows\" value=\"1\" size=\"2\" />");
-$page_vars["add_num_rows_input_field"] = ft_eval_smarty_string($LANG["phrase_add_num_rows"], $replacements);
+$replacements = array("number" => "<input type=\"text\" name=\"num_standard_filter_rows\" id=\"num_standard_filter_rows\" value=\"1\" size=\"2\" />");
+$page_vars["add_standard_filter_num_rows_input_field"] = ft_eval_smarty_string($LANG["phrase_add_num_rows"], $replacements);
+$replacements = array("number" => "<input type=\"text\" name=\"num_client_map_filter_rows\" id=\"num_client_map_filter_rows\" value=\"1\" size=\"2\" />");
+$page_vars["add_client_map_filter_num_rows_input_field"] = ft_eval_smarty_string($LANG["phrase_add_num_rows"], $replacements);
 
-$page_vars["js_messages"] = array("word_remove", "validation_no_tabs_defined", "phrase_all_fields_displayed", "validation_invalid_tab_assign_values",
-        "validation_num_rows_to_add", "phrase_please_select", "word_before", "word_after", "word_equals",
-        "phrase_not_equal", "word_like", "phrase_not_like", "validation_no_view_name", "validation_no_num_submissions_per_page",
-        "validation_no_view_fields", "validation_no_column_selected", "validation_no_view_fields_selected");
+$page_vars["js_messages"] = array("word_remove", "validation_no_tabs_defined", "phrase_all_fields_displayed",
+        "validation_invalid_tab_assign_values", "validation_num_rows_to_add", "phrase_please_select", "word_before",
+        "word_after", "word_equals", "phrase_not_equal", "word_like", "phrase_not_like", "validation_no_view_name",
+        "validation_no_num_submissions_per_page", "validation_no_view_fields", "validation_no_column_selected",
+        "validation_no_view_fields_selected", "phrase_first_name", "phrase_last_name", "phrase_company_name",
+        "word_email", "word_notes", "word_id");
 
-$page_vars["head_js"] = "
+$page_vars["head_js"] =<<< EOF
 $js_string
 
 Event.observe(document, 'dom:loaded',
   function()
   {
     // if there are no filters, init the form with a single, empty filter
-    if (view_ns.num_filter_rows == 0)
-       view_ns.add_filters(\"1\");
+    if (view_ns.num_standard_filter_rows == 0)
+       view_ns.add_standard_filters("1");
+
+    // if there are no filters, init the form with a single, empty filter
+    if (view_ns.num_client_map_filter_rows == 0)
+       view_ns.add_client_map_filters("1");
 
     // add the onblur handler to the tab label fields so that the dropdowns in the Fields tab are automatically
     // updated to show the available tabs
@@ -217,26 +239,33 @@ Event.observe(document, 'dom:loaded',
   }
 );
 
-
 var page_ns = {};
 page_ns.toggle_view_type = function(form_type)
 {
   switch (form_type)
   {
-    case \"admin\":
-      $(\"client_omit_list_button\").disabled = true;
-      $(\"custom_clients\").hide();
+    case "admin":
+      $("client_omit_list_button").disabled = true;
+      $("custom_clients").hide();
       break;
-    case \"public\":
-      $(\"client_omit_list_button\").disabled = false;
-      $(\"custom_clients\").hide();
+    case "public":
+      $("client_omit_list_button").disabled = false;
+      $("custom_clients").hide();
       break;
-    case \"private\":
-      $(\"client_omit_list_button\").disabled = true;
-      $(\"custom_clients\").show();
+    case "private":
+      $("client_omit_list_button").disabled = true;
+      $("custom_clients").show();
       break;
   }
 }
-  ";
+
+page_ns.clientFields = [
+  { val: "account_id",             text: "{$LANG["word_id"]}", section: "{$LANG["phrase_core_fields"]}" },
+  { val: "first_name",             text: "{$LANG["phrase_first_name"]}", section: "{$LANG["phrase_core_fields"]}" },
+  { val: "last_name",              text: "{$LANG["phrase_last_name"]}", section: "{$LANG["phrase_core_fields"]}" },
+  { val: "email",                  text: "{$LANG["word_email"]}", section: "{$LANG["phrase_core_fields"]}" },
+  { val: "settings__company_name", text: "{$LANG["phrase_company_name"]}", section: "{$LANG["phrase_core_fields"]}" }
+];
+EOF;
 
 ft_display_page("admin/forms/edit.tpl", $page_vars);

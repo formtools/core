@@ -131,29 +131,44 @@ function ft_upgrade_form_tools()
 
       if ($existing_version_info["release_date"] < 20090826)
       {
-      	// bug fix for previous version which had a syntax error
-				$query = mysql_query("SHOW COLUMNS FROM {$g_table_prefix}forms");
-				$has_edit_submission_page_label_field = false;
-				while ($row = mysql_fetch_assoc($query))
-				{
-				  if ($row["Field"] == "edit_submission_page_label")
-					  $has_edit_submission_page_label_field = true;
-				}
+        // bug fix for previous version which had a syntax error
+        $query = mysql_query("SHOW COLUMNS FROM {$g_table_prefix}forms");
+        $has_edit_submission_page_label_field = false;
+        while ($row = mysql_fetch_assoc($query))
+        {
+          if ($row["Field"] == "edit_submission_page_label")
+            $has_edit_submission_page_label_field = true;
+        }
 
-				if (!$has_edit_submission_page_label_field)
-				{
+        if (!$has_edit_submission_page_label_field)
+        {
           @mysql_query("ALTER TABLE {$g_table_prefix}forms ADD edit_submission_page_label TEXT NULL");
-	        $forms = ft_get_forms();
-	        foreach ($forms as $form_info)
-	        {
-	          $form_id = $form_info["form_id"];
-	          @mysql_query("
-	            UPDATE {$g_table_prefix}forms
-	            SET    edit_submission_page_label = '{\$LANG.phrase_edit_submission|upper}'
-	            WHERE  form_id = $form_id
-	              ");
-					}
-				}
+          $forms = ft_get_forms();
+          foreach ($forms as $form_info)
+          {
+            $form_id = $form_info["form_id"];
+            @mysql_query("
+              UPDATE {$g_table_prefix}forms
+              SET    edit_submission_page_label = '{\$LANG.phrase_edit_submission|upper}'
+              WHERE  form_id = $form_id
+                ");
+          }
+        }
+      }
+
+      if ($existing_version_info["release_date"] < 20091113)
+      {
+        @mysql_query("ALTER TABLE {$g_table_prefix}view_filters ADD filter_type ENUM('standard', 'client_map') NOT NULL DEFAULT 'standard' AFTER view_id");
+        @mysql_query("ALTER TABLE {$g_table_prefix}views ADD has_standard_filter ENUM('yes', 'no') NOT NULL DEFAULT 'no'");
+        @mysql_query("ALTER TABLE {$g_table_prefix}views ADD has_client_map_filter ENUM('yes', 'no') NOT NULL DEFAULT 'no'");
+
+        // set the has_standard_filter value to "yes" for any Views that have a filter defined
+        $query = @mysql_query("SELECT view_id FROM {$g_table_prefix}view_filters GROUP BY view_id");
+        while ($row = mysql_fetch_assoc($query))
+        {
+        	$view_id = $row["view_id"];
+          mysql_query("UPDATE {$g_table_prefix}views SET has_standard_filter = 'yes' WHERE view_id = $view_id");
+        }
       }
 
       if ($existing_version_info["full"] != $g_current_version)

@@ -464,27 +464,27 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
     $return_arr[] = $field_info;
   }
 
-  // finally, if a View is specified, ensure that the order in which the submission fields are returned
-  // is determined by the View. [NOT efficient!]
-  if (!empty($view_id))
-  {
-    $ordered_return_arr = array();
+	// finally, if a View is specified, ensure that the order in which the submission fields are returned
+	// is determined by the View. [NOT efficient!]
+	if (!empty($view_id))
+	{
+	  $ordered_return_arr = array();
 
-    foreach ($view_fields as $view_field_info)
-    {
-      $field_id = $view_field_info["field_id"];
-      foreach ($return_arr as $field_info)
-      {
-        if ($field_info["field_id"] == $field_id)
-        {
-          $ordered_return_arr[] = $field_info;
-          break;
-        }
-      }
-    }
+		foreach ($view_fields as $view_field_info)
+		{
+		  $field_id = $view_field_info["field_id"];
+		  foreach ($return_arr as $field_info)
+			{
+			  if ($field_info["field_id"] == $field_id)
+			  {
+				  $ordered_return_arr[] = $field_info;
+					break;
+				}
+			}
+		}
 
-    $return_arr = $ordered_return_arr;
-  }
+		$return_arr = $ordered_return_arr;
+	}
 
   extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "return_arr"), array("return_arr")), EXTR_OVERWRITE);
 
@@ -574,23 +574,23 @@ function ft_get_search_submission_ids($form_id, $view_id, $results_per_page, $or
 {
   global $g_table_prefix;
 
-  $order_by = "submission_id";
-  if (!empty($order))
-  {
-    // sorting by column, format: col_x-desc / col_y-asc
-    list($column, $direction) = split("-", $order);
-    $field_info = ft_get_form_field_by_colname($form_id, $column);
+	$order_by = "submission_id";
+	if (!empty($order))
+	{
+	  // sorting by column, format: col_x-desc / col_y-asc
+	  list($column, $direction) = split("-", $order);
+	  $field_info = ft_get_form_field_by_colname($form_id, $column);
 
-    if ($field_info["data_type"] == "number")
-      $order_by = "CAST($column as SIGNED) $direction";
-    else
-      $order_by = "$column $direction";
+	  if ($field_info["data_type"] == "number")
+	    $order_by = "CAST($column as SIGNED) $direction";
+	  else
+	    $order_by = "$column $direction";
 
-    // important! If the ORDER BY column wasn't the submission_id, we need to add
-    // the submission ID as the secondary sorting column
-    if ($column != "submission_id")
-      $order_by .= ", submission_id";
-  }
+	  // important! If the ORDER BY column wasn't the submission_id, we need to add
+	  // the submission ID as the secondary sorting column
+	  if ($column != "submission_id")
+	    $order_by .= ", submission_id";
+	}
 
   // determine the LIMIT clause
   $limit_clause = "";
@@ -861,7 +861,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 
 /**
  * Updates a single form submission. Accepts an hash of form field names to values or
- * col names to values.
+ * col names to values. 
  *
  * @param integer $form_id
  * @param integer $submission_id

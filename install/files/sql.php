@@ -31,7 +31,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%accounts (
   email varchar(200) default NULL,
   username varchar(50) default NULL,
   password varchar(50) default NULL,
-  PRIMARY KEY  (account_id)
+  PRIMARY KEY (account_id)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%accounts (account_id, account_type, account_status, timezone_offset, login_page, menu_id) VALUES (1, 'admin', 'active', '0', 'admin_forms', 1)";
@@ -39,14 +39,14 @@ $g_sql[] = "INSERT INTO %PREFIX%accounts (account_id, account_type, account_stat
 $g_sql[] = "CREATE TABLE %PREFIX%client_forms (
   account_id mediumint(8) unsigned NOT NULL,
   form_id mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY  (account_id,form_id)
+  PRIMARY KEY (account_id,form_id)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
 
 
 $g_sql[] = "CREATE TABLE %PREFIX%client_views (
   account_id mediumint(8) unsigned NOT NULL,
   view_id mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY  (account_id,view_id)
+  PRIMARY KEY (account_id,view_id)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
 
 
@@ -88,7 +88,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%email_templates (
   custom_reply_to_email varchar(100) default NULL,
   html_template mediumtext,
   text_template mediumtext,
-  PRIMARY KEY  (email_id)
+  PRIMARY KEY (email_id)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%field_option_groups (
@@ -96,7 +96,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%field_option_groups (
   group_name varchar(100) NOT NULL,
   original_form_id mediumint(8) unsigned default NULL,
   field_orientation enum('horizontal','vertical','na') NOT NULL default 'na',
-  PRIMARY KEY  (group_id)
+  PRIMARY KEY (group_id)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%field_options (
@@ -112,7 +112,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%field_settings (
   setting_name varchar(100) NOT NULL,
   setting_value varchar(100) default NULL,
   module varchar(100) NOT NULL default 'core',
-  PRIMARY KEY  (field_id,setting_name,module)
+  PRIMARY KEY (field_id,setting_name,module)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%form_fields (
@@ -345,6 +345,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%view_fields (
 $g_sql[] = "CREATE TABLE %PREFIX%view_filters (
   filter_id mediumint(8) unsigned NOT NULL auto_increment,
   view_id mediumint(8) unsigned NOT NULL,
+  filter_type enum('standard', 'client_map') NOT NULL default 'standard',
   field_id mediumint(8) unsigned NOT NULL,
   operator enum('equals','not_equals','like','not_like','before','after') NOT NULL default 'equals',
   filter_values mediumtext NOT NULL,
@@ -371,5 +372,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%views (
   may_add_submissions enum('yes','no') NOT NULL DEFAULT 'yes',
   may_edit_submissions enum('yes','no') NOT NULL default 'yes',
   may_delete_submissions enum('yes','no') NOT NULL default 'yes',
+  has_client_map_filter enum('yes','no') NOT NULL default 'no',
+  has_standard_filter enum('yes','no') NOT NULL default 'no',
   PRIMARY KEY  (view_id)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
