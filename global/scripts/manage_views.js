@@ -14,7 +14,7 @@ view_ns.field_ids       = []; // stores the fields IDs currently in the view
 view_ns.all_form_fields = []; // all form fields
 view_ns.view_tabs       = []; // the view tabs. This is change dynamically in the page
 view_ns.enable_editable_fields = false;
-
+view_ns.tabindex_increment = 1000;
 
 
 /**
@@ -61,25 +61,25 @@ view_ns.toggle_sortable_field = function(field_id, show)
 
 
 /**
- * Adds one or more fields to the current View's field list. This calls the 
+ * Adds one or more fields to the current View's field list. This calls the
  * view_ns.add_view_field function on each selected row.
  */
 view_ns.add_view_fields = function(dd_field_id)
 {
   var selected_field_ids = $F(dd_field_id);
-	if (!selected_field_ids.length)
-	{
-    ft.display_message("ft_message", false, g.messages["validation_no_view_fields_selected"]);	
-	  return;
-	}
-	
-	for (var i=0; i<selected_field_ids.length; i++)
-	  view_ns.add_view_field(selected_field_ids[i]);
+  if (!selected_field_ids.length)
+  {
+    ft.display_message("ft_message", false, g.messages["validation_no_view_fields_selected"]);
+    return;
+  }
+
+  for (var i=0; i<selected_field_ids.length; i++)
+    view_ns.add_view_field(selected_field_ids[i]);
 }
 
 
 /**
- * Adds a field to the current View's field list and removes it from the 
+ * Adds a field to the current View's field list and removes it from the
  * "available fields" dropdown.
  *
  * @param integer field_id the unique field ID.
@@ -89,17 +89,20 @@ view_ns.add_view_field = function(field_id)
   // get the field display text
   var field_display_text = "";
   for (i=0; i<view_ns.all_form_fields.length; i++)
-   {
-     if (view_ns.all_form_fields[i][0] == field_id)
-     {
-       field_display_text = view_ns.all_form_fields[i][1];
-       break;
-     }
-   }
+  {
+    if (view_ns.all_form_fields[i][0] == field_id)
+    {
+      field_display_text = view_ns.all_form_fields[i][1];
+      break;
+    }
+  }
 
   var tbody = $("view_fields_table").getElementsByTagName("tbody")[0];
   var row = document.createElement("tr");
   row.setAttribute("id", "field_row_" + field_id);
+
+  var num_fields = view_ns.field_ids.length;
+
 
   // [1] Order column
   var td1 = document.createElement("td");
@@ -108,6 +111,7 @@ view_ns.add_view_field = function(field_id)
   inp.setAttribute("type", "text");
   inp.setAttribute("name", "field_" + field_id + "_order");
   inp.setAttribute("id", "field_" + field_id + "_order");
+  inp.setAttribute("tabindex", (view_ns.tabindex_increment * 1) + num_fields);
 
   // find the next available number
   var highest_num = 0;
@@ -129,6 +133,7 @@ view_ns.add_view_field = function(field_id)
   inp.setAttribute("type", "checkbox");
   inp.setAttribute("name", "field_" + field_id + "_is_column");
   inp.setAttribute("id", "field_" + field_id + "_is_column");
+  inp.setAttribute("tabindex", (view_ns.tabindex_increment * 2) + num_fields);
   inp.onclick = function(evt) { view_ns.toggle_sortable_field(field_id, this.checked) }
   td2.appendChild(inp);
 
@@ -139,6 +144,7 @@ view_ns.add_view_field = function(field_id)
   inp.setAttribute("type", "checkbox");
   inp.setAttribute("name", "field_" + field_id + "_is_sortable");
   inp.setAttribute("checked", true);
+  inp.setAttribute("tabindex", (view_ns.tabindex_increment * 3) + num_fields);
   var div = document.createElement("div");
   div.setAttribute("id", "sortable_" + field_id);
   div.style.cssText = "display:none";
@@ -158,6 +164,7 @@ view_ns.add_view_field = function(field_id)
     inp.setAttribute("type", "checkbox");
     inp.setAttribute("name", "field_" + field_id + "_is_editable");
     inp.setAttribute("id", "field_" + field_id + "_is_editable");
+    inp.setAttribute("tabindex", (view_ns.tabindex_increment * 4) + num_fields);
 
     if (may_edit_submissions)
       inp.setAttribute("checked", true);
@@ -178,6 +185,7 @@ view_ns.add_view_field = function(field_id)
   var sel = document.createElement("select");
   sel.setAttribute("name", "field_" + field_id + "_tab");
   sel.setAttribute("id", "field_" + field_id + "_tab");
+  sel.setAttribute("tabindex", (view_ns.tabindex_increment * 5) + num_fields);
   for (i=0; i<view_ns.view_tabs.length; i++)
     sel.options[i] = new Option(view_ns.view_tabs[i][1], view_ns.view_tabs[i][0]);
   if (view_ns.view_tabs.length == 0)

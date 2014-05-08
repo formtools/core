@@ -5,7 +5,7 @@
 
             <div class="pad_bottom">
               <input type="checkbox" name="may_edit_submissions" id="cmes" value="yes"
-              onchange="view_ns.toggle_editable_fields(this.checked)"
+                onchange="view_ns.toggle_editable_fields(this.checked)"
               {if $view_info.may_edit_submissions == "yes"}checked{/if} />
               <label for="cmes">{$LANG.phrase_allow_fields_edited}</label>
             </div>
@@ -21,33 +21,43 @@
               <th width="60" class="del">{$LANG.word_remove|upper}</th>
             </tr>
 
+            {* used to generate the tab indexes. Leave be! *}
+            {assign var="tabindex_increment" value=1000}
+
             {foreach from=$view_fields item=field name=row}
               {assign var='field_id' value=$field.field_id}
               {assign var='index' value=$smarty.foreach.row.index}
               {assign var='count' value=$smarty.foreach.row.iteration}
 
+              {assign var=col1_tabindex value=$tabindex_increment+$count}
+              {assign var=col2_tabindex value=$tabindex_increment*2+$count}
+              {assign var=col3_tabindex value=$tabindex_increment*3+$count}
+              {assign var=col4_tabindex value=$tabindex_increment*4+$count}
+              {assign var=col5_tabindex value=$tabindex_increment*5+$count}
+
               <tr id="field_row_{$field_id}">
                 <td class="greyCell" align="center">
-                  <input type="text" name="field_{$field_id}_order" id="field_{$field_id}_order" style="width: 30px;" value="{$count}" />
+                  <input type="text" name="field_{$field_id}_order" id="field_{$field_id}_order" style="width: 30px;" value="{$count}" tabindex="{$col1_tabindex}" />
                 </td>
                 <td class="greyCell" align="center">
-                  <input type="checkbox" name="field_{$field_id}_is_column" id="field_{$field_id}_is_column" onclick="view_ns.toggle_sortable_field({$field_id}, this.checked)" {if $field.is_column == "yes"}checked{/if} />
+                  <input type="checkbox" name="field_{$field_id}_is_column" id="field_{$field_id}_is_column" onclick="view_ns.toggle_sortable_field({$field_id}, this.checked)"
+									  {if $field.is_column == "yes"}checked{/if} tabindex="{$col2_tabindex}" />
                 </td>
                 <td class="greyCell" align="center">
                   <div id="sortable_{$field_id}" {if $field.is_column == 'no'}style="display: none;"{/if}>
-                    <input type="checkbox" name="field_{$field_id}_is_sortable" {if $field.is_sortable == "yes"}checked{/if} />
+                    <input type="checkbox" name="field_{$field_id}_is_sortable" {if $field.is_sortable == "yes"}checked{/if} tabindex="{$col3_tabindex}" />
                   </div>
                 </td>
                 <td class="greyCell" align="center">
                   {* everything except the Submission ID and Last Modified Date is editable *}
                   {if $field.col_name != "submission_id" && $field.col_name != "last_modified_date"}
                     <input type="checkbox" name="field_{$field_id}_is_editable" id="field_{$field_id}_is_editable" {if $field.is_editable == "yes"}checked{/if}
-                      {if $view_info.may_edit_submissions == "no"}disabled{/if}  />
+                      {if $view_info.may_edit_submissions == "no"}disabled{/if} tabindex="{$col4_tabindex}" />
                   {/if}
                 </td>
                 <td class="greyCell pad_left_small">{$field.field_title}</td>
                 <td>
-                  <select name="field_{$field_id}_tab" id="field_{$field_id}_tab">
+                  <select name="field_{$field_id}_tab" id="field_{$field_id}_tab" tabindex="{$col5_tabindex}">
                     {foreach from=$view_tabs item=view_tab name=tab_row}
                       {assign var='counter' value=$smarty.foreach.tab_row.iteration}
 

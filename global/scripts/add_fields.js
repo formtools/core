@@ -1,6 +1,7 @@
 // our namespace for the Add Fields functions and vars
 var add_fields_ns = {}
 add_fields_ns.num_rows = 0; // the total number of rows
+add_fields_ns.tabindex_increment = 1000;
 
 
 /**
@@ -33,6 +34,7 @@ add_fields_ns.add_fields = function(num_rows)
     inp.setAttribute("type", "checkbox");
     inp.setAttribute("name", "include_on_redirect_" + currRow);
     inp.setAttribute("id", "include_on_redirect_" + currRow);
+    inp.setAttribute("tabindex", add_fields_ns.tabindex_increment + currRow);
     td1.appendChild(inp);
 
     // [2] Form Field Name column
@@ -41,6 +43,7 @@ add_fields_ns.add_fields = function(num_rows)
     inp.setAttribute("type", "text");
     inp.setAttribute("name", "field_name_" + currRow);
     inp.setAttribute("id", "field_name_" + currRow);
+    inp.setAttribute("tabindex", (add_fields_ns.tabindex_increment * 2) + currRow);
     inp.style.cssText = "width: 90px";
     td2.appendChild(inp);
 
@@ -50,6 +53,7 @@ add_fields_ns.add_fields = function(num_rows)
     inp.setAttribute("type", "text");
     inp.setAttribute("name", "field_title_" + currRow);
     inp.setAttribute("id", "field_title_" + currRow);
+    inp.setAttribute("tabindex", (add_fields_ns.tabindex_increment * 3) + currRow);
     inp.style.cssText = "width: 85px";
     td3.appendChild(inp);
 
@@ -57,6 +61,7 @@ add_fields_ns.add_fields = function(num_rows)
     var td4 = document.createElement("td");
     var dd1 = document.createElement("select");
     dd1.setAttribute("name", "field_size_" + currRow);
+    dd1.setAttribute("tabindex", (add_fields_ns.tabindex_increment * 4) + currRow);
     var option1 = document.createElement("option");
     option1.setAttribute("value", "tiny");
     option1.appendChild(document.createTextNode(g.messages["phrase_size_tiny"]));
@@ -83,6 +88,7 @@ add_fields_ns.add_fields = function(num_rows)
     var td5 = document.createElement("td");
     var dd2 = document.createElement("select");
     dd2.setAttribute("name", "data_type_" + currRow);
+    dd2.setAttribute("tabindex", (add_fields_ns.tabindex_increment * 5) + currRow);
     var option1 = document.createElement("option");
     option1.setAttribute("value", "string");
     option1.appendChild(document.createTextNode(g.messages["word_string"]));
@@ -99,6 +105,7 @@ add_fields_ns.add_fields = function(num_rows)
     inp.setAttribute("type", "text");
     inp.setAttribute("name", "col_name_" + currRow);
     inp.setAttribute("id", "col_name_" + currRow);
+    inp.setAttribute("tabindex", (add_fields_ns.tabindex_increment * 6) + currRow);
 
     if ($("auto_generate_col_names").checked)
       inp.setAttribute("disabled", "true");

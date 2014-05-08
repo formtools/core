@@ -29,12 +29,14 @@ function smarty_function_form_fields_dropdown($params, &$smarty)
   $style         = (isset($params["style"])) ? $params["style"] : "";
   $blank_option_value = (isset($params["blank_option_value"])) ? $params["blank_option_value"] : "";
   $blank_option_text  = (isset($params["blank_option_text"])) ? $params["blank_option_text"] : "";
+  $tabindex  = (isset($params["tabindex"])) ? $params["tabindex"] : "";
 
   $attributes = array(
     "id"   => $params["name_id"],
     "name" => $params["name_id"],
     "onchange" => $onchange,
-    "style" => $style
+    "style" => $style,
+    "tabindex" => $tabindex
       );
 
 	$attribute_str = "";
@@ -62,4 +64,3 @@ function smarty_function_form_fields_dropdown($params, &$smarty)
   return $dd;
 }
 
-?>

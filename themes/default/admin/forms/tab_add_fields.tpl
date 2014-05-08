@@ -18,7 +18,7 @@
       <td valign="top">
         <table cellspacing="0" cellpadding="0">
         <tr>
-          <td><input type="checkbox" name="auto_generate_col_names" id="auto_generate_col_names" checked onchange="add_fields_ns.toggle_db_column_fields(this.checked)" /></td>
+          <td><input type="checkbox" name="auto_generate_col_names" id="auto_generate_col_names" tabindex="1" checked onchange="add_fields_ns.toggle_db_column_fields(this.checked)" /></td>
           <td><label for="auto_generate_col_names">{$LANG.phrase_auto_generate_db_col_names}</label></td>
         </tr>
         </table>
@@ -26,7 +26,7 @@
       <td align="right">
         <div id="existing_column_name_info" style="display: none;">
           {$LANG.phrase_existing_col_names_c}
-          {form_fields_dropdown name_id="display_only" form_id=$form_id}
+          {form_fields_dropdown name_id="display_only" form_id=$form_id tabindex="2"}
         </div>
       </td>
     </tr>
