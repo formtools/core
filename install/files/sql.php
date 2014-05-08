@@ -34,7 +34,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%accounts (
   PRIMARY KEY  (account_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 
-$g_sql[] = "INSERT INTO %PREFIX%accounts (account_id, account_type, account_status, login_page, menu_id) VALUES (1, 'admin', 'active', 'admin_forms', 1)";
+$g_sql[] = "INSERT INTO %PREFIX%accounts (account_id, account_type, account_status, timezone_offset, login_page, menu_id) VALUES (1, 'admin', 'active', '0', 'admin_forms', 1)";
 
 $g_sql[] = "CREATE TABLE %PREFIX%client_forms (
   account_id mediumint(8) unsigned NOT NULL,
@@ -264,7 +264,7 @@ $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) V
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_date_format', 'M jS y, g:i A', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_footer_text', 'Form Tools', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_language', 'en_us', 'core')";
-$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_login_page', 'client_account', 'core')";
+$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_login_page', 'client_forms', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_logout_url', '', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_num_submissions_per_page', '10', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_page_titles', 'Form Tools - {\$page}', 'core')";
@@ -294,8 +294,6 @@ $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) V
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('tinymce_toolbar', 'simple', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('tinymce_toolbar_align', 'left', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('tinymce_toolbar_location', 'top', 'core')";
-$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('file_upload_dir', '', 'export_manager')";
-$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('file_upload_url', '', 'export_manager')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('num_pages_per_page', '10', 'pages')";
 
 $g_sql[] = "CREATE TABLE %PREFIX%themes (
@@ -313,7 +311,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%themes (
   PRIMARY KEY (theme_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 
-$g_sql[] = "INSERT INTO %PREFIX%themes VALUES (1, 'classicgrey', 'Classic Grey', 'Encore Web Studios', NULL, NULL, 'http://themes.formtools.org/themes', 'The default Form Tools theme for all upgrades, but not fresh installations. This is a remodelling of the old grey-styled Form Tools 1.x theme.', 'yes', '1.0.0', '2.0.0')";
+$g_sql[] = "INSERT INTO %PREFIX%themes VALUES (1, 'default', 'Default', 'Encore Web Studios', 'formtools@encorewebstudios.com', 'http://www.encorewebstudios.com', 'http://themes.formtools.org/', 'The default Form Tools theme for all new installations. It''s a green-coloured fixed-width theme requiring 1024 minimum width screens.', 'yes', '1.0.0', '2.0.0')";
 
 $g_sql[] = "CREATE TABLE %PREFIX%view_fields (
   view_id mediumint(8) unsigned NOT NULL,

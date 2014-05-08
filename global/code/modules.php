@@ -55,14 +55,15 @@ function ft_uninstall_module($module_id)
   if (is_file("$g_root_dir/modules/$module_folder/uninstall.php"))
   {
   	@include_once("$g_root_dir/modules/$module_folder/uninstall.php");
-  	if (function_exists("uninstall"))
+  	$uninstall_function_name = "{$modulr_folder}__uninstall";
+  	if (function_exists($uninstall_function_name))
   	{
   		$has_custom_uninstall_script = true;
 
   		// get the module language file contents and store the info in the $LANG global for
   		// so it can be accessed by the uninstallation script
   		$LANG[$module_folder] = ft_get_module_lang_file_contents($module_folder);
-  		list($success, $custom_message) = uninstall($module_id);
+  		list($success, $custom_message) = $uninstall_function_name($module_id);
 
   		// if there was a custom message returned (error or notification), overwrite the default
   		// message
@@ -666,7 +667,6 @@ function ft_include_module($module_folder)
 }
 
 
-
 /**
  * This if the module counterpart function of the ft_load_field function. It works exactly the same
  * way, except that it namespaces the variables in a $_SESSION["ft"][$module_folder] key.
@@ -709,7 +709,6 @@ function ft_load_module_field($module_folder, $field_name, $session_name, $defau
 }
 
 
-
 /**
  * Called automatically on installation, or when the administrator clicks on the "Install" link for a module
  * This function runs the module's installation script (if it exists) and returns the appropriate success
@@ -729,17 +728,20 @@ function ft_install_module($module_id)
 	$message = ft_eval_smarty_string($LANG["notify_module_installed"], array("link" => "$g_root_url/modules/$module_folder"));
 
 	$has_custom_install_script = false;
+
   if (is_file("$g_root_dir/modules/$module_folder/install.php"))
   {
   	@include_once("$g_root_dir/modules/$module_folder/install.php");
-  	if (function_exists("install"))
+  	$install_function_name = "{$module_folder}__install";
+  	if (function_exists($install_function_name))
   	{
   		$has_custom_install_script = true;
 
   		// get the module language file contents and store the info in the $LANG global for
   		// so it can be accessed by the installation script
   		$LANG[$module_folder] = ft_get_module_lang_file_contents($module_folder);
-  		list($success, $custom_message) = install($module_id);
+
+  		list($success, $custom_message) = $install_function_name($module_id);
 
   		// if there was a custom message returned (error or notification), overwrite the default
   		// message

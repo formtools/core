@@ -55,7 +55,7 @@
           {if $SESSION.account.is_logged_in}
              <b>v{$settings.program_version}</b>
              {if $SESSION.settings.is_beta}
-               &#8212; <span style="" class="red bold">{$SESSION.settings.beta_version}</span>
+               &#8212; <span class="red">{$LANG.word_beta} {$SESSION.settings.beta_version}</span>
              {/if}
           {/if}
 

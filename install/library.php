@@ -9,7 +9,7 @@ $g_default_language       = "en_us.php";
 $g_default_theme          = "default";
 $g_form_tools_version     = "2.0.0";
 $g_is_beta                = "yes";
-$g_beta_version           = "2008/12/23";
+$g_beta_version           = "2008/12/30";
 $g_smarty_use_sub_dirs    = false;
 
 /*
@@ -468,7 +468,7 @@ function ft_install_update_db_settings()
 	$core_settings = array(
 	  "default_logout_url" => $g_root_url,
 	  "file_upload_dir" => addslashes($g_root_dir) . "/upload",
-	  "file_upload_url" => $g_root_url,
+	  "file_upload_url" => "$g_root_url/upload",
 	  "is_beta" => $g_is_beta,
 	  "beta_version" => $g_beta_version
 	);
