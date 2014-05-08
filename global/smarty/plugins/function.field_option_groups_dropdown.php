@@ -37,7 +37,7 @@ function smarty_function_field_option_groups_dropdown($params, &$smarty)
   	  $attribute_str .= " $key=\"$value\"";
   }
 
-  $groups = ft_get_field_option_groups();
+  $groups = ft_get_field_option_groups("all");
   $rows = array();
   $rows[] = "<option value=\"\">{$LANG["phrase_please_select"]}</option>";
 

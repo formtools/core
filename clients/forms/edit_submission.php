@@ -38,6 +38,10 @@ if (isset($_POST) && !empty($_POST))
 	$request["editable_field_ids"] = $editable_field_ids;
   list($g_success, $g_message) = ft_update_submission($form_id, $submission_id, $request);
 
+	// required. The reason being, this setting determines whether the submission IDs in the current form-view-search
+	// are cached. Any time the data changes, the submission may then belong to different Views, so we need to re-cache it
+	$_SESSION["ft"]["new_search"] = "yes";
+
   // if required, remove a file or image
   $file_deleted = false;
   if (isset($_POST['delete_file_type']) && $_POST['delete_file_type'] == "file")
@@ -93,23 +97,24 @@ $wysiwyg_field_id_list = join(",", $wysiwyg_field_ids);
 // get a list of editable fields on this tab
 $editable_tab_fields = array_intersect($submission_tab_field_ids, $editable_field_ids);
 
+$search = isset($_SESSION["ft"]["current_search"]) ? $_SESSION["ft"]["current_search"] : array();
 
 // if we're just coming here from the search results page, get a fresh list of every submission ID in this
 // search result set. This is used to build the internal "<< previous   next >>" nav on this details page
-if ($_SESSION["ft"]["new_search"])
+if (isset($_SESSION["ft"]["new_search"]) && $_SESSION["ft"]["new_search"] == "yes")
 {
   // extract the original search settings and get the list of IDs
-	$search = $_SESSION["ft"]["current_search"];
-	$_SESSION["ft"]["current_search"]["submission_ids"] = ft_get_search_submission_ids($form_id, $view_id, $search["results_per_page"], $search["order"], $search["search_fields"]);
+  $_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"] = ft_get_search_submission_ids($form_id, $view_id, $search["results_per_page"], $search["order"], $search["search_fields"]);
   $_SESSION["ft"]["new_search"] = "no";
 }
 
 $previous_link_html       = "";
 $search_results_link_html = "";
 $next_link_html           = "";
-if (isset($_SESSION["ft"]["current_search"]["submission_ids"]) && !empty($_SESSION["ft"]["current_search"]["submission_ids"]))
+
+if (isset($_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"]) && !empty($_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"]))
 {
-  $submission_ids = $_SESSION["ft"]["current_search"]["submission_ids"];
+  $submission_ids = $_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"];
   $current_sub_id_index = array_search($submission_id, $submission_ids);
 
   // PREVIOUS link

@@ -40,10 +40,13 @@ function smarty_function_display_edit_submission_view_dropdown($params, &$smarty
   $submission_id = $params["submission_id"];
   $account_id    = $params["account_id"];
 
+	if ($is_admin)
+    $views = ft_get_form_views($form_id);
+  else
+	  $views = ft_get_form_views($form_id, $account_id);
+
   // loop through the Views assigned to this user and IFF the view contains the submission,
   // add it to the dropdown list
-  $views = ft_get_form_views($form_id, $account_id);
-
   if (count($views) > 1)
   {
 	  $html = "<select onchange=\"window.location='{$_SERVER["PHP_SELF"]}?form_id=$form_id&submission_id=$submission_id&view_id=' + this.value\">
