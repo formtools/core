@@ -1139,3 +1139,4 @@ $LANG["validation_no_email_template_name"] = "Please enter the email template na
 $LANG["validation_no_email_content"] = "Please enter the email content for at least one of the formats (HTML or text).";
 $LANG["validation_no_email_template_view_mapping_value"] = "Please indicate when the email should be sent.";
 $LANG["validation_no_email_template_view_id"] = "Please select the View to which this email template should be mapped.";
+$LANG["validation_no_email_from_field"] = "Please the email 'from' field.";

@@ -25,6 +25,7 @@ $file_field_text = ($form_has_file_upload_field) ? $LANG["text_file_field_placeh
 
 // values for the test email subpage
 $num_submissions = ft_get_submission_count($form_id);
+$test_email_format = ft_load_field("test_email_format", "test_email_format");
 $test_email_recipient = ft_load_field("test_email_recipient", "test_email_recipient", $admin_info["email"]);
 $test_email_data_source = ft_load_field("test_email_data_source", "test_email_data_source", "random_submission");
 $test_email_submission_id = ft_load_field("test_email_submission_id", "test_email_submission_id", "");
@@ -44,6 +45,7 @@ foreach ($views["results"] as $view)
 
 
 // ------------------------------------------------------------------------------------------------
+
 
 // compile the template information
 $page_vars = array();
@@ -70,6 +72,7 @@ $page_vars["js_messages"]    = array("validation_invalid_email", "validation_no_
 $page_vars["template_info"]  = $template_info;
 $page_vars["edit_email_tab"] = $edit_email_tab;
 $page_vars["num_submissions"] = $num_submissions;
+$page_vars["test_email_format"] = $test_email_format;
 $page_vars["test_email_recipient"] = $test_email_recipient;
 $page_vars["test_email_data_source"] = $test_email_data_source;
 $page_vars["test_email_submission_id"] = $test_email_submission_id;
@@ -95,6 +98,7 @@ page.onsubmit_check_email_settings = function(f)
   // Headers tab
   var rules = [];
   rules.push("function,page.check_one_main_recipient");
+	rules.push("required,email_from,{$LANG["validation_no_email_from_field"]}");
   rules.push("if:email_from=custom,required,custom_from_email,{$LANG["validation_no_custom_from_email"]}");
   rules.push("if:email_from=custom,valid_email,custom_from_email,{$LANG["validation_invalid_custom_from_email"]}");
   rules.push("if:email_reply_to=custom,required,custom_reply_to_email,{$LANG["validation_no_custom_reply_to_email"]}");
@@ -165,7 +169,7 @@ page.check_one_template_defined = function()
   text_template = text_template.strip();
 
   if (html_template.strip() == "" && text_template.strip() == "")
-    return [[$('html_template'), "{$LANG["validation_no_email_content"]}"];
+    return [[$('html_template'), "{$LANG["validation_no_email_content"]}"]];
 
   return true;
 }

@@ -6,9 +6,6 @@ if (isset($request["update_email_settings"]))
 $form_info = ft_get_form($form_id);
 $columns = ft_get_form_column_names($form_id, "", true);
 
-// remove the system fields
-
-
 // compile the templates information
 $page_vars = array();
 $page_vars["page"]       = "email_settings";

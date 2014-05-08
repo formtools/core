@@ -17,9 +17,11 @@
                           <optgroup label="{$LANG.word_administrator}">
                             <option value="admin">{$admin_info.first_name} {$admin_info.last_name} &lt;{$admin_info.email}&gt;</option>
                           </optgroup>
-                          <optgroup label="{$LANG.word_user}">
-                            <option value="user">{$LANG.phrase_from_user_form_submission_b}</option>
-                          </optgroup>
+                          {if $form_info.user_email_field}
+                            <optgroup label="{$LANG.word_user}">
+                              <option value="user">{$LANG.phrase_from_user_form_submission_b}</option>
+                            </optgroup>
+                          {/if}
                           {if $clients}
                             <optgroup label="{$LANG.word_clients}">
                               {foreach from=$clients item=client name=row}
@@ -146,13 +148,15 @@
                 <select name="email_from" id="email_from" onchange="emails_ns.show_custom_email_field('from', this.value)"
                   onchange="emails_ns.show_custom_email_field('from', this.value)">
                   <option value="">{$LANG.phrase_please_select}</option>
-                  <option value="none">{$LANG.phrase_none_not_recommended}</option>
+                  <option value="none" {if $template_info.email_from == "none"}selected{/if}>{$LANG.phrase_none_not_recommended}</option>
                   <optgroup label="{$LANG.word_administrator}">
                     <option value="admin" {if $template_info.email_from == "admin"}selected{/if}>{$admin_info.first_name} {$admin_info.last_name} &lt;{$admin_info.email}&gt;</option>
                   </optgroup>
-                  <optgroup label="{$LANG.word_user}">
-                    <option value="user" {if $template_info.email_from == "user"}selected{/if}>{$LANG.phrase_from_user_form_submission_b}</option>
-                  </optgroup>
+                  {if $form_info.user_email_field}
+                    <optgroup label="{$LANG.word_user}">
+                      <option value="user" {if $template_info.email_from == "user"}selected{/if}>{$LANG.phrase_from_user_form_submission_b}</option>
+                    </optgroup>
+                  {/if}
                   {if $clients}
                     <optgroup label="{$LANG.word_clients}">
                       {foreach from=$clients item=client name=row}
@@ -190,13 +194,15 @@
                 <select name="email_reply_to" id="email_reply_to" onchange="emails_ns.show_custom_email_field('reply_to', this.value)"
                   onchange="emails_ns.show_custom_email_field('reply_to', this.value)">
                   <option value="">{$LANG.phrase_please_select}</option>
-                  <option value="none">{$LANG.word_none}</option>
+                  <option value="none" {if $template_info.email_reply_to == "none"}selected{/if}>{$LANG.word_none}</option>
                   <optgroup label="{$LANG.word_administrator}">
                     <option value="admin" {if $template_info.email_reply_to == "admin"}selected{/if}>{$admin_info.first_name} {$admin_info.last_name} &lt;{$admin_info.email}&gt;</option>
                   </optgroup>
-                  <optgroup label="{$LANG.word_user}">
-                    <option value="user" {if $template_info.email_reply_to == "user"}selected{/if}>{$LANG.phrase_from_user_form_submission_b}</option>
-                  </optgroup>
+                  {if $form_info.user_email_field}
+                    <optgroup label="{$LANG.word_user}">
+                      <option value="user" {if $template_info.email_reply_to == "user"}selected{/if}>{$LANG.phrase_from_user_form_submission_b}</option>
+                    </optgroup>
+                  {/if}
                   {if $clients}
                     <optgroup label="{$LANG.word_clients}">
                       {foreach from=$clients item=client name=row}

@@ -14,6 +14,74 @@
 
 
 /**
+ * This function is called whenever the user clicks the "Create Email" button on the main email list page.
+ *
+ * @param integer $form_id
+ * @param integer $create_email_from_email_id this option parameter lets the user create a new email based on
+ *      an existing one, saving them the effort of having to re-enter everything.
+ */
+function ft_create_blank_email_template($form_id, $create_email_from_email_id = "")
+{
+  global $g_table_prefix;
+
+  if (empty($create_email_from_email_id))
+  {
+    mysql_query("
+      INSERT {$g_table_prefix}email_templates (form_id, email_status, email_event_trigger)
+      VALUES ($form_id, 'enabled', 'on_submission')
+        ");
+    $email_id = mysql_insert_id();
+  }
+  else
+  {
+    $email_template_info = ft_get_email_template($create_email_from_email_id);
+
+    // WISHLIST: be nice to have a generic "copy_table_row" function...
+    $query = mysql_query("
+      INSERT INTO {$g_table_prefix}email_templates (form_id, email_template_name, email_status,
+        view_mapping_type, view_mapping_view_id, email_event_trigger, include_on_edit_submission_page,
+        subject, email_from, email_from_account_id, custom_from_name, custom_from_email, email_reply_to,
+        email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email, html_template, text_template)
+        (SELECT form_id, email_template_name, email_status,
+           view_mapping_type, view_mapping_view_id, email_event_trigger, include_on_edit_submission_page,
+           subject, email_from, email_from_account_id, custom_from_name, custom_from_email, email_reply_to,
+           email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email, html_template, text_template
+         FROM {$g_table_prefix}email_templates WHERE email_id = $create_email_from_email_id)
+    ");
+    $email_id = mysql_insert_id();
+
+    foreach ($email_template_info["recipients"] as $recipient)
+    {
+      $recipient = ft_sanitize($recipient);
+
+      $recipient_user_type    = $recipient["recipient_user_type"];
+      $recipient_type         = $recipient["recipient_type"];
+      $account_id             = !empty($recipient["account_id"]) ? $recipient["account_id"] : "NULL";
+      $custom_recipient_name  = $recipient["custom_recipient_name"];
+      $custom_recipient_email = $recipient["custom_recipient_email"];
+
+      mysql_query("
+        INSERT INTO {$g_table_prefix}email_template_recipients (email_template_id, recipient_user_type,
+          recipient_type, account_id, custom_recipient_name, custom_recipient_email)
+        VALUES ($email_id, '$recipient_user_type', '$recipient_type', $account_id, '$custom_recipient_name',
+          '$custom_recipient_email')
+          ") or die(mysql_error());
+    }
+
+    foreach ($email_template_info["edit_submission_page_view_ids"] as $view_id)
+    {
+      mysql_query("
+        INSERT INTO {$g_table_prefix}email_template_edit_submission_views (email_id, view_id)
+        VALUES ($email_id, $view_id)
+          ");
+    }
+  }
+
+  return $email_id;
+}
+
+
+/**
  * Returns a list of all email templates for a form. This returns everything from the email_templates
  * table, plus a "view_name" key->value pair from the Views table (if a View is specified).
  *
@@ -139,6 +207,30 @@ function ft_send_test_email($info)
     return array(false, $email_info);
 
   $recipient = $info["test_email_recipient"];
+
+  // if Swift Mailer is enabled, send the emails with that
+  $continue = true;
+  if (ft_check_module_enabled("swift_mailer"))
+  {
+    $sm_settings = ft_get_module_settings("", "swift_mailer");
+
+    if ($sm_settings["swiftmailer_enabled"] == "yes")
+    {
+      ft_include_module("swift_mailer");
+			
+			$email_info["cc"]  = array();
+			$email_info["bcc"] = array();
+			$email_info["to"]  = array();
+			$email_info["to"][] = array("email" => $recipient);
+
+      return swift_send_email($email_info);
+      $continue = false;
+    }
+  }
+
+  if (!$continue)
+    return;
+
 
   // construct the email headers
   $eol = _ft_get_email_eol_char();
@@ -293,8 +385,8 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   }
 
 
-  // if the administrator limited the email content to fields in a particular View, pass those fields to the template -
-  // NOT all of the form fields (which is the default)
+  // if the administrator limited the email content to fields in a particular View, pass those fields to the
+  // template - NOT all of the form fields (which is the default)
   $fields_for_email_template = array();
   if (!empty($email_template["limit_email_content_to_fields_in_view"]))
   {
@@ -311,6 +403,25 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   }
   else
     $fields_for_email_template = ft_get_form_fields($form_id);
+
+
+  // for file fields, add folder_url and folder_path attributes to the $fields_for_email_template. This provides
+  // that information for patterns that use the Smarty Loop
+  $updated_fields_for_email_template = array();
+  foreach ($fields_for_email_template as $field_info)
+  {
+  	if ($field_info["field_type"] == "file")
+  	{
+  		$field_id = $field_info["field_id"];
+  		$extended_field_info = ft_get_extended_field_settings($field_id);
+  		$field_info["folder_url"] = $extended_field_info["file_upload_url"];
+  		$field_info["folder_path"] = $extended_field_info["file_upload_dir"];
+  	}
+
+  	$updated_fields_for_email_template[] = $field_info;
+  }
+
+  $fields_for_email_template = $updated_fields_for_email_template;
 
 
   // retrieve the placeholders and their substitutes
@@ -1088,7 +1199,7 @@ function _ft_get_placeholder_hash($form_id, $submission_id, $client_info = "")
   }
 
   $placeholders["ADMINEMAIL"]   = $admin_info["email"];
-  $placeholders["FORMNAME"]     = $form_info['form_name'];
+  $placeholders["FORMNAME"]     = $form_info["form_name"];
   $placeholders["FORMURL"]      = $form_info["form_url"];
   $placeholders["SUBMISSIONID"] = $submission_id;
   $placeholders["LOGINURL"]     = $g_root_url . "/index.php";
@@ -1206,74 +1317,6 @@ function _ft_get_email_headers($info)
   $headers .= $eol;
 
   return $headers;
-}
-
-
-/**
- * This function is called whenever the user clicks the "Create Email" button on the main email list page.
- *
- * @param integer $form_id
- * @param integer $create_email_from_email_id this option parameter lets the user create a new email based on
- *      an existing one, saving them the effort of having to re-enter everything.
- */
-function ft_create_blank_email_template($form_id, $create_email_from_email_id = "")
-{
-  global $g_table_prefix;
-
-  if (empty($create_email_from_email_id))
-  {
-    mysql_query("
-      INSERT {$g_table_prefix}email_templates (form_id, email_status, email_event_trigger)
-      VALUES ($form_id, 'enabled', 'on_submission')
-        ");
-    $email_id = mysql_insert_id();
-  }
-  else
-  {
-    $email_template_info = ft_get_email_template($create_email_from_email_id);
-
-    // WISHLIST: be nice to have a generic "copy_table_row" function...
-    $query = mysql_query("
-      INSERT INTO {$g_table_prefix}email_templates (form_id, email_template_name, email_status,
-        view_mapping_type, view_mapping_view_id, email_event_trigger, include_on_edit_submission_page,
-        subject, email_from, email_from_account_id, custom_from_name, custom_from_email, email_reply_to,
-        email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email, html_template, text_template)
-        (SELECT form_id, email_template_name, email_status,
-           view_mapping_type, view_mapping_view_id, email_event_trigger, include_on_edit_submission_page,
-           subject, email_from, email_from_account_id, custom_from_name, custom_from_email, email_reply_to,
-           email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email, html_template, text_template
-         FROM {$g_table_prefix}email_templates WHERE email_id = $create_email_from_email_id)
-    ");
-    $email_id = mysql_insert_id();
-
-    foreach ($email_template_info["recipients"] as $recipient)
-    {
-      $recipient = ft_sanitize($recipient);
-
-      $recipient_user_type    = $recipient["recipient_user_type"];
-      $recipient_type         = $recipient["recipient_type"];
-      $account_id             = !empty($recipient["account_id"]) ? $recipient["account_id"] : "NULL";
-      $custom_recipient_name  = $recipient["custom_recipient_name"];
-      $custom_recipient_email = $recipient["custom_recipient_email"];
-
-      mysql_query("
-        INSERT INTO {$g_table_prefix}email_template_recipients (email_template_id, recipient_user_type,
-          recipient_type, account_id, custom_recipient_name, custom_recipient_email)
-        VALUES ($email_id, '$recipient_user_type', '$recipient_type', $account_id, '$custom_recipient_name',
-          '$custom_recipient_email')
-          ") or die(mysql_error());
-    }
-
-    foreach ($email_template_info["edit_submission_page_view_ids"] as $view_id)
-    {
-      mysql_query("
-        INSERT INTO {$g_table_prefix}email_template_edit_submission_views (email_id, view_id)
-        VALUES ($email_id, $view_id)
-          ");
-    }
-  }
-
-  return $email_id;
 }
 
 

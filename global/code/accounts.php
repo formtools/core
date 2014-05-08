@@ -279,13 +279,49 @@ function ft_send_password($info)
   $smarty_template_email_subject = file_get_contents("$g_root_dir/global/emails/forget_password_subject.tpl");
   $email_subject = trim(ft_eval_smarty_string($smarty_template_email_subject, $placeholders));
 
-  // send email [note: the double quotes around the email recipient and content are intentional:
-  // some systems fail without it]
-  if (!@mail("$email", $email_subject, $email_content))
+
+  // if Swift Mailer is enabled, send the emails with that
+  if (ft_check_module_enabled("swift_mailer"))
   {
-    $success = false;
-    $message = $LANG["notify_email_not_sent"];
-    return array($success, $message);
+    $sm_settings = ft_get_module_settings("", "swift_mailer");
+
+    if ($sm_settings["swiftmailer_enabled"] == "yes")
+    {
+      ft_include_module("swift_mailer");
+			
+			// get the admin info. We'll use that info for the "from" and "reply-to" values. Note
+			// that we DON'T use that info for the regular mail() function. This is because retrieving 
+			// the password is important functionality and we don't want to cause problems that could 
+			// prevent the email being sent. Many servers don't all the 4th headers parameter of the mail()
+			// function
+			$admin_info = ft_get_admin_info();
+      $admin_email = $admin_info["email"];			
+
+			$email_info  = array();
+			$email_info["to"]  = array();
+			$email_info["to"][] = array("email" => $email);
+			$email_info["from"] = array();
+			$email_info["from"]["email"] = $admin_email;
+			$email_info["subject"] = $email_subject;			
+			$email_info["text_content"] = $email_content;
+      list($success, $sm_message) = swift_send_email($email_info);
+
+			// if the email couldn't be sent, display the appropriate error message. Otherwise
+			// the default success message is used 
+			if (!$success)
+			  $message = $sm_message;
+    }
+  }
+  else
+	{
+    // send email [note: the double quotes around the email recipient and content are intentional:
+    // some systems fail without it]
+    if (!@mail("$email", $email_subject, $email_content))
+    {
+      $success = false;
+      $message = $LANG["notify_email_not_sent"];
+      return array($success, $message);
+    }
   }
 
   return array($success, $message);

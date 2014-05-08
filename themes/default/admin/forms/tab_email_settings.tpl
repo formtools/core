@@ -15,7 +15,7 @@
 
     <table class="list_table" cellspacing="1" cellpadding="0">
     <tr>
-      <td width="160" class="pad_left_small">{$LANG.phrase_user_email_address_field}</td>
+      <td width="200" class="pad_left_small">{$LANG.phrase_user_email_address_field}</td>
       <td>
         {dropdown options=$columns name="user_email_field" default=$form_info.user_email_field}
       </td>

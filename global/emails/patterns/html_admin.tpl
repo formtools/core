@@ -4,14 +4,7 @@
 
 <table cellpadding="0" cellspacing="1">
 {foreach from=$fields item=field}
-{if $field.field_type != "system"}
-{literal}{if $ANSWER_{/literal}{$field.field_name}{literal}}{/literal}
-  <tr>
-    <td style="font-weight: bold">{$field.field_title}</td>
-    <td>{literal}{$ANSWER_{/literal}{$field.field_name}{literal}}{/literal}</td>
-  </tr>
-{literal}{/if}{/literal}
-{else}
+{if $field.field_type == "system"}
 {if $field.col_name == "submission_id"}
   <tr>
     <td style="font-weight: bold">{$field.field_title}</td>
@@ -28,6 +21,16 @@
     <td>{literal}{$IPADDRESS}{/literal}</td>
   </tr>
 {/if}
+{elseif $field.field_type == "file"}
+  <tr>
+    <td style="font-weight: bold">{$field.field_title}</td>
+    <td><a href="{literal}{$FILEURL_{/literal}{$field.field_name}{literal}}{/literal}">{literal}{$FILENAME_{/literal}{$field.field_name}{literal}}{/literal}</a></td>
+  </tr>
+{else}
+  <tr>
+    <td style="font-weight: bold">{$field.field_title}</td>
+    <td>{literal}{$ANSWER_{/literal}{$field.field_name}{literal}}{/literal}</td>
+  </tr>
 {/if}
 {/foreach}
 </table>
