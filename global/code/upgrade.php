@@ -89,6 +89,14 @@ function ft_upgrade_form_tools()
       	    ");
       }
 
+      if ($existing_version_info["release_date"] < 20090510)
+      {
+      	mysql_query("
+          ALTER TABLE {$g_table_prefix}view_fields
+          ADD is_searchable ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER is_editable
+            ");
+      }
+
       if ($existing_version_info["full"] != $g_current_version)
       {
         mysql_query("

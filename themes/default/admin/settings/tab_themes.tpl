@@ -15,7 +15,10 @@
       </tr>
       <tr>
         <td>{$LANG.phrase_default_client_account_theme}</td>
-        <td>{themes_dropdown name_id="default_client_theme" default=$client_theme}</td>
+        <td>
+          {themes_dropdown name_id="default_client_theme" default=$client_theme}
+          <span class="medium_grey">{$LANG.text_also_default_login_page_theme}</span>
+        </td>
       </tr>
       </table>
 

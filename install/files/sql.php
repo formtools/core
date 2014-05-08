@@ -336,6 +336,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%view_fields (
   is_column enum('yes','no') default 'no',
   is_sortable enum('yes','no') NOT NULL default 'yes',
   is_editable enum('yes','no') NOT NULL default 'yes',
+  is_searchable enum('yes','no') NOT NULL default 'yes',
   list_order smallint(5) unsigned default NULL,
   PRIMARY KEY  (view_id,field_id)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";

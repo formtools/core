@@ -58,6 +58,8 @@ if (isset($_POST) && !empty($_POST))
     list($g_success, $g_message) = img_delete_image_file_submission($form_id, $submission_id, $_POST['field_id']);
     $file_deleted = true;
   }
+  
+  // TODO this deprecated??
   else if (isset($_POST['email_user']) && !empty($_POST['email_user']))
   {
     $g_success = ft_send_email("user", $form_id, $submission_id);

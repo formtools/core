@@ -16,6 +16,7 @@
               <th width="60">{$LANG.word_column}</th>
               <th width="60">{$LANG.word_sortable}</th>
               <th width="60">{$LANG.word_editable}</th>
+              <th width="60">{$LANG.word_searchable}</th>
               <th width="200">{$LANG.phrase_display_text}</th>
               <th>{$LANG.word_tab}</th>
               <th width="60" class="del">{$LANG.word_remove|upper}</th>
@@ -34,30 +35,34 @@
               {assign var=col3_tabindex value=$tabindex_increment*3+$count}
               {assign var=col4_tabindex value=$tabindex_increment*4+$count}
               {assign var=col5_tabindex value=$tabindex_increment*5+$count}
+              {assign var=col6_tabindex value=$tabindex_increment*6+$count}
 
               <tr id="field_row_{$field_id}">
                 <td class="greyCell" align="center">
                   <input type="text" name="field_{$field_id}_order" id="field_{$field_id}_order" style="width: 30px;" value="{$count}" tabindex="{$col1_tabindex}" />
                 </td>
-                <td class="greyCell" align="center">
+                <td align="center">
                   <input type="checkbox" name="field_{$field_id}_is_column" id="field_{$field_id}_is_column" onclick="view_ns.toggle_sortable_field({$field_id}, this.checked)"
 									  {if $field.is_column == "yes"}checked{/if} tabindex="{$col2_tabindex}" />
                 </td>
-                <td class="greyCell" align="center">
+                <td align="center">
                   <div id="sortable_{$field_id}" {if $field.is_column == 'no'}style="display: none;"{/if}>
                     <input type="checkbox" name="field_{$field_id}_is_sortable" {if $field.is_sortable == "yes"}checked{/if} tabindex="{$col3_tabindex}" />
                   </div>
                 </td>
-                <td class="greyCell" align="center">
+                <td align="center">
                   {* everything except the Submission ID and Last Modified Date is editable *}
                   {if $field.col_name != "submission_id" && $field.col_name != "last_modified_date"}
                     <input type="checkbox" name="field_{$field_id}_is_editable" id="field_{$field_id}_is_editable" {if $field.is_editable == "yes"}checked{/if}
                       {if $view_info.may_edit_submissions == "no"}disabled{/if} tabindex="{$col4_tabindex}" />
                   {/if}
                 </td>
-                <td class="greyCell pad_left_small">{$field.field_title}</td>
+                <td align="center">
+                  <input type="checkbox" name="field_{$field_id}_is_searchable" {if $field.is_searchable == "yes"}checked{/if} tabindex="{$col5_tabindex}" />
+                </td>
+                <td class="pad_left_small">{$field.field_title}</td>
                 <td>
-                  <select name="field_{$field_id}_tab" id="field_{$field_id}_tab" tabindex="{$col5_tabindex}">
+                  <select name="field_{$field_id}_tab" id="field_{$field_id}_tab" tabindex="{$col6_tabindex}">
                     {foreach from=$view_tabs item=view_tab name=tab_row}
                       {assign var='counter' value=$smarty.foreach.tab_row.iteration}
 

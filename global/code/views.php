@@ -851,12 +851,13 @@ function _ft_update_view_field_settings($view_id, $info)
 
 	for ($i=0; $i<count($field_ids); $i++)
 	{
-		$field_id    = $field_ids[$i];
-		$field_order = (isset($info["field_{$field_id}_order"])) ? $info["field_{$field_id}_order"] : "";
-    $is_column   = (isset($info["field_{$field_id}_is_column"])) ? true : false;
-		$is_sortable = (isset($info["field_{$field_id}_is_sortable"])) ? true : false;
-    $is_editable = (isset($info["field_{$field_id}_is_editable"])) ? true : false;
-    $field_tab   = (isset($info["field_{$field_id}_tab"])) ? $info["field_{$field_id}_tab"] : "";
+		$field_id = $field_ids[$i];
+		$field_order   = (isset($info["field_{$field_id}_order"])) ? $info["field_{$field_id}_order"] : "";
+    $is_column     = (isset($info["field_{$field_id}_is_column"])) ? true : false;
+		$is_sortable   = (isset($info["field_{$field_id}_is_sortable"])) ? true : false;
+    $is_editable   = (isset($info["field_{$field_id}_is_editable"])) ? true : false;
+    $is_searchable = (isset($info["field_{$field_id}_is_searchable"])) ? true : false;
+    $field_tab     = (isset($info["field_{$field_id}_tab"])) ? $info["field_{$field_id}_tab"] : "";
 
     // check to see if a key with this field order doesn't already exist. If it does, we place it directly
     // AFTER the item. We do this by adding 0.1 to the value. After we ksort() the array, the array will be
@@ -873,6 +874,7 @@ function _ft_update_view_field_settings($view_id, $info)
 			"is_sortable" => $is_sortable,
       "is_column" => $is_column,
       "is_editable" => $is_editable,
+      "is_searchable" => $is_searchable,
       "field_tab" => $field_tab
 				);
 	}
@@ -886,11 +888,12 @@ function _ft_update_view_field_settings($view_id, $info)
 		$is_column   = ($hash["is_column"]) ? "yes" : "no";
 		$is_sortable = ($hash["is_sortable"]) ? "yes" : "no";
 		$is_editable = ($hash["is_editable"]) ? "yes" : "no";
+		$is_searchable = ($hash["is_searchable"]) ? "yes" : "no";
 		$field_tab   = (!empty($hash["field_tab"])) ? $hash["field_tab"] : "NULL";
 
 		mysql_query("
-			INSERT INTO {$g_table_prefix}view_fields (view_id, field_id, tab_number, is_column, is_sortable, is_editable, list_order)
-			VALUES ($view_id, $field_id, $field_tab, '$is_column', '$is_sortable', '$is_editable', $order)
+			INSERT INTO {$g_table_prefix}view_fields (view_id, field_id, tab_number, is_column, is_sortable, is_editable, is_searchable, list_order)
+			VALUES ($view_id, $field_id, $field_tab, '$is_column', '$is_sortable', '$is_editable', '$is_searchable', $order)
 				");
 		$order++;
 	}

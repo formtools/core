@@ -140,7 +140,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 
 	// update sessions
 	if (isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) && in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]))
-	  array_splice($_SESSION["ft"]["form_{$form_id}_selected_submissions"], array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]), 1);  
+	  array_splice($_SESSION["ft"]["form_{$form_id}_selected_submissions"], array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]), 1);
 
   return array($success, $message);
 }
@@ -876,10 +876,11 @@ function ft_finalize_submission($form_id, $submission_id)
  *                  search_field<br/>
  *                  search_date<br/>
  *                  search_keyword<br/>
- * @param array $submission_ids an optional array containing a list of submission IDs to return. This may
- *              seem counterintuitive to pass the results that it needs to return to the function that
- *              figures out WHICH results to return, but it's actually kinda handy: this function returns
- *              exactly the field information that's needed in the order that's needed.
+ *                  submission_ids - an optional array containing a list of submission IDs to return.
+ *   This may seem counterintuitive to pass the results that it needs to return to the function that
+ *   figures out WHICH results to return, but it's actually kinda handy: this function returns exactly
+ *   the field information that's needed in the order that's needed.
+ *
  * @return array returns a hash with these keys:<br/>
  *                ["search_query"]       => an array of hashes, each index a search result row<br />
  *                ["search_num_results"] => the number of results in the search (not just the 10 or so

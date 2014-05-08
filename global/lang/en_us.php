@@ -194,6 +194,7 @@ $LANG["word_resolved"] = "Resolved";
 $LANG["word_right"] = "Right";
 $LANG["word_row_sp"] = "Row(s)";
 $LANG["word_search"] = "Search";
+$LANG["word_searchable"] = "Searchable";
 $LANG["word_select"] = "Select";
 $LANG["word_selected"] = "selected";
 $LANG["word_send"] = "Send";
@@ -922,6 +923,7 @@ $LANG["text_add_form_step_5_para_3"] = "If you wish to fine-tune your form for o
 $LANG["text_add_form_step_5_para_4"] = "Since your form contains file upload fields, you will need to configure each field to specify the file upload folder, what files are permitted and . This can be found on the <a href=\"{\$editformlink}\"><b>Display tab</b></a> of the edit form page.";
 $LANG["text_add_form_step_5_para_5"] = "If the submission was sent via the API, change the <b>ft_api_init_form_page</b> line on the first page of your form to:";
 $LANG["text_admin_email_placeholder_info"] = "This is the email address of the Form Tools administrator, defined in your account settings. This only outputs the email address, so if you wish to use as an HTML link, you will need to wrap it in an &lt;a&gt; tag, like so:<br /><b>&lt;a href=\"mailto:{\$ADMINEMAIL}\"&gt;{\$ADMINEMAIL}&lt;/a&gt;</b>";
+$LANG["text_also_default_login_page_theme"] = "(Also the default login page theme)";
 $LANG["text_client_form_page"] = "This page lists all the forms and Views assigned to this client. Tip: in order for them to see a form's submissions, they need to be assigned to at least one View.";
 $LANG["text_client_no_forms"] = "You currently have no forms available for review.";
 $LANG["text_client_welcome"] = "Welcome! This program stores all information submitted by your website visitors. To view submissions for a particular form just click on the <b>VIEW</b> link, or see the leftmost navigation menu for other options.";
