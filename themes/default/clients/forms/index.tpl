@@ -105,10 +105,10 @@
           {* determine the column sorting (if included in query string, reverse) *}
           {if     $order == $i.col_name|cat:'-DESC'}
             {assign var=order_col value="&order=`$i.col_name`-ASC"}
-            {assign var=up_down value="<img src=\"`$theme_dir`/images/sort_down.gif\" />"}
+            {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
           {elseif $order == $i.col_name|cat:'-ASC'}
             {assign var=order_col value="&order=`$i.col_name`-DESC"}
-            {assign var=up_down value="<img src=\"`$theme_dir`/images/sort_up.gif\" />"}
+            {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
           {else}
             {assign var=order_col value="&order=`$i.col_name`-DESC"}
           {/if}
@@ -236,18 +236,18 @@
       </div>
 
       {template_hook location="client_submission_listings_buttons1"}
-			
+
       {if $view_info.may_add_submissions == "yes"}
         <input type="button" id="add_submission" value="{$LANG.word_add}" onclick="window.location='{$same_page}?add_submission'" />
       {/if}
 
       {template_hook location="client_submission_listings_buttons2"}
-						
+
       <input type="button" id="select_button" value="{$LANG.phrase_select_all_on_page}" onclick="ms.select_all_on_page();" />
       <input type="button" id="unselect_button" value="{$LANG.phrase_unselect_all}" onclick="ms.unselect_all()" />
 
       {template_hook location="client_submission_listings_buttons3"}
-						
+
       {if $view_info.may_delete_submissions == "yes"}
         <input type="button" value="{$LANG.word_delete}" class="red" onclick="ms.delete_submissions()" />
       {/if}
