@@ -155,6 +155,7 @@ function ft_get_menu_by_account_id($account_id)
 	  SELECT *
 	  FROM   {$g_table_prefix}menu_items
 	  WHERE  menu_id = $menu_id
+	  ORDER BY list_order
 	    ");
 
 	$info = array();
@@ -650,9 +651,17 @@ function ft_update_admin_menu($info)
 	  $list_order      = isset($info["menu_row_{$i}_order"]) ? $info["menu_row_{$i}_order"] : "";
 
 		// construct the URL for this menu item
-
 		$url = ft_construct_page_url($page_identifier, $custom_options);
-    $menu_items[$list_order] = array(
+
+		// if a key already exists for this list order, tack on an "a" so that the upcoming ksort will
+		// work properly and that this menu item won't be lost. Interestingly, array_key_exists only accepts
+		// keys that are integers or strings, so we add on more and more a's to the end of the key string to
+		// make the row key compatible with both array_key_exists and ksort.
+		$new_list_order = $list_order;
+		while (array_key_exists($new_list_order, $menu_items))
+      $new_list_order .= "a";
+
+    $menu_items[$new_list_order] = array(
       "url" => $url,
 			"page_identifier" => $page_identifier,
 			"display_text" => $display_text,
@@ -758,9 +767,17 @@ function ft_update_client_menu($info)
 	  $list_order      = isset($info["menu_row_{$i}_order"]) ? $info["menu_row_{$i}_order"] : "";
 
 		// construct the URL for this menu item
-
 		$url = ft_construct_page_url($page_identifier, $custom_options);
-    $menu_items[$list_order] = array(
+
+		// if a key already exists for this list order, tack on an "a" so that the upcoming ksort will
+		// work properly and that this menu item won't be lost. Interestingly, array_key_exists only accepts
+		// keys that are integers or strings, so we add on more and more a's to the end of the key string to
+		// make the row key compatible with both array_key_exists and ksort.
+		$new_list_order = $list_order;
+		while (array_key_exists($new_list_order, $menu_items))
+      $new_list_order .= "a";
+
+    $menu_items[$new_list_order] = array(
       "url" => $url,
 			"page_identifier" => $page_identifier,
 			"display_text" => $display_text,

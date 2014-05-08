@@ -180,11 +180,6 @@ switch ($action)
     echo "{ success: $success, message: \"$message\"{$return_val_str} }";
     break;
 
-
-  // TODO
-  case "delete_image_field":
-    break;
-
   case "edit_submission_send_email":
     $form_id       = $request["form_id"];
     $submission_id = $request["submission_id"];

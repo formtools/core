@@ -20,6 +20,8 @@
     </tr>
     </table>
 
+    {template_hook location="client_edit_submission_top"}
+
     {if $tabs|@count > 0}
       {ft_include file='tabset_open.tpl'}
     {/if}
@@ -216,6 +218,8 @@
     {if $tabs|@count > 0}
       {ft_include file='tabset_close.tpl'}
     {/if}
+
+    {template_hook location="client_edit_submission_bottom"}
 
   </div>
 
