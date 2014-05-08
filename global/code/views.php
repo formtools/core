@@ -790,6 +790,7 @@ function _ft_update_view_main_settings($view_id, $info)
   $access_type              = $info["access_type"];
   $may_delete_submissions   = $info["may_delete_submissions"];
   $may_edit_submissions     = isset($info["may_edit_submissions"]) ? "yes" : "no";
+  $may_add_submissions      = isset($info["may_add_submissions"]) ? "yes" : "no";
 
   // do a little error checking on the num submissions field. If it's invalid, just set to to 10 without
   // informing them - it's not really necessary, I don't think
@@ -804,7 +805,8 @@ function _ft_update_view_main_settings($view_id, $info)
 					 default_sort_field = '$default_sort_field',
 					 default_sort_field_order = '$default_sort_field_order',
 					 may_delete_submissions = '$may_delete_submissions',
-					 may_edit_submissions = '$may_edit_submissions'
+					 may_edit_submissions = '$may_edit_submissions',
+					 may_add_submissions = '$may_add_submissions'
     WHERE  view_id = $view_id
 			");
 
