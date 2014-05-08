@@ -99,7 +99,10 @@ add_fields_ns.add_fields = function(num_rows)
     inp.setAttribute("type", "text");
     inp.setAttribute("name", "col_name_" + currRow);
     inp.setAttribute("id", "col_name_" + currRow);
-    inp.setAttribute("disabled", "true");
+
+    if ($("auto_generate_col_names").checked)
+      inp.setAttribute("disabled", "true");
+
     inp.style.cssText = "width: 100px";
     td6.appendChild(inp);
 

@@ -52,6 +52,12 @@ $view_info = ft_get_view($view_id);
 
 ft_check_client_may_view($account_id, $form_id, $view_id);
 
+if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes")
+{
+  $submission_id = ft_create_blank_submission($form_id, true);
+	header("location: edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id");
+	exit;
+}
 
 // if the View just changed (i.e. it was just selected by the user), deselect any items in
 // this form

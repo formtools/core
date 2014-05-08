@@ -1,14 +1,14 @@
-<table cellspacing="0" cellpadding="1" class="pad_bottom">
-            <tr>
-              <td class="pad_left" colspan="2">
-                <input type="checkbox" name="may_edit_submissions" id="cmes" value="yes"
-                  onchange="view_ns.toggle_editable_fields(this.checked)"
-                  {if $view_info.may_edit_submissions == "yes"}checked{/if} />
-                  <label for="cmes">{$LANG.phrase_allow_fields_edited}</label>
-              </td>
-            </tr>
-            </table>
+            <div style="float:right">
+              {$assign_rows_to_tabs_html}
+              <input type="button" id="assign_fields_button" value="{$LANG.word_assign}" onclick="view_ns.assign_field_tabs()" />
+            </div>
 
+            <div class="pad_bottom">
+              <input type="checkbox" name="may_edit_submissions" id="cmes" value="yes"
+              onchange="view_ns.toggle_editable_fields(this.checked)"
+              {if $view_info.may_edit_submissions == "yes"}checked{/if} />
+              <label for="cmes">{$LANG.phrase_allow_fields_edited}</label>
+            </div>
 
             <table id="view_fields_table" class="list_table" width="100%" cellpadding="0" cellspacing="1">
             <tbody><tr style="height: 20px;">
@@ -73,15 +73,18 @@
 
             <input type="hidden" name="field_ids" id="field_ids" value="" />
 
-            <p>
-              <div style="float:right">
-                {$assign_rows_to_tabs_html}
-                <input type="button" id="assign_fields_button" value="{$LANG.word_assign}" onclick="view_ns.assign_field_tabs()" />
+            <div class="pad_top_large">
+              <div style="float:left" class="pad_right">
+              <select id="available_fields" multiple size="5">
+                  {$available_fields}
+                </select>
               </div>
 
-              <select id="available_fields">
-                {$available_fields}
-              </select>
-              <input type="button" id="add_field_button" value="{$LANG.phrase_add_field}" {if $no_available_fields}disabled style="color: #999999"{/if}
-                onclick="view_ns.add_view_field($('available_fields').value);" />
-            </p>
+              <div class="pad_bottom_large">
+                <input type="button" id="add_field_button" value="{$LANG.phrase_add_field_sp}" {if $no_available_fields}disabled style="color: #999999"{/if}
+                  onclick="view_ns.add_view_fields('available_fields');" />
+              </div>
+
+              <input type="button" id="add_field_button" value="{$LANG.phrase_select_all}" onclick="ft.select_all_multi_dropdown_options('available_fields');" /><br />
+              <input type="button" id="add_field_button" value="{$LANG.phrase_unselect_all}" onclick="ft.unselect_all_multi_dropdown_options('available_fields');" />
+            </div>

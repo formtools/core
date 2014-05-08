@@ -77,6 +77,25 @@ ft.display_dhtml_page_nav = function(num_results, num_per_page, current_page)
 
 
 /**
+ * Selects all options in a multi-select dropdown field.
+ */
+ft.select_all_multi_dropdown_options = function(dd_field_id)
+{
+  for (var i=0; i<$(dd_field_id).options.length; i++)
+	  $(dd_field_id).options[i].selected = true;
+}
+
+/**
+ * Selects all options in a multi-select dropdown field.
+ */
+ft.unselect_all_multi_dropdown_options = function(dd_field_id)
+{
+  for (var i=0; i<$(dd_field_id).options.length; i++)
+	  $(dd_field_id).options[i].selected = false;
+}
+
+
+/**
  * Adds a new option to a select dropdown box.
  *
  * @param object selectbox the select box object

@@ -13,6 +13,8 @@
  */
 function smarty_function_submission_radios($params, &$smarty)
 {
+  global $LANG;
+
 	if (empty($params["name"]))
   {
 	  $smarty->trigger_error("assign: missing 'name' parameter. This is used to give the select field a name value.");
@@ -32,6 +34,12 @@ function smarty_function_submission_radios($params, &$smarty)
 	$field_info    = ft_get_form_field($field_id, true);
   $field_group_id = $field_info["field_group_id"];
   $options = $field_info["options"];
+
+	if (empty($field_group_id))
+	{
+	  echo "<div class=\"medium_grey\">{$LANG["notify_no_assigned_field_option_group"]}</div>";
+		return;
+	}
 
   $group_info = ft_get_field_option_group($field_group_id);
   $orientation = $group_info["field_orientation"];
@@ -61,4 +69,3 @@ function smarty_function_submission_radios($params, &$smarty)
 	else
 	  echo $dd_str;
 }
-

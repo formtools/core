@@ -764,6 +764,10 @@ function ft_update_email_template($email_id, $info)
 {
   global $g_table_prefix, $LANG;
 
+  // neat bug. We need to trim out any trailing whitespace from the templates, otherwise they're
+  // escaped for DB insertion & can't be trimmed out then
+  $info["text_template"] = trim($info["text_template"]);
+  $info["html_template"] = trim($info["html_template"]);
   $info = ft_sanitize($info);
 
   extract(ft_process_hooks("start", compact("email_id", "info"), array("info")), EXTR_OVERWRITE);
@@ -800,8 +804,8 @@ function ft_update_email_template($email_id, $info)
   }
 
   // "Email Content" tab
-  $html_template        = $info["html_template"];
-  $text_template        = $info["text_template"];
+  $html_template = $info["html_template"];
+  $text_template = $info["text_template"];
 
   mysql_query("
     UPDATE {$g_table_prefix}email_templates
@@ -966,10 +970,11 @@ function ft_get_email_template_recipients($email_id)
  * This is used on the Edit Submission pages to show the list of email templates which can be emailed
  * for the submission-View.
  *
+ * @param integer $form_id
  * @param integer $view_id
  * @return array
  */
-function ft_get_edit_submission_email_templates($view_id)
+function ft_get_edit_submission_email_templates($form_id, $view_id)
 {
   global $g_table_prefix;
 
@@ -979,6 +984,7 @@ function ft_get_edit_submission_email_templates($view_id)
     SELECT et.email_id
     FROM   {$g_table_prefix}email_templates et
     WHERE  et.email_status = 'enabled' AND
+           et.form_id = $form_id AND
            (et.include_on_edit_submission_page = 'all_views' OR
              (et.include_on_edit_submission_page = 'specific_views'
                AND EXISTS
@@ -1396,9 +1402,11 @@ function ft_delete_email_template($email_id)
 
 /**
  * This function is tightly coupled with ft_get_email_components. I know, I know. It examines the content
- * of an email template and detects any file attachments. It then returns the updated email template (i.e. minus
- * the attachment string) and information about the attachment (file name, location, mimetype) for use by the
- * emailing function (only Swift Mailer module at this time).
+ * of an email template and detects any field and file attachments. Field attachments are files that have
+ * been uploaded through a form field; file attachments are just files on the server that want to be sent
+ * out. It then returns the updated email template (i.e. minus the attachment string) and information about
+ * the attachment (file name, location, mimetype) for use by the emailing function (only Swift Mailer module
+ * at this time).
  *
  * @param string $template_str the email template (HTML or text)
  * @param integer $form_id
@@ -1406,11 +1414,14 @@ function ft_delete_email_template($email_id)
  */
 function _ft_extract_email_attachment_info($template_str, $form_id, $file_info)
 {
+  global $g_root_dir;
+
   // if there are any fields marked as attachments, store them and remove the attachment string
-  $attachments_regexp = '/\{\$attachment\s+field=("|\')(.+)("|\')\}/';
+  $field_attachments_regexp = '/\{\$attachment\s+field=("|\')(.+)("|\')\}/';
+  $file_attachments_regexp  = '/\{\$attachment\s+file=("|\')(.+)("|\')\}/';
 
   $attachment_info = array();
-  if (preg_match_all($attachments_regexp, $template_str, $matches))
+  if (preg_match_all($field_attachments_regexp, $template_str, $matches))
   {
     foreach ($matches[2] as $field_name)
     {
@@ -1434,9 +1445,27 @@ function _ft_extract_email_attachment_info($template_str, $form_id, $file_info)
       }
     }
 
-    $template_str = preg_replace($attachments_regexp, "", $template_str);
+    $template_str = preg_replace($field_attachments_regexp, "", $template_str);
+  }
+
+  if (preg_match_all($file_attachments_regexp, $template_str, $matches))
+  {
+    foreach ($matches[2] as $file_and_relative_path)
+    {
+      if (is_file("$g_root_dir/$file_and_relative_path"))
+      {
+			  $pathinfo = pathinfo($file_and_relative_path);
+				$file_name = $pathinfo["basename"];
+
+        $info = array(
+          "file_and_path" => $file_and_relative_path,
+          "filename" => $filename
+        );
+        $attachment_info[] = $info;
+      }
+    }
+    $template_str = preg_replace($file_attachments_regexp, "", $template_str);
   }
 
   return array($template_str, $attachment_info);
 }
-

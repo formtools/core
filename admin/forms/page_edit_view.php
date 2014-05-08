@@ -199,7 +199,7 @@ $page_vars["add_num_rows_input_field"] = ft_eval_smarty_string($LANG["phrase_add
 $page_vars["js_messages"] = array("word_remove", "validation_no_tabs_defined", "phrase_all_fields_displayed", "validation_invalid_tab_assign_values",
         "validation_num_rows_to_add", "phrase_please_select", "word_before", "word_after", "word_equals",
         "phrase_not_equal", "word_like", "phrase_not_like", "validation_no_view_name", "validation_no_num_submissions_per_page",
-        "validation_no_view_fields", "validation_no_column_selected");
+        "validation_no_view_fields", "validation_no_column_selected", "validation_no_view_fields_selected");
 
 $page_vars["head_js"] = "
 $js_string

@@ -40,10 +40,10 @@ function smarty_function_display_edit_submission_view_dropdown($params, &$smarty
   $submission_id = $params["submission_id"];
   $account_id    = $params["account_id"];
 
-	if ($is_admin)
+  if ($is_admin)
     $views = ft_get_form_views($form_id);
   else
-	  $views = ft_get_form_views($form_id, $account_id);
+    $views = ft_get_form_views($form_id, $account_id);
 
   // loop through the Views assigned to this user and IFF the view contains the submission,
   // add it to the dropdown list

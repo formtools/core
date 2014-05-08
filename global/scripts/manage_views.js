@@ -61,8 +61,26 @@ view_ns.toggle_sortable_field = function(field_id, show)
 
 
 /**
- * Adds a field to the current View's field list and removes it from the "available fields"
- * dropdown.
+ * Adds one or more fields to the current View's field list. This calls the 
+ * view_ns.add_view_field function on each selected row.
+ */
+view_ns.add_view_fields = function(dd_field_id)
+{
+  var selected_field_ids = $F(dd_field_id);
+	if (!selected_field_ids.length)
+	{
+    ft.display_message("ft_message", false, g.messages["validation_no_view_fields_selected"]);	
+	  return;
+	}
+	
+	for (var i=0; i<selected_field_ids.length; i++)
+	  view_ns.add_view_field(selected_field_ids[i]);
+}
+
+
+/**
+ * Adds a field to the current View's field list and removes it from the 
+ * "available fields" dropdown.
  *
  * @param integer field_id the unique field ID.
  */

@@ -11,11 +11,11 @@
  */
 function smarty_function_field_option_groups_dropdown($params, &$smarty)
 {
-	global $LANG;
+  global $LANG;
 
-	if (empty($params["name_id"]))
+  if (empty($params["name_id"]))
   {
-	  $smarty->trigger_error("assign: missing 'name_id' parameter. This is used to give the select field a name and id value.");
+    $smarty->trigger_error("assign: missing 'name_id' parameter. This is used to give the select field a name and id value.");
     return;
   }
 

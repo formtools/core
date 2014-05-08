@@ -172,10 +172,10 @@ function ft_display_page($template, $page_vars, $theme = "")
 	if (!isset($_SESSION["ft"]["account"]["account_type"]))
 	  $_SESSION["ft"]["account"]["account_type"] = "";
 
-
+		
 	// common variables. These are sent to EVERY templates
 	$g_smarty->template_dir = "$g_root_dir/themes/$theme";
-	$g_smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
+	$g_smarty->compile_dir  = "$g_root_dir/themes/$theme/cache";
 	$g_smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
 	$g_smarty->assign("LANG", $LANG);
 	$g_smarty->assign("SESSION", $_SESSION["ft"]);

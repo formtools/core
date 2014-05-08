@@ -63,6 +63,14 @@ function ft_upgrade_form_tools()
             ");
       }
 
+      if ($existing_version_info["release_date"] < 20090317)
+      {
+      	mysql_query("
+      	  ALTER TABLE {$g_table_prefix}views
+      	  ADD may_add_submissions ENUM('yes', 'no') NOT NULL DEFAULT 'no'
+      	    ");
+      }
+
       if ($existing_version_info["full"] != $g_current_version)
       {
         mysql_query("

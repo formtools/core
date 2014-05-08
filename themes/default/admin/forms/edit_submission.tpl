@@ -6,10 +6,10 @@
     <tr>
       <td><span class="title">{$LANG.phrase_edit_submission_uc}</span></td>
       <td align="right">
-	      <div style="float:right; padding-left: 6px;">
-	        <a href="edit.php?form_id={$form_id}"><img src="{$images_url}/edit_small.gif" border="0" alt="{$LANG.phrase_edit_form}"
-	          title="{$LANG.phrase_edit_form}" /></a>
-	      </div>
+        <div style="float:right; padding-left: 6px;">
+          <a href="edit.php?form_id={$form_id}"><img src="{$images_url}/edit_small.gif" border="0" alt="{$LANG.phrase_edit_form}"
+            title="{$LANG.phrase_edit_form}" /></a>
+        </div>
         {display_edit_submission_view_dropdown form_id=$form_id view_id=$view_id submission_id=$submission_id
           account_id=$SESSION.account.account_id is_admin=true}
       </td>
@@ -206,7 +206,7 @@
 
         <span style="float:right">
           {* show the list of whatever email templates can be send from this page *}
-          {display_email_template_dropdown view_id=$view_id submission_id=$submission_id}
+          {display_email_template_dropdown form_id=$form_id view_id=$view_id submission_id=$submission_id}
          </span>
 
         {* only show the update button if there are editable fields in the tab *}
@@ -215,7 +215,7 @@
         {/if}
 
         {if $view_info.may_delete_submissions == "yes"}
-           <input type="button" name="delete" value="{$LANG.word_delete|upper}" class="red" onclick="return ms.delete_submission({$submission_id})"/>
+           <input type="button" name="delete" value="{$LANG.word_delete|upper}" class="red" onclick="return ms.delete_submission({$submission_id}, 'submissions.php')"/>
          {/if}
 
       </div>

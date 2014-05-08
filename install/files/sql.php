@@ -365,6 +365,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%views (
   num_submissions_per_page smallint(6) NOT NULL default '10',
   default_sort_field varchar(255) NOT NULL default 'submission_date',
   default_sort_field_order enum('asc','desc') NOT NULL default 'desc',
+  may_add_submissions enum('yes','no') NOT NULL DEFAULT 'yes',
   may_edit_submissions enum('yes','no') NOT NULL default 'yes',
   may_delete_submissions enum('yes','no') NOT NULL default 'yes',
   PRIMARY KEY  (view_id)

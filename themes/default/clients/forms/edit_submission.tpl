@@ -197,7 +197,7 @@
 
         <span style="float:right">
           {* show the list of whatever email templates can be send from this page *}
-          {display_email_template_dropdown view_id=$view_id submission_id=$submission_id}
+          {display_email_template_dropdown form_id=$form_id view_id=$view_id submission_id=$submission_id}
          </span>
 
         {* only show the update button if there are editable fields in the tab *}
@@ -206,7 +206,7 @@
         {/if}
 
         {if $view_info.may_delete_submissions == "yes"}
-           <input type="button" name="delete" value="{$LANG.word_delete|upper}" class="red" onclick="return ms.delete_submission({$submission_id})"/>
+           <input type="button" name="delete" value="{$LANG.word_delete|upper}" class="red" onclick="return ms.delete_submission({$submission_id}, 'index.php')"/>
          {/if}
 
       </div>

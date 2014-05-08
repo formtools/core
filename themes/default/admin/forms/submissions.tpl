@@ -235,6 +235,10 @@
         {/if}>
       </div>
 
+      {if $view_info.may_add_submissions == "yes"}
+        <input type="button" id="add_submission" value="{$LANG.word_add}" onclick="window.location='{$same_page}?add_submission'" />
+      {/if}
+
       <input type="button" id="select_button" value="{$LANG.phrase_select_all_on_page}" onclick="ms.select_all_on_page();" />
       <input type="button" id="unselect_button" value="{$LANG.phrase_unselect_all}" onclick="ms.unselect_all()" />
 

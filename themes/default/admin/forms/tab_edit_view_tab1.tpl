@@ -101,8 +101,19 @@
               </td>
             </tr>
             <tr>
+              <td class="pad_left">{$LANG.phrase_may_add_submissions}</td>
+              <td valign="top">
+                <input type="radio" name="may_add_submissions" value="yes" id="cmas1"
+                  {if $view_info.may_add_submissions == "yes"}checked{/if} />
+                  <label for="cmas1">{$LANG.word_yes}</label>
+                <input type="radio" name="may_add_submissions" value="no" id="cmas2"
+                  {if $view_info.may_add_submissions == "no"}checked{/if} />
+                  <label for="cmas2">{$LANG.word_no}</label>
+              </td>
+            </tr>
+            <tr>
               <td class="pad_left">{$LANG.phrase_may_delete_view_submissions}</td>
-              <td>
+              <td valign="top">
                 <input type="radio" name="may_delete_submissions" value="yes" id="cmds1"
                   {if $view_info.may_delete_submissions == "yes"}checked{/if} />
                   <label for="cmds1">{$LANG.word_yes}</label>

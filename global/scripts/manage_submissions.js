@@ -93,11 +93,12 @@ ms.delete_submissions = function(page)
  * Called on the edit submission page; lets a user delete the submission.
  *
  * @param integer submission_id
+ * @param string target_webpage where to link to after deleting the submission
  */
-ms.delete_submission = function(submission_id)
+ms.delete_submission = function(submission_id, target_webpage)
 {
   if (confirm(g.messages["confirm_delete_submission"]))
-    window.location = "submissions.php?delete=" + submission_id;
+    window.location = target_webpage + "?delete=" + submission_id;
 
   return false;
 }

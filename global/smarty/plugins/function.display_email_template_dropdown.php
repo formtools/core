@@ -17,8 +17,13 @@
  */
 function smarty_function_display_email_template_dropdown($params, &$smarty)
 {
-	global $LANG;
+  global $LANG;
 
+  if (empty($params["form_id"]))
+  {
+	$smarty->trigger_error("assign: missing 'form_id' parameter.");
+    return;
+  }
 	if (empty($params["view_id"]))
   {
 	  $smarty->trigger_error("assign: missing 'view_id' parameter.");
@@ -32,7 +37,8 @@ function smarty_function_display_email_template_dropdown($params, &$smarty)
 
   $submission_id = $params["submission_id"];
   $view_id       = $params["view_id"];
-  $email_templates = ft_get_edit_submission_email_templates($view_id);
+	$form_id       = $params["form_id"];
+  $email_templates = ft_get_edit_submission_email_templates($form_id, $view_id);
 
   $html = "";
   if (!empty($email_templates))
