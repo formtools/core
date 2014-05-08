@@ -52,9 +52,9 @@ function ft_uninstall_module($module_id)
   $success = true;
 
 	$has_custom_uninstall_script = false;
-  if (is_file("$g_root_dir/modules/$module_folder/uninstall.php"))
+  if (is_file("$g_root_dir/modules/$module_folder/library.php"))
   {
-  	@include_once("$g_root_dir/modules/$module_folder/uninstall.php");
+  	@include_once("$g_root_dir/modules/$module_folder/library.php");
   	$uninstall_function_name = "{$module_folder}__uninstall";
   	if (function_exists($uninstall_function_name))
   	{
@@ -734,9 +734,9 @@ function ft_install_module($module_id)
 
 	$has_custom_install_script = false;
 
-  if (is_file("$g_root_dir/modules/$module_folder/install.php"))
+  if (is_file("$g_root_dir/modules/$module_folder/library.php"))
   {
-  	@include_once("$g_root_dir/modules/$module_folder/install.php");
+  	@include_once("$g_root_dir/modules/$module_folder/library.php");
   	$install_function_name = "{$module_folder}__install";
   	if (function_exists($install_function_name))
   	{
@@ -816,10 +816,10 @@ function ft_upgrade_module($module_id)
 	  return array(false, "");
 
   // if the module has its own upgrade function, call it!
-  @include_once("$g_root_dir/modules/$module_folder/install.php");
+  @include_once("$g_root_dir/modules/$module_folder/library.php");
   $upgrade_function_name = "{$module_folder}__upgrade";
   if (function_exists($upgrade_function_name))
-    $upgrade_function_name();
+    $upgrade_function_name($current_db_version, $new_version);
 
   // now, update the main module record
 	$info = ft_sanitize($info);
