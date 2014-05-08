@@ -194,7 +194,7 @@ $g_filename_char_whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.1-beta-20100516";
+$g_current_version = "2.0.1";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.

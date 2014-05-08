@@ -857,6 +857,7 @@ function ft_finalize_submission($form_id, $submission_id)
   return true;
 }
 
+
 /**
  * Creates and returns a search for any form View, and any subset of its columns, returning results in
  * any column order and for any single page subset (or all pages). The final $search_columns parameter
