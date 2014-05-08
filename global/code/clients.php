@@ -187,7 +187,7 @@ function ft_delete_client($account_id)
   $message = $LANG["notify_account_deleted"];
   extract(ft_process_hooks("end", compact("account_id"), array("success", "message")), EXTR_OVERWRITE);
 
-  return array($usccess, $message);
+  return array($success, $message);
 }
 
 

@@ -175,12 +175,11 @@ function ft_create_unique_option_group($form_id, $option_group_info)
   {
     $group_name  = $option_group_info["group_name"];
 
-    $query = mysql_query("
-      INSERT INTO {$g_table_prefix}field_option_groups (group_name, original_form_id, field_orientation)
-      VALUES ('$group_name', $form_id, '$orientation')
-        ") or die(mysql_error());
+    $query = "INSERT INTO {$g_table_prefix}field_option_groups (group_name, original_form_id, field_orientation)
+      VALUES ('$group_name', $form_id, '$orientation')";
+		$result = mysql_query($query) or ft_handle_error($query, mysql_error());
 
-    if (!$query)
+    if (!$result)
       return false;
 
     $group_id = mysql_insert_id();
@@ -190,12 +189,15 @@ function ft_create_unique_option_group($form_id, $option_group_info)
     $order = 1;
     foreach ($option_group_info["options"] as $option)
     {
-      $value = $option["value"];
-      $text  = $option["text"];
-      mysql_query("
+      $value = ft_sanitize($option["value"]);
+      $text  = ft_sanitize($option["text"]);
+
+      $query = "
         INSERT INTO {$g_table_prefix}field_options (field_group_id, option_value, option_name, option_order)
         VALUES ($group_id, '$value', '$text', $order)
-          ") or die(mysql_error());
+          ";
+  		$result = mysql_query($query) or ft_handle_error($query, mysql_error());
+
       $order++;
     }
   }

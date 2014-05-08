@@ -157,11 +157,13 @@ function ft_login($infohash, $login_as_client = false)
  */
 function ft_logout_user($message_flag = "")
 {
-  global $g_root_url;
+  global $g_root_url, $g_session_type;
 
   extract(ft_process_hooks("main", array(), array()));
 
   // this ensures sessions are started
+  if ($g_session_type == "database")
+    $sess = new SessionManager();
   @session_start();
 
   // first, if $_SESSION["ft"]["admin"] is set, it is an administrator logging out, so just redirect them

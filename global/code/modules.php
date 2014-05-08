@@ -353,9 +353,11 @@ function ft_get_module_count()
  */
 function ft_init_module_page($account_type = "admin")
 {
-	global $g_root_dir, $LANG;
+	global $g_root_dir, $g_session_type, $LANG;
 
-	session_start();
+	if ($g_session_type == "database")
+    $sess = new SessionManager();
+	@session_start();
 	header("Cache-control: private");
 	header("Content-Type: text/html; charset=utf-8");
 	ft_check_permission($account_type);

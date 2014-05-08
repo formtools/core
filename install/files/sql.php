@@ -250,6 +250,13 @@ $g_sql[] = "CREATE TABLE %PREFIX%public_view_omit_list (
   PRIMARY KEY  (view_id,account_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 
+$g_sql[] = "CREATE TABLE %PREFIX%sessions (
+  session_id varchar(100) NOT NULL default '',
+  session_data text NOT NULL,
+  expires int(11) NOT NULL default '0',
+  PRIMARY KEY  (`session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1";
+
 $g_sql[] = "CREATE TABLE %PREFIX%settings (
   setting_id mediumint(9) NOT NULL auto_increment,
   setting_name varchar(100) NOT NULL,

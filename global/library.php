@@ -19,13 +19,11 @@
  * @package 2-0-0
  */
 
+
 // -------------------------------------------------------------------------------------------------
 
 
-/**
- * The current version release.
- */
-$g_current_version = "2.0.0-beta-20090217";
+// SECTION 1: settings you can override in your config.php file
 
 /**
  * This is the base URL of the Form Tools installation on your server. e.g.
@@ -56,7 +54,7 @@ $g_db_hostname = "";
  * here.
  * @global string $g_db_name
  */
-$g_db_name     = "";
+$g_db_name = "";
 
 /**
  * The MySQL username. Note: this user account must have privileges for creating new tables, in
@@ -92,9 +90,8 @@ $g_table_prefix = "ft_";
 $g_max_nav_pages = 16;
 
 /**
- * This offers support for unicode. Namely (a) all form submissions will be sent as UTF-8
- * and (b) UTF-8 HTML headers will be supplied for Excel downloads. With Form Tools 2, all installations
- * are set as unicode.
+ * This offers support for unicode. All form submissions will be sent as UTF-8. This is enabled for all
+ * new installations.
  * @global string $g_unicode
  */
 $g_unicode = true;
@@ -118,7 +115,7 @@ $g_default_error_reporting = 2047;
  * later stage. When set to true it provides detailed, technical reasons for errors that occur.
  * @global string $g_debug
  */
-$g_debug 		= true;
+$g_debug = true;
 $g_smarty_debug = false;
 
 /**
@@ -126,6 +123,45 @@ $g_smarty_debug = false;
  * Not compatible on some systems, so it's set to false by default.
  */
 $g_smarty_use_sub_dirs = false;
+
+/**
+ * This determines the value used to separate the content of array form submissions (e.g. checkboxes
+ * in your form that have the same name, or multi-select dropdowns) when submitted via a query
+ * string for "direct" form submissions (added in version 1.4.2).
+ * @global string $g_query_str_multi_val_separator
+ */
+$g_query_str_multi_val_separator = ",";
+
+/**
+ * For module developers. This prevents the code from automatically deleting your module folder when you're
+ * testing your uninstallation function. Defaults to TRUE, but doesn't work on all systems: sometimes the PHP
+ * doesn't have the permission to remove the folder.
+ */
+$g_delete_module_folder_on_uninstallation = true;
+
+/**
+ * This setting lets you control the type of sessions the application uses. The default value is "php",
+ * but you can change it to "database" if you're running Form Tools on a database cluster or have some
+ * other reason to want to use database sessions. This applies to all users of the program.
+ * @global string $g_session_type
+ */
+$g_session_type = "php"; // "php" or "database"
+
+
+// -------------------------------------------------------------------------------------------------
+
+// SECTION 2: do NOT modify anything below!
+
+/**
+ * The current version of the Form Tools Core.
+ */
+$g_current_version = "2.0.0-beta-20090223";
+
+/**
+ * This is an if-all-else-fails value. It should NEVER be changed.
+ * @global string $g_default_theme
+ */
+$g_default_theme = "default";
 
 /**
  * This determines the value used in the database to separate multiple field values (checkboxes and
@@ -137,34 +173,11 @@ $g_smarty_use_sub_dirs = false;
 $g_multi_val_delimiter = ", ";
 
 /**
- * This determines the value used to separate the content of array form submissions (e.g. checkboxes
- * in your form that have the same name, or multi-select dropdowns) when submitted via a query
- * string for "direct" form submissions (added in version 1.4.2).
- * @global string $g_query_str_multi_val_separator
- */
-$g_query_str_multi_val_separator = ",";
-
-/**
- * This is an if-all-else-fails value. It should NEVER be changed.
- */
-$g_default_theme = "default";
-
-/**
- * For module developers. This prevents the code from automatically deleting your module folder when you're
- * testing your uninstallation function. Defaults to TRUE, but doesn't work on all systems: sometimes the PHP
- * doesn't have the permission to remove the folder.
- */
-$g_delete_module_folder_on_uninstallation = true;
-
-/**
  * Used throughout the script to store any and all temporary error / notification messages. Don't change
  * or remove - defining them here prevents unwanted PHP notices.
  */
 $g_success = "";
 $g_message = "";
-
-
-// -------------------------------------------------------------------------------------------------
 
 
 // include all code libraries
@@ -193,6 +206,7 @@ require_once("$folder/code/hooks.php");
 require_once("$folder/code/languages.php");
 require_once("$folder/code/menus.php");
 require_once("$folder/code/modules.php");
+require_once("$folder/code/sessions.php");
 require_once("$folder/code/settings.php");
 require_once("$folder/code/stabilizer.php");
 require_once("$folder/code/submissions.php");
