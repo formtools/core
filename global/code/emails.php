@@ -222,12 +222,10 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 {
   global $g_table_prefix, $g_root_dir, $LANG, $g_default_theme;
 
-  // retrieve the test email settings
-  $email_template    = ft_get_email_template($email_id);
-  $templates["html"] = $email_template["html_template"];
-  $templates["text"] = $email_template["text_template"];
+  $email_template  = ft_get_email_template($email_id);
 
-  // if this is a test, find out what the administrator wants
+
+  // if this is a test, find out what information the administrator wants
   if ($is_test)
   {
     $test_email_format        = $test_settings["test_email_format"];
@@ -285,6 +283,13 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
         $templates["html"] = $email_template["html_template"];
         break;
     }
+  }
+
+  // for non-test submissions, always grab both the HTML and text templates
+  else
+  {
+	  $templates["html"] = $email_template["html_template"];
+	  $templates["text"] = $email_template["text_template"];
   }
 
 
@@ -356,7 +361,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 
   $return_info = array();
 
-  if (isset($templates["text"]))
+  if (isset($templates["text"]) && !empty($templates["text"]))
   {
     $smarty = new Smarty();
     $smarty->template_dir = "$g_root_dir/global/smarty/";
@@ -371,7 +376,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
     $return_info["text_content"] = $smarty->fetch("eval.tpl");
   }
 
-  if (isset($templates["html"]))
+  if (isset($templates["html"]) && !empty($templates["html"]))
   {
     $smarty = new Smarty();
     $smarty->template_dir = "$g_root_dir/global/smarty/";

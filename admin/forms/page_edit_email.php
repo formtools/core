@@ -35,8 +35,8 @@ $filtered_views = array();
 $selected_edit_submission_views = array();
 foreach ($views["results"] as $view)
 {
-	if (!empty($view["filters"]))
-		$filtered_views[] = $view;
+  if (!empty($view["filters"]))
+    $filtered_views[] = $view;
 
   if (in_array($view["view_id"], $template_info["edit_submission_page_view_ids"]))
     $selected_edit_submission_views[] = $view;
@@ -86,26 +86,26 @@ page.onsubmit_check_email_settings = function(f)
 {
   // Configuration tab
   var rules = [];
-  rules.push("required,email_template_name,Please enter the email template name.");
-  rules.push("required,view_mapping_type,Please indicate when the email should be sent.");
-  rules.push("if:view_mapping_type=specific,required,view_mapping_view_id,Please select the View to which this email template should be mapped.");
+  rules.push("required,email_template_name,{$LANG["validation_no_email_template_name"]}");
+  rules.push("required,view_mapping_type,{$LANG["validation_no_email_template_view_mapping_value"]}");
+  rules.push("if:view_mapping_type=specific,required,view_mapping_view_id,{$LANG["validation_no_email_template_view_id"]}");
   if (!rsv.validate(f, rules))
     return ft.change_inner_tab(1, 5); // this always returns false;
 
   // Headers tab
-	var rules = [];
-	rules.push("function,page.check_one_main_recipient");
-	rules.push("if:email_from=custom,required,custom_from_email,{$LANG["validation_no_custom_from_email"]}");
-	rules.push("if:email_from=custom,valid_email,custom_from_email,{$LANG["validation_invalid_custom_from_email"]}");
-	rules.push("if:email_reply_to=custom,required,custom_reply_to_email,{$LANG["validation_no_custom_reply_to_email"]}");
-	rules.push("if:email_reply_to=custom,valid_email,custom_reply_to_email,{$LANG["validation_invalid_custom_reply_to_email"]}");
+  var rules = [];
+  rules.push("function,page.check_one_main_recipient");
+  rules.push("if:email_from=custom,required,custom_from_email,{$LANG["validation_no_custom_from_email"]}");
+  rules.push("if:email_from=custom,valid_email,custom_from_email,{$LANG["validation_invalid_custom_from_email"]}");
+  rules.push("if:email_reply_to=custom,required,custom_reply_to_email,{$LANG["validation_no_custom_reply_to_email"]}");
+  rules.push("if:email_reply_to=custom,valid_email,custom_reply_to_email,{$LANG["validation_invalid_custom_reply_to_email"]}");
   if (!rsv.validate(f, rules))
-    return ft.change_inner_tab(2, 5); // this always returns false;
+    return ft.change_inner_tab(2, 5); // this always returns false
 
   var rules = [];
   rules.push("function,page.check_one_template_defined");
   if (!rsv.validate(f, rules))
-    return ft.change_inner_tab(3, 5); // this always returns false;
+    return ft.change_inner_tab(3, 5); // this always returns false
 
   return true;
 }
@@ -150,7 +150,7 @@ page.toggle_advanced_settings = function()
   new Ajax.Request(page_url, {
     parameters: { action: "remember_edit_email_advanced_settings", edit_email_advanced_settings: is_visible },
     method: 'post'
-		  });
+      });
 
 }
 
@@ -165,7 +165,7 @@ page.check_one_template_defined = function()
   text_template = text_template.strip();
 
   if (html_template.strip() == "" && text_template.strip() == "")
-    return [[$('html_template'), "Please enter the email content for at least one of the formats (HTML or text)"]];
+    return [[$('html_template'), "{$LANG["validation_no_email_content"]}"];
 
   return true;
 }
@@ -189,8 +189,7 @@ Event.observe(document, 'dom:loaded',
 
     // always set the select recipient field to empty
     $("recipient_options").value = "";
-  }
-  );
+  });
 EOF;
 
 ft_display_page("admin/forms/edit.tpl", $page_vars);

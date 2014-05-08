@@ -37,7 +37,11 @@
           <tr>
             <td><a href="{$g_root_url}/themes/{$theme_info.theme_folder}/about/screenshot.gif" rel="lightbox" title="{$theme_info.theme_name|escape}"><img src="{$g_root_url}/themes/{$theme_info.theme_folder}/about/thumbnail.gif" border="0" /></a></td>
             <td valign="top" class="pad_left">
-              <div><span class="bold pad_right_large">{$theme_info.theme_name}</span> [<a href="{$same_page}?page=themes_about&theme_id={$theme_info.theme_id}">{$LANG.word_about|upper}</a>]</div>
+              <div>
+                <span class="bold">{$theme_info.theme_name}</span>
+                <span class="pad_right_large">{$theme_info.theme_version}</span>
+                [<a href="{$same_page}?page=themes_about&theme_id={$theme_info.theme_id}">{$LANG.word_about|upper}</a>]
+              </div>
               {if $theme_info.author}<div>{$LANG.word_author_c} {$theme_info.author}</div>{/if}
               {if $theme_info.description}<p>{$theme_info.description}</p>{/if}
             </td>

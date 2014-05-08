@@ -47,7 +47,7 @@
         </tr>
         </table>
 
-        <input type="checkbox" name="is_multi_page_form" id="is_multi_page_form" onchange="mf_ns.toggle_multi_page_form_fields(this.checked)"
+        <input type="checkbox" name="is_multi_page_form" id="is_multi_page_form" onclick="mf_ns.toggle_multi_page_form_fields(this.checked)"
           {if $form_info.is_multi_page_form == "yes"}checked{/if} />
           <label for="is_multi_page_form">This a multi-page form</label>
 
@@ -112,38 +112,6 @@
           </table>
         </td>
       </tr>
-
-{*
-    <tr>
-      <td class="red" align="center">*</td>
-      <td class="pad_left_small">{$LANG.phrase_form_url}</td>
-      <td>
-
-        <table cellspacing="0" cellpadding="0" width="100%">
-        <tr>
-          <td><input type="text" name="form_url" value="{$form_info.form_url}" style="width: 99%;" /></td>
-          <td width="40"><input type="button" onclick="ft.open_window(document.add_form.form_url.value)" value="{$LANG.phrase_verify_url}" /></td>
-        </tr>
-        </table>
-
-      </td>
-    </tr>
-    <tr>
-      <td class="red" align="center"> </td>
-      <td class="pad_left_small">{$LANG.phrase_redirect_url}</td>
-      <td>
-
-        <table cellspacing="0" cellpadding="0" width="100%">
-        <tr>
-          <td><input type="text" name="redirect_url" value="{$form_info.redirect_url}" style="width: 99%;" /></td>
-          <td width="40"><input type="button" onclick="ft.open_window(document.add_form.redirect_url.value)" value="{$LANG.phrase_verify_url}" /></td>
-        </tr>
-        </table>
-
-      </td>
-    </tr>
-
-*}
     <tr>
       <td class="red" valign="top" align="center">*</td>
       <td class="pad_left_small" valign="top" width="160">{$LANG.word_access}</td>
@@ -153,7 +121,7 @@
         <tr>
           <td>
             <input type="radio" name="access_type" id="at1" value="admin" {if $form_info.access_type == 'admin'}checked{/if}
-              onfocus=".toggle_form_type(this.value)" />
+              onfocus="mf_ns.toggle_form_type(this.value)" />
               <label for="at1">{$LANG.phrase_admin_only}</label>
           </td>
         </tr>

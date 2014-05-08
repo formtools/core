@@ -41,7 +41,6 @@ function ft_update_client($account_id, $info)
       $last_name    = $info['last_name'];
       $email        = $info['email'];
       $username     = $info['username'];
-      $password     = $info['password'];
 
       // check to see if username is already taken
       list($valid_username, $problem) = _ft_is_valid_username($username, $account_id);
@@ -52,12 +51,20 @@ function ft_update_client($account_id, $info)
         return array($success, $message);
       }
 
+      // only update the password if it's been supplied
+			$password_clause = "";
+			if (!empty($info['password']))
+			{
+				$password = md5(md5($info['password']));
+				$password_clause = "password = '$password',";
+			}
+
       $query = "
           UPDATE  {$g_table_prefix}accounts
-          SET     first_name = '$first_name',
+          SET     password_clause
+                  first_name = '$first_name',
                   last_name = '$last_name',
                   username = '$username',
-                  password = '$password',
                   email = '$email'
           WHERE   account_id = $account_id
                ";

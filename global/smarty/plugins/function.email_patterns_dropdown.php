@@ -6,8 +6,8 @@
  * File:     function.email_patterns_dropdown
  * Type:     function
  * Name:     email_patterns_dropdown
- * Purpose:  generates a dropdown of all email patterns for a particular type (html or text), sorted
- *           by optgroup.
+ * Purpose:  generates a dropdown of all email patterns for a particular type (html or text), 
+ *           grouped by optgroup.
  * -------------------------------------------------------------
  */
 function smarty_function_email_patterns_dropdown($params, &$smarty)

@@ -52,27 +52,27 @@
 	     to server-side due to the complexity of namespacing the various field values, options etc & the need for future
 	     extensibility *}
 	  {if $field.field_type == "system"}
-	    {ft_include file="`$theme_dir`/admin/forms/field_types/system.tpl"}
+	    {ft_include file="admin/forms/field_types/system.tpl"}
 	  {elseif $field.field_type == "textbox"}
-	    {ft_include file="`$theme_dir`/admin/forms/field_types/textbox.tpl"}
+	    {ft_include file="admin/forms/field_types/textbox.tpl"}
 	  {elseif $field.field_type == "password"}
-	    {ft_include file="`$theme_dir`/admin/forms/field_types/password.tpl"}
+	    {ft_include file="admin/forms/field_types/password.tpl"}
 	  {elseif $field.field_type == "textarea"}
-	    {ft_include file="`$theme_dir`/admin/forms/field_types/textarea.tpl"}
+	    {ft_include file="admin/forms/field_types/textarea.tpl"}
 	  {elseif $field.field_type == "radio-buttons"}
-	    {ft_include file="`$theme_dir`/admin/forms/field_types/radios.tpl"}
+	    {ft_include file="admin/forms/field_types/radios.tpl"}
 	  {elseif $field.field_type == "checkboxes"}
-	    {ft_include file="`$theme_dir`/admin/forms/field_types/checkboxes.tpl"}
+	    {ft_include file="admin/forms/field_types/checkboxes.tpl"}
 	  {elseif $field.field_type == "select"}
-	    {ft_include file="`$theme_dir`/admin/forms/field_types/select.tpl"}
+	    {ft_include file="admin/forms/field_types/select.tpl"}
 	  {elseif $field.field_type == "multi-select"}
-	    {ft_include file="`$theme_dir`/admin/forms/field_types/multi_select.tpl"}
+	    {ft_include file="admin/forms/field_types/multi_select.tpl"}
 	  {elseif $field.field_type == "file"}
-	    {ft_include file="`$theme_dir`/admin/forms/field_types/file.tpl"}
+	    {ft_include file="admin/forms/field_types/file.tpl"}
 	  {elseif $field.field_type == "date"}
-	    {ft_include file="`$theme_dir`/admin/forms/field_types/date.tpl"}
+	    {ft_include file="admin/forms/field_types/date.tpl"}
 	  {elseif $field.field_type == "wysiwyg"}
-	    {ft_include file="`$theme_dir`/admin/forms/field_types/wysiwyg.tpl"}
+	    {ft_include file="admin/forms/field_types/wysiwyg.tpl"}
 	  {/if}
   </div>
 
