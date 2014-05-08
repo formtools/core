@@ -232,7 +232,7 @@ function ft_finalize_form($form_id)
              last_modified_date DATETIME NOT NULL,
              ip_address VARCHAR(15),
              is_finalized ENUM('yes','no') default 'yes')
-             TYPE=INNODB";
+             TYPE=InnoDB DEFAULT CHARSET=utf8";
 
   mysql_query($query)
     or ft_handle_error("Failed query in <b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, line " . __LINE__ . ": <i>" . nl2br($query) . "</i>", mysql_error());

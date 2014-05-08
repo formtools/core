@@ -82,7 +82,7 @@ ft.display_dhtml_page_nav = function(num_results, num_per_page, current_page)
 ft.select_all_multi_dropdown_options = function(dd_field_id)
 {
   for (var i=0; i<$(dd_field_id).options.length; i++)
-	  $(dd_field_id).options[i].selected = true;
+    $(dd_field_id).options[i].selected = true;
 }
 
 /**
@@ -91,7 +91,7 @@ ft.select_all_multi_dropdown_options = function(dd_field_id)
 ft.unselect_all_multi_dropdown_options = function(dd_field_id)
 {
   for (var i=0; i<$(dd_field_id).options.length; i++)
-	  $(dd_field_id).options[i].selected = false;
+    $(dd_field_id).options[i].selected = false;
 }
 
 
@@ -194,8 +194,8 @@ ft.verify_url = function(url_field, form_page)
   }
   else
   {
-	  ft.urls.push([form_page, url_field]);
-	  var verify_url_page = g.root_url + "/admin/verify_url.php?form_page=" + form_page + "&url=" + escape(url);
+    ft.urls.push([form_page, url_field]);
+    var verify_url_page = g.root_url + "/admin/verify_url.php?form_page=" + form_page + "&url=" + escape(url);
 
     window.open(verify_url_page, "verify_url", "width=900,height=600,menu=no,toolbar=no,resizable=yes");
   }
@@ -325,17 +325,25 @@ function g_rsvErrors(f, errorInfo)
       $(errorInfo[i][0][0]).addClassName("rsvErrorField");
 
       if (i==0)
-        $(errorInfo[i][0][0]).focus();
+      {
+        try {
+          $(errorInfo[i][0][0]).focus();
+        } catch(e) { }
+      }
     }
     else
     {
       $(errorInfo[i][0]).addClassName("rsvErrorField");
 
       if (i==0)
-        $(errorInfo[i][0]).focus();
+      {
+        try {
+          $(errorInfo[i][0]).focus();
+        } catch(e) { }
+      }
     }
 
-		problemFields.push(errorInfo[i][0]);
+    problemFields.push(errorInfo[i][0]);
   }
 
   if (errorInfo.length > 0)
@@ -659,6 +667,6 @@ ft.check_queue_item_complete = function()
 
 ft.is_valid_url = function(url)
 {
-	var RegExp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-	return RegExp.test(url);
+  var RegExp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+  return RegExp.test(url);
 }

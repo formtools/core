@@ -144,7 +144,7 @@ $g_delete_module_folder_on_uninstallation = true;
  * but you can change it to "php" if you'd prefer to use PHP sessions. This applies to all users of the program.
  * @global string $g_session_type
  */
-$g_session_type = "database"; // "php" or "database"
+$g_session_type = "php"; // "php" or "database"
 
 /**
  * This lets you specify the session save path, used by PHP sessions. By default this isn't set, relying
@@ -190,7 +190,7 @@ $g_api_sessions_timeout = 3600;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.0-beta-20090908";
+$g_current_version = "2.0.0-beta-20090926";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.
