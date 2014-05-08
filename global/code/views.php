@@ -243,11 +243,11 @@ function ft_get_view_searchable_fields($view_id = "", $fields = array())
   if (!empty($view_id) && is_numeric($view_id))
   {
     $view_info = ft_get_view($view_id);
-    $fields = $view_info["fields"];
+    $fields    = $view_info["fields"];
   }
 
   $searchable_columns = array();
-  foreach ($view_info["fields"] as $field_info)
+  foreach ($fields as $field_info)
   {
     if ($field_info["is_searchable"] == "yes")
       $searchable_columns[] = $field_info["col_name"];

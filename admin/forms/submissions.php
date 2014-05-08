@@ -41,7 +41,7 @@ if (empty($view_id))
 else if (!ft_check_view_exists($view_id))
   $view_id = $form_views[0]["view_id"];
 
-$_SESSION["ft"]["form_{$form_id}_view_id"] = $form_views[0]["view_id"];
+$_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
 
 $form_info = ft_get_form($form_id);
 $view_info = ft_get_view($view_id);
@@ -246,7 +246,6 @@ $page_vars["preselected_subids"] = $preselected_subids;
 $page_vars["results_per_page"]   = $results_per_page;
 $page_vars["display_fields"]     = $visible_column_info;
 $page_vars["order"]              = $order;
-$page_vars["page_submission_ids"] = $page_submission_ids;
 $page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
 $page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download", "validation_select_submissions_to_delete",

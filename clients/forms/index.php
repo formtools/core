@@ -43,7 +43,7 @@ if (empty($view_id))
 else if (!ft_check_view_exists($view_id))
   $view_id = $form_views[0]["view_id"];
 
-$_SESSION["ft"]["form_{$form_id}_view_id"] = $form_views[0]["view_id"];
+$_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
 
 
 $form_info = ft_get_form($form_id);
