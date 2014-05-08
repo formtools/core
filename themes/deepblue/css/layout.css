@@ -1,0 +1,91 @@
+html { overflow: -moz-scrollbars-vertical; }
+body, html {
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	background-color: #cccccc;
+/*	overflow-x: hidden; -- causes double vertical scrollbar on FF */
+}
+body {
+	background-image: url(../images/background.jpg);
+	background-repeat: repeat-x;
+	background-position: center top;
+	min-width: 950px; /* Doesn't work in IE */
+}
+.clear { clear: both; }
+#container {
+  min-height: 100%;
+  width: 950px;
+  margin: 0 auto;
+  text-align: center;
+	background-image: url(../images/bg_row.jpg);
+  background-repeat: repeat-y;
+	position: relative;
+}
+* html #container {
+  height: 100%; /*** IE doesn't support min-height, but instead it handles height as min-height so we need to hack the height ***/
+}
+#header {
+  height: 71px;
+  position: relative;
+  text-align: left;
+  background-image: url(../images/header_top.jpg);
+}
+.outer {
+	padding-left: 200px; /*** Same width as margin-left for the float-wrap div ***/
+	text-align: right;
+}
+.inner {
+	width: 100%;
+	padding-bottom: 71px; /*** Padding-bottom value is the same value as the total height of the footer ***/
+}
+
+/*** div.inner is wider than its container, div.outer, and so overlaps to the right, pushing
+div.right into the proper position. IE expands div.outer instead, requiring a Tan hack to avoid
+blowing the layout apart. IE gets the original 100% width as in the Livingstone layout.
+***/
+.float-wrap {
+	float: left;
+	width: 100%;
+	margin-left: -200px; /*** Same length as .outer padding-left but with negative value ***/
+}
+#content {
+	float: right;
+	margin-right: -200px; /*** Same length as .outer padding-left but with negative value ***/
+	width: 100%;
+	position: relative; /*** IE needs this  ***/
+}
+.content_wrap {
+	text-align: left;
+}
+
+/* LEFT COLUMN */
+/*** div.left is in div.float-wrap, and when div.float-wrap is neg margined to the left, div.left is carried over into the proper position. ***/
+#left {
+	float: left;
+	width: 200px;
+	position: relative; /*** IE needs this ***/
+	text-align: left;
+}
+
+/* FOOTER */
+#footer {
+	/*** The drawback with this solution is that the height of the footer can't have a flexible height.
+	If you add so much content to the footer that it extends 45px, you will get a vertical scrollbar
+	and the content will overflow the footer if you don't set overflow to hidden ***/
+	height: 37px;
+
+	/*** By using a negative margin-top we now moves the footer up the same amount as the footer height
+	to avoid vertical scrolling. Remember, if you use borders and padding on your footer you will have
+	to calculate this in your negative margin-top value also. ***/
+	margin-top: -37px;
+	background-image: url(../images/footer_bg.jpg);
+
+	vertical-align: bottom;
+	width: 950px;
+	margin-left: auto;
+	margin-right: auto;
+	position:relative;
+	text-align:center;
+	font-size: 7pt;
+}

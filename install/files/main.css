@@ -1,0 +1,106 @@
+html { overflow: -moz-scrollbars-vertical; }
+body, html {
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+	background-color: #ffffff;
+}
+body {
+	background-image: url(../images/top_row.jpg);
+	background-repeat: repeat-x;
+	background-position: center top;
+	text-align: center;
+}
+body, table, td, div, span, div, p, input, select, textarea, option {
+  font: 11px Verdana, sans-serif;
+  line-height: 20px;
+  color: #333333;
+}
+#container {
+	width: 950px;
+	text-align:left;
+	margin: 0 auto;
+}
+#header {
+  height: 72px;
+  position: relative;
+  text-align: center;
+  width: 950px;
+}
+#content {
+	padding: 18px;
+	padding-top: 24px;
+}
+a:link, a:visited {
+	color: #008800;
+	text-decoration: none;
+}
+a:hover {
+	color: #990000;
+	border-bottom: 1px solid #bb0000;
+}
+a.no_border:link, a.no_border:visited { border-bottom: none; outline: none; }
+.rsvErrorField { background-color: #990000; color: white; }
+
+.nav_visited { color: #aaaaaa; }
+.nav_current { font-weight: bold; color: black; }
+.nav_remaining { color: #009900; }
+.green { color: green; }
+.dark_green { color: #003300; }
+.red { color: #cc0000; }
+.purple { color: purple; }
+.bold { font-weight: bold; }
+.burgundy { color: #bb0000; }
+
+table.info td {
+	border-bottom: 1px solid #efefef;
+}
+.error {
+	color: black;
+	background-color: #FFEDED;
+	border: 1px solid #cc0000;
+}
+.notify {
+	color: #00aa00;
+	background-color: #ffffdd;
+	border: 1px solid #009900;
+	padding: 5px;
+}
+
+ul.tips {
+	padding-left: 16px;
+	margin-left: 0px;
+}
+ul.tips li {
+	font-size: 8pt;
+	line-height: 16px;
+}
+#account_section {
+ 	background-image: url(../images/account_section_bg.jpg);
+	background-repeat: repeat-x;
+	height:25px;
+	padding-left: 12px;
+	padding-right: 12px;
+	color:white;
+}
+#account_section a:link, #account_section a:visited {
+  color: #f2f2f2;
+  text-decoration: none;
+}
+#nav_items {
+  border-right: 1px solid #dddddd;
+  margin-right: 5px;
+}
+#nav_items div {
+  line-height: 24px;
+}
+.margin_right {
+  margin-right: 6px;
+}
+h1 {
+  font: 13pt Verdana, sans-serif;
+  font-weight: bold;
+}
+.label {
+  color: #666666;
+}
