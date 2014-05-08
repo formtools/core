@@ -13,6 +13,8 @@
   </tr>
   </table>
 
+  {template_hook location="admin_edit_client_pages_top"}
+
   {ft_include file='tabset_open.tpl'}
 
     {if $page == "main"}
@@ -26,5 +28,7 @@
     {/if}
 
   {ft_include file='tabset_close.tpl'}
+
+  {template_hook location="admin_edit_client_pages_bottom"}
 
 {ft_include file='footer.tpl'}

@@ -9,6 +9,8 @@
 
   {ft_include file="messages.tpl"}
 
+  {template_hook location="admin_list_clients_top"}
+
   {if $num_clients == 0}
 
     <div>{$LANG.text_no_clients}</div>
@@ -214,6 +216,8 @@
     </form>
 
   {/if}
+
+  {template_hook location="admin_list_clients_bottom"}
 
   <p>
     <form method="post" action="add.php">

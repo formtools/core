@@ -213,7 +213,7 @@ add_fields_ns.check_fields = function(f)
     if (!f["field_title_" + i].value)
     {
       var message = g.messages["validation_no_display_text"].replace(/\{\$fieldname\}/, "'" + f["field_name_" + i].value + "'");
-      alert(message);
+      ft.display_message("ft_message", false, message);
       f["field_title_" + i].focus();
       f["field_title_" + i].style.backgroundColor = rsv.offendingFieldStyle;
       return false;
@@ -225,7 +225,7 @@ add_fields_ns.check_fields = function(f)
       if (!f["col_name_" + i].value)
       {
         var message = g.messages["validation_no_column_name"].replace(/{\$fieldname\}/, "'" + f["field_name_" + i].value + "'");
-        alert(message);
+        ft.display_message("ft_message", false, message);
         f["col_name_" + i].focus();
         f["col_name_" + i].style.backgroundColor = rsv.offendingFieldStyle;
         return false;
@@ -235,7 +235,7 @@ add_fields_ns.check_fields = function(f)
       if (f["col_name_" + i].value.match(/\W/))
       {
         var message = g.messages["validation_invalid_column_name"].replace(/{\$fieldname\}/, "'" + f["field_name_" + i].value + "'");
-        alert(message);
+        ft.display_message("ft_message", false, message);
         f["col_name_" + i].focus();
         f["col_name_" + i].style.backgroundColor = rsv.offendingFieldStyle;
         return false;
@@ -247,7 +247,7 @@ add_fields_ns.check_fields = function(f)
         if (f["col_name_" + i].value == f.existing_columns[j].value)
         {
           var message = g.messages["validation_db_column_name_exists"].replace(/{\$name\}/, "'" + f["col_name_" + i].value + "'");
-          alert(message);
+          ft.display_message("ft_message", false, message);
           f["col_name_" + i].focus();
           f["col_name_" + i].style.backgroundColor = rsv.offendingFieldStyle;
           return false;
@@ -267,7 +267,7 @@ add_fields_ns.check_fields = function(f)
 
         if (f["col_name_" + i].value == f["col_name_" + k].value)
         {
-          alert(g.messages["validation_no_two_column_names"]);
+          ft.display_message("ft_message", false, g.messages["validation_no_two_column_names"]);
           f["col_name_" + i].focus();
           f["col_name_" + i].style.backgroundColor = rsv.offendingFieldStyle;
           return false;

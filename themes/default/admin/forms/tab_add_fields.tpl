@@ -6,7 +6,7 @@
     {$LANG.phrase_add_fields|upper}
   </div>
 
-  <br />
+  {include file="messages.tpl"}
 
   <form action="{$same_page}?page=add_fields" method="post" name="add_fields_form"
     onsubmit="return add_fields_ns.check_fields(this)">
@@ -26,7 +26,7 @@
       <td align="right">
         <div id="existing_column_name_info" style="display: none;">
           {$LANG.phrase_existing_col_names_c}
-          {form_fields_dropdown name_id="display_only" form_id=$form_id tabindex="2"}
+          {form_fields_dropdown name_id="existing_columns" display_column_names=true form_id=$form_id tabindex="2"}
         </div>
       </td>
     </tr>

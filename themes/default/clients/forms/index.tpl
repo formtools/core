@@ -216,7 +216,7 @@
             {assign var=cell_value value=$search_row.$col_name}
           {/if}
 
-          <td class="{$td_class}"><div class="{$nowrap_rightpad} {$ellipsis} {$td_class}">{$cell_value}</td>
+          <td class="{$td_class}"><div class="{$nowrap_rightpad} {$ellipsis} {$td_class}">{$cell_value|escape}</td>
         {/foreach}
 
         <td align="center"><a href="edit_submission.php?form_id={$form_id}&view_id={$view_id}&submission_id={$submission_id}">{if $view_info.may_edit_submissions == "yes"}{$LANG.word_edit|upper}{else}{$LANG.word_view|upper}{/if}</a></td>
@@ -238,7 +238,7 @@
       {if $view_info.may_add_submissions == "yes"}
         <input type="button" id="add_submission" value="{$LANG.word_add}" onclick="window.location='{$same_page}?add_submission'" />
       {/if}
-		
+
       <input type="button" id="select_button" value="{$LANG.phrase_select_all_on_page}" onclick="ms.select_all_on_page();" />
       <input type="button" id="unselect_button" value="{$LANG.phrase_unselect_all}" onclick="ms.unselect_all()" />
 

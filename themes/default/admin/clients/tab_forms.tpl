@@ -8,6 +8,8 @@
       <input type="hidden" name="client_id" value="{$client_id}" />
       <input type="hidden" name="num_forms" id="num_forms" value="0" />
 
+      {template_hook location="admin_edit_client_forms_top"}
+
       <table class="list_table" id="client_forms_table" cellpadding="0" cellspacing="1">
       <tbody><tr>
         <th>{$LANG.word_form}</th>
@@ -76,6 +78,8 @@
       <p>
         <a href="#" onclick="return cf_ns.add_form_row()">{$LANG.phrase_add_row}</a>
       </p>
+
+      {template_hook location="admin_edit_client_forms_bottom"}
 
       <p>
         <input type="submit" name="update_client" value="{$LANG.word_update}" />

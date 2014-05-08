@@ -197,21 +197,6 @@ function ft_process_hooks($event, $vars, $overridable_vars)
 
 
 /**
- * This processes all template hooks for a particular template location (e.g. edit client page, at the top).
- * It works similarly to the ft_process_hooks function, except there are no options to override values in the
- * template. This is used purely to insert content into the templates.
- *
- * @param string $location
- */
-function ft_process_template_hooks($location)
-{
-  $hooks = ft_get_hooks($location, "template", "");
-
-  print_r($hooks);
-}
-
-
-/**
  * Processes an actual hook and returns the value. This requires all hook functions to return either NOTHING,
  * or a hash of values to be overridden.
  *

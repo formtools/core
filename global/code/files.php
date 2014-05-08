@@ -442,7 +442,7 @@ function ft_upload_submission_file($form_id, $submission_id, $field_id, $fileinf
       // remove whitespace and periods
       $clean_extension = str_replace(".", "", trim($ext));
 
-      if (preg_match("/$clean_extension$/", $filename))
+      if (preg_match("/$clean_extension$/i", $filename))
         $is_valid_extension = true;
     }
   }

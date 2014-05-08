@@ -17,6 +17,8 @@
 
   <form action="{$same_page}" id="add_client_form" method="post" autocomplete="off" onsubmit="return rsv.validate(this, rules)">
 
+    {template_hook location="admin_add_client_top"}
+
     <table cellpadding="0" cellspacing="1">
     <tr>
       <td class="medium_grey" width="130">{$LANG.phrase_first_name}</td>
@@ -43,6 +45,8 @@
       <td><input type="password" name="password_2" style="width: 100px" /></td>
     </tr>
     </table>
+
+    {template_hook location="admin_add_client_bottom"}
 
     <p>
       <input type="submit" name="add_client" value="{$LANG.phrase_add_client|upper}" />

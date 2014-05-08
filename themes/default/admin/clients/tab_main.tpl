@@ -46,7 +46,7 @@
       </tr>
       </table>
 
-      {template_hook location="admin_edit_client_main_middle"} 
+      {template_hook location="admin_edit_client_main_middle"}
 
       <p class="subtitle">{$LANG.phrase_change_login_info}</p>
 

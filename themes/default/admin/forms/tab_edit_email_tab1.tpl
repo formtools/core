@@ -29,6 +29,7 @@
                   <label for="eet3">{$LANG.phrase_when_submission_is_deleted}</label><br />
               </td>
             </tr>
+            {template_hook location="edit_template_tab1"}
             </table>
 
             <div class="grey_box">
@@ -136,5 +137,8 @@
                   </td>
                 </tr>
                 </table>
+
+                {template_hook location="edit_template_tab1_advanced"}
+
               </div>
             </div>
