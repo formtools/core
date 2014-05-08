@@ -1056,7 +1056,7 @@ function ft_get_js_webpage_parse_method($form_url)
 
 	// we buffer the file_get_contents call in case the URL is invalid and a fatal error is generated
 	// when the function time-outs
-	if (file_get_contents($form_url))
+	if (@file_get_contents($form_url))
 	  $scrape_method = "file_get_contents";
 	if (function_exists("curl_init") && function_exists("curl_exec"))
 	  $scrape_method = "curl";

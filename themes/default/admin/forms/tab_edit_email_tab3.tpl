@@ -6,14 +6,8 @@
             <tr>
               <td class="bold">{$LANG.phrase_html_template}</td>
               <td class="no_wrap" align="right">
-                {$LANG.phrase_example_templates_c}
-                <select onchange="emails_ns.select_template('html', this.value)">
-                  <option value="">{$LANG.phrase_please_select}</option>
-                  {foreach from=$email_patterns.html_patterns item=pattern name=row}
-                    {assign var='count' value=$smarty.foreach.row.iteration}
-                    <option value="{$count}">{$pattern.pattern_name}</option>
-                  {/foreach}
-                </select>
+                {$LANG.word_examples_c}
+                {email_patterns_dropdown type="html" form_id=$form_id onchange="emails_ns.select_template('html', this.value)"}
               </td>
             </tr>
             <tr>
@@ -35,14 +29,8 @@
             <tr>
               <td class="bold">{$LANG.phrase_text_template}</td>
               <td class="no_wrap" align="right">
-                {$LANG.phrase_example_templates_c}
-                <select onchange="emails_ns.select_template('text', this.value)">
-                  <option value="">{$LANG.phrase_please_select}</option>
-                  {foreach from=$email_patterns.text_patterns item=pattern name=row}
-                    {assign var='count' value=$smarty.foreach.row.iteration}
-                    <option value="{$count}">{$pattern.pattern_name}</option>
-                  {/foreach}
-                </select>
+                {$LANG.word_examples_c}
+                {email_patterns_dropdown type="text" form_id=$form_id onchange="emails_ns.select_template('text', this.value)"}
               </td>
             </tr>
             <tr>

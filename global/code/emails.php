@@ -130,9 +130,9 @@ function ft_send_test_email($info)
 {
   global $g_table_prefix, $LANG;
 
-  $form_id        = $info["form_id"];
+  $form_id        = $_SESSION["ft"]["form_id"];
+  $email_id       = $_SESSION["ft"]["email_id"];
   $submission_id  = (isset($info["submission_id"]) && !empty($info["submission_id"])) ? $info["submission_id"] : "";
-  $email_id       = $info["email_id"];
 
   list ($success, $email_info) = ft_get_email_components($form_id, $submission_id, $email_id, true, $info);
   if (!$success)
@@ -501,15 +501,17 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
  * called them "email templates", but that term is already being put to good use, and
  * "email template template" is just plain silly].
  *
- * @param string $format "html" or "text"
+ * @param integer $form_id
  */
-function ft_get_email_patterns()
+function ft_get_email_patterns($form_id)
 {
   global $g_root_dir;
 
   $pattern_folder = "$g_root_dir/global/emails/patterns";
   $email_template_patterns = parse_ini_file("$pattern_folder/patterns.ini", true);
 
+  $placeholders = array();
+  $placeholders["fields"] = ft_get_form_fields($form_id);
 
   // get the HTML email patterns
   $html_patterns = array();
@@ -520,17 +522,19 @@ function ft_get_email_patterns()
       break;
 
     $name     = ft_eval_smarty_string($email_template_patterns["html_patterns"]["pattern{$count}_name"]);
+    $optgroup = ft_eval_smarty_string($email_template_patterns["html_patterns"]["pattern{$count}_optgroup"]);
     $filename = $email_template_patterns["html_patterns"]["pattern{$count}_file"];
     $content  = "";
 
     if (is_readable("$pattern_folder/$filename") && is_file("$pattern_folder/$filename"))
-      $content = ft_eval_smarty_string(file_get_contents("$pattern_folder/$filename"));
+      $content = ft_eval_smarty_string(file_get_contents("$pattern_folder/$filename"), $placeholders);
 
     // if this has both a name and some email content, log it
     if (!empty($name) && !empty($content))
     {
       $html_patterns[] = array(
         "pattern_name" => $name,
+        "optgroup"     => $optgroup,
         "content"      => $content
           );
     }
@@ -546,17 +550,19 @@ function ft_get_email_patterns()
       break;
 
     $name     = ft_eval_smarty_string($email_template_patterns["text_patterns"]["pattern{$count}_name"]);
+    $optgroup = ft_eval_smarty_string($email_template_patterns["text_patterns"]["pattern{$count}_optgroup"]);
     $filename = $email_template_patterns["text_patterns"]["pattern{$count}_file"];
     $content  = "";
 
     if (is_readable("$pattern_folder/$filename") && is_file("$pattern_folder/$filename"))
-      $content = ft_eval_smarty_string(file_get_contents("$pattern_folder/$filename"));
+      $content = ft_eval_smarty_string(file_get_contents("$pattern_folder/$filename"), $placeholders);
 
     // if this has both a name and some email content, log it
     if (!empty($name) && !empty($content))
     {
       $text_patterns[] = array(
         "pattern_name" => $name,
+        "optgroup"     => $optgroup,
         "content"      => $content
           );
     }
@@ -791,7 +797,11 @@ function ft_get_email_template_recipients($email_id)
       case "custom":
         $recipient_info["final_name"] = $recipient_info["custom_recipient_name"];
         $recipient_info["final_email"] = $recipient_info["custom_recipient_email"];
-        $recipient_info["final_recipient"] = "{$recipient_info["final_name"]} &lt;{$recipient_info["final_email"]}&gt;";
+
+        if (!empty($recipient_info["final_name"]))
+          $recipient_info["final_recipient"] = "{$recipient_info["final_name"]} &lt;{$recipient_info["final_email"]}&gt;";
+        else
+          $recipient_info["final_recipient"] = $recipient_info["final_email"];
         break;
     }
 

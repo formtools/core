@@ -68,17 +68,3 @@
       </p>
 
     </form>
-
-    {* output the email patterns to the page (but hidden), so we can load them into the HTML and text
-       template fields with JS *}
-    <div style="display:none">
-      {foreach from=$email_patterns.html_patterns item=pattern name=row}
-        {assign var='count2' value=$smarty.foreach.row.iteration}
-        <textarea id="html_{$count2}">{$pattern.content}</textarea>
-      {/foreach}
-
-      {foreach from=$email_patterns.text_patterns item=pattern name=row}
-        {assign var='count3' value=$smarty.foreach.row.iteration}
-        <textarea id="text_{$count3}">{$pattern.content}</textarea>
-      {/foreach}
-    </div>

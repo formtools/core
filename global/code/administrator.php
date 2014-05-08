@@ -15,188 +15,6 @@
 
 
 /**
- * Returns information about the administrator account.
- *
- * @return array a hash of account information
- */
-function ft_get_admin_info()
-{
-  global $g_table_prefix;
-
-  $query = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}accounts
-    WHERE  account_type = 'admin'
-    LIMIT  1
-      ");
-
-  $result = mysql_fetch_assoc($query);
-
-  return $result;
-}
-
-
-/**
- * Updates the administrator account. With the addition of the "UI Language" option, this action
- * gets a little more complicated. The problem is that we can't just update the UI language in
- * sessions *within* this function, because by the time this function is called, the appropriate
- * language file is already in memory and being used. So, to get around this problem, the login
- * information form now passes along both the new and old UI languages. If it's different, AFTER
- * this function is called, you need to reset sessions and refresh the page. So be aware that
- * this problem is NOT handled by this function, see:
- *     /admin/accounts/index.php to see how it's solved.
- *
- * @param array $infohash This parameter should be a hash (e.g. $_POST or $_GET) containing the
- *               following keys: first_name, last_name, user_name, password.
- * @param integer $user_id the administrator's user ID
- * @return array [0]: true/false (success / failure)
- *               [1]: message string
- */
-function ft_update_admin_account($infohash, $account_id)
-{
-  global $g_table_prefix, $g_root_url, $LANG;
-
-  $success = true;
-  $message = $LANG["notify_account_updated"];
-  $infohash = ft_sanitize($infohash);
-
-  $rules = array();
-  $rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
-  $rules[] = "required,last_name,{$LANG["validation_no_last_name"]}";
-  $rules[] = "required,email,{$LANG["validation_no_email"]}";
-  $rules[] = "required,theme,{$LANG["validation_no_theme"]}";
-  $rules[] = "required,login_page,{$LANG["validation_no_login_page"]}";
-  $rules[] = "required,logout_url,{$LANG["validation_no_account_logout_url"]}";
-  $rules[] = "required,ui_language,{$LANG["validation_no_ui_language"]}";
-  $rules[] = "required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}";
-  $rules[] = "required,date_format,{$LANG["validation_no_date_format"]}";
-  $rules[] = "required,username,{$LANG["validation_no_username"]}";
-  $rules[] = "if:password!=,required,password_2,{$LANG["validation_no_account_password_confirmed"]}";
-  $rules[] = "if:password!=,same_as,password,password_2,{$LANG["validation_passwords_different"]}";
-  $errors = validate_fields($infohash, $rules);
-
-  if (!empty($errors))
-  {
-    $success = false;
-    array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-    $message = join("<br />", $errors);
-    return array($success, $message);
-  }
-
-  $first_name       = $infohash["first_name"];
-  $last_name        = $infohash["last_name"];
-  $email            = $infohash["email"];
-  $theme            = $infohash["theme"];
-  $login_page       = $infohash["login_page"];
-  $logout_url       = $infohash["logout_url"];
-  $ui_language      = $infohash["ui_language"];
-  $timezone_offset  = $infohash["timezone_offset"];
-  $sessions_timeout = $infohash["sessions_timeout"];
-  $date_format      = $infohash["date_format"];
-  $username         = $infohash["username"];
-  $password         = $infohash["password"];
-
-  // if the password is defined, md5 it
-  $password_sql = (!empty($password)) ? "password = '" . md5(md5($password)) . "', " : "";
-
-  // check to see if username is already taken
-  list($valid_username, $problem) = _ft_is_valid_username($username, $account_id);
-  if (!$valid_username)
-    return array(false, $problem);
-
-  $query = "
-      UPDATE  {$g_table_prefix}accounts
-      SET     $password_sql
-              first_name = '$first_name',
-              last_name = '$last_name',
-              email = '$email',
-              theme = '$theme',
-              login_page = '$login_page',
-              logout_url = '$logout_url',
-              ui_language = '$ui_language',
-              timezone_offset = '$timezone_offset',
-              sessions_timeout = '$sessions_timeout',
-              date_format = '$date_format',
-              username = '$username'
-      WHERE   account_id = $account_id
-           ";
-
-  mysql_query($query)
-    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
-
-  // update the settings
-  $_SESSION["ft"]["settings"] = ft_get_settings();
-  $_SESSION["ft"]["account"] = ft_get_account_info($account_id);
-  $_SESSION["ft"]["account"]["is_logged_in"] = true;
-
-  if (!empty($password))
-    $_SESSION["ft"]["account"]["password"] = md5(md5($password));
-
-  // if the password just changed, update sessions
-  if (!empty($password))
-  {
-    $_SESSION["ft"]["account"]  = ft_get_account_info($account_id);
-    $_SESSION["ft"]["account"]["is_logged_in"] = true;
-    $_SESSION["ft"]["account"]["password"] = md5(md5($password));
-  }
-
-  return array($success, $message);
-}
-
-
-/**
- * Used by administrators to login as a client. This function moves the administrator's sessions to a
- * temporary "admin" session key, and logs the administrator in under the client account. When logging out
- * as a client, the logout function detects if it's really an administrator and erases the old client
- * sessions, replacing them with the old administrator sessions, to enable a smooth transition
- * from one account to the next.
- *
- * @param integer $client_id the client ID
- */
-function ft_login_as_client($client_id)
-{
-  // extract the user's login info
-  $client_info = ft_get_account_info($client_id);
-  $info = array();
-  $info["username"] = $client_info["username"];
-
-  // move the session values to separate $_SESSION['ft']['admin'] values, so that
-  // once the administrator logs out we can reset the sessions appropriately
-  $current_values = $_SESSION["ft"];
-  $_SESSION["ft"] = array();
-  $_SESSION["ft"]["admin"] = $current_values;
-
-  // now log in
-  ft_login($info, true);
-}
-
-
-/**
- * Used by the administrator to logout from a client account. Resets appropriate
- * sessions values and redirects back to admin pages.
- */
-function ft_logout_as_client()
-{
-  global $g_root_url;
-
-  // empty old sessions and reload admin settings
-  $admin_values = $_SESSION["ft"]["admin"];
-  $client_id    = $_SESSION["ft"]["account"]["account_id"];
-  $_SESSION["ft"] = array();
-
-  foreach ($admin_values as $key => $value)
-    $_SESSION["ft"][$key] = $value;
-
-  unset($_SESSION["ft"]["admin"]);
-
-  // redirect them back to the edit client page
-  session_write_close();
-  header("location: $g_root_url/admin/clients/edit.php?client_id=$client_id");
-  exit;
-}
-
-
-/**
  * Creates a new client based on first and last name, and returns the new account id.
  *
  * @param array $infohash This parameter should be a hash (e.g. $_POST or $_GET) containing the
@@ -525,6 +343,188 @@ function ft_admin_update_client($infohash, $tab_num)
         }
       }
       break;
+  }
+
+  return array($success, $message);
+}
+
+
+/**
+ * Returns information about the administrator account.
+ *
+ * @return array a hash of account information
+ */
+function ft_get_admin_info()
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}accounts
+    WHERE  account_type = 'admin'
+    LIMIT  1
+      ");
+
+  $result = mysql_fetch_assoc($query);
+
+  return $result;
+}
+
+
+/**
+ * Used by administrators to login as a client. This function moves the administrator's sessions to a
+ * temporary "admin" session key, and logs the administrator in under the client account. When logging out
+ * as a client, the logout function detects if it's really an administrator and erases the old client
+ * sessions, replacing them with the old administrator sessions, to enable a smooth transition
+ * from one account to the next.
+ *
+ * @param integer $client_id the client ID
+ */
+function ft_login_as_client($client_id)
+{
+  // extract the user's login info
+  $client_info = ft_get_account_info($client_id);
+  $info = array();
+  $info["username"] = $client_info["username"];
+
+  // move the session values to separate $_SESSION["ft"]["admin"] values, so that
+  // once the administrator logs out we can reset the sessions appropriately
+  $current_values = $_SESSION["ft"];
+  $_SESSION["ft"] = array();
+  $_SESSION["ft"]["admin"] = $current_values;
+
+  // now log in
+  ft_login($info, true);
+}
+
+
+/**
+ * Used by the administrator to logout from a client account. Resets appropriate
+ * sessions values and redirects back to admin pages.
+ */
+function ft_logout_as_client()
+{
+  global $g_root_url;
+
+  // empty old sessions and reload admin settings
+  $admin_values = $_SESSION["ft"]["admin"];
+  $client_id    = $_SESSION["ft"]["account"]["account_id"];
+  $_SESSION["ft"] = array();
+
+  foreach ($admin_values as $key => $value)
+    $_SESSION["ft"][$key] = $value;
+
+  unset($_SESSION["ft"]["admin"]);
+
+  // redirect them back to the edit client page
+  session_write_close();
+  header("location: $g_root_url/admin/clients/edit.php?client_id=$client_id");
+  exit;
+}
+
+
+/**
+ * Updates the administrator account. With the addition of the "UI Language" option, this action
+ * gets a little more complicated. The problem is that we can't just update the UI language in
+ * sessions *within* this function, because by the time this function is called, the appropriate
+ * language file is already in memory and being used. So, to get around this problem, the login
+ * information form now passes along both the new and old UI languages. If it's different, AFTER
+ * this function is called, you need to reset sessions and refresh the page. So be aware that
+ * this problem is NOT handled by this function, see:
+ *     /admin/accounts/index.php to see how it's solved.
+ *
+ * @param array $infohash This parameter should be a hash (e.g. $_POST or $_GET) containing the
+ *               following keys: first_name, last_name, user_name, password.
+ * @param integer $user_id the administrator's user ID
+ * @return array [0]: true/false (success / failure)
+ *               [1]: message string
+ */
+function ft_update_admin_account($infohash, $account_id)
+{
+  global $g_table_prefix, $g_root_url, $LANG;
+
+  $success = true;
+  $message = $LANG["notify_account_updated"];
+  $infohash = ft_sanitize($infohash);
+
+  $rules = array();
+  $rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
+  $rules[] = "required,last_name,{$LANG["validation_no_last_name"]}";
+  $rules[] = "required,email,{$LANG["validation_no_email"]}";
+  $rules[] = "required,theme,{$LANG["validation_no_theme"]}";
+  $rules[] = "required,login_page,{$LANG["validation_no_login_page"]}";
+  $rules[] = "required,logout_url,{$LANG["validation_no_account_logout_url"]}";
+  $rules[] = "required,ui_language,{$LANG["validation_no_ui_language"]}";
+  $rules[] = "required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}";
+  $rules[] = "required,date_format,{$LANG["validation_no_date_format"]}";
+  $rules[] = "required,username,{$LANG["validation_no_username"]}";
+  $rules[] = "if:password!=,required,password_2,{$LANG["validation_no_account_password_confirmed"]}";
+  $rules[] = "if:password!=,same_as,password,password_2,{$LANG["validation_passwords_different"]}";
+  $errors = validate_fields($infohash, $rules);
+
+  if (!empty($errors))
+  {
+    $success = false;
+    array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
+    $message = join("<br />", $errors);
+    return array($success, $message);
+  }
+
+  $first_name       = $infohash["first_name"];
+  $last_name        = $infohash["last_name"];
+  $email            = $infohash["email"];
+  $theme            = $infohash["theme"];
+  $login_page       = $infohash["login_page"];
+  $logout_url       = $infohash["logout_url"];
+  $ui_language      = $infohash["ui_language"];
+  $timezone_offset  = $infohash["timezone_offset"];
+  $sessions_timeout = $infohash["sessions_timeout"];
+  $date_format      = $infohash["date_format"];
+  $username         = $infohash["username"];
+  $password         = $infohash["password"];
+
+  // if the password is defined, md5 it
+  $password_sql = (!empty($password)) ? "password = '" . md5(md5($password)) . "', " : "";
+
+  // check to see if username is already taken
+  list($valid_username, $problem) = _ft_is_valid_username($username, $account_id);
+  if (!$valid_username)
+    return array(false, $problem);
+
+  $query = "
+      UPDATE  {$g_table_prefix}accounts
+      SET     $password_sql
+              first_name = '$first_name',
+              last_name = '$last_name',
+              email = '$email',
+              theme = '$theme',
+              login_page = '$login_page',
+              logout_url = '$logout_url',
+              ui_language = '$ui_language',
+              timezone_offset = '$timezone_offset',
+              sessions_timeout = '$sessions_timeout',
+              date_format = '$date_format',
+              username = '$username'
+      WHERE   account_id = $account_id
+           ";
+
+  mysql_query($query)
+    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
+
+  // update the settings
+  $_SESSION["ft"]["settings"] = ft_get_settings();
+  $_SESSION["ft"]["account"] = ft_get_account_info($account_id);
+  $_SESSION["ft"]["account"]["is_logged_in"] = true;
+
+  if (!empty($password))
+    $_SESSION["ft"]["account"]["password"] = md5(md5($password));
+
+  // if the password just changed, update sessions
+  if (!empty($password))
+  {
+    $_SESSION["ft"]["account"]  = ft_get_account_info($account_id);
+    $_SESSION["ft"]["account"]["is_logged_in"] = true;
+    $_SESSION["ft"]["account"]["password"] = md5(md5($password));
   }
 
   return array($success, $message);

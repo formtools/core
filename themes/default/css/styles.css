@@ -51,7 +51,6 @@ img { border: none; }
 form { margin: 0px; }
 
 .rsvErrorField { background-color: #990000; color: #ffffcc; }
-
 #account_section {
  	background-image: url(../images/account_section_bg.jpg);
 	background-repeat: repeat-x;
@@ -64,7 +63,6 @@ form { margin: 0px; }
   color: #f2f2f2;
   text-decoration: none;
 }
-
 #footer {
 	border: 1px solid #CFCFCF;
 	margin-left: 18px;
@@ -76,8 +74,7 @@ form { margin: 0px; }
 	text-align:center;
 }
 
-
-/*-------------- nav links -----------------*/
+/* nav links */
 div.nav_heading {
 	font-weight: bold;
 	padding-left: 4px;
@@ -85,7 +82,6 @@ div.nav_heading {
 	padding-top:2px;
 	padding-bottom:2px;
 }
-
 div#nav_separator {
 	border-bottom: 1px solid #efefef;
 	margin-top: 12px;
@@ -96,12 +92,11 @@ div#left_nav {
 	border-right: 1px dotted #dddddd;
 	margin-right: 20px;
 }
-
 .nav_link {
 	width: 150px;
 	font-size: 8.6pt;
 }
-.nav_link a {
+.nav_link a:link, .nav_link a:visited {
 	width: 156px;
 	display: block;
 	vertical-align: center;
@@ -114,8 +109,9 @@ div#left_nav {
 .nav_link a:hover {
 	color: #004400;
 	background-image: url(../images/nav_bg.jpg);
+	background-repeat: repeat-y;
 }
-.nav_link_submenu a {
+.nav_link_submenu a:link, .nav_link_submenu a:visited {
 	width: 150px;
 	display: block;
 	vertical-align: center;
@@ -128,6 +124,7 @@ div#left_nav {
 .nav_link_submenu a:hover {
 	color: #000000;
 	background-image: url(../images/nav_bg.jpg);
+	background-repeat: repeat-y;
 }
 .nav_link_selected {
 	text-decoration: none;

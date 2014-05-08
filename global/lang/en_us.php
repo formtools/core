@@ -5,10 +5,10 @@ Form Tools - Language File
 --------------------------
 
 Translated by: Anonymous
-File created: Oct 24th, 2:46 AM
+File created: Jan 6th, 11:46 PM
 
 If you would like to help translate Form Tools, please visit:
-http://www.formtools.org/translations/
+http://translations.formtools.org/
 */
 
 // Special (non-editable)
@@ -93,6 +93,7 @@ $LANG["word_equals"] = "Equals";
 $LANG["word_error"] = "Error";
 $LANG["word_error_c"] = "Error:";
 $LANG["word_errors"] = "Errors";
+$LANG["word_examples_c"] = "Examples:";
 $LANG["word_excel"] = "Excel";
 $LANG["word_expert"] = "Expert";
 $LANG["word_external"] = "External";
@@ -307,7 +308,6 @@ $LANG["date_pm"] = "pm";
 
 // Notifications
 $LANG["notify_account_deleted"] = "The user account has been deleted.";
-$LANG["notify_account_not_updated"] = "Please activate javascript in your browser. All fields marked * are required. Your user account was not updated.";
 $LANG["notify_account_updated"] = "Your account has been successfully updated.";
 $LANG["notify_add_display_values"] = "Add Display Values";
 $LANG["notify_admin_menu_updated"] = "The administration menu has been updated.";
@@ -341,13 +341,11 @@ $LANG["notify_file_not_deleted_permissions"] = "The file has not been deleted be
 $LANG["notify_file_not_deleted_unknown_error"] = "There was an unknown error when trying to delete this file. <a href=\"#\" onclick=\"{\$js_link}\">Click here</a> to ignore this error message and just remove the reference from the database.";
 $LANG["notify_file_not_uploaded"] = "The file could not be uploaded.";
 $LANG["notify_file_too_large"] = "This file is too large.";
-$LANG["notify_file_upload_settings_not_updated"] = "The file upload settings could not be updated.";
 $LANG["notify_file_upload_settings_updated"] = "The file upload settings have been successfully updated.";
 $LANG["notify_file_upload_settings_updated_files_moved"] = "The file upload settings have been successfully updated and the associated files have been moved to the new folder.";
 $LANG["notify_file_upload_settings_updated_files_not_moved"] = "The file upload settings have been updated, but the following file(s) could not be moved:";
 $LANG["notify_file_uploaded"] = "The file was successfully uploaded.";
 $LANG["notify_filters_not_updated"] = "There was an error updating this client's submission filters.";
-$LANG["notify_filters_not_updated_no_client"] = "There was an error updating this client's submission filters. No client ID was specified.";
 $LANG["notify_filters_updated"] = "The submission filters have been updated for this client.";
 $LANG["notify_folder_correct_permissions"] = "This folder has the correct permissions.";
 $LANG["notify_folder_url_match"] = "The folder and URL appear to correctly match.";
@@ -355,7 +353,6 @@ $LANG["notify_folder_url_no_access"] = "This test could not be performed since P
 $LANG["notify_folder_url_no_match"] = "This folder-URL combination does not appear to be a match.";
 $LANG["notify_folder_url_unknown_error"] = "An unknown error occurred. You can test it manually by uploading a file to that folder via FTP, then trying to access it at the URL you have supplied.";
 $LANG["notify_form_field_not_added"] = "The form field '{\$fieldname}' could not be added.";
-$LANG["notify_form_field_not_updated"] = "The form display field could not be updated.";
 $LANG["notify_form_field_options_updated"] = "The form field options have been updated.";
 $LANG["notify_form_field_removed"] = "The form field was successfully removed.";
 $LANG["notify_form_fields_removed"] = "The form fields were successfully removed.";
@@ -365,7 +362,6 @@ $LANG["notify_form_submission_updated"] = "The form submission has been updated.
 $LANG["notify_form_tabs_updated"] = "The tabs have been updated.";
 $LANG["notify_form_updated"] = "The form has been successfully updated.";
 $LANG["notify_form_view_order_updated"] = "The View order has been updated.";
-$LANG["notify_image_deleted"] = "The image and thumbnail(s) have been deleted.";
 $LANG["notify_image_field_settings_updated"] = "The image settings have been updated for this field.";
 $LANG["notify_install_invalid_db_info"] = "Sorry, we were unable to connect to the database using the information you supplied. The error message the database returned is: <i>{\$db_connection_error}</i>";
 $LANG["notify_install_no_db_connection"] = "Please check your database name and login information. Although we were able to connect to the database host, we could not connect to the database. The error message the database returned is: <i>{\$db_select_error}</i>";
@@ -389,8 +385,6 @@ $LANG["notify_no_email_template_selected"] = "Please select the email template."
 $LANG["notify_no_emails_defined"] = "No emails have been defined for this form. To add a new one, click the button below.";
 $LANG["notify_no_field_option_groups"] = "There are no field option groups defined in the database. Generally, these are created by the <a href=\"../add/step1.php?add\">Add Form script</a>, but you can manually create them below.";
 $LANG["notify_no_fields_in_tab"] = "This tab does not contain any fields.";
-$LANG["notify_no_image_to_delete"] = "No image to delete!";
-$LANG["notify_no_smart_fill"] = "Smart fill can only be used for forms that are on the same host as Form Tools.";
 $LANG["notify_no_test_submission"] = "Form Tools hasn't received a successful test submission yet.";
 $LANG["notify_no_views_assigned_to_client_form"] = "It appears that your user account hasn't been assigned to any form Views, so you won't be able to see any data. Please contact the administrator for further help.";
 $LANG["notify_no_views_defined"] = "You don't have any Views defined. You will not be able to view this form's submissions unless at least one View is created. Click the button below to continue.";
@@ -422,7 +416,6 @@ $LANG["notify_test_email_not_sent"] = "Your test email could not be sent.";
 $LANG["notify_theme_list_updated"] = "The theme list has been updated.";
 $LANG["notify_themes_settings_updated"] = "Your theme settings have been updated.";
 $LANG["notify_unsupported_file_extension"] = "This file has an unsupported file extension.";
-$LANG["notify_unsupported_image_file_format"] = "Sorry, this is an unsupported image file format.";
 $LANG["notify_view_deleted"] = "The View has been deleted.";
 $LANG["notify_view_updated"] = "The View has been updated.";
 $LANG["notify_wysiwyg_settings_updated"] = "The WYSIWYG settings have been updated.";
@@ -433,6 +426,7 @@ $LANG["notify_module_updated"] = "The <b>{\$module}</b> module has been updated 
 $LANG["phrase_1_direct"] = "1. Direct";
 $LANG["phrase_2_code"] = "2. Code";
 $LANG["phrase_accepting_submissions"] = "(accepting submissions)";
+$LANG["phrase_access_admin_account_c"] = "You can access your administration account here:";
 $LANG["phrase_access_type"] = "Access Type";
 $LANG["phrase_account_info"] = "Account Information";
 $LANG["phrase_account_settings"] = "Account Settings";
@@ -547,6 +541,7 @@ $LANG["phrase_delete_form"] = "Delete Form";
 $LANG["phrase_delete_form_c"] = "Delete Form:";
 $LANG["phrase_delete_uploaded_fields_with_submission"] = "Delete associated files when deleting submission";
 $LANG["phrase_direction_submission"] = "Direct submission";
+$LANG["phrase_display_email"] = "Display Email";
 $LANG["phrase_display_name"] = "Display Name";
 $LANG["phrase_display_options"] = "Display Options";
 $LANG["phrase_display_options_page_5"] = "5. Display Options";
@@ -582,7 +577,6 @@ $LANG["phrase_error_text_intro"] = "Please fix the following error(s) and resubm
 $LANG["phrase_errors_learn_more"] = "Click on the error codes to learn more.";
 $LANG["phrase_event_trigger"] = "Event Trigger";
 $LANG["phrase_example_editor"] = "Example Editor";
-$LANG["phrase_example_templates_c"] = "Example templates:";
 $LANG["phrase_excel_file"] = "Excel file";
 $LANG["phrase_existing_col_names_c"] = "Existing column names:";
 $LANG["phrase_field_content"] = "Field content";
@@ -637,6 +631,7 @@ $LANG["phrase_full_form_submission_omit_empty"] = "Full form submission + omit e
 $LANG["phrase_get_more"] = "Get more...";
 $LANG["phrase_global_placeholders"] = "Global Placeholders";
 $LANG["phrase_group_name"] = "Group Name";
+$LANG["phrase_have_fun"] = "Have fun!";
 $LANG["phrase_hide_help"] = "Hide Help";
 $LANG["phrase_html_email"] = "HTML Email";
 $LANG["phrase_html_template"] = "HTML Template";
@@ -694,6 +689,7 @@ $LANG["phrase_new_blank_email"] = "New Blank Email";
 $LANG["phrase_new_blank_field_option_group"] = "New Blank Field Option Group";
 $LANG["phrase_new_blank_view"] = "New Blank View";
 $LANG["phrase_new_group"] = "New Group";
+$LANG["phrase_new_ft_installation"] = "New Form Tools Installation";
 $LANG["phrase_new_page"] = "new page";
 $LANG["phrase_new_password"] = "New Password";
 $LANG["phrase_new_password_reenter"] = "New Password (please re-enter)";
@@ -886,34 +882,18 @@ $LANG["processing_no_redirect_url"] = "The submission was processed correctly, b
 $LANG["text_account_settings_page"] = "All new client accounts will be created with the settings and permissions defined below. To override a setting for a particular client, edit the client account and visit their Settings tab.";
 $LANG["text_add_form_code_submission_benefits"] = "This method uses the <a href=\"http://docs.formtools.org/api/\" target=\"_blank\">Form Tools API</a>, included in the main Form Tools script. The API provides a number of helpful functions to make the job of integrating your form with Form Tools as simple as possible. There are no restrictions to how your form may be submitted when you use the API. You can submit the content in one go, or page by page; you can add your own custom server-side validation, CAPTCHA images; you can choose to submit the information now, but only tell it to display the submission in the Form Tools UI at a later date (see the <a href=\"\">Finalized Submissions</a> section in the API help documentation).";
 $LANG["text_add_form_code_submission_drawbacks"] = "For non-technical and novice Form Tools users, this method can be a little intimidating at first. But there's plenty of documentation to help you out, including two simple tutorials for integrating your single- and multi-page forms (just click the Select button).";
-$LANG["text_add_form_column_info"] = "This column determines which of all the form fields will be visible to the client when they browse all their form submissions. At least one must be entered in order to continue.";
-$LANG["text_add_form_column_order"] = "This column determines the order in which the fields will be listed both in the main listings page and in the submission details page.<br />- To move an field to the end, just enter a very high value (e.g. 100)<br />- To move an field to the start, enter 0<br />- To place a field in between two consecutive fields, just enter a decimal (e.g. 1.5 would fit the field in between fields with order 1 and 2)";
 $LANG["text_add_form_direct_submission_benefits"] = "This is the simplest way to submit your form to Form Tools. It doesn't require any knowledge of PHP and requires only a very small change to your form. It's great for smaller forms where you want to just submit the information to the database then redirect the user to a \"thankyou\" page.";
 $LANG["text_add_form_direct_submission_drawbacks"] = "This submission method is very simple to use, but doesn't provide much control for more complicated forms. Multi-page forms or forms that require server-side validation are better suited to the second method: submitting via the Form Tools API.";
-$LANG["text_add_form_display_name_info"] = "This column lets you specify the name for the field. Try to make it as succinct and clear as possible. All fields that you want to store in the database require a display name - you cannot finish adding your form unless they have all been entered.";
-$LANG["text_add_form_name_field_info"] = "This is the name attribute of the field in your form. You may use it to determine what information the field is supposed to store and enter the Display Name accordingly.";
 $LANG["text_add_form_step_1_text_1"] = "The following pages lead you through the steps to configure Form Tools to store your form submissions. Before continuing, please check that:";
 $LANG["text_add_form_step_1_text_2"] = "your form has already been created and it's accessible via a URL (localhost is fine)";
 $LANG["text_add_form_step_1_text_3"] = "are able to edit your form";
-$LANG["text_add_form_step_2_para_10"] = "After submitting, you should see a notification message. Once this message is displayed, return to this page and click the refresh button below. When this process is complete, you will see a continue button below, taking you to the next step.";
 $LANG["text_add_form_step_2_para_2"] = "Open your form in an editor of your choice and change your form tag to the following, including the two hidden fields.";
 $LANG["text_add_form_step_2_para_3"] = "Next, <a href=\"{\$linktoform}\" target=\"_blank\">open your form in a web browser</a>. Fill in <b>every</b> field and submit it. After submitting, you should see a notification message. Once this message is displayed, return to this page and click the refresh button below. When this process is complete, you will see a continue button below, taking you to the next step.";
-$LANG["text_add_form_step_2_para_4"] = "At this point, Form Tools is anticipating a test submission through your form, which it will use to know what information should be stored for all future submissions. Please perform the following steps:";
-$LANG["text_add_form_step_2_para_5"] = "In your submission page (it must be a PHP file) include the following files:";
 $LANG["text_add_form_step_2_para_6"] = "In your form submission, include the following values. They may be set directly via PHP or passed along through the form itself. Below are examples of each. The {\$varname} is a hash (or associative array) of all form submission information - this is usually the {\$postvar} or {\$sessionvar} variable, but it may be custom built.";
-$LANG["text_add_form_step_2_para_7"] = "Submit the form information using the following function:";
-$LANG["text_add_form_step_2_para_8"] = "Submit the form information using the following function. Note that ft_process_form returns the new submission ID. You will use this value to finalize the submission whenever you need.";
-$LANG["text_add_form_step_2_para_9"] = "Finally, whenever you need to finalize the submission, just call the following function:";
 $LANG["text_add_form_step_2_text_1"] = "Your form can be located on any website, but you can only submit the form information with PHP if it's located on the same server as this Form Tools installation.";
 $LANG["text_add_form_step_2_text_2"] = "Enter the URL of your \"thankyou\" page here. This is where you want people to be directed to after the form has been submitted. Note: as the next step will explain, you can submit your forms to Form Tools with a standard POST request or by sending the information with PHP using the <a href=\"http://docs.formtools.org/api/\" target=\"_blank\">Form Tools API</a>. The Redirect URL field is only required if you want the form submissions sent without any PHP.";
 $LANG["text_add_form_step_3_para_1"] = "This page lists all fields in your form submission. Please examine each field and remove any that you don't need stored for every submission. If you delete a valid field by accident, or wish to change the information stored by your form, return to the previous page to send a new test submission.";
-$LANG["text_add_form_step_3_para_10"] = "This column only appears for <b>direct</b> form submissions. It allows you to pass along information from the form submission through the query string to the receipt page.";
-$LANG["text_add_form_step_3_para_11"] = "To remove a field, check this field and click the \"UPDATE\" button.";
 $LANG["text_add_form_step_3_para_2"] = "Note: if you're sending multiple values via checkboxes or a multi-select box, make sure your field name ends with the [] characters (see the <a href=\"http://docs.formtools.org/\" target=\"_blank\">user documentation</a> for more information).";
-$LANG["text_add_form_step_3_para_3"] = "You must allocate the space for each field.";
-$LANG["text_add_form_step_3_para_7"] = "This is the name attribute of the field in your form. You may use it to determine what information the field is supposed to store and enter the Display Name accordingly.";
-$LANG["text_add_form_step_3_para_8"] = "The sample data is whatever content was in that field with your test submission.";
-$LANG["text_add_form_step_3_para_9"] = "This is the maximum size of the information submitted for this field. It is important to select the appropriate value: if any submission contains more information that you specify here, it will be truncated.";
 $LANG["text_add_form_step_3_text_1"] = "Here's where the fun starts! At this point, Form Tools is waiting for a test submission from your form. It will use this form submission to know what information should be stored for all future submissions. You can make your test submission in one of two ways:";
 $LANG["text_add_form_step_3_text_2"] = "by pointing your form to Form Tools";
 $LANG["text_add_form_step_3_text_3"] = "using the Form Tools API";
@@ -925,9 +905,6 @@ $LANG["text_add_form_step_5_para_2"] = "Once this is done, all form submissions 
 $LANG["text_add_form_step_5_para_3"] = "If you wish to fine-tune your form for options such as auto-emailing, form field changes, and the editing of form submissions through fields other than textboxes and textareas, you may <a href=\"{\$editformlink}\">edit your form</a> at any point.";
 $LANG["text_add_form_step_5_para_4"] = "Since your form contains file upload fields, you will need to configure each field to specify the file upload folder, what files are permitted and . This can be found on the <a href=\"{\$editformlink}\"><b>Display tab</b><a> of the edit form page.";
 $LANG["text_admin_email_placeholder_info"] = "This is the email address of the Form Tools administrator, defined in your account settings. This only outputs the email address, so if you wish to use as an HTML link, you will need to wrap it in an &lt;a&gt; tag, like so:<br /><b>&lt;a href=\"mailto:{\$ADMINEMAIL}\"&gt;{\$ADMINEMAIL}&lt;/a&gt;</b>";
-$LANG["text_client_css_placeholder_info"] = "This outputs the custom CSS for the client who is assigned to this form. This helps ensure the email is formatted in a similar manner to the client's Form Tools interface. Please read the help documentation for more information on CSS in emails.";
-$LANG["text_client_email_html_tab_info"] = "This tab lets you enter the content for HTML emails sent to clients whenever a user submits the form. Select one of the example templates for a custom-built template that is tailored to your form.";
-$LANG["text_client_email_text_tab_info"] = "This tab lets you enter the content for text emails sent to clients whenever a user submits the form. Select one of the example templates for a custom-built template that is tailored to your form.";
 $LANG["text_client_form_page"] = "This page lists all the forms and Views assigned to this client. Tip: in order for them to see a form's submissions, they need to be assigned to at least one View.";
 $LANG["text_client_no_forms"] = "You currently have no forms available for review.";
 $LANG["text_client_welcome"] = "Welcome! This program stores all information submitted by your website visitors. To view submissions for a particular form just click on the <b>VIEW</b> link, or see the leftmost navigation menu for other options.";
@@ -938,23 +915,16 @@ $LANG["text_config_file_not_created_instructions"] = "Copy and paste the content
 $LANG["text_confirm_delete_form"] = "Yes, I want to delete this form";
 $LANG["text_create_admin_account"] = "Now we're going to create the administrator's account. This is used for managing all aspects of Form Tools, such as adding forms and creating client accounts.";
 $LANG["text_create_new_client_account"] = "Use the form below to create a new client account. All fields are required.";
-$LANG["text_current_host"] = "Your current host is: {\$host}";
 $LANG["text_date_formatting_link"] = "see PHP {\$datefunctionlink} function for formatting options";
 $LANG["text_default_file_settings_page"] = "This page defines the file upload settings for your Form Tools installation. These rules apply to all files uploaded through Form Tools, unless explicitly overridden for an individual form field. Note: if you change the upload folder after files have been uploaded, they will be automatically moved to the new folder.";
-$LANG["text_default_password_reminder_question"] = "What is your mother's maiden name?";
 $LANG["text_delete_all_forms"] = "I want to delete all files that were uploaded via this form";
 $LANG["text_delete_field_warning"] = "deleting a field on this page will delete it from all submissions, so please be careful.";
 $LANG["text_delete_form_warning"] = "Are you sure you want to delete this form? This action cannot be undone. All data will be permanently lost!";
 $LANG["text_edit_admin_menu_page"] = "You may edit your menu below. To ensure you always have access to all functionality available within Form Tools, the following pages are required: Forms, Clients, Your Account, Modules, Settings and Logout.";
 $LANG["text_edit_client_menu_page"] = "This section lets you customize the left navigation column for each user. You may create as many client menus as you wish and assign any account to one of them. By default there are two menus: one for you, the administrator, and one for all client accounts. The administrator account may be modified but not removed.";
 $LANG["text_edit_tab_summary"] = "If you wish to group this View's fields into tabs, just fill in the fields below. After you're done, select the appropriate tab for each field in the <a href=\"#\" onclick=\"return ft.change_inner_tab(2, 4)\">Fields section</a>.";
-$LANG["text_edit_view_page_summary"] = "This page lets you customize all aspects of your View, including which fields should be displayed, their order, which clients may see them, which tab they belong on and any additional filter rules.";
 $LANG["text_email_address"] = "The admin / client's email address.";
-$LANG["text_email_field_info"] = "The value of the {\$fieldname} form field";
-$LANG["text_email_settings_clients"] = "Send email notifications to <span class=\"admin_text bold\">clients</span> for form submissions";
 $LANG["text_email_settings_intro"] = "This page lets you identify which of your form fields are of special relevance to the email mechanism: namely, which (if any) store the email and name of the individual submitting the form. If you don't supply these values, you will not be able to use them when defining your email templates.";
-$LANG["text_email_settings_users"] = "Send email notifications to <span class=\"user_text bold\">users</span> after they submit the form";
-$LANG["text_email_tab_click_update_reminder"] = "Please click the UPDATE button above after making any changes. This will ensure your test email contains the latest settings.";
 $LANG["text_email_tab_summary"] = "This section lets you construct any number of emails to be sent whenever your form is submitted, and other triggers.";
 $LANG["text_email_template_tab"] = "This section lets you determine what content appears in the email. If you wish to send your email as only text or email, only enter a value for that section. If you enter a value for both, the email will be sent in both formats.";
 $LANG["text_email_template_text_1"] = "There has been a submission made through your form, {\$FORMNAME}.";
@@ -972,18 +942,16 @@ $LANG["text_fields_tab_summary"] = "This page contains the general configuration
 $LANG["text_file_extension_info"] = "Enter file extensions separated with commas (e.g. jpg,gif,png) or leave blank to allow any file type.";
 $LANG["text_file_field_placeholders_info"] = "File fields have two special placeholders: FILEURL and FILENAME. FILEURL is the full URL to the file, so you can link directly to it in your emails; FILENAME is just the file name.";
 $LANG["text_file_settings_page"] = "This page lets you customize the settings for this file field. You do not <b>need</b> to edit these values. Only edit them if you wish to override the settings defined in your <a href=\"../settings/index.php?page=files\">File Settings</a> page.";
-$LANG["text_filters_account_no_forms"] = "In order to add some filters, you need to first assign this account to one or more forms.";
 $LANG["text_filters_page"] = "This section lets you create your own custom filters. Only those submissions that meet the rules you define below will appear in this View.";
 $LANG["text_filters_tips"] = "For tips on how to use submission filters, see the <a href=\"{\$user_doc_link}\" target=\"_blank\">User Documentation</a>.";
 $LANG["text_first_name"] = "The admin / client's first name.";
 $LANG["text_forgot_password"] = "No problem. Just enter your username below and your login information will be sent to your email address on file. If you have forgotten your username, please email the site administrator at {\$site_admin_email}.";
 $LANG["text_form_contains_file_fields"] = "This form contains one or more file upload fields:";
-$LANG["text_form_host"] = "Your form's host is: {\$host}";
 $LANG["text_form_placeholder_info"] = "The following placeholders may be used in any of this form's email templates, regardless of whatever View the email template is assigned to. The QUESTION placeholders are the specific form question; the ANSWER placeholders are the answers to each question.";
 $LANG["text_form_submission_date_placeholder"] = "The submission date for this particular form submission. The format of the date is specified by the user's \"Date Format\" settings; for example, the current time in this format is: {\$currenttime}. For non-user accounts, the date format is determined by the default client date format.";
 $LANG["text_form_tools_form_url"] = "The full URL of the form.";
 $LANG["text_form_tools_login_url"] = "The login URL for Form Tools.";
-$LANG["text_ft_installed"] = "Congratulations, Form Tools has been been successfully installed!";
+$LANG["text_ft_installed"] = "Congratulations, Form Tools has been successfully installed!";
 $LANG["text_global_placeholder_info"] = "These placeholders may be used in any template and any form.";
 $LANG["text_group_name_explanation"] = "For fields added through the Add Form process, this value is pre-filled to the display text of whatever field uses the value. You may wish to change it to better characterize the contents.";
 $LANG["text_install_already_upgraded"] = "If you have already run the installation script, delete the <b>/install</b> folder then <a href=\"../\" class=\"bold\">click here to log in</a>.";
@@ -993,15 +961,13 @@ $LANG["text_install_db_tables_error_tip_1"] = "<span class=\"green\">\"Unknown M
 $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">\"Can't connect to local MySQL server through socket\"</span> means the database hostname field is again incorrect.";
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">\"Access denied for user:\"</span> means that there is a problem with your username / password combination.";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">\"Access denied for user: ... to database ...\"</span> means that although your username and password you supplied is correct, it was unable to connect to that particular database with that account. This can mean that either your database name is incorrect, or that this user account is not associated with that database.";
+$LANG["text_install_email_content_text"] = "There's plenty of resources on our website to help you get started, including our online documentation (http://docs.formtools.org) and tutorials (http://docs.formtools.org/tutorials). If you find you get stuck or have a question, pop by our forums (http://forums.formtools.org) and say hello.";
 $LANG["text_install_form_tools_server_not_supported"] = "Sorry, Form Tools will not be able to run on your server. <a href=\"http://docs.formtools.org/userdoc/?page=system_requirements\" target=\"_blank\">Please click here</a> for the minimum requirements.";
 $LANG["text_install_intro"] = "Welcome to the Form Tools installation script! Please select your language.";
 $LANG["text_install_system_check"] = "This page runs a few tests on your system to ensure it's able to run Form Tools.";
-$LANG["text_intro_page_delete_install_folder"] = "Yes? You need to delete the <b>/install</b> folder in order to proceed. Please delete the folder and then <a href=\"index.php\">try logging in again</a>.";
 $LANG["text_js_required"] = "In order to login and use Form Tools, you must have javascript enabled in your browser. Please enable it now, and click refresh in your browser.";
 $LANG["text_last_modified_date_explanation_c"] = "The last time this submission was modified. For new submissions, this is the same as:";
 $LANG["text_last_name"] = "The admin / client's last name.";
-$LANG["text_list_clients"] = "These are all clients currently in the database. Click the <b>LOGIN</b> link to log in as that user and view their account pages.";
-$LANG["text_list_form_page"] = "The following is a list of all forms currently being stored in the database.";
 $LANG["text_list_views_with_filters"] = "(only lists Views with one or more filters defined)";
 $LANG["text_log_in_to_ft"] = "Log in to Form Tools";
 $LANG["text_login"] = "Please log in below to access the {\$program_name} Administration Panel. If you have forgotten your password, <a href=\"{\$forgot_password_link}\">click here</a>.";
@@ -1017,18 +983,12 @@ $LANG["text_no_recipients_added"] = "No recipients have been added.";
 $LANG["text_no_search_results"] = "There are no results with this search criteria / View.";
 $LANG["text_no_submissions_found"] = "Sorry, no submissions were found.";
 $LANG["text_no_themes"] = "You do not have any themes defined. Click the button below to refresh your theme list, or check the <a href=\"http://www.formtools.org/userdoc.php\">Form Tools user documentation</a> for information about adding themes.";
-$LANG["text_please_enter_field_security_reasons"] = "For security reasons, it is <b>highly</b> recommended that you indicate which file types may be uploaded through this field.";
 $LANG["text_public_form_omit_list_page"] = "<b>Public</b> forms give you the benefit of letting all client accounts access them without having to manually assign each client to them. This page lets you pinpoint those clients who may not access this form, even though the form is marked as public.";
 $LANG["text_public_view_omit_list_page"] = "Public Views give you the benefit of letting all client accounts access them without having to manually assign each client to them. This page lets you pinpoint those clients who may not access this particular View.";
-$LANG["text_question_not_sent"] = "The email could not be sent. Please try again later.";
-$LANG["text_question_sent"] = "Thanks! Your question has been submitted. We will get back to you as soon as possible.";
-$LANG["text_ran_installation_script_q"] = "Have you run the installation script?";
 $LANG["text_reason_files_not_moved"] = "The most likely cause of this is either the permissions on the files have been changed or they no longer exist.";
 $LANG["text_reference_tab_info"] = "This tab lists all placeholders available for you to use in the email templates. Placeholders are strings like {\$PLACEHOLDER} which are converted to their appropriate meaning when the email is sent. Take a look at the example templates for some ideas.";
 $LANG["text_review_user_doc"] = "Review the user documentation";
-$LANG["text_see_advanced_controls"] = "For greater control over emails including subject line and email content, select the <b>advanced</b> emailing method from your <a href=\"{\$programsettingslink}\">Program Settings</a>.";
 $LANG["text_send_email_from_edit_submission_page"] = "Include option to send this email from Edit Submission page";
-$LANG["text_send_question_info"] = "Use the form below to email the site administrator with any questions you may have.";
 $LANG["text_test_email"] = "Use the form below to either view or send yourself an email generated from this email template. The email is <b>only</b> sent to the email specified below; the main, cc and bcc email address recipients are ignored while testing.";
 $LANG["text_test_email_templates_no_submissions"] = "In order to test your email templates, you must first put through at least one form submission.";
 $LANG["text_theme_page_intro"] = "This page lists all of your themes. Click on a thumbnail to see a larger example of the theme's styles. The \"enabled\" checkbox determines whether or not that theme may be selected by clients. To browse all available themes, visit the <a href=\"http://themes.formtools.org\" target=\"_blank\">Form Tools website</a>.";
@@ -1038,8 +998,6 @@ $LANG["text_unused_field_option_group"] = "This field option group is not being 
 $LANG["text_upgraded"] = "Your installation has been upgraded to <b>{\$version}</b>";
 $LANG["text_used_field_option_group"] = "This field option group is used by the following fields.";
 $LANG["text_user_account_placeholders_explanation"] = "These placeholders only exist for emails sent to the admin and client accounts. If they exist in emails to other people (e.g. users - the people who submitted the form), they will appear blank.";
-$LANG["text_user_email_html_tab_info"] = "This tab lets you enter the content for HTML emails sent to users whenever they submit the form. Select one of the example templates for a custom-built template that is tailored to your form.";
-$LANG["text_user_email_text_tab_info"] = "This tab lets you enter the content for text emails sent to users whenever they submit the form. Select one of the example templates for a custom-built template that is tailored to your form.";
 $LANG["text_view_tab_summary"] = "This tab lets you create different ways to group and arrange your data, called \"Views\". Views can be used for reporting purposes to show subsets of your form information or to limit what clients may see or edit.";
 
 // Validation

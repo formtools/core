@@ -11,7 +11,6 @@ $columns        = ft_get_form_column_names($form_id);
 $template_info  = ft_get_email_template($email_id);
 $event_trigger_arr =  explode(",", $template_info["email_event_trigger"]);
 $template_info["email_event_trigger"] = $event_trigger_arr;
-$email_patterns  = ft_get_email_patterns();
 $edit_email_tab  = ft_load_field("edit_email_tab", "edit_email_tab", 1);
 $clients         = $form_info["client_info"];
 $admin_info      = ft_get_admin_info();
@@ -69,7 +68,6 @@ $page_vars["js_messages"]    = array("validation_invalid_email", "validation_no_
                                      "word_cc_c", "word_bcc_c", "word_from_c", "word_reply_to_c", "word_subject_c");
 
 $page_vars["template_info"]  = $template_info;
-$page_vars["email_patterns"] = $email_patterns;
 $page_vars["edit_email_tab"] = $edit_email_tab;
 $page_vars["num_submissions"] = $num_submissions;
 $page_vars["test_email_recipient"] = $test_email_recipient;

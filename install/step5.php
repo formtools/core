@@ -11,6 +11,11 @@ if (isset($_POST["add_account"]))
 {
 	list($account_created, $g_message) = ft_install_create_admin_account($_POST);
 
+	// store the username and (unencrypted) password for later user
+	$_SESSION["ft_install"]["email"] = $_POST["email"];
+	$_SESSION["ft_install"]["username"] = $_POST["username"];
+  $_SESSION["ft_install"]["password"] = $_POST["password"];
+
 	// everything's done! Now just make a few minor updates to the database for this users configuration
 	if ($account_created)
 	{

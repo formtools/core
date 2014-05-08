@@ -7,9 +7,9 @@
 $g_ft_installation_folder = dirname(__FILE__);
 $g_default_language       = "en_us.php";
 $g_default_theme          = "default";
-$g_form_tools_version     = "2.0.0-beta-20090106";
+$g_form_tools_version     = "2.0.0-beta-20090107";
 $g_is_beta                = "yes";
-$g_beta_version           = "2009/01/06";
+$g_beta_version           = "2009/01/07";
 $g_smarty_use_sub_dirs    = false;
 
 /*
@@ -567,7 +567,33 @@ function ft_install_get_module_list()
 	return $module_list;
 }
 
-function ft_install_get_theme_list()
-{
 
+/**
+ * This is sent at the very last step. It emails the administrator a short welcome email containing their
+ * login information, with a few links to resources on our site.
+ *
+ * Note: this is ALWAYS sent with mail(), since the Swift Mailer plugin won't have been configured yet.
+ *
+ * @param string $password the unencrypted password
+ */
+function ft_install_send_welcome_email($username, $password)
+{
+	global $g_root_url;
+
+	// 1. build the email content
+  $placeholders = array(
+    "login_url" => $g_root_url,
+    "username"  => $username,
+    "password"  => $password
+  );
+  $smarty_template_email_content = file_get_contents("$g_root_dir/global/emails/installed.tpl");
+  $email_content = ft_eval_smarty_string($smarty_template_email_content, $placeholders);
+
+  // 2. build the email subject line
+  $smarty_template_email_subject = file_get_contents("$g_root_dir/global/emails/installed_subject.tpl");
+  $email_subject = trim(ft_eval_smarty_string($smarty_template_email_subject, array()));
+
+  // send email [note: the double quotes around the email recipient and content are intentional:
+  // some systems fail without it]
+  @mail("$email", $email_subject, $email_content);
 }

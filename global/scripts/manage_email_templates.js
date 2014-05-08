@@ -229,13 +229,14 @@ emails_ns.send_test_email = function(f, action)
 
   if (rsv.validate(f, rules))
   {
-    var query_str = "text_email_format=" + $("test_email_format").value
+    var query_str = "test_email_format=" + $("test_email_format").value
                   + "&test_email_recipient=" + $("test_email_recipient").value
                   + "&test_email_data_source=" + ft.get_checked_value(f.test_email_data_source)
                   + "&test_email_submission_id=" + f.test_email_submission_id.value
 
     if (action == "display")
     {
+      emails_ns.log_activity(true);
       page_url = g.root_url + "/global/code/actions.php?action=display_test_email&" + query_str;
       new Ajax.Request(page_url, {
         method: 'get',
@@ -245,6 +246,7 @@ emails_ns.send_test_email = function(f, action)
     }
     else if (action == "send")
     {
+      emails_ns.log_activity(true);
       page_url = g.root_url + "/global/code/actions.php?action=send_test_email&" + query_str;
       new Ajax.Request(page_url, {
         method: 'get',
@@ -269,6 +271,7 @@ emails_ns.send_test_email = function(f, action)
  */
 emails_ns.display_test_email = function(transport)
 {
+  emails_ns.log_activity(false);
   try {
     var response = transport.responseText.evalJSON(true);
   }
@@ -284,25 +287,36 @@ emails_ns.display_test_email = function(transport)
   {
     var email_info = response[1];
 
-    var to       = email_info.to;
-    var cc       = email_info.cc;
-    var bcc      = email_info.bcc.toString();
     var from     = email_info.from;
     var reply_to = email_info.reply_to;
     var subject  = email_info.subject.toString().unescapeHTML();
 
+    var to       = email_info.to;
+    var to_html = "";
+    for (var i=0; i<to.length; i++)
+      to_html += to[i].recipient_line + "<br />";
+
+    var cc       = email_info.cc;
+    var cc_html = "";
+    for (var i=0; i<cc.length; i++)
+      cc_html += cc[i].recipient_line + "<br />";
+
+    var bcc      = email_info.bcc;
+    var bcc_html = "";
+    for (var i=0; i<bcc.length; i++)
+      bcc_html += bcc[i].recipient_line + "<br />";
 
     // build the header table
     var table = "<table cellpadding=\"0\" cellspacing=\"1\"><tr>"
-              + "<td width=\"100\">To:</td>"
-              + "<td>" + to + "</td>"
+              + "<td width=\"100\" valign=\"top\">To:</td>"
+              + "<td>" + to_html + "</td>"
               + "</tr>";
 
-    if (cc && typeof cc != "object")
-      table += "<tr><td>" + g.messages["word_cc_c"] + "</td><td>" + cc + "</td></tr>";
+    if (cc_html)
+      table += "<tr><td valign=\"top\">" + g.messages["word_cc_c"] + "</td><td>" + cc_html + "</td></tr>";
 
-    if (bcc && typeof bcc != "object")
-      table += "<tr><td>" + g.messages["word_bcc_c"] + "</td><td>" + bcc + "</td></tr>";
+    if (bcc_html)
+      table += "<tr><td valign=\"top\">" + g.messages["word_bcc_c"] + "</td><td>" + bcc_html + "</td></tr>";
 
     if (from && typeof from != "object")
       table += "<tr><td>" + g.messages["word_from_c"] + "</td><td>" + from + "</td></tr>";
@@ -346,6 +360,27 @@ emails_ns.display_test_email = function(transport)
  */
 emails_ns.send_test_email_response = function(transport)
 {
+  emails_ns.log_activity(false);
+
   var json = transport.responseText.evalJSON();
   ft.display_message("ft_message", json.success, json.message);
+}
+
+
+/**
+ * This is called whenever starting or ending any potentially lengthy JS operation. It hides/shows the
+ * ajax loading icon.
+ */
+emails_ns.log_activity = function(is_busy)
+{
+  if (is_busy)
+  {
+    $("ajax_activity").show();
+    $("ajax_no_activity").hide();
+  }
+  else
+  {
+    $("ajax_activity").hide();
+    $("ajax_no_activity").show();
+  }
 }

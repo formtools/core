@@ -15,6 +15,62 @@
 
 
 /**
+ * Retrieves all information about any user account (administrator or client).
+ *
+ * @param integer $user_id the unique account ID
+ * @return array returns a hash of all pertinent data.
+ */
+function ft_get_account_info($account_id)
+{
+  global $g_table_prefix;
+
+  $query = "
+    SELECT  *
+    FROM    {$g_table_prefix}accounts
+    WHERE   account_id = $account_id
+           ";
+  $result = mysql_query($query)
+    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
+
+  $account_info = mysql_fetch_assoc($result);
+
+  // also extract any account-specific settings from account_settings
+  $query = mysql_query("SELECT * FROM {$g_table_prefix}account_settings WHERE account_id = $account_id");
+
+  $settings = array();
+  while ($row = mysql_fetch_assoc($query))
+    $settings[$row["setting_name"]] = $row["setting_value"];
+
+  $account_info["settings"] = $settings;
+
+  return $account_info;
+}
+
+
+/**
+ * Returns all custom account settings for a user account.
+ *
+ * @param integer $account_id
+ * @return array
+ */
+function ft_get_account_settings($account_id)
+{
+  global $g_table_prefix;
+
+  $query  = mysql_query("
+          SELECT setting_name, setting_value
+          FROM   {$g_table_prefix}account_settings
+          WHERE  account_id = $account_id
+          ");
+  $hash = array();
+  while ($row = mysql_fetch_assoc($query))
+    $hash[$row['setting_name']] = $row['setting_value'];
+
+  return $hash;
+}
+
+
+/**
  * The login procedure for both administrators and clients in. If successful, redirects them to the
  * appropriate page, otherwise returns an error.
  *
@@ -78,6 +134,67 @@ function ft_login($infohash, $login_as_client = false)
   session_write_close();
   header("Location: $login_url");
   exit;
+}
+
+
+/**
+ * Logs a user out programmatically. This was added in 2.0.0 to replace the logout.php page. It has
+ * a couple of benefits: (1) it's smart enough to know what page to go when logging out. Formerly, it
+ * would always redirect to the account's logout URL, but there are situations where that's not always
+ * desirable - e.g. sessions timeout. (2) it has the option of passing a message flag via the query
+ * string.
+ *
+ * Internally, a user can logout by passing a "?logout" query string to any page in Form Tools.
+ *
+ * @param string $message_flag if this value is set, it ALWAYS redirects to the login page, so that the
+ *   message is displayed. If it isn't set, it redirects to the user's custom logout URL (if set).
+ */
+function ft_logout_user($message_flag = "")
+{
+  global $g_root_url;
+
+  // this ensures sessions are started
+  @session_start();
+
+  // first, if $_SESSION["ft"]["admin"] is set, it is an administrator logging out, so just redirect them
+  // back to the admin pages
+  if (isset($_SESSION["ft"]) && array_key_exists("admin", $_SESSION["ft"]))
+    ft_logout_as_client();
+  else
+  {
+    if (!empty($message_flag))
+    {
+      // empty sessions, but be nice about it. Only delete the Form Tools namespaced sessions - any other
+      // PHP scripts the user's running right now should be unaffected
+      @session_start();
+      @session_destroy();
+      $_SESSION["ft"] = array();
+
+      // redirect to the login page, passing along the appropriate message flag so the page knows what to display
+      $logout_url = ft_construct_url("$g_root_url/", "message=$message_flag");
+      session_write_close();
+      header("location: $logout_url");
+      exit;
+    }
+    else
+    {
+      $logout_url = isset($_SESSION["ft"]["account"]["logout_url"]) ? $_SESSION["ft"]["account"]["logout_url"] : "";
+
+      // empty sessions, but be nice about it. Only delete the Form Tools namespaced sessions - any other
+      // PHP scripts the user happens to be running right now should be unaffected
+      @session_start();
+      @session_destroy();
+      $_SESSION["ft"] = array();
+
+      if (empty($logout_url))
+        $logout_url = $g_root_url;
+
+      // redirect to login page
+      session_write_close();
+      header("location: $logout_url");
+      exit;
+    }
+  }
 }
 
 
@@ -176,62 +293,6 @@ function ft_send_password($info)
 
 
 /**
- * Retrieves all information about any user account (administrator or client).
- *
- * @param integer $user_id the unique account ID
- * @return array returns a hash of all pertinent data.
- */
-function ft_get_account_info($account_id)
-{
-  global $g_table_prefix;
-
-  $query = "
-    SELECT  *
-    FROM    {$g_table_prefix}accounts
-    WHERE   account_id = $account_id
-           ";
-  $result = mysql_query($query)
-    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
-
-  $account_info = mysql_fetch_assoc($result);
-
-  // also extract any account-specific settings from account_settings
-  $query = mysql_query("SELECT * FROM {$g_table_prefix}account_settings WHERE account_id = $account_id");
-
-  $settings = array();
-  while ($row = mysql_fetch_assoc($query))
-    $settings[$row["setting_name"]] = $row["setting_value"];
-
-  $account_info["settings"] = $settings;
-
-  return $account_info;
-}
-
-
-/**
- * Returns all custom account settings for a user account.
- *
- * @param integer $account_id
- * @return array
- */
-function ft_get_account_settings($account_id)
-{
-  global $g_table_prefix;
-
-  $query  = mysql_query("
-          SELECT setting_name, setting_value
-          FROM   {$g_table_prefix}account_settings
-          WHERE  account_id = $account_id
-          ");
-  $hash = array();
-  while ($row = mysql_fetch_assoc($query))
-    $hash[$row['setting_name']] = $row['setting_value'];
-
-  return $hash;
-}
-
-
-/**
  * Updates any number of settings for a particular user account. As with the similar ft_set_settings
  * function, it creates the record if it doesn't already exist.
  *
@@ -273,6 +334,9 @@ function ft_set_account_settings($account_id, $settings)
 }
 
 
+// ------------------------------------------------------------------------------------------------
+
+
 /**
  * Helper function to determine if a username is valid or not. Checks to see that it only
  * contains alphanumeric chars and that it's not already taken.
@@ -307,65 +371,4 @@ function _ft_is_valid_username($username, $account_id = "")
     return array(false, $LANG["validation_username_taken"]);
   else
     return array(true, "");
-}
-
-
-/**
- * Logs a user out programmatically. This was added in 2.0.0 to replace the logout.php page. It has
- * a couple of benefits: (1) it's smart enough to know what page to go when logging out. Formerly, it
- * would always redirect to the account's logout URL, but there are situations where that's not always
- * desirable - e.g. sessions timeout. (2) it has the option of passing a message flag via the query
- * string.
- *
- * Internally, a user can logout by passing a "?logout" query string to any page in Form Tools.
- *
- * @param string $message_flag if this value is set, it ALWAYS redirects to the login page, so that the
- *   message is displayed. If it isn't set, it redirects to the user's custom logout URL (if set).
- */
-function ft_logout_user($message_flag = "")
-{
-  global $g_root_url;
-
-  // this ensures sessions are started
-  @session_start();
-
-  // first, if $_SESSION["ft"]["admin"] is set, it is an administrator logging out, so just redirect them
-  // back to the admin pages
-  if (isset($_SESSION["ft"]) && array_key_exists("admin", $_SESSION["ft"]))
-    ft_logout_as_client();
-  else
-  {
-    if (!empty($message_flag))
-    {
-      // empty sessions, but be nice about it. Only delete the Form Tools namespaced sessions - any other
-      // PHP scripts the user's running right now should be unaffected
-      @session_start();
-      @session_destroy();
-      $_SESSION["ft"] = array();
-
-      // redirect to the login page, passing along the appropriate message flag so the page knows what to display
-      $logout_url = ft_construct_url("$g_root_url/", "message=$message_flag");
-      session_write_close();
-      header("location: $logout_url");
-      exit;
-    }
-    else
-    {
-      $logout_url = isset($_SESSION["ft"]["account"]["logout_url"]) ? $_SESSION["ft"]["account"]["logout_url"] : "";
-
-      // empty sessions, but be nice about it. Only delete the Form Tools namespaced sessions - any other
-      // PHP scripts the user happens to be running right now should be unaffected
-      @session_start();
-      @session_destroy();
-      $_SESSION["ft"] = array();
-
-      if (empty($logout_url))
-        $logout_url = $g_root_url;
-
-      // redirect to login page
-      session_write_close();
-      header("location: $logout_url");
-      exit;
-    }
-  }
 }
