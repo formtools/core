@@ -10,7 +10,7 @@ $g_sql = array();
 $g_sql[] = "CREATE TABLE %PREFIX%account_settings (
   account_id mediumint(8) unsigned NOT NULL,
   setting_name varchar(255) NOT NULL,
-  setting_value varchar(255) NOT NULL,
+  setting_value mediumtext NOT NULL,
   PRIMARY KEY  (account_id,setting_name)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
 
@@ -154,6 +154,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%forms (
 
 $g_sql[] = "CREATE TABLE %PREFIX%hooks (
   hook_id mediumint(8) unsigned NOT NULL auto_increment,
+  hook_type enum('code','template') NOT NULL default 'code',
   action_location enum('start','end') NOT NULL,
   module_folder varchar(255) NOT NULL,
   core_function varchar(255) NOT NULL,

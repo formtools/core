@@ -197,6 +197,21 @@ function ft_process_hooks($event, $vars, $overridable_vars)
 
 
 /**
+ * This processes all template hooks for a particular template location (e.g. edit client page, at the top).
+ * It works similarly to the ft_process_hooks function, except there are no options to override values in the
+ * template. This is used purely to insert content into the templates.
+ *
+ * @param string $location
+ */
+function ft_process_template_hooks($location)
+{
+  $hooks = ft_get_hooks($location, "template", "");
+
+  print_r($hooks);
+}
+
+
+/**
  * Processes an actual hook and returns the value. This requires all hook functions to return either NOTHING,
  * or a hash of values to be overridden.
  *
@@ -240,7 +255,7 @@ function ft_process_hook($module_folder, $hook_function, $vars, $overridable_var
 function ft_process_template_hooks($location, $template_vars)
 {
   $hooks = ft_get_hooks($location, "template", "");
-	
+
   // extract the var passed from the calling function into the current scope
   foreach ($hooks as $hook_info)
   {
@@ -250,12 +265,12 @@ function ft_process_template_hooks($location, $template_vars)
 
 
 /**
- * This function called the template hooks and returns the generated HTML.    
+ * This function called the template hooks and returns the generated HTML.
  *
  * @param string $module_folder
  * @param string $hook_function
  * @param string $hook_function
- * @return string 
+ * @return string
  */
 function ft_process_template_hook($module_folder, $hook_function, $location, $template_vars)
 {
@@ -263,6 +278,6 @@ function ft_process_template_hook($module_folder, $hook_function, $location, $te
 
   @include_once("$g_root_dir/modules/$module_folder/library.php");
 	$html = @$hook_function($location, $template_vars);
-	
+
 	return $html;
 }

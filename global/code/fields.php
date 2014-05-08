@@ -272,6 +272,34 @@ function ft_delete_form_fields($infohash, $form_id)
 
 
 /**
+ * Helper function to return a field's database column name, based on it's form field name.
+ *
+ * @param integer $form_id
+ * @param string $field_name
+ * @return string the database column name or empty string if not found
+ */
+function ft_get_field_col_by_field_name($form_id, $field_name)
+{
+  global $g_table_prefix;
+
+  $form_id    = ft_sanitize($form_id);
+  $field_name = ft_sanitize($field_name);
+
+  $query = mysql_query("
+    SELECT col_name
+    FROM   {$g_table_prefix}form_fields
+    WHERE  form_id = $form_id AND
+           field_name = '$field_name'
+    ");
+  $result = mysql_fetch_assoc($query);
+
+  $col_name = (isset($result["col_name"])) ? $result["col_name"] : "";
+
+  return $col_name;
+}
+
+
+/**
  * Returns all the field options for a particular multi-select field.
  *
  * @param integer $form_id the unique field ID.
