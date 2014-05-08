@@ -17,7 +17,10 @@
 
 $folder = dirname(__FILE__);
 
-// if the API is supplied, include it
+// always include the core library functions
+require_once("$folder/global/library.php");
+
+// if the API is supplied, include it as well
 @include_once("$folder/global/api/api.php");
 
 
