@@ -9,7 +9,7 @@ if (isset($_SESSION["ft"]["account"]) && isset($_SESSION["ft"]["account"]["is_lo
   $_SESSION["ft"]["account"]["is_logged_in"] == 1)
 {
   $login_page = $_SESSION["ft"]["account"]["login_page"];
-  header("location: {$g_pages[$login_page]}");
+  header("location: {$g_root_url}{$g_pages[$login_page]}");
 	exit;
 }
 

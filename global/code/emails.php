@@ -1093,13 +1093,13 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
     if (isset($sm_settings["swiftmailer_enabled"]) && $sm_settings["swiftmailer_enabled"] == "yes")
     {
       ft_include_module("swift_mailer");
-      swift_send_email($email_components);
+      list($success, $message) = swift_send_email($email_components);
       $continue = false;
     }
   }
 
   if (!$continue)
-    return;
+    return $success;
 
   $eol = _ft_get_email_eol_char();
 

@@ -6,7 +6,7 @@
     {$text_fields_tab_summary}
   </div>
 
-  <form action="{$same_page}" name="display_form" id="display_form" method="post">
+  <form action="{$same_page}" name="display_form" id="display_form" method="post" onsubmit="return rsv.validate(this, rules)">
     <input type="hidden" name="page" value="fields" />
 
     <table class="list_table" style="width:100%" cellpadding="0" cellspacing="1">
