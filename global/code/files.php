@@ -395,7 +395,7 @@ function ft_upload_file($folder, $filename, $tmp_location)
  */
 function ft_upload_submission_file($form_id, $submission_id, $field_id, $fileinfo)
 {
-  global $g_table_prefix, $LANG;
+  global $g_table_prefix, $g_filename_char_whitelist, $LANG;
 
   extract(ft_process_hooks("start", compact("form_id", "submission_id", "field_id", "fileinfo"),
     array("fileinfo")), EXTR_OVERWRITE);
@@ -414,8 +414,20 @@ function ft_upload_submission_file($form_id, $submission_id, $field_id, $fileinf
   if (empty($col_name))
     return array(false, $LANG["notify_submission_no_field_id"]);
 
-  // convert any whitespace chars in filename to underscores [list may be expanded later]
-  $filename     = preg_replace("/\s+/", "_", $fileinfo["name"]);
+  // clean up the filename according to the whitelist chars.
+  $filename_parts = explode(".", $fileinfo["name"]);
+  $extension = $filename_parts[count($filename_parts)-1];
+  array_pop($filename_parts);
+  $filename_without_extension = implode(".", $filename_parts);
+  $valid_chars = preg_quote($g_filename_char_whitelist);
+  $filename_without_ext_clean = preg_replace("/[^$valid_chars]/", "", $filename_without_extension);
+
+  // unlikely, but...!
+  if (empty($filename_without_ext_clean))
+    $filename_without_ext_clean = "file";
+
+  $filename = $filename_without_ext_clean . "." . $extension;
+
   $tmp_filename = $fileinfo["tmp_name"];
   $filesize     = $fileinfo["size"]; // always in BYTES
   $filesize_kb  = $filesize / 1000;
