@@ -9,7 +9,7 @@ $g_default_language       = "en_us.php";
 $g_default_theme          = "default";
 $g_form_tools_version     = "2.0.0-beta-20090302";
 $g_is_beta                = "yes";
-$g_beta_version           = "2009/03/02";
+$g_beta_version           = "2009/03/05";
 $g_smarty_use_sub_dirs    = false;
 
 /*

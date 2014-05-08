@@ -19,8 +19,10 @@ if (empty($_SERVER['PHP_SELF']))
 
 
 // try to fix REQUEST_URI for IIS
-if (empty($_SERVER['REQUEST_URI']))
+if (!isset($_SERVER['REQUEST_URI']) || empty($_SERVER['REQUEST_URI']))
 {
+	$_SERVER['REQUEST_URI'] = "";
+
   // IIS Mod-Rewrite
   if (isset($_SERVER['HTTP_X_ORIGINAL_URL']))
     $_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_ORIGINAL_URL'];

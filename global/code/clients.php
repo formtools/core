@@ -63,7 +63,7 @@ function ft_update_client($account_id, $info)
 
       $query = "
           UPDATE  {$g_table_prefix}accounts
-          SET     password_clause
+          SET     $password_clause
                   first_name = '$first_name',
                   last_name = '$last_name',
                   username = '$username',
