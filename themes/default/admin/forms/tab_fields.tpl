@@ -20,6 +20,7 @@
     </tr>
 
     {assign var='field_ids' value=''}
+    {assign var='total_num_fields' value=$form_fields|@count}
     {foreach from=$form_fields item=field name=row}
       {assign var='count' value=$smarty.foreach.row.iteration}
       {assign var='field_id' value=$field.field_id}
@@ -36,19 +37,19 @@
           <input type="hidden" name="field_{$field_id}" value="1" />
           <input type="text" name="field_{$field_id}_order" style="width: 30px;" value="{$count}" tabindex="{$count}" />
         </td>
-        <td><input type="text" name="field_{$field_id}_display_name" style="width: 97%" value="{$field.field_title|escape}" tabindex="{$count+10000}" /></td>
+        <td><input type="text" name="field_{$field_id}_display_name" style="width: 97%" value="{$field.field_title|escape}" tabindex="{$count+$total_num_fields}" /></td>
         <td>
-		      {if $field.field_type == "system"}
-		        <span class="pad_left_small medium_grey">{$LANG.word_na}</span>
-		      {else}
-		        <input type="text" name="field_{$field_id}_name" id="field_{$field_id}_name" style="width: 97%;" value="{$field.field_name}" tabindex="{$count+20000}" />
-		      {/if}
+          {if $field.field_type == "system"}
+            <span class="pad_left_small medium_grey">{$LANG.word_na}</span>
+          {else}
+            {assign var=offset2 value=$total_num_fields*2}
+            <input type="text" name="field_{$field_id}_name" id="field_{$field_id}_name" style="width: 97%;" value="{$field.field_name}" tabindex="{$count+$offset2}" />
+          {/if}
         </td>
         <td>
           <input type="hidden" name="old_field_{$field_id}_type" value="{$field.field_type}" />
 
           {if $field.field_type == "system"}
-
             <span class="pad_left_small medium_grey">
             {if     $field.col_name == "ip_address"}
               {$LANG.phrase_ip_address}
@@ -61,15 +62,13 @@
               {$LANG.phrase_submission_id}
             {/if}
             </span>
-
             <input type="hidden" name="field_{$field_id}_type" value="system" />
-
           {else}
-
-            <select name="field_{$field_id}_type" tabindex="{$count+40000}">
+            {assign var=offset3 value=$total_num_fields*3}
+            <select name="field_{$field_id}_type" tabindex="{$count+$offset3}">
               <optgroup label="{$LANG.phrase_standard_fields}">
-		            <option value="textbox"       {if $field.field_type == "textbox"}selected{/if}>{$LANG.word_textbox}</option>
-		            <option value="textarea"      {if $field.field_type == "textarea"}selected{/if}>{$LANG.word_textarea}</option>
+                <option value="textbox"       {if $field.field_type == "textbox"}selected{/if}>{$LANG.word_textbox}</option>
+                <option value="textarea"      {if $field.field_type == "textarea"}selected{/if}>{$LANG.word_textarea}</option>
                 <option value="password"      {if $field.field_type == "password"}selected{/if}>{$LANG.word_password}</option>
                 <option value="select"        {if $field.field_type == "select"}selected{/if}>{$LANG.word_dropdown}</option>
                 <option value="multi-select"  {if $field.field_type == "multi-select"}selected{/if}>{$LANG.phrase_multi_select_dropdown}</option>
@@ -78,17 +77,16 @@
               </optgroup>
               <optgroup label="{$LANG.phrase_special_fields}">
                 <option value="file" {if $field.field_type == "file"}selected{/if}>{$LANG.word_file}</option>
-                {if $image_manager_module_enabled}
-                  <option value="image" {if $field.field_type == "image"}selected{/if}>{$LANG.word_image}</option>
-                {/if}
                 <option value="wysiwyg" {if $field.field_type == "wysiwyg"}selected{/if}>{$LANG.phrase_wysiwyg_field}</option>
               </optgroup>
             </select>
-
           {/if}
 
         </td>
-        <td align="center"><input type="checkbox" name="field_{$field_id}_include_on_redirect" {if $field.include_on_redirect == "yes"}checked{/if} /></td>
+        <td align="center">
+          {assign var=offset4 value=$total_num_fields*4}
+          <input type="checkbox" name="field_{$field_id}_include_on_redirect" {if $field.include_on_redirect == "yes"}checked{/if} tabindex="{$count+$offset4}" />
+        </td>
         <td align="center"><a href="edit.php?page=field_options&field_id={$field_id}">{$LANG.word_options}</a></td>
       </tr>
 

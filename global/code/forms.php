@@ -693,7 +693,7 @@ function ft_setup_form($info)
   $form_url     = trim($info["form_url"]);
   $redirect_url = trim($info["redirect_url"]);
   $access_type  = $info["access_type"];
-  $phrase_edit_submission = ft_sanitize($LANG["phrase_edit_submission"]);
+  $phrase_edit_submission = ft_sanitize(mb_strtoupper($LANG["phrase_edit_submission"]));
 
   $now = ft_get_current_datetime();
   $query = "

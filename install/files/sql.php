@@ -120,7 +120,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%form_fields (
   form_id mediumint(8) unsigned NOT NULL default '0',
   field_name varchar(255) NOT NULL default '',
   field_test_value mediumtext,
-  field_size enum('tiny','small','medium','large','very_large') default 'small',
+  field_size enum('tiny','small','medium','large','very_large') default 'medium',
   field_type enum('select','multi-select','radio-buttons','checkboxes','file','textbox','textarea','system','wysiwyg','date','image','password') NOT NULL default 'textbox',
   data_type enum('string','number','date') NOT NULL default 'string',
   field_title varchar(100) default NULL,

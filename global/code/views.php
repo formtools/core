@@ -245,7 +245,6 @@ function ft_get_view_searchable_fields($view_id = "", $fields = array())
     $view_info = ft_get_view($view_id);
     $fields    = $view_info["fields"];
   }
-
   $searchable_columns = array();
   foreach ($fields as $field_info)
   {

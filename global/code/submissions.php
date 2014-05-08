@@ -757,7 +757,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 
 /**
  * Updates a single form submission. Accepts an hash of form field names to values or
- * col names to values. 
+ * col names to values.
  *
  * @param integer $form_id
  * @param integer $submission_id
@@ -1084,7 +1084,8 @@ function _ft_get_search_submissions_search_where_clause($form_id, $search_fields
       {
         // if we're searching ALL columns, get all col names. This shouldn't ever get called any more - but
         // I'll leave it in for regression purposes
-        if (!is_array($searchable_columns) && $searchable_columns == "all")
+        $clauses = array();
+      	if (!is_array($searchable_columns) && $searchable_columns == "all")
         {
           $col_info = ft_get_form_column_names($form_id);
           $col_names = array_keys($col_info);
@@ -1092,18 +1093,17 @@ function _ft_get_search_submissions_search_where_clause($form_id, $search_fields
           unset($col_names["submission_date"]);
           unset($col_names["last_modified_date"]);
 
-          $clauses = array();
           foreach ($col_names as $col_name)
             $clauses[] = "$col_name LIKE '%$search_keyword%'";
         }
         else if (is_array($searchable_columns))
         {
-          $clauses = array();
           foreach ($searchable_columns as $col_name)
             $clauses[] = "$col_name LIKE '%$search_keyword%'";
         }
 
-        $search_where_clause = "AND (" . join(" OR ", $clauses) . ") ";
+        if (!empty($clauses))
+          $search_where_clause = "AND (" . join(" OR ", $clauses) . ") ";
       }
     }
 
@@ -1138,7 +1138,8 @@ function _ft_get_search_submissions_search_where_clause($form_id, $search_fields
           foreach ($searchable_columns as $col_name)
             $clauses[] = "$col_name LIKE '%$search_keyword%'";
 
-          $search_where_clause .= "AND (" . join(" OR ", $clauses) . ") ";
+          if (!empty($clauses))
+            $search_where_clause .= "AND (" . join(" OR ", $clauses) . ") ";
         }
       }
     }
