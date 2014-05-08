@@ -32,15 +32,15 @@
 	    <tr>
 	      <td><img src="images/account_section_left.jpg" border="0" /></td>
 	      <td id="account_section">
-		      v{$g_form_tools_version} {if $g_is_beta}&#8212; <span class="burgundy">{$LANG.word_beta} {$g_beta_version}</span>{/if}
+		      v{$g_form_tools_version}
 	      </td>
 	      <td><img src="images/account_section_right.jpg" border="0" /></td>
 	    </tr>
 	    </table>
     </div>
 
-    <span style="float:left; padding-top: 10px; padding-right: 10px">
-      <a href="http://www.formtools.org" class="no_border"><img src="images/logo.jpg" border="0" width="332" height="59" /></a>
+    <span style="float:left; padding-top: 8px; padding-right: 10px">
+      <a href="http://www.formtools.org" class="no_border"><img src="images/logo.jpg" border="0" width="359" height="61" /></a>
     </span>
 	</div>
 

@@ -16,7 +16,7 @@ $page_vars["ft_version"] = ft_get_version_as_number();
 $page_vars["is_beta"]    = $_SESSION["ft"]["settings"]["is_beta"];
 $page_vars["beta_version"] = $beta_version;
 $page_vars["beta_version_str"] = ft_eval_smarty_string($LANG["phrase_beta_version"], $replacement_info);
-$page_vars["upgrade_link"] = $_SESSION["ft"]["upgrade_link"];
+$page_vars["upgrade_info"] = $_SESSION["ft"]["upgrade_info"];
 
 $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>');
 $page_vars["text_date_formatting_link"] = ft_eval_smarty_string($LANG["text_date_formatting_link"], $replacement_info);

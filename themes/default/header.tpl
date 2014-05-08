@@ -53,9 +53,6 @@
 	        <td><img src="{$theme_url}/images/account_section_left.jpg" border="0" /></td>
 	        <td id="account_section">
 	          <b>v{$settings.program_version}</b>
-	          {if $SESSION.settings.is_beta}
-	            &#8212; <span class="red">{$LANG.word_beta} {$SESSION.settings.beta_version}</span>
-	          {/if}
 	        </td>
 	        <td><img src="{$theme_url}/images/account_section_right.jpg" border="0" /></td>
 	      </tr>
@@ -63,8 +60,8 @@
 	    </div>
     {/if}
 
-    <span style="float:left; padding-top: 7px; padding-right: 10px">
-      <a href="{$settings.logo_link}"><img src="{$theme_url}/images/logo.jpg" border="0" width="203" height="61" /></a>
+    <span style="float:left; padding-top: 8px; padding-right: 10px">
+      <a href="{$settings.logo_link}"><img src="{$theme_url}/images/logo.jpg" border="0" width="220" height="61" /></a>
     </span>
   </div>
 

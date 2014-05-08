@@ -100,7 +100,7 @@ function ft_uninstall_module($module_id)
   $deleted = ft_delete_folder("$g_root_dir/modules/$module_folder");
 
   // update the Upgrade link, to omit this module
-  ft_build_and_cache_upgrade_link();
+  ft_build_and_cache_upgrade_info();
 
   if ($deleted)
     $message = $LANG["notify_module_uninstalled"];
@@ -500,7 +500,7 @@ function ft_update_module_list()
 	closedir($dh);
 
 	// update the Upgrade link
-  ft_build_and_cache_upgrade_link();
+  ft_build_and_cache_upgrade_info();
 
 	return array(true, $LANG["notify_module_list_updated"]);
 }

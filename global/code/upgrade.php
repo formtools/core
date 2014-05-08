@@ -27,37 +27,36 @@ function ft_upgrade_form_tools()
 
 
 /**
- * This function does exactly what you'd expect: it builds custom upgrade link for this particular
- * installation and caches it in sessions. This function is called on (admin) login, when themes and
- * modules are installed or deleted.
+ * This function builds a series of hidden fields containing information about this users installation and
+ * caches the string in sessions. This function is called on (admin) login, when themes and modules are
+ * installed or deleted.
  *
- * The link contains all the versions of the various components of the installation. The information
- * is then processed on the Form Tools site to determine what, if anything, can be upgraded, and
- * determine compatibility conflicts, etc.
+ * The information is then processed on the Form Tools site to determine what, if anything, can be
+ * upgraded, and determine compatibility conflicts, etc.
  */
-function ft_build_and_cache_upgrade_link()
+function ft_build_and_cache_upgrade_info()
 {
 	$settings = ft_get_settings();
 
+  // a hash of k => v storing the hidden field values to pass along
+  $fields = array();
+
   // get the main build version
   $program_version = $settings["program_version"];
-  $is_beta = $settings["is_beta"];
-  $query_string = "m={$program_version}&beta={$is_beta}";
+  $fields[] = array("k" => "m", "v" => $settings["program_version"]);
+  $fields[] = array("k" => "beta", "v" => $settings["is_beta"]);
+  $fields[] = array("k" => "api", "v" => $settings["api_version"]);
 
-  if ($is_beta == "yes")
-  {
-    $beta_version = $settings["beta_version"];
-    $query_string .= "&bv=$beta_version";
-  }
+  if ($settings["is_beta"] == "yes")
+    $fields[] = array("k" => "bv", "v" => $settings["beta_version"]);
 
   // get the theme info
   $themes = ft_get_themes();
   $count = 1;
   foreach ($themes as $theme_info)
   {
-	  $theme_folder  = $theme_info["theme_folder"];
-	  $theme_version = $theme_info["theme_version"];
-    $query_string .= "&t{$count}=$theme_folder&tv{$count}=$theme_version";
+	  $fields[] = array("k" => "t{$count}", "v" => $theme_info["theme_folder"]);
+	  $fields[] = array("k" => "tv{$count}", "v" => $theme_info["theme_version"]);
     $count++;
   }
 
@@ -66,19 +65,13 @@ function ft_build_and_cache_upgrade_link()
   $count = 1;
   foreach ($modules as $module_info)
   {
-	  $module_folder  = $module_info["module_folder"];
-	  $module_version = $module_info["version"];
-    $query_string .= "&m{$count}=$module_folder&mv{$count}=$module_version";
+	  $fields[] = array("k" => "m{$count}", "v" => $module_info["module_folder"]);
+	  $fields[] = array("k" => "mv{$count}", "v" => $module_info["version"]);
     $count++;
   }
 
-  // finally, add the API version
-  $query_string .= "&api={$settings["api_version"]}";
-
-
 	// save the link
-  $link = "http://ft2.formtools.org/upgrade.php?$query_string";
-  $_SESSION["ft"]["upgrade_link"] = $link;
+  $_SESSION["ft"]["upgrade_info"] = $fields;
 }
 
 

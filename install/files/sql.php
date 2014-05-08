@@ -150,7 +150,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%forms (
   submission_strip_tags enum('yes','no') NOT NULL default 'yes',
   default_view_id mediumint(8) unsigned default NULL,
   PRIMARY KEY  (form_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=52";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%menu_items (
   menu_item_id mediumint(8) unsigned NOT NULL auto_increment,

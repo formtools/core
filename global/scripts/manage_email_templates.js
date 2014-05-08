@@ -14,7 +14,10 @@ emails_ns.select_template = function(format_type, row)
   if (!row)
     return;
 
-  $(format_type + "_template").value = $(format_type + "_" + row).value;
+  if (format_type == "html")
+    html_editor.setCode($(format_type + "_" + row).value);
+  if (format_type == "text")
+    text_editor.setCode($(format_type + "_" + row).value);
 }
 
 

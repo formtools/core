@@ -403,7 +403,7 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
   	if (!in_array("form_submissions", $omit_pages))
       $select_lines[] = array("type" => "option", "k" => "form_submissions", "v" => $LANG["phrase_form_submissions"]);
     if (!in_array("edit_form", $omit_pages))
-      $select_lines[] = array("type" => "option", "k" => "edit_form", "v" => "{$LANG["phrase_edit_form"]} - {$LANG["word_main"]}");
+      $select_lines[] = array("type" => "option", "k" => "edit_form", "v" => $LANG["phrase_edit_form"]);
     if (!in_array("edit_form_main", $omit_pages))
       $select_lines[] = array("type" => "option", "k" => "edit_form_main", "v" => "{$LANG["phrase_edit_form"]} - {$LANG["word_main"]}");
     if (!in_array("edit_form_fields", $omit_pages))

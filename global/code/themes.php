@@ -45,6 +45,7 @@ function ft_get_theme_by_theme_folder($theme_folder)
 	return $theme_info;
 }
 
+
 /**
  * Retrieves the list of themes currently in the database. The optional parameter limits the results to
  * only those that are enabled
@@ -111,17 +112,21 @@ function ft_update_theme_list()
 			$theme_author_email = $info["theme_author_email"];
 			$theme_link         = $info["theme_link"];
 			$theme_description  = $info["theme_description"];
+			$theme_version      = $info["theme_version"];
+			$supports_ft_versions = $info["supports_ft_versions"];
 
 			mysql_query("
-				INSERT INTO {$g_table_prefix}themes (theme_folder, theme_name, author, theme_link, description, is_enabled)
-				VALUES ('$folder', '$theme_name', '$theme_author', '$theme_link', '$theme_description', 'yes')
+				INSERT INTO {$g_table_prefix}themes (theme_folder, theme_name, author, theme_link, description, is_enabled, theme_version,
+				  supports_ft_versions)
+				VALUES ('$folder', '$theme_name', '$theme_author', '$theme_link', '$theme_description', 'yes', '$theme_version',
+				  '$supports_ft_versions')
 					");
 	  }
 	}
 	closedir($dh);
 
 	// update the Upgrade link
-  ft_build_and_cache_upgrade_link();
+  ft_build_and_cache_upgrade_info();
 
 	return array(true, $LANG["notify_theme_list_updated"]);
 }
@@ -230,7 +235,7 @@ function ft_display_page($template, $page_vars, $theme = "")
  */
 function ft_get_smarty_template_with_fallback($theme, $template)
 {
-	global $g_default_theme, $g_root_dir;
+	global $g_default_theme, $g_root_dir, $LANG;
 
 	$file = "";
 	if (is_file("$g_root_dir/themes/$theme/$template"))
@@ -239,7 +244,7 @@ function ft_get_smarty_template_with_fallback($theme, $template)
     $file = "$g_root_dir/themes/$g_default_theme/$template";
   else
   {
-  	echo "The \"<b>$template</b>\" template could not be located in either the \"$theme\" theme or the \"$g_default_theme\" theme.";
+  	echo "The \"<b>$template</b>\" template could not be located.";
   	exit;
   }
 
@@ -397,6 +402,8 @@ function _ft_get_theme_info_file_contents($summary_file)
 	$info["theme_author_email"] = isset($vars["theme_author_email"]) ? $vars["theme_author_email"] : "";
 	$info["theme_link"] = isset($vars["theme_link"]) ? $vars["theme_link"] : "";
 	$info["theme_description"] = isset($vars["theme_description"]) ? $vars["theme_description"] : "";
+	$info["theme_version"] = isset($vars["theme_version"]) ? $vars["theme_version"] : "";
+	$info["supports_ft_versions"] = isset($vars["supports_ft_versions"]) ? $vars["supports_ft_versions"] : "";
 
   return $info;
 }

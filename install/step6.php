@@ -22,6 +22,7 @@ foreach ($modules as $module_info)
 	ft_install_module($module_id);
 }
 
+// TODO send "Welcome to Form Tools" email
 
 
 $page_vars = array();

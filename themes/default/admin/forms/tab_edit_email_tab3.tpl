@@ -18,7 +18,18 @@
             </tr>
             <tr>
               <td colspan="2">
-                <textarea style="width: 100%; height: 160px;" class="template" name="html_template" id="html_template">{$template_info.html_template}</textarea>
+                <div style="border: 1px solid #666666; padding: 3px">
+                  <textarea id="html_template" name="html_template" style="width: 100%; height: 320px">{$template_info.html_template}</textarea>
+                </div>
+
+                <script type="text/javascript">
+								  var html_editor = new CodeMirror.fromTextArea("html_template", {literal}{{/literal}
+								    parserfile: ["parsexml.js"],
+								    path: "{$g_root_url}/global/codemirror/js/",
+								    stylesheet: "{$g_root_url}/global/codemirror/css/xmlcolors.css"
+								  {literal}});{/literal}
+								</script>
+
               </td>
             </tr>
             <tr>
@@ -36,7 +47,18 @@
             </tr>
             <tr>
               <td colspan="2">
-                <textarea style="width: 100%; height: 160px;" class="template" name="text_template" id="text_template">{$template_info.text_template}</textarea>
+                <div style="border: 1px solid #666666; padding: 3px">
+                  <textarea id="text_template" name="text_template" style="width: 100%; height: 320px">{$template_info.text_template}</textarea>
+                </div>
+
+                <script type="text/javascript">
+								  var text_editor = new CodeMirror.fromTextArea("text_template", {literal}{{/literal}
+								    parserfile: ["parsexml.js"],
+								    path: "{$g_root_url}/global/codemirror/js/",
+								    stylesheet: "{$g_root_url}/global/codemirror/css/xmlcolors.css"
+								  {literal}});{/literal}
+								</script>
+
               </td>
             </tr>
             </table>

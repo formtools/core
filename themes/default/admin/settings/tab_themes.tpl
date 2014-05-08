@@ -10,7 +10,7 @@
 
       <table cellspacing="0" cellpadding="1" class="margin_bottom_large">
       <tr>
-        <td width="150">{$LANG.phrase_administrator_theme}</td>
+        <td width="180">{$LANG.phrase_administrator_theme}</td>
         <td>{themes_dropdown name_id="admin_theme" default=$admin_theme}</td>
       </tr>
       <tr>

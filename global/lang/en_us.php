@@ -485,6 +485,7 @@ $LANG["phrase_change_login_info"] = "Change Login Information";
 $LANG["phrase_change_password"] = "Change Password";
 $LANG["phrase_check_db_settings_try_again"] = "Please double-check your database settings and click the Continue button again.";
 $LANG["phrase_check_latest_version"] = "check latest version";
+$LANG["phrase_check_for_updates"] = "Check for Updates";
 $LANG["phrase_checklist_1"] = "1. Checklist";
 $LANG["phrase_clean_up"] = "Clean Up";
 $LANG["phrase_clear_omit_list"] = "Clear Omit List";
@@ -1023,7 +1024,7 @@ $LANG["text_question_sent"] = "Thanks! Your question has been submitted. We will
 $LANG["text_ran_installation_script_q"] = "Have you run the installation script?";
 $LANG["text_reason_files_not_moved"] = "The most likely cause of this is either the permissions on the files have been changed or they no longer exist.";
 $LANG["text_reference_tab_info"] = "This tab lists all placeholders available for you to use in the email templates. Placeholders are strings like {\$PLACEHOLDER} which are converted to their appropriate meaning when the email is sent. Take a look at the example templates for some ideas.";
-$LANG["text_review_help_doc"] = "Review the help documentation";
+$LANG["text_review_user_doc"] = "Review the user documentation";
 $LANG["text_see_advanced_controls"] = "For greater control over emails including subject line and email content, select the <b>advanced</b> emailing method from your <a href=\"{\$programsettingslink}\">Program Settings</a>.";
 $LANG["text_send_email_from_edit_submission_page"] = "Include option to send this email from Edit Submission page";
 $LANG["text_send_question_info"] = "Use the form below to email the site administrator with any questions you may have.";

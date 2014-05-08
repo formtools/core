@@ -8,11 +8,9 @@
     <table class="list_table" cellpadding="0" cellspacing="1">
     <tr>
       <td class="pad_left_small" width="200">{$LANG.word_version}</td>
-      <td><b>{$settings.program_version}</b>
-        {if $is_beta == "yes"}
-          &#8212; <span class="red">{$beta_version_str}</span>&nbsp;
-          <a href="{$upgrade_link}" target="_blank">{$LANG.word_upgrade}</a>
-        {/if}
+      <td>
+        <b>{$settings.program_version}</b>
+        <input type="button" value="{$LANG.phrase_check_for_updates}" onclick="$('upgrade_form').submit()" />
       </td>
     </tr>
     <tr>
@@ -58,3 +56,10 @@
     </p>
 
   </form>
+
+  <form action="http://ft2.formtools.org/upgrade.php" id="upgrade_form" method="post" target="_blank">
+    {foreach from=$upgrade_info item=info name=row}
+      <input type="hidden" name="{$info.k}" value="{$info.v}" />
+    {/foreach}
+  </form>
+

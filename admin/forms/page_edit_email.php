@@ -76,9 +76,11 @@ $page_vars["test_email_recipient"] = $test_email_recipient;
 $page_vars["test_email_data_source"] = $test_email_data_source;
 $page_vars["test_email_submission_id"] = $test_email_submission_id;
 
-$page_vars["head_string"] = "<script type=\"text/javascript\" src=\"$g_root_url/global/scripts/manage_email_templates.js\"></script>";
-$page_vars["head_js"] = "
-rsv.onCompleteHandler = function() { ft.select_all($(\"selected_edit_submission_views\")); return true; }
+$page_vars["head_string"] = "<script type=\"text/javascript\" src=\"$g_root_url/global/scripts/manage_email_templates.js\"></script>
+<script type=\"text/javascript\" src=\"$g_root_url/global/codemirror/js/codemirror.js\"></script>";
+
+$page_vars["head_js"] =<<< EOF
+rsv.onCompleteHandler = function() { ft.select_all($("selected_edit_submission_views")); return true; }
 
 var page = {};
 
@@ -86,27 +88,26 @@ page.onsubmit_check_email_settings = function(f)
 {
   // Configuration tab
   var rules = [];
-  rules.push(\"required,email_template_name,Please enter the email template name.\");
-  rules.push(\"required,view_mapping_type,Please indicate when the email should be sent.\");
-  rules.push(\"if:view_mapping_type=specific,required,view_mapping_view_id,Please select the View to which this email template should be mapped.\");
+  rules.push("required,email_template_name,Please enter the email template name.");
+  rules.push("required,view_mapping_type,Please indicate when the email should be sent.");
+  rules.push("if:view_mapping_type=specific,required,view_mapping_view_id,Please select the View to which this email template should be mapped.");
   if (!rsv.validate(f, rules))
     return ft.change_inner_tab(1, 5); // this always returns false;
 
   // Headers tab
 	var rules = [];
-	rules.push(\"function,page.check_one_main_recipient\");
-	rules.push(\"if:email_from=custom,required,custom_from_email,{$LANG["validation_no_custom_from_email"]}\");
-	rules.push(\"if:email_from=custom,valid_email,custom_from_email,{$LANG["validation_invalid_custom_from_email"]}\");
-	rules.push(\"if:email_reply_to=custom,required,custom_reply_to_email,{$LANG["validation_no_custom_reply_to_email"]}\");
-	rules.push(\"if:email_reply_to=custom,valid_email,custom_reply_to_email,{$LANG["validation_invalid_custom_reply_to_email"]}\");
+	rules.push("function,page.check_one_main_recipient");
+	rules.push("if:email_from=custom,required,custom_from_email,{$LANG["validation_no_custom_from_email"]}");
+	rules.push("if:email_from=custom,valid_email,custom_from_email,{$LANG["validation_invalid_custom_from_email"]}");
+	rules.push("if:email_reply_to=custom,required,custom_reply_to_email,{$LANG["validation_no_custom_reply_to_email"]}");
+	rules.push("if:email_reply_to=custom,valid_email,custom_reply_to_email,{$LANG["validation_invalid_custom_reply_to_email"]}");
   if (!rsv.validate(f, rules))
     return ft.change_inner_tab(2, 5); // this always returns false;
 
   var rules = [];
-  rules.push(\"function,page.check_one_template_defined\");
+  rules.push("function,page.check_one_template_defined");
   if (!rsv.validate(f, rules))
     return ft.change_inner_tab(3, 5); // this always returns false;
-
 
   return true;
 }
@@ -115,7 +116,7 @@ page.check_one_main_recipient = function()
 {
   if (emails_ns.num_recipients == 0)
   {
-    return [[$('recipient_options'), \"{$LANG["validation_no_main_email_recipient"]}\"]];
+    return [[$('recipient_options'), "{$LANG["validation_no_main_email_recipient"]}"]];
   }
   else
   {
@@ -127,7 +128,7 @@ page.check_one_main_recipient = function()
     }
 
     if (!has_one_main_recipient)
-      return [[$('recipient_options'), \"{$LANG["validation_no_main_email_recipient"]}\"]];
+      return [[$('recipient_options'), "{$LANG["validation_no_main_email_recipient"]}"]];
   }
 
   return true;
@@ -147,9 +148,9 @@ page.toggle_advanced_settings = function()
   else
     Effect.BlindUp($('advanced_settings'));
 
-  var page_url = g.root_url + \"/global/code/actions.php\";
+  var page_url = g.root_url + "/global/code/actions.php";
   new Ajax.Request(page_url, {
-    parameters: { action: \"remember_edit_email_advanced_settings\", edit_email_advanced_settings: is_visible },
+    parameters: { action: "remember_edit_email_advanced_settings", edit_email_advanced_settings: is_visible },
     method: 'post'
 		  });
 
@@ -160,8 +161,13 @@ page.toggle_advanced_settings = function()
  */
 page.check_one_template_defined = function()
 {
-  if (!$('html_template').value && !$('text_template').value)
-    return [[$('html_template'), \"Please enter the email content for at least one of the formats (HTML or text)\"]];
+  var html_template = html_editor.getCode();
+  html_template = html_template.strip();
+  var text_template = text_editor.getCode();
+  text_template = text_template.strip();
+
+  if (html_template.strip() == "" && text_template.strip() == "")
+    return [[$('html_template'), "Please enter the email content for at least one of the formats (HTML or text)"]];
 
   return true;
 }
@@ -169,7 +175,7 @@ page.check_one_template_defined = function()
 
 page.change_include_on_edit_submission_page = function(selected)
 {
-  if (selected == \"specific_views\")
+  if (selected == "specific_views")
     $('include_on_edit_submission_page_views').show();
   else
     $('include_on_edit_submission_page_views').hide();
@@ -184,9 +190,9 @@ Event.observe(document, 'dom:loaded',
     emails_ns.recipient_num  = parseInt($('num_recipients').value) + 1;
 
     // always set the select recipient field to empty
-    $(\"recipient_options\").value = \"\";
+    $("recipient_options").value = "";
   }
   );
-";
+EOF;
 
 ft_display_page("admin/forms/edit.tpl", $page_vars);

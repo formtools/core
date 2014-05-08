@@ -54,9 +54,6 @@
 
           {if $SESSION.account.is_logged_in}
              <b>v{$settings.program_version}</b>
-             {if $SESSION.settings.is_beta}
-               &#8212; <span class="red">{$LANG.word_beta} {$SESSION.settings.beta_version}</span>
-             {/if}
           {/if}
 
         </td>
@@ -65,8 +62,8 @@
       </table>
     </div>
 
-    <span style="float:left; padding-top: 7px; padding-right: 10px">
-      <a href="{$settings.logo_link}"><img src="{$theme_url}/images/logo.jpg" border="0" width="203" height="61" /></a>
+    <span style="float:left; padding-top: 8px; padding-right: 10px">
+      <a href="{$settings.logo_link}"><img src="{$theme_url}/images/logo.jpg" border="0" width="220" height="61" /></a>
     </span>
   </div>
 

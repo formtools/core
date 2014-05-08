@@ -63,7 +63,7 @@ function ft_login($infohash, $login_as_client = false)
   // if this is an administrator, build and cache the upgrade link and ensure the API version is up to date
   if ($account_info["account_type"] == "admin")
   {
-    ft_build_and_cache_upgrade_link();
+    ft_build_and_cache_upgrade_info();
     ft_update_api_version();
   }
 

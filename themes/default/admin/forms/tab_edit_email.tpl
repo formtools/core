@@ -38,27 +38,27 @@
 
           <div id="inner_tab_content1" {if $edit_email_tab != 1}style="display:none"{/if}>
             <br />
-            {ft_include file="`$theme_dir`/admin/forms/tab_edit_email_tab1.tpl"}
+            {ft_include file="admin/forms/tab_edit_email_tab1.tpl"}
           </div>
 
           <div id="inner_tab_content2" {if $edit_email_tab != 2}style="display:none"{/if}>
             <br />
-            {ft_include file="`$theme_dir`/admin/forms/tab_edit_email_tab2.tpl"}
+            {ft_include file="admin/forms/tab_edit_email_tab2.tpl"}
           </div>
 
           <div id="inner_tab_content3" {if $edit_email_tab != 3}style="display:none"{/if}>
             <br />
-            {ft_include file="`$theme_dir`/admin/forms/tab_edit_email_tab3.tpl"}
+            {ft_include file="admin/forms/tab_edit_email_tab3.tpl"}
           </div>
 
           <div id="inner_tab_content4" {if $edit_email_tab != 4}style="display:none"{/if}>
             <br />
-            {ft_include file="`$theme_dir`/admin/forms/tab_edit_email_tab4.tpl"}
+            {ft_include file="admin/forms/tab_edit_email_tab4.tpl"}
           </div>
 
           <div id="inner_tab_content5" {if $edit_email_tab != 5}style="display:none"{/if}>
             <br />
-            {ft_include file="`$theme_dir`/admin/forms/tab_edit_email_tab5.tpl"}
+            {ft_include file="admin/forms/tab_edit_email_tab5.tpl"}
           </div>
         </div>
       </div>
