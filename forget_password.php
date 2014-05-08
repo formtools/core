@@ -29,6 +29,7 @@ if (isset($_POST) && !empty($_POST))
   list($g_success, $g_message) = ft_send_password($_POST);
 
 $username = (isset($_POST["username"]) && !empty($_POST["username"])) ? $_POST["username"] : "";
+$username = strip_tags($username);
 
 // --------------------------------------------------------------------------------------------
 

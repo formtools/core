@@ -30,6 +30,9 @@ $error = "";
 if (isset($_POST["username"]) && !empty($_POST["username"]))
   $error = ft_login($_POST);
 
+$username = (isset($_POST["username"]) && !empty($_POST["username"])) ? $_POST["username"] : "";
+$username = strip_tags($username);
+
 // -------------------------------------------------------------------------------------------
 
 // compile the variables for use in the templates
@@ -51,7 +54,7 @@ $replacements = array(
 $page_vars["text_login"] = ft_eval_smarty_string($LANG["text_login"], $replacements, $g_theme);
 $page_vars["program_name"]  = $settings["program_name"];
 $page_vars["login_heading"] = sprintf("%s %s", $settings['program_name'], $LANG["word_administration"]);
-$page_vars["username"]      = (isset($_POST["username"]) && !empty($_POST["username"])) ? $_POST["username"] : "";
+$page_vars["username"]      = $username;
 $page_vars["is_logged_in"]  = false;
 $page_vars["head_js"]  = "Event.observe(document, 'dom:loaded', function() { document.login.username.focus(); });";
 $page_vars["head_string"] = "<noscript><style type=\"text/css\">.login_outer_table { display: none; }</style></noscript>";
