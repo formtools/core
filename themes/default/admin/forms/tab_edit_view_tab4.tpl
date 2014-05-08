@@ -24,7 +24,7 @@
                 <td>
 
                   {* TODO: move this to separate Smarty template *}
-                  <select name="filter_{$count}_field_id" id="filter_{$count}_field_id" onchange="view_ns.change_filter_field({$count}, this.value)">
+                  <select name="filter_{$count}_field_id" id="filter_{$count}_field_id" onchange="view_ns.change_filter_field({$count})">
                     {assign var="selected_field_is_date_field" value=false}
 
                     {foreach from=$form_fields item=field name=field_row}

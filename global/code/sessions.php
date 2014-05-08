@@ -70,11 +70,13 @@ class SessionManager
   // this is only executed until after the output stream has been closed
   function write($id, $data)
   {
-    global $g_table_prefix;
+    global $g_table_prefix, $g_api_sessions_timeout;
 
-    $life_time = 1400;
+    $life_time = 3600;
     if (isset($_SESSION["ft"]["account"]["sessions_timeout"]))
       $life_time = $_SESSION["ft"]["account"]["sessions_timeout"] * 60;
+    else
+      $life_time = $g_api_sessions_timeout;
 
     $time = time() + $life_time;
 

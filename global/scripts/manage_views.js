@@ -437,7 +437,9 @@ view_ns.add_filters = function(num_rows)
     var dd2 = document.createElement("select");
     dd2.setAttribute("name", "filter_" + currRow + "_field_id");
     dd2.setAttribute("id", "filter_" + currRow + "_field_id");
-    dd2.onchange = function (evt) { view_ns.change_filter_field(currRow, this.value); };
+    dd2.onchange = view_ns.change_filter_field.bind(this, currRow);
+
+//		dd2.onchange = function (evt) { view_ns.change_filter_field(currRow, this.value); };
 
     var default_option = document.createElement("option");
     default_option.setAttribute("value", "");
@@ -590,8 +592,10 @@ view_ns.add_filters = function(num_rows)
  * @param integer row the row number
  * @param integer field_id the unique field ID
  */
-view_ns.change_filter_field = function(row, field_id)
+view_ns.change_filter_field = function(row)
 {
+  var field_id = $("filter_" + row + "_field_id").value;
+
   // find out if this field is the submission date or not
   var is_date_field = false;
   for (var i=0; i<view_ns.all_form_fields.length; i++)

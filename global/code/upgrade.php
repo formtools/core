@@ -129,6 +129,33 @@ function ft_upgrade_form_tools()
         }
       }
 
+      if ($existing_version_info["release_date"] < 20090826)
+      {
+      	// bug fix for previous version which had a syntax error
+				$query = mysql_query("SHOW COLUMNS FROM {$g_table_prefix}forms");
+				$has_edit_submission_page_label_field = false;
+				while ($row = mysql_fetch_assoc($query))
+				{
+				  if ($row["Field"] == "edit_submission_page_label")
+					  $has_edit_submission_page_label_field = true;
+				}
+
+				if (!$has_edit_submission_page_label_field)
+				{
+          @mysql_query("ALTER TABLE {$g_table_prefix}forms ADD edit_submission_page_label TEXT NULL");
+	        $forms = ft_get_forms();
+	        foreach ($forms as $form_info)
+	        {
+	          $form_id = $form_info["form_id"];
+	          @mysql_query("
+	            UPDATE {$g_table_prefix}forms
+	            SET    edit_submission_page_label = '{\$LANG.phrase_edit_submission|upper}'
+	            WHERE  form_id = $form_id
+	              ");
+					}
+				}
+      }
+
       if ($existing_version_info["full"] != $g_current_version)
       {
         mysql_query("

@@ -525,7 +525,13 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 
     $smarty->assign("eval_str", $templates["html"]);
     while (list($key, $value) = each($common_placeholders))
+    {
+      // convert any newlines chars to page breaks for any answer fields
+      if (strpos($key, "ANSWER_") === 0)
+        $value = nl2br($value);
+
       $smarty->assign($key, $value);
+    }
 
     $smarty->assign("LANG", $LANG);
     $smarty->assign("fields", $fields_for_email_template);

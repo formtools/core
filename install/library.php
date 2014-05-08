@@ -7,9 +7,9 @@
 $g_ft_installation_folder = dirname(__FILE__);
 $g_default_language       = "en_us.php";
 $g_default_theme          = "default";
-$g_form_tools_version     = "2.0.0-beta-20090815";
+$g_form_tools_version     = "2.0.0-beta-20090923";
 $g_is_beta                = "yes";
-$g_beta_version           = "2009/08/15";
+$g_beta_version           = "2009/09/23";
 $g_smarty_use_sub_dirs    = false;
 
 
@@ -19,7 +19,7 @@ TODO
 - manually create file stuff
 - check to confirm config.php file exists
 - language strings
-- the form tools version should ONLY be set here: update the SQL
+- the form tools version should only be set in one location
 
 QA
 - try entering gobbledegook values for g_root_url & g_root_dir and see how it handles going to
@@ -235,6 +235,7 @@ function ft_install_get_config_file_contents()
 
   $root_url = preg_replace("/\/install\/step4\.php$/", "", "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
   $root_dir = preg_replace("/.install$/", "", dirname(__FILE__));
+  $root_dir = preg_replace("/\\\/", "\\\\\\", $root_dir);
 
   $_SESSION["ft_install"]["g_root_dir"] = $root_dir;
   $_SESSION["ft_install"]["g_root_url"] = $root_url;
