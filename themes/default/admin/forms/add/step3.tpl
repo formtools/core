@@ -126,6 +126,13 @@
     $fields = ft_api_init_form_page({$form_id}, "initialize");</pre></code>
 
               <p>
+                {$LANG.text_add_form_step_3_text_7}
+              </p>
+
+              <code><pre class="green">
+    "finalize" => true</pre></code>
+
+              <p>
                 {$LANG.text_add_form_step_3_text_6}
               </p>
 
@@ -134,7 +141,7 @@
                   <div style="padding-bottom: 5px;">{$LANG.phrase_awaiting_form_submission}</div>
                   <form action="{$same_page}" method="post">
                     <input type="hidden" name="submission_type" value="code" />
-                    <input type="hidden" name="form_id" value="{$form_id}"/>
+                    <input type="hidden" name="form_id" value="{$form_id}" />
                     <input type="submit" name="refresh" value="{$LANG.phrase_refresh_page}" />
                   </form>
                 </div>

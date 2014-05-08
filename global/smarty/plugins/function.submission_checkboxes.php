@@ -24,19 +24,23 @@ function smarty_function_submission_checkboxes($params, &$smarty)
 	  $smarty->trigger_error("assign: missing 'field_id' parameter. This is used to give the select field a field_id value.");
     return;
   }
-  
+
   $name          = $params["name"];
   $field_id      = $params["field_id"];
   $selected_vals = (isset($params["selected"])) ? explode("$g_multi_val_delimiter", $params["selected"]) : array();
-  $orientation   = (isset($params["orientation"])) ? $params["orientation"] : "";
-	$option_info   = ft_get_field_options($field_id);
+	$field_info    = ft_get_form_field($field_id, true);
+  $field_group_id = $field_info["field_group_id"];
+  $options = $field_info["options"];
+
+  $group_info = ft_get_field_option_group($field_group_id);
+  $orientation = $group_info["field_orientation"];
 	$pagebreak     = ($orientation == "vertical") ? "<br />" : "";
   $is_editable = (isset($params["is_editable"])) ? $params["is_editable"] : "yes";
 
 	$count = 1;
 	$selected_values = array();
 	$dd_str = "";
-	foreach ($option_info as $option)
+	foreach ($options as $option)
 	{
 		// generate a unique ID for this option (used for the label)
 		$id = "field{$field_id}_$count";
@@ -48,7 +52,7 @@ function smarty_function_submission_checkboxes($params, &$smarty)
 			$dd_str .= " checked";
 		}
 		$dd_str .= "><label for=\"$id\">{$option['option_name']}</label>$pagebreak\n";
-		
+
 		$count++;
 	}
 
@@ -58,4 +62,3 @@ function smarty_function_submission_checkboxes($params, &$smarty)
 	  echo $dd_str;
 }
 
-?> 

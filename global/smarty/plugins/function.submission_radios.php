@@ -27,16 +27,20 @@ function smarty_function_submission_radios($params, &$smarty)
   $name        = $params["name"];
   $field_id    = $params["field_id"];
   $selected    = (isset($params["selected"])) ? $params["selected"] : "";
-  $orientation = (isset($params["orientation"])) ? $params["orientation"] : "";
   $is_editable = (isset($params["is_editable"])) ? $params["is_editable"] : "yes";
 
-	$option_info = ft_get_field_options($field_id);
-	$pagebreak   = ($orientation == "vertical") ? "<br />" : "";
+	$field_info    = ft_get_form_field($field_id, true);
+  $field_group_id = $field_info["field_group_id"];
+  $options = $field_info["options"];
+
+  $group_info = ft_get_field_option_group($field_group_id);
+  $orientation = $group_info["field_orientation"];
+  $pagebreak   = ($orientation == "vertical") ? "<br />" : "";
 
 	$count = 1;
 	$selected_value = "";
 	$dd_str = "";
-	foreach ($option_info as $option)
+	foreach ($options as $option)
 	{
 		// generate a unique ID for this option (used for the label)
 		$id = "field{$field_id}_$count";
@@ -51,11 +55,10 @@ function smarty_function_submission_radios($params, &$smarty)
 
 		$count++;
 	}
-	
+
 	if ($is_editable == "no")
 	  echo $selected_value;
 	else
 	  echo $dd_str;
 }
 
-?> 

@@ -46,6 +46,8 @@ sf_ns.delete_all_rows = function()
 
     $("row_" + i).remove();
   }
+
+  sf_ns.num_rows = 0;
 }
 
 
@@ -169,7 +171,7 @@ sf_ns.process_js_webpage_parse_method_response = function(transport)
 
 
 /**
- * When the contents of the iframe is fully loaded (and, namely, the content is now available to JS), this
+ * When the contents of the iframe are fully loaded (and, namely, the content is now available to JS), this
  * function is called. It logs the page as loaded. Once all form pages are loaded, it loads all the form
  * field information into memory for analyzing by the Smart Fill function.
  */
@@ -207,8 +209,8 @@ sf_ns.log_form_page_as_loaded = function()
   if (sf_ns.manual_file_upload_attempted)
     ft.display_message("smart_fill_messages", true, "Your field options have been Smart Filled");
 
-
   sf_ns.delete_all_rows();
+
 
   // get our field (checks for myField[] syntax, too)
   if (iframe_element.forms[form_index][field_name])

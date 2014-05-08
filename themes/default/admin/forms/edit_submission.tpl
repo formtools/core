@@ -43,26 +43,22 @@
           {if $submission_field.field_type == "select"}
 
             {submission_dropdown name=$submission_field.col_name field_id=$field_id
-              selected=$submission_field.content orientation=$submission_field.option_orientation
-              is_editable=$submission_field.is_editable}
+              selected=$submission_field.content is_editable=$submission_field.is_editable}
 
           {elseif $submission_field.field_type == "radio-buttons"}
 
             {submission_radios name=$submission_field.col_name field_id=$field_id
-              selected=$submission_field.content orientation=$submission_field.option_orientation
-              is_editable=$submission_field.is_editable}
+              selected=$submission_field.content is_editable=$submission_field.is_editable}
 
           {elseif $submission_field.field_type == "checkboxes"}
 
             {submission_checkboxes name=$submission_field.col_name field_id=$field_id
-              selected=$submission_field.content orientation=$submission_field.option_orientation
-              is_editable=$submission_field.is_editable}
+              selected=$submission_field.content is_editable=$submission_field.is_editable}
 
           {elseif $submission_field.field_type == "multi-select"}
 
             {submission_dropdown_multiple name=$submission_field.col_name field_id=$field_id
-              selected=$submission_field.content orientation=$submission_field.option_orientation
-              is_editable=$submission_field.is_editable}
+              selected=$submission_field.content is_editable=$submission_field.is_editable}
 
           {elseif $submission_field.field_type == "file"}
 

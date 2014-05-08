@@ -25,7 +25,7 @@
 /**
  * The current version release.
  */
-$g_current_version = "2.0.0-beta-20090131";
+$g_current_version = "2.0.0-beta-20090211";
 
 /**
  * This is the base URL of the Form Tools installation on your server. e.g.

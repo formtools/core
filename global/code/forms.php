@@ -1735,7 +1735,7 @@ function ft_search_forms($account_id = "", $is_admin = false, $search_criteria =
       $form_clauses[] = "form_id = {$result['form_id']}";
 
     if (count($form_clauses) > 1)
-      $form_clause = "((((" . join(" OR ", $form_clauses) . ") OR $is_public_clause) AND ($is_setup_clause))";
+      $form_clause = "(((" . join(" OR ", $form_clauses) . ") OR $is_public_clause) AND ($is_setup_clause))";
     else
       $form_clause = isset($form_clauses[0]) ? "(({$form_clauses[0]} OR $is_public_clause) AND ($is_setup_clause))" :
         "($is_public_clause AND ($is_setup_clause))";

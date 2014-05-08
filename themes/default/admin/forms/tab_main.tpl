@@ -68,7 +68,6 @@
             <td width="60" align="right">
               <input type="button" class="green" id="form_url_{$curr_page+1}_button"
                 onclick="ft.verify_url('form_url_{$curr_page+1}', {$curr_page+1})" value="{$LANG.word_verified|escape}" />
-
               <input type="hidden" id="form_url_{$curr_page+1}_verified" name="form_url_verified" value="yes" />
             </td>
           </tr>

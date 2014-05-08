@@ -7,11 +7,15 @@
 
     <table class="list_table" cellpadding="0" cellspacing="1">
     <tr>
-      <td class="pad_left_small" width="200">{$LANG.word_version}</td>
-      <td>
-        <b>{$settings.program_version}</b>
+      <td class="pad_left_small" width="200">{$LANG.phrase_core_version}</td>
+      <td class="pad_left_small">
+        <span>{$settings.program_version}</span>
         <input type="button" value="{$LANG.phrase_check_for_updates}" onclick="$('upgrade_form').submit()" />
       </td>
+    </tr>
+    <tr>
+      <td class="pad_left_small">{$LANG.phrase_api_version}</td>
+      <td class="pad_left_small">{$settings.api_version}</td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_program_name}</td>

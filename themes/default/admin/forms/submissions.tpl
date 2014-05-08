@@ -190,10 +190,13 @@
               {assign var=td_class value="submission_id"}
               {assign var=cell_value value=$submission_id}
             {elseif $col_name == "submission_date"}
+              {assign var=td_class value="dates"}
               {assign var=cell_value value=$search_row.submission_date|custom_format_date:$SESSION.settings.timezone_offset:$SESSION.account.date_format}
             {elseif $col_name == "last_modified_date"}
+              {assign var=td_class value="dates"}
               {assign var=cell_value value=$search_row.last_modified_date|custom_format_date:$SESSION.settings.timezone_offset:$SESSION.account.date_format}
             {elseif $col_name == "ip_address"}
+              {assign var=td_class value="ip_address"}
               {assign var=cell_value value=$search_row.ip_address}
             {/if}
 

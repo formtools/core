@@ -16,7 +16,7 @@ if (!empty($id))
 {
   $info = ft_get_account_info($id);
 
-  if (!empty($info))
+  if (isset($info["account_id"]))
   {
     // just in case, boot up the appropriate language file (this overrides any language file already loaded)
     $g_theme  = $info["theme"];

@@ -1,6 +1,7 @@
 // our namespace for the Manage Form functions and vars
 var mf_ns = {};
 mf_ns.num_multi_page_form_pages = null;
+mf_ns.url_verification_overridden = false;
 
 
 /**
@@ -116,6 +117,27 @@ mf_ns.check_urls_verified = function()
     return errors;
 
   return true;
+}
+
+
+mf_ns.bypass_url_verification = function()
+{
+  mf_ns._toggle_verification_button(1, "verified")
+	$("form_url_1_verified").value = "yes";
+
+  for (var i=2; i<mf_ns.num_multi_page_form_pages; i++)
+  {
+    mf_ns._toggle_verification_button (i, "verified")
+	  $("form_url_" + i + "_verified").value = "yes";
+  }
+
+  mf_ns._toggle_verification_button("redirect", "verified")
+	$("form_url_redirect_verified").value = "yes";
+
+  // resubmit the form
+  rsv.validate($("add_form"), rules);
+
+  return false;
 }
 
 

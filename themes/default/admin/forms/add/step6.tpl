@@ -28,9 +28,15 @@
       {$LANG.text_add_form_step_5_para_1}
     </p>
 
-    <div style="color: #336699; width: 500px; padding: 0px;">
-      &nbsp;&nbsp;&lt;input type="hidden" name="form_tools_initialize_form" value="1" /&gt;
-    </div>
+    <code><pre class="green">
+      &lt;input type="hidden" name="form_tools_initialize_form" value="1" /&gt;</pre></code>
+
+    <p>
+      {$LANG.text_add_form_step_5_para_5}
+    </p>
+
+    <code><pre class="green">
+      $fields = ft_api_init_form_page({$form_id});</pre></code>
 
     <p>
       {$LANG.text_add_form_step_5_para_2}

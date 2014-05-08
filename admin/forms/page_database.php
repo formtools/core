@@ -58,38 +58,8 @@ page_ns.smart_fill = function()
 }
 
 var rules = [];
-rules.push(\"function,page_ns.check_non_empty_form_fields\");
 rules.push(\"function,page_ns.check_db_column_field_names\");
 rules.push(\"function,page_ns.check_db_column_field_reserved_word_conflicts\");
-
-
-page_ns.check_non_empty_form_fields = function()
-{
-  var first_error_field = null;
-  for (var i=0; i<page_ns.non_system_field_ids.length; i++)
-  {
-    var curr_field_id   = page_ns.non_system_field_ids[i];
-    var curr_field_name = $('field_' + curr_field_id + '_name').value.strip();
-    if (!curr_field_name)
-    {
-      if (!$('field_' + curr_field_id + '_name').hasClassName('rsvErrorField'))
-        $('field_' + curr_field_id + '_name').addClassName('rsvErrorField');
-
-      if (first_error_field == null)
-        first_error_field = $('field_' + curr_field_id + '_name');
-    }
-    else
-    {
-      if ($('field_' + curr_field_id + '_name').hasClassName('rsvErrorField'))
-        $('field_' + curr_field_id + '_name').removeClassName('rsvErrorField');
-    }
-  }
-
-  if (first_error_field != null)
-    return [[first_error_field, \"{$LANG["validation_no_form_field_name"]}\"]];
-
-  return true;
-}
 
 
 /**
