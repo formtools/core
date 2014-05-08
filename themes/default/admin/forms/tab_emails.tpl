@@ -75,7 +75,7 @@
             {/if}
           </td>
           <td align="center"><a href="{$same_page}?page=edit_email&email_id={$email_id}">{$LANG.word_edit|upper}</a></td>
-          <td class="del"><a href="#" onclick="page.delete_email({$email_id})">{$LANG.word_delete|upper}</a></td>
+          <td class="del"><a href="#" onclick="page_ns.delete_email({$email_id})">{$LANG.word_delete|upper}</a></td>
         </tr>
       {/foreach}
       </table>

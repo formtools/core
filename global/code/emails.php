@@ -77,6 +77,8 @@ function ft_create_blank_email_template($form_id, $create_email_from_email_id = 
     }
   }
 
+  extract(ft_process_hooks("end", compact("email_id"), array()), EXTR_OVERWRITE);
+
   return $email_id;
 }
 
@@ -482,6 +484,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 
 
   $return_info = array();
+  $return_info["email_id"] = $email_id;
   $return_info["attachments"] = array();
 
   if (isset($templates["text"]) && !empty($templates["text"]))
@@ -891,7 +894,8 @@ function ft_update_email_template($email_id, $info)
 
   $success = true;
   $message = $LANG["notify_email_template_updated"];
-  extract(ft_process_hooks("start", compact("email_id", "info"), array("success", "message")), EXTR_OVERWRITE);
+
+  extract(ft_process_hooks("end", compact("email_id", "info"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }

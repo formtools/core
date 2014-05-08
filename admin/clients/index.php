@@ -45,8 +45,8 @@ $page_vars["search_criteria"] = $search_criteria;
 $page_vars["pagination"] = ft_get_dhtml_page_nav(count($clients), $_SESSION["ft"]["settings"]["num_clients_per_page"], 1);
 
 $page_vars["head_js"] = "
-  var page = {};
-  page.delete_client = function(account_id)
+  var page_ns = {};
+  page_ns.delete_client = function(account_id)
   {
     if (confirm(\"{$LANG['validation_check_delete_client']}\"))
       window.location = \"index.php?delete=1&client_id=\" + account_id;
@@ -56,5 +56,3 @@ $page_vars["head_js"] = "
   ";
 
 ft_display_page("admin/clients/index.tpl", $page_vars);
-
-?>

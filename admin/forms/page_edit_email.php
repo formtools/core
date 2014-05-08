@@ -83,9 +83,9 @@ $page_vars["head_string"] = "<script type=\"text/javascript\" src=\"$g_root_url/
 $page_vars["head_js"] =<<< EOF
 rsv.onCompleteHandler = function() { ft.select_all($("selected_edit_submission_views")); return true; }
 
-var page = {};
+var page_ns = {};
 
-page.onsubmit_check_email_settings = function(f)
+page_ns.onsubmit_check_email_settings = function(f)
 {
   // Configuration tab
   var rules = [];
@@ -97,8 +97,8 @@ page.onsubmit_check_email_settings = function(f)
 
   // Headers tab
   var rules = [];
-  rules.push("function,page.check_one_main_recipient");
-	rules.push("required,email_from,{$LANG["validation_no_email_from_field"]}");
+  rules.push("function,page_ns.check_one_main_recipient");
+  rules.push("required,email_from,{$LANG["validation_no_email_from_field"]}");
   rules.push("if:email_from=custom,required,custom_from_email,{$LANG["validation_no_custom_from_email"]}");
   rules.push("if:email_from=custom,valid_email,custom_from_email,{$LANG["validation_invalid_custom_from_email"]}");
   rules.push("if:email_reply_to=custom,required,custom_reply_to_email,{$LANG["validation_no_custom_reply_to_email"]}");
@@ -107,14 +107,14 @@ page.onsubmit_check_email_settings = function(f)
     return ft.change_inner_tab(2, 5, "edit_email_tab"); // this always returns false
 
   var rules = [];
-  rules.push("function,page.check_one_template_defined");
+  rules.push("function,page_ns.check_one_template_defined");
   if (!rsv.validate(f, rules))
     return ft.change_inner_tab(3, 5, "edit_email_tab"); // this always returns false
 
   return true;
 }
 
-page.check_one_main_recipient = function()
+page_ns.check_one_main_recipient = function()
 {
   if (emails_ns.num_recipients == 0)
   {
@@ -137,7 +137,7 @@ page.check_one_main_recipient = function()
 }
 
 
-page.toggle_advanced_settings = function()
+page_ns.toggle_advanced_settings = function()
 {
   var display_setting = $('advanced_settings').getStyle('display');
   var is_visible = false;
@@ -161,7 +161,7 @@ page.toggle_advanced_settings = function()
 /**
  * This confirms that the user has entered at least one of the HTML and text templates.
  */
-page.check_one_template_defined = function()
+page_ns.check_one_template_defined = function()
 {
   var html_template = html_editor.getCode();
   html_template = html_template.strip();
@@ -175,7 +175,7 @@ page.check_one_template_defined = function()
 }
 
 
-page.change_include_on_edit_submission_page = function(selected)
+page_ns.change_include_on_edit_submission_page = function(selected)
 {
   if (selected == "specific_views")
     $('include_on_edit_submission_page_views').show();

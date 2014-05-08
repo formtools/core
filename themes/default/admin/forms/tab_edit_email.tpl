@@ -9,7 +9,7 @@
     {ft_include file='messages.tpl'}
 
     <form method="post" id="edit_email_template_form" action="{$same_page}?page=edit_email"
-      onsubmit="return page.onsubmit_check_email_settings(this)">
+      onsubmit="return page_ns.onsubmit_check_email_settings(this)">
 
       {* used for the JS, don't delete! *}
       <input type="hidden" name="form_id" id="form_id" value="{$form_id}" />

@@ -4,6 +4,15 @@ require_once("global/session_start.php");
 ft_verify_form_tools_installed();
 $is_upgraded = ft_upgrade_form_tools();
 
+// if this user is already logged in, redirect them to their specified login page
+if (isset($_SESSION["ft"]["account"]) && isset($_SESSION["ft"]["account"]["is_logged_in"]) &&
+  $_SESSION["ft"]["account"]["is_logged_in"] == 1)
+{
+  $login_page = $_SESSION["ft"]["account"]["login_page"];
+  header("location: {$g_pages[$login_page]}");
+	exit;
+}
+
 // default settings
 $settings = ft_get_settings();
 $g_theme  = $settings["default_theme"];
@@ -39,6 +48,7 @@ $username = strip_tags($username);
 $page_vars = array();
 $page_vars["page"] = "login";
 $page_vars["page_url"] = ft_get_page_url("login");
+$page_vars["head_title"] = $LANG["phrase_admin_panel"];
 $page_vars["error"] = $error;
 
 if ($is_upgraded)

@@ -29,7 +29,7 @@ $all_form_emails = ft_get_email_template_list($form_id);
 $page_vars = array();
 $page_vars["page"]        = "emails";
 $page_vars["page_url"]    = ft_get_page_url("edit_form_emails", array("form_id" => $form_id));
-$page_vars["tabs"]       = $tabs;
+$page_vars["tabs"]        = $tabs;
 $page_vars["form_id"]     = $form_id;
 $page_vars["form_emails"] = $form_emails;
 $page_vars["all_form_emails"] = $all_form_emails;
@@ -42,8 +42,8 @@ $pass_along_str = "page=emails&form_id=$form_id";
 $page_vars["pagination"] = ft_get_page_nav($num_form_emails, $_SESSION["ft"]["settings"]["num_emails_per_page"], $emails_page, $pass_along_str, "emails_page");
 
 $page_vars["head_js"] = "
-var page = {};
-page.delete_email = function(email_id)
+var page_ns = {};
+page_ns.delete_email = function(email_id)
 {
   if (confirm(\"{$LANG["confirm_delete_email_template"]}\"))
     window.location = \"{$_SERVER['PHP_SELF']}?form_id=$form_id&page=emails&delete=\" + email_id;

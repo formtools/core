@@ -241,4 +241,3 @@
             {template_hook location="edit_template_tab2"}
             </table>
 
-

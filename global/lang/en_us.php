@@ -458,6 +458,7 @@ $LANG["phrase_adding_multi_page_form"] = "Adding a multi-page form with the API"
 $LANG["phrase_adding_single_page_form"] = "Adding a single-page form with the API";
 $LANG["phrase_admin_menu"] = "Administrator Menu";
 $LANG["phrase_admin_only"] = "Administrator Only";
+$LANG["phrase_admin_panel"] = "Admin Panel";
 $LANG["phrase_administrator_theme"] = "Administrator Theme";
 $LANG["phrase_advanced_email_templates"] = "Advanced (email templates)";
 $LANG["phrase_advanced_filter_settings"] = "Advanced Settings (Filters)";

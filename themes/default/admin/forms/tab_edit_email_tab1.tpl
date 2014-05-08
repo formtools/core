@@ -34,7 +34,7 @@
 
             <div class="grey_box">
               <div style="margin_top">
-                <a href="#" onclick="return page.toggle_advanced_settings()">{$LANG.phrase_advanced_settings_rightarrow}</a>
+                <a href="#" onclick="return page_ns.toggle_advanced_settings()">{$LANG.phrase_advanced_settings_rightarrow}</a>
               </div>
 
               <div {if !isset($SESSION.edit_email_advanced_settings) || $SESSION.edit_email_advanced_settings == "false"}style="display:none"{/if} id="advanced_settings">
@@ -71,15 +71,15 @@
                   </td>
                   <td>
                     <input type="radio" name="include_on_edit_submission_page" id="iesp1" value="no"
-                      onchange="page.change_include_on_edit_submission_page(this.value)"
+                      onchange="page_ns.change_include_on_edit_submission_page(this.value)"
                       {if $template_info.include_on_edit_submission_page == "no"}checked{/if} />
                       <label for="iesp1">{$LANG.word_no}</label><br />
                     <input type="radio" name="include_on_edit_submission_page" id="iesp2" value="all_views"
-                      onchange="page.change_include_on_edit_submission_page(this.value)"
+                      onchange="page_ns.change_include_on_edit_submission_page(this.value)"
                       {if $template_info.include_on_edit_submission_page == "all_views"}checked{/if} />
                       <label for="iesp2">{$LANG.phrase_yes_for_all_views}</label><br />
                     <input type="radio" name="include_on_edit_submission_page" id="iesp3" value="specific_views"
-                      onchange="page.change_include_on_edit_submission_page(this.value)"
+                      onchange="page_ns.change_include_on_edit_submission_page(this.value)"
                       {if $template_info.include_on_edit_submission_page == "specific_views"}checked{/if} />
                       <label for="iesp3">{$LANG.phrase_yes_for_specific_views}</label><br />
 

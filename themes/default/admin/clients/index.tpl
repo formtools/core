@@ -196,7 +196,7 @@
             </td>
             <td align="center"><a href="{$same_page}?login={$client_id}">{$LANG.word_login|upper}</a></td>
             <td align="center"><a href="edit.php?client_id={$client_id}">{$LANG.word_edit|upper}</a></td>
-            <td class="del"><a href="#" onclick="return page.delete_client({$client_id})">{$LANG.word_delete|upper}</a></td>
+            <td class="del"><a href="#" onclick="return page_ns.delete_client({$client_id})">{$LANG.word_delete|upper}</a></td>
           </tr>
 
         {if $count != 1 && ($count % $settings.num_clients_per_page) == 0}
