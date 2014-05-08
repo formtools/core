@@ -45,11 +45,11 @@ function ft_login($infohash, $login_as_client = false)
   // error check user login info
   if (!$login_as_client)
   {
-	  if (empty($password))                                 return $LANG["validation_no_password"];
-	  if ($account_info["account_status"] == "disabled")    return $LANG["validation_account_disabled"];
-	  if ($account_info["account_status"] == "pending")     return $LANG["validation_account_pending"];
-	  if (empty($password))                                 return $LANG["validation_account_not_recognized"];
-	  if (md5(md5($password)) != $account_info["password"]) return $LANG["validation_wrong_password"];
+    if (empty($password))                                 return $LANG["validation_no_password"];
+    if ($account_info["account_status"] == "disabled")    return $LANG["validation_account_disabled"];
+    if ($account_info["account_status"] == "pending")     return $LANG["validation_account_pending"];
+    if (empty($password))                                 return $LANG["validation_account_not_recognized"];
+    if (md5(md5($password)) != $account_info["password"]) return $LANG["validation_wrong_password"];
   }
 
   // all checks out. Log them in, after populating sessions
@@ -63,8 +63,8 @@ function ft_login($infohash, $login_as_client = false)
   // if this is an administrator, build and cache the upgrade link and ensure the API version is up to date
   if ($account_info["account_type"] == "admin")
   {
-    ft_build_and_cache_upgrade_info();
     ft_update_api_version();
+    ft_build_and_cache_upgrade_info();
   }
 
   // for clients, store the forms & form Views that they are allowed to access
@@ -324,48 +324,48 @@ function _ft_is_valid_username($username, $account_id = "")
  */
 function ft_logout_user($message_flag = "")
 {
-	global $g_root_url;
+  global $g_root_url;
 
-	// this ensures sessions are started
-	@session_start();
+  // this ensures sessions are started
+  @session_start();
 
-	// first, if $_SESSION["ft"]["admin"] is set, it is an administrator logging out, so just redirect them
-	// back to the admin pages
-	if (isset($_SESSION["ft"]) && array_key_exists("admin", $_SESSION["ft"]))
-	  ft_logout_as_client();
-	else
-	{
-		if (!empty($message_flag))
-		{
-		  // empty sessions, but be nice about it. Only delete the Form Tools namespaced sessions - any other
-		  // PHP scripts the user's running right now should be unaffected
-		  @session_start();
-		  @session_destroy();
-		  $_SESSION["ft"] = array();
+  // first, if $_SESSION["ft"]["admin"] is set, it is an administrator logging out, so just redirect them
+  // back to the admin pages
+  if (isset($_SESSION["ft"]) && array_key_exists("admin", $_SESSION["ft"]))
+    ft_logout_as_client();
+  else
+  {
+    if (!empty($message_flag))
+    {
+      // empty sessions, but be nice about it. Only delete the Form Tools namespaced sessions - any other
+      // PHP scripts the user's running right now should be unaffected
+      @session_start();
+      @session_destroy();
+      $_SESSION["ft"] = array();
 
-		  // redirect to the login page, passing along the appropriate message flag so the page knows what to display
+      // redirect to the login page, passing along the appropriate message flag so the page knows what to display
       $logout_url = ft_construct_url("$g_root_url/", "message=$message_flag");
       session_write_close();
       header("location: $logout_url");
       exit;
-		}
-		else
-		{
-		  $logout_url = isset($_SESSION["ft"]["account"]["logout_url"]) ? $_SESSION["ft"]["account"]["logout_url"] : "";
+    }
+    else
+    {
+      $logout_url = isset($_SESSION["ft"]["account"]["logout_url"]) ? $_SESSION["ft"]["account"]["logout_url"] : "";
 
-		  // empty sessions, but be nice about it. Only delete the Form Tools namespaced sessions - any other
-		  // PHP scripts the user happens to be running right now should be unaffected
-		  @session_start();
-		  @session_destroy();
-		  $_SESSION["ft"] = array();
+      // empty sessions, but be nice about it. Only delete the Form Tools namespaced sessions - any other
+      // PHP scripts the user happens to be running right now should be unaffected
+      @session_start();
+      @session_destroy();
+      $_SESSION["ft"] = array();
 
-		  if (empty($logout_url))
-		    $logout_url = $g_root_url;
+      if (empty($logout_url))
+        $logout_url = $g_root_url;
 
-		  // redirect to login page
-		  session_write_close();
-		  header("location: $logout_url");
-		  exit;
-		}
-	}
+      // redirect to login page
+      session_write_close();
+      header("location: $logout_url");
+      exit;
+    }
+  }
 }

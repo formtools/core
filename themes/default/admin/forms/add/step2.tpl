@@ -46,8 +46,9 @@
           <table width="100%" cellpadding="0" cellspacing="0">
           <tr>
             <td>
+              <input type="hidden" id="original_form_url" value="{$page_values.form_url|escape}" />
               <input type="text" name="form_url" id="form_url" value="{$page_values.form_url}" style="width: 98%"
-                onkeyup="mf_ns.unverify_url_field(this.value, 1)" />
+                onkeyup="mf_ns.unverify_url_field(this.value, $('original_form_url').value, 1)" />
             </td>
             <td width="60" align="center">
               {if $page_values.form_url != ""}
@@ -77,8 +78,9 @@
 		          <tr>
 		            <td width="70" class="bold">{$LANG.word_page} {$curr_page+1}</tdm>
 		            <td>
+                  <input type="hidden" id="original_form_url_{$curr_page+1}" value="{$url.form_url}" />
 		              <input type="text" name="form_url_{$curr_page+1}" id="form_url_{$curr_page+1}" value="{$url.form_url}" style="width: 98%"
-		                onkeyup="mf_ns.unverify_url_field(this.value, {$curr_page+1})" />
+		                onkeyup="mf_ns.unverify_url_field(this.value, $('original_form_url_{$curr_page+1}').value, {$curr_page+1})" />
 		            </td>
 		            <td width="60" align="right">
 		              <input type="button" class="green" id="form_url_{$curr_page+1}_button"
@@ -109,8 +111,9 @@
           <table width="100%" cellpadding="0" cellspacing="0">
           <tr>
             <td>
+              <input type="hidden" id="original_redirect_url" value="{$page_values.redirect_url}" />
               <input type="text" name="redirect_url" id="redirect_url" value="{$page_values.redirect_url}" style="width: 99%;"
-                onkeyup="mf_ns.unverify_url_field(this.value, 'redirect')" />
+                onkeyup="mf_ns.unverify_url_field(this.value, $('original_redirect_url').value, 'redirect')" />
             </td>
             <td width="60" align="center">
               {if $page_values.redirect_url != ""}

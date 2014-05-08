@@ -25,7 +25,7 @@ mf_ns.add_multi_page_form_page = function(f)
   // [2] URL text field
   var td2 = document.createElement("td");
   var inp = "<input type=\"text\" name=\"form_url_" + currRow + "\" id=\"form_url_" + currRow + "\" style=\"width:98%\" "
-          + "onkeyup=\"mf_ns.unverify_url_field(this.value, " + currRow + ")\" />";
+          + "onkeyup=\"mf_ns.unverify_url_field(this.value, '', " + currRow + ")\" />";
   td2.innerHTML = inp;
 
   // [3] Verify URL button
@@ -121,28 +121,60 @@ mf_ns.check_urls_verified = function()
 
 /**
  * This is called whenever the content of a form field changes. It's used to unverify a field, requiring it to
- * be manually re-verified by the user.
+ * be manually re-verified by the user. The function takes three parameters: ,
+ *
+ * @param string val the URL field value
+ * @param string original_val the original URL field value (used when editing an existing URL field). This is
+ *     empty for new field values
+ * @param integer $form_page
  */
-mf_ns.unverify_url_field = function(val, form_page)
+mf_ns.unverify_url_field = function(val, original_val, form_page)
 {
-  $("form_url_" + form_page + "_verified").value = "no";
-
   if (val.strip() == "")
-  {
-    $("form_url_" + form_page + "_button").removeClassName("red");
-    $("form_url_" + form_page + "_button").removeClassName("green");
-    $("form_url_" + form_page + "_button").addClassName("light_grey");
-  }
+    mf_ns._toggle_verification_button(form_page, "no_value");
   else
   {
-    $("form_url_" + form_page + "_button").removeClassName("light_grey");
-    $("form_url_" + form_page + "_button").removeClassName("green");
-    $("form_url_" + form_page + "_button").addClassName("red");
+    // if there was an original field value, see if this field is the SAME. If so, don't
+    // unverify the field
+    if (original_val.strip() != "")
+    {
+      if (val == original_val)
+        mf_ns._toggle_verification_button(form_page, "verified");
+      else
+        mf_ns._toggle_verification_button(form_page, "not_verified");
+    }
+    else
+      mf_ns._toggle_verification_button(form_page, "not_verified");
   }
-
-  $("form_url_" + form_page + "_button").value = g.messages["phrase_verify_url"];
 }
 
+mf_ns._toggle_verification_button = function(form_page, field_status)
+{
+  switch (field_status)
+  {
+    case "no_value":
+	    $("form_url_" + form_page + "_verified").value = "no";
+	    $("form_url_" + form_page + "_button").removeClassName("red");
+	    $("form_url_" + form_page + "_button").removeClassName("green");
+	    $("form_url_" + form_page + "_button").addClassName("light_grey");
+	    $("form_url_" + form_page + "_button").value = g.messages["phrase_verify_url"];
+		  break;
+    case "not_verified":
+      $("form_url_" + form_page + "_verified").value = "no";
+	    $("form_url_" + form_page + "_button").removeClassName("light_grey");
+	    $("form_url_" + form_page + "_button").removeClassName("green");
+	    $("form_url_" + form_page + "_button").addClassName("red");
+	    $("form_url_" + form_page + "_button").value = g.messages["phrase_verify_url"];
+	    break;
+	  case "verified":
+	    $("form_url_" + form_page + "_verified").value = "yes";
+			$("form_url_" + form_page + "_button").removeClassName("light_grey");
+			$("form_url_" + form_page + "_button").removeClassName("red");
+			$("form_url_" + form_page + "_button").addClassName("green");
+		  $("form_url_" + form_page + "_button").value = g.messages["word_verified"];
+	    break;
+  }
+}
 
 /**
  * Hides/shows the additional URL fields to let the user enter ALL pages of a multi-page form.

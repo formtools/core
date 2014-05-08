@@ -29,8 +29,9 @@
         <table width="100%" cellpadding="0" cellspacing="0">
         <tr>
           <td>
+            <input type="hidden" id="original_form_url" value="{$form_info.form_url}" />
             <input type="text" name="form_url" id="form_url" value="{$form_info.form_url}" style="width: 98%"
-              onkeyup="mf_ns.unverify_url_field(this.value, 1)" />
+              onkeyup="mf_ns.unverify_url_field(this.value, $('original_form_url').value, 1)" />
           </td>
           <td width="60" align="center">
             {if $form_info.form_url != ""}
@@ -58,14 +59,17 @@
           {foreach from=$form_info.multi_page_form_urls item=url name=r}
             {assign var=curr_page value=$smarty.foreach.r.iteration}
           <tr>
-            <td width="70" class="bold">{$LANG.word_page} {$curr_page+1}</tdm>
+            <td width="70" class="bold">{$LANG.word_page} {$curr_page+1}</td>
             <td>
+              <input type="hidden" id="original_form_url_{$curr_page+1}" value="{$url.form_url}" />
               <input type="text" name="form_url_{$curr_page+1}" id="form_url_{$curr_page+1}" value="{$url.form_url}" style="width: 98%"
-                onkeyup="mf_ns.unverify_url_field(this.value, {$curr_page+1})" />
+                onkeyup="mf_ns.unverify_url_field(this.value, $('original_form_url_{$curr_page+1}').value, {$curr_page+1})" />
             </td>
             <td width="60" align="right">
               <input type="button" class="green" id="form_url_{$curr_page+1}_button"
                 onclick="ft.verify_url('form_url_{$curr_page+1}', {$curr_page+1})" value="{$LANG.word_verified|escape}" />
+
+              <input type="hidden" id="form_url_{$curr_page+1}_verified" name="form_url_verified" value="yes" />
             </td>
           </tr>
           {/foreach}
@@ -78,6 +82,7 @@
             <td><input type="button" value="{$LANG.phrase_add_row}" onclick="mf_ns.add_multi_page_form_page(this.form)" /></td>
           </tr>
           </table>
+
         </div>
       </td>
     </tr>
@@ -88,8 +93,9 @@
           <table width="100%" cellpadding="0" cellspacing="0">
           <tr>
             <td>
+              <input type="hidden" id="original_redirect_url" value="{$form_info.redirect_url}" />
               <input type="text" name="redirect_url" id="redirect_url" value="{$form_info.redirect_url}" style="width: 99%;"
-                onkeyup="mf_ns.unverify_url_field(this.value, 'redirect')" />
+                onkeyup="mf_ns.unverify_url_field(this.value, $('original_redirect_url').value, 'redirect')" />
             </td>
             <td width="60" align="center">
               {if $form_info.redirect_url != ""}

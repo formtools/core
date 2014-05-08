@@ -26,44 +26,42 @@
  */
 function ft_get_unique_filename($folder, $filename)
 {
-	// check the supplied dir is a valid, readable directory
-	if (!is_dir($folder) && is_readable($folder))
-		return;
+  // check the supplied dir is a valid, readable directory
+  if (!is_dir($folder) && is_readable($folder))
+    return;
 
-	// the filename string to return
-	$return_filename = $filename;
+  // the filename string to return
+  $return_filename = $filename;
 
-	// store all the filenames in the folder into an array
-	$filenames = array();
-	if ($handle = opendir($folder))
-	{
-		while (false !== ($file = readdir($handle)))
-			$filenames[] = $file;
-	}
+  // store all the filenames in the folder into an array
+  $filenames = array();
+  if ($handle = opendir($folder))
+  {
+    while (false !== ($file = readdir($handle)))
+      $filenames[] = $file;
+  }
 
-	// if a file with the same name exists in the directory, find the next free filename of the form:
-	// x_$filename, where x is a number starting with 1
-	if (in_array($filename, $filenames))
-	{
-		// if it already starts with x_, strip off the prefix.
-		if (preg_match("/^\d+_/", $filename))
-			$filename = preg_replace("/^\d+_/", "", $filename);
+  // if a file with the same name exists in the directory, find the next free filename of the form:
+  // x_$filename, where x is a number starting with 1
+  if (in_array($filename, $filenames))
+  {
+    // if it already starts with x_, strip off the prefix.
+    if (preg_match("/^\d+_/", $filename))
+      $filename = preg_replace("/^\d+_/", "", $filename);
 
-		// now find the next available filename
-		$next_num = 1;
-		$return_filename = $next_num . "_" . $filename;
-		while (in_array($return_filename, $filenames))
-		{
-			$return_filename = $next_num . "_" . $filename;
-			$next_num++;
-		}
-	}
+    // now find the next available filename
+    $next_num = 1;
+    $return_filename = $next_num . "_" . $filename;
+    while (in_array($return_filename, $filenames))
+    {
+      $return_filename = $next_num . "_" . $filename;
+      $next_num++;
+    }
+  }
 
-	// return the appropriate filename
-	return $return_filename;
+  // return the appropriate filename
+  return $return_filename;
 }
-
-
 
 
 /**
@@ -84,58 +82,58 @@ function ft_get_unique_filename($folder, $filename)
  */
 function ft_check_folder_url_match($folder, $url)
 {
-	global $g_debug, $g_default_error_reporting, $LANG;
+  global $g_debug, $g_default_error_reporting, $LANG;
 
-	$folder = rtrim(trim($folder), "/\\");
-	$url    = rtrim(trim($url), "/\\");
+  $folder = rtrim(trim($folder), "/\\");
+  $url    = rtrim(trim($url), "/\\");
 
-	list($success, $message) = ft_check_upload_folder($folder);
-	if (!$success)
-		return array(false, $LANG["validation_folder_invalid_permissions"]);
+  list($success, $message) = ft_check_upload_folder($folder);
+  if (!$success)
+    return array(false, $LANG["validation_folder_invalid_permissions"]);
 
-	if (ini_get("allow_url_fopen") != "1")
-		return array(false, $LANG["notify_allow_url_fopen_not_set"]);
+  if (ini_get("allow_url_fopen") != "1")
+    return array(false, $LANG["notify_allow_url_fopen_not_set"]);
 
-	// create the temp file
-	$test_file = "ft_" . date("U") . ".tmp";
+  // create the temp file
+  $test_file = "ft_" . date("U") . ".tmp";
 
   if (($fh = fopen("$folder/$test_file", "w")) === FALSE)
     return array(true, "Problem creating test file.");
 
   fwrite($fh, "Folder-URL match test");
-	fclose($fh);
+  fclose($fh);
 
-	// now try and read the file. We activate error reporting for the duration of this test so we
-	// can examine any error messages that occur to provide some pointers for the user
-	error_reporting(2047);
-	ob_start();
-	$result = @file("$url/$test_file");
-	$errors = ob_get_clean();
-	error_reporting($g_default_error_reporting);
+  // now try and read the file. We activate error reporting for the duration of this test so we
+  // can examine any error messages that occur to provide some pointers for the user
+  error_reporting(2047);
+  ob_start();
+  $result = @file("$url/$test_file");
+  $errors = ob_get_clean();
+  error_reporting($g_default_error_reporting);
 
-	// delete temp file
-	@unlink("$folder/$test_file");
+  // delete temp file
+  @unlink("$folder/$test_file");
 
-	// if $errors is empty, that means there was a match
-	if (is_array($result) && $result[0] == "Folder-URL match test")
-	{
-		return array(true, $LANG["notify_folder_url_match"]);
-	}
-	else
-	{
-		$debug = ($g_debug) ? "<br />$errors" : "";
+  // if $errors is empty, that means there was a match
+  if (is_array($result) && $result[0] == "Folder-URL match test")
+  {
+    return array(true, $LANG["notify_folder_url_match"]);
+  }
+  else
+  {
+    $debug = ($g_debug) ? "<br />$errors" : "";
 
-		// let's take a look at the warning.  [Assumption: error messages in English]
-		//   "404 Not Found" - Not a match
-		if (preg_match("/404 Not Found/", $errors))
-			return array(false, $LANG["notify_folder_url_no_match"] . " $debug");
+    // let's take a look at the warning.  [Assumption: error messages in English]
+    //   "404 Not Found" - Not a match
+    if (preg_match("/404 Not Found/", $errors))
+      return array(false, $LANG["notify_folder_url_no_match"] . " $debug");
 
-		//   "Authorization Required"    - PHP isn't allowed to look at that URL (URL protected by a .htaccess probably)
-		else if (preg_match("/Authorization Required/", $errors))
-			return array(false, $LANG["notify_folder_url_no_access"] . " $debug");
+    //   "Authorization Required"    - PHP isn't allowed to look at that URL (URL protected by a .htaccess probably)
+    else if (preg_match("/Authorization Required/", $errors))
+      return array(false, $LANG["notify_folder_url_no_access"] . " $debug");
 
-		return array(false, $LANG["notify_folder_url_unknown_error"]);
-	}
+    return array(false, $LANG["notify_folder_url_unknown_error"]);
+  }
 }
 
 
@@ -149,32 +147,32 @@ function ft_check_folder_url_match($folder, $url)
  */
 function ft_check_upload_folder($folder)
 {
-	global $LANG;
+  global $LANG;
 
-	// first, check server's temporary file upload folder
-	$upload_tmp_dir = ini_get("upload_tmp_dir");
+  // first, check server's temporary file upload folder
+  $upload_tmp_dir = ini_get("upload_tmp_dir");
 
-	if (!empty($upload_tmp_dir))
-	{
-		if (!is_dir($upload_tmp_dir))
-		{
-			$replacement_info = array("upload_folder" => $upload_tmp_dir);
-			$message = ft_eval_smarty_string($LANG["validation_invalid_upload_folder"], $replacement_info);
-			return array(false, );
-		}
+  if (!empty($upload_tmp_dir))
+  {
+    if (!is_dir($upload_tmp_dir))
+    {
+      $replacement_info = array("upload_folder" => $upload_tmp_dir);
+      $message = ft_eval_smarty_string($LANG["validation_invalid_upload_folder"], $replacement_info);
+      return array(false, );
+    }
 
-		if (!is_writable($upload_tmp_dir))
-			return array(false, $LANG["validation_upload_folder_not_writable"]);
-	}
+    if (!is_writable($upload_tmp_dir))
+      return array(false, $LANG["validation_upload_folder_not_writable"]);
+  }
 
-	// now check the folder is really a folder
-	if (!is_dir($folder))
-		return array(false, $LANG["validation_invalid_folder"]);
+  // now check the folder is really a folder
+  if (!is_dir($folder))
+    return array(false, $LANG["validation_invalid_folder"]);
 
-	if (!is_writable($folder))
-		return array(false, $LANG["validation_folder_not_writable"]);
+  if (!is_writable($folder))
+    return array(false, $LANG["validation_folder_not_writable"]);
 
-	return array(true, $LANG["notify_folder_correct_permissions"]);
+  return array(true, $LANG["notify_folder_correct_permissions"]);
 }
 
 
@@ -188,10 +186,10 @@ function ft_check_upload_folder($folder)
  */
 function ft_get_filename_extension($filename, $lowercase = false)
 {
-	$sections = explode(".", $filename);
-	$extension = ($lowercase) ? mb_strtolower($sections[count($sections) - 1]) : $sections[count($sections) - 1];
+  $sections = explode(".", $filename);
+  $extension = ($lowercase) ? mb_strtolower($sections[count($sections) - 1]) : $sections[count($sections) - 1];
 
-	return $extension;
+  return $extension;
 }
 
 
@@ -208,100 +206,100 @@ function ft_get_filename_extension($filename, $lowercase = false)
  */
 function ft_move_field_files($field_id, $source_folder, $target_folder, $image_type = "")
 {
-	global $g_table_prefix, $g_multi_val_delimiter;
+  global $g_table_prefix, $g_multi_val_delimiter;
 
-	if ($source_folder == $target_folder)
-	  return;
+  if ($source_folder == $target_folder)
+    return;
 
-	$field_info = ft_get_form_field($field_id);
-	$col_name   = $field_info["col_name"];
-	$field_type = $field_info["field_type"];
-	$form_id    = $field_info["form_id"];
+  $field_info = ft_get_form_field($field_id);
+  $col_name   = $field_info["col_name"];
+  $field_type = $field_info["field_type"];
+  $form_id    = $field_info["form_id"];
 
-	if ($field_type != "file" && $field_type != "image")
-	  return;
+  if ($field_type != "file" && $field_type != "image")
+    return;
 
-	if ($field_type == "image" && empty($image_type))
-	  return;
+  if ($field_type == "image" && empty($image_type))
+    return;
 
 
-	$query = mysql_query("
-	  SELECT submission_id, $col_name
-	  FROM   {$g_table_prefix}form_{$form_id}
-	  WHERE  $col_name != ''''
-	    ");
+  $query = mysql_query("
+    SELECT submission_id, $col_name
+    FROM   {$g_table_prefix}form_{$form_id}
+    WHERE  $col_name != ''''
+      ");
 
   while ($row = mysql_fetch_assoc($query))
   {
-  	$submission_id = $row["submission_id"];
-  	$filename      = $row[$col_name];
+    $submission_id = $row["submission_id"];
+    $filename      = $row[$col_name];
 
-  	// if this is an image, the field actually contains up to THREE filenames (main image, main thumb, search
-  	// results thumb). Find the one we want to move and overwrite $filename
-  	if ($field_type == "image")
-  	{
+    // if this is an image, the field actually contains up to THREE filenames (main image, main thumb, search
+    // results thumb). Find the one we want to move and overwrite $filename
+    if ($field_type == "image")
+    {
       $image_info = ft_get_filenames_from_image_field_string($filename);
       switch ($image_type)
       {
-      	case "main_image":
-      		$filename = $image_info["main_image"];
-      		break;
-      	case "main_thumb":
-      		$filename = $image_info["main_thumb"];
-      		break;
-      	case "search_results_thumb":
-      		$filename = $image_info["search_results_thumb"];
-      		break;
-      	default:
-      		continue;
-      		break;
+        case "main_image":
+          $filename = $image_info["main_image"];
+          break;
+        case "main_thumb":
+          $filename = $image_info["main_thumb"];
+          break;
+        case "search_results_thumb":
+          $filename = $image_info["search_results_thumb"];
+          break;
+        default:
+          continue;
+          break;
       }
-  	}
+    }
 
-  	// move the file
+    // move the file
     list($success, $new_filename) = ft_move_file($source_folder, $target_folder, $filename);
 
     // if the file was successfully moved but RENAMED, update the database record
     if ($success && $filename != $new_filename)
     {
-    	$db_field_str = "";
-    	if ($image_type = "file")
-    	  $db_field_str = $new_filename;
-    	else
-    	{
-    		switch ($image_type)
-    		{
-    			case "main_image":
-    				$image_field_string_sections = array(
-	  		      "main_image:$new_filename",
-			  	    "main_thumb:{$image_info["main_thumb"]}",
-			  		  "search_results_thumb:{$image_info["search_results_thumb"]}"
-	  		    );
-    				break;
-    			case "main_thumb":
-    				$image_field_string_sections = array(
-	  		      "main_image:{$image_info["main_image"]}",
-			  	    "main_thumb:$new_filename",
-			  		  "search_results_thumb:{$image_info["search_results_thumb"]}"
-	  		    );
-    				break;
-    			case "search_results_thumb":
-    				$image_field_string_sections = array(
-	  		      "main_image:{$image_info["main_image"]}",
-			  	    "main_thumb:{$image_info["main_thumb"]}",
-			  		  "search_results_thumb:$new_filename"
-	  		    );
-	    		  break;
-    		}
+      $db_field_str = "";
+      if ($image_type = "file")
+        $db_field_str = $new_filename;
+      else
+      {
+        switch ($image_type)
+        {
+          case "main_image":
+            $image_field_string_sections = array(
+              "main_image:$new_filename",
+              "main_thumb:{$image_info["main_thumb"]}",
+              "search_results_thumb:{$image_info["search_results_thumb"]}"
+            );
+            break;
+          case "main_thumb":
+            $image_field_string_sections = array(
+              "main_image:{$image_info["main_image"]}",
+              "main_thumb:$new_filename",
+              "search_results_thumb:{$image_info["search_results_thumb"]}"
+            );
+            break;
+          case "search_results_thumb":
+            $image_field_string_sections = array(
+              "main_image:{$image_info["main_image"]}",
+              "main_thumb:{$image_info["main_thumb"]}",
+              "search_results_thumb:$new_filename"
+            );
+            break;
+        }
 
-    		$db_field_str = implode($g_multi_val_delimiter, $image_field_string_sections);
-    	}
+        $db_field_str = implode($g_multi_val_delimiter, $image_field_string_sections);
+      }
 
-    	mysql_query("
-    	  UPDATE {$g_table_prefix}form_{$form_id}
-    	  SET    $col_name = '$db_field_str'
-    	  WHERE  submission_id = $submission_id
-    	    ") or die(mysql_error());
+      mysql_query("
+        UPDATE {$g_table_prefix}form_{$form_id}
+        SET    $col_name = '$db_field_str'
+        WHERE  submission_id = $submission_id
+          ") or die(mysql_error());
     }
   }
 }
@@ -317,25 +315,25 @@ function ft_move_field_files($field_id, $source_folder, $target_folder, $image_t
  */
 function ft_move_file($source_folder, $target_folder, $filename)
 {
-	global $LANG;
+  global $LANG;
 
-	// check the folder is valid and writable
-	if (!is_dir($target_folder) || !is_writable($target_folder))
-		return array(false, $LANG["notify_invalid_upload_folder"]);
+  // check the folder is valid and writable
+  if (!is_dir($target_folder) || !is_writable($target_folder))
+    return array(false, $LANG["notify_invalid_upload_folder"]);
 
-	// ensure the filename is unique
-	$unique_filename = ft_get_unique_filename($target_folder, $filename);
+  // ensure the filename is unique
+  $unique_filename = ft_get_unique_filename($target_folder, $filename);
 
-	// copy file to the new folder and remove the old one
-	if (@rename("$source_folder/$filename", "$target_folder/$unique_filename"))
-	{
-		@chmod("$target_folder/$unique_filename", 0777);
-		@unlink("$source_folder/$filename");
+  // copy file to the new folder and remove the old one
+  if (@rename("$source_folder/$filename", "$target_folder/$unique_filename"))
+  {
+    @chmod("$target_folder/$unique_filename", 0777);
+    @unlink("$source_folder/$filename");
 
-		return array(true, $unique_filename);
-	}
-	else
-		return array(false, $LANG["notify_file_not_uploaded"]);
+    return array(true, $unique_filename);
+  }
+  else
+    return array(false, $LANG["notify_file_not_uploaded"]);
 }
 
 
@@ -355,23 +353,23 @@ function ft_move_file($source_folder, $target_folder, $filename)
  */
 function ft_upload_file($folder, $filename, $tmp_location)
 {
-	global $g_table_prefix, $LANG;
+  global $g_table_prefix, $LANG;
 
-	// check the folder is valid and writable
-	if (!is_dir($folder) || !is_writable($folder))
-		return array(false, $LANG["notify_invalid_upload_folder"], "");
+  // check the folder is valid and writable
+  if (!is_dir($folder) || !is_writable($folder))
+    return array(false, $LANG["notify_invalid_upload_folder"], "");
 
-	// ensure the filename is unique
-	$unique_filename = ft_get_unique_filename($folder, $filename);
+  // ensure the filename is unique
+  $unique_filename = ft_get_unique_filename($folder, $filename);
 
-	// copy file to uploads folder and remove temporary file
-	if (rename($tmp_location, "$folder/$unique_filename"))
-	{
-		@chmod("$folder/$unique_filename", 0777);
-		return array(true, $LANG["notify_file_uploaded"], $unique_filename);
-	}
-	else
-		return array(false, $LANG["notify_file_not_uploaded"], "");
+  // copy file to uploads folder and remove temporary file
+  if (rename($tmp_location, "$folder/$unique_filename"))
+  {
+    @chmod("$folder/$unique_filename", 0777);
+    return array(true, $LANG["notify_file_uploaded"], $unique_filename);
+  }
+  else
+    return array(false, $LANG["notify_file_not_uploaded"], "");
 }
 
 
@@ -395,98 +393,98 @@ function ft_upload_file($folder, $filename, $tmp_location)
  */
 function ft_upload_submission_file($form_id, $submission_id, $field_id, $fileinfo)
 {
-	global $g_table_prefix, $LANG;
+  global $g_table_prefix, $LANG;
 
-	// get the column name and upload folder for this field
-	$field_info = ft_get_form_field($field_id);
-	$extended_field_info = ft_get_extended_field_settings($field_id);
+  // get the column name and upload folder for this field
+  $field_info = ft_get_form_field($field_id);
+  $extended_field_info = ft_get_extended_field_settings($field_id);
 
-	$col_name             = $field_info["col_name"];
-	$file_upload_dir      = $extended_field_info["file_upload_dir"];
-	$file_upload_url      = $extended_field_info["file_upload_url"];
-	$file_upload_max_size = $extended_field_info["file_upload_max_size"]; // KB
-	$file_upload_types    = $extended_field_info["file_upload_filetypes"];
+  $col_name             = $field_info["col_name"];
+  $file_upload_dir      = $extended_field_info["file_upload_dir"];
+  $file_upload_url      = $extended_field_info["file_upload_url"];
+  $file_upload_max_size = $extended_field_info["file_upload_max_size"]; // KB
+  $file_upload_types    = $extended_field_info["file_upload_filetypes"];
 
-	// if the column name wasn't found, the $field_id passed in was invalid. Return false.
-	if (empty($col_name))
-		return array(false, $LANG["notify_submission_no_field_id"]);
+  // if the column name wasn't found, the $field_id passed in was invalid. Return false.
+  if (empty($col_name))
+    return array(false, $LANG["notify_submission_no_field_id"]);
 
-	// convert any whitespace chars in filename to underscores [list may be expanded later]
-	$filename     = preg_replace("/\s+/", "_", $fileinfo["name"]);
-	$tmp_filename = $fileinfo["tmp_name"];
-	$filesize     = $fileinfo["size"]; // always in BYTES
+  // convert any whitespace chars in filename to underscores [list may be expanded later]
+  $filename     = preg_replace("/\s+/", "_", $fileinfo["name"]);
+  $tmp_filename = $fileinfo["tmp_name"];
+  $filesize     = $fileinfo["size"]; // always in BYTES
   $filesize_kb  = $filesize / 1000;
 
-	// check file size
-	if ($filesize_kb > $file_upload_max_size)
-		return array(false, $LANG["notify_file_too_large"]);
+  // check file size
+  if ($filesize_kb > $file_upload_max_size)
+    return array(false, $LANG["notify_file_too_large"]);
 
-	// check upload folder is valid and writable
-	if (!is_dir($file_upload_dir) || !is_writable($file_upload_dir))
-		return array(false, $LANG["notify_invalid_field_upload_folder"]);
+  // check upload folder is valid and writable
+  if (!is_dir($file_upload_dir) || !is_writable($file_upload_dir))
+    return array(false, $LANG["notify_invalid_field_upload_folder"]);
 
-	// check file extension is valid. Note: this is "dumb" - it just tests for the file extension string, not
-	// the actual file type based on it's header info [this is done because I want to allow users to permit
-	// uploading of any file types, and I can't know the headers of all of them]
-	$is_valid_extension = true;
-	if (!empty($file_upload_types))
-	{
-		$is_valid_extension = false;
-		$raw_extensions = explode(",", $file_upload_types);
+  // check file extension is valid. Note: this is "dumb" - it just tests for the file extension string, not
+  // the actual file type based on it's header info [this is done because I want to allow users to permit
+  // uploading of any file types, and I can't know the headers of all of them]
+  $is_valid_extension = true;
+  if (!empty($file_upload_types))
+  {
+    $is_valid_extension = false;
+    $raw_extensions = explode(",", $file_upload_types);
 
-		foreach ($raw_extensions as $ext)
-		{
-			// remove whitespace and periods
-			$clean_extension = str_replace(".", "", trim($ext));
+    foreach ($raw_extensions as $ext)
+    {
+      // remove whitespace and periods
+      $clean_extension = str_replace(".", "", trim($ext));
 
-			if (preg_match("/$clean_extension$/", $filename))
-				$is_valid_extension = true;
-		}
-	}
+      if (preg_match("/$clean_extension$/", $filename))
+        $is_valid_extension = true;
+    }
+  }
 
-	// all checks out!
-	if ($is_valid_extension)
-	{
-		// find out if there was already a file uploaded in this field. We make a note of this so that
-		// in case the new file upload is successful, we automatically delete the old file
-		$submission_info = ft_get_submission_info($form_id, $submission_id);
-		$old_filename = (!empty($submission_info[$col_name])) ? $submission_info[$col_name] : "";
+  // all checks out!
+  if ($is_valid_extension)
+  {
+    // find out if there was already a file uploaded in this field. We make a note of this so that
+    // in case the new file upload is successful, we automatically delete the old file
+    $submission_info = ft_get_submission_info($form_id, $submission_id);
+    $old_filename = (!empty($submission_info[$col_name])) ? $submission_info[$col_name] : "";
 
-		// check for duplicate filenames and get a unique name
-		$unique_filename = ft_get_unique_filename($file_upload_dir, $filename);
+    // check for duplicate filenames and get a unique name
+    $unique_filename = ft_get_unique_filename($file_upload_dir, $filename);
 
-		// copy file to uploads folder and remove temporary file
-		if (rename($tmp_filename, "$file_upload_dir/$unique_filename"))
-		{
-			@chmod("$file_upload_dir/$unique_filename", 0777);
+    // copy file to uploads folder and remove temporary file
+    if (rename($tmp_filename, "$file_upload_dir/$unique_filename"))
+    {
+      @chmod("$file_upload_dir/$unique_filename", 0777);
 
-			// update the database
-			$query = "
-				UPDATE {$g_table_prefix}form_{$form_id}
-				SET    $col_name = '$unique_filename'
-				WHERE  submission_id = $submission_id
-							 ";
+      // update the database
+      $query = "
+        UPDATE {$g_table_prefix}form_{$form_id}
+        SET    $col_name = '$unique_filename'
+        WHERE  submission_id = $submission_id
+               ";
 
-			$result = mysql_query($query);
+      $result = mysql_query($query);
 
-			if ($result)
-			{
-				// if there was a file previously uploaded in this field, delete it!
-				if (!empty($old_filename))
-					@unlink("{$extended_field_info["file_upload_dir"]}/$old_filename");
+      if ($result)
+      {
+        // if there was a file previously uploaded in this field, delete it!
+        if (!empty($old_filename))
+          @unlink("{$extended_field_info["file_upload_dir"]}/$old_filename");
 
-			  return array(true, $LANG["notify_file_uploaded"], $unique_filename);
-			}
-			else
-			  return array(false, $LANG["notify_file_not_uploaded"]);
-		}
-		else
-			return array(false, $LANG["notify_file_not_uploaded"]);
-	}
+        return array(true, $LANG["notify_file_uploaded"], $unique_filename);
+      }
+      else
+        return array(false, $LANG["notify_file_not_uploaded"]);
+    }
+    else
+      return array(false, $LANG["notify_file_not_uploaded"]);
+  }
 
-	// not a valid extension. Inform the user
-	else
-		return array(false, $LANG["notify_unsupported_file_extension"]);
+  // not a valid extension. Inform the user
+  else
+    return array(false, $LANG["notify_unsupported_file_extension"]);
 }
 
 
@@ -499,31 +497,31 @@ function ft_upload_submission_file($form_id, $submission_id, $field_id, $fileinf
  */
 function ft_delete_folder($folder)
 {
-	if (is_dir($folder))
-		$handle = opendir($folder);
-	else
-		return false;
+  if (is_dir($folder))
+    $handle = opendir($folder);
+  else
+    return false;
 
   while (false !== ($file = @readdir($handle)))
   {
-		if ($file != "." && $file != "..")
-		{
-			if (!is_dir($folder . "/" . $file))
-			{
-				if (!@unlink($folder . "/" . $file))
-				  return false;
-			}
-			else
-			{
-      	@closedir($handle);
-				ft_delete_folder($folder . '/' . $file);
-			}
-		}
-	}
-	@closedir($handle);
+    if ($file != "." && $file != "..")
+    {
+      if (!is_dir($folder . "/" . $file))
+      {
+        if (!@unlink($folder . "/" . $file))
+          return false;
+      }
+      else
+      {
+        @closedir($handle);
+        ft_delete_folder($folder . '/' . $file);
+      }
+    }
+  }
+  @closedir($handle);
 
-	if (!@rmdir($folder))
-	  return false;
+  if (!@rmdir($folder))
+    return false;
 
-	return true;
+  return true;
 }

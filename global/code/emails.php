@@ -82,7 +82,7 @@ function ft_get_email_template_list($form_id)
 
   $info = array();
   while ($row = mysql_fetch_assoc($result))
-  	$info[] = $row;
+    $info[] = $row;
 
   return $info;
 }
@@ -136,40 +136,40 @@ function ft_send_test_email($info)
 
   list ($success, $email_info) = ft_get_email_components($form_id, $submission_id, $email_id, true, $info);
   if (!$success)
-  	return array(false, $email_info);
+    return array(false, $email_info);
 
   $recipient = $info["test_email_recipient"];
 
   // construct the email headers
   $eol = _ft_get_email_eol_char();
 
-	$from = "";
-	if (isset($email_info["from"]) && !empty($email_info["from"]))
-	{
-	  $from = (is_array($email_info["from"])) ? join(", ", $email_info["from"]) : $email_info["from"];
-	  $from = htmlspecialchars_decode($from);
-	}
+  $from = "";
+  if (isset($email_info["from"]) && !empty($email_info["from"]))
+  {
+    $from = (is_array($email_info["from"])) ? join(", ", $email_info["from"]) : $email_info["from"];
+    $from = htmlspecialchars_decode($from);
+  }
 
-	$reply_to = "";
-	if (isset($email_info["from"]) && !empty($email_info["from"]))
-	{
-	  $reply_to = (is_array($email_info["reply_to"])) ? join(", ", $email_info["reply_to"]) : $email_info["reply_to"];
-	  $reply_to = htmlspecialchars_decode($reply_to);
-	}
+  $reply_to = "";
+  if (isset($email_info["from"]) && !empty($email_info["from"]))
+  {
+    $reply_to = (is_array($email_info["reply_to"])) ? join(", ", $email_info["reply_to"]) : $email_info["reply_to"];
+    $reply_to = htmlspecialchars_decode($reply_to);
+  }
 
-	$cc = "";
-	if (isset($email_info["cc"]) && !empty($email_info["cc"]))
-	{
-	  $cc = (is_array($email_info["cc"])) ? join(", ", $email_info["cc"]) : $email_info["cc"];
-	  $cc = htmlspecialchars_decode($cc);
-	}
+  $cc = "";
+  if (isset($email_info["cc"]) && !empty($email_info["cc"]))
+  {
+    $cc = (is_array($email_info["cc"])) ? join(", ", $email_info["cc"]) : $email_info["cc"];
+    $cc = htmlspecialchars_decode($cc);
+  }
 
-	$bcc = "";
-	if (isset($email_info["bcc"]) && !empty($email_info["bcc"]))
-	{
-	  $bcc = (is_array($email_info["bcc"])) ? join(", ", $email_info["bcc"]) : $email_info["bcc"];
-	  $bcc = htmlspecialchars_decode($bcc);
-	}
+  $bcc = "";
+  if (isset($email_info["bcc"]) && !empty($email_info["bcc"]))
+  {
+    $bcc = (is_array($email_info["bcc"])) ? join(", ", $email_info["bcc"]) : $email_info["bcc"];
+    $bcc = htmlspecialchars_decode($bcc);
+  }
 
   $header_info = array(
     "eol" => $eol,
@@ -183,26 +183,26 @@ function ft_send_test_email($info)
   $headers = _ft_get_email_headers($header_info);
 
 
-	// stores the content for either text or HTML emails (but not both!)
-	$message = "";
+  // stores the content for either text or HTML emails (but not both!)
+  $message = "";
 
   if (!empty($email_info["html_content"]) && !empty($email_info["text_content"]))
     $headers .= _ft_get_multipart_message($email_info["html_content"], $email_info["text_content"], $eol);
   else if (!empty($email_info["text_content"]))
-	{
+  {
     $headers .= "Content-type: text/plain; charset=UTF-8";
-		$message = $email_info["text_content"];
+    $message = $email_info["text_content"];
   }
   else if (!empty($email_info["html_content"]))
-	{
+  {
     $headers .= "Content-type: text/html; charset=UTF-8";
-		$message = $email_info["html_content"];
+    $message = $email_info["html_content"];
   }
 
   $subject = $email_info["subject"];
 
   if (!@mail($recipient, $subject, $message, $headers))
-  	return array(false, $LANG["notify_test_email_not_sent"]);
+    return array(false, $LANG["notify_test_email_not_sent"]);
   else
     return array(true, $LANG["notify_your_email_sent"]);
 }
@@ -230,61 +230,61 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   // if this is a test, find out what the administrator wants
   if ($is_test)
   {
-	  $test_email_format        = $test_settings["test_email_format"];
-	  $test_email_recipient     = $test_settings["test_email_recipient"];
-	  $test_email_data_source   = $test_settings["test_email_data_source"];
-	  $test_email_submission_id = $test_settings["test_email_submission_id"];
+    $test_email_format        = $test_settings["test_email_format"];
+    $test_email_recipient     = $test_settings["test_email_recipient"];
+    $test_email_data_source   = $test_settings["test_email_data_source"];
+    $test_email_submission_id = $test_settings["test_email_submission_id"];
 
-		// get the submission ID
-	  switch ($test_email_data_source)
-	  {
-	    case "random_submission":
+    // get the submission ID
+    switch ($test_email_data_source)
+    {
+      case "random_submission":
 
-	    	// if this email template has been mapped to a View ID, get the filters
-	    	$where_clause = "";
-	    	if (!empty($email_template["view_mapping_view_id"]))
-	    	{
-	    		$sql_clauses = ft_get_view_filter_sql($email_template["view_mapping_view_id"]);
-	    		if (!empty($sql_clauses))
-	    		  $where_clause = "AND (" . join(" AND ", $sql_clauses) . ") ";
-	    	}
+        // if this email template has been mapped to a View ID, get the filters
+        $where_clause = "";
+        if (!empty($email_template["view_mapping_view_id"]))
+        {
+          $sql_clauses = ft_get_view_filter_sql($email_template["view_mapping_view_id"]);
+          if (!empty($sql_clauses))
+            $where_clause = "AND (" . join(" AND ", $sql_clauses) . ") ";
+        }
 
-	      $result = mysql_query("
-	        SELECT submission_id
-	        FROM   {$g_table_prefix}form_$form_id
-	        $where_clause
-	        ORDER BY rand() LIMIT 1
-	          ");
+        $result = mysql_query("
+          SELECT submission_id
+          FROM   {$g_table_prefix}form_$form_id
+          $where_clause
+          ORDER BY rand() LIMIT 1
+            ");
 
-	      $row = mysql_fetch_row($result);
-	      $submission_id = $row[0];
-	      break;
+        $row = mysql_fetch_row($result);
+        $submission_id = $row[0];
+        break;
 
-	    case "submission_id":
-	      $result = mysql_query("SELECT count(*) FROM {$g_table_prefix}form_$form_id WHERE submission_id=$test_email_submission_id");
-	      $row = mysql_fetch_row($result);
-	      if ($row[0] != 1)
-	        return array(false, $LANG["notify_submission_id_not_found"]);
-	      else
-	        $submission_id = $test_email_submission_id;
-	      break;
-	  }
+      case "submission_id":
+        $result = mysql_query("SELECT count(*) FROM {$g_table_prefix}form_$form_id WHERE submission_id=$test_email_submission_id");
+        $row = mysql_fetch_row($result);
+        if ($row[0] != 1)
+          return array(false, $LANG["notify_submission_id_not_found"]);
+        else
+          $submission_id = $test_email_submission_id;
+        break;
+    }
 
 
-	  // determine what templates to display
-	  switch ($test_email_format)
-	  {
-	    case "both":
-	      $templates["html"] = $email_template["html_template"];
-	      $templates["text"] = $email_template["text_template"];
-	      break;
-	    case "text":
-	      $templates["text"] = $email_template["text_template"];
-	      break;
-	    case "html":
-	      $templates["html"] = $email_template["html_template"];
-	      break;
-	  }
+    // determine what templates to display
+    switch ($test_email_format)
+    {
+      case "both":
+        $templates["html"] = $email_template["html_template"];
+        $templates["text"] = $email_template["text_template"];
+        break;
+      case "text":
+        $templates["text"] = $email_template["text_template"];
+        break;
+      case "html":
+        $templates["html"] = $email_template["html_template"];
+        break;
+    }
   }
 
 
@@ -293,19 +293,19 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   $fields_for_email_template = array();
   if (!empty($email_template["limit_email_content_to_fields_in_view"]))
   {
-  	$view_fields = ft_get_view_fields($email_template["limit_email_content_to_fields_in_view"]);
+    $view_fields = ft_get_view_fields($email_template["limit_email_content_to_fields_in_view"]);
 
-  	// here, $view_fields just contains the info from the view_fields table. We need the info from the form_fields
+    // here, $view_fields just contains the info from the view_fields table. We need the info from the form_fields
     // table instead - since it contains presentation information likely to be needed in the email templates
-  	$fields_for_email_template = array();
-  	foreach ($view_fields as $view_field_info)
-  	{
-  		$field_id = $view_field_info["field_id"];
-  		$fields_for_email_template[] = ft_get_form_field($field_id);
-  	}
+    $fields_for_email_template = array();
+    foreach ($view_fields as $view_field_info)
+    {
+      $field_id = $view_field_info["field_id"];
+      $fields_for_email_template[] = ft_get_form_field($field_id);
+    }
   }
   else
-  	$fields_for_email_template = ft_get_form_fields($form_id);
+    $fields_for_email_template = ft_get_form_fields($form_id);
 
 
   // retrieve the placeholders and their substitutes
@@ -323,9 +323,9 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 
   $theme = $g_default_theme;
 
-	$settings = ft_get_settings();
-	$default_date_format     = $settings["default_date_format"];
-	$default_timezone_offset = $settings["default_timezone_offset"];
+  $settings = ft_get_settings();
+  $default_date_format     = $settings["default_date_format"];
+  $default_timezone_offset = $settings["default_timezone_offset"];
 
 
   // add the "answer" key to $fields_for_email_template, found in the submission_info content
@@ -336,16 +336,16 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
     {
       if ($submission_field_info["field_id"] == $field_info["field_id"])
       {
-  		  switch ($submission_field_info["col_name"])
-				{
-				  case "submission_date":
-					case "last_modified_date":
+        switch ($submission_field_info["col_name"])
+        {
+          case "submission_date":
+          case "last_modified_date":
             $field_info["answer"] = ft_get_date($default_timezone_offset, $submission_field_info["content"], $default_date_format);
-					  break;
-					default:
+            break;
+          default:
             $field_info["answer"] = $submission_field_info["content"];
-					  break;
-				}
+            break;
+        }
         break;
       }
     }
@@ -400,23 +400,23 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
       $recipient_type_key = "to";
 
     if ($recipient_info["recipient_user_type"] == "user")
-		{
+    {
       $curr_recipient_info = array(
-			  "recipient_line" => $user_recipient,
-				"name"           => "$user_first_name $user_last_name",
-				"email"          => $user_email
-				  );
-		}
+        "recipient_line" => $user_recipient,
+        "name"           => "$user_first_name $user_last_name",
+        "email"          => $user_email
+          );
+    }
     else
-		{
+    {
       $curr_recipient_info = array(
-			  "recipient_line" => $recipient_info["final_recipient"],
-				"name"           => $recipient_info["final_name"],
-				"email"          => $recipient_info["final_email"]
-				  );
-	  }
+        "recipient_line" => $recipient_info["final_recipient"],
+        "name"           => $recipient_info["final_name"],
+        "email"          => $recipient_info["final_email"]
+          );
+    }
 
-	  if (!empty($curr_recipient_info["email"]))
+    if (!empty($curr_recipient_info["email"]))
       $return_info[$recipient_type_key][] = $curr_recipient_info;
   }
 
@@ -425,32 +425,32 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   {
     case "admin":
       $return_info["from"] = array(
-			  "recipient_line" => "{$admin_info["first_name"]} {$admin_info["last_name"]} &lt;{$admin_info["email"]}&gt;",
-			  "name"           => "{$admin_info["first_name"]} {$admin_info["last_name"]}",
-				"email"          => $admin_info["email"]
-				  );
+        "recipient_line" => "{$admin_info["first_name"]} {$admin_info["last_name"]} &lt;{$admin_info["email"]}&gt;",
+        "name"           => "{$admin_info["first_name"]} {$admin_info["last_name"]}",
+        "email"          => $admin_info["email"]
+          );
       break;
     case "client":
       $client_info = ft_get_account_info($email_template["email_from_account_id"]);
       $return_info["from"] = array(
-			  "recipient_line" => "{$client_info["first_name"]} {$client_info["last_name"]} &lt;{$client_info["email"]}&gt;",
-				"name"           => "{$client_info["first_name"]} {$client_info["last_name"]}",
-				"email"          => $client_info["email"]
-				  );
+        "recipient_line" => "{$client_info["first_name"]} {$client_info["last_name"]} &lt;{$client_info["email"]}&gt;",
+        "name"           => "{$client_info["first_name"]} {$client_info["last_name"]}",
+        "email"          => $client_info["email"]
+          );
       break;
     case "user":
       $return_info["from"] = array(
-			  "recipient_line" => $user_recipient,
-				"name"           => "$user_first_name $user_last_name",
-				"email"          => $user_email
-				  );
+        "recipient_line" => $user_recipient,
+        "name"           => "$user_first_name $user_last_name",
+        "email"          => $user_email
+          );
       break;
     case "custom":
       $return_info["from"] = array(
-			  "recipient_line" => "{$email_template["custom_from_name"]} &lt;{$email_template["custom_from_email"]}&gt;",
-				"name"           => $email_template["custom_from_name"],
-				"email"          => $email_template["custom_from_email"]
-				  );
+        "recipient_line" => "{$email_template["custom_from_name"]} &lt;{$email_template["custom_from_email"]}&gt;",
+        "name"           => $email_template["custom_from_name"],
+        "email"          => $email_template["custom_from_email"]
+          );
       break;
   }
 
@@ -459,32 +459,32 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   {
     case "admin":
       $return_info["reply_to"] = array(
-			  "recipient_line" => "{$admin_info["first_name"]} {$admin_info["last_name"]} &lt;{$admin_info["email"]}&gt;",
-				"name"           => "{$admin_info["first_name"]} {$admin_info["last_name"]}",
-				"email"          => $admin_info["email"]
-				  );
+        "recipient_line" => "{$admin_info["first_name"]} {$admin_info["last_name"]} &lt;{$admin_info["email"]}&gt;",
+        "name"           => "{$admin_info["first_name"]} {$admin_info["last_name"]}",
+        "email"          => $admin_info["email"]
+          );
       break;
     case "client":
       $client_info = ft_get_account_info($email_template["email_reply_to_account_id"]);
       $return_info["reply_to"] = array(
-			  "recipient_line" => "{$client_info["first_name"]} {$client_info["last_name"]} &lt;{$client_info["email"]}&gt;",
-				"name"           => "{$client_info["first_name"]} {$client_info["last_name"]}",
-				"email"          => $client_info["email"]
-				  );
+        "recipient_line" => "{$client_info["first_name"]} {$client_info["last_name"]} &lt;{$client_info["email"]}&gt;",
+        "name"           => "{$client_info["first_name"]} {$client_info["last_name"]}",
+        "email"          => $client_info["email"]
+          );
       break;
     case "user":
       $return_info["reply_to"] = array(
-			  "recipient_line" => $user_recipient,
-				"name"           => "$user_first_name $user_last_name",
-				"email"          => $user_email
-				  );
+        "recipient_line" => $user_recipient,
+        "name"           => "$user_first_name $user_last_name",
+        "email"          => $user_email
+          );
       break;
     case "custom":
       $return_info["reply_to"] = array(
-			  "recipient_line" => "{$email_template["custom_reply_to_name"]} &lt;{$email_template["custom_reply_to_email"]}&gt;",
-				"name"           => $email_template["custom_reply_to_name"],
-				"email"          => $email_template["custom_reply_to_email"]
-				  );
+        "recipient_line" => "{$email_template["custom_reply_to_name"]} &lt;{$email_template["custom_reply_to_email"]}&gt;",
+        "name"           => $email_template["custom_reply_to_name"],
+        "email"          => $email_template["custom_reply_to_email"]
+          );
       break;
   }
 
@@ -675,7 +675,7 @@ function ft_update_email_template($email_id, $info)
   mysql_query("DELETE FROM {$g_table_prefix}email_template_edit_submission_views WHERE email_id = $email_id");
   $selected_edit_submission_views = isset($info["selected_edit_submission_views"]) ? $info["selected_edit_submission_views"] : array();
   foreach ($selected_edit_submission_views as $view_id)
-  	mysql_query("INSERT INTO {$g_table_prefix}email_template_edit_submission_views (email_id, view_id) VALUES ($email_id, $view_id)");
+    mysql_query("INSERT INTO {$g_table_prefix}email_template_edit_submission_views (email_id, view_id) VALUES ($email_id, $view_id)");
 
 
   // update the recipient list
@@ -811,7 +811,7 @@ function ft_get_email_template_recipients($email_id)
  */
 function ft_get_edit_submission_email_templates($view_id)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
   // a bit complicated, but all this query does is return those templates that are specified to be
   // displayed for ALL views, or for those that have been mapped to this specific View
@@ -854,42 +854,42 @@ function ft_get_edit_submission_email_templates($view_id)
  */
 function ft_send_emails($event, $form_id, $submission_id)
 {
-	$all_form_email_templates = ft_get_email_template_list($form_id);
+  $all_form_email_templates = ft_get_email_template_list($form_id);
 
-	// filter out those templates that aren't for this event
-	$email_templates = array();
-	foreach ($all_form_email_templates as $template_info)
-	{
-		$events = split(",", $template_info["email_event_trigger"]);
+  // filter out those templates that aren't for this event
+  $email_templates = array();
+  foreach ($all_form_email_templates as $template_info)
+  {
+    $events = split(",", $template_info["email_event_trigger"]);
 
-		if (!in_array($event, $events))
-		  continue;
+    if (!in_array($event, $events))
+      continue;
 
-		if ($template_info["email_status"] == "disabled")
-		  continue;
+    if ($template_info["email_status"] == "disabled")
+      continue;
 
-		// if this email template has been mapped to a particular View, make sure the View ID is valid & that the
-		// submission can be seen in the View
-		if ($template_info["view_mapping_type"] == "specific")
-		{
-			$view_id = $template_info["view_mapping_view_id"];
+    // if this email template has been mapped to a particular View, make sure the View ID is valid & that the
+    // submission can be seen in the View
+    if ($template_info["view_mapping_type"] == "specific")
+    {
+      $view_id = $template_info["view_mapping_view_id"];
 
-			// if there's no View ID specified, there's been a problem with the input - or a View has been deleted
-			if (empty($view_id))
-			  continue;
+      // if there's no View ID specified, there's been a problem with the input - or a View has been deleted
+      if (empty($view_id))
+        continue;
 
-			if (!ft_check_view_contains_submission($form_id, $view_id, $submission_id))
-			  continue;
-		}
+      if (!ft_check_view_contains_submission($form_id, $view_id, $submission_id))
+        continue;
+    }
 
-		$email_templates[] = $template_info;
-	}
+    $email_templates[] = $template_info;
+  }
 
-	// now process each template individually
+  // now process each template individually
   foreach ($email_templates as $template_info)
   {
-  	$email_id = $template_info["email_id"];
-  	ft_process_email_template($form_id, $submission_id, $email_id);
+    $email_id = $template_info["email_id"];
+    ft_process_email_template($form_id, $submission_id, $email_id);
   }
 }
 
@@ -910,58 +910,58 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
     return false;
 
   // if Swift Mailer is enabled, send the emails with that
-	$continue = true;
+  $continue = true;
   if (ft_check_module_enabled("swift_mailer"))
   {
-	  $sm_settings = ft_get_module_settings("", "swift_mailer");
+    $sm_settings = ft_get_module_settings("", "swift_mailer");
 
-  	if ($sm_settings["swiftmailer_enabled"] == "yes")
-  	{
-  		ft_include_module("swift_mailer");
-	    swift_send_email($email_components);
-			$continue = false;
-  	}
+    if ($sm_settings["swiftmailer_enabled"] == "yes")
+    {
+      ft_include_module("swift_mailer");
+      swift_send_email($email_components);
+      $continue = false;
+    }
   }
 
-	if (!$continue)
-	  return;
+  if (!$continue)
+    return;
 
   $eol = _ft_get_email_eol_char();
 
-	$recipient_list = array();
-	foreach ($email_components["to"] as $to_info)
-	  $recipient_list[] = $to_info["recipient_line"];
+  $recipient_list = array();
+  foreach ($email_components["to"] as $to_info)
+    $recipient_list[] = $to_info["recipient_line"];
   $to = join(", ", $recipient_list);
-	$to = htmlspecialchars_decode($to);
+  $to = htmlspecialchars_decode($to);
 
   $headers = "MIME-Version: 1.0$eol";
 
   if (!empty($email_components["from"]))
-	{
-  	$from = htmlspecialchars_decode($email_components["from"]["recipient_line"]);
+  {
+    $from = htmlspecialchars_decode($email_components["from"]["recipient_line"]);
     $headers .= "From: {$from}$eol";
   }
   if (!empty($email_components["reply_to"]))
-	{
-  	$reply_to = htmlspecialchars_decode($email_components["reply_to"]["recipient_line"]);
+  {
+    $reply_to = htmlspecialchars_decode($email_components["reply_to"]["recipient_line"]);
     $headers .= "Reply-to: {$reply_to}$eol";
   }
   if (!empty($email_components["cc"]))
   {
-  	$cc_list = array();
-  	foreach ($email_components["cc"] as $cc_info)
-  	  $cc_list[] = $cc_info["recipient_line"];
+    $cc_list = array();
+    foreach ($email_components["cc"] as $cc_info)
+      $cc_list[] = $cc_info["recipient_line"];
     $cc = join(", ", $cc_list);
-  	$cc = htmlspecialchars_decode($cc);
+    $cc = htmlspecialchars_decode($cc);
     $headers .= "Cc: {$cc}$eol";
   }
   if (!empty($email_components["bcc"]))
   {
-  	$bcc_list = array();
-  	foreach ($email_components["bcc"] as $bcc_info)
-  	  $bcc_list[] = $bcc_info["recipient_line"];
+    $bcc_list = array();
+    foreach ($email_components["bcc"] as $bcc_info)
+      $bcc_list[] = $bcc_info["recipient_line"];
     $bcc = join(", ", $bcc_list);
-  	$bcc = htmlspecialchars_decode($bcc);
+    $bcc = htmlspecialchars_decode($bcc);
     $headers .= "Bcc: {$bcc}$eol";
   }
 
@@ -1052,7 +1052,7 @@ function _ft_get_placeholder_hash($form_id, $submission_id, $client_info = "")
 
     if ($field_type == "file")
     {
-		  $extended_settings = ft_get_extended_field_settings($field_id, "core");
+      $extended_settings = ft_get_extended_field_settings($field_id, "core");
       $placeholders["FILENAME_$field_name"] = $field["content"];
       $placeholders["FILEURL_$field_name"]  = "{$extended_settings["file_upload_url"]}/{$field["content"]}";
     }
@@ -1077,10 +1077,10 @@ function _ft_get_placeholder_hash($form_id, $submission_id, $client_info = "")
 
   if (!empty($client_info))
   {
-  	$placeholders["EMAIL"]       = $client_info["email"];
-  	$placeholders["FIRSTNAME"]   = $client_info["first_name"];
-  	$placeholders["LASTNAME"]    = $client_info["last_name"];
-  	$placeholders["COMPANYNAME"] = $client_info["company_name"];
+    $placeholders["EMAIL"]       = $client_info["email"];
+    $placeholders["FIRSTNAME"]   = $client_info["first_name"];
+    $placeholders["LASTNAME"]    = $client_info["last_name"];
+    $placeholders["COMPANYNAME"] = $client_info["company_name"];
   }
 
   return $placeholders;
@@ -1204,54 +1204,54 @@ function ft_create_blank_email_template($form_id, $create_email_from_email_id = 
 
   if (empty($create_email_from_email_id))
   {
-	  mysql_query("
-	    INSERT {$g_table_prefix}email_templates (form_id, email_status, email_event_trigger)
-	    VALUES ($form_id, 'enabled', 'on_submission')
-	      ");
-	  $email_id = mysql_insert_id();
+    mysql_query("
+      INSERT {$g_table_prefix}email_templates (form_id, email_status, email_event_trigger)
+      VALUES ($form_id, 'enabled', 'on_submission')
+        ");
+    $email_id = mysql_insert_id();
   }
   else
   {
-  	$email_template_info = ft_get_email_template($create_email_from_email_id);
+    $email_template_info = ft_get_email_template($create_email_from_email_id);
 
-  	// WISHLIST: be nice to have a generic "copy_table_row" function...
-  	$query = mysql_query("
-	  	INSERT INTO {$g_table_prefix}email_templates (form_id, email_template_name, email_status,
-	  	  view_mapping_type, view_mapping_view_id, email_event_trigger, include_on_edit_submission_page,
-	  	  subject, email_from, email_from_account_id, custom_from_name, custom_from_email, email_reply_to,
-	  	  email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email, html_template, text_template)
-	  	  (SELECT form_id, email_template_name, email_status,
-		  	   view_mapping_type, view_mapping_view_id, email_event_trigger, include_on_edit_submission_page,
-		  	   subject, email_from, email_from_account_id, custom_from_name, custom_from_email, email_reply_to,
-		  	   email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email, html_template, text_template
-	  	   FROM {$g_table_prefix}email_templates WHERE email_id = $create_email_from_email_id)
-  	");
+    // WISHLIST: be nice to have a generic "copy_table_row" function...
+    $query = mysql_query("
+      INSERT INTO {$g_table_prefix}email_templates (form_id, email_template_name, email_status,
+        view_mapping_type, view_mapping_view_id, email_event_trigger, include_on_edit_submission_page,
+        subject, email_from, email_from_account_id, custom_from_name, custom_from_email, email_reply_to,
+        email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email, html_template, text_template)
+        (SELECT form_id, email_template_name, email_status,
+           view_mapping_type, view_mapping_view_id, email_event_trigger, include_on_edit_submission_page,
+           subject, email_from, email_from_account_id, custom_from_name, custom_from_email, email_reply_to,
+           email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email, html_template, text_template
+         FROM {$g_table_prefix}email_templates WHERE email_id = $create_email_from_email_id)
+    ");
     $email_id = mysql_insert_id();
 
     foreach ($email_template_info["recipients"] as $recipient)
     {
-    	$recipient = ft_sanitize($recipient);
+      $recipient = ft_sanitize($recipient);
 
-    	$recipient_user_type    = $recipient["recipient_user_type"];
-    	$recipient_type         = $recipient["recipient_type"];
-    	$account_id             = !empty($recipient["account_id"]) ? $recipient["account_id"] : "NULL";
-    	$custom_recipient_name  = $recipient["custom_recipient_name"];
-    	$custom_recipient_email = $recipient["custom_recipient_email"];
+      $recipient_user_type    = $recipient["recipient_user_type"];
+      $recipient_type         = $recipient["recipient_type"];
+      $account_id             = !empty($recipient["account_id"]) ? $recipient["account_id"] : "NULL";
+      $custom_recipient_name  = $recipient["custom_recipient_name"];
+      $custom_recipient_email = $recipient["custom_recipient_email"];
 
-    	mysql_query("
-    	  INSERT INTO {$g_table_prefix}email_template_recipients (email_template_id, recipient_user_type,
-    	    recipient_type, account_id, custom_recipient_name, custom_recipient_email)
-    	  VALUES ($email_id, '$recipient_user_type', '$recipient_type', $account_id, '$custom_recipient_name',
-    	    '$custom_recipient_email')
-    	    ") or die(mysql_error());
+      mysql_query("
+        INSERT INTO {$g_table_prefix}email_template_recipients (email_template_id, recipient_user_type,
+          recipient_type, account_id, custom_recipient_name, custom_recipient_email)
+        VALUES ($email_id, '$recipient_user_type', '$recipient_type', $account_id, '$custom_recipient_name',
+          '$custom_recipient_email')
+          ") or die(mysql_error());
     }
 
     foreach ($email_template_info["edit_submission_page_view_ids"] as $view_id)
     {
-    	mysql_query("
-    	  INSERT INTO {$g_table_prefix}email_template_edit_submission_views (email_id, view_id)
-    	  VALUES ($email_id, $view_id)
-    	    ");
+      mysql_query("
+        INSERT INTO {$g_table_prefix}email_template_edit_submission_views (email_id, view_id)
+        VALUES ($email_id, $view_id)
+          ");
     }
   }
 
@@ -1276,12 +1276,12 @@ function ft_delete_email_template($email_id)
   mysql_query("
     DELETE FROM {$g_table_prefix}email_templates
     WHERE email_id = $email_id
-		  ");
+      ");
 
   mysql_query("
     DELETE FROM {$g_table_prefix}email_template_recipients
     WHERE email_template_id = $email_id
-		  ");
+      ");
 
   return array(true, $LANG["notify_email_template_deleted"]);
 }
