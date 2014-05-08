@@ -2,7 +2,7 @@
  * rsv.js - Really Simple Validation
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *
- * v2.5, May 15 2008 - http://www.benjaminkeen.com/software/rsv
+ * v2.5.1, Nov 14 2008
  */
 
 if(typeof rsv=='undefined') rsv={};
@@ -14,7 +14,7 @@ rsv.errorTextIntro="Please fix the following error(s) and resubmit:";
 rsv.errorJSItemBullet="* ";
 rsv.errorHTMLItemBullet="&bull; ";
 rsv.errorTargetElementId="ft_message";
-rsv.customErrorHandler=g_rsvErrors;
+rsv.customErrorHandler=(typeof g_rsvErrors != 'undefined') ? g_rsvErrors : null;
 rsv.onCompleteHandler=null;
 
 // ~~~~~~~~~~~~~~~~~~~~~~~
@@ -276,7 +276,7 @@ rsv.validate = function(form, rules)
         break;
 
       case "reg_exp":
-        var reg_exp_str = fieldName2;
+        var reg_exp_str = fieldName2.replace(/%%C%%/ig, ",");
 
         if (row.length == 5)
           var reg_exp = new RegExp(reg_exp_str, fieldName3);
