@@ -13,7 +13,7 @@ http://translations.formtools.org/
 
 $LANG = array();
 
-// Special (non-editable)
+// Category: Special
 $LANG["special_form_tools"] = "Form Tools";
 $LANG["special_form_tools_c"] = "Form Tools:";
 $LANG["special_language"] = "English";
@@ -21,7 +21,7 @@ $LANG["special_language_locale"] = "English (US)";
 $LANG["special_text_direction"] = "ltr";
 
 
-// Words
+// Category: Words
 $LANG["word_about"] = "About";
 $LANG["word_accept"] = "Accept";
 $LANG["word_access"] = "Access";
@@ -250,7 +250,7 @@ $LANG["word_wysiwyg"] = "WYSIWYG";
 $LANG["word_yes"] = "Yes";
 
 
-// Phrases
+// Category: Phrases
 $LANG["phrase_1_direct"] = "1. Direct";
 $LANG["phrase_2_code"] = "2. Code";
 $LANG["phrase_accepting_submissions"] = "(accepting submissions)";
@@ -301,7 +301,7 @@ $LANG["phrase_auto_generate_db_col_names"] = "Auto-generate database column name
 $LANG["phrase_available_clients"] = "Available Clients";
 $LANG["phrase_available_views"] = "Available Views";
 $LANG["phrase_awaiting_form_submission"] = "Awaiting form submission.";
-$LANG["phrase_back_to_edit_view"] = "<< Back to Edit View";
+$LANG["phrase_back_to_edit_view"] = "&laquo; Back to Edit View";
 $LANG["phrase_back_to_field_list"] = "&laquo; back to field list";
 $LANG["phrase_back_to_search_results"] = "back to search results";
 $LANG["phrase_beta_version"] = "Beta Version: {\$version}";
@@ -310,8 +310,8 @@ $LANG["phrase_change_email_settings"] = "May change email settings";
 $LANG["phrase_change_login_info"] = "Change Login Information";
 $LANG["phrase_change_password"] = "Change Password";
 $LANG["phrase_check_db_settings_try_again"] = "Please double-check your database settings and click the Continue button again.";
-$LANG["phrase_check_latest_version"] = "check latest version";
 $LANG["phrase_check_for_updates"] = "Check for Updates";
+$LANG["phrase_check_latest_version"] = "check latest version";
 $LANG["phrase_checklist_1"] = "1. Checklist";
 $LANG["phrase_clean_up"] = "Clean Up";
 $LANG["phrase_clear_omit_list"] = "Clear Omit List";
@@ -532,7 +532,7 @@ $LANG["phrase_new_view"] = "New View";
 $LANG["phrase_next_field"] = "next field &raquo;";
 $LANG["phrase_next_view"] = "next View &raquo;";
 $LANG["phrase_no_clients"] = "No clients";
-$LANG["phrase_no_files_uploaded"] = "No files has been uploaded through your form fields.";
+$LANG["phrase_no_files_uploaded"] = "No files have been uploaded through your form fields.";
 $LANG["phrase_no_forms"] = "No forms";
 $LANG["phrase_no_offset"] = "No offset";
 $LANG["phrase_no_views"] = "No Views";
@@ -709,7 +709,7 @@ $LANG["phrase_your_email_address"] = "Your email address";
 $LANG["phrase_your_name"] = "Your Name";
 
 
-// Text strings
+// Category: Text
 $LANG["text_account_settings_page"] = "All new client accounts will be created with the settings and permissions defined below. To override a setting for a particular client, edit the client account and visit their Settings tab.";
 $LANG["text_add_form_code_submission_benefits"] = "This method uses the <a href=\"http://docs.formtools.org/api/\" target=\"_blank\">Form Tools API</a>, included in the main Form Tools script. The API provides a number of helpful functions to make the job of integrating your form with Form Tools as simple as possible. There are no restrictions to how your form may be submitted when you use the API. You can submit the content in one go, or page by page; you can add your own custom server-side validation, CAPTCHA images; you can choose to submit the information now, but only tell it to display the submission in the Form Tools UI at a later date (see the <a href=\"\">Finalized Submissions</a> section in the API help documentation).";
 $LANG["text_add_form_code_submission_drawbacks"] = "For non-technical and novice Form Tools users, this method can be a little intimidating at first. But there's plenty of documentation to help you out, including two simple tutorials for integrating your single- and multi-page forms (just click the Select button).";
@@ -740,10 +740,10 @@ $LANG["text_add_form_step_5_para_5"] = "If the submission was sent via the API, 
 $LANG["text_admin_email_placeholder_info"] = "This is the email address of the Form Tools administrator, defined in your account settings. This only outputs the email address, so if you wish to use as an HTML link, you will need to wrap it in an &lt;a&gt; tag, like so:<br /><b>&lt;a href=\"mailto:{\$ADMINEMAIL}\"&gt;{\$ADMINEMAIL}&lt;/a&gt;</b>";
 $LANG["text_also_default_login_page_theme"] = "(Also the default login page theme)";
 $LANG["text_client_form_page"] = "This page lists all the forms and Views assigned to this client. Tip: in order for them to see a form's submissions, they need to be assigned to at least one View.";
-$LANG["text_client_no_forms"] = "You currently have no forms available for review.";
 $LANG["text_client_map_filters_desc1"] = "Client Map filters let you limit the submissions that appear in this View by mapping the values in a form field to the values in a client account.";
 $LANG["text_client_map_filters_desc2"] = "To add new client fields, use the <a href=\"../../modules/extended_client_fields/\">Extended Client Fields</a> module.";
 $LANG["text_client_map_filters_desc3"] = "To add new client fields, download the <a href=\"http://modules.formtools.org/extended_client_fields/\">Extended Client Fields</a> module.";
+$LANG["text_client_no_forms"] = "You currently have no forms available for review.";
 $LANG["text_client_welcome"] = "Welcome! This program stores all information submitted by your website visitors. To view submissions for a particular form just click on the <b>VIEW</b> link, or see the leftmost navigation menu for other options.";
 $LANG["text_company_name"] = "The client's company name, or the value of the Program Name setting for the administrator.";
 $LANG["text_config_file_created"] = "Your config.php file has been created.";
@@ -840,7 +840,7 @@ $LANG["text_user_account_placeholders_explanation"] = "These placeholders only e
 $LANG["text_view_tab_summary"] = "This tab lets you create different ways to group and arrange your data, called \"Views\". Views can be used for reporting purposes to show subsets of your form information or to limit what clients may see or edit.";
 
 
-// Validation
+// Category: Validation
 $LANG["validation_account_disabled"] = "Sorry, your account has been disabled.";
 $LANG["validation_account_not_recognized"] = "Sorry, that username is not recognized.";
 $LANG["validation_account_not_recognized_info"] = "Sorry, that username was not found. Please try again, or contact the site administrator at the address below.";
@@ -880,12 +880,12 @@ $LANG["validation_invalid_num_modules_per_page"] = "Please only enter numbers in
 $LANG["validation_invalid_num_submissions_per_page"] = "Please enter a valid number of submissions per page.";
 $LANG["validation_invalid_num_submissions_per_page_field"] = "The number of submissions per page field must be a number only.";
 $LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";
-$LANG["validation_invalid_password"] = "Your password may only consist of alphanumeric and underscore characters (a-Z\\\, 0-9 and _).";
+$LANG["validation_invalid_password"] = "Your password may only consist of alphanumeric and underscore characters (a-Z 0-9 and _).";
 $LANG["validation_invalid_sessions_timeout"] = "Please enter a valid session timeout (integers only!).";
 $LANG["validation_invalid_tab_assign_values"] = "Please only enter numbers in the 'from' and 'to' fields.";
 $LANG["validation_invalid_upload_folder"] = "Your server's installation of PHP has an invalid setting for the <b>upload_tmp_dir</b> value. \"{\$upload_folder}\" is not a valid folder.";
-$LANG["validation_invalid_username"] = "Your username may only consist of alphanumeric characters (a-Z and 0-9).";
 $LANG["validation_invalid_url"] = "Please enter a valid URL.";
+$LANG["validation_invalid_username"] = "Your username may only consist of alphanumeric characters (a-Z and 0-9).";
 $LANG["validation_is_form_active"] = "Please indicate whether the form is active or not.";
 $LANG["validation_menu_name_taken"] = "Sorry, this menu name is already taken. Please choose a new name.";
 $LANG["validation_no_access_type"] = "Please enter the access type.";
@@ -986,7 +986,7 @@ $LANG["validation_username_taken"] = "Sorry, that username is already taken. Ple
 $LANG["validation_wrong_password"] = "Sorry, that password does not match.";
 
 
-// Confirmations
+// Category: Confirmations
 $LANG["confirm_delete_email_template"] = "Are you sure you want to delete this email template?";
 $LANG["confirm_delete_field_option_group"] = "Are you sure you want to delete this field option group?";
 $LANG["confirm_delete_menu"] = "Are you sure you want to delete this client menu?";
@@ -1000,7 +1000,7 @@ $LANG["confirm_smart_fill_display_names"] = "Are you sure you want to Smart Fill
 $LANG["confirm_uninstall_module"] = "Are you sure you want to uninstall this module? All module data will be lost.";
 
 
-// Notifications
+// Category: Notifications
 $LANG["notify_account_deleted"] = "The user account has been deleted.";
 $LANG["notify_account_updated"] = "Your account has been successfully updated.";
 $LANG["notify_add_display_values"] = "Add Display Values";
@@ -1112,8 +1112,8 @@ $LANG["notify_submissions_and_files_deleted"] = "The submissions and any file(s)
 $LANG["notify_submissions_deleted"] = "The submissions were deleted successfully.";
 $LANG["notify_submissions_deleted_with_problems"] = "The submissions were deleted, but the following problems were encountered when attempting to delete the following file(s):";
 $LANG["notify_test_email_not_sent"] = "Your test email could not be sent.";
-$LANG["notify_theme_list_updated"] = "The theme list has been updated.";
 $LANG["notify_theme_cache_folder_not_writable"] = "This theme's cache folder is not writable. In order to enable this theme, the <b>{\$folder}</b> folder needs to have full read-write permissions.";
+$LANG["notify_theme_list_updated"] = "The theme list has been updated.";
 $LANG["notify_themes_settings_updated"] = "Your theme settings have been updated.";
 $LANG["notify_unsupported_file_extension"] = "This file has an unsupported file extension.";
 $LANG["notify_view_deleted"] = "The View has been deleted.";
@@ -1122,7 +1122,7 @@ $LANG["notify_wysiwyg_settings_updated"] = "The WYSIWYG settings have been updat
 $LANG["notify_your_email_sent"] = "Your email has been successfully sent.";
 
 
-// Dates
+// Category: Dates
 $LANG["date_AM"] = "AM";
 $LANG["date_Fri"] = "Fri";
 $LANG["date_Friday"] = "Friday";
@@ -1167,17 +1167,17 @@ $LANG["date_month_short_Sep"] = "Sep";
 $LANG["date_pm"] = "pm";
 
 
-// Processing
+// Category: Processing
 $LANG["processing_form_disabled"] = "Sorry, this form has been disabled.";
 $LANG["processing_form_incomplete"] = "Sorry, this form does not appear to be fully set up from within Form Tools. The most likely cause of this problem is that you removed the \"form_tools_initialize_form\" hidden form field, but didn't complete all the steps of the \"Add Form\" process.<br><br>Please log in and review the form configuration.";
-$LANG["processing_no_form_url_for_recaptcha"] = "Form Tools is unable to determine where to redirect when they fail to enter the CAPTCHA properly. Please pass in a hidden field with the name <b>form_tools_form_url</b> containing the URL of the form.";
 $LANG["processing_init_complete"] = "Thank you! Your test submission has been put through successfully. Please return to the Form Tools Administration panel and click the \"Refresh\" button at the bottom of the Add Form Step 3 page to finish setting up your form.";
 $LANG["processing_no_form_id"] = "process.php requires a form ID for processing. Make sure your form contains a hidden field with the name \"form_tools_form_id\" that's passing along the form ID.";
+$LANG["processing_no_form_url_for_recaptcha"] = "Form Tools is unable to determine where to redirect when they fail to enter the CAPTCHA properly. Please pass in a hidden field with the name <b>form_tools_form_url</b> containing the URL of the form.";
 $LANG["processing_no_post_vars"] = "process.php is not receiving any data. Note: this script cannot be loaded directly in your browser.<br />Make sure your form is sending via POST.";
 $LANG["processing_no_redirect_url"] = "The submission was processed correctly, but you haven't specified a redirect URL for this form! Edit your form in the Form Tools UI and add the redirect URL.";
 
 
-// API
+// Category: API
 $LANG["api_notify_export_manager_not_installed"] = "Sorry, the Export Manager module needs to be installed and enabled in order for you to use this API function.";
 $LANG["api_notify_export_type_not_found"] = "Sorry, that export type ID is not found.";
 $LANG["api_notify_form_not_found"] = "Sorry, that form ID is not found.";

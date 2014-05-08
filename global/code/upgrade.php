@@ -1,11 +1,9 @@
 <?php
 
 /**
- * This file contains all code relating to upgrading Form Tools. Note: Form Tools 2 can only be upgraded
- * directly from Form Tools 1.5.0 and 1.5.1. All other version need to upgrade to one of those versions
- * first.
+ * This file contains all code relating to upgrading Form Tools.
  *
- * @copyright Encore Web Studios 2008
+ * @copyright Encore Web Studios 2009
  * @author Encore Web Studios <formtools@encorewebstudios.com>
  * @package 2-0-0
  * @subpackage Upgrade

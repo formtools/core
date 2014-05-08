@@ -38,7 +38,7 @@ Event.observe(document, 'dom:loaded',
   {
     add_fields_ns.add_fields("$num_fields");
     add_fields_ns.toggle_db_column_fields($('auto_generate_col_names').checked);
-  });";
+  });
 EOF;
 
 ft_display_page("admin/forms/edit.tpl", $page_vars);
