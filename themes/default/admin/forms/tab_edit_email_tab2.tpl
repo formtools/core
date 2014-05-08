@@ -49,38 +49,32 @@
                       </td>
                       <td><input type="button" value="ADD" onclick="emails_ns.add_recipient(this.form)" /></td>
                     </tr>
-                    </table>
+                     </table>
 
                     <div id="custom_recipients" class="box" style="display:none;margin-top: 2px;">
-                      <table cellspacing="0">
+                      <table>
                       <tr>
-                        <td>
-                          <table cellspacing="0">
-                          <tr>
-                            <td></td>
-                            <td class="pad_right">{$LANG.word_name}</td>
-                            <td><input type="text" id="custom_recipient_name" style="width:200px" /></td>
-                          </tr>
-                          <tr>
-                            <td class="red">*</td>
-                            <td class="pad_right">{$LANG.word_email}</td>
-                            <td><input type="text" id="custom_recipient_email" style="width:200px" /></td>
-                          </tr>
-                          <tr>
-                            <td class="red">*</td>
-                            <td class="pad_right">{$LANG.phrase_recipient_type}</td>
-                            <td>
-                              <select id="custom_recipient_type">
-                                <option value="">{$LANG.word_main|lower}</option>
-                                <option value="cc">cc</option>
-                                <option value="bcc">bcc</option>
-                              </select>
-                            </td>
-                          </tr>
-                          </table>
-                        </td>
-                        <td>
+                        <td></td>
+                        <td class="pad_right">{$LANG.word_name}</td>
+                        <td><input type="text" id="custom_recipient_name" style="width:200px" /></td>
+                        <td rowspan="3">
                           <input type="button" value="ADD" onclick="emails_ns.add_custom_recipient(this.form)" />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="red">*</td>
+                        <td class="pad_right">{$LANG.word_email}</td>
+                        <td><input type="text" id="custom_recipient_email" style="width:200px" /></td>
+                      </tr>
+                      <tr>
+                        <td class="red">*</td>
+                        <td class="pad_right">{$LANG.phrase_recipient_type}</td>
+                        <td>
+                          <select id="custom_recipient_type">
+                            <option value="">{$LANG.word_main|lower}</option>
+                            <option value="cc">cc</option>
+                            <option value="bcc">bcc</option>
+                          </select>
                         </td>
                       </tr>
                       </table>

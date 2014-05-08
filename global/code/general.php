@@ -485,9 +485,8 @@ function ft_check_client_may_view($client_id, $form_id, $view_id)
   global $g_root_url;
   $boot_out_user = false;
 
-  //$search = ft_search_forms($client_id);
+  $search = ft_search_forms($client_id);
 
-  // $permissions = ft_get_client_form_views($account_info["account_id"]);
   $permissions = $_SESSION["ft"]["permissions"];
 
   extract(ft_process_hooks("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);

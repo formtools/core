@@ -140,8 +140,9 @@ $g_query_str_multi_val_separator = ",";
 $g_delete_module_folder_on_uninstallation = true;
 
 /**
- * This setting lets you control the type of sessions the application uses. The default value is "database",
- * but you can change it to "php" if you'd prefer to use PHP sessions. This applies to all users of the program.
+ * This setting lets you control the type of sessions the application uses. The default value is "php",
+ * but you can change it to "database" if you're running Form Tools on a database cluster or have some
+ * other reason to want to use database sessions. This applies to all users of the program.
  * @global string $g_session_type
  */
 $g_session_type = "php"; // "php" or "database"
@@ -177,12 +178,6 @@ $g_api_recaptcha_private_key = "";
  */
 $g_api_header_charset = "utf-8";
 
-/**
- * The default sessions timeout for the API. Default is 1 hour (3600 seconds)
- */
-$g_api_sessions_timeout = 3600;
-
-
 // -------------------------------------------------------------------------------------------------
 
 // SECTION 2: the settings below should NOT be overwritten
@@ -190,7 +185,7 @@ $g_api_sessions_timeout = 3600;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.0-beta-20090923";
+$g_current_version = "2.0.0-beta-20090826";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.
