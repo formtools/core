@@ -423,6 +423,7 @@ ms._update_select_all_button = function(flag)
  *
  * @param field_id
  * @param file_type "file" or "image"
+ * @param force_delete
  */
 ms.delete_submission_file = function(field_id, file_type, force_delete)
 {

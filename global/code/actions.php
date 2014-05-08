@@ -10,7 +10,7 @@
 // -------------------------------------------------------------------------------------------------
 
 require_once("../session_start.php");
-ft_check_permission("client");
+ft_check_permission("user");
 
 
 // the action to take and the ID of the page where it will be displayed (allows for

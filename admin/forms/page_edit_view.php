@@ -191,7 +191,7 @@ $page_vars["head_string"] = "
   <script type=\"text/javascript\" src=\"{$g_root_url}//global/jscalendar/calendar-setup.js\"></script>
   <script type=\"text/javascript\" src=\"{$g_root_url}/global/jscalendar/lang/calendar-en.js\"></script>";
 
-$replacements = array("user_doc_link" => "http://docs.formtools.org/userdoc/index.php?page=clients#submission_filters"); // TODO
+$replacements = array("user_doc_link" => "http://docs.formtools.org/userdoc/index.php?page=view_filters");
 $page_vars["text_filters_tips"] = ft_eval_smarty_string($LANG["text_filters_tips"], $replacements);
 $replacements = array("number" => "<input type=\"text\" name=\"num_filter_rows\" id=\"num_filter_rows\" value=\"1\" size=\"2\" />");
 $page_vars["add_num_rows_input_field"] = ft_eval_smarty_string($LANG["phrase_add_num_rows"], $replacements);

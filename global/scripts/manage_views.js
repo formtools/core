@@ -513,7 +513,7 @@ view_ns.add_filters = function(num_rows)
     td5.className = "del"; // for IE
     var delete_link = document.createElement("a");
     delete_link.setAttribute("href", "#");
-    delete_link.onclick = function (evt) { view_ns.delete_row(currRow); };
+    delete_link.onclick = function (evt) { view_ns.delete_filter_row(currRow); };
     delete_link.appendChild(document.createTextNode(g.messages["word_remove"].toUpperCase()));
     td5.appendChild(delete_link);
 

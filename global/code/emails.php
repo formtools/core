@@ -743,7 +743,7 @@ function ft_update_form_email_settings($form_id, $infohash)
  */
 function ft_update_email_template($email_id, $info)
 {
-  global $g_table_prefix;
+  global $g_table_prefix, $LANG;
 
   $info = ft_sanitize($info);
 
@@ -1061,7 +1061,7 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
   {
     $sm_settings = ft_get_module_settings("", "swift_mailer");
 
-    if ($sm_settings["swiftmailer_enabled"] == "yes")
+    if (isset($sm_settings["swiftmailer_enabled"]) && $sm_settings["swiftmailer_enabled"] == "yes")
     {
       ft_include_module("swift_mailer");
       swift_send_email($email_components);
@@ -1112,9 +1112,14 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
   }
 
   $message = "";
-  $html_content = trim($email_components["html_content"]);
-  $text_content = trim($email_components["text_content"]);
+  $html_content = isset($email_components["html_content"]) ? $email_components["html_content"] : "";
+  $text_content = isset($email_components["text_content"]) ? $email_components["text_content"] : "";
+  $html_content = trim($html_content);
+  $text_content = trim($text_content);
 
+  // if there's no TO line or there's no email content for either types, we can't send the email
+  if (empty($to) || (empty($html_content) && empty($text_content)))
+    return false;
 
   if (!empty($html_content) && !empty($text_content))
     $headers .= _ft_get_multipart_message($html_content, $text_content, $eol);

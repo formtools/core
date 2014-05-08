@@ -303,7 +303,6 @@ $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) V
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('tinymce_toolbar', 'simple', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('tinymce_toolbar_align', 'left', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('tinymce_toolbar_location', 'top', 'core')";
-$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('num_pages_per_page', '10', 'pages')";
 
 $g_sql[] = "CREATE TABLE %PREFIX%themes (
   theme_id mediumint(8) unsigned NOT NULL auto_increment,

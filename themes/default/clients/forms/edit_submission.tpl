@@ -74,6 +74,8 @@
               {/if}
             </span>
 
+            <span id="file_field_{$field_id}_message_id"></span>
+
           {elseif $submission_field.field_type == "image"}
 
             {module_function name="display_image" type="main_thumb" extended_field_info=$image_field_info[$field_id] field_id=$field_id

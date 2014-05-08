@@ -788,7 +788,7 @@ $LANG["phrase_show_path_information"] = "Show Path Information";
 $LANG["phrase_size_large"] = "Large (TEXT)";
 $LANG["phrase_size_medium"] = "Medium (<=256 chars)";
 $LANG["phrase_size_small"] = "Small (<=20 chars)";
-$LANG["phrase_size_tiny"] = "Tiny (<5 chars)";
+$LANG["phrase_size_tiny"] = "Tiny (<=5 chars)";
 $LANG["phrase_size_very_large"] = "Very Large (MEDIUMTEXT)";
 $LANG["phrase_skip_field"] = "Skip Field";
 $LANG["phrase_skip_step"] = "Skip Step";
