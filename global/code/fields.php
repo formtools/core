@@ -272,30 +272,51 @@ function ft_delete_form_fields($infohash, $form_id)
 
 
 /**
- * Helper function to return a field's database column name, based on it's form field name.
+ * Helper function to return a field's database column name, based on its form field name.
  *
  * @param integer $form_id
- * @param string $field_name
- * @return string the database column name or empty string if not found
+ * @param string $field_name_or_names this can be a single field name or an array of field names
+ * @return string the database column name, empty string if not found or an array of database column
+ *     names if the $field_name_or_names was an array of field names
  */
-function ft_get_field_col_by_field_name($form_id, $field_name)
+function ft_get_field_col_by_field_name($form_id, $field_name_or_names)
 {
   global $g_table_prefix;
 
-  $form_id    = ft_sanitize($form_id);
-  $field_name = ft_sanitize($field_name);
+  $form_id             = ft_sanitize($form_id);
+  $field_name_or_names = ft_sanitize($field_name_or_names);
 
-  $query = mysql_query("
-    SELECT col_name
-    FROM   {$g_table_prefix}form_fields
-    WHERE  form_id = $form_id AND
-           field_name = '$field_name'
-    ");
-  $result = mysql_fetch_assoc($query);
+  $return_info = "";
 
-  $col_name = (isset($result["col_name"])) ? $result["col_name"] : "";
+  if (is_array($field_name_or_names))
+  {
+    $return_info = array();
+    foreach ($field_name_or_names as $field_name)
+    {
+      $query = mysql_query("
+        SELECT col_name
+        FROM   {$g_table_prefix}form_fields
+        WHERE  form_id = $form_id AND
+               field_name = '$field_name'
+        ");
+      $result = mysql_fetch_assoc($query);
+      $return_info[] = (isset($result["col_name"])) ? $result["col_name"] : "";
+    }
+  }
+  else
+  {
+    $query = mysql_query("
+      SELECT col_name
+      FROM   {$g_table_prefix}form_fields
+      WHERE  form_id = $form_id AND
+             field_name = '$field_name'
+      ");
+    $result = mysql_fetch_assoc($query);
 
-  return $col_name;
+    $return_info = (isset($result["col_name"])) ? $result["col_name"] : "";
+  }
+
+  return $return_info;
 }
 
 

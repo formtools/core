@@ -138,9 +138,9 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 
   extract(ft_process_hooks("end", compact("form_id", "view_id", "submission_id", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
 
-	// update sessions
-	if (isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) && in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]))
-	  array_splice($_SESSION["ft"]["form_{$form_id}_selected_submissions"], array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]), 1);
+  // update sessions
+  if (isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) && in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]))
+    array_splice($_SESSION["ft"]["form_{$form_id}_selected_submissions"], array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]), 1);
 
   return array($success, $message);
 }
@@ -464,27 +464,27 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
     $return_arr[] = $field_info;
   }
 
-	// finally, if a View is specified, ensure that the order in which the submission fields are returned
-	// is determined by the View. [NOT efficient!]
-	if (!empty($view_id))
-	{
-	  $ordered_return_arr = array();
+  // finally, if a View is specified, ensure that the order in which the submission fields are returned
+  // is determined by the View. [NOT efficient!]
+  if (!empty($view_id))
+  {
+    $ordered_return_arr = array();
 
-		foreach ($view_fields as $view_field_info)
-		{
-		  $field_id = $view_field_info["field_id"];
-		  foreach ($return_arr as $field_info)
-			{
-			  if ($field_info["field_id"] == $field_id)
-			  {
-				  $ordered_return_arr[] = $field_info;
-					break;
-				}
-			}
-		}
+    foreach ($view_fields as $view_field_info)
+    {
+      $field_id = $view_field_info["field_id"];
+      foreach ($return_arr as $field_info)
+      {
+        if ($field_info["field_id"] == $field_id)
+        {
+          $ordered_return_arr[] = $field_info;
+          break;
+        }
+      }
+    }
 
-		$return_arr = $ordered_return_arr;
-	}
+    $return_arr = $ordered_return_arr;
+  }
 
   extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "return_arr"), array("return_arr")), EXTR_OVERWRITE);
 
@@ -574,23 +574,23 @@ function ft_get_search_submission_ids($form_id, $view_id, $results_per_page, $or
 {
   global $g_table_prefix;
 
-	$order_by = "submission_id";
-	if (!empty($order))
-	{
-	  // sorting by column, format: col_x-desc / col_y-asc
-	  list($column, $direction) = split("-", $order);
-	  $field_info = ft_get_form_field_by_colname($form_id, $column);
+  $order_by = "submission_id";
+  if (!empty($order))
+  {
+    // sorting by column, format: col_x-desc / col_y-asc
+    list($column, $direction) = split("-", $order);
+    $field_info = ft_get_form_field_by_colname($form_id, $column);
 
-	  if ($field_info["data_type"] == "number")
-	    $order_by = "CAST($column as SIGNED) $direction";
-	  else
-	    $order_by = "$column $direction";
+    if ($field_info["data_type"] == "number")
+      $order_by = "CAST($column as SIGNED) $direction";
+    else
+      $order_by = "$column $direction";
 
-	  // important! If the ORDER BY column wasn't the submission_id, we need to add
-	  // the submission ID as the secondary sorting column
-	  if ($column != "submission_id")
-	    $order_by .= ", submission_id";
-	}
+    // important! If the ORDER BY column wasn't the submission_id, we need to add
+    // the submission ID as the secondary sorting column
+    if ($column != "submission_id")
+      $order_by .= ", submission_id";
+  }
 
   // determine the LIMIT clause
   $limit_clause = "";
@@ -856,6 +856,78 @@ function ft_update_submission($form_id, $submission_id, $infohash)
   extract(ft_process_hooks("end", compact("form_id", "submission_id", "infohash"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
+}
+
+
+/**
+ * Updates a single form submission. Accepts an hash of form field names to values or
+ * col names to values.
+ *
+ * @param integer $form_id
+ * @param integer $submission_id
+ * @param array $info a hash of form field names to values. If the 4th parameter is set to true, the
+ *       keys should be database column names
+ * @param boolean $use_col_names_as_info_hash_keys
+ */
+function ft_update_submission_info($form_id, $submission_id, $info, $use_col_names_as_info_hash_keys = false)
+{
+  global $g_table_prefix;
+
+  $info = ft_sanitize($info);
+
+  $form_fields = ft_get_form_fields($form_id);
+  $valid_fields = array();
+  foreach ($form_fields as $field_info)
+  {
+    if ($field_info["field_type"] == "system")
+      continue;
+
+    $valid_fields[$field_info["field_name"]] = $field_info["col_name"];
+  }
+
+
+  // if we've been passed form field names, find the database columns for each field
+  if (!$use_col_names_as_info_hash_keys)
+  {
+    $col_names_to_values_hash = array();
+
+    // now convert the array keys to DB column names
+    while (list($field_name, $value) = each($info))
+    {
+      if (!array_key_exists($field_name, $valid_fields))
+        continue;
+
+      $col_name = $valid_fields[$field_name];
+      $col_names_to_values_hash[$col_name] = $value;
+    }
+  }
+  else
+  {
+    $col_names_to_values_hash = $info;
+  }
+
+  // finally, remove any DB col names that don't exist
+  $col_name_query = array();
+
+  while (list($col_name, $value) = each($col_names_to_values_hash))
+  {
+    if (array_search($col_name, $valid_fields) === false)
+      continue;
+
+    $col_name_query[] = "$col_name = '$value'";
+  }
+
+  $query_str = join(",\n", $col_name_query);
+
+  if (empty($query_str))
+    return;
+
+  // here, we finally have a VALID array of col_name => value
+  @mysql_query("
+    UPDATE {$g_table_prefix}form_{$form_id}
+    SET    $query_str
+    WHERE  submission_id = $submission_id
+      ");
 }
 
 

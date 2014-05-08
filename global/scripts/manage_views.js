@@ -439,8 +439,6 @@ view_ns.add_filters = function(num_rows)
     dd2.setAttribute("id", "filter_" + currRow + "_field_id");
     dd2.onchange = view_ns.change_filter_field.bind(this, currRow);
 
-//		dd2.onchange = function (evt) { view_ns.change_filter_field(currRow, this.value); };
-
     var default_option = document.createElement("option");
     default_option.setAttribute("value", "");
     default_option.appendChild(document.createTextNode(g.messages["phrase_please_select"]));
@@ -555,7 +553,8 @@ view_ns.add_filters = function(num_rows)
     td5.className = "del"; // for IE
     var delete_link = document.createElement("a");
     delete_link.setAttribute("href", "#");
-    delete_link.onclick = function (evt) { view_ns.delete_filter_row(currRow); };
+    delete_link.onclick = view_ns.delete_filter_row.bind(this, currRow);
+
     delete_link.appendChild(document.createTextNode(g.messages["word_remove"].toUpperCase()));
     td5.appendChild(delete_link);
 
