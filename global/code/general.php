@@ -26,44 +26,44 @@
 function ft_db_connect()
 {
   global $g_db_hostname, $g_db_username, $g_db_password, $g_db_name, $g_unicode, $g_db_ssl,
-	  $g_check_ft_sessions;
+    $g_check_ft_sessions;
 
-	if ($g_db_ssl)
-	  $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true, MYSQL_CLIENT_SSL)
-	    or ft_handle_error("Couldn't connect to database: <b>$g_db_hostname</b>", "");
-	else
-	  $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true)
-	    or ft_handle_error("Couldn't connect to database: <b>$g_db_hostname</b>", "");
+  if ($g_db_ssl)
+    $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true, MYSQL_CLIENT_SSL)
+      or ft_handle_error("Couldn't connect to database: <b>$g_db_hostname</b>", "");
+  else
+    $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true)
+      or ft_handle_error("Couldn't connect to database: <b>$g_db_hostname</b>", "");
 
-	@mysql_select_db($g_db_name) or
-	  ft_handle_error("couldn't find database <b>$g_db_name</b>", "");
+  @mysql_select_db($g_db_name) or
+    ft_handle_error("couldn't find database <b>$g_db_name</b>", "");
 
-	// if required, set all queries as UTF-8 (enabled by default)
-	if ($g_unicode)
-		@mysql_query("SET NAMES 'utf8'", $link);
+  // if required, set all queries as UTF-8 (enabled by default)
+  if ($g_unicode)
+    @mysql_query("SET NAMES 'utf8'", $link);
 
 
-	if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"]))
-	{
+  if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"]))
+  {
     $now = date("U");
 
-	  // check to see if the session has timed-out
-	  if (isset($_SESSION["ft"]["account"]["last_activity_unixtime"]) && isset($_SESSION["ft"]["account"]["sessions_timeout"]))
-	  {
-	    $sessions_timeout_mins = $_SESSION["ft"]["account"]["sessions_timeout"];
-	  	$timeout_secs = $sessions_timeout_mins * 60;
+    // check to see if the session has timed-out
+    if (isset($_SESSION["ft"]["account"]["last_activity_unixtime"]) && isset($_SESSION["ft"]["account"]["sessions_timeout"]))
+    {
+      $sessions_timeout_mins = $_SESSION["ft"]["account"]["sessions_timeout"];
+      $timeout_secs = $sessions_timeout_mins * 60;
 
-	  	if ($_SESSION["ft"]["account"]["last_activity_unixtime"] + $timeout_secs < $now)
-	  	{
-	  		ft_logout_user("notify_sessions_timeout");
-	  	}
-	  }
+      if ($_SESSION["ft"]["account"]["last_activity_unixtime"] + $timeout_secs < $now)
+      {
+        ft_logout_user("notify_sessions_timeout");
+      }
+    }
 
-	  // log this unixtime for checking the sessions timeout
-	  $_SESSION["ft"]["account"]["last_activity_unixtime"] = $now;
-	}
+    // log this unixtime for checking the sessions timeout
+    $_SESSION["ft"]["account"]["last_activity_unixtime"] = $now;
+  }
 
-	return $link;
+  return $link;
 }
 
 
@@ -74,7 +74,7 @@ function ft_db_connect()
  */
 function ft_db_disconnect($link)
 {
-	@mysql_close($link);
+  @mysql_close($link);
 }
 
 
@@ -97,64 +97,64 @@ function ft_db_disconnect($link)
  */
 function ft_display_message($results, $messages)
 {
-	global $LANG;
+  global $LANG;
 
-	// if there are no messages, just return
-	if (empty($messages))
-		return;
+  // if there are no messages, just return
+  if (empty($messages))
+    return;
 
-	$notifications = array();
-	$errors        = array();
+  $notifications = array();
+  $errors        = array();
 
-	if (is_array($results))
-	{
-		for ($i=0; $i<=count($results); $i++)
-		{
-			if     ($results[$i])  $notifications[] = $messages[$i];
-			elseif (!$results[$i]) $errors[]        = $messages[$i];
-		}
-	}
-	else
-	{
-		if     ($results)  $notifications[] = $messages;
-		elseif (!$results) $errors[]        = $messages;
-	}
+  if (is_array($results))
+  {
+    for ($i=0; $i<=count($results); $i++)
+    {
+      if     ($results[$i])  $notifications[] = $messages[$i];
+      elseif (!$results[$i]) $errors[]        = $messages[$i];
+    }
+  }
+  else
+  {
+    if     ($results)  $notifications[] = $messages;
+    elseif (!$results) $errors[]        = $messages;
+  }
 
 
-	// display notifications
-	if (!empty($notifications))
-	{
-		if (count($notifications) > 1)
-		{
-			array_walk($notifications, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-			$display_str = join("<br />", $notifications);
-		}
-		else
-			$display_str = $notifications[0];
+  // display notifications
+  if (!empty($notifications))
+  {
+    if (count($notifications) > 1)
+    {
+      array_walk($notifications, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
+      $display_str = join("<br />", $notifications);
+    }
+    else
+      $display_str = $notifications[0];
 
-		echo "<div class='notify'>$display_str</div>";
-	}
+    echo "<div class='notify'>$display_str</div>";
+  }
 
-	// display errors
-	if (!empty($errors))
-	{
-		// if there were notifications displayed, add a little padding to separate the two sections
-		if (!empty($notifications)) { echo "<br />"; }
+  // display errors
+  if (!empty($errors))
+  {
+    // if there were notifications displayed, add a little padding to separate the two sections
+    if (!empty($notifications)) { echo "<br />"; }
 
-		if (count($errors) > 1)
-		{
-			array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-			$display_str = join("<br />", $errors);
-			$title_str = $LANG["word_errors"];
-		}
-		else
-		{
-			$display_str = $errors[0];
-			$title_str = $LANG["word_error"];
-		}
+    if (count($errors) > 1)
+    {
+      array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
+      $display_str = join("<br />", $errors);
+      $title_str = $LANG["word_errors"];
+    }
+    else
+    {
+      $display_str = $errors[0];
+      $title_str = $LANG["word_error"];
+    }
 
-		echo "<div class='error'><span>$title_str</span><br /><br />$display_str</div><br />";
-	}
+    echo "<div class='error'><span>$title_str</span><br /><br />$display_str</div><br />";
+  }
 }
 
 
@@ -171,31 +171,31 @@ function ft_display_message($results, $messages)
  */
 function ft_eval_smarty_string($placeholder_str, $placeholders = array(), $theme = "", $plugin_dirs = array())
 {
-	global $g_root_dir, $g_default_theme, $LANG;
+  global $g_root_dir, $g_default_theme, $LANG;
 
   if (empty($theme) && isset($_SESSION["ft"]["account"]["theme"]))
     $theme = $_SESSION["ft"]["account"]["theme"];
   else
     $theme = $g_default_theme;
 
-	$smarty = new Smarty();
-	$smarty->template_dir = "$g_root_dir/global/smarty/";
-	$smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
+  $smarty = new Smarty();
+  $smarty->template_dir = "$g_root_dir/global/smarty/";
+  $smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
 
-	foreach ($plugin_dirs as $dir)
+  foreach ($plugin_dirs as $dir)
     $smarty->plugins_dir[] = $dir;
 
-	$smarty->assign("eval_str", $placeholder_str);
-	if (!empty($placeholders))
-	{
-		while (list($key, $value) = each($placeholders))
-		  $smarty->assign($key, $value);
-	}
+  $smarty->assign("eval_str", $placeholder_str);
+  if (!empty($placeholders))
+  {
+    while (list($key, $value) = each($placeholders))
+      $smarty->assign($key, $value);
+  }
   $smarty->assign("LANG", $LANG);
 
-	$output = $smarty->fetch("eval.tpl");
+  $output = $smarty->fetch("eval.tpl");
 
-	extract(ft_process_hooks("end", compact("output", "placeholder_str", "placeholders", "theme"), array("output")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("output", "placeholder_str", "placeholders", "theme"), array("output")), EXTR_OVERWRITE);
 
   return $output;
 }
@@ -212,21 +212,21 @@ function ft_eval_smarty_string($placeholder_str, $placeholders = array(), $theme
  */
 function ft_trim_string($str, $length, $flag = "ellipsis")
 {
-	$new_string = "";
-	if (mb_strlen($str) < $length)
-		$new_string = $str;
-	else
-	{
-		if ($flag == "ellipsis")
-			$new_string = mb_substr($str, 0, $length) . "...";
-		else
-		{
-			$parts = mb_str_split($str, $length);
-			$new_string = join("<br />", $parts);
-		}
-	}
+  $new_string = "";
+  if (mb_strlen($str) < $length)
+    $new_string = $str;
+  else
+  {
+    if ($flag == "ellipsis")
+      $new_string = mb_substr($str, 0, $length) . "...";
+    else
+    {
+      $parts = mb_str_split($str, $length);
+      $new_string = join("<br />", $parts);
+    }
+  }
 
-	return $new_string;
+  return $new_string;
 }
 
 
@@ -243,69 +243,69 @@ function ft_trim_string($str, $length, $flag = "ellipsis")
  */
 function ft_get_page_nav($num_results, $num_per_page, $current_page = 1, $pass_along_str = "", $page_str = "page", $theme = "")
 {
-	global $g_max_nav_pages, $g_smarty_debug, $g_root_dir, $g_root_url, $LANG, $g_smarty_use_sub_dirs;
+  global $g_max_nav_pages, $g_smarty_debug, $g_root_dir, $g_root_url, $LANG, $g_smarty_use_sub_dirs;
 
-	$current_page = ($current_page < 1) ? 1 : $current_page;
+  $current_page = ($current_page < 1) ? 1 : $current_page;
 
-	if (empty($theme))
-	  $theme = $_SESSION["ft"]["account"]["theme"];
+  if (empty($theme))
+    $theme = $_SESSION["ft"]["account"]["theme"];
 
-	$smarty = new Smarty();
-	$smarty->template_dir = "$g_root_dir/themes/$theme";
-	$smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
-	$smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
-	$smarty->assign("LANG", $LANG);
+  $smarty = new Smarty();
+  $smarty->template_dir = "$g_root_dir/themes/$theme";
+  $smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
+  $smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
+  $smarty->assign("LANG", $LANG);
 
-	if (isset($_SESSION["ft"]))
-  	$smarty->assign("SESSION", $_SESSION["ft"]);
+  if (isset($_SESSION["ft"]))
+    $smarty->assign("SESSION", $_SESSION["ft"]);
 
   $smarty->assign("g_root_dir", $g_root_dir);
-	$smarty->assign("g_root_url", $g_root_url);
-	$smarty->assign("samepage", $_SERVER["PHP_SELF"]);
-	$smarty->assign("num_results", $num_results);
-	$smarty->assign("num_per_page", $num_per_page);
-	$smarty->assign("current_page", $current_page);
-	$smarty->assign("page_str", $page_str);
+  $smarty->assign("g_root_url", $g_root_url);
+  $smarty->assign("samepage", $_SERVER["PHP_SELF"]);
+  $smarty->assign("num_results", $num_results);
+  $smarty->assign("num_per_page", $num_per_page);
+  $smarty->assign("current_page", $current_page);
+  $smarty->assign("page_str", $page_str);
 
-	// display the total number of results found
-	$range_start = ($current_page - 1) * $num_per_page + 1;
-	$range_end   = $range_start + $num_per_page - 1;
-	$range_end   = ($range_end > $num_results) ? $num_results : $range_end;
+  // display the total number of results found
+  $range_start = ($current_page - 1) * $num_per_page + 1;
+  $range_end   = $range_start + $num_per_page - 1;
+  $range_end   = ($range_end > $num_results) ? $num_results : $range_end;
 
-	$smarty->assign("range_start", $range_start);
-	$smarty->assign("range_end", $range_end);
+  $smarty->assign("range_start", $range_start);
+  $smarty->assign("range_end", $range_end);
 
-	$viewing_range = "";
-	if ($num_results > $num_per_page)
-	{
-		$replacement_info = array(
-			"startnum" => "<span id='nav_viewing_num_start'>$range_start</span>",
-			"endnum"   => "<span id='nav_viewing_num_end'>$range_end</span>"
-				);
-		$viewing_range = ft_eval_smarty_string($LANG["phrase_viewing_range"], $replacement_info);
-	}
-	$total_pages = ceil($num_results / $num_per_page);
-	$smarty->assign("viewing_range", $viewing_range);
-	$smarty->assign("total_pages", $total_pages);
+  $viewing_range = "";
+  if ($num_results > $num_per_page)
+  {
+    $replacement_info = array(
+      "startnum" => "<span id='nav_viewing_num_start'>$range_start</span>",
+      "endnum"   => "<span id='nav_viewing_num_end'>$range_end</span>"
+        );
+    $viewing_range = ft_eval_smarty_string($LANG["phrase_viewing_range"], $replacement_info);
+  }
+  $total_pages = ceil($num_results / $num_per_page);
+  $smarty->assign("viewing_range", $viewing_range);
+  $smarty->assign("total_pages", $total_pages);
 
-	// piece together additional query string values
-	if (!empty($pass_along_str))
-		$smarty->assign("query_str", "&{$pass_along_str}");
+  // piece together additional query string values
+  if (!empty($pass_along_str))
+    $smarty->assign("query_str", "&{$pass_along_str}");
 
-	// determine the first and last pages to show page nav links for
-	$half_total_nav_pages  = floor($g_max_nav_pages / 2);
-	$first_page = ($current_page > $half_total_nav_pages) ? $current_page - $half_total_nav_pages : 1;
-	$last_page  = (($current_page + $half_total_nav_pages) < $total_pages) ? $current_page + $half_total_nav_pages : $total_pages;
+  // determine the first and last pages to show page nav links for
+  $half_total_nav_pages  = floor($g_max_nav_pages / 2);
+  $first_page = ($current_page > $half_total_nav_pages) ? $current_page - $half_total_nav_pages : 1;
+  $last_page  = (($current_page + $half_total_nav_pages) < $total_pages) ? $current_page + $half_total_nav_pages : $total_pages;
 
-	$smarty->assign("first_page", $first_page);
-	$smarty->assign("last_page", $last_page);
+  $smarty->assign("first_page", $first_page);
+  $smarty->assign("last_page", $last_page);
 
-	$smarty->assign("include_first_page_direct_link", (($first_page != 1) ? true : false));
-	$smarty->assign("include_last_page_direct_link", (($first_page != $total_pages) ? true : false));
+  $smarty->assign("include_first_page_direct_link", (($first_page != 1) ? true : false));
+  $smarty->assign("include_last_page_direct_link", (($first_page != $total_pages) ? true : false));
 
 
-	// now process the template and return the HTML
-	return $smarty->fetch(ft_get_smarty_template_with_fallback($theme, "pagination.tpl"));
+  // now process the template and return the HTML
+  return $smarty->fetch(ft_get_smarty_template_with_fallback($theme, "pagination.tpl"));
 }
 
 
@@ -330,45 +330,45 @@ function ft_get_page_nav($num_results, $num_per_page, $current_page = 1, $pass_a
  */
 function ft_get_dhtml_page_nav($num_results, $num_per_page, $current_page = 1)
 {
-	global $g_smarty_debug, $g_root_dir, $g_root_url, $LANG, $g_smarty_use_sub_dirs;
+  global $g_smarty_debug, $g_root_dir, $g_root_url, $LANG, $g_smarty_use_sub_dirs;
 
-	$theme = $_SESSION["ft"]["account"]["theme"];
+  $theme = $_SESSION["ft"]["account"]["theme"];
 
-	$smarty = new Smarty();
-	$smarty->template_dir = "$g_root_dir/themes/$theme";
-	$smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
-	$smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
-	$smarty->assign("LANG", $LANG);
-	$smarty->assign("SESSION", $_SESSION["ft"]);
-	$smarty->assign("g_root_dir", $g_root_dir);
-	$smarty->assign("g_root_url", $g_root_url);
-	$smarty->assign("samepage", $_SERVER["PHP_SELF"]);
-	$smarty->assign("num_results", $num_results);
-	$smarty->assign("num_per_page", $num_per_page);
-	$smarty->assign("current_page", $current_page);
+  $smarty = new Smarty();
+  $smarty->template_dir = "$g_root_dir/themes/$theme";
+  $smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
+  $smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
+  $smarty->assign("LANG", $LANG);
+  $smarty->assign("SESSION", $_SESSION["ft"]);
+  $smarty->assign("g_root_dir", $g_root_dir);
+  $smarty->assign("g_root_url", $g_root_url);
+  $smarty->assign("samepage", $_SERVER["PHP_SELF"]);
+  $smarty->assign("num_results", $num_results);
+  $smarty->assign("num_per_page", $num_per_page);
+  $smarty->assign("current_page", $current_page);
 
-	// find the range that's being displayed (e.g 11 to 20)
-	$range_start = ($current_page - 1) * $num_per_page + 1;
-	$range_end   = $range_start + $num_per_page - 1;
-	$range_end   = ($range_end > $num_results) ? $num_results : $range_end;
+  // find the range that's being displayed (e.g 11 to 20)
+  $range_start = ($current_page - 1) * $num_per_page + 1;
+  $range_end   = $range_start + $num_per_page - 1;
+  $range_end   = ($range_end > $num_results) ? $num_results : $range_end;
 
-	$smarty->assign("range_start", $range_start);
-	$smarty->assign("range_end", $range_end);
+  $smarty->assign("range_start", $range_start);
+  $smarty->assign("range_end", $range_end);
 
-	$viewing_range = "";
-	if ($num_results > $num_per_page)
-	{
-		$replacement_info = array(
-			"startnum" => "<span id='nav_viewing_num_start'>$range_start</span>",
-			"endnum"   => "<span id='nav_viewing_num_end'>$range_end</span>"
-				);
-		$viewing_range = ft_eval_smarty_string($LANG["phrase_viewing_range"], $replacement_info);
-	}
-	$smarty->assign("viewing_range", $viewing_range);
-	$smarty->assign("total_pages", ceil($num_results / $num_per_page));
+  $viewing_range = "";
+  if ($num_results > $num_per_page)
+  {
+    $replacement_info = array(
+      "startnum" => "<span id='nav_viewing_num_start'>$range_start</span>",
+      "endnum"   => "<span id='nav_viewing_num_end'>$range_end</span>"
+        );
+    $viewing_range = ft_eval_smarty_string($LANG["phrase_viewing_range"], $replacement_info);
+  }
+  $smarty->assign("viewing_range", $viewing_range);
+  $smarty->assign("total_pages", ceil($num_results / $num_per_page));
 
-	// now process the template and return the HTML
-	return $smarty->fetch(ft_get_smarty_template_with_fallback($theme, "dhtml_pagination.tpl"));
+  // now process the template and return the HTML
+  return $smarty->fetch(ft_get_smarty_template_with_fallback($theme, "dhtml_pagination.tpl"));
 }
 
 
@@ -386,12 +386,12 @@ function ft_get_dhtml_page_nav($num_results, $num_per_page, $current_page = 1)
  */
 function ft_check_permission($account_type)
 {
-	global $g_root_url, $g_table_prefix;
+  global $g_root_url, $g_table_prefix;
 
-	$boot_out_user = false;
+  $boot_out_user = false;
   $message_flag = "";
 
-	extract(ft_process_hooks("end", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
 
   // some VERY complex logic here. The "user" account permission type is included so that people logged in
   // via the Submission Accounts can still view certain pages, e.g. pages with the Pages module. This checks that
@@ -399,42 +399,42 @@ function ft_check_permission($account_type)
   // or it's a regular client or admin account with the account_id set. Crumby, but it'll have to suffice for now.
   if ($account_type == "user")
   {
-  	if ((!isset($_SESSION["ft"]["account"]["submission_id"]) || empty($_SESSION["ft"]["account"]["submission_id"])) &&
+    if ((!isset($_SESSION["ft"]["account"]["submission_id"]) || empty($_SESSION["ft"]["account"]["submission_id"])) &&
        empty($_SESSION["ft"]["account"]["account_id"]))
     {
-			header("location: $g_root_url/modules/submission_accounts/logout.php");
-			exit;
+      header("location: $g_root_url/modules/submission_accounts/logout.php");
+      exit;
     }
   }
- 	// check the user ID is in sessions
-	else if      (empty($_SESSION["ft"]["account"]["account_id"]))
-	{
-		$boot_out_user = true;
-		$message_flag = "notify_no_account_id_in_sessions";
-	}
-	else if ($_SESSION["ft"]["account"]["account_type"] == "client" && $account_type == "admin")
-	{
-		$boot_out_user = true;
-		$message_flag = "notify_invalid_permissions";
-	}
-	else
-	{
-		$query = mysql_query("
-			SELECT count(*)
-			FROM   {$g_table_prefix}accounts
-			WHERE account_id = {$_SESSION["ft"]["account"]["account_id"]}
+   // check the user ID is in sessions
+  else if      (empty($_SESSION["ft"]["account"]["account_id"]))
+  {
+    $boot_out_user = true;
+    $message_flag = "notify_no_account_id_in_sessions";
+  }
+  else if ($_SESSION["ft"]["account"]["account_type"] == "client" && $account_type == "admin")
+  {
+    $boot_out_user = true;
+    $message_flag = "notify_invalid_permissions";
+  }
+  else
+  {
+    $query = mysql_query("
+      SELECT count(*)
+      FROM   {$g_table_prefix}accounts
+      WHERE account_id = {$_SESSION["ft"]["account"]["account_id"]}
       AND   password = '{$_SESSION["ft"]["account"]["password"]}'
-				");
+        ");
 
-		if (mysql_num_rows($query) != 1)
-		{
-			$boot_out_user = true;
-			$message_flag = "notify_invalid_account_information_in_sessions";
-	  }
-	}
+    if (mysql_num_rows($query) != 1)
+    {
+      $boot_out_user = true;
+      $message_flag = "notify_invalid_account_information_in_sessions";
+    }
+  }
 
-	if ($boot_out_user)
-		ft_logout_user($message_flag);
+  if ($boot_out_user)
+    ft_logout_user($message_flag);
 }
 
 
@@ -446,17 +446,17 @@ function ft_check_permission($account_type)
  */
 function ft_check_db_table_exists($table)
 {
-	global $g_table_prefix, $g_db_name;
+  global $g_table_prefix, $g_db_name;
 
   $found = false;
-	$result = mysql_query("SHOW TABLES FROM $g_db_name");
+  $result = mysql_query("SHOW TABLES FROM $g_db_name");
   while ($row = mysql_fetch_row($result))
   {
-  	if ($row[0] == $table)
-  	{
-  		$found = true;
-  		break;
-  	}
+    if ($row[0] == $table)
+    {
+      $found = true;
+      break;
+    }
   }
 
   return $found;
@@ -482,21 +482,21 @@ function ft_check_db_table_exists($table)
  */
 function ft_check_client_may_view($client_id, $form_id, $view_id)
 {
-	global $g_root_url;
-	$boot_out_user = false;
+  global $g_root_url;
+  $boot_out_user = false;
 
-	$search = ft_search_forms($client_id);
+  $search = ft_search_forms($client_id);
 
-	$permissions = $_SESSION["ft"]["permissions"];
+  $permissions = $_SESSION["ft"]["permissions"];
 
-	extract(ft_process_hooks("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
 
-	if (!array_key_exists($form_id, $permissions))
+  if (!array_key_exists($form_id, $permissions))
     ft_logout_user("notify_invalid_permissions");
   else
   {
-  	if (!empty($view_id) && !in_array($view_id, $permissions[$form_id]))
-  	  ft_logout_user("notify_invalid_permissions");
+    if (!empty($view_id) && !in_array($view_id, $permissions[$form_id]))
+      ft_logout_user("notify_invalid_permissions");
   }
 }
 
@@ -523,67 +523,67 @@ function ft_check_client_may_view($client_id, $form_id, $view_id)
  */
 function ft_get_date($offset, $datetime, $format)
 {
-	global $LANG;
+  global $LANG;
 
-	$year = substr($datetime, 0, 4);
-	$mon  = substr($datetime, 5, 2);
-	$day  = substr($datetime, 8, 2);
-	$hour = substr($datetime, 11, 2);
-	$min  = substr($datetime, 14, 2);
-	$sec  = substr($datetime, 17, 2);
+  $year = substr($datetime, 0, 4);
+  $mon  = substr($datetime, 5, 2);
+  $day  = substr($datetime, 8, 2);
+  $hour = substr($datetime, 11, 2);
+  $min  = substr($datetime, 14, 2);
+  $sec  = substr($datetime, 17, 2);
 
-	$timestamp = mktime($hour + $offset, $min, $sec, $mon, $day, $year);
+  $timestamp = mktime($hour + $offset, $min, $sec, $mon, $day, $year);
 
-	// if this is an English language (British, US English, English Canadian, etc), just
-	// use the standard date() functionality (this is faster)
-	$date_str = "";
-	if ($LANG["special_language"] == "English")
-		$date_str = date($format, $timestamp);
-	else
-	{
-		// here's how this works. We replace the special chars in the date formatting
-		// string with a single "@" character - which has no special meaning for either date()
-		// or in regular expressions - and keep track of the order in which they appear. Then,
-		// we call date() to convert all other characters and then replace the @'s with their
-		// translated versions.
-		$special_chars = array("D", "l", "F", "M", "a", "A"); // M: short month, F: long month
-		$char_map = array();
-		$new_format = "";
-		for ($char_ind=0; $char_ind<strlen($format); $char_ind++)
-		{
-			if (in_array($format[$char_ind], $special_chars))
-			{
-				$char_map[] = $format[$char_ind];
-				$format[$char_ind] = "@";
-			}
-			$new_format .= $format[$char_ind];
-		}
-		$date_str = date($new_format, $timestamp);
+  // if this is an English language (British, US English, English Canadian, etc), just
+  // use the standard date() functionality (this is faster)
+  $date_str = "";
+  if ($LANG["special_language"] == "English")
+    $date_str = date($format, $timestamp);
+  else
+  {
+    // here's how this works. We replace the special chars in the date formatting
+    // string with a single "@" character - which has no special meaning for either date()
+    // or in regular expressions - and keep track of the order in which they appear. Then,
+    // we call date() to convert all other characters and then replace the @'s with their
+    // translated versions.
+    $special_chars = array("D", "l", "F", "M", "a", "A"); // M: short month, F: long month
+    $char_map = array();
+    $new_format = "";
+    for ($char_ind=0; $char_ind<strlen($format); $char_ind++)
+    {
+      if (in_array($format[$char_ind], $special_chars))
+      {
+        $char_map[] = $format[$char_ind];
+        $format[$char_ind] = "@";
+      }
+      $new_format .= $format[$char_ind];
+    }
+    $date_str = date($new_format, $timestamp);
 
-		// now replace the @'s with their translated equivalents
-		$eng_strings = date(join(",", $char_map), $timestamp);
-		$eng_string_arr = split(",", $eng_strings);
-		for ($char_ind=0; $char_ind<count($char_map); $char_ind++)
-		{
-			$eng_string = $eng_string_arr[$char_ind];
+    // now replace the @'s with their translated equivalents
+    $eng_strings = date(join(",", $char_map), $timestamp);
+    $eng_string_arr = split(",", $eng_strings);
+    for ($char_ind=0; $char_ind<count($char_map); $char_ind++)
+    {
+      $eng_string = $eng_string_arr[$char_ind];
 
-			switch($char_ind)
-			{
-				case "F":
-					$translated_str = $LANG["date_month_short_$eng_string"];
-					break;
-				case "M":
-					$translated_str = $LANG["date_month_$eng_string"];
-					break;
-				default:
-					$translated_str = $LANG["date_$eng_string"];
-					break;
-			}
-			$date_str = preg_replace("/@/", $translated_str, $date_str, 1);
-		}
-	}
+      switch($char_ind)
+      {
+        case "F":
+          $translated_str = $LANG["date_month_short_$eng_string"];
+          break;
+        case "M":
+          $translated_str = $LANG["date_month_$eng_string"];
+          break;
+        default:
+          $translated_str = $LANG["date_$eng_string"];
+          break;
+      }
+      $date_str = preg_replace("/@/", $translated_str, $date_str, 1);
+    }
+  }
 
-	return $date_str;
+  return $date_str;
 }
 
 
@@ -596,13 +596,13 @@ function ft_get_date($offset, $datetime, $format)
  * */
 function ft_get_current_datetime($timestamp = "")
 {
-	$datetime = "";
-	if (!empty($timestamp))
-		$datetime = date("Y-m-d H:i:s", $timestamp);
-	else
-		$datetime = date("Y-m-d H:i:s");
+  $datetime = "";
+  if (!empty($timestamp))
+    $datetime = date("Y-m-d H:i:s", $timestamp);
+  else
+    $datetime = date("Y-m-d H:i:s");
 
-	return $datetime;
+  return $datetime;
 }
 
 
@@ -651,6 +651,29 @@ function ft_sanitize($input)
 
 
 /**
+ * Recursively strips tags from an array / string.
+ *
+ * @param mixed $input an array or string
+ * @return mixes
+ */
+function ft_strip_tags($input)
+{
+  if (is_array($input))
+  {
+    $output = array();
+    foreach ($input as $k=>$i)
+      $output[$k] = ft_strip_tags($i);
+  }
+  else
+  {
+    $output = strip_tags($input);
+  }
+
+  return $output;
+}
+
+
+/**
  * Used to convert language file strings into their JS-compatible counterparts, all within an
  * "g" namespace.
  *
@@ -667,16 +690,16 @@ function ft_generate_js_messages($keys)
   if (!empty($keys))
   {
     $js_rows = array();
-  	for ($i=0; $i<count($keys); $i++)
-	  {
-	  	$key = $keys[$i];
-	  	if (array_key_exists($key, $LANG))
-	  	{
-	  		$str = preg_replace("/\"/", "\\\"", $LANG[$key]);
-	  	  $js_rows[] = "g.messages[\"$key\"] = \"$str\";";
-	  	}
-	  }
-	  $rows = join("\n", $js_rows);
+    for ($i=0; $i<count($keys); $i++)
+    {
+      $key = $keys[$i];
+      if (array_key_exists($key, $LANG))
+      {
+        $str = preg_replace("/\"/", "\\\"", $LANG[$key]);
+        $js_rows[] = "g.messages[\"$key\"] = \"$str\";";
+      }
+    }
+    $rows = join("\n", $js_rows);
   }
 
   $js = "// our namespace
@@ -711,24 +734,24 @@ function ft_generate_js_messages($keys)
  */
 function ft_load_field($field_name, $session_name, $default_value = "", $namespace = "ft")
 {
-	$field = $default_value;
+  $field = $default_value;
 
-	if (isset($_GET[$field_name]))
-	{
-		$field = $_GET[$field_name];
-		$_SESSION[$namespace][$session_name] = $field;
-	}
-	else if (isset($_POST[$field_name]))
-	{
-		$field = $_POST[$field_name];
-		$_SESSION[$namespace][$session_name] = $field;
-	}
-	else if (isset($_SESSION[$namespace][$session_name]))
-	{
-		$field = $_SESSION[$namespace][$session_name];
-	}
+  if (isset($_GET[$field_name]))
+  {
+    $field = $_GET[$field_name];
+    $_SESSION[$namespace][$session_name] = $field;
+  }
+  else if (isset($_POST[$field_name]))
+  {
+    $field = $_POST[$field_name];
+    $_SESSION[$namespace][$session_name] = $field;
+  }
+  else if (isset($_SESSION[$namespace][$session_name]))
+  {
+    $field = $_SESSION[$namespace][$session_name];
+  }
 
-	return $field;
+  return $field;
 }
 
 
@@ -758,14 +781,14 @@ function ft_is_valid_datetime($datetime)
  */
 function ft_verify_form_tools_installed()
 {
-	global $LANG;
+  global $LANG;
 
-	if (is_dir('install'))
-	{
-		$folder = dirname(__FILE__);
-		header("Location: install/");
-		exit;
-	}
+  if (is_dir('install'))
+  {
+    $folder = dirname(__FILE__);
+    header("Location: install/");
+    exit;
+  }
 }
 
 
@@ -783,20 +806,20 @@ function ft_verify_form_tools_installed()
  */
 function ft_handle_error($error_message, $debug_details, $error_type = "error")
 {
-	global $g_root_url;
+  global $g_root_url;
 
-	// this is for NEW installations. For new installations the $g_root_url isn't set, so we want to
-	// redirect to the error page in the current form tools folder
-	if (!empty($g_root_url))
-	  $g_root_url = "$g_root_url/";
+  // this is for NEW installations. For new installations the $g_root_url isn't set, so we want to
+  // redirect to the error page in the current form tools folder
+  if (!empty($g_root_url))
+    $g_root_url = "$g_root_url/";
 
-	$_SESSION["ft"]["last_error"]       = $error_message;
-	$_SESSION["ft"]["last_error_debug"] = $debug_details;
-	$_SESSION["ft"]["last_error_type"]  = $error_type;
+  $_SESSION["ft"]["last_error"]       = $error_message;
+  $_SESSION["ft"]["last_error_debug"] = $debug_details;
+  $_SESSION["ft"]["last_error_type"]  = $error_type;
 
-	session_write_close();
-	header("Location: {$g_root_url}error.php");
-	exit;
+  session_write_close();
+  header("Location: {$g_root_url}error.php");
+  exit;
 }
 
 
@@ -811,14 +834,14 @@ function ft_handle_error($error_message, $debug_details, $error_type = "error")
  */
 function mb_str_split($string, $split_length = 1)
 {
-	if ($split_length < 1)
-		return false;
+  if ($split_length < 1)
+    return false;
 
-	$result = array();
-	for ($i=0; $i<mb_strlen($string); $i+=$split_length)
-		$result[] = mb_substr($string, $i, $split_length);
+  $result = array();
+  for ($i=0; $i<mb_strlen($string); $i+=$split_length)
+    $result[] = mb_substr($string, $i, $split_length);
 
-	return $result;
+  return $result;
 }
 
 
@@ -830,7 +853,7 @@ function mb_str_split($string, $split_length = 1)
  */
 function ft_construct_url($url, $query_str = "")
 {
-	$valid_url = $url;
+  $valid_url = $url;
 
   if (!empty($query_str))
   {
@@ -872,7 +895,7 @@ function ft_convert_to_json($arr)
     // see if each key corresponds to its position
     for ($i=0; $i<count($keys); $i++)
     {
-    	// a key fails at position check: it's a hash
+      // a key fails at position check: it's a hash
       if ($i != $keys[$i])
       {
         $is_list = false;
@@ -906,8 +929,8 @@ function ft_convert_to_json($arr)
         $str .= 'true';
       else
       {
-      	//$value = preg_replace("/\s+/", "\n", $value);
-      	//$value = ft_sanitize($value);
+        //$value = preg_replace("/\s+/", "\n", $value);
+        //$value = ft_sanitize($value);
         $str .= '"' . ft_sanitize($value) . '"';
       }
 
@@ -943,17 +966,17 @@ function ft_is_valid_email($str)
  */
 function ft_get_mysql_reserved_words()
 {
-	global $g_root_dir;
+  global $g_root_dir;
 
-	$words = @file("$g_root_dir/global/misc/mysql_reserved_words.txt");
+  $words = @file("$g_root_dir/global/misc/mysql_reserved_words.txt");
 
-	$clean_words = array();
-	foreach ($words as $word)
-	{
-		$word = trim($word);
-		if (!empty($word) && !in_array($word, $clean_words))
-		  $clean_words[] = $word;
-	}
+  $clean_words = array();
+  foreach ($words as $word)
+  {
+    $word = trim($word);
+    if (!empty($word) && !in_array($word, $clean_words))
+      $clean_words[] = $word;
+  }
 
   return $clean_words;
 }
@@ -986,11 +1009,11 @@ function ft_in_array_case_insensitive($value, $array)
  */
 function ft_get_upload_max_filesize()
 {
-	$max_filesize_str = ini_get("upload_max_filesize");
-	$max_filesize_mb = (int)preg_replace("/\D+/", "", $max_filesize_str);
-	$max_filesize_bytes = $max_filesize_mb * 1000;
+  $max_filesize_str = ini_get("upload_max_filesize");
+  $max_filesize_mb = (int)preg_replace("/\D+/", "", $max_filesize_str);
+  $max_filesize_bytes = $max_filesize_mb * 1000;
 
-	return $max_filesize_bytes;
+  return $max_filesize_bytes;
 }
 
 
@@ -1003,11 +1026,11 @@ function ft_get_upload_max_filesize()
  */
 function ft_create_slug($string)
 {
-	$str = trim($string);
-	$str = preg_replace('/[^a-zA-Z0-9]/', '_', $str);
-	$str = preg_replace('/_{2,}/', "_", $str);
+  $str = trim($string);
+  $str = preg_replace('/[^a-zA-Z0-9]/', '_', $str);
+  $str = preg_replace('/_{2,}/', "_", $str);
 
-	return $str;
+  return $str;
 }
 
 
@@ -1063,25 +1086,25 @@ function ft_get_js_webpage_parse_method($form_url)
   // set a 1 minute maximum execution time for this request
   @set_time_limit(60);
 
-	$scrape_method = "";
+  $scrape_method = "";
 
-	// we buffer the file_get_contents call in case the URL is invalid and a fatal error is generated
-	// when the function time-outs
-	if (@file_get_contents($form_url))
-	  $scrape_method = "file_get_contents";
-	if (function_exists("curl_init") && function_exists("curl_exec"))
-	  $scrape_method = "curl";
-	else
-	{
-	  $current_url = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-	  $current_url_info = parse_url($current_url);
-		$form_url_info = parse_url($form_url);
+  // we buffer the file_get_contents call in case the URL is invalid and a fatal error is generated
+  // when the function time-outs
+  if (@file_get_contents($form_url))
+    $scrape_method = "file_get_contents";
+  if (function_exists("curl_init") && function_exists("curl_exec"))
+    $scrape_method = "curl";
+  else
+  {
+    $current_url = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
+    $current_url_info = parse_url($current_url);
+    $form_url_info = parse_url($form_url);
 
-	  if (($current_url_info["host"] == $form_url_info["host"]) && ($current_url_info["port"] == $form_url_info["port"]))
-	  	$scrape_method = "redirect";
-	}
+    if (($current_url_info["host"] == $form_url_info["host"]) && ($current_url_info["port"] == $form_url_info["port"]))
+      $scrape_method = "redirect";
+  }
 
-	return $scrape_method;
+  return $scrape_method;
 }
 
 
@@ -1100,8 +1123,8 @@ function ft_update_api_version()
   {
     include_once($api_file);
 
-  	if (!isset($g_api_version) || empty($g_api_version))
-  	  return;
+    if (!isset($g_api_version) || empty($g_api_version))
+      return;
 
     $settings = array("api_version" => $g_api_version);
     ft_set_settings($settings);
@@ -1114,66 +1137,66 @@ function ft_update_api_version()
 
 if (!function_exists("mb_strtoupper"))
 {
-	/**
-	 * A fallback function for servers that don't include the mbstring PHP extension. Note:
-	 * this function is NOT multi-byte; it can't be emulated without the extension. However,
-	 * this will at least allow the user to use Form Tools without errors.
-	 *
-	 * @param string $str
-	 * @return string the uppercased string
-	 */
-	function mb_strtoupper($str)
-	{
-		return strtoupper($str);
-	}
+  /**
+   * A fallback function for servers that don't include the mbstring PHP extension. Note:
+   * this function is NOT multi-byte; it can't be emulated without the extension. However,
+   * this will at least allow the user to use Form Tools without errors.
+   *
+   * @param string $str
+   * @return string the uppercased string
+   */
+  function mb_strtoupper($str)
+  {
+    return strtoupper($str);
+  }
 }
 
 if (!function_exists("mb_strtolower"))
 {
-	/**
-	 * A fallback function for servers that don't include the mbstring PHP extension. Note:
-	 * this function is NOT multi-byte; it can't be emulated without the extension. However,
-	 * this will at least allow the user to use Form Tools without errors.
-	 *
-	 * @param string $str
-	 * @return string the uppercased string
-	 */
-	function mb_strtolower($str)
-	{
-		return strtolower($str);
-	}
+  /**
+   * A fallback function for servers that don't include the mbstring PHP extension. Note:
+   * this function is NOT multi-byte; it can't be emulated without the extension. However,
+   * this will at least allow the user to use Form Tools without errors.
+   *
+   * @param string $str
+   * @return string the uppercased string
+   */
+  function mb_strtolower($str)
+  {
+    return strtolower($str);
+  }
 }
 
 if (!function_exists("mb_strlen"))
 {
-	/**
-	 * A fallback function for servers that don't include the mbstring PHP extension. Note:
-	 * this function is NOT multi-byte; it can't be emulated without the extension. However,
-	 * this will at least allow the user to use Form Tools without errors.
-	 *
-	 * @param string $str
-	 * @return string the length of the string
-	 */
-	function mb_strlen($str)
-	{
-		return strlen($str);
-	}
+  /**
+   * A fallback function for servers that don't include the mbstring PHP extension. Note:
+   * this function is NOT multi-byte; it can't be emulated without the extension. However,
+   * this will at least allow the user to use Form Tools without errors.
+   *
+   * @param string $str
+   * @return string the length of the string
+   */
+  function mb_strlen($str)
+  {
+    return strlen($str);
+  }
 }
 
 if (!function_exists("mb_substr"))
 {
-	/**
-	 * A fallback function for servers that don't include the mbstring PHP extension. Note:
-	 * this function is NOT multi-byte; it can't be emulated without the extension. However,
-	 * this will at least allow the user to use Form Tools without errors.
-	 *
-	 * @param string $str
-	 * @return string the length of the string
-	 */
-	function mb_substr($str, $start, $length)
-	{
-		return substr($str, $start, $length);
-	}
+  /**
+   * A fallback function for servers that don't include the mbstring PHP extension. Note:
+   * this function is NOT multi-byte; it can't be emulated without the extension. However,
+   * this will at least allow the user to use Form Tools without errors.
+   *
+   * @param string $str
+   * @return string the length of the string
+   */
+  function mb_substr($str, $start, $length)
+  {
+    return substr($str, $start, $length);
+  }
 }
 
 if (!function_exists("htmlspecialchars_decode"))
@@ -1182,7 +1205,7 @@ if (!function_exists("htmlspecialchars_decode"))
   {
     $translation = array_flip(get_html_translation_table(HTML_SPECIALCHARS, $style));
     if ($style === ENT_QUOTES)
-		  $translation['&#039;'] = '\'';
+      $translation['&#039;'] = '\'';
 
     return strtr($string, $translation);
   }
@@ -1190,62 +1213,62 @@ if (!function_exists("htmlspecialchars_decode"))
 
 if (!function_exists('mime_content_type'))
 {
-	function mime_content_type($filename)
-	{
+  function mime_content_type($filename)
+  {
     $mime_types = array(
-			'txt' => 'text/plain',
-			'htm' => 'text/html',
-			'html' => 'text/html',
-			'php' => 'text/html',
-			'css' => 'text/css',
-			'js' => 'application/javascript',
-			'json' => 'application/json',
-			'xml' => 'application/xml',
-			'swf' => 'application/x-shockwave-flash',
-			'flv' => 'video/x-flv',
+      'txt' => 'text/plain',
+      'htm' => 'text/html',
+      'html' => 'text/html',
+      'php' => 'text/html',
+      'css' => 'text/css',
+      'js' => 'application/javascript',
+      'json' => 'application/json',
+      'xml' => 'application/xml',
+      'swf' => 'application/x-shockwave-flash',
+      'flv' => 'video/x-flv',
 
       // images
       'png' => 'image/png',
-			'jpe' => 'image/jpeg',
-			'jpeg' => 'image/jpeg',
-			'jpg' => 'image/jpeg',
-			'gif' => 'image/gif',
-			'bmp' => 'image/bmp',
-			'ico' => 'image/vnd.microsoft.icon',
-			'tiff' => 'image/tiff',
-			'tif' => 'image/tiff',
-			'svg' => 'image/svg+xml',
-			'svgz' => 'image/svg+xml',
+      'jpe' => 'image/jpeg',
+      'jpeg' => 'image/jpeg',
+      'jpg' => 'image/jpeg',
+      'gif' => 'image/gif',
+      'bmp' => 'image/bmp',
+      'ico' => 'image/vnd.microsoft.icon',
+      'tiff' => 'image/tiff',
+      'tif' => 'image/tiff',
+      'svg' => 'image/svg+xml',
+      'svgz' => 'image/svg+xml',
 
-			// archives
-			'zip' => 'application/zip',
-			'rar' => 'application/x-rar-compressed',
-			'exe' => 'application/x-msdownload',
-			'msi' => 'application/x-msdownload',
-			'cab' => 'application/vnd.ms-cab-compressed',
+      // archives
+      'zip' => 'application/zip',
+      'rar' => 'application/x-rar-compressed',
+      'exe' => 'application/x-msdownload',
+      'msi' => 'application/x-msdownload',
+      'cab' => 'application/vnd.ms-cab-compressed',
 
-			// audio/video
-			'mp3' => 'audio/mpeg',
-			'qt' => 'video/quicktime',
-			'mov' => 'video/quicktime',
+      // audio/video
+      'mp3' => 'audio/mpeg',
+      'qt' => 'video/quicktime',
+      'mov' => 'video/quicktime',
 
-			// adobe
-			'pdf' => 'application/pdf',
-			'psd' => 'image/vnd.adobe.photoshop',
-			'ai' => 'application/postscript',
-			'eps' => 'application/postscript',
-			'ps' => 'application/postscript',
+      // adobe
+      'pdf' => 'application/pdf',
+      'psd' => 'image/vnd.adobe.photoshop',
+      'ai' => 'application/postscript',
+      'eps' => 'application/postscript',
+      'ps' => 'application/postscript',
 
-			// ms office
-			'doc' => 'application/msword',
-			'rtf' => 'application/rtf',
-			'xls' => 'application/vnd.ms-excel',
-			'ppt' => 'application/vnd.ms-powerpoint',
+      // ms office
+      'doc' => 'application/msword',
+      'rtf' => 'application/rtf',
+      'xls' => 'application/vnd.ms-excel',
+      'ppt' => 'application/vnd.ms-powerpoint',
 
-			// open office
-			'odt' => 'application/vnd.oasis.opendocument.text',
-			'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
-		);
+      // open office
+      'odt' => 'application/vnd.oasis.opendocument.text',
+      'ods' => 'application/vnd.oasis.opendocument.spreadsheet',
+    );
 
     $ext = strtolower(array_pop(explode('.', $filename)));
     if (array_key_exists($ext, $mime_types))

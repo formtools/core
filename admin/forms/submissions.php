@@ -7,7 +7,7 @@ $request = array_merge($_POST, $_GET);
 
 // include the relevant modules
 if (ft_check_module_enabled("export_manager"))
-	ft_include_module("export_manager");
+  ft_include_module("export_manager");
 
 
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
@@ -28,18 +28,18 @@ $form_views = ft_get_form_views($form_id);
 
 if (empty($view_id))
 {
-	if (count($form_views) == 0)
-	{
-		// no Views defined for this form! redirect to the Views page
-		header("location: edit.php?page=views&form_id=$form_id");
-		exit;
-	}
-	else
-	{
-		$default_view_id = $form_views[0]["view_id"];
-		$_SESSION["ft"]["form_{$form_id}_view_id"] = $default_view_id;
-		$view_id = $default_view_id;
-	}
+  if (count($form_views) == 0)
+  {
+    // no Views defined for this form! redirect to the Views page
+    header("location: edit.php?page=views&form_id=$form_id");
+    exit;
+  }
+  else
+  {
+    $default_view_id = $form_views[0]["view_id"];
+    $_SESSION["ft"]["form_{$form_id}_view_id"] = $default_view_id;
+    $view_id = $default_view_id;
+  }
 }
 
 $form_info = ft_get_form($form_id);
@@ -48,8 +48,8 @@ $view_info = ft_get_view($view_id);
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes")
 {
   $submission_id = ft_create_blank_submission($form_id, true);
-	header("location: edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id");
-	exit;
+  header("location: edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id");
+  exit;
 }
 
 // if the View just changed (i.e. it was just selected by the user), deselect any items in
@@ -63,12 +63,12 @@ if (isset($request["view"]))
 
 if (isset($_GET["reset"]) && $_GET["reset"] == "1")
 {
-	unset($_SESSION["ft"]["search_field"]);
-	unset($_SESSION["ft"]["search_keyword"]);
-	unset($_SESSION["ft"]["search_date"]);
-	unset($_SESSION["ft"]["current_search"]);
+  unset($_SESSION["ft"]["search_field"]);
+  unset($_SESSION["ft"]["search_keyword"]);
+  unset($_SESSION["ft"]["search_date"]);
+  unset($_SESSION["ft"]["current_search"]);
 
-	$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
+  $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
   $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
   $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
 }
@@ -89,8 +89,8 @@ if (isset($_GET["delete"]))
   // in order to delete it
   if (!empty($_GET["delete"]))
   {
-	  $ids = split(",", $_GET["delete"]);
-		foreach ($ids as $id)
+    $ids = split(",", $_GET["delete"]);
+    foreach ($ids as $id)
       list($g_success, $g_message) = ft_delete_submission($form_id, $view_id, $id, true);
   }
   else
@@ -104,7 +104,7 @@ if (isset($_GET["delete"]))
       $omit_list = $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"];
     }
 
-	  list($g_success, $g_message) = ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, true);
+    list($g_success, $g_message) = ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, true);
   }
 }
 
@@ -179,7 +179,7 @@ if (!isset($_SESSION["ft"]["form_{$form_id}_select_all_submissions"]))
 // get a list of all submission IDs in this page
 $submission_ids = array();
 for ($i=0; $i<count($search_rows); $i++)
-	$submission_ids[] = $search_rows[$i]["submission_id"];
+  $submission_ids[] = $search_rows[$i]["submission_id"];
 
 $submission_id_str = join(",", $submission_ids);
 
@@ -192,14 +192,14 @@ $preselected_subids = array();
 $all_submissions_selected_omit_list_str = "";
 if ($select_all_submissions_returned == "true")
 {
-	$all_submissions_selected_omit_list = isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]) ?
-	   $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] : array();
+  $all_submissions_selected_omit_list = isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]) ?
+     $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] : array();
 
-	$all_submissions_selected_omit_list_str = join(",", $all_submissions_selected_omit_list);
+  $all_submissions_selected_omit_list_str = join(",", $all_submissions_selected_omit_list);
   $preselected_subids = array_diff($submission_ids, $all_submissions_selected_omit_list);
 }
 else
-	$preselected_subids = isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) ? $_SESSION["ft"]["form_{$form_id}_selected_submissions"] : array();
+  $preselected_subids = isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) ? $_SESSION["ft"]["form_{$form_id}_selected_submissions"] : array();
 
 $preselected_subids_str = join(",", $preselected_subids);
 
@@ -224,19 +224,18 @@ $page_vars["results_per_page"]   = $results_per_page;
 $page_vars["display_fields"]     = $display_fields;
 $page_vars["order"]              = $order;
 $page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
-
 $page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download", "validation_select_submissions_to_delete",
         "confirm_delete_submission", "confirm_delete_submissions", "phrase_select_all_X_results",
-  			"phrase_select_all_on_page", "phrase_all_X_results_selected", "phrase_row_selected", "phrase_rows_selected",
-				"confirm_delete_submissions_on_other_pages");
+        "phrase_select_all_on_page", "phrase_all_X_results_selected", "phrase_row_selected", "phrase_rows_selected",
+        "confirm_delete_submissions_on_other_pages");
 $page_vars["head_string"] = '<script type="text/javascript" src="../../global/scripts/manage_submissions.js"></script>';
-$page_vars["head_js"] = "
+$page_vars["head_js"] =<<< EOF
 var rules = [];
-rules.push(\"if:search_field!=submission_date,required,search_keyword,{$LANG["validation_please_enter_search_keyword"]}\");
-rules.push(\"if:search_field=submission_date,required,search_date,{$LANG["validation_please_enter_search_date_range"]}\");
+rules.push("if:search_field!=submission_date,required,search_keyword,{$LANG["validation_please_enter_search_keyword"]}");
+rules.push("if:search_field=submission_date,required,search_date,{$LANG["validation_please_enter_search_date_range"]}");
 
-if (typeof ms == \"undefined\")
+if (typeof ms == "undefined")
   ms = {};
 
 ms.page_submission_ids = [$submission_id_str]; // the submission IDs on the current page
@@ -252,26 +251,26 @@ Event.observe(document, 'dom:loaded', function() {
   ms.init_page();
   $$('#submissions_table tr').invoke('observe', 'click',
     function(e)
-		{
-		  // TODO: fix this for Safari. Also, does it work with image manager? all browsers?
-		  var el = Event.element(e);
-		  if (el.nodeName != \"INPUT\" && el.nodeName != \"A\")
-		  {
-		    var tr = ft.get_ancestor_node(el, \"TR\"); // there's already a Prototype function for this
-			  if (tr.id)
-			  {
-			    var result = tr.id.match(/^submission_row_(\d+)/);
-			    var sub_id = result[1];
-			    $('submission_cb_' + sub_id).checked = ($('submission_cb_' + sub_id).checked) ? false : true;
-			    ms.select_row(sub_id, ms.num_results_per_page);
-			  }
+    {
+      // TODO: fix this for Safari
+      var el = Event.element(e);
+      if (el.nodeName != "INPUT" && el.nodeName != "A")
+      {
+        var tr = ft.get_ancestor_node(el, "TR"); // there's already a Prototype function for this
+        if (tr.id)
+        {
+          var result = tr.id.match(/^submission_row_(\d+)/);
+          var sub_id = result[1];
+          $('submission_cb_' + sub_id).checked = ($('submission_cb_' + sub_id).checked) ? false : true;
+          ms.select_row(sub_id, ms.num_results_per_page);
+        }
       }
-		});
+    });
 
-		// add an ellipsis to all custom fields to prevent widening the table too much
+    // add an ellipsis to all custom fields to prevent widening the table too much
     $$('.ellipsis').each(ellipsis);
   });
-";
+EOF;
 
 
 ft_display_page("admin/forms/submissions.tpl", $page_vars);

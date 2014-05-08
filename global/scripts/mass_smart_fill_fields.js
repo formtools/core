@@ -57,13 +57,13 @@ sf_ns.smart_fill = function()
 
 
     var found_element_index = null;
-	  for (var j=0; j<sf_ns.itemized_fields.length; j++)
-	  {
-			if (sf_ns.itemized_fields[j].element_name == field_name || sf_ns.itemized_fields[j].element_name == field_name + "[]")
-			{
-			  found_element_index = j;
-			  break;
-			}
+    for (var j=0; j<sf_ns.itemized_fields.length; j++)
+    {
+      if (sf_ns.itemized_fields[j].element_name == field_name || sf_ns.itemized_fields[j].element_name == field_name + "[]")
+      {
+        found_element_index = j;
+        break;
+      }
     }
 
     // no field was found with this field name
@@ -74,7 +74,6 @@ sf_ns.smart_fill = function()
       $("field_" + field_id + "_options").innerHTML  = "";
       num_not_found_elements++;
     }
-
     else
     {
       var curr_field_info = sf_ns.itemized_fields[found_element_index];
@@ -121,7 +120,7 @@ sf_ns.smart_fill = function()
         // here, more than one field with this name was found (and it wasn't a series of radio-buttons or checkboxes)
         case "mixed":
           sf_ns.fields["f" + field_id].status = "multiple_fields_found";
-         	$("field_" + field_id + "_action").innerHTML   = "<a href=\"#\" onclick=\"return sf_ns.show_page('multiple_fields_found', " + field_id + ")\" class=\"red\">" + g.messages["phrase_multiple_fields_found"] + "</a></span>";
+           $("field_" + field_id + "_action").innerHTML   = "<a href=\"#\" onclick=\"return sf_ns.show_page('multiple_fields_found', " + field_id + ")\" class=\"red\">" + g.messages["phrase_multiple_fields_found"] + "</a></span>";
           $("field_" + field_id + "_options").innerHTML  = "";
           break;
       }
@@ -145,6 +144,8 @@ sf_ns.smart_fill = function()
     var message = (page_ns.num_pages == 1) ? $("multiple_fields_not_found_single_page_form").innerHTML : $("multiple_fields_not_found_multi_page_form").innerHTML;
     ft.display_message("ft_message", false, message);
   }
+
+  sf_ns.check_all_fields_complete();
 }
 
 
@@ -166,7 +167,7 @@ sf_ns.show_page = function(page_id, field_id)
         ["review_field_options_next_field_link", "review_field_options_next_field_link2"]);
 
       setTimeout(function() { sf_ns.load_field_options_page(field_id) }, 400);
-		  break;
+      break;
 
     case "multiple_fields_found":
       sf_ns.generate_next_prev_links(field_id,
@@ -188,9 +189,9 @@ sf_ns.show_page = function(page_id, field_id)
       setTimeout(function() { sf_ns.load_not_found_page(field_id); }, 400);
       break;
 
-		case "main_field_table":
-		  Effect.Appear($("main_field_table"), { duration: 0.4, delay: 0.4 });
-		  break;
+    case "main_field_table":
+      Effect.Appear($("main_field_table"), { duration: 0.4, delay: 0.4 });
+      break;
   }
 
   sf_ns.current_page_id = page_id;
@@ -242,25 +243,25 @@ sf_ns.refresh_page = function()
   }
 
   // reset all the field values
-	sf_ns.itemized_fields = [];
-	sf_ns.itemize_form_fields_complete = false;
-	sf_ns.fields = [];
-	sf_ns.current_field_id = null;
-	sf_ns.current_page_id = "main_field_table";
-	sf_ns.all_fields_complete = false;
+  sf_ns.itemized_fields = [];
+  sf_ns.itemize_form_fields_complete = false;
+  sf_ns.fields = [];
+  sf_ns.current_field_id = null;
+  sf_ns.current_page_id = "main_field_table";
+  sf_ns.all_fields_complete = false;
 
-	sf_ns.tmp_deleted_field_option_rows = [];
+  sf_ns.tmp_deleted_field_option_rows = [];
 
   // reload all the iframe contents
   for (var i=1; i<=page_ns.num_pages; i++)
   {
     page_ns["form_" + i + "_loaded"] = false;
-		$("form_" + i + "_iframe").src = $("form_" + i + "_iframe").src;
+    $("form_" + i + "_iframe").src = $("form_" + i + "_iframe").src;
   }
 
   $("smart_fill_button").disabled = false;
-	$("smart_fill_button").addClassName("blue");
-	$("smart_fill_button").removeClassName("light_grey");
+  $("smart_fill_button").addClassName("blue");
+  $("smart_fill_button").removeClassName("light_grey");
 }
 
 
@@ -336,76 +337,76 @@ sf_ns.load_multiple_fields_found_page = function(field_id)
     var page_num   = field_info.form_page;
     var row_number = i+1;
 
-	  var row = document.createElement("tr");
-	  var td1 = document.createElement("td");
-	  td1.setAttribute("width", "50");
-	  td1.setAttribute("align", "center");
-	  td1.appendChild(document.createTextNode(row_number));
+    var row = document.createElement("tr");
+    var td1 = document.createElement("td");
+    td1.setAttribute("width", "50");
+    td1.setAttribute("align", "center");
+    td1.appendChild(document.createTextNode(row_number));
 
-	  var td2 = document.createElement("td");
+    var td2 = document.createElement("td");
 
-	  var field_type_string = "";
-	  switch (field_type)
-	  {
-	    case "textbox":
-	      field_type_string = g.messages["word_textbox"];
-	      break;
-	    case "password":
-	      field_type_string = g.messages["word_password"];
-	      break;
-	    case "file":
-	      field_type_string = g.messages["word_file"];
-	      break;
-	    case "radio-buttons":
-	      field_type_string = g.messages["phrase_radio_buttons"];
-	      break;
-	    case "checkboxes":
-	      field_type_string = g.messages["word_checkboxes"];
-	      break;
-	    case "textarea":
-	      field_type_string = g.messages["word_textarea"];
-	      break;
-	    case "select":
-	      field_type_string = g.messages["word_select"];
-	      break;
-	    case "multi-select":
-	      field_type_string = g.messages["phrase_multi_select"];
-	      break;
-	  }
+    var field_type_string = "";
+    switch (field_type)
+    {
+      case "textbox":
+        field_type_string = g.messages["word_textbox"];
+        break;
+      case "password":
+        field_type_string = g.messages["word_password"];
+        break;
+      case "file":
+        field_type_string = g.messages["word_file"];
+        break;
+      case "radio-buttons":
+        field_type_string = g.messages["phrase_radio_buttons"];
+        break;
+      case "checkboxes":
+        field_type_string = g.messages["word_checkboxes"];
+        break;
+      case "textarea":
+        field_type_string = g.messages["word_textarea"];
+        break;
+      case "select":
+        field_type_string = g.messages["word_select"];
+        break;
+      case "multi-select":
+        field_type_string = g.messages["phrase_multi_select"];
+        break;
+    }
 
-	  td2.appendChild(document.createTextNode(field_type_string));
-	  td2.setAttribute("width", "150");
-	  $(td2).addClassName("pad_left_small");
+    td2.appendChild(document.createTextNode(field_type_string));
+    td2.setAttribute("width", "150");
+    $(td2).addClassName("pad_left_small");
 
-	  var td3 = document.createElement("td");
-	  var a = document.createElement("a");
-	  a.setAttribute("href", page_ns["form_" + page_num + "_url"]);
-	  a.setAttribute("target", "_blank");
-	  a.appendChild(document.createTextNode(g.messages["word_page"] + " " + page_num));
+    var td3 = document.createElement("td");
+    var a = document.createElement("a");
+    a.setAttribute("href", page_ns["form_" + page_num + "_url"]);
+    a.setAttribute("target", "_blank");
+    a.appendChild(document.createTextNode(g.messages["word_page"] + " " + page_num));
     td3.appendChild(a);
 
-	  var td4 = document.createElement("td");
-	  $(td4).addClassName("pad_left_small");
+    var td4 = document.createElement("td");
+    $(td4).addClassName("pad_left_small");
 
 
-	  if (field_info.option_list)
+    if (field_info.option_list)
       td4.appendChild(document.createTextNode(field_info.option_list.toString().truncate(40)));
-	  else
-	    td4.appendChild(document.createTextNode(g.messages["word_na"]));
+    else
+      td4.appendChild(document.createTextNode(g.messages["word_na"]));
 
-	  var td5 = document.createElement("td");
-	  td5.setAttribute("align", "center");
-	  var a = document.createElement("a");
-	  a.setAttribute("href", "#");
+    var td5 = document.createElement("td");
+    td5.setAttribute("align", "center");
+    var a = document.createElement("a");
+    a.setAttribute("href", "#");
     a.onclick = sf_ns.choose_field.bind(this, field_id, sf_ns.itemized_fields[field_name_index].elements[i]);
-	  a.appendChild(document.createTextNode(g.messages["word_select"].toUpperCase()));
+    a.appendChild(document.createTextNode(g.messages["word_select"].toUpperCase()));
     td5.appendChild(a);
 
-	  row.appendChild(td1);
-	  row.appendChild(td2);
-	  row.appendChild(td3);
-	  row.appendChild(td4);
-	  row.appendChild(td5);
+    row.appendChild(td1);
+    row.appendChild(td2);
+    row.appendChild(td3);
+    row.appendChild(td4);
+    row.appendChild(td5);
 
     tbody.appendChild(row);
   }
@@ -451,18 +452,18 @@ sf_ns.choose_field_type = function()
   $("field_" + sf_ns.current_field_id + "_action").innerHTML = "<span class=\"medium_grey\">" + g.messages["word_resolved"] + "</span>";
   $("field_" + sf_ns.current_field_id + "_options").innerHTML = "";
 
-	$("not_found_action_needed").removeClassName("error");
-	$("not_found_action_needed").addClassName("notify");
+  $("not_found_action_needed").removeClassName("error");
+  $("not_found_action_needed").addClassName("notify");
 
-	if (selected_field_type == "radio-buttons" || selected_field_type == "checkboxes" ||
-	    selected_field_type == "select" || selected_field_type == "multi-select")
-	{
-	  $("not_found_action_needed").innerHTML = "<div style=\"padding:6px;\">" + g.messages["notify_multi_field_updated"] + "</div>";
-	}
-	else
-	{
-	  $("not_found_action_needed").innerHTML = "<div style=\"padding:6px;\">" + g.messages["notify_field_updated"] + "</div>";
-	}
+  if (selected_field_type == "radio-buttons" || selected_field_type == "checkboxes" ||
+      selected_field_type == "select" || selected_field_type == "multi-select")
+  {
+    $("not_found_action_needed").innerHTML = "<div style=\"padding:6px;\">" + g.messages["notify_multi_field_updated"] + "</div>";
+  }
+  else
+  {
+    $("not_found_action_needed").innerHTML = "<div style=\"padding:6px;\">" + g.messages["notify_field_updated"] + "</div>";
+  }
 
   sf_ns.check_all_fields_complete();
 }
@@ -479,9 +480,9 @@ sf_ns.skip_field = function()
   $("field_" + sf_ns.current_field_id + "_action").innerHTML = "<span class=\"medium_grey\">" + g.messages["word_skipped"] + "</span>";
   $("field_" + sf_ns.current_field_id + "_options").innerHTML = "";
 
-	$("not_found_action_needed").removeClassName("error");
-	$("not_found_action_needed").addClassName("notify");
-	$("not_found_action_needed").innerHTML = "<div style=\"padding:6px;\">" + g.messages["phrase_field_skipped"] + "</div>";
+  $("not_found_action_needed").removeClassName("error");
+  $("not_found_action_needed").addClassName("notify");
+  $("not_found_action_needed").innerHTML = "<div style=\"padding:6px;\">" + g.messages["phrase_field_skipped"] + "</div>";
 
   sf_ns.check_all_fields_complete();
 }
@@ -504,8 +505,8 @@ sf_ns.choose_field = function(field_id, itemized_field_info)
   if (itemized_field_info.option_list)
   {
     sf_ns.fields["f" + field_id].option_list = itemized_field_info.option_list;
-	  var num_options = sf_ns.fields["f" + field_id].option_list.length;
-	  $("field_" + field_id + "_options").innerHTML = "<a href=\"#\" onclick=\"return sf_ns.show_page('review_field_options', '" + field_id + "')\">" + g.messages["word_options"] + " (" + num_options + ")</span>";
+    var num_options = sf_ns.fields["f" + field_id].option_list.length;
+    $("field_" + field_id + "_options").innerHTML = "<a href=\"#\" onclick=\"return sf_ns.show_page('review_field_options', '" + field_id + "')\">" + g.messages["word_options"] + " (" + num_options + ")</span>";
   }
   else
     $("field_" + field_id + "_options").innerHTML = "<span class=\"light_grey\">" + g.messages["word_na"] + "</span>";
@@ -577,31 +578,31 @@ sf_ns.load_field_options_page = function(field_id)
   var tbody = $("review_field_options_table").getElementsByTagName("tbody")[0];
 
   // add the table heading row
-	var row = document.createElement("tr");
+  var row = document.createElement("tr");
 
-	// [1] first cell: row number
-	var th1 = document.createElement("th");
-	th1.setAttribute("width", "45");
-	th1.appendChild(document.createTextNode(g.messages["word_order"]));
+  // [1] first cell: row number
+  var th1 = document.createElement("th");
+  th1.setAttribute("width", "45");
+  th1.appendChild(document.createTextNode(g.messages["word_order"]));
 
-	// [2] second <td> cell: "value" field
-	var th2 = document.createElement("th");
-	th2.appendChild(document.createTextNode(g.messages["phrase_field_value"]));
+  // [2] second <td> cell: "value" field
+  var th2 = document.createElement("th");
+  th2.appendChild(document.createTextNode(g.messages["phrase_field_value"]));
 
-	// [3] second <td> cell: "display text" field
-	var th3 = document.createElement("th");
-	th3.appendChild(document.createTextNode(g.messages["phrase_display_value"]));
+  // [3] second <td> cell: "display text" field
+  var th3 = document.createElement("th");
+  th3.appendChild(document.createTextNode(g.messages["phrase_display_value"]));
 
-	// [4] delete column
-	var th4 = document.createElement("th");
-	th4.className = "del";
-	th4.appendChild(document.createTextNode(g.messages["word_delete"].toUpperCase()));
+  // [4] delete column
+  var th4 = document.createElement("th");
+  th4.className = "del";
+  th4.appendChild(document.createTextNode(g.messages["word_delete"].toUpperCase()));
 
-	row.appendChild(th1);
-	row.appendChild(th2);
-	row.appendChild(th3);
-	row.appendChild(th4);
-	tbody.appendChild(row);
+  row.appendChild(th1);
+  row.appendChild(th2);
+  row.appendChild(th3);
+  row.appendChild(th4);
+  tbody.appendChild(row);
 
   // now add the custom options
   var num_fields = sf_ns.fields["f" + field_id].option_list.length;
@@ -666,14 +667,14 @@ sf_ns.load_field_options_page = function(field_id)
 
   ft.queue.push([
     function() {
-		  Effect.Appear($("review_field_options"), { duration: 0.4, delay: 0.4 });
-		  setTimeout(function() { sf_ns.log_activity(false) }, 400);
-		},
-		function() {
-		  return $("field_option_text_" + last_row);
-		}
-	]);
-	ft.process_queue();
+      Effect.Appear($("review_field_options"), { duration: 0.4, delay: 0.4 });
+      setTimeout(function() { sf_ns.log_activity(false) }, 400);
+    },
+    function() {
+      return $("field_option_text_" + last_row);
+    }
+  ]);
+  ft.process_queue();
 }
 
 
@@ -697,8 +698,8 @@ sf_ns.display_action_needed_message = function(field_id, target_id)
 
   if (field_info.is_complete)
   {
-  	$(target_id).removeClassName("error");
-  	$(target_id).removeClassName("notify");
+    $(target_id).removeClassName("error");
+    $(target_id).removeClassName("notify");
     $(target_id).innerHTML = "<span class=\"light_grey\">" + g.messages["word_none"] + "</span>";
   }
   else
@@ -706,9 +707,9 @@ sf_ns.display_action_needed_message = function(field_id, target_id)
     switch (field_info.status)
     {
       case "add_field_values":
-				$(target_id).addClassName("error");
-				$(target_id).innerHTML = "<div style=\"padding:6px\">" + g.messages["notify_add_display_values"] + "</div>";
-				break;
+        $(target_id).addClassName("error");
+        $(target_id).innerHTML = "<div style=\"padding:6px\">" + g.messages["notify_add_display_values"] + "</div>";
+        break;
     }
   }
 }
@@ -765,16 +766,16 @@ sf_ns.itemize_form_fields = function()
   // process the forms, logging information about all the form fields.
   for (var form_num=1; form_num<=page_ns.num_pages; form_num++)
   {
-		var form_iframe = window["form_" + form_num + "_iframe"].window.document;
-		var num_forms  = form_iframe.forms.length;
-		for (var j=0; j<num_forms; j++)
-		{
+    var form_iframe = window["form_" + form_num + "_iframe"].window.document;
+    var num_forms  = form_iframe.forms.length;
+    for (var j=0; j<num_forms; j++)
+    {
       // loop through every element in this form
-		  var elements = sf_ns.get_form_elements(form_iframe.forms[j]);
+      var elements = sf_ns.get_form_elements(form_iframe.forms[j]);
 
-		  for (var k=0; k<elements.length; k++)
-		  {
-		    var el = elements[k];
+      for (var k=0; k<elements.length; k++)
+      {
+        var el = elements[k];
 
         // if this element doesn't have a name, skip it - we're not interested in it
         if (!el.name)
@@ -786,16 +787,16 @@ sf_ns.itemize_form_fields = function()
         info.form_page = form_num;
 
 
-	      // see if a field with this name has already been added
-	      var existing_field_name_index = null;
-	      for (var p=0; p<sf_ns.itemized_fields.length; p++)
-	      {
-	        if (sf_ns.itemized_fields[p].element_name == element_name)
-	        {
-	          existing_field_name_index = p;
-	          break;
-	        }
-	      }
+        // see if a field with this name has already been added
+        var existing_field_name_index = null;
+        for (var p=0; p<sf_ns.itemized_fields.length; p++)
+        {
+          if (sf_ns.itemized_fields[p].element_name == element_name)
+          {
+            existing_field_name_index = p;
+            break;
+          }
+        }
 
         switch (el.tagName)
         {
@@ -817,11 +818,11 @@ sf_ns.itemize_form_fields = function()
                 info.option_list = [];
                 if (form_iframe.forms[j][el.name].length != undefined)
                 {
-	                var num_options = form_iframe.forms[j][el.name].length;
-	                for (var n=0; n<num_options; n++)
-	                {
-	                  info.option_list.push([form_iframe.forms[j][el.name][n].value, null]);
-	                }
+                  var num_options = form_iframe.forms[j][el.name].length;
+                  for (var n=0; n<num_options; n++)
+                  {
+                    info.option_list.push([form_iframe.forms[j][el.name][n].value, null]);
+                  }
                 }
                 else
                   info.option_list.push([form_iframe.forms[j][el.name].value, ""]);
@@ -832,17 +833,17 @@ sf_ns.itemize_form_fields = function()
                 info.option_list = [];
                 if (form_iframe.forms[j][el.name].length != undefined)
                 {
-	                var num_options = form_iframe.forms[j][el.name].length;
-	                for (var n=0; n<num_options; n++)
-	                  info.option_list.push([form_iframe.forms[j][el.name][n].value, null]);
+                  var num_options = form_iframe.forms[j][el.name].length;
+                  for (var n=0; n<num_options; n++)
+                    info.option_list.push([form_iframe.forms[j][el.name][n].value, null]);
                 }
                 else
                   info.option_list.push([form_iframe.forms[j][el.name].value, ""]);
                 break;
 
-							// this may seem odd, but for lack of anything better we store these two form field types
-							// as textboxes. Neither would make sense as any other types of field & in most cases, they
-							// won't be stored
+              // this may seem odd, but for lack of anything better we store these two form field types
+              // as textboxes. Neither would make sense as any other types of field & in most cases, they
+              // won't be stored
               case "submit":
               case "hidden":
                 info.element_type = "textbox";
@@ -858,15 +859,15 @@ sf_ns.itemize_form_fields = function()
             else
               info.element_type = "select";
 
-				  	//var num_options = form_iframe.forms[j][el.name].options.length;
-				  	var num_options = el.options.length;
-						info.option_list = [];
-						for (var n=0; n<num_options; n++)
-						{
+            //var num_options = form_iframe.forms[j][el.name].options.length;
+            var num_options = el.options.length;
+            info.option_list = [];
+            for (var n=0; n<num_options; n++)
+            {
               var val = el.options[n].value;
               var txt = el.options[n].text;
-						  info.option_list.push([val, txt]);
-						}
+              info.option_list.push([val, txt]);
+            }
             break;
 
           case "TEXTAREA":
@@ -894,7 +895,7 @@ sf_ns.itemize_form_fields = function()
           }
         }
       }
-	  }
+    }
   }
 
   for (var i=0; i<sf_ns.itemized_fields.length; i++)
@@ -915,11 +916,11 @@ sf_ns.itemize_form_fields = function()
     {
       var full_option_list = [];
       var all_field_types = [];
-	    for (var j=0; j<sf_ns.itemized_fields[i].elements.length; j++)
-	    {
-	      all_field_types.push(sf_ns.itemized_fields[i].elements[j].element_type);
-	      full_option_list.push(sf_ns.itemized_fields[i].elements[j].option_list);
-	    }
+      for (var j=0; j<sf_ns.itemized_fields[i].elements.length; j++)
+      {
+        all_field_types.push(sf_ns.itemized_fields[i].elements[j].element_type);
+        full_option_list.push(sf_ns.itemized_fields[i].elements[j].option_list);
+      }
 
       all_unique_field_types = all_field_types.uniq();
 
@@ -937,7 +938,7 @@ sf_ns.itemize_form_fields = function()
         sf_ns.itemized_fields[i].field_type = all_unique_field_types[0];
         sf_ns.itemized_fields[i].option_list = full_option_list;
       }
-	  }
+    }
   }
 }
 
@@ -994,54 +995,54 @@ sf_ns.add_field_option = function()
   // automatically overwritten when the user approves the field or leaves the page
   sf_ns.fields["f" + sf_ns.current_field_id].option_list.push(null);
 
-	var row = document.createElement("tr");
-	row.setAttribute("id", "field_option_row" + next_id);
+  var row = document.createElement("tr");
+  row.setAttribute("id", "field_option_row" + next_id);
 
-	// [1] first cell: row number
-	var td1 = document.createElement("td");
-	td1.setAttribute("align", "center");
-	td1.setAttribute("id", "field_option_" + next_id + "_order");
+  // [1] first cell: row number
+  var td1 = document.createElement("td");
+  td1.setAttribute("align", "center");
+  td1.setAttribute("id", "field_option_" + next_id + "_order");
   var num_deleted_rows = sf_ns.tmp_deleted_field_option_rows.length;
-	var row_num_label = (next_id + 1) - num_deleted_rows;
-	td1.appendChild(document.createTextNode(row_num_label));
+  var row_num_label = (next_id + 1) - num_deleted_rows;
+  td1.appendChild(document.createTextNode(row_num_label));
 
-	// [2] second <td> cell: "value" field
-	var td2 = document.createElement("td");
-	var title = document.createElement("input");
-	title.setAttribute("type", "text");
-	title.setAttribute("name", "field_option_value_" + next_id);
-	title.setAttribute("id", "field_option_value_" + next_id);
-	title.style.cssText = "width: 98%";
-	td2.appendChild(title);
+  // [2] second <td> cell: "value" field
+  var td2 = document.createElement("td");
+  var title = document.createElement("input");
+  title.setAttribute("type", "text");
+  title.setAttribute("name", "field_option_value_" + next_id);
+  title.setAttribute("id", "field_option_value_" + next_id);
+  title.style.cssText = "width: 98%";
+  td2.appendChild(title);
 
-	// [3] second <td> cell: "display text" field
-	var td3 = document.createElement("td");
-	var title = document.createElement("input");
-	title.setAttribute("type", "text");
-	title.setAttribute("name", "field_option_text_" + next_id);
-	title.setAttribute("id", "field_option_text_" + next_id);
-	title.style.cssText = "width: 98%";
-	td3.appendChild(title);
+  // [3] second <td> cell: "display text" field
+  var td3 = document.createElement("td");
+  var title = document.createElement("input");
+  title.setAttribute("type", "text");
+  title.setAttribute("name", "field_option_text_" + next_id);
+  title.setAttribute("id", "field_option_text_" + next_id);
+  title.style.cssText = "width: 98%";
+  td3.appendChild(title);
 
-	// [4] delete column
-	var td4 = document.createElement("td");
-	td4.setAttribute("align", "center");
-	td4.className = "del";
-	var del_link = document.createElement("a");
-	del_link.setAttribute("href", "#");
-	del_link.onclick = sf_ns.delete_field_option.bind(this, next_id);
-	del_link.appendChild(document.createTextNode(g.messages["word_delete"].toUpperCase()));
-	td4.appendChild(del_link);
+  // [4] delete column
+  var td4 = document.createElement("td");
+  td4.setAttribute("align", "center");
+  td4.className = "del";
+  var del_link = document.createElement("a");
+  del_link.setAttribute("href", "#");
+  del_link.onclick = sf_ns.delete_field_option.bind(this, next_id);
+  del_link.appendChild(document.createTextNode(g.messages["word_delete"].toUpperCase()));
+  td4.appendChild(del_link);
 
-	// add the table data cells to the row
-	row.appendChild(td1);
-	row.appendChild(td2);
-	row.appendChild(td3);
-	row.appendChild(td4);
+  // add the table data cells to the row
+  row.appendChild(td1);
+  row.appendChild(td2);
+  row.appendChild(td3);
+  row.appendChild(td4);
 
-	// add the row to the table
-	var tbody = $("review_field_options_table").getElementsByTagName("tbody")[0];
-	tbody.appendChild(row);
+  // add the row to the table
+  var tbody = $("review_field_options_table").getElementsByTagName("tbody")[0];
+  tbody.appendChild(row);
 }
 
 
@@ -1062,9 +1063,9 @@ sf_ns.update_field = function(message_target_id)
     $("field_" + sf_ns.current_field_id + "_action").innerHTML = "<span class=\"light_grey\">" + g.messages["word_none"] + "</span>";
   }
 
-	$(message_target_id).removeClassName("error");
-	$(message_target_id).removeClassName("notify");
-	$(message_target_id).innerHTML = "<div class=\"notify\"><div style=\"padding:6px;\">" + g.messages["notify_field_updated"] + "</div></div>";
+  $(message_target_id).removeClassName("error");
+  $(message_target_id).removeClassName("notify");
+  $(message_target_id).innerHTML = "<div class=\"notify\"><div style=\"padding:6px;\">" + g.messages["notify_field_updated"] + "</div></div>";
 
   sf_ns.check_all_fields_complete();
 }
@@ -1208,28 +1209,28 @@ sf_ns.get_next_prev_field_ids = function(field_id)
 
   if (field_index > 0)
   {
-	  for (var i=field_index-1; i>=0; i--)
-	  {
-	    var curr_field_id = page_ns.field_ids[i];
-	    if (!sf_ns.fields["f" + curr_field_id].is_complete)
-	    {
-	      previous_field_id = curr_field_id;
-	      break;
-	    }
-	  }
+    for (var i=field_index-1; i>=0; i--)
+    {
+      var curr_field_id = page_ns.field_ids[i];
+      if (!sf_ns.fields["f" + curr_field_id].is_complete)
+      {
+        previous_field_id = curr_field_id;
+        break;
+      }
+    }
   }
 
   if (field_index < page_ns.field_ids.length-1)
   {
-	  for (var i=field_index+1; i<page_ns.field_ids.length; i++)
-	  {
-	    var curr_field_id = page_ns.field_ids[i];
-	    if (!sf_ns.fields["f" + curr_field_id].is_complete)
-	    {
-	      next_field_id = curr_field_id;
-	      break;
-	    }
-	  }
+    for (var i=field_index+1; i<page_ns.field_ids.length; i++)
+    {
+      var curr_field_id = page_ns.field_ids[i];
+      if (!sf_ns.fields["f" + curr_field_id].is_complete)
+      {
+        next_field_id = curr_field_id;
+        break;
+      }
+    }
   }
 
   return [previous_field_id, next_field_id];
@@ -1247,12 +1248,12 @@ sf_ns.skip_step = function()
   {
     var field_id = page_ns.field_ids[i];
 
-		if (!sf_ns.smart_filled)
-		{
-		  sf_ns.fields["f" + field_id] = { status: "skipped" }
+    if (!sf_ns.smart_filled)
+    {
+      sf_ns.fields["f" + field_id] = { status: "skipped" }
       $("field_" + field_id + "_action").innerHTML = "<span class=\"medium_grey\">" + g.messages["word_skipped"] + "</span>";
       sf_ns.fields["f" + field_id].is_complete = true;
-		}
+    }
     else if (!sf_ns.fields["f" + field_id].is_complete)
     {
       sf_ns.fields["f" + field_id].status = "skipped";
@@ -1313,27 +1314,27 @@ sf_ns.log_files_as_uploaded = function()
 
   var response = $("upload_files_iframe").contentWindow.document.body.innerHTML;
   try {
-	  var info = response.evalJSON();
-	  if (info.success)
-	  {
+    var info = response.evalJSON();
+    if (info.success)
+    {
       // so far so good! Here, the files have been uploaded to the server and should be accessible
       // to the JS. Get the file URLs from response and load the iframes. When that's done, a message
       // is displayed to the user telling them to try Smart Filling now. Since the
       sf_ns.manual_file_upload_attempted = true;
       for (var i=1; i<=page_ns.num_pages; i++)
       {
-		    page_ns["form_" + i + "_loaded"] = false;
-				$("form_" + i + "_iframe").src = info["url_" + i];
+        page_ns["form_" + i + "_loaded"] = false;
+        $("form_" + i + "_iframe").src = info["url_" + i];
       }
-	  }
-	  else
-	  {
+    }
+    else
+    {
       ft.display_message("ft_message", false, info.message);
-	  }
-	}
-	// should never occur, but...
-	catch (err)
-	{
+    }
+  }
+  // should never occur, but...
+  catch (err)
+  {
     ft.display_message("ft_message", false, g.messages["notify_smart_fill_upload_fields_fail"]);
   }
 
@@ -1389,8 +1390,8 @@ sf_ns.submit_form = function()
   // display the "please be patient" message,
   ft.display_message("next_step_message", true, g.messages["notify_smart_fill_submitted"]);
   $("next_step").disabled = true; // disable the next step button, just in case
-	$("ajax_activity_bottom").show();
-	$("ajax_no_activity_bottom").hide();
+  $("ajax_activity_bottom").show();
+  $("ajax_no_activity_bottom").hide();
 
 
   page_url = g.root_url + "/global/code/actions.php";
@@ -1405,12 +1406,12 @@ sf_ns.submit_form = function()
 sf_ns.submit_form_response = function(transport)
 {
   try {
-	  var info = transport.responseText.evalJSON();
-	  if (info.success)
-	    window.location = "step6.php";
-	}
-	catch (err)
-	{
+    var info = transport.responseText.evalJSON();
+    if (info.success)
+      window.location = "step6.php";
+  }
+  catch (err)
+  {
     ft.display_message("next_step_message", false, transport.responseText);
   }
 }

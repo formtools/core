@@ -889,6 +889,7 @@ $LANG["phrase_your_name"] = "Your Name";
 // Processing
 $LANG["processing_form_disabled"] = "Sorry, this form has been disabled.";
 $LANG["processing_form_incomplete"] = "Sorry, this form does not appear to be fully set up from within Form Tools. The most likely cause of this problem is that you removed the \"form_tools_initialize_form\" hidden form field, but didn't complete all the steps of the \"Add Form\" process.<br><br>Please log in and review the form configuration.";
+$LANG["processing_no_form_url_for_recaptcha"] = "Form Tools is unable to determine where to redirect when they fail to enter the CAPTCHA properly. Please pass in a hidden field with the name <b>form_tools_form_url</b> containing the URL of the form.";
 $LANG["processing_init_complete"] = "Thank you! Your test submission has been put through successfully. Please return to the Form Tools Administration panel and click the \"Refresh\" button at the bottom of the Add Form Step 3 page to finish setting up your form.";
 $LANG["processing_no_form_id"] = "process.php requires a form ID for processing. Make sure your form contains a hidden field with the name \"form_tools_form_id\" that's passing along the form ID.";
 $LANG["processing_no_post_vars"] = "process.php is not receiving any data. Note: this script cannot be loaded directly in your browser.<br />Make sure your form is sending via POST.";

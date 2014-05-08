@@ -21,16 +21,16 @@
  */
 function ft_check_module_enabled($module_folder)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$query = mysql_query("
-	  SELECT is_enabled
-	  FROM   {$g_table_prefix}modules
-	  WHERE  module_folder = '$module_folder'
-	    ");
+  $query = mysql_query("
+    SELECT is_enabled
+    FROM   {$g_table_prefix}modules
+    WHERE  module_folder = '$module_folder'
+      ");
 
-	$result = mysql_fetch_assoc($query);
-	return (!empty($result) && $result["is_enabled"] == "yes");
+  $result = mysql_fetch_assoc($query);
+  return (!empty($result) && $result["is_enabled"] == "yes");
 }
 
 
@@ -41,9 +41,9 @@ function ft_check_module_enabled($module_folder)
  */
 function ft_uninstall_module($module_id)
 {
-	global $g_table_prefix, $LANG, $g_root_dir, $g_delete_module_folder_on_uninstallation;
+  global $g_table_prefix, $LANG, $g_root_dir, $g_delete_module_folder_on_uninstallation;
 
-	$module_info = ft_get_module($module_id);
+  $module_info = ft_get_module($module_id);
   $module_folder = $module_info["module_folder"];
 
   if (empty($module_info))
@@ -51,36 +51,36 @@ function ft_uninstall_module($module_id)
 
   $success = true;
 
-	$has_custom_uninstall_script = false;
+  $has_custom_uninstall_script = false;
   if (is_file("$g_root_dir/modules/$module_folder/library.php"))
   {
-  	@include_once("$g_root_dir/modules/$module_folder/library.php");
-  	$uninstall_function_name = "{$module_folder}__uninstall";
-  	if (function_exists($uninstall_function_name))
-  	{
-  		$has_custom_uninstall_script = true;
+    @include_once("$g_root_dir/modules/$module_folder/library.php");
+    $uninstall_function_name = "{$module_folder}__uninstall";
+    if (function_exists($uninstall_function_name))
+    {
+      $has_custom_uninstall_script = true;
 
-  		// get the module language file contents and store the info in the $LANG global for
-  		// so it can be accessed by the uninstallation script
-  		$LANG[$module_folder] = ft_get_module_lang_file_contents($module_folder);
-  		list($success, $custom_message) = $uninstall_function_name($module_id);
+      // get the module language file contents and store the info in the $LANG global for
+      // so it can be accessed by the uninstallation script
+      $LANG[$module_folder] = ft_get_module_lang_file_contents($module_folder);
+      list($success, $custom_message) = $uninstall_function_name($module_id);
 
-  		// if there was a custom message returned (error or notification), overwrite the default
-  		// message
-  		if (!empty($custom_message))
-  		  $message = $custom_message;
-  	}
+      // if there was a custom message returned (error or notification), overwrite the default
+      // message
+      if (!empty($custom_message))
+        $message = $custom_message;
+    }
   }
 
   // finally, if there wasn't a custom uninstallation script, or there WAS and it was successfully
   // run, remove the module record and any old database references
   if (!$has_custom_uninstall_script || ($has_custom_uninstall_script && $success))
   {
-  	// delete the module tables
-		mysql_query("DELETE FROM {$g_table_prefix}modules WHERE module_id = $module_id");
-		mysql_query("DELETE FROM {$g_table_prefix}module_menu_items WHERE module_id = $module_id");
+    // delete the module tables
+    mysql_query("DELETE FROM {$g_table_prefix}modules WHERE module_id = $module_id");
+    mysql_query("DELETE FROM {$g_table_prefix}module_menu_items WHERE module_id = $module_id");
 
-		// if this module was linked to any menu items, remove it!
+    // if this module was linked to any menu items, remove it!
     $query = mysql_query("
       DELETE FROM   {$g_table_prefix}menu_items
       WHERE  page_identifier = 'module_$module_id'
@@ -112,9 +112,9 @@ function ft_uninstall_module($module_id)
   else
     $message = $LANG["notify_module_uninstalled_files_not_deleted"];
 
-	extract(ft_process_hooks("end", compact("module_id", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("module_id", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
 
-	return array($success, $message);
+  return array($success, $message);
 }
 
 
@@ -126,17 +126,17 @@ function ft_uninstall_module($module_id)
  */
 function ft_get_module_id_from_module_folder($module_folder)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$result = mysql_query("
-	  SELECT module_id
-	  FROM   {$g_table_prefix}modules
-	  WHERE  module_folder = '$module_folder'
-	    ");
+  $result = mysql_query("
+    SELECT module_id
+    FROM   {$g_table_prefix}modules
+    WHERE  module_folder = '$module_folder'
+      ");
 
-	$info = mysql_fetch_assoc($result);
+  $info = mysql_fetch_assoc($result);
 
-	return (isset($info["module_id"])) ? $info["module_id"] : "";
+  return (isset($info["module_id"])) ? $info["module_id"] : "";
 }
 
 
@@ -153,29 +153,29 @@ function ft_get_module_id_from_module_folder($module_folder)
  */
 function ft_get_module_menu_items($module_id, $module_folder)
 {
-	global $g_table_prefix, $g_root_url;
+  global $g_table_prefix, $g_root_url;
 
-	$result = mysql_query("
-	  SELECT *
-	  FROM {$g_table_prefix}module_menu_items
-	  WHERE module_id = $module_id
-	  ORDER BY list_order ASC
-	    ");
+  $result = mysql_query("
+    SELECT *
+    FROM {$g_table_prefix}module_menu_items
+    WHERE module_id = $module_id
+    ORDER BY list_order ASC
+      ");
 
-	$menu_items = array();
+  $menu_items = array();
 
   $placeholders = array();
   $placeholders["module_dir"] = "$g_root_url/modules/$module_folder";
 
-	while ($row = mysql_fetch_assoc($result))
-	{
-		$row["url"] = ft_eval_smarty_string($row["url"], $placeholders);
-	  $menu_items[] = $row;
-	}
+  while ($row = mysql_fetch_assoc($result))
+  {
+    $row["url"] = ft_eval_smarty_string($row["url"], $placeholders);
+    $menu_items[] = $row;
+  }
 
-	extract(ft_process_hooks("end", compact("menu_items", "module_id", "module_folder"), array("menu_items")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("menu_items", "module_id", "module_folder"), array("menu_items")), EXTR_OVERWRITE);
 
-	return $menu_items;
+  return $menu_items;
 }
 
 
@@ -186,14 +186,14 @@ function ft_get_module_menu_items($module_id, $module_folder)
  */
 function ft_get_module($module_id)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$query = mysql_query("SELECT * FROM {$g_table_prefix}modules WHERE module_id = $module_id");
-	$result = mysql_fetch_assoc($query);
+  $query = mysql_query("SELECT * FROM {$g_table_prefix}modules WHERE module_id = $module_id");
+  $result = mysql_fetch_assoc($query);
 
-	extract(ft_process_hooks("end", compact("module_id", "result"), array("result")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("module_id", "result"), array("result")), EXTR_OVERWRITE);
 
-	return $result;
+  return $result;
 }
 
 
@@ -212,10 +212,10 @@ function ft_get_module($module_id)
  */
 function ft_get_module_settings($settings = "", $module_folder = "")
 {
-	if (empty($module_folder))
-	  $module_folder = _ft_get_current_module_folder();
+  if (empty($module_folder))
+    $module_folder = _ft_get_current_module_folder();
 
-	return ft_get_settings($settings, $module_folder);
+  return ft_get_settings($settings, $module_folder);
 }
 
 
@@ -228,31 +228,31 @@ function ft_search_modules($search_criteria)
 {
   global $g_table_prefix;
 
-	if (!isset($search_criteria["order"]))
-	  $search_criteria["order"] = "module_name-DESC";
+  if (!isset($search_criteria["order"]))
+    $search_criteria["order"] = "module_name-DESC";
 
-	extract(ft_process_hooks("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
 
-	// verbose, but at least it prevents any invalid sorting...
-	$order_clause = "";
+  // verbose, but at least it prevents any invalid sorting...
+  $order_clause = "";
   switch ($search_criteria["order"])
   {
-  	case "module_name-DESC":
-  		$order_clause = "module_name DESC";
-  		break;
-  	case "module_name-ASC":
-  		$order_clause = "module_name ASC";
-  		break;
+    case "module_name-DESC":
+      $order_clause = "module_name DESC";
+      break;
+    case "module_name-ASC":
+      $order_clause = "module_name ASC";
+      break;
     case "is_enabled-DESC":
-  		$order_clause = "is_enabled DESC";
-  		break;
+      $order_clause = "is_enabled DESC";
+      break;
     case "is_enabled-ASC":
-  		$order_clause = "is_enabled ASC";
-  		break;
+      $order_clause = "is_enabled ASC";
+      break;
 
     default:
-  		$order_clause = "module_name";
-  		break;
+      $order_clause = "module_name";
+      break;
   }
   $order_clause = "ORDER BY $order_clause";
 
@@ -279,20 +279,20 @@ function ft_search_modules($search_criteria)
     $where_clause = "";
 
 
-	// get form info
-	$module_query_result = mysql_query("
-		SELECT *
-		FROM   {$g_table_prefix}modules
-		$where_clause
-		$order_clause
-					 ");
+  // get form info
+  $module_query_result = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}modules
+    $where_clause
+    $order_clause
+           ");
 
-	// now retrieve the basic info (id, first and last name) about each client assigned to this form
-	$module_info = array();
-	while ($module = mysql_fetch_assoc($module_query_result))
-		$module_info[] = $module;
+  // now retrieve the basic info (id, first and last name) about each client assigned to this form
+  $module_info = array();
+  while ($module = mysql_fetch_assoc($module_query_result))
+    $module_info[] = $module;
 
-	return $module_info;
+  return $module_info;
 }
 
 
@@ -303,17 +303,17 @@ function ft_search_modules($search_criteria)
  */
 function ft_get_modules()
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$query = mysql_query("SELECT * FROM {$g_table_prefix}modules ORDER BY module_name");
+  $query = mysql_query("SELECT * FROM {$g_table_prefix}modules ORDER BY module_name");
 
-	$modules_info = array();
-	while ($module = mysql_fetch_assoc($query))
-		$modules_info[] = $module;
+  $modules_info = array();
+  while ($module = mysql_fetch_assoc($query))
+    $modules_info[] = $module;
 
-	extract(ft_process_hooks("start", compact("modules_info"), array("modules_info")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("start", compact("modules_info"), array("modules_info")), EXTR_OVERWRITE);
 
-	return $modules_info;
+  return $modules_info;
 }
 
 
@@ -325,12 +325,12 @@ function ft_get_modules()
  */
 function ft_get_module_count()
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$query = mysql_query("SELECT count(*) as c FROM {$g_table_prefix}modules");
-	$info = mysql_fetch_assoc($query);
+  $query = mysql_query("SELECT count(*) as c FROM {$g_table_prefix}modules");
+  $info = mysql_fetch_assoc($query);
 
-	return $info["c"];
+  return $info["c"];
 }
 
 
@@ -353,14 +353,18 @@ function ft_get_module_count()
  */
 function ft_init_module_page($account_type = "admin")
 {
-	global $g_root_dir, $g_session_type, $LANG;
+	global $g_root_dir, $g_session_type, $g_session_save_path, $LANG;
 
-	if ($g_session_type == "database")
+  if ($g_session_type == "database")
     $sess = new SessionManager();
-	@session_start();
-	header("Cache-control: private");
-	header("Content-Type: text/html; charset=utf-8");
-	ft_check_permission($account_type);
+
+  if (!empty($g_session_save_path))
+    session_save_path($g_session_save_path);
+
+  @session_start();
+  header("Cache-control: private");
+  header("Content-Type: text/html; charset=utf-8");
+  ft_check_permission($account_type);
 
   $module_folder = _ft_get_current_module_folder();
 
@@ -385,7 +389,7 @@ function ft_init_module_page($account_type = "admin")
  */
 function ft_set_module_settings($settings)
 {
-	$module_folder = _ft_get_current_module_folder();
+  $module_folder = _ft_get_current_module_folder();
   ft_set_settings($settings, $module_folder);
 }
 
@@ -397,16 +401,16 @@ function ft_set_module_settings($settings)
  */
 function ft_update_enabled_modules($request)
 {
-	global $g_table_prefix, $LANG;
+  global $g_table_prefix, $LANG;
 
-	$is_enabled = isset($request["is_enabled"]) ? $request["is_enabled"] : array();
+  $is_enabled = isset($request["is_enabled"]) ? $request["is_enabled"] : array();
 
-	mysql_query("UPDATE {$g_table_prefix}modules SET is_enabled = 'no'");
+  mysql_query("UPDATE {$g_table_prefix}modules SET is_enabled = 'no'");
 
-	foreach ($is_enabled as $module_id)
-	  mysql_query("UPDATE {$g_table_prefix}modules SET is_enabled = 'yes' WHERE module_id = $module_id");
+  foreach ($is_enabled as $module_id)
+    mysql_query("UPDATE {$g_table_prefix}modules SET is_enabled = 'yes' WHERE module_id = $module_id");
 
-	return array(true, $LANG["notify_enabled_module_list_updated"]);
+  return array(true, $LANG["notify_enabled_module_list_updated"]);
 }
 
 
@@ -415,114 +419,114 @@ function ft_update_enabled_modules($request)
  */
 function ft_update_module_list()
 {
-	global $g_table_prefix, $g_root_dir, $LANG;
+  global $g_table_prefix, $g_root_dir, $LANG;
 
-	$modules_folder = "$g_root_dir/modules";
+  $modules_folder = "$g_root_dir/modules";
 
-	// loop through all modules in this folder and, if the module contains the appropriate files, add it to the database
-	$module_info = array();
-	$dh = opendir($modules_folder);
+  // loop through all modules in this folder and, if the module contains the appropriate files, add it to the database
+  $module_info = array();
+  $dh = opendir($modules_folder);
 
-	// if we couldn't open the modules folder, it doesn't exist or something went wrong
-	if (!$dh)
-		return array(false, $message);
+  // if we couldn't open the modules folder, it doesn't exist or something went wrong
+  if (!$dh)
+    return array(false, $message);
 
-	// get the list of currently installed modules
+  // get the list of currently installed modules
   $current_modules = ft_get_modules();
   $current_module_folders = array();
   foreach ($current_modules as $module_info)
     $current_module_folders[] = $module_info["module_folder"];
 
-	while (($folder = readdir($dh)) !== false)
-	{
-		// if this module is already in the database, ignore it
-		if (in_array($folder, $current_module_folders))
-		  continue;
+  while (($folder = readdir($dh)) !== false)
+  {
+    // if this module is already in the database, ignore it
+    if (in_array($folder, $current_module_folders))
+      continue;
 
-	  if (is_dir("$modules_folder/$folder") && $folder != "." && $folder != "..")
-	  {
-	    $info = ft_get_module_info_file_contents($folder);
+    if (is_dir("$modules_folder/$folder") && $folder != "." && $folder != "..")
+    {
+      $info = ft_get_module_info_file_contents($folder);
 
-	    if (empty($info))
-	  		continue;
+      if (empty($info))
+        continue;
 
-			$info = ft_sanitize($info);
+      $info = ft_sanitize($info);
 
-	    // check the required info file fields
-	    $required_fields = array("author", "version", "date", "origin_language", "supports_ft_versions");
-	    $all_found = true;
+      // check the required info file fields
+      $required_fields = array("author", "version", "date", "origin_language", "supports_ft_versions");
+      $all_found = true;
       foreach ($required_fields as $field)
       {
-      	if (empty($info[$field]))
-      	  $all_found = false;
+        if (empty($info[$field]))
+          $all_found = false;
       }
       if (!$all_found)
         continue;
 
-			// now check the language file contains the two required fields: module_name and module_description
+      // now check the language file contains the two required fields: module_name and module_description
       $lang_file = "$modules_folder/$folder/lang/{$info["origin_language"]}.php";
-			$lang_info = _ft_get_module_lang_file_contents($lang_file);
+      $lang_info = _ft_get_module_lang_file_contents($lang_file);
       $lang_info = ft_sanitize($lang_info);
 
-	    // check the required language file fields
+      // check the required language file fields
       if ((!isset($lang_info["module_name"]) || empty($lang_info["module_name"])) ||
           (!isset($lang_info["module_description"]) || empty($lang_info["module_description"])))
         continue;
 
-			$author               = $info["author"];
-			$author_email         = $info["author_email"];
-			$author_link          = $info["author_link"];
-			$module_version       = $info["version"];
-			$module_date          = $info["date"];
-			$origin_language      = $info["origin_language"];
-			$supports_ft_versions = $info["supports_ft_versions"];
-			$nav                  = $info["nav"];
+      $author               = $info["author"];
+      $author_email         = $info["author_email"];
+      $author_link          = $info["author_link"];
+      $module_version       = $info["version"];
+      $module_date          = $info["date"];
+      $origin_language      = $info["origin_language"];
+      $supports_ft_versions = $info["supports_ft_versions"];
+      $nav                  = $info["nav"];
 
-			$module_name          = $lang_info["module_name"];
-			$module_description   = $lang_info["module_description"];
+      $module_name          = $lang_info["module_name"];
+      $module_description   = $lang_info["module_description"];
 
-			// convert the date into a MySQL datetime
-			list($year, $month, $day) = split("-", $module_date);
-			$timestamp = mktime(null, null, null, $month, $day, $year);
-			$module_datetime = ft_get_current_datetime($timestamp);
+      // convert the date into a MySQL datetime
+      list($year, $month, $day) = split("-", $module_date);
+      $timestamp = mktime(null, null, null, $month, $day, $year);
+      $module_datetime = ft_get_current_datetime($timestamp);
 
-			mysql_query("
-				INSERT INTO {$g_table_prefix}modules (is_installed, is_enabled, origin_language, module_name, module_folder, version,
-				  author, author_email, author_link, description, module_date, supports_ft_versions)
-				VALUES ('no','no', '$origin_language', '$module_name', '$folder', '$module_version', '$author', '$author_email', '$author_link',
-					'$module_description', '$module_datetime', '$supports_ft_versions')
-					") or die(mysql_error());
-		  $module_id = mysql_insert_id();
+      mysql_query("
+        INSERT INTO {$g_table_prefix}modules (is_installed, is_enabled, origin_language, module_name, module_folder, version,
+          author, author_email, author_link, description, module_date, supports_ft_versions)
+        VALUES ('no','no', '$origin_language', '$module_name', '$folder', '$module_version', '$author', '$author_email', '$author_link',
+          '$module_description', '$module_datetime', '$supports_ft_versions')
+          ") or die(mysql_error());
+      $module_id = mysql_insert_id();
 
-		  // now add any navigation links for this module
-		  if ($module_id)
-		  {
-		  	$order = 1;
-			  while (list($lang_file_key, $info) = each($nav))
-			  {
-			  	$url        = $info[0];
-			  	$is_submenu = ($info[1]) ? "yes" : "no";
-			  	if (empty($lang_file_key) || empty($url))
-			  	  continue;
+      // now add any navigation links for this module
+      if ($module_id)
+      {
+        $order = 1;
+        while (list($lang_file_key, $info) = each($nav))
+        {
+          $url        = $info[0];
+          $is_submenu = ($info[1]) ? "yes" : "no";
+          if (empty($lang_file_key) || empty($url))
+            continue;
 
-			  	$display_text = $lang_info[$lang_file_key];
+          $display_text = $lang_info[$lang_file_key];
 
-			  	mysql_query("
-			  	  INSERT INTO {$g_table_prefix}module_menu_items (module_id, display_text, url, is_submenu, list_order)
-			  	  VALUES ($module_id, '$display_text', '$url', '$is_submenu', $order)
-			  	  ") or die(mysql_error());
+          mysql_query("
+            INSERT INTO {$g_table_prefix}module_menu_items (module_id, display_text, url, is_submenu, list_order)
+            VALUES ($module_id, '$display_text', '$url', '$is_submenu', $order)
+            ") or die(mysql_error());
 
-			  	$order++;
-			  }
-		  }
-	  }
-	}
-	closedir($dh);
+          $order++;
+        }
+      }
+    }
+  }
+  closedir($dh);
 
-	// update the Upgrade link
+  // update the Upgrade link
   ft_build_and_cache_upgrade_info();
 
-	return array(true, $LANG["notify_module_list_updated"]);
+  return array(true, $LANG["notify_module_list_updated"]);
 }
 
 
@@ -538,30 +542,30 @@ function ft_update_module_list()
  */
 function ft_get_module_info_file_contents($module_folder)
 {
-	global $g_root_dir;
+  global $g_root_dir;
 
-	$file = "$g_root_dir/modules/$module_folder/module.php";
+  $file = "$g_root_dir/modules/$module_folder/module.php";
 
-	if (!is_file($file))
+  if (!is_file($file))
     return array();
 
-	@include($file);
-	$v = get_defined_vars();
+  @include($file);
+  $v = get_defined_vars();
 
-	if (!isset($v["MODULE"]))
-	  return array();
+  if (!isset($v["MODULE"]))
+    return array();
 
-	$values = $v["MODULE"];
-	$info["author"] = isset($values["author"]) ? $values["author"] : "";
-	$info["author_email"] = isset($values["author_email"]) ? $values["author_email"] : "";
-	$info["author_link"] = isset($values["author_link"]) ? $values["author_link"] : "";
-	$info["version"] = isset($values["version"]) ? $values["version"] : "";
-	$info["date"] = isset($values["date"]) ? $values["date"] : "";
-	$info["origin_language"] = isset($values["origin_language"]) ? $values["origin_language"] : "";
-	$info["supports_ft_versions"] = isset($values["supports_ft_versions"]) ? $values["supports_ft_versions"] : "";
+  $values = $v["MODULE"];
+  $info["author"] = isset($values["author"]) ? $values["author"] : "";
+  $info["author_email"] = isset($values["author_email"]) ? $values["author_email"] : "";
+  $info["author_link"] = isset($values["author_link"]) ? $values["author_link"] : "";
+  $info["version"] = isset($values["version"]) ? $values["version"] : "";
+  $info["date"] = isset($values["date"]) ? $values["date"] : "";
+  $info["origin_language"] = isset($values["origin_language"]) ? $values["origin_language"] : "";
+  $info["supports_ft_versions"] = isset($values["supports_ft_versions"]) ? $values["supports_ft_versions"] : "";
   $info["nav"] = isset($values["nav"]) ? $values["nav"] : array();
 
-	return $info;
+  return $info;
 }
 
 
@@ -574,29 +578,30 @@ function ft_get_module_info_file_contents($module_folder)
  */
 function ft_get_module_lang_file_contents($module_folder)
 {
-	global $g_root_dir;
+  global $g_root_dir;
 
   $lang_file_path = "$g_root_dir/modules/$module_folder/lang";
   $desired_lang   = isset($_SESSION["ft"]["account"]["ui_language"]) ? $_SESSION["ft"]["account"]["ui_language"] : "";
   $desired_lang_file = "$lang_file_path/{$desired_lang}.php";
 
   // if the desired language file exists, use it. Otherwise use the default language file
+  $content = array();
   if (!empty($desired_lang) && is_file($desired_lang_file))
   {
-  	$content = _ft_get_module_lang_file_contents($desired_lang_file);
+    $content = _ft_get_module_lang_file_contents($desired_lang_file);
   }
   else
   {
-  	$module_id = ft_get_module_id_from_module_folder($module_folder);
-  	$module_info = ft_get_module($module_id);
-  	$origin_lang = $module_info["origin_language"];
+    $module_id = ft_get_module_id_from_module_folder($module_folder);
+    $module_info = ft_get_module($module_id);
+    $origin_lang = $module_info["origin_language"];
 
-  	// TODO maybe we should throw an warning here if the file isn't found...
-  	$origin_lang_file = "$lang_file_path/{$origin_lang}.php";
-  	if (!empty($origin_lang) && is_file($origin_lang_file))
-  	{
-	  	$content = _ft_get_module_lang_file_contents($origin_lang_file);
-  	}
+    // TODO maybe we should throw an warning here if the file isn't found...
+    $origin_lang_file = "$lang_file_path/{$origin_lang}.php";
+    if (!empty($origin_lang) && is_file($origin_lang_file))
+    {
+      $content = _ft_get_module_lang_file_contents($origin_lang_file);
+    }
   }
 
   return $content;
@@ -610,12 +615,12 @@ function ft_get_module_lang_file_contents($module_folder)
  */
 function _ft_get_module_lang_file_contents($lang_file)
 {
-	@include($lang_file);
-	$vars = get_defined_vars();
+  @include($lang_file);
+  $vars = get_defined_vars();
 
-	$lang_array = isset($vars["L"]) ? $vars["L"] : array();;
+  $lang_array = isset($vars["L"]) ? $vars["L"] : array();;
 
-	return $lang_array;
+  return $lang_array;
 }
 
 
@@ -629,13 +634,13 @@ function _ft_get_module_lang_file_contents($lang_file)
  */
 function _ft_get_current_module_folder()
 {
-	global $g_root_dir;
+  global $g_root_dir;
 
-	$script_name = $_SERVER["SCRIPT_NAME"];
+  $script_name = $_SERVER["SCRIPT_NAME"];
 
-	$module_folder = "";
-	if (preg_match("/\/modules\/([^\/]*)/", $script_name, $matches))
-	  $module_folder = $matches[1];
+  $module_folder = "";
+  if (preg_match("/\/modules\/([^\/]*)/", $script_name, $matches))
+    $module_folder = $matches[1];
 
   return $module_folder;
 }
@@ -663,24 +668,24 @@ function _ft_get_current_module_folder()
  */
 function ft_include_module($module_folder)
 {
-	global $g_root_dir, $g_smarty, $LANG;
+  global $g_root_dir, $g_smarty, $LANG;
 
   // TODO. think about this... all variables now globals...? OK?
   foreach ($GLOBALS as $key => $val) { @eval("global \$$key;"); }
 
-	// code file
-	if (is_file("$g_root_dir/modules/$module_folder/library.php"))
-		include_once("$g_root_dir/modules/$module_folder/library.php");
+  // code file
+  if (is_file("$g_root_dir/modules/$module_folder/library.php"))
+    include_once("$g_root_dir/modules/$module_folder/library.php");
 
-	if ($module_folder != "swift_mailer")
+  if ($module_folder != "swift_mailer")
   {
-	 	// Smarty resources
-	  if (is_dir("$g_root_dir/modules/$module_folder/smarty"))
-	    $g_smarty->plugins_dir[] = "$g_root_dir/modules/$module_folder/smarty";
+     // Smarty resources
+    if (is_dir("$g_root_dir/modules/$module_folder/smarty"))
+      $g_smarty->plugins_dir[] = "$g_root_dir/modules/$module_folder/smarty";
 
-	  // load the language file into the $LANG var, under
-	  $content = ft_get_module_lang_file_contents($module_folder);
-	  $LANG[$module_folder] = $content;
+    // load the language file into the $LANG var, under
+    $content = ft_get_module_lang_file_contents($module_folder);
+    $LANG[$module_folder] = $content;
   }
 
   extract(ft_process_hooks("end", compact("module_folder"), array()), EXTR_OVERWRITE);
@@ -705,27 +710,27 @@ function ft_include_module($module_folder)
  */
 function ft_load_module_field($module_folder, $field_name, $session_name, $default_value = "")
 {
-	$field = $default_value;
+  $field = $default_value;
 
-	if (!isset($_SESSION["ft"][$module_folder]) || !is_array($_SESSION["ft"][$module_folder]))
-	  $_SESSION["ft"][$module_folder] = array();
+  if (!isset($_SESSION["ft"][$module_folder]) || !is_array($_SESSION["ft"][$module_folder]))
+    $_SESSION["ft"][$module_folder] = array();
 
-	if (isset($_GET[$field_name]))
-	{
-		$field = $_GET[$field_name];
-		$_SESSION["ft"][$module_folder][$session_name] = $field;
-	}
-	else if (isset($_POST[$field_name]))
-	{
-		$field = $_POST[$field_name];
-		$_SESSION["ft"][$module_folder][$session_name] = $field;
-	}
-	else if (isset($_SESSION["ft"][$module_folder][$session_name]))
-	{
-		$field = $_SESSION["ft"][$module_folder][$session_name];
-	}
+  if (isset($_GET[$field_name]))
+  {
+    $field = $_GET[$field_name];
+    $_SESSION["ft"][$module_folder][$session_name] = $field;
+  }
+  else if (isset($_POST[$field_name]))
+  {
+    $field = $_POST[$field_name];
+    $_SESSION["ft"][$module_folder][$session_name] = $field;
+  }
+  else if (isset($_SESSION["ft"][$module_folder][$session_name]))
+  {
+    $field = $_SESSION["ft"][$module_folder][$session_name];
+  }
 
-	return $field;
+  return $field;
 }
 
 
@@ -739,47 +744,47 @@ function ft_load_module_field($module_folder, $field_name, $session_name, $defau
  */
 function ft_install_module($module_id)
 {
-	global $LANG, $g_root_dir, $g_root_url, $g_table_prefix;
+  global $LANG, $g_root_dir, $g_root_url, $g_table_prefix;
 
   $module_info = ft_get_module($module_id);
   $module_folder = $module_info["module_folder"];
 
- 	$success = true;
-	$message = ft_eval_smarty_string($LANG["notify_module_installed"], array("link" => "$g_root_url/modules/$module_folder"));
+   $success = true;
+  $message = ft_eval_smarty_string($LANG["notify_module_installed"], array("link" => "$g_root_url/modules/$module_folder"));
 
-	$has_custom_install_script = false;
+  $has_custom_install_script = false;
 
   if (is_file("$g_root_dir/modules/$module_folder/library.php"))
   {
-  	@include_once("$g_root_dir/modules/$module_folder/library.php");
-  	$install_function_name = "{$module_folder}__install";
-  	if (function_exists($install_function_name))
-  	{
-  		$has_custom_install_script = true;
+    @include_once("$g_root_dir/modules/$module_folder/library.php");
+    $install_function_name = "{$module_folder}__install";
+    if (function_exists($install_function_name))
+    {
+      $has_custom_install_script = true;
 
-  		// get the module language file contents and store the info in the $LANG global for
-  		// so it can be accessed by the installation script
-  		$LANG[$module_folder] = ft_get_module_lang_file_contents($module_folder);
+      // get the module language file contents and store the info in the $LANG global for
+      // so it can be accessed by the installation script
+      $LANG[$module_folder] = ft_get_module_lang_file_contents($module_folder);
 
-  		list($success, $custom_message) = $install_function_name($module_id);
+      list($success, $custom_message) = $install_function_name($module_id);
 
-  		// if there was a custom message returned (error or notification), overwrite the default
-  		// message
-  		if (!empty($custom_message))
-  		  $message = $custom_message;
-  	}
+      // if there was a custom message returned (error or notification), overwrite the default
+      // message
+      if (!empty($custom_message))
+        $message = $custom_message;
+    }
   }
 
   // if there wasn't a custom installation script, or there was and it was successfully run,
   // update the record in the module table to mark it as both is_installed and is_enabled.
   if (!$has_custom_install_script || ($has_custom_install_script && $success))
   {
-  	mysql_query("
-  	  UPDATE {$g_table_prefix}modules
-  	  SET    is_installed = 'yes',
-  	         is_enabled = 'yes'
-  	  WHERE   module_id = $module_id
-  	    ");
+    mysql_query("
+      UPDATE {$g_table_prefix}modules
+      SET    is_installed = 'yes',
+             is_enabled = 'yes'
+      WHERE   module_id = $module_id
+        ");
 
   }
 
@@ -797,14 +802,14 @@ function ft_install_module($module_id)
 function ft_module_needs_upgrading($module_id)
 {
   $module_info = ft_get_module($module_id);
-	$module_folder = $module_info["module_folder"];
-	$current_db_version = $module_info["version"];
+  $module_folder = $module_info["module_folder"];
+  $current_db_version = $module_info["version"];
 
-	$latest_module_info = ft_get_module_info_file_contents($module_folder);
+  $latest_module_info = ft_get_module_info_file_contents($module_folder);
 
   $actual_version = $latest_module_info["version"];
 
-	return ($current_db_version != $actual_version);
+  return ($current_db_version != $actual_version);
 }
 
 
@@ -817,15 +822,15 @@ function ft_upgrade_module($module_id)
   global $LANG, $g_root_dir, $g_table_prefix;
 
   $module_info = ft_get_module($module_id);
-	$module_folder = $module_info["module_folder"];
-	$module_name = $module_info["module_name"];
-	$current_db_version = $module_info["version"];
+  $module_folder = $module_info["module_folder"];
+  $module_name = $module_info["module_name"];
+  $current_db_version = $module_info["version"];
 
-	$info = ft_get_module_info_file_contents($module_folder);
+  $info = ft_get_module_info_file_contents($module_folder);
   $new_version = $info["version"];
 
   if ($current_db_version == $new_version)
-	  return array(false, "");
+    return array(false, "");
 
   // if the module has its own upgrade function, call it!
   @include_once("$g_root_dir/modules/$module_folder/library.php");
@@ -834,9 +839,9 @@ function ft_upgrade_module($module_id)
     $upgrade_function_name($current_db_version, $new_version);
 
   // now, update the main module record
-	$info = ft_sanitize($info);
+  $info = ft_sanitize($info);
 
-	// we're assuming the module developer hasn't removed any of the required fields...
+  // we're assuming the module developer hasn't removed any of the required fields...
 
 
   // now check the language file contains the two required fields: module_name and module_description
@@ -868,44 +873,44 @@ function ft_upgrade_module($module_id)
 
   mysql_query("
     UPDATE {$g_table_prefix}modules
-		SET    origin_language = '$origin_language',
-		       module_name = '$module_name',
-					 version = '$module_version',
+    SET    origin_language = '$origin_language',
+           module_name = '$module_name',
+           version = '$module_version',
            author = '$author',
-					 author_email = '$author_email',
-					 author_link = '$author_link',
-					 description = '$module_description',
-					 module_date = '$module_datetime',
-					 supports_ft_versions = '$supports_ft_versions'
+           author_email = '$author_email',
+           author_link = '$author_link',
+           description = '$module_description',
+           module_date = '$module_datetime',
+           supports_ft_versions = '$supports_ft_versions'
     WHERE  module_id = $module_id
       ") or die(mysql_error());
 
   // remove and update the navigation links for this module
-	mysql_query("DELETE FROM {$g_table_prefix}module_menu_items WHERE module_id = $module_id");
- 	$order = 1;
+  mysql_query("DELETE FROM {$g_table_prefix}module_menu_items WHERE module_id = $module_id");
+   $order = 1;
   while (list($lang_file_key, $info) = each($nav))
-	{
-  	$url        = $info[0];
-  	$is_submenu = ($info[1]) ? "yes" : "no";
-  	if (empty($lang_file_key) || empty($url))
-  	  continue;
+  {
+    $url        = $info[0];
+    $is_submenu = ($info[1]) ? "yes" : "no";
+    if (empty($lang_file_key) || empty($url))
+      continue;
 
-  	$display_text = $lang_info[$lang_file_key];
+    $display_text = $lang_info[$lang_file_key];
 
-  	mysql_query("
-  	  INSERT INTO {$g_table_prefix}module_menu_items (module_id, display_text, url, is_submenu, list_order)
-  	  VALUES ($module_id, '$display_text', '$url', '$is_submenu', $order)
-    	  ") or die(mysql_error());
+    mysql_query("
+      INSERT INTO {$g_table_prefix}module_menu_items (module_id, display_text, url, is_submenu, list_order)
+      VALUES ($module_id, '$display_text', '$url', '$is_submenu', $order)
+        ") or die(mysql_error());
 
-		$order++;
-	}
+    $order++;
+  }
 
-	// And we're done! inform the user that it's been upgraded
-	$placeholders = array(
-	  "module" => $module_name,
-	  "version" => $new_version
-	);
+  // And we're done! inform the user that it's been upgraded
+  $placeholders = array(
+    "module" => $module_name,
+    "version" => $new_version
+  );
   $message = ft_eval_smarty_string($LANG["notify_module_updated"], $placeholders);
 
-	return array(true, $message);
+  return array(true, $message);
 }

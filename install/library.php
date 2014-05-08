@@ -7,9 +7,9 @@
 $g_ft_installation_folder = dirname(__FILE__);
 $g_default_language       = "en_us.php";
 $g_default_theme          = "default";
-$g_form_tools_version     = "2.0.0-beta-20090524";
+$g_form_tools_version     = "2.0.0-beta-20090614";
 $g_is_beta                = "yes";
-$g_beta_version           = "2009/05/24";
+$g_beta_version           = "2009/06/14";
 $g_smarty_use_sub_dirs    = false;
 
 /*
@@ -53,14 +53,20 @@ require_once("$g_ft_installation_folder/../global/smarty/Smarty.class.php");
  */
 function ft_install_display_page($template, $page_vars)
 {
-	global $LANG, $g_smarty, $g_success, $g_message, $g_ft_installation_folder, $g_default_theme,
-	  $g_smarty_use_sub_dirs, $g_form_tools_version, $g_is_beta, $g_beta_version;
+  global $LANG, $g_smarty, $g_success, $g_message, $g_ft_installation_folder, $g_default_theme,
+    $g_smarty_use_sub_dirs, $g_form_tools_version, $g_is_beta, $g_beta_version;
 
-	require_once("$g_ft_installation_folder/../global/smarty/Smarty.class.php");
+  require_once("$g_ft_installation_folder/../global/smarty/Smarty.class.php");
 
-	// run a preliminary permissions check on the default theme's cache folder
-	if (!is_readable("$g_ft_installation_folder/../themes/$g_default_theme/cache/"))
-	{
+  clearstatcache();
+  $cache_folder = realpath("$g_ft_installation_folder/../themes/$g_default_theme/cache/");
+
+  // always try to set the cache folder to 777 during the installation phase
+  @chmod($cache_folder, 0777);
+
+  // run a preliminary permissions check on the default theme's cache folder
+  if (!is_readable("$cache_folder/") || !is_writable("$cache_folder/"))
+  {
     echo <<< EOF
 <html>
 <head>
@@ -69,77 +75,78 @@ function ft_install_display_page($template, $page_vars)
 <body>
 
 <div id="container">
-	<div id="header">
+  <div id="header">
 
     <div style="float:right">
-	    <table cellspacing="0" cellpadding="0" height="25">
-	    <tr>
-	      <td><img src="images/account_section_left.jpg" border="0" /></td>
-	      <td id="account_section">
-		      v{$g_form_tools_version}
-	      </td>
-	      <td><img src="images/account_section_right.jpg" border="0" /></td>
-	    </tr>
-	    </table>
+      <table cellspacing="0" cellpadding="0" height="25">
+      <tr>
+        <td><img src="images/account_section_left.jpg" border="0" /></td>
+        <td id="account_section">
+          v{$g_form_tools_version}
+        </td>
+        <td><img src="images/account_section_right.jpg" border="0" /></td>
+      </tr>
+      </table>
     </div>
 
     <span style="float:left; padding-top: 8px; padding-right: 10px">
       <a href="http://www.formtools.org" class="no_border"><img src="images/logo.jpg" border="0" width="359" height="61" /></a>
     </span>
-	</div>
+  </div>
   <div id="content">
 
     <div class="notify">
       {$LANG["text_default_theme_cache_folder_not_writable"]}
     </div>
 
-	</div>
+  </div>
 </div>
 </body>
 </html>
 EOF;
     exit;
-	}
+  }
 
-	$g_smarty = new Smarty();
-	$g_smarty->template_dir = "$g_ft_installation_folder/../themes/$g_default_theme";
-	$g_smarty->compile_dir  = "$g_ft_installation_folder/../themes/$g_default_theme/cache/";
-	$g_smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
-	$g_smarty->assign("LANG", $LANG);
-	$g_smarty->assign("SESSION", $_SESSION["ft_install"]);
-	$g_smarty->assign("same_page", $_SERVER["PHP_SELF"]);
-	$g_smarty->assign("dir", $LANG["special_text_direction"]);
-	$g_smarty->assign("g_success", $g_success);
-	$g_smarty->assign("g_message", $g_message);
-	$g_smarty->assign("g_default_theme", $g_default_theme);
-	$g_smarty->assign("g_form_tools_version", $g_form_tools_version);
-	$g_smarty->assign("g_is_beta", $g_is_beta);
-	$g_smarty->assign("g_beta_version", $g_beta_version);
+  $g_smarty = new Smarty();
+  $g_smarty->template_dir = realpath("$g_ft_installation_folder/../themes/$g_default_theme");
+  $g_smarty->compile_dir  = $cache_folder;
 
-	// check the "required" vars are at least set so they don't produce warnings when smarty debug is enabled
-	if (!isset($page_vars["head_string"])) $page_vars["head_string"] = "";
-	if (!isset($page_vars["head_title"]))  $page_vars["head_title"] = "";
-	if (!isset($page_vars["head_js"]))     $page_vars["head_js"] = "";
-	if (!isset($page_vars["page"]))        $page_vars["page"] = "";
+  $g_smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
+  $g_smarty->assign("LANG", $LANG);
+  $g_smarty->assign("SESSION", $_SESSION["ft_install"]);
+  $g_smarty->assign("same_page", $_SERVER["PHP_SELF"]);
+  $g_smarty->assign("dir", $LANG["special_text_direction"]);
+  $g_smarty->assign("g_success", $g_success);
+  $g_smarty->assign("g_message", $g_message);
+  $g_smarty->assign("g_default_theme", $g_default_theme);
+  $g_smarty->assign("g_form_tools_version", $g_form_tools_version);
+  $g_smarty->assign("g_is_beta", $g_is_beta);
+  $g_smarty->assign("g_beta_version", $g_beta_version);
 
-	// if we need to include custom JS messages in the page, add it to the generated JS. Note: even if the js_messages
-	// key is defined but still empty, the ft_generate_js_messages function is called, returning the "base" JS - like
-	// the JS version of g_root_url. Only if it is not defined will that info not be included.
-	$js_messages = (isset($page_vars["js_messages"])) ? ft_generate_js_messages($page_vars["js_messages"]) : "";
+  // check the "required" vars are at least set so they don't produce warnings when smarty debug is enabled
+  if (!isset($page_vars["head_string"])) $page_vars["head_string"] = "";
+  if (!isset($page_vars["head_title"]))  $page_vars["head_title"] = "";
+  if (!isset($page_vars["head_js"]))     $page_vars["head_js"] = "";
+  if (!isset($page_vars["page"]))        $page_vars["page"] = "";
 
-	if (!empty($page_vars["head_js"]) || !empty($js_messages))
-		$page_vars["head_js"] = "<script type=\"text/javascript\">\n//<![CDATA[\n{$page_vars["head_js"]}\n$js_messages\n//]]>\n</script>";
+  // if we need to include custom JS messages in the page, add it to the generated JS. Note: even if the js_messages
+  // key is defined but still empty, the ft_generate_js_messages function is called, returning the "base" JS - like
+  // the JS version of g_root_url. Only if it is not defined will that info not be included.
+  $js_messages = (isset($page_vars["js_messages"])) ? ft_generate_js_messages($page_vars["js_messages"]) : "";
 
-	if (!isset($page_vars["head_css"]))
-		$page_vars["head_css"] = "";
-	else if (!empty($page_vars["head_css"]))
-		$page_vars["head_css"] = "<style type=\"text/css\">\n{$page_vars["head_css"]}\n</style>";
+  if (!empty($page_vars["head_js"]) || !empty($js_messages))
+    $page_vars["head_js"] = "<script type=\"text/javascript\">\n//<![CDATA[\n{$page_vars["head_js"]}\n$js_messages\n//]]>\n</script>";
 
-	// now add the custom variables for this template, as defined in $page_vars
-	foreach ($page_vars as $key=>$value)
-		$g_smarty->assign($key, $value);
+  if (!isset($page_vars["head_css"]))
+    $page_vars["head_css"] = "";
+  else if (!empty($page_vars["head_css"]))
+    $page_vars["head_css"] = "<style type=\"text/css\">\n{$page_vars["head_css"]}\n</style>";
 
-	$g_smarty->display("$g_ft_installation_folder/$template");
+  // now add the custom variables for this template, as defined in $page_vars
+  foreach ($page_vars as $key=>$value)
+    $g_smarty->assign($key, $value);
+
+  $g_smarty->display(realpath("$g_ft_installation_folder/$template"));
 }
 
 
@@ -153,22 +160,22 @@ function ft_install_get_languages()
 
   $language_folder_dir = "$g_ft_installation_folder/../global/lang";
 
-	$available_language_info = array();
-	if ($handle = opendir($language_folder_dir))
-	{
-		while (false !== ($filename = readdir($handle)))
-		{
-			if ($filename != '.' && $filename != '..' && $filename != "index.php" && preg_match("/.php$/", $filename))
-			{
-				$language_name = ft_install_get_language_file_info("$language_folder_dir/$filename");
-				$available_language_info[$filename] = $language_name;
-			}
-		}
-		closedir($handle);
-	}
+  $available_language_info = array();
+  if ($handle = opendir($language_folder_dir))
+  {
+    while (false !== ($filename = readdir($handle)))
+    {
+      if ($filename != '.' && $filename != '..' && $filename != "index.php" && preg_match("/.php$/", $filename))
+      {
+        $language_name = ft_install_get_language_file_info("$language_folder_dir/$filename");
+        $available_language_info[$filename] = $language_name;
+      }
+    }
+    closedir($handle);
+  }
 
-	// sort the languages alphabetically
-	ksort($available_language_info);
+  // sort the languages alphabetically
+  ksort($available_language_info);
 
   return $available_language_info;
 }
@@ -184,11 +191,11 @@ function ft_install_get_languages()
  */
 function ft_install_get_language_file_info($file)
 {
-	include($file);
-	$defined_vars = get_defined_vars();
-	$language_name = $defined_vars["LANG"]["special_language_locale"];
+  include($file);
+  $defined_vars = get_defined_vars();
+  $language_name = $defined_vars["LANG"]["special_language_locale"];
 
-	return $language_name;
+  return $language_name;
 }
 
 
@@ -197,33 +204,33 @@ function ft_install_get_language_file_info($file)
  */
 function ft_install_get_config_file_contents()
 {
-	// try to fix REQUEST_URI for IIS
-	if (empty($_SERVER['REQUEST_URI']))
-	{
-	  // IIS Mod-Rewrite
-	  if (isset($_SERVER['HTTP_X_ORIGINAL_URL']))
-	    $_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_ORIGINAL_URL'];
+  // try to fix REQUEST_URI for IIS
+  if (empty($_SERVER['REQUEST_URI']))
+  {
+    // IIS Mod-Rewrite
+    if (isset($_SERVER['HTTP_X_ORIGINAL_URL']))
+      $_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_ORIGINAL_URL'];
 
-	  // IIS Isapi_Rewrite
-	  else if (isset($_SERVER['HTTP_X_REWRITE_URL']))
-	    $_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_REWRITE_URL'];
+    // IIS Isapi_Rewrite
+    else if (isset($_SERVER['HTTP_X_REWRITE_URL']))
+      $_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_REWRITE_URL'];
 
-	  else
-	  {
-	    // some IIS + PHP configurations puts the script-name in the path-info (no need to append it twice)
-	    if ( isset($_SERVER['PATH_INFO']) )
-	    {
-	      if ( $_SERVER['PATH_INFO'] == $_SERVER['SCRIPT_NAME'])
-	        $_SERVER['REQUEST_URI'] = $_SERVER['PATH_INFO'];
-	      else
-			$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'] . $_SERVER['PATH_INFO'];
-	    }
+    else
+    {
+      // some IIS + PHP configurations puts the script-name in the path-info (no need to append it twice)
+      if ( isset($_SERVER['PATH_INFO']) )
+      {
+        if ( $_SERVER['PATH_INFO'] == $_SERVER['SCRIPT_NAME'])
+          $_SERVER['REQUEST_URI'] = $_SERVER['PATH_INFO'];
+        else
+      $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'] . $_SERVER['PATH_INFO'];
+      }
 
-	    // append the query string if it exists and isn't null
-	    if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']))
-	      $_SERVER['REQUEST_URI'] .= '?' . $_SERVER['QUERY_STRING'];
-	  }
-	}
+      // append the query string if it exists and isn't null
+      if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']))
+        $_SERVER['REQUEST_URI'] .= '?' . $_SERVER['QUERY_STRING'];
+    }
+  }
 
   $root_url = preg_replace("/\/install\/step4\.php$/", "", "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
   $root_dir = preg_replace("/.install$/", "", dirname(__FILE__));
@@ -255,8 +262,8 @@ function ft_install_get_config_file_contents()
  */
 function ft_install_generate_config_file()
 {
-	$g_root_dir  = $_SESSION["ft_install"]["g_root_dir"];
-	$config_file = $_SESSION["ft_install"]["config_file"];
+  $g_root_dir  = $_SESSION["ft_install"]["g_root_dir"];
+  $config_file = $_SESSION["ft_install"]["config_file"];
 
   // try and write to the config.php file directly. This will probably fail, but in the off-chance
   // the permissions are set, it saves the user the hassle of manually creating the file
@@ -286,9 +293,9 @@ function ft_install_generate_config_file()
  */
 function ft_install_create_database($hostname, $db_name, $username, $password, $table_prefix)
 {
-	global $g_sql, $g_form_tools_version, $g_is_beta, $g_beta_version;
+  global $g_sql, $g_form_tools_version, $g_is_beta, $g_beta_version;
 
-	// connect to the database (since we know this works, having called
+  // connect to the database (since we know this works, having called
   $link = @mysql_connect($hostname, $username, $password);
   @mysql_select_db($db_name);
 
@@ -308,7 +315,7 @@ function ft_install_create_database($hostname, $db_name, $username, $password, $
     // problem! delete any tables we just added
     if (!$result)
     {
-    	ft_install_failure_delete_tables($hostname, $db_name, $username, $password, $table_prefix);
+      ft_install_failure_delete_tables($hostname, $db_name, $username, $password, $table_prefix);
       break;
     }
   }
@@ -340,17 +347,17 @@ function ft_install_database_is_setup()
 
   $is_setup = false;
 
-	$g_sql = mysql_query("SHOW TABLES FROM $g_db_name");
+  $g_sql = mysql_query("SHOW TABLES FROM $g_db_name");
 
-	$table_names = array();
-	while ($table_info = mysql_fetch_array($sql, MYSQL_NUM))
-	  $table_names[] = $table_info[0];
+  $table_names = array();
+  while ($table_info = mysql_fetch_array($sql, MYSQL_NUM))
+    $table_names[] = $table_info[0];
 
-	if (in_array("{$g_table_prefix}settings", $table_names) && in_array("{$g_table_prefix}forms", $table_names) &&
-	    in_array("{$g_table_prefix}form_fields", $table_names) && in_array("{$g_table_prefix}accounts", $table_names))
-	  $is_setup = true;
+  if (in_array("{$g_table_prefix}settings", $table_names) && in_array("{$g_table_prefix}forms", $table_names) &&
+      in_array("{$g_table_prefix}form_fields", $table_names) && in_array("{$g_table_prefix}accounts", $table_names))
+    $is_setup = true;
 
-	return $is_setup;
+  return $is_setup;
 }
 
 
@@ -378,7 +385,7 @@ function ft_install_check_config_file_exists()
  */
 function ft_install_check_db_settings($hostname, $db_name, $username, $password)
 {
-	global $LANG, $g_default_theme, $g_ft_installation_folder;
+  global $LANG, $g_default_theme, $g_ft_installation_folder;
 
   $db_connection_error = "";
   $db_select_error     = "";
@@ -387,9 +394,9 @@ function ft_install_check_db_settings($hostname, $db_name, $username, $password)
 
   if ($db_connection_error)
   {
-  	$placeholders = array("db_connection_error" => $db_connection_error);
+    $placeholders = array("db_connection_error" => $db_connection_error);
     $error = ft_install_eval_smarty_string($LANG["notify_install_invalid_db_info"], $placeholders, $g_default_theme);
-  	return array(false, $error);
+    return array(false, $error);
   }
   else
   {
@@ -398,9 +405,9 @@ function ft_install_check_db_settings($hostname, $db_name, $username, $password)
 
     if ($db_select_error)
     {
-	  	$placeholders = array("db_select_error" => $db_select_error);
-	    $error = ft_install_eval_smarty_string($LANG["notify_install_no_db_connection"], $placeholders, $g_default_theme);
-    	return array(false, $error);
+      $placeholders = array("db_select_error" => $db_select_error);
+      $error = ft_install_eval_smarty_string($LANG["notify_install_no_db_connection"], $placeholders, $g_default_theme);
+      return array(false, $error);
     }
     else
     {
@@ -414,21 +421,21 @@ function ft_install_check_db_settings($hostname, $db_name, $username, $password)
 
 function ft_install_eval_smarty_string($placeholder_str, $placeholders = array(), $theme)
 {
-	global $g_ft_installation_folder, $LANG;
+  global $g_ft_installation_folder, $LANG;
 
-	$smarty = new Smarty();
-	$smarty->template_dir = "$g_ft_installation_folder/../global/smarty/";
-	$smarty->compile_dir  = "$g_ft_installation_folder/../themes/$theme/cache/";
+  $smarty = new Smarty();
+  $smarty->template_dir = "$g_ft_installation_folder/../global/smarty/";
+  $smarty->compile_dir  = "$g_ft_installation_folder/../themes/$theme/cache/";
 
-	$smarty->assign("eval_str", $placeholder_str);
-	if (!empty($placeholders))
-	{
-		while (list($key, $value) = each($placeholders))
-		  $smarty->assign($key, $value);
-	}
+  $smarty->assign("eval_str", $placeholder_str);
+  if (!empty($placeholders))
+  {
+    while (list($key, $value) = each($placeholders))
+      $smarty->assign($key, $value);
+  }
   $smarty->assign("LANG", $LANG);
 
-	$output = $smarty->fetch("eval.tpl");
+  $output = $smarty->fetch("eval.tpl");
 
   return $output;
 }
@@ -443,30 +450,30 @@ function ft_install_eval_smarty_string($placeholder_str, $placeholders = array()
  */
 function ft_install_create_admin_account($info)
 {
-	global $g_table_prefix, $g_root_url;
+  global $g_table_prefix, $g_root_url;
 
   $info = ft_sanitize($info);
 
   $rules = array();
-	$rules[] = "required,first_name,Please enter your first name.";
-	$rules[] = "required,last_name,Please enter your last name.";
-	$rules[] = "required,email,Please enter the administrator email address.";
-	$rules[] = "valid_email,email,Please enter a valid administrator email address.";
-	$rules[] = "required,username,Please enter your username.";
-	$rules[] = "is_alpha,username,Please make sure your username consist of alphanumeric (a-Z and 0-9) characters only.";
-	$rules[] = "required,password,Please enter your password.";
-	$rules[] = "is_alpha,password,Please make sure your password consist of alphanumeric (a-Z and 0-9) characters only.";
-	$rules[] = "required,password_2,Please re-enter your password.";
-	$rules[] = "same_as,password,password_2,Please ensure the passwords are the same";
-	$errors = validate_fields($info, $rules);
+  $rules[] = "required,first_name,Please enter your first name.";
+  $rules[] = "required,last_name,Please enter your last name.";
+  $rules[] = "required,email,Please enter the administrator email address.";
+  $rules[] = "valid_email,email,Please enter a valid administrator email address.";
+  $rules[] = "required,username,Please enter your username.";
+  $rules[] = "is_alpha,username,Please make sure your username consist of alphanumeric (a-Z and 0-9) characters only.";
+  $rules[] = "required,password,Please enter your password.";
+  $rules[] = "is_alpha,password,Please make sure your password consist of alphanumeric (a-Z and 0-9) characters only.";
+  $rules[] = "required,password_2,Please re-enter your password.";
+  $rules[] = "same_as,password,password_2,Please ensure the passwords are the same";
+  $errors = validate_fields($info, $rules);
 
-	if (!empty($errors))
-	{
-		$success = false;
-		array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-		$message = join("<br />", $errors);
-		return array($success, $message);
-	}
+  if (!empty($errors))
+  {
+    $success = false;
+    array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
+    $message = join("<br />", $errors);
+    return array($success, $message);
+  }
 
   $first_name = $_POST["first_name"];
   $last_name = $_POST["last_name"];
@@ -488,11 +495,11 @@ function ft_install_create_admin_account($info)
   $success = "";
   $message = "";
   if ($query)
-  	$success = true;
+    $success = true;
   else
   {
-  	$success = false;
-  	$message = mysql_error();
+    $success = false;
+    $message = mysql_error();
   }
 
   return array($success, $message);
@@ -505,23 +512,23 @@ function ft_install_create_admin_account($info)
  */
 function ft_install_update_db_settings()
 {
-	global $g_root_dir, $g_root_url, $g_is_beta, $g_beta_version;
+  global $g_root_dir, $g_root_url, $g_is_beta, $g_beta_version;
 
-	// we add slashes since in PC paths like c:\www\whatever the \'s get lost en route
-	$core_settings = array(
-	  "default_logout_url" => $g_root_url,
-	  "file_upload_dir" => addslashes($g_root_dir) . "/upload",
-	  "file_upload_url" => "$g_root_url/upload",
-	  "is_beta" => $g_is_beta,
-	  "beta_version" => $g_beta_version
-	);
-	ft_set_settings($core_settings, "core");
+  // we add slashes since in PC paths like c:\www\whatever the \'s get lost en route
+  $core_settings = array(
+    "default_logout_url" => $g_root_url,
+    "file_upload_dir" => addslashes($g_root_dir) . "/upload",
+    "file_upload_url" => "$g_root_url/upload",
+    "is_beta" => $g_is_beta,
+    "beta_version" => $g_beta_version
+  );
+  ft_set_settings($core_settings, "core");
 
-	$export_manager_settings = array(
-	  "file_upload_dir" => addslashes($g_root_dir) . "/upload",
-	  "file_upload_url" => "$g_root_url/upload"
-	    );
-	ft_set_settings($export_manager_settings, "export_manager");
+  $export_manager_settings = array(
+    "file_upload_dir" => addslashes($g_root_dir) . "/upload",
+    "file_upload_url" => "$g_root_url/upload"
+      );
+  ft_set_settings($export_manager_settings, "export_manager");
 }
 
 
@@ -544,12 +551,12 @@ function ft_install_failure_delete_tables($hostname, $db_name, $username, $passw
     "public_form_omit_list", "public_view_omit_list", "settings", "themes", "views", "view_fields", "view_filters", "view_tabs"
   );
 
-	// connect to the database (since we know this works, having called
+  // connect to the database (since we know this works, having called
   $link = @mysql_connect($hostname, $username, $password);
   @mysql_select_db($db_name);
 
   foreach ($tables as $table)
-  	mysql_query("DROP TABLE {$table_prefix}{$table}");
+    mysql_query("DROP TABLE {$table_prefix}{$table}");
 
   @mysql_close($link);
 }
@@ -557,57 +564,57 @@ function ft_install_failure_delete_tables($hostname, $db_name, $username, $passw
 
 function ft_install_get_module_list()
 {
-	global $g_table_prefix, $g_root_dir;
+  global $g_table_prefix, $g_root_dir;
 
-	$modules_folder = "$g_root_dir/modules";
-	$module_list = array();
+  $modules_folder = "$g_root_dir/modules";
+  $module_list = array();
 
-	// if we couldn't open the modules folder, it doesn't exist or something went wrong
-	$dh = opendir($modules_folder);
-	if (!$dh)
-		return array(false, "");
+  // if we couldn't open the modules folder, it doesn't exist or something went wrong
+  $dh = opendir($modules_folder);
+  if (!$dh)
+    return array(false, "");
 
-	while (($folder = readdir($dh)) !== false)
-	{
-	  if (is_dir("$modules_folder/$folder") && $folder != "." && $folder != "..")
-	  {
-	    $info = ft_get_module_info_file_contents($folder);
+  while (($folder = readdir($dh)) !== false)
+  {
+    if (is_dir("$modules_folder/$folder") && $folder != "." && $folder != "..")
+    {
+      $info = ft_get_module_info_file_contents($folder);
 
-	    if (empty($info))
-	  		continue;
+      if (empty($info))
+        continue;
 
-			$info = ft_sanitize($info);
+      $info = ft_sanitize($info);
 
-	    // check the required info file fields
-	    $required_fields = array("author", "version", "date", "origin_language", "supports_ft_versions");
-	    $all_found = true;
+      // check the required info file fields
+      $required_fields = array("author", "version", "date", "origin_language", "supports_ft_versions");
+      $all_found = true;
       foreach ($required_fields as $field)
       {
-      	if (empty($info[$field]))
-      	  $all_found = false;
+        if (empty($info[$field]))
+          $all_found = false;
       }
       if (!$all_found)
         continue;
 
-			// now check the language file contains the two required fields: module_name and module_description
+      // now check the language file contains the two required fields: module_name and module_description
       $lang_file = "$modules_folder/$folder/lang/{$info["origin_language"]}.php";
-			$lang_info = _ft_get_module_lang_file_contents($lang_file);
+      $lang_info = _ft_get_module_lang_file_contents($lang_file);
       $lang_info = ft_sanitize($lang_info);
 
-	    // check the required language file fields
+      // check the required language file fields
       if ((!isset($lang_info["module_name"]) || empty($lang_info["module_name"])) ||
           (!isset($lang_info["module_description"]) || empty($lang_info["module_description"])))
         continue;
 
-			$module_list = array(
-			  "module_name" => $lang_info["module_name"],
-			  "version" => $info["version"]
-			);
-	  }
-	}
-	closedir($dh);
+      $module_list = array(
+        "module_name" => $lang_info["module_name"],
+        "version" => $info["version"]
+      );
+    }
+  }
+  closedir($dh);
 
-	return $module_list;
+  return $module_list;
 }
 
 
@@ -621,9 +628,9 @@ function ft_install_get_module_list()
  */
 function ft_install_send_welcome_email($email, $username, $password)
 {
-	global $g_root_dir, $g_root_url;
+  global $g_root_dir, $g_root_url;
 
-	// 1. build the email content
+  // 1. build the email content
   $placeholders = array(
     "login_url" => $g_root_url,
     "username"  => $username,

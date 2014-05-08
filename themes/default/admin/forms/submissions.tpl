@@ -30,6 +30,11 @@
     <p>
       {$LANG.text_no_submissions_found}
     </p>
+
+    {if $view_info.may_add_submissions == "yes"}
+      <input type="button" id="add_submission" value="{$LANG.word_add}" onclick="window.location='{$same_page}?add_submission'" />
+    {/if}
+
   {else}
 
   {ft_include file="messages.tpl"}
@@ -236,7 +241,7 @@
       </div>
 
       {template_hook location="admin_submission_listings_buttons1"}
-			
+
       {if $view_info.may_add_submissions == "yes"}
         <input type="button" id="add_submission" value="{$LANG.word_add}" onclick="window.location='{$same_page}?add_submission'" />
       {/if}
@@ -247,7 +252,7 @@
       <input type="button" id="unselect_button" value="{$LANG.phrase_unselect_all}" onclick="ms.unselect_all()" />
 
       {template_hook location="admin_submission_listings_buttons3"}
-			
+
       {if $view_info.may_delete_submissions == "yes"}
         <input type="button" value="{$LANG.word_delete}" class="red" onclick="ms.delete_submissions()" />
       {/if}

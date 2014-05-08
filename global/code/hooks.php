@@ -64,19 +64,19 @@ function ft_register_hook($hook_type, $module_folder, $when, $core_function, $ho
   $may_proceed = true;
   if ($force_unique)
   {
-  	$query = mysql_query("
-  	  SELECT count(*) as c
-  	  FROM   {$g_table_prefix}hooks
-  	  WHERE  hook_type = '$hook_type' AND
-			       action_location = '$when' AND
-  	         module_folder = '$module_folder' AND
-  	         core_function = '$core_function' AND
-  	         hook_function = '$hook_function'
-      	");
+    $query = mysql_query("
+      SELECT count(*) as c
+      FROM   {$g_table_prefix}hooks
+      WHERE  hook_type = '$hook_type' AND
+             action_location = '$when' AND
+             module_folder = '$module_folder' AND
+             core_function = '$core_function' AND
+             hook_function = '$hook_function'
+        ");
 
-  	$result = mysql_fetch_assoc($query);
-  	if ($result["c"] > 0)
-  	  $may_proceed = false;
+    $result = mysql_fetch_assoc($query);
+    if ($result["c"] > 0)
+      $may_proceed = false;
   }
 
   $result = mysql_query("
@@ -214,6 +214,10 @@ function ft_process_hook($module_folder, $hook_function, $vars, $overridable_var
   $vars["form_tools_calling_function"] = $calling_function;
 
   @include_once("$g_root_dir/modules/$module_folder/library.php");
+
+  if (!function_exists($hook_function))
+    return $overridable_vars;
+
   $result = @$hook_function($vars);
 
   $updated_values = array();
@@ -262,7 +266,7 @@ function ft_process_template_hook($module_folder, $hook_function, $location, $te
   global $g_root_dir;
 
   @include_once("$g_root_dir/modules/$module_folder/library.php");
-	$html = @$hook_function($location, $template_vars);
+  $html = @$hook_function($location, $template_vars);
 
-	return $html;
+  return $html;
 }

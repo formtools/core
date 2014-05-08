@@ -152,7 +152,7 @@ switch ($action)
     break;
 
   case "display_test_email":
-  	$form_id  = $_SESSION["ft"]["form_id"];
+    $form_id  = $_SESSION["ft"]["form_id"];
     $email_id = $_SESSION["ft"]["email_id"];
     $info = ft_get_email_components($form_id, "", $email_id, true, $request);
     echo ft_convert_to_json($info);

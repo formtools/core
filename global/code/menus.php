@@ -36,9 +36,9 @@ $g_pages = array(
   "admin_forms" => "/admin/forms/",
   "add_form1" => "/admin/forms/add/step1.php?add",
   "add_form2" => "/admin/forms/add/step2.php",
-	"add_form3" => "/admin/forms/add/step3.php",
-	"add_form4" => "/admin/forms/add/step4.php",
-	"add_form5" => "/admin/forms/add/step5.php",
+  "add_form3" => "/admin/forms/add/step3.php",
+  "add_form4" => "/admin/forms/add/step4.php",
+  "add_form5" => "/admin/forms/add/step5.php",
   "add_form6" => "/admin/forms/add/step6.php",
 
   "form_submissions" => "/admin/forms/submissions.php",
@@ -48,9 +48,9 @@ $g_pages = array(
   "edit_form" => "/admin/forms/edit.php",
   "edit_form_main" => "/admin/forms/edit.php?page=main",
   "edit_form_public_form_omit_list" => "/admin/forms/edit.php?page=public_form_omit_list",
-	"edit_form_fields" => "/admin/forms/edit.php?page=fields",
+  "edit_form_fields" => "/admin/forms/edit.php?page=fields",
   "edit_form_images" => "/admin/forms/edit.php?page=images",
-	"edit_form_views" => "/admin/forms/edit.php?page=views",
+  "edit_form_views" => "/admin/forms/edit.php?page=views",
   "edit_form_public_view_omit_list" => "/admin/forms/edit.php?page=public_view_omit_list",
   "edit_form_emails" => "/admin/forms/edit.php?page=emails",
   "edit_form_email_settings" => "/admin/forms/edit.php?page=email_settings",
@@ -74,12 +74,12 @@ $g_pages = array(
   "settings_main" => "/admin/settings/index.php?page=main",
   "settings_accounts" => "/admin/settings/index.php?page=accounts",
   "settings_files" => "/admin/settings/index.php?page=files",
-	"settings_wysiwyg" => "/admin/settings/index.php?page=wysiwyg",
-	"settings_themes" => "/admin/settings/index.php?page=themes",
+  "settings_wysiwyg" => "/admin/settings/index.php?page=wysiwyg",
+  "settings_themes" => "/admin/settings/index.php?page=themes",
   "themes_about" => "/admin/themes/about.php",
-	"settings_menus" => "/admin/settings/index.php?page=menus",
+  "settings_menus" => "/admin/settings/index.php?page=menus",
 
-	// CLIENT pages
+  // CLIENT pages
   "client_forms" => "/clients/index.php",
   "client_account" => "/clients/account/index.php",
   "client_account_login" => "/clients/account/index.php?page=main",
@@ -97,15 +97,15 @@ $g_pages = array(
  */
 function ft_create_blank_client_menu()
 {
-	global $g_table_prefix, $LANG;
+  global $g_table_prefix, $LANG;
 
-	// to ensure that even new blank menus have unique names, query the database and find
-	// the next free menu name of the form "Client Menu (X)" (where "Client Menu" is in the language
-	// of the current user)
-	$menus = ft_get_menu_list();
+  // to ensure that even new blank menus have unique names, query the database and find
+  // the next free menu name of the form "Client Menu (X)" (where "Client Menu" is in the language
+  // of the current user)
+  $menus = ft_get_menu_list();
   $menu_names = array();
   foreach ($menus as $menu_info)
-  	$menu_names[] = $menu_info["menu"];
+    $menu_names[] = $menu_info["menu"];
 
   $base_client_menu_name = $LANG["phrase_client_menu"];
   $new_menu_name = $base_client_menu_name;
@@ -117,8 +117,8 @@ function ft_create_blank_client_menu()
 
     while (in_array($new_menu_name, $menu_names))
     {
-    	$count++;
-    	$new_menu_name = "$base_client_menu_name ($count)";
+      $count++;
+      $new_menu_name = "$base_client_menu_name ($count)";
     }
   }
 
@@ -139,28 +139,28 @@ function ft_create_blank_client_menu()
  */
 function ft_get_menu_by_account_id($account_id)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$query = mysql_query("
-	  SELECT *
-	  FROM {$g_table_prefix}menus m, {$g_table_prefix}accounts a
-	  WHERE a.account_id = $account_id AND
-	        m.menu_id = a.menu_id
-	    ") or die(mysql_error());
+  $query = mysql_query("
+    SELECT *
+    FROM {$g_table_prefix}menus m, {$g_table_prefix}accounts a
+    WHERE a.account_id = $account_id AND
+          m.menu_id = a.menu_id
+      ") or die(mysql_error());
 
-	$menu_info = mysql_fetch_assoc($query);
-	$menu_id = $menu_info["menu_id"];
+  $menu_info = mysql_fetch_assoc($query);
+  $menu_id = $menu_info["menu_id"];
 
-	$menu_item_query = mysql_query("
-	  SELECT *
-	  FROM   {$g_table_prefix}menu_items
-	  WHERE  menu_id = $menu_id
-	  ORDER BY list_order
-	    ");
+  $menu_item_query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}menu_items
+    WHERE  menu_id = $menu_id
+    ORDER BY list_order
+      ");
 
-	$info = array();
-	while ($row = mysql_fetch_assoc($menu_item_query))
-		$info[] = $row;
+  $info = array();
+  while ($row = mysql_fetch_assoc($menu_item_query))
+    $info[] = $row;
 
   $menu_info["menu_items"] = $info;
 
@@ -176,55 +176,55 @@ function ft_get_menu_by_account_id($account_id)
  */
 function ft_get_menus($page_num = 1)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$num_menus_per_page = $_SESSION["ft"]["settings"]["num_menus_per_page"];
+  $num_menus_per_page = $_SESSION["ft"]["settings"]["num_menus_per_page"];
 
-	// determine the LIMIT clause
-	$limit_clause = "";
-	if (empty($page_num))
-		$page_num = 1;
-	$first_item = ($page_num - 1) * $num_menus_per_page;
-	$limit_clause = "LIMIT $first_item, $num_menus_per_page";
+  // determine the LIMIT clause
+  $limit_clause = "";
+  if (empty($page_num))
+    $page_num = 1;
+  $first_item = ($page_num - 1) * $num_menus_per_page;
+  $limit_clause = "LIMIT $first_item, $num_menus_per_page";
 
   $result = mysql_query("
     SELECT *
-		FROM 	 {$g_table_prefix}menus
-		ORDER BY menu
- 		$limit_clause
-			");
- 	$count_result = mysql_query("
-		SELECT count(*) as c
-		FROM 	 {$g_table_prefix}menus
-			");
- 	$count_hash = mysql_fetch_assoc($count_result);
+    FROM 	 {$g_table_prefix}menus
+    ORDER BY menu
+     $limit_clause
+      ");
+   $count_result = mysql_query("
+    SELECT count(*) as c
+    FROM 	 {$g_table_prefix}menus
+      ");
+   $count_hash = mysql_fetch_assoc($count_result);
 
- 	// select all account associated with this menu
- 	$info = array();
-	while ($row = mysql_fetch_assoc($result))
-	{
-		$menu_id = $row["menu_id"];
+   // select all account associated with this menu
+   $info = array();
+  while ($row = mysql_fetch_assoc($result))
+  {
+    $menu_id = $row["menu_id"];
 
-		$account_query = mysql_query("
-		  SELECT account_id, first_name, last_name, account_type
-		  FROM   {$g_table_prefix}accounts a
-		  WHERE  menu_id = $menu_id
-		    ");
+    $account_query = mysql_query("
+      SELECT account_id, first_name, last_name, account_type
+      FROM   {$g_table_prefix}accounts a
+      WHERE  menu_id = $menu_id
+        ");
 
-		$accounts = array();
-		while ($account_row = mysql_fetch_assoc($account_query))
-		  $accounts[] = $account_row;
+    $accounts = array();
+    while ($account_row = mysql_fetch_assoc($account_query))
+      $accounts[] = $account_row;
 
-		$row["account_info"] = $accounts;
-		$info[] = $row;
-	}
+    $row["account_info"] = $accounts;
+    $info[] = $row;
+  }
 
-	$return_hash["results"] = $info;
-	$return_hash["num_results"]  = $count_hash["c"];
+  $return_hash["results"] = $info;
+  $return_hash["num_results"]  = $count_hash["c"];
 
-	extract(ft_process_hooks("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
-	return $return_hash;
+  return $return_hash;
 }
 
 
@@ -235,21 +235,21 @@ function ft_get_menus($page_num = 1)
  */
 function ft_get_menu_list()
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$query = mysql_query("
-	  SELECT *
-	  FROM   {$g_table_prefix}menus
-	  ORDER BY menu
-	    ");
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}menus
+    ORDER BY menu
+      ");
 
-	$menus = array();
-	while ($row = mysql_fetch_assoc($query))
-	  $menus[] = $row;
+  $menus = array();
+  while ($row = mysql_fetch_assoc($query))
+    $menus[] = $row;
 
-	extract(ft_process_hooks("end", compact("menus"), array("menus")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("menus"), array("menus")), EXTR_OVERWRITE);
 
-	return $menus;
+  return $menus;
 }
 
 
@@ -260,32 +260,32 @@ function ft_get_menu_list()
  */
 function ft_get_admin_menu()
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$result = mysql_query("
-	  SELECT *
-	  FROM   {$g_table_prefix}menus
-	  WHERE  menu_type = 'admin'
-	    ");
+  $result = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}menus
+    WHERE  menu_type = 'admin'
+      ");
 
-	$menu_info = mysql_fetch_assoc($result);
-	$menu_id = $menu_info["menu_id"];
+  $menu_info = mysql_fetch_assoc($result);
+  $menu_id = $menu_info["menu_id"];
 
-	// now get all the menu items and stash them in a "menu_items" key in $menu_info
-	$menu_item_query = mysql_query("
-	  SELECT *
-	  FROM   {$g_table_prefix}menu_items
-	  WHERE  menu_id = $menu_id
-	  ORDER BY list_order
-	    ");
+  // now get all the menu items and stash them in a "menu_items" key in $menu_info
+  $menu_item_query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}menu_items
+    WHERE  menu_id = $menu_id
+    ORDER BY list_order
+      ");
 
-	$menu_items = array();
-	while ($item = mysql_fetch_assoc($menu_item_query))
-		$menu_items[] = $item;
+  $menu_items = array();
+  while ($item = mysql_fetch_assoc($menu_item_query))
+    $menu_items[] = $item;
 
   $menu_info["menu_items"] = $menu_items;
 
-	extract(ft_process_hooks("end", compact("menu_info"), array("menu_info")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("menu_info"), array("menu_info")), EXTR_OVERWRITE);
 
   return $menu_info;
 }
@@ -299,32 +299,32 @@ function ft_get_admin_menu()
  */
 function ft_get_client_menu($menu_id)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$result = mysql_query("
-	  SELECT *
-	  FROM   {$g_table_prefix}menus
-	  WHERE  menu_id = $menu_id
-	    ");
+  $result = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}menus
+    WHERE  menu_id = $menu_id
+      ");
 
-	$menu_info = mysql_fetch_assoc($result);
+  $menu_info = mysql_fetch_assoc($result);
   $menu_info["menu_items"] = ft_get_menu_items($menu_id);
 
   // get all associated client accounts
-	$menu_clients_query = mysql_query("
-	  SELECT *
-	  FROM   {$g_table_prefix}accounts
-	  WHERE  menu_id = $menu_id
-	  ORDER BY first_name
-	    ");
+  $menu_clients_query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}accounts
+    WHERE  menu_id = $menu_id
+    ORDER BY first_name
+      ");
 
-	$menu_clients = array();
-	while ($client = mysql_fetch_assoc($menu_clients_query))
-		$menu_clients[] = $client;
+  $menu_clients = array();
+  while ($client = mysql_fetch_assoc($menu_clients_query))
+    $menu_clients[] = $client;
 
   $menu_info["clients"] = $menu_clients;
 
-	extract(ft_process_hooks("end", compact("menu_info"), array("menu_info")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("menu_info"), array("menu_info")), EXTR_OVERWRITE);
 
   return $menu_info;
 }
@@ -338,21 +338,21 @@ function ft_get_client_menu($menu_id)
  */
 function ft_get_menu_items($menu_id)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	// now get all the menu items and stash them in a "menu_items" key in $menu_info
-	$menu_item_query = mysql_query("
-	  SELECT *
-	  FROM   {$g_table_prefix}menu_items
-	  WHERE  menu_id = $menu_id
-	  ORDER BY list_order
-	    ");
+  // now get all the menu items and stash them in a "menu_items" key in $menu_info
+  $menu_item_query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}menu_items
+    WHERE  menu_id = $menu_id
+    ORDER BY list_order
+      ");
 
-	$menu_items = array();
-	while ($item = mysql_fetch_assoc($menu_item_query))
-		$menu_items[] = $item;
+  $menu_items = array();
+  while ($item = mysql_fetch_assoc($menu_item_query))
+    $menu_items[] = $item;
 
-	extract(ft_process_hooks("end", compact("menu_items", "menu_id"), array("menu_items")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("menu_items", "menu_id"), array("menu_items")), EXTR_OVERWRITE);
 
   return $menu_items;
 }
@@ -383,7 +383,7 @@ function ft_get_menu($menu_id)
  */
 function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_menu, $omit_pages = array())
 {
-	global $LANG;
+  global $LANG;
 
   // stores the non-option lines of the select box: <select>, </select> and the optgroups
   $select_lines   = array();
@@ -394,9 +394,9 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
 
   if (!in_array("custom_url", $omit_pages))
   {
-  	$select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_custom"]);
-  	$select_lines[] = array("type" => "option", "k" => "custom_url", "v" => $LANG["phrase_custom_url"]);
-  	$select_lines[] = array("type" => "optgroup_close");
+    $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_custom"]);
+    $select_lines[] = array("type" => "option", "k" => "custom_url", "v" => $LANG["phrase_custom_url"]);
+    $select_lines[] = array("type" => "optgroup_close");
   }
 
   $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_forms"]);
@@ -410,7 +410,7 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
 
   if ($is_building_menu)
   {
-  	if (!in_array("form_submissions", $omit_pages))
+    if (!in_array("form_submissions", $omit_pages))
       $select_lines[] = array("type" => "option", "k" => "form_submissions", "v" => $LANG["phrase_form_submissions"]);
     if (!in_array("edit_form", $omit_pages))
       $select_lines[] = array("type" => "option", "k" => "edit_form", "v" => $LANG["phrase_edit_form"]);
@@ -438,7 +438,7 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
 
   if ($is_building_menu)
   {
-  	if (!in_array("edit_client", $omit_pages))
+    if (!in_array("edit_client", $omit_pages))
       $select_lines[] = array("type" => "option", "k" => "edit_client", "v" => $LANG["phrase_edit_client"]);
     if (!in_array("edit_client_main", $omit_pages))
       $select_lines[] = array("type" => "option", "k" => "edit_client_main", "v" => $LANG["word_main"]);
@@ -454,26 +454,26 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
   $modules = ft_get_modules();
   for ($i=0; $i<count($modules); $i++)
   {
-  	$module_id = $modules[$i]["module_id"];
-  	$module    = $modules[$i]["module_name"];
-  	$select_lines[] = array("type" => "option", "k" => "module_{$module_id}", "v" => $module);
+    $module_id = $modules[$i]["module_id"];
+    $module    = $modules[$i]["module_name"];
+    $select_lines[] = array("type" => "option", "k" => "module_{$module_id}", "v" => $module);
   }
   $select_lines[] = array("type" => "optgroup_close");
 
   // if the Pages module is enabled, display any custom pages that have been defined
   if (ft_check_module_enabled("pages"))
   {
-  	ft_include_module("pages");
-  	$pages_info = pg_get_pages("all");
+    ft_include_module("pages");
+    $pages_info = pg_get_pages("all");
     $pages = $pages_info["results"];
 
-  	$select_lines[] = array("type" => "optgroup_open", "label" => $LANG["phrase_pages_module"]);
-  	for ($i=0; $i<count($pages); $i++)
-  	{
-  		$page_id = $pages[$i]["page_id"];
-  		$page_name = $pages[$i]["page_name"];
-  		$select_lines[] = array("type" => "option", "k" => "page_{$page_id}", "v" => $page_name);
-  	}
+    $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["phrase_pages_module"]);
+    for ($i=0; $i<count($pages); $i++)
+    {
+      $page_id = $pages[$i]["page_id"];
+      $page_name = $pages[$i]["page_name"];
+      $select_lines[] = array("type" => "option", "k" => "page_{$page_id}", "v" => $page_name);
+    }
 
     $select_lines[] = array("type" => "optgroup_close");
   }
@@ -497,29 +497,29 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
   $dd = "";
   foreach ($select_lines as $line)
   {
-  	switch ($line["type"])
-  	{
-  		case "select_open":
-				$attribute_str = "";
-			  while (list($key, $value) = each($attributes))
-			  	$attribute_str .= " $key=\"$value\"";
-  		  $dd .= "<select $attribute_str>";
-  		  break;
-  		case "select_close":
-  		  $dd .= "</select>";
-  		  break;
-  		case "optgroup_open":
-  			$dd .= "<optgroup label=\"{$line["label"]}\">";
-  			break;
-  		case "optgroup_close":
-  		  $dd .= "</optgroup>";
-  		  break;
-  		case "option":
-  			$key   = $line["k"];
-		  	$value = $line["v"];
-		    $dd .= "<option value=\"{$key}\"" . (($selected == $key) ? " selected" : "") . ">$value</option>\n";
-  			break;
-  	}
+    switch ($line["type"])
+    {
+      case "select_open":
+        $attribute_str = "";
+        while (list($key, $value) = each($attributes))
+          $attribute_str .= " $key=\"$value\"";
+        $dd .= "<select $attribute_str>";
+        break;
+      case "select_close":
+        $dd .= "</select>";
+        break;
+      case "optgroup_open":
+        $dd .= "<optgroup label=\"{$line["label"]}\">";
+        break;
+      case "optgroup_close":
+        $dd .= "</optgroup>";
+        break;
+      case "option":
+        $key   = $line["k"];
+        $value = $line["v"];
+        $dd .= "<option value=\"{$key}\"" . (($selected == $key) ? " selected" : "") . ">$value</option>\n";
+        break;
+    }
   }
 
   return $dd;
@@ -536,7 +536,7 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
  */
 function ft_get_client_menu_pages_dropdown($selected, $attributes, $omit_pages = array())
 {
-	global $LANG;
+  global $LANG;
 
   // stores the non-option lines of the select box: <select>, </select> and the optgroups
   $select_lines   = array();
@@ -547,9 +547,9 @@ function ft_get_client_menu_pages_dropdown($selected, $attributes, $omit_pages =
 
   if (!in_array("custom_url", $omit_pages))
   {
-  	$select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_custom"]);
-  	$select_lines[] = array("type" => "option", "k" => "custom_url", "v" => $LANG["phrase_custom_url"]);
-  	$select_lines[] = array("type" => "optgroup_close");
+    $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_custom"]);
+    $select_lines[] = array("type" => "option", "k" => "custom_url", "v" => $LANG["phrase_custom_url"]);
+    $select_lines[] = array("type" => "optgroup_close");
   }
 
   $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_main"]);
@@ -573,52 +573,52 @@ function ft_get_client_menu_pages_dropdown($selected, $attributes, $omit_pages =
   // if there's at least ONE page defined
   if (ft_check_module_enabled("pages"))
   {
-  	ft_include_module("pages");
-  	$pages_info = pg_get_pages("all");
+    ft_include_module("pages");
+    $pages_info = pg_get_pages("all");
     $pages = $pages_info["results"];
 
     if (count($pages) > 0)
     {
-	    $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["phrase_pages_module"]);
-	    foreach ($pages as $page)
-	  	{
-	  		$page_id = $page["page_id"];
-	  		$page_name = $page["page_name"];
-	  		$select_lines[] = array("type" => "option", "k" => "page_{$page_id}", "v" => $page_name);
-	  	}
-	  	$select_lines[] = array("type" => "optgroup_close");
+      $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["phrase_pages_module"]);
+      foreach ($pages as $page)
+      {
+        $page_id = $page["page_id"];
+        $page_name = $page["page_name"];
+        $select_lines[] = array("type" => "option", "k" => "page_{$page_id}", "v" => $page_name);
+      }
+      $select_lines[] = array("type" => "optgroup_close");
     }
   }
 
-	$select_lines[] = array("type" => "select_close");
+  $select_lines[] = array("type" => "select_close");
 
   // now build the HTML
   $dd = "";
   foreach ($select_lines as $line)
   {
-  	switch ($line["type"])
-  	{
-  		case "select_open":
-				$attribute_str = "";
-			  while (list($key, $value) = each($attributes))
-			  	$attribute_str .= " $key=\"$value\"";
-  		  $dd .= "<select $attribute_str>";
-  		  break;
-  		case "select_close":
-  		  $dd .= "</select>";
-  		  break;
-  		case "optgroup_open":
-  			$dd .= "<optgroup label=\"{$line["label"]}\">";
-  			break;
-  		case "optgroup_close":
-  		  $dd .= "</optgroup>";
-  		  break;
-  		case "option":
-  			$key   = $line["k"];
-		  	$value = $line["v"];
-		    $dd .= "<option value=\"{$key}\"" . (($selected == $key) ? " selected" : "") . ">$value</option>\n";
-  			break;
-  	}
+    switch ($line["type"])
+    {
+      case "select_open":
+        $attribute_str = "";
+        while (list($key, $value) = each($attributes))
+          $attribute_str .= " $key=\"$value\"";
+        $dd .= "<select $attribute_str>";
+        break;
+      case "select_close":
+        $dd .= "</select>";
+        break;
+      case "optgroup_open":
+        $dd .= "<optgroup label=\"{$line["label"]}\">";
+        break;
+      case "optgroup_close":
+        $dd .= "</optgroup>";
+        break;
+      case "option":
+        $key   = $line["k"];
+        $value = $line["v"];
+        $dd .= "<option value=\"{$key}\"" . (($selected == $key) ? " selected" : "") . ">$value</option>\n";
+        break;
+    }
   }
 
   return $dd;
@@ -632,43 +632,43 @@ function ft_get_client_menu_pages_dropdown($selected, $attributes, $omit_pages =
  */
 function ft_update_admin_menu($info)
 {
-	global $g_table_prefix, $g_pages, $g_root_url, $LANG;
+  global $g_table_prefix, $g_pages, $g_root_url, $LANG;
 
-	$menu_id    = $info["menu_id"];
-	$account_id = $info["account_id"];
+  $menu_id    = $info["menu_id"];
+  $account_id = $info["account_id"];
 
-	$menu_items = array();
-	for ($i=1; $i<=$info["num_rows"]; $i++)
-	{
-		// if this row doesn't have a page identifier, just ignore it
-		if (!isset($info["page_identifier_$i"]) || empty($info["page_identifier_$i"]))
-		  continue;
+  $menu_items = array();
+  for ($i=1; $i<=$info["num_rows"]; $i++)
+  {
+    // if this row doesn't have a page identifier, just ignore it
+    if (!isset($info["page_identifier_$i"]) || empty($info["page_identifier_$i"]))
+      continue;
 
-	  $page_identifier = $info["page_identifier_$i"];
-	  $display_text    = ft_sanitize($info["display_text_$i"]);
-	  $custom_options  = isset($info["custom_options_$i"]) ? ft_sanitize($info["custom_options_$i"]) : "";
-	  $is_submenu      = isset($info["submenu_$i"]) ? "yes" : "no";
-	  $list_order      = isset($info["menu_row_{$i}_order"]) ? $info["menu_row_{$i}_order"] : "";
+    $page_identifier = $info["page_identifier_$i"];
+    $display_text    = ft_sanitize($info["display_text_$i"]);
+    $custom_options  = isset($info["custom_options_$i"]) ? ft_sanitize($info["custom_options_$i"]) : "";
+    $is_submenu      = isset($info["submenu_$i"]) ? "yes" : "no";
+    $list_order      = isset($info["menu_row_{$i}_order"]) ? $info["menu_row_{$i}_order"] : "";
 
-		// construct the URL for this menu item
-		$url = ft_construct_page_url($page_identifier, $custom_options);
+    // construct the URL for this menu item
+    $url = ft_construct_page_url($page_identifier, $custom_options);
 
-		// if a key already exists for this list order, tack on an "a" so that the upcoming ksort will
-		// work properly and that this menu item won't be lost. Interestingly, array_key_exists only accepts
-		// keys that are integers or strings, so we add on more and more a's to the end of the key string to
-		// make the row key compatible with both array_key_exists and ksort.
-		$new_list_order = $list_order;
-		while (array_key_exists($new_list_order, $menu_items))
+    // if a key already exists for this list order, tack on an "a" so that the upcoming ksort will
+    // work properly and that this menu item won't be lost. Interestingly, array_key_exists only accepts
+    // keys that are integers or strings, so we add on more and more a's to the end of the key string to
+    // make the row key compatible with both array_key_exists and ksort.
+    $new_list_order = $list_order;
+    while (array_key_exists($new_list_order, $menu_items))
       $new_list_order .= "a";
 
     $menu_items[$new_list_order] = array(
       "url" => $url,
-			"page_identifier" => $page_identifier,
-			"display_text" => $display_text,
+      "page_identifier" => $page_identifier,
+      "display_text" => $display_text,
       "custom_options" => $custom_options,
       "is_submenu" => $is_submenu
-				);
-	}
+        );
+  }
 
   ksort($menu_items);
 
@@ -676,28 +676,28 @@ function ft_update_admin_menu($info)
 
   $order = 1;
   foreach ($menu_items as $key => $hash)
-	{
-		$url             = $hash["url"];
-		$page_identifier = $hash["page_identifier"];
-		$display_text    = $hash["display_text"];
-		$custom_options  = $hash["custom_options"];
-		$is_submenu      = $hash["is_submenu"];
+  {
+    $url             = $hash["url"];
+    $page_identifier = $hash["page_identifier"];
+    $display_text    = $hash["display_text"];
+    $custom_options  = $hash["custom_options"];
+    $is_submenu      = $hash["is_submenu"];
 
-		mysql_query("
-	    INSERT INTO {$g_table_prefix}menu_items (menu_id, display_text, page_identifier, custom_options, url, is_submenu, list_order)
-	    VALUES ($menu_id, '$display_text', '$page_identifier', '$custom_options', '$url', '$is_submenu', $order)
-	      ") or die(mysql_error());
-	  $order++;
-	}
+    mysql_query("
+      INSERT INTO {$g_table_prefix}menu_items (menu_id, display_text, page_identifier, custom_options, url, is_submenu, list_order)
+      VALUES ($menu_id, '$display_text', '$page_identifier', '$custom_options', '$url', '$is_submenu', $order)
+        ") or die(mysql_error());
+    $order++;
+  }
 
-	// update the administrator's cache, so the menu automatically updates
+  // update the administrator's cache, so the menu automatically updates
   ft_cache_account_menu($account_id);
 
   $success = true;
   $message = $LANG["notify_admin_menu_updated"];
-	extract(ft_process_hooks("end", compact("success", "message", "info"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("success", "message", "info"), array("success", "message")), EXTR_OVERWRITE);
 
-	return array($success, $message);
+  return array($success, $message);
 }
 
 
@@ -711,9 +711,9 @@ function ft_update_admin_menu($info)
  */
 function ft_update_menu_order($menu_id)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	// this returns the menu items ordered by list order
+  // this returns the menu items ordered by list order
   $menu_items = ft_get_menu_items($menu_id);
 
   // now update the list orders to ensure no gaps
@@ -727,10 +727,10 @@ function ft_update_menu_order($menu_id)
       SET    list_order = $order
       WHERE  menu_item_id = $menu_item_id
         ");
-  	$order++;
+    $order++;
   }
 
-	extract(ft_process_hooks("end", compact("menu_id"), array()), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("menu_id"), array()), EXTR_OVERWRITE);
 }
 
 
@@ -741,11 +741,11 @@ function ft_update_menu_order($menu_id)
  */
 function ft_update_client_menu($info)
 {
-	global $g_table_prefix, $g_pages, $g_root_url, $LANG;
+  global $g_table_prefix, $g_pages, $g_root_url, $LANG;
 
-	$info = ft_sanitize($info);
-	$menu_id = $info["menu_id"];
-	$menu    = trim($info["menu"]);
+  $info = ft_sanitize($info);
+  $menu_id = $info["menu_id"];
+  $menu    = trim($info["menu"]);
 
   mysql_query("
     UPDATE {$g_table_prefix}menus
@@ -753,38 +753,38 @@ function ft_update_client_menu($info)
     WHERE  menu_id = $menu_id
       ");
 
-	$menu_items = array();
-	for ($i=1; $i<=$info["num_rows"]; $i++)
-	{
-		// if this row doesn't have a page identifier, just ignore it
-		if (!isset($info["page_identifier_$i"]) || empty($info["page_identifier_$i"]))
-		  continue;
+  $menu_items = array();
+  for ($i=1; $i<=$info["num_rows"]; $i++)
+  {
+    // if this row doesn't have a page identifier, just ignore it
+    if (!isset($info["page_identifier_$i"]) || empty($info["page_identifier_$i"]))
+      continue;
 
-	  $page_identifier = $info["page_identifier_$i"];
-	  $display_text    = ft_sanitize($info["display_text_$i"]);
-	  $custom_options  = isset($info["custom_options_$i"]) ? ft_sanitize($info["custom_options_$i"]) : "";
-	  $is_submenu      = isset($info["submenu_$i"]) ? "yes" : "no";
-	  $list_order      = isset($info["menu_row_{$i}_order"]) ? $info["menu_row_{$i}_order"] : "";
+    $page_identifier = $info["page_identifier_$i"];
+    $display_text    = ft_sanitize($info["display_text_$i"]);
+    $custom_options  = isset($info["custom_options_$i"]) ? ft_sanitize($info["custom_options_$i"]) : "";
+    $is_submenu      = isset($info["submenu_$i"]) ? "yes" : "no";
+    $list_order      = isset($info["menu_row_{$i}_order"]) ? $info["menu_row_{$i}_order"] : "";
 
-		// construct the URL for this menu item
-		$url = ft_construct_page_url($page_identifier, $custom_options);
+    // construct the URL for this menu item
+    $url = ft_construct_page_url($page_identifier, $custom_options);
 
-		// if a key already exists for this list order, tack on an "a" so that the upcoming ksort will
-		// work properly and that this menu item won't be lost. Interestingly, array_key_exists only accepts
-		// keys that are integers or strings, so we add on more and more a's to the end of the key string to
-		// make the row key compatible with both array_key_exists and ksort.
-		$new_list_order = $list_order;
-		while (array_key_exists($new_list_order, $menu_items))
+    // if a key already exists for this list order, tack on an "a" so that the upcoming ksort will
+    // work properly and that this menu item won't be lost. Interestingly, array_key_exists only accepts
+    // keys that are integers or strings, so we add on more and more a's to the end of the key string to
+    // make the row key compatible with both array_key_exists and ksort.
+    $new_list_order = $list_order;
+    while (array_key_exists($new_list_order, $menu_items))
       $new_list_order .= "a";
 
     $menu_items[$new_list_order] = array(
       "url" => $url,
-			"page_identifier" => $page_identifier,
-			"display_text" => $display_text,
+      "page_identifier" => $page_identifier,
+      "display_text" => $display_text,
       "custom_options" => $custom_options,
       "is_submenu" => $is_submenu
-				);
-	}
+        );
+  }
 
   ksort($menu_items);
 
@@ -792,25 +792,25 @@ function ft_update_client_menu($info)
 
   $order = 1;
   foreach ($menu_items as $key => $hash)
-	{
-		$url             = $hash["url"];
-		$page_identifier = $hash["page_identifier"];
-		$display_text    = $hash["display_text"];
-		$custom_options  = $hash["custom_options"];
-		$is_submenu      = $hash["is_submenu"];
+  {
+    $url             = $hash["url"];
+    $page_identifier = $hash["page_identifier"];
+    $display_text    = $hash["display_text"];
+    $custom_options  = $hash["custom_options"];
+    $is_submenu      = $hash["is_submenu"];
 
-		mysql_query("
-	    INSERT INTO {$g_table_prefix}menu_items (menu_id, display_text, page_identifier, custom_options, url, is_submenu, list_order)
-	    VALUES ($menu_id, '$display_text', '$page_identifier', '$custom_options', '$url', '$is_submenu', $order)
-	      ") or die(mysql_error());
-	  $order++;
-	}
+    mysql_query("
+      INSERT INTO {$g_table_prefix}menu_items (menu_id, display_text, page_identifier, custom_options, url, is_submenu, list_order)
+      VALUES ($menu_id, '$display_text', '$page_identifier', '$custom_options', '$url', '$is_submenu', $order)
+        ") or die(mysql_error());
+    $order++;
+  }
 
-	$success = true;
-	$message = $LANG["notify_client_menu_updated"];
-	extract(ft_process_hooks("end", compact("info"), array("success", "message")), EXTR_OVERWRITE);
+  $success = true;
+  $message = $LANG["notify_client_menu_updated"];
+  extract(ft_process_hooks("end", compact("info"), array("success", "message")), EXTR_OVERWRITE);
 
-	return array($success, $message);
+  return array($success, $message);
 }
 
 
@@ -822,26 +822,26 @@ function ft_update_client_menu($info)
  */
 function ft_cache_account_menu($account_id)
 {
-	global $g_root_url;
+  global $g_root_url;
 
-	$menu_info = ft_get_menu_by_account_id($account_id);
+  $menu_info = ft_get_menu_by_account_id($account_id);
 
-	$menu_template_info = array();
-	for ($i=0; $i<count($menu_info["menu_items"]); $i++)
-	{
-		$curr_item = $menu_info["menu_items"][$i];
+  $menu_template_info = array();
+  for ($i=0; $i<count($menu_info["menu_items"]); $i++)
+  {
+    $curr_item = $menu_info["menu_items"][$i];
 
-		$url = (preg_match("/^http/", $curr_item["url"])) ? $curr_item["url"] : $g_root_url . $curr_item["url"];
+    $url = (preg_match("/^http/", $curr_item["url"])) ? $curr_item["url"] : $g_root_url . $curr_item["url"];
 
-		$menu_template_info[] = array(
-		  "url"             => $url,
-		  "display_text"    => $curr_item["display_text"],
-		  "page_identifier" => $curr_item["page_identifier"],
-		  "is_submenu"      => $curr_item["is_submenu"]
-		);
-	}
+    $menu_template_info[] = array(
+      "url"             => $url,
+      "display_text"    => $curr_item["display_text"],
+      "page_identifier" => $curr_item["page_identifier"],
+      "is_submenu"      => $curr_item["is_submenu"]
+    );
+  }
 
-	$_SESSION["ft"]["menu"]["menu_items"] = $menu_template_info;
+  $_SESSION["ft"]["menu"]["menu_items"] = $menu_template_info;
 }
 
 
@@ -861,12 +861,12 @@ function ft_cache_account_menu($account_id)
  */
 function ft_get_page_url($page_identifier, $params = array())
 {
-	global $g_pages;
+  global $g_pages;
 
-	$url = $g_pages[$page_identifier];
-	$query_pairs = array();
-	while (list($key, $value) = each($params))
-	  $query_pairs[] = "$key=$value";
+  $url = $g_pages[$page_identifier];
+  $query_pairs = array();
+  while (list($key, $value) = each($params))
+    $query_pairs[] = "$key=$value";
 
   $query_str = join("&", $query_pairs);
 
@@ -875,15 +875,15 @@ function ft_get_page_url($page_identifier, $params = array())
 
   if (!empty($query_str))
   {
-	  if (strpos($url, "?"))
-	    $full_url .= "&{$query_str}";
-	  else
-	    $full_url .= "?{$query_str}";
+    if (strpos($url, "?"))
+      $full_url .= "&{$query_str}";
+    else
+      $full_url .= "?{$query_str}";
   }
 
   extract(ft_process_hooks("end", compact("page_identifier", "params", "full_url"), array("full_url")), EXTR_OVERWRITE);
 
-	return $full_url;
+  return $full_url;
 }
 
 
@@ -899,16 +899,16 @@ function ft_get_page_url($page_identifier, $params = array())
  */
 function ft_construct_page_url($page_identifier, $custom_options = "")
 {
-	global $g_pages;
+  global $g_pages;
 
-	$url = "";
-	switch ($page_identifier)
-	{
-		case "custom_url":
-			$url = $custom_options;
-	    break;
+  $url = "";
+  switch ($page_identifier)
+  {
+    case "custom_url":
+      $url = $custom_options;
+      break;
 
-	  case "client_form_submissions":
+    case "client_form_submissions":
     case "form_submissions":
     case "edit_form":
     case "edit_form_main":
@@ -917,41 +917,41 @@ function ft_construct_page_url($page_identifier, $custom_options = "")
     case "edit_form_emails":
     case "edit_form_database":
     case "edit_form_add_fields":
-    	$joiner = (strpos($g_pages[$page_identifier], "?")) ? "&" : "?";
+      $joiner = (strpos($g_pages[$page_identifier], "?")) ? "&" : "?";
       $url = $g_pages[$page_identifier] . $joiner . "form_id=" . $custom_options;
       break;
 
     case "edit_client":
     case "edit_client_main":
     case "edit_client_permissions":
-    	$joiner = (strpos($g_pages[$page_identifier], "?")) ? "&" : "?";
+      $joiner = (strpos($g_pages[$page_identifier], "?")) ? "&" : "?";
       $url = $g_pages[$page_identifier] . $joiner . "client_id=" . $custom_options;
-    	break;
+      break;
 
-		default:
-			// modules
-			if (preg_match("/^module_(\d+)/", $page_identifier, $matches))
-			{
-				$module_id = $matches[1];
-				$module_info = ft_get_module($module_id);
-				if (!empty($module_info))
-				{
-					$module_folder = $module_info["module_folder"];
-					$url = "/modules/$module_folder/";
-				}
-			}
-			// pages (from the Pages module)
-			else if (preg_match("/^page_(\d+)/", $page_identifier, $matches))
-			{
-			  $page_id = $matches[1];
-				$url = "/modules/pages/page.php?id=$page_id";
-			}
-			else
-			  $url = $g_pages[$page_identifier];
-			break;
-	}
+    default:
+      // modules
+      if (preg_match("/^module_(\d+)/", $page_identifier, $matches))
+      {
+        $module_id = $matches[1];
+        $module_info = ft_get_module($module_id);
+        if (!empty($module_info))
+        {
+          $module_folder = $module_info["module_folder"];
+          $url = "/modules/$module_folder/";
+        }
+      }
+      // pages (from the Pages module)
+      else if (preg_match("/^page_(\d+)/", $page_identifier, $matches))
+      {
+        $page_id = $matches[1];
+        $url = "/modules/pages/page.php?id=$page_id";
+      }
+      else
+        $url = $g_pages[$page_identifier];
+      break;
+  }
 
-	return $url;
+  return $url;
 }
 
 
@@ -969,43 +969,43 @@ function ft_construct_page_url($page_identifier, $custom_options = "")
  */
 function ft_get_parent_page_url($page_url)
 {
-	global $g_root_url;
+  global $g_root_url;
 
-	$page_found = false;
-	$last_parent_page_url = "";
+  $page_found = false;
+  $last_parent_page_url = "";
 
-	// if there's no menu in memory, the person isn't logged in. Just return the empty string
-	if (!isset($_SESSION["ft"]["menu"]))
-	  return "";
+  // if there's no menu in memory, the person isn't logged in. Just return the empty string
+  if (!isset($_SESSION["ft"]["menu"]))
+    return "";
 
-	$menu_items = $_SESSION["ft"]["menu"]["menu_items"];
+  $menu_items = $_SESSION["ft"]["menu"]["menu_items"];
 
-	for ($i=0; $i<count($menu_items); $i++)
-	{
-		$curr_page_url = $menu_items[$i]["url"];
-	  if ($menu_items[$i]["is_submenu"] == "no")
-	    $last_parent_page_url = $curr_page_url;
+  for ($i=0; $i<count($menu_items); $i++)
+  {
+    $curr_page_url = $menu_items[$i]["url"];
+    if ($menu_items[$i]["is_submenu"] == "no")
+      $last_parent_page_url = $curr_page_url;
 
-	  if ($curr_page_url == $g_root_url . $page_url)
-	  {
-	  	$page_found = true;
-	  	break;
-	  }
-	}
+    if ($curr_page_url == $g_root_url . $page_url)
+    {
+      $page_found = true;
+      break;
+    }
+  }
 
-	$found_page = "";
-	if (!$page_found)
-	{
-		if (isset($_SESSION["ft"]["menu"]["last_parent_url"]))
-		  $found_page = $_SESSION["ft"]["menu"]["last_parent_url"];
-		else
-			$found_page = "";
-	}
-	else
-	{
-		$found_page = $last_parent_page_url;
-		$_SESSION["ft"]["menu"]["last_parent_url"] = $found_page;
-	}
+  $found_page = "";
+  if (!$page_found)
+  {
+    if (isset($_SESSION["ft"]["menu"]["last_parent_url"]))
+      $found_page = $_SESSION["ft"]["menu"]["last_parent_url"];
+    else
+      $found_page = "";
+  }
+  else
+  {
+    $found_page = $last_parent_page_url;
+    $_SESSION["ft"]["menu"]["last_parent_url"] = $found_page;
+  }
 
   return $found_page;
 }
@@ -1025,7 +1025,7 @@ function ft_get_parent_page_url($page_url)
  */
 function ft_delete_client_menu($menu_id)
 {
-	global $g_table_prefix, $g_root_url, $LANG;
+  global $g_table_prefix, $g_root_url, $LANG;
 
   extract(ft_process_hooks("start", compact("menu_id"), array()), EXTR_OVERWRITE);
 
@@ -1042,34 +1042,34 @@ function ft_delete_client_menu($menu_id)
 
   if (!empty($client_info))
   {
-  	$message = $LANG["notify_deleted_menu_already_assigned"];
-  	$placeholder_str = $LANG["phrase_assign_all_listed_client_accounts_to_menu"];
+    $message = $LANG["notify_deleted_menu_already_assigned"];
+    $placeholder_str = $LANG["phrase_assign_all_listed_client_accounts_to_menu"];
 
-  	$menus = ft_get_menu_list();
-	  $dd = "<select id=\"mass_update_client_menu\">";
-	  foreach ($menus as $menu_info)
-	  {
-	  	if ($menu_info["menu_type"] == "admin")
-	  	  continue;
-
-	  	$dd .= "<option value=\"{$menu_info["menu_id"]}\">{$menu_info["menu"]}</option>";
-	  }
-
-	  $dd .= "</select>";
-
-  	// a bit bad (hardcoded HTML!), but organize the account list in 3 columns
-  	$client_links_table = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n<tr>";
-  	$num_affected_clients = count($client_info);
-  	for ($i=0; $i<$num_affected_clients; $i++)
+    $menus = ft_get_menu_list();
+    $dd = "<select id=\"mass_update_client_menu\">";
+    foreach ($menus as $menu_info)
     {
-    	$account_info = $client_info[$i];
-    	$client_id  = $account_info["account_id"];
-    	$first_name = $account_info["first_name"];
-    	$last_name  = $account_info["last_name"];
-    	$client_ids[] = $client_id;
+      if ($menu_info["menu_type"] == "admin")
+        continue;
 
-    	if ($i != 0 && $i % 3 == 0)
-    		$client_links_table .= "</tr>\n<tr>";
+      $dd .= "<option value=\"{$menu_info["menu_id"]}\">{$menu_info["menu"]}</option>";
+    }
+
+    $dd .= "</select>";
+
+    // a bit bad (hardcoded HTML!), but organize the account list in 3 columns
+    $client_links_table = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n<tr>";
+    $num_affected_clients = count($client_info);
+    for ($i=0; $i<$num_affected_clients; $i++)
+    {
+      $account_info = $client_info[$i];
+      $client_id  = $account_info["account_id"];
+      $first_name = $account_info["first_name"];
+      $last_name  = $account_info["last_name"];
+      $client_ids[] = $client_id;
+
+      if ($i != 0 && $i % 3 == 0)
+        $client_links_table .= "</tr>\n<tr>";
 
       $client_links_table .= "<td width=\"33%\">&bull;&nbsp;<a href=\"$g_root_url/admin/clients/edit.php?page=settings&client_id=$client_id\" target=\"_blank\">$first_name $last_name</a></td>\n";
     }
@@ -1086,9 +1086,9 @@ function ft_delete_client_menu($menu_id)
     $submit_button = "<input type=\"button\" value=\"{$LANG["phrase_update_accounts"]}\" onclick=\"window.location='index.php?page=menus&mass_assign=1&accounts=$client_id_str&menu_id=' + $('mass_update_client_menu').value\" />";
 
     $placeholders = array(
-	    "menu_dropdown" => $dd,
-	    "submit_button" => $submit_button
-	  );
+      "menu_dropdown" => $dd,
+      "submit_button" => $submit_button
+    );
 
     $mass_assign_html = "<div class=\"margin_top_large margin_bottom_large\">" . ft_eval_smarty_string($placeholder_str, $placeholders) . "</div>";
     $html = $message . $mass_assign_html . $client_links_table;
@@ -1127,9 +1127,9 @@ function ft_delete_client_menu($menu_id)
     $accounts_str = "<br />";
     foreach ($client_accounts as $account_info)
     {
-    	$client_id  = $account_info["account_id"];
-    	$first_name = $account_info["first_name"];
-    	$last_name  = $account_info["last_name"];
+      $client_id  = $account_info["account_id"];
+      $first_name = $account_info["first_name"];
+      $last_name  = $account_info["last_name"];
 
       $accounts_str .= "&bull;&nbsp;<a href=\"$g_root_url/admin/clients/edit.php?client_id=$client_id\" target=\"_blank\">$first_name $last_name</a><br />\n";
     }
@@ -1164,10 +1164,9 @@ function ft_update_client_menus($account_ids, $menu_id)
   $menu_name = $menu_info["menu"];
 
   foreach ($client_ids as $client_id)
-  	mysql_query("UPDATE {$g_table_prefix}accounts SET menu_id=$menu_id WHERE account_id = $client_id");
+    mysql_query("UPDATE {$g_table_prefix}accounts SET menu_id=$menu_id WHERE account_id = $client_id");
 
   $placeholders = array("menu_name" => $menu_name);
   $message = ft_eval_smarty_string($LANG["notify_client_account_menus_updated"], $placeholders);
   return array(true, $message);
 }
-

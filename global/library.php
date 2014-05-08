@@ -148,6 +148,18 @@ $g_delete_module_folder_on_uninstallation = true;
 $g_session_type = "php"; // "php" or "database"
 
 /**
+ * This lets you specify the session save path, used by PHP sessions. By default this isn't set, relying
+ * on the default value. But on some systems this value needs to be set.
+ */
+$g_session_save_path = "";
+
+/**
+ * This lets you specify the session save path, used by PHP sessions. By default this isn't set, relying
+ * on the default value. But on some systems this value needs to be set.
+ */
+$g_session_save_path = "";
+
+/**
  * This enables debugging for the API functions. Generally this just causes the database errors and other
  * messages to be outputted along with the problem error code. Enabled by default.
  */
@@ -173,7 +185,7 @@ $g_api_header_charset = "utf-8";
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.0-beta-20090524";
+$g_current_version = "2.0.0-beta-20090614";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.
@@ -203,8 +215,8 @@ $folder = dirname(__FILE__);
 $config_file_exists = false;
 if (is_file("$folder/config.php"))
 {
-	$config_file_exists = true;
-	include_once("$folder/config.php");
+  $config_file_exists = true;
+  include_once("$folder/config.php");
 }
 
 
@@ -236,16 +248,16 @@ require_once("$folder/smarty/Smarty.class.php");
 
 if ($config_file_exists)
 {
-	// our Smarty instance, used for rendering the webpages
-	$g_smarty = new Smarty();
+  // our Smarty instance, used for rendering the webpages
+  $g_smarty = new Smarty();
 
-	// load the appropriate language file
-	$g_language = ft_get_ui_language();
-	require_once("$folder/lang/{$g_language}.php");
+  // load the appropriate language file
+  $g_language = ft_get_ui_language();
+  require_once("$folder/lang/{$g_language}.php");
 
-	// if the config file exists, we can assume the user isn't installed
-	$g_link = ft_db_connect();
+  // if the config file exists, we can assume the user isn't installed
+  $g_link = ft_db_connect();
 
-	if (isset($_GET["logout"]))
-	  ft_logout_user();
+  if (isset($_GET["logout"]))
+    ft_logout_user();
 }

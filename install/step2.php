@@ -7,7 +7,6 @@
 session_start();
 header("Cache-control: private");
 header("Content-Type: text/html; charset=utf-8");
-
 require_once("library.php");
 
 // 1. PHP Version (4.3 or later)
