@@ -58,7 +58,7 @@
                     {assign var=last_recipient_type value=$recipient.recipient_type}
                   {/if}
 
-                  <option>{$recipient.final_recipient}</option>
+                  <option>{if $recipient.recipient_user_type == "form_email_field"}{$LANG.phrase_form_email_field_b_c}{/if} {$recipient.final_recipient}</option>
                 {/foreach}
 
                 {if $last_recipient_type != ""}

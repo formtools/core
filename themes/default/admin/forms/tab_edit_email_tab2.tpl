@@ -1,4 +1,4 @@
-            {if !$form_info.user_email_field}
+            {if $registered_form_emails|@count == 0}
               <div class="box">
                 {eval_smarty_string placeholder_str=$LANG.notify_no_user_email_fields_configured}
               </div>
@@ -13,7 +13,6 @@
                 <table cellspacing="0" cellpadding="0">
                 <tr>
                   <td>
-
                     <table cellspacing="0">
                     <tr>
                       <td>
@@ -23,19 +22,21 @@
                           <optgroup label="{$LANG.word_administrator}">
                             <option value="admin">{$admin_info.first_name} {$admin_info.last_name} &lt;{$admin_info.email}&gt;</option>
                           </optgroup>
-                          {if $form_info.user_email_field}
-                            <optgroup label="{$LANG.word_user}">
-                              <option value="user">{$LANG.phrase_from_user_form_submission_b}</option>
-                            </optgroup>
-                          {/if}
                           {if $clients}
                             <optgroup label="{$LANG.word_clients}">
                               {foreach from=$clients item=client name=row}
-                                <option value="{$client.account_id}">{$client.first_name} {$client.last_name} &lt;{$client.email}&gt;</option>
+                                <option value="client_account_id_{$client.account_id}">{$client.first_name} {$client.last_name} &lt;{$client.email}&gt;</option>
                               {/foreach}
                             </optgroup>
                           {/if}
-                          <optgroup label="Other">
+                          {if $registered_form_emails|@count > 0}
+                            <optgroup label="{$LANG.phrase_form_email_fields}">
+                              {foreach from=$registered_form_emails item=email_info}
+                                <option value="form_email_id_{$email_info.form_email_id}">{$email_info.email_field_label}</option>
+                              {/foreach}
+                            </optgroup>
+                          {/if}
+                          <optgroup label="{$LANG.word_other}">
                             <option value="custom">{$LANG.phrase_custom_recipient}</option>
                           </optgroup>
                         </select>
@@ -47,7 +48,7 @@
                           <option value="bcc">bcc</option>
                         </select>
                       </td>
-                      <td><input type="button" value="ADD" onclick="emails_ns.add_recipient(this.form)" /></td>
+                      <td><input type="button" value="{$LANG.word_add|upper}" onclick="emails_ns.add_recipient(this.form)" /></td>
                     </tr>
                     </table>
 
@@ -80,7 +81,7 @@
                           </table>
                         </td>
                         <td>
-                          <input type="button" value="ADD" onclick="emails_ns.add_custom_recipient(this.form)" />
+                          <input type="button" value="{$LANG.word_add|upper}" onclick="emails_ns.add_custom_recipient(this.form)" />
                         </td>
                       </tr>
                       </table>
@@ -114,12 +115,13 @@
                         <input type="hidden" name="recipient_{$count}_user_type" value="admin" />
                         <input type="hidden" id="recipient_{$count}_type" name="recipient_{$count}_type" value="{$recipient.recipient_type}" />
                       </div>
-                    {elseif $recipient.recipient_user_type == "user"}
+                    {elseif $recipient.recipient_user_type == "form_email_field"}
                       <div id="recipient_{$count}">
-                        {$LANG.phrase_from_user_form_submission_b}{$recipient_type}&nbsp;
+                        {$LANG.phrase_form_email_field_b_c} {$recipient.final_recipient}{$recipient_type}&nbsp;
                         <a href="#" onclick="return emails_ns.remove_recipient({$count})">[x]</a>
                         <input type="hidden" name="recipients[]" value="{$count}" />
-                        <input type="hidden" name="recipient_{$count}_user_type" value="user" />
+                        <input type="hidden" name="recipient_{$count}_user_type" value="form_email_field" />
+                        <input type="hidden" name="recipient_{$count}_form_email_id" value="{$recipient.form_email_id}	" />
                         <input type="hidden" id="recipient_{$count}_type" name="recipient_{$count}_type" value="{$recipient.recipient_type}" />
                       </div>
                     {elseif $recipient.recipient_user_type == "client"}
@@ -164,19 +166,22 @@
                   <optgroup label="{$LANG.word_administrator}">
                     <option value="admin" {if $template_info.email_from == "admin"}selected{/if}>{$admin_info.first_name} {$admin_info.last_name} &lt;{$admin_info.email}&gt;</option>
                   </optgroup>
-                  {if $form_info.user_email_field}
-                    <optgroup label="{$LANG.word_user}">
-                      <option value="user" {if $template_info.email_from == "user"}selected{/if}>{$LANG.phrase_from_user_form_submission_b}</option>
-                    </optgroup>
-                  {/if}
                   {if $clients}
                     <optgroup label="{$LANG.word_clients}">
                       {foreach from=$clients item=client name=row}
-                        <option value="{$client.account_id}" {if $template_info.email_from_account_id == $client.account_id}selected{/if}>{$client.first_name} {$client.last_name} &lt;{$client.email}&gt;</option>
+                        <option value="client_account_id_{$client.account_id}" {if $template_info.email_from_account_id == $client.account_id}selected{/if}>{$client.first_name} {$client.last_name} &lt;{$client.email}&gt;</option>
                       {/foreach}
                     </optgroup>
                   {/if}
-                  <optgroup label="Other">
+                  {if $registered_form_emails|@count > 0}
+                    <optgroup label="{$LANG.phrase_form_email_fields}">
+                      {foreach from=$registered_form_emails item=email_info}
+                        <option value="form_email_id_{$email_info.form_email_id}"
+                          {if $template_info.email_from_form_email_id == $email_info.form_email_id}selected{/if}>{$LANG.phrase_form_email_field_b_c} {$email_info.email_field_label}</option>
+                      {/foreach}
+                    </optgroup>
+                  {/if}
+                  <optgroup label="{$LANG.word_other}">
                     <option value="custom" {if $template_info.email_from == "custom"}selected{/if}>{$LANG.word_custom}</option>
                   </optgroup>
                 </select>
@@ -210,11 +215,6 @@
                   <optgroup label="{$LANG.word_administrator}">
                     <option value="admin" {if $template_info.email_reply_to == "admin"}selected{/if}>{$admin_info.first_name} {$admin_info.last_name} &lt;{$admin_info.email}&gt;</option>
                   </optgroup>
-                  {if $form_info.user_email_field}
-                    <optgroup label="{$LANG.word_user}">
-                      <option value="user" {if $template_info.email_reply_to == "user"}selected{/if}>{$LANG.phrase_from_user_form_submission_b}</option>
-                    </optgroup>
-                  {/if}
                   {if $clients}
                     <optgroup label="{$LANG.word_clients}">
                       {foreach from=$clients item=client name=row}
@@ -222,7 +222,15 @@
                       {/foreach}
                     </optgroup>
                   {/if}
-                  <optgroup label="Other">
+                  {if $registered_form_emails|@count > 0}
+                    <optgroup label="{$LANG.phrase_form_email_fields}">
+                      {foreach from=$registered_form_emails item=email_info}
+                        <option value="form_email_id_{$email_info.form_email_id}"
+                          {if $template_info.email_reply_to_form_email_id == $email_info.form_email_id}selected{/if}>{$LANG.phrase_form_email_field_b_c} {$email_info.email_field_label}</option>
+                      {/foreach}
+                    </optgroup>
+                  {/if}
+                  <optgroup label="{$LANG.word_other}">
                     <option value="custom" {if $template_info.email_reply_to == "custom"}selected{/if}>{$LANG.word_custom}</option>
                   </optgroup>
                 </select>

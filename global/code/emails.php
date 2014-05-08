@@ -36,7 +36,7 @@ function ft_create_blank_email_template($form_id, $create_email_from_email_id = 
   {
     $email_template_info = ft_get_email_template($create_email_from_email_id);
 
-    // WISHLIST: be nice to have a generic "copy_table_row" function...
+    // WISHLIST: be very nice to have a generic "copy_table_row" function...
     $query = mysql_query("
       INSERT INTO {$g_table_prefix}email_templates (form_id, email_template_name, email_status,
         view_mapping_type, view_mapping_view_id, email_event_trigger, include_on_edit_submission_page,
@@ -122,7 +122,7 @@ function ft_get_email_templates($form_id, $page_num = 1)
   while ($row = mysql_fetch_assoc($result))
   {
     $info = $row;
-    $info["recipients"] = ft_get_email_template_recipients($row["email_id"]);
+    $info["recipients"] = ft_get_email_template_recipients($form_id, $row["email_id"]);
     $email_info[] = $info;
   }
 
@@ -179,7 +179,8 @@ function ft_get_email_template($email_id)
       ");
 
   $email_template = mysql_fetch_assoc($email_template_query);
-  $email_template["recipients"] = ft_get_email_template_recipients($email_id);
+  $form_id = $email_template["form_id"];
+  $email_template["recipients"] = ft_get_email_template_recipients($form_id, $email_id);
 
   // get the list of Views that should show this email template on the edit submission page
   $email_view_query = mysql_query("SELECT view_id FROM {$g_table_prefix}email_template_edit_submission_views WHERE email_id = $email_id");
@@ -312,7 +313,9 @@ function ft_send_test_email($info)
 /**
  * This handy function figures out the various components of an email: from, reply_to, to, cc, bcc,
  * subject, html_content and text_content - and returns them in a hash. This function is used when
- * actually sending the emails and for testing purposes.
+ * sending actual emails but also for testing purposes. This should be the only place that email content
+ * is actually constructed. All other email functions should be using it, regardless of what mechanism
+ * actually sends the email.
  *
  * @param integer $form_id
  * @param mixed $submission_id for non-test emails, this is included. For testing, it may be blank.
@@ -323,8 +326,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 {
   global $g_table_prefix, $g_root_dir, $LANG, $g_default_theme;
 
-  $email_template  = ft_get_email_template($email_id);
-
+  $email_template = ft_get_email_template($email_id);
 
   // if this is a test, find out what information the administrator wants
   if ($is_test)
@@ -369,7 +371,6 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
         break;
     }
 
-
     // determine what templates to display
     switch ($test_email_format)
     {
@@ -413,9 +414,8 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   else
     $fields_for_email_template = ft_get_form_fields($form_id);
 
-
   // for file fields, add folder_url and folder_path attributes to the $fields_for_email_template. This provides
-  // that information for patterns that use the Smarty Loop
+  // that information for email patterns that use the Smarty Loop
   $updated_fields_for_email_template = array();
   foreach ($fields_for_email_template as $field_info)
   {
@@ -439,13 +439,6 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   $admin_info = ft_get_admin_info();
   $form_info  = ft_get_form($form_id);
   $submission_info = ft_get_submission($form_id, $submission_id);
-
-  $header_info = _ft_get_submission_email_headers($form_info, $submission_info);
-  $user_recipient  = $header_info["recipient_line"];
-  $user_first_name = $header_info["user_first_name"];
-  $user_last_name  = $header_info["user_last_name"];
-  $user_email      = $header_info["user_email"];
-
   $theme = $g_default_theme;
 
   $settings = ft_get_settings();
@@ -540,7 +533,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 
   // compile the "to" / "from" / "reply-to" recipient list, based on this form submission. Virtually
   // everything is already stored in $email_templates["recipients"], but needs to be extracted.
-  // The notable exception is the USER information: that has to be constructed separately
+  // The notable exception is the FORM EMAIL FIELD information: that has to be constructed separately
   $return_info["to"]  = array();
   $return_info["cc"]  = array();
   $return_info["bcc"] = array();
@@ -551,8 +544,14 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
     if ($recipient_info["recipient_type"] == "")
       $recipient_type_key = "to";
 
-    if ($recipient_info["recipient_user_type"] == "user")
+    if ($recipient_info["recipient_user_type"] == "form_email_field")
     {
+      $header_info = _ft_get_form_email_field_headers($recipient_info["form_email_id"], $submission_info);
+      $user_recipient  = $header_info["recipient_line"];
+      $user_first_name = $header_info["first_name"];
+      $user_last_name  = $header_info["last_name"];
+      $user_email      = $header_info["email"];
+
       $curr_recipient_info = array(
         "recipient_line" => $user_recipient,
         "name"           => "$user_first_name $user_last_name",
@@ -582,6 +581,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
         "email"          => $admin_info["email"]
           );
       break;
+
     case "client":
       $client_info = ft_get_account_info($email_template["email_from_account_id"]);
       $return_info["from"] = array(
@@ -590,13 +590,20 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
         "email"          => $client_info["email"]
           );
       break;
-    case "user":
+
+    case "form_email_field":
+      $header_info = _ft_get_form_email_field_headers($email_template["email_from_form_email_id"], $submission_info);
+      $user_recipient  = $header_info["recipient_line"];
+      $user_first_name = $header_info["first_name"];
+      $user_last_name  = $header_info["last_name"];
+      $user_email      = $header_info["email"];
       $return_info["from"] = array(
         "recipient_line" => $user_recipient,
         "name"           => "$user_first_name $user_last_name",
         "email"          => $user_email
           );
       break;
+
     case "custom":
       $return_info["from"] = array(
         "recipient_line" => "{$email_template["custom_from_name"]} &lt;{$email_template["custom_from_email"]}&gt;",
@@ -616,6 +623,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
         "email"          => $admin_info["email"]
           );
       break;
+
     case "client":
       $client_info = ft_get_account_info($email_template["email_reply_to_account_id"]);
       $return_info["reply_to"] = array(
@@ -624,13 +632,21 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
         "email"          => $client_info["email"]
           );
       break;
-    case "user":
+
+    case "form_email_field":
+      $form_email_id = $email_template["email_reply_to_form_email_id"];
+      $header_info = _ft_get_form_email_field_headers($form_email_id, $submission_info);
+      $user_recipient  = $header_info["recipient_line"];
+      $user_first_name = $header_info["first_name"];
+      $user_last_name  = $header_info["last_name"];
+      $user_email      = $header_info["email"];
       $return_info["reply_to"] = array(
         "recipient_line" => $user_recipient,
         "name"           => "$user_first_name $user_last_name",
         "email"          => $user_email
           );
       break;
+
     case "custom":
       $return_info["reply_to"] = array(
         "recipient_line" => "{$email_template["custom_reply_to_name"]} &lt;{$email_template["custom_reply_to_email"]}&gt;",
@@ -728,7 +744,37 @@ function ft_get_email_patterns($form_id)
 
 
 /**
- * Called by administrators; updates the email settings for a form: namely, which form fields
+ * Returns all email field info that have been registered for this form.
+ *
+ * @param integer $form_id
+ */
+function ft_get_registered_form_emails($form_id)
+{
+  global $g_table_prefix, $LANG;
+
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}form_email_fields
+    WHERE  form_id = $form_id
+      ");
+
+  $info = array();
+  while ($row = mysql_fetch_assoc($query))
+  {
+    // also retrieve the display names for each of the fields
+    $row["email_field_label"]      = ft_get_field_title_by_field_col($form_id, $row["email_field"]);
+    $row["first_name_field_label"] = ft_get_field_title_by_field_col($form_id, $row["first_name_field"]);
+    $row["last_name_field_label"]  = ft_get_field_title_by_field_col($form_id, $row["last_name_field"]);
+
+    $info[] = $row;
+  }
+
+  return $info;
+}
+
+
+/**
+ * Called by administrators; this logs the email settings for a form: namely, which form fields
  * correspond to which user information (email, name). This information is used for building the
  * email templates.
  *
@@ -738,28 +784,58 @@ function ft_get_email_patterns($form_id)
  *               [0]: true/false (success / failure)<br/>
  *               [1]: message string<br/>
  */
-function ft_update_form_email_settings($form_id, $infohash)
+function ft_register_form_email_info($form_id, $infohash)
 {
   global $g_table_prefix, $LANG;
 
-  $user_email_field = isset($infohash["user_email_field"]) ? $infohash["user_email_field"] : "";
-  $user_first_name_field = isset($infohash["user_first_name_field"]) ? $infohash["user_first_name_field"] : "";
-  $user_last_name_field = isset($infohash["user_last_name_field"]) ? $infohash["user_last_name_field"] : "";
+  $email_field      = isset($infohash["email_field"]) ? $infohash["email_field"] : "";
+  $first_name_field = isset($infohash["first_name_field"]) ? $infohash["first_name_field"] : "";
+  $last_name_field  = isset($infohash["last_name_field"]) ? $infohash["last_name_field"] : "";
 
   $result = mysql_query("
-    UPDATE {$g_table_prefix}forms
-    SET    user_email_field = '$user_email_field',
-           user_first_name_field = '$user_first_name_field',
-           user_last_name_field = '$user_last_name_field'
-    WHERE form_id = $form_id
+    INSERT INTO {$g_table_prefix}form_email_fields (form_id, email_field, first_name_field, last_name_field)
+    VALUES ($form_id, '$email_field', '$first_name_field', '$last_name_field')
       ");
 
-  extract(ft_process_hooks("end", compact("form_id", "infohash"), array("form_id", "infohash")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("form_id", "infohash"), array()), EXTR_OVERWRITE);
 
   if ($result)
     return array(true, $LANG["notify_email_fields_updated"]);
   else
     return array(false, $LANG["notify_email_fields_not_updated"]);
+}
+
+
+/**
+ * Called by administrators on the email configuration page. This unregisters a field or group of fields associated
+ * with a unique user in the form submission fields.
+ *
+ * @param integer $form_email_id
+ */
+function ft_unregister_form_email_info($form_email_id)
+{
+  global $g_table_prefix, $LANG;
+
+  @mysql_query("DELETE FROM {$g_table_prefix}form_email_fields WHERE form_email_id = $form_email_id");
+  @mysql_query("DELETE FROM {$g_table_prefix}email_template_recipients WHERE form_email_id = $form_email_id");
+
+  // update those email templates that reference this form email ID
+  @mysql_query("
+    UPDATE {$g_table_prefix}email_templates
+    SET    email_from = 'none',
+           email_from_form_email_id = ''
+    WHERE  email_from_form_email_id = $form_email_id
+      ");
+  @mysql_query("
+    UPDATE {$g_table_prefix}email_templates
+    SET    email_reply_to = 'none',
+           email_reply_to_form_email_id = ''
+    WHERE  email_reply_to_form_email_id = $form_email_id
+      ");
+
+  extract(ft_process_hooks("end", compact("form_email_id"), array()), EXTR_OVERWRITE);
+
+  return array(true, $LANG["notify_email_field_config_deleted"]);
 }
 
 
@@ -798,18 +874,32 @@ function ft_update_email_template($email_id, $info)
   $custom_reply_to_name  = isset($info["custom_reply_to_name"]) ? $info["custom_reply_to_name"] : "";
   $custom_reply_to_email = isset($info["custom_reply_to_email"]) ? $info["custom_reply_to_email"] : "";
 
-  // if the From or Reply-to fields are a number, that means it's a client's user account ID
-  $email_from_account_id = "";
-  if (is_numeric($email_from))
+  // figure out the email_from field details
+  $email_from_account_id    = "";
+  $email_from_form_email_id = "";
+  if (preg_match("/^client_account_id_(\d+)/", $email_from, $matches))
   {
-    $email_from_account_id = $email_from;
+    $email_from_account_id = $matches[1];
     $email_from = "client";
   }
-  $email_reply_to_account_id = "";
-  if (is_numeric($email_reply_to))
+  else if (preg_match("/^form_email_id_(\d+)/", $email_from, $matches))
   {
-    $email_reply_to_account_id = $email_reply_to;
+    $email_from_form_email_id = $matches[1];
+    $email_from = "form_email_field";
+  }
+
+  // figure out the email_from field details
+  $email_reply_to_account_id = "";
+  $email_reply_to_form_email_id = "";
+  if (preg_match("/^client_account_id_(\d+)/", $email_reply_to, $matches))
+  {
+    $email_reply_to_account_id = $matches[1];
     $email_reply_to = "client";
+  }
+  else if (preg_match("/^form_email_id_(\d+)/", $email_reply_to, $matches))
+  {
+    $email_reply_to_form_email_id = $matches[1];
+    $email_reply_to = "form_email_field";
   }
 
   // "Email Content" tab
@@ -828,10 +918,12 @@ function ft_update_email_template($email_id, $info)
            subject = '$subject',
            email_from = '$email_from',
            email_from_account_id = '$email_from_account_id',
+           email_from_form_email_id = '$email_from_form_email_id',
            custom_from_name = '$custom_from_name',
            custom_from_email = '$custom_from_email',
            email_reply_to = '$email_reply_to',
            email_reply_to_account_id = '$email_reply_to_account_id',
+           email_reply_to_form_email_id = '$email_reply_to_form_email_id',
            custom_reply_to_name = '$custom_reply_to_name',
            custom_reply_to_email = '$custom_reply_to_email',
            html_template = '$html_template',
@@ -843,22 +935,27 @@ function ft_update_email_template($email_id, $info)
   mysql_query("DELETE FROM {$g_table_prefix}email_template_edit_submission_views WHERE email_id = $email_id");
   $selected_edit_submission_views = isset($info["selected_edit_submission_views"]) ? $info["selected_edit_submission_views"] : array();
   foreach ($selected_edit_submission_views as $view_id)
-    mysql_query("INSERT INTO {$g_table_prefix}email_template_edit_submission_views (email_id, view_id) VALUES ($email_id, $view_id)");
-
+  {
+    mysql_query("
+      INSERT INTO {$g_table_prefix}email_template_edit_submission_views (email_id, view_id)
+      VALUES ($email_id, $view_id)
+        ");
+  }
 
   // update the recipient list
   mysql_query("DELETE FROM {$g_table_prefix}email_template_recipients WHERE email_template_id = $email_id");
   $recipient_ids = $info["recipients"];
 
+
   foreach ($recipient_ids as $recipient_id)
   {
     $row = $recipient_id;
 
-    // if there's no recipient user type (admin/user/client/custom), just ignore the row
+    // if there's no recipient user type (admin/form_email_field/client/custom), just ignore the row
     if (!isset($info["recipient_{$row}_user_type"]))
       continue;
 
-    // "", "cc" or "bcc"
+    // "" (main), "cc" or "bcc"
     $recipient_type = $info["recipient_{$row}_type"];
 
     switch ($info["recipient_{$row}_user_type"])
@@ -870,10 +967,12 @@ function ft_update_email_template($email_id, $info)
             ");
         break;
 
-      case "user":
+      case "form_email_field":
+        $form_email_id = $info["recipient_{$row}_form_email_id"];
         mysql_query("
-          INSERT INTO {$g_table_prefix}email_template_recipients (email_template_id, recipient_user_type, recipient_type)
-          VALUES ($email_id, 'user', '$recipient_type')
+          INSERT INTO {$g_table_prefix}email_template_recipients
+            (email_template_id, recipient_user_type, recipient_type, form_email_id)
+          VALUES ($email_id, 'form_email_field', '$recipient_type', $form_email_id)
             ");
         break;
 
@@ -916,15 +1015,20 @@ function ft_update_email_template($email_id, $info)
  *   Tom Jones <babe@magnet.com>
  *
  * If the name doesn't exist, that key just returns the email address. ASSUMPTION: All clients and administrator
- * MUST have a first name, last name and email address.
+ * MUST have a first name, last name and email address. For form email fields, the final recipient just contains
+ * the title of the email field (the display value).
  *
- * Returns results ordered by (a) recipient type (main, cc then bcc), then (b) recipient user type (admin, client,
- * user then custom)
+ * This is obviously used for display purposes only, whereas that value for the other recipient types is used both
+ * for display purposes & in the actual email construction. This seemed an adequate approach because this function
+ * will never be able to know the individual submission content so it can't construct it properly.
+ *
+ * The returned results are ordered by (a) recipient type (main, cc then bcc), then (b) recipient user type
+ * (admin, client, form_email_field then custom)
  *
  * @param integer $email_id
  * @return array an array of hashes
  */
-function ft_get_email_template_recipients($email_id)
+function ft_get_email_template_recipients($form_id, $email_id)
 {
   global $g_table_prefix, $LANG;
 
@@ -949,19 +1053,23 @@ function ft_get_email_template_recipients($email_id)
         $recipient_info["final_email"] = $admin_info["email"];
         $recipient_info["final_recipient"] = "{$recipient_info["final_name"]} &lt;{$recipient_info["final_email"]}&gt;";
         break;
+
       case "client":
         $client_info = ft_get_account_info($recipient_info["account_id"]);
         $recipient_info["final_name"] = "{$client_info["first_name"]} {$client_info["last_name"]}";
         $recipient_info["final_email"] = $client_info["email"];
         $recipient_info["final_recipient"] = "{$recipient_info["final_name"]} &lt;{$recipient_info["final_email"]}&gt;";
         break;
-      case "user":
-        $recipient_info["final_recipient"] = $LANG["phrase_from_user_form_submission_b"];
+
+      case "form_email_field":
+        $form_email_field_info = ft_get_form_email_field_info($recipient_info["form_email_id"]);
+        $email_field = $form_email_field_info["email_field"];
+        $recipient_info["final_recipient"] = ft_get_field_title_by_field_col($form_id, $email_field);
         break;
+
       case "custom":
         $recipient_info["final_name"] = $recipient_info["custom_recipient_name"];
         $recipient_info["final_email"] = $recipient_info["custom_recipient_email"];
-
         if (!empty($recipient_info["final_name"]))
           $recipient_info["final_recipient"] = "{$recipient_info["final_name"]} &lt;{$recipient_info["final_email"]}&gt;";
         else
@@ -973,6 +1081,28 @@ function ft_get_email_template_recipients($email_id)
   }
 
   return $recipients;
+}
+
+
+/**
+ * Returns a record from the form_email_field table.
+ *
+ * @param integer $form_email_id
+ * @return array
+ */
+function ft_get_form_email_field_info($form_email_id)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}form_email_fields
+    WHERE  form_email_id = $form_email_id
+      ");
+
+  $info = mysql_fetch_assoc($query);
+
+  return $info;
 }
 
 
@@ -1297,18 +1427,20 @@ function _ft_get_email_eol_char()
 
 /**
  * Determines the first name, last name and email address used the email headers based on the
- * form and submission info.
+ * form and submission info. This can be used for the "from", "reply-to", or "to" fields.
  *
  * @param array $form_info A hash containing all the form information.
  * @param array $submission_info A hash containing all the submission information.
  * @return array string the email header
  */
-function _ft_get_submission_email_headers($form_info, $submission_info)
+function _ft_get_form_email_field_headers($form_email_id, $submission_info)
 {
+  $form_email_field_info = ft_get_form_email_field_info($form_email_id);
+
   // retrieve the user's name and email address from the form submission
-  $user_first_name_field = $form_info["user_first_name_field"];
-  $user_last_name_field  = $form_info["user_last_name_field"];
-  $user_email_field      = $form_info["user_email_field"];
+  $first_name_field = $form_email_field_info["first_name_field"];
+  $last_name_field  = $form_email_field_info["last_name_field"];
+  $email_field      = $form_email_field_info["email_field"];
 
   $submission_first_name = "";
   $submission_last_name  = "";
@@ -1316,19 +1448,19 @@ function _ft_get_submission_email_headers($form_info, $submission_info)
 
   foreach ($submission_info as $row)
   {
-    if (!empty($user_first_name_field))
+    if (!empty($first_name_field))
     {
-      if ($row["col_name"] == $user_first_name_field)
-        $submission_first_name = trim($row['content']);
+      if ($row["col_name"] == $first_name_field)
+        $submission_first_name = trim($row["content"]);
     }
-    if (!empty($user_last_name_field))
+    if (!empty($last_name_field))
     {
-      if ($row['col_name'] == $user_last_name_field)
-        $submission_last_name = trim($row['content']);
+      if ($row["col_name"] == $last_name_field)
+        $submission_last_name = trim($row["content"]);
     }
     // email
-    if ($row['col_name'] == $user_email_field)
-      $submission_email = trim($row['content']);
+    if ($row["col_name"] == $email_field)
+      $submission_email = trim($row["content"]);
   }
 
   // now build the header string
@@ -1347,9 +1479,9 @@ function _ft_get_submission_email_headers($form_info, $submission_info)
 
   // return EVERYTHING
   return array("recipient_line" => $recipient_line,
-               "user_first_name" => $submission_first_name,
-               "user_last_name" => $submission_last_name,
-               "user_email" => $submission_email);
+               "first_name" => $submission_first_name,
+               "last_name" => $submission_last_name,
+               "email" => $submission_email);
 }
 
 

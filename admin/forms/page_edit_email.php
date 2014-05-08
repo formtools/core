@@ -67,8 +67,8 @@ $page_vars["file_field_text"] = $file_field_text;
 $page_vars["columns"]    = $columns;
 $page_vars["js_messages"]    = array("validation_invalid_email", "validation_no_custom_recipient_email",
                                      "validation_no_test_email_recipient", "validation_no_test_email_submission_id",
-                                     "word_cc_c", "word_bcc_c", "word_from_c", "word_reply_to_c", "word_subject_c");
-
+                                     "word_cc_c", "word_bcc_c", "word_from_c", "word_reply_to_c", "word_subject_c",
+                                     "phrase_form_email_field_b_c", "phrase_form_email_fields");
 $page_vars["template_info"]  = $template_info;
 $page_vars["edit_email_tab"] = $edit_email_tab;
 $page_vars["num_submissions"] = $num_submissions;
@@ -76,9 +76,11 @@ $page_vars["test_email_format"] = $test_email_format;
 $page_vars["test_email_recipient"] = $test_email_recipient;
 $page_vars["test_email_data_source"] = $test_email_data_source;
 $page_vars["test_email_submission_id"] = $test_email_submission_id;
-
-$page_vars["head_string"] = "<script type=\"text/javascript\" src=\"$g_root_url/global/scripts/manage_email_templates.js\"></script>
-<script type=\"text/javascript\" src=\"$g_root_url/global/codemirror/js/codemirror.js\"></script>";
+$page_vars["registered_form_emails"] = ft_get_registered_form_emails($form_id);
+$page_vars["head_string"] =<<< EOF
+<script src="$g_root_url/global/scripts/manage_email_templates.js?v=2"></script>
+<script src="$g_root_url/global/codemirror/js/codemirror.js"></script>
+EOF;
 
 $page_vars["head_js"] =<<< EOF
 rsv.onCompleteHandler = function() { ft.select_all($("selected_edit_submission_views")); return true; }

@@ -47,7 +47,7 @@ function ft_upgrade_form_tools()
             hook_function varchar(255) NOT NULL,
             priority tinyint(4) NOT NULL default '50',
             PRIMARY KEY (hook_id)
-          ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+          ) TYPE=InnoDB DEFAULT CHARSET=utf8
           ");
       }
 
@@ -164,10 +164,157 @@ function ft_upgrade_form_tools()
         $query = @mysql_query("SELECT view_id FROM {$g_table_prefix}view_filters GROUP BY view_id");
         while ($row = mysql_fetch_assoc($query))
         {
-        	$view_id = $row["view_id"];
+          $view_id = $row["view_id"];
           mysql_query("UPDATE {$g_table_prefix}views SET has_standard_filter = 'yes' WHERE view_id = $view_id");
         }
       }
+
+      // this version introduced an improved "form email fields" feature that lets you mark multiple email
+      // fields as having significance for the email mechanism. All DB changes relate to this new feature.
+      if ($existing_version_info["release_date"] < 20100118)
+      {
+        // [1] misc DB column updates
+        @mysql_query("
+          ALTER TABLE {$g_table_prefix}email_templates
+          ADD email_from_form_email_id MEDIUMINT UNSIGNED NULL AFTER email_from_account_id
+            ");
+        @mysql_query("
+          ALTER TABLE {$g_table_prefix}email_templates
+          ADD email_reply_to_form_email_id MEDIUMINT UNSIGNED NULL AFTER email_reply_to_account_id
+            ");
+
+        // [2] email_from DB field update
+        $email_from_query = mysql_query("
+          SELECT email_id
+          FROM   {$g_table_prefix}email_templates
+          WHERE  email_from = 'user'
+            ");
+        @mysql_query("
+          ALTER TABLE {$g_table_prefix}email_templates
+          CHANGE email_from email_from ENUM('admin', 'client', 'form_email_field', 'custom', 'none')
+          CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
+            ");
+        while ($row = mysql_fetch_assoc($email_from_query))
+        {
+          $email_id = $row["email_id"];
+          mysql_query("
+            UPDATE {$g_table_prefix}email_templates
+            SET    email_from = 'form_email_field'
+            WHERE  email_id = $email_id
+              ");
+        }
+
+        // [3] email_reply_to DB field update
+        $email_reply_to_query = mysql_query("
+          SELECT email_id
+          FROM   {$g_table_prefix}email_templates
+          WHERE  email_reply_to = 'user'
+            ");
+        @mysql_query("
+          ALTER TABLE {$g_table_prefix}email_templates
+          CHANGE email_reply_to email_reply_to ENUM('admin', 'client', 'form_email_field', 'custom', 'none')
+          CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
+            ");
+        while ($row = mysql_fetch_assoc($email_reply_to_query))
+        {
+          $email_id = $row["email_id"];
+          mysql_query("
+            UPDATE {$g_table_prefix}email_templates
+            SET    email_reply_to = 'form_email_field'
+            WHERE  email_id = $email_id
+              ");
+        }
+
+        // [4] create our new form_email_fields table
+        @mysql_query("
+          CREATE TABLE {$g_table_prefix}form_email_fields (
+            form_email_id MEDIUMINT unsigned NOT NULL auto_increment,
+            form_id MEDIUMINT UNSIGNED NOT NULL,
+            email_field VARCHAR( 255 ) NOT NULL,
+            first_name_field VARCHAR( 255 ) NULL,
+            last_name_field VARCHAR( 255 ) NULL,
+            PRIMARY KEY (form_email_id)
+          ) TYPE=InnoDB DEFAULT CHARSET=utf8
+            ");
+
+        // [5] rename the "recipient_user_type" enum options to call the "user" option "form_email_field" instead,
+        // but first, store all the recipient_ids so we can update them after the DB change
+        $recipients_id_query = mysql_query("
+          SELECT recipient_id
+          FROM   {$g_table_prefix}email_template_recipients
+          WHERE  recipient_user_type = 'user'
+            ");
+        @mysql_query("
+          ALTER TABLE {$g_table_prefix}email_template_recipients
+          CHANGE recipient_user_type recipient_user_type ENUM('admin', 'client', 'form_email_field', 'custom')
+          CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+            ");
+        @mysql_query("
+          ALTER TABLE {$g_table_prefix}email_template_recipients
+          ADD form_email_id MEDIUMINT UNSIGNED NULL AFTER account_id
+            ");
+        while ($row = mysql_fetch_assoc($recipients_id_query))
+        {
+				  // we can safely set the form_email_id to 1 for these because after upgrading they will
+					// have one and only one form email ID
+          $recipient_id = $row["recipient_id"];
+          mysql_query("
+            UPDATE {$g_table_prefix}email_template_recipients
+            SET    recipient_user_type = 'form_email_field',
+						       form_email_id = 1
+            WHERE  recipient_id = $recipient_id
+              ");
+        }
+
+        // [6] now update the old "user" email field data to the new "form email field" table
+        // and update the corresponding DB tables
+        $forms_query = mysql_query("SELECT form_id, user_email_field, user_first_name_field, user_last_name_field FROM {$g_table_prefix}forms");
+        while ($form_info = mysql_fetch_assoc($forms_query))
+        {
+          $form_id = $form_info["form_id"];
+          $user_email_field      = $form_info["user_email_field"];
+          $user_first_name_field = $form_info["user_first_name_field"];
+          $user_last_name_field  = $form_info["user_last_name_field"];
+
+          if (!empty($user_email_field))
+          {
+            // create the new email field
+            @mysql_query("
+              INSERT INTO {$g_table_prefix}form_email_fields (form_id, email_field, first_name_field, last_name_field)
+              VALUES ($form_id, '$user_email_field', '$user_first_name_field', '$user_last_name_field')
+                ");
+            $form_email_id = mysql_insert_id();
+
+            // "from"
+            @mysql_query("
+              UPDATE {$g_table_prefix}email_templates
+              SET    email_from_form_email_id = $form_email_id
+              WHERE  form_id = $form_id AND
+                     email_from = 'form_email_field'
+                ");
+            // "reply-to"
+            @mysql_query("
+              UPDATE {$g_table_prefix}email_templates
+              SET    email_reply_to_form_email_id = $form_email_id
+              WHERE  form_id = $form_id AND
+                     email_reply_to = 'form_email_field'
+                ");
+            // "to"
+            @mysql_query("
+              UPDATE {$g_table_prefix}email_template_recipients
+              SET    form_email_id = $form_email_id
+              WHERE  form_id = $form_id AND
+                     recipient_user_type = 'form_email_field'
+                ");
+          }
+        }
+
+        // delete the old fields in the forms table. They're not needed any more
+        @mysql_query("ALTER TABLE {$g_table_prefix}forms DROP COLUMN user_email_field");
+        @mysql_query("ALTER TABLE {$g_table_prefix}forms DROP COLUMN user_first_name_field");
+        @mysql_query("ALTER TABLE {$g_table_prefix}forms DROP COLUMN user_last_name_field");
+      }
+
 
       if ($existing_version_info["full"] != $g_current_version)
       {
@@ -180,7 +327,6 @@ function ft_upgrade_form_tools()
       }
     }
   }
-
   return $is_upgraded;
 }
 

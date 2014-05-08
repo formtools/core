@@ -42,13 +42,11 @@ $g_sql[] = "CREATE TABLE %PREFIX%client_forms (
   PRIMARY KEY (account_id,form_id)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
 
-
 $g_sql[] = "CREATE TABLE %PREFIX%client_views (
   account_id mediumint(8) unsigned NOT NULL,
   view_id mediumint(8) unsigned NOT NULL,
   PRIMARY KEY (account_id,view_id)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
-
 
 $g_sql[] = "CREATE TABLE %PREFIX%email_template_edit_submission_views (
   email_id mediumint(8) unsigned NOT NULL,
@@ -59,9 +57,10 @@ $g_sql[] = "CREATE TABLE %PREFIX%email_template_edit_submission_views (
 $g_sql[] = "CREATE TABLE %PREFIX%email_template_recipients (
   recipient_id mediumint(8) unsigned NOT NULL auto_increment,
   email_template_id mediumint(8) unsigned NOT NULL,
-  recipient_user_type enum('admin','client','user','custom') NOT NULL,
+  recipient_user_type enum('admin','client','form_email_field','custom') NOT NULL,
   recipient_type enum('main','cc','bcc') NOT NULL default 'main',
   account_id mediumint(9) default NULL,
+  form_email_id MEDIUMINT UNSIGNED NULL,
   custom_recipient_name varchar(200) default NULL,
   custom_recipient_email varchar(200) default NULL,
   PRIMARY KEY  (recipient_id)
@@ -78,12 +77,14 @@ $g_sql[] = "CREATE TABLE %PREFIX%email_templates (
   email_event_trigger set('on_submission','on_edit','on_delete') default NULL,
   include_on_edit_submission_page enum('no','all_views','specific_views') NOT NULL default 'no',
   subject varchar(255) default NULL,
-  email_from enum('admin','client','user','custom','none') default NULL,
+  email_from enum('admin','client','form_email_field','custom','none') default NULL,
   email_from_account_id mediumint(8) unsigned default NULL,
+  email_from_form_email_id MEDIUMINT UNSIGNED NULL,
   custom_from_name varchar(100) default NULL,
   custom_from_email varchar(100) default NULL,
-  email_reply_to enum('admin','client','user','custom','none') default NULL,
+  email_reply_to enum('admin','client','form_email_field','custom','none') default NULL,
   email_reply_to_account_id mediumint(8) unsigned default NULL,
+  email_reply_to_form_email_id MEDIUMINT UNSIGNED NULL,
   custom_reply_to_name varchar(100) default NULL,
   custom_reply_to_email varchar(100) default NULL,
   html_template mediumtext,
@@ -115,6 +116,15 @@ $g_sql[] = "CREATE TABLE %PREFIX%field_settings (
   PRIMARY KEY (field_id,setting_name,module)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
 
+$g_sql[] = "CREATE TABLE %PREFIX%form_email_fields (
+  form_email_id MEDIUMINT unsigned NOT NULL auto_increment,
+  form_id MEDIUMINT UNSIGNED NOT NULL,
+  email_field VARCHAR( 255 ) NOT NULL,
+  first_name_field VARCHAR( 255 ) NULL,
+  last_name_field VARCHAR( 255 ) NULL,
+  PRIMARY KEY (form_email_id)
+) TYPE=InnoDB DEFAULT CHARSET=utf8";
+
 $g_sql[] = "CREATE TABLE %PREFIX%form_fields (
   field_id mediumint(8) unsigned NOT NULL auto_increment,
   form_id mediumint(8) unsigned NOT NULL default '0',
@@ -143,9 +153,6 @@ $g_sql[] = "CREATE TABLE %PREFIX%forms (
   form_name varchar(255) NOT NULL default '',
   form_url varchar(255) NOT NULL default '',
   redirect_url varchar(255) default NULL,
-  user_email_field varchar(255) default NULL,
-  user_first_name_field varchar(255) default NULL,
-  user_last_name_field varchar(255) default NULL,
   auto_delete_submission_files enum('yes','no') NOT NULL default 'yes',
   submission_strip_tags enum('yes','no') NOT NULL default 'yes',
   default_view_id mediumint(8) unsigned default NULL,

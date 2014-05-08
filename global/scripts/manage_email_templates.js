@@ -39,54 +39,79 @@ emails_ns.show_custom_email_field = function(target, val)
  */
 emails_ns.add_recipient = function(f)
 {
-  var recipient_type = $("recipient_options").value;
-  if (recipient_type == "")
+  var recipient_target = $("recipient_options").value;
+  if (recipient_target == "")
     return;
 
-  if (recipient_type == "custom")
-    emails_ns.add_custom_recipient(f);
-  else
+  var is_email_field = /^form_email_id/;
+  var is_client      = /^client_account_id/;
+
+  var rtype = recipient_target;
+  if (is_email_field.test(recipient_target))
+    rtype = "form_email_field";
+  if (is_client.test(recipient_target))
+    rtype = "client";
+
+  var recipient_str = emails_ns._get_recipient_string(recipient_target);
+
+  switch (rtype)
   {
-    // get the recipient string (e.g. "Ben Keen <formtools@encorewebstudios.com>")
-    var dd = $("recipient_options");
-    var recipient_str = null;
-    for (var i=0; i<dd.options.length; i++)
+    case "admin":
+      emails_ns._add_recipient({
+        full_display_string: recipient_str,
+        recipient_type: $("recipient_type").value,
+        recipient_user_type: "admin"
+          });
+      break;
+
+    case "client":
+      var info = recipient_target.match(/client_account_id_(\d+)/);
+      var cid = info[1];
+      emails_ns._add_recipient({
+         full_display_string: recipient_str,
+         client_id: cid,
+         recipient_type: $("recipient_type").value,
+         recipient_user_type: "client"
+           });
+      break;
+
+    case "form_email_field":
+      var info = recipient_target.match(/form_email_id_(\d+)/);
+      var feid = info[1];
+      emails_ns._add_recipient({
+        full_display_string: g.messages["phrase_form_email_field_b_c"] + " " + recipient_str,
+        recipient_type: $("recipient_type").value,
+        recipient_user_type: "form_email_field",
+        form_email_id: feid
+          });
+      break;
+
+    case "custom":
+      emails_ns.add_custom_recipient(f);
+      break;
+
+    default:
+      alert("Unknown recipient type!");
+      break;
+  }
+}
+
+
+// get the recipient string (e.g. "Ben Keen <formtools@encorewebstudios.com>")
+emails_ns._get_recipient_string = function(option_val)
+{
+  var dd = $("recipient_options");
+  var recipient_str = null;
+  for (var i=0; i<dd.options.length; i++)
+  {
+    if (dd.options[i].value == option_val)
     {
-      if (dd.options[i].value == recipient_type)
-      {
-        recipient_str = dd.options[i].text;
-        break;
-      }
-    }
-
-    switch (recipient_type)
-    {
-      case "admin":
-        emails_ns._add_recipient({
-          full_display_string: recipient_str,
-          recipient_type: $("recipient_type").value,
-          recipient_user_type: "admin"
-            });
-        break;
-
-      case "user":
-        emails_ns._add_recipient({
-          full_display_string: recipient_str,
-          recipient_type: $("recipient_type").value,
-          recipient_user_type: "user"
-            });
-        break;
-
-      default:
-        emails_ns._add_recipient({
-          full_display_string: recipient_str,
-          client_id: recipient_type,
-          recipient_type: $("recipient_type").value,
-          recipient_user_type: "client"
-            });
-        break;
+      recipient_str = dd.options[i].text;
+      break;
     }
   }
+
+  return recipient_str;
 }
 
 
@@ -138,6 +163,7 @@ emails_ns.remove_recipient = function(num)
  *             full_display_string - the name + email (administrators & clients)
  *             recipient_type - "" (for main), "cc" or "bcc" (this field is required)
  *             client_id - the client ID (clients only)
+ *             form_email_id - the form email ID (form email fields only)
  *             recipient_type - "client", "custom" or "admin" (required)
  */
 emails_ns._add_recipient = function(info)
@@ -164,13 +190,14 @@ emails_ns._add_recipient = function(info)
               + "</div>";
       break;
 
-    case "user":
+    case "form_email_field":
       var str = "<div id=\"recipient_" + num + "\">" + info.full_display_string.escapeHTML()
               + recipient_type_str
               + " &nbsp;<a href=\"#\" onclick=\"return emails_ns.remove_recipient(" + num + ")\">[x]</a>"
               + "<input type=\"hidden\" name=\"recipients[]\" value=\"" + num + "\" />"
-              + "<input type=\"hidden\" name=\"recipient_" + num + "_user_type\" value=\"user\" />"
+              + "<input type=\"hidden\" name=\"recipient_" + num + "_user_type\" value=\"form_email_field\" />"
               + "<input type=\"hidden\" id=\"recipient_" + num + "_type\" name=\"recipient_" + num + "_type\" value=\"" + info.recipient_type + "\" />"
+              + "<input type=\"hidden\" name=\"recipient_" + num + "_form_email_id\" value=\"" + info.form_email_id + "\" />"
               + "</div>";
       break;
 
@@ -318,15 +345,14 @@ emails_ns.display_test_email = function(transport)
     if (bcc_html)
       table += "<tr><td valign=\"top\">" + g.messages["word_bcc_c"] + "</td><td>" + bcc_html + "</td></tr>";
 
-    if (from && typeof from != "object")
-      table += "<tr><td>" + g.messages["word_from_c"] + "</td><td>" + from + "</td></tr>";
+    if (from && typeof from == "object" && typeof from.recipient_line != "undefined" && from.recipient_line != "")
+      table += "<tr><td>" + g.messages["word_from_c"] + "</td><td>" + from.recipient_line + "</td></tr>";
 
-    if (reply_to && typeof reply_to != "object")
-      table += "<tr><td>" + g.messages["word_reply_to_c"] + "</td><td>" + reply_to + "</td></tr>";
+    if (reply_to && typeof reply_to == "object" && typeof reply_to.recipient_line != "undefined" && reply_to.recipient_line != "")
+      table += "<tr><td>" + g.messages["word_reply_to_c"] + "</td><td>" + reply_to.recipient_line	 + "</td></tr>";
 
     if (subject)
       table += "<tr><td>" + g.messages["word_subject_c"] + "</td><td>" + subject + "</td></tr>";
-
 
     if (email_info.html_content)
     {
@@ -383,4 +409,15 @@ emails_ns.log_activity = function(is_busy)
     $("ajax_activity").hide();
     $("ajax_no_activity").show();
   }
+}
+
+
+emails_ns.delete_form_email_field_config = function(form_email_id)
+{
+  if (confirm(g.messages["confirm_delete_email_field_config"]))
+  {
+    window.location = "edit.php?page=email_settings&delete_form_email_id=" + form_email_id;
+  }
+
+  return false;
 }

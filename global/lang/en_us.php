@@ -442,7 +442,9 @@ $LANG["phrase_for_view_submissions"] = "Only for submissions in View:";
 $LANG["phrase_forgot_password"] = "Forgot your Password?";
 $LANG["phrase_form_already_selected"] = "Form already selected";
 $LANG["phrase_form_configuration"] = "Form Configuration";
+$LANG["phrase_form_email_field_b_c"] = "[Form email field]:";
 $LANG["phrase_form_email_field_configuration"] = "Form Email Field Configuration";
+$LANG["phrase_form_email_fields"] = "Form Email Fields";
 $LANG["phrase_form_field"] = "Form Field";
 $LANG["phrase_form_field_name"] = "Form Field Name";
 $LANG["phrase_form_fields"] = "Form Fields";
@@ -459,7 +461,6 @@ $LANG["phrase_form_tools_compatibility"] = "Form Tools Compatibility";
 $LANG["phrase_form_type"] = "Form Type";
 $LANG["phrase_form_url"] = "Form URL";
 $LANG["phrase_form_url_sp"] = "Form URL(s)";
-$LANG["phrase_from_user_form_submission_b"] = "[user, from the form submission]";
 $LANG["phrase_ft_installation"] = "Form Tools Installation Script";
 $LANG["phrase_full_form_submission"] = "Full form submission";
 $LANG["phrase_full_form_submission_omit_empty"] = "Full form submission + omit empty fields";
@@ -520,6 +521,7 @@ $LANG["phrase_multi_select"] = "Multi-select";
 $LANG["phrase_multi_select_dropdown"] = "Multi-select dropdown";
 $LANG["phrase_multiple_fields_found"] = "Multiple Fields Found!";
 $LANG["phrase_mysql_version"] = "MySQL Version";
+$LANG["phrase_name_or_last_name"] = "Name / First Name";
 $LANG["phrase_new_blank_email"] = "New Blank Email";
 $LANG["phrase_new_blank_field_option_group"] = "New Blank Field Option Group";
 $LANG["phrase_new_blank_view"] = "New Blank View";
@@ -592,6 +594,7 @@ $LANG["phrase_refresh_list"] = "Refresh List";
 $LANG["phrase_refresh_module_list"] = "Refresh Module List";
 $LANG["phrase_refresh_page"] = "Refresh Page";
 $LANG["phrase_refresh_theme_list"] = "Refresh Theme List";
+$LANG["phrase_register_new_email"] = "Register New Email";
 $LANG["phrase_remove_tabs"] = "Remove Tabs";
 $LANG["phrase_resend_test_submission"] = "Resend Test Submission";
 $LANG["phrase_return_form_list"] = "Return to Form List";
@@ -681,11 +684,8 @@ $LANG["phrase_use_lightbox"] = "Use Lightbox to display files";
 $LANG["phrase_use_lightbox_caveat"] = "(Only enable if you're only uploading images through file fields)";
 $LANG["phrase_used_by_num_form_fields"] = "Used by # Form Fields";
 $LANG["phrase_user_account_placeholders"] = "User Account Placeholders";
-$LANG["phrase_user_email_address_field"] = "User's email address form field";
 $LANG["phrase_user_email_address_format"] = "User's name <user's email address>";
 $LANG["phrase_user_emails"] = "User Emails";
-$LANG["phrase_user_last_name_field"] = "User's last name field";
-$LANG["phrase_user_name_field"] = "User's first name / name field";
 $LANG["phrase_user_text"] = "User, Text";
 $LANG["phrase_values_to_text"] = "Values -&gt; Text";
 $LANG["phrase_verify_url"] = "Verify URL";
@@ -762,7 +762,7 @@ $LANG["text_edit_admin_menu_page"] = "You may edit your menu below. To ensure yo
 $LANG["text_edit_client_menu_page"] = "This section lets you customize the left navigation column for each user. You may create as many client menus as you wish and assign any account to one of them. By default there are two menus: one for you, the administrator, and one for all client accounts. The administrator account may be modified but not removed.";
 $LANG["text_edit_tab_summary"] = "If you wish to group this View's fields into tabs, just fill in the fields below. After you're done, select the appropriate tab for each field in the <a href=\"#\" onclick=\"return ft.change_inner_tab(2, 4)\">Fields section</a>.";
 $LANG["text_email_address"] = "The admin / client's email address.";
-$LANG["text_email_settings_intro"] = "This page lets you identify which of your form fields are of special relevance to the email mechanism: namely, which (if any) store the email and name of the individual submitting the form. If you don't supply these values, you will not be able to use them when defining your email templates.";
+$LANG["text_email_settings_intro"] = "This page lets you identify which of your form fields store emails and their corresponding names. Once you define them here, you can use them in your email templates as recipients. This section is entirely optional.";
 $LANG["text_email_tab_summary"] = "This section lets you construct any number of emails to be sent whenever your form is submitted, and other triggers.";
 $LANG["text_email_template_tab"] = "This section lets you determine what content appears in the email. If you wish to send your email as only text or email, only enter a value for that section. If you enter a value for both, the email will be sent in both formats.";
 $LANG["text_email_template_text_1"] = "There has been a submission made through your form, {\$FORMNAME}.";
@@ -912,6 +912,7 @@ $LANG["validation_no_default_sessions_timeout"] = "Please enter the default sess
 $LANG["validation_no_display_text"] = "Please enter the display text for the {\$fieldname} field.";
 $LANG["validation_no_edit_submission_page_label"] = "Please enter the Edit Submission page label.";
 $LANG["validation_no_email"] = "Please enter your email address.";
+$LANG["validation_no_email_config_field"] = "Please specify which form field is the email field.";
 $LANG["validation_no_email_content"] = "Please enter the email content for at least one of the formats (HTML or text).";
 $LANG["validation_no_email_from_field"] = "Please the email 'from' field.";
 $LANG["validation_no_email_template_name"] = "Please enter the email template name.";
@@ -987,6 +988,7 @@ $LANG["validation_wrong_password"] = "Sorry, that password does not match.";
 
 
 // Category: Confirmations
+$LANG["confirm_delete_email_field_config"] = "Are you sure you want to delete this email field configuration?";
 $LANG["confirm_delete_email_template"] = "Are you sure you want to delete this email template?";
 $LANG["confirm_delete_field_option_group"] = "Are you sure you want to delete this field option group?";
 $LANG["confirm_delete_menu"] = "Are you sure you want to delete this client menu?";
@@ -999,6 +1001,7 @@ $LANG["confirm_delete_view"] = "Are you sure you want to delete this View?";
 $LANG["confirm_smart_fill_db_column_fields"] = "Are you sure you want to Smart Fill the database column names? This will overwrite your existing values.";
 $LANG["confirm_smart_fill_display_names"] = "Are you sure you want to Smart Fill the Display names? This will overwrite your existing values.";
 $LANG["confirm_uninstall_module"] = "Are you sure you want to uninstall this module? All module data will be lost.";
+
 
 
 // Category: Notifications
@@ -1018,6 +1021,7 @@ $LANG["notify_client_menu_updated"] = "The client menu has been updated.";
 $LANG["notify_deleted_menu_already_assigned"] = "Sorry, the menu you just tried to delete is already being used by the clients listed below. In order to delete the menu you will first need to assign the clients to other menus. Click on the client name to edit that individual account, or assign all accounts to a different menu using the dropdown below.";
 $LANG["notify_disabled_theme_already_assigned"] = "Sorry, one of the themes you just disabled are already being used by the following client accounts. In order to disable the theme you will first need to assign each client to another theme. Click on the client name to edit that individual account, or assign all accounts to a theme using the dropdown below.";
 $LANG["notify_email_fields_not_updated"] = "Sorry, we could not update the email fields.";
+$LANG["notify_email_field_config_deleted"] = "The email configuration has been deleted.";
 $LANG["notify_email_fields_updated"] = "The email fields have been updated.";
 $LANG["notify_email_not_sent"] = "Sorry, the email could not be sent. Please contact the site administrator at the address below.";
 $LANG["notify_email_sent"] = "The email(s) have been sent.";
@@ -1085,7 +1089,7 @@ $LANG["notify_no_emails_defined"] = "No emails have been defined for this form. 
 $LANG["notify_no_field_option_groups"] = "There are no field option groups defined in the database. Generally, these are created by the <a href=\"../add/step1.php?add\">Add Form script</a>, but you can manually create them below.";
 $LANG["notify_no_fields_in_tab"] = "This tab does not contain any fields.";
 $LANG["notify_no_test_submission"] = "Form Tools hasn't received a successful test submission yet.";
-$LANG["notify_no_user_email_fields_configured"] = "Note: in order to select the user (the individual submitting the form) in any of the dropdowns below, you first need to <a href=\"{\$same_page}?page=email_settings\">configure the form email fields</a>.";
+$LANG["notify_no_user_email_fields_configured"] = "Note: if you want to send an email to any email address that was included in the form, you first need to <a href=\"{\$same_page}?page=email_settings\">configure the form email fields</a>.";
 $LANG["notify_no_views_assigned_to_client_form"] = "It appears that your user account hasn't been assigned to any form Views, so you won't be able to see any data. Please contact the administrator for further help.";
 $LANG["notify_no_views_defined"] = "You don't have any Views defined. You will not be able to view this form's submissions unless at least one View is created. Click the button below to continue.";
 $LANG["notify_page_added"] = "The page has been added.";

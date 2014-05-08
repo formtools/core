@@ -10,7 +10,7 @@ if (isset($_SESSION["ft"]["account"]) && isset($_SESSION["ft"]["account"]["is_lo
 {
   $login_page = $_SESSION["ft"]["account"]["login_page"];
   header("location: {$g_root_url}{$g_pages[$login_page]}");
-	exit;
+  exit;
 }
 
 // default settings
@@ -53,8 +53,8 @@ $page_vars["error"] = $error;
 
 if ($is_upgraded)
 {
-	$replacements = array("version" => $settings['program_version']);
-	$page_vars["upgrade_notification"] = ft_eval_smarty_string($LANG["text_upgraded"], $replacements, $g_theme);
+  $replacements = array("version" => $settings['program_version']);
+  $page_vars["upgrade_notification"] = ft_eval_smarty_string($LANG["text_upgraded"], $replacements, $g_theme);
 }
 $replacements = array(
   "program_name"         => $settings["program_name"],
@@ -71,15 +71,15 @@ $page_vars["head_string"] = "<noscript><style type=\"text/css\">.login_outer_tab
 
 if (isset($_GET["message"]))
 {
-	$g_success = false;
+  $g_success = false;
 
-	if (array_key_exists($_GET["message"], $LANG))
-	  $g_message = $LANG[$_GET["message"]];
-	  
-	// this provides a simple mechanism for module developers to output their own messages on the index 
-	// page (e.g. if they're forbidding a user from logging in & need to notify them)
-	else
-	  $g_message = strip_tags($_GET["message"]);
+  if (array_key_exists($_GET["message"], $LANG))
+    $g_message = $LANG[$_GET["message"]];
+
+  // this provides a simple mechanism for module developers to output their own messages on the index
+  // page (e.g. if they're forbidding a user from logging in & need to notify them)
+  else
+    $g_message = strip_tags($_GET["message"]);
 }
 
 ft_display_page("index.tpl", $page_vars, $g_theme);
