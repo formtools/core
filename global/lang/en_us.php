@@ -11,6 +11,8 @@ If you would like to help translate Form Tools, please visit:
 http://translations.formtools.org/
 */
 
+$LANG = array();
+
 // Special (non-editable)
 $LANG["special_form_tools"] = "Form Tools";
 $LANG["special_form_tools_c"] = "Form Tools:";

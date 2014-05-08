@@ -1458,8 +1458,8 @@ function _ft_extract_email_attachment_info($template_str, $form_id, $file_info)
 				$file_name = $pathinfo["basename"];
 
         $info = array(
-          "file_and_path" => $file_and_relative_path,
-          "filename" => $filename
+          "file_and_path" => "$g_root_dir/$file_and_relative_path",
+          "filename" => $file_name
         );
         $attachment_info[] = $info;
       }

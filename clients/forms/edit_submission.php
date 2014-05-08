@@ -17,6 +17,11 @@ $tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
 
 // check the current client is permitted to view this information!
 ft_check_client_may_view($account_id, $form_id, $view_id);
+if (!ft_check_view_contains_submission($form_id, $view_id, $submission_id))
+{
+  header("location: index.php");
+	exit;
+}
 
 
 // store this submission ID
