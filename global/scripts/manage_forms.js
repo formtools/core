@@ -125,7 +125,7 @@ mf_ns.bypass_url_verification = function()
   mf_ns._toggle_verification_button(1, "verified")
 	$("form_url_1_verified").value = "yes";
 
-  for (var i=2; i<mf_ns.num_multi_page_form_pages; i++)
+  for (var i=2; i<=mf_ns.num_multi_page_form_pages; i++)
   {
     mf_ns._toggle_verification_button (i, "verified")
 	  $("form_url_" + i + "_verified").value = "yes";

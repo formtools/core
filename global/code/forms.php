@@ -691,6 +691,7 @@ function ft_setup_form($info)
   $user_ids     = isset($info["selected_client_ids"]) ? $info["selected_client_ids"] : array();
   $form_name    = trim($info["form_name"]);
   $form_url     = trim($info["form_url"]);
+  $is_multi_page_form   = isset($info["is_multi_page_form"]) ? "yes" : "no";
   $redirect_url = trim($info["redirect_url"]);
   $access_type  = $info["access_type"];
   $phrase_edit_submission = ft_sanitize(mb_strtoupper($LANG["phrase_edit_submission"]));
@@ -698,8 +699,8 @@ function ft_setup_form($info)
   $now = ft_get_current_datetime();
   $query = "
      INSERT INTO {$g_table_prefix}forms (access_type, date_created, is_active, is_complete,
-       form_name, form_url, redirect_url, edit_submission_page_label)
-     VALUES ('$access_type', '$now', 'no', 'no', '$form_name', '$form_url', '$redirect_url',
+       is_multi_page_form, form_name, form_url, redirect_url, edit_submission_page_label)
+     VALUES ('$access_type', '$now', 'no', 'no', '$is_multi_page_form', '$form_name', '$form_url', '$redirect_url',
        '$phrase_edit_submission')
            ";
 
@@ -715,6 +716,22 @@ function ft_setup_form($info)
        INSERT INTO {$g_table_prefix}client_forms (account_id, form_id)
        VALUES  ($user_id, $new_form_id)
                          ");
+  }
+
+  // if this is a multi-page form, add the list of pages in the form
+  if ($is_multi_page_form == "yes")
+  {
+    $num_pages_in_multi_page_form = $info["num_pages_in_multi_page_form"];
+
+    for ($page_num=2; $page_num<=$num_pages_in_multi_page_form; $page_num++)
+    {
+      $form_url = isset($info["form_url_{$page_num}"]) ? $info["form_url_{$page_num}"] : "";
+
+      if (empty($form_url))
+        continue;
+
+      mysql_query("INSERT INTO {$g_table_prefix}multi_page_form_urls (form_id, form_url, page_num) VALUES ($new_form_id, '$form_url', $page_num)");
+		}
   }
 
   return array($success, $message, $new_form_id);
@@ -795,17 +812,15 @@ function ft_set_form_main_settings($infohash)
   if ($is_multi_page_form == "yes")
   {
     $num_pages_in_multi_page_form = $infohash["num_pages_in_multi_page_form"];
-    $page_num = 2;
 
-    for ($i=1; $i<=$num_pages_in_multi_page_form; $i++)
+    for ($page_num=2; $page_num<=$num_pages_in_multi_page_form; $page_num++)
     {
-      $form_url = isset($infohash["form_url_{$i}"]) ? $infohash["form_url_{$i}"] : "";
+      $form_url = isset($infohash["form_url_{$page_num}"]) ? $infohash["form_url_{$page_num}"] : "";
 
       if (empty($form_url))
         continue;
 
       mysql_query("INSERT INTO {$g_table_prefix}multi_page_form_urls (form_id, form_url, page_num) VALUES ($form_id, '$form_url', $page_num)");
-      $page_num++;
     }
   }
 

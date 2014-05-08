@@ -43,3 +43,6 @@
 .medium_grey, a.medium_grey:link, a.medium_grey:visited { color: #666666; }
 
 .no_js_hide { display: none; }
+
+/* this is hardcoded here for backwards compatibility. New themes can override it */
+.list_table tr.row_highlight { background-color: #c6f1c9; }
