@@ -190,7 +190,7 @@ $g_api_sessions_timeout = 3600;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.1-beta-20100410";
+$g_current_version = "2.0.1-beta-20100428";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.
