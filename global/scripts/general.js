@@ -195,7 +195,7 @@ ft.verify_url = function(url_field, form_page)
   else
   {
 	  ft.urls.push([form_page, url_field]);
-	  var verify_url_page = g.root_url + "/admin/verify_url.php?form_page=" + form_page + "&url=" + url;
+	  var verify_url_page = g.root_url + "/admin/verify_url.php?form_page=" + form_page + "&url=" + escape(url);
 
     window.open(verify_url_page, "verify_url", "width=900,height=600,menu=no,toolbar=no,resizable=yes");
   }

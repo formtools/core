@@ -105,7 +105,7 @@ mf_ns.check_urls_verified = function()
     }
   }
 
-  // if the redirect URL has been supplied, ensure it's been verified too
+  // if the redirect URL has been supplied, ensure its been verified too
   var redirect_url = $("redirect_url").value.strip();
   if (redirect_url != "")
   {
