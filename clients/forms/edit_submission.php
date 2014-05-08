@@ -11,7 +11,7 @@ if (ft_check_module_enabled("image_manager"))
 // blur the GET and POST variables into a single variable for easy reference
 $request = array_merge($_GET, $_POST);
 $form_id = ft_load_field("form_id", "curr_form_id");
-$view_id = $_SESSION["ft"]["form_{$form_id}_view_id"];
+$view_id = ft_load_field("view_id", "form_{$form_id}_view_id");
 $submission_id = $request['submission_id'];
 $tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
 
@@ -119,7 +119,7 @@ if (isset($_SESSION["ft"]["current_search"]["submission_ids"]) && !empty($_SESSI
   else
   {
     $previous_submission_id = $submission_ids[$current_sub_id_index - 1];
-    $previous_link_html = "<a href='{$_SERVER['PHP_SELF']}?form_id=$form_id&submission_id=$previous_submission_id'>{$LANG['word_previous_leftarrow']}</a>";
+    $previous_link_html = "<a href='{$_SERVER['PHP_SELF']}?form_id=$form_id&view_id=$view_id&submission_id=$previous_submission_id'>{$LANG['word_previous_leftarrow']}</a>";
   }
 
   $results_per_page = $search["results_per_page"];
@@ -144,7 +144,7 @@ if (isset($_SESSION["ft"]["current_search"]["submission_ids"]) && !empty($_SESSI
   else
   {
     $next_submission_id = $submission_ids[$current_sub_id_index + 1];
-    $next_link_html = "<a href='{$_SERVER['PHP_SELF']}?form_id=$form_id&submission_id=$next_submission_id'>{$LANG['word_next_rightarrow']}</a>";
+    $next_link_html = "<a href='{$_SERVER['PHP_SELF']}?form_id=$form_id&view_id=$view_id&submission_id=$next_submission_id'>{$LANG['word_next_rightarrow']}</a>";
   }
 }
 

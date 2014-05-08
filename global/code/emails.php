@@ -239,7 +239,6 @@ function ft_send_test_email($info)
   if (!$continue)
     return;
 
-
   // construct the email headers
   $eol = _ft_get_email_eol_char();
 

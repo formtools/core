@@ -5,7 +5,14 @@
     <table cellpadding="0" cellspacing="0" width="100%">
     <tr>
       <td><span class="title">{$LANG.phrase_edit_submission_uc}</span></td>
-      <td align="right"><a href="edit.php?form_id={$form_id}">{$LANG.word_edit_form_b}</a></td>
+      <td align="right">
+	      <div style="float:right; padding-left: 6px;">
+	        <a href="edit.php?form_id={$form_id}"><img src="{$images_url}/edit_small.gif" border="0" alt="{$LANG.phrase_edit_form}"
+	          title="{$LANG.phrase_edit_form}" /></a>
+	      </div>
+        {display_edit_submission_view_dropdown form_id=$form_id view_id=$view_id submission_id=$submission_id
+          account_id=$SESSION.account.account_id is_admin=true}
+      </td>
     </tr>
     </table>
 
@@ -24,7 +31,8 @@
     {ft_include file="messages.tpl"}
 
     <form action="edit_submission.php" method="post" name="edit_submission_form" enctype="multipart/form-data">
-      <input type="hidden" name="form_id" id="form_id" value="{$form_id}" /> {* needed for JS - don't delete! *}
+      {* hidden fields needed for JS - don't delete! *}
+      <input type="hidden" name="form_id" id="form_id" value="{$form_id}" />
       <input type="hidden" name="submission_id" value="{$submission_id}" />
       <input type="hidden" name="tab" value="{$tab_number}" />
 

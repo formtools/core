@@ -4,7 +4,12 @@
   <tr>
     <td width="45"><a href="./"><img src="{$images_url}/icon_forms.gif" border="0" width="34" height="34" /></a></td>
     <td class="title"><a href="./">{$LANG.word_forms|upper}</a>: {$form_info.form_name|upper} (<span class="bold">{$form_id}</span>)</td>
-    <td align="right"><a href="submissions.php?form_id={$form_id}">{$LANG.phrase_view_submissions_link}</a></td>
+    <td align="right">
+      <div style="float:right; padding-left: 6px;">
+	      <a href="submissions.php?form_id={$form_id}"><img src="{$images_url}/view_small.gif" border="0" alt="{$LANG.phrase_view_submissions}"
+	        title="{$LANG.phrase_view_submissions}" /></a>
+	    </div>
+    </td>
   </tr>
   </table>
 

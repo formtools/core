@@ -1,9 +1,22 @@
 {ft_include file='header.tpl'}
 
-  <table cellpadding="0" cellspacing="0">
+  <table cellpadding="0" cellspacing="0" width="100%">
   <tr>
     <td width="45"><a href="../"><img src="{$images_url}/icon_forms.gif" border="0" width="34" height="34" /></a></td>
     <td class="title">{$form_info.form_name|upper}</td>
+    <td align="right" valign="top">
+
+      {if $form_views|@count > 1}
+        <select onchange="window.location='{$same_page}?page=1&view=' + this.value">
+          <optgroup label="{$LANG.word_views}">
+	          {foreach from=$form_views key=k item=i}
+	            <option value="{$i.view_id}" {if $view_id == $i.view_id}selected{/if}>{$i.view_name}</option>
+	          {/foreach}
+          </optgroup>
+        </select>
+      {/if}
+
+    </td>
   </tr>
   </table>
 
@@ -68,23 +81,7 @@
 
   <br />
 
-  {* show the available Views dropdown *}
-  <div style="width:100%">
-    <div style="float:right">
-
-      {if $form_views|@count > 1}
-        <b>{$LANG.word_view_c}</b>
-        <select onchange="window.location='{$same_page}?page=1&view=' + this.value">
-          {foreach from=$form_views key=k item=i}
-            <option value="{$i.view_id}" {if $view_id == $i.view_id}selected{/if}>{$i.view_name}</option>
-          {/foreach}
-        </select>
-      {/if}
-
-    </div>
-
-    {$pagination}
-  </div>
+  {$pagination}
 
   {if $search_num_results == 0}
     <div class="notify yellow_bg">
@@ -222,7 +219,7 @@
           <td class="{$td_class}"><div class="{$nowrap_rightpad} {$ellipsis} {$td_class}">{$cell_value}</td>
         {/foreach}
 
-        <td align="center"><a href="edit_submission.php?submission_id={$submission_id}">{if $view_info.may_edit_submissions == "yes"}{$LANG.word_edit|upper}{else}{$LANG.word_view|upper}{/if}</a></td>
+        <td align="center"><a href="edit_submission.php?form_id={$form_id}&view_id={$view_id}&submission_id={$submission_id}">{if $view_info.may_edit_submissions == "yes"}{$LANG.word_edit|upper}{else}{$LANG.word_view|upper}{/if}</a></td>
       </tr>
 
     {/foreach}

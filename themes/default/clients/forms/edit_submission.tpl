@@ -5,6 +5,10 @@
     <table cellpadding="0" cellspacing="0" width="100%">
     <tr>
       <td><span class="title">{$LANG.phrase_edit_submission_uc}</span></td>
+      <td align="right" valign="top">
+        {display_edit_submission_view_dropdown form_id=$form_id view_id=$view_id submission_id=$submission_id
+          account_id=$SESSION.account.account_id is_admin=true}
+      </td>
     </tr>
     </table>
 

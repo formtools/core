@@ -5,7 +5,7 @@ Form Tools - Language File
 --------------------------
 
 Translated by: Anonymous
-File created: Jan 6th, 11:46 PM
+File created: Mar 7th, 11:58 PM
 
 If you would like to help translate Form Tools, please visit:
 http://translations.formtools.org/
@@ -859,6 +859,7 @@ $LANG["phrase_user_text"] = "User, Text";
 $LANG["phrase_values_to_text"] = "Values -&gt; Text";
 $LANG["phrase_verify_url"] = "Verify URL";
 $LANG["phrase_view_name"] = "View Name";
+$LANG["phrase_view_submissions"] = "View Submissions";
 $LANG["phrase_view_submissions_link"] = "[View Submissions]";
 $LANG["phrase_view_uploaded_files"] = "view uploaded files";
 $LANG["phrase_viewing_range"] = " [viewing {\$startnum} to {\$endnum}]";
