@@ -807,7 +807,7 @@ function ft_module_needs_upgrading($module_id)
 
   $latest_module_info = ft_get_module_info_file_contents($module_folder);
 
-  $actual_version = $latest_module_info["version"];
+  $actual_version = isset($latest_module_info["version"]) ? $latest_module_info["version"] : "";
 
   return ($current_db_version != $actual_version);
 }

@@ -25,6 +25,8 @@ if (empty($form_id))
 // will appear in the page
 $view_id    = ft_load_field("view", "form_{$form_id}_view_id");
 $form_views = ft_get_form_views($form_id);
+$default_view_id = $form_views[0]["view_id"];
+$_SESSION["ft"]["form_{$form_id}_view_id"] = $default_view_id;
 
 if (empty($view_id))
 {
@@ -36,14 +38,15 @@ if (empty($view_id))
   }
   else
   {
-    $default_view_id = $form_views[0]["view_id"];
-    $_SESSION["ft"]["form_{$form_id}_view_id"] = $default_view_id;
     $view_id = $default_view_id;
   }
 }
+else if (!ft_check_view_exists($view_id))
+  $view_id = $default_view_id;
 
 $form_info = ft_get_form($form_id);
 $view_info = ft_get_view($view_id);
+
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes")
 {

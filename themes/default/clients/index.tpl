@@ -37,11 +37,9 @@
           {/if}
         </td>
         <td align="center">
-          {if $form_info.is_active == 'yes'}
-            {assign var=form_num_submissions_key value="form_`$form_id`_num_submissions"}
-            {assign var=num_submissions value=$SESSION.$form_num_submissions_key}
-            ({$num_submissions})&nbsp;<a href="forms/index.php?form_id={$form_id}">{$LANG.word_view|upper}</a>
-          {/if}
+          {assign var=form_num_submissions_key value="form_`$form_id`_num_submissions"}
+          {assign var=num_submissions value=$SESSION.$form_num_submissions_key}
+          ({$num_submissions})&nbsp;<a href="forms/index.php?form_id={$form_id}">{$LANG.word_view|upper}</a>
         </td>
       </tr>
     {/foreach}

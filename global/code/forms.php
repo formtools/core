@@ -1619,7 +1619,7 @@ function _ft_cache_form_stats($form_id = "")
  * Retrieves information about all forms associated with a particular account. Since 2.0.0
  * this function lets you SEARCH the forms, but it still returns all results - not a page worth
  * (the reason being: the vast majority of people use Form Tools for a small number of forms < 100)
- * so the form tables are displaying via DHTML, with all results actually returned and latent in the
+ * so the form tables are displaying via DHTML, with all results actually returned and hidden in the
  * page ready to be displayed.
  *
  * @param integer $account_id if blank, return all finalized forms, otherwise returns the forms

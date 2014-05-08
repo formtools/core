@@ -100,6 +100,20 @@ function ft_add_default_view($form_id)
 
 
 /**
+ * This checks to see if a View exists in the database.
+ *
+ * @param integer $view_id
+ * @return boolean
+ */
+function ft_check_view_exists($view_id)
+{
+  global $g_table_prefix;
+  $query = @mysql_query("SELECT * FROM {$g_table_prefix}views WHERE view_id = $view_id");
+  return (mysql_num_rows($query) > 0);
+}
+
+
+/**
  * Retrieves all information about a View, including associated user and filter info.
  *
  * @param integer $view_id the unique view ID
@@ -117,7 +131,8 @@ function ft_get_view($view_id)
   $view_info["fields"]    = ft_get_view_fields($view_id);
   $view_info["filters"]   = ft_get_view_filters($view_id);
   $view_info["tabs"]      = ft_get_view_tabs($view_id);
-  $view_info["client_omit_list"] = ($view_info["access_type"] == "public") ? ft_get_public_view_omit_list($view_id) : array();
+  $view_info["client_omit_list"] = (isset($view_info["access_type"]) && $view_info["access_type"] == "public") ?
+	  ft_get_public_view_omit_list($view_id) : array();
 
   extract(ft_process_hooks("end", compact("view_id", "view_info"), array("view_info")), EXTR_OVERWRITE);
 
