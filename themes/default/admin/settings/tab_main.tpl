@@ -15,7 +15,9 @@
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_api_version}</td>
-      <td class="pad_left_small">{$settings.api_version}</td>
+      <td class="pad_left_small">
+        {$settings.api_version|default:"<span class=\"light_grey\">`$LANG.notify_no_api_installed`</span>"}
+      </td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_program_name}</td>

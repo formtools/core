@@ -1694,6 +1694,7 @@ function ft_search_forms($account_id = "", $is_admin = false, $search_criteria =
   $keyword_clause = "";
   if (isset($search_criteria["keyword"]) && !empty($search_criteria["keyword"]))
   {
+  	$search_criteria["keyword"] = trim($search_criteria["keyword"]);
     $string = ft_sanitize($search_criteria["keyword"]);
     $fields = array("form_name", "form_url", "redirect_url", "form_id");
 

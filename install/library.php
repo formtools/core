@@ -7,9 +7,9 @@
 $g_ft_installation_folder = dirname(__FILE__);
 $g_default_language       = "en_us.php";
 $g_default_theme          = "default";
-$g_form_tools_version     = "2.0.0-beta-20090223";
+$g_form_tools_version     = "2.0.0-beta-20090301";
 $g_is_beta                = "yes";
-$g_beta_version           = "2009/02/23";
+$g_beta_version           = "2009/03/01";
 $g_smarty_use_sub_dirs    = false;
 
 /*
@@ -57,6 +57,49 @@ function ft_install_display_page($template, $page_vars)
 	  $g_smarty_use_sub_dirs, $g_form_tools_version, $g_is_beta, $g_beta_version;
 
 	require_once("$g_ft_installation_folder/../global/smarty/Smarty.class.php");
+
+	// run a preliminary permissions check on the default theme's cache folder
+	if (!is_readable("$g_ft_installation_folder/../themes/$g_default_theme/cache/"))
+	{
+    echo <<< EOF
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="files/main.css">
+</head>
+<body>
+
+<div id="container">
+	<div id="header">
+
+    <div style="float:right">
+	    <table cellspacing="0" cellpadding="0" height="25">
+	    <tr>
+	      <td><img src="images/account_section_left.jpg" border="0" /></td>
+	      <td id="account_section">
+		      v{$g_form_tools_version}
+	      </td>
+	      <td><img src="images/account_section_right.jpg" border="0" /></td>
+	    </tr>
+	    </table>
+    </div>
+
+    <span style="float:left; padding-top: 8px; padding-right: 10px">
+      <a href="http://www.formtools.org" class="no_border"><img src="images/logo.jpg" border="0" width="359" height="61" /></a>
+    </span>
+	</div>
+  <div id="content">
+
+    <div class="notify">
+      {$LANG["text_default_theme_cache_folder_not_writable"]}
+    </div>
+
+	</div>
+</div>
+</body>
+</html>
+EOF;
+    exit;
+	}
 
 	$g_smarty = new Smarty();
 	$g_smarty->template_dir = "$g_ft_installation_folder/../themes/$g_default_theme";

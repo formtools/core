@@ -53,6 +53,16 @@ function ft_upgrade_form_tools()
           ");
       }
 
+      if ($existing_version_info["release_date"] < 20090301)
+      {
+      	mysql_query("
+          ALTER TABLE {$g_table_prefix}email_templates
+          CHANGE email_reply_to email_reply_to
+          ENUM('none', 'admin', 'client', 'user', 'custom')
+          CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
+            ");
+      }
+
       if ($existing_version_info["full"] != $g_current_version)
       {
         mysql_query("
@@ -62,6 +72,7 @@ function ft_upgrade_form_tools()
                   ");
         $is_upgraded = true;
       }
+
     }
   }
 

@@ -82,7 +82,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%email_templates (
   email_from_account_id mediumint(8) unsigned default NULL,
   custom_from_name varchar(100) default NULL,
   custom_from_email varchar(100) default NULL,
-  email_reply_to enum('admin','client','user','custom') default NULL,
+  email_reply_to enum('admin','client','user','custom','none') default NULL,
   email_reply_to_account_id mediumint(8) unsigned default NULL,
   custom_reply_to_name varchar(100) default NULL,
   custom_reply_to_email varchar(100) default NULL,

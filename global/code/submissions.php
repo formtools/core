@@ -36,7 +36,7 @@ function ft_create_blank_submission($form_id, $is_finalized = false)
     VALUES ('$now', '$now', '$ip')
       ");
 
-	extract(ft_process_hooks("end", compact("form_id"), array()), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("form_id"), array()), EXTR_OVERWRITE);
 
   return mysql_insert_id();
 }
@@ -55,91 +55,91 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 {
   global $g_table_prefix, $LANG;
 
-	$form_info = ft_get_form($form_id);
-	$form_fields = ft_get_form_fields($form_id);
+  $form_info = ft_get_form($form_id);
+  $form_fields = ft_get_form_fields($form_id);
 
-	$auto_delete_submission_files = $form_info["auto_delete_submission_files"];
-	$file_delete_problems = array();
-	$form_has_file_field = false;
+  $auto_delete_submission_files = $form_info["auto_delete_submission_files"];
+  $file_delete_problems = array();
+  $form_has_file_field = false;
 
-	// send any emails
+  // send any emails
   ft_send_emails("on_delete", $form_id, $submission_id);
 
-	// loop the form templates to find out if there are any file fields. If there are - and the user
-	// configured it - delete any associated files
-	foreach ($form_fields as $field_info)
-	{
-		$field_type = $field_info["field_type"];
+  // loop the form templates to find out if there are any file fields. If there are - and the user
+  // configured it - delete any associated files
+  foreach ($form_fields as $field_info)
+  {
+    $field_type = $field_info["field_type"];
 
-		if ($field_type == "file" || $field_type == "image")
-		{
-			$form_has_file_field = true;
+    if ($field_type == "file" || $field_type == "image")
+    {
+      $form_has_file_field = true;
 
-			// store the filename we're about to delete BEFORE deleting it. The reason being,
-			// if the delete_file_submission function can't find the file, it updates the database record
-			// (i.e. overwrites the file name with "") and returns a message indicating what happened.
-			// If this wasn't done, in the event of a file being removed/renamed by another process, the
-			// user could NEVER remove the filename from their interface. This seems the least inelegant
-			// solution. By storing the filename here, we can display it to the user to explain what
-			// happened.
-			if ($auto_delete_submission_files == "no")
-				continue;
+      // store the filename we're about to delete BEFORE deleting it. The reason being,
+      // if the delete_file_submission function can't find the file, it updates the database record
+      // (i.e. overwrites the file name with "") and returns a message indicating what happened.
+      // If this wasn't done, in the event of a file being removed/renamed by another process, the
+      // user could NEVER remove the filename from their interface. This seems the least inelegant
+      // solution. By storing the filename here, we can display it to the user to explain what
+      // happened.
+      if ($auto_delete_submission_files == "no")
+        continue;
 
-			$submission_info = ft_get_submission_info($form_id, $submission_id);
-			$filename = $submission_info[$field_info['col_name']];
+      $submission_info = ft_get_submission_info($form_id, $submission_id);
+      $filename = $submission_info[$field_info['col_name']];
 
-			// if no filename was stored, it was empty - just continue
-			if (empty($filename))
-				continue;
+      // if no filename was stored, it was empty - just continue
+      if (empty($filename))
+        continue;
 
-		  if ($field_type == "file")
-			  list($success, $message) = ft_delete_file_submission($form_id, $submission_id, $field_info['field_id']);
-			else if ($field_type == "image")
-			  list($success, $message) = img_delete_image_file_submission($form_id, $submission_id, $field_info['field_id']);
+      if ($field_type == "file")
+        list($success, $message) = ft_delete_file_submission($form_id, $submission_id, $field_info['field_id']);
+      else if ($field_type == "image")
+        list($success, $message) = img_delete_image_file_submission($form_id, $submission_id, $field_info['field_id']);
 
-			if (!$success)
-				$file_delete_problems[] = array($filename, $message);
-		}
-	}
-
-
-	// now delete the submission
-	mysql_query("
-	  DELETE FROM {$g_table_prefix}form_{$form_id}
-	  WHERE submission_id = $submission_id
-	    ");
-
-	if ($auto_delete_submission_files == "yes")
-	{
-		if (empty($file_delete_problems))
-		{
-			$success = true;
-			$message = ($form_has_file_field) ? $LANG["notify_submission_and_files_deleted"] : $LANG["notify_submission_deleted"];
-		}
-		else
-		{
-
-			$success = false;
-			$message = $LANG["notify_submission_deleted_with_problems"] . "<br /><br />";
-
-			foreach ($file_delete_problems as $problem)
-				$message .= "&bull; <b>{$problem[0]}</b>: {$problem[1]}<br />\n";
-		}
-	}
-	else
-	{
-		$success = true;
-		$message = $LANG["notify_submission_deleted"];
-	}
+      if (!$success)
+        $file_delete_problems[] = array($filename, $message);
+    }
+  }
 
 
-	// update sessions to ensure the first submission date and num submissions for this form View are correct
-	_ft_cache_form_stats($form_id);
-	_ft_cache_view_stats($view_id);
+  // now delete the submission
+  mysql_query("
+    DELETE FROM {$g_table_prefix}form_{$form_id}
+    WHERE submission_id = $submission_id
+      ");
 
-	extract(ft_process_hooks("end", compact("form_id", "view_id", "submission_id", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
+  if ($auto_delete_submission_files == "yes")
+  {
+    if (empty($file_delete_problems))
+    {
+      $success = true;
+      $message = ($form_has_file_field) ? $LANG["notify_submission_and_files_deleted"] : $LANG["notify_submission_deleted"];
+    }
+    else
+    {
 
-	return array($success, $message);
+      $success = false;
+      $message = $LANG["notify_submission_deleted_with_problems"] . "<br /><br />";
+
+      foreach ($file_delete_problems as $problem)
+        $message .= "&bull; <b>{$problem[0]}</b>: {$problem[1]}<br />\n";
+    }
+  }
+  else
+  {
+    $success = true;
+    $message = $LANG["notify_submission_deleted"];
+  }
+
+
+  // update sessions to ensure the first submission date and num submissions for this form View are correct
+  _ft_cache_form_stats($form_id);
+  _ft_cache_view_stats($view_id);
+
+  extract(ft_process_hooks("end", compact("form_id", "view_id", "submission_id", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
+
+  return array($success, $message);
 }
 
 
@@ -164,135 +164,135 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
  */
 function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, $is_admin)
 {
-	global $g_table_prefix, $LANG;
+  global $g_table_prefix, $LANG;
 
-	$submission_ids = array();
-	if ($submissions_to_delete == "all")
-	{
-	  $submission_ids = ft_get_search_submission_ids($form_id, $view_id, "all", "submission_id-ASC", $search_fields);
-	  $submission_ids = array_diff($submission_ids, $omit_list);
-	}
-	else
-	{
+  $submission_ids = array();
+  if ($submissions_to_delete == "all")
+  {
+    $submission_ids = ft_get_search_submission_ids($form_id, $view_id, "all", "submission_id-ASC", $search_fields);
+    $submission_ids = array_diff($submission_ids, $omit_list);
+  }
+  else
+  {
     $submission_ids = $submissions_to_delete;
-	}
+  }
 
-	$form_info = ft_get_form($form_id);
-	$form_fields = ft_get_form_fields($form_id);
+  $form_info = ft_get_form($form_id);
+  $form_fields = ft_get_form_fields($form_id);
 
-	$auto_delete_submission_files = $form_info["auto_delete_submission_files"];
+  $auto_delete_submission_files = $form_info["auto_delete_submission_files"];
 
-	$submission_ids_qry = array();
-	foreach ($submission_ids as $submission_id)
-  	$submission_ids_qry[] = "submission_id = $submission_id";
+  $submission_ids_qry = array();
+  foreach ($submission_ids as $submission_id)
+    $submission_ids_qry[] = "submission_id = $submission_id";
 
-	$where_clause = "WHERE " . join(" OR ", $submission_ids_qry);
-
-
-	$file_delete_problems = array();
-	$form_has_file_field  = false;
-
-	// loop the form templates to find out if there are any file fields. If there are - and the user
-	// configured it - delete any associated files
-	foreach ($form_fields as $field_info)
-	{
-		$field_type = $field_info["field_type"];
-
-		if ($field_type == "file" || $field_type == "image")
-		{
-			$form_has_file_field = true;
-
-			// store the filename we're about to delete BEFORE deleting it. The reason being,
-			// if the delete_file_submission function can't find the file, it updates the database record
-			// (i.e. overwrites the file name with "") and returns a message indicating what happened.
-			// If this wasn't done, in the event of a file being removed/renamed by another process, the
-			// user could NEVER remove the filename from their interface. This seems the least inelegant
-			// solution. By storing the filename here, we can display it to the user to explain what
-			// happened.
-			if ($auto_delete_submission_files == "no")
-				continue;
-
-			foreach ($submission_ids as $submission_id)
-			{
-				$submission_info = ft_get_submission_info($form_id, $submission_id);
-				$filename = $submission_info[$field_info["col_name"]];
-
-				// if no filename was stored, it was empty - just continue
-				if (empty($filename))
-					continue;
-
-			  if ($field_type == "file")
-				  list($success, $message) = ft_delete_file_submission($form_id, $submission_id, $field_info['field_id']);
-				else if ($field_type == "image")
-				  list($success, $message) = img_delete_image_file_submission($form_id, $submission_id, $field_info['field_id']);
-
-				if (!$success)
-					$file_delete_problems[] = array($filename, $message);
-			}
-		}
-	}
+  $where_clause = "WHERE " . join(" OR ", $submission_ids_qry);
 
 
-	// now delete the submission
-	mysql_query("
-		 DELETE FROM {$g_table_prefix}form_{$form_id}
-		 $where_clause
-							");
+  $file_delete_problems = array();
+  $form_has_file_field  = false;
 
-	if ($auto_delete_submission_files == "yes")
-	{
-		if (empty($file_delete_problems))
-		{
-			$success = true;
+  // loop the form templates to find out if there are any file fields. If there are - and the user
+  // configured it - delete any associated files
+  foreach ($form_fields as $field_info)
+  {
+    $field_type = $field_info["field_type"];
 
-			if (count($submission_ids) > 1)
-				$message = ($form_has_file_field) ? $LANG["notify_submissions_and_files_deleted"] :
-					$LANG["notify_submissions_deleted"];
-			else
-				$message = ($form_has_file_field) ? $LANG["notify_submission_and_files_deleted"] :
-					$LANG["notify_submission_deleted"];
-		}
-		else
-		{
-			$success = false;
+    if ($field_type == "file" || $field_type == "image")
+    {
+      $form_has_file_field = true;
 
-			if (count($submission_ids) > 1)
-				$message = $LANG["notify_submissions_deleted_with_problems"] . "<br /><br />";
-			else
-				$message = $LANG["notify_submission_deleted_with_problems"] . "<br /><br />";
+      // store the filename we're about to delete BEFORE deleting it. The reason being,
+      // if the delete_file_submission function can't find the file, it updates the database record
+      // (i.e. overwrites the file name with "") and returns a message indicating what happened.
+      // If this wasn't done, in the event of a file being removed/renamed by another process, the
+      // user could NEVER remove the filename from their interface. This seems the least inelegant
+      // solution. By storing the filename here, we can display it to the user to explain what
+      // happened.
+      if ($auto_delete_submission_files == "no")
+        continue;
 
-			foreach ($file_delete_problems as $problem)
-				$message .= "&bull; <b>{$problem[0]}</b>: $problem[1]<br />\n";
-		}
-	}
-	else
-	{
-		$success = true;
+      foreach ($submission_ids as $submission_id)
+      {
+        $submission_info = ft_get_submission_info($form_id, $submission_id);
+        $filename = $submission_info[$field_info["col_name"]];
 
-		if (count($submission_ids) > 1)
-			$message = $LANG["notify_submissions_deleted"];
-		else
-			$message = $LANG["notify_submission_deleted"];
-	}
+        // if no filename was stored, it was empty - just continue
+        if (empty($filename))
+          continue;
+
+        if ($field_type == "file")
+          list($success, $message) = ft_delete_file_submission($form_id, $submission_id, $field_info['field_id']);
+        else if ($field_type == "image")
+          list($success, $message) = img_delete_image_file_submission($form_id, $submission_id, $field_info['field_id']);
+
+        if (!$success)
+          $file_delete_problems[] = array($filename, $message);
+      }
+    }
+  }
 
 
-	// update sessions to ensure the first submission date and num submissions for this form View are correct
-	_ft_cache_form_stats($form_id);
-	_ft_cache_view_stats($view_id);
+  // now delete the submission
+  mysql_query("
+     DELETE FROM {$g_table_prefix}form_{$form_id}
+     $where_clause
+              ");
 
-	$_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
-	$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-	$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
+  if ($auto_delete_submission_files == "yes")
+  {
+    if (empty($file_delete_problems))
+    {
+      $success = true;
 
-	// loop through all submissions deleted and send any emails
-	reset($submission_ids);
-	foreach ($submission_ids as $submission_id)
-	  ft_send_emails("on_delete", $form_id, $submission_id);
+      if (count($submission_ids) > 1)
+        $message = ($form_has_file_field) ? $LANG["notify_submissions_and_files_deleted"] :
+          $LANG["notify_submissions_deleted"];
+      else
+        $message = ($form_has_file_field) ? $LANG["notify_submission_and_files_deleted"] :
+          $LANG["notify_submission_deleted"];
+    }
+    else
+    {
+      $success = false;
 
-	extract(ft_process_hooks("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"),
-	  array("success", "message")), EXTR_OVERWRITE);
+      if (count($submission_ids) > 1)
+        $message = $LANG["notify_submissions_deleted_with_problems"] . "<br /><br />";
+      else
+        $message = $LANG["notify_submission_deleted_with_problems"] . "<br /><br />";
 
-	return array($success, $message);
+      foreach ($file_delete_problems as $problem)
+        $message .= "&bull; <b>{$problem[0]}</b>: $problem[1]<br />\n";
+    }
+  }
+  else
+  {
+    $success = true;
+
+    if (count($submission_ids) > 1)
+      $message = $LANG["notify_submissions_deleted"];
+    else
+      $message = $LANG["notify_submission_deleted"];
+  }
+
+
+  // update sessions to ensure the first submission date and num submissions for this form View are correct
+  _ft_cache_form_stats($form_id);
+  _ft_cache_view_stats($view_id);
+
+  $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
+  $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
+  $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
+
+  // loop through all submissions deleted and send any emails
+  reset($submission_ids);
+  foreach ($submission_ids as $submission_id)
+    ft_send_emails("on_delete", $form_id, $submission_id);
+
+  extract(ft_process_hooks("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"),
+    array("success", "message")), EXTR_OVERWRITE);
+
+  return array($success, $message);
 }
 
 
@@ -312,93 +312,93 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
  */
 function ft_delete_file_submission($form_id, $submission_id, $field_id, $force_delete = false)
 {
-	global $g_table_prefix, $LANG;
+  global $g_table_prefix, $LANG;
 
-	// get the column name and upload folder for this field
-	$field_info = ft_get_form_field($field_id);
-	$extended_field_settings = ft_get_extended_field_settings($field_id);
+  // get the column name and upload folder for this field
+  $field_info = ft_get_form_field($field_id);
+  $extended_field_settings = ft_get_extended_field_settings($field_id);
 
-	$col_name    = $field_info["col_name"];
-	$file_folder = $extended_field_settings["file_upload_dir"];
+  $col_name    = $field_info["col_name"];
+  $file_folder = $extended_field_settings["file_upload_dir"];
 
-	// if the column name wasn't found, the $field_id passed in was invalid. Return false.
-	if (empty($col_name))
-		return array(false, $LANG["notify_submission_no_field_id"]);
+  // if the column name wasn't found, the $field_id passed in was invalid. Return false.
+  if (empty($col_name))
+    return array(false, $LANG["notify_submission_no_field_id"]);
 
-	$query = "
-		SELECT $col_name
-		FROM   {$g_table_prefix}form_{$form_id}
-		WHERE  submission_id = $submission_id
-						";
+  $query = "
+    SELECT $col_name
+    FROM   {$g_table_prefix}form_{$form_id}
+    WHERE  submission_id = $submission_id
+            ";
 
-	$result = mysql_query($query);
-	$file_info = mysql_fetch_row($result);
-	$file = $file_info[0];
+  $result = mysql_query($query);
+  $file_info = mysql_fetch_row($result);
+  $file = $file_info[0];
 
-	$update_database_record = false;
-	$success = true;
-	$message = "";
+  $update_database_record = false;
+  $success = true;
+  $message = "";
 
-	if (!empty($file))
-	{
-	  if ($force_delete)
-	  {
-	  	@unlink("$file_folder/$file");
-			$message = $LANG["notify_file_deleted"];
-			$update_database_record = true;
-	  }
-	  else
-	  {
-	    if (@unlink("$file_folder/$file"))
-	    {
-				$success = true;
-				$message = $LANG["notify_file_deleted"];
-				$update_database_record = true;
-	    }
-	    else
-	    {
-			  if (!is_file("$file_folder/$file"))
-			  {
-					$success = false;
-					$update_database_record = false;
-					$replacements = array("js_link" => "return ms.delete_submission_file($field_id, 'file', true)");
-					$message = ft_eval_smarty_string($LANG["notify_file_not_deleted_no_exist"], $replacements);
-			  }
-			  else if (is_file("$file_folder/$file") && (!is_readable("$file_folder/$file") || !is_writable("$file_folder/$file")))
-			  {
-					$success = false;
-					$update_database_record = false;
-					$replacements = array("js_link" => "return ms.delete_submission_file($field_id, 'file', true)");
-					$message = ft_eval_smarty_string($LANG["notify_file_not_deleted_permissions"], $replacements);
-			  }
-			  else
-			  {
-					$success = false;
-					$update_database_record = false;
-					$replacements = array("js_link" => "return ms.delete_submission_file($field_id, 'file', true)");
-					$message = ft_eval_smarty_string($LANG["notify_file_not_deleted_unknown_error"], $replacements);
-			  }
-	    }
-	  }
-	}
+  if (!empty($file))
+  {
+    if ($force_delete)
+    {
+      @unlink("$file_folder/$file");
+      $message = $LANG["notify_file_deleted"];
+      $update_database_record = true;
+    }
+    else
+    {
+      if (@unlink("$file_folder/$file"))
+      {
+        $success = true;
+        $message = $LANG["notify_file_deleted"];
+        $update_database_record = true;
+      }
+      else
+      {
+        if (!is_file("$file_folder/$file"))
+        {
+          $success = false;
+          $update_database_record = false;
+          $replacements = array("js_link" => "return ms.delete_submission_file($field_id, 'file', true)");
+          $message = ft_eval_smarty_string($LANG["notify_file_not_deleted_no_exist"], $replacements);
+        }
+        else if (is_file("$file_folder/$file") && (!is_readable("$file_folder/$file") || !is_writable("$file_folder/$file")))
+        {
+          $success = false;
+          $update_database_record = false;
+          $replacements = array("js_link" => "return ms.delete_submission_file($field_id, 'file', true)");
+          $message = ft_eval_smarty_string($LANG["notify_file_not_deleted_permissions"], $replacements);
+        }
+        else
+        {
+          $success = false;
+          $update_database_record = false;
+          $replacements = array("js_link" => "return ms.delete_submission_file($field_id, 'file', true)");
+          $message = ft_eval_smarty_string($LANG["notify_file_not_deleted_unknown_error"], $replacements);
+        }
+      }
+    }
+  }
 
-	// if need be, update the database record to remove the reference to the file in the database. Generally this
-	// should always work, but in case something funky happened, like the permissions on the file were changed to
-	// forbid deleting, I think it's best if the record doesn't get deleted to remind the admin/client it's still
-	// there.
-	if ($update_database_record)
-	{
-		$query = mysql_query("
-			UPDATE {$g_table_prefix}form_{$form_id}
-			SET    $col_name = ''
-			WHERE  submission_id = $submission_id
-						 ");
-	}
+  // if need be, update the database record to remove the reference to the file in the database. Generally this
+  // should always work, but in case something funky happened, like the permissions on the file were changed to
+  // forbid deleting, I think it's best if the record doesn't get deleted to remind the admin/client it's still
+  // there.
+  if ($update_database_record)
+  {
+    $query = mysql_query("
+      UPDATE {$g_table_prefix}form_{$form_id}
+      SET    $col_name = ''
+      WHERE  submission_id = $submission_id
+             ");
+  }
 
-	extract(ft_process_hooks("end", compact("form_id", "submission_id", "field_id", "force_delete"),
-	  array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("form_id", "submission_id", "field_id", "force_delete"),
+    array("success", "message")), EXTR_OVERWRITE);
 
-	return array($success, $message);
+  return array($success, $message);
 }
 
 
@@ -416,54 +416,54 @@ function ft_delete_file_submission($form_id, $submission_id, $field_id, $force_d
  */
 function ft_get_submission($form_id, $submission_id, $view_id = "")
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$return_arr = array();
+  $return_arr = array();
 
-	$form_fields = ft_get_form_fields($form_id);
+  $form_fields = ft_get_form_fields($form_id);
   $submission  = ft_get_submission_info($form_id, $submission_id);
   $view_fields = (!empty($view_id)) ? ft_get_view_fields($view_id) : array();
 
-	if (empty($submission))
-	  return array();
+  if (empty($submission))
+    return array();
 
   $view_field_ids = array();
   foreach ($view_fields as $view_field)
     $view_field_ids[] = $view_field["field_id"];
 
-	// for each field, combine the meta form info (like field size, type, data type etc) from $form_fields
-	// with the info about the submission itself. Also, if there's a View specified, filter out any fields
-	// that aren't used in the View
-	foreach ($form_fields as $field_info)
-	{
-		$field_id = $field_info["field_id"];
+  // for each field, combine the meta form info (like field size, type, data type etc) from $form_fields
+  // with the info about the submission itself. Also, if there's a View specified, filter out any fields
+  // that aren't used in the View
+  foreach ($form_fields as $field_info)
+  {
+    $field_id = $field_info["field_id"];
 
-		// if we're looking at this submission through a View,
+    // if we're looking at this submission through a View,
     if (!empty($view_id) && !in_array($field_id, $view_field_ids))
       continue;
 
-		// if the submission contains contents for this field, add it
-		if (array_key_exists($field_info['col_name'], $submission))
-			$field_info["content"] = $submission[$field_info['col_name']];
+    // if the submission contains contents for this field, add it
+    if (array_key_exists($field_info['col_name'], $submission))
+      $field_info["content"] = $submission[$field_info['col_name']];
 
-		// if a view ID is specified, return the view-specific field info as well
-		if (!empty($view_id))
-		{
-			$field_view_info = ft_get_view_field($view_id, $field_id);
+    // if a view ID is specified, return the view-specific field info as well
+    if (!empty($view_id))
+    {
+      $field_view_info = ft_get_view_field($view_id, $field_id);
 
-			if (!empty($field_view_info))
-			{
-				foreach ($field_view_info as $key => $value)
-					$field_info[$key] = $value;
-			}
-		}
+      if (!empty($field_view_info))
+      {
+        foreach ($field_view_info as $key => $value)
+          $field_info[$key] = $value;
+      }
+    }
 
-		$return_arr[] = $field_info;
-	}
+    $return_arr[] = $field_info;
+  }
 
-	extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "return_arr"), array("return_arr")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "return_arr"), array("return_arr")), EXTR_OVERWRITE);
 
-	return $return_arr;
+  return $return_arr;
 }
 
 
@@ -479,20 +479,20 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
  */
 function ft_get_submission_info($form_id, $submission_id)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	// get the form submission info
-	$submission_info = mysql_query("
-		 SELECT *
-		 FROM   {$g_table_prefix}form_{$form_id}
-		 WHERE  submission_id = $submission_id
-							");
+  // get the form submission info
+  $submission_info = mysql_query("
+     SELECT *
+     FROM   {$g_table_prefix}form_{$form_id}
+     WHERE  submission_id = $submission_id
+              ");
 
-	$submission = mysql_fetch_assoc($submission_info);
+  $submission = mysql_fetch_assoc($submission_info);
 
   extract(ft_process_hooks("end", compact("form_id", "submission_id", "submission"), array("submission")), EXTR_OVERWRITE);
 
-	return $submission;
+  return $submission;
 }
 
 
@@ -505,29 +505,29 @@ function ft_get_submission_info($form_id, $submission_id)
  */
 function ft_get_submission_count($form_id, $view_id = "")
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$filter_sql_clause = "";
-	if (!empty($view_id))
-	{
-	  $filter_sql = ft_get_view_filter_sql($view_id);
+  $filter_sql_clause = "";
+  if (!empty($view_id))
+  {
+    $filter_sql = ft_get_view_filter_sql($view_id);
 
-	  if (!empty($filter_sql))
-	    $filter_sql_clause = join(" AND ", $filter_sql);
-	}
+    if (!empty($filter_sql))
+      $filter_sql_clause = join(" AND ", $filter_sql);
+  }
 
-	// get the form submission info
-	$query = mysql_query("
-		 SELECT count(*)
-		 FROM   {$g_table_prefix}form_{$form_id}
-		        $filter_sql_clause
-		 WHERE  is_finalized = 'yes'
-							");
+  // get the form submission info
+  $query = mysql_query("
+     SELECT count(*)
+     FROM   {$g_table_prefix}form_{$form_id}
+            $filter_sql_clause
+     WHERE  is_finalized = 'yes'
+              ");
 
-	$result = mysql_fetch_array($query);
-	$submission_count = $result[0];
+  $result = mysql_fetch_array($query);
+  $submission_count = $result[0];
 
-	return $submission_count;
+  return $submission_count;
 }
 
 
@@ -547,132 +547,137 @@ function ft_get_submission_count($form_id, $view_id = "")
  */
 function ft_get_search_submission_ids($form_id, $view_id, $results_per_page, $order, $search_fields = array())
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	// sorting by column, format: col_x-desc / col_y-asc
-	list($column, $direction) = split("-", $order);
-	$field_info = ft_get_form_field_by_colname($form_id, $column);
+  // sorting by column, format: col_x-desc / col_y-asc
+  list($column, $direction) = split("-", $order);
+  $field_info = ft_get_form_field_by_colname($form_id, $column);
 
-	if ($field_info["data_type"] == "number")
-		$order_by = "CAST($column as SIGNED) $direction";
-	else
-		$order_by = "$column $direction";
+  if ($field_info["data_type"] == "number")
+    $order_by = "CAST($column as SIGNED) $direction";
+  else
+    $order_by = "$column $direction";
 
-	// determine the LIMIT clause
-	$limit_clause = "";
-	if ($results_per_page != "all")
-	{
-		if (empty($page_num))
-			$page_num = 1;
-		$first_item = ($page_num - 1) * $results_per_page;
+  // important! If the ORDER BY column wasn't the submission_id, we need to add
+  // the submission ID as the secondary sorting column
+  if ($column != "submission_id")
+    $order_by .= ", submission_id";
 
-		$limit_clause = "LIMIT $first_item, $results_per_page";
-	}
+  // determine the LIMIT clause
+  $limit_clause = "";
+  if ($results_per_page != "all")
+  {
+    if (empty($page_num))
+      $page_num = 1;
+    $first_item = ($page_num - 1) * $results_per_page;
 
-	// any filters?
-	$view_filters = ft_get_view_filter_sql($view_id);
-	$filter_clause = "";
-	if (!empty($view_filters))
-	  $filter_clause = "AND " . join(" AND ", $view_filters);
+    $limit_clause = "LIMIT $first_item, $results_per_page";
+  }
 
-	// if search fields were included, build an addition to the WHERE clause
-	$search_where_clause = "";
-	if (!empty($search_fields))
-	{
-		$clean_search_fields = ft_sanitize($search_fields);
+  // any filters?
+  $view_filters = ft_get_view_filter_sql($view_id);
+  $filter_clause = "";
+  if (!empty($view_filters))
+    $filter_clause = "AND " . join(" AND ", $view_filters);
 
-		$search_field   = $clean_search_fields["search_field"];
-		$search_date    = $clean_search_fields["search_date"];
-		$search_keyword = $clean_search_fields["search_keyword"];
+  // if search fields were included, build an addition to the WHERE clause
+  $search_where_clause = "";
+  if (!empty($search_fields))
+  {
+    $clean_search_fields = ft_sanitize($search_fields);
 
-		// search field can either be "all" or a database column name. "submission_date"
-		// has a special meaning in that it allows searching by specific date ranges
-		switch ($search_field)
-		{
-			case "all":
-				if (!empty($search_keyword))
-				{
-					// get all columns
-					$col_info = ft_get_form_column_names($form_id);
-					$col_names = array_keys($col_info);
-					unset($col_names["is_finalized"]);
-					unset($col_names["submission_date"]);
+    $search_field   = $clean_search_fields["search_field"];
+    $search_date    = $clean_search_fields["search_date"];
+    $search_keyword = $clean_search_fields["search_keyword"];
 
-					$clauses = array();
-					foreach ($col_names as $col_name)
-						$clauses[] = "$col_name LIKE '%$search_keyword%'";
+    // search field can either be "all" or a database column name. "submission_date"
+    // has a special meaning in that it allows searching by specific date ranges
+    switch ($search_field)
+    {
+      case "all":
+        if (!empty($search_keyword))
+        {
+          // get all columns
+          $col_info = ft_get_form_column_names($form_id);
+          $col_names = array_keys($col_info);
+          unset($col_names["is_finalized"]);
+          unset($col_names["submission_date"]);
 
-					$search_where_clause = "AND (" . join(" OR ", $clauses) . ") ";
-				}
-				break;
+          $clauses = array();
+          foreach ($col_names as $col_name)
+            $clauses[] = "$col_name LIKE '%$search_keyword%'";
 
-			case "submission_date":
-				if (!empty($search_date))
-				{
-					// search by number of days
-					if (is_numeric($search_date))
-					{
-						$days = $search_date;
-						$search_where_clause = "AND (DATE_SUB(curdate(), INTERVAL $days DAY) < submission_date) ";
-					}
+          $search_where_clause = "AND (" . join(" OR ", $clauses) . ") ";
+        }
+        break;
 
-					// otherwise, return a specific month
-					else
-					{
-						list($month, $year) = split("_", $search_date);
+      case "submission_date":
+        if (!empty($search_date))
+        {
+          // search by number of days
+          if (is_numeric($search_date))
+          {
+            $days = $search_date;
+            $search_where_clause = "AND (DATE_SUB(curdate(), INTERVAL $days DAY) < submission_date) ";
+          }
 
-						$month_start = mktime(0, 0, 0, $month, 1, $year);
-						$month_end   = mktime(0, 0, 0, $month+1, 1, $year);
+          // otherwise, return a specific month
+          else
+          {
+            list($month, $year) = split("_", $search_date);
 
-						$start = date("Y-m-d", $month_start);
-						$end   = date("Y-m-d", $month_end);
+            $month_start = mktime(0, 0, 0, $month, 1, $year);
+            $month_end   = mktime(0, 0, 0, $month+1, 1, $year);
 
-						$search_where_clause = "AND (submission_date > '$start' AND submission_date < '$end') ";
-					}
+            $start = date("Y-m-d", $month_start);
+            $end   = date("Y-m-d", $month_end);
 
-					if (!empty($search_keyword))
-					{
-						// get all columns
-						$col_info = ft_get_form_column_names($form_id);
-						$col_names = array_keys($col_info);
-						unset($col_names["is_finalized"]);
-						unset($col_names["submission_date"]);
+            $search_where_clause = "AND (submission_date > '$start' AND submission_date < '$end') ";
+          }
 
-						$clauses = array();
-						foreach ($col_names as $col_name)
-							$clauses[] = "$col_name LIKE '%$search_keyword%'";
+          if (!empty($search_keyword))
+          {
+            // get all columns
+            $col_info = ft_get_form_column_names($form_id);
+            $col_names = array_keys($col_info);
+            unset($col_names["is_finalized"]);
+            unset($col_names["submission_date"]);
 
-						$search_where_clause .= "AND (" . join(" OR ", $clauses) . ") ";
-					}
-				}
-				break;
+            $clauses = array();
+            foreach ($col_names as $col_name)
+              $clauses[] = "$col_name LIKE '%$search_keyword%'";
 
-			// here, the user is searching one of their own custom fields
-			default:
-				if (!empty($search_keyword) && !empty($search_field))
-					$search_where_clause = "AND $search_field LIKE '%$search_keyword%'";
-				break;
-		}
-	}
+            $search_where_clause .= "AND (" . join(" OR ", $clauses) . ") ";
+          }
+        }
+        break;
 
-	// now build our query
-	$full_query = "
-			SELECT submission_id
-			FROM   {$g_table_prefix}form_{$form_id}
-			WHERE  is_finalized = 'yes'
-						 $search_where_clause
-						 $filter_clause
-			ORDER BY $order_by
-								";
+      // here, the user is searching one of their own custom fields
+      default:
+        if (!empty($search_keyword) && !empty($search_field))
+          $search_where_clause = "AND $search_field LIKE '%$search_keyword%'";
+        break;
+    }
+  }
 
-	$search_query = mysql_query($full_query)
-		or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$full_query</i>", mysql_error());
+  // now build our query
+  $full_query = "
+      SELECT submission_id
+      FROM   {$g_table_prefix}form_{$form_id}
+      WHERE  is_finalized = 'yes'
+             $search_where_clause
+             $filter_clause
+      ORDER BY $order_by
+                ";
 
-	$submission_ids = array();
-	while ($row = mysql_fetch_assoc($search_query))
-		$submission_ids[] = $row["submission_id"];
+  $search_query = mysql_query($full_query)
+    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$full_query</i>", mysql_error());
 
-	return $submission_ids;
+  $submission_ids = array();
+  while ($row = mysql_fetch_assoc($search_query))
+    $submission_ids[] = $row["submission_id"];
+
+  return $submission_ids;
 }
 
 
@@ -691,31 +696,31 @@ function ft_get_search_submission_ids($form_id, $view_id, $results_per_page, $or
  */
 function ft_update_submission($form_id, $submission_id, $infohash)
 {
-	global $g_table_prefix, $g_multi_val_delimiter, $LANG;
+  global $g_table_prefix, $g_multi_val_delimiter, $LANG;
 
-	$success = true;
-	$message = $LANG["notify_form_submission_updated"];
+  $success = true;
+  $message = $LANG["notify_form_submission_updated"];
 
-	$infohash = ft_sanitize($infohash);
-	extract(ft_process_hooks("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
+  $infohash = ft_sanitize($infohash);
+  extract(ft_process_hooks("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
-	// assumes that each tab as at least a single field (UPDATE button should be hidden in those cases)
+  // assumes that each tab as at least a single field (UPDATE button should be hidden in those cases)
   $field_ids = split(",", $infohash["field_ids"]);
 
-	$form_fields = ft_get_form_fields($form_id);
-	$db_column_names = array();
+  $form_fields = ft_get_form_fields($form_id);
+  $db_column_names = array();
 
   $now = ft_get_current_datetime();
-	$query = array();
-	$query[] = "last_modified_date = '$now'";
+  $query = array();
+  $query[] = "last_modified_date = '$now'";
 
-	$file_fields = array();
+  $file_fields = array();
 
-	$submission_date_changed = false;
+  $submission_date_changed = false;
 
-	foreach ($form_fields as $row)
-	{
-	  // if the field ID isn't in the page's tab, ignore it
+  foreach ($form_fields as $row)
+  {
+    // if the field ID isn't in the page's tab, ignore it
     if (!in_array($row["field_id"], $field_ids))
       continue;
 
@@ -723,105 +728,105 @@ function ft_update_submission($form_id, $submission_id, $infohash)
     if (!in_array($row["field_id"], $infohash["editable_field_ids"]))
       continue;
 
-		// keep track of the file fields & their IDs. These will be used to upload the files (if need be)
-		if ($row['field_type'] == "file")
-			$file_fields[] = array("field_id" => $row['field_id'], "col_name" => $row['col_name'], "field_type" => "file");
-		else if ($row["field_type"] == "image")
-		  $file_fields[] = array("field_id" => $row['field_id'], "col_name" => $row['col_name'], "field_type" => "image");
-		else
-		{
-			// if this is the Submission Date or Last Modified Date fields, check that the information the user has
-			// supplied is a valid MySQL datetime. If it's invalid or empty, we DON'T update the value
-			if ($row["col_name"] == "submission_date" || $row["col_name"] == "last_modified_date")
-			{
-				if (!isset($infohash[$row["col_name"]]) || empty($infohash[$row["col_name"]]) || !ft_is_valid_datetime($infohash[$row["col_name"]]))
-				  continue;
+    // keep track of the file fields & their IDs. These will be used to upload the files (if need be)
+    if ($row['field_type'] == "file")
+      $file_fields[] = array("field_id" => $row['field_id'], "col_name" => $row['col_name'], "field_type" => "file");
+    else if ($row["field_type"] == "image")
+      $file_fields[] = array("field_id" => $row['field_id'], "col_name" => $row['col_name'], "field_type" => "image");
+    else
+    {
+      // if this is the Submission Date or Last Modified Date fields, check that the information the user has
+      // supplied is a valid MySQL datetime. If it's invalid or empty, we DON'T update the value
+      if ($row["col_name"] == "submission_date" || $row["col_name"] == "last_modified_date")
+      {
+        if (!isset($infohash[$row["col_name"]]) || empty($infohash[$row["col_name"]]) || !ft_is_valid_datetime($infohash[$row["col_name"]]))
+          continue;
 
-				$submission_date_changed = true;
-			}
+        $submission_date_changed = true;
+      }
 
-			if (isset($infohash[$row["col_name"]]))
-			{
-				if (is_array($infohash[$row["col_name"]]))
-					$query[] = $row["col_name"] . " = '" . join("$g_multi_val_delimiter", $infohash[$row["col_name"]]) . "'";
-				else
-					$query[] = $row["col_name"] . " = '" . $infohash[$row["col_name"]] . "'";
-			}
-			else
-				$query[] = $row["col_name"] . " = ''";
-		}
-	}
+      if (isset($infohash[$row["col_name"]]))
+      {
+        if (is_array($infohash[$row["col_name"]]))
+          $query[] = $row["col_name"] . " = '" . join("$g_multi_val_delimiter", $infohash[$row["col_name"]]) . "'";
+        else
+          $query[] = $row["col_name"] . " = '" . $infohash[$row["col_name"]] . "'";
+      }
+      else
+        $query[] = $row["col_name"] . " = ''";
+    }
+  }
 
-	$set_query = join(",\n", $query);
+  $set_query = join(",\n", $query);
 
-	$query = "
-		UPDATE {$g_table_prefix}form_{$form_id}
-		SET    $set_query
-		WHERE  submission_id = $submission_id
-					 ";
+  $query = "
+    UPDATE {$g_table_prefix}form_{$form_id}
+    SET    $set_query
+    WHERE  submission_id = $submission_id
+           ";
 
-	$result = mysql_query($query);
+  $result = mysql_query($query);
 
-	if (!$result)
-		return array(false, $LANG["notify_submission_not_updated"]);
+  if (!$result)
+    return array(false, $LANG["notify_submission_not_updated"]);
 
 
-	// now the submission exists in the database, upload any files
-	if (!empty($file_fields))
-	{
-		$problem_files = array();
+  // now the submission exists in the database, upload any files
+  if (!empty($file_fields))
+  {
+    $problem_files = array();
 
-		while (list($form_field_name, $fileinfo) = each($_FILES))
-		{
-			// if nothing was included in this field, just ignore it
-			if (empty($fileinfo['name']))
-				continue;
+    while (list($form_field_name, $fileinfo) = each($_FILES))
+    {
+      // if nothing was included in this field, just ignore it
+      if (empty($fileinfo['name']))
+        continue;
 
-		  foreach ($file_fields as $field_info)
-		  {
-		    $field_id   = $field_info["field_id"];
-		    $col_name   = $field_info["col_name"];
-		    $field_type = $field_info["field_type"];
+      foreach ($file_fields as $field_info)
+      {
+        $field_id   = $field_info["field_id"];
+        $col_name   = $field_info["col_name"];
+        $field_type = $field_info["field_type"];
 
-		    if ($col_name == $form_field_name)
-		    {
-		      if ($field_type == "file")
-		      {
-						list($success2, $message2) = ft_upload_submission_file($form_id, $submission_id, $field_id, $fileinfo);
-						if (!$success2)
-							$problem_files[] = array($fileinfo['name'], $message2);
-		      }
-		      else if ($field_type == "image")
-		      {
-						list ($success2, $message2) = ft_upload_submission_image($form_id, $submission_id, $field_id, $fileinfo);
-						if (!$success2)
-							$problem_files[] = array($fileinfo['name'], $message2);
-		      }
-		    }
-		  }
-		}
+        if ($col_name == $form_field_name)
+        {
+          if ($field_type == "file")
+          {
+            list($success2, $message2) = ft_upload_submission_file($form_id, $submission_id, $field_id, $fileinfo);
+            if (!$success2)
+              $problem_files[] = array($fileinfo['name'], $message2);
+          }
+          else if ($field_type == "image")
+          {
+            list ($success2, $message2) = ft_upload_submission_image($form_id, $submission_id, $field_id, $fileinfo);
+            if (!$success2)
+              $problem_files[] = array($fileinfo['name'], $message2);
+          }
+        }
+      }
+    }
 
-		if (!empty($problem_files))
-		{
-			$message = $LANG["notify_submission_updated_file_problems"] . "<br /><br />";
-			foreach ($problem_files as $problem)
-				$message .= "&bull; <b>{$problem[0]}</b>: $problem[1]<br />\n";
+    if (!empty($problem_files))
+    {
+      $message = $LANG["notify_submission_updated_file_problems"] . "<br /><br />";
+      foreach ($problem_files as $problem)
+        $message .= "&bull; <b>{$problem[0]}</b>: $problem[1]<br />\n";
 
-			return array(false, $message);
-		}
-	}
+      return array(false, $message);
+    }
+  }
 
-	// if the submission date just changed, update sessions in case it was the FIRST submission (this updates the
-	// search date dropdown)
-	if ($submission_date_changed)
-		_ft_cache_form_stats($form_id);
+  // if the submission date just changed, update sessions in case it was the FIRST submission (this updates the
+  // search date dropdown)
+  if ($submission_date_changed)
+    _ft_cache_form_stats($form_id);
 
   // send any emails
   ft_send_emails("on_edit", $form_id, $submission_id);
 
   extract(ft_process_hooks("end", compact("form_id", "submission_id", "infohash"), array("success", "message")), EXTR_OVERWRITE);
 
-	return array($success, $message);
+  return array($success, $message);
 }
 
 
@@ -835,20 +840,20 @@ function ft_update_submission($form_id, $submission_id, $infohash)
  */
 function ft_finalize_submission($form_id, $submission_id)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	// check the form_id is valid
-	if (!ft_check_form_exists($form_id))
-	  return false;
+  // check the form_id is valid
+  if (!ft_check_form_exists($form_id))
+    return false;
 
-	$query = "
-		UPDATE {$g_table_prefix}form_$form_id
-		SET    is_finalized = 'yes'
-		WHERE  submission_id = $submission_id
-					 ";
-	$result = mysql_query($query);
+  $query = "
+    UPDATE {$g_table_prefix}form_$form_id
+    SET    is_finalized = 'yes'
+    WHERE  submission_id = $submission_id
+           ";
+  $result = mysql_query($query);
 
-	return true;
+  return true;
 }
 
 
@@ -882,200 +887,205 @@ function ft_finalize_submission($form_id, $submission_id)
  */
 function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num, $order, $columns, $search_fields = array(), $submission_ids = array())
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	// sorting by column, format: col_x-desc / col_y-asc
-	list($column, $direction) = split("-", $order);
-	$field_info = ft_get_form_field_by_colname($form_id, $column);
+  // sorting by column, format: col_x-desc / col_y-asc
+  list($column, $direction) = split("-", $order);
+  $field_info = ft_get_form_field_by_colname($form_id, $column);
 
-	if ($field_info["data_type"] == "number")
-		$order_by = "CAST($column as SIGNED) $direction";
-	else
-		$order_by = "$column $direction";
+  if ($field_info["data_type"] == "number")
+    $order_by = "CAST($column as SIGNED) $direction";
+  else
+    $order_by = "$column $direction";
 
-	// determine the LIMIT clause
-	$limit_clause = "";
-	if ($results_per_page != "all")
-	{
-		if (empty($page_num))
-			$page_num = 1;
-		$first_item = ($page_num - 1) * $results_per_page;
+  // important! If the ORDER BY column wasn't the submission_id, we need to add
+  // the submission ID as the secondary sorting column
+  if ($column != "submission_id")
+    $order_by .= ", submission_id";
 
-		$limit_clause = "LIMIT $first_item, $results_per_page";
-	}
+  // determine the LIMIT clause
+  $limit_clause = "";
+  if ($results_per_page != "all")
+  {
+    if (empty($page_num))
+      $page_num = 1;
+    $first_item = ($page_num - 1) * $results_per_page;
 
-	$select_clause = "";
-	if (!is_array($columns) && $columns == "all")
-	{
-		$select_clause = " * ";
-	}
-	else
-	{
-		// if submission_id isn't included, add it - it'll be needed at some point
-		if (!in_array("submission_id", $columns))
-			$columns[] = "submission_id";
+    $limit_clause = "LIMIT $first_item, $results_per_page";
+  }
 
-		$select_clause = join(", ", $columns);
-	}
+  $select_clause = "";
+  if (!is_array($columns) && $columns == "all")
+  {
+    $select_clause = " * ";
+  }
+  else
+  {
+    // if submission_id isn't included, add it - it'll be needed at some point
+    if (!in_array("submission_id", $columns))
+      $columns[] = "submission_id";
 
-	// any filters?
-	$view_filters = ft_get_view_filter_sql($view_id);
-	$filter_clause = "";
-	if (!empty($view_filters))
-	  $filter_clause = "AND " . join(" AND ", $view_filters);
+    $select_clause = join(", ", $columns);
+  }
 
-	// submission IDs?
-	$submission_id_clause = "";
-	if (!empty($submission_ids))
-	{
-	  $rows = array();
-	  foreach ($submission_ids as $submission_id)
-	    $rows[] = "submission_id = $submission_id";
+  // any filters?
+  $view_filters = ft_get_view_filter_sql($view_id);
+  $filter_clause = "";
+  if (!empty($view_filters))
+    $filter_clause = "AND " . join(" AND ", $view_filters);
 
-	  $submission_id_clause = "AND (" . join(" OR ", $rows) . ") ";
-	}
+  // submission IDs?
+  $submission_id_clause = "";
+  if (!empty($submission_ids))
+  {
+    $rows = array();
+    foreach ($submission_ids as $submission_id)
+      $rows[] = "submission_id = $submission_id";
 
-	// if search fields were included, build an addition to the WHERE clause
-	$search_where_clause = "";
-	if (!empty($search_fields))
-	{
-		$clean_search_fields = ft_sanitize($search_fields);
+    $submission_id_clause = "AND (" . join(" OR ", $rows) . ") ";
+  }
 
-		$search_field   = $clean_search_fields["search_field"];
-		$search_date    = $clean_search_fields["search_date"];
-		$search_keyword = $clean_search_fields["search_keyword"];
+  // if search fields were included, build an addition to the WHERE clause
+  $search_where_clause = "";
+  if (!empty($search_fields))
+  {
+    $clean_search_fields = ft_sanitize($search_fields);
 
-		// search field can either be "all" or a database column name. "submission_date" and "last_modified_date"
-		// have special meanings, since they allow for searching by specific date ranges
-		if ($search_field == "all")
-		{
-			if (!empty($search_keyword))
-			{
-				// if we're searching ALL columns, get all the name
-	      if (!is_array($columns) && $columns == "all")
-	      {
-					$col_info = ft_get_form_column_names($form_id);
-					$col_names = array_keys($col_info);
-					unset($col_names["is_finalized"]);
-					unset($col_names["submission_date"]);
-					unset($col_names["last_modified_date"]);
+    $search_field   = $clean_search_fields["search_field"];
+    $search_date    = $clean_search_fields["search_date"];
+    $search_keyword = $clean_search_fields["search_keyword"];
 
-					$clauses = array();
-					foreach ($col_names as $col_name)
-						$clauses[] = "$col_name LIKE '%$search_keyword%'";
-	      }
-	      else
-	      {
-	        $clauses = array();
-					foreach ($columns as $col_name)
-						$clauses[] = "$col_name LIKE '%$search_keyword%'";
-	      }
+    // search field can either be "all" or a database column name. "submission_date" and "last_modified_date"
+    // have special meanings, since they allow for searching by specific date ranges
+    if ($search_field == "all")
+    {
+      if (!empty($search_keyword))
+      {
+        // if we're searching ALL columns, get all the name
+        if (!is_array($columns) && $columns == "all")
+        {
+          $col_info = ft_get_form_column_names($form_id);
+          $col_names = array_keys($col_info);
+          unset($col_names["is_finalized"]);
+          unset($col_names["submission_date"]);
+          unset($col_names["last_modified_date"]);
 
-		  	$search_where_clause = "AND (" . join(" OR ", $clauses) . ") ";
-			}
-		}
-		else if ($search_field == "submission_date" || $search_field == "last_modified_date")
-		{
+          $clauses = array();
+          foreach ($col_names as $col_name)
+            $clauses[] = "$col_name LIKE '%$search_keyword%'";
+        }
+        else
+        {
+          $clauses = array();
+          foreach ($columns as $col_name)
+            $clauses[] = "$col_name LIKE '%$search_keyword%'";
+        }
 
-			if (!empty($search_date))
-			{
-				// search by number of days
-				if (is_numeric($search_date))
-				{
-					$days = $search_date;
-					$search_where_clause = "AND (DATE_SUB(curdate(), INTERVAL $days DAY) < $search_field) ";
-				}
+        $search_where_clause = "AND (" . join(" OR ", $clauses) . ") ";
+      }
+    }
+    else if ($search_field == "submission_date" || $search_field == "last_modified_date")
+    {
 
-				// otherwise, return a specific month
-				else
-				{
-					list($month, $year) = split("_", $search_date);
+      if (!empty($search_date))
+      {
+        // search by number of days
+        if (is_numeric($search_date))
+        {
+          $days = $search_date;
+          $search_where_clause = "AND (DATE_SUB(curdate(), INTERVAL $days DAY) < $search_field) ";
+        }
 
-					$month_start = mktime(0, 0, 0, $month, 1, $year);
-					$month_end   = mktime(0, 0, 0, $month+1, 1, $year);
+        // otherwise, return a specific month
+        else
+        {
+          list($month, $year) = split("_", $search_date);
 
-					$start = date("Y-m-d", $month_start);
-					$end   = date("Y-m-d", $month_end);
+          $month_start = mktime(0, 0, 0, $month, 1, $year);
+          $month_end   = mktime(0, 0, 0, $month+1, 1, $year);
 
-					$search_where_clause = "AND ($search_field > '$start' AND $search_field < '$end') ";
-				}
+          $start = date("Y-m-d", $month_start);
+          $end   = date("Y-m-d", $month_end);
 
-				if (!empty($search_keyword))
-				{
-					// get all columns
-					$col_info = ft_get_form_column_names($form_id);
-					$col_names = array_keys($col_info);
-					unset($col_names["is_finalized"]);
-					unset($col_names["submission_date"]);
+          $search_where_clause = "AND ($search_field > '$start' AND $search_field < '$end') ";
+        }
 
-					$clauses = array();
-					foreach ($col_names as $col_name)
-						$clauses[] = "$col_name LIKE '%$search_keyword%'";
+        if (!empty($search_keyword))
+        {
+          // get all columns
+          $col_info = ft_get_form_column_names($form_id);
+          $col_names = array_keys($col_info);
+          unset($col_names["is_finalized"]);
+          unset($col_names["submission_date"]);
 
-					$search_where_clause .= "AND (" . join(" OR ", $clauses) . ") ";
-				}
-			}
-		}
+          $clauses = array();
+          foreach ($col_names as $col_name)
+            $clauses[] = "$col_name LIKE '%$search_keyword%'";
 
-		else
-		{
-			if (!empty($search_keyword) && !empty($search_field))
-				$search_where_clause = "AND $search_field LIKE '%$search_keyword%'";
-		}
-	}
+          $search_where_clause .= "AND (" . join(" OR ", $clauses) . ") ";
+        }
+      }
+    }
 
-	// Queries: [1] the main search query that returns a page of submission info
-	$search_query = mysql_query("
-			SELECT $select_clause
-			FROM   {$g_table_prefix}form_{$form_id}
-			WHERE  is_finalized = 'yes'
-						 $search_where_clause
-						 $filter_clause
-						 $submission_id_clause
-			ORDER BY $order_by
-						 $limit_clause
-						    ")
-		or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: ", mysql_error());
+    else
+    {
+      if (!empty($search_keyword) && !empty($search_field))
+        $search_where_clause = "AND $search_field LIKE '%$search_keyword%'";
+    }
+  }
 
-	$search_result_rows = array();
-	while ($row = mysql_fetch_assoc($search_query))
-	  $search_result_rows[] = $row;
+  // Queries: [1] the main search query that returns a page of submission info
+  $search_query = mysql_query("
+      SELECT $select_clause
+      FROM   {$g_table_prefix}form_{$form_id}
+      WHERE  is_finalized = 'yes'
+             $search_where_clause
+             $filter_clause
+             $submission_id_clause
+      ORDER BY $order_by
+             $limit_clause
+                ")
+    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: ", mysql_error());
+
+  $search_result_rows = array();
+  while ($row = mysql_fetch_assoc($search_query))
+    $search_result_rows[] = $row;
 
 
   // [2] find out how many results there are in this current search
-	$search_results_count_query = mysql_query("
-			SELECT count(*) as c
-			FROM   {$g_table_prefix}form_{$form_id}
-			WHERE  is_finalized = 'yes'
-						 $search_where_clause
-						 $filter_clause
-						 $submission_id_clause
-								 ")
-		or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: ", mysql_error());
+  $search_results_count_query = mysql_query("
+      SELECT count(*) as c
+      FROM   {$g_table_prefix}form_{$form_id}
+      WHERE  is_finalized = 'yes'
+             $search_where_clause
+             $filter_clause
+             $submission_id_clause
+                 ")
+    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: ", mysql_error());
   $search_num_results_info = mysql_fetch_assoc($search_results_count_query);
   $search_num_results = $search_num_results_info["c"];
 
 
   // [3] find out how many results should appear in the View, regardless of the current search criteria
-	$view_results_count_query = mysql_query("
-			SELECT count(*) as c
-			FROM   {$g_table_prefix}form_{$form_id}
-			WHERE  is_finalized = 'yes'
-						 $filter_clause
-								 ")
+  $view_results_count_query = mysql_query("
+      SELECT count(*) as c
+      FROM   {$g_table_prefix}form_{$form_id}
+      WHERE  is_finalized = 'yes'
+             $filter_clause
+                 ")
     or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: ", mysql_error());
   $view_num_results_info = mysql_fetch_assoc($view_results_count_query);
   $view_num_results = $view_num_results_info["c"];
 
 
-	$return_hash["search_rows"]        = $search_result_rows;
-	$return_hash["search_num_results"] = $search_num_results;
-	$return_hash["view_num_results"]   = $view_num_results;
+  $return_hash["search_rows"]        = $search_result_rows;
+  $return_hash["search_num_results"] = $search_num_results;
+  $return_hash["view_num_results"]   = $view_num_results;
 
   extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "results_per_page", "page_num", "order",
     "columns", "search_fields", "submission_ids", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
-	return $return_hash;
+  return $return_hash;
 }
 
 
@@ -1093,27 +1103,27 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
  */
 function ft_get_submission_field_info($view_fields, $return_all_fields = false)
 {
-	$display_fields = array();
-	foreach ($view_fields as $field)
-	{
-		$field_id = $field["field_id"];
+  $display_fields = array();
+  foreach ($view_fields as $field)
+  {
+    $field_id = $field["field_id"];
 
-		if ($field['is_column'] == "yes" || $return_all_fields)
-	  {
-	    $curr_field_info = array('field_id'    => $field_id,
-	                             'is_sortable' => $field['is_sortable'],
-	                             'field_title' => $field['field_title'],
-	                             'col_name'    => $field['col_name'],
-	                             'list_order'  => $field['list_order']);
+    if ($field['is_column'] == "yes" || $return_all_fields)
+    {
+      $curr_field_info = array('field_id'    => $field_id,
+                               'is_sortable' => $field['is_sortable'],
+                               'field_title' => $field['field_title'],
+                               'col_name'    => $field['col_name'],
+                               'list_order'  => $field['list_order']);
 
-			$field_info = ft_get_form_field($field_id, true);
-		  $curr_field_info["field_info"] = $field_info;
+      $field_info = ft_get_form_field($field_id, true);
+      $curr_field_info["field_info"] = $field_info;
 
-		  $display_fields[] = $curr_field_info;
-	  }
-	}
+      $display_fields[] = $curr_field_info;
+    }
+  }
 
-	return $display_fields;
+  return $display_fields;
 }
 
 
@@ -1128,7 +1138,7 @@ function ft_get_submission_field_info($view_fields, $return_all_fields = false)
  */
 function ft_check_view_contains_submission($form_id, $view_id, $submission_id)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
   $filter_sql = ft_get_view_filter_sql($view_id);
 
@@ -1160,13 +1170,13 @@ function ft_check_view_contains_submission($form_id, $view_id, $submission_id)
  */
 function ft_check_submission_finalized($form_id, $submission_id)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
   $query = mysql_query("
-		SELECT is_finalized
-		FROM   {$g_table_prefix}form_$form_id
-		WHERE  submission_id = $submission_id
-					 ");
+    SELECT is_finalized
+    FROM   {$g_table_prefix}form_$form_id
+    WHERE  submission_id = $submission_id
+           ");
 
   $result = mysql_fetch_assoc($query);
 
@@ -1185,13 +1195,13 @@ function ft_check_submission_finalized($form_id, $submission_id)
  */
 function ft_check_submission_exists($form_id, $submission_id)
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
   $query = @mysql_query("
-		SELECT submission_id
-		FROM   {$g_table_prefix}form_$form_id
-		WHERE  submission_id = $submission_id
-					 ");
+    SELECT submission_id
+    FROM   {$g_table_prefix}form_$form_id
+    WHERE  submission_id = $submission_id
+           ");
 
   if ($query)
     return (mysql_num_rows($query) == 1);

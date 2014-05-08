@@ -105,7 +105,7 @@ $g_check_ft_sessions = (isset($g_check_ft_sessions)) ? $g_check_ft_sessions : tr
 
 /**
  * This is set to 1 by default (genuine errors only). Crank it up to 2047 to list every
- * last error/warning/notice that occurs.
+ * last error/warning/notice that occurs. For Beta versions, it's set to 2047.
  * @global string $g_default_error_reporting
  */
 $g_default_error_reporting = 2047;
@@ -147,15 +147,33 @@ $g_delete_module_folder_on_uninstallation = true;
  */
 $g_session_type = "php"; // "php" or "database"
 
+/**
+ * This enables debugging for the API functions. Generally this just causes the database errors and other
+ * messages to be outputted along with the problem error code. Enabled by default.
+ */
+$g_api_debug = true;
+
+/**
+ * These two settings are for the ft_api_display_captcha() function. See the API documentation for more
+ * information on how that works.
+ */
+$g_api_recaptcha_public_key  = "";
+$g_api_recaptcha_private_key = "";
+
+/**
+ * This is used by the ft_api_init_form_page() function when setting up the environment for the webpage;
+ * headers are sent with this charset.
+ */
+$g_api_header_charset = "utf-8";
 
 // -------------------------------------------------------------------------------------------------
 
-// SECTION 2: do NOT modify anything below!
+// SECTION 2: the settings below should NOT be overwritten
 
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.0-beta-20090223";
+$g_current_version = "2.0.0-beta-20090301";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.

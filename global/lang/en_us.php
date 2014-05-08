@@ -380,6 +380,7 @@ $LANG["notify_multi_field_selected"] = "The field has been selected. <a href=\"#
 $LANG["notify_multi_field_updated"] = "This field has been updated. You will be able to configure the field options after setting up the form.";
 $LANG["notify_multiple_fields_found"] = "Multiple elements were found with this field name (<b>{\$field_name}</b>). This can occur if your page contains more than one form or if you accidentally named one of your forms the same as another. Please choose the one you want from the list below.";
 $LANG["notify_no_account_id_in_sessions"] = "No user account ID was found in sessions. Please log in again below.";
+$LANG["notify_no_api_installed"] = "You don't have the API installed";
 $LANG["notify_no_client_permissions"] = "There are no settings available to edit.";
 $LANG["notify_no_email_template_selected"] = "Please select the email template.";
 $LANG["notify_no_emails_defined"] = "No emails have been defined for this form. To add a new one, click the button below.";
@@ -923,6 +924,7 @@ $LANG["text_create_admin_account"] = "Now we're going to create the administrato
 $LANG["text_create_new_client_account"] = "Use the form below to create a new client account. All fields are required.";
 $LANG["text_date_formatting_link"] = "see PHP {\$datefunctionlink} function for formatting options";
 $LANG["text_default_file_settings_page"] = "This page defines the file upload settings for your Form Tools installation. These rules apply to all files uploaded through Form Tools, unless explicitly overridden for an individual form field. Note: if you change the upload folder after files have been uploaded, they will be automatically moved to the new folder.";
+$LANG["text_default_theme_cache_folder_not_writable"] = "Before continuing, you will need to update your <b>/themes/default/cache</b> folder to allow full read and write permissions. Once this is done, this message will disappear and you can install the script.";
 $LANG["text_delete_all_forms"] = "I want to delete all files that were uploaded via this form";
 $LANG["text_delete_field_warning"] = "deleting a field on this page will delete it from all submissions, so please be careful.";
 $LANG["text_delete_form_warning"] = "Are you sure you want to delete this form? This action cannot be undone. All data will be permanently lost!";
