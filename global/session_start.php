@@ -5,7 +5,10 @@ $g_defer_init_page = true;
 require_once("$folder/library.php");
 
 if ($g_session_type == "database")
-  $sess = new SessionManager();
+{
+  $g_link = ft_db_connect(); // TODO confirm
+	$sess = new SessionManager();
+}
 
 if (!empty($g_session_save_path))
 	session_save_path($g_session_save_path);

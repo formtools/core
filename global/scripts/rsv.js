@@ -2,7 +2,7 @@
  * rsv.js - Really Simple Validation
  * ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  *
- * v2.5.1, Nov 14 2008
+ * v2.5.2, Jan 30 2010
  */
 
 if(typeof rsv=='undefined') rsv={};
@@ -118,11 +118,11 @@ rsv.validate = function(form, rules)
     {
       if (form[fieldName].type == undefined)
       {
-		    // style each field individually
-		    for (var j=0; j<form[fieldName].length; j++)
-		      rsv.removeClassName(form[fieldName][j], rsv.errorFieldClass, true);
-		  }
-		  else
+        // style each field individually
+        for (var j=0; j<form[fieldName].length; j++)
+          rsv.removeClassName(form[fieldName][j], rsv.errorFieldClass, true);
+      }
+      else
         rsv.removeClassName(form[fieldName], rsv.errorFieldClass);
     }
 
@@ -622,6 +622,9 @@ rsv.displayHTMLErrors = function(f, errorInfo)
  */
 rsv.styleField = function(field, focus)
 {
+  if (!rsv.errorFieldClass)
+    return;
+
   // if "field" is an array, it's a radio button. Focus on the first element
   if (field.type == undefined)
   {

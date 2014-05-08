@@ -26,6 +26,10 @@
     <p>
       {$LANG.text_no_submissions_found}
     </p>
+
+    {if $view_info.may_add_submissions == "yes"}
+      <input type="button" id="add_submission" value="{$LANG.word_add}" onclick="window.location='{$same_page}?add_submission'" />
+    {/if}
   {else}
 
   {ft_include file="messages.tpl"}
@@ -191,10 +195,10 @@
               {assign var=cell_value value=$submission_id}
             {elseif $col_name == "submission_date"}
               {assign var=td_class value="dates"}
-              {assign var=cell_value value=$search_row.submission_date|custom_format_date:$SESSION.settings.timezone_offset:$SESSION.account.date_format}
+              {assign var=cell_value value=$search_row.submission_date|custom_format_date:$SESSION.account.timezone_offset:$SESSION.account.date_format}
             {elseif $col_name == "last_modified_date"}
               {assign var=td_class value="dates"}
-              {assign var=cell_value value=$search_row.last_modified_date|custom_format_date:$SESSION.settings.timezone_offset:$SESSION.account.date_format}
+              {assign var=cell_value value=$search_row.last_modified_date|custom_format_date:$SESSION.account.timezone_offset:$SESSION.account.date_format}
             {elseif $col_name == "ip_address"}
               {assign var=td_class value="ip_address"}
               {assign var=cell_value value=$search_row.ip_address}

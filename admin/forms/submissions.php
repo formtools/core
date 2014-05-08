@@ -18,6 +18,13 @@ if (empty($form_id))
   exit;
 }
 
+// check this is a valid form
+if (!ft_check_form_exists($form_id))
+{
+  ft_handle_error($LANG["notify_form_does_not_exist"]);
+  exit;
+}
+
 // next, get the View. If it's not defined, the user has just arrives at the page. We grab the first View in
 // (ordered) list of Views for this form. If THAT doesn't exist, the user has deleted all Views (doh!), so
 // there's nothing to show. In that case, just redirect them to the Views tab, where an error / warning message

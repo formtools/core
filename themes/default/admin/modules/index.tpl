@@ -151,7 +151,7 @@
 						  {if $module.needs_upgrading}
                 <a href="{$same_page}?upgrade={$module_id}">{$LANG.word_upgrade|upper}</a>
 							{else}
-                <a href="{$g_root_url}/modules/{$module.module_folder}/">{$LANG.word_select|upper}</a>							
+                <a href="{$g_root_url}/modules/{$module.module_folder}/">{$LANG.word_select|upper}</a>
 							{/if}
             {/if}
           </td>
@@ -182,7 +182,5 @@
     </form>
 
   {/if}
-
-
 
 {include file='footer.tpl'}

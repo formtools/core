@@ -24,7 +24,13 @@
       {assign var='field_id' value=$field.field_id}
       {assign var='count' value=$smarty.foreach.row.iteration}
 
-      <tr {if $field.field_type == "system"}style = "background-color: #c6f1c9"{/if}>
+      {if $field.field_type == "system"}
+        {assign var="class_style" value="row_highlight"}
+      {else}
+        {assign var="class_style" value=""}
+      {/if}
+
+      <tr class="{$class_style}">
         <td class="pad_left_small">{$field.field_title}</td>
         <td>
 

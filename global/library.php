@@ -15,8 +15,8 @@
  * zipfile.
  *
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @version 2.0.0
- * @package 2-0-0
+ * @version 2.0.1
+ * @package 2-0-1
  */
 
 
@@ -182,6 +182,10 @@ $g_api_header_charset = "utf-8";
  */
 $g_api_sessions_timeout = 3600;
 
+/**
+ * Permissible characters in a filename. All other characters are stripped out.
+ */
+$g_filename_char_whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-";
 
 // -------------------------------------------------------------------------------------------------
 
@@ -190,7 +194,7 @@ $g_api_sessions_timeout = 3600;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.0";
+$g_current_version = "2.0.1";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.

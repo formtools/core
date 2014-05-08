@@ -5,7 +5,7 @@
  *
  * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-0
+ * @package 2-0-1
  * @subpackage Submissions
  */
 
@@ -36,9 +36,11 @@ function ft_create_blank_submission($form_id, $is_finalized = false)
     VALUES ('$now', '$now', '$ip')
       ");
 
-  extract(ft_process_hooks("end", compact("form_id"), array()), EXTR_OVERWRITE);
+  $new_submission_id = mysql_insert_id();
 
-  return mysql_insert_id();
+  extract(ft_process_hooks("end", compact("form_id", "now", "ip", "new_submission_id"), array()), EXTR_OVERWRITE);
+
+  return $new_submission_id;
 }
 
 
@@ -850,8 +852,11 @@ function ft_finalize_submission($form_id, $submission_id)
            ";
   $result = mysql_query($query);
 
+  ft_send_emails("on_submission", $form_id, $submission_id);
+
   return true;
 }
+
 
 /**
  * Creates and returns a search for any form View, and any subset of its columns, returning results in

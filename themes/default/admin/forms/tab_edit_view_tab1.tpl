@@ -39,7 +39,7 @@
                 <tr>
                   <td>
                     <input type="radio" name="access_type" id="at1" value="admin" {if $view_info.access_type == 'admin'}checked{/if}
-                      onfocus="page_ns.toggle_view_type(this.value)" />
+                      onclick="page_ns.toggle_view_type(this.value)" />
                       <label for="at1">{$LANG.phrase_admin_only}</label>
                   </td>
                 </tr>
@@ -53,14 +53,14 @@
                     </div>
 
                     <input type="radio" name="access_type" id="at2" value="public" {if $view_info.access_type == 'public'}checked{/if}
-                      onfocus="page_ns.toggle_view_type(this.value)" />
+                      onclick="page_ns.toggle_view_type(this.value)" />
                       <label for="at2">{$LANG.word_public} <span class="light_grey">{$LANG.phrase_all_clients_have_access}</span></label>
                   </td>
                 </tr>
                 <tr>
                   <td>
                     <input type="radio" name="access_type" id="at3" value="private" {if $view_info.access_type == 'private'}checked{/if}
-                      onfocus="page_ns.toggle_view_type(this.value)" />
+                      onclick="page_ns.toggle_view_type(this.value)" />
                       <label for="at3">{$LANG.word_private} <span class="light_grey">{$LANG.phrase_only_specific_clients_have_access}</span></label>
                   </td>
                 </tr>

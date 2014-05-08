@@ -27,12 +27,12 @@
       {assign var='field_ids' value="$field_ids,`$field.field_id`"}
 
       {if $field.field_type == "system"}
-        {assign var="style" value="background-color: #c6f1c9"}
+        {assign var="class_style" value="row_highlight"}
       {else}
-        {assign var="style" value=""}
+        {assign var="class_style" value=""}
       {/if}
 
-      <tr style="{$style}">
+      <tr class="{$class_style}">
         <td align="center">
           <input type="hidden" name="field_{$field_id}" value="1" />
           <input type="text" name="field_{$field_id}_order" style="width: 30px;" value="{$count}" tabindex="{$count}" />
