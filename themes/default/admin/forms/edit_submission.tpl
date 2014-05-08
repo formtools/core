@@ -4,7 +4,7 @@
 
     <table cellpadding="0" cellspacing="0" width="100%">
     <tr>
-      <td><span class="title">{$LANG.phrase_edit_submission_uc}</span></td>
+      <td><span class="title">{$edit_submission_page_label}</span></td>
       <td align="right">
         <div style="float:right; padding-left: 6px;">
           <a href="edit.php?form_id={$form_id}"><img src="{$images_url}/edit_small.gif" border="0" alt="{$LANG.phrase_edit_form}"
@@ -112,7 +112,7 @@
               {if $submission_field.is_editable == "yes"}
                 <table cellspacing="0" cellpadding="0">
                 <tr>
-                  <td><input type="text" style="width: 110px;" name="{$submission_field.col_name}" id="{$submission_field.col_name}" value="{$submission_field.content}" /></td>
+                  <td><input type="text" style="width: 125px;" name="{$submission_field.col_name}" id="{$submission_field.col_name}" value="{$submission_field.content}" /></td>
                   <td><img src="{$theme_url}/images/calendar_icon.gif" id="date_image_{$field_id}" style="cursor:pointer" /></td>
                 </tr>
                 </table>
@@ -136,7 +136,7 @@
               {if $submission_field.is_editable == "yes"}
                 <table cellspacing="0" cellpadding="0">
                 <tr>
-                  <td><input type="text" style="width: 110px;" name="{$submission_field.col_name}" id="{$submission_field.col_name}" value="{$submission_field.content}" /></td>
+                  <td><input type="text" style="width: 125px;" name="{$submission_field.col_name}" id="{$submission_field.col_name}" value="{$submission_field.content}" /></td>
                   <td><img src="{$theme_url}/images/calendar_icon.gif" id="date_image_{$field_id}" style="cursor:pointer" /></td>
                 </tr>
                 </table>

@@ -693,11 +693,14 @@ function ft_setup_form($info)
   $form_url     = trim($info["form_url"]);
   $redirect_url = trim($info["redirect_url"]);
   $access_type  = $info["access_type"];
+  $phrase_edit_submission = ft_sanitize($LANG["phrase_edit_submission"]);
 
   $now = ft_get_current_datetime();
   $query = "
-     INSERT INTO {$g_table_prefix}forms (access_type, date_created, is_active, is_complete, form_name, form_url, redirect_url)
-     VALUES ('$access_type', '$now', 'no', 'no', '$form_name', '$form_url', '$redirect_url')
+     INSERT INTO {$g_table_prefix}forms (access_type, date_created, is_active, is_complete,
+       form_name, form_url, redirect_url, edit_submission_page_label)
+     VALUES ('$access_type', '$now', 'no', 'no', '$form_name', '$form_url', '$redirect_url',
+       '$phrase_edit_submission')
            ";
 
   $result = mysql_query($query)
@@ -995,6 +998,7 @@ function ft_update_form_main_tab($infohash, $form_id)
   $rules = array();
   $rules[] = "required,form_name,{$LANG["validation_no_form_name"]}";
   $rules[] = "required,form_url,{$LANG["validation_no_form_url"]}";
+  $rules[] = "required,edit_submission_page_label,{$LANG["validation_no_edit_submission_page_label"]}";
   $errors = validate_fields($infohash, $rules);
 
   if (!empty($errors))
@@ -1011,6 +1015,7 @@ function ft_update_form_main_tab($infohash, $form_id)
   $form_name       = $infohash["form_name"];
   $form_url        = $infohash["form_url"];
   $redirect_url    = $infohash["redirect_url"];
+  $edit_submission_page_label = $infohash["edit_submission_page_label"];
   $auto_delete_submission_files = $infohash["auto_delete_submission_files"];
   $submission_strip_tags = $infohash["submission_strip_tags"];
 
@@ -1027,7 +1032,8 @@ function ft_update_form_main_tab($infohash, $form_id)
            form_name = '$form_name',
            redirect_url = '$redirect_url',
            auto_delete_submission_files ='$auto_delete_submission_files',
-           submission_strip_tags = '$submission_strip_tags'
+           submission_strip_tags = '$submission_strip_tags',
+           edit_submission_page_label = '$edit_submission_page_label'
     WHERE  form_id = $form_id
            ";
 
@@ -1694,7 +1700,7 @@ function ft_search_forms($account_id = "", $is_admin = false, $search_criteria =
   $keyword_clause = "";
   if (isset($search_criteria["keyword"]) && !empty($search_criteria["keyword"]))
   {
-  	$search_criteria["keyword"] = trim($search_criteria["keyword"]);
+    $search_criteria["keyword"] = trim($search_criteria["keyword"]);
     $string = ft_sanitize($search_criteria["keyword"]);
     $fields = array("form_name", "form_url", "redirect_url", "form_id");
 

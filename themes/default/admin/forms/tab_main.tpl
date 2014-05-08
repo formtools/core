@@ -120,7 +120,7 @@
         <tr>
           <td>
             <input type="radio" name="access_type" id="at1" value="admin" {if $form_info.access_type == 'admin'}checked{/if}
-              onfocus="mf_ns.toggle_form_type(this.value)" />
+              onfocus="mf_ns.toggle_access_type(this.value)" />
               <label for="at1">{$LANG.phrase_admin_only}</label>
           </td>
         </tr>
@@ -173,6 +173,11 @@
         </div>
 
       </td>
+    </tr>
+    <tr>
+      <td class="red" valign="top" align="center">*</td>
+      <td class="pad_left_small" valign="top" width="160">Edit Submission Page Label</td>
+      <td><input type="text" name="edit_submission_page_label" value="{$form_info.edit_submission_page_label}" style="width: 99%" /></td>
     </tr>
     <tr>
       <td class="red" align="center">*</td>

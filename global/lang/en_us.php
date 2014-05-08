@@ -1091,6 +1091,7 @@ $LANG["validation_no_default_client_theme"] = "Please select the default theme f
 $LANG["validation_no_default_language"] = "Please select the default language for your installation of Form Tools.";
 $LANG["validation_no_default_sessions_timeout"] = "Please enter the default session timeout for user accounts.";
 $LANG["validation_no_display_text"] = "Please enter the display text for the {\$fieldname} field.";
+$LANG["validation_no_edit_submission_page_label"] = "Please enter the Edit Submission page label.";
 $LANG["validation_no_email"] = "Please enter your email address.";
 $LANG["validation_no_email_content"] = "Please enter the email content for at least one of the formats (HTML or text).";
 $LANG["validation_no_email_from_field"] = "Please the email 'from' field.";

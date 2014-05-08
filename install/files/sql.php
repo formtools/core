@@ -149,6 +149,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%forms (
   auto_delete_submission_files enum('yes','no') NOT NULL default 'yes',
   submission_strip_tags enum('yes','no') NOT NULL default 'yes',
   default_view_id mediumint(8) unsigned default NULL,
+  edit_submission_page_label text,
   PRIMARY KEY  (form_id)
 ) TYPE=InnoDB DEFAULT CHARSET=utf8";
 

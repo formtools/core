@@ -58,7 +58,7 @@ if (isset($_POST) && !empty($_POST))
     list($g_success, $g_message) = img_delete_image_file_submission($form_id, $submission_id, $_POST['field_id']);
     $file_deleted = true;
   }
-  
+
   // TODO this deprecated??
   else if (isset($_POST['email_user']) && !empty($_POST['email_user']))
   {
@@ -170,6 +170,22 @@ while (list($key, $value) = each($view_tabs))
 
 $image_manager_enabled = ft_check_module_enabled("image_manager");
 
+// construct the page label
+$edit_submission_page_label = $form_info["edit_submission_page_label"];
+$common_placeholders = _ft_get_placeholder_hash($form_id, $submission_id);
+
+$theme = $_SESSION["ft"]["account"]["theme"];
+
+$smarty = new Smarty();
+$smarty->template_dir = "$g_root_dir/global/smarty/";
+$smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
+$smarty->assign("LANG", $LANG);
+$smarty->assign("eval_str", $edit_submission_page_label);
+while (list($key, $value) = each($common_placeholders))
+  $smarty->assign($key, $value);
+reset($common_placeholders);
+$edit_submission_page_label = $smarty->fetch("eval.tpl");
+
 // ------------------------------------------------------------------------------------------------
 
 // compile the header information
@@ -187,11 +203,12 @@ $page_vars["view_info"] = $view_info;
 $page_vars["image_field_info"] = $image_field_info;
 $page_vars["form_id"] = $form_id;
 $page_vars["view_id"] = $view_id;
+$page_vars["edit_submission_page_label"] = $edit_submission_page_label;
 $page_vars["submission_tab_fields"] = $submission_tab_fields;
 $page_vars["submission_tab_field_id_str"] = join(",", $submission_tab_field_ids);
 $page_vars["tab_number"] = $tab_number;
 $page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected");
-$page_vars["head_title"] = "{$LANG['phrase_edit_submission']} - $submission_id";
+$page_vars["head_title"] = $edit_submission_page_label;
 $page_vars["head_string"] = "<script type=\"text/javascript\" src=\"$g_root_url/global/tiny_mce/tiny_mce.js\"></script>
   <script type=\"text/javascript\" src=\"$g_root_url/global/scripts/wysiwyg_settings.js\"></script>
   <script type=\"text/javascript\" src=\"$g_root_url/global/scripts/manage_submissions.js\"></script>

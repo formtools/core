@@ -527,7 +527,7 @@ view_ns.add_filters = function(num_rows)
     img.setAttribute("src", g.root_url + "/themes/" + g.theme_folder + "/images/calendar_icon.gif");
     img.setAttribute("id", "date_image_" + currRow);
     img.setAttribute("border", "0");
-    tr_td1.appendChild(img);
+    tr_td2.appendChild(img);
 
     tr.appendChild(tr_td1);
     tr.appendChild(tr_td2);
@@ -594,7 +594,7 @@ view_ns.change_filter_field = function(row, field_id)
 {
   // find out if this field is the submission date or not
   var is_date_field = false;
-  for (i=0; i<view_ns.all_form_fields.length; i++)
+  for (var i=0; i<view_ns.all_form_fields.length; i++)
   {
     curr_field_id = view_ns.all_form_fields[i][0];
     curr_col_name = view_ns.all_form_fields[i][2];

@@ -55,7 +55,7 @@ function ft_upgrade_form_tools()
 
       if ($existing_version_info["release_date"] < 20090301)
       {
-      	mysql_query("
+        mysql_query("
           ALTER TABLE {$g_table_prefix}email_templates
           CHANGE email_reply_to email_reply_to
           ENUM('none', 'admin', 'client', 'user', 'custom')
@@ -65,33 +65,33 @@ function ft_upgrade_form_tools()
 
       if ($existing_version_info["release_date"] < 20090317)
       {
-      	mysql_query("
-      	  ALTER TABLE {$g_table_prefix}views
-      	  ADD may_add_submissions ENUM('yes', 'no') NOT NULL DEFAULT 'no'
-      	    ");
+        mysql_query("
+          ALTER TABLE {$g_table_prefix}views
+          ADD may_add_submissions ENUM('yes', 'no') NOT NULL DEFAULT 'no'
+            ");
       }
 
       if ($existing_version_info["release_date"] < 20090402)
       {
-      	mysql_query("
-      	  ALTER TABLE {$g_table_prefix}hooks
-      	  ADD hook_type ENUM('code', 'template') NOT NULL DEFAULT 'code' AFTER hook_id
-      	    ");
+        mysql_query("
+          ALTER TABLE {$g_table_prefix}hooks
+          ADD hook_type ENUM('code', 'template') NOT NULL DEFAULT 'code' AFTER hook_id
+            ");
 
-      	mysql_query("
-      	  ALTER TABLE {$g_table_prefix}hooks
-      	  CHANGE action_location action_location VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
-      	    ");
+        mysql_query("
+          ALTER TABLE {$g_table_prefix}hooks
+          CHANGE action_location action_location VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+            ");
 
-      	mysql_query("
-      	  ALTER TABLE {$g_table_prefix}account_settings
-      	  CHANGE setting_value setting_value MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
-      	    ");
+        mysql_query("
+          ALTER TABLE {$g_table_prefix}account_settings
+          CHANGE setting_value setting_value MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+            ");
       }
 
       if ($existing_version_info["release_date"] < 20090510)
       {
-      	mysql_query("
+        mysql_query("
           ALTER TABLE {$g_table_prefix}view_fields
           ADD is_searchable ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER is_editable
             ");
@@ -100,11 +100,33 @@ function ft_upgrade_form_tools()
       // bug #117
       if ($existing_version_info["release_date"] < 20090627)
       {
-      	mysql_query("
-          ALTER TABLE {$g_table_prefix}view_filters`
+        mysql_query("
+          ALTER TABLE {$g_table_prefix}view_filters
           CHANGE operator operator ENUM('equals', 'not_equals', 'like', 'not_like', 'before', 'after' )
           CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'equals'
             ");
+      }
+
+      if ($existing_version_info["release_date"] < 20090815)
+      {
+        mysql_query("
+          ALTER TABLE {$g_table_prefix}forms
+          ADD edit_submission_page_label TEXT NULL
+            ");
+
+        // for upgrades, for maximum language compatibility set all the form Edit Submission Labels to
+        // $LANG.phrase_edit_submission. They can always change it to English or whatever language they
+        // want. New installations will have that value set to the administrator's language
+        $forms = ft_get_forms();
+        foreach ($forms as $form_info)
+        {
+          $form_id = $form_info["form_id"];
+          mysql_query("
+            UPDATE {$g_table_prefix}forms
+            SET    edit_submission_page_label = '{\$LANG.phrase_edit_submission|upper}'
+            WHERE  form_id = $form_id
+              ");
+        }
       }
 
       if ($existing_version_info["full"] != $g_current_version)

@@ -77,6 +77,12 @@ function ft_process_form($form_data)
   // check to see if this form has been disabled
   if ($form_info["is_active"] == "no")
   {
+    if (isset($form_data["form_tools_inactive_form_redirect_url"]))
+    {
+      header("location: {$form_data["form_tools_inactive_form_redirect_url"]}");
+      exit;
+    }
+
     $page_vars = array("message_type" => "error", "message" => $LANG["processing_form_disabled"]);
     ft_display_page("../../global/smarty/messages.tpl", $page_vars);
     exit;

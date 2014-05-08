@@ -13,8 +13,8 @@ $form_id = ft_load_field("form_id", "curr_form_id");
 
 if (isset($request["view_id"]))
 {
-	$view_id = $request["view_id"];
-	$_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
+  $view_id = $request["view_id"];
+  $_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
 }
 else
 {
@@ -25,7 +25,7 @@ else
 // or elsewhere in the script. For this case, use the default View
 if (empty($view_id))
 {
-	$view_id = ft_get_default_view($form_id);
+  $view_id = ft_get_default_view($form_id);
 }
 
 $submission_id = $request["submission_id"];
@@ -45,14 +45,14 @@ $view_tabs = ft_get_view_tabs($view_id, true);
 // handle POST requests
 if (isset($_POST) && !empty($_POST))
 {
-	// add the view ID to the request hash, for use by the ft_update_submission function
-	$request["view_id"] = $view_id;
-	$request["editable_field_ids"] = $editable_field_ids;
+  // add the view ID to the request hash, for use by the ft_update_submission function
+  $request["view_id"] = $view_id;
+  $request["editable_field_ids"] = $editable_field_ids;
   list($g_success, $g_message) = ft_update_submission($form_id, $submission_id, $request);
 
-	// required. The reason being, this setting determines whether the submission IDs in the current form-view-search
-	// are cached. Any time the data changes, the submission may then belong to different Views, so we need to re-cache it
-	$_SESSION["ft"]["new_search"] = "yes";
+  // required. The reason being, this setting determines whether the submission IDs in the current form-view-search
+  // are cached. Any time the data changes, the submission may then belong to different Views, so we need to re-cache it
+  $_SESSION["ft"]["new_search"] = "yes";
 
   // if required, remove a file or image
   $file_deleted = false;
@@ -88,21 +88,21 @@ $image_field_info         = array();
 
 for ($i=0; $i<count($submission_info); $i++)
 {
-	// if this view has tabs, ignore those fields that aren't on the current tab.
-	if (count($view_tabs) > 0 && (!isset($submission_info[$i]["tab_number"]) || $submission_info[$i]["tab_number"] != $tab_number))
-	  continue;
+  // if this view has tabs, ignore those fields that aren't on the current tab.
+  if (count($view_tabs) > 0 && (!isset($submission_info[$i]["tab_number"]) || $submission_info[$i]["tab_number"] != $tab_number))
+    continue;
 
-	$curr_field_id = $submission_info[$i]["field_id"];
+  $curr_field_id = $submission_info[$i]["field_id"];
 
-	if ($submission_info[$i]["field_type"] == "wysiwyg")
-	  $wysiwyg_field_ids[] = "field_{$curr_field_id}_wysiwyg";
+  if ($submission_info[$i]["field_type"] == "wysiwyg")
+    $wysiwyg_field_ids[] = "field_{$curr_field_id}_wysiwyg";
 
-	// if this is an image field, keep track of its extended image settings. These are passed to the image rendering Smarty
-	// plugin function to let it know how to display it
-	if ($submission_info[$i]["field_type"] == "image")
-	  $image_field_info[$curr_field_id] = ft_get_extended_field_settings($curr_field_id, "image_manager");
+  // if this is an image field, keep track of its extended image settings. These are passed to the image rendering Smarty
+  // plugin function to let it know how to display it
+  if ($submission_info[$i]["field_type"] == "image")
+    $image_field_info[$curr_field_id] = ft_get_extended_field_settings($curr_field_id, "image_manager");
 
-	$submission_tab_field_ids[] = $curr_field_id;
+  $submission_tab_field_ids[] = $curr_field_id;
   $submission_tab_fields[]    = $submission_info[$i];
 }
 
@@ -179,6 +179,22 @@ while (list($key, $value) = each($view_tabs))
 
 $image_manager_enabled = ft_check_module_enabled("image_manager");
 
+// construct the page label
+$edit_submission_page_label = $form_info["edit_submission_page_label"];
+$common_placeholders = _ft_get_placeholder_hash($form_id, $submission_id);
+
+$theme = $_SESSION["ft"]["account"]["theme"];
+
+$smarty = new Smarty();
+$smarty->template_dir = "$g_root_dir/global/smarty/";
+$smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
+$smarty->assign("LANG", $LANG);
+$smarty->assign("eval_str", $edit_submission_page_label);
+while (list($key, $value) = each($common_placeholders))
+  $smarty->assign($key, $value);
+reset($common_placeholders);
+$edit_submission_page_label = $smarty->fetch("eval.tpl");
+
 // ------------------------------------------------------------------------------------------------
 
 // compile the header information
@@ -196,11 +212,12 @@ $page_vars["view_info"] = $view_info;
 $page_vars["image_field_info"] = $image_field_info;
 $page_vars["form_id"] = $form_id;
 $page_vars["view_id"] = $view_id;
+$page_vars["edit_submission_page_label"] = $edit_submission_page_label;
 $page_vars["submission_tab_fields"] = $submission_tab_fields;
 $page_vars["submission_tab_field_id_str"] = join(",", $submission_tab_field_ids);
 $page_vars["tab_number"] = $tab_number;
 $page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected");
-$page_vars["head_title"] = "{$LANG['phrase_edit_submission']} - $submission_id";
+$page_vars["head_title"] = $edit_submission_page_label;
 $page_vars["head_string"] = "<script type=\"text/javascript\" src=\"$g_root_url/global/tiny_mce/tiny_mce.js\"></script>
   <script type=\"text/javascript\" src=\"$g_root_url/global/scripts/wysiwyg_settings.js\"></script>
   <script type=\"text/javascript\" src=\"$g_root_url/global/scripts/manage_submissions.js\"></script>
@@ -208,13 +225,13 @@ $page_vars["head_string"] = "<script type=\"text/javascript\" src=\"$g_root_url/
   <script type=\"text/javascript\" src=\"$g_root_url/global/jscalendar/calendar.js\"></script>
   <script type=\"text/javascript\" src=\"$g_root_url/global/jscalendar/calendar-setup.js\"></script>
   <script type=\"text/javascript\" src=\"$g_root_url/global/jscalendar/lang/calendar-en.js\"></script>
-	<script type=\"text/javascript\" src=\"$g_root_url/global/scripts/lightbox.js\"></script>
+  <script type=\"text/javascript\" src=\"$g_root_url/global/scripts/lightbox.js\"></script>
   <link rel=\"stylesheet\" href=\"$g_root_url/global/css/lightbox.css\" type=\"text/css\" media=\"screen\" />";
 
 $tiny_resize = ($_SESSION["ft"]["settings"]["tinymce_resize"] == "yes") ? "true" : "false";
 $content_css = "$g_root_url/global/css/tinymce.css";
 
-	$page_vars["head_js"] = "
+  $page_vars["head_js"] = "
 
 // load up any WYWISYG editors in the page
 g_content_css = \"$content_css\";
