@@ -8,7 +8,7 @@
       {$LANG.text_install_create_config_file}
     </p>
 
-    <textarea name="content" style="width:100%; height:240px;" readonly>{$config_file}</textarea>
+    <textarea name="content" style="width:100%; height:290px;" readonly>{$config_file}</textarea>
 
 	  <form name="display_config_content_form" action="{$same_page}" method="post">
 	    <p>
@@ -38,7 +38,7 @@
     </p>
 
 	  <form name="display_config_content_form" action="{$same_page}" method="post">
-	    <textarea name="content" style="width:100%; height:240px;">{$config_file}</textarea>
+	    <textarea name="content" style="width:100%; height:290px;">{$config_file}</textarea>
 
 	    <p>
 	    	<input type="submit" name="check_config_contents" value="{$LANG.word_continue_rightarrow}" />

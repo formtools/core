@@ -115,7 +115,7 @@ function ft_process_form($form_data)
     else
     {
       // since we need to pass all the info back to the form page we do it by storing the data in sessions. Enable 'em.
-      @ft_api_start_sessions();
+      ft_api_start_sessions();
       $_SESSION["form_tools_form_data"] = $form_data;
       $_SESSION["form_tools_form_data"]["api_recaptcha_error"] = $resp->error;
 

@@ -1053,7 +1053,6 @@ $LANG["notify_folder_url_match"] = "The folder and URL appear to correctly match
 $LANG["notify_folder_url_no_access"] = "This test could not be performed since PHP was unable to access that URL. This is usually caused by the URL being password protected with a .htaccess file.";
 $LANG["notify_folder_url_no_match"] = "This folder-URL combination does not appear to be a match.";
 $LANG["notify_folder_url_unknown_error"] = "An unknown error occurred. You can test it manually by uploading a file to that folder via FTP, then trying to access it at the URL you have supplied.";
-$LANG["notify_form_does_not_exist"] = "Sorry, a form with that ID does not exist.";
 $LANG["notify_form_field_not_added"] = "The form field '{\$fieldname}' could not be added.";
 $LANG["notify_form_field_options_updated"] = "The form field options have been updated.";
 $LANG["notify_form_field_removed"] = "The form field was successfully removed.";

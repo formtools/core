@@ -13,10 +13,8 @@ body {
 }
 body, table, td, div, span, div, p, input, select, textarea, option {
   font: 11px Verdana, sans-serif;
-  color: #333333;
-}
-body, table, td, div, span, div, p {
   line-height: 20px;
+  color: #333333;
 }
 #container {
 	width: 950px;

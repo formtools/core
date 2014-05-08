@@ -182,10 +182,6 @@ $g_api_header_charset = "utf-8";
  */
 $g_api_sessions_timeout = 3600;
 
-/**
- * Permissible characters in a filename. All other characters are stripped out.
- */
-$g_filename_char_whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-";
 
 // -------------------------------------------------------------------------------------------------
 
@@ -194,7 +190,7 @@ $g_filename_char_whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.1";
+$g_current_version = "2.0.1-beta-20100410";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.

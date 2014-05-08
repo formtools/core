@@ -6,8 +6,9 @@
 
 $g_ft_installation_folder = dirname(__FILE__);
 $g_default_language       = "en_us.php";
-$g_form_tools_version     = "2.0.1";
-$g_is_beta                = "no";
+$g_default_theme          = "default";
+$g_form_tools_version     = "2.0.1-beta-20100410";
+$g_is_beta                = "yes";
 $g_beta_version           = "";
 $g_smarty_use_sub_dirs    = false;
 
@@ -53,13 +54,13 @@ require_once("$g_ft_installation_folder/../global/smarty/Smarty.class.php");
  */
 function ft_install_display_page($template, $page_vars)
 {
-  global $LANG, $g_smarty, $g_success, $g_message, $g_ft_installation_folder,
+  global $LANG, $g_smarty, $g_success, $g_message, $g_ft_installation_folder, $g_default_theme,
     $g_smarty_use_sub_dirs, $g_form_tools_version, $g_is_beta, $g_beta_version;
 
   require_once("$g_ft_installation_folder/../global/smarty/Smarty.class.php");
 
   clearstatcache();
-  $cache_folder = realpath("$g_ft_installation_folder/../themes/default/cache/");
+  $cache_folder = realpath("$g_ft_installation_folder/../themes/$g_default_theme/cache/");
 
   // always try to set the cache folder to 777 during the installation phase
   @chmod($cache_folder, 0777);
@@ -108,7 +109,7 @@ EOF;
   }
 
   $g_smarty = new Smarty();
-  $g_smarty->template_dir = realpath("$g_ft_installation_folder/../themes/default");
+  $g_smarty->template_dir = realpath("$g_ft_installation_folder/../themes/$g_default_theme");
   $g_smarty->compile_dir  = $cache_folder;
 
   $g_smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
@@ -118,7 +119,7 @@ EOF;
   $g_smarty->assign("dir", $LANG["special_text_direction"]);
   $g_smarty->assign("g_success", $g_success);
   $g_smarty->assign("g_message", $g_message);
-  $g_smarty->assign("g_default_theme", "default");
+  $g_smarty->assign("g_default_theme", $g_default_theme);
   $g_smarty->assign("g_form_tools_version", $g_form_tools_version);
   $g_smarty->assign("g_is_beta", $g_is_beta);
   $g_smarty->assign("g_beta_version", $g_beta_version);
@@ -386,7 +387,7 @@ function ft_install_check_config_file_exists()
  */
 function ft_install_check_db_settings($hostname, $db_name, $username, $password)
 {
-  global $LANG, $g_ft_installation_folder;
+  global $LANG, $g_default_theme, $g_ft_installation_folder;
 
   $db_connection_error = "";
   $db_select_error     = "";
@@ -396,7 +397,7 @@ function ft_install_check_db_settings($hostname, $db_name, $username, $password)
   if ($db_connection_error)
   {
     $placeholders = array("db_connection_error" => $db_connection_error);
-    $error = ft_install_eval_smarty_string($LANG["notify_install_invalid_db_info"], $placeholders, "default");
+    $error = ft_install_eval_smarty_string($LANG["notify_install_invalid_db_info"], $placeholders, $g_default_theme);
     return array(false, $error);
   }
   else
@@ -407,7 +408,7 @@ function ft_install_check_db_settings($hostname, $db_name, $username, $password)
     if ($db_select_error)
     {
       $placeholders = array("db_select_error" => $db_select_error);
-      $error = ft_install_eval_smarty_string($LANG["notify_install_no_db_connection"], $placeholders, "default");
+      $error = ft_install_eval_smarty_string($LANG["notify_install_no_db_connection"], $placeholders, $g_default_theme);
       return array(false, $error);
     }
     else
@@ -518,10 +519,10 @@ function ft_install_update_db_settings()
   // we add slashes since in PC paths like c:\www\whatever the \'s get lost en route
   $core_settings = array(
     "default_logout_url" => $g_root_url,
-    "file_upload_dir"    => addslashes($g_root_dir) . "/upload",
-    "file_upload_url"    => "$g_root_url/upload",
-    "is_beta"            => $g_is_beta,
-    "beta_version"       => $g_beta_version
+    "file_upload_dir" => addslashes($g_root_dir) . "/upload",
+    "file_upload_url" => "$g_root_url/upload",
+    "is_beta" => $g_is_beta,
+    "beta_version" => $g_beta_version
   );
   ft_set_settings($core_settings, "core");
 
