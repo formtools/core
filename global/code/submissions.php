@@ -36,6 +36,8 @@ function ft_create_blank_submission($form_id, $is_finalized = false)
     VALUES ('$now', '$now', '$ip')
       ");
 
+	extract(ft_process_hooks("end", compact("form_id"), array()), EXTR_OVERWRITE);
+
   return mysql_insert_id();
 }
 
@@ -135,6 +137,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 	_ft_cache_form_stats($form_id);
 	_ft_cache_view_stats($view_id);
 
+	extract(ft_process_hooks("end", compact("form_id", "view_id", "submission_id", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
 }
@@ -286,6 +289,8 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 	foreach ($submission_ids as $submission_id)
 	  ft_send_emails("on_delete", $form_id, $submission_id);
 
+	extract(ft_process_hooks("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"),
+	  array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
 }
@@ -390,6 +395,9 @@ function ft_delete_file_submission($form_id, $submission_id, $field_id, $force_d
 						 ");
 	}
 
+	extract(ft_process_hooks("end", compact("form_id", "submission_id", "field_id", "force_delete"),
+	  array("success", "message")), EXTR_OVERWRITE);
+
 	return array($success, $message);
 }
 
@@ -453,6 +461,8 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
 		$return_arr[] = $field_info;
 	}
 
+	extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "return_arr"), array("return_arr")), EXTR_OVERWRITE);
+
 	return $return_arr;
 }
 
@@ -479,6 +489,8 @@ function ft_get_submission_info($form_id, $submission_id)
 							");
 
 	$submission = mysql_fetch_assoc($submission_info);
+
+  extract(ft_process_hooks("end", compact("form_id", "submission_id", "submission"), array("submission")), EXTR_OVERWRITE);
 
 	return $submission;
 }
@@ -1059,6 +1071,9 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
 	$return_hash["search_rows"]        = $search_result_rows;
 	$return_hash["search_num_results"] = $search_num_results;
 	$return_hash["view_num_results"]   = $view_num_results;
+
+  extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "results_per_page", "page_num", "order",
+    "columns", "search_fields", "submission_ids", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
 	return $return_hash;
 }

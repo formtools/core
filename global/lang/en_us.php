@@ -421,6 +421,8 @@ $LANG["notify_view_updated"] = "The View has been updated.";
 $LANG["notify_wysiwyg_settings_updated"] = "The WYSIWYG settings have been updated.";
 $LANG["notify_your_email_sent"] = "Your email has been successfully sent.";
 $LANG["notify_module_updated"] = "The <b>{\$module}</b> module has been updated to <b>{\$version}</b>.";
+$LANG["notify_email_template_updated"] = "The email template has been updated.";
+
 
 // Phrases
 $LANG["phrase_1_direct"] = "1. Direct";

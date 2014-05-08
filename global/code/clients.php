@@ -31,6 +31,8 @@ function ft_update_client($account_id, $info)
   $message = $LANG["notify_account_updated"];
   $info = ft_sanitize($info);
 
+  extract(ft_process_hooks("start", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
+
   $client_info = ft_get_account_info($account_id);
 
   $page = $info["page"];
@@ -155,6 +157,8 @@ function ft_update_client($account_id, $info)
   // TODO
   //$_SESSION["ft"]["account"]["password"] = md5($password);
 
+  extract(ft_process_hooks("end", compact("account_id", "info"), array("success", "message")), EXTR_OVERWRITE);
+
   return array($success, $message);
 }
 
@@ -179,7 +183,11 @@ function ft_delete_client($account_id)
   mysql_query("DELETE FROM {$g_table_prefix}public_form_omit_list WHERE account_id = $account_id");
   mysql_query("DELETE FROM {$g_table_prefix}public_view_omit_list WHERE account_id = $account_id");
 
-  return array(true, $LANG["notify_account_deleted"]);
+  $success = true;
+  $message = $LANG["notify_account_deleted"];
+  extract(ft_process_hooks("end", compact("account_id"), array("success", "message")), EXTR_OVERWRITE);
+
+  return array($usccess, $message);
 }
 
 
@@ -234,6 +242,8 @@ function ft_get_client_count()
 function ft_search_clients($search_criteria = array())
 {
   global $g_table_prefix;
+
+  extract(ft_process_hooks("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
 
   if (!isset($search_criteria["order"]))
     $search_criteria["order"] = "client_id-DESC";
@@ -325,6 +335,8 @@ function ft_search_clients($search_criteria = array())
   while ($client = mysql_fetch_assoc($client_query_result))
     $clients[] = $client;
 
+  extract(ft_process_hooks("end", compact("search_criteria", "clients"), array("clients")), EXTR_OVERWRITE);
+
   return $clients;
 }
 
@@ -362,6 +374,8 @@ function ft_get_client_form_views($account_id)
     $info[$form_id] = $view_ids;
   }
 
+  extract(ft_process_hooks("end", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
+
   return $info;
 }
 
@@ -394,5 +408,7 @@ function ft_update_client_themes($account_ids, $theme_id)
 
   $placeholders = array("theme" => $theme_name);
   $message = ft_eval_smarty_string($LANG["notify_client_account_themes_updated"], $placeholders);
-  return array(true, $message);
+  $success = true;
+
+  return array($success, $message);
 }

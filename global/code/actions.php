@@ -37,13 +37,13 @@ if (isset($request["return_vals"]))
 switch ($action)
 {
   case "test_folder_permissions":
-    list($success, $message) = ft_check_upload_folder($request['file_upload_dir']);
+    list($success, $message) = ft_check_upload_folder($request["file_upload_dir"]);
     $success = ($success) ? 1 : 0;
     echo "{ success: $success, message: \"$message\"{$return_val_str} }";
     break;
 
   case "test_folder_url_match":
-    list($success, $message) = ft_check_folder_url_match($request['file_upload_dir'], $request['file_upload_url']);
+    list($success, $message) = ft_check_folder_url_match($request["file_upload_dir"], $request["file_upload_url"]);
     $success = ($success) ? 1 : 0;
     echo "{ success: $success, message: \"$message\"{$return_val_str} }";
     break;

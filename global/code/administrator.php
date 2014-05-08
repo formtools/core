@@ -29,6 +29,8 @@ function ft_add_client($infohash)
 
   $form_vals = ft_sanitize($infohash);
 
+  extract(ft_process_hooks("start", compact("form_vals"), array("form_vals")), EXTR_OVERWRITE);
+
   $success = true;
   $message = "";
 
@@ -101,6 +103,8 @@ function ft_add_client($infohash)
   );
   ft_set_account_settings($new_user_id, $account_settings);
 
+  extract(ft_process_hooks("end", compact("new_user_id", "account_settings"), array("success", "message")), EXTR_OVERWRITE);
+
   return array($success, $message, $new_user_id);
 }
 
@@ -119,11 +123,13 @@ function ft_admin_update_client($infohash, $tab_num)
 {
   global $g_table_prefix, $g_debug, $LANG;
 
+  extract(ft_process_hooks("start", compact("infohash", "tab_num"), array("infohash", "tab_num")), EXTR_OVERWRITE);
+
   $success = true;
   $message = $LANG["notify_client_account_updated"];
 
   $form_vals = ft_sanitize($infohash);
-  $account_id = $form_vals['client_id'];
+  $account_id = $form_vals["client_id"];
 
   switch ($tab_num)
   {
@@ -345,6 +351,8 @@ function ft_admin_update_client($infohash, $tab_num)
       break;
   }
 
+  extract(ft_process_hooks("end", compact("infohash", "tab_num"), array("success", "message")), EXTR_OVERWRITE);
+
   return array($success, $message);
 }
 
@@ -365,9 +373,11 @@ function ft_get_admin_info()
     LIMIT  1
       ");
 
-  $result = mysql_fetch_assoc($query);
+  $admin_info = mysql_fetch_assoc($query);
 
-  return $result;
+  extract(ft_process_hooks("main", compact("admin_info"), array("admin_info")), EXTR_OVERWRITE);
+
+  return $admin_info;
 }
 
 
@@ -446,6 +456,8 @@ function ft_update_admin_account($infohash, $account_id)
   $success = true;
   $message = $LANG["notify_account_updated"];
   $infohash = ft_sanitize($infohash);
+
+  extract(ft_process_hooks("start", compact("infohash", "account_id"), array("infohash")), EXTR_OVERWRITE);
 
   $rules = array();
   $rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
@@ -526,6 +538,8 @@ function ft_update_admin_account($infohash, $account_id)
     $_SESSION["ft"]["account"]["is_logged_in"] = true;
     $_SESSION["ft"]["account"]["password"] = md5(md5($password));
   }
+
+  extract(ft_process_hooks("end", compact("infohash", "account_id"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }

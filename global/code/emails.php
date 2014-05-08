@@ -127,6 +127,8 @@ function ft_get_email_templates($form_id, $page_num = 1)
   $return_hash["results"] = $email_info;
   $return_hash["num_results"]  = $count_hash["c"];
 
+  extract(ft_process_hooks("end", compact("form_id", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
+
   return $return_hash;
 }
 
@@ -151,6 +153,8 @@ function ft_get_email_template_list($form_id)
   $info = array();
   while ($row = mysql_fetch_assoc($result))
     $info[] = $row;
+
+  extract(ft_process_hooks("end", compact("form_id", "info"), array("info")), EXTR_OVERWRITE);
 
   return $info;
 }
@@ -183,6 +187,8 @@ function ft_get_email_template($email_id)
 
   $email_template["edit_submission_page_view_ids"] = $view_ids;
 
+  extract(ft_process_hooks("end", compact("email_template"), array("email_template")), EXTR_OVERWRITE);
+
   return $email_template;
 }
 
@@ -197,6 +203,8 @@ function ft_get_email_template($email_id)
 function ft_send_test_email($info)
 {
   global $g_table_prefix, $LANG;
+
+  extract(ft_process_hooks("start", compact("info"), array("info")), EXTR_OVERWRITE);
 
   $form_id        = $_SESSION["ft"]["form_id"];
   $email_id       = $_SESSION["ft"]["email_id"];
@@ -685,6 +693,8 @@ function ft_get_email_patterns($form_id)
     $count++;
   }
 
+  extract(ft_process_hooks("end", compact("text_patterns", "html_patterns"), array("text_patterns", "html_patterns")), EXTR_OVERWRITE);
+
   return array("text_patterns" => $text_patterns, "html_patterns" => $html_patterns);
 }
 
@@ -716,6 +726,8 @@ function ft_update_form_email_settings($form_id, $infohash)
     WHERE form_id = $form_id
       ");
 
+  extract(ft_process_hooks("end", compact("form_id", "infohash"), array("form_id", "infohash")), EXTR_OVERWRITE);
+
   if ($result)
     return array(true, $LANG["notify_email_fields_updated"]);
   else
@@ -734,6 +746,8 @@ function ft_update_email_template($email_id, $info)
   global $g_table_prefix;
 
   $info = ft_sanitize($info);
+
+  extract(ft_process_hooks("start", compact("email_id", "info"), array("info")), EXTR_OVERWRITE);
 
   // "Main" tab
   $email_template_name   = $info["email_template_name"];
@@ -852,7 +866,11 @@ function ft_update_email_template($email_id, $info)
     }
   }
 
-  return array(true, "The email template has been updated.");
+  $success = true;
+  $message = $LANG["notify_email_template_updated"];
+  extract(ft_process_hooks("start", compact("email_id", "info"), array("success", "message")), EXTR_OVERWRITE);
+
+  return array($success, $message);
 }
 
 
@@ -869,9 +887,6 @@ function ft_update_email_template($email_id, $info)
  *
  * Returns results ordered by (a) recipient type (main, cc then bcc), then (b) recipient user type (admin, client,
  * user then custom)
- *
- * TODO: update this function to pass in a submission ID or something, so that it properly converts the user name
- * to valid recipient information.
  *
  * @param integer $email_id
  * @return array an array of hashes
@@ -964,6 +979,8 @@ function ft_get_edit_submission_email_templates($view_id)
     $email_info[] = ft_get_email_template($email_id);
   }
 
+  extract(ft_process_hooks("end", compact("view_id", "email_info"), array("email_info")), EXTR_OVERWRITE);
+
   return $email_info;
 }
 
@@ -1034,6 +1051,9 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
 
   if (!$success)
     return false;
+
+  extract(ft_process_hooks("start", compact("form_id", "submission_id", "email_id", "email_components"),
+    array("email_components")), EXTR_OVERWRITE);
 
   // if Swift Mailer is enabled, send the emails with that
   $continue = true;
@@ -1211,6 +1231,8 @@ function _ft_get_placeholder_hash($form_id, $submission_id, $client_info = "")
     $placeholders["LASTNAME"]    = $client_info["last_name"];
     $placeholders["COMPANYNAME"] = $client_info["company_name"];
   }
+
+  extract(ft_process_hooks("end", compact("placeholders"), array("placeholders")), EXTR_OVERWRITE);
 
   return $placeholders;
 }

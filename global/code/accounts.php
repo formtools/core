@@ -43,6 +43,8 @@ function ft_get_account_info($account_id)
 
   $account_info["settings"] = $settings;
 
+  extract(ft_process_hooks("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
+
   return $account_info;
 }
 
@@ -64,7 +66,9 @@ function ft_get_account_settings($account_id)
           ");
   $hash = array();
   while ($row = mysql_fetch_assoc($query))
-    $hash[$row['setting_name']] = $row['setting_value'];
+    $hash[$row['setting_name']] = $row["setting_value"];
+
+  extract(ft_process_hooks("main", compact("account_id", "hash"), array("hash")), EXTR_OVERWRITE);
 
   return $hash;
 }
@@ -107,6 +111,8 @@ function ft_login($infohash, $login_as_client = false)
     if (empty($password))                                 return $LANG["validation_account_not_recognized"];
     if (md5(md5($password)) != $account_info["password"]) return $LANG["validation_wrong_password"];
   }
+
+  extract(ft_process_hooks("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
 
   // all checks out. Log them in, after populating sessions
   $_SESSION["ft"]["settings"] = ft_get_settings("", "core"); // only load the core settings
@@ -152,6 +158,8 @@ function ft_login($infohash, $login_as_client = false)
 function ft_logout_user($message_flag = "")
 {
   global $g_root_url;
+
+  extract(ft_process_hooks("main", array(), array()));
 
   // this ensures sessions are started
   @session_start();
@@ -211,6 +219,8 @@ function ft_send_password($info)
   global $g_root_url, $g_root_dir, $g_table_prefix, $LANG;
 
   $info = ft_sanitize($info);
+
+  extract(ft_process_hooks("start", compact("info"), array("info")), EXTR_OVERWRITE);
 
   $success = true;
   $message = $LANG["notify_login_info_emailed"];
@@ -288,26 +298,26 @@ function ft_send_password($info)
     if ($sm_settings["swiftmailer_enabled"] == "yes")
     {
       ft_include_module("swift_mailer");
-			
+
 			// get the admin info. We'll use that info for the "from" and "reply-to" values. Note
-			// that we DON'T use that info for the regular mail() function. This is because retrieving 
-			// the password is important functionality and we don't want to cause problems that could 
+			// that we DON'T use that info for the regular mail() function. This is because retrieving
+			// the password is important functionality and we don't want to cause problems that could
 			// prevent the email being sent. Many servers don't all the 4th headers parameter of the mail()
 			// function
 			$admin_info = ft_get_admin_info();
-      $admin_email = $admin_info["email"];			
+      $admin_email = $admin_info["email"];
 
 			$email_info  = array();
 			$email_info["to"]  = array();
 			$email_info["to"][] = array("email" => $email);
 			$email_info["from"] = array();
 			$email_info["from"]["email"] = $admin_email;
-			$email_info["subject"] = $email_subject;			
+			$email_info["subject"] = $email_subject;
 			$email_info["text_content"] = $email_content;
       list($success, $sm_message) = swift_send_email($email_info);
 
 			// if the email couldn't be sent, display the appropriate error message. Otherwise
-			// the default success message is used 
+			// the default success message is used
 			if (!$success)
 			  $message = $sm_message;
     }
@@ -324,6 +334,8 @@ function ft_send_password($info)
     }
   }
 
+  extract(ft_process_hooks("end", compact("success", "message", "info"), array("success", "message")), EXTR_OVERWRITE);
+
   return array($success, $message);
 }
 
@@ -338,6 +350,8 @@ function ft_send_password($info)
 function ft_set_account_settings($account_id, $settings)
 {
   global $g_table_prefix;
+
+  extract(ft_process_hooks("start", compact("account_id", "settings"), array("settings")), EXTR_OVERWRITE);
 
   while (list($setting_name, $setting_value) = each($settings))
   {
@@ -367,6 +381,8 @@ function ft_set_account_settings($account_id, $settings)
           ");
     }
   }
+
+  extract(ft_process_hooks("end", compact("account_id", "settings"), array()), EXTR_OVERWRITE);
 }
 
 

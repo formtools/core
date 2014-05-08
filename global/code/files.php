@@ -59,6 +59,8 @@ function ft_get_unique_filename($folder, $filename)
     }
   }
 
+  extract(ft_process_hooks("end", compact("return_filename"), array("return_filename")), EXTR_OVERWRITE);
+
   // return the appropriate filename
   return $return_filename;
 }
@@ -394,6 +396,9 @@ function ft_upload_file($folder, $filename, $tmp_location)
 function ft_upload_submission_file($form_id, $submission_id, $field_id, $fileinfo)
 {
   global $g_table_prefix, $LANG;
+
+  extract(ft_process_hooks("start", compact("form_id", "submission_id", "field_id", "fileinfo"),
+    array("fileinfo")), EXTR_OVERWRITE);
 
   // get the column name and upload folder for this field
   $field_info = ft_get_form_field($field_id);

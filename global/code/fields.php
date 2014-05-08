@@ -146,6 +146,8 @@ function ft_add_form_fields($infohash, $form_id)
     }
   }
 
+  extract(ft_process_hooks("end", compact("infohash", "form_id"), array("success", "message")), EXTR_OVERWRITE);
+
   return array($success, $message);
 }
 
@@ -263,6 +265,8 @@ function ft_delete_form_fields($infohash, $form_id)
   else
     $message = $LANG["notify_form_field_removed"];
 
+  extract(ft_process_hooks("end", compact("infohash", "form_id", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
+
   return array($success, $message);
 }
 
@@ -298,6 +302,8 @@ function ft_get_field_options($field_id)
   $options = array();
   while ($row = mysql_fetch_assoc($option_query))
     $options[] = $row;
+
+  extract(ft_process_hooks("end", compact("field_id", "options"), array("options")), EXTR_OVERWRITE);
 
   return $options;
 }
@@ -350,6 +356,8 @@ function ft_get_form_field($field_id, $get_options = false)
       $info["options"] = ft_get_field_options($field_id);
     }
   }
+
+  extract(ft_process_hooks("end", compact("field_id", "info"), array("info")), EXTR_OVERWRITE);
 
   return $info;
 }
@@ -418,6 +426,8 @@ function ft_get_form_field_settings($field_id, $module)
       $settings[$row["setting_name"]] = $row["setting_value"];
   }
 
+  extract(ft_process_hooks("end", compact("field_id", "module", "settings"), array("settings")), EXTR_OVERWRITE);
+
   return $settings;
 }
 
@@ -442,6 +452,8 @@ function ft_get_form_fields($form_id)
   $infohash = array();
   while ($row = mysql_fetch_assoc($query))
     $infohash[] = $row;
+
+  extract(ft_process_hooks("end", compact("form_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
   return $infohash;
 }
@@ -502,6 +514,8 @@ function ft_get_extended_field_settings($field_id, $module = "core", $setting_na
       $settings[$setting_name] = $module_settings[$setting_name];
   }
 
+  extract(ft_process_hooks("end", compact("field_id", "module", "setting_name"), array("settings")), EXTR_OVERWRITE);
+
   return $settings;
 }
 
@@ -516,6 +530,8 @@ function ft_delete_extended_field_settings($field_id)
   global $g_table_prefix;
 
   mysql_query("DELETE FROM {$g_table_prefix}field_settings WHERE field_id = $field_id");
+
+  extract(ft_process_hooks("end", compact("field_id"), array()), EXTR_OVERWRITE);
 }
 
 
@@ -657,7 +673,11 @@ function ft_update_field($info, $field_id)
         ");
   }
 
-  return array(true, $LANG["notify_form_field_options_updated"]);
+  $success = true;
+  $message = $LANG["notify_form_field_options_updated"];
+  extract(ft_process_hooks("end", compact("field_id"), array("success", "message")), EXTR_OVERWRITE);
+
+  return array($success, $message);
 }
 
 
@@ -688,7 +708,11 @@ function ft_update_multi_field_settings($info, $field_id)
     WHERE  field_id = $field_id
       ");
 
-  return array(true, $LANG["notify_form_field_options_updated"]);
+  $success = true;
+  $message = $LANG["notify_form_field_options_updated"];
+  extract(ft_process_hooks("end", compact("field_id", "info"), array("success", "message")), EXTR_OVERWRITE);
+
+  return array($success, $message);
 }
 
 
@@ -776,7 +800,11 @@ function ft_update_field_file_settings($infohash, $field_id)
     $old_field_info["settings"]["file_upload_dir"] != $new_settings["file_upload_dir"])
     ft_move_field_files($field_id, $old_field_info["settings"]["file_upload_dir"], $new_settings["file_upload_dir"]);
 
-  return array(true, $LANG["notify_image_field_settings_updated"]);
+  $success = true;
+  $message = $LANG["notify_image_field_settings_updated"];
+  extract(ft_process_hooks("end", compact("infohash", "field_id"), array("success", "message")), EXTR_OVERWRITE);
+
+  return array($success, $message);
 }
 
 

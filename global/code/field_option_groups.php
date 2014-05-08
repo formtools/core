@@ -59,6 +59,8 @@ function ft_get_field_option_groups($page_num = 1)
   $return_hash["results"] = $groups;
   $return_hash["num_results"]  = $count_hash["c"];
 
+  extract(ft_process_hooks("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
+
   return $return_hash;
 }
 
@@ -289,7 +291,11 @@ function ft_update_field_option_group($group_id, $info)
     $order++;
   }
 
-  return array(true, $LANG["notify_field_option_group_updated"]);
+  $success = true;
+  $message = $LANG["notify_field_option_group_updated"];
+  extract(ft_process_hooks("end", compact("group_id", "info"), array("success", "message")), EXTR_OVERWRITE);
+
+  return array($success, $message);
 }
 
 
@@ -417,6 +423,10 @@ function ft_delete_field_option_group($group_id)
   mysql_query("DELETE FROM {$g_table_prefix}field_options WHERE field_group_id = $group_id");
   mysql_query("DELETE FROM {$g_table_prefix}field_option_groups WHERE group_id = $group_id");
 
-  return array(true, $LANG["notify_field_option_group_deleted"]);
+  $success = true;
+  $message = $LANG["notify_field_option_group_deleted"];
+  extract(ft_process_hooks("end", compact("group_id"), array("success", "message")), EXTR_OVERWRITE);
+
+  return array(true, $message);
 }
 

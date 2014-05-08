@@ -24,6 +24,8 @@ function ft_client_update_form_settings($infohash)
 {
   global $g_table_prefix, $LANG;
 
+  extract(ft_process_hooks("start", compact("infohash"), array("infohash")), EXTR_OVERWRITE);
+
   $success = true;
   $message = $LANG["notify_form_settings_updated"];
 
@@ -56,6 +58,8 @@ function ft_client_update_form_settings($infohash)
     return array($success, $message);
   }
 
+  extract(ft_process_hooks("end", compact("infohash", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
+
   return array($success, $message);
 }
 
@@ -75,6 +79,8 @@ function ft_client_update_form_settings($infohash)
 function ft_delete_form($form_id, $remove_associated_files = false)
 {
   global $g_table_prefix;
+
+  extract(ft_process_hooks("start", compact("form_id"), array()), EXTR_OVERWRITE);
 
   if ($remove_associated_files)
   {
@@ -247,6 +253,8 @@ function ft_finalize_form($form_id)
 
   // finally, add the default View
   ft_add_default_view($form_id);
+
+  extract(ft_process_hooks("end", compact("form_id"), array()), EXTR_OVERWRITE);
 }
 
 
@@ -425,6 +433,8 @@ function ft_get_form($form_id)
   while ($row = mysql_fetch_assoc($query))
     $form_info["multi_page_form_urls"][] = $row;
 
+  extract(ft_process_hooks("end", compact("form_id", "form_info"), array("form_info")), EXTR_OVERWRITE);
+
   return $form_info;
 }
 
@@ -483,6 +493,8 @@ function ft_get_form_clients($form_id)
     while ($row = mysql_fetch_assoc($account_query))
       $accounts[] = $row;
   }
+
+  extract(ft_process_hooks("end", compact("form_id", "accounts"), array("accounts")), EXTR_OVERWRITE);
 
   return $accounts;
 }
@@ -794,6 +806,7 @@ function ft_set_form_main_settings($infohash)
     }
   }
 
+  extract(ft_process_hooks("end", compact("infohash", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -812,6 +825,8 @@ function ft_set_form_database_settings($infohash, $form_id)
 
   $infohash = ft_sanitize($infohash);
   $field_info = array();
+
+  extract(ft_process_hooks("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
 
   // loop through $infohash and for each field_X_order values, store the various values
   while (list($key, $val) = each($infohash))
@@ -861,6 +876,8 @@ function ft_set_form_database_settings($infohash, $form_id)
 function ft_set_form_field_types($form_id, $info)
 {
   global $g_table_prefix;
+
+  extract(ft_process_hooks("start", compact("info", "form_id"), array("info")), EXTR_OVERWRITE);
 
   // set a 5 minute maximum execution time for this request
   set_time_limit(300);
@@ -968,6 +985,8 @@ function ft_update_form_main_tab($infohash, $form_id)
   global $g_table_prefix, $LANG;
 
   $infohash = ft_sanitize($infohash);
+
+  extract(ft_process_hooks("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
 
   $success = true;
   $message = $LANG["notify_form_updated"];
@@ -1099,6 +1118,7 @@ function ft_update_form_main_tab($infohash, $form_id)
     }
   }
 
+  extract(ft_process_hooks("end", compact("infohash", "form_id", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -1119,10 +1139,10 @@ function ft_update_form_fields_tab($form_id, $infohash)
   global $g_table_prefix, $g_root_url, $g_root_dir, $g_debug, $LANG;
 
   $infohash = ft_sanitize($infohash);
+  extract(ft_process_hooks("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
 
   $success = true;
   $message = "";
-
 
   // loop through $infohash and for each field_X_order values, store the various values
   $field_info = array();
@@ -1233,7 +1253,12 @@ function ft_update_form_fields_tab($form_id, $infohash)
     }
   }
 
-  return array(true, $LANG["notify_field_settings_updated"]);
+  $success = true;
+  $message = $LANG["notify_field_settings_updated"];
+
+  extract(ft_process_hooks("end", compact("infohash", "form_id"), array("success", "message")), EXTR_OVERWRITE);
+
+  return array($success, $message);
 }
 
 
@@ -1256,6 +1281,8 @@ function ft_update_form_database_tab($infohash)
 
   $form_id = $infohash["form_id"];
   $infohash = ft_sanitize($infohash);
+
+  extract(ft_process_hooks("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
 
   // get the field IDs we're working with
   $field_ids = array();
@@ -1409,8 +1436,11 @@ function ft_update_form_database_tab($infohash)
       ft_update_field_filters($field_id);
   }
 
+  $success = true;
+  $message = $LANG["notify_fields_updated"];
+  extract(ft_process_hooks("end", compact("infohash", "form_id"), array("success", "message")), EXTR_OVERWRITE);
 
-  return array(true, $LANG["notify_fields_updated"]);
+  return array($success, $message);
 }
 
 
@@ -1607,6 +1637,8 @@ function ft_search_forms($account_id = "", $is_admin = false, $search_criteria =
 {
   global $g_table_prefix;
 
+  extract(ft_process_hooks("start", compact("account_id", "is_admin", "search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
+
   if (!isset($search_criteria["order"]))
     $search_criteria["order"] = "form_id-DESC";
 
@@ -1753,6 +1785,7 @@ function ft_search_forms($account_id = "", $is_admin = false, $search_criteria =
     $form_info[] = ft_get_form($form_id);
   }
 
+  extract(ft_process_hooks("end", compact("account_id", "is_admin", "search_criteria", "form_info"), array("form_info")), EXTR_OVERWRITE);
 
   return $form_info;
 }
@@ -1777,6 +1810,8 @@ function ft_get_public_form_omit_list($form_id)
   $client_ids = array();
   while ($row = mysql_fetch_assoc($query))
     $client_ids[] = $row["account_id"];
+
+  extract(ft_process_hooks("end", compact("clients_id", "form_id"), array("client_ids")), EXTR_OVERWRITE);
 
   return $client_ids;
 }
