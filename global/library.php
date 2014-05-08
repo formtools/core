@@ -190,7 +190,7 @@ $g_api_sessions_timeout = 3600;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.0-beta-20091113";
+$g_current_version = "2.0.0-beta-20091116";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.
@@ -251,7 +251,7 @@ require_once("$folder/code/validation.php");
 require_once("$folder/code/views.php");
 require_once("$folder/smarty/Smarty.class.php");
 
-if ($config_file_exists)
+if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page))
 {
   // our Smarty instance, used for rendering the webpages
   $g_smarty = new Smarty();
