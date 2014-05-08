@@ -172,7 +172,10 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
   $submission_ids = array();
   if ($submissions_to_delete == "all")
   {
-    $submission_ids = ft_get_search_submission_ids($form_id, $view_id, "all", "submission_id-ASC", $search_fields);
+  	// get the list of searchable columns for this View. This is needed to ensure that ft_get_search_submission_ids receives
+  	// the correct info to determine what submission IDs are appearing in this current search.
+    $searchable_columns = ft_get_view_searchable_fields($view_id);
+    $submission_ids = ft_get_search_submission_ids($form_id, $view_id, "all", "submission_id-ASC", $search_fields, $searchable_columns);
     $submission_ids = array_diff($submission_ids, $omit_list);
   }
   else
@@ -226,8 +229,6 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 
         if ($field_type == "file")
           list($success, $message) = ft_delete_file_submission($form_id, $submission_id, $field_info['field_id']);
-        else if ($field_type == "image")
-          list($success, $message) = img_delete_image_file_submission($form_id, $submission_id, $field_info['field_id']);
 
         if (!$success)
           $file_delete_problems[] = array($filename, $message);
@@ -558,136 +559,31 @@ function ft_get_submission_count($form_id, $view_id = "")
 
 /**
  * Returns all submission IDs in a search result set. This is used on the item details pages (admin
- * and client) to build the << previous / next >> links.
+ * and client) to build the << previous / next >> links. Since the system now properly only searches
+ * fields marked as "is_searchable", this function needs the final $search_columns parameter, containing
+ * the list of searchable fields (which is View-dependent).
  *
- * @param integer $form_id The unique form ID
- * @param integer $view_id The unique form ID
+ * @param integer $form_id the unique form ID
+ * @param integer $view_id the unique form ID
  * @param mixed   $results_per_page an integer, or "all"
- * @param string  $order A string of form: "{db column}_{ASC|DESC}"
+ * @param string  $order a string of form: "{db column}_{ASC|DESC}"
  * @param array   $search_fields an optional hash with these keys:<br/>
  *                  search_field<br/>
  *                  search_date<br/>
  *                  search_keyword<br/>
+ * @param array   $search_columns the columns that are being searched
  * @return string an HTML string
  */
-function ft_get_search_submission_ids($form_id, $view_id, $results_per_page, $order, $search_fields = array())
+function ft_get_search_submission_ids($form_id, $view_id, $results_per_page, $order, $search_fields = array(),
+     $search_columns = array())
 {
   global $g_table_prefix;
 
-	$order_by = "submission_id";
-	if (!empty($order))
-	{
-	  // sorting by column, format: col_x-desc / col_y-asc
-	  list($column, $direction) = split("-", $order);
-	  $field_info = ft_get_form_field_by_colname($form_id, $column);
-
-	  if ($field_info["data_type"] == "number")
-	    $order_by = "CAST($column as SIGNED) $direction";
-	  else
-	    $order_by = "$column $direction";
-
-	  // important! If the ORDER BY column wasn't the submission_id, we need to add
-	  // the submission ID as the secondary sorting column
-	  if ($column != "submission_id")
-	    $order_by .= ", submission_id";
-	}
-
-  // determine the LIMIT clause
-  $limit_clause = "";
-  if ($results_per_page != "all")
-  {
-    if (empty($page_num))
-      $page_num = 1;
-    $first_item = ($page_num - 1) * $results_per_page;
-
-    $limit_clause = "LIMIT $first_item, $results_per_page";
-  }
-
-  // any filters?
-  $view_filters = ft_get_view_filter_sql($view_id);
-  $filter_clause = "";
-  if (!empty($view_filters))
-    $filter_clause = "AND " . join(" AND ", $view_filters);
-
-  // if search fields were included, build an addition to the WHERE clause
-  $search_where_clause = "";
-  if (!empty($search_fields))
-  {
-    $clean_search_fields = ft_sanitize($search_fields);
-
-    $search_field   = $clean_search_fields["search_field"];
-    $search_date    = $clean_search_fields["search_date"];
-    $search_keyword = $clean_search_fields["search_keyword"];
-
-    // search field can either be "all" or a database column name. "submission_date"
-    // has a special meaning in that it allows searching by specific date ranges
-    switch ($search_field)
-    {
-      case "all":
-        if (!empty($search_keyword))
-        {
-          // get all columns
-          $col_info = ft_get_form_column_names($form_id);
-          $col_names = array_keys($col_info);
-          unset($col_names["is_finalized"]);
-          unset($col_names["submission_date"]);
-
-          $clauses = array();
-          foreach ($col_names as $col_name)
-            $clauses[] = "$col_name LIKE '%$search_keyword%'";
-
-          $search_where_clause = "AND (" . join(" OR ", $clauses) . ") ";
-        }
-        break;
-
-      case "submission_date":
-        if (!empty($search_date))
-        {
-          // search by number of days
-          if (is_numeric($search_date))
-          {
-            $days = $search_date;
-            $search_where_clause = "AND (DATE_SUB(curdate(), INTERVAL $days DAY) < submission_date) ";
-          }
-
-          // otherwise, return a specific month
-          else
-          {
-            list($month, $year) = split("_", $search_date);
-
-            $month_start = mktime(0, 0, 0, $month, 1, $year);
-            $month_end   = mktime(0, 0, 0, $month+1, 1, $year);
-
-            $start = date("Y-m-d", $month_start);
-            $end   = date("Y-m-d", $month_end);
-
-            $search_where_clause = "AND (submission_date > '$start' AND submission_date < '$end') ";
-          }
-
-          if (!empty($search_keyword))
-          {
-            // get all columns
-            $col_info = ft_get_form_column_names($form_id);
-            $col_names = array_keys($col_info);
-            unset($col_names["is_finalized"]);
-            unset($col_names["submission_date"]);
-
-            $clauses = array();
-            foreach ($col_names as $col_name)
-              $clauses[] = "$col_name LIKE '%$search_keyword%'";
-
-            $search_where_clause .= "AND (" . join(" OR ", $clauses) . ") ";
-          }
-        }
-        break;
-
-      // here, the user is searching one of their own custom fields
-      default:
-        if (!empty($search_keyword) && !empty($search_field))
-          $search_where_clause = "AND $search_field LIKE '%$search_keyword%'";
-        break;
-    }
-  }
+  // determine the various SQL clauses
+  $order_by            = _ft_get_search_submissions_order_by_clause($form_id, $order);
+  $limit_clause        = _ft_get_search_submissions_limit_clause(1, $results_per_page);
+  $filter_clause       = _ft_get_search_submissions_view_filter_clause($view_id);
+  $search_where_clause = _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $search_columns);
 
   // now build our query
   $full_query = "
@@ -957,10 +853,11 @@ function ft_finalize_submission($form_id, $submission_id)
   return true;
 }
 
-
 /**
  * Creates and returns a search for any form View, and any subset of its columns, returning results in
- * any column order and for any single page subset (or all pages).
+ * any column order and for any single page subset (or all pages). The final $search_columns parameter
+ * was added most recently to fix bug #173. That parameter lets the caller differentiate between the
+ * columns being returned ($columns param) and columns to be searched ($search_columns).
  *
  * @param integer $form_id the unique form ID
  * @param integer $view_id the unique View ID
@@ -974,10 +871,14 @@ function ft_finalize_submission($form_id, $submission_id)
  *                  search_field<br/>
  *                  search_date<br/>
  *                  search_keyword<br/>
- *                  submission_ids - an optional array containing a list of submission IDs to return.
- *   This may seem counterintuitive to pass the results that it needs to return to the function that
- *   figures out WHICH results to return, but it's actually kinda handy: this function returns exactly
- *   the field information that's needed in the order that's needed.
+ * @param array submission_ids - an optional array containing a list of submission IDs to return.
+ *     This may seem counterintuitive to pass the results that it needs to return to the function that
+ *     figures out WHICH results to return, but it's actually kinda handy: this function returns exactly
+ *     the field information that's needed in the order that's needed.
+ * @param array $submission_ids an optional array of submission IDs to return
+ * @param array $search_columns an optional array determining which database columns should be included
+ *     in the search. Note: this is different from the $columns parameter which just determines which
+ *     database columns will be returned. If it's not defined, it's just set to $columns.
  *
  * @return array returns a hash with these keys:<br/>
  *                ["search_query"]       => an array of hashes, each index a search result row<br />
@@ -987,35 +888,138 @@ function ft_finalize_submission($form_id, $submission_id)
  *                ["view_num_results"]   => the total number of results in this View, regardless of the
  *                                          current search values.
  */
-function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num, $order, $columns, $search_fields = array(), $submission_ids = array())
+function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num, $order, $columns,
+	                             $search_fields = array(), $submission_ids = array(), $search_columns = array())
 {
   global $g_table_prefix;
 
-  // sorting by column, format: col_x-desc / col_y-asc
-  list($column, $direction) = split("-", $order);
-  $field_info = ft_get_form_field_by_colname($form_id, $column);
+  // for backward compatibility
+  if (empty($search_columns))
+    $search_columns = $columns;
 
-  if ($field_info["data_type"] == "number")
-    $order_by = "CAST($column as SIGNED) $direction";
-  else
-    $order_by = "$column $direction";
+  // determine the various SQL clauses for the searches
+  $order_by             = _ft_get_search_submissions_order_by_clause($form_id, $order);
+  $limit_clause         = _ft_get_search_submissions_limit_clause($page_num, $results_per_page);
+  $select_clause        = _ft_get_search_submissions_select_clause($columns);
+  $filter_clause        = _ft_get_search_submissions_view_filter_clause($view_id);
+  $submission_id_clause = _ft_get_search_submissions_submission_id_clause($submission_ids);
+  $search_where_clause  = _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $search_columns);
 
-  // important! If the ORDER BY column wasn't the submission_id, we need to add
-  // the submission ID as the secondary sorting column
-  if ($column != "submission_id")
-    $order_by .= ", submission_id";
+  // (1) our main search query that returns a PAGE of submission info
+  $search_query = mysql_query("
+      SELECT $select_clause
+      FROM   {$g_table_prefix}form_{$form_id}
+      WHERE  is_finalized = 'yes'
+             $search_where_clause
+             $filter_clause
+             $submission_id_clause
+      ORDER BY $order_by
+             $limit_clause
+                ")
+    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: ", mysql_error());
 
-  // determine the LIMIT clause
+  $search_result_rows = array();
+  while ($row = mysql_fetch_assoc($search_query))
+    $search_result_rows[] = $row;
+
+  // (2) find out how many results there are in this current search
+  $search_results_count_query = mysql_query("
+      SELECT count(*) as c
+      FROM   {$g_table_prefix}form_{$form_id}
+      WHERE  is_finalized = 'yes'
+             $search_where_clause
+             $filter_clause
+             $submission_id_clause
+                 ")
+    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: ", mysql_error());
+  $search_num_results_info = mysql_fetch_assoc($search_results_count_query);
+  $search_num_results = $search_num_results_info["c"];
+
+  // (3) find out how many results should appear in the View, regardless of the current search criteria
+  $view_results_count_query = mysql_query("
+      SELECT count(*) as c
+      FROM   {$g_table_prefix}form_{$form_id}
+      WHERE  is_finalized = 'yes'
+             $filter_clause
+                 ")
+    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: ", mysql_error());
+  $view_num_results_info = mysql_fetch_assoc($view_results_count_query);
+  $view_num_results = $view_num_results_info["c"];
+
+  $return_hash["search_rows"]        = $search_result_rows;
+  $return_hash["search_num_results"] = $search_num_results;
+  $return_hash["view_num_results"]   = $view_num_results;
+
+  extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "results_per_page", "page_num", "order",
+    "columns", "search_fields", "submission_ids", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
+
+  return $return_hash;
+}
+
+
+/**
+ * Used in the ft_search_submissions function to abstract away a few minor details.
+ *
+ * @param $form_id integer
+ * @param $order string
+ * @return string
+ */
+function _ft_get_search_submissions_order_by_clause($form_id, $order)
+{
+  $order_by = "submission_id";
+  if (!empty($order))
+  {
+	  // sorting by column, format: col_x-desc / col_y-asc
+    list($column, $direction) = split("-", $order);
+    $field_info = ft_get_form_field_by_colname($form_id, $column);
+
+    if ($field_info["data_type"] == "number")
+      $order_by = "CAST($column as SIGNED) $direction";
+    else
+      $order_by = "$column $direction";
+
+    // important! If the ORDER BY column wasn't the submission_id, we need to add
+    // the submission ID as the secondary sorting column
+    if ($column != "submission_id")
+      $order_by .= ", submission_id";
+  }
+
+  return $order_by;
+}
+
+
+/**
+ * Used in the ft_search_submissions function to abstract away a few minor details.
+ *
+ * @param integer $page_num
+ * @param integer $results_per_page
+ * @return string
+ */
+function _ft_get_search_submissions_limit_clause($page_num, $results_per_page)
+{
   $limit_clause = "";
   if ($results_per_page != "all")
   {
     if (empty($page_num))
+    {
       $page_num = 1;
+    }
     $first_item = ($page_num - 1) * $results_per_page;
-
     $limit_clause = "LIMIT $first_item, $results_per_page";
   }
 
+  return $limit_clause;
+}
+
+
+/**
+ * Used in the ft_search_submissions function to abstract away a few minor details.
+ *
+ * @param array $columns
+ * @return string
+ */
+function _ft_get_search_submissions_select_clause($columns)
+{
   $select_clause = "";
   if (!is_array($columns) && $columns == "all")
   {
@@ -1030,24 +1034,39 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
     $select_clause = join(", ", $columns);
   }
 
-  // any filters?
+  return $select_clause;
+}
+
+
+/**
+ * Used in the ft_search_submissions function to abstract away a few minor details.
+ *
+ * @param integer $view_id
+ * @return string
+ */
+function _ft_get_search_submissions_view_filter_clause($view_id)
+{
   $view_filters = ft_get_view_filter_sql($view_id);
   $filter_clause = "";
   if (!empty($view_filters))
     $filter_clause = "AND " . join(" AND ", $view_filters);
 
-  // submission IDs?
-  $submission_id_clause = "";
-  if (!empty($submission_ids))
-  {
-    $rows = array();
-    foreach ($submission_ids as $submission_id)
-      $rows[] = "submission_id = $submission_id";
+  return $filter_clause;
+}
 
-    $submission_id_clause = "AND (" . join(" OR ", $rows) . ") ";
-  }
 
-  // if search fields were included, build an addition to the WHERE clause
+/**
+ * Used in the ft_search_submissions function. This figures out the additional SQL clauses required for
+ * a custom search. Note: as of the Dec 2009 build, this function properly only searches those fields
+ * marked as "is_searchable" in the database.
+ *
+ * @param integer $form_id
+ * @param array $search_fields
+ * @param array $columns the View columns that have been marked as "is_searchable"
+ * @return string
+ */
+function _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $searchable_columns)
+{
   $search_where_clause = "";
   if (!empty($search_fields))
   {
@@ -1058,13 +1077,14 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
     $search_keyword = $clean_search_fields["search_keyword"];
 
     // search field can either be "all" or a database column name. "submission_date" and "last_modified_date"
-    // have special meanings, since they allow for searching by specific date ranges
+    // have special meanings, since they allow for keyword searching within specific date ranges
     if ($search_field == "all")
     {
       if (!empty($search_keyword))
       {
-        // if we're searching ALL columns, get all the name
-        if (!is_array($columns) && $columns == "all")
+        // if we're searching ALL columns, get all col names. This shouldn't ever get called any more - but
+        // I'll leave it in for regression purposes
+        if (!is_array($searchable_columns) && $searchable_columns == "all")
         {
           $col_info = ft_get_form_column_names($form_id);
           $col_names = array_keys($col_info);
@@ -1076,19 +1096,19 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
           foreach ($col_names as $col_name)
             $clauses[] = "$col_name LIKE '%$search_keyword%'";
         }
-        else
+        else if (is_array($searchable_columns))
         {
           $clauses = array();
-          foreach ($columns as $col_name)
+          foreach ($searchable_columns as $col_name)
             $clauses[] = "$col_name LIKE '%$search_keyword%'";
         }
 
         $search_where_clause = "AND (" . join(" OR ", $clauses) . ") ";
       }
     }
+
     else if ($search_field == "submission_date" || $search_field == "last_modified_date")
     {
-
       if (!empty($search_date))
       {
         // search by number of days
@@ -1114,14 +1134,8 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
 
         if (!empty($search_keyword))
         {
-          // get all columns
-          $col_info = ft_get_form_column_names($form_id);
-          $col_names = array_keys($col_info);
-          unset($col_names["is_finalized"]);
-          unset($col_names["submission_date"]);
-
           $clauses = array();
-          foreach ($col_names as $col_name)
+          foreach ($searchable_columns as $col_name)
             $clauses[] = "$col_name LIKE '%$search_keyword%'";
 
           $search_where_clause .= "AND (" . join(" OR ", $clauses) . ") ";
@@ -1136,58 +1150,29 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
     }
   }
 
-  // Queries: [1] the main search query that returns a page of submission info
-  $search_query = mysql_query("
-      SELECT $select_clause
-      FROM   {$g_table_prefix}form_{$form_id}
-      WHERE  is_finalized = 'yes'
-             $search_where_clause
-             $filter_clause
-             $submission_id_clause
-      ORDER BY $order_by
-             $limit_clause
-                ")
-    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: ", mysql_error());
-
-  $search_result_rows = array();
-  while ($row = mysql_fetch_assoc($search_query))
-    $search_result_rows[] = $row;
+  return $search_where_clause;
+}
 
 
-  // [2] find out how many results there are in this current search
-  $search_results_count_query = mysql_query("
-      SELECT count(*) as c
-      FROM   {$g_table_prefix}form_{$form_id}
-      WHERE  is_finalized = 'yes'
-             $search_where_clause
-             $filter_clause
-             $submission_id_clause
-                 ")
-    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: ", mysql_error());
-  $search_num_results_info = mysql_fetch_assoc($search_results_count_query);
-  $search_num_results = $search_num_results_info["c"];
+/**
+ * Used in the ft_search_submissions function to abstract away a few minor details.
+ *
+ * @param array $submission_ids
+ * @return string
+ */
+function _ft_get_search_submissions_submission_id_clause($submission_ids)
+{
+  $submission_id_clause = "";
+  if (!empty($submission_ids))
+  {
+    $rows = array();
+    foreach ($submission_ids as $submission_id)
+      $rows[] = "submission_id = $submission_id";
 
+    $submission_id_clause = "AND (" . join(" OR ", $rows) . ") ";
+  }
 
-  // [3] find out how many results should appear in the View, regardless of the current search criteria
-  $view_results_count_query = mysql_query("
-      SELECT count(*) as c
-      FROM   {$g_table_prefix}form_{$form_id}
-      WHERE  is_finalized = 'yes'
-             $filter_clause
-                 ")
-    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: ", mysql_error());
-  $view_num_results_info = mysql_fetch_assoc($view_results_count_query);
-  $view_num_results = $view_num_results_info["c"];
-
-
-  $return_hash["search_rows"]        = $search_result_rows;
-  $return_hash["search_num_results"] = $search_num_results;
-  $return_hash["view_num_results"]   = $view_num_results;
-
-  extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "results_per_page", "page_num", "order",
-    "columns", "search_fields", "submission_ids", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
-
-  return $return_hash;
+  return $submission_id_clause;
 }
 
 
@@ -1212,11 +1197,13 @@ function ft_get_submission_field_info($view_fields, $return_all_fields = false)
 
     if ($field['is_column'] == "yes" || $return_all_fields)
     {
-      $curr_field_info = array('field_id'    => $field_id,
-                               'is_sortable' => $field['is_sortable'],
-                               'field_title' => $field['field_title'],
-                               'col_name'    => $field['col_name'],
-                               'list_order'  => $field['list_order']);
+      $curr_field_info = array('field_id'      => $field_id,
+                               'is_sortable'   => $field['is_sortable'],
+                               'is_searchable' => $field['is_searchable'],
+                               'is_column'     => $field['is_column'],
+                               'field_title'   => $field['field_title'],
+                               'col_name'      => $field['col_name'],
+                               'list_order'    => $field['list_order']);
 
       $field_info = ft_get_form_field($field_id, true);
       $curr_field_info["field_info"] = $field_info;

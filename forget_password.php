@@ -42,11 +42,11 @@ $page_vars["page"] = "forgot_password";
 $page_vars["page_url"] = ft_get_page_url("forgot_password");
 $page_vars["settings"] = $settings;
 $page_vars["username"] = $username;
-$page_vars["head_js"] = "
-	var rules = [];
-	rules.push(\"required,username,{$LANG['validation_no_username']}\");
+$page_vars["head_js"] =<<<EOF
+var rules = [];
+rules.push("required,username,{$LANG['validation_no_username']}");
 
-	Event.observe(document, 'dom:loaded', function() { document.forget_password.username.focus(); });
-		";
+Event.observe(document, 'dom:loaded', function() { document.forget_password.username.focus(); });
+EOF;
 
 ft_display_page("forget_password.tpl", $page_vars, $g_theme);

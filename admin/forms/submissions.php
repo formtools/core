@@ -5,10 +5,9 @@ ft_check_permission("admin");
 
 $request = array_merge($_POST, $_GET);
 
-// include the relevant modules
+// [Bad! TODO]
 if (ft_check_module_enabled("export_manager"))
   ft_include_module("export_manager");
-
 
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
 $form_id = ft_load_field("form_id", "curr_form_id");
@@ -25,8 +24,6 @@ if (empty($form_id))
 // will appear in the page
 $view_id    = ft_load_field("view", "form_{$form_id}_view_id");
 $form_views = ft_get_form_views($form_id);
-$default_view_id = $form_views[0]["view_id"];
-$_SESSION["ft"]["form_{$form_id}_view_id"] = $default_view_id;
 
 if (empty($view_id))
 {
@@ -38,11 +35,13 @@ if (empty($view_id))
   }
   else
   {
-    $view_id = $default_view_id;
+    $view_id = $form_views[0]["view_id"];
   }
 }
 else if (!ft_check_view_exists($view_id))
-  $view_id = $default_view_id;
+  $view_id = $form_views[0]["view_id"];
+
+$_SESSION["ft"]["form_{$form_id}_view_id"] = $form_views[0]["view_id"];
 
 $form_info = ft_get_form($form_id);
 $view_info = ft_get_view($view_id);
@@ -64,16 +63,24 @@ if (isset($request["view"]))
   $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
 }
 
-if (isset($_GET["reset"]) && $_GET["reset"] == "1")
+// Fix for bug #174
+$has_search_info_for_other_form = (isset($_SESSION["ft"]["current_search"]) && $_SESSION["ft"]["current_search"]["form_id"] != $form_id);
+$is_resetting_search            = (isset($_GET["reset"]) && $_GET["reset"] == "1");
+
+if ($is_resetting_search || $has_search_info_for_other_form)
 {
   unset($_SESSION["ft"]["search_field"]);
   unset($_SESSION["ft"]["search_keyword"]);
   unset($_SESSION["ft"]["search_date"]);
   unset($_SESSION["ft"]["current_search"]);
 
-  $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-  $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
-  $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
+  // only empty the memory of selected submission ID info if the user just reset the search
+  if ($is_resetting_search)
+  {
+    $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
+    $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
+    $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
+  }
 }
 
 $search_field   = ft_load_field("search_field", "search_field", "");
@@ -117,14 +124,26 @@ $current_page = ft_load_field("page", "view_{$view_id}_page", 1);
 if (isset($_POST["search"]))
   $current_page = 1;
 
-
-$display_fields = ft_get_submission_field_info($view_info["fields"]);
+$display_fields = ft_get_submission_field_info($view_info["fields"], true);
 
 // used to tell the search function which columns to return
 $search_columns  = array();
 foreach ($display_fields as $field_info)
-  $search_columns[] = $field_info["col_name"];
+{
+  if ($field_info["is_searchable"] == "yes")
+    $search_columns[] = $field_info["col_name"];
+}
 
+$db_columns = array();
+$visible_column_info = array();
+foreach ($display_fields as $field_info)
+{
+  if ($field_info["is_column"] == "yes")
+  {
+    $db_columns[] = $field_info["col_name"];
+    $visible_column_info[] = $field_info;
+  }
+}
 
 // determine the sort order
 if (isset($_GET["order"]))
@@ -143,7 +162,8 @@ else
 $results_per_page = $view_info["num_submissions_per_page"];
 
 // perform the almighty search query
-$results_info = ft_search_submissions($form_id, $view_id, $results_per_page, $current_page, $order, $search_columns, $search_fields);
+$results_info = ft_search_submissions($form_id, $view_id, $results_per_page, $current_page, $order, $db_columns,
+      $search_fields, array(), $search_columns);
 
 $search_rows        = $results_info["search_rows"];
 $search_num_results = $results_info["search_num_results"];
@@ -210,7 +230,7 @@ $preselected_subids_str = join(",", $preselected_subids);
 
 // compile the header information
 $page_vars = array();
-$page_vars["page"]    = "form";
+$page_vars["page"]    = "admin_forms";
 $page_vars["page_url"] = ft_get_page_url("form_submissions", array("form_id" => $form_id));
 $page_vars["head_title"]  = $LANG["word_submissions"];
 $page_vars["form_info"]   = $form_info;
@@ -224,8 +244,9 @@ $page_vars["form_views"]  = $form_views;
 $page_vars["view_info"]   = $view_info;
 $page_vars["preselected_subids"] = $preselected_subids;
 $page_vars["results_per_page"]   = $results_per_page;
-$page_vars["display_fields"]     = $display_fields;
+$page_vars["display_fields"]     = $visible_column_info;
 $page_vars["order"]              = $order;
+$page_vars["page_submission_ids"] = $page_submission_ids;
 $page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
 $page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download", "validation_select_submissions_to_delete",

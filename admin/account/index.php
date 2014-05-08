@@ -38,25 +38,22 @@ $page_vars["head_title"] = $LANG["phrase_your_account"];
 $page_vars["admin_info"] = $admin_info;
 $page_vars["text_date_formatting_link"] = ft_eval_smarty_string($LANG["text_date_formatting_link"], $replacement_info);
 
-$page_vars["head_js"] = "
+$page_vars["head_js"] =<<<EOF
   var rules = [];
-  rules.push(\"required,first_name,{$LANG["validation_no_first_name"]}\");
-  rules.push(\"required,last_name,{$LANG["validation_no_last_name"]}\");
-  rules.push(\"required,email,{$LANG["validation_no_email"]}\");
-  rules.push(\"required,theme,{$LANG["validation_no_theme"]}\");
-  rules.push(\"required,login_page,{$LANG["validation_no_login_page"]}\");
-  rules.push(\"required,logout_url,{$LANG["validation_no_account_logout_url"]}\");
-  rules.push(\"required,ui_language,{$LANG["validation_no_ui_language"]}\");
-  rules.push(\"required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}\");
-  rules.push(\"required,date_format,{$LANG["validation_no_date_format"]}\");
-  rules.push(\"required,username,{$LANG["validation_no_username"]}\");
-  rules.push(\"if:password!=,required,password_2,{$LANG["validation_no_account_password_confirmed"]}\");
-  rules.push(\"if:password!=,same_as,password,password_2,{$LANG["validation_passwords_different"]}\");
+  rules.push("required,first_name,{$LANG["validation_no_first_name"]}");
+  rules.push("required,last_name,{$LANG["validation_no_last_name"]}");
+  rules.push("required,email,{$LANG["validation_no_email"]}");
+  rules.push("required,theme,{$LANG["validation_no_theme"]}");
+  rules.push("required,login_page,{$LANG["validation_no_login_page"]}");
+  rules.push("required,logout_url,{$LANG["validation_no_account_logout_url"]}");
+  rules.push("required,ui_language,{$LANG["validation_no_ui_language"]}");
+  rules.push("required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}");
+  rules.push("required,date_format,{$LANG["validation_no_date_format"]}");
+  rules.push("required,username,{$LANG["validation_no_username"]}");
+  rules.push("if:password!=,required,password_2,{$LANG["validation_no_account_password_confirmed"]}");
+  rules.push("if:password!=,same_as,password,password_2,{$LANG["validation_passwords_different"]}");
 
   Event.observe(document, 'dom:loaded', function() { document.login_info.first_name.focus(); });
-	            ";
+EOF;
 
 ft_display_page("admin/account/index.tpl", $page_vars);
-
-
-?>

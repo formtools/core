@@ -4,10 +4,6 @@ require("../../global/session_start.php");
 ft_check_permission("client");
 $account_id = $_SESSION["ft"]["account"]["account_id"];
 
-// if required, include the Image Manager module
-if (ft_check_module_enabled("image_manager"))
-  ft_include_module("image_manager");
-
 // blur the GET and POST variables into a single variable for easy reference
 $request = array_merge($_GET, $_POST);
 $form_id = ft_load_field("form_id", "curr_form_id");
@@ -20,7 +16,7 @@ ft_check_client_may_view($account_id, $form_id, $view_id);
 if (!ft_check_view_contains_submission($form_id, $view_id, $submission_id))
 {
   header("location: index.php");
-	exit;
+  exit;
 }
 
 // store this submission ID
@@ -37,25 +33,20 @@ $view_tabs = ft_get_view_tabs($view_id, true);
 // handle POST requests
 if (isset($_POST) && !empty($_POST))
 {
-	// add the view ID to the request hash, for use by the ft_update_submission function
-	$request["view_id"] = $view_id;
-	$request["editable_field_ids"] = $editable_field_ids;
+  // add the view ID to the request hash, for use by the ft_update_submission function
+  $request["view_id"] = $view_id;
+  $request["editable_field_ids"] = $editable_field_ids;
   list($g_success, $g_message) = ft_update_submission($form_id, $submission_id, $request);
 
-	// required. The reason being, this setting determines whether the submission IDs in the current form-view-search
-	// are cached. Any time the data changes, the submission may then belong to different Views, so we need to re-cache it
-	$_SESSION["ft"]["new_search"] = "yes";
+  // required. The reason being, this setting determines whether the submission IDs in the current form-view-search
+  // are cached. Any time the data changes, the submission may then belong to different Views, so we need to re-cache it
+  $_SESSION["ft"]["new_search"] = "yes";
 
   // if required, remove a file or image
   $file_deleted = false;
   if (isset($_POST['delete_file_type']) && $_POST['delete_file_type'] == "file")
   {
     list($g_success, $g_message) = ft_delete_file_submission($form_id, $submission_id, $_POST['field_id']);
-    $file_deleted = true;
-  }
-  else if (isset($_POST['delete_file_type']) && $_POST['delete_file_type'] == "image")
-  {
-    list($g_success, $g_message) = img_delete_image_file_submission($form_id, $submission_id, $_POST['field_id']);
     $file_deleted = true;
   }
 
@@ -76,25 +67,19 @@ $submission_info = ft_get_submission($form_id, $submission_id, $view_id);
 $submission_tab_fields    = array();
 $submission_tab_field_ids = array();
 $wysiwyg_field_ids        = array();
-$image_field_info         = array();
 
 for ($i=0; $i<count($submission_info); $i++)
 {
-	// if this view has tabs, ignore those fields that aren't on the current tab.
-	if (count($view_tabs) > 0 && (!isset($submission_info[$i]["tab_number"]) || $submission_info[$i]["tab_number"] != $tab_number))
-	  continue;
+  // if this view has tabs, ignore those fields that aren't on the current tab.
+  if (count($view_tabs) > 0 && (!isset($submission_info[$i]["tab_number"]) || $submission_info[$i]["tab_number"] != $tab_number))
+    continue;
 
-	$curr_field_id = $submission_info[$i]["field_id"];
+  $curr_field_id = $submission_info[$i]["field_id"];
 
-	if ($submission_info[$i]["field_type"] == "wysiwyg")
-	  $wysiwyg_field_ids[] = "field_{$curr_field_id}_wysiwyg";
+  if ($submission_info[$i]["field_type"] == "wysiwyg")
+    $wysiwyg_field_ids[] = "field_{$curr_field_id}_wysiwyg";
 
-	// if this is an image field, keep track of its extended image settings. These are passed to the image rendering Smarty
-	// plugin function to let it know how to display it
-	if ($submission_info[$i]["field_type"] == "image")
-	  $image_field_info[$curr_field_id] = ft_get_extended_field_settings($curr_field_id, "image_manager");
-
-	$submission_tab_field_ids[] = $curr_field_id;
+  $submission_tab_field_ids[] = $curr_field_id;
   $submission_tab_fields[]    = $submission_info[$i];
 }
 
@@ -110,7 +95,11 @@ $search = isset($_SESSION["ft"]["current_search"]) ? $_SESSION["ft"]["current_se
 if (isset($_SESSION["ft"]["new_search"]) && $_SESSION["ft"]["new_search"] == "yes")
 {
   // extract the original search settings and get the list of IDs
-  $_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"] = ft_get_search_submission_ids($form_id, $view_id, $search["results_per_page"], $search["order"], $search["search_fields"]);
+  $searchable_columns = ft_get_view_searchable_fields("", $view_info["fields"]);
+  $submission_ids = ft_get_search_submission_ids($form_id, $view_id, $search["results_per_page"], $search["order"],
+    $search["search_fields"], $searchable_columns);
+
+  $_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"] = $submission_ids;
   $_SESSION["ft"]["new_search"] = "no";
 }
 
@@ -168,8 +157,6 @@ while (list($key, $value) = each($view_tabs))
     );
 }
 
-$image_manager_enabled = ft_check_module_enabled("image_manager");
-
 // construct the page label
 $edit_submission_page_label = $form_info["edit_submission_page_label"];
 $common_placeholders = _ft_get_placeholder_hash($form_id, $submission_id);
@@ -200,7 +187,6 @@ $page_vars["search_results_link_html"] = $search_results_link_html;
 $page_vars["next_link_html"] = $next_link_html;
 $page_vars["tab_has_editable_fields"] = count($editable_tab_fields) > 0;
 $page_vars["view_info"] = $view_info;
-$page_vars["image_field_info"] = $image_field_info;
 $page_vars["form_id"] = $form_id;
 $page_vars["view_id"] = $view_id;
 $page_vars["edit_submission_page_label"] = $edit_submission_page_label;
@@ -209,35 +195,29 @@ $page_vars["submission_tab_field_id_str"] = join(",", $submission_tab_field_ids)
 $page_vars["tab_number"] = $tab_number;
 $page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected");
 $page_vars["head_title"] = $edit_submission_page_label;
-$page_vars["head_string"] = "<script type=\"text/javascript\" src=\"$g_root_url/global/tiny_mce/tiny_mce.js\"></script>
-  <script type=\"text/javascript\" src=\"$g_root_url/global/scripts/wysiwyg_settings.js\"></script>
-  <script type=\"text/javascript\" src=\"$g_root_url/global/scripts/manage_submissions.js\"></script>
-  <link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"{$g_root_url}/global/jscalendar/skins/aqua/theme.css\" title=\"Aqua\" />
-  <script type=\"text/javascript\" src=\"{$g_root_url}/global/jscalendar/calendar.js\"></script>
-  <script type=\"text/javascript\" src=\"{$g_root_url}/global/jscalendar/calendar-setup.js\"></script>
-  <script type=\"text/javascript\" src=\"{$g_root_url}/global/jscalendar/lang/calendar-en.js\"></script>";
-
-// if the image manager is enabled, there's a good chance the user wants to use the Lightbox. Include it!
-if ($image_manager_enabled)
-{
-	$page_vars["head_string"] .= "
-	<script type=\"text/javascript\" src=\"{$g_root_url}/global/scripts/lightbox.js\"></script>
-  <link rel=\"stylesheet\" href=\"$g_root_url/global/css/lightbox.css\" type=\"text/css\" media=\"screen\" />";
-}
+$page_vars["head_string"] =<<<EOF
+  <script type="text/javascript" src="$g_root_url/global/tiny_mce/tiny_mce.js"></script>
+  <script type="text/javascript" src="$g_root_url/global/scripts/wysiwyg_settings.js"></script>
+  <script type="text/javascript" src="$g_root_url/global/scripts/manage_submissions.js"></script>
+  <link rel="stylesheet" type="text/css" media="all" href="{$g_root_url}/global/jscalendar/skins/aqua/theme.css" title="Aqua" />
+  <script type="text/javascript" src="{$g_root_url}/global/jscalendar/calendar.js"></script>
+  <script type="text/javascript" src="{$g_root_url}/global/jscalendar/calendar-setup.js"></script>
+  <script type="text/javascript" src="{$g_root_url}/global/jscalendar/lang/calendar-en.js"></script>
+EOF;
 
 $tiny_resize = ($_SESSION["ft"]["settings"]["tinymce_resize"] == "yes") ? "true" : "false";
 $content_css = "$g_root_url/global/css/tinymce.css";
 
-	$page_vars["head_js"] = "
-
+  $page_vars["head_js"] =<<<EOF
 // load up any WYWISYG editors in the page
-g_content_css = \"$content_css\";
-editors[\"{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}\"].elements = \"$wysiwyg_field_id_list\";
-editors[\"{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}\"].theme_advanced_toolbar_location = \"{$_SESSION["ft"]["settings"]["tinymce_toolbar_location"]}\";
-editors[\"{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}\"].theme_advanced_toolbar_align = \"{$_SESSION["ft"]["settings"]["tinymce_toolbar_align"]}\";
-editors[\"{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}\"].theme_advanced_path_location = \"{$_SESSION["ft"]["settings"]["tinymce_path_info_location"]}\";
-editors[\"{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}\"].theme_advanced_resizing = $tiny_resize;
-editors[\"{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}\"].content_css = \"$content_css\";
-tinyMCE.init(editors[\"{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}\"]);";
+g_content_css = "$content_css";
+editors["{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}"].elements = "$wysiwyg_field_id_list";
+editors["{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}"].theme_advanced_toolbar_location = "{$_SESSION["ft"]["settings"]["tinymce_toolbar_location"]}";
+editors["{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}"].theme_advanced_toolbar_align = "{$_SESSION["ft"]["settings"]["tinymce_toolbar_align"]}";
+editors["{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}"].theme_advanced_path_location = "{$_SESSION["ft"]["settings"]["tinymce_path_info_location"]}";
+editors["{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}"].theme_advanced_resizing = $tiny_resize;
+editors["{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}"].content_css = "$content_css";
+tinyMCE.init(editors["{$_SESSION["ft"]["settings"]["tinymce_toolbar"]}"]);
+EOF;
 
 ft_display_page("clients/forms/edit_submission.tpl", $page_vars);

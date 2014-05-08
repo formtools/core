@@ -3,10 +3,6 @@
 require("../../global/session_start.php");
 ft_check_permission("admin");
 
-// if required, include the Image Manager module
-if (ft_check_module_enabled("image_manager"))
-  ft_include_module("image_manager");
-
 // blur the GET and POST variables into a single variable for easy reference
 $request = array_merge($_GET, $_POST);
 $form_id = ft_load_field("form_id", "curr_form_id");
@@ -61,11 +57,6 @@ if (isset($_POST) && !empty($_POST))
     list($g_success, $g_message) = ft_delete_file_submission($form_id, $submission_id, $_POST['field_id']);
     $file_deleted = true;
   }
-  else if (isset($_POST['delete_file_type']) && $_POST['delete_file_type'] == "image")
-  {
-    list($g_success, $g_message) = img_delete_image_file_submission($form_id, $submission_id, $_POST['field_id']);
-    $file_deleted = true;
-  }
 
   // TODO this deprecated??
   else if (isset($_POST['email_user']) && !empty($_POST['email_user']))
@@ -97,11 +88,6 @@ for ($i=0; $i<count($submission_info); $i++)
   if ($submission_info[$i]["field_type"] == "wysiwyg")
     $wysiwyg_field_ids[] = "field_{$curr_field_id}_wysiwyg";
 
-  // if this is an image field, keep track of its extended image settings. These are passed to the image rendering Smarty
-  // plugin function to let it know how to display it
-  if ($submission_info[$i]["field_type"] == "image")
-    $image_field_info[$curr_field_id] = ft_get_extended_field_settings($curr_field_id, "image_manager");
-
   $submission_tab_field_ids[] = $curr_field_id;
   $submission_tab_fields[]    = $submission_info[$i];
 }
@@ -117,8 +103,12 @@ $search = isset($_SESSION["ft"]["current_search"]) ? $_SESSION["ft"]["current_se
 // search result set. This is used to build the internal "<< previous   next >>" nav on this details page
 if (isset($_SESSION["ft"]["new_search"]) && $_SESSION["ft"]["new_search"] == "yes")
 {
+  $searchable_columns = ft_get_view_searchable_fields("", $view_info["fields"]);
+
   // extract the original search settings and get the list of IDs
-  $_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"] = ft_get_search_submission_ids($form_id, $view_id, $search["results_per_page"], $search["order"], $search["search_fields"]);
+  $submission_ids = ft_get_search_submission_ids($form_id, $view_id, $search["results_per_page"], $search["order"],
+    $search["search_fields"], $searchable_columns);
+  $_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"] = $submission_ids;
   $_SESSION["ft"]["new_search"] = "no";
 }
 
@@ -177,8 +167,6 @@ while (list($key, $value) = each($view_tabs))
     );
 }
 
-$image_manager_enabled = ft_check_module_enabled("image_manager");
-
 // construct the page label
 $edit_submission_page_label = $form_info["edit_submission_page_label"];
 $common_placeholders = _ft_get_placeholder_hash($form_id, $submission_id);
@@ -209,7 +197,6 @@ $page_vars["search_results_link_html"] = $search_results_link_html;
 $page_vars["next_link_html"] = $next_link_html;
 $page_vars["tab_has_editable_fields"] = count($editable_tab_fields) > 0;
 $page_vars["view_info"] = $view_info;
-$page_vars["image_field_info"] = $image_field_info;
 $page_vars["form_id"] = $form_id;
 $page_vars["view_id"] = $view_id;
 $page_vars["edit_submission_page_label"] = $edit_submission_page_label;

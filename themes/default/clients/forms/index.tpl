@@ -20,7 +20,6 @@
   </tr>
   </table>
 
-
   {* if there is at least one submission in this form (and not necessary in this current search or View),
      always display the search form *}
   {if $total_form_submissions == 0}

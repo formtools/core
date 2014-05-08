@@ -25,18 +25,19 @@ $page_vars = array();
 $page_vars["page"] = "add_client";
 $page_vars["page_url"] = ft_get_page_url("add_client");
 $page_vars["head_title"] = $LANG["phrase_add_client"];
-$page_vars["head_js"] = "var rules = [];
-rules.push(\"required,first_name,{$LANG['validation_no_client_first_name']}\");
-rules.push(\"required,last_name,{$LANG['validation_no_client_first_name']}\");
-rules.push(\"required,email,{$LANG['validation_no_client_email']}\");
-rules.push(\"valid_email,email,{$LANG['validation_invalid_email']}\");
-rules.push(\"required,username,{$LANG['validation_no_client_username']}\");
-rules.push(\"is_alpha,username,{$LANG['validation_invalid_client_username']}\");
-rules.push(\"required,password,{$LANG['validation_no_client_password']}\");
-rules.push(\"is_alpha,password,{$LANG['validation_invalid_client_password']}\");
-rules.push(\"same_as,password,password_2,{$LANG['validation_passwords_different']}\");
+$page_vars["head_js"] =<<<EOF
+var rules = [];
+rules.push("required,first_name,{$LANG['validation_no_client_first_name']}");
+rules.push("required,last_name,{$LANG['validation_no_client_first_name']}");
+rules.push("required,email,{$LANG['validation_no_client_email']}");
+rules.push("valid_email,email,{$LANG['validation_invalid_email']}");
+rules.push("required,username,{$LANG['validation_no_client_username']}");
+rules.push("is_alpha,username,{$LANG['validation_invalid_client_username']}");
+rules.push("required,password,{$LANG['validation_no_client_password']}");
+rules.push("is_alpha,password,{$LANG['validation_invalid_client_password']}");
+rules.push("same_as,password,password_2,{$LANG['validation_passwords_different']}");
 
-Event.observe(document, 'dom:loaded', function() { $(\"first_name\").focus(); });
-  ";
+Event.observe(document, 'dom:loaded', function() { $("first_name").focus(); });
+EOF;
 
 ft_display_page("admin/clients/add.tpl", $page_vars);

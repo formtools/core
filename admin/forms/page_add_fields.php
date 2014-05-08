@@ -32,15 +32,13 @@ $page_vars["js_messages"] = array("validation_num_rows_to_add", "phrase_size_tin
         "phrase_size_medium", "phrase_size_large", "phrase_size_very_large", "word_string",
         "word_number", "word_delete", "validation_no_display_text", "validation_no_column_name",
         "validation_invalid_column_name", "validation_db_column_name_exists", "validation_no_two_column_names");
-$page_vars["head_js"] = "
-
+$page_vars["head_js"] =<<<EOF
 Event.observe(document, 'dom:loaded',
   function()
   {
-    add_fields_ns.add_fields(\"$num_fields\");
+    add_fields_ns.add_fields("$num_fields");
     add_fields_ns.toggle_db_column_fields($('auto_generate_col_names').checked);
   });";
+EOF;
 
 ft_display_page("admin/forms/edit.tpl", $page_vars);
-
-?>

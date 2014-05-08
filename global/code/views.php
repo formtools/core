@@ -132,7 +132,7 @@ function ft_get_view($view_id)
   $view_info["filters"]   = ft_get_view_filters($view_id);
   $view_info["tabs"]      = ft_get_view_tabs($view_id);
   $view_info["client_omit_list"] = (isset($view_info["access_type"]) && $view_info["access_type"] == "public") ?
-	  ft_get_public_view_omit_list($view_id) : array();
+    ft_get_public_view_omit_list($view_id) : array();
 
   extract(ft_process_hooks("end", compact("view_id", "view_info"), array("view_info")), EXTR_OVERWRITE);
 
@@ -224,6 +224,40 @@ function ft_get_view_ids($form_id)
 
 
 /**
+ * This returns the database column names of all searchable fields in this View. To reduce the number of
+ * DB queries, this function allows you to pass in all field info to just extract the information from that.
+ *
+ * @param integer $view_id optional, but if not supplied, the second $fields paramt
+ * @param array $fields optional, but if not supplied, the first $view_id param is required. This should
+ *   be the $view_info["fields"] key, returned from $view_info = ft_get_view($view_id), which contains all
+ *   View field info
+ *
+ * @return array an array of searchable database column names
+ */
+function ft_get_view_searchable_fields($view_id = "", $fields = array())
+{
+  // this should never occur, but just in case
+  if (empty($view_id) && empty($fields))
+    ft_handle_error("<b>" . __FUNCTION__ . "</b> received invalid input, line " . __LINE__);
+
+  if (!empty($view_id) && is_numeric($view_id))
+  {
+    $view_info = ft_get_view($view_id);
+    $fields = $view_info["fields"];
+  }
+
+  $searchable_columns = array();
+  foreach ($view_info["fields"] as $field_info)
+  {
+    if ($field_info["is_searchable"] == "yes")
+      $searchable_columns[] = $field_info["col_name"];
+  }
+
+  return $searchable_columns;
+}
+
+
+/**
  * Returns all tab information for a particular form view. If the second parameter is
  * set to true.
  *
@@ -304,12 +338,14 @@ function ft_create_new_view($form_id, $create_from_view_id = "")
     $num_submissions_per_page = $view_info["num_submissions_per_page"];
     $default_sort_field       = $view_info["default_sort_field"];
     $default_sort_field_order = $view_info["default_sort_field_order"];
+    $has_standard_filter      = $view_info["has_standard_filter"];
+    $has_client_map_filter    = $view_info["has_client_map_filter"];
 
     mysql_query("
       INSERT INTO {$g_table_prefix}views (form_id, view_name, view_order, num_submissions_per_page,
-        default_sort_field, default_sort_field_order)
+        default_sort_field, default_sort_field_order, has_client_map_filter, has_standard_filter)
       VALUES ($form_id, '{$LANG["phrase_new_view"]}', $next_order, $num_submissions_per_page,
-        '$default_sort_field', '$default_sort_field_order')
+        '$default_sort_field', '$default_sort_field_order', '$has_client_map_filter', '$has_standard_filter')
         ") or die(mysql_error());
     $view_id = mysql_insert_id();
 
@@ -355,13 +391,14 @@ function ft_create_new_view($form_id, $create_from_view_id = "")
     foreach ($view_info["filters"] as $filter_info)
     {
       $field_id      = $filter_info["field_id"];
+      $filter_type   = $filter_info["filter_type"];
       $operator      = $filter_info["operator"];
       $filter_values = $filter_info["filter_values"];
       $filter_sql    = $filter_info["filter_sql"];
 
       mysql_query("
-        INSERT INTO {$g_table_prefix}view_filters (view_id, field_id, operator, filter_values, filter_sql)
-        VALUES ($view_id, $field_id, '$operator', '$filter_values', '$filter_sql')
+        INSERT INTO {$g_table_prefix}view_filters (view_id, filter_type, field_id, operator, filter_values, filter_sql)
+        VALUES ($view_id, '$filter_type', $field_id, '$operator', '$filter_values', '$filter_sql')
           ");
     }
   }
@@ -698,17 +735,17 @@ function ft_get_view_filter_sql($view_id)
 
   $placeholders = array();
   if ($is_client_account)
-	{
-	  $account_info = $_SESSION["ft"]["account"];
+  {
+    $account_info = $_SESSION["ft"]["account"];
 
-		$placeholders = array(
-		  "account_id" => $account_info["account_id"],
+    $placeholders = array(
+      "account_id" => $account_info["account_id"],
       "first_name" => $account_info["first_name"],
-		  "last_name" => $account_info["last_name"],
-		  "email" => $account_info["email"],
-			"company_name" => $account_info["settings"]["company_name"]
-			  );
-	}
+      "last_name" => $account_info["last_name"],
+      "email" => $account_info["email"],
+      "company_name" => $account_info["settings"]["company_name"]
+        );
+  }
 
   extract(ft_process_hooks("start", compact("placeholders", "is_client_account"), array("placeholders", "is_client_account")), EXTR_OVERWRITE);
 
@@ -726,11 +763,11 @@ function ft_get_view_filter_sql($view_id)
       $infohash[] = $filter["filter_sql"];
     else
     {
-		  // if this is a client account, evaluate the Client Map placeholders
+      // if this is a client account, evaluate the Client Map placeholders
       if ($is_client_account)
-			{
-			  $infohash[] = ft_eval_smarty_string($filter["filter_sql"], $placeholders);
-			}
+      {
+        $infohash[] = ft_eval_smarty_string($filter["filter_sql"], $placeholders);
+      }
     }
   }
 
@@ -1000,7 +1037,7 @@ function _ft_update_view_filter_settings($view_id, $info)
 {
   global $g_table_prefix, $g_debug, $LANG;
 
-  $info = ft_sanitize($info);  
+  $info = ft_sanitize($info);
   $form_id = $info["form_id"];
 
   // delete all old filters for this View. The two update view filter functions that follow re-insert
@@ -1022,7 +1059,7 @@ function _ft_update_view_filter_settings($view_id, $info)
   {
     $success = false;
     $message = $LANG["notify_filters_not_updated"];
-    
+
     $errors = array_merge($standard_filter_errors, $client_map_filter_errors);
 
     if ($g_debug)
@@ -1042,7 +1079,7 @@ function _ft_update_view_filter_settings($view_id, $info)
 function _ft_update_view_standard_filters($view_id, $info, $field_columns)
 {
   global $g_table_prefix;
-  
+
   // note that we call this MAX_standard_filters, not num_standard_filters. This is because
   // the value passed from the page may not be accurate. The JS doesn't reorder everything when
   // the user deletes a row, so the value passed is the total number of rows that CAN be passed. Some rows
@@ -1050,9 +1087,9 @@ function _ft_update_view_standard_filters($view_id, $info, $field_columns)
   $max_standard_filters = $info["num_standard_filters"];
   $errors = array();
 
-  // stores the actual number of standard filters added  
+  // stores the actual number of standard filters added
   $num_standard_filters = 0;
-  
+
   // loop through all standard filters and add each to the database
   for ($i=1; $i<=$max_standard_filters; $i++)
   {
@@ -1124,7 +1161,7 @@ function _ft_update_view_standard_filters($view_id, $info, $field_columns)
         // "Yes" - and that includes NULL values. So, we need to add an additional check to also return null values
         if ($operator == "not_like" || $operator == "not_equals")
         {
-        	// empty string being searched AGAINST; i.e. checking the field is NOT empty or LIKE empty
+          // empty string being searched AGAINST; i.e. checking the field is NOT empty or LIKE empty
           if (empty($trimmed_value))
             $sql_statements_arr[] = "$field_name $sql_operator '$escaped_value' OR $field_name IS NOT NULL";
           else
@@ -1161,7 +1198,7 @@ function _ft_update_view_standard_filters($view_id, $info, $field_columns)
     $has_standard_filter = "yes";
 
   @mysql_query("UPDATE {$g_table_prefix}views SET has_standard_filter = '$has_standard_filter' WHERE view_id = $view_id");
-  
+
   return $errors;
 }
 
@@ -1169,7 +1206,7 @@ function _ft_update_view_standard_filters($view_id, $info, $field_columns)
 function _ft_update_view_client_map_filters($view_id, $info, $field_columns)
 {
   global $g_table_prefix;
-    
+
   // note that we call this MAX_client_map_filters, not num_client_map_filters. This is because
   // the value passed from the page may not be accurate. The JS doesn't reorder everything when
   // the user deletes a row, so the value passed is the total number of rows that CAN be passed. Some rows
@@ -1177,13 +1214,13 @@ function _ft_update_view_client_map_filters($view_id, $info, $field_columns)
   $max_client_map_filters = $info["num_client_map_filters"];
   $errors = array();
 
-  // stores the actual number of client map filters added  
+  // stores the actual number of client map filters added
   $num_client_map_filters = 0;
-  
+
   // loop through all client map filters and add each to the database
   for ($i=1; $i<=$max_client_map_filters; $i++)
   {
-    // if this filter doesn't have a field or a client field specified, 
+    // if this filter doesn't have a field or a client field specified,
     if (!isset($info["client_map_filter_{$i}_field_id"]) || empty($info["client_map_filter_{$i}_field_id"]) ||
         !isset($info["client_map_filter_{$i}_client_field"]) || empty($info["client_map_filter_{$i}_client_field"]))
       continue;
@@ -1218,13 +1255,13 @@ function _ft_update_view_client_map_filters($view_id, $info, $field_columns)
         break;
     }
 
-    $field_name = $field_columns[$field_id];    
+    $field_name = $field_columns[$field_id];
     $original_client_field = $client_field;
-    
+
     // now we're going to build the actual SQL query that contains the Smarty placeholders for the account info.
     // first, convert the client field name to a Smarty variable.
     $sql_client_field = "{\$$client_field}";
-    
+
     // second, if this is a LIKE operator (not_like, like), wrap the value even further with a %...%
     if ($operator == "like" || $operator == "not_like")
       $sql_client_field = "%$sql_client_field%";
@@ -1249,7 +1286,7 @@ function _ft_update_view_client_map_filters($view_id, $info, $field_columns)
 
   @mysql_query("UPDATE {$g_table_prefix}views SET has_client_map_filter = '$has_client_map_filter' WHERE view_id = $view_id");
 
-  return $errors;  
+  return $errors;
 }
 
 
