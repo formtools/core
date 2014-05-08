@@ -169,7 +169,7 @@ function ft_display_message($results, $messages)
  * @param string $theme
  * @return string a string containing the output of the eval()'d smarty template
  */
-function ft_eval_smarty_string($placeholder_str, $placeholders = array(), $theme = "")
+function ft_eval_smarty_string($placeholder_str, $placeholders = array(), $theme = "", $plugin_dirs = array())
 {
 	global $g_root_dir, $g_default_theme, $LANG;
 
@@ -181,6 +181,9 @@ function ft_eval_smarty_string($placeholder_str, $placeholders = array(), $theme
 	$smarty = new Smarty();
 	$smarty->template_dir = "$g_root_dir/global/smarty/";
 	$smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
+
+	foreach ($plugin_dirs as $dir)
+    $smarty->plugins_dir[] = $dir;
 
 	$smarty->assign("eval_str", $placeholder_str);
 	if (!empty($placeholders))

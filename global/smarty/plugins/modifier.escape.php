@@ -23,7 +23,7 @@ function smarty_modifier_escape($string, $esc_type = 'html', $char_set = 'ISO-88
 {
     switch ($esc_type) {
 
-    	  // added for Form Tools' Export Manager
+    	  // added for the Form Tools Export Manager module
         case 'csv':
         	  $string = preg_replace("/\"/", "\"\"", $string);
 

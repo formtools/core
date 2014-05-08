@@ -3,10 +3,11 @@
 /*
  * Smarty plugin
  * -------------------------------------------------------------
- * File:     function.forms_dropdown
+ * File:     function.display_multi_select_field_values
  * Type:     function
  * Name:     form_dropdown
- * Purpose:  generates a dropdown of all forms in the database (ordered by form name).
+ * Purpose:  used to display the values of any form of multi-select field: dropdowns, multi-select dropdowns,
+ *           checkboxes and radio buttons.
  * -------------------------------------------------------------
  */
 function smarty_function_display_multi_select_field_values($params, &$smarty)
@@ -20,7 +21,7 @@ function smarty_function_display_multi_select_field_values($params, &$smarty)
 	  $smarty->trigger_error("assign: missing 'options' parameter. This contains all available multi-select options.");
     return;
   }
-  $options = (isset($params["options"])) ? $params["options"] : "";
+  $options  = (isset($params["options"])) ? $params["options"] : "";
   $var_name = (isset($params["var_name"])) ? $params["var_name"] : "";
 
   // contains the raw field VALUES (not display values), separated by $g_multi_val_delimiter
