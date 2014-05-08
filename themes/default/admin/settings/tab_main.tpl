@@ -55,6 +55,7 @@
       <td class="pad_left_small">{$LANG.phrase_num_modules_per_page}</td>
       <td><input type="text" name="num_modules_per_page" value="{$settings.num_modules_per_page}" style="width: 30px" /></td>
     </tr>
+    {template_hook location="admin_settings_main_tab_bottom"}
     </table>
 
     <p>

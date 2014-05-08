@@ -150,6 +150,7 @@
           <span class="pad_left_large light_grey">{$LANG.text_use_lightbox_caveat}</span>
         </td>
       </tr>
+      {template_hook location="admin_settings_files_bottom"}			
       </table>
 
       <p>

@@ -14,9 +14,9 @@ function smarty_function_template_hook($params, &$smarty)
 {
   if (empty($params["location"]))
   {
-	  $smarty->trigger_error("assign: missing 'location' parameter.");
+    $smarty->trigger_error("assign: missing 'location' parameter.");
     return;
   }
-	
-	echo ft_process_template_hooks($params["location"], $smarty->_tpl_vars);
+
+  echo ft_process_template_hooks($params["location"], $smarty->_tpl_vars);
 }

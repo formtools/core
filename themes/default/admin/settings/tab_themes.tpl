@@ -65,6 +65,7 @@
           </tr>
 
         {/foreach}
+        {template_hook location="admin_settings_themes_bottom"}				
         </table>
 
       {/if}

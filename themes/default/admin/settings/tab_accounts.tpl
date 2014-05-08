@@ -69,6 +69,7 @@
       <td><input type="text" name="default_date_format" value="{$settings.default_date_format}" style="width: 80px" /> <span class="medium_grey">{$text_date_formatting_link}</span></td>
       <td align="center"><input type="checkbox" name="clients_may_edit_date_format" {if $settings.clients_may_edit_date_format == "yes"}checked{/if} /></td>
     </tr>
+    {template_hook location="admin_settings_client_settings_bottom"}
     </table>
 
     <p>

@@ -6,6 +6,8 @@
       {$LANG.text_edit_client_menu_page}
     </div>
 
+    {template_hook location="admin_settings_menus_top"}
+
     {$pagination}
 
     <table class="list_table" cellspacing="1" cellpadding="1">

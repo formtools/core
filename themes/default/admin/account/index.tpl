@@ -9,6 +9,8 @@
 
   {ft_include file='messages.tpl'}
 
+  {template_hook location="admin_account_top"}
+	
   <form method="post" name="login_info" action="{$same_page}" onsubmit="return rsv.validate(this, rules)">
 
     <table class="list_table" cellpadding="0" cellspacing="1">
@@ -76,6 +78,8 @@
       <td><input type="password" name="password_2" value="" size="20" autocomplete="off" /></td>
     </tr>
     </table>
+
+    {template_hook location="admin_account_bottom"}
 
     <p>
       <input type="submit" value="{$LANG.word_update|upper}" />

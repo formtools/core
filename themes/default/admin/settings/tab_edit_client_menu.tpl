@@ -12,6 +12,8 @@
 
     {ft_include file='messages.tpl'}
 
+    {template_hook location="admin_settings_client_menu_top"}
+		
     <form action="{$same_page}" method="post" onsubmit="return mm.update_client_menu_submit(this)">
       <input type="hidden" name="page" value="edit_client_menu" />
       <input type="hidden" name="menu_id" value="{$menu.menu_id}" />

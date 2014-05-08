@@ -68,6 +68,7 @@
           /> <label for="tinymce_resize2">{$LANG.word_no}</label>
       </td>
     </tr>
+    {template_hook location="admin_settings_wysiwyg_bottom"}		
     </table>
 
 

@@ -35,7 +35,7 @@ function smarty_function_forms_dropdown($params, &$smarty)
   // if this option is set, it only shows those form in the array
   $only_show_forms = (isset($params["only_show_forms"])) ? $params["only_show_forms"] : array();
 
-  // this option tells the function that if there's only a single client, display it as straight text
+  // this option tells the function that if there's only a single form, display it as straight text
   // rather than in a dropdown. Only compatible with the non-multiple dropdown list
   $display_single_form_as_text = (isset($params["display_single_form_as_text"])) ? $params["display_single_form_as_text"] : false;
 

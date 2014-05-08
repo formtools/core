@@ -10,6 +10,8 @@
       {$LANG.text_edit_admin_menu_page}
     </div>
 
+    {template_hook location="admin_settings_admin_menu_top"}
+
     <form action="{$same_page}" method="post" onsubmit="return mm.update_admin_menu_submit(this)">
       <input type="hidden" name="page" value="edit_admin_menu" />
       <input type="hidden" name="menu_id" value="{$menu.menu_id}" />

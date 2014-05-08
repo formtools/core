@@ -51,7 +51,7 @@
  * @param integer $priority 1-100 (100 lowest, 1 highest). Optional setting that determines the order
  *    in which this hook gets processed, in relation to OTHER hooks attached to the same event.
  * @param boolean $force_unique if set to true, this will only register hooks that haven't been set
- *    with this module, location, hook and core functino.
+ *    with this module, location, hook and core function.
  */
 function ft_register_hook($hook_type, $module_folder, $when, $core_function, $hook_function, $priority = 50, $force_unique = false)
 {
@@ -85,9 +85,12 @@ function ft_register_hook($hook_type, $module_folder, $when, $core_function, $ho
       ");
 
   if ($result)
-    return true;
+  {
+    $hook_id = mysql_insert_id();
+    return array(true, $hook_id);
+  }
   else
-    return false;
+    return array(false, "");
 }
 
 
@@ -172,6 +175,10 @@ function ft_process_hooks($event, $vars, $overridable_vars)
   // extract the var passed from the calling function into the current scope
   foreach ($hooks as $hook_info)
   {
+    // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
+    // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
+    $vars["form_tools_hook_info"] = $hook_info; 
+
     $updated_vars = ft_process_hook($hook_info["module_folder"], $hook_info["hook_function"], $vars, $overridable_vars, $calling_function);
 
     // update $vars with any values that have been updated by the hook
@@ -248,6 +255,9 @@ function ft_process_template_hooks($location, $template_vars)
   // extract the var passed from the calling function into the current scope
   foreach ($hooks as $hook_info)
   {
+    // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
+    // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
+    $template_vars["form_tools_hook_info"] = $hook_info; 
     ft_process_template_hook($hook_info["module_folder"], $hook_info["hook_function"], $location, $template_vars);
   }
 }
@@ -269,4 +279,15 @@ function ft_process_template_hook($module_folder, $hook_function, $location, $te
   $html = @$hook_function($location, $template_vars);
 
   return $html;
+}
+
+/**
+ * Deletes a hook by hook ID.
+ *
+ * @param integer $hook_id
+ */
+function ft_delete_hook($hook_id)
+{
+  global $g_table_prefix;
+  mysql_query("DELETE FROM {$g_table_prefix}hooks WHERE hook_id = $hook_id");
 }

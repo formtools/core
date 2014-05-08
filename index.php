@@ -75,6 +75,13 @@ if (isset($_GET["message"]))
 
 	if (array_key_exists($_GET["message"], $LANG))
 	  $g_message = $LANG[$_GET["message"]];
+
+	  
+	// this provides a simple mechanism for module developers to output their own messages on the index 
+	// page (e.g. if they're forbidding a user from logging in & need to notify them)
+	else
+	  $g_message = strip_tags($_GET["message"]);
+
 }
 
 ft_display_page("index.tpl", $page_vars, $g_theme);

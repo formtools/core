@@ -462,8 +462,8 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
     {
       if ($submission_field_info["field_id"] == $field_info["field_id"])
       {
-    if ($submission_field_info["field_type"] == "file" || $submission_field_info["field_type"] == "image")
-      $file_info[$submission_field_info["field_name"]] = $submission_field_info["content"];
+        if ($submission_field_info["field_type"] == "file" || $submission_field_info["field_type"] == "image")
+          $file_info[$submission_field_info["field_name"]] = $submission_field_info["content"];
 
         switch ($submission_field_info["col_name"])
         {
@@ -507,7 +507,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 
     $smarty->assign("LANG", $LANG);
     $smarty->assign("fields", $fields_for_email_template);
-    $return_info["text_content"] = $smarty->fetch("eval.tpl");
+    $return_info["text_content"] = @$smarty->fetch("eval.tpl");
   }
 
   if (isset($templates["html"]) && !empty($templates["html"]))
@@ -535,7 +535,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 
     $smarty->assign("LANG", $LANG);
     $smarty->assign("fields", $fields_for_email_template);
-    $return_info["html_content"] = $smarty->fetch("eval.tpl");
+    $return_info["html_content"] = @$smarty->fetch("eval.tpl");
   }
 
   // compile the "to" / "from" / "reply-to" recipient list, based on this form submission. Virtually
