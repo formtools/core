@@ -9,11 +9,10 @@ $g_default_language       = "en_us.php";
 $g_default_theme          = "default";
 $g_form_tools_version     = "2.0.0";
 $g_is_beta                = "yes";
-$g_beta_version           = "15/12/2008";
+$g_beta_version           = "2008/12/23";
 $g_smarty_use_sub_dirs    = false;
 
 /*
-
 TODO
 - sessions check on every page - make sure the session still exists
 - manually create file stuff
@@ -25,7 +24,6 @@ QA
 - try entering gobbledegook values for g_root_url & g_root_dir and see how it handles going to
   step 5. Crash? blank screen?
 - check the language file stays in memory for the duration of the script.
-
 */
 
 
