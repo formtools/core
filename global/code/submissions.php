@@ -118,7 +118,6 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
     }
     else
     {
-
       $success = false;
       $message = $LANG["notify_submission_deleted_with_problems"] . "<br /><br />";
 
@@ -138,6 +137,10 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
   _ft_cache_view_stats($view_id);
 
   extract(ft_process_hooks("end", compact("form_id", "view_id", "submission_id", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
+
+	// update sessions
+	if (isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) && in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]))
+	  array_splice($_SESSION["ft"]["form_{$form_id}_selected_submissions"], array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]), 1);  
 
   return array($success, $message);
 }

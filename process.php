@@ -42,9 +42,7 @@ else if (isset($_POST["form_tools_initialize_form"]))
 else
   ft_process_form($_POST);
 
-
 // -------------------------------------------------------------------------------------------------
-
 
 /**
  * This function processes the form submissions, after the form has been set up in the database.

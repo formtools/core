@@ -26,14 +26,13 @@ function ft_get_ui_language()
 {
 	global $g_table_prefix, $g_root_dir, $g_root_url;
 
-
 	// always set the default language to en_us
 	$language = "en_us";
 
 	// if the user isn't logged in, retrieve whatever language is most appropriate. Note that this
 	// doesn't store the language ID in sessions: it keeps getting checked for as long as they're not
 	// logged in
-	if (!isset($_SESSION["ft"]["login_user_id"]))
+	if (!isset($_SESSION["ft"]["account"]["account_id"]))
 	{
 		if (!empty($g_root_url))
 		{
@@ -57,11 +56,11 @@ function ft_get_ui_language()
   // here they're logged in
 	else
 	{
-		if (isset($_SESSION["ft"]["ui_language"]) && !empty($_SESSION["ft"]["ui_language"]))
+		if (isset($_SESSION["ft"]["account"]["ui_language"]) && !empty($_SESSION["ft"]["account"]["ui_language"]))
     {
       // final check: check the language is a valid language file
-      if (is_file("$g_root_dir/global/lang/{$_SESSION["ft"]["ui_language"]}.php"))
-        $language = $_SESSION["ft"]["ui_language"];
+      if (is_file("$g_root_dir/global/lang/{$_SESSION["ft"]["account"]["ui_language"]}.php"))
+        $language = $_SESSION["ft"]["account"]["ui_language"];
     }
 		else
 		{
@@ -74,7 +73,7 @@ function ft_get_ui_language()
 				$lang_result = @mysql_query("
 					SELECT ui_language
 					FROM   {$g_table_prefix}accounts
-					WHERE  user_id = {$_SESSION["ft"]["login_user_id"]}
+					WHERE  user_id = {$_SESSION["ft"]["account"]["account_id"]}
 						");
 
 				if ($lang_result)
@@ -85,7 +84,7 @@ function ft_get_ui_language()
 					if (!empty($query_info))
           {
 						$language = $query_info["ui_language"];
-            $_SESSION["ft"]["ui_language"] = $language;
+            $_SESSION["ft"]["account"]["ui_language"] = $language;
           }
 				}
 			}

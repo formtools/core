@@ -173,7 +173,7 @@ $g_api_header_charset = "utf-8";
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.0-beta-20090427";
+$g_current_version = "2.0.0-beta-20090428";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.

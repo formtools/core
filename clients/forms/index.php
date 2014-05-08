@@ -96,7 +96,9 @@ if (isset($_GET["delete"]))
   // in order to delete it
   if (!empty($_GET["delete"]))
   {
-    list($g_success, $g_message) = ft_delete_submission($form_id, $view_id, $_GET["delete"], true);
+	  $ids = split(",", $_GET["delete"]);
+		foreach ($ids as $id)
+      list($g_success, $g_message) = ft_delete_submission($form_id, $view_id, $id, true);
   }
   else
   {
@@ -232,7 +234,8 @@ $page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fie
 $page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download", "validation_select_submissions_to_delete",
         "confirm_delete_submission", "confirm_delete_submissions", "phrase_select_all_X_results",
-  			"phrase_select_all_on_page", "phrase_all_X_results_selected", "phrase_row_selected", "phrase_rows_selected");
+  			"phrase_select_all_on_page", "phrase_all_X_results_selected", "phrase_row_selected", "phrase_rows_selected",
+				"confirm_delete_submissions_on_other_pages");
 $page_vars["head_string"] = '<script type="text/javascript" src="../../global/scripts/manage_submissions.js"></script>';
 $page_vars["head_js"] = "
 var rules = [];
