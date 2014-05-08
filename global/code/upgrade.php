@@ -71,6 +71,24 @@ function ft_upgrade_form_tools()
       	    ");
       }
 
+      if ($existing_version_info["release_date"] < 20090402)
+      {
+      	mysql_query("
+      	  ALTER TABLE {$g_table_prefix}hooks
+      	  ADD hook_type ENUM('code', 'template') NOT NULL DEFAULT 'code' AFTER hook_id
+      	    ");
+
+      	mysql_query("
+      	  ALTER TABLE {$g_table_prefix}hooks
+      	  CHANGE action_location action_location VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+      	    ");
+
+      	mysql_query("
+      	  ALTER TABLE {$g_table_prefix}account_settings
+      	  CHANGE setting_value setting_value MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+      	    ");
+      }
+
       if ($existing_version_info["full"] != $g_current_version)
       {
         mysql_query("

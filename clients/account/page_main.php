@@ -15,5 +15,12 @@ $page_vars["page"]     = "main";
 $page_vars["tabs"]     = $tabs;
 $page_vars["client_info"] = $client_info;
 $page_vars["page_url"] = ft_get_page_url("client_account");
+$page_vars["head_js"] =<<< EOF
+var rules = [];
+rules.push("required,first_name,{$LANG["validation_no_first_name"]}");
+rules.push("required,last_name,{$LANG["validation_no_last_name"]}");
+rules.push("required,email,{$LANG["validation_no_email"]}");
+push("required,username,{$LANG["validation_no_username"]}");
+EOF;
 
 ft_display_page("clients/account/index.tpl", $page_vars);

@@ -1,8 +1,10 @@
     {ft_include file='messages.tpl'}
 
-    <form method="post" action="{$same_page}" onsubmit="return rsv.validate(this, rules)">
+    <form method="post" id="settings_form" action="{$same_page}" onsubmit="return rsv.validate(this, rules)">
       <input type="hidden" name="client_id" value="{$client_id}" />
       <input type="hidden" name="page" value="settings" />
+
+      {template_hook location="admin_edit_client_settings_top"} 
 
       <table class="list_table" cellpadding="0" cellspacing="1">
       <tr>
@@ -65,6 +67,8 @@
         <td align="center"><input type="checkbox" name="may_edit_date_format" {if $client_info.settings.may_edit_date_format == "yes"}checked{/if} /></td>
       </tr>
       </table>
+
+      {template_hook location="admin_edit_client_settings_bottom"}
 
       <p>
         <input type="submit" name="update_client" value="{$LANG.word_update|upper}" />

@@ -1454,8 +1454,8 @@ function _ft_extract_email_attachment_info($template_str, $form_id, $file_info)
     {
       if (is_file("$g_root_dir/$file_and_relative_path"))
       {
-			  $pathinfo = pathinfo($file_and_relative_path);
-				$file_name = $pathinfo["basename"];
+        $pathinfo = pathinfo($file_and_relative_path);
+        $file_name = $pathinfo["basename"];
 
         $info = array(
           "file_and_path" => "$g_root_dir/$file_and_relative_path",

@@ -1,8 +1,10 @@
     {ft_include file='messages.tpl'}
 
-    <form method="post" name="add_client" action="{$same_page}" onsubmit="return rsv.validate(this, rules)">
+    <form method="post" name="add_client" id="add_client" action="{$same_page}" onsubmit="return rsv.validate(this, rules)">
       <input type="hidden" name="client_id" value="{$client_id}" />
       <input type="hidden" name="update_client" value="1" />
+
+      {template_hook location="admin_edit_client_main_top"}
 
       <table class="list_table" cellpadding="0" cellspacing="1">
       <tr>
@@ -44,6 +46,8 @@
       </tr>
       </table>
 
+      {template_hook location="admin_edit_client_main_middle"} 
+
       <p class="subtitle">{$LANG.phrase_change_login_info}</p>
 
       <table class="list_table" cellpadding="0" cellspacing="1">
@@ -63,6 +67,8 @@
         <td><input type="password" name="password_2" value="" size="20" autocomplete="off" /></td>
       </tr>
       </table>
+
+      {template_hook location="admin_edit_client_main_bottom"}
 
       <p>
         <input type="submit" name="submit" value="{$LANG.word_update}" />

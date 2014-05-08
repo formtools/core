@@ -23,8 +23,7 @@
  *   Return values: your function may return any values you want. These will be registered in the function
  *   scope, overwriting anything already defined there.
  *
- *   2. Register your function. In your library.php file, add the following line:
- *      ft_register_hook("start", "my_update_submission");
+ *   2. Register your function. In your library.php file, call the ft_register_hook function.
  *
  *   The first parameter should be "start" or "after". It determines
  *   The function also takes a 3rd, optional parameter: priority. 1-100
@@ -41,12 +40,12 @@
 
 /**
  * Called by module installation files, and/or whenever needed. This function logs new hooks in the
- * database.
+ * database. This function is called by the module designers WITHIN their own modules.
  *
- * This function is called by the module designers WITHIN their own modules. Hence, the module ID
- * doesn't need to be passed: we can figure it out from the calling location.
- *
- * @param string $when "start", "end". When in the functions the hooks should be processed.
+ * @param string $hook_type "code" or "template"
+ * @param string $when when in the functions the hooks should be processed. For code hooks, these are
+ *    either "start" or "end"; for template hooks, this is the location attribute of the {template_hook ...}
+ *    tag.
  * @param string $core_function the name of the core function to which this hook is to be attached
  * @param string $hook_function the name of the hook function, found in the modules library.php file
  * @param integer $priority 1-100 (100 lowest, 1 highest). Optional setting that determines the order
@@ -54,7 +53,7 @@
  * @param boolean $force_unique if set to true, this will only register hooks that haven't been set
  *    with this module, location, hook and core functino.
  */
-function ft_register_hook($module_folder, $when, $core_function, $hook_function, $priority = 50, $force_unique = false)
+function ft_register_hook($hook_type, $module_folder, $when, $core_function, $hook_function, $priority = 50, $force_unique = false)
 {
   global $g_table_prefix;
 
@@ -68,7 +67,8 @@ function ft_register_hook($module_folder, $when, $core_function, $hook_function,
   	$query = mysql_query("
   	  SELECT count(*) as c
   	  FROM   {$g_table_prefix}hooks
-  	  WHERE  action_location = '$when' AND
+  	  WHERE  hook_type = '$hook_type' AND
+			       action_location = '$when' AND
   	         module_folder = '$module_folder' AND
   	         core_function = '$core_function' AND
   	         hook_function = '$hook_function'
@@ -80,8 +80,8 @@ function ft_register_hook($module_folder, $when, $core_function, $hook_function,
   }
 
   $result = mysql_query("
-    INSERT INTO {$g_table_prefix}hooks (action_location, module_folder, core_function, hook_function, priority)
-    VALUES ('$when', '$module_folder', '$core_function', '$hook_function', $priority)
+    INSERT INTO {$g_table_prefix}hooks (hook_type, action_location, module_folder, core_function, hook_function, priority)
+    VALUES ('$hook_type', '$when', '$module_folder', '$core_function', '$hook_function', $priority)
       ");
 
   if ($result)
@@ -111,14 +111,15 @@ function ft_unregister_module_hooks($module_folder)
  * @param string $core_function
  * @return array a hash of hook information
  */
-function ft_get_hooks($event, $core_function)
+function ft_get_hooks($event, $hook_type, $core_function)
 {
   global $g_table_prefix;
 
   $query = mysql_query("
     SELECT *
     FROM   {$g_table_prefix}hooks
-    WHERE  action_location = '$event' AND
+    WHERE  hook_type = '$hook_type' AND
+           action_location = '$event' AND
            core_function = '$core_function'
     ORDER BY priority ASC
       ");
@@ -158,8 +159,7 @@ function ft_get_module_hooks($module_folder)
 
 /**
  * Our main process hooks function. This finds and calls ft_process_hook for each hook defined
- * for this event & calling function. It processes each one sequentially (in order of priority)
- * and returns whatever values are
+ * for this event & calling function. It processes each one sequentially in order of priority.
  */
 function ft_process_hooks($event, $vars, $overridable_vars)
 {
@@ -167,7 +167,7 @@ function ft_process_hooks($event, $vars, $overridable_vars)
   $calling_function = $backtrace[1]["function"];
 
   // get the hooks associated with this core function and event
-  $hooks = ft_get_hooks($event, $calling_function);
+  $hooks = ft_get_hooks($event, "code", $calling_function);
 
   // extract the var passed from the calling function into the current scope
   foreach ($hooks as $hook_info)
@@ -227,4 +227,42 @@ function ft_process_hook($module_folder, $hook_function, $vars, $overridable_var
   }
 
   return $updated_values;
+}
+
+
+/**
+ * This processes all template hooks for a particular template location (e.g. edit client page, at the top).
+ * It works similarly to the ft_process_hooks function, except there are no options to override values in the
+ * template. This is used purely to insert content into the templates.
+ *
+ * @param string $location
+ */
+function ft_process_template_hooks($location, $template_vars)
+{
+  $hooks = ft_get_hooks($location, "template", "");
+	
+  // extract the var passed from the calling function into the current scope
+  foreach ($hooks as $hook_info)
+  {
+    ft_process_template_hook($hook_info["module_folder"], $hook_info["hook_function"], $location, $template_vars);
+  }
+}
+
+
+/**
+ * This function called the template hooks and returns the generated HTML.    
+ *
+ * @param string $module_folder
+ * @param string $hook_function
+ * @param string $hook_function
+ * @return string 
+ */
+function ft_process_template_hook($module_folder, $hook_function, $location, $template_vars)
+{
+  global $g_root_dir;
+
+  @include_once("$g_root_dir/modules/$module_folder/library.php");
+	$html = @$hook_function($location, $template_vars);
+	
+	return $html;
 }

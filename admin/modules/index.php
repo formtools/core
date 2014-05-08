@@ -26,6 +26,7 @@ if (isset($_GET["reset"]))
 	$_SESSION["ft"]["module_search_keyword"] = "";
 	$_SESSION["ft"]["module_search_status"] = "";
 }
+
 $order       = ft_load_field("order", "module_sort_order", "");
 $keyword     = ft_load_field("keyword", "module_search_keyword", "");
 $status      = ft_load_field("status", "module_search_status", "");

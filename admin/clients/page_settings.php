@@ -25,18 +25,19 @@ $page_vars["forms"]       = $forms;
 $page_vars["client_id"]   = $client_id;
 $page_vars["text_date_formatting_link"] = ft_eval_smarty_string($LANG["text_date_formatting_link"], $replacement_info);
 
-$page_vars["head_js"] = "
+$page_vars["head_js"] =<<< EOF
 var rules = [];
-rules.push(\"required,page_titles,{$LANG["validation_no_titles"]}\");
-rules.push(\"required,menu_id,{$LANG["validation_no_menu"]}\");
-rules.push(\"required,theme,{$LANG["validation_no_theme"]}\");
-rules.push(\"required,login_page,{$LANG["validation_no_client_login_page"]}\");
-rules.push(\"required,logout_url,{$LANG["validation_no_logout_url"]}\");
-rules.push(\"required,ui_language,{$LANG["validation_no_ui_language"]}\");
-rules.push(\"required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}\");
-rules.push(\"digits_only,sessions_timeout,{$LANG["validation_invalid_sessions_timeout"]}\");
-rules.push(\"required,date_format,{$LANG["validation_no_date_format"]}\");
+rules.push("required,page_titles,{$LANG["validation_no_titles"]}");
+rules.push("required,menu_id,{$LANG["validation_no_menu"]}");
+rules.push("required,theme,{$LANG["validation_no_theme"]}");
+rules.push("required,login_page,{$LANG["validation_no_client_login_page"]}");
+rules.push("required,logout_url,{$LANG["validation_no_logout_url"]}");
+rules.push("required,ui_language,{$LANG["validation_no_ui_language"]}");
+rules.push("required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}");
+rules.push("digits_only,sessions_timeout,{$LANG["validation_invalid_sessions_timeout"]}");
+rules.push("required,date_format,{$LANG["validation_no_date_format"]}");
 
-Event.observe(document, 'dom:loaded', function() { $(\"page_titles\").focus(); });";
+Event.observe(document, 'dom:loaded', function() { $("settings_form").focusFirstElement(); });
+EOF;
 
 ft_display_page("admin/clients/edit.tpl", $page_vars);
