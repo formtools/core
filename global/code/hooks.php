@@ -28,7 +28,7 @@
  *   The first parameter should be "start" or "after". It determines
  *   The function also takes a 3rd, optional parameter: priority. 1-100
  *
- * @copyright Encore Web Studios 2009
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
  * @package 2-0-0
  * @subpackage General
@@ -177,7 +177,7 @@ function ft_process_hooks($event, $vars, $overridable_vars)
   {
     // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
     // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
-    $vars["form_tools_hook_info"] = $hook_info; 
+    $vars["form_tools_hook_info"] = $hook_info;
 
     $updated_vars = ft_process_hook($hook_info["module_folder"], $hook_info["hook_function"], $vars, $overridable_vars, $calling_function);
 
@@ -257,7 +257,7 @@ function ft_process_template_hooks($location, $template_vars)
   {
     // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
     // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
-    $template_vars["form_tools_hook_info"] = $hook_info; 
+    $template_vars["form_tools_hook_info"] = $hook_info;
     ft_process_template_hook($hook_info["module_folder"], $hook_info["hook_function"], $location, $template_vars);
   }
 }

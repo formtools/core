@@ -3,7 +3,7 @@
 /**
  * This file defines all functions relating to Form Tools modules.
  *
- * @copyright Encore Web Studios 2009
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
  * @package 2-0-0
  * @subpackage Modules
@@ -677,16 +677,13 @@ function ft_include_module($module_folder)
   if (is_file("$g_root_dir/modules/$module_folder/library.php"))
     include_once("$g_root_dir/modules/$module_folder/library.php");
 
-  if ($module_folder != "swift_mailer")
-  {
-     // Smarty resources
-    if (is_dir("$g_root_dir/modules/$module_folder/smarty"))
-      $g_smarty->plugins_dir[] = "$g_root_dir/modules/$module_folder/smarty";
+  // Smarty resources
+  if (is_dir("$g_root_dir/modules/$module_folder/smarty"))
+    $g_smarty->plugins_dir[] = "$g_root_dir/modules/$module_folder/smarty";
 
-    // load the language file into the $LANG var, under
-    $content = ft_get_module_lang_file_contents($module_folder);
-    $LANG[$module_folder] = $content;
-  }
+  // load the language file into the $LANG var, under
+  $content = ft_get_module_lang_file_contents($module_folder);
+  $LANG[$module_folder] = $content;
 
   extract(ft_process_hooks("end", compact("module_folder"), array()), EXTR_OVERWRITE);
 }

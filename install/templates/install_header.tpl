@@ -32,7 +32,7 @@
 	    <tr>
 	      <td><img src="images/account_section_left.jpg" border="0" /></td>
 	      <td id="account_section">
-		      v{$g_form_tools_version}
+		      <b>v{$g_form_tools_version}</b>
 	      </td>
 	      <td><img src="images/account_section_right.jpg" border="0" /></td>
 	    </tr>

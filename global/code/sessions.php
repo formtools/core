@@ -2,8 +2,6 @@
 
 /**
  * This file contains the sessions management code for database sessions. It's not enabled by default.
- * The code is based on code (I know it was open source) written by someone else. Unfortunately, I haven't
- * been able to locate it. Apologies to the writer(s)!
  */
 
 

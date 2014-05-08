@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Form Tools - generic form processing, storage and access script
-Copyright (c) 2009  Encore Web Studios
+Copyright (c) 2010  Encore Web Studios
 http://www.formtools.org
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
@@ -16,7 +16,4 @@ This software is distributed under the GNU General Public License. Please see th
 license.txt file included in this zipfile.
 
 Legal stuff aside, for installation instructions, please visit this URL:
-http://www.formtools.org/userdoc/index.php?page=install
-
-For technical documentation for developers, please see:
-http://www.formtools.org/developerdoc/
+http://docs.formtools.org/installation/

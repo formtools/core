@@ -3,7 +3,7 @@
 /**
  * This file contains all functions relating to form Views.
  *
- * @copyright Encore Web Studios 2009
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
  * @package 2-0-0
  * @subpackage Views

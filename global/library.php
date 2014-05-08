@@ -105,10 +105,10 @@ $g_check_ft_sessions = (isset($g_check_ft_sessions)) ? $g_check_ft_sessions : tr
 
 /**
  * This is set to 1 by default (genuine errors only). Crank it up to 2047 to list every
- * last error/warning/notice that occurs. For Beta versions, it's set to 2047.
+ * last error/warning/notice that occurs.
  * @global string $g_default_error_reporting
  */
-$g_default_error_reporting = 2047;
+$g_default_error_reporting = 1;
 
 /**
  * This feature currently has limited support in the code, but will be implemented more fully at a
@@ -190,7 +190,7 @@ $g_api_sessions_timeout = 3600;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.0-beta-20100118";
+$g_current_version = "2.0.0";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.
@@ -243,7 +243,6 @@ require_once("$folder/code/menus.php");
 require_once("$folder/code/modules.php");
 require_once("$folder/code/sessions.php");
 require_once("$folder/code/settings.php");
-//require_once("$folder/code/stabilizer.php");
 require_once("$folder/code/submissions.php");
 require_once("$folder/code/themes.php");
 require_once("$folder/code/upgrade.php");
