@@ -101,6 +101,8 @@
 
     <form name="current_form" action="{$same_page}" method="post">
 
+    {template_hook location="admin_submission_listings_top"}
+		
     <table class="submissions_table" id="submissions_table" cellpadding="1" cellspacing="1" border="0" width="650">
     <tr>
       <th align="center" width="25"> </th>
@@ -260,6 +262,8 @@
       {template_hook location="admin_submission_listings_buttons4"}
     </div>
 
+    {template_hook location="admin_submission_listings_bottom"}
+		
     </form>
 
 

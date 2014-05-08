@@ -245,6 +245,7 @@ $page_vars["view_info"]   = $view_info;
 $page_vars["preselected_subids"] = $preselected_subids;
 $page_vars["results_per_page"]   = $results_per_page;
 $page_vars["display_fields"]     = $visible_column_info;
+$page_vars["page_submission_ids"] = $submission_id_str;
 $page_vars["order"]              = $order;
 $page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
 $page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_page, $current_page, "");
@@ -275,7 +276,6 @@ Event.observe(document, 'dom:loaded', function() {
   $$('#submissions_table tr').invoke('observe', 'click',
     function(e)
     {
-      // TODO: fix this for Safari
       var el = Event.element(e);
       if (el.nodeName != "INPUT" && el.nodeName != "A")
       {

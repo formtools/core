@@ -246,6 +246,7 @@ $page_vars["total_form_submissions"] = $_SESSION["ft"]["form_{$form_id}_num_subm
 $page_vars["form_views"]  = $form_views;
 $page_vars["view_info"]   = $view_info;
 $page_vars["preselected_subids"] = $preselected_subids;
+$page_vars["page_submission_ids"] = $submission_id_str;
 $page_vars["results_per_page"]   = $results_per_page;
 $page_vars["display_fields"]     = $visible_columns;
 $page_vars["order"]              = $order;
