@@ -387,6 +387,7 @@ $LANG["notify_no_emails_defined"] = "No emails have been defined for this form. 
 $LANG["notify_no_field_option_groups"] = "There are no field option groups defined in the database. Generally, these are created by the <a href=\"../add/step1.php?add\">Add Form script</a>, but you can manually create them below.";
 $LANG["notify_no_fields_in_tab"] = "This tab does not contain any fields.";
 $LANG["notify_no_test_submission"] = "Form Tools hasn't received a successful test submission yet.";
+$LANG["notify_no_user_email_fields_configured"] = "Note: in order to select the user (the individual submitting the form) in any of the dropdowns below, you first need to <a href=\"{\$same_page}?page=email_settings\">configure the form email fields</a>.";
 $LANG["notify_no_views_assigned_to_client_form"] = "It appears that your user account hasn't been assigned to any form Views, so you won't be able to see any data. Please contact the administrator for further help.";
 $LANG["notify_no_views_defined"] = "You don't have any Views defined. You will not be able to view this form's submissions unless at least one View is created. Click the button below to continue.";
 $LANG["notify_page_added"] = "The page has been added.";

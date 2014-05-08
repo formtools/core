@@ -1,3 +1,9 @@
+            {if !$form_info.user_email_field}
+              <div class="box">
+                {$LANG.notify_no_user_email_fields_configured}
+              </div>
+            {/if}
+
             <table cellpadding="2" cellspacing="1" width="100%">
             <tr>
               <td width="10" valign="top" class="red">*</td>

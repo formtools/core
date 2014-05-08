@@ -220,7 +220,15 @@ function ft_process_form($form_data)
 
       default:
       	$field_name = $field_info["field_name"];
-      	$redirect_query_params[] = "$field_name=" . rawurlencode(stripslashes($form_data[$field_name]));
+
+      	// if $value is an array, convert it to a string, separated by $g_query_str_multi_val_separator
+	      if (is_array($form_data[$field_name]))
+	      {
+	        $value_str = join($g_query_str_multi_val_separator, $form_data[$field_name]);
+	        $redirect_query_params[] = "$field_name=" . rawurlencode($value_str);
+	      }
+	      else
+	        $redirect_query_params[] = "$field_name=" . rawurlencode($form_data[$field_name]);
       	break;
     }
   }
