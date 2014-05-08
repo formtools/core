@@ -49,16 +49,35 @@
  * @param string $when "start", "end". When in the functions the hooks should be processed.
  * @param string $core_function the name of the core function to which this hook is to be attached
  * @param string $hook_function the name of the hook function, found in the modules library.php file
- * @param integer priority 1-100 (100 lowest, 1 highest). Optional setting that determines the order
+ * @param integer $priority 1-100 (100 lowest, 1 highest). Optional setting that determines the order
  *    in which this hook gets processed, in relation to OTHER hooks attached to the same event.
+ * @param boolean $force_unique if set to true, this will only register hooks that haven't been set
+ *    with this module, location, hook and core functino.
  */
-function ft_register_hook($module_folder, $when, $core_function, $hook_function, $priority = 50)
+function ft_register_hook($module_folder, $when, $core_function, $hook_function, $priority = 50, $force_unique = false)
 {
   global $g_table_prefix;
 
   $when          = ft_sanitize($when);
   $core_function = ft_sanitize($core_function);
   $hook_function = ft_sanitize($hook_function);
+
+  $may_proceed = true;
+  if ($force_unique)
+  {
+  	$query = mysql_query("
+  	  SELECT count(*) as c
+  	  FROM   {$g_table_prefix}hooks
+  	  WHERE  action_location = '$when' AND
+  	         module_folder = '$module_folder' AND
+  	         core_function = '$core_function' AND
+  	         hook_function = '$hook_function'
+      	");
+
+  	$result = mysql_fetch_assoc($query);
+  	if ($result["c"] > 0)
+  	  $may_proceed = false;
+  }
 
   $result = mysql_query("
     INSERT INTO {$g_table_prefix}hooks (action_location, module_folder, core_function, hook_function, priority)
@@ -101,6 +120,31 @@ function ft_get_hooks($event, $core_function)
     FROM   {$g_table_prefix}hooks
     WHERE  action_location = '$event' AND
            core_function = '$core_function'
+    ORDER BY priority ASC
+      ");
+
+  $results = array();
+  while ($row = mysql_fetch_assoc($query))
+    $results[] = $row;
+
+  return $results;
+}
+
+
+/**
+ * Returns all modules associated with a particular module ordered by priority.
+ *
+ * @param string $module_folder
+ * @return array
+ */
+function ft_get_module_hooks($module_folder)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}hooks
+    WHERE  module_folder = '$module_folder'
     ORDER BY priority ASC
       ");
 

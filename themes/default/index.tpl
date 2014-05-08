@@ -1,4 +1,4 @@
-{ft_include file="header.tpl"}
+{include file="header.tpl"}
 
   <div class="title">{$login_heading|upper}</div>
 
@@ -14,7 +14,7 @@
 
     {if $upgrade_notification}
       <div class="notify" id="upgrade_notification">
-  
+
         <div style="padding:8px">
           <span style="float: right; padding-left: 5px;"><a href="#" onclick="return ft.hide_message('upgrade_notification')">X</a></span>
           {$upgrade_notification}
@@ -81,4 +81,4 @@
     </div>
   </noscript>
 
-{ft_include file="footer.tpl"}
+{include file="footer.tpl"}

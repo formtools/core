@@ -62,7 +62,7 @@
     {/if}
 
     <span style="float:left; padding-top: 7px; padding-right: 10px">
-      <img src="{$theme_url}/images/logo.jpg" border="0" width="203" height="61" />
+      <img src="{$theme_url}/images/logo.jpg" border="0" width="220" height="61" />
     </span>
   </div>
 
