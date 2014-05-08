@@ -7,9 +7,9 @@
 $g_ft_installation_folder = dirname(__FILE__);
 $g_default_language       = "en_us.php";
 $g_default_theme          = "default";
-$g_form_tools_version     = "2.0.0-beta-20090107";
+$g_form_tools_version     = "2.0.0-beta-20090108";
 $g_is_beta                = "yes";
-$g_beta_version           = "2009/01/07";
+$g_beta_version           = "2009/01/08";
 $g_smarty_use_sub_dirs    = false;
 
 /*
@@ -576,9 +576,9 @@ function ft_install_get_module_list()
  *
  * @param string $password the unencrypted password
  */
-function ft_install_send_welcome_email($username, $password)
+function ft_install_send_welcome_email($email, $username, $password)
 {
-	global $g_root_url;
+	global $g_root_dir, $g_root_url;
 
 	// 1. build the email content
   $placeholders = array(

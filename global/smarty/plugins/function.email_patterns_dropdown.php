@@ -43,8 +43,6 @@ function smarty_function_email_patterns_dropdown($params, &$smarty)
 
   	$optgroups[$optgroup][] = array($pattern_name, $content);
   }
-  ksort($optgroups);
-
 
   // now construct the HTML
   $content = "";

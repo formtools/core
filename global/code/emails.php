@@ -1077,6 +1077,9 @@ function _ft_get_placeholder_hash($form_id, $submission_id, $client_info = "")
 
     if ($field['col_name'] == "last_modified_date")
       $placeholders["LASTMODIFIEDDATE"] = ft_get_date($settings['default_timezone_offset'], $field["content"], $settings['default_date_format']);
+
+    if ($field['col_name'] == "ip_address")
+      $placeholders["IPADDRESS"] = $field["content"];
   }
 
   $placeholders["ADMINEMAIL"]   = $admin_info["email"];

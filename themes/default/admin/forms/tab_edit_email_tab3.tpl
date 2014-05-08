@@ -13,7 +13,7 @@
             <tr>
               <td colspan="2">
                 <div style="border: 1px solid #666666; padding: 3px">
-                  <textarea id="html_template" name="html_template" style="width: 100%; height: 320px">{$template_info.html_template}</textarea>
+                  <textarea id="html_template" name="html_template" style="width: 100%; height: 300px">{$template_info.html_template}</textarea>
                 </div>
 
                 <script type="text/javascript">
@@ -36,7 +36,7 @@
             <tr>
               <td colspan="2">
                 <div style="border: 1px solid #666666; padding: 3px">
-                  <textarea id="text_template" name="text_template" style="width: 100%; height: 320px">{$template_info.text_template}</textarea>
+                  <textarea id="text_template" name="text_template" style="width: 100%; height: 300px">{$template_info.text_template}</textarea>
                 </div>
 
                 <script type="text/javascript">

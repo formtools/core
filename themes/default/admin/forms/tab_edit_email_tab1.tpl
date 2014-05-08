@@ -127,7 +127,13 @@
                   <td valign="top">
                     {$LANG.phrase_limit_email_content}
                   </td>
-                  <td>{views_dropdown name_id="limit_email_content_to_fields_in_view" form_id=$form_id default=$template_info.limit_email_content_to_fields_in_view}</td>
+                  <td>
+                    {views_dropdown name_id="limit_email_content_to_fields_in_view" form_id=$form_id
+                      default=$template_info.limit_email_content_to_fields_in_view}
+                    <div class="medium_grey">
+                      This option only works for HTML and text content generated with Smarty Loops.
+                    </div>
+                  </td>
                 </tr>
                 </table>
               </div>

@@ -39,6 +39,10 @@
             <td valign="top" class="blue">{literal}{$SUBMISSIONID}{/literal}</td>
             <td>{$LANG.text_unique_submission_id}</td>
           </tr>
+          <tr>
+            <td valign="top" class="blue">{literal}{$IPADDRESS}{/literal}</td>
+            <td>{$LANG.text_submission_ip_address}</td>
+          </tr>
           </table>
           <br />
 

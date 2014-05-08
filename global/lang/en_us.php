@@ -989,6 +989,7 @@ $LANG["text_reason_files_not_moved"] = "The most likely cause of this is either 
 $LANG["text_reference_tab_info"] = "This tab lists all placeholders available for you to use in the email templates. Placeholders are strings like {\$PLACEHOLDER} which are converted to their appropriate meaning when the email is sent. Take a look at the example templates for some ideas.";
 $LANG["text_review_user_doc"] = "Review the user documentation";
 $LANG["text_send_email_from_edit_submission_page"] = "Include option to send this email from Edit Submission page";
+$LANG["text_submission_ip_address"] = "The IP Address of the user who made the submission.";
 $LANG["text_test_email"] = "Use the form below to either view or send yourself an email generated from this email template. The email is <b>only</b> sent to the email specified below; the main, cc and bcc email address recipients are ignored while testing.";
 $LANG["text_test_email_templates_no_submissions"] = "In order to test your email templates, you must first put through at least one form submission.";
 $LANG["text_theme_page_intro"] = "This page lists all of your themes. Click on a thumbnail to see a larger example of the theme's styles. The \"enabled\" checkbox determines whether or not that theme may be selected by clients. To browse all available themes, visit the <a href=\"http://themes.formtools.org\" target=\"_blank\">Form Tools website</a>.";

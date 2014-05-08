@@ -5,7 +5,7 @@
 <table cellpadding="0" cellspacing="1">
 {foreach from=$fields item=field}
 {if $field.field_type != "system"}
-{literal}{if $ANSWER_{/literal}{$field.field_name}{literal} != ""}{/literal}
+{literal}{if $ANSWER_{/literal}{$field.field_name}{literal}}{/literal}
   <tr>
     <td style="font-weight: bold">{$field.field_title}</td>
     <td>{literal}{$ANSWER_{/literal}{$field.field_name}{literal}}{/literal}</td>
