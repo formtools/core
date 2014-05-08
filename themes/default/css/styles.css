@@ -11,12 +11,12 @@ body {
 	background-position: center top;
 	text-align: center;
 }
-body, table, td, div, span, div, p {
+body, table, td, div, span, div, p, textarea {
   font: 11px Verdana, sans-serif;
   line-height: 20px;
   color: #333333;
 }
-input, select, textarea, option {
+input, select, option {
   font: 11px Verdana, sans-serif;
   color: #333333;
 }

@@ -59,15 +59,7 @@ function ft_process_form($form_data)
   $form_id = $form_data["form_tools_form_id"];
   $form_info = ft_get_form($form_id);
 
-  // if the submission pre-parser module is enabled, perform any pre-parser rules on the submission data
-  // that have been defined for this form
-  if (ft_check_module_enabled("submission_pre_parser"))
-  {
-	  $_POST = $form_data;
-    ft_include_module("submission_pre_parser");
-    spp_parse();
-    $form_data = $_POST;
-  }
+  extract(ft_process_hooks("start", compact("form_info", "form_id", "form_data"), array("form_data")), EXTR_OVERWRITE);
 
   // check to see if this form has been completely set up
   if ($form_info["is_complete"] == "no")

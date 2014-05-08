@@ -25,7 +25,7 @@
 /**
  * The current version release.
  */
-$g_current_version = "2.0.0-beta-20090112";
+$g_current_version = "2.0.0-beta-20090113";
 
 /**
  * This is the base URL of the Form Tools installation on your server. e.g.
@@ -150,6 +150,13 @@ $g_query_str_multi_val_separator = ",";
 $g_default_theme = "default";
 
 /**
+ * For module developers. This prevents the code from automatically deleting your module folder when you're
+ * testing your uninstallation function. Defaults to TRUE, but doesn't work on all systems: sometimes the PHP
+ * doesn't have the permission to remove the folder.
+ */
+$g_delete_module_folder_on_uninstallation = true;
+
+/**
  * Used throughout the script to store any and all temporary error / notification messages. Don't change
  * or remove - defining them here prevents unwanted PHP notices.
  */
@@ -182,6 +189,7 @@ require_once("$folder/code/field_option_groups.php");
 require_once("$folder/code/files.php");
 require_once("$folder/code/forms.php");
 require_once("$folder/code/general.php");
+require_once("$folder/code/hooks.php");
 require_once("$folder/code/languages.php");
 require_once("$folder/code/menus.php");
 require_once("$folder/code/modules.php");

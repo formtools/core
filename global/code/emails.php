@@ -217,11 +217,11 @@ function ft_send_test_email($info)
     if ($sm_settings["swiftmailer_enabled"] == "yes")
     {
       ft_include_module("swift_mailer");
-			
-			$email_info["cc"]  = array();
-			$email_info["bcc"] = array();
-			$email_info["to"]  = array();
-			$email_info["to"][] = array("email" => $recipient);
+
+      $email_info["cc"]  = array();
+      $email_info["bcc"] = array();
+      $email_info["to"]  = array();
+      $email_info["to"][] = array("email" => $recipient);
 
       return swift_send_email($email_info);
       $continue = false;
@@ -380,8 +380,8 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   // for non-test submissions, always grab both the HTML and text templates
   else
   {
-	  $templates["html"] = $email_template["html_template"];
-	  $templates["text"] = $email_template["text_template"];
+    $templates["html"] = $email_template["html_template"];
+    $templates["text"] = $email_template["text_template"];
   }
 
 
@@ -410,15 +410,15 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   $updated_fields_for_email_template = array();
   foreach ($fields_for_email_template as $field_info)
   {
-  	if ($field_info["field_type"] == "file")
-  	{
-  		$field_id = $field_info["field_id"];
-  		$extended_field_info = ft_get_extended_field_settings($field_id);
-  		$field_info["folder_url"] = $extended_field_info["file_upload_url"];
-  		$field_info["folder_path"] = $extended_field_info["file_upload_dir"];
-  	}
+    if ($field_info["field_type"] == "file")
+    {
+      $field_id = $field_info["field_id"];
+      $extended_field_info = ft_get_extended_field_settings($field_id);
+      $field_info["folder_url"] = $extended_field_info["file_upload_url"];
+      $field_info["folder_path"] = $extended_field_info["file_upload_dir"];
+    }
 
-  	$updated_fields_for_email_template[] = $field_info;
+    $updated_fields_for_email_template[] = $field_info;
   }
 
   $fields_for_email_template = $updated_fields_for_email_template;
@@ -1112,7 +1112,7 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
   $subject = $email_components["subject"];
 
   // send the email
-  return mail("$to", $subject, $message, $headers);
+  return @mail("$to", $subject, $message, $headers);
 }
 
 

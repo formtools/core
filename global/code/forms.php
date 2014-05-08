@@ -277,6 +277,7 @@ function ft_initialize_form($form_data)
 
   $form_info = ft_get_form($form_id);
 
+
   // if this form has already been completed, exit with an error message
   if ($form_info["is_complete"] == "yes")
   {

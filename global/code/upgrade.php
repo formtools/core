@@ -15,7 +15,7 @@
 
 
 /**
- * This function upgrades the Form Tools Core. 
+ * This function upgrades the Form Tools Core.
  *
  * TODO Improve Me.
  *
@@ -24,33 +24,48 @@
 function ft_upgrade_form_tools()
 {
   global $g_table_prefix, $g_current_version;
-	
-	$is_upgraded = false;
 
-	$settings = ft_get_settings();
-	$existing_version_info = ft_get_version_info($settings["program_version"]);
-	//$current_version_info  = ft_get_version_info($g_current_version);
+  $is_upgraded = false;
 
-	
-	// 2.0.0
-	if ($existing_version_info["version"] == "2.0.0")
-	{
-	  // BETA
+  $settings = ft_get_settings();
+  $existing_version_info = ft_get_version_info($settings["program_version"]);
+  $current_version_info  = ft_get_version_info($g_current_version);
+
+  // 2.0.0
+  if ($existing_version_info["version"] == "2.0.0")
+  {
+    // BETA
     if ($existing_version_info["release_type"] == "beta")
-		{
-		  if ($existing_version_info["full"] != $g_current_version)
-			{
-    		mysql_query("
-    			UPDATE {$g_table_prefix}settings
-    			SET    setting_value = '$g_current_version'
-    			WHERE  setting_name = 'program_version'
-  								");
-  		  $is_upgraded = true;
-		  }
-		}
-	}
+    {
+      if ($existing_version_info["release_date"] < 20090113)
+      {
+        // add the Hooks table
+        mysql_query("
+          CREATE TABLE {$g_table_prefix}hooks (
+            hook_id mediumint(8) unsigned NOT NULL auto_increment,
+            action_location enum('start','end') NOT NULL,
+            module_folder varchar(255) NOT NULL,
+            core_function varchar(255) NOT NULL,
+            hook_function varchar(255) NOT NULL,
+            priority tinyint(4) NOT NULL default '50',
+            PRIMARY KEY (hook_id)
+          ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+          ");
+      }
 
-	return $is_upgraded;
+      if ($existing_version_info["full"] != $g_current_version)
+      {
+        mysql_query("
+          UPDATE {$g_table_prefix}settings
+          SET    setting_value = '$g_current_version'
+          WHERE  setting_name = 'program_version'
+                  ");
+        $is_upgraded = true;
+      }
+    }
+  }
+
+  return $is_upgraded;
 }
 
 
@@ -64,7 +79,7 @@ function ft_upgrade_form_tools()
  */
 function ft_build_and_cache_upgrade_info()
 {
-	$settings = ft_get_settings();
+  $settings = ft_get_settings();
 
   // a hash of k => v storing the hidden field values to pass along
   $fields = array();
@@ -83,22 +98,22 @@ function ft_build_and_cache_upgrade_info()
   $count = 1;
   foreach ($themes as $theme_info)
   {
-	  $fields[] = array("k" => "t{$count}", "v" => $theme_info["theme_folder"]);
-	  $fields[] = array("k" => "tv{$count}", "v" => $theme_info["theme_version"]);
+    $fields[] = array("k" => "t{$count}", "v" => $theme_info["theme_folder"]);
+    $fields[] = array("k" => "tv{$count}", "v" => $theme_info["theme_version"]);
     $count++;
   }
 
-	// get the module info
+  // get the module info
   $modules = ft_get_modules();
   $count = 1;
   foreach ($modules as $module_info)
   {
-	  $fields[] = array("k" => "m{$count}", "v" => $module_info["module_folder"]);
-	  $fields[] = array("k" => "mv{$count}", "v" => $module_info["version"]);
+    $fields[] = array("k" => "m{$count}", "v" => $module_info["module_folder"]);
+    $fields[] = array("k" => "mv{$count}", "v" => $module_info["version"]);
     $count++;
   }
 
-	// save the link
+  // save the link
   $_SESSION["ft"]["upgrade_info"] = $fields;
 }
 
@@ -115,13 +130,13 @@ function ft_build_and_cache_upgrade_info()
  */
 function ft_get_version_info($version_string)
 {
-	$parts = split("-", $version_string);
+  $parts = split("-", $version_string);
 
-	$version_parts = array();
-	$version_parts["full"] = $version_string;
-	$version_parts["version"] = $parts[0];
+  $version_parts = array();
+  $version_parts["full"] = $version_string;
+  $version_parts["version"] = $parts[0];
   $version_parts["release_type"] = (count($parts) > 1) ? $parts[1] : "main";
-  $version_parts["release_date"] = (count($parts) > 2) ? $parts[2] : "";	 
+  $version_parts["release_date"] = (count($parts) > 2) ? $parts[2] : "";
 
-	return $version_parts;
+  return $version_parts;
 }

@@ -685,6 +685,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 	$message = $LANG["notify_form_submission_updated"];
 
 	$infohash = ft_sanitize($infohash);
+	extract(ft_process_hooks("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
 	// assumes that each tab as at least a single field (UPDATE button should be hidden in those cases)
   $field_ids = split(",", $infohash["field_ids"]);
@@ -805,6 +806,8 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 
   // send any emails
   ft_send_emails("on_edit", $form_id, $submission_id);
+
+  extract(ft_process_hooks("end", compact("form_id", "submission_id", "infohash"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
 }

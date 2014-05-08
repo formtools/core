@@ -41,7 +41,7 @@ function ft_check_module_enabled($module_folder)
  */
 function ft_uninstall_module($module_id)
 {
-	global $g_table_prefix, $LANG, $g_root_dir;
+	global $g_table_prefix, $LANG, $g_root_dir, $g_delete_module_folder_on_uninstallation;
 
 	$module_info = ft_get_module($module_id);
   $module_folder = $module_info["module_folder"];
@@ -72,8 +72,8 @@ function ft_uninstall_module($module_id)
   	}
   }
 
-  // finally, if there wasn't a custom uninstallation script, or there was and it was successfully
-  // run, remove the module record and any menu links to it
+  // finally, if there wasn't a custom uninstallation script, or there WAS and it was successfully
+  // run, remove the module record and any old database references
   if (!$has_custom_uninstall_script || ($has_custom_uninstall_script && $success))
   {
   	// delete the module tables
@@ -86,6 +86,9 @@ function ft_uninstall_module($module_id)
       WHERE  page_identifier = 'module_$module_id'
         ");
 
+    // delete any hooks registered by this module
+    ft_unregister_module_hooks($module_folder);
+
     // if rows were deleted, re-cache the admin menu and update the ordering of the admin account.
     // ASSUMPTION: only administrator accounts can have modules as items (will need to update at some
     // point soon, no doubt).
@@ -97,7 +100,9 @@ function ft_uninstall_module($module_id)
   }
 
   // now delete the entire module folder
-  $deleted = ft_delete_folder("$g_root_dir/modules/$module_folder");
+  $deleted = false;
+  if ($g_delete_module_folder_on_uninstallation)
+    $deleted = ft_delete_folder("$g_root_dir/modules/$module_folder");
 
   // update the Upgrade link, to omit this module
   ft_build_and_cache_upgrade_info();

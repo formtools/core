@@ -53,10 +53,7 @@
 	      <tr>
 	        <td><img src="{$theme_url}/images/account_section_left.jpg" border="0" /></td>
 	        <td id="account_section">
-	          <b>v{$settings.program_version}</b>
-	          {if $SESSION.settings.is_beta}
-	            &#8212; <span class="red bold">{$LANG.word_beta} {$SESSION.settings.beta_version}</span>
-	          {/if}
+	          <b>{$settings.program_version}</b>
 	        </td>
 	        <td><img src="{$theme_url}/images/account_section_right.jpg" border="0" /></td>
 	      </tr>
