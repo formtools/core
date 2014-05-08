@@ -513,15 +513,15 @@ function ft_get_submission_count($form_id, $view_id = "")
     $filter_sql = ft_get_view_filter_sql($view_id);
 
     if (!empty($filter_sql))
-      $filter_sql_clause = join(" AND ", $filter_sql);
+      $filter_sql_clause = "AND" . join(" AND ", $filter_sql);
   }
 
   // get the form submission info
   $query = mysql_query("
      SELECT count(*)
      FROM   {$g_table_prefix}form_{$form_id}
-            $filter_sql_clause
      WHERE  is_finalized = 'yes'
+            $filter_sql_clause
               ");
 
   $result = mysql_fetch_array($query);

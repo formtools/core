@@ -284,7 +284,7 @@ function ft_get_smarty_template_with_fallback($theme, $template)
 function ft_display_module_page($template, $page_vars = array(), $theme = "")
 {
 	global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_language, $LANG,
-	  $g_smarty, $L;
+	  $g_smarty, $L, $g_smarty_use_sub_dirs;
 
 	$module_folder = _ft_get_current_module_folder();
 
@@ -303,7 +303,7 @@ function ft_display_module_page($template, $page_vars = array(), $theme = "")
 	// common variables. These are sent to EVERY template
 	$g_smarty->template_dir = "$g_root_dir/themes/$theme";
 	$g_smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
-	$g_smarty->use_sub_dirs = true;
+	$g_smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
 	$g_smarty->assign("LANG", $LANG);
 
 	// this contains the custom language content of the module, in the language required. It's populated by
