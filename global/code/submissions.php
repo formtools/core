@@ -464,6 +464,28 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
     $return_arr[] = $field_info;
   }
 
+	// finally, if a View is specified, ensure that the order in which the submission fields are returned
+	// is determined by the View. [NOT efficient!]
+	if (!empty($view_id))
+	{
+	  $ordered_return_arr = array();
+
+		foreach ($view_fields as $view_field_info)
+		{
+		  $field_id = $view_field_info["field_id"];
+		  foreach ($return_arr as $field_info)
+			{
+			  if ($field_info["field_id"] == $field_id)
+			  {
+				  $ordered_return_arr[] = $field_info;
+					break;
+				}
+			}
+		}
+
+		$return_arr = $ordered_return_arr;
+	}
+
   extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "return_arr"), array("return_arr")), EXTR_OVERWRITE);
 
   return $return_arr;

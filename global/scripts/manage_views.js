@@ -174,33 +174,46 @@ view_ns.add_view_field = function(field_id)
     td4.appendChild(inp);
   }
 
-  // [5] Display text column
+  // [5] Searchable
   var td5 = document.createElement("td");
-  td5.className = "pad_left_small";
-  var textNode = document.createTextNode(field_display_text);
-  td5.appendChild(textNode);
+  td5.setAttribute("align", "center");
+  var inp = document.createElement("input");
+  inp.setAttribute("type", "checkbox");
+  inp.setAttribute("name", "field_" + field_id + "_is_searchable");
+  inp.setAttribute("checked", true);
+  inp.setAttribute("tabindex", (view_ns.tabindex_increment * 5) + num_fields);
+  var div = document.createElement("div");
+  div.setAttribute("id", "searchable_" + field_id);
+  div.appendChild(inp);
+  td5.appendChild(div);
 
-  // [6] Tab column
+  // [6] Display text column
   var td6 = document.createElement("td");
+  td6.className = "pad_left_small";
+  var textNode = document.createTextNode(field_display_text);
+  td6.appendChild(textNode);
+
+  // [7] Tab column
+  var td7 = document.createElement("td");
   var sel = document.createElement("select");
   sel.setAttribute("name", "field_" + field_id + "_tab");
   sel.setAttribute("id", "field_" + field_id + "_tab");
-  sel.setAttribute("tabindex", (view_ns.tabindex_increment * 5) + num_fields);
+  sel.setAttribute("tabindex", (view_ns.tabindex_increment * 6) + num_fields);
   for (i=0; i<view_ns.view_tabs.length; i++)
     sel.options[i] = new Option(view_ns.view_tabs[i][1], view_ns.view_tabs[i][0]);
   if (view_ns.view_tabs.length == 0)
     sel.options[0] = new Option(g.messages["validation_no_tabs_defined"], "");
-  td6.appendChild(sel);
+  td7.appendChild(sel);
 
-  // [7] Remove column
-  var td7 = document.createElement("td");
-  td7.setAttribute("align", "center");
-  td7.className = "del";
+  // [8] Remove column
+  var td8 = document.createElement("td");
+  td8.setAttribute("align", "center");
+  td8.className = "del";
   var delete_link = document.createElement("a");
   delete_link.setAttribute("href", "#");
   delete_link.onclick = function (evt) { return view_ns.remove_view_field(field_id); };
   delete_link.appendChild(document.createTextNode(g.messages["word_remove"].toUpperCase()));
-  td7.appendChild(delete_link);
+  td8.appendChild(delete_link);
 
   // add the table data cells to the row
   row.appendChild(td1);
@@ -210,6 +223,7 @@ view_ns.add_view_field = function(field_id)
   row.appendChild(td5);
   row.appendChild(td6);
   row.appendChild(td7);
+  row.appendChild(td8);
 
   // add the row to the table
   tbody.appendChild(row);
