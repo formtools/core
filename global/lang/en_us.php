@@ -427,6 +427,7 @@ $LANG["notify_view_deleted"] = "The View has been deleted.";
 $LANG["notify_view_updated"] = "The View has been updated.";
 $LANG["notify_wysiwyg_settings_updated"] = "The WYSIWYG settings have been updated.";
 $LANG["notify_your_email_sent"] = "Your email has been successfully sent.";
+$LANG["notify_module_updated"] = "The <b>{\$module}</b> module has been updated to <b>{\$version}</b>.";
 
 // Phrases
 $LANG["phrase_1_direct"] = "1. Direct";
@@ -603,7 +604,7 @@ $LANG["phrase_field_values_to_display_values"] = "Field Values &raquo; Display V
 $LANG["phrase_file_field_settings"] = "File Field Settings";
 $LANG["phrase_file_upload_folder"] = "File upload folder";
 $LANG["phrase_file_upload_options"] = "File Upload Options";
-$LANG["phrase_final_touches_page_5"] = "5. Finishing Touches";
+$LANG["phrase_final_touches_page_6"] = "6. Finishing Touches";
 $LANG["phrase_finalize_form"] = "Finalize Form";
 $LANG["phrase_first_name"] = "First Name";
 $LANG["phrase_footer_text"] = "Footer Text";
@@ -1034,7 +1035,7 @@ $LANG["text_theme_page_intro"] = "This page lists all of your themes. Click on a
 $LANG["text_tutorial_adding_first_form"] = "Tutorial: Adding your first form!";
 $LANG["text_unique_submission_id"] = "The unique submission ID.";
 $LANG["text_unused_field_option_group"] = "This field option group is not being used by any form fields.";
-$LANG["text_upgraded"] = "Your installation of has been upgraded to {\$version}";
+$LANG["text_upgraded"] = "Your installation has been upgraded to <b>{\$version}</b>";
 $LANG["text_used_field_option_group"] = "This field option group is used by the following fields.";
 $LANG["text_user_account_placeholders_explanation"] = "These placeholders only exist for emails sent to the admin and client accounts. If they exist in emails to other people (e.g. users - the people who submitted the form), they will appear blank.";
 $LANG["text_user_email_html_tab_info"] = "This tab lets you enter the content for HTML emails sent to users whenever they submit the form. Select one of the example templates for a custom-built template that is tailored to your form.";

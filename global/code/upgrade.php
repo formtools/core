@@ -15,14 +15,42 @@
 
 
 /**
- * This function upgrades Form Tools to the latest version of Form Tools - from 1.5.0 or 1.5.1 at
- * the earliest. Other versions need to upgrade to 1.5.x first.
+ * This function upgrades the Form Tools Core. 
+ *
+ * TODO Improve Me.
  *
  * @return boolean is_upgraded a boolean indicating whether or not the program was just upgraded.
  */
 function ft_upgrade_form_tools()
 {
-	return false;
+  global $g_table_prefix, $g_current_version;
+	
+	$is_upgraded = false;
+
+	$settings = ft_get_settings();
+	$existing_version_info = ft_get_version_info($settings["program_version"]);
+	//$current_version_info  = ft_get_version_info($g_current_version);
+
+	
+	// 2.0.0
+	if ($existing_version_info["version"] == "2.0.0")
+	{
+	  // BETA
+    if ($existing_version_info["release_type"] == "beta")
+		{
+		  if ($existing_version_info["full"] != $g_current_version)
+			{
+    		mysql_query("
+    			UPDATE {$g_table_prefix}settings
+    			SET    setting_value = '$g_current_version'
+    			WHERE  setting_name = 'program_version'
+  								");
+  		  $is_upgraded = true;
+		  }
+		}
+	}
+
+	return $is_upgraded;
 }
 
 
@@ -76,17 +104,24 @@ function ft_build_and_cache_upgrade_info()
 
 
 /**
- * Helper function to return the current version of Form Tools as a number. The assumption is that
- * all Form Tools versions have three sections, e.g. 1.5.0 or 2.0.0.
+ * Returns the current core version, whether it's a Beta, release candidate or main release and the beta/rc
+ * date.
  *
- * @return integer The current Form Tools version as a number (e.g. 145 -> 1.4.5)
+ * @return array a hash with the following keys:
+ *                    "version" => e.g. 2.0.0
+ *                    "release_type" => "main", "beta" or "rc"
+ *                    "release_date" => e.g. 20081231 or empty, if not a beta or rc
+ *                    "full" => e.g. 2.0.0-beta-20081231
  */
-function ft_get_version_as_number()
+function ft_get_version_info($version_string)
 {
-	$settings = ft_get_settings();
-	$version = $settings['program_version'];
-	$version = preg_replace("/\D/", "", $version);
+	$parts = split("-", $version_string);
 
-	return $version;
+	$version_parts = array();
+	$version_parts["full"] = $version_string;
+	$version_parts["version"] = $parts[0];
+  $version_parts["release_type"] = (count($parts) > 1) ? $parts[1] : "main";
+  $version_parts["release_date"] = (count($parts) > 2) ? $parts[2] : "";	 
+
+	return $version_parts;
 }
-

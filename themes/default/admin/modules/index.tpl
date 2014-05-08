@@ -128,7 +128,7 @@
 
         {/if}
 
-        {if $module.is_installed == "no"}
+        {if $module.is_installed == "no" || $module.needs_upgrading}
            <tr class="selected_row_color">
         {else}
           <tr>
@@ -148,7 +148,11 @@
           </td>
           <td valign="top" align="center">
             {if $module.is_enabled == "yes"}
-              <a href="{$g_root_url}/modules/{$module.module_folder}/">{$LANG.word_select|upper}</a>
+						  {if $module.needs_upgrading}
+                <a href="{$same_page}?upgrade={$module_id}">{$LANG.word_upgrade|upper}</a>
+							{else}
+                <a href="{$g_root_url}/modules/{$module.module_folder}/">{$LANG.word_select|upper}</a>							
+							{/if}
             {/if}
           </td>
           <td valign="top" class="del" align="center">

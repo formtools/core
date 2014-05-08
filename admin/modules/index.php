@@ -17,6 +17,8 @@ if (isset($request["refresh_module_list"]))
 if (isset($request["uninstall"]))
 	list($g_success, $g_message) = ft_uninstall_module($request["uninstall"]);
 
+if (isset($request["upgrade"]))
+	list($g_success, $g_message) = ft_upgrade_module($request["upgrade"]);
 
 if (isset($_GET["reset"]))
 {
@@ -36,6 +38,17 @@ $search_criteria = array(
 $num_modules = ft_get_module_count();
 $modules     = ft_search_modules($search_criteria);
 
+// find out if any of the modules have been upgraded
+$updated_modules = array();
+foreach ($modules as $module_info)
+{
+  $module_id = $module_info["module_id"];
+	$curr_module = $module_info;
+	$curr_module["needs_upgrading"] = ft_module_needs_upgrading($module_id);
+  $updated_modules[] = $curr_module;
+}
+
+
 // ------------------------------------------------------------------------------------------
 
 // compile header information
@@ -43,7 +56,7 @@ $page_vars = array();
 $page_vars["page"]        = "modules";
 $page_vars["page_url"]    = ft_get_page_url("modules");
 $page_vars["head_title"]  = $LANG["word_modules"];
-$page_vars["modules"]     = $modules;
+$page_vars["modules"]     = $updated_modules;
 $page_vars["num_modules"] = $num_modules;
 $page_vars["order"]       = $order;
 $page_vars["search_criteria"] = $search_criteria;

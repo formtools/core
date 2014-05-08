@@ -41,7 +41,8 @@
                 <td class="greyCell" align="center">
                   {* everything except the Submission ID and Last Modified Date is editable *}
                   {if $field.col_name != "submission_id" && $field.col_name != "last_modified_date"}
-                    <input type="checkbox" name="field_{$field_id}_is_editable" id="field_{$field_id}_is_editable" {if $field.is_editable == "yes"}checked{/if} />
+                    <input type="checkbox" name="field_{$field_id}_is_editable" id="field_{$field_id}_is_editable" {if $field.is_editable == "yes"}checked{/if}
+                      {if $view_info.may_edit_submissions == "no"}disabled{/if}  />
                   {/if}
                 </td>
                 <td class="greyCell pad_left_small">{$field.field_title}</td>

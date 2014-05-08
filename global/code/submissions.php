@@ -3,7 +3,7 @@
 /**
  * This file defines all functions related to managing form submissions.
  *
- * @copyright Encore Web Studios 2008
+ * @copyright Encore Web Studios 2009
  * @author Encore Web Studios <formtools@encorewebstudios.com>
  * @package 2-0-0
  * @subpackage Submissions

@@ -68,11 +68,16 @@
 
             <span id="field_{$field_id}_link" {if $submission_field.content == ""}style="display:none"{/if}>
               {display_file_field field_id=$field_id filename=$submission_field.content}
-              <input type="button" class="pad_left_large" value="{$LANG.phrase_delete_file|upper}" onclick="ms.delete_submission_file({$field_id}, 'file', false)" />
+
+              {if $submission_field.is_editable == "yes"}
+                <input type="button" class="pad_left_large" value="{$LANG.phrase_delete_file|upper}" onclick="ms.delete_submission_file({$field_id}, 'file', false)" />
+              {/if}
             </span>
 
             <span id="field_{$field_id}_upload_field" {if $submission_field.content != ""}style="display:none"{/if}>
-              <input type="file" name="{$submission_field.col_name}" />
+              {if $submission_field.is_editable == "yes"}
+                <input type="file" name="{$submission_field.col_name}" />
+              {/if}
             </span>
 
             <span id="file_field_{$field_id}_message_id"></span>

@@ -21,6 +21,12 @@
 
 // -------------------------------------------------------------------------------------------------
 
+
+/**
+ * The current version release.
+ */
+$g_current_version = "2.0.0-beta-20090104";
+
 /**
  * This is the base URL of the Form Tools installation on your server. e.g.
  * http://www.yoursite.com/formtools. You can either supply an absolute or relative URL. Note: if

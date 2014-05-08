@@ -13,9 +13,14 @@
   <form name="login" action="{$same_page}{$query_params}" method="post">
 
     {if $upgrade_notification}
-      <div class="notify">
-        {$upgrade_notification}
+      <div class="notify" id="upgrade_notification">
+  
+        <div style="padding:8px">
+          <span style="float: right; padding-left: 5px;"><a href="#" onclick="return ft.hide_message('upgrade_notification')">X</a></span>
+          {$upgrade_notification}
+        </div>
       </div>
+
       <br />
     {/if}
 

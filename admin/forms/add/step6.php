@@ -14,10 +14,10 @@ if (isset($_SESSION["ft"]["smart_fill_tmp_uploaded_files"]) && !empty($_SESSION[
 $_SESSION["ft"]["method"] = "";
 $form_id = ft_load_field("form_id", "add_form_form_id", "");
 
-$replacement_info = array("editformlink" => "edit.php?form_id={$form_id}");
+$replacement_info = array("editformlink" => "../edit.php?form_id={$form_id}");
 $text_add_form_step_5_para = ft_eval_smarty_string($LANG["text_add_form_step_5_para_3"], $replacement_info);
 
-$replacement_info = array("editformlink" => "edit_form.php?form_id={$form_id}");
+$replacement_info = array("editformlink" => "../edit.php?form_id={$form_id}");
 $text_add_form_step_5_para_4 = ft_eval_smarty_string($LANG["text_add_form_step_5_para_4"], $replacement_info);
 
 // ------------------------------------------------------------------------------------------------

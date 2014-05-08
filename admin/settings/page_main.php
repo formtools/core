@@ -12,10 +12,6 @@ $page_vars["page"] = "main";
 $page_vars["page_url"] = ft_get_page_url("settings_main");
 $page_vars["tabs"] = $tabs;
 $page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_main"]}";
-$page_vars["ft_version"] = ft_get_version_as_number();
-$page_vars["is_beta"]    = $_SESSION["ft"]["settings"]["is_beta"];
-$page_vars["beta_version"] = $beta_version;
-$page_vars["beta_version_str"] = ft_eval_smarty_string($LANG["phrase_beta_version"], $replacement_info);
 $page_vars["upgrade_info"] = $_SESSION["ft"]["upgrade_info"];
 
 $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>');

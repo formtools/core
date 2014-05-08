@@ -22,7 +22,7 @@
 
   <div>
 
-    <div class="subtitle underline">{$LANG.phrase_final_touches_page_5|upper}</div>
+    <div class="subtitle underline">{$LANG.phrase_final_touches_page_6|upper}</div>
 
     <p>
       {$LANG.text_add_form_step_5_para_1}

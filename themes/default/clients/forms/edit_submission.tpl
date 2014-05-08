@@ -11,7 +11,7 @@
     <table cellpadding="0" cellspacing="0" class="pad_top_large pad_bottom_large">
     <tr>
       <td width="80">{$previous_link_html}</td>
-      <td width="120">{$search_results_link_html}</td>
+      <td width="150">{$search_results_link_html}</td>
       <td>{$next_link_html}</td>
     </tr>
     </table>
@@ -63,12 +63,19 @@
 
           {elseif $submission_field.field_type == "file"}
 
-            {if $submission_field.content != ""}
-              <a href="{$submission_field.file_upload_url}/{$submission_field.content}" target="_blank">{$submission_field.content|truncate}</a>
-              &nbsp;<input type="button" value="{$LANG.phrase_delete_file|upper}" onclick="delete_submission_file('file', {$submission_field.field_id});" />
-            {else}
-              <input type="file" name="{$submission_field.col_name}" />
-            {/if}
+            <span id="field_{$field_id}_link" {if $submission_field.content == ""}style="display:none"{/if}>
+              {display_file_field field_id=$field_id filename=$submission_field.content}
+
+              {if $submission_field.is_editable == "yes"}
+                <input type="button" class="pad_left_large" value="{$LANG.phrase_delete_file|upper}" onclick="ms.delete_submission_file({$field_id}, 'file', false)" />
+              {/if}
+            </span>
+
+            <span id="field_{$field_id}_upload_field" {if $submission_field.content != ""}style="display:none"{/if}>
+              {if $submission_field.is_editable == "yes"}
+                <input type="file" name="{$submission_field.col_name}" />
+              {/if}
+            </span>
 
           {elseif $submission_field.field_type == "image"}
 

@@ -3,7 +3,7 @@
 /**
  * This file defines all functions relating to Form Tools modules.
  *
- * @copyright Encore Web Studios 2008
+ * @copyright Encore Web Studios 2009
  * @author Encore Web Studios <formtools@encorewebstudios.com>
  * @package 2-0-0
  * @subpackage Modules
@@ -55,7 +55,7 @@ function ft_uninstall_module($module_id)
   if (is_file("$g_root_dir/modules/$module_folder/uninstall.php"))
   {
   	@include_once("$g_root_dir/modules/$module_folder/uninstall.php");
-  	$uninstall_function_name = "{$modulr_folder}__uninstall";
+  	$uninstall_function_name = "{$module_folder}__uninstall";
   	if (function_exists($uninstall_function_name))
   	{
   		$has_custom_uninstall_script = true;
@@ -522,16 +522,16 @@ function ft_get_module_info_file_contents($module_folder)
 
 	$file = "$g_root_dir/modules/$module_folder/module.php";
 
-  if (!is_file($file))
+	if (!is_file($file))
     return array();
 
-	@include_once($file);
-	$vars = get_defined_vars();
+	@include($file);
+	$v = get_defined_vars();
 
-	if (!isset($vars["MODULE"]))
+	if (!isset($v["MODULE"]))
 	  return array();
 
-	$values = $vars["MODULE"];
+	$values = $v["MODULE"];
 	$info["author"] = isset($values["author"]) ? $values["author"] : "";
 	$info["author_email"] = isset($values["author_email"]) ? $values["author_email"] : "";
 	$info["author_link"] = isset($values["author_link"]) ? $values["author_link"] : "";
@@ -764,4 +764,131 @@ function ft_install_module($module_id)
   }
 
   return array($success, $message);
+}
+
+
+/**
+ * This is called on the main Modules listing page for each module. It checks to
+ * see if the module has a new upgrade available. If it has, it displays an "Upgrade
+ * Module" link to allow the administrator to call the upgrade script (ft_upgrade_module)
+ *
+ * @param integer $module_id
+ */
+function ft_module_needs_upgrading($module_id)
+{
+  $module_info = ft_get_module($module_id);
+	$module_folder = $module_info["module_folder"];
+	$current_db_version = $module_info["version"];
+
+	$latest_module_info = ft_get_module_info_file_contents($module_folder);
+
+//  echo $module_folder;
+//	print_r($latest_module_info);
+
+  $actual_version = $latest_module_info["version"];
+
+	return ($current_db_version != $actual_version);
+}
+
+
+/**
+ * This function is called from the main Modules page. It upgrades an individual
+ * module.
+ */
+function ft_upgrade_module($module_id)
+{
+  global $LANG, $g_root_dir, $g_table_prefix;
+
+  $module_info = ft_get_module($module_id);
+	$module_folder = $module_info["module_folder"];
+	$module_name = $module_info["module_name"];
+	$current_db_version = $module_info["version"];
+
+	$info = ft_get_module_info_file_contents($module_folder);
+  $new_version = $info["version"];
+
+  if ($current_db_version == $new_version)
+	  return array(false, "");
+
+  // if the module has its own upgrade function, call it!
+  @include_once("$g_root_dir/modules/$module_folder/install.php");
+  $upgrade_function_name = "{$module_folder}__upgrade";
+  if (function_exists($upgrade_function_name))
+    $upgrade_function_name();
+
+  // now, update the main module record
+	$info = ft_sanitize($info);
+
+	// we're assuming the module developer hasn't removed any of the required fields...
+
+
+  // now check the language file contains the two required fields: module_name and module_description
+  $lang_file = "$g_root_dir/modules/$module_folder/lang/{$info["origin_language"]}.php";
+  $lang_info = _ft_get_module_lang_file_contents($lang_file);
+  $lang_info = ft_sanitize($lang_info);
+
+  // check the required language file fields
+  if ((!isset($lang_info["module_name"]) || empty($lang_info["module_name"])) ||
+      (!isset($lang_info["module_description"]) || empty($lang_info["module_description"])))
+    return;
+
+  $author               = $info["author"];
+  $author_email         = $info["author_email"];
+  $author_link          = $info["author_link"];
+  $module_version       = $info["version"];
+  $module_date          = $info["date"];
+  $origin_language      = $info["origin_language"];
+  $supports_ft_versions = $info["supports_ft_versions"];
+  $nav                  = $info["nav"];
+
+  $module_name          = $lang_info["module_name"];
+  $module_description   = $lang_info["module_description"];
+
+  // convert the date into a MySQL datetime
+  list($year, $month, $day) = split("-", $module_date);
+  $timestamp = mktime(null, null, null, $month, $day, $year);
+  $module_datetime = ft_get_current_datetime($timestamp);
+
+  mysql_query("
+    UPDATE {$g_table_prefix}modules
+		SET    origin_language = '$origin_language',
+		       module_name = '$module_name',
+					 version = '$module_version',
+           author = '$author',
+					 author_email = '$author_email',
+					 author_link = '$author_link',
+					 description = '$module_description',
+					 module_date = '$module_datetime',
+					 supports_ft_versions = '$supports_ft_versions'
+    WHERE  module_id = $module_id
+      ") or die(mysql_error());
+
+  // remove and update the navigation links for this module
+	mysql_query("DELETE FROM {$g_table_prefix}module_menu_items WHERE module_id = $module_id");
+ 	$order = 1;
+  while (list($lang_file_key, $info) = each($nav))
+	{
+  	$url        = $info[0];
+  	$is_submenu = ($info[1]) ? "yes" : "no";
+  	if (empty($lang_file_key) || empty($url))
+  	  continue;
+
+  	$display_text = $lang_info[$lang_file_key];
+
+  	mysql_query("
+  	  INSERT INTO {$g_table_prefix}module_menu_items (module_id, display_text, url, is_submenu, list_order)
+  	  VALUES ($module_id, '$display_text', '$url', '$is_submenu', $order)
+    	  ") or die(mysql_error());
+
+		$order++;
+	}
+
+	// And we're done! inform the user that it's been upgraded
+	$placeholders = array(
+	  "module" => $module_name,
+	  "version" => $new_version
+	);
+  $message = ft_eval_smarty_string($LANG["notify_module_updated"], $placeholders);
+
+	return array(true, $message);
 }
