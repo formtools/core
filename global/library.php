@@ -173,7 +173,7 @@ $g_api_header_charset = "utf-8";
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.0-beta-20090308";
+$g_current_version = "2.0.0-beta-20090309";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.
@@ -226,7 +226,7 @@ require_once("$folder/code/menus.php");
 require_once("$folder/code/modules.php");
 require_once("$folder/code/sessions.php");
 require_once("$folder/code/settings.php");
-require_once("$folder/code/stabilizer.php");
+//require_once("$folder/code/stabilizer.php");
 require_once("$folder/code/submissions.php");
 require_once("$folder/code/themes.php");
 require_once("$folder/code/upgrade.php");

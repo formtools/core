@@ -385,7 +385,8 @@ function ft_get_form_field_id_by_field_name($field_name, $form_id)
       ");
   $result = mysql_fetch_assoc($query);
 
-  return $result["field_id"];
+  $field_id = (isset($result["field_id"])) ? $result["field_id"] : "";
+  return $field_id;
 }
 
 
@@ -495,6 +496,8 @@ function ft_get_form_field_by_colname($form_id, $col_name)
  * fields - like default upload URL, thumbnail sizes and so on. However, since every one of those settings
  * can be manually overridden for a single image field, this function returns either the original value OR
  * the custom overridden value.
+ *
+ * TODO BUG: The optional 3rd param apparently has no affect...
  *
  * @param integer $field_id
  * @param string $module the module folder or "core"

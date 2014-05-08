@@ -602,8 +602,7 @@ function ellipsis(e)
     }
   }
 
-document.write('<style type="text/css">' + '.ellipsis { margin-right:-10000px; }</style>');
-
+document.write('<style type="text/css">' + '.ellipsis { margin-right:-10000px; } #content { overflow: hidden }</style>');
 
 /**
  * A generic JS queuing function. For purpose and usage, see my post:

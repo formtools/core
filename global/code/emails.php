@@ -250,7 +250,7 @@ function ft_send_test_email($info)
   }
 
   $reply_to = "";
-  if (isset($email_info["from"]) && !empty($email_info["from"]))
+  if (isset($email_info["reply_to"]) && !empty($email_info["reply_to"]))
   {
     $reply_to = (is_array($email_info["reply_to"])) ? join(", ", $email_info["reply_to"]) : $email_info["reply_to"];
     $reply_to = htmlspecialchars_decode($reply_to);
@@ -452,6 +452,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 
 
   // add the "answer" key to $fields_for_email_template, found in the submission_info content
+  $file_info = array();
   $updated_fields_for_email_template = array();
   foreach ($fields_for_email_template as $field_info)
   {
@@ -459,6 +460,9 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
     {
       if ($submission_field_info["field_id"] == $field_info["field_id"])
       {
+    if ($submission_field_info["field_type"] == "file" || $submission_field_info["field_type"] == "image")
+      $file_info[$submission_field_info["field_name"]] = $submission_field_info["content"];
+
         switch ($submission_field_info["col_name"])
         {
           case "submission_date":
@@ -478,12 +482,21 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 
 
   $return_info = array();
+  $return_info["attachments"] = array();
 
   if (isset($templates["text"]) && !empty($templates["text"]))
   {
     $smarty = new Smarty();
     $smarty->template_dir = "$g_root_dir/global/smarty/";
     $smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
+
+    list($templates["text"], $attachments) = _ft_extract_email_attachment_info($templates["text"], $form_id, $file_info);
+    foreach ($attachments as $attachment_info)
+    {
+      if (!in_array($attachment_info, $return_info["attachments"]))
+        $return_info["attachments"][] = $attachment_info;
+    }
+
     $smarty->assign("eval_str", $templates["text"]);
     while (list($key, $value) = each($common_placeholders))
       $smarty->assign($key, $value);
@@ -499,6 +512,14 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
     $smarty = new Smarty();
     $smarty->template_dir = "$g_root_dir/global/smarty/";
     $smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
+
+    list($templates["html"], $attachments) = _ft_extract_email_attachment_info($templates["html"], $form_id, $file_info);
+    foreach ($attachments as $attachment_info)
+    {
+      if (!in_array($attachment_info, $return_info["attachments"]))
+        $return_info["attachments"][] = $attachment_info;
+    }
+
     $smarty->assign("eval_str", $templates["html"]);
     while (list($key, $value) = each($common_placeholders))
       $smarty->assign($key, $value);
@@ -507,7 +528,6 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
     $smarty->assign("fields", $fields_for_email_template);
     $return_info["html_content"] = $smarty->fetch("eval.tpl");
   }
-
 
   // compile the "to" / "from" / "reply-to" recipient list, based on this form submission. Virtually
   // everything is already stored in $email_templates["recipients"], but needs to be extracted.
@@ -1372,3 +1392,51 @@ function ft_delete_email_template($email_id)
 
   return array(true, $LANG["notify_email_template_deleted"]);
 }
+
+
+/**
+ * This function is tightly coupled with ft_get_email_components. I know, I know. It examines the content
+ * of an email template and detects any file attachments. It then returns the updated email template (i.e. minus
+ * the attachment string) and information about the attachment (file name, location, mimetype) for use by the
+ * emailing function (only Swift Mailer module at this time).
+ *
+ * @param string $template_str the email template (HTML or text)
+ * @param integer $form_id
+ * @param array $file_info information about all files
+ */
+function _ft_extract_email_attachment_info($template_str, $form_id, $file_info)
+{
+  // if there are any fields marked as attachments, store them and remove the attachment string
+  $attachments_regexp = '/\{\$attachment\s+field=("|\')(.+)("|\')\}/';
+
+  $attachment_info = array();
+  if (preg_match_all($attachments_regexp, $template_str, $matches))
+  {
+    foreach ($matches[2] as $field_name)
+    {
+      $field_id = ft_get_form_field_id_by_field_name($field_name, $form_id);
+      if (!empty($field_name) && array_key_exists($field_name, $file_info))
+      {
+        $field_settings = ft_get_extended_field_settings($field_id, "core", "file_upload_dir");
+        $file_upload_dir = $field_settings["file_upload_dir"];
+        $file_and_path = "$file_upload_dir/{$file_info[$field_name]}";
+
+        if (is_file($file_and_path))
+        {
+          $info = array(
+            "field_name" => $field_name,
+            "file_and_path" => $file_and_path,
+            "filename" => $file_info[$field_name],
+            "mimetype" => mime_content_type($file_and_path)
+          );
+          $attachment_info[] = $info;
+        }
+      }
+    }
+
+    $template_str = preg_replace($attachments_regexp, "", $template_str);
+  }
+
+  return array($template_str, $attachment_info);
+}
+
