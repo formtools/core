@@ -212,7 +212,7 @@ $g_release_type = "alpha";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110527";
+$g_release_date = "20110528";
 
 /**
  * The minimum required PHP version needed to run Form Tools.

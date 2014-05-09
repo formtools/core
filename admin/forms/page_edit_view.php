@@ -37,7 +37,10 @@ $num_client_map_filters = count($client_map_filters);
 
 $edit_view_tab = (isset($_SESSION["ft"]["inner_tabs"]["edit_view"])) ? $_SESSION["ft"]["inner_tabs"]["edit_view"] : 1;
 if (isset($request["edit_view_tab"]))
+{
   $edit_view_tab = $request["edit_view_tab"];
+  $_SESSION["ft"]["inner_tabs"]["edit_view"] = $edit_view_tab;
+}
 
 $view_omit_list = ft_get_public_view_omit_list($view_id);
 $num_clients_on_omit_list = count($view_omit_list);

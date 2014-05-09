@@ -32,6 +32,16 @@
     {if $view_info.may_add_submissions == "yes"}
       <input type="button" id="add_submission" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='{$same_page}?add_submission'" />
     {/if}
+
+  {elseif $view_info.columns|@count == 0}
+
+    <div class="notify margin_top_large">
+      <div style="padding: 8px">
+        Oops! This View hasn't been fully set up yet. <a href="edit.php?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2">Click here</a> to specify which fields
+        should appear as columns on this page.
+      </div>
+    </div>
+
   {else}
 
   {ft_include file="messages.tpl"}

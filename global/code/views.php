@@ -196,7 +196,7 @@ function ft_get_view_ids($form_id)
  * This returns the database column names of all searchable fields in this View. To reduce the number of
  * DB queries, this function allows you to pass in all field info to just extract the information from that.
  *
- * @param integer $view_id optional, but if not supplied, the second $fields paramt
+ * @param integer $view_id optional, but if not supplied, the second $fields parameter is require
  * @param array $fields optional, but if not supplied, the first $view_id param is required. This should
  *   be the $view_info["fields"] key, returned from $view_info = ft_get_view($view_id), which contains all
  *   View field info
@@ -205,10 +205,6 @@ function ft_get_view_ids($form_id)
  */
 function ft_get_view_searchable_fields($view_id = "", $fields = array())
 {
-  // this should never occur, but just in case
-  if (empty($view_id) && empty($fields))
-    ft_handle_error("<b>" . __FUNCTION__ . "</b> received invalid input, line " . __LINE__);
-
   if (!empty($view_id) && is_numeric($view_id))
   {
     $view_info = ft_get_view($view_id);
@@ -1092,16 +1088,16 @@ function ft_get_grouped_views($form_id, $custom_params = array())
         SELECT v.*
         FROM   {$g_table_prefix}views v
         WHERE  v.form_id = $form_id AND
+               v.group_id = $group_id AND
                (v.access_type = 'public' OR v.view_id IN (
                   SELECT cv.view_id
-                  FROM {$g_table_prefix}client_views cv
-                  WHERE account_id = {$params["account_id"]}
+                  FROM   {$g_table_prefix}client_views cv
+                  WHERE  account_id = {$params["account_id"]}
                )) AND
-               NOT EXISTS (
-                  SELECT *
-                  FROM {$g_table_prefix}public_view_omit_list
-                  WHERE view_id = $view_id AND
-                        account_id = {$params["account_id"]}
+               v.view_id NOT IN (
+                  SELECT view_id
+                  FROM   {$g_table_prefix}public_view_omit_list
+                  WHERE  account_id = {$params["account_id"]}
                )
                $hidden_views_clause
         ORDER BY v.view_order
@@ -1335,7 +1331,6 @@ function _ft_update_view_field_settings($view_id, $info)
   $grouped_info = explode("~", $info["{$sortable_id}_sortable__rows"]);
   $new_groups   = explode(",", $info["{$sortable_id}_sortable__new_groups"]);
 
-
   // empty the old View fields; we're about to update them
   mysql_query("DELETE FROM {$g_table_prefix}view_fields WHERE view_id = $view_id");
 
@@ -1357,6 +1352,9 @@ function _ft_update_view_field_settings($view_id, $info)
   $new_group_order = 1;
   foreach ($grouped_info as $curr_grouped_info)
   {
+    if (empty($curr_grouped_info))
+      continue;
+
     list($curr_group_id, $ordered_field_ids_str) = explode("|", $curr_grouped_info);
     $ordered_field_ids = explode(",", $ordered_field_ids_str);
 

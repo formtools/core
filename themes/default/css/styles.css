@@ -24,6 +24,16 @@ input, select, option {
   font: 11px Verdana, sans-serif;
   color: #333333;
 }
+input[type=text], input[type=password], textarea {
+  border-top: 1px #acaeb4 solid;
+  border-left: 1px #dde1e7 solid;
+  border-right: 1px #dde1e7 solid;
+  border-bottom: 2px #f1f4f7 solid;
+  padding: 1px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+
 #container {
   width: 950px;
   text-align:left;
@@ -68,6 +78,9 @@ form { margin: 0px; }
   text-decoration: none;
 }
 
+.lang_field_full {
+  width: 473px;
+}
 
 #footer {
   border: 1px solid #CFCFCF;
@@ -241,7 +254,6 @@ a#logout_link { color: #990000; }
   border-spacing: 1px;
   width: 100%;
 }
-
 .list_table th, .submissions_table th {
   background-image: url(../images/list_table_heading.jpg);
   color: white;
@@ -249,11 +261,17 @@ a#logout_link { color: #990000; }
   text-align: center;
   font-weight: normal;
   cursor: auto;
+  white-space: nowrap;
 }
 .list_table th.over, .submissions_table th.over, th.sortable_col :hover {
   background-image: url(../images/list_table_heading_over.jpg);
 }
-
+.list_table th td {
+  vertical-align: middle;
+}
+.list_table td {
+  vertical-align: top;
+}
 .submissions_table td {
   padding: 0px 2px;
 }
@@ -429,23 +447,38 @@ a#logout_link { color: #990000; }
 }
 
 /*--------- login / forget pwd pages ---------*/
-.login_outer_table {
+.login_panel {
   border: 1px solid #999999;
-  border-spacing: 3px;
+  display: inline-block;
 }
-.login_inner_table {
+.login_panel_inner {
   background-color: #e9e9e9;
+  margin: 3px;
+  padding: 14px;
 }
-.login_table_text {
+.login_panel_inner input[type=text], .login_panel_inner input[type=password] {
+  font-size: 11pt;
+  width: 160px;
+  margin-right: 10px;
+}
+.login_panel table {
+  float: left;
+}
+.login_panel td {
   color: #336699;
-  padding-left: 10px;
-  padding-right: 10px;
+  min-width: 80px;
+  font-size: 9pt;
 }
 .login_error {
   background-color: #4b9743;
   color: white;
   padding-top: 1px;
   padding-bottom: 1px;
+  margin: 3px;
+}
+.login_submit {
+  float: left;
+  margin-top: 15px;
 }
 
 /* Javascript tabsets */

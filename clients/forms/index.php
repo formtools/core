@@ -15,17 +15,17 @@ if (empty($form_id))
   exit;
 }
 
-$view_id = ft_load_field("view", "form_{$form_id}_view_id");
-
-// this returns all and ONLY the Views accessible by this client
-$form_views = ft_get_form_views($form_id, $account_id);
+$view_id = ft_load_field("view_id", "form_{$form_id}_view_id");
 
 // check the current client is permitted to view this information!
 ft_check_client_may_view($account_id, $form_id, $view_id);
 
-if (empty($view_id))
+// this returns all and ONLY the Views accessible by this client
+$grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
+
+if (empty($view_id) || !ft_check_view_exists($view_id, true))
 {
-  if (count($form_views) == 0)
+  if (count($grouped_views[0]["views"]) == 0)
   {
     // no Views defined for this client
     ft_handle_error($LANG["notify_no_views_assigned_to_client_form"], "", "notify");
@@ -33,20 +33,13 @@ if (empty($view_id))
   }
   else
   {
-    $view_id = $form_views[0]["view_id"];
+    $view_id = $grouped_views[0]["views"][0]["view_id"];
   }
 }
-else if (!ft_check_view_exists($view_id))
-  $view_id = $form_views[0]["view_id"];
-
 $_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
 
-
 $form_info = ft_get_form($form_id);
-$grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true));
 $view_info = ft_get_view($view_id);
-
-ft_check_client_may_view($account_id, $form_id, $view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes")
 {
@@ -153,7 +146,7 @@ foreach ($view_info["columns"] as $column_info)
 
   if (!array_key_exists($curr_col_name, $db_columns))
   {
-  	$db_columns[] = $curr_col_name;
+    $db_columns[] = $curr_col_name;
   }
 }
 
@@ -272,8 +265,8 @@ foreach ($view_info["fields"] as $field_info)
 {
   if ($field_info["is_searchable"] == "yes")
   {
-  	$has_searchable_field = true;
-  	break;
+    $has_searchable_field = true;
+    break;
   }
 }
 

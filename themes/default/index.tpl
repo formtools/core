@@ -14,7 +14,6 @@
 
     {if $upgrade_notification}
       <div class="notify" id="upgrade_notification">
-
         <div style="padding:8px">
           <span style="float: right; padding-left: 5px;"><a href="#" onclick="return ft.hide_message('upgrade_notification')">X</a></span>
           {$upgrade_notification}
@@ -24,60 +23,36 @@
       <br />
     {/if}
 
-    <table width="340" cellpadding="1" class="login_outer_table">
-    <tr>
-      <td>
-
-        <table width="100%" cellpadding="0" cellspacing="1" class="login_inner_table">
+    <div class="login_panel">
+      <div class="login_panel_inner">
+        <table cellpadding="0" cellspacing="1">
         <tr>
-          <td colspan="2">&nbsp;</td>
+          <td>{$LANG.word_username}</td>
+          <td><input type="text" name="username" value="{$username}" /></td>
         </tr>
         <tr>
-          <td>
-
-            <table width="200" cellpadding="0" cellspacing="1">
-            <tr>
-              <td class="login_table_text">{$LANG.word_username}</td>
-              <td><input type="text" size="25" name="username" value="{$username}"></td>
-            </tr>
-            <tr>
-              <td class="login_table_text">{$LANG.word_password}</td>
-              <td><input type="password" size="25" name="password" value=""></td>
-            </tr>
-            </table>
-
-          </td>
-          <td align="center" valign="center">
-
-            <script type="text/javascript">
-            document.write('<input type="submit" value="{$LANG.phrase_log_in|upper}">&nbsp;');
-            </script>
-
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2">&nbsp;</td>
+          <td>{$LANG.word_password}</td>
+          <td><input type="password" name="password" value="" /></td>
         </tr>
         </table>
 
-      </td>
-    </tr>
+        <script>
+        document.write('<input type="submit" class="login_submit" value="{$LANG.phrase_log_in|upper}">');
+        </script>
+        <div class="clear"></div>
+      </div>
 
-    {if $error}
-    <tr>
-      <td colspan="3">
-        <div class="login_error pad_left">{$error}</div>
-      </td>
-    </tr>
-    {/if}
-
-    </table>
-
+      {if $error}
+        <div>
+          <div class="login_error pad_left">{$error}</div>
+        </div>
+      {/if}
+    </div>
   </form>
 
   <noscript>
     <div class="error" style="padding:6px;">
-    {$LANG.text_js_required}
+      {$LANG.text_js_required}
     </div>
   </noscript>
 

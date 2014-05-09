@@ -8,7 +8,7 @@ $request = array_merge($_GET, $_POST);
 $form_id = ft_load_field("form_id", "curr_form_id");
 $view_id = _ft_code_get_view($request, $form_id);
 
-$submission_id = $request["submission_id"];
+$submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";
 if (empty($submission_id))
 {
   header("location: submissions.php");
@@ -141,4 +141,3 @@ $shared_resources
 EOF;
 
 ft_display_page("admin/forms/edit_submission.tpl", $page_vars);
-

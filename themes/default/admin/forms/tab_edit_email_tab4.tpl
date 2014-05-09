@@ -22,17 +22,17 @@
               <td rowspan="3" width="120" class="subpanel" align="center">
                 <input type="button" name="send_test_email" value="{$LANG.phrase_send_test_email}"
                   onclick="return emails_ns.send_test_email(this.form, 'send')" /><br />
-	              <input type="button" name="display_email" value="{$LANG.phrase_display_email}"
-	                onclick="return emails_ns.send_test_email(this.form, 'display')" /><br />
+                <input type="button" name="display_email" value="{$LANG.phrase_display_email}"
+                  onclick="return emails_ns.send_test_email(this.form, 'display')" /><br />
 
-				        <div id="ajax_activity" style="padding:3px; display:none"><img src="{$images_url}/ajax_activity_grey.gif" /></div>
-				        <div id="ajax_no_activity" style="padding:3px;"><img src="{$images_url}/ajax_no_activity_grey.gif" /></div>
+                <div id="ajax_activity" style="padding:3px; display:none"><img src="{$images_url}/ajax_activity_grey.gif" /></div>
+                <div id="ajax_no_activity" style="padding:3px;"><img src="{$images_url}/ajax_no_activity_grey.gif" /></div>
               </td>
             </tr>
             <tr>
               <td class="pad_left_small">{$LANG.phrase_your_email_address}</td>
               <td>
-                <input type="text" name="test_email_recipient" id="test_email_recipient" style="width:300px" value="{$test_email_recipient}" />
+                <input type="text" name="test_email_recipient" id="test_email_recipient" style="width:390px" value="{$test_email_recipient}" />
               </td>
             </tr>
             <tr>

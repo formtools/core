@@ -30,114 +30,114 @@
     </table>
 
     <div id="external_form_settings" {if $form_info.form_type == "internal"}style="display:none"{/if}>
-	    <div class="subtitle underline margin_bottom_large margin_top_large">{$LANG.phrase_external_form_info|upper}</div>
+      <div class="subtitle underline margin_bottom_large margin_top_large">{$LANG.phrase_external_form_info|upper}</div>
 
-	    <table class="list_table margin_bottom_large" width="100%" cellpadding="0" cellspacing="1">
-	    <tr>
-	      <td class="pad_left_small" width="200"><label for="submission_type">{$LANG.phrase_submission_type}</label></td>
-	      <td>
-	        <select name="submission_type" id="submission_type">
-	          <option value="direct" {if $form_info.submission_type == "direct"}selected{/if}>{$LANG.word_direct}</option>
-	          <option value="code" {if $form_info.submission_type == "code"}selected{/if}>{$LANG.word_code} (API)</option>
-	        </select>
-	      </td>
-	    </tr>
-	    <tbody id="multi_page_form_row" {if $form_info.submission_type == 'direct'}style="display:none"{/if}>
-		    <tr>
-		      <td class="pad_left_small"><label for="is_multi_page_form">{$LANG.phrase_is_multi_page_form_q}</label></td>
-		      <td>
-		        <input type="radio" class="is_multi_page_form" name="is_multi_page_form" id="impf1" value="yes"
-		          {if $form_info.is_multi_page_form == "yes"}checked{/if} />
-		          <label for="impf1">{$LANG.word_yes}</label>
-		        <input type="radio" class="is_multi_page_form" name="is_multi_page_form" id="impf2" value="no"
-		          {if $form_info.is_multi_page_form == "no"}checked{/if} />
-		          <label for="impf2">{$LANG.word_no}</label>
-		      </td>
-		    </tr>
-	    </tbody>
-	    <tr>
-	      <td valign="top" class="pad_left_small">
-	        <span id="form_label_single" {if $form_info.is_multi_page_form == "yes"}style="display:none"{/if}>{$LANG.phrase_form_url}</span>
-	        <span id="form_label_multiple" {if $form_info.is_multi_page_form == "no"}style="display:none"{/if}>{$LANG.phrase_form_urls}</span>
-	      </td>
-	      <td>
+      <table class="list_table margin_bottom_large" width="100%" cellpadding="0" cellspacing="1">
+      <tr>
+        <td class="pad_left_small" width="200"><label for="submission_type">{$LANG.phrase_submission_type}</label></td>
+        <td>
+          <select name="submission_type" id="submission_type">
+            <option value="direct" {if $form_info.submission_type == "direct"}selected{/if}>{$LANG.word_direct}</option>
+            <option value="code" {if $form_info.submission_type == "code"}selected{/if}>{$LANG.word_code} (API)</option>
+          </select>
+        </td>
+      </tr>
+      <tbody id="multi_page_form_row" {if $form_info.submission_type == 'direct'}style="display:none"{/if}>
+        <tr>
+          <td class="pad_left_small"><label for="is_multi_page_form">{$LANG.phrase_is_multi_page_form_q}</label></td>
+          <td>
+            <input type="radio" class="is_multi_page_form" name="is_multi_page_form" id="impf1" value="yes"
+              {if $form_info.is_multi_page_form == "yes"}checked{/if} />
+              <label for="impf1">{$LANG.word_yes}</label>
+            <input type="radio" class="is_multi_page_form" name="is_multi_page_form" id="impf2" value="no"
+              {if $form_info.is_multi_page_form == "no"}checked{/if} />
+              <label for="impf2">{$LANG.word_no}</label>
+          </td>
+        </tr>
+      </tbody>
+      <tr>
+        <td valign="top" class="pad_left_small">
+          <span id="form_label_single" {if $form_info.is_multi_page_form == "yes"}style="display:none"{/if}>{$LANG.phrase_form_url}</span>
+          <span id="form_label_multiple" {if $form_info.is_multi_page_form == "no"}style="display:none"{/if}>{$LANG.phrase_form_urls}</span>
+        </td>
+        <td>
           <div id="form_url_single" {if $form_info.is_multi_page_form == "yes"}style="display:none"{/if}>
-	          <table width="100%" cellpadding="0" cellspacing="0">
-	          <tr>
-	            <td><input type="text" name="form_url" id="form_url" value="{$form_info.form_url}" style="width: 98%" /></td>
-	            <td width="60"><input type="button" class="check_url" id="check_url__form_url" value="{$LANG.phrase_check_url|escape}" /></td>
-	          </tr>
-	          </table>
+            <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td><input type="text" name="form_url" id="form_url" value="{$form_info.form_url}" style="width: 98%" /></td>
+              <td width="60"><input type="button" class="check_url" id="check_url__form_url" value="{$LANG.phrase_check_url|escape}" /></td>
+            </tr>
+            </table>
           </div>
           <div id="form_url_multiple" {if $form_info.is_multi_page_form == "no" || $form_info.submission_info == "direct"}style="display:none"{/if}>
-		        <div class="sortable multi_page_form_list" id="{$sortable_id}">
-		          <ul class="header_row">
-		            <li class="col1">{$LANG.word_page}</li>
-		            <li class="col2">{$LANG.phrase_form_url}</li>
-		            <li class="col3"></li>
-		            <li class="col4 colN del"></li>
-		          </ul>
-		          <div class="clear"></div>
-		          <ul class="rows">
-		            {assign var=previous_item value=""}
-		            {foreach from=$form_info.multi_page_form_urls item=i name=row}
-		              {assign var=count value=$smarty.foreach.row.iteration}
-		              <li class="sortable_row{if $smarty.foreach.row.last} rowN{/if}">
-		                <div class="row_content">
-		                  <div class="row_group{if $smarty.foreach.row.last} rowN{/if}">
-		                    <input type="hidden" class="sr_order" value="{$count}" />
-		                    <ul>
-		                      <li class="col1 sort_col">{$count}</li>
-		                      <li class="col2"><input type="text" name="multi_page_urls[]" id="mp_url_{$count}" value="{$i.form_url|escape}" /></li>
-		                      <li class="col3"><input type="button" class="check_url" id="check_url__mp_url_{$count}" value="{$LANG.phrase_check_url|escape}" /></li>
-		                      <li class="col4 colN del"></li>
-		                    </ul>
-		                    <div class="clear"></div>
-		                  </div>
-		                </div>
-		                <div class="clear"></div>
-		              </li>
-		            {/foreach}
-		            {if $form_info.multi_page_form_urls|@count == 0}
-		              <li class="sortable_row">
-		                <div class="row_content">
-		                  <div class="row_group rowN">
-		                    <input type="hidden" class="sr_order" value="1" />
-		                    <ul>
-		                      <li class="col1 sort_col">1</li>
-		                      <li class="col2"><input type="text" name="multi_page_urls[]" id="mp_url_0" /></li>
-		                      <li class="col3"><input type="button" class="check_url" id="check_url__mp_url_0" value="{$LANG.phrase_check_url|escape}" /></li>
-		                      <li class="col4 colN del"></li>
-		                    </ul>
-		                    <div class="clear"></div>
-		                  </div>
-		                </div>
-		                <div class="clear"></div>
-		              </li>
-		            {/if}
-		          </ul>
-		        </div>
-		        <div class="clear"></div>
-	          <div>
-	            <a href="#" onclick="return mf_ns.add_multi_page_form_page()">{$LANG.phrase_add_row}</a>
-	          </div>
-	        </div>
-	      </td>
-	    </tr>
-	    <tbody id="redirect_url_row" {if $form_info.submission_type == "code"}style="display:none"{/if}>
-		    <tr>
-		      <td valign="top" width="200" class="pad_left_small">{$LANG.phrase_redirect_url}</td>
-		      <td>
-	          <table width="100%" cellpadding="0" cellspacing="0">
-	          <tr>
-	            <td><input type="text" name="redirect_url" id="redirect_url" value="{$form_info.redirect_url}" style="width: 98%" /></td>
-	            <td width="60"><input type="button" class="check_url" id="check_url__redirect_url" value="{$LANG.phrase_check_url|escape}" /></td>
-	          </tr>
-	          </table>
-		      </td>
-		    </tr>
-	    </tbody>
-	    </table>
+            <div class="sortable multi_page_form_list" id="{$sortable_id}">
+              <ul class="header_row">
+                <li class="col1">{$LANG.word_page}</li>
+                <li class="col2">{$LANG.phrase_form_url}</li>
+                <li class="col3"></li>
+                <li class="col4 colN del"></li>
+              </ul>
+              <div class="clear"></div>
+              <ul class="rows">
+                {assign var=previous_item value=""}
+                {foreach from=$form_info.multi_page_form_urls item=i name=row}
+                  {assign var=count value=$smarty.foreach.row.iteration}
+                  <li class="sortable_row{if $smarty.foreach.row.last} rowN{/if}">
+                    <div class="row_content">
+                      <div class="row_group{if $smarty.foreach.row.last} rowN{/if}">
+                        <input type="hidden" class="sr_order" value="{$count}" />
+                        <ul>
+                          <li class="col1 sort_col">{$count}</li>
+                          <li class="col2"><input type="text" name="multi_page_urls[]" id="mp_url_{$count}" value="{$i.form_url|escape}" /></li>
+                          <li class="col3"><input type="button" class="check_url" id="check_url__mp_url_{$count}" value="{$LANG.phrase_check_url|escape}" /></li>
+                          <li class="col4 colN del"></li>
+                        </ul>
+                        <div class="clear"></div>
+                      </div>
+                    </div>
+                    <div class="clear"></div>
+                  </li>
+                {/foreach}
+                {if $form_info.multi_page_form_urls|@count == 0}
+                  <li class="sortable_row">
+                    <div class="row_content">
+                      <div class="row_group rowN">
+                        <input type="hidden" class="sr_order" value="1" />
+                        <ul>
+                          <li class="col1 sort_col">1</li>
+                          <li class="col2"><input type="text" name="multi_page_urls[]" id="mp_url_0" /></li>
+                          <li class="col3"><input type="button" class="check_url" id="check_url__mp_url_0" value="{$LANG.phrase_check_url|escape}" /></li>
+                          <li class="col4 colN del"></li>
+                        </ul>
+                        <div class="clear"></div>
+                      </div>
+                    </div>
+                    <div class="clear"></div>
+                  </li>
+                {/if}
+              </ul>
+            </div>
+            <div class="clear"></div>
+            <div>
+              <a href="#" onclick="return mf_ns.add_multi_page_form_page()">{$LANG.phrase_add_row}</a>
+            </div>
+          </div>
+        </td>
+      </tr>
+      <tbody id="redirect_url_row" {if $form_info.submission_type == "code"}style="display:none"{/if}>
+        <tr>
+          <td valign="top" width="200" class="pad_left_small">{$LANG.phrase_redirect_url}</td>
+          <td>
+            <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td><input type="text" name="redirect_url" id="redirect_url" value="{$form_info.redirect_url}" style="width: 98%" /></td>
+              <td width="60"><input type="button" class="check_url" id="check_url__redirect_url" value="{$LANG.phrase_check_url|escape}" /></td>
+            </tr>
+            </table>
+          </td>
+        </tr>
+      </tbody>
+      </table>
 
     </div>
 
@@ -222,12 +222,14 @@
     </tr>
     <tr>
       <td class="pad_left_small" valign="top">{$LANG.phrase_edit_submission_label}</td>
-      <td><input type="text" name="edit_submission_page_label" value="{$form_info.edit_submission_page_label|escape}" style="width: 99%" /></td>
+      <td><input type="text" name="edit_submission_page_label" value="{$form_info.edit_submission_page_label|escape}"
+        class="lang_placeholder_field lang_field_full" /></td>
     </tr>
     <tr>
       <td class="pad_left_small" valign="top">{$LANG.phrase_add_submission_button}</td>
       <td>
-        <input type="text" name="add_submission_button_label" value="{$form_info.add_submission_button_label|escape}" style="width: 99%" />
+        <input type="text" name="add_submission_button_label" value="{$form_info.add_submission_button_label|escape}"
+          class="lang_placeholder_field lang_field_full" />
         <div class="medium_grey">{$LANG.text_add_submission_button}</div>
       </td>
     </tr>

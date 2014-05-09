@@ -11,28 +11,18 @@
   <form name="forget_password" action="{$same_page}{$g_query_params}" method="post"
     onsubmit="return rsv.validate(this, rules)">
 
-  <table width="320" cellpadding="1" class="login_outer_table">
-  <tr>
-    <td colspan="1">
-
-      <table width="100%" cellpadding="0" cellspacing="1" class="login_inner_table">
-      <tr>
-        <td colspan="2">&nbsp;</td>
-      </tr>
-      <tr>
-        <td class="login_table_text">{$LANG.word_username}</td>
-        <td><input type="textbox" size="25" name="username" value="{$username}"></td>
-        <td><input type="submit" value="{$LANG.word_email|upper}" class="margin_left_large margin_right_large"></td>
-      </tr>
-      <tr>
-        <td colspan="2">&nbsp;</td>
-      </tr>
-      </table>
-
-    </td>
-  </tr>
-  </table>
-
+    <div class="login_panel">
+      <div class="login_panel_inner">
+        <table cellpadding="0" cellspacing="1">
+        <tr>
+          <td>{$LANG.word_username}</td>
+          <td><input type="text" name="username" value="{$username}" /></td>
+          <td><input type="submit" value="{$LANG.word_email|upper}" class="margin_left_large margin_right_large" /></td>
+        </tr>
+        </table>
+        <div class="clear"></div>
+      </div>
+    </div>
   </form>
 
   <p>

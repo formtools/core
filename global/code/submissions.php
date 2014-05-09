@@ -608,11 +608,9 @@ function ft_update_submission($form_id, $submission_id, $infohash)
       }
     }
 
-    // if this is the Submission Date or Last Modified Date fields, check that the information the user has
-    // supplied is a valid MySQL datetime. If it's invalid or empty, we DON'T update the value
-    if ($row["col_name"] == "submission_date" || $row["col_name"] == "last_modified_date")
+    if ($row["field_name"] == "core__submission_date" || $row["col_name"] == "core__last_modified")
     {
-      if (!isset($infohash[$row["col_name"]]) || empty($infohash[$row["col_name"]]) || !ft_is_valid_datetime($infohash[$row["col_name"]]))
+      if (!isset($infohash[$row["field_name"]]) || empty($infohash[$row["field_name"]]))
         continue;
       $submission_date_changed = true;
     }
@@ -621,10 +619,11 @@ function ft_update_submission($form_id, $submission_id, $infohash)
     if (!empty($field_types_processing_info[$row["field_type_id"]]["php_processing"]))
     {
       $data = array(
-        "field_info" => $row,
-        "data"       => $infohash,
-        "code"       => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
-        "settings"   => $field_settings[$field_id]
+        "field_info"   => $row,
+        "data"         => $infohash,
+        "code"         => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
+        "settings"     => $field_settings[$field_id],
+        "account_info" => $_SESSION["ft"]["account"]
       );
       $value = ft_process_form_field($data);
       $query[] = $row["col_name"] . " = '$value'";

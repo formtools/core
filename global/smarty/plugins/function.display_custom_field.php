@@ -80,6 +80,7 @@ function smarty_function_display_custom_field($params, &$smarty)
       "VALUE"         => $value,
       "SETTINGS"      => ft_get_settings("", "core"), // SLOW! TODO
       "CONTEXTPAGE"   => "submission_listing",
+      "ACCOUNT_INFO"  => $_SESSION["ft"]["account"],
       "g_root_url"    => $g_root_url,
       "g_root_dir"    => $g_root_dir,
       "g_multi_val_delimiter" => $g_multi_val_delimiter
@@ -105,7 +106,6 @@ function smarty_function_display_custom_field($params, &$smarty)
         }
         reset($field_settings);
       }
-
 
       // if this setting type is a dropdown list and $value is non-empty, get the option list
       if ($curr_setting_field_type == "option_list_or_form_field" && !empty($value))

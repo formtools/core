@@ -810,11 +810,12 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
   // get the overridden settings
   $query = mysql_query("
     SELECT fts.field_type_id, fs.field_id, fts.field_setting_identifier, fs.setting_value
-    FROM   ft_field_type_settings fts, ft_field_settings fs
+    FROM   {$g_table_prefix}field_type_settings fts, {$g_table_prefix}field_settings fs
     WHERE  fts.setting_id = fs.setting_id AND
            fs.field_id IN ($field_id_str)
     ORDER BY fs.field_id
   ");
+
   $overridden_settings = array();
   while ($row = mysql_fetch_assoc($query))
   {

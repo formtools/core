@@ -157,7 +157,6 @@ foreach ($view_info["columns"] as $column_info)
   }
 }
 
-
 // display_fields contains ALL the information we need for the fields in the template
 $display_fields = array();
 foreach ($view_info["columns"] as $col_info)

@@ -33,7 +33,8 @@
 
     {ft_include file="messages.tpl"}
 
-    <form action="edit_submission.php" method="post" name="edit_submission_form" enctype="multipart/form-data">
+    <form action="edit_submission.php?form_id={$form_id}&submission_id={$submission_id}" method="post"
+      name="edit_submission_form" enctype="multipart/form-data">
       {* hidden fields needed for JS - don't delete! *}
       <input type="hidden" name="form_id" id="form_id" value="{$form_id}" />
       <input type="hidden" name="submission_id" id="submission_id" value="{$submission_id}" />

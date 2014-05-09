@@ -10,8 +10,16 @@ $account_id = $_SESSION["ft"]["account"]["account_id"];
 $request = array_merge($_GET, $_POST);
 $form_id = ft_load_field("form_id", "curr_form_id");
 $view_id = ft_load_field("view_id", "form_{$form_id}_view_id");
-$submission_id = $request['submission_id'];
+$submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";
+if (empty($submission_id))
+{
+  header("location: index.php");
+  exit;
+}
+
 $tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
+
+$grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
 
 // check the current client is permitted to view this information!
 ft_check_client_may_view($account_id, $form_id, $view_id);
@@ -25,7 +33,7 @@ if (!ft_check_view_contains_submission($form_id, $view_id, $submission_id))
 $_SESSION["ft"]["last_submission_id"] = $submission_id;
 
 // get a list of all editable fields in the View. This is used both for security purposes
-// for the update function and o determine whether the page contains any editable fields
+// for the update function and to determine whether the page contains any editable fields
 $editable_field_ids = _ft_get_editable_view_fields($view_id);
 
 // get the tabs for this View
@@ -53,12 +61,12 @@ $page_field_ids      = array();
 $page_field_type_ids = array();
 foreach ($grouped_fields as $group)
 {
-	foreach ($group["fields"] as $field_info)
-	{
-		$page_field_ids[] = $field_info["field_id"];
-		if (!in_array($field_info["field_type_id"], $page_field_type_ids))
-		  $page_field_type_ids[] = $field_info["field_type_id"];
-	}
+  foreach ($group["fields"] as $field_info)
+  {
+    $page_field_ids[] = $field_info["field_id"];
+    if (!in_array($field_info["field_type_id"], $page_field_type_ids))
+      $page_field_type_ids[] = $field_info["field_type_id"];
+  }
 }
 $page_field_types = ft_get_field_types(true, $page_field_type_ids);
 
@@ -114,6 +122,8 @@ $page_vars = array();
 $page_vars["page"]   = "client_edit_submission";
 $page_vars["page_url"] = ft_get_page_url("client_edit_submission");
 $page_vars["tabs"] = $tabs;
+$page_vars["grouped_views"] = $grouped_views;
+$page_vars["tab_number"] = $tab_number;
 $page_vars["page_field_ids"] = $page_field_ids;
 $page_vars["grouped_fields"] = $grouped_fields;
 $page_vars["field_types"] = $page_field_types;
@@ -128,9 +138,8 @@ $page_vars["form_id"] = $form_id;
 $page_vars["view_id"] = $view_id;
 $page_vars["view_info"] = $view_info;
 $page_vars["edit_submission_page_label"] = $edit_submission_page_label;
-//$page_vars["submission_tab_fields"] = $submission_tab_fields;
-//$page_vars["submission_tab_field_id_str"] = implode(",", $submission_tab_field_ids);
-$page_vars["tab_number"] = $tab_number;
+$page_vars["page_field_ids"] = $page_field_ids;
+$page_vars["page_field_ids_str"] = implode(",", $page_field_ids);
 $page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected", "confirm_delete_submission_file",
   "phrase_please_confirm", "word_no", "word_yes");
 $page_vars["head_string"] =<<< EOF

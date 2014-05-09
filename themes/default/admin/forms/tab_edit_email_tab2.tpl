@@ -163,7 +163,7 @@
             <tr>
               <td class="red">*</td>
               <td>{$LANG.phrase_subject_line}</td>
-              <td><input type="text" name="subject" style="width:300px;" value="{$template_info.subject|escape}" /></td>
+              <td><input type="text" name="subject" class="lang_placeholder_field" style="width: 490px" value="{$template_info.subject|escape}" /></td>
             </tr>
             <tr>
               <td valign="top" class="red">*</td>

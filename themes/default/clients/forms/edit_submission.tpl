@@ -5,8 +5,10 @@
     <tr>
       <td><span class="title">{$edit_submission_page_label}</span></td>
       <td align="right">
-        {views_dropdown form_id=$form_id submission_id=$submission_id selected=$view_id omit_hidden_views=true
-          onchange="window.location='`$same_page`?form_id=`$form_id`&submission_id=`$submission_id`&view_id=' + this.value"}
+        <div class="views_dropdown">
+          {views_dropdown grouped_views=$grouped_views form_id=$form_id submission_id=$submission_id selected=$view_id omit_hidden_views=true
+            onchange="window.location='`$same_page`?form_id=`$form_id`&submission_id=`$submission_id`&view_id=' + this.value"}
+        </div>
       </td>
     </tr>
     </table>

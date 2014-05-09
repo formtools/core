@@ -28,11 +28,11 @@
           <td>
             <input type="text" size="20" name="keyword" value="{$search_criteria.keyword|escape}" />
             <input type="submit" name="search_forms" value="{$LANG.word_search}" />
-            <input type="button" name="reset" value="{$LANG.phrase_show_all}" onclick="window.location='{$same_page}?reset=1'"
+            <input type="button" name="reset" onclick="window.location='{$same_page}?reset=1'"
               {if $forms|@count < $num_client_forms}
-                class="bold"
+                value="{$LANG.phrase_show_all} ({$num_client_forms})" class="bold"
               {else}
-                class="light_grey" disabled
+                value="{$LANG.phrase_show_all}" class="light_grey" disabled
               {/if} />
           </td>
         </tr>

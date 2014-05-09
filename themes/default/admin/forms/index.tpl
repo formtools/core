@@ -41,11 +41,11 @@
           <td>
             <input type="text" size="20" name="keyword" value="{$search_criteria.keyword|escape}" />
             <input type="submit" name="search_forms" value="{$LANG.word_search}" />
-            <input type="button" name="reset" value="{$LANG.phrase_show_all}" onclick="window.location='{$same_page}?reset=1'"
+            <input type="button" name="reset" onclick="window.location='{$same_page}?reset=1'"
               {if $forms|@count < $num_forms}
-                class="bold"
+                value="{$LANG.phrase_show_all} ({$num_forms})" class="bold"
               {else}
-                class="light_grey" disabled
+                value="{$LANG.phrase_show_all}" class="light_grey" disabled
               {/if} />
           </td>
         </tr>
@@ -72,8 +72,7 @@
       {assign var="table_group_id" value="1"}
 
       {* this displays ALL forms on the page, but groups them in separate tables - only one shown
-         at a time. The page nav above hides/shows the appropriate page with JS. Sorry the Smarty logic
-         is so dense...! *}
+         at a time. The page nav above hides/shows the appropriate page with JS. *}
       {foreach from=$forms item=form_info name=row}
         {assign var='index' value=$smarty.foreach.row.index}
         {assign var='count' value=$smarty.foreach.row.iteration}
@@ -185,8 +184,8 @@
                 {if $form_info.client_omit_list|@count == 0}
                   <span class="pad_left_small blue">{$LANG.phrase_all_clients}</span>
                 {else}
-                  <span class="pad_left_small blue">All clients, except: </span>
-                  {clients_dropdown only_show_clients=$form_info.client_omit_list display_single_client_as_text=true}
+                  {clients_dropdown only_show_clients=$form_info.client_omit_list display_single_client_as_text=true
+                    include_blank_option=true blank_option="All clients, except:" force_show_blank_option=true}
                 {/if}
 
               {else}
