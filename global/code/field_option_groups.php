@@ -5,7 +5,7 @@
  *
  * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-3
+ * @package 2-0-4
  * @subpackage FieldOptionGroups
  */
 
@@ -249,7 +249,7 @@ function ft_get_fields_using_field_option_group($group_id)
     $results[] = $row;
 
   return $results;
-}	
+}
 
 
 /**

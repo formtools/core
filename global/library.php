@@ -15,8 +15,8 @@
  * zipfile.
  *
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @version 2.0.3
- * @package 2-0-3
+ * @version 2.0.4
+ * @package 2-0-4
  */
 
 
@@ -200,7 +200,7 @@ $g_password_history_size = 10;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.3";
+$g_current_version = "2.0.4";
 
 /**
  * The release type: beta or main
