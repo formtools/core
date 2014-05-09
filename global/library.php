@@ -212,7 +212,7 @@ $g_release_type = "alpha";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110521";
+$g_release_date = "20110522";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.

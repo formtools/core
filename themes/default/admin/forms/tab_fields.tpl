@@ -68,7 +68,7 @@
 
       <div class="clear"></div>
 
-      <ul class="rows" id="rows">
+      <ul class="rows check_areas" id="rows">
         {assign var=previous_item value=""}
         {foreach from=$form_fields item=field name=row}
           {assign var='count' value=$smarty.foreach.row.index}
@@ -125,7 +125,7 @@
                         {display_field_types_dropdown name="field_`$field_id`_type_id" id="field_`$field_id`_type_id" default=$field.field_type_id class="field_types"}
                       {/if}
                     </li>
-                    <li class="sub_col3">
+                    <li class="sub_col3 check_area">
                       <input type="checkbox" name="field_{$field_id}_include_on_redirect" id="field_{$field_id}_include_on_redirect" {if $field.include_on_redirect == "yes"}checked{/if}
                         class="pass_on" />
                     </li>

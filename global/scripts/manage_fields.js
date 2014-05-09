@@ -183,16 +183,13 @@ $(function() {
     }
   });
 
-
   $(".check_areas").live("click", function(e) {
     if (!$(e.target).hasClass("check_area")) {
       return;
     }
     var field = $(e.target).find("input")[0];
-    field.checked = !field.checked;
     fields_ns.click_use_default(field);
   });
-
 
   // load all option lists into memory
   $.ajax({

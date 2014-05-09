@@ -1205,12 +1205,12 @@ function ft_upgrade_form_tools()
   {
     mysql_query("
       UPDATE {$g_table_prefix}field_types
-      SET    field_field_smarty_markup = '{\$VALUE|htmlspecialchars}'
+      SET    view_field_smarty_markup = '{\$VALUE|htmlspecialchars}'
       WHERE  field_type_identifier = 'textbox'
     ");
     mysql_query("
       UPDATE {$g_table_prefix}field_types
-      SET    field_field_smarty_markup = '{if \$CONTEXTPAGE == \"edit_submission\"}\t\n  {\$VALUE|nl2br}\r\n{else}\r\n  {\$VALUE}\r\n{/if}'
+      SET    view_field_smarty_markup = '{if \$CONTEXTPAGE == \"edit_submission\"}\t\n  {\$VALUE|nl2br}\r\n{else}\r\n  {\$VALUE}\r\n{/if}'
       WHERE  field_type_identifier = 'textarea'
     ");
   }

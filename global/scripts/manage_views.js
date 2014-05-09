@@ -1060,7 +1060,7 @@ view_ns.add_view_column = function() {
 
   row_html += '</select>'
       + '</li>'
-      + '<li class="col3 check_area"><input type="checkbox" name="is_sortable_' + row_num + '" /></li>'
+      + '<li class="col3 check_area"><input type="checkbox" name="is_sortable_' + row_num + '" checked /></li>'
       + '<li class="col4 light_grey">'
         + '<input type="checkbox" name="auto_size_' + row_num + '" id="auto_size_' + row_num + '" class="auto_size" checked />'
         + '<label for="auto_size_' + row_num + '" class="black">Auto-size</label>'

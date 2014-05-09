@@ -225,15 +225,6 @@ $(function() {
     view_ns.add_client_map_filters("1");
   }
 
-  $(".check_areas").bind("click", function(e) {
-    if (!$(e.target).hasClass("check_area")) {
-      return;
-    }
-    var field    = $(e.target).find("input")[0];
-    var field_id = field.value;
-    field.checked = !field.checked;
-  });
-
   $(".adding_field_ids").live("change", function() {
     if (this.checked) {
       $(this).closest("li").addClass("selected_row");

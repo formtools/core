@@ -12,9 +12,9 @@ if (isset($_GET['login']))
 
 if (isset($_GET["reset"]))
 {
-	$_SESSION["ft"]["client_sort_order"] = "";
-	$_SESSION["ft"]["client_search_keyword"] = "";
-	$_SESSION["ft"]["client_search_status"] = "";
+  $_SESSION["ft"]["client_sort_order"] = "";
+  $_SESSION["ft"]["client_search_keyword"] = "";
+  $_SESSION["ft"]["client_search_status"] = "";
 }
 $order   = ft_load_field("order", "client_sort_order", "last_name-ASC");
 $keyword = ft_load_field("keyword", "client_search_keyword", "");

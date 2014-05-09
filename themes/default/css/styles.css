@@ -1515,4 +1515,34 @@ a.show_form {
   background-color: #f2f2f2 !important;
 }
 
+.module_section {
+  background-color: #f2f2f2;
+  border: 1px solid #dddddd;
+  margin-top: 12px;
+  padding: 2px 8px 8px 8px;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+  display: inline-block;
+}
 
+.module_section h2 {
+  font: 11px/20px Verdana,sans-serif;
+  color: #777777;
+  margin: 0px;
+  padding: 2px 0px;
+  font-style: italic;
+}
+
+.export_manager_module table tr {
+  height: 23px;
+}
+.export_manager_module .icon {
+  padding-right: 6px;
+}
+.export_manager_module .export_group_name {
+  padding-right: 10px;
+}
+.export_manager_module .target_content {
+  padding-right: 10px;
+}

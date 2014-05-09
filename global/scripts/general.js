@@ -21,6 +21,14 @@ $(function() {
   $("td.edit").live("mouseout", function(e) {
     $(e.target).closest("tr").removeClass("edit_row_hover");
   });
+
+  $(".check_areas").live("click", function(e) {
+    if (!$(e.target).hasClass("check_area")) {
+      return;
+    }
+    var field = $(e.target).find("input")[0];
+    field.checked = !field.checked;
+  });
 });
 
 

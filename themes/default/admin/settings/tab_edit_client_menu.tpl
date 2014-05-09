@@ -35,7 +35,7 @@
           <li class="col6 colN del"></li>
         </ul>
         <div class="clear"></div>
-        <ul class="rows" id="rows">
+        <ul class="rows check_areas" id="rows">
         {assign var=previous_item value=""}
         {foreach from=$menu.menu_items key=k item=i name=edit_menu_items}
           {if $i.is_new_sort_group == "yes"}
@@ -71,7 +71,7 @@
                     <span class="medium_grey">{$LANG.word_na}</span>
                   {/if}
                 </li>
-                <li class="col5"><input type="checkbox" name="submenu_{$i.list_order}" {if $i.is_submenu == "yes"}checked{/if} /></li>
+                <li class="col5 check_area"><input type="checkbox" name="submenu_{$i.list_order}" {if $i.is_submenu == "yes"}checked{/if} /></li>
                 <li class="col6 colN del"></li>
               </ul>
               <div class="clear"></div>
