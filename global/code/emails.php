@@ -3,9 +3,9 @@
 /**
  * This file defines all functions related to emails sent by Form Tools.
  *
- * @copyright Encore Web Studios 2010
+ * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-4
+ * @package 2-0-5
  * @subpackage Emails
  */
 

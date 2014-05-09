@@ -15,8 +15,8 @@
  * zipfile.
  *
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @version 2.0.4
- * @package 2-0-4
+ * @version 2.0.5
+ * @package 2-0-5
  */
 
 
@@ -200,7 +200,7 @@ $g_password_history_size = 10;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.4";
+$g_current_version = "2.0.5";
 
 /**
  * The release type: beta or main
@@ -210,7 +210,7 @@ $g_release_type = "main";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20100925";
+$g_release_date = "20110226";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.

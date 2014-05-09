@@ -3,9 +3,9 @@
 /**
  * This file contains all functions relating to managing forms within Form Tools.
  *
- * @copyright Encore Web Studios 2010
+ * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-4
+ * @package 2-0-5
  * @subpackage Forms
  */
 
@@ -1031,7 +1031,6 @@ function ft_update_form_main_tab($infohash, $form_id)
     return array ($success, $message, "");
   }
 
-  $client_ids      = isset($infohash["selected_client_ids"]) ? $infohash["selected_client_ids"] : array();
   $is_multi_page_form = isset($infohash["is_multi_page_form"]) ? "yes" : "no";
   $access_type     = $infohash["access_type"];
   $form_name       = $infohash["form_name"];
@@ -1064,6 +1063,8 @@ function ft_update_form_main_tab($infohash, $form_id)
 
   // finally, update the list of clients associated with this form
   mysql_query("DELETE FROM {$g_table_prefix}client_forms WHERE form_id = $form_id");
+
+  $client_ids      = isset($infohash["selected_client_ids"]) ? $infohash["selected_client_ids"] : array();
   foreach ($client_ids as $client_id)
   {
     $query = mysql_query("
@@ -1094,7 +1095,7 @@ function ft_update_form_main_tab($infohash, $form_id)
       break;
 
     // remove any records from the client_view and public_view_omit_list tables concerned clients NOT associated
-    // with this form.
+    // with this form
     case "private":
       mysql_query("DELETE FROM {$g_table_prefix}public_form_omit_list WHERE form_id = $form_id");
 
@@ -1105,10 +1106,15 @@ function ft_update_form_main_tab($infohash, $form_id)
       // there WERE clients associated with this form. Delete the ones that AREN'T associated
       if (!empty($client_clauses))
       {
-        $where_clause = "WHERE " . join(" AND ", $client_clauses);
+        $client_id_clause = implode(" AND ", $client_clauses);
+        mysql_query("DELETE FROM {$g_table_prefix}client_views WHERE form_id = $form_id AND $client_id_clause");
 
-        mysql_query("DELETE FROM {$g_table_prefix}client_views $where_clause");
-        mysql_query("DELETE FROM {$g_table_prefix}public_view_omit_list $where_clause");
+        // also delete any orphaned records in the View omit list
+        $view_ids = ft_get_view_ids($form_id);
+        foreach ($view_ids as $view_id)
+        {
+          mysql_query("DELETE FROM {$g_table_prefix}public_view_omit_list WHERE view_id = $view_id AND $client_id_clause");
+        }
       }
 
       // for some reason, the administrator has assigned NO clients to this private form. So, delete all clients
@@ -1387,7 +1393,7 @@ function ft_update_form_database_tab($infohash)
       // if any physical aspect of the form (column name, field type) needs to be changed, change it
       if (($old_field_info['col_name'] != $field["col_name"]) || ($old_field_info['field_size'] != $field["field_size"]))
       {
-      	$db_col_change_hash[$old_field_info['col_name']] = $field["col_name"];
+        $db_col_change_hash[$old_field_info['col_name']] = $field["col_name"];
 
         $new_field_size = "";
         switch ($field["field_size"])
