@@ -333,4 +333,13 @@ switch ($action)
       exit;
     }
     break;
+
+  case "get_upgrade_form_html":
+  	echo "<form action=\"http://www.formtools.org/upgrade.php\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
+  	foreach ($_SESSION["ft"]["upgrade_info"] as $component_info)
+    {
+    	echo "<input type=\"hidden\" name=\"{$component_info["k"]}\" value=\"{$component_info["v"]}\" />\n";
+    }
+    echo "</form>";
+  	break;
 }

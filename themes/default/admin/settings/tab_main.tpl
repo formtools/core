@@ -14,7 +14,6 @@
         {else}
           <span>{$settings.program_version}</span>
         {/if}
-        <input type="button" value="{$LANG.phrase_check_for_updates}" onclick="$('upgrade_form').submit()" />
       </td>
     </tr>
     <tr>
@@ -66,11 +65,5 @@
       <input type="submit" name="update_main" value="{$LANG.word_update|upper}" />
     </p>
 
-  </form>
-
-  <form action="http://www.formtools.org/upgrade.php" id="upgrade_form" method="post" target="_blank">
-    {foreach from=$upgrade_info item=info name=row}
-      <input type="hidden" name="{$info.k}" value="{$info.v}" />
-    {/foreach}
   </form>
 

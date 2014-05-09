@@ -474,6 +474,41 @@ ft.error_handler = function(transport)
   ft.display_message("ft_message", false, "Error: " + transport.responseText);
 }
 
+/**
+ * Called when the administrator clicks on the "Update" link - it gets the upgrade info form
+ * from the server, inserts it into the page and submits it.
+ */
+ft.check_updates = function()
+{
+  if ($("upgrade_form") != null)
+    $("upgrade_form").submit();
+  else
+  {
+    var ajaxActionsURL = g.root_url + "/global/code/actions.php";
+    new Ajax.Request(ajaxActionsURL, {
+      parameters: { action: "get_upgrade_form_html" },
+      method:     'post',
+      onSuccess:  ft.embed_and_submit_upgrade_form
+    });
+  }
+
+  return false;
+}
+
+ft.embed_and_submit_upgrade_form = function(transport)
+{
+  var body = $$("body")[0];
+  var div = document.createElement("div");
+  div.innerHTML = transport.responseText;
+  body.appendChild(div);
+
+  ft.queue.push([
+    function() { $("upgrade_form").submit(); },
+    function() { return ($("upgrade_form").length > 0); }
+  ]);
+  ft.process_queue();
+}
+
 
 /**
  * The Fade Anything Technique - Adam Michela

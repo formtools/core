@@ -408,7 +408,14 @@ function ft_build_and_cache_upgrade_info()
 
   // get the main build version
   $program_version = $settings["program_version"];
-  $fields[] = array("k" => "m", "v" => $settings["program_version"]);
+  $release_date    = $settings["release_date"];
+  $release_type    = $settings["release_type"];
+
+  $version = $program_version;
+  if ($release_type == "beta")
+  	$version = "{$program_version}-beta-{$release_date}";
+
+  $fields[] = array("k" => "m", "v" => $version);
   $fields[] = array("k" => "beta", "v" => $settings["is_beta"]);
   $fields[] = array("k" => "api", "v" => $settings["api_version"]);
 

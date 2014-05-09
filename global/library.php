@@ -205,12 +205,12 @@ $g_current_version = "2.0.3";
 /**
  * The release type: beta or main
  */
-$g_release_type = "beta";
+$g_release_type = "main";
 
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20100919";
+$g_release_date = "20100925";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.

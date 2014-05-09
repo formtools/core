@@ -1195,7 +1195,7 @@ $LANG["phrase_auto_disable_account"] = "Auto-disable account after # failed logi
 $LANG["phrase_min_password_length"] = "Minimum password length";
 $LANG["phrase_required_password_chars"] = "Required password characters";
 $LANG["phrase_one_char_upper"] = "At least one character is uppercase";
-$LANG["phrase_one_char_number"] = "At least one character is a number (0-9)";
+$LANG["phrase_one_char_number"] = "At least one character is  a number (0-9)";
 $LANG["phrase_one_special_char"] = "At least one of <b>{\$chars}</b>";
 $LANG["phrase_prevent_password_reuse"] = "Prevent re-use of # last passwords";
 $LANG["validation_client_password_too_short"] = "The client password needs to be at least <b>{\$number}</b> characters long.";
@@ -1215,7 +1215,6 @@ $LANG["validation_no_account_password_confirmed2"] = "Please re-enter the new pa
 $LANG["validation_password_in_password_history"] = "For security, you cannot enter the same password as any of the last <b>{\$history_size}</b> passwords. Please enter a different password.";
 
 
-
 // changes
 //$LANG["phrase_browse_available_languages"] = "Browse available language packs.";
 $LANG["validation_no_db_hostname"] = "Please enter the database hostname.";
@@ -1223,4 +1222,3 @@ $LANG["validation_no_db_name"] = "Please enter the database name.";
 $LANG["validation_no_db_username"] = "Please enter the database account username.";
 $LANG["validation_no_second_password"] = "Please re-enter your password.";
 $LANG["word_ignore"] = "Ignore";
-

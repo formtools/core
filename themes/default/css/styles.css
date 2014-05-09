@@ -461,3 +461,9 @@ table.subpanel td {
   float:right;
   margin-top: 5px;
 }
+#account_section a.update_link {
+  color: #ffffcc;
+}
+#account_section a.update_link:hover {
+  color: orange;
+}
