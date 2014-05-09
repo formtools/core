@@ -39,11 +39,11 @@ function smarty_function_clients_dropdown($params, &$smarty)
     "size" => $size
       );
 
-	$attribute_str = "";
+  $attribute_str = "";
   while (list($key, $value) = each($attributes))
   {
-  	if (!empty($value))
-  	  $attribute_str .= " $key=\"$value\"";
+    if (!empty($value))
+      $attribute_str .= " $key=\"$value\"";
   }
 
   $all_clients = ft_get_client_list();
@@ -51,42 +51,42 @@ function smarty_function_clients_dropdown($params, &$smarty)
 
   foreach ($all_clients as $client)
   {
-  	$account_id = $client["account_id"];
+    $account_id = $client["account_id"];
 
-  	// if this is multiple dropdown list, figure out whether we need to show the this particular client
-  	// based on the list of selecteds client passed in
-  	if (!empty($multiple_action))
-  	{
-  		if ($multiple_action == "hide" && in_array($account_id, $selected_clients))
-  			continue;
+    // if this is multiple dropdown list, figure out whether we need to show the this particular client
+    // based on the list of selecteds client passed in
+    if (!empty($multiple_action))
+    {
+      if ($multiple_action == "hide" && in_array($account_id, $selected_clients))
+        continue;
 
-  		if ($multiple_action == "show" && !in_array($account_id, $selected_clients))
-  			continue;
-  	}
+      if ($multiple_action == "show" && !in_array($account_id, $selected_clients))
+        continue;
+    }
 
-  	if (!empty($only_show_clients) && !in_array($account_id, $only_show_clients))
-  	  continue;
+    if (!empty($only_show_clients) && !in_array($account_id, $only_show_clients))
+      continue;
 
 
-  	$first_name = $client["first_name"];
-  	$last_name  = $client["last_name"];
-  	$name = "$first_name $last_name";
+    $first_name = $client["first_name"];
+    $last_name  = $client["last_name"];
+    $name = "$first_name $last_name";
 
-  	$rows[] = array("account_id" => $account_id, "name" => $name);
+    $rows[] = array("account_id" => $account_id, "name" => $name);
   }
 
   $html = "";
   if (count($rows) == 1 && $display_single_client_as_text)
   {
-  	$html = $rows[0]["name"];
+    $html = $rows[0]["name"];
   }
   else
   {
-  	$options = array();
-  	foreach ($rows as $row_info)
+    $options = array();
+    foreach ($rows as $row_info)
       $options[] = "<option value=\"{$row_info["account_id"]}\" " . (($default_value == $row_info["account_id"]) ? "selected" : "") . ">{$row_info["name"]}</option>";
 
-  	$html = "<select $attribute_str>" . join("\n", $options) . "</select>";
+    $html = "<select $attribute_str>" . join("\n", $options) . "</select>";
   }
 
   return $html;

@@ -241,6 +241,8 @@ function ft_disable_client($account_id)
     return;
 
   mysql_query("UPDATE {$g_table_prefix}accounts SET account_status = 'disabled' WHERE account_id = $account_id");
+
+  extract(ft_process_hooks("end", compact("account_id"), array()), EXTR_OVERWRITE);
 }
 
 

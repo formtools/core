@@ -13,6 +13,24 @@
 
 // -------------------------------------------------------------------------------------------------
 
+/**
+ * Figure out if an account exists or not.
+ *
+ * @param $account_id
+ */
+function ft_account_exists($account_id)
+{
+  global $g_table_prefix;
+
+  if (empty($account_id) || !is_numeric($account_id))
+    return false;
+
+  $query = mysql_query("SELECT count(*) as c FROM {$g_table_prefix}accounts WHERE account_id = $account_id");
+  $result = mysql_fetch_assoc($query);
+
+  return ($result["c"] == 1);
+}
+
 
 /**
  * Retrieves all information about any user account (administrator or client).
@@ -118,34 +136,34 @@ function ft_login($infohash, $login_as_client = false)
 
     if (md5(md5($password)) != $account_info["password"])
     {
-    	// if this is a client account and the administrator has enabled the maximum failed login attempts feature,
-    	// keep track of the count
-    	$account_settings = ft_get_account_settings($account_info["account_id"]);
+      // if this is a client account and the administrator has enabled the maximum failed login attempts feature,
+      // keep track of the count
+      $account_settings = ft_get_account_settings($account_info["account_id"]);
 
-  		// stores the MAXIMUM number of failed attempts permitted, before the account gets disabled. If the value
-  		// is empty in either the user account or for the default value, that means the administrator doesn't want
-  		// to track the failed login attempts
-  		$max_failed_login_attempts = (isset($account_settings["max_failed_login_attempts"])) ?
-  		  $account_settings["max_failed_login_attempts"] : $settings["default_max_failed_login_attempts"];
+      // stores the MAXIMUM number of failed attempts permitted, before the account gets disabled. If the value
+      // is empty in either the user account or for the default value, that means the administrator doesn't want
+      // to track the failed login attempts
+      $max_failed_login_attempts = (isset($account_settings["max_failed_login_attempts"])) ?
+        $account_settings["max_failed_login_attempts"] : $settings["default_max_failed_login_attempts"];
 
-    	if ($account_info["account_type"] == "client" && !empty($max_failed_login_attempts))
-    	{
-    		$num_failed_login_attempts = (isset($account_settings["num_failed_login_attempts"]) && !empty($account_settings["num_failed_login_attempts"])) ?
-    		  $account_settings["num_failed_login_attempts"] : 0;
+      if ($account_info["account_type"] == "client" && !empty($max_failed_login_attempts))
+      {
+        $num_failed_login_attempts = (isset($account_settings["num_failed_login_attempts"]) && !empty($account_settings["num_failed_login_attempts"])) ?
+          $account_settings["num_failed_login_attempts"] : 0;
 
         $num_failed_login_attempts++;
 
         if ($num_failed_login_attempts >= $max_failed_login_attempts)
         {
-        	ft_disable_client($account_info["account_id"]);
-        	ft_set_account_settings($account_info["account_id"], array("num_failed_login_attempts" => 0));
-        	return $LANG["validation_account_disabled"];
+          ft_disable_client($account_info["account_id"]);
+          ft_set_account_settings($account_info["account_id"], array("num_failed_login_attempts" => 0));
+          return $LANG["validation_account_disabled"];
         }
         else
         {
-    		  ft_set_account_settings($account_info["account_id"], array("num_failed_login_attempts" => $num_failed_login_attempts));
+          ft_set_account_settings($account_info["account_id"], array("num_failed_login_attempts" => $num_failed_login_attempts));
         }
-    	}
+      }
       return $LANG["validation_wrong_password"];
     }
   }
@@ -168,7 +186,7 @@ function ft_login($infohash, $login_as_client = false)
   }
   else
   {
-  	ft_set_account_settings($account_info["account_id"], array("num_failed_login_attempts" => 0));
+    ft_set_account_settings($account_info["account_id"], array("num_failed_login_attempts" => 0));
   }
 
   // for clients, store the forms & form Views that they are allowed to access
@@ -343,31 +361,31 @@ function ft_send_password($info)
     {
       ft_include_module("swift_mailer");
 
-			// get the admin info. We'll use that info for the "from" and "reply-to" values. Note
-			// that we DON'T use that info for the regular mail() function. This is because retrieving
-			// the password is important functionality and we don't want to cause problems that could
-			// prevent the email being sent. Many servers don't all the 4th headers parameter of the mail()
-			// function
-			$admin_info = ft_get_admin_info();
+      // get the admin info. We'll use that info for the "from" and "reply-to" values. Note
+      // that we DON'T use that info for the regular mail() function. This is because retrieving
+      // the password is important functionality and we don't want to cause problems that could
+      // prevent the email being sent. Many servers don't all the 4th headers parameter of the mail()
+      // function
+      $admin_info = ft_get_admin_info();
       $admin_email = $admin_info["email"];
 
-			$email_info  = array();
-			$email_info["to"]  = array();
-			$email_info["to"][] = array("email" => $email);
-			$email_info["from"] = array();
-			$email_info["from"]["email"] = $admin_email;
-			$email_info["subject"] = $email_subject;
-			$email_info["text_content"] = $email_content;
+      $email_info  = array();
+      $email_info["to"]  = array();
+      $email_info["to"][] = array("email" => $email);
+      $email_info["from"] = array();
+      $email_info["from"]["email"] = $admin_email;
+      $email_info["subject"] = $email_subject;
+      $email_info["text_content"] = $email_content;
       list($success, $sm_message) = swift_send_email($email_info);
 
-			// if the email couldn't be sent, display the appropriate error message. Otherwise
-			// the default success message is used
-			if (!$success)
-			  $message = $sm_message;
+      // if the email couldn't be sent, display the appropriate error message. Otherwise
+      // the default success message is used
+      if (!$success)
+        $message = $sm_message;
     }
   }
   else
-	{
+  {
     // send email [note: the double quotes around the email recipient and content are intentional:
     // some systems fail without it]
     if (!@mail("$email", $email_subject, $email_content))

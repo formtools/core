@@ -1006,9 +1006,7 @@ function _ft_get_search_submissions_limit_clause($page_num, $results_per_page)
   if ($results_per_page != "all")
   {
     if (empty($page_num))
-    {
       $page_num = 1;
-    }
     $first_item = ($page_num - 1) * $results_per_page;
     $limit_clause = "LIMIT $first_item, $results_per_page";
   }

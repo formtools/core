@@ -9,7 +9,6 @@
         <a href="edit.php?form_id={$form_id}"><img src="{$images_url}/edit_small.gif" border="0" alt="{$LANG.phrase_edit_form}"
           title="{$LANG.phrase_edit_form}" /></a>
       </div>
-
       {if $form_views|@count > 1}
         <select onchange="window.location='{$same_page}?page=1&view=' + this.value">
           <optgroup label="{$LANG.word_views}">
@@ -19,7 +18,6 @@
           </optgroup>
         </select>
       {/if}
-
     </td>
   </tr>
   </table>
@@ -82,9 +80,7 @@
         </td>
       </tr>
       </table>
-
     </form>
-
   </div>
 
   <br />

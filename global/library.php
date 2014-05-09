@@ -153,12 +153,6 @@ $g_session_type = "php"; // "php" or "database"
 $g_session_save_path = "";
 
 /**
- * This lets you specify the session save path, used by PHP sessions. By default this isn't set, relying
- * on the default value. But on some systems this value needs to be set.
- */
-$g_session_save_path = "";
-
-/**
  * This enables debugging for the API functions. Generally this just causes the database errors and other
  * messages to be outputted along with the problem error code. Enabled by default.
  */
@@ -206,7 +200,7 @@ $g_password_history_size = 10;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.3-beta-20100731";
+$g_current_version = "2.0.3-beta-20100807";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.

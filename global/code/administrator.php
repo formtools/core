@@ -68,8 +68,7 @@ function ft_add_client($infohash)
   }
 
   $errors = validate_fields($form_vals, $rules);
-
-  list($valid_username, $problem) = _ft_is_valid_username($form_vals["username"], $account_id);
+  list($valid_username, $problem) = _ft_is_valid_username($form_vals["username"]);
   if (!$valid_username)
     $errors[] = $problem;
 
@@ -358,7 +357,6 @@ function ft_admin_update_client($infohash, $tab_num)
 
     // FORMS tab
     case "3":
-
       // clear out the old mappings for the client-forms and client-Views. This section re-inserts everything
       mysql_query("DELETE FROM {$g_table_prefix}client_forms WHERE account_id = $account_id");
       mysql_query("DELETE FROM {$g_table_prefix}client_views WHERE account_id = $account_id");
