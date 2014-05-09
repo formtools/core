@@ -15,8 +15,8 @@
  * zipfile.
  *
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @version 2.0.5
- * @package 2-0-5
+ * @version 2.0.6
+ * @package 2-0-6
  */
 
 
@@ -179,7 +179,7 @@ $g_api_sessions_timeout = 3600;
 /**
  * Permissible characters in a filename. All other characters are stripped out.
  */
-$g_filename_char_whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-";
+$g_filename_char_whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-0123456789";
 
 /**
  * Special chars, required in password (optional setting through interface).
@@ -200,7 +200,7 @@ $g_password_history_size = 10;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.5";
+$g_current_version = "2.0.6";
 
 /**
  * The release type: beta or main
@@ -210,7 +210,7 @@ $g_release_type = "main";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110226";
+$g_release_date = "20110418";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.
@@ -273,15 +273,15 @@ require_once("$folder/smarty/Smarty.class.php");
 
 if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page))
 {
+  // if the config file exists, we can assume the user isn't installed
+  $g_link = ft_db_connect();
+
   // our Smarty instance, used for rendering the webpages
   $g_smarty = new Smarty();
 
   // load the appropriate language file
   $g_language = ft_get_ui_language();
   require_once("$folder/lang/{$g_language}.php");
-
-  // if the config file exists, we can assume the user isn't installed
-  $g_link = ft_db_connect();
 
   if (isset($_GET["logout"]))
     ft_logout_user();

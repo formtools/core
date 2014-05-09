@@ -7,7 +7,7 @@
  *
  * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-5
+ * @package 2-0-6
  * @subpackage Settings
  */
 
