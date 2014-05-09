@@ -2,9 +2,9 @@
 
 if (isset($request["update"]))
 {
-	list($g_success, $g_message) = ft_update_field($request, $field_id);
+  list($g_success, $g_message) = ft_update_field($form_id, $field_id, $request);
 
-	// reset $field_info with the latest values
+  // reset $field_info with the latest values
   $field_info = ft_get_form_field($field_id);
 }
 

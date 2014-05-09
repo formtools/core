@@ -200,7 +200,7 @@ $g_password_history_size = 10;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.3-beta-20100914";
+$g_current_version = "2.0.3-beta-20100915";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.

@@ -100,7 +100,7 @@ switch ($action)
     break;
 
   case "select_submissions":
-     $form_id        = $request["form_id"];
+    $form_id        = $request["form_id"];
     $submission_ids = split(",", $request["submission_ids"]);
 
     // user HASN'T selected all submissions

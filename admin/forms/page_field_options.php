@@ -8,7 +8,7 @@ if (isset($request["update_field_type"]))
   $new_field_type = $request["field_type"];
 
   // N.B. we don't bother displaying any message when they change the field type
-  ft_change_field_type($field_id, $new_field_type);
+  ft_change_field_type($form_id, $field_id, $new_field_type);
 }
 
 if (!isset($request["field_id"]))

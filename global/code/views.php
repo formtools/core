@@ -1362,7 +1362,7 @@ function _ft_cache_view_stats($form_id, $view_id = "")
     if (empty($filters))
     {
       $_SESSION["ft"]["view_{$view_id}_num_submissions"]       = $_SESSION["ft"]["form_{$form_id}_num_submissions"];
-      $_SESSION["ft"]["view_{$form_id}_first_submission_date"] = $_SESSION["ft"]["form_{$form_id}_first_submission_date"];
+      $_SESSION["ft"]["view_{$view_id}_first_submission_date"] = $_SESSION["ft"]["form_{$form_id}_first_submission_date"];
     }
     else
     {

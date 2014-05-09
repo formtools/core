@@ -14,7 +14,7 @@ EOF;
 if (isset($request["update_file_settings"]))
 {
   $field_id = $request["field_id"];
-  list($g_success, $g_message) = ft_update_field_file_settings($request, $field_id);
+  list($g_success, $g_message) = ft_update_field_file_settings($form_id, $field_id, $request);
 }
 
 $form_info = ft_get_form($form_id);

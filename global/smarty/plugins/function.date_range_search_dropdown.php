@@ -60,7 +60,7 @@ function smarty_function_date_range_search_dropdown($params, &$smarty)
 	  $rows[] = "<option value=\"1\" " . (($default_value == "1") ? "selected" : "") . ">{$LANG["phrase_last_day"]}</option>";
 
 	  if ($search_days > 1)
-	    $rows[] = "<option value=\"2\" " . (($default_value == "2") ? "selected" : "") . ">{$LANG["phrase_last_day"]}</option>";
+	    $rows[] = "<option value=\"2\" " . (($default_value == "2") ? "selected" : "") . ">{$LANG["phrase_last_2_days"]}</option>";
 	  if ($search_days > 2)
 	    $rows[] = "<option value=\"3\" " . (($default_value == "3") ? "selected" : "") . ">{$LANG["phrase_last_3_days"]}</option>";
 	  if ($search_days > 3)

@@ -717,13 +717,14 @@ function ft_auto_update_form_field_order($form_id)
  *     file:                                     ft_update_field_file_settings()
  *     radios/checkboxes/single & multi-select:  ft_update_multi_field_settings()
  *
+ * @param integer $form_id The unique form ID
+ * @param integer $field_id The unique field ID
  * @param integer $info a hash containing the contents of the Edit Form Advanced tab
- * @param integer $field_id The unique field ID.
  * @return array Returns array with indexes:<br/>
  *               [0]: true/false (success / failure)<br/>
  *               [1]: message string<br/>
  */
-function ft_update_field($info, $field_id)
+function ft_update_field($form_id, $field_id, $info)
 {
   global $g_table_prefix, $g_debug, $LANG;
 
@@ -731,6 +732,8 @@ function ft_update_field($info, $field_id)
   $field_title         = $info["field_title"];
   $field_type          = $info["field_type"];
   $include_on_redirect = (isset($info["include_on_redirect"])) ? "yes" : "no";
+
+  $old_field_info = ft_get_form_field($field_id, false);
 
   // update each field
   if ($field_type == "system")
@@ -753,6 +756,22 @@ function ft_update_field($info, $field_id)
              include_on_redirect = '$include_on_redirect'
       WHERE  field_id = $field_id
         ");
+
+    // if the field size just changed, update the database table too
+    if ($old_field_info["field_size"] != $field_size)
+    {
+      $new_field_size = "";
+      switch ($field_size)
+      {
+        case "tiny":       $new_field_size = "VARCHAR(5)";   break;
+        case "small":      $new_field_size = "VARCHAR(20)";  break;
+        case "medium":     $new_field_size = "VARCHAR(255)"; break;
+        case "large":      $new_field_size = "TEXT";         break;
+        case "very_large": $new_field_size = "MEDIUMTEXT";   break;
+        default:           $new_field_size = "VARCHAR(255)"; break;
+      }
+      _ft_alter_table_column("{$g_table_prefix}form_{$form_id}", $old_field_info["col_name"], $old_field_info["col_name"], $new_field_size);
+    }
   }
 
   $success = true;
@@ -767,9 +786,11 @@ function ft_update_field($info, $field_id)
  * This function is called on the update field options page for radio buttons, checkboxes, select
  * and multi-select fields.
  *
+ * @param integer $form_id
  * @param integer $field_id
+ * @param array $info
  */
-function ft_update_multi_field_settings($info, $field_id)
+function ft_update_multi_field_settings($form_id, $field_id, $info)
 {
   global $g_table_prefix, $g_debug, $LANG;
 
@@ -777,9 +798,11 @@ function ft_update_multi_field_settings($info, $field_id)
   $field_title         = $info["field_title"];
   $field_type          = $info["field_type"];
   $include_on_redirect = (isset($info["include_on_redirect"])) ? "yes" : "no";
-  $group_id            = (isset($info["group_id"])) ? $info["group_id"] : "NULL";
+  $group_id            = (isset($info["group_id"]) && !empty($info["group_id"])) ? $info["group_id"] : "NULL";
+  $field_size          = $info["field_size"];
 
-  $field_size = $info["field_size"];
+  $old_field_info = ft_get_form_field($field_id, false);
+
   mysql_query("
     UPDATE {$g_table_prefix}form_fields
     SET    field_size = '$field_size',
@@ -789,6 +812,22 @@ function ft_update_multi_field_settings($info, $field_id)
            field_group_id = $group_id
     WHERE  field_id = $field_id
       ");
+
+  // if the field size just changed, update the database table too
+  if ($old_field_info["field_size"] != $field_size)
+  {
+    $new_field_size = "";
+    switch ($field_size)
+    {
+      case "tiny":       $new_field_size = "VARCHAR(5)";   break;
+      case "small":      $new_field_size = "VARCHAR(20)";  break;
+      case "medium":     $new_field_size = "VARCHAR(255)"; break;
+      case "large":      $new_field_size = "TEXT";         break;
+      case "very_large": $new_field_size = "MEDIUMTEXT";   break;
+      default:           $new_field_size = "VARCHAR(255)"; break;
+    }
+    _ft_alter_table_column("{$g_table_prefix}form_{$form_id}", $old_field_info["col_name"], $old_field_info["col_name"], $new_field_size);
+  }
 
   $success = true;
   $message = $LANG["notify_form_field_options_updated"];
@@ -809,7 +848,7 @@ function ft_update_multi_field_settings($info, $field_id)
  *               [0]: true/false (success / failure)<br/>
  *               [1]: message string<br/>
  */
-function ft_update_field_file_settings($infohash, $field_id)
+function ft_update_field_file_settings($form_id, $field_id, $infohash)
 {
   global $g_table_prefix, $g_debug, $LANG;
 
@@ -818,6 +857,8 @@ function ft_update_field_file_settings($infohash, $field_id)
   // first, update the common settings
   $field_title         = $infohash["field_title"];
   $include_on_redirect = (isset($infohash["include_on_redirect"])) ? "yes" : "no";
+
+  $old_field_info = ft_get_form_field($field_id, false);
 
   mysql_query("
     UPDATE {$g_table_prefix}form_fields
@@ -828,8 +869,10 @@ function ft_update_field_file_settings($infohash, $field_id)
     WHERE  field_id = $field_id
       ");
 
+  // ensure the database field size is "medium"
+  _ft_alter_table_column("{$g_table_prefix}form_{$form_id}", $old_field_info["col_name"], $old_field_info["col_name"], "VARCHAR(255)");
+
   // delete old settings
-  $old_field_info = ft_get_form_field($field_id);
   $old_extended_settings = ft_get_extended_field_settings($field_id, "core");
   ft_delete_extended_field_settings($field_id);
 
@@ -868,7 +911,6 @@ function ft_update_field_file_settings($infohash, $field_id)
   // all right! Database update complete, let's see if the file upload folder info changed, and if so, move the files.
   $new_extended_settings = ft_get_extended_field_settings($field_id);
 
-
   // (1) they just REMOVED a custom file upload folder
   if (isset($old_field_info["settings"]["file_upload_dir"]) && !isset($new_settings["file_upload_dir"]))
     ft_move_field_files($field_id, $old_field_info["settings"]["file_upload_dir"], $new_extended_settings["file_upload_dir"]);
@@ -881,6 +923,7 @@ function ft_update_field_file_settings($infohash, $field_id)
   else if (isset($old_field_info["settings"]["file_upload_dir"]) && isset($new_settings["file_upload_dir"]) &&
     $old_field_info["settings"]["file_upload_dir"] != $new_settings["file_upload_dir"])
     ft_move_field_files($field_id, $old_field_info["settings"]["file_upload_dir"], $new_settings["file_upload_dir"]);
+
 
   $success = true;
   $message = $LANG["notify_image_field_settings_updated"];
@@ -1006,10 +1049,11 @@ function ft_update_field_filters($field_id)
  * This is called when the user updates the field type on the Edit Field Options page. It deletes all old
  * now-irrelevant settings, but retains values that will not change based on field type.
  *
+ * @param integer $form_id
  * @param integer $field_id
  * @param string $new_field_type
  */
-function ft_change_field_type($field_id, $new_field_type)
+function ft_change_field_type($form_id, $field_id, $new_field_type)
 {
   global $g_table_prefix;
 
@@ -1020,15 +1064,24 @@ function ft_change_field_type($field_id, $new_field_type)
   $old_field_type = $field_info["field_type"];
   $multi_select_types = array("select", "multi-select", "radio-buttons", "checkboxes");
 
-  $empty_field_group_id_clause = "";
+  $clauses = array("field_type = '$new_field_type'");
   if (!in_array($old_field_type, $multi_select_types) || !in_array($new_field_type, $multi_select_types))
-    $empty_field_group_id_clause = ", field_group_id = NULL";
+    $clauses[] = "field_group_id = NULL";
+  if ($new_field_type == "file")
+    $clauses[] = "field_size = 'medium'";
+
+  $clauses_str = implode(",", $clauses);
 
   mysql_query("DELETE FROM {$g_table_prefix}field_settings WHERE field_id = $field_id");
   mysql_query("
     UPDATE {$g_table_prefix}form_fields
-    SET    field_type = '$new_field_type'
-           $empty_field_group_id_clause
+    SET    $clauses_str
     WHERE  field_id = $field_id
       ") or die(mysql_error());
+
+  // if the user just changed to a file type, ALWAYS set the database field size to "medium"
+  if ($old_field_type != $new_field_type && $new_field_type == "file")
+  {
+    _ft_alter_table_column("{$g_table_prefix}form_{$form_id}", $field_info["col_name"], $field_info["col_name"], "VARCHAR(255)");
+  }
 }

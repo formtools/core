@@ -206,7 +206,6 @@ function ft_finalize_form($form_id)
     if ($field["field_type"] == "system")
       continue;
 
-
     $query .= "{$field['col_name']} ";
     switch ($field["field_size"])
     {
@@ -580,7 +579,7 @@ function ft_get_form_column_names($form_id, $view_id = "", $omit_system_fields =
 /**
  * This, like ft_get_search_months is used for building the date dropdown in the search submissions
  * form. This function returns the number of days that have passed since the FIRST submission in a
- * particular form View. That value is used to generate a
+ * particular form View.
  *
  * @param integer $view_id
  * @return array
@@ -1388,7 +1387,7 @@ function ft_update_form_database_tab($infohash)
       // if any physical aspect of the form (column name, field type) needs to be changed, change it
       if (($old_field_info['col_name'] != $field["col_name"]) || ($old_field_info['field_size'] != $field["field_size"]))
       {
-        $db_col_change_hash[$old_field_info['col_name']] = $field["col_name"];
+      	$db_col_change_hash[$old_field_info['col_name']] = $field["col_name"];
 
         $new_field_size = "";
         switch ($field["field_size"])

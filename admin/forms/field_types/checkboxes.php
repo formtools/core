@@ -2,7 +2,7 @@
 
 if (isset($request["update"]))
 {
-	list($g_success, $g_message) = ft_update_multi_field_settings($request, $field_id);
+	list($g_success, $g_message) = ft_update_multi_field_settings($form_id, $field_id, $request);
 
 	// reset $field_info with the latest values
   $field_info = ft_get_form_field($field_id);
