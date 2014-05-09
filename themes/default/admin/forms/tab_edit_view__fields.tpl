@@ -152,7 +152,7 @@
       <table cellspacing="1" cellpadding="3" width="100%" height="100%">
       <tr>
         <td width="140">{$LANG.phrase_group_name}</td>
-        <td><input type="text" class="new_group_name" /></td>
+        <td><input type="text" class="new_group_name" placeholder="(optional)" /></td>
       </tr>
       <tr>
         <td valign="top">{$LANG.phrase_available_fields}</td>

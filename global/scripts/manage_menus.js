@@ -29,7 +29,7 @@ mm.add_menu_item_row = function() {
   var li2 = $("<li class=\"col2\">" + pages_dd + "</li>");
   var li3 = $("<li class=\"col3\"><input type=\"text\" name=\"display_text_" + currRow + "\" id=\"display_text_" + currRow + "\" /></li>");
   var li4 = $("<li class=\"col4\" id=\"row_" + currRow + "_options\"><span class=\"medium_grey\">" + g.messages["word_na"] + "</span></li>");
-  var li5 = $("<li class=\"col5\"><input type=\"checkbox\" name=\"submenu_" + currRow + "\" id=\"submenu_" + currRow + "\" /></li>");
+  var li5 = $("<li class=\"col5 check_area\"><input type=\"checkbox\" name=\"submenu_" + currRow + "\" id=\"submenu_" + currRow + "\" /></li>");
   var li6 = $("<li class=\"col6 colN del\"></li>");
 
   var ul = $("<ul></ul>");

@@ -18,6 +18,7 @@
       {/if}
     </td>
   </tr>
+  {if $mysql_loaded}
   <tr>
     <td>{$LANG.phrase_mysql_version}</td>
     <td class="bold">{$mysql_get_client_info}</td>
@@ -25,17 +26,26 @@
       {if $overridden_invalid_db_version}
         <span class="orange">{$LANG.word_overridden|upper}</span>
       {else}
-			  {if $valid_mysql_version}
+        {if $valid_mysql_version}
           <span class="green">{$LANG.word_pass|upper}</span>
         {else}
           <span class="red">{$LANG.word_fail|upper}</span>
           <form action="step2.php" method="post">
             <input type="submit" name="override_invalid_db_version" value="{$LANG.word_ignore}" />
-  			  </form>
+          </form>
         {/if}
-			{/if}
+      {/if}
     </td>
   </tr>
+  {else}
+  <tr>
+    <td>{$LANG.phrase_mysql_version}</td>
+    <td class="bold red">MySQL extension not available</td>
+    <td width="100" align="center">
+      <span class="red">{$LANG.word_fail|upper}</span>
+    </td>
+  </tr>
+  {/if}
   <tr>
     <td rowspan="2" valign="top">{$LANG.phrase_write_permissions}</td>
     <td class="bold">
@@ -65,18 +75,18 @@
 
   <br />
 
-  {if !$valid_php_version || !$valid_mysql_version}
+  {if !$valid_php_version || !$mysql_loaded || !$valid_mysql_version}
 
     <p class="error" style="padding: 6px">
-	      {$LANG.text_install_form_tools_server_not_supported}
-	  </p>
+      {$LANG.text_install_form_tools_server_not_supported}
+    </p>
 
   {else}
 
     <form action="step3.php" method="post">
-		  <p>
-		    <input type="submit" name="next" value="{$LANG.word_continue_rightarrow}" />
-		  </p>
+      <p>
+        <input type="submit" name="next" value="{$LANG.word_continue_rightarrow}" />
+      </p>
     </form>
 
   {/if}

@@ -20,8 +20,8 @@ $page_values = array();
 // start setting up the form
 if (isset($request["add_form"]))
 {
-	$request["form_type"]       = "external";
-	$request["submission_type"] = $submission_type;
+  $request["form_type"]       = "external";
+  $request["submission_type"] = $submission_type;
   list($g_success, $g_message, $form_id) = ft_setup_form($request);
 
   // store the uploading_files value for the duration of this session
@@ -48,7 +48,7 @@ else if (isset($request['update_form']))
 {
   // store the uploading_files value for the duration of this session
   $_SESSION["ft"]["uploading_files"] = isset($request["uploading_files"]) ? $request["uploading_files"] : "no";
-	$request["submission_type"] = $submission_type;
+  $request["submission_type"] = $submission_type;
   list($g_success, $g_message) = ft_set_form_main_settings($request);
   if ($g_success)
   {

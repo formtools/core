@@ -14,8 +14,10 @@
         <a href="edit.php?form_id={$form_id}"><img src="{$images_url}/admin_view.png" border="0" alt="{$LANG.phrase_edit_form}"
           title="{$LANG.phrase_edit_form}" width="48" height="23" /></a>
       </div>
-      <div style="height: 23px;">{views_dropdown grouped_views=$grouped_views form_id=$form_id selected=$view_id
-        onchange="window.location='`$same_page`?form_id=`$form_id`&page=1&view_id=' + this.value"}</div>
+      <div class="views_dropdown">
+        {views_dropdown grouped_views=$grouped_views form_id=$form_id selected=$view_id
+          onchange="window.location='`$same_page`?form_id=`$form_id`&page=1&view_id=' + this.value"}
+      </div>
     </td>
   </tr>
   </table>
@@ -128,20 +130,20 @@
       {/if}
       <tr class="unselected_row_color">
         <td align="center"><input type="checkbox" class="select_row_cb" name="submissions[]" value="{$submission_id}" {$precheck} /></td>
-	      {foreach from=$display_fields key=k2 item=curr_field}
-	        {assign var=col_name value=$curr_field.col_name}
-	        <td>
-	          {if $curr_field.truncate == "truncate" && $curr_field.custom_width}
-	            <div class="truncate" style="width:{$curr_field.custom_width}px">
-	          {elseif $curr_field.truncate == "truncate"}
-	            <div class="truncate_no_fixed_width">
-	          {/if}
-	            {display_custom_field form_id=$form_id view_id=$view_id submission_id=$submission_id
-	              value=$search_row.$col_name field_info=$curr_field field_types=$field_types}
-	          {if $curr_field.truncate == "truncate"}
-	            </div>
-	          {/if}
-	        </td>
+        {foreach from=$display_fields key=k2 item=curr_field}
+          {assign var=col_name value=$curr_field.col_name}
+          <td>
+            {if $curr_field.truncate == "truncate" && $curr_field.custom_width}
+              <div class="truncate" style="width:{$curr_field.custom_width}px">
+            {elseif $curr_field.truncate == "truncate"}
+              <div class="truncate_no_fixed_width">
+            {/if}
+              {display_custom_field form_id=$form_id view_id=$view_id submission_id=$submission_id
+                value=$search_row.$col_name field_info=$curr_field field_types=$field_types}
+            {if $curr_field.truncate == "truncate"}
+              </div>
+            {/if	}
+          </td>
         {/foreach}
         <td class="edit"><a href="edit_submission.php?form_id={$form_id}&view_id={$view_id}&submission_id={$submission_id}" title="{$LANG.word_edit}"></a></td>
       </tr>

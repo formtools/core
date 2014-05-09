@@ -322,16 +322,20 @@ function ft_get_num_fields_using_option_list($list_id)
 
 
 /**
- * Returns information about fields that use a particular option list. If the second
- * parameter is set, it returns the information grouped by form instead.
+ * Returns information about fields that use a particular option list. If the second parameter is set,
+ * it returns the information grouped by form instead.
  *
  * @param integer $list_id
- * @param boolean $group_by_form
+ * @param array
  * @return array
  */
-function ft_get_fields_using_option_list($list_id, $group_by_form)
+function ft_get_fields_using_option_list($list_id, $custom_params = array())
 {
   global $g_table_prefix;
+
+  $params = array(
+    "group_by_form" => (isset($custom_params["group_by_form"])) ? $custom_params["group_by_form"] : false
+  );
 
   $query = mysql_query("
     SELECT field_id
@@ -361,7 +365,7 @@ function ft_get_fields_using_option_list($list_id, $group_by_form)
   while ($row = mysql_fetch_assoc($query))
     $results[] = $row;
 
-  if ($group_by_form)
+  if ($params["group_by_form"])
   {
     $grouped_results = array();
     foreach ($results as $row)
@@ -620,14 +624,37 @@ function ft_delete_option_list($list_id)
 {
   global $g_table_prefix, $LANG;
 
-  $num_fields = ft_get_num_fields_using_option_list($list_id);
-
-  // TODO check this
-  if ($num_fields > 0)
+  // slight behavioural change in 2.1.0. Now you CAN delete Option Lists that are used by one or more fields.
+  // It just clears any references, thus leaving those fields incompletely configured (which isn't the end of
+  // the world!)
+  $fields = ft_get_fields_using_option_list($list_id);
+  foreach ($fields as $field_info)
   {
-    $placeholders = array("link" => "edit.php?page=form_fields&group_id=$group_id");
-    $message = ft_eval_smarty_string($LANG["validation_field_option_group_has_assigned_fields"], $placeholders);
-    return array(false, $message);
+    $field_id      = $field_info["field_id"];
+    $field_type_id = $field_info["field_type_id"];
+    $settings = ft_get_field_type_settings($field_type_id);
+
+    $setting_ids = array();
+    foreach ($settings as $setting_info)
+    {
+      if ($setting_info["field_type"] == "option_list_or_form_field")
+      {
+      	$setting_ids[] = $setting_info["setting_id"];
+      }
+    }
+    if (empty($setting_ids))
+      continue;
+
+    $setting_id_str = implode(",", $setting_ids);
+
+    // now we delete any entries in the field_settings table with field_id, setting_id and a NUMERIC value for the
+    // setting_value column. That column is also
+    mysql_query("
+      DELETE FROM {$g_table_prefix}field_settings
+      WHERE field_id = $field_id AND
+            setting_id IN ($setting_id_str) AND
+            setting_value NOT LIKE 'form_field%'
+    ");
   }
 
   mysql_query("DELETE FROM {$g_table_prefix}field_options WHERE list_id = $list_id");

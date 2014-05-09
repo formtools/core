@@ -13,7 +13,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%account_settings (
   setting_name varchar(255) NOT NULL,
   setting_value mediumtext NOT NULL,
   PRIMARY KEY  (account_id,setting_name)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%accounts (
   account_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -34,7 +34,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%accounts (
   username varchar(50) NOT NULL,
   password varchar(50) NOT NULL,
   PRIMARY KEY (account_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%accounts (account_id, account_type, account_status, timezone_offset, login_page, menu_id) VALUES (1, 'admin', 'active', '0', 'admin_forms', 1)";
 
@@ -42,19 +42,19 @@ $g_sql[] = "CREATE TABLE %PREFIX%client_forms (
   account_id mediumint(8) unsigned NOT NULL,
   form_id mediumint(8) unsigned NOT NULL,
   PRIMARY KEY (account_id,form_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%client_views (
   account_id mediumint(8) unsigned NOT NULL,
   view_id mediumint(8) unsigned NOT NULL,
   PRIMARY KEY (account_id,view_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%email_template_edit_submission_views (
   email_id mediumint(8) unsigned NOT NULL,
   view_id mediumint(8) unsigned NOT NULL,
   PRIMARY KEY  (email_id,view_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%email_template_recipients (
   recipient_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -66,7 +66,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%email_template_recipients (
   custom_recipient_name varchar(200) default NULL,
   custom_recipient_email varchar(200) default NULL,
   PRIMARY KEY  (recipient_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%email_templates (
   email_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -92,7 +92,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%email_templates (
   html_template mediumtext,
   text_template mediumtext,
   PRIMARY KEY (email_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%field_options (
   list_id mediumint(8) unsigned NOT NULL,
@@ -102,14 +102,14 @@ $g_sql[] = "CREATE TABLE %PREFIX%field_options (
   option_name varchar(255) NOT NULL,
   is_new_sort_group enum('yes', 'no') NOT NULL,
   PRIMARY KEY (list_id, list_group_id, option_order)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%field_settings (
   field_id mediumint(8) unsigned NOT NULL,
   setting_id mediumint(9) NOT NULL,
   setting_value mediumtext,
   PRIMARY KEY (field_id,setting_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%field_type_setting_options (
   setting_id mediumint(9) NOT NULL,
@@ -118,7 +118,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%field_type_setting_options (
   option_order smallint(6) NOT NULL,
   is_new_sort_group enum('yes','no') NOT NULL,
   PRIMARY KEY  (setting_id,option_order)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 // textbox - size
 $g_sql[] = "INSERT INTO %PREFIX%field_type_setting_options VALUES (1, 'Tiny', 'cf_size_tiny', 1, 'yes')";
@@ -208,7 +208,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%field_type_settings (
   default_value varchar(255) default NULL,
   list_order smallint(6) NOT NULL,
   PRIMARY KEY (setting_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 // textbox
 $g_sql[] = "INSERT INTO %PREFIX%field_type_settings VALUES (1, 1, 'Size', 'size', 'select', 'na', 'static', 'cf_size_medium', 1)";
@@ -282,7 +282,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%field_types (
   resources_css mediumtext,
   resources_js mediumtext,
   PRIMARY KEY (field_type_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%field_types VALUES (1, 'no', '{\$LANG.text_non_deletable_fields}', NULL, '{\$LANG.word_textbox}', 'textbox', 1, 'no', 'no', 'textbox', NULL, 1, '1char,2chars,tiny,small,medium,large,very_large', '{\$VALUE|htmlspecialchars}', '<input type=\"text\" name=\"{\$NAME}\" value=\"{\$VALUE|escape}\" \r\n  class=\"{\$size}{if \$highlight} {\$highlight}{/if}\" \r\n  {if \$maxlength}maxlength=\"{\$maxlength}\"{/if} />\r\n \r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '\r\n', 'input.cf_size_tiny {\r\n  width: 30px; \r\n}\r\ninput.cf_size_small {\r\n  width: 80px; \r\n}\r\ninput.cf_size_medium {\r\n  width: 150px; \r\n}\r\ninput.cf_size_large {\r\n  width: 250px;\r\n}\r\ninput.cf_size_full_width {\r\n  width: 99%; \r\n}\r\n\r\n', '')";
 $g_sql[] = "INSERT INTO %PREFIX%field_types VALUES (2, 'yes', NULL, NULL, '{\$LANG.word_textarea}', 'textarea', 1, 'no', 'no', 'textarea', NULL, 2, 'medium,large,very_large', '{if \$CONTEXTPAGE == \"edit_submission\"}\t\n  {\$VALUE|nl2br}\r\n{else}\r\n  {\$VALUE}\r\n{/if}', '{* figure out all the classes *}\r\n{assign var=classes value=\$height}\r\n{if \$highlight_colour}\r\n  {assign var=classes value=\"`\$classes` `\$highlight_colour`\"}\r\n{/if}\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_wordcounter max`\$maxlength`\"}\r\n{else if \$input_length == \"chars\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_textcounter max`\$maxlength`\"}\r\n{/if}\r\n\r\n<textarea name=\"{\$NAME}\" id=\"{\$NAME}_id\" class=\"{\$classes}\">{\$VALUE}</textarea>\r\n\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} word limit. <span></span> remaining words\r\n  </div>\r\n{elseif \$input_length == \"chars\" && \$max_length != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} characters limit. <span></span> remaining characters\r\n  </div>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments|nl2br}</div>\r\n{/if}\r\n', '', '.cf_counter span {\r\n  font-weight: bold; \r\n}\r\ntextarea {\r\n  width: 99%;\r\n}\r\ntextarea.cf_size_tiny {\r\n  height: 30px;\r\n}\r\ntextarea.cf_size_small {\r\n  height: 80px;  \r\n}\r\ntextarea.cf_size_medium {\r\n  height: 150px;  \r\n}\r\ntextarea.cf_size_large {\r\n  height: 300px;\r\n}\r\n', '/**\r\n * The following code provides a simple text/word counter option for any  \r\n * textarea. It either just keeps counting up, or limits the results to a\r\n * certain number - all depending on what the user has selected via the\r\n * field type settings.\r\n */\r\nvar cf_counter = {};\r\ncf_counter.get_max_count = function(el) {\r\n  var classes = \$(el).attr(''class'').split(\" \").slice(-1);\r\n  var max = null;\r\n  for (var i=0; i<classes.length; i++) {\r\n    var result = classes[i].match(/max(\\\d+)/);\r\n    if (result != null) {\r\n      max = result[1];\r\n      break;\r\n    }\r\n  }\r\n  return max;\r\n}\r\n\r\n\$(function() {\r\n  \$(\"textarea[class~=''cf_wordcounter'']\").each(function() {\r\n    var max = cf_counter.get_max_count(this);\r\n    if (max == null) {\r\n      return;\r\n    }\r\n    \$(this).bind(\"keydown\", function() {\r\n      var val = \$(this).val();\r\n      var len        = val.split(/[\\\s]+/);\r\n      var field_name = \$(this).attr(\"name\");\r\n      var num_words  = len.length - 1;\r\n      if (num_words > max) {\r\n        var allowed_words = val.split(/[\\\s]+/, max);\r\n        truncated_str = allowed_words.join(\" \");\r\n        \$(this).val(truncated_str);\r\n      } else {\r\n        \$(\"#\" + field_name + \"_counter\").find(\"span\").html(parseInt(max) - parseInt(num_words));\r\n      }\r\n    });     \r\n    \$(this).trigger(\"keydown\");\r\n  });\r\n\r\n  \$(\"textarea[class~=''cf_textcounter'']\").each(function() {\r\n    var max = cf_counter.get_max_count(this);\r\n    if (max == null) {\r\n      return;\r\n    }\r\n    \$(this).bind(\"keydown\", function() {    \r\n      var field_name = \$(this).attr(\"name\");      \r\n      if (this.value.length > max) {\r\n        this.value = this.value.substring(0, max);\r\n      } else {\r\n        \$(\"#\" + field_name + \"_counter\").find(\"span\").html(max - this.value.length);\r\n      }\r\n    });\r\n    \$(this).trigger(\"keydown\");\r\n  }); \r\n});\r\n\r\n')";
@@ -303,7 +303,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%form_email_fields (
   first_name_field_id mediumint(9) NULL,
   last_name_field_id mediumint(9) NULL,
   PRIMARY KEY (form_email_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%form_fields (
   field_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -321,7 +321,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%form_fields (
   include_on_redirect enum('yes','no') NOT NULL default 'no',
   option_list_id mediumint(9) default NULL,
   PRIMARY KEY  (field_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%forms (
   form_id mediumint(9) unsigned NOT NULL auto_increment,
@@ -341,7 +341,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%forms (
   edit_submission_page_label text,
   add_submission_button_label varchar(255) default '{\$LANG.word_add}',
   PRIMARY KEY (form_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%hooks (
   hook_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -352,7 +352,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%hooks (
   hook_function varchar(255) NOT NULL,
   priority tinyint(4) NOT NULL default '50',
   PRIMARY KEY  (hook_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%list_groups (
   group_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -361,7 +361,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%list_groups (
   custom_data text NOT NULL,
   list_order smallint(6) NOT NULL,
   PRIMARY KEY (group_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%list_groups VALUES (1, 'field_types', 'Standard Fields', '', 1)";
 $g_sql[] = "INSERT INTO %PREFIX%list_groups VALUES (2, 'field_types', 'Special Fields', '', 2)";
@@ -377,7 +377,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%menu_items (
   is_new_sort_group enum('yes','no') NOT NULL default 'yes',
   list_order smallint(5) unsigned default NULL,
   PRIMARY KEY (menu_item_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (1, 1, 'Forms', 'admin_forms', '', '/admin/forms/', 'no', 'yes', 1)";
 $g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (2, 1, 'Add Form', 'add_form1', '', '/admin/forms/add/step1.php?add', 'yes', 'no', 2)";
@@ -403,7 +403,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%menus (
   menu varchar(255) NOT NULL,
   menu_type enum('admin','client') NOT NULL default 'client',
   PRIMARY KEY  (menu_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%menus VALUES (1, 'Administrator', 'admin')";
 $g_sql[] = "INSERT INTO %PREFIX%menus VALUES (2, 'Client Menu', 'client')";
@@ -417,7 +417,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%module_menu_items (
   is_submenu enum('yes','no') NOT NULL default 'no',
   list_order smallint(6) NOT NULL,
   PRIMARY KEY  (menu_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%modules (
   module_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -433,14 +433,14 @@ $g_sql[] = "CREATE TABLE %PREFIX%modules (
   description mediumtext NOT NULL,
   module_date datetime NOT NULL,
   PRIMARY KEY  (module_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%multi_page_form_urls (
   form_id mediumint(8) unsigned NOT NULL,
   form_url varchar(255) NOT NULL,
   page_num tinyint(4) NOT NULL default '2',
   PRIMARY KEY  (form_id, page_num)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%new_view_submission_defaults (
   view_id mediumint(9) NOT NULL,
@@ -448,7 +448,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%new_view_submission_defaults (
   default_value text NOT NULL,
   list_order smallint(6) NOT NULL,
   PRIMARY KEY (view_id,field_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%option_lists (
   list_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -456,26 +456,26 @@ $g_sql[] = "CREATE TABLE %PREFIX%option_lists (
   is_grouped enum('yes','no') NOT NULL,
   original_form_id mediumint(8) unsigned default NULL,
   PRIMARY KEY (list_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%public_form_omit_list (
   form_id mediumint(8) unsigned NOT NULL,
   account_id mediumint(8) unsigned NOT NULL,
   PRIMARY KEY  (form_id,account_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%public_view_omit_list (
   view_id mediumint(8) unsigned NOT NULL,
   account_id mediumint(8) unsigned NOT NULL,
   PRIMARY KEY  (view_id,account_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%sessions (
   session_id varchar(100) NOT NULL default '',
   session_data text NOT NULL,
   expires int(11) NOT NULL default '0',
   PRIMARY KEY (session_id)
-) TYPE=MyISAM DEFAULT CHARSET=latin1";
+) DEFAULT CHARSET=latin1";
 
 $g_sql[] = "CREATE TABLE %PREFIX%settings (
   setting_id mediumint(9) NOT NULL auto_increment,
@@ -483,7 +483,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%settings (
   setting_value text NOT NULL,
   module varchar(100) NOT NULL default 'core',
   PRIMARY KEY  (setting_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 // changes per release
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('program_version', '%FORMTOOLSVERSION%', 'core')";
@@ -545,7 +545,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%themes (
   is_enabled enum('yes','no') NOT NULL default 'yes',
   theme_version varchar(50) default NULL,
   PRIMARY KEY (theme_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%themes VALUES (1, 'default', 'Default', 'Encore Web Studios', 'formtools@encorewebstudios.com', 'http://www.encorewebstudios.com', 'http://themes.formtools.org/', 'The default Form Tools theme for all new installations. It''s a green-coloured fixed-width theme requiring 1024 minimum width screens.', 'yes', '1.0.0')";
 
@@ -558,7 +558,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%view_columns (
   custom_width varchar(10) default NULL,
   truncate enum('truncate','no_truncate') NOT NULL default 'truncate',
   PRIMARY KEY  (view_id,field_id,list_order)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%view_fields (
   view_id mediumint(8) unsigned NOT NULL,
@@ -569,7 +569,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%view_fields (
   list_order smallint(5) unsigned default NULL,
   is_new_sort_group enum('yes','no') NOT NULL,
   PRIMARY KEY  (view_id,field_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%view_filters (
   filter_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -580,14 +580,14 @@ $g_sql[] = "CREATE TABLE %PREFIX%view_filters (
   filter_values mediumtext NOT NULL,
   filter_sql mediumtext NOT NULL,
   PRIMARY KEY  (filter_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%view_tabs (
   view_id mediumint(8) unsigned NOT NULL,
   tab_number tinyint(3) unsigned NOT NULL,
   tab_label varchar(50) default NULL,
   PRIMARY KEY  (view_id,tab_number)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%views (
   view_id smallint(6) NOT NULL auto_increment,
@@ -606,4 +606,4 @@ $g_sql[] = "CREATE TABLE %PREFIX%views (
   has_client_map_filter enum('yes','no') NOT NULL default 'no',
   has_standard_filter enum('yes','no') NOT NULL default 'no',
   PRIMARY KEY  (view_id)
-) TYPE=MyISAM DEFAULT CHARSET=utf8";
+) DEFAULT CHARSET=utf8";

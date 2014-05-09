@@ -47,6 +47,7 @@ $_SESSION["ft"]["last_link_page"] = "submissions";
 
 $form_info = ft_get_form($form_id);
 $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true, "include_field_settings" => true));
+
 $view_info = ft_get_view($view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes")
@@ -122,21 +123,40 @@ $current_page = ft_load_field("page", "view_{$view_id}_page", 1);
 if (isset($_POST["search"]))
   $current_page = 1;
 
-// make a map of field_id => col_name for use in determining the search cols ad
-$field_columns = array();
+// make a map of field_id => col_name for use in determining the search cols. This contains
+// all the fields in the View
+$all_view_field_columns = array();
+$searchable_columns  = array();
 foreach ($view_info["fields"] as $field_info)
 {
-  $field_columns[$field_info["field_id"]] = $field_info["col_name"];
+  $all_view_field_columns[$field_info["field_id"]] = $field_info["col_name"];
+  if ($field_info["is_searchable"] == "yes")
+    $searchable_columns[] = $field_info["col_name"];
 }
-$db_columns = array_values($field_columns); // used for the search query
+$db_columns = array_values($all_view_field_columns); // used for the search query
 
-$display_columns  = array();
-foreach ($view_info["columns"] as $view_col_info)
+// with 2.1.0, users can now assign fields to be columns on the Submission Listing page but not actually
+// include them in the list of fields to appear in the View. This section tacks on those columns so
+// that they're included in the Almighty Search Query
+foreach ($view_info["columns"] as $column_info)
 {
-  $field_id = $view_col_info["field_id"];
-  if ($view_col_info["is_sortable"] == "yes")
-    $display_columns[] = $field_columns[$field_id];
+  $curr_field_id = $column_info["field_id"];
+  $curr_col_name = "";
+  foreach ($form_fields as $field_info)
+  {
+    if ($field_info["field_id"] == $curr_field_id)
+    {
+      $curr_col_name = $field_info["col_name"];
+      break;
+    }
+  }
+
+  if (!array_key_exists($curr_col_name, $db_columns))
+  {
+  	$db_columns[] = $curr_col_name;
+  }
 }
+
 
 // display_fields contains ALL the information we need for the fields in the template
 $display_fields = array();
@@ -181,7 +201,7 @@ $results_per_page = $view_info["num_submissions_per_page"];
 
 // perform the almighty search query [urgh. Too many params...!]
 $results_info = ft_search_submissions($form_id, $view_id, $results_per_page, $current_page, $order, $db_columns,
-      $search_fields, array(), $display_columns);
+      $search_fields, array(), $searchable_columns);
 
 $search_rows        = $results_info["search_rows"];
 $search_num_results = $results_info["search_num_results"];

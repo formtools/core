@@ -32,17 +32,17 @@ if (isset($_POST["create_database"]))
 
     if (empty($existing_tables))
     {
-	    list($success, $error) = ft_install_create_database($hostname, $db_name, $username, $password, $g_table_prefix);
-	    if ($success)
-	    {
-	      header("location: step4.php");
-	      exit;
-	    }
+      list($success, $error) = ft_install_create_database($hostname, $db_name, $username, $password, $g_table_prefix);
+      if ($success)
+      {
+        header("location: step4.php");
+        exit;
+      }
     }
     else
     {
-    	$success = false;
-    	$tables_already_exist = true;
+      $success = false;
+      $tables_already_exist = true;
     }
   }
 }

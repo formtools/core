@@ -134,8 +134,8 @@ $page_vars["page_field_ids_str"] = implode(",", $page_field_ids);
 $page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected", "confirm_delete_submission_file",
   "phrase_please_confirm", "word_no", "word_yes");
 $page_vars["head_string"] =<<< EOF
-  <script type="text/javascript" src="$g_root_url/global/scripts/manage_submissions.js"></script>
-  <script type="text/javascript" src="$g_root_url/global/scripts/field_types.php"></script>
+  <script src="$g_root_url/global/scripts/manage_submissions.js"></script>
+  <script src="$g_root_url/global/scripts/field_types.php"></script>
   <link rel="stylesheet" href="$g_root_url/global/css/field_types.php" type="text/css" />
 $shared_resources
 EOF;

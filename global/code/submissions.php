@@ -811,22 +811,22 @@ function ft_finalize_submission($form_id, $submission_id)
  *                ["view_num_results"]   => the total number of results in this View, regardless of the
  *                                          current search values.
  */
-function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num, $order, $columns,
-                               $search_fields = array(), $submission_ids = array(), $search_columns = array())
+function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num, $order, $columns_to_return,
+                               $search_fields = array(), $submission_ids = array(), $searchable_columns = array())
 {
   global $g_table_prefix;
 
   // for backward compatibility
-  if (empty($search_columns))
-    $search_columns = $columns;
+  if (empty($searchable_columns))
+    $searchable_columns = $columns_to_return;
 
   // determine the various SQL clauses for the searches
   $order_by             = _ft_get_search_submissions_order_by_clause($form_id, $order);
   $limit_clause         = _ft_get_limit_clause($page_num, $results_per_page);
-  $select_clause        = _ft_get_search_submissions_select_clause($columns);
+  $select_clause        = _ft_get_search_submissions_select_clause($columns_to_return);
   $filter_clause        = _ft_get_search_submissions_view_filter_clause($view_id);
   $submission_id_clause = _ft_get_search_submissions_submission_id_clause($submission_ids);
-  $search_where_clause  = _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $search_columns);
+  $search_where_clause  = _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $searchable_columns);
 
   // (1) our main search query that returns a PAGE of submission info
   $search_query = mysql_query("

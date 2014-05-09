@@ -133,11 +133,11 @@
           </td>
           <td valign="top" align="center">
             {if $module.is_enabled == "yes"}
-						  {if $module.needs_upgrading}
+              {if $module.needs_upgrading}
                 <a href="{$same_page}?upgrade={$module_id}">{$LANG.word_upgrade|upper}</a>
-							{else}
+              {else}
                 <a href="{$g_root_url}/modules/{$module.module_folder}/">{$LANG.word_select|upper}</a>
-							{/if}
+              {/if}
             {/if}
           </td>
           <td valign="top" class="del2" align="center">

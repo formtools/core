@@ -6,9 +6,9 @@ $request = array_merge($_POST, $_GET);
 
 if (isset($request["code"]) || isset($request["direct"]))
 {
-	$type = isset($request["code"]) ? "code" : "direct";
-	header("location: step2.php?submission_type=$type");
-	exit;
+  $type = isset($request["code"]) ? "code" : "direct";
+  header("location: step2.php?submission_type=$type");
+  exit;
 }
 
 $form_id = ft_load_field("form_id", "add_form_form_id", "");

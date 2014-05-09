@@ -562,6 +562,55 @@ function ft_get_form_list()
   return $results;
 }
 
+
+/**
+ * Returns a list of (completed, finalized) forms, ordered by form name, and all views, ordered
+ * by view_order. This is handy for any time you need to just output the list of forms & their Views.
+ *
+ * @return array
+ */
+function ft_get_form_view_list()
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT form_id, form_name
+    FROM   {$g_table_prefix}forms
+    WHERE  is_complete = 'yes' AND
+           is_initialized = 'yes'
+    ORDER BY form_name ASC
+  ");
+
+  $results = array();
+  while ($row = mysql_fetch_assoc($query))
+  {
+  	$form_id = $row["form_id"];
+  	$view_query = mysql_query("
+  	  SELECT view_id, view_name
+  	  FROM   {$g_table_prefix}views
+  	  WHERE  form_id = $form_id
+  	");
+
+  	$views = array();
+  	while ($row2 = mysql_fetch_assoc($view_query))
+  	{
+      $views[] = array(
+        "view_id"   => $row2["view_id"],
+        "view_name" => $row2["view_name"]
+      );
+  	}
+
+  	$results[] = array(
+  	  "form_id"   => $form_id,
+  	  "form_name" => $row["form_name"],
+  	  "views"     => $views
+  	);
+  }
+
+  return $results;
+}
+
+
 /**
  * Basically a wrapper function for ft_search_forms, which returns ALL forms, regardless of
  * what client it belongs to.
@@ -1001,11 +1050,10 @@ function ft_set_form_field_types($form_id, $info)
 
   $textbox_field_type_id = ft_get_field_type_id_by_identifier("textbox");
 
-  // set a 5 minute maximum execution time for this request
+  // set a 5 minute maximum execution time for this request. For long forms it can take some time.
   @set_time_limit(300);
 
   $info = ft_sanitize($info);
-
   $form_fields = ft_get_form_fields($form_id);
 
   // update the field types and sizes
@@ -1031,7 +1079,7 @@ function ft_set_form_field_types($form_id, $info)
       WHERE  field_id = $field_id
         ");
 
-    // if this field is an option list field, store all the option list info. We'll add them at the end
+    // if this field is an Option List field, store all the option list info. We'll add them at the end
     if (isset($info["field_{$field_id}_num_options"]) && is_numeric($info["field_{$field_id}_num_options"]))
     {
       $num_options = $info["field_{$field_id}_num_options"];

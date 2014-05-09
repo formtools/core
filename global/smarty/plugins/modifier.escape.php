@@ -23,13 +23,13 @@ function smarty_modifier_escape($string, $esc_type = 'html', $char_set = 'ISO-88
 {
     switch ($esc_type) {
 
-    	  // added for the Form Tools Export Manager module
+        // added for the Form Tools Export Manager module
         case 'csv':
-        	  $string = preg_replace("/\"/", "\"\"", $string);
+            $string = preg_replace("/\"/", "\"\"", $string);
 
-        	  // if it contains one or more commas, escape the whole thing in double quotes
-        	  if (strstr($string, ","))
-        	      $string = "\"$string\"";
+            // if it contains one or more commas, escape the whole thing in double quotes
+            if (strstr($string, ","))
+                $string = "\"$string\"";
 
             return $string;
 

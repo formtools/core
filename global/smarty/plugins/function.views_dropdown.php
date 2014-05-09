@@ -12,11 +12,11 @@
  */
 function smarty_function_views_dropdown($params, &$smarty)
 {
-	global $LANG;
+  global $LANG;
 
   if (empty($params["form_id"]))
   {
-	  $smarty->trigger_error("assign: missing 'form_id' parameter.");
+    $smarty->trigger_error("assign: missing 'form_id' parameter.");
     return;
   }
 
@@ -41,16 +41,16 @@ function smarty_function_views_dropdown($params, &$smarty)
     "onchange" => $onchange
       );
 
-	$attribute_str = "";
+  $attribute_str = "";
   while (list($key, $value) = each($attributes))
   {
-  	if (!empty($value))
-  	  $attribute_str .= " $key=\"$value\"";
+    if (!empty($value))
+      $attribute_str .= " $key=\"$value\"";
   }
 
-	$dd = "<select $attribute_str>";
+  $dd = "<select $attribute_str>";
 
-	if ($show_empty_label)
+  if ($show_empty_label)
     $dd .= "<option value=\"\">{$empty_label}</option>";
 
   if ($create_view_dropdown)
@@ -61,41 +61,41 @@ function smarty_function_views_dropdown($params, &$smarty)
 
   foreach ($grouped_views as $curr_group)
   {
-  	$group_name = $curr_group["group"]["group_name"];
+    $group_name = $curr_group["group"]["group_name"];
 
     $view_options = "";
     foreach ($curr_group["views"] as $view_info)
     {
-    	$curr_view_id = $view_info["view_id"];
-    	$view_name    = $view_info["view_name"];
-    	$is_selected = ($curr_view_id == $selected) ? "selected" : "";
-    	if (empty($submission_id))
-    	{
-	    	$view_options .= "<option value=\"$curr_view_id\" {$is_selected}>$view_name</option>\n";
-    	}
-    	else
-    	{
-				if (ft_check_view_contains_submission($form_id, $curr_view_id, $submission_id))
-				{
-					$view_options .= "<option value=\"$curr_view_id\" {$is_selected}>$view_name</option>";
-				}
-    	}
+      $curr_view_id = $view_info["view_id"];
+      $view_name    = $view_info["view_name"];
+      $is_selected = ($curr_view_id == $selected) ? "selected" : "";
+      if (empty($submission_id))
+      {
+        $view_options .= "<option value=\"$curr_view_id\" {$is_selected}>$view_name</option>\n";
+      }
+      else
+      {
+        if (ft_check_view_contains_submission($form_id, $curr_view_id, $submission_id))
+        {
+          $view_options .= "<option value=\"$curr_view_id\" {$is_selected}>$view_name</option>";
+        }
+      }
     }
 
     if (!empty($view_options))
     {
-	  	if (!empty($group_name))
-	  		$dd .= "<optgroup label=\"$group_name\">";
+      if (!empty($group_name))
+        $dd .= "<optgroup label=\"$group_name\">";
 
-    	$dd .= $view_options;
+      $dd .= $view_options;
 
-    	if (!empty($group_name))
-  		  $dd .= "</optgroup>";
+      if (!empty($group_name))
+        $dd .= "</optgroup>";
     }
   }
 
   $dd .= "</select>";
 
-	return $dd;
+  return $dd;
 }
 

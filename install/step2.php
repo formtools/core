@@ -4,31 +4,36 @@ require_once("library.php");
 
 // 1. PHP Version (4.3 or later)
 $valid_php_version = false;
-if (version_compare(phpversion(), "4.3.0", ">="))
+if (version_compare(phpversion(), $g_required_php_version, ">="))
   $valid_php_version = true;
 
 // 2. MySQL version (4 or later)
-$overridden_invalid_db_version = false;
-if (isset($_POST["override_invalid_db_version"]))
+$mysql_loaded = extension_loaded("mysql");
+if ($mysql_loaded)
 {
-  $valid_mysql_version = true;
-  $overridden_invalid_db_version = true;
-}
-else
-{
-  $valid_mysql_version = false;
-  if (substr(mysql_get_client_info(), 0, 1) >= 4)
+  $overridden_invalid_db_version = false;
+  if (isset($_POST["override_invalid_db_version"]))
+  {
     $valid_mysql_version = true;
+    $overridden_invalid_db_version = true;
+  }
+  else
+  {
+    $valid_mysql_version = false;
+    if (version_compare(mysql_get_server_info(), $g_required_mysql_version, '>=')) // TODO check the param on this func
+      $valid_mysql_version = true;
+  }
 }
 
-$upload_folder_writable = is_writable("$g_ft_installation_folder/../upload");
-$default_theme_cache_dir_writable = is_writable("$g_ft_installation_folder/../themes/default/cache");
+$upload_folder_writable           = is_writable(realpath("$g_ft_installation_folder/../upload"));
+$default_theme_cache_dir_writable = is_writable(realpath("$g_ft_installation_folder/../themes/default/cache"));
 
 // ------------------------------------------------------------------------------------------------
 
 $page_vars = array();
 $page_vars["step"] = 2;
 $page_vars["valid_php_version"] = $valid_php_version;
+$page_vars["mysql_loaded"] = $mysql_loaded;
 $page_vars["valid_mysql_version"] = $valid_mysql_version;
 $page_vars["overridden_invalid_db_version"] = $overridden_invalid_db_version;
 $page_vars["phpversion"] = phpversion();

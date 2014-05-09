@@ -7,20 +7,20 @@
   </div>
 
   <form action="{$same_page}" method="post">
-	  <div class="underline pad_bottom_large margin_bottom_large">
- 		  <div style="float:right">{$pagination}</div>
-	    <span class="margin_right_large medium_grey">{$LANG.word_show}</span>
-	    <select name="num_fields_per_page">
-	      <option value="all"{if $num_fields_per_page == "all"} selected{/if}>all fields</option>
-	      <option value="10"{if $num_fields_per_page == "10"} selected{/if}>10 per page</option>
-	      <option value="15"{if $num_fields_per_page == "15"} selected{/if}>15 per page</option>
-	      <option value="20"{if $num_fields_per_page == "20"} selected{/if}>20 per page</option>
-	      <option value="25"{if $num_fields_per_page == "25"} selected{/if}>25 per page</option>
-	      <option value="50"{if $num_fields_per_page == "50"} selected{/if}>50 per page</option>
-	      <option value="100"{if $num_fields_per_page == "100"} selected{/if}>100 per page</option>
-	    </select>
-	    <input type="submit" value="{$LANG.word_update}" />
-	  </div>
+    <div class="underline pad_bottom_large margin_bottom_large">
+       <div style="float:right">{$pagination}</div>
+      <span class="margin_right_large medium_grey">{$LANG.word_show}</span>
+      <select name="num_fields_per_page">
+        <option value="all"{if $num_fields_per_page == "all"} selected{/if}>all fields</option>
+        <option value="10"{if $num_fields_per_page == "10"} selected{/if}>10 per page</option>
+        <option value="15"{if $num_fields_per_page == "15"} selected{/if}>15 per page</option>
+        <option value="20"{if $num_fields_per_page == "20"} selected{/if}>20 per page</option>
+        <option value="25"{if $num_fields_per_page == "25"} selected{/if}>25 per page</option>
+        <option value="50"{if $num_fields_per_page == "50"} selected{/if}>50 per page</option>
+        <option value="100"{if $num_fields_per_page == "100"} selected{/if}>100 per page</option>
+      </select>
+      <input type="submit" value="{$LANG.word_update}" />
+    </div>
   </form>
 
   <form action="{$same_page}" name="display_form" id="display_form" method="post">
@@ -151,12 +151,12 @@
                       {/if}
                     </li>
                     <li class="sub_col6">
-								      {if $field.is_system_field == "yes"}
-								        <span class="pad_left_small medium_grey system_field_db_column">{$field.col_name}</span>
-								      {else}
-								        <input type="hidden" name="old_col_{$field_id}_name" id="old_col_{$field_id}_name" value="{$field.col_name}" />
-								        <input type="text" name="col_{$field_id}_name" id="col_{$field_id}_name" class="db_column" value="{$field.col_name}" />
-								      {/if}
+                      {if $field.is_system_field == "yes"}
+                        <span class="pad_left_small medium_grey system_field_db_column">{$field.col_name}</span>
+                      {else}
+                        <input type="hidden" name="old_col_{$field_id}_name" id="old_col_{$field_id}_name" value="{$field.col_name}" />
+                        <input type="text" name="col_{$field_id}_name" id="col_{$field_id}_name" class="db_column" value="{$field.col_name}" />
+                      {/if}
                     </li>
                   </ul>
                 </li>
@@ -186,33 +186,33 @@
     <div class="clear"></div>
 
     <div class="margin_top_large">
-	    <input type="submit" name="update_fields" value="{$LANG.word_update|upper}" />
+      <input type="submit" name="update_fields" value="{$LANG.word_update|upper}" />
     </div>
   </form>
 
   <form onsubmit="return fields_ns.add_fields()">
-	  <table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: -23px">
-	  <tr>
-	    <td align="right">
-	      {$LANG.word_add} <input type="text" id="add_num_fields" size="3" value="1" /> {$LANG.word_field_sp}
-	      <select id="new_field_position">
-	        <option value="end">{$LANG.phrase_at_end}</option>
-	        <option value="start">{$LANG.phrase_at_start}</option>
-	        <optgroup label="{$LANG.word_after}" id="add_fields_list">
-	          {foreach from=$form_fields item=field name=row}
-	            <option value="{$field.field_id}">{$field.field_title}</option>
-	          {/foreach}
-	        </optgroup>
-	      </select>
-	      <input type="checkbox" id="group_new_fields" />
-	        <label for="group_new_fields">{$LANG.phrase_group_rows}</label>
-	      <input type="submit" name="add_field" value="{$LANG.word_add}" />
-	    </td>
-	  </tr>
-	  </table>
-	</form>
+    <table cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-top: -23px">
+    <tr>
+      <td align="right">
+        {$LANG.word_add} <input type="text" id="add_num_fields" size="3" value="1" /> {$LANG.word_field_sp}
+        <select id="new_field_position">
+          <option value="end">{$LANG.phrase_at_end}</option>
+          <option value="start">{$LANG.phrase_at_start}</option>
+          <optgroup label="{$LANG.word_after}" id="add_fields_list">
+            {foreach from=$form_fields item=field name=row}
+              <option value="{$field.field_id}">{$field.field_title}</option>
+            {/foreach}
+          </optgroup>
+        </select>
+        <input type="checkbox" id="group_new_fields" />
+          <label for="group_new_fields">{$LANG.phrase_group_rows}</label>
+        <input type="submit" name="add_field" value="{$LANG.word_add}" />
+      </td>
+    </tr>
+    </table>
+  </form>
 
-	<div class="hidden" id="new_row_template">
+  <div class="hidden" id="new_row_template">
     <div class="row_group">
       <input type="hidden" class="sr_order" value="%%ROW%%" />
       <ul>
@@ -228,13 +228,13 @@
             <li class="sub_col2">
               {display_field_types_dropdown name="field_%%ROW%%_type_id" id="field_%%ROW%%_type_id" class="field_types"}
             </li>
-            <li class="sub_col3">
+            <li class="sub_col3 check_area">
               <input type="checkbox" name="field_%%ROW%%_include_on_redirect" id="field_%%ROW%%_include_on_redirect" class="pass_on" />
             </li>
             <li class="sub_col4">
               <div class="field_sizes_div">
                 {field_sizes_dropdown name="field_%%ROW%%_size" id="field_%%ROW%%_size" field_type_id="" default="medium" class="field_sizes"}
-						  </div>
+              </div>
             </li>
             <li class="sub_col5">
               <select name="field_%%ROW%%_data_type" class="data_types">
@@ -253,15 +253,15 @@
       </ul>
       <div class="clear"></div>
     </div>
-	</div>
+  </div>
 
-	<div class="hidden tabbed_dialog" id="edit_field_template">
-	  <div id="edit_field_template_message" class="margin_bottom_small hidden"></div>
-	  <div id="edit_field_template_new_field" class="margin_bottom_small notify hidden">
-	    <div style="padding: 8px">
-	      {$LANG.notify_edit_field_new_field}
-	    </div>
-	  </div>
+  <div class="hidden tabbed_dialog" id="edit_field_template">
+    <div id="edit_field_template_message" class="margin_bottom_small hidden"></div>
+    <div id="edit_field_template_new_field" class="margin_bottom_small notify hidden">
+      <div style="padding: 8px">
+        {$LANG.notify_edit_field_new_field}
+      </div>
+    </div>
     <div class="inner_tabset ft_dialog" id="edit_field">
       <div class="tab_row threeCols">
         <div class="inner_tab1 selected">{$LANG.phrase_main_settings}</div>
@@ -269,65 +269,65 @@
       </div>
       <div class="inner_tab_content">
         <div class="inner_tab_content1">
-	        <form id="edit_field_form_tab1">
-				    <table cellspacing="0" cellpadding="0">
-				    <tr>
-				      <td width="180"><label for="edit_field__display_text">{$LANG.phrase_display_text}</label></td>
-				      <td>
-				        <input type="text" id="edit_field__display_text" name="edit_field__display_text" />
-				      </td>
-				    </tr>
-				    <tr>
-				      <td><label for="edit_field__field_name">{$LANG.phrase_form_field}</label></td>
-				      <td>
-				        <div class="edit_field__non_system"><input type="text" id="edit_field__field_name" name="edit_field__field_name" /></div>
-				        <div class="edit_field__system medium_grey">{$LANG.word_na}</div>
-				      </td>
-				    </tr>
-				    <tr>
-				      <td><label for="edit_field__field_type">{$LANG.phrase_field_type}</label></td>
-				      <td>
-				        <div class="edit_field__non_system">
-				          {display_field_types_dropdown id="edit_field__field_type" name="edit_field__field_type" default=$field.field_type_id}
-				        </div>
-				        <div id="edit_field__field_type_system" class="edit_field__system medium_grey"></div>
-				      </td>
-				    </tr>
-				    <tr>
-				      <td><label for="edit_field__pass_on">{$LANG.phrase_pass_on}</label></td>
-				      <td>
-		  		      <input type="checkbox" id="edit_field__pass_on" name="edit_field__pass_on" />
-				      </td>
-				    </tr>
-				    <tr>
-				      <td>{$LANG.phrase_field_size}</td>
-				      <td>
-				        <div class="edit_field__non_system" id="edit_field__field_size_div"></div>
-				        <div class="edit_field__system medium_grey">{$LANG.word_na}</div>
-				      </td>
-				    </tr>
-				    <tr>
-				      <td>{$LANG.phrase_data_type}</td>
-				      <td>
-				        <div class="edit_field__non_system">
-				          <select id="edit_field__data_type" name="edit_field__data_type">
-				            <option value="string">{$LANG.word_string}</option>
-				            <option value="number">{$LANG.word_number}</option>
-				          </select>
-				        </div>
-				        <div class="edit_field__system medium_grey">{$LANG.word_na}</div>
-				      </td>
-				    </tr>
-				    <tr>
-				      <td><label for="edit_field__db_column">{$LANG.phrase_db_column}</label></td>
-				      <td>
-				        <div class="edit_field__non_system" id="edit_field__db_column_div">
-				          <input type="text" id="edit_field__db_column" name="edit_field__db_column" />
-				        </div>
-				        <div id="edit_field__db_column_div_system" class="edit_field__system medium_grey"></div>
-				      </td>
-				    </tr>
-				    </table>
+          <form id="edit_field_form_tab1">
+            <table cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="180"><label for="edit_field__display_text">{$LANG.phrase_display_text}</label></td>
+              <td>
+                <input type="text" id="edit_field__display_text" name="edit_field__display_text" />
+              </td>
+            </tr>
+            <tr>
+              <td><label for="edit_field__field_name">{$LANG.phrase_form_field}</label></td>
+              <td>
+                <div class="edit_field__non_system"><input type="text" id="edit_field__field_name" name="edit_field__field_name" /></div>
+                <div class="edit_field__system medium_grey">{$LANG.word_na}</div>
+              </td>
+            </tr>
+            <tr>
+              <td><label for="edit_field__field_type">{$LANG.phrase_field_type}</label></td>
+              <td>
+                <div class="edit_field__non_system">
+                  {display_field_types_dropdown id="edit_field__field_type" name="edit_field__field_type" default=$field.field_type_id}
+                </div>
+                <div id="edit_field__field_type_system" class="edit_field__system medium_grey"></div>
+              </td>
+            </tr>
+            <tr>
+              <td><label for="edit_field__pass_on">{$LANG.phrase_pass_on}</label></td>
+              <td>
+                <input type="checkbox" id="edit_field__pass_on" name="edit_field__pass_on" />
+              </td>
+            </tr>
+            <tr>
+              <td>{$LANG.phrase_field_size}</td>
+              <td>
+                <div class="edit_field__non_system" id="edit_field__field_size_div"></div>
+                <div class="edit_field__system medium_grey">{$LANG.word_na}</div>
+              </td>
+            </tr>
+            <tr>
+              <td>{$LANG.phrase_data_type}</td>
+              <td>
+                <div class="edit_field__non_system">
+                  <select id="edit_field__data_type" name="edit_field__data_type">
+                    <option value="string">{$LANG.word_string}</option>
+                    <option value="number">{$LANG.word_number}</option>
+                  </select>
+                </div>
+                <div class="edit_field__system medium_grey">{$LANG.word_na}</div>
+              </td>
+            </tr>
+            <tr>
+              <td><label for="edit_field__db_column">{$LANG.phrase_db_column}</label></td>
+              <td>
+                <div class="edit_field__non_system" id="edit_field__db_column_div">
+                  <input type="text" id="edit_field__db_column" name="edit_field__db_column" />
+                </div>
+                <div id="edit_field__db_column_div_system" class="edit_field__system medium_grey"></div>
+              </td>
+            </tr>
+            </table>
           </form>
         </div>
         <div class="inner_tab_content2" style="display:none">
@@ -340,4 +340,4 @@
     </div>
     <a class="prev_field field_nav">{$LANG.phrase_previous_field}</a>
     <a class="next_field field_nav">{$LANG.phrase_next_field}</a>
-	</div>
+  </div>

@@ -1215,6 +1215,17 @@ function ft_upgrade_form_tools()
     ");
   }
 
+  if ($old_version_info["release_date"] < 20110523)
+  {
+  	mysql_query("
+  	  UPDATE {$g_table_prefix}field_typest
+  	  SET    raw_field_type_map_multi_select_id = 16
+  	  WHERE  field_type_identifier = 'radio_buttons'
+  	");
+
+  	// TODO update date View smarty markup here (added {strip})
+  }
+
   // ----------------------------------------------------------------------------------------------
 
   // if the full version string (version-type-date) is different, update the database

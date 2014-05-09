@@ -47,6 +47,7 @@ sf_ns.smart_fill = function() {
 
   // now loop through each and every form field and see if we can identify it in the forms
   var num_not_found_elements = 0;
+
   for (var i=0; i<page_ns.field_ids.length; i++) {
     var field_id = page_ns.field_ids[i];
     var field_name = $("#field_" + field_id + "_name").val();
@@ -784,14 +785,9 @@ sf_ns.itemize_form_fields = function() {
               case "reset":
                 break;
 
-              // just lump the other valid input types as a plain textbox
+              // just interpret other input types as a plain textbox
               default:
-                var valid_input_types = ["range", "number", "submit", "hidden", "email", "search", "url", "tel",
-                  "datetime", "date", "month", "week", "time", "datetimelocal", "color"];
-
-                if ($.inArray(info.element_type, valid_input_types) != -1) {
-                  info.element_type = "textbox";
-                }
+                info.element_type = "textbox";
                 break;
             }
             break;
@@ -873,6 +869,7 @@ sf_ns.itemize_form_fields = function() {
       }
     }
   }
+
 }
 
 

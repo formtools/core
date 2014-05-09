@@ -1334,8 +1334,9 @@ $LANG["phrase_prev_form"] = "&laquo; prev form";
 $LANG["phrase_next_form"] = "next form &raquo;";
 $LANG["phrase_field_type_information"] = "Field Type Information";
 
-$LANG["validation_option_list_has_assigned_fields"] = "Sorry, you cannot delete this Option List until all form fields that use the list have either been reassigned to a new Option List, or changed to a different field type. <a href=\"{\$link}\">Click here</a> to view the list of form fields that need to be updated.";
 $LANG["text_non_deletable_fields"] = "This field is used by the Core script and cannot be edited or deleted without causing incompatibilities. If you wish to make changes to the field type, make a copy of it and edit the copy.";
+
+$LANG["validation_delete_non_empty_option_list"] = "Warning! This Option List is used by one or more form fields. Deleting it will make those fields cease to work properly.";
 
 $LANG["word_columns_sp"] = "Column(s)";
 $LANG["phrase_new_view_all_fields"] = "New View - All fields";

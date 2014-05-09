@@ -18,24 +18,20 @@ sf_ns.num_new_groups = 0; // keeps track of the number of new groups added to th
  * field option group is used by any fields. If it is, they can't delete it: they need to re-assign the fields
  * to other option groups or change the field types.
  *
- * TODO: check the may_delete option + server side backup
- *
  * @param integer list_id
  * @param boolean may_delete
  */
 sf_ns.delete_option_list = function(list_id, may_delete) {
+  var content = g.messages["confirm_delete_option_list"];
   if (!may_delete) {
-    var link = "edit.php?page=form_fields&list_id=" + list_id;
-    var message = g.messages["validation_option_list_has_assigned_fields"].replace(/\{\$link\}/, link);
-    ft.display_message("ft_message", false, message);
-    return false;
+    content = "<div class=\"red\">" + g.messages["validation_delete_non_empty_option_list"] + "</div>" + content;
   }
 
   ft.create_dialog({
   dialog:     sf_ns.delete_option_list_dialog,
     popup_type: "warning",
     title:      g.messages["phrase_please_confirm"],
-    content:    g.messages["confirm_delete_option_list"],
+    content:    content,
     buttons: [{
       "text":  g.messages["word_yes"],
       "click": function() {

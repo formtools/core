@@ -1360,6 +1360,7 @@ body .ui-widget-header span {
 .view_fields_list ul li label {
   display: block;
 }
+
 .check_area:hover {
   background-color: #dfdfdf !important;
 }
@@ -1516,14 +1517,15 @@ a.show_form {
 }
 
 .module_section {
-  background-color: #f2f2f2;
-  border: 1px solid #dddddd;
-  margin-top: 12px;
-  padding: 2px 8px 8px 8px;
   -webkit-border-radius: 6px;
   -moz-border-radius: 6px;
   border-radius: 6px;
+  background-color: #e6f5ff;
+  padding: 2px 8px 8px 8px;
+  margin-top: 12px;
+  border: 1px solid #999999;
   display: inline-block;
+  position: relative;
 }
 
 .module_section h2 {
@@ -1533,7 +1535,19 @@ a.show_form {
   padding: 2px 0px;
   font-style: italic;
 }
-
+.module_section .module_link {
+  width: 16px;
+  height: 16px;
+  background-image: url(../images/utilities_small.png);
+  position: absolute;
+  right: 3px;
+  top: 3px;
+}
+.module_section .module_link a {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
 .export_manager_module table tr {
   height: 23px;
 }
@@ -1545,4 +1559,15 @@ a.show_form {
 }
 .export_manager_module .target_content {
   padding-right: 10px;
+}
+
+.views_dropdown {
+  background-color: #e8e8e8;
+  display: inline-block;
+  height: 23px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+.views_dropdown select {
+  margin: 2px;
 }

@@ -9,8 +9,10 @@
           <a href="edit.php?form_id={$form_id}"><img src="{$images_url}/admin_view.png" border="0" alt="{$LANG.phrase_edit_form}"
             title="{$LANG.phrase_edit_form}" width="48" height="23" /></a>
         </div>
+        <div class="views_dropdown">
 	      {views_dropdown form_id=$form_id submission_id=$submission_id selected=$view_id omit_hidden_views=true
 	        onchange="window.location='`$same_page`?form_id=`$form_id`&submission_id=`$submission_id`&view_id=' + this.value"}
+	    </div>
       </td>
     </tr>
     </table>

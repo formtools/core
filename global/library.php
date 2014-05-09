@@ -212,7 +212,17 @@ $g_release_type = "alpha";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110522";
+$g_release_date = "20110526";
+
+/**
+ * The minimum required PHP version needed to run Form Tools.
+ */
+$g_required_php_version = "4.3";
+
+/**
+ * The minimum required MySQL version needed to run Form Tools.
+ */
+$g_required_mysql_version = "4.1.2";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.

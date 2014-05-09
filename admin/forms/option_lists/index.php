@@ -51,7 +51,7 @@ foreach ($option_lists as $option_list)
   // add the number of fields that use this option group
   $option_list["num_fields"] = ft_get_num_fields_using_option_list($list_id);
   if ($option_list["num_fields"] > 0) {
-    $option_list["fields"] = ft_get_fields_using_option_list($list_id, true);
+    $option_list["fields"] = ft_get_fields_using_option_list($list_id, array("group_by_form" => true));
   }
 
   // add the total number of options in this group
@@ -73,7 +73,7 @@ $page_vars["option_lists"] = $updated_option_lists;
 $page_vars["num_option_lists"] = $num_option_lists;
 $page_vars["all_option_lists"] = $all_option_lists["results"];
 $page_vars["order"] = $order;
-$page_vars["js_messages"] = array("validation_option_list_has_assigned_fields", "confirm_delete_option_list",
+$page_vars["js_messages"] = array("validation_delete_non_empty_option_list", "confirm_delete_option_list",
   "phrase_please_confirm", "word_yes", "word_no", "word_edit", "word_remove");
 $page_vars["pagination"] = ft_get_page_nav($num_option_lists, $num_option_lists_per_page, $option_list_page);
 $page_vars["head_string"] =<<< END
