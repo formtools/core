@@ -21,12 +21,19 @@
   <tr>
     <td>{$LANG.phrase_mysql_version}</td>
     <td class="bold">{$mysql_get_client_info}</td>
-    <td width="100" align="center">
-      {if $valid_mysql_version}
-        <span class="green">{$LANG.word_pass|upper}</span>
+    <td align="center">
+      {if $overridden_invalid_db_version}
+        <span class="orange">{$LANG.word_overridden|upper}</span>
       {else}
-        <span class="red">{$LANG.word_fail|upper}</span>
-      {/if}
+			  {if $valid_mysql_version}
+          <span class="green">{$LANG.word_pass|upper}</span>
+        {else}
+          <span class="red">{$LANG.word_fail|upper}</span>
+          <form action="step2.php" method="post">
+            <input type="submit" name="override_invalid_db_version" value="{$LANG.word_ignore}" />
+  			  </form>
+        {/if}
+			{/if}
     </td>
   </tr>
   <tr>
@@ -34,7 +41,7 @@
     <td class="bold">
       /upload/
     </td>
-    <td width="100" align="center">
+    <td align="center">
       {if $upload_folder_writable}
         <span class="green">{$LANG.word_pass|upper}</span>
       {else}
@@ -46,7 +53,7 @@
     <td class="bold">
       /themes/{$g_default_theme}/cache/
     </td>
-    <td width="100" align="center">
+    <td align="center">
       {if $default_theme_cache_dir_writable}
         <span class="green">{$LANG.word_pass|upper}</span>
       {else}
@@ -60,9 +67,9 @@
 
   {if !$valid_php_version || !$valid_mysql_version}
 
-    <p class="error">
-      {$LANG.text_install_form_tools_server_not_supported}
-    </p>
+    <p class="error" style="padding: 6px">
+	      {$LANG.text_install_form_tools_server_not_supported}
+	  </p>
 
   {else}
 

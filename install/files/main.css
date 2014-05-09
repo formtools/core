@@ -47,6 +47,7 @@ a.no_border:link, a.no_border:visited { border-bottom: none; outline: none; }
 .nav_visited { color: #aaaaaa; }
 .nav_current { font-weight: bold; color: black; }
 .nav_remaining { color: #009900; }
+.orange { color: orange; }
 .green { color: green; }
 .dark_green { color: #003300; }
 .red { color: #cc0000; }
