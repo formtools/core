@@ -1,9 +1,8 @@
 <?php
-session_start();
-header("Cache-control: private");
-header("Content-Type: text/html; charset=utf-8");
-require("../global/library.php");
-require("library.php");
+
+// bit weird, but deliberate. This first line will have $g_defer_init_page = false;
+require_once("../global/library.php");
+require_once("library.php");
 
 // if required, add the user account
 $account_created = false;
@@ -34,16 +33,14 @@ $page_vars["g_root_url"] = $g_root_url;
 $page_vars["account_created"] = $account_created;
 $page_vars["head_js"] =<<< EOF
 var rules = [];
-rules.push("required,first_name,Please enter your first name.");
-rules.push("required,last_name,Please enter your last name.");
-rules.push("required,email,Please enter the administrator email address.");
-rules.push("valid_email,email,Please enter a valid administrator email address.")
-rules.push("required,username,Please enter your username.");
-rules.push("is_alpha,username,Please make sure your username consist of alphanumeric (a-Z and 0-9) characters only.");
-rules.push("required,password,Please enter your password.");
-rules.push("is_alpha,password,Please make sure your password consist of alphanumeric (a-Z and 0-9) characters only.");
-rules.push("required,password_2,Please re-enter your password.");
-rules.push("same_as,password,password_2,Please ensure the passwords are the same.")
+rules.push("required,first_name,{$LANG["validation_no_first_name"]}");
+rules.push("required,last_name,{$LANG["validation_no_last_name"]}");
+rules.push("required,email,{$LANG["validation_no_admin_email"]}");
+rules.push("valid_email,email,{$LANG["validation_invalid_admin_email"]}");
+rules.push("required,username,{$LANG["validation_no_username"]}");
+rules.push("required,password,{$LANG["validation_no_password"]}");
+rules.push("required,password_2,{$LANG["validation_no_second_password"]}");
+rules.push("same_as,password,password_2,{$LANG["validation_passwords_different"]}")
 
 rsv.displayType = "alert-all";
 rsv.errorTextIntro = "{$LANG["phrase_error_text_intro"]}";

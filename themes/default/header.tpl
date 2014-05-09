@@ -49,17 +49,21 @@
   <div id="header">
 
     {if $SESSION.account.is_logged_in}
-	    <div style="float:right">
-	      <table cellspacing="0" cellpadding="0" height="25">
-	      <tr>
-	        <td><img src="{$theme_url}/images/account_section_left.jpg" border="0" /></td>
-	        <td id="account_section">
-	          <b>v{$settings.program_version}</b>
-	        </td>
-	        <td><img src="{$theme_url}/images/account_section_right.jpg" border="0" /></td>
-	      </tr>
-	      </table>
-	    </div>
+      <div style="float:right">
+        <table cellspacing="0" cellpadding="0" height="25">
+        <tr>
+          <td><img src="{$theme_url}/images/account_section_left.jpg" border="0" /></td>
+          <td id="account_section">
+            {if $settings.release_type == "beta"}
+              <b>{$settings.program_version}-beta-{$settings.release_date}</b>
+            {else}
+              <b>{$settings.program_version}</b>
+            {/if}
+          </td>
+          <td><img src="{$theme_url}/images/account_section_right.jpg" border="0" /></td>
+        </tr>
+        </table>
+      </div>
     {/if}
 
     <span style="float:left; padding-top: 8px; padding-right: 10px">
@@ -77,4 +81,4 @@
         </div>
       </td>
       <td valign="top">
-			  <div style="width:740px">
+        <div style="width:740px">

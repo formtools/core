@@ -249,7 +249,7 @@ function ft_get_fields_using_field_option_group($group_id)
     $results[] = $row;
 
   return $results;
-}
+}	
 
 
 /**

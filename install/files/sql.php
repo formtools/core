@@ -274,9 +274,13 @@ $g_sql[] = "CREATE TABLE %PREFIX%settings (
   PRIMARY KEY  (setting_id)
 ) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
+// changes per release
+$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('program_version', '%FORMTOOLSVERSION%', 'core')";
+$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('release_date', '%FORMTOOLSRELEASEDATE%', 'core')";
+$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('release_type', '%FORMTOOLSRELEASETYPE%', 'core')";
+
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('api_version', '', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('available_languages', 'en_us,English (US)', 'core')";
-$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('beta_version', '%BETAVERSION%', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('clients_may_edit_date_format', 'no', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('clients_may_edit_footer_text', 'no', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('clients_may_edit_logout_url', 'yes', 'core')";
@@ -301,7 +305,6 @@ $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) V
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('file_upload_filetypes', 'bmp,gif,jpg,jpeg,png,avi,mp3,mp4,doc,txt,pdf,xml,csv,swf,fla,xls,tif', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('file_upload_url', '', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('file_upload_max_size', '200', 'core')";
-$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('is_beta', '%ISBETA%', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('logo_link', 'http://www.formtools.org', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('num_clients_per_page', '10', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('num_emails_per_page', '10', 'core')";
@@ -311,7 +314,6 @@ $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) V
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('num_views_per_page', '10', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('num_field_option_groups_per_page', '10', 'core');";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('program_name', 'Form Tools', 'core')";
-$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('program_version', '%FORMTOOLSVERSION%', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('timezone_offset', '0', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('tinymce_path_info_location', 'bottom', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('tinymce_resize', 'yes', 'core')";

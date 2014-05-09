@@ -1,9 +1,7 @@
 <?php
-session_start();
-header("Cache-control: private");
-header("Content-Type: text/html; charset=utf-8");
-require("../global/library.php");
-require("library.php");
+
+require_once("../global/library.php");
+require_once("library.php");
 
 // add whatever themes and modules are in the modules and themes folders
 ft_update_module_list();
@@ -13,24 +11,24 @@ $modules = ft_get_modules();
 
 foreach ($modules as $module_info)
 {
-	$module_id    = $module_info["module_id"];
-	$is_installed = $module_info["is_installed"];
+  $module_id    = $module_info["module_id"];
+  $is_installed = $module_info["is_installed"];
 
-	if ($is_installed == "yes")
-	  continue;
+  if ($is_installed == "yes")
+    continue;
 
-	ft_install_module($module_id);
+  ft_install_module($module_id);
 }
 
 // send "Welcome to Form Tools" email
 if (!isset($_SESSION["ft_install"]["email_notification_sent"]))
 {
   $email    = $_SESSION["ft_install"]["email"];
-	$username = $_SESSION["ft_install"]["username"];
-	$password = $_SESSION["ft_install"]["password"];
+  $username = $_SESSION["ft_install"]["username"];
+  $password = $_SESSION["ft_install"]["password"];
 
-	ft_install_send_welcome_email($email, $username, $password);
-	$_SESSION["ft_install"]["email_notification_sent"] = true;
+  ft_install_send_welcome_email($email, $username, $password);
+  $_SESSION["ft_install"]["email_notification_sent"] = true;
 }
 
 

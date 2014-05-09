@@ -1,20 +1,11 @@
 <?php
 
-/**
- * The first page of the installation script. All HTML is found in the /templates folder.
- */
-
-session_start();
-header("Cache-control: private");
-header("Content-Type: text/html; charset=utf-8");
-
-require_once("library.php");
-$lang_file = ft_load_field("lang_file", "lang_file", $g_default_language, "ft_install");
+require("library.php");
 
 if (isset($_POST["next"]))
 {
-	header("location: step2.php");
-	exit;
+  header("location: step2.php");
+  exit;
 }
 
 $page_vars = array();

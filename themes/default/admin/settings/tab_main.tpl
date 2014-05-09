@@ -9,7 +9,11 @@
     <tr>
       <td class="pad_left_small" width="200">{$LANG.phrase_core_version}</td>
       <td class="pad_left_small">
-        <span>{$settings.program_version}</span>
+        {if $settings.release_type == "beta"}
+          <span>{$settings.program_version}-beta-{$settings.release_date}</span>
+        {else}
+          <span>{$settings.program_version}</span>
+        {/if}
         <input type="button" value="{$LANG.phrase_check_for_updates}" onclick="$('upgrade_form').submit()" />
       </td>
     </tr>

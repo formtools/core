@@ -305,7 +305,6 @@ $LANG["phrase_back_to_edit_view"] = "&laquo; Back to Edit View";
 $LANG["phrase_back_to_field_list"] = "&laquo; back to field list";
 $LANG["phrase_back_to_search_results"] = "back to search results";
 $LANG["phrase_beta_version"] = "Beta Version: {\$version}";
-$LANG["phrase_browse_available_languages"] = "Browse available language packs.";
 $LANG["phrase_change_email_settings"] = "May change email settings";
 $LANG["phrase_change_login_info"] = "Change Login Information";
 $LANG["phrase_change_password"] = "Change Password";
@@ -1214,4 +1213,14 @@ $LANG["phrase_password_special_char"] = "It must contain at least one of the fol
 $LANG["phrase_password_min"] = "It must be at least <b>{\$length}</b> characters.";
 $LANG["validation_no_account_password_confirmed2"] = "Please re-enter the new password.";
 $LANG["validation_password_in_password_history"] = "For security, you cannot enter the same password as any of the last <b>{\$history_size}</b> passwords. Please enter a different password.";
+
+
+
+// changes
+//$LANG["phrase_browse_available_languages"] = "Browse available language packs.";
+$LANG["validation_no_db_hostname"] = "Please enter the database hostname.";
+$LANG["validation_no_db_name"] = "Please enter the database name.";
+$LANG["validation_no_db_username"] = "Please enter the database account username.";
+$LANG["validation_no_second_password"] = "Please re-enter your password.";
+$LANG["word_ignore"] = "Ignore";
 

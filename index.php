@@ -52,8 +52,12 @@ $page_vars["error"] = $error;
 
 if ($is_upgraded)
 {
-  $replacements = array("version" => $settings['program_version']);
-  $page_vars["upgrade_notification"] = ft_eval_smarty_string($LANG["text_upgraded"], $replacements, $g_theme);
+  $new_version = $settings["program_version"];
+	if ($settings["release_type"] == "beta")
+	  $new_version = "{$settings['program_version']}-beta-{$settings['release_date']}";
+
+  $replacements = array("version" => $new_version);
+	$page_vars["upgrade_notification"] = ft_eval_smarty_string($LANG["text_upgraded"], $replacements, $g_theme);
 }
 $replacements = array(
   "program_name"         => $settings["program_name"],

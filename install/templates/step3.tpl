@@ -9,22 +9,22 @@
   {* here there was a problem, display whatever errors occurred *}
   {if $error != ""}
 
- 	  <div class="error" style="padding: 5px; margin-top: 8px">
-	    {$LANG.phrase_error_occurred_c}<br />
-		  <br />
-		  <div class="red">{$error}</div>
-		  <br/>
-		  {$LANG.phrase_check_db_settings_try_again}
-		</div>
+     <div class="error" style="padding: 5px; margin-top: 8px">
+      {$LANG.phrase_error_occurred_c}<br />
+      <br />
+      <div class="red">{$error}</div>
+      <br/>
+      {$LANG.phrase_check_db_settings_try_again}
+    </div>
 
-	  <p><b>{$LANG.word_tips}</b></p>
+    <p><b>{$LANG.word_tips}</b></p>
 
-	  <ul class="tips">
-		  <li><div>{$LANG.text_install_db_tables_error_tip_1}</div></li>
+    <ul class="tips">
+      <li><div>{$LANG.text_install_db_tables_error_tip_1}</div></li>
       <li><div>{$LANG.text_install_db_tables_error_tip_2}</div></li>
-		  <li><div>{$LANG.text_install_db_tables_error_tip_3}</div></li>
-			<li><div>{$LANG.text_install_db_tables_error_tip_4}</div></li>
-		</ul>
+      <li><div>{$LANG.text_install_db_tables_error_tip_3}</div></li>
+      <li><div>{$LANG.text_install_db_tables_error_tip_4}</div></li>
+    </ul>
 
   {/if}
 
@@ -62,9 +62,9 @@
     </p>
   </form>
 
-	<script type="text/javascript">
+  <script type="text/javascript">
   document.db_settings_form.g_db_hostname.focus();
-	</script>
+  </script>
 
 
 {include file="../../install/templates/install_footer.tpl"}

@@ -51,11 +51,13 @@
       <tr>
         <td><img src="{$theme_url}/images/account_section_left.jpg" border="0" /></td>
         <td id="account_section">
-
           {if $SESSION.account.is_logged_in}
-             <b>v{$settings.program_version}</b>
+					  {if $settings.release_type == "beta"}
+  	          <b>{$settings.program_version}-beta-{$settings.release_date}</b>
+						{else}
+						  <b>{$settings.program_version}</b>
+						{/if}
           {/if}
-
         </td>
         <td><img src="{$theme_url}/images/account_section_right.jpg" border="0" /></td>
       </tr>

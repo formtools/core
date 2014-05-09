@@ -1,12 +1,5 @@
 <?php
 
-/**
- * The first page of the installation script. All HTML is found in the /templates folder.
- */
-
-session_start();
-header("Cache-control: private");
-header("Content-Type: text/html; charset=utf-8");
 require_once("library.php");
 
 // 1. PHP Version (4.3 or later)
@@ -19,7 +12,7 @@ $overridden_invalid_db_version = false;
 if (isset($_POST["override_invalid_db_version"]))
 {
   $valid_mysql_version = true;
-	$overridden_invalid_db_version = true;
+  $overridden_invalid_db_version = true;
 }
 else
 {
@@ -28,9 +21,8 @@ else
     $valid_mysql_version = true;
 }
 
-$folder = dirname(__FILE__);
-$upload_folder_writable = is_writable("$folder/../upload");
-$default_theme_cache_dir_writable = is_writable("$folder/../themes/default/cache");
+$upload_folder_writable = is_writable("$g_ft_installation_folder/../upload");
+$default_theme_cache_dir_writable = is_writable("$g_ft_installation_folder/../themes/default/cache");
 
 // ------------------------------------------------------------------------------------------------
 
