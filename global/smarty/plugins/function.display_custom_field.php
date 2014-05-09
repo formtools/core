@@ -97,6 +97,7 @@ function smarty_function_display_custom_field($params, &$smarty)
     {
       $curr_setting_id         = $setting_info["setting_id"];
       $curr_setting_field_type = $setting_info["field_type"];
+      $default_value_type      = $setting_info["default_value_type"];
       $value                   = $setting_info["default_value"];
       $identifier              = $setting_info["field_setting_identifier"];
 
@@ -111,6 +112,17 @@ function smarty_function_display_custom_field($params, &$smarty)
           }
         }
         reset($field_settings);
+      }
+
+      // next, if the setting is dynamic, convert the stored value
+      if ($default_value_type == "dynamic")
+      {
+        // dynamic setting values should ALWAYS be of the form "setting_name,module_folder/'core'". If they're not, just ignore it
+        $parts = explode(",", $value);
+        if (count($parts) == 2)
+        {
+          $value = ft_get_settings($parts[0], $parts[1]);
+        }
       }
 
       // if this setting type is a dropdown list and $value is non-empty, get the option list

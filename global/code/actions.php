@@ -291,8 +291,12 @@ switch ($action)
     else
     {
       $params = array("\"success\": \"1\"");
+      $count = 1;
       foreach ($uploaded_file_info as $url)
-        $params[] = "url_1: \"$url\"";
+      {
+        $params[] = "\"url_{$count}\": \"$url\"";
+        $count++;
+      }
 
       echo "{ " . implode(", ", $params) . " }";
     }

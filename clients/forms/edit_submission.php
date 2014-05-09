@@ -18,7 +18,6 @@ if (empty($submission_id))
 }
 
 $tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
-
 $grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
 
 // check the current client is permitted to view this information!

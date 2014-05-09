@@ -11,27 +11,27 @@
  */
 function smarty_function_forms_dropdown($params, &$smarty)
 {
-	global $LANG;
+  global $LANG;
 
-	if (empty($params["name_id"]))
+  if (empty($params["name_id"]))
   {
-	  $smarty->trigger_error("assign: missing 'name_id' parameter. This is used to give the select field a name and id value.");
+    $smarty->trigger_error("assign: missing 'name_id' parameter. This is used to give the select field a name and id value.");
     return;
   }
   $name_id = $params["name_id"];
 
   $default_value = (isset($params["default"])) ? $params["default"] : ""; // may be array or single form ID
 
-	$attribute_whitelist = array("onchange", "style", "class");
+  $attribute_whitelist = array("onchange", "style", "class");
   $attributes = array(
     "name=\"$name_id\"",
     "id=\"$name_id\""
    );
-	foreach ($attribute_whitelist as $attribute_name)
-	{
-		if (isset($params[$attribute_name]) && !empty($params[$attribute_name]))
-		  $attributes[] = "$attribute_name=\"{$params[$attribute_name]}\"";
-	}
+  foreach ($attribute_whitelist as $attribute_name)
+  {
+    if (isset($params[$attribute_name]) && !empty($params[$attribute_name]))
+      $attributes[] = "$attribute_name=\"{$params[$attribute_name]}\"";
+  }
   $attribute_str = implode(" ", $attributes);
 
   $include_blank_option = (isset($params["include_blank_option"])) ? $params["include_blank_option"] : false;
@@ -56,55 +56,55 @@ function smarty_function_forms_dropdown($params, &$smarty)
 
   foreach ($forms as $form_info)
   {
-  	if ($form_info["is_complete"] == "no" && $hide_incomplete_forms)
-  	  continue;
+    if ($form_info["is_complete"] == "no" && $hide_incomplete_forms)
+      continue;
 
-  	$form_id   = $form_info["form_id"];
-  	$form_name = $form_info["form_name"];
+    $form_id   = $form_info["form_id"];
+    $form_name = $form_info["form_name"];
 
-  	if (in_array($form_id, $omit_forms))
-  	  continue;
+    if (in_array($form_id, $omit_forms))
+      continue;
 
-  	if (!empty($only_show_forms) && !in_array($form_id, $only_show_forms))
-  	  continue;
+    if (!empty($only_show_forms) && !in_array($form_id, $only_show_forms))
+      continue;
 
-  	$rows[] = array("form_id" => $form_id, "form_name" => $form_name);
+    $rows[] = array("form_id" => $form_id, "form_name" => $form_name);
   }
 
   $html = "";
   if (count($rows) == 1 && $display_single_form_as_text)
   {
-  	$html = $rows[0]["form_name"];
+    $html = $rows[0]["form_name"];
   }
   else
   {
-  	$options = array();
+    $options = array();
 
-  	if ($include_blank_option)
-  	{
-  		if ($blank_option_is_optgroup)
-  		  $options[] = "<optgroup label=\"{$LANG["phrase_please_select"]}\">";
-  		else
+    if ($include_blank_option)
+    {
+      if ($blank_option_is_optgroup)
+        $options[] = "<optgroup label=\"{$LANG["phrase_please_select"]}\">";
+      else
         $options[] = "<option value=\"\">{$LANG["phrase_please_select"]}</option>";
-  	}
+    }
 
-  	foreach ($rows as $row_info)
-  	{
-  	  $selected = "";
-  	  if (is_array($default_value) && in_array($row_info["form_id"], $default_value))
- 	      $selected = "selected";
-  	  else if ($default_value == $row_info["form_id"])
-  	    $selected = "selected";
+    foreach ($rows as $row_info)
+    {
+      $selected = "";
+      if (is_array($default_value) && in_array($row_info["form_id"], $default_value))
+         $selected = "selected";
+      else if ($default_value == $row_info["form_id"])
+        $selected = "selected";
 
       $options[] = "<option value=\"{$row_info["form_id"]}\" $selected>{$row_info["form_name"]}</option>";
-  	}
+    }
 
-  	if ($include_blank_option && $blank_option_is_optgroup)
-  	{
-  		$options[] = "</optgroup>";
-  	}
+    if ($include_blank_option && $blank_option_is_optgroup)
+    {
+      $options[] = "</optgroup>";
+    }
 
-   	$html = "<select $attribute_str>" . join("\n", $options) . "</select>";
+     $html = "<select $attribute_str>" . join("\n", $options) . "</select>";
   }
 
   return $html;

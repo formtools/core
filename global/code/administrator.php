@@ -334,7 +334,7 @@ function ft_admin_update_client($infohash, $tab_num)
       $max_failed_login_attempts = $infohash["max_failed_login_attempts"];
       $min_password_length       = $infohash["min_password_length"];
       $num_password_history      = $infohash["num_password_history"];
-      $required_password_chars   = (is_array($infohash["required_password_chars"])) ? implode(",", $infohash["required_password_chars"]) : "";
+      $required_password_chars   = (isset($infohash["required_password_chars"]) && is_array($infohash["required_password_chars"])) ? implode(",", $infohash["required_password_chars"]) : "";
       $forms_page_default_message = $infohash["forms_page_default_message"];
 
       // update the client custom account settings table

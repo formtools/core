@@ -17,7 +17,6 @@ mf_ns.add_multi_page_form_page = function() {
   var li4 = $("<li class=\"col4 colN del\"></li>");
   var ul  = $("<ul></ul>").append(ft.group_nodes([li1, li2, li3, li4]));
 
-  // TODO the value="1" correct?
   var hidden_sort_field = $("<input type=\"hidden\" value=\"1\" class=\"sr_order\">");
   var clr = $("<div class=\"clear\"></div>");
   var row_group  = $("<div class=\"row_group\"></div>").append(ft.group_nodes([hidden_sort_field, ul, clr]));
@@ -48,12 +47,12 @@ mf_ns.check_first_form_url = function() {
   var is_multi_page_form = $(".is_multi_page_form:checked").val();
 
   if ($("#submission_type").val() == "direct" || is_multi_page_form == "no") {
-	var form_url = $.trim($("#form_url").val());
-	if (!form_url) {
+  	var form_url = $.trim($("#form_url").val());
+  	if (!form_url) {
       return [[$("#form_url")[0], g.messages["validation_no_form_url"]]];
-	} else {
+  	} else {
       $("#form_url").removeClass("rsvErrorField");
-	}
+	  }
   } else if (is_multi_page_form == "yes") {
     var rows = $(".multi_page_form_list .rows");
     if (rows.find(".sortable_row").length == 0) {

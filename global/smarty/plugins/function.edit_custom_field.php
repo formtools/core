@@ -92,6 +92,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
   {
     $curr_setting_id         = $setting_info["setting_id"];
     $curr_setting_field_type = $setting_info["field_type"];
+    $default_value_type      = $setting_info["default_value_type"];
     $value                   = $setting_info["default_value"];
     $identifier              = $setting_info["field_setting_identifier"];
 

@@ -303,7 +303,7 @@
     </ol>
 
     If none of the above solutions work, you may also want to try
-    <a href="#" onclick="ft.display_message('ft_message', true, $('upload_files_text').innerHTML)">manually uploading your forms for processing</a>.
+    <a href="#" onclick="ft.display_message('ft_message', 1, $('#upload_files_text').html())">manually uploading your forms for processing</a>.
   </div>
 
   <div id="multiple_fields_not_found_multi_page_form" style="display:none">
@@ -321,7 +321,7 @@
     </ol>
 
     If none of the above solutions work, you may also want to try
-    <a href="#" onclick="ft.display_message('ft_message', true, $('upload_files_text').innerHTML)">manually uploading your forms for processing</a>.
+    <a href="#" onclick="ft.display_message('ft_message', 1, $('#upload_files_text').html())">manually uploading your forms for processing</a>.
   </div>
 
   <div id="upload_files_text" style="display:none">

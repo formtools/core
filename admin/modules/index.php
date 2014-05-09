@@ -44,8 +44,8 @@ $updated_modules = array();
 foreach ($modules as $module_info)
 {
   $module_id = $module_info["module_id"];
-	$curr_module = $module_info;
-	$curr_module["needs_upgrading"] = ft_module_needs_upgrading($module_id);
+  $curr_module = $module_info;
+  $curr_module["needs_upgrading"] = ft_module_needs_upgrading($module_id);
   $updated_modules[] = $curr_module;
 }
 
@@ -72,7 +72,7 @@ page_ns.uninstall_module = function(module_id) {
     dialog:     page_ns.uninstall_module_dialog,
     title:      "{$LANG["phrase_please_confirm"]}",
     content:    "{$LANG["confirm_uninstall_module"]}",
-    popup_type: "warning", 
+    popup_type: "warning",
     buttons: {
       "{$LANG["word_yes"]}": function() {
         window.location = "index.php?uninstall=" + module_id;

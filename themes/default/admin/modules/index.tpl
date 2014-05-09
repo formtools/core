@@ -23,11 +23,11 @@
         <td>
           <input type="text" size="20" name="keyword" value="{$search_criteria.keyword|escape}" />
           <input type="submit" name="search_modules" value="{$LANG.word_search}" />
-          <input type="button" name="reset" value="{$LANG.phrase_show_all}" onclick="window.location='{$same_page}?reset=1'"
+          <input type="button" name="reset" onclick="window.location='{$same_page}?reset=1'"
             {if $modules|@count < $num_modules}
-              class="bold"
+              value="{$LANG.phrase_show_all} ({$num_modules})" class="bold"
             {else}
-              class="light_grey" disabled
+              value="{$LANG.phrase_show_all}" class="light_grey" disabled
             {/if} />
         </td>
       </tr>
@@ -53,7 +53,7 @@
 
     {$pagination}
 
-    <form action="{$same_page}" method="post">
+    <form action="{$same_page}" method="post" class="check_areas">
 
       {assign var="table_group_id" value="1"}
 
@@ -124,7 +124,7 @@
             <div class="medium_grey">{$module.description}</div>
           </td>
           <td valign="top" align="center">{$module.version}</td>
-          <td valign="top" align="center">
+          <td valign="top" align="center"{if $module.is_installed == "yes"}class="check_area"{/if}>
             {if $module.is_installed == "no"}
               <a href="{$same_page}?install={$module.module_id}">{$LANG.word_install|upper}</a>
             {else}

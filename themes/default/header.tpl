@@ -49,8 +49,7 @@
 <div id="container">
 
   <div id="header">
-
-    {if $SESSION.account.is_logged_in}
+    {if $SESSION.account.is_logged_in && !$g_omit_top_bar}
       <div style="float:right">
         <table cellspacing="0" cellpadding="0" height="25">
         <tr>

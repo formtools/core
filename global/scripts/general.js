@@ -26,8 +26,17 @@ $(function() {
     if (!$(e.target).hasClass("check_area")) {
       return;
     }
-    var field = $(e.target).find("input")[0];
-    field.checked = !field.checked;
+    var field = $(e.target).find("input");
+    var field_type = field.attr("type");
+
+    // for radios, we only check the fields - not uncheck them
+    if (field_type == "radio") {
+      if (!field[0].checked) {
+        field[0].checked = true;
+      }
+    } else {
+      field[0].checked = !field[0].checked;
+    }
   });
 });
 

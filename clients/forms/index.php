@@ -276,6 +276,15 @@ $date_picker_info = ft_get_default_date_field_search_value($settings["default_da
 $default_date_field_search_value = $date_picker_info["default_date_field_search_value"];
 $date_field_search_js_format     = $date_picker_info["date_field_search_js_format"];
 
+// get all the shared resources
+$shared_resources_list = ft_get_settings("edit_submission_onload_resources");
+$shared_resources_array = explode("|", $shared_resources_list);
+$shared_resources = "";
+foreach ($shared_resources_array as $resource)
+{
+  $shared_resources .= ft_eval_smarty_string($resource, array("g_root_url" => $g_root_url)) . "\n";
+}
+
 // ------------------------------------------------------------------------------------------------
 
 // compile the header information
@@ -312,6 +321,7 @@ $page_vars["head_string"] =<<< END
 <link rel="stylesheet" href="../../global/css/ui.daterangepicker.css" type="text/css" />
 <script src="../../global/scripts/manage_submissions.js"></script>
 <script src="../../global/scripts/daterangepicker.jquery.js"></script>
+<script src="$g_root_url/global/scripts/field_types.php"></script>
 END;
 
 $page_vars["head_js"] =<<< END

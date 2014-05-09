@@ -47,6 +47,23 @@
   </tr>
   {/if}
   <tr>
+    <td>PHP Sessions</td>
+    <td class="bold">
+      {if $sessions_loaded == 1}
+        Available
+      {else}
+        Not Available
+      {/if}
+    </td>
+    <td width="100" align="center">{$sessions_enabled}
+      {if $sessions_loaded == 1}
+        <span class="green">{$LANG.word_pass|upper}</span>
+      {else}
+        <span class="red">{$LANG.word_fail|upper}</span>
+      {/if}
+    </td>
+  </tr>
+  <tr>
     <td rowspan="2" valign="top">{$LANG.phrase_write_permissions}</td>
     <td class="bold">
       /upload/
@@ -75,7 +92,7 @@
 
   <br />
 
-  {if !$valid_php_version || !$mysql_loaded || !$valid_mysql_version}
+  {if !$valid_php_version || !$mysql_loaded || !$valid_mysql_version || !$sessions_loaded}
 
     <p class="error" style="padding: 6px">
       {$LANG.text_install_form_tools_server_not_supported}

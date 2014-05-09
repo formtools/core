@@ -283,7 +283,7 @@ sf_ns.log_form_page_as_loaded = function(page) {
     // if a manual file upload was just attempted, inform the user that they can now try to Smart Fill
     // the fields, based on the uploaded files
     if (sf_ns.manual_file_upload_attempted) {
-      ft.display_message("ft_message", true, g.messages["notify_smart_fill_files_uploaded_successfully"]);
+      ft.display_message("ft_message", 1, g.messages["notify_smart_fill_files_uploaded_successfully"]);
     }
   }
 }
@@ -478,8 +478,7 @@ sf_ns.load_multiple_fields_found_page = function(field_id) {
 }
 
 
-sf_ns.load_not_found_page = function(field_id)
-{
+sf_ns.load_not_found_page = function(field_id) {
   sf_ns.current_field_id = field_id;
 
   var field_title = $("#field_" + field_id + "_title").html();
@@ -500,11 +499,9 @@ sf_ns.load_not_found_page = function(field_id)
  * Called on the Not Found page after the user selects a form type. It saves the value & displays the
  * appropriate message.
  */
-sf_ns.choose_field_type = function()
-{
+sf_ns.choose_field_type = function() {
   var selected_field_type = $("#not_found_field_type").val();
-  if (!selected_field_type)
-  {
+  if (!selected_field_type) {
     alert(g.messages["validation_select_field_type"]);
     return;
   }
@@ -520,12 +517,9 @@ sf_ns.choose_field_type = function()
   $("#not_found_action_needed").addClass("notify");
 
   if (selected_field_type == "radio-buttons" || selected_field_type == "checkboxes" ||
-      selected_field_type == "select" || selected_field_type == "multi-select")
-  {
+      selected_field_type == "select" || selected_field_type == "multi-select") {
     $("not_found_action_needed").html("<div style=\"padding:6px;\">" + g.messages["notify_multi_field_updated"] + "</div>");
-  }
-  else
-  {
+  } else {
     $("not_found_action_needed").html("<div style=\"padding:6px;\">" + g.messages["notify_field_updated"] + "</div>");
   }
 
@@ -719,6 +713,8 @@ sf_ns.itemize_form_fields = function() {
       // loop through every element in this form
       var elements = sf_ns.get_form_elements(form_iframe.forms[j]);
 
+//      console.log(elements);
+
       for (var k=0; k<elements.length; k++) {
         var el = elements[k];
 
@@ -870,6 +866,9 @@ sf_ns.itemize_form_fields = function() {
     }
   }
 
+  // TODO
+  //console.log(sf_ns.itemized_fields);
+
 }
 
 
@@ -889,9 +888,9 @@ sf_ns.get_form_elements = function(f) {
 sf_ns.add_field_option = function(data) {
 
   var data = $.extend({
-  default_value: "",
-  default_text: "",
-  reorder: true
+    default_value: "",
+    default_text: "",
+    reorder: true
   }, data);
 
   var num_rows = sf_ns.fields["f" + sf_ns.current_field_id].option_list.length;
@@ -921,7 +920,7 @@ sf_ns.add_field_option = function(data) {
   $(".review_field_options .rows").append(row_html);
 
   if (data.reorder) {
-  sortable_ns.reorder_rows($(".review_field_options"));
+    sortable_ns.reorder_rows($(".review_field_options"));
   }
 }
 
@@ -1122,20 +1121,36 @@ sf_ns.skip_step = function() {
  * uploads copies of the forms to the server. The
  */
 sf_ns.validate_upload_files = function(f) {
-  // check all the fields have been entered
+  var error = null;
   for (var i=1; i<=page_ns.num_pages; i++) {
+    // check all the fields have been entered
     if (!f["form_page_" + i].value) {
-      alert(g.messages["validation_smart_fill_upload_all_pages"]);
-      return false;
+      error = g.messages["validation_smart_fill_upload_all_pages"];
+      break;
     }
-
     // check it has a .html or .htm file
     if (!f["form_page_" + i].value.match(/(\.htm|\.html)$/)) {
-      alert(g.messages["validation_upload_html_files_only"]);
-      return false;
+      error = g.messages["validation_upload_html_files_only"];
+      break;
     }
   }
 
+  if (error != null) {
+    ft.create_dialog({
+      title:      g.messages["word_error"],
+      popup_type: "warning",
+      content:    error,
+      buttons:    [
+       {
+         text: g.messages["word_okay"],
+         click: function() {
+           $(this).dialog("close")
+         }
+       }
+      ]
+    });
+    return false;
+  }
   // show the processing icon; this is turned off when the custom onload handler is executed for the
   // upload_files_iframe
   sf_ns.log_activity(true);
@@ -1159,8 +1174,8 @@ sf_ns.log_files_as_uploaded = function() {
 
   var response = $("#upload_files_iframe")[0].contentWindow.document.body.innerHTML;
   try {
-  // TODO
-    var info = response.evalJSON();
+    var info = eval("(" + response + ")");
+
     if (info.success) {
       // so far so good! Here, the files have been uploaded to the server and should be accessible
       // to the JS. Get the file URLs from response and load the iframes. When that's done, a message
@@ -1194,8 +1209,8 @@ sf_ns.is_option_list_field = function(field_type_id) {
       }
 
       if (info[i].raw_field_type_map_multi_select_id != "") {
-    	is_option_list_field = true;
-    	return false;
+      is_option_list_field = true;
+      return false;
       }
     }
   });

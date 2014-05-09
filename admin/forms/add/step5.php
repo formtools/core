@@ -9,10 +9,15 @@ $form_info   = ft_get_form($form_id);
 $form_fields = ft_get_form_fields($form_id);
 
 $form_urls = array();
-$form_urls[] = $form_info["form_url"];
-
-foreach ($form_info["multi_page_form_urls"] as $page_info)
-  $form_urls[] = $page_info["form_url"];
+if ($form_info["is_multi_page_form"] == "yes")
+{
+  foreach ($form_info["multi_page_form_urls"] as $page_info)
+    $form_urls[] = $page_info["form_url"];
+}
+else
+{
+  $form_urls[] = $form_info["form_url"];
+}
 
 $iframe_loaded_js_rows = array();
 reset($form_urls);
@@ -64,8 +69,7 @@ $page_vars["js_messages"] = array("word_na", "word_found", "word_delete", "word_
   "notify_field_updated", "word_skipped", "phrase_field_skipped", "notify_multi_field_selected", "notify_field_selected",
   "word_horizontal", "word_vertical", "word_order", "phrase_field_value", "phrase_display_value", "notify_add_display_values",
   "phrase_previous_field", "phrase_next_field", "validation_smart_fill_upload_all_pages", "notify_smart_fill_upload_fields_fail",
-  "notify_smart_fill_files_uploaded_successfully", "validation_upload_html_files_only",
-
+  "notify_smart_fill_files_uploaded_successfully", "validation_upload_html_files_only", "word_okay", "word_error",
   "word_yes", "word_no", "phrase_please_confirm", "confirm_refresh_page"
 );
 $page_vars["head_css"] = "";
