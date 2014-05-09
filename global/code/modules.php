@@ -353,7 +353,7 @@ function ft_get_module_count()
  */
 function ft_init_module_page($account_type = "admin")
 {
-	global $g_root_dir, $g_session_type, $g_session_save_path, $LANG;
+  global $g_root_dir, $g_session_type, $g_session_save_path, $LANG;
 
   if ($g_session_type == "database")
     $sess = new SessionManager();

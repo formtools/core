@@ -35,8 +35,8 @@
     <form action="edit_submission.php" method="post" name="edit_submission_form" enctype="multipart/form-data">
       {* hidden fields needed for JS - don't delete! *}
       <input type="hidden" name="form_id" id="form_id" value="{$form_id}" />
-      <input type="hidden" name="submission_id" value="{$submission_id}" />
-      <input type="hidden" name="tab" value="{$tab_number}" />
+      <input type="hidden" name="submission_id" id="submission_id" value="{$submission_id}" />
+      <input type="hidden" name="tab" id="tab" value="{$tab_number}" />
 
       {if $submission_tab_fields|@count > 0}
         <table class="list_table" cellpadding="1" cellspacing="1" border="0" width="100%">

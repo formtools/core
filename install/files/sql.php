@@ -12,7 +12,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%account_settings (
   setting_name varchar(255) NOT NULL,
   setting_value mediumtext NOT NULL,
   PRIMARY KEY  (account_id,setting_name)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%accounts (
   account_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -32,7 +32,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%accounts (
   username varchar(50) default NULL,
   password varchar(50) default NULL,
   PRIMARY KEY (account_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%accounts (account_id, account_type, account_status, timezone_offset, login_page, menu_id) VALUES (1, 'admin', 'active', '0', 'admin_forms', 1)";
 
@@ -40,19 +40,19 @@ $g_sql[] = "CREATE TABLE %PREFIX%client_forms (
   account_id mediumint(8) unsigned NOT NULL,
   form_id mediumint(8) unsigned NOT NULL,
   PRIMARY KEY (account_id,form_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%client_views (
   account_id mediumint(8) unsigned NOT NULL,
   view_id mediumint(8) unsigned NOT NULL,
   PRIMARY KEY (account_id,view_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%email_template_edit_submission_views (
   email_id mediumint(8) unsigned NOT NULL,
   view_id mediumint(8) unsigned NOT NULL,
   PRIMARY KEY  (email_id,view_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%email_template_recipients (
   recipient_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -64,7 +64,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%email_template_recipients (
   custom_recipient_name varchar(200) default NULL,
   custom_recipient_email varchar(200) default NULL,
   PRIMARY KEY  (recipient_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%email_templates (
   email_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -90,7 +90,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%email_templates (
   html_template mediumtext,
   text_template mediumtext,
   PRIMARY KEY (email_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%field_option_groups (
   group_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -98,7 +98,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%field_option_groups (
   original_form_id mediumint(8) unsigned default NULL,
   field_orientation enum('horizontal','vertical','na') NOT NULL default 'na',
   PRIMARY KEY (group_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%field_options (
   field_group_id mediumint(8) unsigned NOT NULL,
@@ -106,7 +106,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%field_options (
   option_value varchar(255) NOT NULL,
   option_name varchar(255) NOT NULL,
   PRIMARY KEY (field_group_id, option_order)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%field_settings (
   field_id mediumint(8) unsigned NOT NULL,
@@ -114,7 +114,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%field_settings (
   setting_value varchar(100) default NULL,
   module varchar(100) NOT NULL default 'core',
   PRIMARY KEY (field_id,setting_name,module)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%form_email_fields (
   form_email_id MEDIUMINT unsigned NOT NULL auto_increment,
@@ -123,7 +123,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%form_email_fields (
   first_name_field VARCHAR( 255 ) NULL,
   last_name_field VARCHAR( 255 ) NULL,
   PRIMARY KEY (form_email_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%form_fields (
   field_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -139,7 +139,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%form_fields (
   include_on_redirect enum('yes','no') NOT NULL default 'no',
   `field_group_id` mediumint(9) default NULL,
   PRIMARY KEY  (field_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%forms (
   form_id mediumint(9) unsigned NOT NULL auto_increment,
@@ -158,7 +158,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%forms (
   default_view_id mediumint(8) unsigned default NULL,
   edit_submission_page_label text,
   PRIMARY KEY  (form_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%hooks (
   hook_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -169,7 +169,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%hooks (
   hook_function varchar(255) NOT NULL,
   priority tinyint(4) NOT NULL default '50',
   PRIMARY KEY  (hook_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%menu_items (
   menu_item_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -181,19 +181,19 @@ $g_sql[] = "CREATE TABLE %PREFIX%menu_items (
   is_submenu enum('yes','no') NOT NULL default 'no',
   list_order smallint(5) unsigned default NULL,
   PRIMARY KEY (menu_item_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (1, 1, 'Forms', 'admin_forms', '', '/admin/forms/', 'no', 1)";
 $g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (2, 1, 'Add Form', 'add_form1', '', '/admin/forms/add/step1.php?add', 'yes', 2)";
 $g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (3, 1, 'Field Option Groups', 'field_option_groups', '', '/admin/forms/field_option_groups/', 'yes', 3)";
 $g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (4, 1, 'Clients', 'clients', '', '/admin/clients/', 'no', 4)";
 $g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (5, 1, 'Modules', 'modules', '', '/admin/modules/', 'no', 5)";
-$g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (6, 1, 'Settings', 'settings', '', '/admin/settings', 'no', 6)";
-$g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (7, 1, 'Main', 'settings_main', '', '/admin/settings/index.php?page=main', 'yes', 7)";
-$g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (8, 1, 'Accounts', 'settings_accounts', '', '/admin/settings/index.php?page=accounts', 'yes', 8)";
-$g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (9, 1, 'Files', 'settings_files', '', '/admin/settings/index.php?page=files', 'yes', 9)";
-$g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (10, 1, 'WYSIWYG', 'settings_wysiwyg', '', '/admin/settings/index.php?page=wysiwyg', 'yes', 10)";
-$g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (11, 1, 'Themes', 'settings_themes', '', '/admin/settings/index.php?page=themes', 'yes', 11)";
+$g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (6, 1, 'Themes', 'settings_themes', '', '/admin/themes/', 'no', 6)";
+$g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (7, 1, 'Settings', 'settings', '', '/admin/settings', 'no', 7)";
+$g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (8, 1, 'Main', 'settings_main', '', '/admin/settings/index.php?page=main', 'yes', 8)";
+$g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (9, 1, 'Accounts', 'settings_accounts', '', '/admin/settings/index.php?page=accounts', 'yes', 9)";
+$g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (10, 1, 'Files', 'settings_files', '', '/admin/settings/index.php?page=files', 'yes', 10)";
+$g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (11, 1, 'WYSIWYG', 'settings_wysiwyg', '', '/admin/settings/index.php?page=wysiwyg', 'yes', 11)";
 $g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (12, 1, 'Menus', 'settings_menus', '', '/admin/settings/index.php?page=menus', 'yes', 12)";
 $g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (13, 1, 'Your Account', 'your_account', '', '/admin/account', 'no', 13)";
 $g_sql[] = "INSERT INTO %PREFIX%menu_items VALUES (14, 1, 'Logout', 'logout', '', '/index.php?logout', 'no', 14)";
@@ -208,7 +208,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%menus (
   menu varchar(255) NOT NULL,
   menu_type enum('admin','client') NOT NULL default 'client',
   PRIMARY KEY  (menu_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%menus VALUES (1, 'Administrator', 'admin')";
 $g_sql[] = "INSERT INTO %PREFIX%menus VALUES (2, 'Client Menu', 'client')";
@@ -221,7 +221,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%module_menu_items (
   is_submenu enum('yes','no') NOT NULL default 'no',
   list_order smallint(6) NOT NULL,
   PRIMARY KEY  (menu_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%modules (
   module_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -238,33 +238,33 @@ $g_sql[] = "CREATE TABLE %PREFIX%modules (
   module_date datetime NOT NULL,
   supports_ft_versions varchar(255) default NULL,
   PRIMARY KEY  (module_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%multi_page_form_urls (
   `form_id` mediumint(8) unsigned NOT NULL,
   `form_url` varchar(255) NOT NULL,
   `page_num` tinyint(4) NOT NULL default '2',
   PRIMARY KEY  (`form_id`,`page_num`)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%public_form_omit_list (
   form_id mediumint(8) unsigned NOT NULL,
   account_id mediumint(8) unsigned NOT NULL,
   PRIMARY KEY  (form_id,account_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%public_view_omit_list (
   view_id mediumint(8) unsigned NOT NULL,
   account_id mediumint(8) unsigned NOT NULL,
   PRIMARY KEY  (view_id,account_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%sessions (
   session_id varchar(100) NOT NULL default '',
   session_data text NOT NULL,
   expires int(11) NOT NULL default '0',
   PRIMARY KEY  (`session_id`)
-) TYPE=InnoDB DEFAULT CHARSET=latin1";
+) TYPE=MyISAM DEFAULT CHARSET=latin1";
 
 $g_sql[] = "CREATE TABLE %PREFIX%settings (
   setting_id mediumint(9) NOT NULL auto_increment,
@@ -272,7 +272,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%settings (
   setting_value text NOT NULL,
   module varchar(100) NOT NULL default 'core',
   PRIMARY KEY  (setting_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('api_version', '', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('available_languages', 'en_us,English (US)', 'core')";
@@ -333,7 +333,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%themes (
   theme_version varchar(50) default NULL,
   supports_ft_versions mediumtext,
   PRIMARY KEY (theme_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "INSERT INTO %PREFIX%themes VALUES (1, 'default', 'Default', 'Encore Web Studios', 'formtools@encorewebstudios.com', 'http://www.encorewebstudios.com', 'http://themes.formtools.org/', 'The default Form Tools theme for all new installations. It''s a green-coloured fixed-width theme requiring 1024 minimum width screens.', 'yes', '1.0.0', '2.0.0')";
 
@@ -347,7 +347,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%view_fields (
   is_searchable enum('yes','no') NOT NULL default 'yes',
   list_order smallint(5) unsigned default NULL,
   PRIMARY KEY  (view_id,field_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%view_filters (
   filter_id mediumint(8) unsigned NOT NULL auto_increment,
@@ -358,14 +358,14 @@ $g_sql[] = "CREATE TABLE %PREFIX%view_filters (
   filter_values mediumtext NOT NULL,
   filter_sql mediumtext NOT NULL,
   PRIMARY KEY  (filter_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%view_tabs (
   view_id mediumint(8) unsigned NOT NULL,
   tab_number tinyint(3) unsigned NOT NULL,
   tab_label varchar(50) default NULL,
   PRIMARY KEY  (view_id,tab_number)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%views (
   view_id smallint(6) NOT NULL auto_increment,
@@ -382,4 +382,4 @@ $g_sql[] = "CREATE TABLE %PREFIX%views (
   has_client_map_filter enum('yes','no') NOT NULL default 'no',
   has_standard_filter enum('yes','no') NOT NULL default 'no',
   PRIMARY KEY  (view_id)
-) TYPE=InnoDB DEFAULT CHARSET=utf8";
+) TYPE=MyISAM DEFAULT CHARSET=utf8";

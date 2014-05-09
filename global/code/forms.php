@@ -232,7 +232,7 @@ function ft_finalize_form($form_id)
              last_modified_date DATETIME NOT NULL,
              ip_address VARCHAR(15),
              is_finalized ENUM('yes','no') default 'yes')
-             TYPE=InnoDB DEFAULT CHARSET=utf8";
+             TYPE=MyISAM DEFAULT CHARSET=utf8";
 
   mysql_query($query)
     or ft_handle_error("Failed query in <b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, line " . __LINE__ . ": <i>" . nl2br($query) . "</i>", mysql_error());
@@ -731,7 +731,7 @@ function ft_setup_form($info)
         continue;
 
       mysql_query("INSERT INTO {$g_table_prefix}multi_page_form_urls (form_id, form_url, page_num) VALUES ($new_form_id, '$form_url', $page_num)");
-		}
+    }
   }
 
   return array($success, $message, $new_form_id);
@@ -1364,6 +1364,7 @@ function ft_update_form_database_tab($infohash)
 
   // this keeps track of any database column changes, in case of error
   $db_col_changes = array();
+  $db_col_change_hash = array(); // added later. Could use refactoring
 
   if ($form_info["is_complete"] == "yes")
   {
@@ -1379,6 +1380,8 @@ function ft_update_form_database_tab($infohash)
       // if any physical aspect of the form (column name, field type) needs to be changed, change it
       if (($old_field_info['col_name'] != $field["col_name"]) || ($old_field_info['field_size'] != $field["field_size"]))
       {
+      	$db_col_change_hash[$old_field_info['col_name']] = $field["col_name"];
+
         $new_field_size = "";
         switch ($field["field_size"])
         {
@@ -1407,7 +1410,7 @@ function ft_update_form_database_tab($infohash)
             {
               $query = mysql_query("
                 UPDATE {$g_table_prefix}form_fields
-                SET    col_name   = '$col_name'
+                SET    col_name = '$col_name'
                 WHERE  field_id = $field_id
                           ");
             }
@@ -1459,7 +1462,7 @@ function ft_update_form_database_tab($infohash)
 
   $success = true;
   $message = $LANG["notify_fields_updated"];
-  extract(ft_process_hooks("end", compact("infohash", "form_id"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("infohash", "form_id", "db_col_changes", "db_col_change_hash"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }

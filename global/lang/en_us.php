@@ -663,6 +663,7 @@ $LANG["phrase_text_and_html"] = "Text &amp; HTML";
 $LANG["phrase_text_email"] = "Text Email";
 $LANG["phrase_text_template"] = "Text Template";
 $LANG["phrase_textbox_or_textarea"] = "Textbox / Textarea";
+$LANG["phrase_theme_description"] = "Theme Description";
 $LANG["phrase_theme_info"] = "Theme Info";
 $LANG["phrase_toolbar_alignment"] = "Toolbar Alignment";
 $LANG["phrase_toolbar_location"] = "Toolbar Location";

@@ -628,7 +628,7 @@ function ft_delete_extended_field_settings($field_id)
  * <input type="hidden" name="field_X_system" value="1" />
  *
  * @param integer $infohash A hash containing the contents of the Edit Form Advanced tab.
- * @param boolean $set_default_form_field_names A hash containing the contents of the Edit Form Advanced tab.
+ * @param boolean $set_default_form_field_names if true, this renames the columns
  */
 function ft_reorder_form_fields($infohash, $form_id, $set_default_form_field_names = false)
 {

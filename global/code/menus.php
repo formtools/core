@@ -3,7 +3,7 @@
 /**
  * This file defines all functions relating to the menus / internal navigation within Form Tools.
  *
- * @copyright Encore Web Studios 2009
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
  * @package 2-0-3
  * @subpackage Menus
@@ -75,7 +75,11 @@ $g_pages = array(
   "settings_accounts" => "/admin/settings/index.php?page=accounts",
   "settings_files" => "/admin/settings/index.php?page=files",
   "settings_wysiwyg" => "/admin/settings/index.php?page=wysiwyg",
-  "settings_themes" => "/admin/settings/index.php?page=themes",
+
+  // before 2.0.3, themes used to be grouped under "Settings". The settings_themes key is kept
+  // to minimize regression
+  "settings_themes" => "/admin/themes/index.php",
+
   "themes_about" => "/admin/themes/about.php",
   "settings_menus" => "/admin/settings/index.php?page=menus",
 
@@ -86,7 +90,7 @@ $g_pages = array(
   "client_account_settings" => "/clients/account/index.php?page=settings",
   "client_form_submissions" => "/clients/forms/index.php",
   "client_edit_submission" => "/clients/forms/edit_submission.php"
-  );
+);
 
 
 
@@ -480,12 +484,12 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
 
   $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_other"]);
   $select_lines[] = array("type" => "option", "k" => "your_account", "v" => $LANG["phrase_your_account"]);
+  $select_lines[] = array("type" => "option", "k" => "settings_themes", "v" => "{$LANG["word_themes"]}");
   $select_lines[] = array("type" => "option", "k" => "settings", "v" => $LANG["word_settings"]);
   $select_lines[] = array("type" => "option", "k" => "settings_main", "v" => "{$LANG["word_settings"]} - {$LANG["word_main"]}");
   $select_lines[] = array("type" => "option", "k" => "settings_accounts", "v" => "{$LANG["word_settings"]} - {$LANG["word_accounts"]}");
   $select_lines[] = array("type" => "option", "k" => "settings_wysiwyg", "v" => "{$LANG["word_settings"]} - {$LANG["word_wysiwyg"]}");
   $select_lines[] = array("type" => "option", "k" => "settings_files", "v" => "{$LANG["word_settings"]} - {$LANG["word_files"]}");
-  $select_lines[] = array("type" => "option", "k" => "settings_themes", "v" => "{$LANG["word_settings"]} - {$LANG["word_themes"]}");
   $select_lines[] = array("type" => "option", "k" => "settings_menus", "v" => "{$LANG["word_settings"]} - {$LANG["word_menus"]}");
   $select_lines[] = array("type" => "option", "k" => "logout", "v" => $LANG["word_logout"]);
   $select_lines[] = array("type" => "optgroup_close");

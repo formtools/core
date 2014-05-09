@@ -57,6 +57,8 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 {
   global $g_table_prefix, $LANG;
 
+  extract(ft_process_hooks("start", compact("form_id", "view_id", "submission_id", "is_admin"), array()), EXTR_OVERWRITE);
+
   $form_info = ft_get_form($form_id);
   $form_fields = ft_get_form_fields($form_id);
 
@@ -174,8 +176,8 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
   $submission_ids = array();
   if ($submissions_to_delete == "all")
   {
-  	// get the list of searchable columns for this View. This is needed to ensure that ft_get_search_submission_ids receives
-  	// the correct info to determine what submission IDs are appearing in this current search.
+    // get the list of searchable columns for this View. This is needed to ensure that ft_get_search_submission_ids receives
+    // the correct info to determine what submission IDs are appearing in this current search.
     $searchable_columns = ft_get_view_searchable_fields($view_id);
     $submission_ids = ft_get_search_submission_ids($form_id, $view_id, "all", "submission_id-ASC", $search_fields, $searchable_columns);
     $submission_ids = array_diff($submission_ids, $omit_list);
@@ -184,6 +186,10 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
   {
     $submission_ids = $submissions_to_delete;
   }
+
+  $submissions_to_delete = $submission_ids;
+  extract(ft_process_hooks("start", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"),
+    array("submission_ids")), EXTR_OVERWRITE);
 
   $form_info = ft_get_form($form_id);
   $form_fields = ft_get_form_fields($form_id);
@@ -281,7 +287,6 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
       $message = $LANG["notify_submission_deleted"];
   }
 
-
   // update sessions to ensure the first submission date and num submissions for this form View are correct
   _ft_cache_form_stats($form_id);
   _ft_cache_view_stats($view_id);
@@ -295,6 +300,7 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
   foreach ($submission_ids as $submission_id)
     ft_send_emails("on_delete", $form_id, $submission_id);
 
+  $submissions_to_delete = $submission_ids;
   extract(ft_process_hooks("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"),
     array("success", "message")), EXTR_OVERWRITE);
 
@@ -467,27 +473,27 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
     $return_arr[] = $field_info;
   }
 
-	// finally, if a View is specified, ensure that the order in which the submission fields are returned
-	// is determined by the View. [NOT efficient!]
-	if (!empty($view_id))
-	{
-	  $ordered_return_arr = array();
+  // finally, if a View is specified, ensure that the order in which the submission fields are returned
+  // is determined by the View. [NOT efficient!]
+  if (!empty($view_id))
+  {
+    $ordered_return_arr = array();
 
-		foreach ($view_fields as $view_field_info)
-		{
-		  $field_id = $view_field_info["field_id"];
-		  foreach ($return_arr as $field_info)
-			{
-			  if ($field_info["field_id"] == $field_id)
-			  {
-				  $ordered_return_arr[] = $field_info;
-					break;
-				}
-			}
-		}
+    foreach ($view_fields as $view_field_info)
+    {
+      $field_id = $view_field_info["field_id"];
+      foreach ($return_arr as $field_info)
+      {
+        if ($field_info["field_id"] == $field_id)
+        {
+          $ordered_return_arr[] = $field_info;
+          break;
+        }
+      }
+    }
 
-		$return_arr = $ordered_return_arr;
-	}
+    $return_arr = $ordered_return_arr;
+  }
 
   extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "return_arr"), array("return_arr")), EXTR_OVERWRITE);
 
@@ -894,7 +900,7 @@ function ft_finalize_submission($form_id, $submission_id)
  *                                          current search values.
  */
 function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num, $order, $columns,
-	                             $search_fields = array(), $submission_ids = array(), $search_columns = array())
+                               $search_fields = array(), $submission_ids = array(), $search_columns = array())
 {
   global $g_table_prefix;
 
@@ -974,7 +980,7 @@ function _ft_get_search_submissions_order_by_clause($form_id, $order)
   $order_by = "submission_id";
   if (!empty($order))
   {
-	  // sorting by column, format: col_x-desc / col_y-asc
+    // sorting by column, format: col_x-desc / col_y-asc
     list($column, $direction) = split("-", $order);
     $field_info = ft_get_form_field_by_colname($form_id, $column);
 
@@ -1088,7 +1094,7 @@ function _ft_get_search_submissions_search_where_clause($form_id, $search_fields
         // if we're searching ALL columns, get all col names. This shouldn't ever get called any more - but
         // I'll leave it in for regression purposes
         $clauses = array();
-      	if (!is_array($searchable_columns) && $searchable_columns == "all")
+        if (!is_array($searchable_columns) && $searchable_columns == "all")
         {
           $col_info = ft_get_form_column_names($form_id);
           $col_names = array_keys($col_info);

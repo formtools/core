@@ -244,6 +244,7 @@ function ft_process_form($form_data)
     }
 
     $submission_id = mysql_insert_id();
+    extract(ft_process_hooks("end", compact("form_id", "submission_id"), array()), EXTR_OVERWRITE);
   }
 
 

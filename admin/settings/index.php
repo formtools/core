@@ -43,11 +43,6 @@ $tabs = array(
       "tab_label" => $LANG["word_wysiwyg"],
       "tab_link" => "{$_SERVER["PHP_SELF"]}?page=wysiwyg"
         ),
-  "themes" => array(
-      "tab_label" => $LANG["word_themes"],
-      "tab_link" => "{$_SERVER["PHP_SELF"]}?page=themes",
-      "pages" => array("themes", "themes_about")
-        ),
   "menus" => array(
       "tab_label" => $LANG["word_menus"],
       "tab_link" => "{$_SERVER["PHP_SELF"]}?page=menus",
@@ -58,35 +53,29 @@ $tabs = array(
 
 switch ($page)
 {
-	case "main":
-		require("page_main.php");
-		break;
-	case "accounts":
-		require("page_accounts.php");
-		break;
-	case "files":
-		require("page_files.php");
-		break;
-	case "themes":
-		require("page_themes.php");
-		break;
-	case "themes_about":
-		require("page_themes_about.php");
-		break;
+  case "main":
+    require("page_main.php");
+    break;
+  case "accounts":
+    require("page_accounts.php");
+    break;
+  case "files":
+    require("page_files.php");
+    break;
   case "wysiwyg":
-		require("page_wysiwyg.php");
-		break;
-	case "menus":
-		require("page_menus.php");
-		break;
-	case "edit_client_menu":
-		require("page_edit_client_menu.php");
-		break;
-	case "edit_admin_menu":
-		require("page_edit_admin_menu.php");
-		break;
+    require("page_wysiwyg.php");
+    break;
+  case "menus":
+    require("page_menus.php");
+    break;
+  case "edit_client_menu":
+    require("page_edit_client_menu.php");
+    break;
+  case "edit_admin_menu":
+    require("page_edit_admin_menu.php");
+    break;
 
-	default:
-		require("page_main.php");
-		break;
+  default:
+    require("page_main.php");
+    break;
 }

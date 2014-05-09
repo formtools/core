@@ -29,10 +29,6 @@
       <td class="pad_left_small"><a href="{$module_info.author_link}" target="_blank">{$module_info.author_link}</a></td>
     </tr>
   {/if}
-  <tr>
-    <td class="pad_left_small">{$LANG.phrase_form_tools_compatibility}</td>
-    <td class="pad_left_small">{$module_info.supports_ft_versions}</td>
-  </tr>
   </table>
 
   <p>

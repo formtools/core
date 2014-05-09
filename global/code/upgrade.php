@@ -15,8 +15,6 @@
 /**
  * This function upgrades the Form Tools Core.
  *
- * TODO Improve Me.
- *
  * @return boolean is_upgraded a boolean indicating whether or not the program was just upgraded.
  */
 function ft_upgrade_form_tools()
@@ -44,7 +42,7 @@ function ft_upgrade_form_tools()
           hook_function varchar(255) NOT NULL,
           priority tinyint(4) NOT NULL default '50',
           PRIMARY KEY (hook_id)
-        ) TYPE=InnoDB DEFAULT CHARSET=utf8
+        ) TYPE=MyISAM DEFAULT CHARSET=utf8
         ");
     }
 
@@ -231,7 +229,7 @@ function ft_upgrade_form_tools()
           first_name_field VARCHAR( 255 ) NULL,
           last_name_field VARCHAR( 255 ) NULL,
           PRIMARY KEY (form_email_id)
-        ) TYPE=InnoDB DEFAULT CHARSET=utf8
+        ) TYPE=MyISAM DEFAULT CHARSET=utf8
           ");
 
       // [5] rename the "recipient_user_type" enum options to call the "user" option "form_email_field" instead,
@@ -342,6 +340,31 @@ function ft_upgrade_form_tools()
       	// add the current password to the password history queue
       	$client_settings["password_history"] = $client_info["password"];
         ft_set_account_settings($client_info["account_id"], $client_settings);
+      }
+    }
+
+    if ($old_version_info["release_date"] < 20100908)
+    {
+      // convert all core tables to MyISAM
+      $core_tables = array(
+        "accounts", "account_settings", "client_forms", "client_views", "email_templates",
+        "email_template_edit_submission_views", "email_template_recipients", "field_options",
+        "field_option_groups", "field_settings", "forms", "form_email_fields", "form_fields",
+        "hooks", "menus", "menu_items", "modules", "module_menu_items", "multi_page_form_urls",
+        "public_form_omit_list", "public_view_omit_list", "settings", "themes", "views",
+        "view_fields", "view_filters", "view_tabs"
+      );
+      foreach ($core_tables as $table)
+      {
+      	@mysql_query("ALTER TABLE {$g_table_prefix}$table TYPE=MyISAM");
+      }
+
+      // convert all the custom tables to MyISAM as well
+      $forms = ft_get_forms();
+      foreach ($forms as $form_info)
+      {
+        $form_id = $form_info["form_id"];
+        @mysql_query("ALTER TABLE {$g_table_prefix}form_{$form_id} TYPE=MyISAM");
       }
     }
   }
