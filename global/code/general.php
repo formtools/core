@@ -29,14 +29,22 @@ function ft_db_connect()
     $g_check_ft_sessions;
 
   if ($g_db_ssl)
-    $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true, MYSQL_CLIENT_SSL)
-      or ft_handle_error("Couldn't connect to database: <b>$g_db_hostname</b>", "");
+    $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true, MYSQL_CLIENT_SSL);
   else
-    $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true)
-      or ft_handle_error("Couldn't connect to database: <b>$g_db_hostname</b>", "");
+    $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true);
 
-  @mysql_select_db($g_db_name) or
-    ft_handle_error("couldn't find database <b>$g_db_name</b>", "");
+  if (!$link)
+  {
+    ft_display_serious_error("<p>Form Tools was unable to make a connection to the database hostname. This usually means the host is temporarily down, it's no longer accessible with the hostname you're passing, or the username and password you're using isn't valid.</p><p>Please check your /global/config.php file to confirm the <b>\$g_db_hostname</b>, <b>\$g_db_username</b> and <b>\$g_db_password</b> settings.</p>");
+    exit;
+  }
+
+  $db_connection = mysql_select_db($g_db_name);
+  if (!$db_connection)
+  {
+    ft_display_serious_error("Form Tools was unable to make a connection to the database. This usually means the database is temporarily down, or that the database is no longer accessible. Please check your /global/config.php file to confirm the <b>\$g_db_name</b> setting.");
+    exit;
+  }
 
   // if required, set all queries as UTF-8 (enabled by default)
   if ($g_unicode)
@@ -832,6 +840,38 @@ function ft_verify_form_tools_installed()
   }
 }
 
+/**
+ * Also called on the login page. This does a quick test to confirm the database tables exist as they should.
+ * If not, it throws a serious error and prevents the user from logging in.
+ */
+function ft_verify_core_tables_exist()
+{
+  global $g_table_prefix, $g_ft_tables, $g_db_name;
+
+  $result = mysql_query("SHOW TABLES FROM $g_db_name");
+  $found_tables = array();
+  while ($row = mysql_fetch_array($result))
+    $found_tables[] = $row[0];
+
+  $all_tables_found = true;
+  $missing_tables = array();
+  foreach ($g_ft_tables as $table_name)
+  {
+  	if (!in_array("{$g_table_prefix}$table_name", $found_tables))
+  	{
+  	  $all_tables_found = false;
+  	  $missing_tables[] = "{$g_table_prefix}$table_name";
+  	}
+  }
+
+  if (!$all_tables_found)
+  {
+  	$missing_tables_str = "<blockquote><pre>" . implode("\n", $missing_tables) . "</pre></blockquote>";
+    ft_display_serious_error("Form Tools couldn't find all the database tables. Please check your /global/config.php file to confirm the <b>\$g_table_prefix</b> setting. The following tables are missing: {$missing_tables_str}");
+    exit;
+  }
+}
+
 
 /**
  * This function was added in 1.4.7 to handle serious, show-stopper errors instead of the former
@@ -913,13 +953,17 @@ function ft_construct_url($url, $query_str = "")
  * Helper function that's called as a wrapper to the PHP json_encode function. If it doesn't exist,
  * it manually encodes the value as a JSON object.
  *
+ * I didn't just make this function override json_encore for those servers that support it (PHP 5.2+)
+ * because I couldn't locate a 100% guaranteed identical plain vanilla PHP equivalent. Hence this custom
+ * function.
+ *
  * @param mixed $arr
  * @return string the JSON object (as a PHP string)
  */
 function ft_convert_to_json($arr)
 {
-  if (function_exists('json_encode'))
-    return json_encode($arr);
+//  if (function_exists('json_encode'))
+//    return json_encode($arr);
 
   $parts = array();
   $is_list = false;
@@ -970,9 +1014,8 @@ function ft_convert_to_json($arr)
         $str .= 'true';
       else
       {
-        //$value = preg_replace("/\s+/", "\n", $value);
-        //$value = ft_sanitize($value);
-        //$str .= '"' . ft_sanitize($value) . '"';
+        $json_replacements = array(array('\\', '/', "\n", "\t", "\r", "\b", "\f", '"'), array('\\\\', '\\/', '\\n', '\\t', '\\r', '\\b', '\\f', '\"'));
+        $value = str_replace($json_replacements[0], $json_replacements[1], $value);
         $str .= '"' . $value . '"';
       }
 
@@ -1118,7 +1161,7 @@ function ft_generate_password($length = 8)
  *   4. "" - the empty string gets returned if none of the above methods apply. In this case, the user will
  *      have to manually upload copies of the files which are then created locally for parsing.
  *
- * FIXME. There's a potentially bug with this function, which I haven't been able to solve for both PHP 4 & 5:
+ * TODO. There's a potentially bug with this function, which I haven't been able to solve for both PHP 4 & 5:
  * if the URL is invalid, file_get_contents can timeout with a fatal error. To reduce the likelihood of this
  * occurring, Step 2 of the Add Form process requires the user to have confirmed each of the form URLs.
  * Nevertheless, this needs to be addressed at some point.
@@ -1489,4 +1532,51 @@ function ft_get_formtools_installed_components()
   }
 
   return $components;
+}
+
+
+/**
+ * This is used for serious errors: when no database connection can be made. All it does is output
+ * the error string with no other dependencies - not even language strings. This is always output in English.
+ *
+ * @param string $error
+ */
+function ft_display_serious_error($error)
+{
+  echo <<< END
+<html>
+<head>
+  <title>Error</title>
+  <style type="text/css">
+  h1 {
+    margin: 0px 0px 16px 0px;
+  }
+  body {
+    background-color: #f9f9f9;
+    text-align: center;
+    font-family: verdana;
+    font-size: 11pt;
+    line-height: 22px;
+  }
+  div {
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
+    border: 1px solid #666666;
+    padding: 40px;
+    background-color: white;
+    width: 600px;
+    text-align: left;
+    margin: 30px auto;
+  }
+  </style>
+</head>
+<body>
+<div class="error">
+  <h1>Uh-oh.</h1>
+  {$error}
+</div>
+</body>
+</html>
+END;
 }

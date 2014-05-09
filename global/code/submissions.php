@@ -237,10 +237,11 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 
   // loop the form templates to find out if there are any file fields. If there are - and the user
   // configured it - delete any associated files
+  // TODO!
   foreach ($form_fields as $field_info)
   {
+/*
     $field_type = $field_info["field_type"];
-
     if ($field_type == "file" || $field_type == "image")
     {
       $form_has_file_field = true;
@@ -271,14 +272,12 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
           $file_delete_problems[] = array($filename, $message);
       }
     }
+*/
   }
 
 
   // now delete the submission
-  mysql_query("
-     DELETE FROM {$g_table_prefix}form_{$form_id}
-     $where_clause
-              ");
+  mysql_query("DELETE FROM {$g_table_prefix}form_{$form_id} $where_clause");
 
   if ($auto_delete_submission_files == "yes")
   {
@@ -829,7 +828,6 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
   $submission_id_clause = _ft_get_search_submissions_submission_id_clause($submission_ids);
   $search_where_clause  = _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $searchable_columns);
 
-
   // (1) our main search query that returns a PAGE of submission info
   $search_query = mysql_query("
       SELECT $select_clause
@@ -904,9 +902,9 @@ function _ft_get_search_submissions_order_by_clause($form_id, $order)
     {
       if ($field_info["is_date_field"] == "yes")
       {
-      	if ($column == "submission_date" || $column == "last_modified_date")
-      	  $order_by = "$column $direction";
-      	else
+        if ($column == "submission_date" || $column == "last_modified_date")
+          $order_by = "$column $direction";
+        else
           $order_by = "CAST($column as DATETIME) $direction";
       }
       else
@@ -1032,7 +1030,7 @@ function _ft_get_search_submissions_search_where_clause($form_id, $search_fields
       $search_field = preg_replace("/\|date$/", "", $search_field);
       $is_core_date_field = ($search_field == "submission_date" || $search_field == "last_modified_date") ? true : false;
       if (!$is_core_date_field)
-      	$search_field = "CAST($search_field as DATETIME) ";
+        $search_field = "CAST($search_field as DATETIME) ";
 
       if (!empty($search_date))
       {

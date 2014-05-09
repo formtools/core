@@ -402,44 +402,6 @@ function ft_update_file_settings($infohash)
 
 
 /**
- * Called by administrators; updates the WYSIWYG editor settings.
- *
- * @param array $infohash this parameter should be a hash (e.g. $_POST or $_GET) containing the
- *             various fields from the main settings admin page.
- * @return array Returns array with indexes:<br/>
- *               [0]: true/false (success / failure)<br/>
- *               [1]: message string<br/>
- */
-function ft_update_wysiwyg_settings($infohash)
-{
-  global $g_table_prefix, $g_root_url, $LANG;
-
-  $success = true;
-  $message = $LANG["notify_wysiwyg_settings_updated"];
-
-  $infohash = ft_sanitize($infohash);
-
-  $tinymce_path_info_location = isset($infohash["tinymce_path_info_location"]) ? $infohash["tinymce_path_info_location"] : "bottom";
-  $tinymce_resize             = isset($infohash["tinymce_resize"]) ? $infohash["tinymce_resize"] : "no";
-
-  $settings = array(
-    "tinymce_toolbar"            => $infohash["tinymce_toolbar"],
-    "tinymce_toolbar_location"   => $infohash["tinymce_toolbar_location"],
-    "tinymce_toolbar_align"      => $infohash["tinymce_toolbar_align"],
-    "tinymce_show_path"          => $infohash["tinymce_show_path"],
-    "tinymce_path_info_location" => $infohash["tinymce_path_info_location"],
-    "tinymce_resize"             => $infohash["tinymce_resize"]
-  );
-
-  ft_set_settings($settings);
-
-  extract(ft_process_hook_calls("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
-
-  return array($success, $message);
-}
-
-
-/**
  * Called by the administrator from the Themes settings page. It updates the list of enabled
  * themes, and which theme is assigned to the administrator and (default) client accounts. Note:
  * it doesn't disable any themes that are already assigned to a user account. If that happens,

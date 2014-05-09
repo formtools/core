@@ -312,9 +312,9 @@ function ft_send_test_email($info)
 
 /**
  * This handy function figures out the various components of an email: from, reply_to, to, cc, bcc,
- * subject, html_content and text_content - and returns them in a hash. This function is used when
- * sending actual emails but also for testing purposes. This should be the only place that email content
- * is actually constructed. All other email functions should be using it, regardless of what mechanism
+ * subject, html_content and text_content - and returns them in a hash. This function is used both when
+ * sending the emails but also for testin. This should be the only place that email content is actually
+ * constructed. All other email functions should be using it, regardless of what mechanism
  * actually sends the email.
  *
  * @param integer $form_id
@@ -419,6 +419,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   $updated_fields_for_email_template = array();
   foreach ($fields_for_email_template as $field_info)
   {
+/*
     if ($field_info["field_type"] == "file")
     {
       $field_id = $field_info["field_id"];
@@ -426,7 +427,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
       $field_info["folder_url"] = $extended_field_info["file_upload_url"];
       $field_info["folder_path"] = $extended_field_info["file_upload_dir"];
     }
-
+*/
     $updated_fields_for_email_template[] = $field_info;
   }
 
@@ -455,15 +456,17 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
     {
       if ($submission_field_info["field_id"] == $field_info["field_id"])
       {
-        if ($submission_field_info["field_type"] == "file" || $submission_field_info["field_type"] == "image")
-          $file_info[$submission_field_info["field_name"]] = $submission_field_info["content"];
+//        if ($submission_field_info["field_type"] == "file" || $submission_field_info["field_type"] == "image")
+//          $file_info[$submission_field_info["field_name"]] = $submission_field_info["content"];
 
         switch ($submission_field_info["col_name"])
         {
+/*
           case "submission_date":
           case "last_modified_date":
             $field_info["answer"] = ft_get_date($default_timezone_offset, $submission_field_info["content"], $default_date_format);
             break;
+*/
           default:
             $field_info["answer"] = $submission_field_info["content"];
             break;

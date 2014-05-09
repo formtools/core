@@ -62,6 +62,7 @@ foreach ($grouped_fields as $group)
       $page_field_type_ids[] = $field_info["field_type_id"];
   }
 }
+
 $page_field_types = ft_get_field_types(true, $page_field_type_ids);
 
 // construct the tab list

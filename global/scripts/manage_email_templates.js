@@ -259,11 +259,11 @@ emails_ns.send_test_email = function(f, action) {
     if (action == "display") {
       emails_ns.log_activity(true);
       $.ajax({
-	    url:      g.root_url + "/global/code/actions.php?action=display_test_email&" + query_str,
-	    type:     "GET",
-	    dataType: "json",
-	    success:  emails_ns.display_test_email,
-	    error:    ft.error_handler
+        url:      g.root_url + "/global/code/actions.php?action=display_test_email&" + query_str,
+        type:     "GET",
+        dataType: "json",
+        success:  emails_ns.display_test_email,
+        error:    function(a,b,c) { ft.error_handler(a, b, c); }
       });
     }
     else if (action == "send") {

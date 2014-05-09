@@ -2,6 +2,7 @@
 
 require_once("global/session_start.php");
 ft_verify_form_tools_installed();
+ft_verify_core_tables_exist();
 $upgrade_info = ft_upgrade_form_tools();
 
 // if this user is already logged in, redirect them to their specified login page

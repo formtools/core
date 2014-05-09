@@ -676,7 +676,7 @@ fields_ns.edit_field = function(row_group) {
     }
   }
 
-  // if this is a new field, force it to show the first page
+  // if this field hasn't been added to the database yet, force it to show the first page
   if (is_new_field) {
     $("#edit_field_template_new_field").removeClass("hidden");
     $(".tab_row").hide();
@@ -709,6 +709,7 @@ fields_ns.edit_field = function(row_group) {
     $(".edit_field__non_system").show();
     $(".edit_field__system").hide();
     var field_type = row_group.find(".field_types");
+    field_type_id = field_type.val();
 
     // display all the various values for this field
     if (tab1_fields) {
@@ -725,10 +726,8 @@ fields_ns.edit_field = function(row_group) {
       $("#edit_field__pass_on").attr("checked", ((pass_on == "") ? "" : "checked"));
       $("#edit_field__data_type").val(ft._extract_array_val(tab1_fields, "edit_field__data_type"));
       $("#edit_field__db_column").val(ft._extract_array_val(tab1_fields, "edit_field__db_column"));
-
     } else {
       $("#edit_field__field_name").val(row_group.find(".field_names").val());
-      field_type_id = field_type.val();
       $("#edit_field__field_type").val(field_type_id);
 
       ft.update_field_size_dropdown(field_type, $("#edit_field__field_size_div"), {
@@ -1201,11 +1200,33 @@ fields_ns.load_field_settings_response = function(data) {
 
 
 /**
- * This updates the HTML to show some a field's settings. This is loaded after the settings
- * have become available. Note: it's possible that the option list or forms query hasn't been returned
- * yet.
+ * This updates the HTML to show a field's settings. This is loaded after the settings have become available.
+ * Note: it's possible that the option list or forms request hasn't been returned yet.
  */
 fields_ns.display_field_settings = function(field_type_id, settings) {
+
+  // see if there's already some values stashed in memory for this field. If there IS, we use those
+  // values rather that what's being passed via the settings param
+  if (typeof fields_ns.memory["field_" + fields_ns.__current_field_id] != 'undefined' &&
+      typeof fields_ns.memory["field_" + fields_ns.__current_field_id].tab2 != 'undefined') {
+    var unsaved_changes = fields_ns.memory["field_" + fields_ns.__current_field_id].tab2;
+
+    var updated_settings = [];
+    for (var i=0; i<settings.length; i++) {
+      var curr_setting_id = settings[i].setting_id;
+      var curr_setting = settings[i];
+      for (var j=0; j<unsaved_changes.length; j++) {
+        var setting_name = "edit_field__setting_" + curr_setting_id;
+        if (unsaved_changes[j].name == setting_name) {
+          curr_setting.setting_value = unsaved_changes[j].value;
+          curr_setting.uses_default = false;
+        }
+      }
+      updated_settings.push(curr_setting);
+    }
+    settings = updated_settings;
+  }
+
   for (var i=0, j=settings.length; i<j; i++) {
     var curr_setting_id = settings[i].setting_id;
     $("#edit_field__use_default_value_" + curr_setting_id).attr("disabled", "");
@@ -1577,5 +1598,6 @@ fields_ns.click_use_default = function(el) {
     $(settings_selectors).attr("disabled", "").removeClass("light_grey");
     $("#edit_field__setting_" + setting_id).focus();
   }
+  $(el).trigger("change");
 }
 

@@ -164,7 +164,9 @@ ms.init_submissions_page = function() {
     return;
   }
 
-  ms.change_search_field($("#search_field").val());
+  if ($("search_field")) {
+    ms.change_search_field($("#search_field").val());
+  }
 
   // check the selected rows and make sure they have the appropriate class
   var all_checked = true;

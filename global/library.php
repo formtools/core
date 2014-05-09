@@ -219,7 +219,7 @@ $g_release_type = "alpha";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110530";
+$g_release_date = "20110603";
 
 /**
  * The minimum required PHP version needed to run Form Tools.
@@ -253,6 +253,45 @@ $g_multi_val_delimiter = ", ";
 $g_success = "";
 $g_message = "";
 
+/**
+ * Added in 2.1.0 to provide better error checking on the login page. This is used to confirm that all the Core
+ * tables do in fact exist before letting the user log in.
+ */
+$g_ft_tables = array(
+  "account_settings",
+  "accounts",
+  "client_forms",
+  "client_views",
+  "email_template_edit_submission_views",
+  "email_template_recipients",
+  "email_templates",
+  "field_options",
+  "field_settings",
+  "field_type_setting_options",
+  "field_type_settings",
+  "field_types",
+  "form_email_fields",
+  "form_fields",
+  "forms",
+  "hook_calls",
+  "hooks",
+  "list_groups",
+  "menu_items",
+  "menus",
+  "modules",
+  "multi_page_form_urls",
+  "new_view_submission_defaults",
+  "option_lists",
+  "public_form_omit_list",
+  "public_view_omit_list",
+  "sessions",
+  "settings",
+  "themes",
+  "view_columns",
+  "view_fields",
+  "view_filters",
+  "view_tabs"
+);
 
 // include all code libraries
 $folder = dirname(__FILE__);

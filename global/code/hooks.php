@@ -290,10 +290,10 @@ function ft_process_template_hook_call($module_folder, $hook_function, $location
  *
  * @param integer $hook_id
  */
-function ft_delete_hook_calls($hook_id)
+function ft_delete_hook_call($hook_id)
 {
   global $g_table_prefix;
-  mysql_query("DELETE FROM {$g_table_prefix}hook_calls WHERE hook_id = $hook_id");
+  mysql_query("DELETE FROM {$g_table_prefix}hook_call WHERE hook_id = $hook_id");
 }
 
 

@@ -150,7 +150,7 @@ foreach ($view_info["columns"] as $column_info)
     }
   }
 
-  if (!array_key_exists($curr_col_name, $db_columns))
+  if (!array_key_exists($curr_col_name, $db_columns) && !empty($curr_col_name))
   {
   	$db_columns[] = $curr_col_name;
   }
@@ -342,25 +342,29 @@ ms.num_results_per_page = $results_per_page;
 
 $(function() {
   ms.init_submissions_page();
-  ms.change_search_field($("#search_field").val());
-  $("#search_field").bind("keyup change", function() {
-    ms.change_search_field(this.value);
-  });
-  $("#search_date").daterangepicker({
-    dateFormat: "$date_field_search_js_format",
-    doneButtonText: "{$LANG["word_done"]}",
-    presetRanges: [
-      {text: '{$LANG["word_today"]}', dateStart: 'today', dateEnd: 'today' },
-      {text: '{$LANG["phrase_last_7_days"]}', dateStart: 'today-7days', dateEnd: 'today' },
-      {text: '{$LANG["phrase_month_to_date"]}', dateStart: function(){ return Date.parse('today').moveToFirstDayOfMonth();  }, dateEnd: 'today' },
-      {text: '{$LANG["phrase_year_to_date"]}', dateStart: function(){ var x= Date.parse('today'); x.setMonth(0); x.setDate(1); return x; }, dateEnd: 'today' },
-      {text: '{$LANG["phrase_the_previous_month"]}', dateStart: function(){ return Date.parse('1 month ago').moveToFirstDayOfMonth();  }, dateEnd: function(){ return Date.parse('1 month ago').moveToLastDayOfMonth();  } }
-    ],
-    datepickerOptions: {
-      changeYear: true,
-      changeMonth: true
-    }
-  });
+  if ($("#search_field").length) {
+    ms.change_search_field($("#search_field").val());
+    $("#search_field").bind("keyup change", function() {
+      ms.change_search_field(this.value);
+    });
+  }
+  if ($("#search_date").length) {
+    $("#search_date").daterangepicker({
+      dateFormat: "$date_field_search_js_format",
+      doneButtonText: "{$LANG["word_done"]}",
+      presetRanges: [
+        {text: '{$LANG["word_today"]}', dateStart: 'today', dateEnd: 'today' },
+        {text: '{$LANG["phrase_last_7_days"]}', dateStart: 'today-7days', dateEnd: 'today' },
+        {text: '{$LANG["phrase_month_to_date"]}', dateStart: function(){ return Date.parse('today').moveToFirstDayOfMonth();  }, dateEnd: 'today' },
+        {text: '{$LANG["phrase_year_to_date"]}', dateStart: function(){ var x= Date.parse('today'); x.setMonth(0); x.setDate(1); return x; }, dateEnd: 'today' },
+        {text: '{$LANG["phrase_the_previous_month"]}', dateStart: function(){ return Date.parse('1 month ago').moveToFirstDayOfMonth();  }, dateEnd: function(){ return Date.parse('1 month ago').moveToLastDayOfMonth();  } }
+      ],
+      datepickerOptions: {
+        changeYear: true,
+        changeMonth: true
+      }
+    });
+  }
 });
 END;
 

@@ -547,7 +547,7 @@ function ft_get_grouped_view_fields($view_id, $tab_number = "", $form_id = "", $
 
   $group_query = mysql_query("
     SELECT *
-    FROM	 {$g_table_prefix}list_groups
+    FROM  {$g_table_prefix}list_groups
     WHERE  group_type = 'view_fields_{$view_id}'
            $tab_clause
     ORDER BY list_order
