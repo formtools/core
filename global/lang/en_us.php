@@ -726,8 +726,6 @@ $LANG["text_admin_email_placeholder_info"] = "This is the email address of the F
 $LANG["text_also_default_login_page_theme"] = "(Also the default login page theme)";
 $LANG["text_client_form_page"] = "This page lists all the forms and Views assigned to this client. Tip: in order for them to see a form's submissions, they need to be assigned to at least one View.";
 $LANG["text_client_map_filters_desc1"] = "Client Map filters let you limit the submissions that appear in this View by mapping the values in a form field to the values in a client account.";
-$LANG["text_client_map_filters_desc2"] = "To add new client fields, use the <a href=\"../../modules/extended_client_fields/\">Extended Client Fields</a> module.";
-$LANG["text_client_map_filters_desc3"] = "To add new client fields, download the <a href=\"http://modules.formtools.org/extended_client_fields/\">Extended Client Fields</a> module.";
 $LANG["text_client_no_forms"] = "You currently have no forms available for review.";
 $LANG["text_client_welcome"] = "Welcome! This program stores all information submitted by your website visitors. To view submissions for a particular form just click on the <b>VIEW</b> link, or see the leftmost navigation menu for other options.";
 $LANG["text_company_name"] = "The client's company name, or the value of the Program Name setting for the administrator.";
@@ -1360,7 +1358,7 @@ $LANG["notify_invalid_search_dates"] = "Please use the datepicker to enter a val
 $LANG["notify_change_temp_password"] = "You just logged in with a temporary password. You should reset your password now!";
 
 $LANG["notify_file_too_large"] = "This file is too large. The file was {\$FILESIZE}KB, but the maximum permitted file upload size is {\$MAXFILESIZE}KB.";
-
+$LANG["phrase_show_form"] = "Show Form";
 
 // removed!
 //$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";

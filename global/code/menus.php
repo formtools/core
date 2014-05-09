@@ -849,8 +849,6 @@ function ft_cache_account_menu($account_id)
  * the user may have added something extra. This function builds the "proper" URL for use by the
  * custom menus; it lets the script know what parent menu to show for any given page.
  *
- * TODO. I hate this function and whole approach. Really need to think about it some more.
- *
  * @param string $page_identifier
  * @param array $params
  * @return string

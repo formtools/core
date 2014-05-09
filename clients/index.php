@@ -35,5 +35,8 @@ $page_vars["num_client_forms"] = $num_client_forms;
 $page_vars["forms"] = $forms;
 $page_vars["forms_page_default_message"] = $forms_page_default_message;
 $page_vars["search_criteria"] = $search_criteria;
-
+$page_vars["js_messages"] = array("phrase_open_form_in_new_tab_or_win", "word_close", "phrase_show_form");
+$page_vars["head_js"] =<<< END
+$(function() { ft.init_show_form_links(); });
+END;
 ft_display_page("clients/index.tpl", $page_vars);

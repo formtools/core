@@ -377,4 +377,5 @@ $(function() {
 });
 END;
 
+
 ft_display_page("admin/forms/submissions.tpl", $page_vars);

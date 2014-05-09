@@ -38,7 +38,8 @@ if (!empty($file_field_hash))
 {
   foreach ($file_field_hash as $field_id => $upload_url)
   {
-    $uploaded_files = ft_get_uploaded_filenames($form_id, $field_id);
+  	// TODO this is no longer generic enough for 2.1
+    $uploaded_files = array(); // ft_get_uploaded_filenames($form_id, $field_id);
 
     $files = array();
     foreach ($uploaded_files as $file)

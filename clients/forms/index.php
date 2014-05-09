@@ -322,6 +322,7 @@ $page_vars["head_string"] =<<< END
 <script src="../../global/scripts/manage_submissions.js"></script>
 <script src="../../global/scripts/daterangepicker.jquery.js"></script>
 <script src="$g_root_url/global/scripts/field_types.php"></script>
+$shared_resources
 END;
 
 $page_vars["head_js"] =<<< END

@@ -667,7 +667,7 @@ function ft_upgrade_form_tools()
         is_sortable enum('yes','no') NOT NULL,
         auto_size enum('yes','no') NOT NULL default 'yes',
         custom_width varchar(10) default NULL,
-        `truncate` enum('truncate','no_truncate') NOT NULL default 'truncate',
+        truncate enum('truncate','no_truncate') NOT NULL default 'truncate',
         PRIMARY KEY  (view_id,field_id,list_order)
       ) DEFAULT CHARSET=utf8
     ");
@@ -1273,9 +1273,9 @@ function ft_upgrade_form_tools()
     mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value) VALUES ('default_date_field_search_value', 'none')");
   }
 
-  if ($old_version_info["release_date"] < 20110608)
+  if ($old_version_info["release_date"] < 20110612)
   {
-  	mysql_query("ALTER TABLE {$g_table_prefix}accounts ADD temp_reset_password VARCHAR(50) NULL");
+  	@mysql_query("ALTER TABLE {$g_table_prefix}accounts ADD temp_reset_password VARCHAR(50) NULL");
   }
 
 

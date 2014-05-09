@@ -219,7 +219,7 @@ $g_release_type = "alpha";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110609";
+$g_release_date = "20110612";
 
 /**
  * The minimum required PHP version needed to run Form Tools.
@@ -253,6 +253,7 @@ $g_multi_val_delimiter = ", ";
 $g_success = "";
 $g_message = "";
 
+
 /**
  * Added in 2.1.0 to provide better error checking on the login page. This is used to confirm that all the Core
  * tables do in fact exist before letting the user log in.
@@ -279,6 +280,7 @@ $g_ft_tables = array(
   "menu_items",
   "menus",
   "modules",
+  "module_menu_items",
   "multi_page_form_urls",
   "new_view_submission_defaults",
   "option_lists",
@@ -287,6 +289,7 @@ $g_ft_tables = array(
   "sessions",
   "settings",
   "themes",
+  "views",
   "view_columns",
   "view_fields",
   "view_filters",
@@ -294,42 +297,41 @@ $g_ft_tables = array(
 );
 
 // include all code libraries
-$folder = dirname(__FILE__);
 $config_file_exists = false;
-if (is_file("$folder/config.php"))
+if (is_file(dirname(__FILE__) . "/config.php"))
 {
   $config_file_exists = true;
-  include_once("$folder/config.php");
+  include_once(dirname(__FILE__) . "/config.php");
 }
 
 
 // explicitly set the error reporting value
 error_reporting($g_default_error_reporting);
 
-require_once("$folder/code/administrator.php");
-require_once("$folder/code/accounts.php");
-require_once("$folder/code/clients.php");
-require_once("$folder/code/emails.php");
-require_once("$folder/code/fields.php");
-require_once("$folder/code/field_sizes.php");
-require_once("$folder/code/field_types.php");
-require_once("$folder/code/files.php");
-require_once("$folder/code/forms.php");
-require_once("$folder/code/general.php");
-require_once("$folder/code/hooks.php");
-require_once("$folder/code/languages.php");
-require_once("$folder/code/list_groups.php");
-require_once("$folder/code/menus.php");
-require_once("$folder/code/modules.php");
-require_once("$folder/code/option_lists.php");
-require_once("$folder/code/sessions.php");
-require_once("$folder/code/settings.php");
-require_once("$folder/code/submissions.php");
-require_once("$folder/code/themes.php");
-require_once("$folder/code/upgrade.php");
-require_once("$folder/code/validation.php");
-require_once("$folder/code/views.php");
-require_once("$folder/smarty/Smarty.class.php");
+require_once(dirname(__FILE__) . "/code/administrator.php");
+require_once(dirname(__FILE__) . "/code/accounts.php");
+require_once(dirname(__FILE__) . "/code/clients.php");
+require_once(dirname(__FILE__) . "/code/emails.php");
+require_once(dirname(__FILE__) . "/code/fields.php");
+require_once(dirname(__FILE__) . "/code/field_sizes.php");
+require_once(dirname(__FILE__) . "/code/field_types.php");
+require_once(dirname(__FILE__) . "/code/files.php");
+require_once(dirname(__FILE__) . "/code/forms.php");
+require_once(dirname(__FILE__) . "/code/general.php");
+require_once(dirname(__FILE__) . "/code/hooks.php");
+require_once(dirname(__FILE__) . "/code/languages.php");
+require_once(dirname(__FILE__) . "/code/list_groups.php");
+require_once(dirname(__FILE__) . "/code/menus.php");
+require_once(dirname(__FILE__) . "/code/modules.php");
+require_once(dirname(__FILE__) . "/code/option_lists.php");
+require_once(dirname(__FILE__) . "/code/sessions.php");
+require_once(dirname(__FILE__) . "/code/settings.php");
+require_once(dirname(__FILE__) . "/code/submissions.php");
+require_once(dirname(__FILE__) . "/code/themes.php");
+require_once(dirname(__FILE__) . "/code/upgrade.php");
+require_once(dirname(__FILE__) . "/code/validation.php");
+require_once(dirname(__FILE__) . "/code/views.php");
+require_once(dirname(__FILE__) . "/smarty/Smarty.class.php");
 
 
 if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page))
@@ -341,7 +343,7 @@ if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page))
 
   // load the appropriate language file
   $g_language = ft_get_ui_language();
-  require_once("$folder/lang/{$g_language}.php");
+  require_once(dirname(__FILE__) . "/lang/{$g_language}.php");
 
   if (isset($_GET["logout"]))
     ft_logout_user();

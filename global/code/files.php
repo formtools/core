@@ -181,8 +181,6 @@ function ft_check_upload_folder($folder)
 /**
  * Simple helper function to return the extension of a file.
  *
- * TODO how about using getImageSize?? (GD only?)
- *
  * @param string $filename
  * @return string
  */
@@ -379,6 +377,8 @@ function ft_upload_file($folder, $filename, $tmp_location)
  * This function deletes a folder and all containing files. If it's unable to delete ANYTHING - file or folder,
  * it halts immediately and returns false.
  *
+ * This also sucks. This has failed to properly delete module folders since 2.0.0.
+ *
  * @param string $folder
  * @return boolean
  */
@@ -412,3 +412,33 @@ function ft_delete_folder($folder)
 
   return true;
 }
+
+
+/**
+ * This is called by the ft_delete_submission and ft_delete_submissions function. It's passed all relevant
+ * information about the submission & file fields that need to be deleted. The function is just a stub to
+ * allow file upload modules to add their hooks to.
+ *
+ * Modules that extend this function should return $problems. That should be an array of hashes. Each hash
+ * having keys "filename" and "error". Since the calling functions will blithely delete the submissions even
+ * if the file deletion fails, no other info is worth returning.
+ *
+ * @param integer $form_id
+ * @param array $file_info an array of hashes. Each hash has the following keys (all self-explanatory):
+ *                    submission_id -
+ *                    field_id -
+ *                    filename -
+ *                    field_type_id -
+ * @param string $context. Just used to pass a little more info to the hook. This is the context in which this
+ *                    function is being called; i.e. the function name / action.
+ */
+function ft_delete_submission_files($form_id, $file_field_info, $context = "")
+{
+  $success = true;
+  $problems = array();
+
+  extract(ft_process_hook_calls("start", compact("form_id", "file_field_info"), array("success", "problems")), EXTR_OVERWRITE);
+
+  return array($success, $problems);
+}
+

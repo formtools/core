@@ -93,7 +93,7 @@ function smarty_function_form_view_fields_dropdown($params, &$smarty)
       $selected = ($default_value == $col_name) ? "selected" : "";
     }
 
-    $rows[] = "<option value=\"{$col_name}{$suffix}\" $selected $date_field_class>{$field_title}</option>";
+    $rows[] = "<option value=\"{$col_name}{$suffix}\" $selected>{$field_title}</option>";
   }
 
   $dd = "<select $attribute_str>" . join("\n", $rows) . "</select>";

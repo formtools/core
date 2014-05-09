@@ -24,7 +24,7 @@ if (isset($_GET["reset"]))
 {
   $_SESSION["ft"]["module_sort_order"] = "";
   $_SESSION["ft"]["module_search_keyword"] = "";
-  $_SESSION["ft"]["module_search_status"] = "";
+  $_SESSION["ft"]["module_search_status"] = array("enabled", "disabled");
 }
 
 $order       = ft_load_field("order", "module_sort_order", "");
@@ -62,7 +62,6 @@ $page_vars["num_modules"] = $num_modules;
 $page_vars["order"]       = $order;
 $page_vars["search_criteria"] = $search_criteria;
 $page_vars["pagination"]  = ft_get_dhtml_page_nav(count($modules), $_SESSION["ft"]["settings"]["num_modules_per_page"], 1);
-
 $page_vars["head_js"] =<<< END
 var page_ns = {
   uninstall_module_dialog: $("<div></div>")

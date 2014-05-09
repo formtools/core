@@ -333,68 +333,6 @@ function ft_update_file_settings($infohash)
   if (!$is_valid_folder)
     return array($is_valid_folder, $folder_message);
 
-  // if the folder has just changed, move all the files to the new folder. This involves the following:
-  //   1. finding each and every file upload field that uses the default file upload folder, and move all the
-  //      files, one by one
-  //   2. any default (blank) images used by the Image Manager
-  if ($original_file_upload_dir != $file_upload_dir)
-  {
-    // TODO
-
-/*
-    // get all the filenames associated with this field
-    $filename_hash = ft_get_uploaded_filenames($form_id, $field_id);
-    $filenames = array_values($filename_hash);
-
-    if (!empty($filenames))
-    {
-      $problem_files = array();
-
-      $field_info = get_form_field($field_id);
-      $database_column_name = $field_info['col_name'];
-
-      foreach ($filename_hash as $sub_id => $file)
-      {
-        $submission_id = $filename_hash[$sub_id];
-
-        // check that a file with this name doesn't already exist in the new folder. If it does,
-        // find a unique filename, move it, and update the database
-        $new_filename = $file;
-        if (file_exists("$file_upload_dir/$file"))
-          $new_filename = check_duplicate_filename($file_upload_dir, $file);
-
-        // now move the file. Record any problems that occur
-        if (!rename("$original_file_upload_dir/$file", "$file_upload_dir/$new_filename"))
-          $problem_files[] = $file;
-        else
-        {
-          // if the filename has changed, update the database record
-          if ($file != $new_filename)
-          {
-            $query = "
-              UPDATE {$g_table_prefix}form_{$form_id}
-              SET    $database_column_name = '$new_filename'
-              WHERE  submission_id = $submission_id
-                     ";
-            $result = mysql_query($query);
-          }
-        }
-      }
-
-      if (empty($problem_files))
-        return array(true, $LANG["notify_file_upload_settings_updated_files_moved"]);
-      else
-      {
-        $message = $LANG["notify_file_upload_settings_updated_files_not_moved"] . "<br /><br />";
-        array_walk($problem_files, create_function('&$el', '$el = "&bull;&nbsp; " . $el;'));
-        $message .= join("<br />", $problem_files);
-        $message .= "<br />" . $LANG["text_reason_files_not_moved"];
-        return array(false, $message);
-      }
-    }
-*/
-  }
-
   extract(ft_process_hook_calls("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);

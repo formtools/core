@@ -288,10 +288,20 @@ function ft_search_modules($search_criteria)
     $keyword_clause = join(" OR ", $clauses);
   }
 
+  // status ("enabled"/"disabled") clause
+  $status_clause = "";
+  if (count($search_criteria["status"]) < 2)
+  {
+  	if (in_array("enabled", $search_criteria["status"]))
+      $status_clause = "is_enabled = 'yes'";
+  	else
+      $status_clause = "is_enabled = 'no'";
+  }
+
   // add up the where clauses
   $where_clauses = array();
   if (!empty($keyword_clause)) $where_clauses[] = "($keyword_clause)";
-
+  if (!empty($status_clause))  $where_clauses[] = "($status_clause)";
   if (!empty($where_clauses))
     $where_clause = "WHERE " . join(" AND ", $where_clauses);
   else
@@ -645,8 +655,6 @@ function _ft_get_module_lang_file_contents($lang_file)
  * Expects to be called from within the modules folder; namely, within a particular module. This
  * function returns the name of the current module. Assumption: no module contains a /modules folder.
  *
- * TODO check this function in a Windows environment.
- *
  * @return string
  */
 function _ft_get_current_module_folder()
@@ -687,7 +695,6 @@ function ft_include_module($module_folder)
 {
   global $g_root_dir, $g_smarty, $LANG;
 
-  // TODO. think about this... all variables now globals...? OK?
   foreach ($GLOBALS as $key => $val) { @eval("global \$$key;"); }
 
   // code file

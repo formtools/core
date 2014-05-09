@@ -28,7 +28,7 @@ function _ft_code_get_link_html($form_id, $view_id, $submission_id, $results_per
     $submission_ids = $_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"];
     $current_sub_id_index = array_search($submission_id, $submission_ids);
 
-    if (!empty($current_sub_id_index))
+    if (!empty($current_sub_id_index) || $current_sub_id_index === 0)
     {
       // PREVIOUS link
       if ($submission_ids[0] != $submission_id && $current_sub_id_index != 0)

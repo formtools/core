@@ -108,12 +108,12 @@ function ft_update_client($account_id, $info)
                ";
       if (mysql_query($query))
       {
-      	// if the password wasn't empty, reset the temporary password, in case it was set
-      	if (!empty($info["password"]))
-      	  mysql_query("UPDATE {$g_table_prefix}accounts SET temp_reset_password = NULL where account_id = $account_id");
+        // if the password wasn't empty, reset the temporary password, in case it was set
+        if (!empty($info["password"]))
+          mysql_query("UPDATE {$g_table_prefix}accounts SET temp_reset_password = NULL where account_id = $account_id");
       }
       else {
-      	ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
+        ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
       }
       break;
 
@@ -149,7 +149,7 @@ function ft_update_client($account_id, $info)
 
       // update the main accounts table. Only update those settings they're ALLOWED to
       $settings = array();
-      if ($client_info["settings"]["may_edit_language"] == "yes") // TODO! Change the client UI lang!
+      if ($client_info["settings"]["may_edit_language"] == "yes")
         $settings["ui_language"] = $info["ui_language"];
       if ($client_info["settings"]["may_edit_timezone_offset"] == "yes")
         $settings["timezone_offset"] = $info["timezone_offset"];
@@ -187,7 +187,9 @@ function ft_update_client($account_id, $info)
         $settings["max_failed_login_attempts"] = $info["max_failed_login_attempts"];
 
       if (!empty($settings))
+      {
         ft_set_account_settings($account_id, $settings);
+      }
       break;
   }
 
@@ -197,9 +199,6 @@ function ft_update_client($account_id, $info)
   $_SESSION["ft"]["settings"] = ft_get_settings();
   $_SESSION["ft"]["account"]  = ft_get_account_info($account_id);
   $_SESSION["ft"]["account"]["is_logged_in"] = true;
-
-  // TODO
-  //$_SESSION["ft"]["account"]["password"] = md5($password);
 
   return array($success, $message);
 }

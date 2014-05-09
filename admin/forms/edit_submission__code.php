@@ -17,7 +17,7 @@ function _ft_code_get_link_html($form_id, $view_id, $submission_id, $results_per
 {
   global $LANG;
 
-  // defaults! As of 2.1.0, the navigation always appears. This is better for consistencies sake
+  // defaults! As of 2.1.0, the navigation always appears. This is better for consistency's sake
   $previous_link_html       = "<span class=\"light_grey\">{$LANG['word_previous_leftarrow']}</span>";
   $next_link_html           = "<span class=\"light_grey\">{$LANG['word_next_rightarrow']}</span>";
   $search_results_link_html = "<a href=\"submissions.php?form_id=$form_id\">{$LANG['phrase_back_to_search_results']}</a>";
@@ -28,7 +28,7 @@ function _ft_code_get_link_html($form_id, $view_id, $submission_id, $results_per
     $submission_ids = $_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"];
     $current_sub_id_index = array_search($submission_id, $submission_ids);
 
-    if (!empty($current_sub_id_index))
+    if (!empty($current_sub_id_index) || $current_sub_id_index === 0)
     {
       // PREVIOUS link
       if ($submission_ids[0] != $submission_id && $current_sub_id_index != 0)
@@ -84,7 +84,6 @@ function _ft_code_get_view($request, $form_id)
   // or elsewhere in the script. For this case, find and use the default View
   if (empty($view_id))
   {
-  	echo "???";
     $view_id = ft_get_default_view($form_id);
   }
 

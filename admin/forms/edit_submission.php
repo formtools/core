@@ -21,6 +21,7 @@ $_SESSION["ft"]["last_link_page"] = "edit";
 // determine whether the page contains any editable fields
 $editable_field_ids = _ft_get_editable_view_fields($view_id);
 
+
 // update the submission
 if (isset($_POST) && !empty($_POST))
 {
@@ -117,6 +118,7 @@ $page_vars = array();
 $page_vars["page"]   = "admin_edit_submission";
 $page_vars["page_url"] = ft_get_page_url("admin_edit_submission");
 $page_vars["head_title"] = $edit_submission_page_label;
+$page_vars["form_info"] = $form_info;
 $page_vars["form_id"] = $form_id;
 $page_vars["view_id"] = $view_id;
 $page_vars["submission_id"] = $submission_id;
@@ -140,5 +142,6 @@ $page_vars["head_string"] =<<< EOF
   <link rel="stylesheet" href="$g_root_url/global/css/field_types.php" type="text/css" />
 $shared_resources
 EOF;
+
 
 ft_display_page("admin/forms/edit_submission.tpl", $page_vars);

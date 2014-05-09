@@ -47,7 +47,8 @@ $(function() {
 // the main Form Tools namespace
 var ft = {
   urls: [],
-  check_url_dialog: $("<div></div>")
+  check_url_dialog: $("<div></div>"),
+  show_form_dialog: $("<div></div>")
 }
 
 
@@ -269,6 +270,39 @@ ft.init_inner_tabs = function() {
         ft.change_inner_tab(e.data.tab, e.data.tabset_name);
       });
       row++;
+    });
+  });
+}
+
+
+/**
+ * Can be used whenever you want to open up a form in a dialog window. Just add a show_form class to the link.
+ */
+ft.init_show_form_links = function() {
+  $(".show_form").each(function() {
+    var url = $(this).attr("href");
+    $(this).bind("click", { url: url }, function(e) {
+      ft.create_dialog({
+        dialog:     ft.show_form_dialog,
+        title:      g.messages["phrase_show_form"],
+        min_width:  800,
+        min_height: 500,
+        content: "<iframe class=\"check_url_iframe\" src=\"" + e.data.url + "\"></iframe>",
+        buttons: [{
+          text:  g.messages["phrase_open_form_in_new_tab_or_win"],
+          click: function() {
+            window.open(url);
+            $(this).dialog("close");
+          }
+        },
+        {
+          text:  g.messages["word_close"],
+          click: function() {
+            $(this).dialog("close");
+          }
+        }]
+      });
+      return false;
     });
   });
 }

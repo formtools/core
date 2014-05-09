@@ -92,11 +92,6 @@
     <div id="client_map_filters" {if $view_info.has_client_map_filter == "no"}style="display:none"{/if}>
       <div class="margin_top margin_bottom">
         {$LANG.text_client_map_filters_desc1}
-        {if $extended_client_fields_module_installed}
-          {$LANG.text_client_map_filters_desc2}
-        {else}
-          {$LANG.text_client_map_filters_desc3}
-        {/if}
       </div>
 
       <table cellspacing="1" cellpadding="0" class="list_table" width="100%" id="client_map_filters_table">

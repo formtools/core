@@ -40,11 +40,11 @@ function ft_client_update_form_settings($infohash)
   $query = "
       UPDATE {$g_table_prefix}forms
       SET    is_active = '{$infohash['is_active']}',
-             auto_email_admin = '{$infohash['auto_email_admin']}',
-             auto_email_user = '{$infohash['auto_email_user']}',
-             num_submissions_per_page = '{$infohash['num_submissions_per_page']}',
-             printer_friendly_format = '{$infohash['printer_friendly_format']}',
-             hide_printer_friendly_empty_fields = '{$infohash['hide_empty_fields']}'
+            auto_email_admin = '{$infohash['auto_email_admin']}',
+            auto_email_user = '{$infohash['auto_email_user']}',
+            num_submissions_per_page = '{$infohash['num_submissions_per_page']}',
+            printer_friendly_format = '{$infohash['printer_friendly_format']}',
+            hide_printer_friendly_empty_fields = '{$infohash['hide_empty_fields']}'
       WHERE  form_id = '{$infohash['form_id']}'
             ";
 
@@ -128,8 +128,8 @@ function ft_create_internal_form($request)
       mysql_query("
         UPDATE {$g_table_prefix}form_fields
         SET    field_title = '$field_name_prefix $order',
-               col_name = 'col_$order'
-               $field_size_clause
+              col_name = 'col_$order'
+              $field_size_clause
         WHERE  field_id = $field_id
       ");
       $order++;
@@ -168,9 +168,6 @@ function ft_create_internal_form($request)
  * It also includes an optional parameter to remove all files that were uploaded through file fields in the
  * form; defaulted to FALSE.
  *
- * All field types marked as "file" MUST have a setting for "folder_path". That's used here to locate (and other places)
- * to locate the file to be actually removed.
- *
  * @param integer $form_id the unique form ID
  * @param boolean $remove_associated_files A boolean indicating whether or not all files that were
  *              uploaded via file fields in this form should be removed as well.
@@ -180,28 +177,46 @@ function ft_delete_form($form_id, $remove_associated_files = false)
   global $g_table_prefix;
 
   extract(ft_process_hook_calls("start", compact("form_id"), array()), EXTR_OVERWRITE);
-
   $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true));
 
-  // remove the files
+  $success = true;
+  $message = "";
+
+  $file_delete_problems = array();
   if ($remove_associated_files)
   {
-    foreach ($form_fields as $form_field_info)
+    $submission_id_query = mysql_query("SELECT submission_id FROM {$g_table_prefix}form_{$form_id}");
+    $file_fields_to_delete = array();
+    while ($row = mysql_fetch_assoc($submission_id_query))
     {
-      $field_id = $form_field_info["field_id"];
-      if ($form_field_info["is_file_field"] == "no")
-        continue;
+      $submission_id = $row["submission_id"];
 
-      $uploaded_files = ft_get_uploaded_filenames($form_id, $field_id);
-
-      if (!empty($uploaded_files))
+      foreach ($form_fields as $form_field_info)
       {
-        foreach ($uploaded_files as $file)
-        {
-          @unlink($file);
-        }
+        if ($form_field_info["is_file_field"] == "no")
+          continue;
+
+        // I really don't like this... what should be done is do a SINGLE query after this loop is complete
+        // to return a map of field_id to values. That would then update $file_fields_to_delete
+        // with a fraction of the cost
+        $submission_info = ft_get_submission_info($form_id, $submission_id);
+        $filename = $submission_info[$field_info["col_name"]];
+
+        // if no filename was stored, it was empty - just continue
+        if (empty($filename))
+          continue;
+
+        $file_fields_to_delete[] = array(
+          "submission_id" => $submission_id,
+          "field_id"      => $form_field_info["field_id"],
+          "field_type_id" => $field_type_id,
+          "filename"      => $filename
+        );
       }
     }
+
+    if (!empty($file_fields_to_delete))
+      list($success, $file_delete_problems) = ft_delete_submission_files($form_id, $file_fields_to_delete, "ft_delete_form");
   }
 
   // remove the table
@@ -242,6 +257,13 @@ function ft_delete_form($form_id, $remove_associated_files = false)
     $field_id = $field_info["field_id"];
     mysql_query("DELETE FROM {$g_table_prefix}field_settings WHERE field_id = $field_id");
   }
+
+  // as with many things in the script, potentially we need to return a vast range of information from this last function. But
+  // we'l limit
+  if (!$success)
+    $message = $file_delete_problems;
+
+  return array($success, $message);
 }
 
 
@@ -281,10 +303,10 @@ function ft_finalize_form($form_id)
   }
 
   $query .= "submission_date DATETIME NOT NULL,
-             last_modified_date DATETIME NOT NULL,
-             ip_address VARCHAR(15),
-             is_finalized ENUM('yes','no') default 'yes')
-             DEFAULT CHARSET=utf8";
+            last_modified_date DATETIME NOT NULL,
+            ip_address VARCHAR(15),
+            is_finalized ENUM('yes','no') default 'yes')
+            DEFAULT CHARSET=utf8";
 
   mysql_query($query)
     or ft_handle_error("Failed query in <b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, line " . __LINE__ . ": <i>" . nl2br($query) . "</i>", mysql_error());
@@ -295,11 +317,11 @@ function ft_finalize_form($form_id)
   $query = "
       UPDATE {$g_table_prefix}forms
       SET    is_initialized = 'yes',
-             is_complete = 'yes',
-             is_active = 'yes',
-             date_created = '$now'
+            is_complete = 'yes',
+            is_active = 'yes',
+            date_created = '$now'
       WHERE  form_id = $form_id
-           ";
+          ";
   mysql_query($query)
     or ft_handle_error("Failed query in <b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
 
@@ -357,7 +379,7 @@ function ft_initialize_form($form_data)
   $query = mysql_query("
     DELETE FROM {$g_table_prefix}form_fields
     WHERE  form_id = $form_id
-           ");
+          ");
 
   // remove irrelevant key-values
   unset($form_data["form_tools_initialize_form"]);
@@ -554,7 +576,7 @@ function ft_get_form_list()
     SELECT *
     FROM   {$g_table_prefix}forms
     WHERE  is_complete = 'yes' AND
-           is_initialized = 'yes'
+          is_initialized = 'yes'
     ORDER BY form_name ASC
   ");
 
@@ -582,7 +604,7 @@ function ft_get_form_view_list()
     SELECT form_id, form_name
     FROM   {$g_table_prefix}forms
     WHERE  is_complete = 'yes' AND
-           is_initialized = 'yes'
+          is_initialized = 'yes'
     ORDER BY form_name ASC
   ");
 
@@ -679,8 +701,8 @@ function ft_get_form_clients($form_id)
       SELECT *
       FROM   {$g_table_prefix}client_forms cf, {$g_table_prefix}accounts a
       WHERE  cf.form_id = $form_id AND
-             cf.account_id = a.account_id
-             ");
+            cf.account_id = a.account_id
+            ");
 
     while ($row = mysql_fetch_assoc($account_query))
       $accounts[] = $row;
@@ -822,11 +844,11 @@ function ft_setup_form($info)
 
   $now = ft_get_current_datetime();
   $query = "
-     INSERT INTO {$g_table_prefix}forms (form_type, access_type, submission_type, date_created, is_active, is_complete,
-       is_multi_page_form, form_name, form_url, redirect_url, edit_submission_page_label)
-     VALUES ('$form_type', '$access_type', $submission_type, '$now', 'no', 'no', '$is_multi_page_form', '$form_name',
-       '$form_url', '$redirect_url', '$phrase_edit_submission')
-           ";
+    INSERT INTO {$g_table_prefix}forms (form_type, access_type, submission_type, date_created, is_active, is_complete,
+      is_multi_page_form, form_name, form_url, redirect_url, edit_submission_page_label)
+    VALUES ('$form_type', '$access_type', $submission_type, '$now', 'no', 'no', '$is_multi_page_form', '$form_name',
+      '$form_url', '$redirect_url', '$phrase_edit_submission')
+          ";
 
   $result = mysql_query($query)
     or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
@@ -910,29 +932,29 @@ function ft_set_form_main_settings($infohash)
 
   // all checks out, so update the new form
   $query = mysql_query("
-     UPDATE {$g_table_prefix}forms
-     SET    access_type = '$access_type',
+    UPDATE {$g_table_prefix}forms
+    SET    access_type = '$access_type',
             is_active = 'no',
             is_complete = 'no',
             is_multi_page_form = '$is_multi_page_form',
             form_name = '$form_name',
             form_url = '$form_url',
             redirect_url = '$redirect_url'
-     WHERE  form_id = $form_id
-           ")
+    WHERE  form_id = $form_id
+          ")
     or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
 
   $query = mysql_query("
     DELETE FROM {$g_table_prefix}client_forms
     WHERE form_id = $form_id
-                       ");
+                      ");
 
   foreach ($client_ids as $client_id)
   {
     $query = mysql_query("
-       INSERT INTO {$g_table_prefix}client_forms (account_id, form_id)
-       VALUES  ($client_id, $form_id)
-                         ");
+      INSERT INTO {$g_table_prefix}client_forms (account_id, form_id)
+      VALUES  ($client_id, $form_id)
+                        ");
   }
 
   // set the multi-page form URLs
@@ -996,7 +1018,7 @@ function ft_set_form_field_types($form_id, $info)
     mysql_query("
       UPDATE {$g_table_prefix}form_fields
       SET    field_type_id = $field_type_id,
-             field_size = '$field_size'
+            field_size = '$field_size'
       WHERE  field_id = $field_id
         ");
 
@@ -1126,19 +1148,19 @@ function ft_update_form_main_tab($infohash, $form_id)
   $query = "
     UPDATE {$g_table_prefix}forms
     SET    $is_active
-           form_type = '$form_type',
-           submission_type = '$submission_type',
-           is_multi_page_form = '$is_multi_page_form',
-           form_url = '$form_url',
-           form_name = '$form_name',
-           redirect_url = '$redirect_url',
-           access_type = '$access_type',
-           auto_delete_submission_files ='$auto_delete_submission_files',
-           submission_strip_tags = '$submission_strip_tags',
-           edit_submission_page_label = '$edit_submission_page_label',
-           add_submission_button_label = '$add_submission_button_label'
+          form_type = '$form_type',
+          submission_type = '$submission_type',
+          is_multi_page_form = '$is_multi_page_form',
+          form_url = '$form_url',
+          form_name = '$form_name',
+          redirect_url = '$redirect_url',
+          access_type = '$access_type',
+          auto_delete_submission_files ='$auto_delete_submission_files',
+          submission_strip_tags = '$submission_strip_tags',
+          edit_submission_page_label = '$edit_submission_page_label',
+          add_submission_button_label = '$add_submission_button_label'
     WHERE  form_id = $form_id
-           ";
+          ";
 
   $result = mysql_query($query)
     or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
@@ -1149,9 +1171,9 @@ function ft_update_form_main_tab($infohash, $form_id)
   foreach ($client_ids as $client_id)
   {
     $query = mysql_query("
-       INSERT INTO {$g_table_prefix}client_forms (account_id, form_id)
-       VALUES  ($client_id, $form_id)
-         ");
+      INSERT INTO {$g_table_prefix}client_forms (account_id, form_id)
+      VALUES  ($client_id, $form_id)
+        ");
   }
 
   // since the client list may have just changed, do a little cleanup on the database data
@@ -1370,7 +1392,7 @@ function ft_update_form_fields_tab($form_id, $infohash)
           @mysql_query("
             UPDATE {$g_table_prefix}form_fields
             SET    col_name   = '$col_name',
-                   field_size = '$field_size'
+                  field_size = '$field_size'
             WHERE  field_id = $field_id
                       ");
         }
@@ -1412,9 +1434,9 @@ function ft_update_form_fields_tab($form_id, $infohash)
       $query = "
         UPDATE {$g_table_prefix}form_fields
         SET    field_title = '$display_name',
-               include_on_redirect = '$include_on_redirect',
-               list_order = $list_order,
-               is_new_sort_group = '$is_new_sort_group'
+              include_on_redirect = '$include_on_redirect',
+              list_order = $list_order,
+              is_new_sort_group = '$is_new_sort_group'
         WHERE  field_id = $field_id
                   ";
     }
@@ -1423,13 +1445,13 @@ function ft_update_form_fields_tab($form_id, $infohash)
       $query = "
         UPDATE {$g_table_prefix}form_fields
         SET    field_name = '$field_name',
-               field_title = '$display_name',
-               field_size = '$field_size',
-               col_name = '$col_name',
-               field_type_id  = '$field_type_id',
-               include_on_redirect = '$include_on_redirect',
-               list_order = $list_order,
-               is_new_sort_group = '$is_new_sort_group'
+              field_title = '$display_name',
+              field_size = '$field_size',
+              col_name = '$col_name',
+              field_type_id  = '$field_type_id',
+              include_on_redirect = '$include_on_redirect',
+              list_order = $list_order,
+              is_new_sort_group = '$is_new_sort_group'
         WHERE  field_id = $field_id
                   ";
     }
@@ -1627,9 +1649,9 @@ function ft_update_form_database_tab($infohash)
       $query = "
         UPDATE {$g_table_prefix}form_fields
         SET    include_on_redirect = '{$field["include_on_redirect"]}',
-               field_size = '{$field["field_size"]}',
-               data_type  = '{$field["data_type"]}',
-               col_name   = '{$field["col_name"]}'
+              field_size = '{$field["field_size"]}',
+              data_type  = '{$field["data_type"]}',
+              col_name   = '{$field["col_name"]}'
         WHERE  field_id = {$field["field_id"]}
                   ";
     }
@@ -1669,8 +1691,8 @@ function ft_check_form_has_file_upload_field($form_id)
     SELECT count(*) as c
     FROM   {$g_table_prefix}form_fields ff, {$g_table_prefix}field_types fft
     WHERE  ff.form_id = $form_id AND
-           ff.field_type_id = fft.field_type_id AND
-           fft.is_file_field = 'yes'
+          ff.field_type_id = fft.field_type_id AND
+          fft.is_file_field = 'yes'
       ");
 
   $result = mysql_fetch_assoc($query);
@@ -1728,7 +1750,7 @@ function _ft_add_table_column($table, $col_name, $col_type)
   $result = mysql_query("
     ALTER TABLE $table
     ADD         $col_name $col_type
-           ");
+          ");
 
   if (!$result)
   {
@@ -1761,7 +1783,7 @@ function _ft_alter_table_column($table, $old_col_name, $new_col_name, $col_type)
   $result = mysql_query("
     ALTER TABLE $table
     CHANGE      $old_col_name $new_col_name $col_type
-           ");
+          ");
 
   if (!$result)
   {
@@ -1793,7 +1815,7 @@ function _ft_cache_form_stats($form_id = "")
     FROM   {$g_table_prefix}forms
     WHERE  is_complete = 'yes'
     $where_clause
-           ");
+          ");
 
   // loop through all forms, extract the submission count and first submission date
   while ($form_info = mysql_fetch_assoc($query))
@@ -1847,7 +1869,7 @@ function ft_search_forms($account_id = "", $is_admin = false, $search_criteria =
     FROM   {$g_table_prefix}forms
     {$results["where_clause"]}
     {$results["order_clause"]}
-           ");
+          ");
 
   // now retrieve the basic info (id, first and last name) about each client assigned to this form. This
   // takes into account whether it's a public form or not and if so, what clients are in the omit list

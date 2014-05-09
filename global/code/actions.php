@@ -349,7 +349,7 @@ switch ($action)
   case "get_extended_field_settings":
     $field_id      = $request["field_id"];
     $field_type_id = $request["field_type_id"];
-    $settings = ft_get_extended_field_settings($field_id);
+    $settings = ft_get_extended_field_settings($field_id, "", true);
     $info = array(
       "field_id"      => $field_id,
       "field_type_id" => $field_type_id,

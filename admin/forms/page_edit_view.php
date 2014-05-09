@@ -64,17 +64,8 @@ foreach ($form_fields as $field)
 
   if ($is_date_field == "true")
     $date_field_ids[] = $field_id;
-
-  // TODO needed?
-  // if this is the submission ID or Last Modified field, store its field ID in a JS var. This is used to
-  // identify this special field in the JS. Specifically, it's needed to prevent showing the "Editable" checkbox
-  if ($col_name == "submission_id")
-    $js_string .= "view_ns.submission_id_field_id = {$field["field_id"]};\n";
-  else if ($col_name == "last_modified_date")
-    $js_string .= "view_ns.last_modified_date_field_id = {$field["field_id"]};\n";
 }
 $all_form_fields_js = "view_ns.all_form_fields = [" . implode(",\n", $all_form_fields) . "];";
-
 
 for ($i=1; $i<=count($view_tabs); $i++)
 {
@@ -139,13 +130,6 @@ for ($i=0; $i<$num_views; $i++)
   }
 }
 
-// TODO unacceptable
-/*
-$extended_client_fields_module_installed = false;
-if (ft_check_module_enabled("extended_client_fields"))
-  $extended_client_fields_module_installed = true;
-*/
-
 // override the form nav links so that it always links to the Views page
 $page_vars["prev_tabset_link"] = (!empty($links["prev_form_id"])) ? "edit.php?page=views&form_id={$links["prev_form_id"]}" : "";
 $page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "edit.php?page=views&form_id={$links["next_form_id"]}" : "";
@@ -158,7 +142,6 @@ $page_vars["page_url"]   = ft_get_page_url("edit_view");
 $page_vars["view_id"]    = $view_id;
 $page_vars["grouped_fields"] = $grouped_fields;
 $page_vars["new_view_submission_defaults"] = $new_view_submission_defaults;
-//$page_vars["extended_client_fields_module_installed"] = $extended_client_fields_module_installed; // ???!!! NOT cool.
 $page_vars["head_title"] = "{$LANG["phrase_edit_form"]} - {$LANG["phrase_edit_view"]}";
 $page_vars["standard_filters"]     = $standard_filters;
 $page_vars["client_map_filters"]   = $client_map_filters;
@@ -286,7 +269,6 @@ $(function() {
     e.preventDefault();
   });
 
-
   $(".auto_size").live("change", function() {
     var li = $(this).parent();
     if (this.checked) {
@@ -301,7 +283,6 @@ $(function() {
   });
 });
 
-// TODO
 var page_ns = {
   clientFields: [
     { val: "account_id",             text: "{$LANG["word_id"]}", section: "{$LANG["phrase_core_fields"]}" },

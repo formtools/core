@@ -1635,3 +1635,9 @@ a.show_form {
 .views_dropdown select {
   margin: 2px;
 }
+
+.button_separator {
+  color: #dddddd;
+  margin-left: 25px;
+  margin-right: 25px;
+}

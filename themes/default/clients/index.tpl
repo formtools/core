@@ -80,7 +80,14 @@
 	      {assign var=form_id value=$form_info.form_id}
 
 	      <tr style="height: 20px;">
-	        <td class="pad_left_small"><a href="{$form_info.form_url}" target="_blank">{$form_info.form_name}</a></td>
+	        <td class="pad_left_small">
+              {if $form_info.form_type == "external"}
+                {$form_info.form_name}
+                <a href="{$form_info.form_url}" class="show_form" target="_blank" title="Open form in dialog window"></a>
+              {else}
+                {$form_info.form_name}
+              {/if}
+	        </td>
 	        <td align="center">
 	          {if $form_info.is_active == 'no'}
 	            <span class="red">{$LANG.word_offline}</span>

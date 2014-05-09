@@ -82,10 +82,14 @@
         </span>
         {* only show the update button if there are editable fields in the tab *}
         {if $page_field_ids|@count > 0 && $tab_has_editable_fields}
-          <input type="submit" name="update" value="{$LANG.word_update|upper}" />
+          <input type="submit" name="update" value="{$LANG.word_update}" />
         {/if}
         {if $view_info.may_delete_submissions == "yes"}
-          <input type="button" name="delete" value="{$LANG.word_delete|upper}" class="red" onclick="return ms.delete_submission({$submission_id}, 'submissions.php')"/>
+          <input type="button" name="delete" value="{$LANG.word_delete}" class="red" onclick="return ms.delete_submission({$submission_id}, 'submissions.php')"/>
+        {/if}
+        {if $view_info.may_add_submissions == "yes"}
+          <span class="button_separator">|</span>
+          <input type="button" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='submissions.php?form_id={$form_id}&add_submission'" />
         {/if}
       </div>
     </form>

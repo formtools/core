@@ -80,7 +80,7 @@ function ft_create_blank_submission($form_id, $view_id, $is_finalized = false)
  * @param integer $form_id
  * @param integer $view_id
  * @param integer $submission_id
- * @param boolean $is_admin TODO
+ * @param boolean $is_admin
  */
 function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = false)
 {
@@ -90,34 +90,28 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 
   $form_info = ft_get_form($form_id);
   $form_fields = ft_get_form_fields($form_id);
-
   $auto_delete_submission_files = $form_info["auto_delete_submission_files"];
-  $file_delete_problems = array();
-  $form_has_file_field = false;
 
   // send any emails
   ft_send_emails("on_delete", $form_id, $submission_id);
 
   // loop the form templates to find out if there are any file fields. If there are - and the user
   // configured it - delete any associated files
-  foreach ($form_fields as $field_info)
+  $file_delete_problems = array();
+  if ($auto_delete_submission_files == "yes")
   {
-    $field_type = $field_info["field_type"];
-
-    if ($field_type == "file" || $field_type == "image")
+    $file_field_type_ids = ft_get_file_field_type_ids();
+    $file_fields_to_delete = array();
+    foreach ($form_fields as $field_info)
     {
-      $form_has_file_field = true;
+      $field_type_id = $field_info["field_type_id"];
 
-      // store the filename we're about to delete BEFORE deleting it. The reason being,
-      // if the delete_file_submission function can't find the file, it updates the database record
-      // (i.e. overwrites the file name with "") and returns a message indicating what happened.
-      // If this wasn't done, in the event of a file being removed/renamed by another process, the
-      // user could NEVER remove the filename from their interface. This seems the least inelegant
-      // solution. By storing the filename here, we can display it to the user to explain what
-      // happened.
-      if ($auto_delete_submission_files == "no")
+      if (!in_array($field_type_id, $file_field_type_ids))
         continue;
 
+      // I really don't like this... what should be done is do a SINGLE query after this loop is complete
+      // to return a map of field_id to values. That would then update $file_fields_to_delete
+      // with a fraction of the cost
       $submission_info = ft_get_submission_info($form_id, $submission_id);
       $filename = $submission_info[$field_info['col_name']];
 
@@ -125,16 +119,19 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
       if (empty($filename))
         continue;
 
-      if ($field_type == "file")
-        list($success, $message) = ft_delete_file_submission($form_id, $submission_id, $field_info['field_id']);
-      else if ($field_type == "image")
-        list($success, $message) = img_delete_image_file_submission($form_id, $submission_id, $field_info['field_id']);
+      $file_fields_to_delete[] = array(
+        "submission_id" => $submission_id,
+        "field_id"      => $field_info["field_id"],
+        "field_type_id" => $field_type_id,
+        "filename"      => $filename
+      );
+    }
 
-      if (!$success)
-        $file_delete_problems[] = array($filename, $message);
+    if (!empty($file_fields_to_delete))
+    {
+      list($success, $file_delete_problems) = ft_delete_submission_files($form_id, $file_fields_to_delete, "ft_delete_submission");
     }
   }
-
 
   // now delete the submission
   mysql_query("
@@ -155,7 +152,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
       $message = $LANG["notify_submission_deleted_with_problems"] . "<br /><br />";
 
       foreach ($file_delete_problems as $problem)
-        $message .= "&bull; <b>{$problem[0]}</b>: {$problem[1]}<br />\n";
+        $message .= "&bull; <b>{$problem["filename"]}</b>: {$problem["error"]}<br />\n";
     }
   }
   else
@@ -163,7 +160,6 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
     $success = true;
     $message = $LANG["notify_submission_deleted"];
   }
-
 
   // update sessions to ensure the first submission date and num submissions for this form View are correct
   _ft_cache_form_stats($form_id);
@@ -186,8 +182,6 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
  * more files associated with this submission couldn't be deleted (either because they didn't exist
  * or because they didn't have permissions) the submission IS deleted, but it returns an error
  * indicating which files caused problems.
- *
- * Assumption: if deleting an image field, the Image Manager module has been imported.
  *
  * @param integer $form_id the unique form ID
  * @param mixed $delete_ids a single submission ID / an array of submission IDs / "all". This column
@@ -222,7 +216,6 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 
   $form_info = ft_get_form($form_id);
   $form_fields = ft_get_form_fields($form_id);
-
   $auto_delete_submission_files = $form_info["auto_delete_submission_files"];
 
   $submission_ids_qry = array();
@@ -232,47 +225,43 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
   $where_clause = "WHERE " . join(" OR ", $submission_ids_qry);
 
 
-  $file_delete_problems = array();
-  $form_has_file_field  = false;
-
   // loop the form templates to find out if there are any file fields. If there are - and the user
   // configured it - delete any associated files
-  // TODO!
-  foreach ($form_fields as $field_info)
+  $file_delete_problems = array();
+  $form_has_file_field = false;
+  if ($auto_delete_submission_files == "yes")
   {
-/*
-    $field_type = $field_info["field_type"];
-    if ($field_type == "file" || $field_type == "image")
-    {
-      $form_has_file_field = true;
-
-      // store the filename we're about to delete BEFORE deleting it. The reason being,
-      // if the delete_file_submission function can't find the file, it updates the database record
-      // (i.e. overwrites the file name with "") and returns a message indicating what happened.
-      // If this wasn't done, in the event of a file being removed/renamed by another process, the
-      // user could NEVER remove the filename from their interface. This seems the least inelegant
-      // solution. By storing the filename here, we can display it to the user to explain what
-      // happened.
-      if ($auto_delete_submission_files == "no")
-        continue;
-
-      foreach ($submission_ids as $submission_id)
+    $file_field_type_ids = ft_get_file_field_type_ids();
+    $file_fields_to_delete = array();
+  	foreach ($submissions_to_delete as $submission_id)
+  	{
+      foreach ($form_fields as $field_info)
       {
+        $field_type_id = $field_info["field_type_id"];
+        if (!in_array($field_type_id, $file_field_type_ids))
+          continue;
+
+        $form_has_file_field = true;
         $submission_info = ft_get_submission_info($form_id, $submission_id);
-        $filename = $submission_info[$field_info["col_name"]];
+        $filename = $submission_info[$field_info['col_name']];
 
         // if no filename was stored, it was empty - just continue
         if (empty($filename))
           continue;
 
-        if ($field_type == "file")
-          list($success, $message) = ft_delete_file_submission($form_id, $submission_id, $field_info['field_id']);
-
-        if (!$success)
-          $file_delete_problems[] = array($filename, $message);
+        $file_fields_to_delete[] = array(
+          "submission_id" => $submission_id,
+          "field_id"      => $field_info["field_id"],
+          "field_type_id" => $field_type_id,
+          "filename"      => $filename
+        );
       }
+  	}
+
+    if (!empty($file_fields_to_delete))
+    {
+      list($success, $file_delete_problems) = ft_delete_submission_files($form_id, $file_fields_to_delete, "ft_delete_submissions");
     }
-*/
   }
 
 
@@ -284,31 +273,26 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
     if (empty($file_delete_problems))
     {
       $success = true;
-
       if (count($submission_ids) > 1)
-        $message = ($form_has_file_field) ? $LANG["notify_submissions_and_files_deleted"] :
-          $LANG["notify_submissions_deleted"];
+        $message = ($form_has_file_field) ? $LANG["notify_submissions_and_files_deleted"] : $LANG["notify_submissions_deleted"];
       else
-        $message = ($form_has_file_field) ? $LANG["notify_submission_and_files_deleted"] :
-          $LANG["notify_submission_deleted"];
+        $message = ($form_has_file_field) ? $LANG["notify_submission_and_files_deleted"] : $LANG["notify_submission_deleted"];
     }
     else
     {
       $success = false;
-
       if (count($submission_ids) > 1)
         $message = $LANG["notify_submissions_deleted_with_problems"] . "<br /><br />";
       else
         $message = $LANG["notify_submission_deleted_with_problems"] . "<br /><br />";
 
       foreach ($file_delete_problems as $problem)
-        $message .= "&bull; <b>{$problem[0]}</b>: $problem[1]<br />\n";
+        $message .= "&bull; <b>{$problem["filename"]}</b>: {$problem["error"]}<br />\n";
     }
   }
   else
   {
     $success = true;
-
     if (count($submission_ids) > 1)
       $message = $LANG["notify_submissions_deleted"];
     else

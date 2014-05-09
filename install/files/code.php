@@ -162,7 +162,7 @@ function ft_install_get_language_file_info($file)
  */
 function ft_install_get_config_file_contents()
 {
-	global $g_ft_installation_folder;
+  global $g_ft_installation_folder;
 
   // try to fix REQUEST_URI for IIS
   if (empty($_SERVER['REQUEST_URI']))
@@ -199,8 +199,8 @@ function ft_install_get_config_file_contents()
   $_SESSION["ft_install"]["g_root_dir"] = $g_ft_installation_folder;
   $_SESSION["ft_install"]["g_root_url"] = $root_url;
 
-	$username = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_username"]);
-	$password = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_password"]);
+  $username = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_username"]);
+  $password = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_password"]);
 
   $content = "<" . "?php\n\n"
            . "// main program paths - no trailing slashes!\n"
@@ -649,7 +649,7 @@ function ft_check_no_existing_tables($hostname, $db_name, $username, $password, 
   {
     $table = preg_replace("/^$table_prefix/", "", $row[0]);
     if (in_array($table, $g_ft_tables))
-  	  $existing_tables[] = $row[0];
+      $existing_tables[] = $row[0];
   }
 
   @mysql_close($link);

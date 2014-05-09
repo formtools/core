@@ -187,7 +187,6 @@ function ft_display_custom_page_message($flag)
 }
 
 
-
 /**
  * This function evaluates any string that contains Smarty logic / variables. It handles
  * parsing the email templates, filename strings and other such functionality. It uses on the

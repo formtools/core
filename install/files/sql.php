@@ -33,6 +33,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%accounts (
   email varchar(200) default NULL,
   username varchar(50) NOT NULL,
   password varchar(50) NOT NULL,
+  temp_reset_password varchar(50) NULL,
   PRIMARY KEY (account_id)
 ) DEFAULT CHARSET=utf8";
 

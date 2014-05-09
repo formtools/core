@@ -22,7 +22,12 @@
         <td class="blue" width="70">{$LANG.word_search}</td>
         <td>
           <input type="text" size="20" name="keyword" value="{$search_criteria.keyword|escape}" />
-          <input type="submit" name="search_modules" value="{$LANG.word_search}" />
+          <input type="checkbox" id="status_enabled" name="status[]" value="enabled" {if "enabled"|in_array:$search_criteria.status}checked{/if} />
+            <label for="status_enabled">{$LANG.word_enabled}</label>
+          <input type="checkbox" id="status_disabled" name="status[]" value="disabled" {if "disabled"|in_array:$search_criteria.status}checked{/if} />
+            <label for="status_disabled">{$LANG.word_disabled}</label>
+
+          <input type="submit" name="search_modules" value="{$LANG.word_search}" class="margin_left" />
           <input type="button" name="reset" onclick="window.location='{$same_page}?reset=1'"
             {if $modules|@count < $num_modules}
               value="{$LANG.phrase_show_all} ({$num_modules})" class="bold"

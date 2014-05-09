@@ -602,9 +602,10 @@ function ft_get_field_order_info_by_colname($form_id, $col_name)
  *
  * @param integer $field_id
  * @param string $setting_id (optional)
+ * @param boolean $convert_dynamic_values defaults to false just in case...
  * @return array an array of hashes
  */
-function ft_get_extended_field_settings($field_id, $setting_id = "")
+function ft_get_extended_field_settings($field_id, $setting_id = "", $convert_dynamic_values = false)
 {
   // get whatever custom settings are defined for this field
   $custom_settings = ft_get_form_field_settings($field_id);
@@ -620,11 +621,19 @@ function ft_get_extended_field_settings($field_id, $setting_id = "")
       continue;
 
     $uses_default  = true;
-    $setting_value = $curr_setting["default_value"];
+    $setting_value_type = $curr_setting["default_value_type"];
+    $setting_value      = $curr_setting["default_value"];
     if (array_key_exists($curr_setting_id, $custom_settings))
     {
       $uses_default  = false;
       $setting_value = $custom_settings[$curr_setting_id];
+    }
+
+    if ($convert_dynamic_values && $setting_value_type == "dynamic")
+    {
+      $parts = explode(",", $setting_value);
+      if (count($parts) == 2)
+        $setting_value = ft_get_settings($parts[0], $parts[1]);
     }
 
     $settings[] = array(
@@ -696,8 +705,9 @@ function ft_get_field_settings($field_id)
       }
     }
 
-    if (isset($overridden_settings[$field_id]) && isset($overridden_settings[$field_id][$identifier]))
-      $value = $overridden_settings[$field_id][$identifier];
+    // if the field has been overwritten use that instead!
+    if (isset($overridden_settings[$identifier]))
+      $value = $overridden_settings[$identifier];
 
     $complete_settings[$identifier] = $value;
   }
@@ -1001,8 +1011,11 @@ function ft_update_field($form_id, $field_id, $tab_info)
 
 
 /**
- * Returns all files associated with a particular form field. This is compatible with both the
- * built-in "File" field as well as the Image fields of the Image Manager
+ * Returns all files associated with a particular form field. Different field types may store the
+ * files differently. So each file upload module needs to add a hook to this function to return
+ * the appropriate information.
+ *
+ * TODO.
  *
  * @param integer $form_id the unique form ID.
  * @param integer $field_id the unique field ID.

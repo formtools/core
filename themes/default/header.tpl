@@ -37,7 +37,6 @@
   <script type="text/javascript" src="{$g_root_url}/global/scripts/jquery-ui-1.8.6.custom.min.js"></script>
   <script type="text/javascript" src="{$g_root_url}/global/scripts/general.js?v=2_1_0"></script>
   <script type="text/javascript" src="{$g_root_url}/global/scripts/rsv.js?v=2_1_0"></script>
-
   {$head_string}
   {$head_js}
   {$head_css}

@@ -164,6 +164,7 @@ function ft_display_page($template, $page_vars, $theme = "")
   global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_debug, $LANG,
     $g_smarty, $g_smarty_use_sub_dirs, $g_js_debug;
 
+
   if (empty($theme) && (isset($_SESSION["ft"]["account"]["theme"])))
     $theme = $_SESSION["ft"]["account"]["theme"];
   elseif (empty($theme))

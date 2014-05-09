@@ -4,7 +4,9 @@ require("../../global/session_start.php");
 ft_check_permission("admin");
 
 if (isset($_GET['delete']) && isset($_GET['form_id']))
-  ft_delete_form($_GET["form_id"]);
+{
+  list($g_success, $g_message) = ft_delete_form($_GET["form_id"]);
+}
 
 _ft_cache_form_stats();
 if (isset($_GET["reset"]))
@@ -44,42 +46,11 @@ $page_vars["order"] = $order;
 $page_vars["clients"] = $clients;
 $page_vars["search_criteria"] = $search_criteria;
 $page_vars["pagination"] = ft_get_dhtml_page_nav(count($forms), $_SESSION["ft"]["settings"]["num_forms_per_page"], 1);
-$page_vars["js_messages"] = array("word_remove", "word_edit");
+$page_vars["js_messages"] = array("word_remove", "word_edit", "phrase_open_form_in_new_tab_or_win", "word_close", "phrase_show_form");
 $page_vars["head_js"] =<<< END
-
-var page_ns = {};
-page_ns.show_form_dialog = $("<div></div>");
-
 $(function() {
-  $(".show_form").each(function() {
-    var url = $(this).attr("href");
-    $(this).bind("click", { url: url }, function(e) {
-      ft.create_dialog({
-        dialog:     page_ns.show_form_dialog,
-        title:      "Show Form",
-        min_width:  800,
-        min_height: 500,
-        content: "<iframe class=\"check_url_iframe\" src=\"" + e.data.url + "\"></iframe>",
-        buttons: [{
-          text: "{$LANG["phrase_open_form_in_new_tab_or_win"]}",
-          click: function() {
-            window.open(url);
-            $(this).dialog("close");
-          }
-        },
-        {
-          text: "{$LANG["word_close"]}",
-          click: function() {
-            $(this).dialog("close");
-          }
-        }]
-      });
-      return false;
-    });
-  });
+  ft.init_show_form_links();
 });
-
-
 END;
 
 ft_display_page("admin/forms/index.tpl", $page_vars);

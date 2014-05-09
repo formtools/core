@@ -19,6 +19,7 @@ function smarty_function_clients_dropdown($params, &$smarty)
   $onchange      = (isset($params["onchange"])) ? $params["onchange"] : "";
   $style         = (isset($params["style"])) ? $params["style"] : "";
   $class         = (isset($params["class"])) ? $params["class"] : "";
+  $name_id       = (isset($params["name_id"])) ? $params["name_id"] : "";
   $include_blank_option = (isset($params["include_blank_option"])) ? $params["include_blank_option"] : false;
   $blank_option         = (isset($params["blank_option"])) ? $params["blank_option"] : $LANG["phrase_please_select"];
   $blank_option_is_optgroup = (isset($params["blank_option_is_optgroup"])) ? $params["blank_option_is_optgroup"] : false;
@@ -38,9 +39,9 @@ function smarty_function_clients_dropdown($params, &$smarty)
   $display_single_client_as_text = (isset($params["display_single_client_as_text"])) ? $params["display_single_client_as_text"] : false;
 
   $attributes = array(
-    "id"   => $params["name_id"],
-    "name" => $params["name_id"],
-    "class" => $params["class"],
+    "id"   => $name_id,
+    "name" => $name_id,
+    "class" => $class,
     "onchange" => $onchange,
     "style" => $style,
     "multiple" => $multiple,

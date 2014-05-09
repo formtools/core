@@ -81,6 +81,10 @@
         {if $view_info.may_delete_submissions == "yes"}
           <input type="button" name="delete" value="{$LANG.word_delete|upper}" class="red" onclick="return ms.delete_submission({$submission_id}, 'submissions.php')"/>
         {/if}
+        {if $view_info.may_add_submissions == "yes"}
+          <span class="button_separator">|</span>
+          <input type="button" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='index.php?form_id={$form_id}&add_submission'" />
+        {/if}
       </div>
     </form>
 

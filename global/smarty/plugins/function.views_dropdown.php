@@ -36,8 +36,8 @@ function smarty_function_views_dropdown($params, &$smarty)
   $grouped_views = (isset($params["grouped_views"])) ? $params["grouped_views"] : ft_get_grouped_views($form_id, array("omit_hidden_views" => $omit_hidden_views));
 
   $attributes = array(
-    "id"       => $params["name_id"],
-    "name"     => $params["name_id"],
+    "id"       => $name_id,
+    "name"     => $name_id,
     "onchange" => $onchange
       );
 
