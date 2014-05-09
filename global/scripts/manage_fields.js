@@ -1579,4 +1579,3 @@ fields_ns.click_use_default = function(el) {
   }
 }
 
-

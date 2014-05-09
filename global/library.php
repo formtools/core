@@ -193,6 +193,13 @@ $g_password_special_chars = "~!@#$%^&";
  */
 $g_password_history_size = 10;
 
+/**
+ * Determines the format of the date range string when searching a date field. Note: this only accepts two
+ * values: d/m/y or m/d/y. This is because this value is used by both the daterangepicker element and
+ * on the server. I don't want to fuss around with too many formats; it's confusing enough!
+ */
+$g_search_form_date_field_format = "d/m/y";
+
 
 // -------------------------------------------------------------------------------------------------
 
@@ -212,7 +219,7 @@ $g_release_type = "alpha";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110528";
+$g_release_date = "20110530";
 
 /**
  * The minimum required PHP version needed to run Form Tools.

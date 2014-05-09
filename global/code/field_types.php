@@ -875,3 +875,75 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
 
   return $results;
 }
+
+
+/**
+ * This is used on the Submission Listing page to provide the default value for the date range field, which
+ * appears when a user chooses a date to search on.
+ *
+ * @param string $choice
+ * @return array a hash with the two keys:
+ *                 "default_date_field_search_value": the default value to show. This depends on what they
+ *                       selected on the Settings -> Main tab field.
+ *                 "date_field_search_js_format": the format to pass to the jQuery date range picker
+ */
+function ft_get_default_date_field_search_value($choice)
+{
+  global $LANG, $g_search_form_date_field_format;
+
+  $php_date_format = "";
+  $date_field_search_js_format = "";
+  if ($g_search_form_date_field_format == "d/m/y") {
+  	$php_date_format = "j/n/Y";
+  	$date_field_search_js_format = "d/m/yy";
+  } else {
+  	$php_date_format = "n/j/Y";
+  	$date_field_search_js_format = "m/d/yy";
+  }
+
+  $value = "";
+  switch ($choice)
+  {
+  	case "none":
+      $value = $LANG["phrase_select_date"];
+      break;
+  	case "today":
+  	  $value = date($php_date_format);
+      break;
+  	case "last_7_days":
+  	  $now  = date("U");
+  	  $then = $now - (60 * 60 * 24 * 7);
+  	  $value = date($php_date_format, $then) . " - " . date($php_date_format, $now);
+      break;
+  	case "month_to_date":
+      $current_month = date("n");
+      $current_year  = date("Y");
+      if ($g_search_form_date_field_format == "d/m/y") {
+        $value = "1/$current_month/$current_year - " . date($php_date_format);
+      } else {
+      	$value = "$current_month/1/$current_year - " . date($php_date_format);
+      }
+      break;
+  	case "year_to_date":
+      $current_year  = date("Y");
+      $value = "1/1/$current_year - " . date($php_date_format);
+      break;
+  	case "previous_month":
+  	  $current_month = date("n");
+  	  $previous_month = ($current_month == 1) ? 12 : $current_month-1;
+  	  $current_year  = date("Y");
+  	  $mid_previous_month = mktime(0, 0, 0, $previous_month, 15, $current_year);
+  	  $num_days_in_last_month = date("t", $mid_previous_month);
+  	  if ($g_search_form_date_field_format == "d/m/y") {
+  	  	$value = "1/$previous_month/$current_year - $num_days_in_last_month/$previous_month/$current_year";
+  	  } else {
+  	  	$value = "$previous_month/1/$current_year - $previous_month/$num_days_in_last_month/$current_year";
+  	  }
+      break;
+  }
+
+  return array(
+    "default_date_field_search_value" => $value,
+    "date_field_search_js_format"     => $date_field_search_js_format
+  );
+}

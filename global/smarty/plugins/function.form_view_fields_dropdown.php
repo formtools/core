@@ -30,6 +30,11 @@ function smarty_function_form_view_fields_dropdown($params, &$smarty)
     $smarty->trigger_error("assign: missing 'view_id' parameter.");
     return;
   }
+  if (empty($params["field_types"]))
+  {
+    $smarty->trigger_error("assign: missing 'field_types' parameter.");
+    return;
+  }
 
   $default_value = (isset($params["default"])) ? $params["default"] : "";
   $onchange      = (isset($params["onchange"])) ? $params["onchange"] : "";
@@ -38,6 +43,7 @@ function smarty_function_form_view_fields_dropdown($params, &$smarty)
   $blank_option_text  = (isset($params["blank_option_text"])) ? $params["blank_option_text"] : "";
   $view_id = $params["view_id"];
   $form_id = $params["form_id"];
+  $field_types = $params["field_types"];
 
   $attributes = array(
     "id"   => $params["name_id"],
@@ -56,6 +62,14 @@ function smarty_function_form_view_fields_dropdown($params, &$smarty)
   $view_fields = ft_get_view_fields($view_id);
   $rows = array();
 
+  // find out which field type IDs are date fields
+  $date_field_type_ids = array();
+  foreach ($field_types as $field_type_info)
+  {
+  	if ($field_type_info["is_date_field"] == "yes")
+  	  $date_field_type_ids[] = $field_type_info["field_type_id"];
+  }
+
   if (!empty($blank_option_value) && !empty($blank_option_text))
     $rows[] = "<option value=\"{$blank_option_value}\">$blank_option_text</option>";
 
@@ -66,7 +80,20 @@ function smarty_function_form_view_fields_dropdown($params, &$smarty)
 
     $col_name    = $field_info["col_name"];
     $field_title = $field_info["field_title"];
-    $rows[] = "<option value=\"{$col_name}\" " . (($default_value == $col_name) ? "selected" : "") . ">{$field_title}</option>";
+
+    $is_date_field = (in_array($field_info["field_type_id"], $date_field_type_ids)) ? true : false;
+    $suffix = "";
+    if ($is_date_field)
+    {
+      $suffix = "|date";
+      $selected = ($default_value == "$col_name|date") ? "selected" : "";
+    }
+    else
+    {
+      $selected = ($default_value == $col_name) ? "selected" : "";
+    }
+
+    $rows[] = "<option value=\"{$col_name}{$suffix}\" $selected $date_field_class>{$field_title}</option>";
   }
 
   $dd = "<select $attribute_str>" . join("\n", $rows) . "</select>";

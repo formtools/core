@@ -421,6 +421,12 @@ a#logout_link { color: #990000; }
   background-color: #efefef;
   padding: 5px;
 }
+.search_keyword {
+  width: 110px;
+}
+#search_field {
+  margin-right: 1px;
+}
 .next_step {
   color: #336699;
   font-weight: bold;
@@ -1220,6 +1226,31 @@ body .ui-widget-header {
 }
 body .ui-widget-header span {
   color: white;
+}
+body .ui-daterangepicker .ui-widget-header {
+  background-image: none;
+  background-color: #dddddd; /* 3b7d40 */
+}
+body .ui-daterangepicker .ui-widget-header span {
+  color: black;
+}
+body .ui-daterangepicker .ui-widget-header .ui-widget-content .ui-widget-header {
+  background-color: #3b7d40;
+}
+body .ui-daterangepicker .ui-widget-header .ui-widget-content .ui-widget-header span {
+  color: white;
+}
+
+body .ui-daterangepicker {
+  padding: 2px !important;
+}
+body .ui-daterangepicker ul {
+  font-size: 11px;
+  text-align: left;
+  width: 140px;
+}
+body .ui-daterangepicker ul li a {
+  margin: 1px 3px;
 }
 .desc {
   font-style: italic;

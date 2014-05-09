@@ -38,6 +38,11 @@ function smarty_function_display_custom_field($params, &$smarty)
     $smarty->trigger_error("assign: missing 'field_types' parameter.");
     return;
   }
+  if (empty($params["settings"]))
+  {
+    $smarty->trigger_error("assign: missing 'settings' parameter.");
+    return;
+  }
 
   $form_id       = $params["form_id"];
   $view_id       = $params["view_id"];
@@ -45,6 +50,7 @@ function smarty_function_display_custom_field($params, &$smarty)
   $field_info    = $params["field_info"];
   $field_types   = $params["field_types"];
   $value         = $params["value"];
+  $settings      = $params["settings"];
 
   // loop through the field types and store the one we're interested in in $field_type_info
   $field_type_info = array();
@@ -78,7 +84,7 @@ function smarty_function_display_custom_field($params, &$smarty)
       "NAME"          => $field_info["field_name"],
       "COLNAME"       => $field_info["col_name"],
       "VALUE"         => $value,
-      "SETTINGS"      => ft_get_settings("", "core"), // SLOW! TODO
+      "SETTINGS"      => $settings,
       "CONTEXTPAGE"   => "submission_listing",
       "ACCOUNT_INFO"  => $_SESSION["ft"]["account"],
       "g_root_url"    => $g_root_url,

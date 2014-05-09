@@ -829,6 +829,7 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
   $submission_id_clause = _ft_get_search_submissions_submission_id_clause($submission_ids);
   $search_where_clause  = _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $searchable_columns);
 
+
   // (1) our main search query that returns a PAGE of submission info
   $search_query = mysql_query("
       SELECT $select_clause
@@ -903,7 +904,10 @@ function _ft_get_search_submissions_order_by_clause($form_id, $order)
     {
       if ($field_info["is_date_field"] == "yes")
       {
-        $order_by = "CAST($column as DATETIME) $direction";
+      	if ($column == "submission_date" || $column == "last_modified_date")
+      	  $order_by = "$column $direction";
+      	else
+          $order_by = "CAST($column as DATETIME) $direction";
       }
       else
       {
@@ -979,6 +983,8 @@ function _ft_get_search_submissions_view_filter_clause($view_id)
  */
 function _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $searchable_columns)
 {
+  global $g_search_form_date_field_format;
+
   $search_where_clause = "";
   if (!empty($search_fields))
   {
@@ -1019,29 +1025,54 @@ function _ft_get_search_submissions_search_where_clause($form_id, $search_fields
       }
     }
 
-    else if ($search_field == "submission_date" || $search_field == "last_modified_date")
+    // date field! Date fields actually take two forms: they're either the Core fields (Submission Date and
+    // Last Modified Date), which are real DATETIME fields, or custom date fields which are varchars
+    else if (preg_match("/\|date$/", $search_field))
     {
+      $search_field = preg_replace("/\|date$/", "", $search_field);
+      $is_core_date_field = ($search_field == "submission_date" || $search_field == "last_modified_date") ? true : false;
+      if (!$is_core_date_field)
+      	$search_field = "CAST($search_field as DATETIME) ";
+
       if (!empty($search_date))
       {
-        // search by number of days
-        if (is_numeric($search_date))
+        // search by date range
+        if (strpos($search_date, "-") !== false)
         {
-          $days = $search_date;
-          $search_where_clause = "AND (DATE_SUB(curdate(), INTERVAL $days DAY) < $search_field) ";
+          $dates = split(" - ", $search_date);
+          $start = $dates[0];
+          $end   = $dates[1];
+          if ($g_search_form_date_field_format == "d/m/y") {
+            list($start_day, $start_month, $start_year) = explode("/", $start);
+            list($end_day, $end_month, $end_year)       = explode("/", $end);
+          } else {
+            list($start_month, $start_day, $start_year) = explode("/", $start);
+            list($end_month, $end_day, $end_year)       = explode("/", $end);
+          }
+          $start_day   = str_pad($start_day, 2, "0", STR_PAD_LEFT);
+          $start_month = str_pad($start_month, 2, "0", STR_PAD_LEFT);
+          $end_day     = str_pad($end_day, 2, "0", STR_PAD_LEFT);
+          $end_month   = str_pad($end_month, 2, "0", STR_PAD_LEFT);
+
+          $start_date = "{$start_year}-{$start_month}-{$start_day} 00:00:00";
+          $end_date   = "{$end_year}-{$end_month}-{$end_day} 23:59:59";
+          $search_where_clause = "AND ($search_field >= '$start_date' AND $search_field <= '$end_date') ";
         }
 
-        // otherwise, return a specific month
+        // otherwise, return a specific day
         else
         {
-          list($month, $year) = split("_", $search_date);
+          if ($g_search_form_date_field_format == "d/m/y") {
+            list($day, $month, $year) = explode("/", $search_date);
+          } else {
+            list($month, $day, $year) = explode("/", $search_date);
+          }
+          $month = str_pad($month, 2, "0", STR_PAD_LEFT);
+          $day   = str_pad($day, 2, "0", STR_PAD_LEFT);
 
-          $month_start = mktime(0, 0, 0, $month, 1, $year);
-          $month_end   = mktime(0, 0, 0, $month+1, 1, $year);
-
-          $start = date("Y-m-d", $month_start);
-          $end   = date("Y-m-d", $month_end);
-
-          $search_where_clause = "AND ($search_field > '$start' AND $search_field < '$end') ";
+          $start = "{$year}-{$month}-{$day} 00:00:00";
+          $end   = "{$year}-{$month}-{$day} 23:59:59";
+          $search_where_clause = "AND ($search_field >= '$start' AND $search_field <= '$end') ";
         }
 
         if (!empty($search_keyword))

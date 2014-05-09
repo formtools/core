@@ -56,6 +56,19 @@
       <td class="pad_left_small">{$LANG.phrase_num_modules_per_page}</td>
       <td><input type="text" name="num_modules_per_page" value="{$settings.num_modules_per_page}" style="width: 30px" /></td>
     </tr>
+    <tr>
+      <td class="pad_left_small">Default date field search value</td>
+      <td>
+        <select name="default_date_field_search_value">
+          <option value="none" {if $settings.default_date_field_search_value == "none"}selected{/if}>{$LANG.word_none}</option>
+          <option value="today" {if $settings.default_date_field_search_value == "today"}selected{/if}>Today</option>
+          <option value="last_7_days" {if $settings.default_date_field_search_value == "last_7_days"}selected{/if}>Last 7 days</option>
+          <option value="month_to_date" {if $settings.default_date_field_search_value == "month_to_date"}selected{/if}>Month to date</option>
+          <option value="year_to_date" {if $settings.default_date_field_search_value == "year_to_date"}selected{/if}>Year to date</option>
+          <option value="previous_month" {if $settings.default_date_field_search_value == "previous_month"}selected{/if}>The previous month</option>
+        </select>
+      </td>
+    </tr>
     {template_hook location="admin_settings_main_tab_bottom"}
     </table>
 

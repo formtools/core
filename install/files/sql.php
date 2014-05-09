@@ -516,6 +516,7 @@ $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) V
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('clients_may_edit_timezone_offset', 'yes', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('clients_may_edit_ui_language', 'yes', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_client_menu_id', '2', 'core')";
+$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_date_field_search_value', 'none', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_date_format', 'M jS y, g:i A', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_footer_text', '', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_language', 'en_us', 'core')";
@@ -547,6 +548,7 @@ $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) V
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('program_name', 'Form Tools', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('required_password_chars', '', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('timezone_offset', '0', 'core')";
+
 
 $g_sql[] = "CREATE TABLE %PREFIX%themes (
   theme_id mediumint(8) unsigned NOT NULL auto_increment,

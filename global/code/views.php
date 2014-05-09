@@ -1748,9 +1748,7 @@ function ft_update_public_view_omit_list($info, $view_id)
 /**
  * Caches the total number of (finalized) submissions in a particular form - or all forms -
  * in the $_SESSION["ft"]["form_{$form_id}_num_submissions"] key. That value is used on the administrators
- * main Forms page to list the form submission count. It also stores the earliest form submission date, which
- * isn't used directly, but it's copied by the _ft_cache_view_stats function for all Views that don't have a
- * filter.
+ * main Forms page to list the form submission count.
  *
  * @param integer $form_id
  */
@@ -1772,8 +1770,7 @@ function _ft_cache_view_stats($form_id, $view_id = "")
     // as the parent form
     if (empty($filters))
     {
-      $_SESSION["ft"]["view_{$view_id}_num_submissions"]       = $_SESSION["ft"]["form_{$form_id}_num_submissions"];
-      $_SESSION["ft"]["view_{$view_id}_first_submission_date"] = $_SESSION["ft"]["form_{$form_id}_first_submission_date"];
+      $_SESSION["ft"]["view_{$view_id}_num_submissions"] = $_SESSION["ft"]["form_{$form_id}_num_submissions"];
     }
     else
     {
@@ -1789,19 +1786,6 @@ function _ft_cache_view_stats($form_id, $view_id = "")
 
       $info = mysql_fetch_assoc($count_query);
       $_SESSION["ft"]["view_{$form_id}_num_submissions"] = $info["c"];
-
-      $first_date_query = mysql_query("
-        SELECT submission_date
-        FROM   {$g_table_prefix}form_$form_id
-        WHERE  is_finalized = 'yes' AND
-        $filter_clause
-        ORDER BY submission_date ASC
-        LIMIT 1
-          ")
-            or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__, mysql_error());
-      $info = mysql_fetch_assoc($first_date_query);
-
-      $_SESSION["ft"]["view_{$view_id}_first_submission_date"] = $info["submission_date"];
     }
   }
 }

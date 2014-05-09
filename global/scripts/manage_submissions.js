@@ -114,9 +114,9 @@ ms.delete_submissions = function(page) {
 
   var message = "";
   if (ms.selected_submission_ids.length == 1) {
-	message = g.messages["confirm_delete_submission"];
+	  message = g.messages["confirm_delete_submission"];
   } else {
-	message = g.messages["confirm_delete_submissions"];
+	  message = g.messages["confirm_delete_submissions"];
   }
 
   ft.create_dialog({
@@ -402,14 +402,13 @@ ms.unselect_all = function() {
 
 
 /**
- * Used to hide/show the additional date search options.
+ * Used to hide/show the additional date search options. With 2.1.0, any field can be a date field. We identify
+ * them via a "date" class on the <option> element.
  *
- * TODO
- *
- * @param string choice the column name
+ * @param string choice the selected column name
  */
-ms.change_search_field = function(choice) {
-  if (choice == "submission_date" || choice == "last_modified_date") {
+ms.change_search_field = function(val) {
+  if (val.match(/\|date$/)) {
     $("#search_dropdown_section").show();
   } else {
     $("#search_dropdown_section").hide();
@@ -492,4 +491,28 @@ ms.edit_submission_page_send_email = function(submission_id) {
  */
 ms.email_sent = function(data) {
   ft.display_message("ft_message", data.success, data.message);
+}
+
+
+// ensures that if the user's doing a search on a non-date field, they have to have entered in a search string
+ms.check_search_keyword = function() {
+  var search_keyword_field = $("#search_keyword");
+  var curr_value = $("#search_field").val();
+  if (!curr_value.match(/\|date$/) && !search_keyword_field.val()) {
+    return [[search_keyword_field[0], g.messages["validation_please_enter_search_keyword"]]];
+  } else {
+    return true;
+  }
+}
+
+// checks that if a user is doing a search on a date field, there's a valid date or date range in the date field
+ms.check_valid_date = function() {
+  var date_field = $("#search_date");
+  var val = date_field.val();
+  if (!val.match(/^\d{1,2}?\/\d{1,2}\/\d{4}$/) &&
+      !val.match(/^\d{1,2}?\/\d{1,2}\/\d{4}\s-\s\d{1,2}?\/\d{1,2}\/\d{4}$/)) {
+    return [[date_field[0], g.messages["notify_invalid_search_dates"]]];
+  } else {
+    return true;
+  }
 }

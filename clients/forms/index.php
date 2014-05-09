@@ -270,6 +270,12 @@ foreach ($view_info["fields"] as $field_info)
   }
 }
 
+$settings = ft_get_settings("", "core");
+
+$date_picker_info = ft_get_default_date_field_search_value($settings["default_date_field_search_value"]);
+$default_date_field_search_value = $date_picker_info["default_date_field_search_value"];
+$date_field_search_js_format     = $date_picker_info["date_field_search_js_format"];
+
 // ------------------------------------------------------------------------------------------------
 
 // compile the header information
@@ -283,9 +289,11 @@ $page_vars["view_id"]     = $view_id;
 $page_vars["search_rows"] = $search_rows;
 $page_vars["search_num_results"] = $search_num_results;
 $page_vars["view_num_results"] = $view_num_results;
+$page_vars["default_date_field_search_value"] = $default_date_field_search_value;
 $page_vars["total_form_submissions"] = $_SESSION["ft"]["form_{$form_id}_num_submissions"];
 $page_vars["grouped_views"] = $grouped_views;
-$page_vars["view_info"]   = $view_info;
+$page_vars["view_info"]     = $view_info;
+$page_vars["settings"]      = $settings;
 $page_vars["preselected_subids"] = $preselected_subids;
 $page_vars["page_submission_ids"] = $submission_id_str;
 $page_vars["results_per_page"]   = $results_per_page;
@@ -299,15 +307,21 @@ $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_
         "confirm_delete_submission", "confirm_delete_submissions", "phrase_select_all_X_results",
         "phrase_select_all_on_page", "phrase_all_X_results_selected", "phrase_row_selected", "phrase_rows_selected",
         "confirm_delete_submissions_on_other_pages", "confirm_delete_submissions_on_other_pages2",
-        "word_yes", "word_no", "phrase_please_confirm");
-$page_vars["head_string"] = '<script type="text/javascript" src="../../global/scripts/manage_submissions.js"></script>';
+        "word_yes", "word_no", "phrase_please_confirm", "validation_please_enter_search_keyword", "notify_invalid_search_dates");
+$page_vars["head_string"] =<<< END
+<link rel="stylesheet" href="../../global/css/ui.daterangepicker.css" type="text/css" />
+<script src="../../global/scripts/manage_submissions.js"></script>
+<script src="../../global/scripts/daterangepicker.jquery.js"></script>
+END;
+
 $page_vars["head_js"] =<<< END
 var rules = [];
-rules.push("if:search_field!=submission_date,required,search_keyword,{$LANG["validation_please_enter_search_keyword"]}");
+rules.push("function,ms.check_search_keyword");
 rules.push("if:search_field=submission_date,required,search_date,{$LANG["validation_please_enter_search_date_range"]}");
-
-if (typeof ms == "undefined")
+rules.push("function,ms.check_valid_date");
+if (typeof ms == "undefined") {
   ms = {};
+}
 
 ms.page_submission_ids = [$submission_id_str]; // the submission IDs on the current page
 ms.all_submissions_on_page_selected = null; // boolean; set on page load
@@ -320,6 +334,25 @@ ms.num_results_per_page = $results_per_page;
 
 $(function() {
   ms.init_submissions_page();
+  ms.change_search_field($("#search_field").val());
+  $("#search_field").bind("keyup change", function() {
+    ms.change_search_field(this.value);
+  });
+  $("#search_date").daterangepicker({
+    dateFormat: "$date_field_search_js_format",
+    doneButtonText: "{$LANG["word_done"]}",
+    presetRanges: [
+      {text: '{$LANG["word_today"]}', dateStart: 'today', dateEnd: 'today' },
+      {text: '{$LANG["phrase_last_7_days"]}', dateStart: 'today-7days', dateEnd: 'today' },
+      {text: '{$LANG["phrase_month_to_date"]}', dateStart: function(){ return Date.parse('today').moveToFirstDayOfMonth();  }, dateEnd: 'today' },
+      {text: '{$LANG["phrase_year_to_date"]}', dateStart: function(){ var x= Date.parse('today'); x.setMonth(0); x.setDate(1); return x; }, dateEnd: 'today' },
+      {text: '{$LANG["phrase_the_previous_month"]}', dateStart: function(){ return Date.parse('1 month ago').moveToFirstDayOfMonth();  }, dateEnd: function(){ return Date.parse('1 month ago').moveToLastDayOfMonth();  } }
+    ],
+    datepickerOptions: {
+      changeYear: true,
+      changeMonth: true
+    }
+  });
 });
 END;
 

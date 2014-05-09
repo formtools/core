@@ -288,7 +288,7 @@ function ft_finalize_form($form_id)
              last_modified_date DATETIME NOT NULL,
              ip_address VARCHAR(15),
              is_finalized ENUM('yes','no') default 'yes')
-             TYPE=MyISAM DEFAULT CHARSET=utf8";
+             DEFAULT CHARSET=utf8";
 
   mysql_query($query)
     or ft_handle_error("Failed query in <b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, line " . __LINE__ . ": <i>" . nl2br($query) . "</i>", mysql_error());
@@ -330,6 +330,7 @@ function ft_initialize_form($form_data)
   $textbox_field_type_id = ft_get_field_type_id_by_identifier("textbox");
   $date_field_type_id    = ft_get_field_type_id_by_identifier("date");
   $date_field_type_datetime_setting_id = ft_get_field_type_setting_id_by_identifier($date_field_type_id, "display_format");
+  $date_field_type_timezone_setting_id = ft_get_field_type_setting_id_by_identifier($date_field_type_id, "apply_timezone_offset");
 
   $display_notification_page = isset($form_data["form_tools_display_notification_page"]) ?
     $form_data["form_tools_display_notification_page"] : true;
@@ -451,6 +452,10 @@ function ft_initialize_form($form_data)
     INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
     VALUES ($submission_date_field_id, $date_field_type_datetime_setting_id, '$g_default_datetime_format')
       ");
+  mysql_query("
+    INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
+    VALUES ($submission_date_field_id, $date_field_type_timezone_setting_id, 'yes')
+      ");
 
   // last modified date
   $order2 = $order+1;
@@ -464,6 +469,10 @@ function ft_initialize_form($form_data)
   mysql_query("
     INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
     VALUES ($last_modified_date_field_id, $date_field_type_datetime_setting_id, '$g_default_datetime_format')
+      ");
+  mysql_query("
+    INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
+    VALUES ($last_modified_date_field_id, $date_field_type_timezone_setting_id, 'yes')
       ");
 
   // ip address
@@ -753,90 +762,6 @@ function ft_get_form_column_names($form_id, $view_id = "", $omit_system_fields =
   }
 
   return $col_names;
-}
-
-
-/**
- * This, like ft_get_search_months is used for building the date dropdown in the search submissions
- * form. This function returns the number of days that have passed since the FIRST submission in a
- * particular form View.
- *
- * @param integer $view_id
- * @return array
- */
-function ft_get_search_days($view_id)
-{
-  $first_submission_date = $_SESSION["ft"]["view_{$view_id}_first_submission_date"];
-
-  // if there is no submission date to base this on, just return an empty array. This would happen with
-  // forms that don't have any submissions or form Views that have filters that don't let through any
-  // submissions
-  if (empty($first_submission_date))
-    return "";
-
-  $first_submission_unixtime = ft_convert_datetime_to_timestamp($first_submission_date);
-
-  $now = date("U");
-  $difference_secs = $now - $first_submission_unixtime;
-  $difference_days = $difference_secs / (60 * 60 * 24);
-
-  return ceil($difference_days);
-}
-
-
-/**
- * This function is used in building the date range search dropdown on the main submission listing page
- * for all Form Tools accounts.
- *
- * It examines sessions to find the date of the FIRST submission for this form. This information is
- * stored in $_SESSION["ft"]["view_X_first_submission_date"] and is a MySQL datetime.
- *
- * @param integer $form_id the unique form ID.
- * @return array Based on the info in sessions, it returns an array of search months, most recent
- *             first.
- *
- *             For example, if the current date was Jan 2007 and the form was created in Nov 2006,
- *             it returns:<br/>
- *             "1_2007" => "January 2007",<br/>
- *             "2_2007" => "December 2006",<br/>
- *             "3_2007" => "November 2006"<br/>
- *             If the form creation date was earlier, it would return more months - UP TO 12 months,
- *             no more.
- *
- *             If there are no results, it returns an empty array.
- */
-function ft_get_search_months($view_id)
-{
-  $first_submission_date = $_SESSION["ft"]["view_{$view_id}_first_submission_date"];
-
-  // if there is no submission date to base this on, just return an empty array. This would happen with
-  // forms that don't have any submissions or form Views that have filters that don't let through any
-  // submissions
-  if (empty($first_submission_date))
-    return array();
-
-  $date_info = split(" ", $first_submission_date);
-  list($year, $month, $day) = split("-", $date_info[0]);
-  $unix_date_created = mktime(0, 0, 0, $month, 0, $year);
-  $first_submission_start_month_unixtime = mktime(0, 0, 0, $month, 0, $year);
-  $current_unixtime = date("U");
-  $seconds_in_month = 30 * 24 * 60 * 60;
-
-  $count = 0;
-
-  $search_months = array();
-  while ($count < 12 && $current_unixtime > $first_submission_start_month_unixtime)
-  {
-    // get the localized date info for current_unixtime
-    $date_info = ft_get_date(0, ft_get_current_datetime($current_unixtime), "n F Y");
-    list($month, $label_month, $year) = split(" ", $date_info);
-    $search_months["{$month}_$year"] = "$label_month $year";
-
-    $current_unixtime -= $seconds_in_month;
-    $count++;
-  }
-
-  return $search_months;
 }
 
 
@@ -1855,9 +1780,7 @@ function _ft_alter_table_column($table, $old_col_name, $new_col_name, $col_type)
 /**
  * Caches the total number of (finalized) submissions in a particular form - or all forms -
  * in the $_SESSION["ft"]["form_{$form_id}_num_submissions"] key. That value is used on the administrators
- * main Forms page to list the form submission count. It also stores the earliest form submission date, which
- * isn't used directly, but it's copied by the _ft_cache_view_stats function for all Views that don't have a
- * filter.
+ * main Forms page to list the form submission count.
  *
  * @param integer $form_id
  */
@@ -1890,17 +1813,6 @@ function _ft_cache_form_stats($form_id = "")
 
     $info = mysql_fetch_assoc($count_query);
     $_SESSION["ft"]["form_{$form_id}_num_submissions"] = $info["c"];
-
-    $first_date_query = mysql_query("
-      SELECT submission_date
-      FROM   {$g_table_prefix}form_$form_id
-      WHERE  is_finalized = 'yes'
-      ORDER BY submission_date ASC
-      LIMIT 1
-        ") or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__, mysql_error());
-
-    $info = mysql_fetch_assoc($first_date_query);
-    $_SESSION["ft"]["form_{$form_id}_first_submission_date"] = $info["submission_date"];
   }
 }
 

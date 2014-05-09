@@ -1347,6 +1347,17 @@ $LANG["word_identifier"] = "Identifier";
 
 $LANG["notify_module_already_installed"] = "Oops, this module is already installed!";
 $LANG["phrase_update_order"] = "Update Order";
+$LANG["phrase_select_date"] = "Select date";
+$LANG["word_done"] = "Done";
+$LANG["phrase_search_keyword"] = "Search keyword";
+
+$LANG["word_today"] = "Today";
+$LANG["phrase_last_7_days"] = "Last 7 days";
+$LANG["phrase_month_to_date"] = "Month to date";
+$LANG["phrase_year_to_date"] = "Year to date";
+$LANG["phrase_the_previous_month"] = "The previous Month";
+
+$LANG["notify_invalid_search_dates"] = "Please use the datepicker to enter a valid date or dates.";
 
 // removed!
 //$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";

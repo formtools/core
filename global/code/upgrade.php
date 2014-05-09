@@ -1266,9 +1266,14 @@ function ft_upgrade_form_tools()
              php_processing = '\$field_name     = \$vars[\"field_info\"][\"field_name\"];\r\n\$date           = \$vars[\"data\"][\$field_name];\r\n\$display_format = \$vars[\"settings\"][\"display_format\"];\r\n\$atzo           = \$vars[\"settings\"][\"apply_timezone_offset\"];\r\n\$account_info   = isset(\$vars[\"account_info\"]) ? \$vars[\"account_info\"] : array();\r\n\r\nif (empty(\$date))\r\n{\r\n  \$value = \"\";\r\n}\r\nelse\r\n{\r\n  if (strpos(\$display_format, \"datetime:\") === 0)\r\n  {\r\n    \$parts = explode(\" \", \$date);\r\n    switch (\$display_format)\r\n    {\r\n      case \"datetime:dd/mm/yy|h:mm TT|ampm`true\":\r\n        \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n          substr(\$date, 6);        \r\n        break;\r\n    }\r\n  }\r\n  else\r\n  {\r\n    if (\$display_format == \"dd/mm/yy\")\r\n    {\r\n      \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n        substr(\$date, 6);\r\n    }\r\n  }\r\n  \$time = strtotime(\$date);\r\n  \r\n  // lastly, if this field has a timezone offset being applied to it, do the\r\n  // appropriate math on the date\r\n  if (\$atzo == \"yes\" && !isset(\$account_info[\"timezone_offset\"]))\r\n  {\r\n    \$seconds_offset = \$account_info[\"timezone_offset\"] * 60 * 60;\r\n    \$time += \$seconds_offset;\r\n  }\r\n\r\n  \$value = date(\"Y-m-d H:i:s\", \$time);\r\n}\r\n\r\n\r\n'
       WHERE  field_type_id = 8
     ");
-
-    // TODO update radios View-smarty-markup (added {strip})
   }
+
+  if ($old_version_info["release_date"] < 20110530)
+  {
+    mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value) VALUES ('default_date_field_search_value', 'none')");
+  }
+
+  // TODO update radios View-smarty-markup (added {strip})
 
   // ----------------------------------------------------------------------------------------------
 

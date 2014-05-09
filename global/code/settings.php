@@ -187,7 +187,8 @@ function ft_update_main_settings($infohash)
     "num_forms_per_page"        => trim($infohash["num_forms_per_page"]),
     "num_option_lists_per_page" => trim($infohash["num_option_lists_per_page"]),
     "num_menus_per_page"        => trim($infohash["num_menus_per_page"]),
-    "num_modules_per_page"      => trim($infohash["num_modules_per_page"])
+    "num_modules_per_page"      => trim($infohash["num_modules_per_page"]),
+    "default_date_field_search_value" => $infohash["default_date_field_search_value"]
   );
 
   ft_set_settings($settings);

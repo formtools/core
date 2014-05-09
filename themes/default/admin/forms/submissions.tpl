@@ -48,6 +48,7 @@
 
   {if $has_searchable_field}
     <div id="search_form">
+
       <form action="{$same_page}" method="post" name="search_form" onsubmit="return rsv.validate(this, rules)">
         <input type="hidden" name="search" value="1" />
         <input type="hidden" name="select_all" value="{if $curr_view_select_all == "yes"}1{/if}"  />
@@ -60,29 +61,28 @@
               <td>
                 {form_view_fields_dropdown name_id="search_field" form_id=$form_id view_id=$view_id
                   blank_option_value="all" blank_option_text=$LANG.phrase_all_fields
-                  onchange="ms.change_search_field(this.value)" onkeyup="ms.change_search_field(this.value)"
-                  default=$curr_search_fields.search_field}
+                  default=$curr_search_fields.search_field field_types=$field_types}
               </td>
               <td>
-                <div id="search_dropdown_section"
-                  {* TODO *}
-                  {if $curr_search_fields.search_field != "submission_date" &&
-                      $curr_search_fields.search_field != "last_modified_date"}style="display: none"{/if}>
-                  {date_range_search_dropdown name_id="search_date" form_id=$form_id view_id=$view_id
-                    default=$curr_search_fields.search_date}
+                <div id="search_dropdown_section" style="display: none">
+				  <input type="text" name="search_date" id="search_date" value="{$curr_search_fields.search_date|default:$default_date_field_search_value}" />
                 </div>
               </td>
             </tr>
             </table>
           </td>
-          <td width="20" align="center">{$LANG.word_for}</td>
           <td>
-            <input type="text" style="width: 120px;" name="search_keyword" value="{$curr_search_fields.search_keyword|escape}" />
+            <input type="text" placeholder="{$LANG.phrase_search_keyword|escape}" name="search_keyword" id="search_keyword"
+              class="search_keyword" value="{$curr_search_fields.search_keyword|escape}" />
           </td>
           <td>
             <input type="submit" name="search" value="{$LANG.word_search}" />
-            <input type="button" name="" value="{$LANG.phrase_show_all}" onclick="window.location='submissions.php?page=1&reset=1'"
-              {if $search_num_results < $view_num_results}class="bold"{/if} />
+            <input type="button" name="" onclick="window.location='submissions.php?page=1&reset=1'"
+              {if $search_num_results < $view_num_results}
+                class="bold" value="{$LANG.phrase_show_all} ({$view_num_results})"
+              {else}
+                value="{$LANG.phrase_show_all}"
+              {/if} />
           </td>
         </tr>
         </table>
@@ -149,7 +149,7 @@
               <div class="truncate_no_fixed_width">
             {/if}
               {display_custom_field form_id=$form_id view_id=$view_id submission_id=$submission_id
-                value=$search_row.$col_name field_info=$curr_field field_types=$field_types}
+                value=$search_row.$col_name field_info=$curr_field field_types=$field_types settings=$settings}
             {if $curr_field.truncate == "truncate"}
               </div>
             {/if	}
