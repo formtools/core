@@ -6,7 +6,7 @@
 
 $g_ft_installation_folder = dirname(__FILE__);
 $g_default_language       = "en_us.php";
-$g_form_tools_version     = "2.0.3-beta-20100908";
+$g_form_tools_version     = "2.0.3-beta-20100911";
 $g_is_beta                = "yes";
 $g_beta_version           = "";
 $g_smarty_use_sub_dirs    = false;

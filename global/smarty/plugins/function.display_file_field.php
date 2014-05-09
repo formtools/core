@@ -36,7 +36,12 @@ function smarty_function_display_file_field($params, &$smarty)
 
   $html = "<a href=\"$file_upload_url/$filename\"";
 
-  if ($display_files_with_lightbox == "yes")
+  if (isset($params["show_in_new_window"]))
+  {
+  	if ($params["show_in_new_window"] === true)
+  	  $html .= " target=\"_blank\"";
+  }
+  else if ($display_files_with_lightbox == "yes")
     $html .= " rel=\"lightbox\" title=\"$filename\"";
   else
     $html .= " target=\"_blank\"";

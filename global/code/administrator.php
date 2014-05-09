@@ -215,9 +215,9 @@ function ft_admin_update_client($infohash, $tab_num)
         if (!empty($account_settings["num_password_history"]))
         {
           $encrypted_password = md5(md5($form_vals["password"]));
-      	  if (ft_password_in_password_history($account_id, $encrypted_password, $account_settings["num_password_history"]))
-      	    $errors[] = ft_eval_smarty_string($LANG["validation_password_in_password_history"], array("history_size" => $account_settings["num_password_history"]));
-      	  else
+          if (ft_password_in_password_history($account_id, $encrypted_password, $account_settings["num_password_history"]))
+            $errors[] = ft_eval_smarty_string($LANG["validation_password_in_password_history"], array("history_size" => $account_settings["num_password_history"]));
+          else
             ft_add_password_to_password_history($account_id, $encrypted_password);
         }
       }
@@ -364,7 +364,7 @@ function ft_admin_update_client($infohash, $tab_num)
       mysql_query("DELETE FROM {$g_table_prefix}public_view_omit_list WHERE account_id = $account_id");
 
       $num_form_rows = $infohash["num_forms"];
-      $client_forms = array(); // stores the form IDs of all forms this client has been added to
+      $client_forms      = array(); // stores the form IDs of all forms this client has been added to
       $client_form_views = array(); // stores the view IDs of each form this client is associated with
       for ($i=1; $i<=$num_form_rows; $i++)
       {
@@ -376,20 +376,24 @@ function ft_admin_update_client($infohash, $tab_num)
         $client_forms[] = $form_id;
         $client_form_views[$form_id] = array();
 
-        // find out a little info about this form. If it's a public form, the user is automatically assigned
-        // to it, so don't bother inserting a record into the client_forms table
+        // find out a little info about this form. If it's a public form, the user is already (implicitly) assigned
+        // to it, so don't bother inserting a redundant record into the client_forms table
         $form_info_query = mysql_query("SELECT access_type FROM {$g_table_prefix}forms WHERE form_id = $form_id");
         $form_info = mysql_fetch_assoc($form_info_query);
 
         if ($form_info["access_type"] != "public")
           mysql_query("INSERT INTO {$g_table_prefix}client_forms (account_id, form_id) VALUES ($account_id, $form_id)");
 
+        // if this form was previously an "admin" type, it no longer is! By adding this client to the form, it's now
+        // changed to a "private" access type
+        if ($form_info["access_type"] == "admin")
+          mysql_query("UPDATE {$g_table_prefix}forms SET access_type = 'private' WHERE form_id = $form_id");
+
         // now loop through selected Views. Get View info
         if (!isset($infohash["row_{$i}_selected_views"]))
           continue;
 
         $client_form_views[$form_id] = $infohash["row_{$i}_selected_views"];
-
         foreach ($infohash["row_{$i}_selected_views"] as $view_id)
         {
           $view_info_query = mysql_query("SELECT access_type FROM {$g_table_prefix}views WHERE view_id = $view_id");
