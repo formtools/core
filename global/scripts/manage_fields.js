@@ -161,7 +161,7 @@ $(function() {
 
     ft.update_field_size_dropdown(this, field_sizes_div, {
       name:       "field_" + curr_field_id + "_size",
-      html_class: "field_types",
+      html_class: "field_sizes",
       selected:   curr_value
     });
   });

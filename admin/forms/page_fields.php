@@ -69,7 +69,7 @@ if ($num_fields_per_page != "all")
 
 $page_vars["head_string"] =<<< END
   <script src="{$g_root_url}/global/scripts/sortable.js"></script>
-  <script src="{$g_root_url}/global/scripts/manage_fields.js"></script>
+  <script src="{$g_root_url}/global/scripts/manage_fields.js?v=2"></script>
 END;
 
 $replacement_info = array("views_tab_link" => "$php_self?page=views&form_id=$form_id");

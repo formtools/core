@@ -132,6 +132,7 @@ function ft_set_settings($settings, $module = "")
           ");
     }
 
+    // hmm... TODO. This looks suspiciously like a bug... [a module could overwrite a core var]
     $_SESSION["ft"]["settings"][$setting_name] = $setting_value;
   }
 }

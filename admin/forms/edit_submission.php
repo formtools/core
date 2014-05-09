@@ -53,7 +53,6 @@ $grouped_fields = ft_get_grouped_view_fields($view_id, $tab_number, $form_id, $s
 
 $page_field_ids      = array();
 $page_field_type_ids = array();
-
 foreach ($grouped_fields as $group)
 {
   foreach ($group["fields"] as $field_info)

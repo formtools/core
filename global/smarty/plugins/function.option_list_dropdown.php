@@ -6,7 +6,7 @@
  * File:     function.field_option_list_dropdown
  * Type:     function
  * Name:     field_option_groups
- * Purpose:  generates a dropdown of all Option Lists in the database (ordered by form name).
+ * Purpose:  generates a dropdown of all Option Lists in the database
  * -------------------------------------------------------------
  */
 function smarty_function_option_list_dropdown($params, &$smarty)
@@ -24,32 +24,33 @@ function smarty_function_option_list_dropdown($params, &$smarty)
   $style         = (isset($params["style"])) ? $params["style"] : "";
 
   $attributes = array(
-    "id"   => $params["name_id"],
-    "name" => $params["name_id"],
+    "id"       => $params["name_id"],
+    "name"     => $params["name_id"],
     "onchange" => $onchange,
-    "style" => $style
+    "style"    => $style
       );
 
-	$attribute_str = "";
+  $attribute_str = "";
   while (list($key, $value) = each($attributes))
   {
-  	if (!empty($value))
-  	  $attribute_str .= " $key=\"$value\"";
+    if (!empty($value))
+      $attribute_str .= " $key=\"$value\"";
   }
 
   $groups = ft_get_option_lists("all");
+
   $rows = array();
   $rows[] = "<option value=\"\">{$LANG["phrase_please_select"]}</option>";
 
   foreach ($groups["results"] as $group_info)
   {
-  	$group_id   = $group_info["group_id"];
-  	$group_name = $group_info["group_name"];
-  	$selected = ($default_value == $group_id) ? "selected" : "";
-  	$rows[] = "<option value=\"$group_id\" $selected>$group_name</option>\n";
+    $list_id          = $group_info["list_id"];
+    $option_list_name = $group_info["option_list_name"];
+    $selected = ($default_value == $list_id) ? "selected" : "";
+    $rows[] = "<option value=\"$list_id\" $selected>$option_list_name</option>\n";
   }
 
- 	$html = "<select $attribute_str>" . join("\n", $rows) . "</select>";
+   $html = "<select $attribute_str>" . join("\n", $rows) . "</select>";
 
   return $html;
 }
