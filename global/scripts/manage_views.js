@@ -1,49 +1,219 @@
 /**
  * File:        manage_views.js
- * Abstract:    contains all JS for adding/editing Views. Note: this file also contains the JS that
- *              used to be in the filters.js file, since filters are now associated with Views, not
- *              individual clients.
+ * Abstract:    contains all JS for the Views and Edit View pages.
  * Assumptions: g.root_url is defined
  */
 
-// the Views JS namespace
 var view_ns = {};
-
 view_ns.num_standard_filter_rows   = 0; // the number of standard filters currently displayed (overwritten by calling page)
 view_ns.num_client_map_filter_rows = 0; // the number of client map filters currently displayed (overwritten by calling page)
 view_ns.field_ids       = []; // stores the fields IDs currently in the view
 view_ns.all_form_fields = []; // all form fields
 view_ns.view_tabs       = []; // the view tabs. This is change dynamically in the page
-view_ns.enable_editable_fields = false;
 view_ns.tabindex_increment = 1000;
+view_ns.delete_view_dialog = $("<div id=\"delete_view_dialog\"></div>");
+
+
+// used internally to create a new group ID for dynamically inserted groups. This is used temporarily
+// in the page. When submitted, the server code does the job of assigned appropriate group IDs from the DB
+view_ns.curr_new_group_id = 1;
+
+// initialized on page load
+view_ns.num_new_submission_default_values = 0;
+view_ns.num_view_columns = 0;
+
+
+$(function() {
+  $(".add_field_link").live("click", function() {
+    var group_id = $(this).closest(".sortable_group").find(".group_order").val();
+    ft.create_dialog({
+      dialog:  $("#new_view_dialog"),
+      title:   g.messages["phrase_create_new_view"],
+      buttons: [{
+        text:  g.messages["phrase_create_new_view"],
+        click: function() {
+          ft.dialog_activity_icon($("#new_view_dialog"), "show");
+          var form_id = $("#form_id").val();
+          var data_type = (g.js_debug) ? "html" : "json";
+          $.ajax({
+            url:      g.root_url + "/global/code/actions.php",
+            type:     "POST",
+            dataType: data_type,
+            data:     {
+              form_id:                  form_id,
+              group_id:                 group_id,
+              action:                   "create_new_view",
+              view_name:                $("#new_view_name").val(),
+              create_view_from_view_id: $("#create_view_from_view_id").val()
+            },
+            success: function(data) {
+              if (g.js_debug) {
+                console.log(data);
+                return;
+              }
+              window.location = "edit.php?page=edit_view&edit_view_tab=1&form_id=" + form_id + "&view_id=" + data.view_id;
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              $("#new_view_dialog").dialog("close");
+              ft.error_handler(jqXHR, textStatus, errorThrown);
+            }
+          });
+        }
+      },
+      {
+        text:  g.messages["word_cancel"],
+        click: function() {
+          $(this).dialog("close");
+        }
+      }]
+    });
+  });
+});
+
+
+/**
+ * Creates a new View group.
+ */
+view_ns.create_new_group = function() {
+  ft.dialog_activity_icon($("#add_group_popup"), "show");
+  $.ajax({
+    url:      g.root_url + "/global/code/actions.php",
+    type:     "POST",
+    dataType: "json",
+    data:     { group_name: $("#add_group_popup").find(".new_group_name").val(), action: "create_new_view_group" },
+    success:  view_ns.create_new_group_response,
+    error:    function(xhr, text_status, error_thrown) {
+      ft.dialog_activity_icon($("#add_group_popup"), "hide");
+      $("#add_group_popup").dialog("close");
+      ft.error_handler(xhr, text_status, error_thrown);
+    }
+  });
+  return false;
+}
+
+
+/**
+ * Creates a new View group (on the main Views page).
+ */
+view_ns.create_new_group_response = function(data) {
+  ft.dialog_activity_icon($("#add_group_popup"), "hide");
+  $("#add_group_popup").dialog("close");
+  sortable_ns.insert_new_group({
+    group_id:     data.group_id,
+    group_name:   data.group_name,
+    is_groupable: true
+  });
+}
+
+
+view_ns.delete_view = function(el) {
+  var view_id = $(el).closest(".row_group").find(".sr_order").val();
+
+  ft.create_dialog({
+    dialog:     view_ns.delete_view_dialog,
+    title:      g.messages["phrase_delete_view"],
+    content:    g.messages["confirm_delete_view"],
+    popup_type: "warning",
+    buttons: [{
+      text: g.messages["word_yes"],
+      click: function() {
+        ft.dialog_activity_icon($("#delete_view_dialog"), "show");
+        $.ajax({
+          url:      g.root_url + "/global/code/actions.php",
+          type:     "POST",
+          dataType: "json",
+          data:     { view_id: view_id, action: "delete_view" },
+          success:  view_ns.delete_view_response,
+          error:    function(xhr, text_status, error_thrown) {
+            ft.dialog_activity_icon($("#add_group_popup"), "hide");
+            $("#delete_view_dialog").dialog("close");
+            ft.error_handler(xhr, text_status, error_thrown);
+          }
+        });
+      }
+    },
+    {
+      text: g.messages["word_no"],
+      click: function() {
+        $(this).dialog("close");
+      }
+    }]
+  });
+}
+
+
+view_ns.delete_view_response = function(data) {
+  ft.dialog_activity_icon($("#delete_view_dialog"), "hide");
+  $("#delete_view_dialog").dialog("close");
+  sortable_ns.delete_row("view_list", $(".sr_order[value=" + data.view_id + "]"));
+  ft.display_message("ft_message", 1, g.messages["notify_view_deleted"]);
+
+  // one final thing: delete the now-orphaned reference to this deleted View in the Add View dialog source
+  $("#create_view_from_view_id option[value=" + data.view_id + "]").remove();
+}
 
 
 /**
  * Hides/shows the custom client list.
  */
-view_ns.toggle_custom_client_list = function(val)
-{
-  if (val == "yes")
-    $("custom_clients").hide();
-  else
-    $("custom_clients").show();
+view_ns.toggle_custom_client_list = function(val) {
+  if (val == "yes") {
+    $("#custom_clients").hide();
+  } else {
+    $("#custom_clients").show();
+  }
 }
 
 
 /**
  * Enables / disables all fields in the View.
  */
-view_ns.toggle_editable_fields = function(enable_fields)
-{
-  view_ns.enable_editable_fields = enable_fields;
-
-  // loop through all selected form fields and if the
-  for (var i=0; i<view_ns.field_ids.length; i++)
-  {
-    field_id = view_ns.field_ids[i];
-    if ($("field_" + field_id + "_is_editable"))
-      $("field_" + field_id + "_is_editable").disabled = !enable_fields;
+view_ns.toggle_editable_fields = function(may_edit) {
+  if (may_edit) {
+    $(".editable_fields").attr({ disabled: "" });
+  } else {
+    $(".editable_fields").attr({ disabled: "disabled" });
   }
+}
+
+
+/**
+ * Called after the user changes the tab content.
+ */
+view_ns.update_tab_dropdowns = function() {
+  var tabs = view_ns.get_tab_dropdown_contents();
+  $(".tabs_dropdown").each(function() {
+    var curr_dropdown_selection = this.value;
+    if (tabs.length == 0) {
+      $(this).html("<option value=\"\">" + g.messages["validation_no_tabs_defined"] + "</option>");
+    } else {
+      var options = [];
+      for (var i=0; i<tabs.length; i++) {
+      var is_selected = (tabs[i].tab == curr_dropdown_selection) ? " selected" : "";
+        options.push($("<option value=\"" + tabs[i].tab + "\"" + is_selected + ">" + tabs[i].label + "</option>"));
+      }
+      var optgroup = $("<optgroup label=\"" + g.messages["phrase_available_tabs"] + "\"></optgroup>").append(ft.group_nodes(options));
+      $(this).html(optgroup);
+    }
+  });
+}
+
+
+/**
+ * Looks at the contents of the tabs and constructs and returns
+ */
+view_ns.get_tab_dropdown_contents = function() {
+  var tabs = [];
+  $(".tab_label").each(function(i) {
+    var curr_tab_label = $.trim($(this).val());
+    if (curr_tab_label == "") {
+      return;
+    }
+    var tab_num = i + 1;
+    tabs.push({ tab: tab_num, label: curr_tab_label});
+  });
+
+  return tabs;
 }
 
 
@@ -54,182 +224,25 @@ view_ns.toggle_editable_fields = function(enable_fields)
  * @param integer field_id
  * @param bool show hide/show the field
  */
-view_ns.toggle_sortable_field = function(field_id, show)
-{
-  var display = (show) ? "block" : "none";
-  $("sortable_" + field_id).style.display = display;
+view_ns.toggle_sortable_field = function(field_id, show) {
+  $("#sortable_" + field_id).css("display", ((show) ? "block" : "none"));
 }
 
 
 /**
- * Adds one or more fields to the current View's field list. This calls the
- * view_ns.add_view_field function on each selected row.
- */
-view_ns.add_view_fields = function(dd_field_id)
-{
-  var selected_field_ids = $F(dd_field_id);
-  if (!selected_field_ids.length)
-  {
-    ft.display_message("ft_message", false, g.messages["validation_no_view_fields_selected"]);
-    return;
-  }
-
-  for (var i=0; i<selected_field_ids.length; i++)
-    view_ns.add_view_field(selected_field_ids[i]);
-}
-
-
-/**
- * Adds a field to the current View's field list and removes it from the
- * "available fields" dropdown.
+ * Helper function to get the field name out of the view_ns.all_form_fields array.
  *
- * @param integer field_id the unique field ID.
+ * @param integer field_id
  */
-view_ns.add_view_field = function(field_id)
-{
-  // get the field display text
-  var field_display_text = "";
-  for (i=0; i<view_ns.all_form_fields.length; i++)
-  {
-    if (view_ns.all_form_fields[i][0] == field_id)
-    {
-      field_display_text = view_ns.all_form_fields[i][1];
+view_ns.get_field_name = function(field_id) {
+  var field_name = null;
+  for (var i=0; i<view_ns.all_form_fields.length; i++) {
+    if (view_ns.all_form_fields[i].field_id == field_id) {
+      field_name = view_ns.all_form_fields[i].display_name;
       break;
     }
   }
-
-  var tbody = $("view_fields_table").getElementsByTagName("tbody")[0];
-  var row = document.createElement("tr");
-  row.setAttribute("id", "field_row_" + field_id);
-  var num_fields = view_ns.field_ids.length;
-
-  // [1] Order column
-  var td1 = document.createElement("td");
-  td1.setAttribute("align", "center");
-  var inp = document.createElement("input");
-  inp.setAttribute("type", "text");
-  inp.setAttribute("name", "field_" + field_id + "_order");
-  inp.setAttribute("id", "field_" + field_id + "_order");
-  inp.setAttribute("tabindex", (view_ns.tabindex_increment * 1) + num_fields);
-
-  // find the next available number
-  var highest_num = 0;
-  for (i=0; i<view_ns.field_ids.length; i++)
-  {
-    curr_num = parseInt($("field_" + view_ns.field_ids[i] + "_order").value);
-    if (curr_num > highest_num)
-      highest_num = curr_num;
-  }
-  next_num = highest_num + 1;
-  inp.setAttribute("value", next_num);
-  inp.style.cssText = "width: 30px";
-  td1.appendChild(inp);
-
-  // [2] Is Column
-  var td2 = document.createElement("td");
-  td2.setAttribute("align", "center");
-  var inp = document.createElement("input");
-  inp.setAttribute("type", "checkbox");
-  inp.setAttribute("name", "field_" + field_id + "_is_column");
-  inp.setAttribute("id", "field_" + field_id + "_is_column");
-  inp.setAttribute("tabindex", (view_ns.tabindex_increment * 2) + num_fields);
-  inp.onclick = function(evt) { view_ns.toggle_sortable_field(field_id, this.checked) }
-  td2.appendChild(inp);
-
-  // [3] Sortable
-  var td3 = document.createElement("td");
-  td3.setAttribute("align", "center");
-  var inp = document.createElement("input");
-  inp.setAttribute("type", "checkbox");
-  inp.setAttribute("name", "field_" + field_id + "_is_sortable");
-  inp.setAttribute("checked", true);
-  inp.setAttribute("tabindex", (view_ns.tabindex_increment * 3) + num_fields);
-  var div = document.createElement("div");
-  div.setAttribute("id", "sortable_" + field_id);
-  div.style.cssText = "display:none";
-  div.appendChild(inp);
-  td3.appendChild(div);
-
-  // [4] Editable
-  var td4 = document.createElement("td");
-  td4.setAttribute("align", "center");
-
-  // the Submission ID and Last Modified fields CANNOT be edited, so check it's another field
-  if (field_id != view_ns.submission_id_field_id && field_id != view_ns.last_modified_date_field_id)
-  {
-    var may_edit_submissions = $("cmes").checked;
-
-    var inp = document.createElement("input");
-    inp.setAttribute("type", "checkbox");
-    inp.setAttribute("name", "field_" + field_id + "_is_editable");
-    inp.setAttribute("id", "field_" + field_id + "_is_editable");
-    inp.setAttribute("tabindex", (view_ns.tabindex_increment * 4) + num_fields);
-
-    if (may_edit_submissions)
-      inp.setAttribute("checked", true);
-    else
-      inp.setAttribute("disabled", true);
-
-    td4.appendChild(inp);
-  }
-
-  // [5] Searchable
-  var td5 = document.createElement("td");
-  td5.setAttribute("align", "center");
-  var inp = document.createElement("input");
-  inp.setAttribute("type", "checkbox");
-  inp.setAttribute("name", "field_" + field_id + "_is_searchable");
-  inp.setAttribute("checked", true);
-  inp.setAttribute("tabindex", (view_ns.tabindex_increment * 5) + num_fields);
-  var div = document.createElement("div");
-  div.setAttribute("id", "searchable_" + field_id);
-  div.appendChild(inp);
-  td5.appendChild(div);
-
-  // [6] Display text column
-  var td6 = document.createElement("td");
-  td6.className = "pad_left_small";
-  var textNode = document.createTextNode(field_display_text);
-  td6.appendChild(textNode);
-
-  // [7] Tab column
-  var td7 = document.createElement("td");
-  var sel = document.createElement("select");
-  sel.setAttribute("name", "field_" + field_id + "_tab");
-  sel.setAttribute("id", "field_" + field_id + "_tab");
-  sel.setAttribute("tabindex", (view_ns.tabindex_increment * 6) + num_fields);
-  for (i=0; i<view_ns.view_tabs.length; i++)
-    sel.options[i] = new Option(view_ns.view_tabs[i][1], view_ns.view_tabs[i][0]);
-  if (view_ns.view_tabs.length == 0)
-    sel.options[0] = new Option(g.messages["validation_no_tabs_defined"], "");
-  td7.appendChild(sel);
-
-  // [8] Remove column
-  var td8 = document.createElement("td");
-  td8.setAttribute("align", "center");
-  td8.className = "del";
-  var delete_link = document.createElement("a");
-  delete_link.setAttribute("href", "#");
-  delete_link.onclick = function (evt) { return view_ns.remove_view_field(field_id); };
-  delete_link.appendChild(document.createTextNode(g.messages["word_remove"].toUpperCase()));
-  td8.appendChild(delete_link);
-
-  // add the table data cells to the row
-  row.appendChild(td1);
-  row.appendChild(td2);
-  row.appendChild(td3);
-  row.appendChild(td4);
-  row.appendChild(td5);
-  row.appendChild(td6);
-  row.appendChild(td7);
-  row.appendChild(td8);
-
-  // add the row to the table
-  tbody.appendChild(row);
-
-  // add this field to view_ns.field_ids and update the available view field list
-  view_ns.field_ids.push(field_id);
-  view_ns.update_available_view_fields();
+  return field_name;
 }
 
 
@@ -239,19 +252,16 @@ view_ns.add_view_field = function(field_id)
  *
  * @param integer field_id the unique field ID
  */
-view_ns.remove_view_field = function(field_id)
-{
-  // get the current table
-  var tbody = $("view_fields_table").getElementsByTagName("tbody")[0];
+view_ns.remove_view_field = function(field_id) {
+  var tbody = $("#view_fields_table").getElementsByTagName("tbody")[0];
 
-  for (i=tbody.childNodes.length-1; i>0; i--)
-  {
+  for (var i=tbody.childNodes.length-1; i>0; i--) {
     // ignore any whitespace "nodes"
-    if (tbody.childNodes[i].nodeName == '#text')
+    if (tbody.childNodes[i].nodeName == '#text') {
       continue;
+    }
 
-    if (tbody.childNodes[i].id == "field_row_" + field_id)
-    {
+    if (tbody.childNodes[i].id == "field_row_" + field_id) {
       tbody.removeChild(tbody.childNodes[i]);
       break;
     }
@@ -272,172 +282,33 @@ view_ns.remove_view_field = function(field_id)
 
 
 /**
- * Called whenever a user adds or removes a field in the View. This updates the "available field"
- * dropdown and whether or not the Add Field button is enabled or not.
- */
-view_ns.update_available_view_fields = function()
-{
-  var available_field_list = [];
-
-  // loop through view_ns.all_form_fields hash and if the key (field_id) isn't in view_ns.field_ids,
-  // keep track of it. We'll use that info to populate the available fields dropdown
-  for (j=0; j<view_ns.all_form_fields.length; j++)
-  {
-    field_id = view_ns.all_form_fields[j][0];
-
-    if (!$(view_ns.field_ids).include(field_id))
-      available_field_list.push(view_ns.all_form_fields[j]);
-  }
-
-  if (available_field_list.length == 0)
-  {
-    $("available_fields").options.length = 0;
-    $("available_fields").options[0] = new Option(g.messages["phrase_all_fields_displayed"], "");
-    $("add_field_button").disabled = true;
-    $("add_field_button").style.color = '#999999';
-  }
-  else
-  {
-    $("available_fields").options.length = 0;
-    $("add_field_button").disabled = false;
-    $("add_field_button").style.color = '#000000';
-
-    // now add the new list
-    for (i=0; i<available_field_list.length; i++)
-    {
-      new_option = new Option(available_field_list[i][1], available_field_list[i][0]);
-      $("available_fields").options[i] = new_option;
-    }
-  }
-}
-
-
-/**
- * Changes the tab choice of multiple View fields at once, saving the user have to do them all
- * manually.
- */
-view_ns.assign_field_tabs = function()
-{
-  var from_row    = parseInt($("tab_row_from").value);
-  var to_row      = parseInt($("tab_row_to").value);
-  var new_tab_num = $("assign_fields_tab_selection").value;
-
-  if (from_row.toString() == "NaN" || to_row.toString() == "NaN")
-  {
-    ft.display_message("ft_message", false, g.messages["validation_invalid_tab_assign_values"]);
-    return;
-  }
-
-  var tbody = $("view_fields_table").getElementsByTagName("tbody")[0];
-  var count = 1;
-
-  for (var i=0; i<tbody.childNodes.length; i++)
-  {
-    if (!tbody.childNodes[i].id || !tbody.childNodes[i].id.match(/field_row_/))
-      continue;
-
-    var curr_field_id = tbody.childNodes[i].id.replace(/field_row_/, "");
-
-    if (count >= from_row && count <= to_row)
-      $("field_" + curr_field_id + "_tab").value = new_tab_num;
-
-    count++;
-  }
-}
-
-
-/**
- * Helper function to empty the 6 tab label fields (with "tab_label" class).
- */
-view_ns.remove_tabs = function()
-{
-  $$('.tab_label').each(function(Element) { Element.value = ""; } );
-  view_ns.update_field_tabs();
-}
-
-
-/**
- * This function is called whenever the user's focus leaves any of the the tab name fields. It
- * updates the contents of the tab dropdown column in the fields section - for each and every
- * field.
- */
-view_ns.update_field_tabs = function()
-{
-  // get the tab labels
-  var tab_labels = [
-    $("tab_label1").value,
-    $("tab_label2").value,
-    $("tab_label3").value,
-    $("tab_label4").value,
-    $("tab_label5").value,
-    $("tab_label6").value
-      ];
-
-  // update the view_tabs array
-  view_ns.view_tabs = [];
-  for (var i=0; i<tab_labels.length; i++)
-  {
-    if (tab_labels[i] != "")
-      view_ns.view_tabs.push([i+1, tab_labels[i]]);
-  }
-  if (view_ns.view_tabs.length == 0)
-    view_ns.view_tabs.push(["", g.messages["validation_no_tabs_defined"]]);
-
-  // update all the tab dropdowns for each of the View fields
-  for (var i=0; i<view_ns.field_ids.length; i++)
-  {
-    var field_id = view_ns.field_ids[i];
-    var tab_number = $("field_" + field_id + "_tab").value;
-    $("field_" + field_id + "_tab").options.length = 0;
-
-    for (var j=0; j<view_ns.view_tabs.length; j++)
-    {
-      var is_selected = ((j+1) == tab_number) ? true : false;
-      $("field_" + field_id + "_tab").options[j] = new Option(view_ns.view_tabs[j][1], view_ns.view_tabs[j][0], is_selected);
-    }
-  }
-
-  // lastly, update the assign multiple tabs dropdown
-  $("assign_fields_tab_selection").options.length = 0;
-   for (var i=0; i<view_ns.view_tabs.length; i++)
-  {
-    var is_selected = ((i+1) == tab_number) ? true : false;
-    $("assign_fields_tab_selection").options[i] = new Option(view_ns.view_tabs[i][1], view_ns.view_tabs[i][0], is_selected);
-  }
-}
-
-
-/**
  * Used to add rows to the standard filters table on the Edit View page (the first table). This is separated from the
  * client map filter table because the content is sufficiently different.
  *
  * @param integer num_rows the number of rows to add
  */
-view_ns.add_standard_filters = function(num_rows)
-{
-  // check num_rows is an integer
-  if (num_rows.match(/\D/) || num_rows == 0 || num_rows == "")
-  {
+view_ns.add_standard_filters = function(num_rows) {
+  var num_rows = num_rows.toString();
+  if (num_rows.match(/\D/) || num_rows == 0 || num_rows == "") {
     ft.display_message("ft_message", false, g.messages["validation_num_rows_to_add"]);
-    $("num_standard_filter_rows").focus();
+    $("#num_standard_filter_rows").focus();
     return;
   }
 
-  var tbody = $("standard_filters_table").getElementsByTagName("tbody")[0];
-
-  for (var i=1; i<=num_rows; i++)
-  {
-    var currRow = ++view_ns.num_standard_filter_rows;
+  for (var i=1; i<=num_rows; i++) {
+    var curr_row = ++view_ns.num_standard_filter_rows;
 
     var row = document.createElement("tr");
-    row.setAttribute("id", "standard_row_" + currRow);
+    row.setAttribute("id", "standard_row_" + curr_row);
 
     // [1] first <td> cell: form field dropdown (defaulted to "please select")
     var td2 = document.createElement("td");
     var dd2 = document.createElement("select");
-    dd2.setAttribute("name", "standard_filter_" + currRow + "_field_id");
-    dd2.setAttribute("id", "standard_filter_" + currRow + "_field_id");
-    dd2.onchange = view_ns.change_standard_filter_field.bind(this, currRow);
+    dd2.setAttribute("name", "standard_filter_" + curr_row + "_field_id");
+    dd2.setAttribute("id", "standard_filter_" + curr_row + "_field_id");
+    $(dd2).bind("change", { curr_row: curr_row }, function(e) {
+      view_ns.change_standard_filter_field(e.data.curr_row);
+    });
 
     var default_option = document.createElement("option");
     default_option.setAttribute("value", "");
@@ -445,11 +316,9 @@ view_ns.add_standard_filters = function(num_rows)
     dd2.appendChild(default_option);
 
     // now add all form fields (even if they're not included in the View)
-    for (j=0; j<view_ns.all_form_fields.length; j++)
-    {
-      field_id   = view_ns.all_form_fields[j][0];
-      field_name = view_ns.all_form_fields[j][1];
-
+    for (var j=0; j<view_ns.all_form_fields.length; j++) {
+      field_id   = view_ns.all_form_fields[j].field_id;
+      field_name = view_ns.all_form_fields[j].display_name;
       dd2.options[j+1] = new Option(field_name, field_id);
     }
     td2.appendChild(dd2);
@@ -461,10 +330,10 @@ view_ns.add_standard_filters = function(num_rows)
 
     // -- first section: DATE operators
     var first_div = document.createElement("div");
-    first_div.setAttribute("id", "standard_filter_" + currRow + "_operators_dates_div");
+    first_div.setAttribute("id", "standard_filter_" + curr_row + "_operators_dates_div");
     first_div.style.cssText = "display: none";
     var operator_dd = document.createElement("select");
-    operator_dd.setAttribute("name", "standard_filter_" + currRow + "_operator_date");
+    operator_dd.setAttribute("name", "standard_filter_" + curr_row + "_operator_date");
     var option1 = document.createElement("option");
     option1.setAttribute("value", "before");
     option1.appendChild(document.createTextNode(g.messages["word_before"]));
@@ -477,9 +346,9 @@ view_ns.add_standard_filters = function(num_rows)
 
     // -- second section: REGULAR operators
     var second_div = document.createElement("div");
-    second_div.setAttribute("id", "standard_filter_" + currRow + "_operators_div");
+    second_div.setAttribute("id", "standard_filter_" + curr_row + "_operators_div");
     var operator_dd = document.createElement("select");
-    operator_dd.setAttribute("name", "standard_filter_" + currRow + "_operator");
+    operator_dd.setAttribute("name", "standard_filter_" + curr_row + "_operator");
     var option1 = document.createElement("option");
     option1.setAttribute("value", "equals");
     option1.appendChild(document.createTextNode(g.messages["word_equals"]));
@@ -505,43 +374,31 @@ view_ns.add_standard_filters = function(num_rows)
 
     // -- first section: DATE textbox & select image
     var first_div = document.createElement("div");
-    first_div.setAttribute("id", "standard_filter_" + currRow + "_values_dates_div");
+    first_div.setAttribute("id", "standard_filter_" + curr_row + "_values_dates_div");
     first_div.style.cssText = "display: none";
+    $(first_div).addClass("cf_date_group");
 
-    var table = document.createElement("table");
-    table.setAttribute("cellspacing", "0");
-    table.setAttribute("cellpadding", "0");
-    table.setAttribute("border", "0");
-    var tr = document.createElement("tr");
-    var tr_td1 = document.createElement("td");
-
-     var inp = document.createElement("input");
+    var inp = document.createElement("input");
     inp.setAttribute("type", "text");
-    inp.setAttribute("name", "standard_filter_" + currRow + "_filter_date_values");
-    inp.setAttribute("id", "standard_date_" + currRow);
-    inp.style.cssText = "width: 120px";
-    tr_td1.appendChild(inp);
+    inp.setAttribute("name", "standard_filter_" + curr_row + "_filter_date_values");
+    inp.setAttribute("id", "standard_date_" + curr_row);
 
-    var tr_td2 = document.createElement("td");
     var img = document.createElement("img");
-    img.setAttribute("src", g.root_url + "/themes/" + g.theme_folder + "/images/calendar_icon.gif");
-    img.setAttribute("id", "standard_date_image_" + currRow);
+    img.setAttribute("src", g.root_url + "/global/images/calendar.png");
+    img.setAttribute("id", "standard_date_image_" + curr_row);
     img.setAttribute("border", "0");
-    tr_td2.appendChild(img);
+    $(img).addClass("ui-datepicker-trigger");
 
-    tr.appendChild(tr_td1);
-    tr.appendChild(tr_td2);
-    table.appendChild(tr);
-
-    first_div.appendChild(table);
+    first_div.appendChild(inp);
+    first_div.appendChild(img);
 
     // -- second section: REGULAR textbox
     var second_div = document.createElement("div");
-    second_div.setAttribute("id", "standard_filter_" + currRow + "_values_div");
+    second_div.setAttribute("id", "standard_filter_" + curr_row + "_values_div");
     var inp2 = document.createElement("input");
     inp2.setAttribute("type", "text");
-    inp2.setAttribute("name", "standard_filter_" + currRow + "_filter_values");
-    inp2.setAttribute("style", "width: 120px;");
+    inp2.setAttribute("name", "standard_filter_" + curr_row + "_filter_values");
+    inp2.setAttribute("style", "width: 144px;");
     second_div.appendChild(inp2);
     td4.appendChild(first_div);
     td4.appendChild(second_div);
@@ -553,9 +410,9 @@ view_ns.add_standard_filters = function(num_rows)
     td5.className = "del"; // for IE
     var delete_link = document.createElement("a");
     delete_link.setAttribute("href", "#");
-    delete_link.onclick = view_ns.delete_filter_row.bind(this, "standard", currRow);
-
-    delete_link.appendChild(document.createTextNode(g.messages["word_remove"].toUpperCase()));
+    $(delete_link).bind("click", { curr_row: curr_row }, function(e) {
+      return view_ns.delete_filter_row("standard", e.data.curr_row);
+    });
     td5.appendChild(delete_link);
 
     // add the table data cells to the row
@@ -565,67 +422,51 @@ view_ns.add_standard_filters = function(num_rows)
     row.appendChild(td5);
 
     // add the row to the table
-    tbody.appendChild(row);
-
-    // init a Calendar for this row
-    Calendar.setup({
-       inputField     :    "standard_date_" + currRow,
-       showsTime      :    true,
-       timeFormat     :    "24",
-       ifFormat       :    "%Y-%m-%d %H:%M:00",
-       button         :    "standard_date_image_" + currRow,
-       align          :    "Bl",
-       singleClick    :    true
+    $("#standard_filters_table tbody").append(row);
+    $("#standard_date_" + curr_row).datetimepicker({
+      showSecond: true,
+      timeFormat: "hh:mm:ss",
+      dateFormat: "yy-mm-dd"
     });
   }
 
   // update the filter count
-  $("num_standard_filters").value = view_ns.num_standard_filter_rows;
+  $("#num_standard_filters").val(view_ns.num_standard_filter_rows);
 }
 
 
 /**
  * Used to add rows to the client map filters table on the Edit View page.
- * 
+ *
  * @param integer num_rows the number of rows to add
  */
-view_ns.add_client_map_filters = function(num_rows)
-{
-  // check num_rows is an integer
-  if (num_rows.match(/\D/) || num_rows == 0 || num_rows == "")
-  {
+view_ns.add_client_map_filters = function(num_rows) {
+  if (num_rows.match(/\D/) || num_rows == 0 || num_rows == "") {
     ft.display_message("ft_message", false, g.messages["validation_num_rows_to_add"]);
-    $("num_client_map_filter_rows").focus();
+    $("#num_client_map_filter_rows").focus();
     return;
   }
 
-  var tbody = $("client_map_filters_table").getElementsByTagName("tbody")[0];
-
-  for (var i=1; i<=num_rows; i++)
-  {
-    var currRow = ++view_ns.num_client_map_filter_rows;
-
+  var tbody = $("#client_map_filters_table tbody")[0];
+  for (var i=1; i<=num_rows; i++) {
+    var curr_row = ++view_ns.num_client_map_filter_rows;
     var row = document.createElement("tr");
-    row.setAttribute("id", "client_map_row_" + currRow);
+    row.setAttribute("id", "client_map_row_" + curr_row);
 
     // [1] first <td> cell: form field dropdown (defaulted to "please select")
     var td2 = document.createElement("td");
     var dd2 = document.createElement("select");
-    dd2.setAttribute("name", "client_map_filter_" + currRow + "_field_id");
-    dd2.setAttribute("id", "client_map_filter_" + currRow + "_field_id");
-
-    var default_option = document.createElement("option");
-    default_option.setAttribute("value", "");
-    default_option.appendChild(document.createTextNode(g.messages["phrase_please_select"]));
-    dd2.appendChild(default_option);
+    dd2.setAttribute("name", "client_map_filter_" + curr_row + "_field_id");
+    dd2.setAttribute("id", "client_map_filter_" + curr_row + "_field_id");
 
     // now add all form fields (even if they're not included in the View)
-    for (j=0; j<view_ns.all_form_fields.length; j++)
-    {
-      field_id   = view_ns.all_form_fields[j][0];
-      field_name = view_ns.all_form_fields[j][1];
-      dd2.options[j+1] = new Option(field_name, field_id);
+    var options = "<option value=\"\">" + g.messages["phrase_please_select"] + "</option>";
+    for (var j=0; j<view_ns.all_form_fields.length; j++) {
+      var field_id   = view_ns.all_form_fields[j].field_id;
+      var field_name = view_ns.all_form_fields[j].display_name;
+      options += "<option value=\"" + field_id + "\">" + field_name + "</option>";
     }
+    $(dd2).append(options);
     td2.appendChild(dd2);
 
     // [3] third <td> cell: operator dropdown
@@ -635,9 +476,9 @@ view_ns.add_client_map_filters = function(num_rows)
 
     // -- second section: REGULAR operators
     var div = document.createElement("div");
-    div.setAttribute("id", "client_map_filter_" + currRow + "_operators_div");
+    div.setAttribute("id", "client_map_filter_" + curr_row + "_operators_div");
     var operator_dd = document.createElement("select");
-    operator_dd.setAttribute("name", "client_map_filter_" + currRow + "_operator");
+    operator_dd.setAttribute("name", "client_map_filter_" + curr_row + "_operator");
     var option1 = document.createElement("option");
     option1.setAttribute("value", "equals");
     option1.appendChild(document.createTextNode(g.messages["word_equals"]));
@@ -660,37 +501,37 @@ view_ns.add_client_map_filters = function(num_rows)
     // [4] fourth <td> cell: select dropdown
     var td4 = document.createElement("td");
     var dd = document.createElement("select");
-    dd.setAttribute("name", "client_map_filter_" + currRow + "_client_field");
-    dd.setAttribute("style", "width: 150px;");
+    dd.setAttribute("style", "width: 160px;");
+    dd.setAttribute("name", "client_map_filter_" + curr_row + "_client_field");
+
     var default_option = document.createElement("option");
     default_option.setAttribute("value", "");
     default_option.appendChild(document.createTextNode(g.messages["phrase_please_select"]));
     dd.appendChild(default_option);
 
-		// add in the contents of the page_ns.clientFields array. For extensibility with
-		// other modules, the options are grouped in optgroups.
-	  var current_section = null;
-		var optgroup = null;
-    for (var j=0; j<page_ns.clientFields.length; j++)
-    {
-		  if (page_ns.clientFields[j].section != current_section)
-      {
-			  if (current_section != null)
-				  dd.appendChild(optgroup);
+    // add in the contents of the page_ns.clientFields array. For extensibility with
+    // other modules, the options are grouped in optgroups.
+    var current_section = null;
+    var optgroup = null;
+    for (var j=0; j<page_ns.clientFields.length; j++) {
+      if (page_ns.clientFields[j].section != current_section) {
+        if (current_section != null) {
+          dd.appendChild(optgroup);
+        }
 
         optgroup = document.createElement("optgroup");
-				current_section = page_ns.clientFields[j].section;
-			  optgroup.setAttribute("label", current_section);
-			}
-			
+        current_section = page_ns.clientFields[j].section;
+        optgroup.setAttribute("label", current_section);
+      }
+
       var option = document.createElement("option");
       option.setAttribute("value", page_ns.clientFields[j].val);
       option.appendChild(document.createTextNode(page_ns.clientFields[j].text));
       optgroup.appendChild(option);
     }
 
-	  dd.appendChild(optgroup);
-    
+    dd.appendChild(optgroup);
+
     // add any additional fields defined in the page (from the Extended Client Fields module)
     td4.appendChild(dd);
 
@@ -701,9 +542,9 @@ view_ns.add_client_map_filters = function(num_rows)
     td5.className = "del"; // for IE
     var delete_link = document.createElement("a");
     delete_link.setAttribute("href", "#");
-    delete_link.onclick = view_ns.delete_filter_row.bind(this, "client_map", currRow);
-
-    delete_link.appendChild(document.createTextNode(g.messages["word_remove"].toUpperCase()));
+    $(delete_link).bind("click", { curr_row: curr_row }, function(e) {
+      return view_ns.delete_filter_row("client_map", e.data.curr_row);
+    });
     td5.appendChild(delete_link);
 
     // add the table data cells to the row
@@ -717,7 +558,7 @@ view_ns.add_client_map_filters = function(num_rows)
   }
 
   // update the filter count
-  $("num_client_map_filters").value = view_ns.num_client_map_filter_rows;
+  $("#num_client_map_filters").val(view_ns.num_client_map_filter_rows);
 }
 
 
@@ -728,34 +569,24 @@ view_ns.add_client_map_filters = function(num_rows)
  * @param integer row the row number
  * @param integer field_id the unique field ID
  */
-view_ns.change_standard_filter_field = function(row)
-{
-  var field_id = $("standard_filter_" + row + "_field_id").value;
+view_ns.change_standard_filter_field = function(row) {
+  var field_id = $("#standard_filter_" + row + "_field_id").val();
 
   // find out if this field is the submission date or not
   var is_date_field = false;
-  for (var i=0; i<view_ns.all_form_fields.length; i++)
-  {
-    curr_field_id = view_ns.all_form_fields[i][0];
-    curr_col_name = view_ns.all_form_fields[i][2];
-
-    if (curr_field_id == field_id && (curr_col_name.match("submission_date") || curr_col_name.match("last_modified_date")))
-      is_date_field = true;
+  for (var i=0; i<view_ns.all_form_fields.length; i++) {
+    var curr_field_id = view_ns.all_form_fields[i].field_id;
+    if (curr_field_id == field_id) {
+      is_date_field = view_ns.all_form_fields[i].is_date_field;
+    }
   }
 
-  if (is_date_field)
-  {
-    $("standard_filter_" + row + "_operators_div").style.display = "none";
-    $("standard_filter_" + row + "_operators_dates_div").style.display = "block";
-    $("standard_filter_" + row + "_values_div").style.display = "none";
-    $("standard_filter_" + row + "_values_dates_div").style.display = "block";
-  }
-  else
-  {
-    $("standard_filter_" + row + "_operators_div").style.display = "block";
-    $("standard_filter_" + row + "_operators_dates_div").style.display = "none";
-    $("standard_filter_" + row + "_values_div").style.display = "block";
-    $("standard_filter_" + row + "_values_dates_div").style.display = "none";
+  if (is_date_field) {
+    $("#standard_filter_" + row + "_operators_div, #standard_filter_" + row + "_values_div").hide();
+    $("#standard_filter_" + row + "_operators_dates_div, #standard_filter_" + row + "_values_dates_div").show();
+  } else {
+    $("#standard_filter_" + row + "_operators_div, #standard_filter_" + row + "_values_div").show();
+    $("#standard_filter_" + row + "_operators_dates_div, #standard_filter_" + row + "_values_dates_div").hide();
   }
 }
 
@@ -772,27 +603,18 @@ view_ns.change_standard_filter_field = function(row)
  * @param string table "standard", "client_map"
  * @param integer row the row number
  */
-view_ns.delete_filter_row = function(table, row)
-{
+view_ns.delete_filter_row = function(table, row) {
   // get the current table
   var table_id = null;
-  if (table == "standard")
-  {
+  if (table == "standard") {
     table_id = "standard_filters_table";
     row_id_prefix = "standard_";
-  }
-  else
-  {
+  } else {
     table_id = "client_map_filters_table";
     row_id_prefix = "client_map_";
   }
 
-  var tbody = $(table_id).getElementsByTagName("tbody")[0];
-  for (var i=tbody.childNodes.length-1; i>0; i--)
-  {
-    if (tbody.childNodes[i].id == row_id_prefix + "row_" + row)
-      tbody.removeChild(tbody.childNodes[i]);
-  }
+  $("#" + row_id_prefix + "row_" + row).remove();
 
   return false;
 }
@@ -804,63 +626,463 @@ view_ns.delete_filter_row = function(table, row)
  *
  * @param the form element
  */
-view_ns.process_form = function(f)
-{
+view_ns.process_form = function(f) {
   // 1. Main tab
   var rules = [];
   rules.push("required,view_name," + g.messages['validation_no_view_name']);
   rules.push("required,num_submissions_per_page," + g.messages['validation_no_num_submissions_per_page']);
+  if (!rsv.validate(f, rules)) {
+    return ft.change_inner_tab(1, "edit_view"); // this always returns false
+  }
 
-  if (!rsv.validate(f, rules))
-    return ft.change_inner_tab(1, 4, "edit_view_tab"); // this always returns false
-
+  // TODO
+  /*
   // 2. Fields tab
-  if (view_ns.field_ids.length == 0)
-  {
+  if (view_ns.field_ids.length == 0) {
     ft.display_message("ft_message", false, g.messages["validation_no_view_fields"]);
-    return ft.change_inner_tab(2, 4, "edit_view_tab");
+    return ft.change_inner_tab(2, "edit_view");
   }
 
   // check that at least one field is marked as a column
   var has_column_checked = false;
-  for (i=0; i<view_ns.field_ids.length; i++)
-  {
-    if ($("field_" + view_ns.field_ids[i] + "_is_column").checked)
+  for (i=0; i<view_ns.field_ids.length; i++) {
+    if ($("#field_" + view_ns.field_ids[i] + "_is_column").attr("checked")) {
       has_column_checked = true;
+    }
   }
-  if (!has_column_checked)
-  {
+  if (!has_column_checked) {
     ft.display_message("ft_message", false, g.messages["validation_no_column_selected"]);
-    return ft.change_inner_tab(2, 4, "edit_view_tab"); // this always returns false
+    return ft.change_inner_tab(2, "edit_view"); // this always returns false
   }
+  */
 
   // select all clients
-  ft.select_all(f["selected_user_ids[]"]);
-
-  // store the field_ids in a hidden field to pass along with the update request
-  $("field_ids").value = view_ns.field_ids.join(",");
+  ft.select_all("selected_user_ids");
 
   return true;
 }
 
 
-view_ns.toggle_filter_section = function(section)
-{
-  if (section == "client_map")
-    var section_id = "client_map_filters"; 
-  else
-    var section_id = "standard_filters"; 
-		  
-  var display_setting = $(section_id).getStyle('display');
-  var is_visible = false;
-
-  if (display_setting == 'none')
-  {
-    Effect.BlindDown($(section_id));
-    is_visible = true;
+view_ns.toggle_filter_section = function(section) {
+  var section_id = null;
+  if (section == "client_map") {
+    section_id = "client_map_filters";
+  } else {
+    section_id = "standard_filters";
   }
-  else
-    Effect.BlindUp($(section_id));
+
+  var display_setting = $("#" + section_id).css("display");
+  if (display_setting == 'none') {
+    $("#" + section_id).show("blind");
+  } else {
+    $("#" + section_id).hide("blind");
+  }
 
   return false;
 }
+
+
+/**
+ * Open the Add Fields dialog after the user clicks on the Add Fields(s) >> link for a specific group.
+ */
+view_ns.add_fields_dialog = function() {
+  view_ns.curr_group = $(this).closest(".sortable_group");
+
+  $("#add_fields_popup .error").addClass("hidden");
+
+  // figure out what fields haven't already been added and add the HTML into the dialog
+  var available_field_info = view_ns.get_available_view_fields();
+  $("#add_fields_popup_available_fields").html(available_field_info.html);
+
+  var buttons = [{
+    text: g.messages["word_close"],
+    click: function() {
+    view_ns._close_add_fields_dialog(this);
+    }
+  }];
+
+  if (available_field_info.num_fields > 0) {
+    $("#add_fields_popup .two_buttons input").attr("disabled", "");
+    buttons.unshift({
+      text: g.messages["phrase_add_fields"],
+      click: function() {
+        var field_ids = [];
+        $('#add_fields_popup .adding_field_ids').each(function() {
+          if (!this.checked) {
+            return;
+          }
+          field_ids.push(this.value);
+        });
+
+        if (!field_ids.length) {
+          $("#add_fields_popup .error div").html(g.messages["validation_no_view_fields_selected"]).parent().removeClass("hidden");
+        } else {
+          view_ns.add_view_fields(field_ids);
+          view_ns._close_add_fields_dialog(this);
+        }
+      }
+    });
+  } else {
+    $("#add_fields_popup .two_buttons input").attr("disabled", "disabled");
+  }
+
+  ft.create_dialog({
+    dialog:     $("#add_fields_popup"),
+    title:      g.messages["phrase_add_fields"],
+    min_width:  500,
+    min_height: 360,
+    buttons:    buttons
+  });
+
+  return false;
+}
+
+
+view_ns._close_add_fields_dialog = function(dialog) {
+  $("#add_fields_popup_available_fields").html("");
+  $(dialog).dialog("close");
+}
+
+
+/**
+ * Figures out how many fields are left that aren't currently used in the View. This function
+ * return an object with the following keys:
+ *
+ * @return object {
+ *                  "num_fields": the number of rows available
+ *                  "html":       the HTML of the rows to insert in the dialog
+ *                }
+ */
+view_ns.get_available_view_fields = function() {
+  var selected_field_ids = [];
+  $(".inner_tab_content2 .sr_order").each(function() { selected_field_ids.push(parseInt(this.value)); });
+
+  var html = "";
+  var num_fields = 0;
+  if (selected_field_ids.length < view_ns.all_form_fields.length) {
+    html = "<ul>";
+    for (var i=0; i<view_ns.all_form_fields.length; i++) {
+      if ($.inArray(view_ns.all_form_fields[i].field_id, selected_field_ids) != -1) {
+        continue;
+      }
+      html += "<li><input type=\"checkbox\" class=\"adding_field_ids\" value=\"" + view_ns.all_form_fields[i].field_id + "\" "
+            + "id=\"r" + i + "\" /><label for=\"r" + i + "\">" + view_ns.all_form_fields[i].display_name + "</label></li>";
+      num_fields++;
+    }
+    html += "</ul>";
+  } else {
+    html += "<div class=\"light_grey margin_left_small\">" + g.messages["phrase_all_fields_displayed"] + "</div>";
+  }
+
+  return {
+    num_fields: num_fields,
+    html:       html
+  };
+}
+
+
+/**
+ * Adds one or more fields to the appropriate View group.
+ */
+view_ns.add_view_fields = function(field_ids) {
+  var rows = [];
+
+  for (var i=0; i<field_ids.length; i++) {
+    var field_id   = field_ids[i];
+    var field_name = view_ns.get_field_name(field_id);
+
+    // a little irksome. All fields may be editable except Last Modified and Submission ID
+    var field_info = {};
+    for (var j=0; j<view_ns.all_form_fields.length; j++) {
+      if (view_ns.all_form_fields[j].field_id != field_id) {
+        continue;
+      }
+      field_info = view_ns.all_form_fields[j];
+    }
+    var is_editable = true;
+    if ($.inArray(field_info.col_name, ["submission_id", "last_modified_date"]) != -1) {
+      is_editable = false;
+    }
+
+    var row_html = '<div class="row_group">'
+      + '<input type="hidden" value="' + field_id + '" class="sr_order">'
+      + '<ul>'
+        + '<li class="col1 sort_col"></li>'
+        + '<li class="col2">' + field_name + '</li>'
+        + '<li class="col3 medium_grey">' + view_ns.field_type_map["ft" + field_info.field_type_id] + '</li>'
+
+    if (is_editable) {
+      row_html += '<li class="col4 check_area"><input type="checkbox" checked="checked" class="editable_fields" value="' + field_id + '" name="editable_fields[]" /></li>';
+    } else {
+      row_html += '<li class="col4"></li>';
+    }
+
+    row_html += '<li class="col5 check_area"><input type="checkbox" checked="checked" value="' + field_id + '" name="searchable_fields[]" /></li>'
+        + '<li class="col6 colN del"><a onclick="return view_ns.remove_view_field(' + field_id + ')" href="#"></a></li>'
+      + '</ul>'
+      + '<div class="clear"></div>'
+      + '</div>';
+
+    rows.push(sortable_ns.get_sortable_row_markup({row_group: row_html, is_grouped: true}));
+  }
+
+  view_ns.curr_group.find(".rows").append(ft.group_nodes(rows));
+  sortable_ns.reorder_rows(view_ns.curr_group, false);
+}
+
+
+/**
+ * This opens the Add Group dialog window, allowing users to create a new group and assign fields in one
+ * go. Note that this does NOT use the default add group functionality defined in sortables.js - we needed
+ * more control, hence the customized version.
+ */
+view_ns.add_field_group = function() {
+  var available_field_info = view_ns.get_available_view_fields();
+  $("#add_group_popup_available_fields").html(available_field_info.html);
+  $(".new_group_name").val("");
+
+  ft.create_dialog({
+    dialog:     $("#add_group_popup"),
+    title:      $(".add_group_popup_title").val(),
+    min_width:  500,
+    buttons:    [{
+      "text":  g.messages["phrase_create_group"],
+      "click": function() {
+        // note we use a custom insert_new_group function, defined on the view_ns namespace
+        view_ns.insert_new_group({
+          group_id:   "NEW" + view_ns.curr_new_group_id,
+          group_name: $(".new_group_name").val()
+        });
+        view_ns.curr_new_group_id++;
+
+        // if there are no other groups in the page, show the default message
+        $("#no_view_fields_defined").hide();
+        $("#allow_editable_fields_toggle").show();
+
+        // now insert all selected rows
+        var field_ids = [];
+        $('#add_group_popup .adding_field_ids').each(function() {
+          if (!this.checked) {
+            return;
+          }
+          field_ids.push(this.value);
+        });
+        view_ns.curr_group = $(".sortable_group:last");
+        view_ns.add_view_fields(field_ids);
+
+      // we clear the markup because both the add group and fields popup add the same markup with
+      // the same IDs for the labels
+      $("#add_group_popup_available_fields").html("");
+        $(this).dialog("close");
+      }
+    },
+    {
+      "text":  g.messages["word_cancel"],
+      "click": function() {
+      $("#add_group_popup_available_fields").html("");
+        $(this).dialog("close");
+      }
+    }]
+  });
+
+  return false;
+}
+
+
+/**
+ * Our custom insert_new_group function. Normally you'd use sortable_ns.insert_new_group, but the
+ * View field groups contain custom header: i.e. the tabs dropdown.
+ */
+view_ns.insert_new_group = function(info) {
+  var new_group_name = info.group_name;
+  var new_group_id   = info.group_id;
+
+  var group_label    = $(".sortable__new_group_name").val();
+  var sortable_class = $(".sortable__class").val();
+
+  // for the tab dropdown, see if it's already defined in the page. If so, just copy the contents - otherwise
+  // we need to manually construct it [TODO: check this on IE... I think the selected value of the first group's
+  // tab will be passed over]
+  var tabs_dropdown = $(".tabs_dropdown");
+  var tab_options   = "";
+  if (tabs_dropdown.length) {
+    tab_options = $(".tabs_dropdown:first").html();
+  } else {
+    var tabs = view_ns.get_tab_dropdown_contents();
+    if (tabs.length == 0) {
+      tab_options = "<option value=\"\">" + g.messages["validation_no_tabs_defined"] + "</option>";
+    } else {
+      tab_options = "<optgroup label=\"" + g.messages["phrase_available_tabs"] + "\">";
+      for (var i=0; i<tabs.length; i++) {
+        tab_options += "<option value=\"" + tabs[i].tab + "\">" + tabs[i].label + "</option>";
+      }
+      tab_options += "</optgroup>";
+    }
+  }
+
+  var html = "<div class=\"sortable_group\">\n"
+        + "<div class=\"sortable_group_header\">\n"
+          + "<div class=\"sort\"></div>\n"
+          + "<label>" + group_label + "</label>\n"
+          + "<input type=\"text\" name=\"group_name_" + new_group_id + "\" class=\"group_name\" value=\""
+            + new_group_name.replace(/"/, "&quot;") + "\" />\n"
+          + "<select name=\"group_tab_" + new_group_id + "\" class=\"tabs_dropdown\">"
+            + tab_options
+          + "</select>"
+          + "<div class=\"delete_group\"></div>\n"
+          + "<input type=\"hidden\" class=\"group_order\" value=\"" + new_group_id + "\" />\n"
+          + "<div class=\"clear\"></div>\n"
+        + "</div>\n"
+        + "<div class=\"sortable " + sortable_class + "\">\n";
+
+  html += $("#sortable__new_group_header").html();
+
+  html += "<div class=\"clear\"></div>\n"
+          + "<ul class=\"rows connected_sortable\">\n"
+            + "<li class=\"sortable_row rowN empty_group\"><div class=\"clear\"></div></li>"
+          + "</ul>\n"
+        + "</div>\n"
+        + "<div class=\"clear\"></div>\n";
+
+  if ($("#sortable__new_group_footer").length) {
+    html += $("#sortable__new_group_footer").html();
+  }
+
+  html += "</div>\n";
+
+  sortable_ns.append_new_sortable_group(html);
+}
+
+view_ns.add_fields_select_all = function() {
+  $('.adding_field_ids').each(function() {
+    this.checked = true;
+    $(this).closest("li").addClass("selected_row");
+  });
+}
+view_ns.add_fields_unselect_all = function() {
+  $('.adding_field_ids').each(function() {
+    this.checked = false;
+    $(this).closest("li").removeClass("selected_row");
+  });
+}
+
+
+/**
+ * We keep the delete View group really simple: just remove it from the DOM. I don't want to
+ * pester the user with confirmation requests for *anything* on the Edit View fields page: it should
+ * be as speedy as possible.
+ *
+ * @param node the delete_group link node.
+ */
+view_ns.delete_field_group = function(el) {
+  var sortable_group = $(el).closest(".sortable_group");
+  var group_id = sortable_group.find(".group_order").val();
+  sortable_group.remove();
+
+  var deleted_groups_str = $("#deleted_groups").val();
+  var updated_str = (deleted_groups_str == "") ? group_id : deleted_groups_str + "," + group_id;
+  $("#deleted_groups").val(updated_str);
+
+  // if there are no other groups in the page, show the default message
+  if ($(".sortable_group").length == 0) {
+    $("#no_view_fields_defined").show();
+    $("#allow_editable_fields_toggle").hide();
+  }
+}
+
+
+view_ns.add_default_values_for_submission = function() {
+  var row_html = "<tr><td><select name=\"new_submissions[]\" class=\"new_submission_default_val_fields\">"
+      + "<option value=\"\">" + g.messages["phrase_please_select"] + "</option>";
+  for (var i=0; i<view_ns.all_form_fields.length; i++) {
+    if (view_ns.all_form_fields[i].is_system_field) {
+      continue;
+  }
+    row_html += "<option value=\"" + view_ns.all_form_fields[i].field_id + "\">" + view_ns.all_form_fields[i].display_name + "</option>";
+  }
+  row_html += "</select></td><td><input type=\"text\" name=\"new_submissions_vals[]\" class=\"new_submission_default_vals\" /></td>"
+    + "<td class=\"del\"><a href=\"#\" onclick=\"return view_ns.delete_new_view_submission_vals(this)\"></a></td></tr>";
+
+  $("#new_view_default_submission_vals tbody").append(row_html);
+  return false;
+}
+
+
+view_ns.delete_new_view_submission_vals = function(el)
+{
+  $(el).closest("tr").remove();
+
+  // if there are no more rows, hide the entire section (the first row is the heading)
+  if ($("#new_view_default_submission_vals tr").length <= 1) {
+    $("#no_new_submission_default_values").removeClass("hidden");
+    $("#new_submission_default_values").addClass("hidden");
+  }
+
+  return false;
+}
+
+
+/**
+ * Helper function to empty the 6 tab label fields (with "tab_label" class).
+ */
+view_ns.remove_tabs = function() {
+  $(".tab_label").val("");
+  view_ns.update_tab_dropdowns();
+}
+
+
+/* Submission Listing tab code */
+
+
+
+
+/**
+ * Adds a new row to the Submission List tab so that it will appear as a column on the Submission Listing page.
+ */
+view_ns.add_view_column = function() {
+
+  var row_num = ++view_ns.num_view_columns;
+
+  var row_html = '<div class="row_group">'
+    + '<input type="hidden" value="' + row_num + '" class="sr_order">'
+    + '<ul>'
+      + '<li class="col1 sort_col"></li>'
+      + '<li class="col2">'
+        + '<select name="field_id_' + row_num + '">'
+          + '<option value="">' + g.messages["phrase_please_select"] + '</option>';
+
+  // now add all form fields (even if they're not included in the View)
+  for (var j=0; j<view_ns.all_form_fields.length; j++) {
+    field_id   = view_ns.all_form_fields[j].field_id;
+    field_name = view_ns.all_form_fields[j].display_name;
+    row_html += '<option value="' + field_id + '">' + field_name + '</option>';
+  }
+
+  row_html += '</select>'
+      + '</li>'
+      + '<li class="col3 check_area"><input type="checkbox" name="is_sortable_' + row_num + '" /></li>'
+      + '<li class="col4 light_grey">'
+        + '<input type="checkbox" name="auto_size_' + row_num + '" id="auto_size_' + row_num + '" class="auto_size" checked />'
+        + '<label for="auto_size_' + row_num + '" class="black">Auto-size</label>'
+        + ' &#8212; width: '
+        + '<input type="text" name="custom_width_' + row_num + '" class="custom_width" disabled />px'
+      + '</li>'
+      + '<li class="col5">'
+        + '<select name="truncate_' + row_num + '">'
+          + '<option value="truncate">' + g.messages["word_yes"] + '</option>'
+          + '<option value="no_truncate">' + g.messages["word_no"] + '</option>'
+        + '</select>'
+      + '</li>'
+      + '<li class="col6 colN del"></li>'
+    + '</ul>'
+    + '<div class="clear"></div>'
+    + '</div>';
+
+  var new_row = sortable_ns.get_sortable_row_markup({row_group: row_html, is_grouped: false });
+
+  $("#submission_list").find(".rows").append(new_row);
+  sortable_ns.reorder_rows($("#submission_list"), false);
+
+  return false
+}
+

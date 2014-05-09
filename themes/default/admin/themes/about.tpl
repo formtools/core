@@ -3,7 +3,11 @@
   <table cellpadding="0" cellspacing="0" height="35">
   <tr>
     <td width="45"><img src="{$images_url}/icon_themes.gif" width="34" height="29" /></td>
-    <td class="title"><a href="index.php">{$LANG.word_themes|upper}</a> &raquo; {$theme_info.theme_name|upper}</td>
+    <td class="title">
+      <a href="./">{$LANG.word_themes}</a>
+      <span class="joiner">&raquo;</span>
+      {$theme_info.theme_name}
+    </td>
   </tr>
   </table>
 
@@ -37,10 +41,6 @@
   <tr>
     <td class="pad_left_small">{$LANG.word_version}</td>
     <td class="pad_left_small">{$theme_info.theme_version}</td>
-  </tr>
-  <tr>
-    <td class="pad_left_small">{$LANG.phrase_form_tools_compatibility}</td>
-    <td class="pad_left_small">{$theme_info.supports_ft_versions}</td>
   </tr>
   </table>
 

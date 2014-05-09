@@ -16,7 +16,6 @@ foreach ($file_upload_filetypes as $filetype)
 	  $other_filetypes[] = $filetype;
 }
 $other_filetypes_str = implode(",", $other_filetypes);
-
 $max_filesize = ft_get_upload_max_filesize();
 
 

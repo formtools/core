@@ -26,18 +26,21 @@ function smarty_function_pages_dropdown($params, &$smarty)
   $menu_type        = $params["menu_type"];
   $default_value    = (isset($params["default"])) ? $params["default"] : "";
   $onchange         = (isset($params["onchange"])) ? $params["onchange"] : "";
+  $onkeyup          = (isset($params["onkeyup"])) ? $params["onkeyup"] : "";
   $is_building_menu = (isset($params["is_building_menu"]) && $params["is_building_menu"] === true) ? true : false;
+  $class            = (isset($params["class"])) ? $params["class"] : "";
 
   if (isset($params["omit_pages"]) && !empty($params["omit_pages"]))
     $omit_pages = explode(",", $params["omit_pages"]);
   else
     $omit_pages = array();
 
-
   $attributes = array(
     "id"   => $params["name_id"],
+    "class" => $class,
     "name" => $params["name_id"],
-    "onchange" => $onchange
+    "onchange" => $onchange,
+    "onkeyup" => $onkeyup
       );
 
   if ($menu_type == "admin")
@@ -49,4 +52,3 @@ function smarty_function_pages_dropdown($params, &$smarty)
   return $dropdown_str;
 }
 
-?>

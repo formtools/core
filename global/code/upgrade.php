@@ -3,9 +3,9 @@
 /**
  * This file contains all code relating to upgrading Form Tools.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Upgrade
  */
 
@@ -98,7 +98,7 @@ function ft_upgrade_form_tools()
   {
     mysql_query("
       ALTER TABLE {$g_table_prefix}view_filters
-      CHANGE operator operator ENUM('equals', 'not_equals', 'like', 'not_like', 'before', 'after' )
+      CHANGE operator operator ENUM('equals', 'not_equals', 'like', 'not_like', 'before', 'after')
       CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'equals'
         ");
   }
@@ -374,76 +374,291 @@ function ft_upgrade_form_tools()
   }
 
   // ----------------------------------------------------------------------------------------------
+  // 2.1.0
+
+  if ($old_version_info["release_date"] < 20101117)
+  {
+    mysql_query("ALTER TABLE {$g_table_prefix}menu_items ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER is_submenu");
+    mysql_query("ALTER TABLE {$g_table_prefix}form_fields ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER list_order");
+    mysql_query("ALTER TABLE {$g_table_prefix}accounts ADD last_logged_in DATETIME NULL AFTER account_status");
+    mysql_query("ALTER TABLE {$g_tble_prefix}view_fields ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes'");
+    mysql_query("ALTER TABLE {$g_table_prefix}views ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER view_order");
+    mysql_query("ALTER TABLE {$g_tble_prefix}field_options ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes'");
+
+    /*
+CREATE TABLE IF NOT EXISTS `ft_field_types` (
+  `field_type_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `field_type_name` varchar(255) NOT NULL,
+  `field_label` varchar(30) NOT NULL,
+  `group_id` smallint(6) NOT NULL,
+  `list_order` smallint(6) NOT NULL,
+  `compatible_field_sizes` set('tiny','small','medium','large','very_large') NOT NULL,
+  `view_field_smarty_markup` mediumtext NOT NULL,
+  `edit_field_smarty_markup` mediumtext NOT NULL,
+  `resources_css` mediumtext,
+  `resources_js` mediumtext,
+  PRIMARY KEY (`field_type_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+
+
+INSERT INTO `ft_field_types` (`field_type_id`, `field_type_name`, `field_label`, `group_id`, `list_order`, `compatible_field_sizes`, `view_field_smarty_markup`, `edit_field_smarty_markup`, `resources_css`, `resources_js`) VALUES
+(1, '{$LANG.word_textbox}', 'textbox', 1, 1, 'small,medium,large,very_large', 0, '{$VALUE}', '<input type="text" name="{$NAME}" value="{$VALUE|escape}" class="{$SETTING1}" />', 'input.size_tiny {\r\n  width: 50px; \r\n}\r\ninput.size_small {\r\n  width: 100px; \r\n}\r\ninput.size_medium {\r\n  width: 200px; \r\n}\r\ninput.size_full_size {\r\n  width: 100%; \r\n}\r\n', ''),
+(2, '{$LANG.word_textarea}', 'textarea', 1, 2, '', 0, '{$VALUE|nl2br}', '<textarea name="{$NAME}">{$VALUE}</textarea>', '', ''),
+(3, '{$LANG.word_password}', 'password', 1, 3, '', 0, '{$VALUE}', '<input type="password" name="{$NAME}" value="{$VALUE|escape}" class="password" />\r\n', 'input.password {\r\n  width: 120px;\r\n}\r\n', '\r\n'),
+(4, '{$LANG.word_dropdown}', 'select', 2, 2, 'tiny,small,medium,large,very_large', 0, '', '', NULL, NULL),
+(5, '{$LANG.phrase_multi_select_dropdown}', 'multi-select', 1, 5, '', 0, '', '', NULL, NULL),
+(6, '{$LANG.phrase_radio_buttons}', 'radio-buttons', 1, 6, '', 0, '', '', NULL, NULL),
+(7, '{$LANG.word_checkboxes}', 'checkboxes', 1, 7, '', 0, '', '', NULL, NULL),
+(8, '{$LANG.word_file}', 'file', 1, 8, '', 0, '', '', NULL, NULL),
+(9, '{$LANG.word_wysiwyg}', '', 2, 1, '', 0, '', '', NULL, NULL),
+(10, '{$LANG.phrase_date_or_time}', '', 1, 4, '', 0, '', '', NULL, NULL);
+
+CREATE TABLE IF NOT EXISTS `ft_field_type_settings` (
+  `setting_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `field_type_id` mediumint(8) unsigned NOT NULL,
+  `field_label` varchar(255) NOT NULL,
+  `field_type` enum('textbox','textarea','password','radios','checkboxes','select','multi-select') NOT NULL,
+  `field_orientation` enum('horizontal','vertical','na') NOT NULL DEFAULT 'na',
+  `default_value` varchar(255) DEFAULT NULL,
+  `is_required` enum('yes','no') DEFAULT NULL,
+  `error_string` mediumtext,
+  `list_order` smallint(6) NOT NULL,
+  PRIMARY KEY (`setting_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
+
+INSERT INTO `ft_field_type_settings` (`setting_id`, `field_type_id`, `field_label`, `field_type`, `field_orientation`, `default_value`, `is_required`, `error_string`, `list_order`) VALUES
+(1, 1, 'Size', 'select', 'na', '', '', '', 1),
+(2, 1, 'Highlight', 'textarea', 'na', 'full', '', '', 2);
+
+CREATE TABLE IF NOT EXISTS `ft_field_type_setting_options` (
+  `setting_id` mediumint(9) NOT NULL,
+  `option_text` varchar(255) DEFAULT NULL,
+  `field_order` smallint(6) NOT NULL,
+  PRIMARY KEY (`setting_id`,`field_order`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE `ft_views` ADD `group_id` SMALLINT NULL AFTER `is_new_sort_group`
+ALTER TABLE `ft_field_types` CHANGE `compatible_field_sizes` `compatible_field_sizes` VARCHAR( 255 ) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL DEFAULT '1char,2chars,tiny,small,medium,large,very_large'
+
+CREATE TABLE `formtools_next`.`ft_new_view_submission_defaults` (
+`view_id` MEDIUMINT NOT NULL ,
+`field_id` MEDIUMINT NOT NULL ,
+`default_value` TEXT NOT NULL ,
+PRIMARY KEY ( `view_id` , `field_id` )
+) ENGINE = MYISAM
+
+ALTER TABLE `ft_new_view_submission_defaults` ADD `list_order` SMALLINT NOT NULL
+
+ALTER TABLE `ft_accounts`
+CHANGE `username` `username` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,
+CHANGE `password` `password` VARCHAR( 50 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+
+ALTER TABLE `ft_view_fields` DROP `is_column` ,
+DROP `is_sortable` ;
+
+ALTER TABLE `ft_form_email_fields` CHANGE `email_field` `email_field_id` MEDIUMINT( 9 ) NOT NULL
+ALTER TABLE `ft_form_email_fields` CHANGE `first_name_field` `first_name_field_id` MEDIUMINT( 9 ) NULL DEFAULT NULL
+ALTER TABLE `ft_form_email_fields` CHANGE `last_name_field` `last_name_field_id` MEDIUMINT( 9 ) NULL DEFAULT NULL
+
+ALTER TABLE `ft_forms` DROP `default_view_id`
+*/
+
+
+    mysql_query("
+      CREATE TABLE IF NOT EXISTS {$g_table_prefix}field_types (
+        field_type_id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+        field_type_name varchar(255) NOT NULL,
+        is_core_field enum('yes','no') NOT NULL DEFAULT 'no',
+        group_id smallint(6) NOT NULL,
+        list_order smallint(6) NOT NULL,
+        compatible_field_sizes SET('tiny','small','medium','large','very_large') NOT NULL DEFAULT 'tiny,small,medium,large,very_large',
+        view_field_smarty_markup MEDIUMTEXT,
+        edit_field_smarty_markup MEDIUMTEXT,
+        PRIMARY KEY (field_type_id)
+      ) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=10
+        ");
+
+    mysql_query("
+      INSERT INTO {$g_table_prefix}field_types (field_type_id, field_type_name, is_base_field_type, group_id, list_order) VALUES
+      (1, '{\$LANG.word_textbox}', 'yes', 1, 1),
+      (2, '{\$LANG.word_textarea}', 'yes', 1, 2),
+      (3, '{\$LANG.word_password}', 'yes', 1, 3),
+      (4, '{\$LANG.word_dropdown}', 'yes', 1, 4),
+      (5, '{\$LANG.phrase_multi_select_dropdown}', 'yes', 1, 5),
+      (6, '{\$LANG.phrase_radio_buttons}', 'yes', 1, 6),
+      (7, '{\$LANG.word_checkboxes}', 'yes', 1, 7),
+      (8, '{\$LANG.word_file}', 'yes', 1, 8),
+      (9, '{\$LANG.word_wysiwyg}', 'yes', 2, 1)
+      (10, '{\$LANG.word_date}', 'yes', 2, 2)
+        ");
+
+
+
+    // ALTER TABLE `ft_field_option_groups` RENAME `ft_option_lists`
+    // ALTER TABLE `ft_option_lists` CHANGE `group_id` `list_id` MEDIUMINT( 8 ) UNSIGNED NOT NULL AUTO_INCREMENT
+    // ALTER TABLE `ft_option_lists` CHANGE `group_name` `option_list_name` VARCHAR( 100 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
+
+    // need up update menus to change field_option_groups to option_lists
+
+    // ALTER TABLE `ft_option_lists` DROP `field_orientation`
+
+    // UPDATE ft_settings SET setting_name = 'num_option_lists_per_page' WHERE setting_name = 'num_field_option_groups_per_page'
+    // ALTER TABLE `ft_forms` ADD `form_type` ENUM( 'internal', 'external' ) NOT NULL DEFAULT 'external' AFTER `form_id`
+    // ALTER TABLE `ft_forms` ADD `add_submission_button_label` VARCHAR( 255 ) NULL DEFAULT '{$LANG.word_add}';
+
+    // ALTER TABLE `ft_forms` CHANGE `form_url` `form_url` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL
+/*
+CREATE TABLE `ft_list_groups` (
+`group_id` MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+`group_type` ENUM( 'views', 'option_lists' ) NOT NULL ,
+`group_name` VARCHAR( 255 ) NOT NULL ,
+`list_order` SMALLINT NOT NULL
+) TYPE = MYISAM ;
+INSERT INTO `ft_list_groups` ( `group_id` , `group_type` , `group_name` , `list_order` )
+VALUES (
+NULL , 'field_types', '{$LANG.phrase_standard_fields}', '1'
+), (
+NULL , 'field_types', '{$LANG.phrase_special_fields}', '2'
+);
+
+CREATE TABLE `ft_field_type_setting_options` (
+  `setting_id` mediumint(9) NOT NULL,
+  `option_text` varchar(255) default NULL,
+  `field_order` smallint(6) NOT NULL,
+  PRIMARY KEY  (`setting_id`,`field_order`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `ft_field_type_settings` (
+  `setting_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `field_type_id` mediumint(8) unsigned NOT NULL,
+  `field_label` varchar(255) NOT NULL,
+  `field_type` enum('textbox','textarea','password','radios','checkboxes','select','multi-select') NOT NULL,
+  `placeholder` varchar(255) NOT NULL,
+  `field_orientation` enum('horizontal','vertical','na') NOT NULL DEFAULT 'na',
+  `default_value` varchar(255) DEFAULT NULL,
+  `list_order` smallint(6) NOT NULL,
+  PRIMARY KEY (`setting_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1
+
+ALTER TABLE `ft_form_fields` CHANGE `field_size` `field_size` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'medium'
+
+ALTER TABLE `ft_view_fields` CHANGE `tab_number` `tab_group_id` TINYINT( 4 ) NULL DEFAULT NULL
+DROP TABLE `ft_view_tabs`
+
+ALTER TABLE `ft_themes` DROP `supports_ft_versions`
+ALTER TABLE `ft_modules` DROP `supports_ft_versions`
+
+INSERT INTO `formtools_next`.`ft_settings` (`setting_id`, `setting_name`, `setting_value`, `module`) VALUES
+(NULL, 'edit_submission_shared_resources_js', '', 'core'),
+(NULL, 'edit_submission_shared_resources_css', '', 'core');
+
+// new setting: forms_page_default_message
+
+*** Important change *** : the following field_name values in the ft_form_fields tables have changed:
+Submission ID   -> core__submission_id
+Last Modified   -> core__last_modified
+Date            -> core__submission_date
+IP Address      -> core__ip_address
+
+
+CREATE TABLE `ft_view_columns` (
+`view_id` MEDIUMINT NOT NULL ,
+`field_id` MEDIUMINT NOT NULL ,
+`list_order` SMALLINT NOT NULL ,
+`is_sortable` ENUM( 'yes', 'no' ) NOT NULL ,
+`auto_size` ENUM( 'yes', 'no' ) NOT NULL DEFAULT 'yes',
+`custom_width` VARCHAR( 10 ) NULL ,
+`truncate` ENUM( 'truncate', 'no_truncate' ) NOT NULL DEFAULT 'truncate',
+PRIMARY KEY ( `view_id` , `field_id` , `list_order` )
+) TYPE = MYISAM ;
+*/
+
+    $forms = ft_get_forms();
+    $form_changes = array();
+    $date_system_field_ids = array();
+
+    foreach ($forms as $form_info)
+    {
+      $form_id = $form_info["form_id"];
+      $fields = ft_get_form_fields($form_id);
+
+      $field_types = array();
+      foreach ($fields as $field_info)
+      {
+        $field_id = $field_info["field_id"];
+        if (!array_key_exists($field_info["field_type"], $field_types))
+          $field_types[$field_info["field_type"]] = array();
+
+        if ($field_info["field_type"] == "system" && ($field_info["col_name"] == "last_modified_date" || $field_info["col_name"] == "submission_date"))
+          $date_system_field_ids[] = $field_id;
+
+        $field_types[$field_info["field_type"]][] = $field_id;
+      }
+      $form_changes[$form_id] = $field_types;
+    }
+
+    // now make the changes to the form table
+    mysql_query("ALTER TABLE {$g_table_prefix}form_fields CHANGE field_type field_type_id SMALLINT NOT NULL DEFAULT '1'");
+    mysql_query("ALTER TABLE {$g_table_prefix}form_fields ADD is_system_field ENUM('yes','no') NOT NULL DEFAULT 'no' AFTER field_type_id");
+
+
+    // yeesh!
+    $map = array(
+      "textbox"       => 1,
+      "textarea"      => 2,
+      "password"      => 3,
+      "select"        => 4,
+      "multi-select"  => 5,
+      "radio-buttons" => 6,
+      "checkboxes"    => 7,
+      "file"          => 8,
+      "wysiwyg"       => 9,
+      "date"          => 10,
+
+      // this is special. All system fields are set to regular text fields at first. Then if they're in $date_system_field_ids
+      // they get set to 10 (date)
+      "system"        => 1
+    );
+
+    while (list($form_id, $changes) = each($form_changes))
+    {
+      while (list($field_label, $field_ids) = each($changes))
+      {
+        foreach ($field_ids as $field_id)
+        {
+          $field_type_id = $map[$field_label];
+
+          if (in_array($field_id, $date_system_field_ids))
+            $field_type_id = 10;
+
+          $is_system_field = ($field_label == "system") ? "yes" : "no";
+
+          mysql_query("
+            UPDATE {$g_table_prefix}form_fields
+            SET    field_type_id = $field_type_id,
+                   is_system_field = '$is_system_field'
+            WHERE  field_id = $field_id
+          ");
+        }
+      }
+    }
+  }
+
+  // ----------------------------------------------------------------------------------------------
 
   // if the full version string (version-type-date) is different, update the database
   if ($old_version_info["full"] != "{$g_current_version}-{$g_release_type}-{$g_release_date}")
   {
-  	$new_settings = array(
-  	  "program_version" => $g_current_version,
-  	  "release_date"    => $g_release_date,
-  	  "release_type"    => $g_release_type
-  	);
+    $new_settings = array(
+      "program_version" => $g_current_version,
+      "release_date"    => $g_release_date,
+      "release_type"    => $g_release_type
+    );
     ft_set_settings($new_settings);
     $is_upgraded = true;
   }
 
   return $is_upgraded;
-}
-
-
-/**
- * This function builds a series of hidden fields containing information about this users installation and
- * caches the string in sessions. This function is called on (admin) login, when themes and modules are
- * installed or deleted.
- *
- * The information is then processed on the Form Tools site to determine what, if anything, can be
- * upgraded, and determine compatibility conflicts, etc.
- */
-function ft_build_and_cache_upgrade_info()
-{
-  $settings = ft_get_settings();
-
-  // a hash of k => v storing the hidden field values to pass along
-  $fields = array();
-
-  // get the main build version
-  $program_version = $settings["program_version"];
-  $release_date    = $settings["release_date"];
-  $release_type    = $settings["release_type"];
-
-  $version = $program_version;
-  if ($release_type == "beta")
-  	$version = "{$program_version}-beta-{$release_date}";
-
-  $fields[] = array("k" => "m", "v" => $version);
-  $fields[] = array("k" => "beta", "v" => $settings["is_beta"]);
-  $fields[] = array("k" => "api", "v" => $settings["api_version"]);
-
-  if ($settings["is_beta"] == "yes")
-    $fields[] = array("k" => "bv", "v" => $settings["beta_version"]);
-
-  // get the theme info
-  $themes = ft_get_themes();
-  $count = 1;
-  foreach ($themes as $theme_info)
-  {
-    $fields[] = array("k" => "t{$count}", "v" => $theme_info["theme_folder"]);
-    $fields[] = array("k" => "tv{$count}", "v" => $theme_info["theme_version"]);
-    $count++;
-  }
-
-  // get the module info
-  $modules = ft_get_modules();
-  $count = 1;
-  foreach ($modules as $module_info)
-  {
-    $fields[] = array("k" => "m{$count}", "v" => $module_info["module_folder"]);
-    $fields[] = array("k" => "mv{$count}", "v" => $module_info["version"]);
-    $count++;
-  }
-
-  // save the link
-  $_SESSION["ft"]["upgrade_info"] = $fields;
 }
 
 
@@ -516,14 +731,14 @@ function ft_get_core_version_info()
     }
     else
     {
-    	// here, there will always be release_date and release_type values in $settings, except
-    	// for ONE scenario: when a user is upgrading to that first version. Here, the DB won't have
-    	// any values for those fields (release_date, release_type). To get around this, we set the
-    	// release date to be the day before: this enables the calling function (ft_upgrade_form_tools)
-    	// to just seamlessly upgrade to the new versioning scheme. From there on out, we can rely
-    	// on those settings being in the database
-		  $release_date    = (isset($settings["release_date"])) ? $settings["release_date"] : "20100919";
-		  $release_type    = (isset($settings["release_type"])) ? $settings["release_type"] : "beta";
+      // here, there will always be release_date and release_type values in $settings, except
+      // for ONE scenario: when a user is upgrading to that first version. Here, the DB won't have
+      // any values for those fields (release_date, release_type). To get around this, we set the
+      // release date to be the day before: this enables the calling function (ft_upgrade_form_tools)
+      // to just seamlessly upgrade to the new versioning scheme. From there on out, we can rely
+      // on those settings being in the database
+      $release_date    = (isset($settings["release_date"])) ? $settings["release_date"] : "20100919";
+      $release_type    = (isset($settings["release_type"])) ? $settings["release_type"] : "beta";
 
       $version_info = array(
         "full"         => "{$program_version}-{$release_type}-{$release_date}",

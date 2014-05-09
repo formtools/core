@@ -9,7 +9,9 @@
     <tr>
       <td class="pad_left_small" width="200">{$LANG.phrase_core_version}</td>
       <td class="pad_left_small">
-        {if $settings.release_type == "beta"}
+        {if $settings.release_type == "alpha"}
+          <span>{$settings.program_version}-alpha-{$settings.release_date}</span>
+        {elseif $settings.release_type == "beta"}
           <span>{$settings.program_version}-beta-{$settings.release_date}</span>
         {else}
           <span>{$settings.program_version}</span>
@@ -24,11 +26,11 @@
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_program_name}</td>
-      <td><input type="text" name="program_name" value="{$settings.program_name}" style="width: 400px" /></td>
+      <td><input type="text" name="program_name" value="{$settings.program_name}" style="width: 98%" /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_logo_link_url}</td>
-      <td><input type="text" name="logo_link" value="{$settings.logo_link}" style="width: 400px" /></td>
+      <td><input type="text" name="logo_link" value="{$settings.logo_link}" style="width: 98%" /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_num_clients_per_page}</td>
@@ -43,16 +45,12 @@
       <td><input type="text" name="num_forms_per_page" value="{$settings.num_forms_per_page}" style="width: 30px" /></td>
     </tr>
     <tr>
-      <td class="pad_left_small">{$LANG.phrase_num_field_option_groups_per_page}</td>
-      <td><input type="text" name="num_field_option_groups_per_page" value="{$settings.num_field_option_groups_per_page}" style="width: 30px" /></td>
+      <td class="pad_left_small">{$LANG.phrase_num_option_lists_per_page}</td>
+      <td><input type="text" name="num_option_lists_per_page" value="{$settings.num_option_lists_per_page}" style="width: 30px" /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_num_menus_per_page}</td>
       <td><input type="text" name="num_menus_per_page" value="{$settings.num_menus_per_page}" style="width: 30px" /></td>
-    </tr>
-    <tr>
-      <td class="pad_left_small">{$LANG.phrase_num_views_per_page}</td>
-      <td><input type="text" name="num_views_per_page" value="{$settings.num_views_per_page}" style="width: 30px" /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_num_modules_per_page}</td>

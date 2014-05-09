@@ -21,18 +21,32 @@ $page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_menus"]}";
 $page_vars["menus"] = $menus["results"];
 $page_vars["total_num_menus"] = $menus["num_results"];
 $page_vars["pagination"] = ft_get_page_nav($menus["num_results"], $_SESSION["ft"]["settings"]["num_menus_per_page"], $menu_page, "page=menus", "menu_page");
+$page_vars["js_messages"] = array("word_remove");
 
-$page_vars["head_js"] =<<< EOF
-var page_ns = {};
-page_ns.delete_menu = function(menu_id)
-{
-  if (confirm("{$LANG["confirm_delete_menu"]}"))
-  {
-    window.location = 'index.php?page=menus&delete=' + menu_id;
-  }
-
-  return false;
+$page_vars["head_js"] =<<< END
+var page_ns = {
+  delete_menu_dialog: $("<div></div>")
 }
-EOF;
+
+page_ns.delete_menu = function(menu_id) {
+  ft.create_dialog({
+	  dialog:   page_ns.delete_menu_dialog,
+	  title:    "{$LANG["phrase_please_confirm"]}",
+	  content:  "{$LANG["confirm_delete_menu"]}",
+	  popup_type: "warning",
+	  buttons: {
+	    "{$LANG["word_yes"]}": function() {
+	      window.location = "index.php?page=menus&delete=" + menu_id;
+	      $(this).dialog("close");
+	    },
+	    "{$LANG["word_no"]}": function() {
+	      $(this).dialog("close");
+	    }
+	  }
+	});
+
+	return false;
+}
+END;
 
 ft_display_page("admin/settings/index.tpl", $page_vars);

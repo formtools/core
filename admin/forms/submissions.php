@@ -5,9 +5,10 @@ ft_check_permission("admin");
 
 $request = array_merge($_POST, $_GET);
 
-// [Bad! TODO]
-if (ft_check_module_enabled("export_manager"))
-  ft_include_module("export_manager");
+
+// TODO. This is not acceptable
+//if (ft_check_module_enabled("export_manager"))
+//  ft_include_module("export_manager");
 
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
 $form_id = ft_load_field("form_id", "curr_form_id");
@@ -29,41 +30,40 @@ if (!ft_check_form_exists($form_id))
 // (ordered) list of Views for this form. If THAT doesn't exist, the user has deleted all Views (doh!), so
 // there's nothing to show. In that case, just redirect them to the Views tab, where an error / warning message
 // will appear in the page
-$view_id    = ft_load_field("view", "form_{$form_id}_view_id");
-$form_views = ft_get_form_views($form_id);
+$view_id       = ft_load_field("view_id", "form_{$form_id}_view_id");
+$grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true));
 
-if (empty($view_id))
+if (empty($view_id) || !ft_check_view_exists($view_id, true))
 {
-  if (count($form_views) == 0)
+  // here, we know that the first View group has at least one item. [hmm...]
+  if (count($grouped_views[0]["views"]) == 0)
   {
-    // no Views defined for this form! redirect to the Views page
-    header("location: edit.php?page=views&form_id=$form_id");
+    // no Views defined for this form! redirect to the Views page and display a message
+    header("location: edit.php?page=views&form_id=$form_id&message=no_views");
     exit;
   }
   else
   {
-    $view_id = $form_views[0]["view_id"];
+    $view_id = $grouped_views[0]["views"][0]["view_id"];
   }
 }
-else if (!ft_check_view_exists($view_id))
-  $view_id = $form_views[0]["view_id"];
 
 $_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
+$_SESSION["ft"]["last_link_page"] = "submissions";
 
 $form_info = ft_get_form($form_id);
+$form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true, "include_field_settings" => true));
 $view_info = ft_get_view($view_id);
-
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes")
 {
-  $submission_id = ft_create_blank_submission($form_id, true);
+  $submission_id = ft_create_blank_submission($form_id, $view_id, true);
   header("location: edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id");
   exit;
 }
 
-// if the View just changed (i.e. it was just selected by the user), deselect any items in
-// this form
-if (isset($request["view"]))
+// if the View just changed (i.e. it was just selected by the user), deselect any form rows
+if (isset($request["view_id"]))
 {
   $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
   $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
@@ -90,14 +90,10 @@ if ($is_resetting_search || $has_search_info_for_other_form)
   }
 }
 
-$search_field   = ft_load_field("search_field", "search_field", "");
-$search_date    = ft_load_field("search_date", "search_date", "");
-$search_keyword = ft_load_field("search_keyword", "search_keyword", "");
-
 $search_fields = array(
-  "search_field"   => $search_field,
-  "search_date"    => $search_date,
-  "search_keyword" => $search_keyword
+  "search_field"   => ft_load_field("search_field", "search_field", ""),
+  "search_date"    => ft_load_field("search_date", "search_date", ""),
+  "search_keyword" => ft_load_field("search_keyword", "search_keyword", "")
 );
 
 if (isset($_GET["delete"]))
@@ -108,7 +104,9 @@ if (isset($_GET["delete"]))
   {
     $ids = split(",", $_GET["delete"]);
     foreach ($ids as $id)
+    {
       list($g_success, $g_message) = ft_delete_submission($form_id, $view_id, $id, true);
+    }
   }
   else
   {
@@ -125,32 +123,53 @@ if (isset($_GET["delete"]))
   }
 }
 
-
 // figure out the current page
 $current_page = ft_load_field("page", "view_{$view_id}_page", 1);
 if (isset($_POST["search"]))
   $current_page = 1;
 
-$display_fields = ft_get_submission_field_info($view_info["fields"], true);
-
-// used to tell the search function which columns to return
-$search_columns  = array();
-foreach ($display_fields as $field_info)
+// make a map of field_id => col_name for use in determining the search cols ad
+$field_columns = array();
+foreach ($view_info["fields"] as $field_info)
 {
-  if ($field_info["is_searchable"] == "yes")
-    $search_columns[] = $field_info["col_name"];
+  $field_columns[$field_info["field_id"]] = $field_info["col_name"];
+}
+$db_columns = array_values($field_columns); // used for the search query
+
+$display_columns  = array();
+foreach ($view_info["columns"] as $view_col_info)
+{
+  $field_id = $view_col_info["field_id"];
+  if ($view_col_info["is_sortable"] == "yes")
+    $display_columns[] = $field_columns[$field_id];
 }
 
-$db_columns = array();
-$visible_column_info = array();
-foreach ($display_fields as $field_info)
+// display_fields contains ALL the information we need for the fields in the template
+$display_fields = array();
+foreach ($view_info["columns"] as $col_info)
 {
-  if ($field_info["is_column"] == "yes")
+  $curr_field_id = $col_info["field_id"];
+  $data_to_merge = $col_info;
+
+  foreach ($view_info["fields"] as $view_field_info)
   {
-    $db_columns[] = $field_info["col_name"];
-    $visible_column_info[] = $field_info;
+    if ($view_field_info["field_id"] != $curr_field_id)
+      continue;
+
+    $data_to_merge = array_merge($view_field_info, $data_to_merge);
   }
+
+  foreach ($form_fields as $form_field_info)
+  {
+    if ($form_field_info["field_id"] != $curr_field_id)
+      continue;
+
+    $data_to_merge = array_merge($form_field_info, $data_to_merge);
+  }
+
+  $display_fields[] = $data_to_merge;
 }
+
 
 // determine the sort order
 if (isset($_GET["order"]))
@@ -168,13 +187,14 @@ else
 
 $results_per_page = $view_info["num_submissions_per_page"];
 
-// perform the almighty search query
+// perform the almighty search query [urgh. Too many params...!]
 $results_info = ft_search_submissions($form_id, $view_id, $results_per_page, $current_page, $order, $db_columns,
-      $search_fields, array(), $search_columns);
+      $search_fields, array(), $display_columns);
 
 $search_rows        = $results_info["search_rows"];
 $search_num_results = $results_info["search_num_results"];
 $view_num_results   = $results_info["view_num_results"];
+
 
 // store the current search settings. This information is used on the item details page to provide
 // "<< previous  next >>" links that only apply to the CURRENT search result set
@@ -200,6 +220,8 @@ if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$vi
 
 // this sets the total number of submissions that the admin can see in this form and View in the form_X_num_submissions
 // and view_X_num_submissions keys. It's used to generate the list of searchable dates
+
+// TODO really???
 _ft_cache_form_stats($form_id);
 _ft_cache_view_stats($form_id, $view_id);
 
@@ -233,6 +255,9 @@ else
 
 $preselected_subids_str = join(",", $preselected_subids);
 
+// to pass to the smarty template
+$field_types = ft_get_field_types(true);
+
 // ------------------------------------------------------------------------------------------------
 
 // compile the header information
@@ -247,25 +272,26 @@ $page_vars["search_rows"] = $search_rows;
 $page_vars["search_num_results"] = $search_num_results;
 $page_vars["view_num_results"] = $view_num_results;
 $page_vars["total_form_submissions"] = $_SESSION["ft"]["form_{$form_id}_num_submissions"];
-$page_vars["form_views"]  = $form_views;
-$page_vars["view_info"]   = $view_info;
+$page_vars["grouped_views"] = $grouped_views;
+$page_vars["view_info"]     = $view_info;
 $page_vars["preselected_subids"] = $preselected_subids;
 $page_vars["results_per_page"]   = $results_per_page;
-$page_vars["display_fields"]     = $visible_column_info;
+$page_vars["display_fields"]    = $display_fields;
 $page_vars["page_submission_ids"] = $submission_id_str;
 $page_vars["order"]              = $order;
+$page_vars["field_types"] = $field_types;
 $page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
 $page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download", "validation_select_submissions_to_delete",
         "confirm_delete_submission", "confirm_delete_submissions", "phrase_select_all_X_results",
         "phrase_select_all_on_page", "phrase_all_X_results_selected", "phrase_row_selected", "phrase_rows_selected",
-        "confirm_delete_submissions_on_other_pages", "confirm_delete_submissions_on_other_pages2");
+        "confirm_delete_submissions_on_other_pages", "confirm_delete_submissions_on_other_pages2",
+        "word_yes", "word_no", "phrase_please_confirm");
 $page_vars["head_string"] = '<script type="text/javascript" src="../../global/scripts/manage_submissions.js"></script>';
-$page_vars["head_js"] =<<< EOF
+$page_vars["head_js"] =<<< END
 var rules = [];
 rules.push("if:search_field!=submission_date,required,search_keyword,{$LANG["validation_please_enter_search_keyword"]}");
 rules.push("if:search_field=submission_date,required,search_date,{$LANG["validation_please_enter_search_date_range"]}");
-
 if (typeof ms == "undefined")
   ms = {};
 
@@ -278,29 +304,9 @@ ms.search_num_results = $search_num_results; // the total number of View-search 
 ms.form_id = $form_id;
 ms.num_results_per_page = $results_per_page;
 
-Event.observe(document, 'dom:loaded', function() {
-  ms.init_page();
-  $$('#submissions_table tr').invoke('observe', 'click',
-    function(e)
-    {
-      var el = Event.element(e);
-      if (el.nodeName != "INPUT" && el.nodeName != "A")
-      {
-        var tr = ft.get_ancestor_node(el, "TR"); // there's already a Prototype function for this
-        if (tr.id)
-        {
-          var result = tr.id.match(/^submission_row_(\d+)/);
-          var sub_id = result[1];
-          $('submission_cb_' + sub_id).checked = ($('submission_cb_' + sub_id).checked) ? false : true;
-          ms.select_row(sub_id, ms.num_results_per_page);
-        }
-      }
-    });
-
-    // add an ellipsis to all custom fields to prevent widening the table too much
-    $$('.ellipsis').each(ellipsis);
-  });
-EOF;
-
+$(function() {
+  ms.init_submissions_page();
+});
+END;
 
 ft_display_page("admin/forms/submissions.tpl", $page_vars);

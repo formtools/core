@@ -4,9 +4,9 @@
  * This file defines all functions relating to Form Tools themes. Note: the Theme setting tab/page
  * is updated via ft_update_theme_settings, found in the settings.php file.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Themes
  */
 
@@ -121,7 +121,6 @@ function ft_update_theme_list()
       $theme_link         = $info["theme_link"];
       $theme_description  = $info["theme_description"];
       $theme_version      = $info["theme_version"];
-      $supports_ft_versions = $info["supports_ft_versions"];
 
       // try and set the cache folder as writable
       if (!is_writable("$themes_folder/$folder/cache/"))
@@ -131,16 +130,13 @@ function ft_update_theme_list()
 
       mysql_query("
         INSERT INTO {$g_table_prefix}themes (theme_folder, theme_name, author, theme_link, description, is_enabled,
-          theme_version, supports_ft_versions)
+          theme_version)
         VALUES ('$folder', '$theme_name', '$theme_author', '$theme_link', '$theme_description',
-          '$cache_folder_writable', '$theme_version', '$supports_ft_versions')
+          '$cache_folder_writable', '$theme_version')
           ");
     }
   }
   closedir($dh);
-
-  // update the Upgrade link
-  ft_build_and_cache_upgrade_info();
 
   $success = true;
   $message = $LANG["notify_theme_list_updated"];
@@ -166,7 +162,7 @@ function ft_update_theme_list()
 function ft_display_page($template, $page_vars, $theme = "")
 {
   global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_debug, $LANG,
-    $g_smarty, $g_smarty_use_sub_dirs;
+    $g_smarty, $g_smarty_use_sub_dirs, $g_js_debug;
 
   if (empty($theme) && (isset($_SESSION["ft"]["account"]["theme"])))
     $theme = $_SESSION["ft"]["account"]["theme"];
@@ -195,9 +191,16 @@ function ft_display_page($template, $page_vars, $theme = "")
   $g_smarty->assign("g_root_dir", $g_root_dir);
   $g_smarty->assign("g_root_url", $g_root_url);
   $g_smarty->assign("g_debug", $g_debug);
-  $g_smarty->assign("same_page", $_SERVER["PHP_SELF"]);
-  $g_smarty->assign("query_string", $_SERVER["QUERY_STRING"]); // TODO...
+  $g_smarty->assign("g_js_debug", ($g_js_debug) ? "true" : "false");
+  $g_smarty->assign("same_page", ft_get_clean_php_self());
+  $g_smarty->assign("query_string", $_SERVER["QUERY_STRING"]);
   $g_smarty->assign("dir", $LANG["special_text_direction"]);
+
+  // if this page has been told to dislay a custom message, override g_success and g_message
+  if (isset($_GET["message"]))
+  {
+    list($g_success, $g_message) = ft_display_custom_page_message($_GET["message"]);
+  }
   $g_smarty->assign("g_success", $g_success);
   $g_smarty->assign("g_message", $g_message);
 
@@ -288,7 +291,7 @@ function ft_get_smarty_template_with_fallback($theme, $template)
 function ft_display_module_page($template, $page_vars = array(), $theme = "")
 {
   global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_language, $LANG,
-    $g_smarty, $L, $g_smarty_use_sub_dirs;
+    $g_smarty, $L, $g_smarty_use_sub_dirs, $g_js_debug;
 
   $module_folder = _ft_get_current_module_folder();
 
@@ -320,9 +323,16 @@ function ft_display_module_page($template, $page_vars = array(), $theme = "")
   $g_smarty->assign("account", $_SESSION["ft"]["account"]);
   $g_smarty->assign("g_root_dir", $g_root_dir);
   $g_smarty->assign("g_root_url", $g_root_url);
-  $g_smarty->assign("same_page", $_SERVER["PHP_SELF"]);
+  $g_smarty->assign("g_js_debug", ($g_js_debug) ? "true" : "false");
+  $g_smarty->assign("same_page", ft_get_clean_php_self());
   $g_smarty->assign("query_string", $_SERVER["QUERY_STRING"]); // TODO FIX
   $g_smarty->assign("dir", $LANG["special_text_direction"]);
+
+  // if this page has been told to dislay a custom message, override g_success and g_message
+  if (isset($_GET["message"]))
+  {
+    list($g_success, $g_message) = ft_display_custom_page_message($_GET["message"]);
+  }
   $g_smarty->assign("g_success", $g_success);
   $g_smarty->assign("g_message", $g_message);
 
@@ -345,8 +355,15 @@ function ft_display_module_page($template, $page_vars = array(), $theme = "")
 
   // if we need to include custom JS messages in the page, add it to the generated JS. Note: even if the js_messages
   // key is defined but still empty, the ft_generate_js_messages function is called, returning the "base" JS - like
-  // the JS version of g_root_url. Only if it is not defined will that info not be included.
-  $js_messages = (isset($page_vars["js_messages"])) ? ft_generate_js_messages($page_vars["js_messages"]) : "";
+  // the JS version of g_root_url. Only if it is not defined will that info not be included. This feature was hacked
+  // in 2.1 to support js_messages from a single module files
+  $js_messages = "";
+  if (isset($page_vars["js_messages"]) || isset($page_vars["module_js_messages"]))
+  {
+  	$core_js_messages   = isset($page_vars["js_messages"]) ? $page_vars["js_messages"] : "";
+  	$module_js_messages = isset($page_vars["module_js_messages"]) ? $page_vars["module_js_messages"] : "";
+    $js_messages = ft_generate_js_messages($core_js_messages, $module_js_messages);
+  }
 
   if (!empty($page_vars["head_js"]) || !empty($js_messages))
     $page_vars["head_js"] = "<script type=\"text/javascript\">\n//<![CDATA[\n{$page_vars["head_js"]}\n$js_messages\n//]]>\n</script>";
@@ -430,7 +447,6 @@ function _ft_get_theme_info_file_contents($summary_file)
   $info["theme_link"] = isset($vars["theme_link"]) ? $vars["theme_link"] : "";
   $info["theme_description"] = isset($vars["theme_description"]) ? $vars["theme_description"] : "";
   $info["theme_version"] = isset($vars["theme_version"]) ? $vars["theme_version"] : "";
-  $info["supports_ft_versions"] = isset($vars["supports_ft_versions"]) ? $vars["supports_ft_versions"] : "";
 
   return $info;
 }

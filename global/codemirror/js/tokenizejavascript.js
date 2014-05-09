@@ -5,7 +5,6 @@ var tokenizeJavaScript = (function() {
   // backslash) is encountered, or the end of the line is reached.
   function nextUntilUnescaped(source, end) {
     var escaped = false;
-    var next;
     while (!source.endOfLine()) {
       var next = source.next();
       if (next == end && !escaped)
@@ -23,35 +22,34 @@ var tokenizeJavaScript = (function() {
   // token.
   var keywords = function(){
     function result(type, style){
-      return {type: type, style: style};
+      return {type: type, style: "js-" + style};
     }
     // keywords that take a parenthised expression, and then a
     // statement (if)
-    var keywordA = result("keyword a", "js-keyword");
+    var keywordA = result("keyword a", "keyword");
     // keywords that take just a statement (else)
-    var keywordB = result("keyword b", "js-keyword");
+    var keywordB = result("keyword b", "keyword");
     // keywords that optionally take an expression, and form a
     // statement (return)
-    var keywordC = result("keyword c", "js-keyword");
-    var operator = result("operator", "js-keyword");
-    var atom = result("atom", "js-atom");
+    var keywordC = result("keyword c", "keyword");
+    var operator = result("operator", "keyword");
+    var atom = result("atom", "atom");
     return {
-      "if": keywordA, "switch": keywordA, "while": keywordA, "with": keywordA,
+      "if": keywordA, "while": keywordA, "with": keywordA,
       "else": keywordB, "do": keywordB, "try": keywordB, "finally": keywordB,
       "return": keywordC, "break": keywordC, "continue": keywordC, "new": keywordC, "delete": keywordC, "throw": keywordC,
       "in": operator, "typeof": operator, "instanceof": operator,
-      "var": result("var", "js-keyword"), "function": result("function", "js-keyword"), "catch": result("catch", "js-keyword"),
-      "for": result("for", "js-keyword"), 
-      "case": result("case", "js-keyword"), "default": result("default", "js-keyword"),
+      "var": result("var", "keyword"), "function": result("function", "keyword"), "catch": result("catch", "keyword"),
+      "for": result("for", "keyword"), "switch": result("switch", "keyword"),
+      "case": result("case", "keyword"), "default": result("default", "keyword"),
       "true": atom, "false": atom, "null": atom, "undefined": atom, "NaN": atom, "Infinity": atom
     };
   }();
 
-  // Some helper regexp matchers.
-  var isOperatorChar = matcher(/[+\-*&%\/=<>!?|]/);
-  var isDigit = matcher(/[0-9]/);
-  var isHexDigit = matcher(/[0-9A-Fa-f]/);
-  var isWordChar = matcher(/[\w\$_]/);
+  // Some helper regexps
+  var isOperatorChar = /[+\-*&%=<>!?|]/;
+  var isHexDigit = /[0-9A-Fa-f]/;
+  var isWordChar = /[\w\$_]/;
 
   // Wrapper around jsToken that helps maintain parser state (whether
   // we are inside of a multi-line comment and whether the next token
@@ -67,35 +65,35 @@ var tokenizeJavaScript = (function() {
     };
   }
 
-  // The token reader, inteded to be used by the tokenizer from
+  // The token reader, intended to be used by the tokenizer from
   // tokenize.js (through jsTokenState). Advances the source stream
   // over a token, and returns an object containing the type and style
   // of that token.
   function jsToken(inside, regexp, source, setInside) {
     function readHexNumber(){
       source.next(); // skip the 'x'
-      source.nextWhile(isHexDigit);
+      source.nextWhileMatches(isHexDigit);
       return {type: "number", style: "js-atom"};
     }
 
     function readNumber() {
-      source.nextWhile(isDigit);
+      source.nextWhileMatches(/[0-9]/);
       if (source.equals(".")){
         source.next();
-        source.nextWhile(isDigit);
+        source.nextWhileMatches(/[0-9]/);
       }
       if (source.equals("e") || source.equals("E")){
         source.next();
         if (source.equals("-"))
           source.next();
-        source.nextWhile(isDigit);
+        source.nextWhileMatches(/[0-9]/);
       }
       return {type: "number", style: "js-atom"};
     }
     // Read a word, look it up in keywords. If not found, it is a
     // variable, otherwise it is a keyword of the type found.
     function readWord() {
-      source.nextWhile(isWordChar);
+      source.nextWhileMatches(isWordChar);
       var word = source.get();
       var known = keywords.hasOwnProperty(word) && keywords.propertyIsEnumerable(word) && keywords[word];
       return known ? {type: known.type, style: known.style, content: word} :
@@ -103,7 +101,7 @@ var tokenizeJavaScript = (function() {
     }
     function readRegexp() {
       nextUntilUnescaped(source, "/");
-      source.nextWhile(matcher(/[gi]/));
+      source.nextWhileMatches(/[gi]/);
       return {type: "regexp", style: "js-string"};
     }
     // Mutli-line comments are tricky. We want to return the newlines
@@ -128,7 +126,7 @@ var tokenizeJavaScript = (function() {
       return {type: "comment", style: "js-comment"};
     }
     function readOperator() {
-      source.nextWhile(isOperatorChar);
+      source.nextWhileMatches(isOperatorChar);
       return {type: "operator", style: "js-operator"};
     }
     function readString(quote) {
@@ -151,7 +149,7 @@ var tokenizeJavaScript = (function() {
       return {type: ch, style: "js-punctuation"};
     else if (ch == "0" && (source.equals("x") || source.equals("X")))
       return readHexNumber();
-    else if (isDigit(ch))
+    else if (/[0-9]/.test(ch))
       return readNumber();
     else if (ch == "/"){
       if (source.equals("*"))
@@ -163,7 +161,7 @@ var tokenizeJavaScript = (function() {
       else
         return readOperator();
     }
-    else if (isOperatorChar(ch))
+    else if (isOperatorChar.test(ch))
       return readOperator();
     else
       return readWord();

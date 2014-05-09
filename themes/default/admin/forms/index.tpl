@@ -3,7 +3,7 @@
   <table cellpadding="0" cellspacing="0">
   <tr>
     <td width="45"><img src="{$images_url}/icon_forms.gif" width="34" height="34" /></td>
-    <td class="title">{$LANG.word_forms|upper}</td>
+    <td class="title">{$LANG.word_forms}</td>
   </tr>
   </table>
 
@@ -22,10 +22,12 @@
           <td class="blue" width="70">{$LANG.word_search}</td>
           <td>
             <select name="client_id">
-              <option value="" {if $search_criteria.client_id == ""}selected{/if}>{$LANG.phrase_all_clients}</option>
-              {foreach from=$clients item=client name=row}
-                <option value="{$client.account_id}" {if $search_criteria.client_id == $client.account_id}selected{/if}>{$client.first_name} {$client.last_name}</option>
-              {/foreach}
+              <option value="" {if $search_criteria.client_id == ""}selected{/if}>{$LANG.phrase_forms_assigned_to_any_account}</option>
+              <optgroup label="{$LANG.word_clients}">
+                {foreach from=$clients item=client name=row}
+                  <option value="{$client.account_id}" {if $search_criteria.client_id == $client.account_id}selected{/if}>{$client.first_name} {$client.last_name}</option>
+                {/foreach}
+              </optgroup>
             </select>
           </td>
           <td>
@@ -48,9 +50,7 @@
           </td>
         </tr>
         </table>
-
       </form>
-
     </div>
 
     {if $forms|@count == 0}
@@ -88,85 +88,89 @@
           {else}
             {assign var="style" value="display: none"}
           {/if}
-
           <div id="page_{$table_group_id}" style="{$style}">
 
             <table class="list_table" width="100%" cellpadding="0" cellspacing="1">
             <tr>
-              <th width="30">
-
-                {assign var="up_down" value=""}
-                {if     $order == "form_id-DESC"}
-                  {assign var=sort_order value="order=form_id-ASC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
-                {elseif $order == "form_id-ASC"}
-                  {assign var=sort_order value="order=form_id-DESC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
-                {else}
-                  {assign var=sort_order value="order=form_id-DESC"}
-                {/if}
-
-                <table cellspacing="0" cellpadding="0" align="center" class="pad_left_small">
-                <tr>
-                  <td><a href="{$same_page}?{$sort_order}">{$LANG.word_id|upper}</a></td>
-                  <td class="pad_left">{$up_down}</td>
-                </tr>
-                </table>
-
+              {assign var="up_down" value=""}
+              {if     $order == "form_id-DESC"}
+                {assign var=sort_order value="order=form_id-ASC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+              {elseif $order == "form_id-ASC"}
+                {assign var=sort_order value="order=form_id-DESC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+              {else}
+                {assign var=sort_order value="order=form_id-DESC"}
+              {/if}
+              <th width="30" class="sortable_col{if $up_down} over{/if}">
+                <a href="{$same_page}?{$sort_order}">{$LANG.word_id|upper} {$up_down}</a>
               </th>
-              <th>
 
-                {assign var="up_down" value=""}
-                {if     $order == "form_name-DESC"}
-                  {assign var=sort_order value="order=form_name-ASC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
-                {elseif $order == "form_name-ASC"}
-                  {assign var=sort_order value="order=form_name-DESC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
-                {else}
-                  {assign var=sort_order value="order=form_name-DESC"}
-                {/if}
+              {assign var="up_down" value=""}
+              {if     $order == "form_name-DESC"}
+                {assign var=sort_order value="order=form_name-ASC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+              {elseif $order == "form_name-ASC"}
+                {assign var=sort_order value="order=form_name-DESC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+              {else}
+                {assign var=sort_order value="order=form_name-DESC"}
+              {/if}
+              <th class="sortable_col{if $up_down} over{/if}">
+                <a href="{$same_page}?{$sort_order}">{$LANG.word_form} {$up_down}</a>
+              </th>
 
-                <table cellspacing="0" cellpadding="0" align="center" class="pad_left_small">
-                <tr>
-                  <td><a href="{$same_page}?{$sort_order}">{$LANG.word_form}</a></td>
-                  <td class="pad_left">{$up_down}</td>
-                </tr>
-                </table>
-
+              {assign var="up_down" value=""}
+              {if     $order == "form_type-DESC"}
+                {assign var=sort_order value="order=form_type-ASC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+              {elseif $order == "form_type-ASC"}
+                {assign var=sort_order value="order=form_type-DESC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+              {else}
+                {assign var=sort_order value="order=form_type-DESC"}
+              {/if}
+              <th nowrap class="sortable_col{if $up_down} over{/if}">
+                <a href="{$same_page}?{$sort_order}">{$LANG.phrase_form_type} {$up_down}</a>
               </th>
               <th>{$LANG.phrase_who_can_access}</th>
-              <th width="70">
 
-                {assign var="up_down" value=""}
-                {if     $order == "status-DESC"}
-                  {assign var=sort_order value="order=status-ASC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
-                {elseif $order == "status-ASC"}
-                  {assign var=sort_order value="order=status-DESC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
-                {else}
-                  {assign var=sort_order value="order=status-DESC"}
-                {/if}
-
-                <table cellspacing="0" cellpadding="0" align="center" class="pad_left_small">
-                <tr>
-                  <td><a href="{$same_page}?{$sort_order}">{$LANG.word_status}</a></td>
-                  <td class="pad_left">{$up_down}</td>
-                </tr>
-                </table>
-
+              {assign var="up_down" value=""}
+              {if     $order == "status-DESC"}
+                {assign var=sort_order value="order=status-ASC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+              {elseif $order == "status-ASC"}
+                {assign var=sort_order value="order=status-DESC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+              {else}
+                {assign var=sort_order value="order=status-DESC"}
+              {/if}
+              <th width="90" class="sortable_col{if $up_down} over{/if}">
+                <a href="{$same_page}?{$sort_order}">{$LANG.word_status} {$up_down}</a>
               </th>
               <th width="90">{$LANG.word_submissions|upper}</th>
-              <th width="70">{$LANG.word_edit|upper}</th>
-              <th class="del" width="70">{$LANG.word_delete|upper}</th>
+              <th class="edit"></th>
+              <th class="del"></th>
             </tr>
 
-        {/if}
+         {/if}
 
           <tr>
             <td align="center" class="medium_grey">{$form_id}</td>
-            <td class="pad_left_small"><a href="{$form_info.form_url}" target="_blank">{$form_info.form_name}</a></td>
+            <td class="pad_left_small">
+              {if $form_info.form_type == "external"}
+                <a href="{$form_info.form_url}" class="show_form" target="_blank">{$form_info.form_name}</a>
+              {else}
+                {$form_info.form_name}
+              {/if}
+            </td>
+            <td align="center">
+              {if $form_info.form_type == "external"}
+                <span class="brown">{$LANG.word_external}</span>
+              {elseif $form_info.form_type == "internal"}
+                <span class="orange">{$LANG.word_internal}</span>
+              {/if}
+            </td>
             <td>
 
               {* display the list of client associated with this form. If it's a public form, keep it simple
@@ -201,7 +205,6 @@
 
             </td>
             <td align="center">
-
               {if $form_info.is_active == "no"}
                 {assign var='status' value="<span style=\"color: orange\">`$LANG.word_offline`</span>"}
               {else}
@@ -210,7 +213,7 @@
 
               {if $form_info.is_complete == "no"}
                 {assign var='status' value="<span style=\"color: red\">`$LANG.word_incomplete`</span>"}
-                {assign var='file' value='add/step1.php'}
+                {assign var='file' value='add/step2.php'}
               {else}
                 {assign var='file' value='edit.php'}
               {/if}
@@ -218,24 +221,24 @@
               {$status}
 
             </td>
-            <td align="center">
-
+            <td {if $form_info.is_complete == "no"}align="center"{/if}>
               {if $form_info.is_complete == "yes"}
+                <div class="form_info_link">
                 {assign var='num_form_submissions' value=form_`$form_id`_num_submissions}
-                ({$SESSION[$num_form_submissions]})&nbsp;<a href="submissions.php?form_id={$form_id}">{$LANG.word_view|upper}</a>
+                <a href="submissions.php?form_id={$form_id}">{$LANG.word_view|upper}<span class="num_submissions_box">{$SESSION[$num_form_submissions]}</span></a>
+                </div>
               {/if}
 
-            </td>
-            <td align="center">
-
-              {if $form_info.is_complete == "yes"}
-                <a href="{$file}?form_id={$form_id}">{$LANG.word_edit|upper}</a>
-              {else}
+              {if $form_info.is_complete != "yes"}
                 <a href="{$file}?form_id={$form_id}">{$LANG.word_complete|upper}</a>
               {/if}
-
             </td>
-            <td class="del"><a href="delete_form.php?form_id={$form_id}">{$LANG.word_delete|upper}</a></td>
+            <td {if $form_info.is_complete == "yes"}class="edit"{/if}>
+              {if $form_info.is_complete == "yes"}
+                <a href="{$file}?form_id={$form_id}"></a>
+              {/if}
+            </td>
+            <td class="del"><a href="delete_form.php?form_id={$form_id}"></a></td>
           </tr>
 
         {if $count != 1 && ($count % $settings.num_forms_per_page) == 0}
@@ -257,8 +260,8 @@
   {/if}
 
   <p>
-    <form method="post" action="add/step1.php">
-      <input type="submit" value="{$LANG.phrase_add_form|upper}" />
+    <form method="post" action="add/">
+      <input type="submit" name="new_form" value="{$LANG.phrase_add_form|upper}" />
     </form>
   </p>
 

@@ -2,6 +2,8 @@
 
   <h1>{$LANG.word_welcome}</h1>
 
+  {include file='messages.tpl'}
+
   <div class="notify">
     {$LANG.text_install_already_upgraded}
   </div>

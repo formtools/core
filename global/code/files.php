@@ -4,9 +4,9 @@
  * This file defines all functions related to files and folders within Form Tools. All direct image-related
  * functionality (uploading, resizing, etc) for the Image Manager module is found in images.php.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Files
  */
 
@@ -378,8 +378,10 @@ function ft_upload_file($folder, $filename, $tmp_location)
 /**
  * Uploads a file for a particular form submission field.
  *
- * This is to be called AFTER the submission has already been added to the database so there's an available
- * and valid submission ID. It uploads the file to the specified folder then updates the database record.
+ * This is to be called AFTER the submission has already been added to the database so there's an available,
+ * valid submission ID. It uploads the file to the specified folder then updates the database record.
+ *
+ * TODO move this and all file-related functionality to a separate module. Yup!
  *
  * Since any submission file field can only ever store a single file at once, this file automatically deletes
  * both the file if a new file is successfully uploaded.
@@ -388,33 +390,35 @@ function ft_upload_file($folder, $filename, $tmp_location)
  * @param integer $submission_id a unique submission ID
  * @param integer $field_id a unique field ID
  * @param array $fileinfo an index from the $_FILES array (containing all data about the file)
+ * @param array $field_settings whatever settings have been custom defined for this field
  * @return array Returns array with indexes:<br/>
  *               [0]: true/false (success / failure)<br/>
  *               [1]: message string<br/>
  *               [2]: If success, the filename of the uploaded file
  */
-function ft_upload_submission_file($form_id, $submission_id, $field_id, $fileinfo)
+function ft_upload_submission_file($form_id, $submission_id, $fileinfo, $field_info)
 {
   global $g_table_prefix, $g_filename_char_whitelist, $LANG;
 
-  extract(ft_process_hooks("start", compact("form_id", "submission_id", "field_id", "fileinfo"),
+  extract(ft_process_hooks("start", compact("form_id", "submission_id", "field_info", "fileinfo"),
     array("fileinfo")), EXTR_OVERWRITE);
 
   // get the column name and upload folder for this field
-  $field_info = ft_get_form_field($field_id);
-  $extended_field_info = ft_get_extended_field_settings($field_id);
+  $field_id = $field_info["field_info"]["field_id"];
+  $col_name = $field_info["field_info"]["col_name"];
 
-  $col_name             = $field_info["col_name"];
-  $file_upload_dir      = $extended_field_info["file_upload_dir"];
-  $file_upload_url      = $extended_field_info["file_upload_url"];
-  $file_upload_max_size = $extended_field_info["file_upload_max_size"]; // KB
-  $file_upload_types    = $extended_field_info["file_upload_filetypes"];
+  $default_settings = ft_get_settings(array("file_upload_dir", "file_upload_url", "file_upload_max_size", "file_upload_filetypes"));
+
+  $file_upload_dir = isset($default_settings["file_upload_dir"]) ? $default_settings["file_upload_dir"] : $default_settings["file_upload_dir"];
+  $file_upload_url = isset($default_settings["file_upload_url"]) ? $default_settings["file_upload_url"] : $default_settings["file_upload_url"];
+  $file_upload_max_size = isset($default_settings["file_upload_max_size"]) ? $default_settings["file_upload_max_size"] : $default_settings["file_upload_max_size"];
+  $file_upload_types    = isset($default_settings["file_upload_types"]) ? $default_settings["file_upload_types"] : $default_settings["file_upload_types"];
 
   // if the column name wasn't found, the $field_id passed in was invalid. Return false.
   if (empty($col_name))
     return array(false, $LANG["notify_submission_no_field_id"]);
 
-  // clean up the filename according to the whitelist chars.
+  // clean up the filename according to the whitelist chars
   $filename_parts = explode(".", $fileinfo["name"]);
   $extension = $filename_parts[count($filename_parts)-1];
   array_pop($filename_parts);

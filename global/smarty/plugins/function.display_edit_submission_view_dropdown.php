@@ -6,7 +6,8 @@
  * File:     function.display_edit_submission_view_dropdown
  * Type:     function
  * Name:     form_view_fields_dropdown
- * Purpose:  used on the edit submission page. This displays a dropdown of available Views for the submission.
+ * Purpose:  used on the edit submission page. This displays a dropdown of available Views for the
+ *           submission.
  * -------------------------------------------------------------
  */
 function smarty_function_display_edit_submission_view_dropdown($params, &$smarty)
@@ -49,7 +50,8 @@ function smarty_function_display_edit_submission_view_dropdown($params, &$smarty
   // add it to the dropdown list
   if (count($views) > 1)
   {
-	  $html = "<select onchange=\"window.location='{$_SERVER["PHP_SELF"]}?form_id=$form_id&submission_id=$submission_id&view_id=' + this.value\">
+  	$same_page = ft_get_clean_php_self();
+	  $html = "<select onchange=\"window.location='{$same_page}?form_id=$form_id&submission_id=$submission_id&view_id=' + this.value\">
 	    <optgroup label=\"Views\">\n";
 	  foreach ($views as $view_info)
 	  {

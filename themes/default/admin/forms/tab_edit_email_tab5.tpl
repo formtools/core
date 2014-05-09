@@ -56,8 +56,7 @@
           <tr>
             <th>{$LANG.phrase_field_label}</th>
             <th>{$LANG.phrase_form_field}</th>
-            <th>{$LANG.phrase_field_label_placeholder}</th>
-            <th>{$LANG.phrase_field_response_placeholder}</th>
+            <th>Label / Response Placeholders</th>
           </tr>
           {foreach from=$form_fields item=field name=row}
 
@@ -65,17 +64,29 @@
               <tr>
                 <td>{$field.field_title}</td>
                 <td>{$field.field_name}</td>
-                <td class="blue">{literal}{$QUESTION{/literal}_{$field.field_name}{literal}}{/literal}</td>
-                <td class="blue">
-
-                  {* if this is a file field, display the image folder URL placeholder *}
-                  {if $field.field_type == "file"}
-                    {literal}{$FILENAME{/literal}_{$field.field_name}{literal}}{/literal}, {literal}{$FILEURL{/literal}_{$field.field_name}{literal}}{/literal}
-                  {else}
-                    {literal}{$ANSWER{/literal}_{$field.field_name}{literal}}{/literal}
-                  {/if}
-
+                <td>
+                  <table cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td nowrap>Field Label</td>
+                    <td class="blue">{literal}{$QUESTION{/literal}_{$field.field_name}{literal}}{/literal}</td>
+                  </tr>
+                  <tr>
+                    <td nowrap>Field Response</td>
+                    <td class="blue">
+		                  {* if this is a file field, display the image folder URL placeholder *}
+		                  {if $field.field_type == "file"}
+		                    {literal}{$FILENAME{/literal}_{$field.field_name}{literal}}{/literal}, {literal}{$FILEURL{/literal}_{$field.field_name}{literal}}{/literal}
+		                  {else}
+		                    {literal}{$ANSWER{/literal}_{$field.field_name}{literal}}{/literal}
+		                  {/if}
+                    </td>
+                  </tr>
+                  </table>
                 </td>
+{*
+{$LANG.phrase_field_label_placeholder}
+{$LANG.phrase_field_response_placeholder}
+*}
               </tr>
             {/if}
           {/foreach}

@@ -3,13 +3,17 @@
   <table cellpadding="0" cellspacing="0" class="margin_bottom_large">
   <tr>
     <td width="45"><a href="../"><img src="{$images_url}/icon_forms.gif" border="0" width="34" height="34" /></a></td>
-    <td class="title"><a href="../">{$LANG.word_forms|upper}</a>: {$LANG.phrase_add_form|upper}</td>
+    <td class="title">
+      <a href="../">{$LANG.word_forms}</a> <span class="joiner">&raquo;</span>
+      <a href="./">{$LANG.phrase_add_form}</a> <span class="joiner">&raquo;</span>
+      {$LANG.phrase_external_form}
+    </td>
   </tr>
   </table>
 
   <table cellpadding="0" cellspacing="0" width="100%" class="add_form_nav">
   <tr>
-    <td class="selected">{$LANG.word_checklist}</td>
+    <td class="selected">{$LANG.word_start}</td>
     <td class="selected">{$LANG.phrase_form_info}</td>
     <td class="selected">{$LANG.phrase_test_submission}</td>
     <td class="selected">{$LANG.phrase_database_setup}</td>

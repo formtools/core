@@ -5,9 +5,9 @@
  * for the various areas of the Settings pages is a little hodge podge; e.g. the menus update code is
  * in menus.php.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Settings
  */
 
@@ -58,8 +58,7 @@ function ft_get_settings($settings = "", $module = "")
 			WHERE  setting_name = '$settings'
 			$and_module_clause
 				");
-
-		$info = mysql_fetch_assoc($query);
+	  $info = mysql_fetch_assoc($query);
 		$return_val = $info["setting_value"];
 	}
 	else if (is_array($settings))
@@ -164,12 +163,10 @@ function ft_update_main_settings($infohash)
 	$rules[] = "digits_only,num_emails_per_page,{$LANG["validation_invalid_num_emails_per_page"]}";
 	$rules[] = "required,num_forms_per_page,{$LANG["validation_no_num_forms_per_page"]}";
 	$rules[] = "digits_only,num_forms_per_page,{$LANG["validation_invalid_num_forms_per_page"]}";
-	$rules[] = "required,num_field_option_groups_per_page,{$LANG["validation_no_num_field_option_groups_per_page"]}";
-	$rules[] = "digits_only,num_field_option_groups_per_page,{$LANG["validation_invalid_num_field_option_groups_per_page"]}";
+	$rules[] = "required,num_option_lists_per_page,{$LANG["validation_no_num_option_lists_per_page"]}";
+	$rules[] = "digits_only,num_option_lists_per_page,{$LANG["validation_invalid_num_option_lists_per_page"]}";
 	$rules[] = "required,num_menus_per_page,{$LANG["validation_no_num_menus_per_page"]}";
 	$rules[] = "digits_only,num_menus_per_page,{$LANG["validation_invalid_num_menus_per_page"]}";
-	$rules[] = "required,num_views_per_page,{$LANG["validation_no_num_views_per_page"]}";
-	$rules[] = "digits_only,num_views_per_page,{$LANG["validation_invalid_num_views_per_page"]}";
 	$rules[] = "required,num_modules_per_page,{$LANG["validation_no_num_modules_per_page"]}";
 	$rules[] = "digits_only,num_modules_per_page,{$LANG["validation_invalid_num_modules_per_page"]}";
 	$errors = validate_fields($infohash, $rules);
@@ -183,15 +180,14 @@ function ft_update_main_settings($infohash)
 	}
 
   $settings = array(
-    "program_name"         => trim($infohash["program_name"]),
-    "logo_link"            => trim($infohash["logo_link"]),
-    "num_clients_per_page" => trim($infohash["num_clients_per_page"]),
-    "num_emails_per_page"  => trim($infohash["num_emails_per_page"]),
-    "num_forms_per_page"   => trim($infohash["num_forms_per_page"]),
-    "num_field_option_groups_per_page" => trim($infohash["num_field_option_groups_per_page"]),
-    "num_menus_per_page"   => trim($infohash["num_menus_per_page"]),
-    "num_views_per_page"   => trim($infohash["num_views_per_page"]),
-    "num_modules_per_page" => trim($infohash["num_modules_per_page"])
+    "program_name"              => trim($infohash["program_name"]),
+    "logo_link"                 => trim($infohash["logo_link"]),
+    "num_clients_per_page"      => trim($infohash["num_clients_per_page"]),
+    "num_emails_per_page"       => trim($infohash["num_emails_per_page"]),
+    "num_forms_per_page"        => trim($infohash["num_forms_per_page"]),
+    "num_option_lists_per_page" => trim($infohash["num_option_lists_per_page"]),
+    "num_menus_per_page"        => trim($infohash["num_menus_per_page"]),
+    "num_modules_per_page"      => trim($infohash["num_modules_per_page"])
   );
 
   ft_set_settings($settings);
@@ -251,7 +247,7 @@ function ft_update_account_settings($infohash)
   $clients_may_edit_max_failed_login_attempts = isset($infohash["clients_may_edit_max_failed_login_attempts"]) ? "yes" : "no";
 
   $required_password_chars = "";
-  if (is_array($infohash["required_password_chars"]))
+  if (isset($infohash["required_password_chars"]) && is_array($infohash["required_password_chars"]))
     $required_password_chars = implode(",", $infohash["required_password_chars"]);
 
   $settings = array(
@@ -265,6 +261,7 @@ function ft_update_account_settings($infohash)
     "default_timezone_offset"      => $infohash["default_timezone_offset"],
     "default_sessions_timeout"     => $infohash["default_sessions_timeout"],
     "default_date_format"          => $infohash["default_date_format"],
+    "forms_page_default_message"   => $infohash["forms_page_default_message"],
     "clients_may_edit_page_titles" => $clients_may_edit_page_titles,
     "clients_may_edit_footer_text" => $clients_may_edit_footer_text,
     "clients_may_edit_theme"       => $clients_may_edit_theme,
@@ -320,14 +317,12 @@ function ft_update_file_settings($infohash)
 		  $file_upload_filetypes .= ",{$infohash["file_upload_filetypes_other"]}";
 	}
 	$file_upload_filetypes = mb_strtolower($file_upload_filetypes);
-	$display_files_with_lightbox = $infohash["display_files_with_lightbox"];
 
 	$settings = array(
 	  "file_upload_dir" => $file_upload_dir,
     "file_upload_url" => $file_upload_url,
 	  "file_upload_max_size" => $file_upload_max_size,
-	  "file_upload_filetypes" => $file_upload_filetypes,
-	  "display_files_with_lightbox" => $display_files_with_lightbox
+	  "file_upload_filetypes" => $file_upload_filetypes
 	);
 
 	ft_set_settings($settings);
@@ -336,7 +331,6 @@ function ft_update_file_settings($infohash)
 	list($is_valid_folder, $folder_message) = ft_check_upload_folder($file_upload_dir);
 	if (!$is_valid_folder)
 		return array($is_valid_folder, $folder_message);
-
 
 	// if the folder has just changed, move all the files to the new folder. This involves the following:
 	//   1. finding each and every file upload field that uses the default file upload folder, and move all the

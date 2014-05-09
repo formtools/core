@@ -1,6 +1,14 @@
 {include file='header.tpl'}
 
-  <div class="title margin_bottom_large">{$LANG.phrase_module_info|upper}</div>
+  <table cellpadding="0" cellspacing="0" height="35" class="margin_bottom_large">
+  <tr>
+    <td width="45"><img src="{$images_url}/icon_modules.gif" width="34" height="34" /></td>
+    <td class="title">
+      <a href="./">{$LANG.word_modules}</a> <span class="joiner">&raquo;</span> {$LANG.phrase_module_info}
+    </td>
+  </tr>
+  </table>
+
 
   <table cellspacing="1" cellpadding="1" class="list_table">
   <tr>

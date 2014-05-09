@@ -12,14 +12,13 @@
   //]]>
   </script>
 
+  <script type="text/javascript" src="../global/scripts/jquery.js?v=2_1_0"></script>
+  <script type="text/javascript" src="../global/scripts/jquery-ui-1.8.6.custom.min.js"></script>
   <link rel="stylesheet" type="text/css" href="files/main.css">
-  <script type="text/javascript" src="../global/scripts/prototype.js"></script>
-  <script type="text/javascript" src="../global/scripts/scriptaculous.js?load=effects"></script>
   <script type="text/javascript" src="../global/scripts/general.js"></script>
   <script type="text/javascript" src="../global/scripts/rsv.js"></script>
 
   {$head_js}
-
 </head>
 <body>
 

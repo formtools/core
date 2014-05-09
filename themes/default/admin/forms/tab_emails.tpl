@@ -25,9 +25,9 @@
       <tr>
         <th>{$LANG.phrase_email_template}</th>
         <th>{$LANG.word_recipient_sp}</th>
-        <th width="60">{$LANG.word_status}</th>
-        <th width="60">{$LANG.word_edit|upper}</th>
-        <th width="60" class="del">{$LANG.word_delete|upper}</th>
+        <th width="90">{$LANG.word_status}</th>
+        <th class="edit"></th>
+        <th class="del colN"></th>
       </tr>
 
       {foreach from=$form_emails item=email name=row}
@@ -74,8 +74,8 @@
               <span class="red">{$LANG.word_disabled}</span>
             {/if}
           </td>
-          <td align="center"><a href="{$same_page}?page=edit_email&email_id={$email_id}">{$LANG.word_edit|upper}</a></td>
-          <td class="del"><a href="#" onclick="page_ns.delete_email({$email_id})">{$LANG.word_delete|upper}</a></td>
+          <td class="edit"><a href="{$same_page}?page=edit_email&email_id={$email_id}"></a></td>
+          <td class="del colN"><a href="#" onclick="page_ns.delete_email({$email_id})"></a></td>
         </tr>
       {/foreach}
       </table>

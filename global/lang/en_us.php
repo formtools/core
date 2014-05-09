@@ -1,15 +1,15 @@
 <?php
 
 /*
-Form Tools - Language File
---------------------------
+ Form Tools - Language File
+ --------------------------
 
-Translated by: Anonymous
-File created: Mar 7th, 11:58 PM
+ Translated by: Anonymous
+ File created: Mar 7th, 11:58 PM
 
-If you would like to help translate Form Tools, please visit:
-http://translations.formtools.org/
-*/
+ If you would like to help translate Form Tools, please visit:
+ http://translations.formtools.org/
+ */
 
 $LANG = array();
 
@@ -294,7 +294,6 @@ $LANG["phrase_allow_toolbar_resizing"] = "Allow Toolbar Resizing";
 $LANG["phrase_api_version"] = "API Version";
 $LANG["phrase_assign_all_listed_client_accounts_to_menu"] = "Assign all listed client accounts to {\$menu_dropdown} {\$submit_button}";
 $LANG["phrase_assign_all_listed_client_accounts_to_theme"] = "Assign all listed client accounts to {\$theme_dropdown} {\$submit_button}";
-$LANG["phrase_assign_rows_to_tabs"] = "Assign rows {\$x} to {\$y} to tab {\$tab}";
 $LANG["phrase_author_link"] = "Author Link";
 $LANG["phrase_auto_email_administrator_sp"] = "Auto-email administrator(s)";
 $LANG["phrase_auto_generate_db_col_names"] = "Auto-generate database column names";
@@ -344,8 +343,6 @@ $LANG["phrase_create_config_file"] = "Create Config File";
 $LANG["phrase_create_database_tables"] = "Create Database Tables";
 $LANG["phrase_create_file"] = "Create File";
 $LANG["phrase_create_new_email"] = "Create New Email";
-$LANG["phrase_create_new_field_option_group"] = "Create Field Option Group";
-$LANG["phrase_create_new_group"] = "Create New Group &raquo;";
 $LANG["phrase_create_new_menu"] = "Create New Menu";
 $LANG["phrase_create_new_view"] = "Create New View";
 $LANG["phrase_custom_recipient"] = "Custom Recipient";
@@ -388,7 +385,6 @@ $LANG["phrase_edit_client_menu"] = "Edit Client Menu";
 $LANG["phrase_edit_client_uc_c"] = "EDIT CLIENT:";
 $LANG["phrase_edit_email_template"] = "Edit Email Template";
 $LANG["phrase_edit_field"] = "Edit Field";
-$LANG["phrase_edit_field_option_group"] = "Edit Field Option Group";
 $LANG["phrase_edit_field_options"] = "Edit Field Options";
 $LANG["phrase_edit_form"] = "Edit Form";
 $LANG["phrase_edit_form_uc_c"] = "EDIT FORM:";
@@ -418,8 +414,6 @@ $LANG["phrase_field_content"] = "Field content";
 $LANG["phrase_field_label"] = "Field Label";
 $LANG["phrase_field_label_placeholder"] = "Field Label Placeholder";
 $LANG["phrase_field_name"] = "Field Name";
-$LANG["phrase_field_option_group"] = "Field Option Group";
-$LANG["phrase_field_option_groups"] = "Field Option Groups";
 $LANG["phrase_field_options"] = "Field Options";
 $LANG["phrase_field_orientation"] = "Field Orientation";
 $LANG["phrase_field_response_placeholder"] = "Field Response Placeholder";
@@ -466,7 +460,6 @@ $LANG["phrase_full_form_submission"] = "Full form submission";
 $LANG["phrase_full_form_submission_omit_empty"] = "Full form submission + omit empty fields";
 $LANG["phrase_get_more"] = "Get more...";
 $LANG["phrase_global_placeholders"] = "Global Placeholders";
-$LANG["phrase_group_name"] = "Group Name";
 $LANG["phrase_have_fun"] = "Have fun!";
 $LANG["phrase_hide_help"] = "Hide Help";
 $LANG["phrase_html_email"] = "HTML Email";
@@ -506,9 +499,8 @@ $LANG["phrase_manage_client"] = "Manage Client";
 $LANG["phrase_manage_clients"] = "Manage Clients";
 $LANG["phrase_manage_forms"] = "Manage Forms";
 $LANG["phrase_max_file_size"] = "Max File Size";
-$LANG["phrase_may_add_submissions"] = "May add submissions";
-$LANG["phrase_may_delete_submissions"] = "May delete submissions";
-$LANG["phrase_may_delete_view_submissions"] = "May delete submissions that appear in this View";
+$LANG["phrase_may_add_submissions"] = "May add Submissions";
+$LANG["phrase_may_delete_submissions"] = "May delete Submissions";
 $LANG["phrase_may_edit_submissions"] = "May edit submissions";
 $LANG["phrase_may_log_in"] = "<b>Active</b> (may log in)";
 $LANG["phrase_menu_name"] = "Menu Name";
@@ -523,10 +515,8 @@ $LANG["phrase_multiple_fields_found"] = "Multiple Fields Found!";
 $LANG["phrase_mysql_version"] = "MySQL Version";
 $LANG["phrase_name_or_last_name"] = "Name / Last Name";
 $LANG["phrase_new_blank_email"] = "New Blank Email";
-$LANG["phrase_new_blank_field_option_group"] = "New Blank Field Option Group";
 $LANG["phrase_new_blank_view"] = "New Blank View";
 $LANG["phrase_new_ft_installation"] = "New Form Tools Installation";
-$LANG["phrase_new_group"] = "New Group";
 $LANG["phrase_new_page"] = "new page";
 $LANG["phrase_new_password"] = "New Password";
 $LANG["phrase_new_password_reenter"] = "New Password (please re-enter)";
@@ -546,7 +536,6 @@ $LANG["phrase_not_visible_to_client"] = "(not visible to client)";
 $LANG["phrase_notification_only"] = "Notification only";
 $LANG["phrase_num_clients_per_page"] = "Num Clients Per Page";
 $LANG["phrase_num_emails_per_page"] = "Num Emails Per Page";
-$LANG["phrase_num_field_option_groups_per_page"] = "Num Field Option Groups Per Page";
 $LANG["phrase_num_field_options"] = "Num Field Options";
 $LANG["phrase_num_forms_per_page"] = "Num Forms Per Page";
 $LANG["phrase_num_menus_per_page"] = "Num Menus Per Page";
@@ -578,7 +567,7 @@ $LANG["phrase_please_select"] = "Please Select";
 $LANG["phrase_please_select_form"] = "Please select a form";
 $LANG["phrase_previous_field"] = "&laquo; previous field";
 $LANG["phrase_previous_page"] = "Previous Page";
-$LANG["phrase_previous_view"] = "&laquo; previous View";
+$LANG["phrase_previous_view"] = "&laquo; prev View";
 $LANG["phrase_print_preview"] = "Print Preview";
 $LANG["phrase_program_name"] = "Program Name";
 $LANG["phrase_public_form_omit_list"] = "Public Form Omit List";
@@ -681,15 +670,12 @@ $LANG["phrase_upload_folder_path"] = "Upload folder path";
 $LANG["phrase_upload_folder_url"] = "Upload folder URL";
 $LANG["phrase_upload_image_c"] = "Upload Image:";
 $LANG["phrase_use_default_styles"] = "Use default styles";
-$LANG["phrase_use_lightbox"] = "Use Lightbox to display files";
-$LANG["phrase_use_lightbox_caveat"] = "(Only enable if you're only uploading images through file fields)";
 $LANG["phrase_used_by_num_form_fields"] = "Used by # Form Fields";
 $LANG["phrase_user_account_placeholders"] = "User Account Placeholders";
 $LANG["phrase_user_email_address_format"] = "User's name <user's email address>";
 $LANG["phrase_user_emails"] = "User Emails";
 $LANG["phrase_user_text"] = "User, Text";
 $LANG["phrase_values_to_text"] = "Values -&gt; Text";
-$LANG["phrase_verify_url"] = "Verify URL";
 $LANG["phrase_view_name"] = "View Name";
 $LANG["phrase_view_submissions"] = "View Submissions";
 $LANG["phrase_view_submissions_link"] = "[View Submissions]";
@@ -709,11 +695,12 @@ $LANG["phrase_your_email"] = "Your Email";
 $LANG["phrase_your_email_address"] = "Your email address";
 $LANG["phrase_your_name"] = "Your Name";
 
-
 // Category: Text
 $LANG["text_account_settings_page"] = "All new client accounts will be created with the settings and permissions defined below. To override a setting for a particular client, edit the client account and visit their Settings tab.";
+
+// TODO: incomplete link in this var
 $LANG["text_add_form_code_submission_benefits"] = "This method uses the <a href=\"http://docs.formtools.org/api/\" target=\"_blank\">Form Tools API</a>, included in the main Form Tools script. The API provides a number of helpful functions to make the job of integrating your form with Form Tools as simple as possible. There are no restrictions to how your form may be submitted when you use the API. You can submit the content in one go, or page by page; you can add your own custom server-side validation, CAPTCHA images; you can choose to submit the information now, but only tell it to display the submission in the Form Tools UI at a later date (see the <a href=\"\">Finalized Submissions</a> section in the API help documentation).";
-$LANG["text_add_form_code_submission_drawbacks"] = "For non-technical and novice Form Tools users, this method can be a little intimidating at first. But there's plenty of documentation to help you out, including two simple tutorials for integrating your single- and multi-page forms (just click the Select button).";
+
 $LANG["text_add_form_direct_submission_benefits"] = "This is the simplest way to submit your form to Form Tools. It doesn't require any knowledge of PHP and requires only a very small change to your form. It's great for smaller forms where you want to just submit the information to the database then redirect the user to a \"thankyou\" page.";
 $LANG["text_add_form_direct_submission_drawbacks"] = "This submission method is very simple to use, but doesn't provide much control for more complicated forms. Multi-page forms or forms that require server-side validation are better suited to the second method: submitting via the Form Tools API.";
 $LANG["text_add_form_step_1_text_1"] = "The following pages lead you through the steps to configure Form Tools to store your form submissions. Before continuing, please check that:";
@@ -722,11 +709,8 @@ $LANG["text_add_form_step_1_text_3"] = "are able to edit your form";
 $LANG["text_add_form_step_2_para_2"] = "Open your form in an editor of your choice and change your form tag to the following, including the two hidden fields.";
 $LANG["text_add_form_step_2_para_3"] = "Next, <a href=\"{\$linktoform}\" target=\"_blank\">open your form in a web browser</a>. Fill in <b>every</b> field and submit it. After submitting, you should see a notification message. Once this message is displayed, return to this page and click the refresh button below. When this process is complete, you will see a continue button below, taking you to the next step.";
 $LANG["text_add_form_step_2_para_6"] = "In your form submission, include the following values. They may be set directly via PHP or passed along through the form itself. Below are examples of each. The {\$varname} is a hash (or associative array) of all form submission information - this is usually the {\$postvar} or {\$sessionvar} variable, but it may be custom built.";
-$LANG["text_add_form_step_2_text_1"] = "Your form can be located on any website, but you can only submit the form information with PHP if it's located on the same server as this Form Tools installation.";
-$LANG["text_add_form_step_2_text_2"] = "Enter the URL of your \"thankyou\" page here. This is where you want people to be directed to after the form has been submitted. Note: as the next step will explain, you can submit your forms to Form Tools with a standard POST request or by sending the information with PHP using the <a href=\"http://docs.formtools.org/api/\" target=\"_blank\">Form Tools API</a>. The Redirect URL field is only required if you want the form submissions sent without any PHP.";
 $LANG["text_add_form_step_3_para_1"] = "This page lists all fields in your form submission. Please examine each field and remove any that you don't need stored for every submission. If you delete a valid field by accident, or wish to change the information stored by your form, return to the previous page to send a new test submission.";
 $LANG["text_add_form_step_3_para_2"] = "Note: if you're sending multiple values via checkboxes or a multi-select box, make sure your field name ends with the [] characters (see the <a href=\"http://docs.formtools.org/\" target=\"_blank\">user documentation</a> for more information).";
-$LANG["text_add_form_step_3_text_1"] = "Here's where the fun starts! At this point, Form Tools is waiting for a test submission from your form. It will use this form submission to know what information should be stored for all future submissions. You can make your test submission in one of two ways:";
 $LANG["text_add_form_step_3_text_2"] = "by pointing your form to Form Tools";
 $LANG["text_add_form_step_3_text_3"] = "using the Form Tools API";
 $LANG["text_add_form_step_3_text_4"] = "To help integrate your form, we suggest you read one of the following tutorials:";
@@ -757,11 +741,9 @@ $LANG["text_date_formatting_link"] = "see PHP {\$datefunctionlink} function for 
 $LANG["text_default_file_settings_page"] = "This page defines the file upload settings for your Form Tools installation. These rules apply to all files uploaded through Form Tools, unless explicitly overridden for an individual form field. Note: if you change the upload folder after files have been uploaded, they will be automatically moved to the new folder.";
 $LANG["text_default_theme_cache_folder_not_writable"] = "Before continuing, you will need to update your <b>/themes/default/cache</b> folder to allow full read and write permissions. Once this is done, this message will disappear and you can install the script.";
 $LANG["text_delete_all_forms"] = "I want to delete all files that were uploaded via this form";
-$LANG["text_delete_field_warning"] = "deleting a field on this page will delete it from all submissions, so please be careful.";
 $LANG["text_delete_form_warning"] = "Are you sure you want to delete this form? This action cannot be undone. All data will be permanently lost!";
 $LANG["text_edit_admin_menu_page"] = "You may edit your menu below. To ensure you always have access to all functionality available within Form Tools, the following pages are required: Forms, Clients, Your Account, Modules, Settings and Logout.";
 $LANG["text_edit_client_menu_page"] = "This section lets you customize the left navigation column for each user. You may create as many client menus as you wish and assign any account to one of them. By default there are two menus: one for you, the administrator, and one for all client accounts. The administrator account may be modified but not removed.";
-$LANG["text_edit_tab_summary"] = "If you wish to group this View's fields into tabs, just fill in the fields below. After you're done, select the appropriate tab for each field in the <a href=\"#\" onclick=\"return ft.change_inner_tab(2, 4)\">Fields section</a>.";
 $LANG["text_email_address"] = "The admin / client's email address.";
 $LANG["text_email_settings_intro"] = "This page lets you identify which of your form fields store emails and their corresponding names. Once you define them here, you can use them in your email templates as recipients. This section is entirely optional.";
 $LANG["text_email_tab_summary"] = "This section lets you construct any number of emails to be sent whenever your form is submitted, and other triggers.";
@@ -770,14 +752,8 @@ $LANG["text_email_template_text_1"] = "There has been a submission made through 
 $LANG["text_email_template_text_1_c"] = "There has been a submission made through your form, {\$FORMNAME}:";
 $LANG["text_email_template_thanks"] = "Thanks for your submission!";
 $LANG["text_example_wysiwyg"] = "WYSIWYG stands for \"<b>W</b>hat <b>Y</b>ou <b>S</b>ee <b>I</b>s <b>W</b>hat <b>Y</b>ou <b>G</b>et\"; it's a commonly used acronym for describing HTML/rich-text editors, like <a href=\"http://tinymce.moxiecode.com/\">TinyMCE</a> used in Form Tools. This is how the WYSIWYG fields will look, based on the settings defined above. You may assign any form field to use this WYSIWYG editor on the Edit Form -> Fields page/tab.";
-$LANG["text_field_option_group_checkboxes_explanation"] = "The field option group determines the contents of this set of checkboxes and their orientation (vertical or horizontal).";
-$LANG["text_field_option_group_dropdown_explanation"] = "The field option group determines the contents of this dropdown field.";
-$LANG["text_field_option_group_explanation"] = "Click the edit button to edit the group values. Creating a new group will create a new, blank field option group and assign it to this field.";
-$LANG["text_field_option_group_page"] = "Form Tools stores field options for dropdowns, multi-select dropdowns, radio buttons and checkboxes as distinct groups. Generally, these are created automatically by the <a href=\"{\$link}\">Add Form</a> process, but you can manually add or edit your field groups below if your form content changes or you wish to construct fields that are only used internally.";
-$LANG["text_field_option_group_radios_explanation"] = "The field option group determines the contents of this set of radio buttons and their orientation (vertical or horizontal).";
-$LANG["text_field_option_group_used_by_fields"] = "This field option group is used by multiple form fields. If you update the information below, it will be changed for all of the fields (see the <a href=\"{\$link1}\">Form Fields</a> tab to see the list of fields). If you wish to update the values for one, or a subset of the fields that are currently assigned, <a href=\"{\$link2}\">click here</a> to create a new field option group with the same values as this one. Then you can assign the form fields you want to the new group.";
+
 $LANG["text_field_orientation_explanation"] = "This is relevant only for radio-buttons and checkboxes. It determines whether the fields should be grouped vertically or horizontally on the page.";
-$LANG["text_fields_tab_summary"] = "This page contains the general configuration settings for the form fields. To control how they appear when browsing submissions, see the <a href=\"{\$views_tab_link}\">Views tab</a>.";
 $LANG["text_file_extension_info"] = "Enter file extensions separated with commas (e.g. jpg,gif,png) or leave blank to allow any file type.";
 $LANG["text_file_field_placeholders_info"] = "File fields have two special placeholders: FILEURL and FILENAME. FILEURL is the full URL to the file, so you can link directly to it in your emails; FILENAME is just the file name.";
 $LANG["text_file_settings_page"] = "This page lets you customize the settings for this file field. You do not <b>need</b> to edit these values. Only edit them if you wish to override the settings defined in your <a href=\"../settings/index.php?page=files\">File Settings</a> page.";
@@ -816,7 +792,8 @@ $LANG["text_name_of_form"] = "The name of the form.";
 $LANG["text_no_clients"] = "There are currently no clients in the database. To add a new client account, click the Add Client button below.";
 $LANG["text_no_clients_found"] = "No clients were found. Try broadening your search criteria.";
 $LANG["text_no_forms"] = "There are currently no forms in the database. To add a new form, click the Add Form button below.";
-$LANG["text_no_forms_found"] = "No forms were found. Try broadening your search criteria.";
+$LANG["text_no_forms_found"] = "No forms were found.";
+$LANG["text_no_forms_found_search"] = "No forms were found. Try broadening your search criteria.";
 $LANG["text_no_modules_found"] = "No modules were found. Try broadening your search criteria.";
 $LANG["text_no_recipients_added"] = "No recipients have been added.";
 $LANG["text_no_search_results"] = "There are no results with this search criteria / View.";
@@ -834,11 +811,8 @@ $LANG["text_test_email_templates_no_submissions"] = "In order to test your email
 $LANG["text_theme_page_intro"] = "This page lists all of your themes. Click on a thumbnail to see a larger example of the theme's styles. The \"enabled\" checkbox determines whether or not that theme may be selected by clients. To browse all available themes, visit the <a href=\"http://themes.formtools.org\" target=\"_blank\">Form Tools website</a>.";
 $LANG["text_tutorial_adding_first_form"] = "Tutorial: Adding your first form!";
 $LANG["text_unique_submission_id"] = "The unique submission ID.";
-$LANG["text_unused_field_option_group"] = "This field option group is not being used by any form fields.";
 $LANG["text_upgraded"] = "Your installation has been upgraded to <b>{\$version}</b>";
-$LANG["text_used_field_option_group"] = "This field option group is used by the following fields.";
 $LANG["text_user_account_placeholders_explanation"] = "These placeholders only exist for emails sent to the admin and client accounts. If they exist in emails to other people (e.g. users - the people who submitted the form), they will appear blank.";
-$LANG["text_view_tab_summary"] = "This tab lets you create different ways to group and arrange your data, called \"Views\". Views can be used for reporting purposes to show subsets of your form information or to limit what clients may see or edit.";
 
 
 // Category: Validation
@@ -854,15 +828,12 @@ $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Sorry, the de
 $LANG["validation_delete_form_confirm"] = "Please check the box to confirm that you wish to delete this form.";
 $LANG["validation_display_names_incomplete"] = "Please enter a value for all the Display Names, or click the Smart Fill option to enter them dynamically.";
 $LANG["validation_email_not_found_or_invalid"] = "Sorry, the email associated with your account either doesn't exist or is invalid.";
-$LANG["validation_field_option_group_has_assigned_fields"] = "Sorry, you cannot delete this field option group until all form fields that use the group have either been reassigned to a new field option group, or changed to a different field type. <a href=\"{\$link}\">Click here</a> to view the list of form fields that need to be updated.";
-$LANG["validation_field_option_group_name_taken"] = "Sorry, this group name is already taken. Please choose a new name.";
 $LANG["validation_folder_invalid_permissions"] = "In order to run this test, the permissions need to be set on the upload folder to allow for reading and writing files (777 on Unix).";
 $LANG["validation_folder_not_writable"] = "This folder is not writeable.";
 $LANG["validation_form_contains_file_fields"] = "Please indicate whether this form contains file upload field(s) or not.";
 $LANG["validation_invalid_admin_email"] = "Please enter a valid adminstrator's email address.";
 $LANG["validation_invalid_client_username"] = "The client's user name may only consist of alphanumeric characters (a-Z and 0-9).";
 $LANG["validation_invalid_client_username2"] = "Sorry, username's may only contain letters, numbers and the underscore character. Please enter a new username.";
-$LANG["validation_invalid_column_name"] = "Column names may only be alphanumeric (a-Z, 0-9). Please check the column name for the {\$fieldname} field.";
 $LANG["validation_invalid_column_name_short"] = "Column names may only be alphanumeric and underscores (a-Z, 0-9, _).";
 $LANG["validation_invalid_custom_from_email"] = "Please enter a valid custom 'From' email address.";
 $LANG["validation_invalid_custom_reply_to_email"] = "Please enter a valid custom 'Reply-to' email address.";
@@ -873,13 +844,11 @@ $LANG["validation_invalid_folder"] = "Sorry, this does not appear to be a valid 
 $LANG["validation_invalid_form_field_names"] = "Form fields may only be alphanumeric and underscores (a-Z, 0-9, _), with no spaces.";
 $LANG["validation_invalid_num_clients_per_page"] = "Please only enter numbers in the Num Clients Per Page field.";
 $LANG["validation_invalid_num_emails_per_page"] = "Please only enter digits for the emails per page.";
-$LANG["validation_invalid_num_field_option_groups_per_page"] = "Please only enter numbers in the Num Field Option Groups Per Page field.";
 $LANG["validation_invalid_num_forms_per_page"] = "Please only enter numbers in the Num Forms Per Page field.";
 $LANG["validation_invalid_num_menus_per_page"] = "Please only enter digits for the menus per page.";
 $LANG["validation_invalid_num_modules_per_page"] = "Please only enter numbers in the Num Modules Per Page field.";
 $LANG["validation_invalid_num_submissions_per_page"] = "Please enter a valid number of submissions per page.";
 $LANG["validation_invalid_num_submissions_per_page_field"] = "The number of submissions per page field must be a number only.";
-$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";
 $LANG["validation_invalid_sessions_timeout"] = "Please enter a valid session timeout (integers only!).";
 $LANG["validation_invalid_tab_assign_values"] = "Please only enter numbers in the 'from' and 'to' fields.";
 $LANG["validation_invalid_upload_folder"] = "Your server's installation of PHP has an invalid setting for the <b>upload_tmp_dir</b> value. \"{\$upload_folder}\" is not a valid folder.";
@@ -898,7 +867,6 @@ $LANG["validation_no_client_last_name"] = "Please enter the client's last name."
 $LANG["validation_no_client_login_page"] = "Please indicate which page the client should be redirected to when they log in.";
 $LANG["validation_no_client_password"] = "Please enter the client's password.";
 $LANG["validation_no_client_username"] = "Please enter the client's username.";
-$LANG["validation_no_column_name"] = "Please enter the column name for the {\$fieldname} field or check the auto-generate database column names field.";
 $LANG["validation_no_column_selected"] = "Please select at least one field to appear as a column on the submission listing page.";
 $LANG["validation_no_css"] = "Please enter the client CSS.";
 $LANG["validation_no_custom_from_email"] = "Please enter the custom 'From' email address.";
@@ -908,7 +876,6 @@ $LANG["validation_no_date_format"] = "Please enter a date format.";
 $LANG["validation_no_default_client_theme"] = "Please select the default theme for all new client accounts.";
 $LANG["validation_no_default_language"] = "Please select the default language for your installation of Form Tools.";
 $LANG["validation_no_default_sessions_timeout"] = "Please enter the default session timeout for user accounts.";
-$LANG["validation_no_display_text"] = "Please enter the display text for the {\$fieldname} field.";
 $LANG["validation_no_edit_submission_page_label"] = "Please enter the Edit Submission page label.";
 $LANG["validation_no_email"] = "Please enter your email address.";
 $LANG["validation_no_email_config_field"] = "Please specify which form field is the email field.";
@@ -918,8 +885,6 @@ $LANG["validation_no_email_template_name"] = "Please enter the email template na
 $LANG["validation_no_email_template_view_id"] = "Please select the View to which this email template should be mapped.";
 $LANG["validation_no_email_template_view_mapping_value"] = "Please indicate when the email should be sent.";
 $LANG["validation_no_enabled_themes"] = "Please ensure that at least one theme is enabled.";
-$LANG["validation_no_field_group_selected"] = "Please select the field option group you would like to edit.";
-$LANG["validation_no_field_option_group_name"] = "Please enter the field group name.";
 $LANG["validation_no_field_title"] = "Please enter the field display text.";
 $LANG["validation_no_finalize_submission_val"] = "Please indicate whether the submissions need to be finalized or not.";
 $LANG["validation_no_first_name"] = "Please enter your first name.";
@@ -937,12 +902,10 @@ $LANG["validation_no_menu"] = "Please select a menu for this user account.";
 $LANG["validation_no_menu_id"] = "Please select a menu.";
 $LANG["validation_no_num_clients_per_page"] = "Please enter the number of client accounts per page.";
 $LANG["validation_no_num_emails_per_page"] = "Please enter the number of emails to list per page.";
-$LANG["validation_no_num_field_option_groups_per_page"] = "Please enter the number of field option groups per page.";
 $LANG["validation_no_num_forms_per_page"] = "Please enter the number of forms per page.";
 $LANG["validation_no_num_menus_per_page"] = "Please enter the number of menus to list per page.";
 $LANG["validation_no_num_modules_per_page"] = "Please enter the number of modules per page.";
 $LANG["validation_no_num_submissions_per_page"] = "Please enter the number of submissions to display per page.";
-$LANG["validation_no_num_views_per_page"] = "Please enter the number of views per page.";
 $LANG["validation_no_page_titles"] = "Please enter the default page titles for the user accounts.";
 $LANG["validation_no_password"] = "Please enter your password.";
 $LANG["validation_no_program_name"] = "Please enter the program name.";
@@ -981,7 +944,6 @@ $LANG["validation_smart_fill_upload_all_pages"] = "Please upload all the pages i
 $LANG["validation_specify_client"] = "Please specify the client.";
 $LANG["validation_upload_folder_not_writable"] = "This temporary upload folder specified by your PHP installation is not writable. Until this is fixed, files cannot be uploaded through Form Tools (or any other PHP program). Please contact your hosting provider.";
 $LANG["validation_upload_html_files_only"] = "Please only upload HTML files.";
-$LANG["validation_urls_not_verified"] = "Please verify all the form URLs, or <a href=\"#\" onclick=\"return mf_ns.bypass_url_verification()\">click here</a> to bypass this step.";
 $LANG["validation_username_taken"] = "Sorry, that username is already taken. Please enter another username.";
 $LANG["validation_wrong_password"] = "Sorry, that password does not match.";
 
@@ -989,7 +951,6 @@ $LANG["validation_wrong_password"] = "Sorry, that password does not match.";
 // Category: Confirmations
 $LANG["confirm_delete_email_field_config"] = "Are you sure you want to delete this email field configuration?";
 $LANG["confirm_delete_email_template"] = "Are you sure you want to delete this email template?";
-$LANG["confirm_delete_field_option_group"] = "Are you sure you want to delete this field option group?";
 $LANG["confirm_delete_menu"] = "Are you sure you want to delete this client menu?";
 $LANG["confirm_delete_submission"] = "Are you sure you want to delete this submission?";
 $LANG["confirm_delete_submission_file"] = "Are you sure you want to delete this file?";
@@ -997,10 +958,10 @@ $LANG["confirm_delete_submissions"] = "Are you sure you want to delete these sub
 $LANG["confirm_delete_submissions_on_other_pages"] = "<b>Warning!</b> You have selected <b>{\$num_selected_on_page}</b> submissions on this page and <b>{\$num_selected_on_other_pages}</b> on other pages. Please choose one of the following options:<div class=\"margin_top_large\"><input type=\"button\" value=\"Delete All Selected Submissions\" {\$delete_all_submissions_onclick} /> <input type=\"button\" value=\"Only Delete Submissions Selected on this Page\" {\$delete_submissions_on_page_onclick} /> <input type=\"button\" value=\"Cancel\" onclick=\"return ft.hide_message('ft_message')\" /></div>";
 $LANG["confirm_delete_submissions_on_other_pages2"] = "<b>Warning!</b> You haven't selected any submissions on this page but you've selected <b>{\$num_selected_on_other_pages}</b> on other pages. Please confirm you want to delete these submissions. <div class=\"margin_top_large\"><input type=\"button\" value=\"Delete All Selected Submissions\" {\$delete_all_submissions_onclick} /> <input type=\"button\" value=\"Cancel\" onclick=\"return ft.hide_message('ft_message')\" /></div>";
 $LANG["confirm_delete_view"] = "Are you sure you want to delete this View?";
+$LANG["confirm_smart_fill_db_column_fields_desc"] = "This option auto-generates the database column names based on the Display Text fields, so the contents of the database table are easier to read.";
 $LANG["confirm_smart_fill_db_column_fields"] = "Are you sure you want to Smart Fill the database column names? This will overwrite your existing values.";
 $LANG["confirm_smart_fill_display_names"] = "Are you sure you want to Smart Fill the Display names? This will overwrite your existing values.";
 $LANG["confirm_uninstall_module"] = "Are you sure you want to uninstall this module? All module data will be lost.";
-
 
 
 // Category: Notifications
@@ -1028,8 +989,6 @@ $LANG["notify_email_sent_to_user"] = "An email has been sent to this user.";
 $LANG["notify_email_template_deleted"] = "The email template has been deleted.";
 $LANG["notify_email_template_updated"] = "The email template has been updated.";
 $LANG["notify_enabled_module_list_updated"] = "The list of enabled modules has been updated.";
-$LANG["notify_field_option_group_deleted"] = "The field option group has been deleted";
-$LANG["notify_field_option_group_updated"] = "The field option group has been updated.";
 $LANG["notify_field_selected"] = "The field has been selected. <a href=\"#\" onclick=\"{\$onclick}\">Click here</a> to return to the main field list.";
 $LANG["notify_field_settings_updated"] = "The form field settings have been updated.";
 $LANG["notify_field_updated"] = "This field has been updated.";
@@ -1061,7 +1020,6 @@ $LANG["notify_form_settings_updated"] = "Your form settings have been updated su
 $LANG["notify_form_submission_updated"] = "The form submission has been updated.";
 $LANG["notify_form_tabs_updated"] = "The tabs have been updated.";
 $LANG["notify_form_updated"] = "The form has been successfully updated.";
-$LANG["notify_form_view_order_updated"] = "The View order has been updated.";
 $LANG["notify_image_field_settings_updated"] = "The image settings have been updated for this field.";
 $LANG["notify_install_invalid_db_info"] = "Sorry, we were unable to connect to the database using the information you supplied. The error message the database returned is: <i>{\$db_connection_error}</i>";
 $LANG["notify_install_no_db_connection"] = "Please check your database name and login information. Although we were able to connect to the database host, we could not connect to the database. The error message the database returned is: <i>{\$db_select_error}</i>";
@@ -1086,12 +1044,10 @@ $LANG["notify_no_assigned_field_option_group"] = "This field has not been assign
 $LANG["notify_no_client_permissions"] = "There are no settings available to edit.";
 $LANG["notify_no_email_template_selected"] = "Please select the email template.";
 $LANG["notify_no_emails_defined"] = "No emails have been defined for this form. To add a new one, click the button below.";
-$LANG["notify_no_field_option_groups"] = "There are no field option groups defined in the database. Generally, these are created by the <a href=\"../add/step1.php?add\">Add Form script</a>, but you can manually create them below.";
 $LANG["notify_no_fields_in_tab"] = "This tab does not contain any fields.";
 $LANG["notify_no_test_submission"] = "Form Tools hasn't received a successful test submission yet.";
 $LANG["notify_no_user_email_fields_configured"] = "Note: if you want to send an email to any email address that was included in the form, you first need to <a href=\"{\$same_page}?page=email_settings\">configure the form email fields</a>.";
 $LANG["notify_no_views_assigned_to_client_form"] = "It appears that your user account hasn't been assigned to any form Views, so you won't be able to see any data. Please contact the administrator for further help.";
-$LANG["notify_no_views_defined"] = "You don't have any Views defined. You will not be able to view this form's submissions unless at least one View is created. Click the button below to continue.";
 $LANG["notify_page_added"] = "The page has been added.";
 $LANG["notify_page_not_added"] = "The page could not be added.";
 $LANG["notify_page_updated"] = "The page has been updated.";
@@ -1214,6 +1170,7 @@ $LANG["phrase_password_min"] = "It must be at least <b>{\$length}</b> characters
 $LANG["validation_no_account_password_confirmed2"] = "Please re-enter the new password.";
 $LANG["validation_password_in_password_history"] = "For security, you cannot enter the same password as any of the last <b>{\$history_size}</b> passwords. Please enter a different password.";
 
+// -------------------------------------
 
 // changes
 //$LANG["phrase_browse_available_languages"] = "Browse available language packs.";
@@ -1222,3 +1179,186 @@ $LANG["validation_no_db_name"] = "Please enter the database name.";
 $LANG["validation_no_db_username"] = "Please enter the database account username.";
 $LANG["validation_no_second_password"] = "Please re-enter your password.";
 $LANG["word_ignore"] = "Ignore";
+
+$LANG["phrase_delete_row"] = "Delete Row";
+$LANG["phrase_connect_rows"] = "Connect rows";
+$LANG["phrase_disconnect_rows"] = "Disconnect rows";
+$LANG["phrase_last_logged_in"] = "Last Logged In";
+$LANG["word_never"] = "Never";
+$LANG["phrase_view_id"] = "View ID";
+$LANG["notify_form_views_updated"] = "The form Views have been updated.";
+$LANG["word_hidden"] = "Hidden";
+$LANG["phrase_please_confirm"] = "Please Confirm";
+$LANG["word_okay"] = "Okay";
+$LANG["word_cancel"] = "Cancel";
+$LANG["phrase_group_rows"] = "Group rows";
+$LANG["phrase_at_start"] = "At Start";
+$LANG["phrase_at_end"] = "At End";
+$LANG["word_row"] = "row";
+$LANG["phrase_option_list"] = "Option List";
+$LANG["phrase_option_lists"] = "Option Lists";
+$LANG["phrase_form_type"] = "Form Type";
+$LANG["word_external"] = "External";
+$LANG["word_internal"] = "Internal";
+$LANG["word_range"] = "Range";
+$LANG["phrase_1char"] = "1 Char";
+$LANG["phrase_2chars"] = "2 Chars";
+
+// changed!
+$LANG["text_view_tab_summary"] = "This tab lets you create different ways to group and arrange your data. Views let you create custom subsets of your form data to split it into manageable chunks, and to limit what clients may see or edit.";
+$LANG["validation_no_display_text"] = "Please enter the Display Text for each field.";
+
+
+// label changes too...
+$LANG["text_field_option_group_checkboxes_explanation"] = "The field option group determines the contents of this set of checkboxes and their orientation (vertical or horizontal).";
+$LANG["text_field_option_group_dropdown_explanation"] = "The field option group determines the contents of this dropdown field.";
+$LANG["text_field_option_group_explanation"] = "Click the edit button to edit the group values. Creating a new group will create a new, blank field option group and assign it to this field.";
+$LANG["text_option_list_page"] = "Radio buttons, checkboxes, dropdowns and multi-select dropdown fields all provide the user with multiple options from which they can select one or more items. In Form Tools, these are known as Option Lists. Generally, these are created automatically by the <a href=\"{\$link}\">Add External Form</a> process, but you can manually add or edit your option lists below if your form content changes or you construct fields that are only used internally.";
+$LANG["text_field_option_group_radios_explanation"] = "The Option List determines the contents of this set of radio buttons and their orientation (vertical or horizontal).";
+$LANG["text_field_option_group_used_by_fields"] = "This Option List is used by multiple form fields. If you update the information below, it will be changed for all of the fields (see the <a href=\"{\$link1}\">Form Fields</a> tab to see the list of fields). If you wish to update the values for one, or a subset of the fields that are currently assigned, <a href=\"{\$link2}\">click here</a> to create a new Option List with the same values as this one. Then you can assign the form fields you want to the new group.";
+$LANG["notify_no_option_lists"] = "There are no option lists defined. Click the button below to create a new one.";
+$LANG["phrase_new_option_list"] = "New Option List";
+$LANG["validation_option_list_name_taken"] = "Sorry, this option list name is already taken. Please choose a new name.";
+$LANG["validation_no_option_list_selected"] = "Please select the option list you would like to edit.";
+$LANG["validation_no_option_list_name"] = "Please enter the option list name.";
+$LANG["phrase_option_list_name"] = "Option List Name";
+$LANG["phrase_num_option_lists_per_page"] = "Num Option Lists Per Page";
+$LANG["validation_no_num_option_lists_per_page"] = "Please enter the number of option lists per page.";
+$LANG["validation_invalid_num_option_lists_per_page"] = "Please only enter numbers in the Num Option Lists Per Page field.";
+$LANG["phrase_num_options"] = "Num Options";
+$LANG["text_unused_option_list"] = "This option list is not being used by any form fields.";
+$LANG["phrase_edit_option_list"] = "Edit Option List";
+
+$LANG["phrase_add_view_rightarrow"] = "Add View &raquo;";
+$LANG["phrase_delete_field"] = "Delete Field";
+
+$LANG["phrase_add_form_choose_type"] = "Add Form - Choose Type";
+$LANG["phrase_add_form_internal"] = "Add Form - Internal";
+$LANG["phrase_add_form_external"] = "Add Form - External";
+$LANG["phrase_external_form"] = "External Form";
+$LANG["phrase_internal_form"] = "Internal Form";
+$LANG["phrase_num_fields"] = "Number of Fields";
+$LANG["phrase_date_or_time"] = "Date / Time";
+$LANG["text_internal_form_intro"] = "Use the form below to create a new Internal form. All settings, including the number and content of the form fields can be be changed and configured later.";
+
+$LANG["validation_no_num_form_fields"] = "Please enter the number of fields for your form.";
+$LANG["validation_invalid_num_form_fields"] = "Please only enter numbers in the Number of Fields field.";
+$LANG["phrase_group_name"] = "Group Name";
+$LANG["phrase_required_field"] = "Required field";
+$LANG["phrase_please_wait"] = "Please wait...";
+
+$LANG["validation_duplicate_form_field_name"] = "You cannot have multiple fields with the same field name.";
+$LANG["validation_no_column_name"] = "Please enter all column names, or click the Smart Fill button to automatically fill them.";
+$LANG["validation_invalid_column_name"] = "Column names may only be alphanumeric (a-Z, 0-9). Please check the column names.";
+$LANG["text_fields_tab_summary"] = "This page lists all of your form fields. To control how they appear when browsing submissions, see the <a href=\"{\$views_tab_link}\">Views tab</a>. Deleting a field on this page will delete it from all submissions, so please be careful!";
+$LANG["phrase_add_new_group_rightarrow"] = "Add New Group &raquo;";
+
+$LANG["phrase_save_changes"] = "Save Changes";
+$LANG["phrase_sort_as"] = "Sort As";
+$LANG["phrase_field_specific_settings"] = "Field-Specific Settings";
+$LANG["phrase_edit_field_c"] = "Edit Field:";
+
+$LANG["notify_no_field_settings"] = "This field type doesn't contain any extra settings.";
+$LANG["word_value"] = "Value";
+$LANG["phrase_use_default_value_q"] = "Use Default Value?";
+$LANG["phrase_loading_ellipsis"] = "Loading...";
+$LANG["phrase_create_group"] = "Create Group";
+$LANG["confirm_delete_group"] = "Are you sure you want to delete this group?";
+$LANG["text_option_list_group_explanation"] = "If this is selected, it lets to group your options. How the groups are displayed depends on the field type using this option list.";
+$LANG["phrase_create_new_option_list_group"] = "Create new option list group";
+$LANG["confirm_ungroup_option_list"] = "Are you sure you want to ungroup this option list? All options will be lumped into a single, ungrouped list.";
+$LANG["notify_cannot_delete_nonempty_group"] = "Sorry, you cannot delete a non-empty group. Please delete all rows or move them into another group first.";
+$LANG["phrase_group_options_q"] = "Group options?";
+
+$LANG["notify_option_list_deleted"] = "The option list has been deleted.";
+$LANG["notify_option_list_updated"] = "The option list has been updated.";
+$LANG["confirm_delete_option_list"] = "Are you sure you want to delete this option list?";
+$LANG["phrase_check_url"] = "Check URL";
+$LANG["notify_internal_form_created"] = "Your form has been created! You can configure your form through these tabs.";
+$LANG["word_start"] = "Start";
+
+$LANG["text_add_form_step_2_text_2"] = "Enter the URL of your \"thankyou\" page here. This is where you want people to be directed to after the form has been submitted.";
+$LANG["text_add_form_step_3_text_1"] = "Here's where the fun starts! At this point, Form Tools is waiting for a test submission from your form. It will use this form submission to know what information should be stored in the database.";
+$LANG["confirm_refresh_page"] = "Are you sure you want to refresh the page? This will lose any changes you have made.";
+$LANG["word_unknown"] = "Unknown";
+$LANG["phrase_new_blank_option_list"] = "New Blank Option List";
+$LANG["phrase_forms_assigned_to_any_account"] = "Forms assigned to any account";
+$LANG["phrase_open_form_in_new_tab_or_win"] = "Open this form in a new tab/window";
+$LANG["phrase_external_your_own_form"] = "External (your own form)";
+$LANG["phrase_is_multi_page_form_q"] = "Is this a multi-page form?";
+$LANG["phrase_external_form_info"] = "External Form Info";
+$LANG["phrase_permissions_other_settings"] = "Permissions / Other Settings";
+$LANG["phrase_edit_submission_label"] = "Edit Submission Label";
+$LANG["phrase_add_submission_button"] = "Add Submission Button";
+$LANG["text_add_submission_button"] = "The Add Submission button only appears for Views that have the \"May add submissions\" option set to \"yes\".";
+$LANG["text_edit_tab_summary"] = "If you wish to group this View's fields into tabs, just enter the tab names below. After you're done, select the appropriate tab for each field group in the <a href=\"#\" onclick=\"return ft.change_inner_tab(2, 5)\">Fields tab</a>.";
+$LANG["text_add_form_code_submission_drawbacks"] = "In order to submit your form data via PHP, your form must be located on the same website as this Form Tools installation. Secondly, for non-technical and novice Form Tools users, this method can be a little intimidating at first. But there's plenty of documentation to help you out, including two simple tutorials for integrating your single- and multi-page forms (these are linked to on a later step).";
+$LANG["phrase_form_urls"] = "Form URLs";
+$LANG["phrase_create_new_view_group"] = "Create New View Group";
+$LANG["phrase_delete_view"] = "Delete View";
+$LANG["phrase_view_group"] = "View Group";
+$LANG["phrase_base_view_on"] = "Base View on...";
+$LANG["notify_view_group_deleted"] = "The View group has been deleted.";
+$LANG["notify_no_views_defined"] = "You don't have any Views defined. You will not be able to view this form's submissions unless at least one View is created. Click the button below to create the default View.";
+$LANG["notify_new_default_view_created"] = "A new, default View containing all your form fields has been created.";
+$LANG["phrase_add_fields_rightarrow"] = "Add Field(s) &raquo;";
+$LANG["phrase_available_tabs"] = "Available Tabs";
+$LANG["phrase_select_fields"] = "Select Fields";
+$LANG["phrase_available_fields"] = "Available Fields";
+$LANG["phrase_create_default_view"] = "Create Default View";
+
+$LANG["word_filters_sp"] = "Filter(s)";
+$LANG["word_fields_sp"] = "Field(s)";
+$LANG["word_tabs_sp"] = "Tab(s)";
+$LANG["phrase_edit_form_access_type_b"] = "[Edit form access type]";
+
+$LANG["text_form_view_permission_info_admin"] = "Note: this form currently has <b>Administrator</b> access type, so none of the client accounts will be able to see this View.";
+$LANG["text_form_view_permission_info_private"] = "Note: this form currently has <b>Private</b> access type so the Public and Private options here will be limited to that subset of clients.";
+
+$LANG["phrase_default_values"] = "Default values";
+$LANG["phrase_default_value"] = "Default value";
+$LANG["phrase_query_problem"] = "There was a problem with the following query: ";
+$LANG["notify_field_changes_saved"] = "The changes to your field(s) have been saved.";
+$LANG["phrase_create_new_option_list"] = "Create New Option List";
+$LANG["phrase_create_new_option_list_rightarrow"] = "Create New Option List &raquo;";
+$LANG["phrase_edit_option_list"] = "Edit Option List";
+$LANG["text_used_field_option_group"] = "This Option List is used by the following fields.";
+$LANG["validation_no_display_text_single"] = "Please enter the Display Text value.";
+$LANG["validation_no_form_field_single"] = "Please enter the Form Field value.";
+$LANG["validation_no_db_column_single"] = "Please enter the Database Column name.";
+$LANG["notify_no_views"] = "Your form doesn't have any Views set up! You will need at least one View in order to manage your form data.";
+$LANG["notify_edit_field_new_field"] = "<b>This is a new field</b>. You will need to update the main page before being able to fully edit this field.";
+$LANG["phrase_forms_page_default_message"] = "Forms page default message";
+$LANG["phrase_login_as_user"] = "Log in as this user";
+$LANG["phrase_prev_client"] = "&laquo; prev client";
+$LANG["phrase_next_client"] = "next client &raquo;";
+$LANG["phrase_prev_form"] = "&laquo; prev form";
+$LANG["phrase_next_form"] = "next form &raquo;";
+$LANG["phrase_field_type_information"] = "Field Type Information";
+
+$LANG["validation_option_list_has_assigned_fields"] = "Sorry, you cannot delete this Option List until all form fields that use the list have either been reassigned to a new Option List, or changed to a different field type. <a href=\"{\$link}\">Click here</a> to view the list of form fields that need to be updated.";
+$LANG["text_non_deletable_fields"] = "This field is used by the Core script and cannot be edited or deleted without causing incompatibilities. If you wish to make changes to the field type, make a copy of it and edit the copy.";
+
+$LANG["word_columns_sp"] = "Column(s)";
+$LANG["phrase_new_view_all_fields"] = "New View - All fields";
+
+$LANG["validation_invalid_admin_username"] = "Your username may only consist of alphanumeric characters (a-Z and 0-9).";
+$LANG["validation_internal_form_too_many_fields"] = "Sorry, you can only created forms with 1000 fields or less.";
+
+// removed!
+//$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";
+//$LANG["validation_no_num_views_per_page"] = "Please enter the number of views per page.";
+//$LANG["notify_form_view_order_updated"] = "The View order has been updated.";
+// $LANG["phrase_field_option_group"] = "Field Option Group";
+// $LANG["phrase_field_option_groups"] = "Field Option Groups";
+// $LANG["phrase_new_group"] = "New Group";
+// $LANG["text_delete_field_warning"] = "deleting a field on this page will delete it from all submissions, so please be careful.";
+//$LANG["phrase_verify_url"] = "Verify URL";
+// $LANG["validation_urls_not_verified"] = "Please verify all the form URLs, or <a href=\"#\" onclick=\"return mf_ns.bypass_url_verification()\">click here</a> to bypass this step.";
+//$LANG["text_add_form_step_2_text_1"] = "Your form can be located on any website, but you can only submit the form information with PHP if it's located on the same server as this Form Tools installation.";
+// $LANG["phrase_assign_rows_to_tabs"] = "Assign rows {\$x} to {\$y} to tab {\$tab}";
+// $LANG["phrase_may_delete_view_submissions"] = "May delete submissions that appear in this View";
+//$LANG["phrase_create_new_group"] = "Create New Group &raquo;";
+//$LANG["phrase_use_lightbox"] = "Use Lightbox to display files";
+//$LANG["phrase_use_lightbox_caveat"] = "(Only enable if you're only uploading images through file fields)";
+

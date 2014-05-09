@@ -3,7 +3,7 @@
   <table cellpadding="0" cellspacing="0">
   <tr>
     <td width="45"><img src="{$images_url}/icon_accounts.gif" width="34" height="34" /></td>
-    <td class="title">{$LANG.word_clients|upper}</td>
+    <td class="title">{$LANG.word_clients}</td>
   </tr>
   </table>
 
@@ -88,103 +88,102 @@
 
             <table class="list_table" width="100%" cellpadding="0" cellspacing="1">
             <tr>
-              <th width="30">
-
-                {assign var="up_down" value=""}
-                {if     $order == "client_id-DESC"}
-                  {assign var=sort_order value="order=client_id-ASC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
-                {elseif $order == "client_id-ASC"}
-                  {assign var=sort_order value="order=client_id-DESC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
-                {else}
-                  {assign var=sort_order value="order=client_id-DESC"}
-                {/if}
-
-                <table cellspacing="0" cellpadding="0" align="center" class="pad_left_small">
-                <tr>
-                  <td><a href="{$same_page}?{$sort_order}">{$LANG.word_id|upper}</a></td>
-                  <td class="pad_left">{$up_down}</td>
-                </tr>
-                </table>
-
+              {assign var="up_down" value=""}
+              {if     $order == "client_id-DESC"}
+                {assign var=sort_order value="order=client_id-ASC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+              {elseif $order == "client_id-ASC"}
+                {assign var=sort_order value="order=client_id-DESC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+              {else}
+                {assign var=sort_order value="order=client_id-DESC"}
+              {/if}
+              <th width="30"{if $up_down} class="over"{/if}>
+                <a href="{$same_page}?{$sort_order}">{$LANG.word_id|upper} {$up_down}</a>
               </th>
-              <th>
 
-                {assign var="up_down" value=""}
-                {if     $order == "last_name-DESC"}
-                  {assign var=sort_order value="order=last_name-ASC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
-                {elseif $order == "last_name-ASC"}
-                  {assign var=sort_order value="order=last_name-DESC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
-                {else}
-                  {assign var=sort_order value="order=last_name-DESC"}
-                {/if}
-
-                <table cellspacing="0" cellpadding="0" align="center" class="pad_left_small">
-                <tr>
-                  <td><a href="{$same_page}?{$sort_order}">{$LANG.word_client}</a></td>
-                  <td class="pad_left">{$up_down}</td>
-                </tr>
-                </table>
-
+              {assign var="up_down" value=""}
+              {if     $order == "first_name-DESC"}
+                {assign var=sort_order value="order=first_name-ASC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+              {elseif $order == "first_name-ASC"}
+                {assign var=sort_order value="order=first_name-DESC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+              {else}
+                {assign var=sort_order value="order=first_name-DESC"}
+              {/if}
+              <th{if $up_down} class="over"{/if}>
+                <a href="{$same_page}?{$sort_order}">{$LANG.phrase_first_name} {$up_down}</a>
               </th>
-              <th>
 
-                {assign var="up_down" value=""}
-                {if     $order == "email-DESC"}
-                  {assign var=sort_order value="order=email-ASC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
-                {elseif $order == "email-ASC"}
-                  {assign var=sort_order value="order=email-DESC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
-                {else}
-                  {assign var=sort_order value="order=email-DESC"}
-                {/if}
+              {assign var="up_down" value=""}
+              {if     $order == "last_name-DESC"}
+                {assign var=sort_order value="order=last_name-ASC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+              {elseif $order == "last_name-ASC"}
+                {assign var=sort_order value="order=last_name-DESC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+              {else}
+                {assign var=sort_order value="order=last_name-DESC"}
+              {/if}
+              <th{if $up_down} class="over"{/if}>
+                <a href="{$same_page}?{$sort_order}">{$LANG.phrase_last_name} {$up_down}</a>
+              </th>
 
-                <table cellspacing="0" cellpadding="0" align="center" class="pad_left_small">
-                <tr>
-                  <td><a href="{$same_page}?{$sort_order}">{$LANG.word_email}</a></td>
-                  <td class="pad_left">{$up_down}</td>
-                </tr>
-                </table>
-
+              {assign var="up_down" value=""}
+              {if     $order == "email-DESC"}
+                {assign var=sort_order value="order=email-ASC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+              {elseif $order == "email-ASC"}
+                {assign var=sort_order value="order=email-DESC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+              {else}
+                {assign var=sort_order value="order=email-DESC"}
+              {/if}
+              <th{if $up_down} class="over"{/if}>
+                <a href="{$same_page}?{$sort_order}">{$LANG.word_email} {$up_down}</a>
               </td>
-              <th width="70">
 
-                {assign var="up_down" value=""}
-                {if     $order == "status-DESC"}
-                  {assign var=sort_order value="order=status-ASC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
-                {elseif $order == "status-ASC"}
-                  {assign var=sort_order value="order=status-DESC"}
-                  {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
-                {else}
-                  {assign var=sort_order value="order=status-DESC"}
-                {/if}
+              {assign var="up_down" value=""}
+              {if     $order == "status-DESC"}
+                {assign var=sort_order value="order=status-ASC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+              {elseif $order == "status-ASC"}
+                {assign var=sort_order value="order=status-DESC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+              {else}
+                {assign var=sort_order value="order=status-DESC"}
+              {/if}
+              <th width="70"{if $up_down} class="over"{/if}>
+                <a href="{$same_page}?{$sort_order}">{$LANG.word_status} {$up_down}</a>
+              </th>
 
-                <table cellspacing="0" cellpadding="0" align="center" class="pad_left_small">
-                <tr>
-                  <td><a href="{$same_page}?{$sort_order}">{$LANG.word_status}</a></td>
-                  <td class="pad_left">{$up_down}</td>
-                </tr>
-                </table>
-
+              {assign var="up_down" value=""}
+              {if     $order == "last_logged_in-DESC"}
+                {assign var=sort_order value="order=last_logged_in-ASC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+              {elseif $order == "last_logged_in-ASC"}
+                {assign var=sort_order value="order=last_logged_in-DESC"}
+                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+              {else}
+                {assign var=sort_order value="order=last_logged_in-DESC"}
+              {/if}
+              <th{if $up_down} class="over"{/if}>
+                <a href="{$same_page}?{$sort_order}">{$LANG.phrase_last_logged_in} {$up_down}</a>
               </th>
               <th width="70">{$LANG.word_login|upper}</th>
-              <th width="60">{$LANG.word_edit|upper}</th>
-              <th class="del" width="60">{$LANG.word_delete|upper}</th>
+              <th class="edit"></th>
+              <th class="del"></th>
             </tr>
 
           {/if}
 
           <tr>
             <td align="center" class="medium_grey">{$client_id}</td>
-            <td class="pad_left_small">{$client_info.last_name}, {$client_info.first_name}</td>
+            <td class="pad_left_small">{$client_info.first_name}</td>
+            <td class="pad_left_small">{$client_info.last_name}</td>
             <td class="pad_left_small"><a href="mailto:{$client_info.email}">{$client_info.email}</a></td>
             <td align="center">
-
               {if $client_info.account_status == "active"}
                 <span class="light_green">{$LANG.word_active}</span>
               {elseif $client_info.account_status == "disabled"}
@@ -192,11 +191,17 @@
               {elseif $client_info.account_status == "pending"}
                 <span style="color: orange">{$LANG.word_pending}</span>
               {/if}
-
+            </td>
+            <td class="pad_left_small">
+              {if $client_info.last_logged_in != ""}
+               {$client_info.last_logged_in|custom_format_date:$SESSION.account.timezone_offset:$SESSION.account.date_format}
+              {else}
+                <span class="medium_grey">{$LANG.word_never}</span>
+              {/if}
             </td>
             <td align="center"><a href="{$same_page}?login={$client_id}">{$LANG.word_login|upper}</a></td>
-            <td align="center"><a href="edit.php?client_id={$client_id}">{$LANG.word_edit|upper}</a></td>
-            <td class="del"><a href="#" onclick="return page_ns.delete_client({$client_id})">{$LANG.word_delete|upper}</a></td>
+            <td class="edit"><a href="edit.php?client_id={$client_id}"> </a></td>
+            <td class="del"><a href="#" onclick="return page_ns.delete_client({$client_id})"></a></td>
           </tr>
 
         {if $count != 1 && ($count % $settings.num_clients_per_page) == 0}

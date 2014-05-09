@@ -8,19 +8,6 @@ function method(obj, name) {
 // The value used to signal the end of a sequence in iterators.
 var StopIteration = {toString: function() {return "StopIteration"}};
 
-// Checks whether the argument is an iterator or a regular sequence,
-// turns it into an iterator.
-function iter(seq) {
-  var i = 0;
-  if (seq.next) return seq;
-  else return {
-    next: function() {
-      if (i >= seq.length) throw StopIteration;
-      else return seq[i++];
-    }
-  };
-}
-
 // Apply a function to each element in a sequence.
 function forEach(iter, f) {
   if (iter.next) {
@@ -41,7 +28,8 @@ function map(iter, f) {
 }
 
 // Create a predicate function that tests a string againsts a given
-// regular expression.
+// regular expression. No longer used but might be used by 3rd party
+// parsers.
 function matcher(regexp){
   return function(value){return regexp.test(value);};
 }
@@ -98,10 +86,7 @@ function normalizeEvent(event) {
   }
 
   if (event.type == "keypress") {
-    if (event.charCode === 0 || event.charCode == undefined)
-      event.code = event.keyCode;
-    else
-      event.code = event.charCode;
+    event.code = (event.charCode == null) ? event.keyCode : event.charCode;
     event.character = String.fromCharCode(event.code);
   }
   return event;
@@ -120,4 +105,26 @@ function addEventHandler(node, type, handler, removeFunc) {
     node.attachEvent("on" + type, wrapHandler);
     if (removeFunc) return function() {node.detachEvent("on" + type, wrapHandler);};
   }
+}
+
+function nodeText(node) {
+  return node.textContent || node.innerText || node.nodeValue || "";
+}
+
+function nodeTop(node) {
+  var top = 0;
+  while (node.offsetParent) {
+    top += node.offsetTop;
+    node = node.offsetParent;
+  }
+  return top;
+}
+
+function isBR(node) {
+  var nn = node.nodeName;
+  return nn == "BR" || nn == "br";
+}
+function isSpan(node) {
+  var nn = node.nodeName;
+  return nn == "SPAN" || nn == "span";
 }

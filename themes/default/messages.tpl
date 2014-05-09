@@ -15,32 +15,30 @@
      errors / notifications
   4. Spacing: It ALWAYS has a space of 10px at the bottom. This is nice since you don't have to worry
      about making sure the surrounding elements will be spaced right with or without some messages being
-     displayed.
+     displayed. [hardcoded inline styles? Jeez...]
 *}
 
 {if $g_message}
 
   {if $g_success}
     {assign var=class value="notify"}
-
-    <script type="text/javascript">
-    // add the nice fade effect for the notification message
-    {literal}Event.observe(document, 'dom:loaded', function() { Fat.fade_element("ft_message_inner", 60, 1000, "#" + g.notify_colours[0], "#" + g.notify_colours[1]); });{/literal}
+    <script>
+    {literal}
+    // TODO way for this to be a class instead...?
+    $(function() { $("#ft_message_inner").effect("highlight", {color: "#" + g.notify_colours[1] }, 1200); });
+    {/literal}
     </script>
-
   {else}
     {assign var=class value="error"}
-
-    <script type="text/javascript">
-    // add the nice fade effect for the notification message
-    {literal}Event.observe(document, 'dom:loaded', function() { Fat.fade_element("ft_message_inner", 60, 1000, "#" + g.error_colours[0], "#" + g.error_colours[1]); });{/literal}
+    <script>
+    {literal}
+    $(function() { $("#ft_message_inner").effect("highlight", {color: "#" + g.error_colours[1] }, 1200); });
+    {/literal}
     </script>
-
   {/if}
 
   <div id="ft_message">
     <div style="height: 8px;"> </div>
-
     <div class="{$class}" id="ft_message_inner">
       <div style="padding:8px">
         <span style="float: right; padding-left: 5px;"><a href="#" onclick="return ft.hide_message('ft_message')">X</a></span>

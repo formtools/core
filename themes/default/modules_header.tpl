@@ -17,28 +17,27 @@
   <title>{$head_title}</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <link rel="shortcut icon" href="{$theme_url}/images/favicon.ico" >
-
-  <script type="text/javascript">
+  {template_hook location="modules_head_top"}
+  <script>
   //<![CDATA[
-  var g = {literal}{}{/literal};
-  g.root_url = "{$g_root_url}";
-  g.error_colours = ["ffbfbf", "ffeded"];
-  g.notify_colours = ["c6e2ff", "f2f8ff"];
+  var g = {literal}{{/literal}
+    root_url:       "{$g_root_url}",
+    error_colours:  ["ffbfbf", "ffb5b5"],
+    notify_colours: ["c6e2ff", "97c7ff"]
+  {literal}}{/literal};
   //]]>
   </script>
-
-  <link type="text/css" rel="stylesheet" href="{$g_root_url}/global/css/main.css">
-  <link type="text/css" rel="stylesheet" href="{$theme_url}/css/styles.css">
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/prototype.js"></script>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/scriptaculous.js"></script>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/effects.js"></script>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/general.js"></script>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/rsv.js"></script>
-
+  <link type="text/css" rel="stylesheet" href="{$g_root_url}/global/css/main.css?v=2_1_0">
+  <link type="text/css" rel="stylesheet" href="{$theme_url}/css/styles.css?v=2_1_0">
+  <link href="{$g_root_url}/global/css/smoothness/jquery-ui-1.8.6.custom.css?v=2_1_0" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="{$g_root_url}/global/scripts/jquery.js?v=2_1_0"></script>
+  <script type="text/javascript" src="{$g_root_url}/global/scripts/jquery-ui-1.8.6.custom.min.js"></script>
+  <script type="text/javascript" src="{$g_root_url}/global/scripts/general.js?v=2_1_0"></script>
+  <script type="text/javascript" src="{$g_root_url}/global/scripts/rsv.js?v=2_1_0"></script>
   {$head_string}
   {$head_js}
   {$head_css}
-
+  {template_hook location="modules_head_top"}
 </head>
 <body>
 
@@ -52,11 +51,15 @@
         <td><img src="{$theme_url}/images/account_section_left.jpg" border="0" /></td>
         <td id="account_section">
           {if $SESSION.account.is_logged_in}
-					  {if $settings.release_type == "beta"}
+            {if $settings.release_type == "alpha"}
+              <b>{$settings.program_version}-alpha-{$settings.release_date}</b>
+					  {elseif $settings.release_type == "beta"}
   	          <b>{$settings.program_version}-beta-{$settings.release_date}</b>
 						{else}
 						  <b>{$settings.program_version}</b>
 						{/if}
+            |
+            <a href="#" onclick="return ft.check_updates()" class="update_link">{$LANG.word_update}</a>
           {/if}
         </td>
         <td><img src="{$theme_url}/images/account_section_right.jpg" border="0" /></td>

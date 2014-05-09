@@ -3,9 +3,9 @@
 /**
  * This file defines all functions relating to the menus / internal navigation within Form Tools.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Menus
  */
 
@@ -34,6 +34,8 @@ $g_pages = array(
 
   // ADMIN pages
   "admin_forms" => "/admin/forms/",
+  "add_form_choose_type" => "/admin/forms/add/",
+  "add_form_internal" => "/admin/forms/add/internal.php",
   "add_form1" => "/admin/forms/add/step1.php?add",
   "add_form2" => "/admin/forms/add/step2.php",
   "add_form3" => "/admin/forms/add/step3.php",
@@ -42,20 +44,19 @@ $g_pages = array(
   "add_form6" => "/admin/forms/add/step6.php",
 
   "form_submissions" => "/admin/forms/submissions.php",
-  "field_option_groups" => "/admin/forms/field_option_groups/",
-  "edit_field_option_group" => "/admin/forms/field_option_groups/edit.php",
+  "option_lists" => "/admin/forms/option_lists/",
+  "edit_option_list" => "/admin/forms/option_lists/edit.php",
+
   "delete_form" => "/admin/forms/delete_form.php",
   "edit_form" => "/admin/forms/edit.php",
   "edit_form_main" => "/admin/forms/edit.php?page=main",
   "edit_form_public_form_omit_list" => "/admin/forms/edit.php?page=public_form_omit_list",
   "edit_form_fields" => "/admin/forms/edit.php?page=fields",
-  "edit_form_images" => "/admin/forms/edit.php?page=images",
   "edit_form_views" => "/admin/forms/edit.php?page=views",
   "edit_form_public_view_omit_list" => "/admin/forms/edit.php?page=public_view_omit_list",
   "edit_form_emails" => "/admin/forms/edit.php?page=emails",
   "edit_form_email_settings" => "/admin/forms/edit.php?page=email_settings",
-  "edit_form_database" => "/admin/forms/edit.php?page=database",
-  "edit_form_add_fields" => "/admin/forms/edit.php?page=add_fields",
+
   "edit_admin_menu" => "/admin/settings/index.php?page=edit_admin_menu",
   "edit_client_menu" => "/admin/settings/index.php?page=edit_client_menu",
   "edit_view" => "/admin/forms/edit.php?page=edit_view",
@@ -74,7 +75,6 @@ $g_pages = array(
   "settings_main" => "/admin/settings/index.php?page=main",
   "settings_accounts" => "/admin/settings/index.php?page=accounts",
   "settings_files" => "/admin/settings/index.php?page=files",
-  "settings_wysiwyg" => "/admin/settings/index.php?page=wysiwyg",
 
   // before 2.0.3, themes used to be grouped under "Settings". The settings_themes key is kept
   // to minimize regression
@@ -407,10 +407,14 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
 
   if (!in_array("admin_forms", $omit_pages))
     $select_lines[] = array("type" => "option", "k" => "admin_forms", "v" => $LANG["word_forms"]);
-  if (!in_array("field_option_groups", $omit_pages))
-    $select_lines[] = array("type" => "option", "k" => "field_option_groups", "v" => $LANG["phrase_field_option_groups"]);
-  if (!in_array("add_form1", $omit_pages))
-    $select_lines[] = array("type" => "option", "k" => "add_form1", "v" => $LANG["phrase_add_form"]);
+  if (!in_array("option_lists", $omit_pages))
+    $select_lines[] = array("type" => "option", "k" => "option_lists", "v" => $LANG["phrase_option_lists"]);
+  if (!in_array("add_form", $omit_pages))
+    $select_lines[] = array("type" => "option", "k" => "add_form_choose_type", "v" => $LANG["phrase_add_form"]);
+  if (!in_array("add_form_internal", $omit_pages))
+    $select_lines[] = array("type" => "option", "k" => "add_form_internal", "v" => $LANG["phrase_add_form_internal"]);
+    if (!in_array("add_form1", $omit_pages))
+    $select_lines[] = array("type" => "option", "k" => "add_form1", "v" => $LANG["phrase_add_form_external"]);
 
   if ($is_building_menu)
   {
@@ -426,10 +430,6 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
       $select_lines[] = array("type" => "option", "k" => "edit_form_views", "v" => "{$LANG["phrase_edit_form"]} - {$LANG["word_views"]}");
     if (!in_array("edit_form_emails", $omit_pages))
       $select_lines[] = array("type" => "option", "k" => "edit_form_emails", "v" => "{$LANG["phrase_edit_form"]} - {$LANG["word_emails"]}");
-    if (!in_array("edit_form_database", $omit_pages))
-      $select_lines[] = array("type" => "option", "k" => "edit_form_database", "v" => "{$LANG["phrase_edit_form"]} - {$LANG["word_database"]}");
-    if (!in_array("edit_form_add_fields", $omit_pages))
-      $select_lines[] = array("type" => "option", "k" => "edit_form_add_fields", "v" => "{$LANG["phrase_edit_form"]} - {$LANG["phrase_add_fields"]}");
   }
 
   $select_lines[] = array("type" => "optgroup_close");
@@ -488,7 +488,6 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
   $select_lines[] = array("type" => "option", "k" => "settings", "v" => $LANG["word_settings"]);
   $select_lines[] = array("type" => "option", "k" => "settings_main", "v" => "{$LANG["word_settings"]} - {$LANG["word_main"]}");
   $select_lines[] = array("type" => "option", "k" => "settings_accounts", "v" => "{$LANG["word_settings"]} - {$LANG["word_accounts"]}");
-  $select_lines[] = array("type" => "option", "k" => "settings_wysiwyg", "v" => "{$LANG["word_settings"]} - {$LANG["word_wysiwyg"]}");
   $select_lines[] = array("type" => "option", "k" => "settings_files", "v" => "{$LANG["word_settings"]} - {$LANG["word_files"]}");
   $select_lines[] = array("type" => "option", "k" => "settings_menus", "v" => "{$LANG["word_settings"]} - {$LANG["word_menus"]}");
   $select_lines[] = array("type" => "option", "k" => "logout", "v" => $LANG["word_logout"]);
@@ -638,11 +637,15 @@ function ft_update_admin_menu($info)
 {
   global $g_table_prefix, $g_pages, $g_root_url, $LANG;
 
-  $menu_id    = $info["menu_id"];
-  $account_id = $info["account_id"];
+  $menu_id     = $info["menu_id"];
+  $account_id  = $info["account_id"];
+  $sortable_id = $info["sortable_id"];
+
+  $sortable_rows       = explode(",", $info["{$sortable_id}_sortable__rows"]);
+  $sortable_new_groups = explode(",", $info["{$sortable_id}_sortable__new_groups"]);
 
   $menu_items = array();
-  for ($i=1; $i<=$info["num_rows"]; $i++)
+  foreach ($sortable_rows as $i)
   {
     // if this row doesn't have a page identifier, just ignore it
     if (!isset($info["page_identifier_$i"]) || empty($info["page_identifier_$i"]))
@@ -652,45 +655,38 @@ function ft_update_admin_menu($info)
     $display_text    = ft_sanitize($info["display_text_$i"]);
     $custom_options  = isset($info["custom_options_$i"]) ? ft_sanitize($info["custom_options_$i"]) : "";
     $is_submenu      = isset($info["submenu_$i"]) ? "yes" : "no";
-    $list_order      = isset($info["menu_row_{$i}_order"]) ? $info["menu_row_{$i}_order"] : "";
 
     // construct the URL for this menu item
     $url = ft_construct_page_url($page_identifier, $custom_options);
 
-    // if a key already exists for this list order, tack on an "a" so that the upcoming ksort will
-    // work properly and that this menu item won't be lost. Interestingly, array_key_exists only accepts
-    // keys that are integers or strings, so we add on more and more a's to the end of the key string to
-    // make the row key compatible with both array_key_exists and ksort.
-    $new_list_order = $list_order;
-    while (array_key_exists($new_list_order, $menu_items))
-      $new_list_order .= "a";
-
-    $menu_items[$new_list_order] = array(
-      "url" => $url,
-      "page_identifier" => $page_identifier,
-      "display_text" => $display_text,
-      "custom_options" => $custom_options,
-      "is_submenu" => $is_submenu
+    $menu_items[] = array(
+      "url"               => $url,
+      "page_identifier"   => $page_identifier,
+      "display_text"      => $display_text,
+      "custom_options"    => $custom_options,
+      "is_submenu"        => $is_submenu,
+      "is_new_sort_group" => (in_array($i, $sortable_new_groups)) ? "yes" : "no"
         );
   }
-
-  ksort($menu_items);
 
   mysql_query("DELETE FROM {$g_table_prefix}menu_items WHERE menu_id = $menu_id");
 
   $order = 1;
-  foreach ($menu_items as $key => $hash)
+  foreach ($menu_items as $hash)
   {
-    $url             = $hash["url"];
-    $page_identifier = $hash["page_identifier"];
-    $display_text    = $hash["display_text"];
-    $custom_options  = $hash["custom_options"];
-    $is_submenu      = $hash["is_submenu"];
+    $url               = $hash["url"];
+    $page_identifier   = $hash["page_identifier"];
+    $display_text      = $hash["display_text"];
+    $custom_options    = $hash["custom_options"];
+    $is_submenu        = $hash["is_submenu"];
+    $is_new_sort_group = $hash["is_new_sort_group"];
 
     mysql_query("
-      INSERT INTO {$g_table_prefix}menu_items (menu_id, display_text, page_identifier, custom_options, url, is_submenu, list_order)
-      VALUES ($menu_id, '$display_text', '$page_identifier', '$custom_options', '$url', '$is_submenu', $order)
-        ") or die(mysql_error());
+      INSERT INTO {$g_table_prefix}menu_items (menu_id, display_text, page_identifier, custom_options, url,
+        is_submenu, list_order, is_new_sort_group)
+      VALUES ($menu_id, '$display_text', '$page_identifier', '$custom_options', '$url', '$is_submenu',
+        $order, '$is_new_sort_group')
+        ");
     $order++;
   }
 
@@ -750,15 +746,19 @@ function ft_update_client_menu($info)
   $info = ft_sanitize($info);
   $menu_id = $info["menu_id"];
   $menu    = trim($info["menu"]);
+  $sortable_id = $info["sortable_id"];
 
   mysql_query("
     UPDATE {$g_table_prefix}menus
-    SET    menu = '$menu'
+    SET    menu    = '$menu'
     WHERE  menu_id = $menu_id
       ");
 
+  $sortable_rows       = explode(",", $info["{$sortable_id}_sortable__rows"]);
+  $sortable_new_groups = explode(",", $info["{$sortable_id}_sortable__new_groups"]);
+
   $menu_items = array();
-  for ($i=1; $i<=$info["num_rows"]; $i++)
+  foreach ($sortable_rows as $i)
   {
     // if this row doesn't have a page identifier, just ignore it
     if (!isset($info["page_identifier_$i"]) || empty($info["page_identifier_$i"]))
@@ -768,45 +768,39 @@ function ft_update_client_menu($info)
     $display_text    = ft_sanitize($info["display_text_$i"]);
     $custom_options  = isset($info["custom_options_$i"]) ? ft_sanitize($info["custom_options_$i"]) : "";
     $is_submenu      = isset($info["submenu_$i"]) ? "yes" : "no";
-    $list_order      = isset($info["menu_row_{$i}_order"]) ? $info["menu_row_{$i}_order"] : "";
 
     // construct the URL for this menu item
     $url = ft_construct_page_url($page_identifier, $custom_options);
 
-    // if a key already exists for this list order, tack on an "a" so that the upcoming ksort will
-    // work properly and that this menu item won't be lost. Interestingly, array_key_exists only accepts
-    // keys that are integers or strings, so we add on more and more a's to the end of the key string to
-    // make the row key compatible with both array_key_exists and ksort.
-    $new_list_order = $list_order;
-    while (array_key_exists($new_list_order, $menu_items))
-      $new_list_order .= "a";
-
-    $menu_items[$new_list_order] = array(
+    $menu_items[] = array(
       "url" => $url,
-      "page_identifier" => $page_identifier,
-      "display_text" => $display_text,
-      "custom_options" => $custom_options,
-      "is_submenu" => $is_submenu
+      "page_identifier"   => $page_identifier,
+      "display_text"      => $display_text,
+      "custom_options"    => $custom_options,
+      "is_submenu"        => $is_submenu,
+      "is_new_sort_group" => (in_array($i, $sortable_new_groups)) ? "yes" : "no"
         );
   }
 
   ksort($menu_items);
-
   mysql_query("DELETE FROM {$g_table_prefix}menu_items WHERE menu_id = $menu_id");
 
   $order = 1;
-  foreach ($menu_items as $key => $hash)
+  foreach ($menu_items as $hash)
   {
-    $url             = $hash["url"];
-    $page_identifier = $hash["page_identifier"];
-    $display_text    = $hash["display_text"];
-    $custom_options  = $hash["custom_options"];
-    $is_submenu      = $hash["is_submenu"];
+    $url               = $hash["url"];
+    $page_identifier   = $hash["page_identifier"];
+    $display_text      = $hash["display_text"];
+    $custom_options    = $hash["custom_options"];
+    $is_submenu        = $hash["is_submenu"];
+    $is_new_sort_group = $hash["is_new_sort_group"];
 
     mysql_query("
-      INSERT INTO {$g_table_prefix}menu_items (menu_id, display_text, page_identifier, custom_options, url, is_submenu, list_order)
-      VALUES ($menu_id, '$display_text', '$page_identifier', '$custom_options', '$url', '$is_submenu', $order)
-        ") or die(mysql_error());
+      INSERT INTO {$g_table_prefix}menu_items (menu_id, display_text, page_identifier, custom_options, url, is_submenu,
+        list_order, is_new_sort_group)
+      VALUES ($menu_id, '$display_text', '$page_identifier', '$custom_options', '$url', '$is_submenu',
+        $order, '$is_new_sort_group')
+        ");
     $order++;
   }
 
@@ -856,8 +850,6 @@ function ft_cache_account_menu($account_id)
  * custom menus; it lets the script know what parent menu to show for any given page.
  *
  * TODO. I hate this function and whole approach. Really need to think about it some more.
- *
- * The REASON I hate it is that
  *
  * @param string $page_identifier
  * @param array $params
@@ -919,8 +911,6 @@ function ft_construct_page_url($page_identifier, $custom_options = "")
     case "edit_form_fields":
     case "edit_form_views":
     case "edit_form_emails":
-    case "edit_form_database":
-    case "edit_form_add_fields":
       $joiner = (strpos($g_pages[$page_identifier], "?")) ? "&" : "?";
       $url = $g_pages[$page_identifier] . $joiner . "form_id=" . $custom_options;
       break;
@@ -1087,7 +1077,7 @@ function ft_delete_client_menu($menu_id)
 
     $client_links_table .= "</tr></table>";
 
-    $submit_button = "<input type=\"button\" value=\"{$LANG["phrase_update_accounts"]}\" onclick=\"window.location='index.php?page=menus&mass_assign=1&accounts=$client_id_str&menu_id=' + $('mass_update_client_menu').value\" />";
+    $submit_button = "<input type=\"button\" value=\"{$LANG["phrase_update_accounts"]}\" onclick=\"window.location='index.php?page=menus&mass_assign=1&accounts=$client_id_str&menu_id=' + $('#mass_update_client_menu').val()\" />";
 
     $placeholders = array(
       "menu_dropdown" => $dd,

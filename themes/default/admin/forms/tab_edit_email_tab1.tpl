@@ -1,4 +1,4 @@
-            <table cellpadding="2" cellspacing="1" width="100%">
+            <table cellpadding="2" cellspacing="1" width="100%" class="margin_bottom">
             <tr>
               <td width="10" class="red">*</td>
               <td width="180">{$LANG.phrase_email_template_name}</td>
@@ -34,13 +34,12 @@
 
             <div class="grey_box">
               <div style="margin_top">
-                <a href="#" onclick="return page_ns.toggle_advanced_settings()">{$LANG.phrase_advanced_settings_rightarrow}</a>
+                <a href="#" onclick="return emails_ns.toggle_advanced_settings()">{$LANG.phrase_advanced_settings_rightarrow}</a>
               </div>
 
               <div {if !isset($SESSION.edit_email_advanced_settings) || $SESSION.edit_email_advanced_settings == "false"}style="display:none"{/if} id="advanced_settings">
                 <table cellpadding="2" cellspacing="1" width="100%">
                 <tr>
-                  <td valign="top" class="red" width="10">*</td>
                   <td valign="top" width="180">{$LANG.phrase_when_sent}</td>
                   <td>
                     <input type="radio" name="view_mapping_type" id="vmt1" value="all" {if $template_info.view_mapping_type == "all"}checked{/if} />
@@ -65,21 +64,15 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="red" valign="top">*</td>
-                  <td valign="top">
-                    {$LANG.text_send_email_from_edit_submission_page}
-                  </td>
+                  <td valign="top">{$LANG.text_send_email_from_edit_submission_page}</td>
                   <td>
                     <input type="radio" name="include_on_edit_submission_page" id="iesp1" value="no"
-                      onchange="page_ns.change_include_on_edit_submission_page(this.value)"
                       {if $template_info.include_on_edit_submission_page == "no"}checked{/if} />
                       <label for="iesp1">{$LANG.word_no}</label><br />
                     <input type="radio" name="include_on_edit_submission_page" id="iesp2" value="all_views"
-                      onchange="page_ns.change_include_on_edit_submission_page(this.value)"
                       {if $template_info.include_on_edit_submission_page == "all_views"}checked{/if} />
                       <label for="iesp2">{$LANG.phrase_yes_for_all_views}</label><br />
                     <input type="radio" name="include_on_edit_submission_page" id="iesp3" value="specific_views"
-                      onchange="page_ns.change_include_on_edit_submission_page(this.value)"
                       {if $template_info.include_on_edit_submission_page == "specific_views"}checked{/if} />
                       <label for="iesp3">{$LANG.phrase_yes_for_specific_views}</label><br />
 
@@ -124,13 +117,10 @@
                   </td>
                 </tr>
                 <tr>
-                  <td class="red" valign="top">*</td>
-                  <td valign="top">
-                    {$LANG.phrase_limit_email_content}
-                  </td>
+                  <td valign="top">{$LANG.phrase_limit_email_content}</td>
                   <td>
-                    {views_dropdown name_id="limit_email_content_to_fields_in_view" form_id=$form_id
-                      default=$template_info.limit_email_content_to_fields_in_view}
+                    {views_dropdown name_id="limit_email_content_to_fields_in_view" form_id=$form_id show_empty_label=true
+                      selected=$template_info.limit_email_content_to_fields_in_view}
                     <div class="medium_grey">
                       This option only works for HTML and text content generated with Smarty Loops.
                     </div>

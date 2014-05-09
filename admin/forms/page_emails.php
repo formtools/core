@@ -22,19 +22,18 @@ $num_form_emails  = $form_email_info["num_results"];
 
 // a little irksome, but we also need to retrieve ALL emails, for the Create Email From Existing Email dropdown
 $all_form_emails = ft_get_email_template_list($form_id);
+$php_self = ft_get_clean_php_self();
 
 
 // compile the templates information
-$page_vars = array();
 $page_vars["page"]        = "emails";
 $page_vars["page_url"]    = ft_get_page_url("edit_form_emails", array("form_id" => $form_id));
-$page_vars["tabs"]        = $tabs;
-$page_vars["form_id"]     = $form_id;
 $page_vars["form_emails"] = $form_emails;
 $page_vars["all_form_emails"] = $all_form_emails;
 $page_vars["num_form_emails"] = $num_form_emails;
 $page_vars["head_title"] = "{$LANG["phrase_edit_form"]} - {$LANG["word_emails"]}";
 $page_vars["form_info"]  = $form_info;
+$page_vars["js_messages"] = array("word_edit", "word_remove");
 
 // build values to pass along in nav query string
 $pass_along_str = "page=emails&form_id=$form_id";
@@ -45,7 +44,7 @@ var page_ns = {};
 page_ns.delete_email = function(email_id)
 {
   if (confirm(\"{$LANG["confirm_delete_email_template"]}\"))
-    window.location = \"{$_SERVER['PHP_SELF']}?form_id=$form_id&page=emails&delete=\" + email_id;
+    window.location = \"$php_self?form_id=$form_id&page=emails&delete=\" + email_id;
 
   return false;
 }

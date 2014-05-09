@@ -1,9 +1,15 @@
 {ft_include file='header.tpl'}
 
-  <p>
-    <span class="title">{$LANG.phrase_delete_form_c|upper}</span>
-    <span class="subtitle">{$form_info.form_name}</span> (<b>{$form_id}</b>)
-  </p>
+  <table cellpadding="0" cellspacing="0" class="margin_bottom_large">
+  <tr>
+    <td width="45"><img src="{$images_url}/icon_forms.gif" width="34" height="34" /></td>
+    <td class="title">
+	    <a href="./">{$LANG.word_forms}</a> <span class="joiner">&raquo;</span>
+	    {$LANG.phrase_delete_form} <span class="joiner">&raquo;</span>
+	    {$form_info.form_name} (<span class="identifier">{$form_id}</span>)
+    </td>
+  </tr>
+  </table>
 
   <div class="error yellow_bg">
     <div style="padding: 8px;">
@@ -13,7 +19,7 @@
 
   {ft_include file="messages.tpl"}
 
-  <form method="post" action="{$same_page}" onsubmit="return rsv.validate(this, rules)">
+  <form method="post" action="{$same_page}" onsubmit="return rsv.validate(this, rules)" id="delete_form_form">
     <input type="hidden" name="form_id" value="{$form_id}" />
     <input type="checkbox" name="delete_form" id="delete_form" value="yes" />
     <label for="delete_form">{$LANG.text_confirm_delete_form}</label><br />

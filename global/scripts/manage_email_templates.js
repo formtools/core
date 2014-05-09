@@ -9,15 +9,16 @@ emails_ns.recipient_num = null;
 /**
  * Selects an email pattern from the available email template dropdown.
  */
-emails_ns.select_template = function(format_type, row)
-{
-  if (!row)
+emails_ns.select_template = function(format_type, row) {
+  if (!row) {
     return;
-
-  if (format_type == "html")
-    html_editor.setCode($(format_type + "_" + row).value);
-  if (format_type == "text")
-    text_editor.setCode($(format_type + "_" + row).value);
+  }
+  if (format_type == "html") {
+    html_editor.setCode($("#" + format_type + "_" + row).val());
+  }
+  if (format_type == "text") {
+    text_editor.setCode($("#" + format_type + "_" + row).val());
+  }
 }
 
 
@@ -25,54 +26,55 @@ emails_ns.select_template = function(format_type, row)
  * Hides / shows the custom From, Reply-to and Recipient elements. These allow the administrator
  * to choose whoever they want should receive, etc. the emails.
  */
-emails_ns.show_custom_email_field = function(target, val)
-{
-  if (val == "custom")
-    $("custom_" + target).style.display = "block";
-  else
-    $("custom_" + target).style.display = "none";
+emails_ns.show_custom_email_field = function(target, val) {
+  if (val == "custom") {
+    $("#custom_" + target).show();
+  } else {
+    $("#custom_" + target).hide();
+  }
 }
 
 
 /**
  * Adds a recipient for this email template.
  */
-emails_ns.add_recipient = function(f)
-{
-  var recipient_target = $("recipient_options").value;
-  if (recipient_target == "")
+emails_ns.add_recipient = function(f) {
+  var recipient_target = $("#recipient_options").val();
+  if (recipient_target == "") {
     return;
+  }
 
   var is_email_field = /^form_email_id/;
   var is_client      = /^client_account_id/;
 
   var rtype = recipient_target;
-  if (is_email_field.test(recipient_target))
+  if (is_email_field.test(recipient_target)) {
     rtype = "form_email_field";
-  if (is_client.test(recipient_target))
+  }
+  if (is_client.test(recipient_target)) {
     rtype = "client";
+  }
 
   var recipient_str = emails_ns._get_recipient_string(recipient_target);
 
-  switch (rtype)
-  {
+  switch (rtype) {
     case "admin":
       emails_ns._add_recipient({
         full_display_string: recipient_str,
-        recipient_type: $("recipient_type").value,
+        recipient_type:      $("#recipient_type").val(),
         recipient_user_type: "admin"
-          });
+      });
       break;
 
     case "client":
       var info = recipient_target.match(/client_account_id_(\d+)/);
       var cid = info[1];
       emails_ns._add_recipient({
-         full_display_string: recipient_str,
-         client_id: cid,
-         recipient_type: $("recipient_type").value,
-         recipient_user_type: "client"
-           });
+        full_display_string: recipient_str,
+        client_id: cid,
+        recipient_type:      $("#recipient_type").val(),
+        recipient_user_type: "client"
+      });
       break;
 
     case "form_email_field":
@@ -80,10 +82,10 @@ emails_ns.add_recipient = function(f)
       var feid = info[1];
       emails_ns._add_recipient({
         full_display_string: g.messages["phrase_form_email_field_b_c"] + " " + recipient_str,
-        recipient_type: $("recipient_type").value,
+        recipient_type:      $("#recipient_type").val(),
         recipient_user_type: "form_email_field",
         form_email_id: feid
-          });
+      });
       break;
 
     case "custom":
@@ -98,37 +100,31 @@ emails_ns.add_recipient = function(f)
 
 
 // get the recipient string (e.g. "Ben Keen <formtools@encorewebstudios.com>")
-emails_ns._get_recipient_string = function(option_val)
-{
-  var dd = $("recipient_options");
+emails_ns._get_recipient_string = function(option_val) {
+  var dd = $("#recipient_options")[0];
   var recipient_str = null;
-  for (var i=0; i<dd.options.length; i++)
-  {
-    if (dd.options[i].value == option_val)
-    {
+  for (var i=0; i<dd.options.length; i++) {
+    if (dd.options[i].value == option_val) {
       recipient_str = dd.options[i].text;
       break;
     }
   }
-
   return recipient_str;
 }
 
 
-emails_ns.add_custom_recipient = function(f)
-{
+emails_ns.add_custom_recipient = function(f) {
   // check at least the email is entered
   var rules = [
     "required,custom_recipient_email," + g.messages["validation_no_custom_recipient_email"],
     "valid_email,custom_recipient_email," + g.messages["validation_invalid_email"]
       ];
 
-  if (rsv.validate(f, rules))
-  {
+  if (rsv.validate(f, rules)) {
     emails_ns._add_recipient({
-      name: $("custom_recipient_name").value,
-      email: $("custom_recipient_email").value,
-      recipient_type: $("custom_recipient_type").value,
+      name:                $("#custom_recipient_name").val(),
+      email:               $("#custom_recipient_email").val(),
+      recipient_type:      $("#custom_recipient_type").val(),
       recipient_user_type: "custom"
         });
   }
@@ -138,16 +134,16 @@ emails_ns.add_custom_recipient = function(f)
 /**
  * Removes a recipient from the page. Note: it still requires an update to update the database.
  */
-emails_ns.remove_recipient = function(num)
-{
+emails_ns.remove_recipient = function(num) {
   emails_ns.num_recipients--;
 
   // if necessary, show the "No recipients" text
-  if (emails_ns.num_recipients == 0)
-    $("no_recipients").show();
+  if (emails_ns.num_recipients == 0) {
+    $("#no_recipients").show();
+  }
 
-  $("recipient_" + num).innerHTML = "";
-  $("recipient_" + num).hide();
+  $("#recipient_" + num).html("");
+  $("#recipient_" + num).hide();
 
   return false;
 }
@@ -166,22 +162,21 @@ emails_ns.remove_recipient = function(num)
  *             form_email_id - the form email ID (form email fields only)
  *             recipient_type - "client", "custom" or "admin" (required)
  */
-emails_ns._add_recipient = function(info)
-{
-  $("no_recipients").hide();
-
+emails_ns._add_recipient = function(info) {
+  $("#no_recipients").hide();
   var num = ++emails_ns.recipient_num; // our unique num (always incremented)
 
   var recipient_type_str = "";
-  if (info.recipient_type == "cc")
+  if (info.recipient_type == "cc") {
     recipient_type_str = "&nbsp;<b>[cc]</b>";
-  else if (info.recipient_type == "bcc")
+  }
+  else if (info.recipient_type == "bcc") {
     recipient_type_str = "&nbsp;<b>[bcc]</b>";
+  }
 
-  switch (info.recipient_user_type)
-  {
+  switch (info.recipient_user_type) {
     case "admin":
-      var str = "<div id=\"recipient_" + num + "\">" + info.full_display_string.escapeHTML()
+      var str = "<div id=\"recipient_" + num + "\">" + $("<div />").text(info.full_display_string).html()
               + recipient_type_str
               + " &nbsp;<a href=\"#\" onclick=\"return emails_ns.remove_recipient(" + num + ")\">[x]</a>"
               + "<input type=\"hidden\" name=\"recipients[]\" value=\"" + num + "\" />"
@@ -191,7 +186,7 @@ emails_ns._add_recipient = function(info)
       break;
 
     case "form_email_field":
-      var str = "<div id=\"recipient_" + num + "\">" + info.full_display_string.escapeHTML()
+      var str = "<div id=\"recipient_" + num + "\">" + $("<div />").text(info.full_display_string).html()
               + recipient_type_str
               + " &nbsp;<a href=\"#\" onclick=\"return emails_ns.remove_recipient(" + num + ")\">[x]</a>"
               + "<input type=\"hidden\" name=\"recipients[]\" value=\"" + num + "\" />"
@@ -202,7 +197,7 @@ emails_ns._add_recipient = function(info)
       break;
 
     case "client":
-      var str = "<div id=\"recipient_" + num + "\">" + info.full_display_string.escapeHTML()
+      var str = "<div id=\"recipient_" + num + "\">" + $("<div />").text(info.full_display_string).html()
               + recipient_type_str
               + " &nbsp;<a href=\"#\" onclick=\"return emails_ns.remove_recipient(" + num + ")\">[x]</a>"
               + "<input type=\"hidden\" name=\"recipients[]\" value=\"" + num + "\" />"
@@ -213,19 +208,19 @@ emails_ns._add_recipient = function(info)
       break;
 
     case "custom":
-      if (info.name)
+      if (info.name) {
         recipient = info.name + " &lt;" + info.email + "&gt;";
-      else
+      } else {
         recipient = info.email;
-
+      }
       var str = "<div id=\"recipient_" + num + "\">" + recipient
               + recipient_type_str
               + " &nbsp;<a href=\"#\" onclick=\"return emails_ns.remove_recipient(" + num + ")\">[x]</a>"
               + "<input type=\"hidden\" name=\"recipients[]\" value=\"" + num + "\" />"
               + "<input type=\"hidden\" name=\"recipient_" + num + "_user_type\" value=\"custom\" />"
               + "<input type=\"hidden\" id=\"recipient_" + num + "_type\" name=\"recipient_" + num + "_type\" value=\"" + info.recipient_type + "\" />"
-              + "<input type=\"hidden\" name=\"recipient_" + num + "_name\" value=\"" + $("custom_recipient_name").value + "\" />"
-              + "<input type=\"hidden\" name=\"recipient_" + num + "_email\" value=\"" + $("custom_recipient_email").value + "\" />"
+              + "<input type=\"hidden\" name=\"recipient_" + num + "_name\" value=\"" + $("#custom_recipient_name").val() + "\" />"
+              + "<input type=\"hidden\" name=\"recipient_" + num + "_email\" value=\"" + $("#custom_recipient_email").val() + "\" />"
               + "</div>";
       break;
 
@@ -234,7 +229,7 @@ emails_ns._add_recipient = function(info)
       break;
   }
 
-  $("email_recipients").innerHTML += str;
+  $("#email_recipients").append(str);
 
   // increment the num_recipients count
   emails_ns.num_recipients++;
@@ -244,41 +239,41 @@ emails_ns._add_recipient = function(info)
 /**
  * Sends a test email, via Ajax.
  *
+ * TODO
+ *
+ * @param the DOM form node
  * @param string the action to take: "send" or "display"
  */
-emails_ns.send_test_email = function(f, action)
-{
-  // confirm all the fields are entered properly
+emails_ns.send_test_email = function(f, action) {
   var rules = [];
   rules.push("required,test_email_recipient," + g.messages["validation_no_test_email_recipient"]);
   rules.push("valid_email,test_email_recipient," + g.messages["validation_valid_email"]);
   rules.push("if:test_email_data_source=submission_id,required,test_email_submission_id," + g.messages["validation_no_test_email_submission_id"]);
 
-  if (rsv.validate(f, rules))
-  {
-    var query_str = "test_email_format=" + $("test_email_format").value
-                  + "&test_email_recipient=" + $("test_email_recipient").value
-                  + "&test_email_data_source=" + ft.get_checked_value(f.test_email_data_source)
+  if (rsv.validate(f, rules)) {
+    var query_str = "test_email_format=" + $("#test_email_format").val()
+                  + "&test_email_recipient=" + $("#test_email_recipient").val()
+                  + "&test_email_data_source=" + $(f).find("input:radio[name=test_email_data_source]:checked").val()
                   + "&test_email_submission_id=" + f.test_email_submission_id.value
 
-    if (action == "display")
-    {
+    if (action == "display") {
       emails_ns.log_activity(true);
-      page_url = g.root_url + "/global/code/actions.php?action=display_test_email&" + query_str;
-      new Ajax.Request(page_url, {
-        method: 'get',
-        onSuccess: emails_ns.display_test_email,
-        onFailure: function() { alert("Couldn't load page: " + page_url); }
+      $.ajax({
+	    url:      g.root_url + "/global/code/actions.php?action=display_test_email&" + query_str,
+	    type:     "GET",
+	    dataType: "json",
+	    success:  emails_ns.display_test_email,
+	    error:    ft.error_handler
       });
     }
-    else if (action == "send")
-    {
+    else if (action == "send") {
       emails_ns.log_activity(true);
-      page_url = g.root_url + "/global/code/actions.php?action=send_test_email&" + query_str;
-      new Ajax.Request(page_url, {
-        method: 'get',
-        onSuccess: emails_ns.send_test_email_response,
-        onFailure: function() { alert("Couldn't load page: " + page_url); }
+      $.ajax({
+        url:      g.root_url + "/global/code/actions.php?action=send_test_email&" + query_str,
+        type:     "GET",
+        dataType: "json",
+        success:  emails_ns.send_test_email_response,
+        error:    ft.error_handler,
       });
     }
   }
@@ -296,42 +291,34 @@ emails_ns.send_test_email = function(f, action)
  *     the error message. If true, this is an object containing the various elements of the email (subject,
  *     cc, bcc, etc) as properties.
  */
-emails_ns.display_test_email = function(transport)
-{
+emails_ns.display_test_email = function(data) {
+
   emails_ns.log_activity(false);
-  try {
-    var response = transport.responseText.evalJSON(true);
-  }
-  catch (e)
-  {
-    alert("Error: " + e);
-    return;
-  }
+  var success = data[0];
 
-  var success = response[0];
-
-  if (success)
-  {
-    var email_info = response[1];
-
+  if (success) {
+    var email_info = data[1];
     var from     = email_info.from;
     var reply_to = email_info.reply_to;
-    var subject  = email_info.subject.toString().unescapeHTML();
+    var subject  = email_info.subject; // unescapeHTML
 
     var to       = email_info.to;
     var to_html = "";
-    for (var i=0; i<to.length; i++)
+    for (var i=0; i<to.length; i++) {
       to_html += to[i].recipient_line + "<br />";
+    }
 
     var cc       = email_info.cc;
     var cc_html = "";
-    for (var i=0; i<cc.length; i++)
+    for (var i=0; i<cc.length; i++) {
       cc_html += cc[i].recipient_line + "<br />";
+    }
 
     var bcc      = email_info.bcc;
     var bcc_html = "";
-    for (var i=0; i<bcc.length; i++)
+    for (var i=0; i<bcc.length; i++) {
       bcc_html += bcc[i].recipient_line + "<br />";
+    }
 
     // build the header table
     var table = "<table cellpadding=\"0\" cellspacing=\"1\"><tr>"
@@ -339,43 +326,38 @@ emails_ns.display_test_email = function(transport)
               + "<td>" + to_html + "</td>"
               + "</tr>";
 
-    if (cc_html)
+    if (cc_html) {
       table += "<tr><td valign=\"top\">" + g.messages["word_cc_c"] + "</td><td>" + cc_html + "</td></tr>";
-
-    if (bcc_html)
+    }
+    if (bcc_html) {
       table += "<tr><td valign=\"top\">" + g.messages["word_bcc_c"] + "</td><td>" + bcc_html + "</td></tr>";
-
-    if (from && typeof from == "object" && typeof from.recipient_line != "undefined" && from.recipient_line != "")
+    }
+    if (from && typeof from == "object" && typeof from.recipient_line != "undefined" && from.recipient_line != "") {
       table += "<tr><td>" + g.messages["word_from_c"] + "</td><td>" + from.recipient_line + "</td></tr>";
-
-    if (reply_to && typeof reply_to == "object" && typeof reply_to.recipient_line != "undefined" && reply_to.recipient_line != "")
+    }
+    if (reply_to && typeof reply_to == "object" && typeof reply_to.recipient_line != "undefined" && reply_to.recipient_line != "") {
       table += "<tr><td>" + g.messages["word_reply_to_c"] + "</td><td>" + reply_to.recipient_line	 + "</td></tr>";
-
-    if (subject)
+    }
+    if (subject) {
       table += "<tr><td>" + g.messages["word_subject_c"] + "</td><td>" + subject + "</td></tr>";
-
-    if (email_info.html_content)
-    {
-      html_table = table + "<tr><td valign=\"top\">Content:</td><td>" + email_info.html_content + "</td></tr>";
-      $("display_html_content").innerHTML = html_table;
-      Effect.Appear("display_html");
-    }
-    else
-    {
-      $("display_html").hide();
-      $("display_html_content").innerHTML = "";
     }
 
-    if (email_info.text_content)
-    {
-      text_table = table + "<tr><td valign=\"top\">Content:</td><td>" + email_info.text_content.replace(/\n/g, "<br />") + "</td></tr>";
-      $("display_text_content").innerHTML = text_table;
-      Effect.Appear("display_text");
+    if (email_info.html_content) {
+      html_table = table + "<tr><td valign=\"top\">Content:</td><td>" + email_info.html_content + "</td></tr></table>";
+      $("#display_html_content").html(html_table);
+      $("#display_html").removeClass("hidden");
+    } else {
+      $("#display_html").addClass("hidden");
+      $("#display_html_content").html("");
     }
-    else
-    {
-      $("display_text").hide();
-      $("display_text_content").innerHTML = "";
+
+    if (email_info.text_content) {
+      text_table = table + "<tr><td valign=\"top\">Content:</td><td>" + email_info.text_content.replace(/\n/g, "<br />") + "</td></tr></table>";
+      $("#display_text_content").html(text_table);
+      $("#display_text").removeClass("hidden");
+    } else {
+      $("#display_text_content").html("");
+      $("#display_text").addClass("hidden");
     }
   }
 }
@@ -384,10 +366,8 @@ emails_ns.display_test_email = function(transport)
 /**
  * Called after sending a test email. Displays the appropriate message.
  */
-emails_ns.send_test_email_response = function(transport)
-{
+emails_ns.send_test_email_response = function(transport) {
   emails_ns.log_activity(false);
-
   var json = transport.responseText.evalJSON();
   ft.display_message("ft_message", json.success, json.message);
 }
@@ -397,27 +377,132 @@ emails_ns.send_test_email_response = function(transport)
  * This is called whenever starting or ending any potentially lengthy JS operation. It hides/shows the
  * ajax loading icon.
  */
-emails_ns.log_activity = function(is_busy)
-{
-  if (is_busy)
-  {
-    $("ajax_activity").show();
-    $("ajax_no_activity").hide();
-  }
-  else
-  {
-    $("ajax_activity").hide();
-    $("ajax_no_activity").show();
+emails_ns.log_activity = function(is_busy) {
+  if (is_busy) {
+    $("#ajax_activity").show();
+    $("#ajax_no_activity").hide();
+  } else {
+    $("#ajax_activity").hide();
+    $("#ajax_no_activity").show();
   }
 }
 
 
-emails_ns.delete_form_email_field_config = function(form_email_id)
-{
-  if (confirm(g.messages["confirm_delete_email_field_config"]))
-  {
-    window.location = "edit.php?page=email_settings&delete_form_email_id=" + form_email_id;
-  }
-
+emails_ns.delete_form_email_field_config = function(form_email_id) {
+  ft.create_dialog({
+    title:     g.messages["phrase_please_confirm"],
+    content:   g.messages["confirm_delete_email_field_config"],
+    popup_type: "warning",
+    buttons: [
+      {
+        text:  g.messages["word_yes"],
+        click: function() {
+        window.location = "edit.php?page=email_settings&delete_form_email_id=" + form_email_id;
+        }
+      },
+      {
+        text:  g.messages["word_no"],
+        click: function() {
+          $(this).dialog("close");
+        }
+      }
+    ]
+  });
   return false;
 }
+
+
+emails_ns.toggle_advanced_settings = function() {
+  var display_setting = $('#advanced_settings').css("display");
+
+  var is_visible = false;
+  if (display_setting == 'none' || display_setting == "") {
+    $("#advanced_settings").show("blind");
+    is_visible = true;
+  } else {
+    $("#advanced_settings").hide("blind");
+  }
+  $.ajax({
+    url:   g.root_url + "/global/code/actions.php",
+    data:  { action: "remember_edit_email_advanced_settings", edit_email_advanced_settings: is_visible },
+    type:  "POST",
+    error: ft.error_handler
+  });
+}
+
+
+emails_ns.check_one_main_recipient = function() {
+  if (emails_ns.num_recipients == 0) {
+    return [[$('#recipient_options')[0], g.messages["validation_no_main_email_recipient"]]];
+  } else {
+    var has_one_main_recipient = false;
+    for (var i=0; i<=emails_ns.recipient_num; i++) {
+      if ($("#recipient_" + i + "_type").length > 0 &&
+          ($("#recipient_" + i + "_type").val() == '' || $("#recipient_" + i + "_type").val() == 'main')) {
+        var has_one_main_recipient = true;
+      }
+    }
+    if (!has_one_main_recipient) {
+      return [[$('#recipient_options')[0], g.messages["validation_no_main_email_recipient"]]];
+    }
+  }
+  return true;
+}
+
+
+emails_ns.change_include_on_edit_submission_page = function(selected) {
+  if (selected == "specific_views") {
+    $('#include_on_edit_submission_page_views').show();
+  } else {
+    $('#include_on_edit_submission_page_views').hide();
+  }
+}
+
+
+/**
+ * This confirms that the user has entered at least one of the HTML and text templates.
+ */
+emails_ns.check_one_template_defined = function() {
+  var html_template = html_editor.getCode();
+  html_template = $.trim(html_template);
+  var text_template = text_editor.getCode();
+  text_template = $.trim(text_template);
+  if (html_template == "" && text_template == "") {
+    return [[$('#html_template'), g.messages["validation_no_email_content"]]];
+  }
+  return true;
+}
+
+
+emails_ns.onsubmit_check_email_settings = function(f) {
+
+  // configuration tab
+  var rules = [];
+  rules.push("required,email_template_name," + g.messages["validation_no_email_template_name"]);
+  rules.push("required,view_mapping_type," + g.messages["validation_no_email_template_view_mapping_value"]);
+  rules.push("if:view_mapping_type=specific,required,view_mapping_view_id," + g.messages["validation_no_email_template_view_id"]);
+  if (!rsv.validate(f, rules)) {
+    return ft.change_inner_tab(1, "edit_email_template"); // this always returns false;
+  }
+
+  // recipients tab
+  var rules = [];
+  rules.push("function,emails_ns.check_one_main_recipient");
+  rules.push("required,email_from," + g.messages["validation_no_email_from_field"]);
+  rules.push("if:email_from=custom,required,custom_from_email," + g.messages["validation_no_custom_from_email"]);
+  rules.push("if:email_from=custom,valid_email,custom_from_email," + g.messages["validation_invalid_custom_from_email"]);
+  rules.push("if:email_reply_to=custom,required,custom_reply_to_email," + g.messages["validation_no_custom_reply_to_email"]);
+  rules.push("if:email_reply_to=custom,valid_email,custom_reply_to_email," + g.messages["validation_invalid_custom_reply_to_email"]);
+  if (!rsv.validate(f, rules)) {
+    return ft.change_inner_tab(2, "edit_email_template");
+  }
+
+  var rules = [];
+  rules.push("function,emails_ns.check_one_template_defined");
+  if (!rsv.validate(f, rules)) {
+    return ft.change_inner_tab(3, "edit_email_template");
+  }
+
+  return true;
+}
+

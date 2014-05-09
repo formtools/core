@@ -1,12 +1,12 @@
 {include file="header.tpl"}
 
-  <div class="title">{$login_heading|upper}</div>
+  <div class="title">{$login_heading}</div>
 
-  <div style="width:540px">
+  <div style="width:600px">
     {ft_include file="messages.tpl"}
   </div>
 
-  <div class="margin_bottom_large" style="width: 540px">
+  <div class="margin_bottom_large" style="width: 600px">
     {$text_login}
   </div>
 
@@ -26,7 +26,7 @@
 
     <table width="340" cellpadding="1" class="login_outer_table">
     <tr>
-      <td colspan="1">
+      <td>
 
         <table width="100%" cellpadding="0" cellspacing="1" class="login_inner_table">
         <tr>

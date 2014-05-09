@@ -39,12 +39,20 @@ $page_vars["themes"] = $updated_themes;
 $page_vars["js_messages"] = "";
 $page_vars["admin_theme"]  = $_SESSION["ft"]["account"]["theme"];
 $page_vars["client_theme"] = $_SESSION["ft"]["settings"]["default_theme"];
-$page_vars["head_js"] = "
-
+$page_vars["head_js"] =<<< EOF
 var rules = [];
-rules.push(\"required,admin_theme_id,{$LANG["validation_no_admin_theme"]}\");
-rules.push(\"required,default_client_theme_id,{$LANG["validation_no_default_client_theme"]}\");";
-$page_vars["head_string"] = "<script type=\"text/javascript\" src=\"$g_root_url/global/scripts/lightbox.js\"></script>
-<link rel=\"stylesheet\" href=\"$g_root_url/global/css/lightbox.css\" type=\"text/css\" media=\"screen\" />";
+rules.push("required,admin_theme_id,{$LANG["validation_no_admin_theme"]}");
+rules.push("required,default_client_theme_id,{$LANG["validation_no_default_client_theme"]}");
+
+$(function() {
+	$(".fancybox").fancybox();
+});
+
+EOF;
+
+$page_vars["head_string"] =<<< EOF
+<script type="text/javascript" src="$g_root_url/global/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" href="$g_root_url/global/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+EOF;
 
 ft_display_page("admin/themes/index.tpl", $page_vars);

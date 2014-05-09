@@ -14,37 +14,29 @@
         <td width="120" class="pad_left">{$LANG.phrase_upload_folder_path}</td>
         <td>
           <input type="hidden" name="original_file_upload_dir" value="{$settings.file_upload_dir}" />
-
           <table cellpadding="0" cellspacing="0" width="100%">
           <tr>
             <td><input type="text" name="file_upload_dir" id="file_upload_dir" value="{$settings.file_upload_dir}" style="width: 98%" /></td>
             <td width="180">
-              <input type="button" value="{$LANG.phrase_test_folder_permissions}" onclick="ft.test_folder_permissions($('file_upload_dir').value, 'permissions_result')" style="width: 180px;" />
+              <input type="button" value="{$LANG.phrase_test_folder_permissions}" onclick="ft.test_folder_permissions($('#file_upload_dir').val(), 'permissions_result')" style="width: 180px;" />
             </td>
           </tr>
           </table>
-
           <div id="permissions_result"></div>
-
         </td>
       </tr>
       <tr>
         <td class="pad_left">{$LANG.phrase_upload_folder_url}</td>
         <td>
-
           <table cellpadding="0" cellspacing="0" width="100%">
           <tr>
             <td><input type="text" name="file_upload_url" id="file_upload_url" value="{$settings.file_upload_url}" style="width: 98%" /></td>
-
             {if $allow_url_fopen}
-              <td width="150"><input type="button" value="{$LANG.phrase_confirm_folder_url_match}" onclick="ft.test_folder_url_match($('file_upload_dir').value, $('file_upload_url').value, 'folder_match_message_id')" style="width: 180px;" /></td>
+              <td width="150"><input type="button" value="{$LANG.phrase_confirm_folder_url_match}" onclick="ft.test_folder_url_match($('#file_upload_dir').val(), $('#file_upload_url').val(), 'folder_match_message_id')" style="width: 180px;" /></td>
             {/if}
-
           </tr>
           </table>
-
           <div id="folder_match_message_id"></div>
-
         </td>
       </tr>
       <tr>
@@ -137,20 +129,7 @@
 
         </td>
       </tr>
-      <tr>
-        <td class="pad_left">
-          {$LANG.phrase_use_lightbox}
-        </td>
-        <td>
-          <input type="radio" name="display_files_with_lightbox" value="yes" id="dfwl1" {if $settings.display_files_with_lightbox == "yes"}checked{/if} />
-            <label for="dfwl1">{$LANG.word_yes}</label>
-          <input type="radio" name="display_files_with_lightbox" value="no" id="dfwl2" {if $settings.display_files_with_lightbox == "no"}checked{/if} />
-            <label for="dfwl2">{$LANG.word_no}</label>
-
-          <span class="pad_left_large light_grey">{$LANG.text_use_lightbox_caveat}</span>
-        </td>
-      </tr>
-      {template_hook location="admin_settings_files_bottom"}			
+      {template_hook location="admin_settings_files_bottom"}
       </table>
 
       <p>

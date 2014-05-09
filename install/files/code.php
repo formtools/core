@@ -19,8 +19,10 @@ function ft_install_display_page($template, $page_vars)
   // always try to set the cache folder to 777
   @chmod($cache_folder, 0777);
 
-  $version_string = "v{$g_current_version}";
-  if ($g_release_type == "beta")
+  $version_string = $g_current_version;
+  if ($g_release_type == "alpha")
+    $version_string .= "-alpha-$g_release_date";
+  else if ($g_release_type == "beta")
     $version_string .= "-beta-$g_release_date";
 
   // run a preliminary permissions check on the default theme's cache folder
@@ -197,6 +199,9 @@ function ft_install_get_config_file_contents()
   $_SESSION["ft_install"]["g_root_dir"] = $g_ft_installation_folder;
   $_SESSION["ft_install"]["g_root_url"] = $root_url;
 
+	$username = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_username"]);
+	$password = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_password"]);
+
   $content = "<" . "?php\n\n"
            . "// main program paths - no trailing slashes!\n"
            . "\$g_root_url = \"$root_url\";\n"
@@ -204,8 +209,8 @@ function ft_install_get_config_file_contents()
            . "// database settings\n"
            . "\$g_db_hostname = \"{$_SESSION["ft_install"]["g_db_hostname"]}\";\n"
            . "\$g_db_name = \"{$_SESSION["ft_install"]["g_db_name"]}\";\n"
-           . "\$g_db_username = \"{$_SESSION["ft_install"]["g_db_username"]}\";\n"
-           . "\$g_db_password = \"{$_SESSION["ft_install"]["g_db_password"]}\";\n"
+           . "\$g_db_username = \"{$username}\";\n"
+           . "\$g_db_password = \"{$password}\";\n"
            . "\$g_table_prefix = \"{$_SESSION["ft_install"]["g_table_prefix"]}\";\n";
 
   $content .= "\n?" . ">";
@@ -225,8 +230,10 @@ function ft_install_generate_config_file()
   $config_file = $_SESSION["ft_install"]["config_file"];
 
   // try and write to the config.php file directly. This will probably fail, but in the off-chance
-  // the permissions are set, it saves the user the hassle of manually creating the file
-  $file = "$g_root_dir/global/config.php";
+  // the permissions are set, it saves the user the hassle of manually creating the file. I changed this
+  // to use a relative path and realpath() in 2.1.0...
+  $file = realpath("../global/config.php");
+
   $handle = @fopen($file, "w");
   if ($handle)
   {
@@ -254,10 +261,12 @@ function ft_install_create_database($hostname, $db_name, $username, $password, $
 {
   global $g_sql, $g_current_version, $g_release_type, $g_release_date;
 
-  // connect to the database (since we know this works, having called
+  // connect to the database
   $link = @mysql_connect($hostname, $username, $password);
   @mysql_select_db($db_name);
 
+  // check for the existence of Form Tools tables. It would be sad to accidentally delete/overwrite someone's
+  // older installation!
   $errors = array();
   foreach ($g_sql as $query)
   {
@@ -269,12 +278,12 @@ function ft_install_create_database($hostname, $db_name, $username, $password, $
     // execute the queries. If any error occurs, break out of the installation loop, delete any and
     // all tables that have been created
     $result = mysql_query($query)
-      or $errors[] = mysql_error();
+      or $errors[] = $query . " - <b>" . mysql_error() . "</b>";
 
     // problem! delete any tables we just added
     if (!$result)
     {
-      ft_install_failure_delete_tables($hostname, $db_name, $username, $password, $table_prefix);
+      ft_install_delete_tables($hostname, $db_name, $username, $password, $table_prefix);
       break;
     }
   }
@@ -498,20 +507,14 @@ function ft_install_update_db_settings()
  * @param string $password
  * @param string $table_prefix
  */
-function ft_install_failure_delete_tables($hostname, $db_name, $username, $password, $table_prefix)
+function ft_install_delete_tables($hostname, $db_name, $username, $password, $table_prefix)
 {
-  $tables = array(
-    "accounts", "account_settings", "client_forms", "client_views", "email_templates", "email_template_edit_submission_views",
-    "email_template_recipients", "field_options", "field_settings", "forms", "form_fields", "menus", "menu_items", "modules",
-    "module_export_groups", "module_export_group_clients", "module_export_types", "module_menu_items", "module_pages",
-    "public_form_omit_list", "public_view_omit_list", "settings", "themes", "views", "view_fields", "view_filters", "view_tabs"
-  );
+  global $g_ft_tables;
 
-  // connect to the database (since we know this works, having called
   $link = @mysql_connect($hostname, $username, $password);
   @mysql_select_db($db_name);
 
-  foreach ($tables as $table)
+  foreach ($g_ft_tables as $table)
     mysql_query("DROP TABLE {$table_prefix}{$table}");
 
   @mysql_close($link);
@@ -542,7 +545,7 @@ function ft_install_get_module_list()
       $info = ft_sanitize($info);
 
       // check the required info file fields
-      $required_fields = array("author", "version", "date", "origin_language", "supports_ft_versions");
+      $required_fields = array("author", "version", "date", "origin_language");
       $all_found = true;
       foreach ($required_fields as $field)
       {
@@ -623,3 +626,34 @@ function ft_install_sanitize_no_db($input)
 
   return $output;
 }
+
+
+/**
+ * Helper function to check the database to confirm the user isn't about to delete/overwrite any old tables.
+ *
+ * @return array [0] true/false true: there are no existing tables, false: there are.
+ *               [1] an array of the tables that already existed.
+ */
+function ft_check_no_existing_tables($hostname, $db_name, $username, $password, $table_prefix)
+{
+  global $g_ft_tables;
+
+  // connect to the database (since we know this works, having called
+  $link = @mysql_connect($hostname, $username, $password);
+  @mysql_select_db($db_name);
+
+  $query = mysql_query("SHOW TABLES");
+
+  $existing_tables = array();
+  while ($row = mysql_fetch_array($query))
+  {
+    $table = preg_replace("/^$table_prefix/", "", $row[0]);
+    if (in_array($table, $g_ft_tables))
+  	  $existing_tables[] = $row[0];
+  }
+
+  @mysql_close($link);
+
+  return $existing_tables;
+}
+

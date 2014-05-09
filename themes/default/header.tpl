@@ -16,25 +16,27 @@
 <head>
   <title>{$head_title}</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link rel="shortcut icon" href="{$theme_url}/images/favicon.ico" >
+  <link rel="shortcut icon" href="{$theme_url}/images/favicon.ico">
 
   {template_hook location="head_top"}
-  <script type="text/javascript">
+  <script>
   //<![CDATA[
-  var g = {literal}{}{/literal};
-  g.root_url = "{$g_root_url}";
-  g.error_colours = ["ffbfbf", "ffeded"];
-  g.notify_colours = ["c6e2ff", "f2f8ff"];
+  var g = {literal}{{/literal}
+    root_url:       "{$g_root_url}",
+    error_colours:  ["ffbfbf", "ffb5b5"],
+    notify_colours: ["c6e2ff", "97c7ff"],
+    js_debug:       {$g_js_debug}
+  {literal}}{/literal};
   //]]>
   </script>
 
-  <link type="text/css" rel="stylesheet" href="{$g_root_url}/global/css/main.css">
-  <link type="text/css" rel="stylesheet" href="{$theme_url}/css/styles.css">
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/prototype.js"></script>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/scriptaculous.js?load=effects"></script>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/effects.js"></script>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/general.js"></script>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/rsv.js"></script>
+  <link type="text/css" rel="stylesheet" href="{$g_root_url}/global/css/main.css?v=2_0_5">
+  <link type="text/css" rel="stylesheet" href="{$theme_url}/css/styles.css?v=2_0_5">
+  <link href="{$g_root_url}/global/css/smoothness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="{$g_root_url}/global/scripts/jquery.js"></script>
+  <script type="text/javascript" src="{$g_root_url}/global/scripts/jquery-ui-1.8.6.custom.min.js"></script>
+  <script type="text/javascript" src="{$g_root_url}/global/scripts/general.js?v=2_1_0"></script>
+  <script type="text/javascript" src="{$g_root_url}/global/scripts/rsv.js?v=2_1_0"></script>
 
   {$head_string}
   {$head_js}
@@ -54,7 +56,9 @@
         <tr>
           <td><img src="{$theme_url}/images/account_section_left.jpg" border="0" /></td>
           <td id="account_section">
-            {if $settings.release_type == "beta"}
+            {if $settings.release_type == "alpha"}
+              <b>{$settings.program_version}-alpha-{$settings.release_date}</b>
+            {elseif $settings.release_type == "beta"}
               <b>{$settings.program_version}-beta-{$settings.release_date}</b>
             {else}
               <b>{$settings.program_version}</b>
@@ -69,7 +73,7 @@
     {/if}
 
     <span style="float:left; padding-top: 8px; padding-right: 10px">
-      <a href="{$settings.logo_link}"><img src="{$theme_url}/images/logo.jpg" border="0" width="220" height="61" /></a>
+      {if $settings.logo_link}<a href="{$settings.logo_link}">{/if}<img src="{$theme_url}/images/logo.jpg" border="0" width="220" height="61" />{if $settings.logo_link}</a>{/if}
     </span>
   </div>
 

@@ -20,7 +20,6 @@
                 </select>
               </td>
               <td rowspan="3" width="120" class="subpanel" align="center">
-
                 <input type="button" name="send_test_email" value="{$LANG.phrase_send_test_email}"
                   onclick="return emails_ns.send_test_email(this.form, 'send')" /><br />
 	              <input type="button" name="display_email" value="{$LANG.phrase_display_email}"
@@ -28,7 +27,6 @@
 
 				        <div id="ajax_activity" style="padding:3px; display:none"><img src="{$images_url}/ajax_activity_grey.gif" /></div>
 				        <div id="ajax_no_activity" style="padding:3px;"><img src="{$images_url}/ajax_no_activity_grey.gif" /></div>
-
               </td>
             </tr>
             <tr>
@@ -53,12 +51,12 @@
 
             <br />
 
-            <div id="display_text" style="display:none; padding: 8px; margin-bottom: 6px; background-color: #f9f9f9; border: 1px solid #666666;">
+            <div id="display_text" class="hidden" style="padding: 8px; margin-bottom: 6px; background-color: #f9f9f9; border: 1px solid #666666;">
               <div class="bold">{$LANG.phrase_text_email}</div>
               <div id="display_text_content"></div>
             </div>
 
-            <div id="display_html" style="display:none; padding: 8px; margin-bottom: 6px; background-color: #f9f9f9; border: 1px solid #666666;">
+            <div id="display_html" class="hidden" style="padding: 8px; margin-bottom: 6px; background-color: #f9f9f9; border: 1px solid #666666;">
               <div class="bold">{$LANG.phrase_html_email}</div>
               <div id="display_html_content"></div>
             </div>

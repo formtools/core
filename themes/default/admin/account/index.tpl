@@ -3,14 +3,14 @@
   <table cellpadding="0" cellspacing="0" height="35">
   <tr>
     <td width="45"><img src="{$images_url}/icon_login.gif" height="34" width="34" /></td>
-    <td class="title">{$LANG.phrase_your_account|upper}</td>
+    <td class="title">{$LANG.phrase_your_account}</td>
   </tr>
   </table>
 
   {ft_include file='messages.tpl'}
 
   {template_hook location="admin_account_top"}
-	
+
   <form method="post" name="login_info" action="{$same_page}" onsubmit="return rsv.validate(this, rules)">
 
     <table class="list_table" cellpadding="0" cellspacing="1">

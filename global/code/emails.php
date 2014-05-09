@@ -3,9 +3,9 @@
 /**
  * This file defines all functions related to emails sent by Form Tools.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Emails
  */
 
@@ -147,7 +147,7 @@ function ft_get_email_template_list($form_id)
 
   $result = mysql_query("
     SELECT *
-    FROM 	 {$g_table_prefix}email_templates et
+    FROM   {$g_table_prefix}email_templates
     WHERE  form_id = $form_id
     ORDER BY email_template_name
       ");
@@ -748,7 +748,7 @@ function ft_get_email_patterns($form_id)
  *
  * @param integer $form_id
  */
-function ft_get_registered_form_emails($form_id)
+function ft_get_email_fields($form_id)
 {
   global $g_table_prefix, $LANG;
 
@@ -762,10 +762,9 @@ function ft_get_registered_form_emails($form_id)
   while ($row = mysql_fetch_assoc($query))
   {
     // also retrieve the display names for each of the fields
-    $row["email_field_label"]      = ft_get_field_title_by_field_col($form_id, $row["email_field"]);
-    $row["first_name_field_label"] = ft_get_field_title_by_field_col($form_id, $row["first_name_field"]);
-    $row["last_name_field_label"]  = ft_get_field_title_by_field_col($form_id, $row["last_name_field"]);
-
+    $row["email_field_label"]      = ft_get_field_title_by_field_id($row["email_field_id"]);
+    $row["first_name_field_label"] = ft_get_field_title_by_field_id($row["first_name_field_id"]);
+    $row["last_name_field_label"]  = ft_get_field_title_by_field_id($row["last_name_field_id"]);
     $info[] = $row;
   }
 
@@ -784,17 +783,17 @@ function ft_get_registered_form_emails($form_id)
  *               [0]: true/false (success / failure)<br/>
  *               [1]: message string<br/>
  */
-function ft_register_form_email_info($form_id, $infohash)
+function ft_set_field_as_email_field($form_id, $infohash)
 {
   global $g_table_prefix, $LANG;
 
-  $email_field      = isset($infohash["email_field"]) ? $infohash["email_field"] : "";
-  $first_name_field = isset($infohash["first_name_field"]) ? $infohash["first_name_field"] : "";
-  $last_name_field  = isset($infohash["last_name_field"]) ? $infohash["last_name_field"] : "";
+  $email_field_id      = isset($infohash["email_field_id"]) ? $infohash["email_field_id"] : "";
+  $first_name_field_id = isset($infohash["first_name_field_id"]) ? $infohash["first_name_field_id"] : "";
+  $last_name_field_id  = isset($infohash["last_name_field_id"]) ? $infohash["last_name_field_id"] : "";
 
   $result = mysql_query("
-    INSERT INTO {$g_table_prefix}form_email_fields (form_id, email_field, first_name_field, last_name_field)
-    VALUES ($form_id, '$email_field', '$first_name_field', '$last_name_field')
+    INSERT INTO {$g_table_prefix}form_email_fields (form_id, email_field_id, first_name_field_id, last_name_field_id)
+    VALUES ($form_id, '$email_field_id', '$first_name_field_id', '$last_name_field_id')
       ");
 
   extract(ft_process_hooks("end", compact("form_id", "infohash"), array()), EXTR_OVERWRITE);
@@ -812,7 +811,7 @@ function ft_register_form_email_info($form_id, $infohash)
  *
  * @param integer $form_email_id
  */
-function ft_unregister_form_email_info($form_email_id)
+function ft_unset_field_as_email_field($form_email_id)
 {
   global $g_table_prefix, $LANG;
 
@@ -826,6 +825,7 @@ function ft_unregister_form_email_info($form_email_id)
            email_from_form_email_id = ''
     WHERE  email_from_form_email_id = $form_email_id
       ");
+
   @mysql_query("
     UPDATE {$g_table_prefix}email_templates
     SET    email_reply_to = 'none',
@@ -901,7 +901,12 @@ function ft_update_email_template($email_id, $info)
     $email_reply_to_form_email_id = $matches[1];
     $email_reply_to = "form_email_field";
   }
-
+  $email_from_account_id = (empty($email_from_account_id)) ? "NULL" : "'$email_from_account_id'";
+  $email_from_form_email_id = (empty($email_from_form_email_id)) ? "NULL" : "'$email_from_form_email_id'";
+  $email_reply_to_account_id = (empty($email_reply_to_account_id)) ? "NULL" : "'email_reply_to_account_id'";
+  $email_reply_to_form_email_id = (empty($email_reply_to_form_email_id)) ? "NULL" : "'email_reply_to_form_email_id'";
+	$email_from = (empty($email_from)) ? "NULL" : "'$email_from'";
+	$email_reply_to = (empty($email_reply_to)) ? "NULL" : "'$email_reply_to'";
   // "Email Content" tab
   $html_template = $info["html_template"];
   $text_template = $info["text_template"];
@@ -916,14 +921,14 @@ function ft_update_email_template($email_id, $info)
            email_event_trigger = '$email_event_trigger',
            include_on_edit_submission_page = '$include_on_edit_submission_page',
            subject = '$subject',
-           email_from = '$email_from',
-           email_from_account_id = '$email_from_account_id',
-           email_from_form_email_id = '$email_from_form_email_id',
+           email_from = $email_from,
+           email_from_account_id = $email_from_account_id,
+           email_from_form_email_id = $email_from_form_email_id,
            custom_from_name = '$custom_from_name',
            custom_from_email = '$custom_from_email',
-           email_reply_to = '$email_reply_to',
-           email_reply_to_account_id = '$email_reply_to_account_id',
-           email_reply_to_form_email_id = '$email_reply_to_form_email_id',
+           email_reply_to = $email_reply_to,
+           email_reply_to_account_id = $email_reply_to_account_id,
+           email_reply_to_form_email_id = $email_reply_to_form_email_id,
            custom_reply_to_name = '$custom_reply_to_name',
            custom_reply_to_email = '$custom_reply_to_email',
            html_template = '$html_template',
@@ -931,7 +936,7 @@ function ft_update_email_template($email_id, $info)
     WHERE  email_id = $email_id
       ") or die(mysql_error());
 
-  // update the edit submission page views
+  // update the email template edit submission page Views
   mysql_query("DELETE FROM {$g_table_prefix}email_template_edit_submission_views WHERE email_id = $email_id");
   $selected_edit_submission_views = isset($info["selected_edit_submission_views"]) ? $info["selected_edit_submission_views"] : array();
   foreach ($selected_edit_submission_views as $view_id)
@@ -946,7 +951,6 @@ function ft_update_email_template($email_id, $info)
   mysql_query("DELETE FROM {$g_table_prefix}email_template_recipients WHERE email_template_id = $email_id");
   $recipient_ids = $info["recipients"];
 
-
   foreach ($recipient_ids as $recipient_id)
   {
     $row = $recipient_id;
@@ -956,8 +960,7 @@ function ft_update_email_template($email_id, $info)
       continue;
 
     // "" (main), "cc" or "bcc"
-    $recipient_type = $info["recipient_{$row}_type"];
-
+    $recipient_type = (empty($info["recipient_{$row}_type"])) ? "main" : $info["recipient_{$row}_type"];
     switch ($info["recipient_{$row}_user_type"])
     {
       case "admin":
@@ -1063,8 +1066,8 @@ function ft_get_email_template_recipients($form_id, $email_id)
 
       case "form_email_field":
         $form_email_field_info = ft_get_form_email_field_info($recipient_info["form_email_id"]);
-        $email_field = $form_email_field_info["email_field"];
-        $recipient_info["final_recipient"] = ft_get_field_title_by_field_col($form_id, $email_field);
+        $email_field_id = $form_email_field_info["email_field_id"];
+        $recipient_info["final_recipient"] = ft_get_field_title_by_field_id($email_field_id);
         break;
 
       case "custom":
@@ -1359,10 +1362,12 @@ function _ft_get_placeholder_hash($form_id, $submission_id, $client_info = "")
   // add the custom submission responses to the placeholder hash
   foreach ($submission_info as $field)
   {
-    $field_id   = $field["field_id"];
-    $field_name = $field["field_name"];
-    $field_type = $field["field_type"];
+    $field_id      = $field["field_id"];
+    $field_name    = $field["field_name"];
+    $field_type_id = $field["field_type_id"];
 
+    // TODO
+    /*
     if ($field_type != "system")
       $placeholders["QUESTION_$field_name"] = $field["field_title"];
 
@@ -1377,6 +1382,7 @@ function _ft_get_placeholder_hash($form_id, $submission_id, $client_info = "")
       if ($field_type != "system")
         $placeholders["ANSWER_$field_name"] = $field["content"];
     }
+    */
 
     if ($field['col_name'] == "submission_date")
       $placeholders["SUBMISSIONDATE"] = ft_get_date($settings['default_timezone_offset'], $field["content"], $settings["default_date_format"]);
@@ -1528,15 +1534,9 @@ function ft_delete_email_template($email_id)
   if (empty($email_id) || !is_numeric($email_id))
     return array(false, $LANG["validation_invalid_email_id"]);
 
-  mysql_query("
-    DELETE FROM {$g_table_prefix}email_templates
-    WHERE email_id = $email_id
-      ");
-
-  mysql_query("
-    DELETE FROM {$g_table_prefix}email_template_recipients
-    WHERE email_template_id = $email_id
-      ");
+  mysql_query("DELETE FROM {$g_table_prefix}email_templates WHERE email_id = $email_id");
+  mysql_query("DELETE FROM {$g_table_prefix}email_template_recipients WHERE email_template_id = $email_id");
+  mysql_query("DELETE FROM {$g_table_prefix}email_template_edit_submission_views WHERE email_id = $email_id");
 
   return array(true, $LANG["notify_email_template_deleted"]);
 }

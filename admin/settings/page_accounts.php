@@ -19,7 +19,7 @@ $page_vars["tabs"] = $tabs;
 $page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_accounts"]}";
 $page_vars["text_date_formatting_link"] = ft_eval_smarty_string($LANG["text_date_formatting_link"], $replacement_info);
 $page_vars["phrase_one_special_char"] = ft_eval_smarty_string($LANG["phrase_one_special_char"], array("chars" => $g_password_special_chars));
-$page_vars["head_js"] =<<< EOF
+$page_vars["head_js"] =<<< END
 var rules = [];
 rules.push("required,default_page_titles,{$LANG["validation_no_page_titles"]}");
 rules.push("required,default_client_menu_id,{$LANG["validation_no_menu_id"]}");
@@ -30,6 +30,6 @@ rules.push("required,default_language,{$LANG["validation_no_default_language"]}"
 rules.push("required,default_sessions_timeout,{$LANG["validation_no_default_sessions_timeout"]}");
 rules.push("digits_only,default_sessions_timeout,{$LANG["validation_invalid_default_sessions_timeout"]}");
 rules.push("required,default_date_format,{$LANG["validation_no_date_format"]}");
-EOF;
+END;
 
 ft_display_page("admin/settings/index.tpl", $page_vars);

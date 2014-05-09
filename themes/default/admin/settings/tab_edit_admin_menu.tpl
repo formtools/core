@@ -15,47 +15,78 @@
     <form action="{$same_page}" method="post" onsubmit="return mm.update_admin_menu_submit(this)">
       <input type="hidden" name="page" value="edit_admin_menu" />
       <input type="hidden" name="menu_id" value="{$menu.menu_id}" />
-      <input type="hidden" name="num_rows" id="num_rows" value="{$menu.menu_items|@count}" />
 
-      <table id="menu_table" class="list_table" cellspacing="1" cellpadding="1" width="100%">
-      <tbody>
-      <tr>
-        <th width="40">{$LANG.word_order}</th>
-        <th>{$LANG.word_page}</th>
-        <th width="130">{$LANG.phrase_display_text}</th>
-        <th>{$LANG.word_options}</th>
-        <th width="75">{$LANG.word_submenu}</th>
-        <th class="del" width="70">{$LANG.word_remove|upper}</th>
-      </tr>
-      {foreach from=$menu.menu_items key=k item=i}
-        <tr id="row_{$i.list_order}">
-          <td align="center"><input type="text" style="width:30px" name="menu_row_{$i.list_order}_order" id="menu_row_{$i.list_order}_order" value="{$i.list_order}" /></td>
-          <td width="120">{pages_dropdown menu_type="admin" default=$i.page_identifier name_id="page_identifier_`$i.list_order`" onchange="mm.change_page(`$i.list_order`, this.value)" is_building_menu=true}</td>
-          <td width="120"><input type="text" name="display_text_{$i.list_order}" id="display_text_{$i.list_order}" value="{$i.display_text|escape}" style="width:120px" /></td>
-          <td class="nowrap"><div id="row_{$i.list_order}_options" class="nowrap pad_left_small">
-            {if $i.page_identifier == "custom_url"}
-              URL:&nbsp;<input type="text" name="custom_options_{$i.list_order}" id="custom_options_{$i.list_order}" value="{$i.custom_options|escape}" style="width:160px" />
-            {elseif $i.page_identifier == "form_submissions" ||
-                    $i.page_identifier == "edit_form_main" ||
-                    $i.page_identifier == "edit_form_fields" ||
-                    $i.page_identifier == "edit_form_views" ||
-                    $i.page_identifier == "edit_form_emails" ||
-                    $i.page_identifier == "edit_form_database" ||
-                    $i.page_identifier == "edit_form_add_fields"}
-              {$LANG.word_form_c}&nbsp;{forms_dropdown name_id="custom_options_`$i.list_order`" style="width:155px" default=$i.custom_options}
-            {elseif $i.page_identifier == "edit_client"}
-              {$LANG.word_client_c}&nbsp;{clients_dropdown name_id="custom_options_`$i.list_order`" style="width:150px" default=$i.custom_options}
-            {else}
-              <span class="medium_grey">{$LANG.word_na}</span>
+      <div class="sortable groupable edit_menu" id="{$sortable_id}">
+        <ul class="header_row">
+          <li class="col1">{$LANG.word_order}</li>
+          <li class="col2">{$LANG.word_page}</li>
+          <li class="col3">{$LANG.phrase_display_text}</li>
+          <li class="col4">{$LANG.word_options}</li>
+          <li class="col5">{$LANG.word_submenu}</li>
+          <li class="col6 colN del"></li>
+        </ul>
+        <div class="clear"></div>
+        <ul class="rows" id="rows">
+        {assign var=previous_item value=""}
+        {foreach from=$menu.menu_items key=k item=i name=admin_menu_items}
+          {if $i.is_new_sort_group == "yes"}
+            {if $previous_item != ""}
+              </div>
+              <div class="clear"></div>
+            </li>
             {/if}
-            </div></td>
-          <td align="center"><input type="checkbox" name="submenu_{$i.list_order}" {if $i.is_submenu == "yes"}checked{/if} /></td>
-          <td align="center" class="del"><a href="#" onclick="return mm.remove_menu_item_row({$i.list_order})">{$LANG.word_remove|upper}</a></td>
-        </tr>
-      {/foreach}
-      </tbody></table>
+            <li class="sortable_row">
+            {assign var=next_item_is_new_sort_group value=$menu.menu_items[$smarty.foreach.admin_menu_items.iteration].is_new_sort_group}
+            <div class="row_content{if $next_item_is_new_sort_group == 'no'} grouped_row{/if}">
+          {/if}
 
-      <script type="text/javascript">
+          {assign var=previous_item value=$i}
+
+            <div class="row_group{if $smarty.foreach.admin_menu_items.last} rowN{/if}">
+              <input type="hidden" class="sr_order" value="{$i.list_order}" />
+              <ul>
+                <li class="col1 sort_col">{$i.list_order}</li>
+                <li class="col2">
+                  {pages_dropdown menu_type="admin" default=$i.page_identifier name_id="page_identifier_`$i.list_order`"
+                    onchange="mm.change_page(`$i.list_order`, this.value)" onkeyup="mm.change_page(`$i.list_order`, this.value)"
+                    is_building_menu=true class="page_type"}
+                </li>
+                <li class="col3"><input type="text" name="display_text_{$i.list_order}" id="display_text_{$i.list_order}" value="{$i.display_text|escape}" /></li>
+                <li class="col4" id="row_{$i.list_order}_options">
+                  {if $i.page_identifier == "custom_url"}
+                    URL:&nbsp;<input type="text" name="custom_options_{$i.list_order}" id="custom_options_{$i.list_order}" value="{$i.custom_options|escape}" style="width:155px" />
+                  {elseif $i.page_identifier == "form_submissions" ||
+                          $i.page_identifier == "edit_form" ||
+                          $i.page_identifier == "edit_form_main" ||
+                          $i.page_identifier == "edit_form_fields" ||
+                          $i.page_identifier == "edit_form_views" ||
+                          $i.page_identifier == "edit_form_emails" ||
+                          $i.page_identifier == "edit_form_database" ||
+                          $i.page_identifier == "edit_form_add_fields"}
+                    {$LANG.word_form_c}&nbsp;{forms_dropdown name_id="custom_options_`$i.list_order`" style="width:155px" default=$i.custom_options}
+                  {elseif $i.page_identifier == "edit_client"}
+                    {$LANG.word_client_c}&nbsp;{clients_dropdown name_id="custom_options_`$i.list_order`" style="width:150px" default=$i.custom_options}
+                  {else}
+                    <span class="medium_grey">{$LANG.word_na}</span>
+                  {/if}
+                </li>
+                <li class="col5"><input type="checkbox" name="submenu_{$i.list_order}" {if $i.is_submenu == "yes"}checked{/if} /></li>
+                <li class="col6 colN del"></li>
+              </ul>
+              <div class="clear"></div>
+            </div>
+
+          {if $smarty.foreach.admin_menu_items.last}
+            </div>
+            <div class="clear"></div>
+          </li>
+          {/if}
+
+        {/foreach}
+        </ul>
+      </div>
+
+      <script>
       mm.num_rows = {$menu.menu_items|@count};
       </script>
 
@@ -63,16 +94,16 @@
         <a href="#" onclick="return mm.add_menu_item_row()">{$LANG.phrase_add_row}</a>
       </p>
 
-      <div id="menu_options" style="display:none">
-        {pages_dropdown menu_type="admin" name_id="page_identifier_%%X%%" is_building_menu=true}
+      <div id="menu_options" class="hidden">
+        {pages_dropdown menu_type="admin" name_id="page_identifier_%%X%%" is_building_menu=true class="page_type"}
       </div>
 
-      <div id="form_dropdown_template" style="display:none">
-        {forms_dropdown name_id="custom_options_%%X%%" style="width:155px"}
+      <div id="form_dropdown_template" class="hidden">
+        {forms_dropdown name_id="custom_options_%%X%%" include_blank_option=true blank_option_is_optgroup=true}
       </div>
 
-      <div id="client_dropdown_template" style="display:none">
-        {clients_dropdown name_id="custom_options_%%X%%" style="width:150px"}
+      <div id="client_dropdown_template" class="hidden">
+        {clients_dropdown name_id="custom_options_%%X%%" include_blank_option=true blank_option_is_optgroup=true}
       </div>
 
       <p>

@@ -5,7 +5,7 @@
  *
  * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Views
  */
 
@@ -17,16 +17,19 @@
  * This function is called after creating a new form (ft_finalize_form), and creates a default
  * View - one containing all fields and assigned to all clients that are assigned to the form.
  *
+ * Notes: I'm not terribly happy about the relationship between the list_groups table and whatever
+ * they're grouping - here, Views. The issue is that to make the entries in the list_groups table
+ * have additional meaning, I customize the group_type value to something like "form_X_view_group"
+ * where "X" is the form name. ...
+ *
  * @param integer $form_id
  */
 function ft_add_default_view($form_id)
 {
   global $g_table_prefix, $LANG;
 
-  // first, create the new View
-  $form_info   = ft_get_form($form_id);
-  $form_fields = ft_get_form_fields($form_id);
-  $form_name   = $form_info["form_name"];
+  // 1. create the new View
+  $form_info = ft_get_form($form_id);
   $num_submissions_per_page = isset($_SESSION["ft"]["settings"]["num_submissions_per_page"]) ? $_SESSION["ft"]["settings"]["num_submissions_per_page"] : 10;
 
   mysql_query("
@@ -36,57 +39,30 @@ function ft_add_default_view($form_id)
       ");
   $view_id = mysql_insert_id();
 
-  // add the default tab
-  mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 1, '{$LANG["phrase_default_tab_label"]}')");
-  mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 2, '')");
-  mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 3, '')");
-  mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 4, '')");
-  mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 5, '')");
-  mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 6, '')");
+  // 2. create the View group and update the view record we just created (blurgh!)
+  mysql_query("
+    INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, list_order)
+    VALUES ('form_{$form_id}_view_group', '{$LANG["word_views"]}', 1)
+  ");
+  $group_id = mysql_insert_id();
+  mysql_query("UPDATE {$g_table_prefix}views SET group_id = $group_id WHERE view_id = $view_id");
 
-  // next, assign all the View fields. Since we don't know which fields the user will want as columns, we
-  // add submission ID, 3 custom fields & submission date
-  $count = 1;
-  $num_custom_fields_added = 0;
+  // 3. add the default tabs [N.B. this table should eventually be dropped altogether and data moved to list_groups]
+  $view_tab_inserts = array(
+    "($view_id, 1, '{$LANG["phrase_default_tab_label"]}')",
+    "($view_id, 2, '')",
+    "($view_id, 3, '')",
+    "($view_id, 4, '')",
+    "($view_id, 5, '')",
+    "($view_id, 6, '')"
+  );
+  $view_tab_insert_str = implode(",\n", $view_tab_inserts);
+  mysql_query("INSERT INTO {$g_table_prefix}view_tabs VALUES $view_tab_insert_str");
 
-  foreach ($form_fields as $field)
-  {
-    $field_id = $field["field_id"];
+  // now populate the new View fields and the View columns
+  _ft_populate_new_view_fields($form_id, $view_id);
 
-    // make the submission ID, submission date and the 1st 3 columns visible by default
-    $is_column = "no";
-    $is_sortable   = "no";
-    if ($field["col_name"] == "submission_id" || $field["col_name"] == "submission_date")
-    {
-      $is_column = "yes";
-      $is_sortable   = "yes";
-    }
-    else
-    {
-      if ($num_custom_fields_added < 3)
-      {
-        $is_column = "yes";
-        $is_sortable   = "yes";
-        $num_custom_fields_added++;
-      }
-    }
-
-    // by default, make every field editable except Submission ID, Submission Date, Last Modified Date, IP Address.
-    // The administrator can manually make them editable later (except Submission ID and Last Modified Date) if they
-    // so wish
-    $is_editable = "yes";
-    if ($field["col_name"] == "submission_id" || $field["col_name"] == "submission_date" ||
-        $field["col_name"] == "last_modified_date" || $field["col_name"] == "ip_address")
-      $is_editable = "no";
-
-    mysql_query("
-      INSERT INTO {$g_table_prefix}view_fields (view_id, field_id, tab_number, is_column, is_sortable, is_editable, list_order)
-      VALUES ($view_id, $field_id, 1, '$is_column', '$is_sortable', '$is_editable', $count)
-        ");
-    $count++;
-  }
-
-  // assign the view to all clients attached to this form
+  // assign the View to all clients attached to this form
   $client_info = $form_info["client_info"];
   foreach ($client_info as $user)
   {
@@ -96,6 +72,8 @@ function ft_add_default_view($form_id)
       VALUES ($account_id, $view_id)
         ");
   }
+
+  return array(true, $LANG["notify_new_default_view_created"]);
 }
 
 
@@ -103,13 +81,25 @@ function ft_add_default_view($form_id)
  * This checks to see if a View exists in the database.
  *
  * @param integer $view_id
+ * @param boolean
  * @return boolean
  */
-function ft_check_view_exists($view_id)
+function ft_check_view_exists($view_id, $ignore_hidden_views = false)
 {
   global $g_table_prefix;
-  $query = @mysql_query("SELECT * FROM {$g_table_prefix}views WHERE view_id = $view_id");
-  return (mysql_num_rows($query) > 0);
+
+  $view_clause = ($ignore_hidden_views) ? " AND access_type != 'hidden' " : "";
+
+  $query = mysql_query("
+    SELECT count(*) as c
+    FROM {$g_table_prefix}views
+    WHERE view_id = $view_id
+          $view_clause
+      ");
+
+  $results = mysql_fetch_assoc($query);
+
+  return $results["c"] > 0;
 }
 
 
@@ -119,18 +109,23 @@ function ft_check_view_exists($view_id)
  * @param integer $view_id the unique view ID
  * @return array a hash of view information
  */
-function ft_get_view($view_id)
+function ft_get_view($view_id, $custom_params = array())
 {
   global $g_table_prefix;
+
+  $params = array(
+    "include_field_settings" => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false
+  );
 
   $query = "SELECT * FROM {$g_table_prefix}views WHERE view_id = $view_id";
   $result = mysql_query($query);
 
   $view_info = mysql_fetch_assoc($result);
   $view_info["client_info"] = ft_get_view_clients($view_id);
-  $view_info["fields"]    = ft_get_view_fields($view_id);
-  $view_info["filters"]   = ft_get_view_filters($view_id);
-  $view_info["tabs"]      = ft_get_view_tabs($view_id);
+  $view_info["columns"]     = ft_get_view_columns($view_id);
+  $view_info["fields"]      = ft_get_view_fields($view_id, $params);
+  $view_info["filters"]     = ft_get_view_filters($view_id);
+  $view_info["tabs"]        = ft_get_view_tabs($view_id);
   $view_info["client_omit_list"] = (isset($view_info["access_type"]) && $view_info["access_type"] == "public") ?
     ft_get_public_view_omit_list($view_id) : array();
 
@@ -141,48 +136,22 @@ function ft_get_view($view_id)
 
 
 /**
- * Retrieves a list of all views for a form. It returns either ALL results (by passing in "all" as
- * the second parameter) or a page worth by either leaving the second parameter empty (page = 1) or
- * by specifying a page. Note: for the paginated option, it expects the num Views per page value to
- * be stored in sessions - it requires it to be an ADMINISTRATOR.
+ * Retrieves a list of all views for a form. As of 2.0.5 this function now always returns ALL Views,
+ * instead of the option of a single page.
  *
  * @param integer $form_id the unique form ID
- * @param mixed $page_num the current page or "all"
  * @return array a hash of view information
  */
-function ft_get_views($form_id, $page_num = 1)
+function ft_get_views($form_id)
 {
   global $g_table_prefix;
-
-  if ($page_num == "all")
-  {
-    $limit_clause = "";
-  }
-  else
-  {
-    $num_views_per_page = $_SESSION["ft"]["settings"]["num_views_per_page"];
-
-    // determine the LIMIT clause
-    $limit_clause = "";
-    if (empty($page_num))
-      $page_num = 1;
-    $first_item = ($page_num - 1) * $num_views_per_page;
-    $limit_clause = "LIMIT $first_item, $num_views_per_page";
-  }
 
   $result = mysql_query("
     SELECT view_id
     FROM 	 {$g_table_prefix}views
     WHERE  form_id = $form_id
     ORDER BY view_order
-     $limit_clause
       ");
-   $count_result = mysql_query("
-    SELECT count(*) as c
-    FROM 	 {$g_table_prefix}views
-    WHERE  form_id = $form_id
-      ");
-   $count_hash = mysql_fetch_assoc($count_result);
 
   $view_info = array();
   while ($row = mysql_fetch_assoc($result))
@@ -192,7 +161,7 @@ function ft_get_views($form_id, $page_num = 1)
   }
 
   $return_hash["results"] = $view_info;
-  $return_hash["num_results"]  = $count_hash["c"];
+  $return_hash["num_results"]  = count($view_info);
 
   extract(ft_process_hooks("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
@@ -297,10 +266,12 @@ function ft_get_view_tabs($view_id, $return_non_empty_tabs_only = false)
  * TODO check this function works with tabs, filters etc. containing ', " and other chars. Need to re-sanitize?
  *
  * @param integer $form_id the unique form ID
- * @param integer $view_id (optional)
+ * @param integer $group_id the view group ID that we're adding this View to
+ * @param integer $create_from_view_id (optional) either the ID of the View from which to base this new View on,
+ *                or "blank_view_no_fields" or "blank_view_all_fields"
  * @return integer the new view ID
  */
-function ft_create_new_view($form_id, $create_from_view_id = "")
+function ft_create_new_view($form_id, $group_id, $view_name = "", $create_from_view_id = "")
 {
   global $g_table_prefix, $LANG;
 
@@ -309,13 +280,14 @@ function ft_create_new_view($form_id, $create_from_view_id = "")
   $count_hash = mysql_fetch_assoc($count_query);
   $num_form_views = $count_hash["c"];
   $next_order = $num_form_views + 1;
+  $view_name = (empty($view_name)) ? $LANG["phrase_new_view"] : ft_sanitize($view_name);
 
-  if (empty($create_from_view_id))
+  if ($create_from_view_id == "blank_view_no_fields" || $create_from_view_id == "blank_view_all_fields")
   {
     // add the View with default values
     mysql_query("
-      INSERT INTO {$g_table_prefix}views (form_id, view_name, view_order)
-      VALUES ($form_id, '{$LANG["phrase_new_view"]}', $next_order)
+      INSERT INTO {$g_table_prefix}views (form_id, view_name, view_order, is_new_sort_group, group_id)
+      VALUES ($form_id, '$view_name', $next_order, 'yes', $group_id)
         ");
     $view_id = mysql_insert_id();
 
@@ -326,6 +298,11 @@ function ft_create_new_view($form_id, $create_from_view_id = "")
     mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 4, '')");
     mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 5, '')");
     mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 6, '')");
+
+    if ($create_from_view_id == "blank_view_all_fields")
+    {
+    	_ft_populate_new_view_fields($form_id, $view_id);
+    }
   }
   else
   {
@@ -334,18 +311,23 @@ function ft_create_new_view($form_id, $create_from_view_id = "")
 
     // Main View Settings
     $view_order = $view_info["view_order"];
+    $access_type              = $view_info["access_type"];
     $num_submissions_per_page = $view_info["num_submissions_per_page"];
     $default_sort_field       = $view_info["default_sort_field"];
     $default_sort_field_order = $view_info["default_sort_field_order"];
+    $may_add_submissions      = $view_info["may_add_submissions"];
+    $may_edit_submissions     = $view_info["may_edit_submissions"];
     $has_standard_filter      = $view_info["has_standard_filter"];
     $has_client_map_filter    = $view_info["has_client_map_filter"];
 
     mysql_query("
-      INSERT INTO {$g_table_prefix}views (form_id, view_name, view_order, num_submissions_per_page,
-        default_sort_field, default_sort_field_order, has_client_map_filter, has_standard_filter)
-      VALUES ($form_id, '{$LANG["phrase_new_view"]}', $next_order, $num_submissions_per_page,
-        '$default_sort_field', '$default_sort_field_order', '$has_client_map_filter', '$has_standard_filter')
-        ") or die(mysql_error());
+      INSERT INTO {$g_table_prefix}views (form_id, access_type, view_name, view_order, is_new_sort_group, group_id,
+        num_submissions_per_page, default_sort_field, default_sort_field_order, may_add_submissions, may_edit_submissions,
+        has_client_map_filter, has_standard_filter)
+      VALUES ($form_id, '$access_type', '$view_name', $next_order, 'yes', $group_id, $num_submissions_per_page,
+        '$default_sort_field', '$default_sort_field_order', '$may_add_submissions', '$may_edit_submissions',
+        '$has_client_map_filter', '$has_standard_filter')
+        ");
     $view_id = mysql_insert_id();
 
     foreach ($view_info["client_info"] as $client_info)
@@ -369,21 +351,49 @@ function ft_create_new_view($form_id, $create_from_view_id = "")
     mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 5, '$tab5')");
     mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 6, '$tab6')");
 
-    // View Fields
+
+    // with 2.1.0, all View fields are now grouped. We need to duplicate all the groups as well as the fields
+    $group_id_map = ft_duplicate_view_field_groups($create_from_view_id, $view_id);
+
+    $field_view_inserts = array();
     foreach ($view_info["fields"] as $field_info)
     {
-      $field_id    = $field_info["field_id"];
-      $tab_number  = (!empty($field_info["tab_number"])) ? $field_info["tab_number"] : "NULL";
-      $is_column   = $field_info["is_column"];
-      $is_editable = $field_info["is_editable"];
-      $is_sortable = $field_info["is_sortable"];
-      $list_order  = $field_info["list_order"];
-
+      $field_id      = $field_info["field_id"];
+      $new_group_id  = $group_id_map[$field_info["group_id"]];
+      $is_editable   = $field_info["is_editable"];
+      $is_searchable = $field_info["is_searchable"];
+      $list_order    = $field_info["list_order"];
+      $is_new_sort_group = $field_info["is_new_sort_group"];
+      $field_view_inserts[] = "($view_id, $field_id, $new_group_id, '$is_editable', '$is_searchable', $list_order, '$is_new_sort_group')";
+    }
+    if (!empty($field_view_inserts))
+    {
+    	$field_view_inserts_str = implode(",\n", $field_view_inserts);
       mysql_query("
-        INSERT INTO {$g_table_prefix}view_fields (view_id, field_id, tab_number, is_column, is_sortable,
-          is_editable, list_order)
-        VALUES ($view_id, $field_id, $tab_number, '$is_column', '$is_sortable', '$is_editable', $list_order)
-          ") or die(mysql_error());
+        INSERT INTO {$g_table_prefix}view_fields (view_id, field_id, group_id, is_editable,
+          is_searchable, list_order, is_new_sort_group)
+        VALUES $field_view_inserts_str
+      ");
+    }
+
+    $view_column_inserts = array();
+    foreach ($view_info["columns"] as $field_info)
+    {
+      $field_id     = $field_info["field_id"];
+      $list_order   = $field_info["list_order"];
+      $is_sortable  = $field_info["is_sortable"];
+      $auto_size    = $field_info["auto_size"];
+      $custom_width = $field_info["custom_width"];
+      $truncate     = $field_info["truncate"];
+      $view_column_inserts[] = "($view_id, $field_id, $list_order, '$is_sortable', '$auto_size', '$custom_width', '$truncate')";
+    }
+    if (!empty($view_column_inserts))
+    {
+    	$view_column_insert_str = implode(",\n", $view_column_inserts);
+      mysql_query("
+        INSERT INTO {$g_table_prefix}view_columns (view_id, field_id, list_order, is_sortable, auto_size, custom_width, truncate)
+        VALUES $view_column_insert_str
+      ");
     }
 
     // View Filters
@@ -416,21 +426,54 @@ function ft_create_new_view($form_id, $create_from_view_id = "")
  * @param integer $field_id the unique field ID
  * @return array a hash containing the various view field values
  */
-function ft_get_view_field($view_id, $field_id)
+function ft_get_view_field($view_id, $field_id, $custom_params = array())
 {
   global $g_table_prefix;
 
+  $params = array(
+    "include_field_settings" => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false
+  );
+
   $query = mysql_query("
-    SELECT vf.*, ft.field_title, ft.col_name
+    SELECT vf.*, ft.field_title, ft.col_name, ft.field_type_id, ft.field_name
     FROM   {$g_table_prefix}view_fields vf, {$g_table_prefix}form_fields ft
-    WHERE  vf.field_id = ft.field_id AND
-           view_id = $view_id AND
+    WHERE  view_id = $view_id AND
+           vf.field_id = ft.field_id AND
            vf.field_id = $field_id
       ");
 
   $result = mysql_fetch_assoc($query);
 
+  if ($params["include_field_settings"])
+  {
+  	$result["field_settings"] = ft_get_form_field_settings($field_id);
+  }
+
   return $result;
+}
+
+
+/**
+ * Returns all information about a View columns.
+ *
+ * @param integer $view_id
+ */
+function ft_get_view_columns($view_id)
+{
+	global $g_table_prefix;
+
+	$query = mysql_query("
+	  SELECT *
+	  FROM   {$g_table_prefix}view_columns
+	  WHERE  view_id = $view_id
+	  ORDER BY list_order
+	");
+
+	$info = array();
+	while ($row = mysql_fetch_assoc($query))
+	  $info[] = $row;
+
+	return $info;
 }
 
 
@@ -440,12 +483,16 @@ function ft_get_view_field($view_id, $field_id)
  * @param integer $view_id the unique View ID
  * @return array $info an array of hashes containing the various view field values.
  */
-function ft_get_view_fields($view_id)
+function ft_get_view_fields($view_id, $custom_params = array())
 {
   global $g_table_prefix;
 
+  $params = array(
+    "include_field_settings" => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false
+  );
+
   $result = mysql_query("
-     SELECT field_id
+    SELECT field_id
     FROM	 {$g_table_prefix}view_fields
     WHERE  view_id = $view_id
     ORDER BY list_order
@@ -455,10 +502,134 @@ function ft_get_view_fields($view_id)
   while ($field_info = mysql_fetch_assoc($result))
   {
     $field_id = $field_info["field_id"];
-    $fields_info[] = ft_get_view_field($view_id, $field_id);
+    $fields_info[] = ft_get_view_field($view_id, $field_id, $params);
   }
 
   return $fields_info;
+}
+
+
+/**
+ * Verbose name, but this function returns a hash of group_id => tab number for a particular View. In
+ * other words, it looks at the View field groups to find out which tab each one belongs to.
+ *
+ * @return array
+ */
+function ft_get_view_field_group_tabs($view_id)
+{
+	global $g_table_prefix;
+
+	$query = mysql_query("
+	  SELECT group_id, custom_data
+	  FROM   {$g_table_prefix}list_groups
+	  WHERE  group_type = 'view_fields_{$view_id}'
+	");
+
+	$map = array();
+	while ($row = mysql_fetch_assoc($query))
+	{
+	  $map[$row["group_id"]] = $row["custom_data"];
+	}
+
+	return $map;
+}
+
+
+/**
+ * Return all fields in a View. If this is being on the edit submission page, the second optional
+ * parameter is used to limit the results to ONLY those groups on the appropriate tab.
+ *
+ * @param integer $view_id
+ * @param integer $tab_number
+ * @return array
+ */
+function ft_get_grouped_view_fields($view_id, $tab_number = "", $form_id = "", $submission_id = "")
+{
+  global $g_table_prefix;
+
+  $tab_clause = (!empty($tab_number)) ? "AND custom_data = $tab_number" : "";
+
+  $group_query = mysql_query("
+    SELECT *
+    FROM	 {$g_table_prefix}list_groups
+    WHERE  group_type = 'view_fields_{$view_id}'
+           $tab_clause
+    ORDER BY list_order
+      ");
+
+  if (!empty($submission_id))
+  {
+    $submission_info = ft_get_submission_info($form_id, $submission_id);
+  }
+
+  $grouped_info = array();
+  while ($group_info = mysql_fetch_assoc($group_query))
+  {
+    $group_id = $group_info["group_id"];
+
+    $field_query = mysql_query("
+      SELECT *, vf.list_order as list_order, vf.is_new_sort_group as view_field_is_new_sort_group
+      FROM   {$g_table_prefix}view_fields vf, {$g_table_prefix}form_fields ff
+      WHERE  group_id = $group_id AND
+             vf.field_id = ff.field_id
+      ORDER BY vf.list_order
+    ");
+
+    $fields_info = array();
+    $field_ids   = array();
+    while ($row = mysql_fetch_assoc($field_query))
+    {
+      $field_ids[]   = $row["field_id"];
+    	$fields_info[] = $row;
+    }
+
+    // now, if the submission ID is set, add an additional key: submission_info. That contains a hash with
+    // two keys:
+    //    value:    whatever is actually stored for this fields
+    //    settings: an array of hashes. Each hash contains setting_id => setting_value
+    if (!empty($submission_id))
+    {
+      // do a single query to get a list of ALL settings for any of the field IDs we're dealing with
+      $field_id_str = implode(",", $field_ids);
+      $field_settings_query = mysql_query("
+        SELECT *
+        FROM   {$g_table_prefix}field_settings
+        WHERE  field_id IN ($field_id_str)
+      ");
+
+      $field_settings = array();
+      while ($row = mysql_fetch_assoc($field_settings_query))
+      {
+      	$field_id = $row["field_id"];
+      	if (!array_key_exists($field_id, $field_settings))
+      		$field_settings[$field_id] = array();
+
+      	$field_settings[$field_id][] = array($row["setting_id"] => $row["setting_value"]);
+      }
+
+      // now append the submission info to the field info that we already have stored
+      $updated_fields_info = array();
+      foreach ($fields_info as $curr_field_info)
+      {
+      	$curr_col_name = $curr_field_info["col_name"];
+      	$curr_field_id = $curr_field_info["field_id"];
+        $curr_field_info["submission_info"] = array(
+          "value"    => $submission_info[$curr_col_name],
+          "settings" => (array_key_exists($curr_field_id, $field_settings)) ? $field_settings[$curr_field_id] : array()
+        );
+        $updated_fields_info[] = $curr_field_info;
+      }
+
+      $fields_info = $updated_fields_info;
+    }
+
+    $grouped_info[] = array(
+      "group"  => $group_info,
+      "fields" => $fields_info
+    );
+  }
+
+  return $grouped_info;
 }
 
 
@@ -484,7 +655,39 @@ function ft_get_field_views($field_id)
 
 
 /**
- * Deletes a View.
+ * This is called by the administrator on the main Views tab. It lets them delete an entire group of Views
+ * in one go.
+ *
+ * @param integer $group_id
+ */
+function ft_delete_view_group($group_id)
+{
+  global $g_table_prefix, $LANG;
+
+  $query = mysql_query("
+    SELECT view_id
+    FROM   {$g_table_prefix}views
+    WHERE  group_id = $group_id
+  ");
+
+  // first, delete all the Views
+  while ($view_info = mysql_fetch_assoc($query))
+  {
+  	$view_id = $view_info["view_id"];
+  	ft_delete_view($view_id);
+  }
+
+  // next, delete the group
+  mysql_query("DELETE FROM {$g_table_prefix}list_groups WHERE group_id = $group_id");
+
+  // TODO: should update order of other View groups
+
+  return array(true, $LANG["notify_view_group_deleted"]);
+}
+
+
+/**
+ * Deletes a View and updates the list order of the Views in the same View group.
  *
  * @param integer $view_id the unique view ID
  * @return array Returns array with indexes:<br/>
@@ -495,26 +698,28 @@ function ft_delete_view($view_id)
 {
   global $g_table_prefix, $LANG;
 
+  $view_info = ft_get_view($view_id);
+
   mysql_query("DELETE FROM {$g_table_prefix}client_views WHERE view_id = $view_id");
+  mysql_query("DELETE FROM {$g_table_prefix}view_columns WHERE view_id = $view_id");
   mysql_query("DELETE FROM {$g_table_prefix}view_fields WHERE view_id = $view_id");
   mysql_query("DELETE FROM {$g_table_prefix}view_filters WHERE view_id = $view_id");
   mysql_query("DELETE FROM {$g_table_prefix}view_tabs WHERE view_id = $view_id");
   mysql_query("DELETE FROM {$g_table_prefix}public_view_omit_list WHERE view_id = $view_id");
+
+  mysql_query("DELETE FROM {$g_table_prefix}list_groups WHERE group_type = 'view_fields_$view_id'");
+
+  mysql_query("DELETE FROM {$g_table_prefix}email_template_edit_submission_views WHERE view_id = $view_id");
+  mysql_query("DELETE FROM {$g_table_prefix}new_view_submission_defaults WHERE view_id = $view_id");
   mysql_query("DELETE FROM {$g_table_prefix}views WHERE view_id = $view_id");
 
-  // reset any email templates that are assigned to this View. We don't delete them outright because
-  // it's easy for the administrator to forget about them, and it's a pain having to re-create them.
-  // By resetting their View IDs, they're rendered inactive
-  mysql_query("
-    UPDATE {$g_table_prefix}email_templates
-    SET    view_id = NULL
-    WHERE  view_id = $view_id
-      ");
+  // hmm.. This needs to be handled better: the user needs to be notified prior to deleting a View to describe all the dependencies
+  mysql_query("UPDATE {$g_table_prefix}email_templates SET view_mapping_view_id = NULL WHERE view_mapping_view_id = $view_id");
+  mysql_query("UPDATE {$g_table_prefix}email_templates SET limit_email_content_to_fields_in_view = NULL WHERE limit_email_content_to_fields_in_view = $view_id");
 
   $success = true;
   $message = $LANG["notify_view_deleted"];
   extract(ft_process_hooks("end", compact("view_id"), array("success", "message")), EXTR_OVERWRITE);
-
 
   return array($success, $message);
 }
@@ -530,6 +735,7 @@ function ft_delete_view_field($view_id, $field_id)
 {
   global $g_table_prefix;
 
+  mysql_query("DELETE FROM {$g_table_prefix}view_columns WHERE view_id = $view_id AND field_id = $field_id");
   mysql_query("DELETE FROM {$g_table_prefix}view_fields WHERE view_id = $view_id AND field_id = $field_id");
   mysql_query("DELETE FROM {$g_table_prefix}view_filters WHERE view_id = $view_id AND field_id = $field_id");
 
@@ -595,8 +801,8 @@ function ft_get_view_clients($view_id)
 
 
 /**
- * Called by administrators on the main View tab. This updates the orders of the entire list of
- * Views. Note: the option to sort the Views only appears if there's > 1 Views.
+ * Called by administrators on the main View tab. This updates the orders and the grouping
+ * of the all form Views.
  *
  * @param integer $form_id the form ID
  * @param array $info the form contents
@@ -604,53 +810,48 @@ function ft_get_view_clients($view_id)
  *               [0]: true/false (success / failure)<br/>
  *               [1]: message string<br/>
  */
-function ft_update_view_order($form_id, $info)
+function ft_update_views($form_id, $info)
 {
   global $g_table_prefix, $LANG;
 
-  // loop through all the fields in $info that are being re-sorted and compile a list of
-  // view_id => order pairs.
-  $new_view_orders = array();
-  foreach ($info as $key => $value)
-  {
-    if (preg_match("/^view_(\d+)$/", $key, $match))
-    {
-      $view_id = $match[1];
-      $new_view_orders[$view_id] = $value;
-    }
-  }
+  $sortable_id = $info["sortable_id"];
+  $grouped_info = explode("~", $info["{$sortable_id}_sortable__rows"]);
+  $new_groups   = explode(",", $info["{$sortable_id}_sortable__new_groups"]);
 
-  // okay! Since we may have only updated a *subset* of all Views (since the Views page is
-  // arranged in pages), get a list of ALL Views associated with this form, add them to
-  // $new_view_orders and sort the entire lot of them in one go
-  $view_info = array();
-  $query = mysql_query("
-    SELECT view_id, view_order
-    FROM   {$g_table_prefix}views
-    WHERE  form_id = $form_id
-      ");
-  while ($row = mysql_fetch_assoc($query))
+  $ordered_group_ids = array();
+  $new_group_order = 1;
+  foreach ($grouped_info as $curr_grouped_info)
   {
-    if (!array_key_exists($row["view_id"], $new_view_orders))
-      $new_view_orders[$row["view_id"]] = $row["view_order"];
-  }
+    list($curr_group_id, $ordered_view_ids_str) = explode("|", $curr_grouped_info);
+    $ordered_view_ids = explode(",", $ordered_view_ids_str);
+    $group_name = $info["group_name_{$curr_group_id}"];
 
-  // sort by the ORDER (the value - non-key - of the hash)
-  asort($new_view_orders);
-
-  $count = 1;
-  foreach ($new_view_orders as $view_id => $order)
-  {
-    mysql_query("
-      UPDATE {$g_table_prefix}views
-      SET	   view_order = $count
-      WHERE  view_id = $view_id
+    @mysql_query("
+      UPDATE {$g_table_prefix}list_groups
+      SET    group_name = '$group_name',
+             list_order = $new_group_order
+      WHERE  group_id = $curr_group_id
         ");
-    $count++;
+    $new_group_order++;
+
+	  $order = 1;
+	  foreach ($ordered_view_ids as $view_id)
+	  {
+	  	$is_new_sort_group = (in_array($view_id, $new_groups)) ? "yes" : "no";
+	    mysql_query("
+	      UPDATE {$g_table_prefix}views
+	      SET	   view_order = $order,
+	             group_id = $curr_group_id,
+	             is_new_sort_group = '$is_new_sort_group'
+	      WHERE  view_id = $view_id
+	        ");
+
+	  	$order++;
+	  }
   }
 
   // return success
-  return array(true, $LANG["notify_form_view_order_updated"]);
+  return array(true, $LANG["notify_form_views_updated"]);
 }
 
 
@@ -668,8 +869,9 @@ function ft_update_view($view_id, $info)
 {
   global $LANG;
 
-  // update each of the tabs
+  // update each of the tabs. Be nice to only update the changed ones...
   _ft_update_view_main_settings($view_id, $info);
+  _ft_update_view_columns_settings($view_id, $info);
   _ft_update_view_field_settings($view_id, $info);
   _ft_update_view_tab_settings($view_id, $info);
   _ft_update_view_filter_settings($view_id, $info);
@@ -834,6 +1036,109 @@ function ft_get_form_views($form_id, $account_id = "")
   return $view_hash;
 }
 
+
+/**
+ * Returns all Views for a form, grouped appropriately. This function introduces a new way of handling
+ * loads of optional params (should have implemented this a long time ago!). The second $custom_params
+ *
+ * @param integer $form_id
+ * @param array a hash with any of the following keys:
+ *                       account_id => if this is specified, the results will only return View groups
+ *                                     that have Views that a client account has access to
+ *                       omit_empty_groups => (default: false)
+ *                       omit_hidden_views => (default: false)
+ *                       include_client => (default: false). If yes, returns assorted client information
+ *                             for those that are mapped to the View
+ * @param boolean $omit_empty_groups
+ */
+function ft_get_grouped_views($form_id, $custom_params = array())
+{
+	global $g_table_prefix;
+
+	// figure out what settings
+	$params = array(
+	  "account_id"        => (isset($custom_params["account_id"])) ? $custom_params["account_id"] : "",
+	  "omit_empty_groups" => (isset($custom_params["omit_empty_groups"])) ? $custom_params["omit_empty_groups"] : true,
+	  "omit_hidden_views" => (isset($custom_params["omit_hidden_views"])) ? $custom_params["omit_hidden_views"] : false,
+	  "include_clients"   => (isset($custom_params["include_clients"])) ? $custom_params["include_clients"] : false
+	);
+
+	$group_query = mysql_query("
+	  SELECT group_id, group_name
+	  FROM   {$g_table_prefix}list_groups lg
+	  WHERE  group_type = 'form_{$form_id}_view_group'
+	  ORDER BY lg.list_order
+	");
+
+	$info = array();
+	while ($row = mysql_fetch_assoc($group_query))
+	{
+    $group_id = $row["group_id"];
+
+    $hidden_views_clause = ($params["omit_hidden_views"]) ? " AND v.access_type != 'hidden'" : "";
+		if (empty($params["account_id"]))
+		{
+	    $view_query = mysql_query("
+	      SELECT *
+	      FROM   {$g_table_prefix}views v
+	      WHERE  v.group_id = $group_id
+	             $hidden_views_clause
+	      ORDER BY v.view_order
+	    ");
+		}
+		else
+		{
+	    $view_query = mysql_query("
+	      SELECT v.*
+	      FROM   {$g_table_prefix}views v
+	      WHERE  v.form_id = $form_id AND
+	             (v.access_type = 'public' OR v.view_id IN (
+	                SELECT cv.view_id
+	                FROM {$g_table_prefix}client_views cv
+	                WHERE account_id = {$params["account_id"]}
+	             )) AND
+	             NOT EXISTS (
+	                SELECT *
+	                FROM {$g_table_prefix}public_view_omit_list
+	                WHERE view_id = $view_id AND
+	                      account_id = {$params["account_id"]}
+	             )
+	             $hidden_views_clause
+	      ORDER BY v.view_order
+	        ");
+		}
+
+    $views = array();
+    while ($view_info = mysql_fetch_assoc($view_query))
+    {
+    	$view_id = $view_info["view_id"];
+    	if ($params["include_clients"])
+    	{
+        $view_info["client_info"]      = ft_get_view_clients($view_id);
+        $view_info["client_omit_list"] = ft_get_public_view_omit_list($view_id);
+    	}
+
+    	$view_info["columns"] = ft_get_view_columns($view_id);
+    	$view_info["fields"]  = ft_get_view_fields($view_id);
+    	$view_info["tabs"]    = ft_get_view_tabs($view_id, true);
+    	$view_info["filters"] = ft_get_view_filters($view_id, "all");
+    	$views[] = $view_info;
+    }
+
+    if (count($views) > 0 || !$params["omit_empty_groups"])
+    {
+	    $curr_group = array(
+	      "group" => $row,
+	      "views" => $views
+	    );
+      $info[] = $curr_group;
+    }
+	}
+
+  return $info;
+}
+
+
 // -----------------------------------------------------------------------------------------------------
 
 /**
@@ -881,8 +1186,8 @@ function _ft_update_view_main_settings($view_id, $info)
   $default_sort_field_order = $info["default_sort_field_order"];
   $access_type              = $info["access_type"];
   $may_delete_submissions   = $info["may_delete_submissions"];
-  $may_edit_submissions     = isset($info["may_edit_submissions"]) ? "yes" : "no";
   $may_add_submissions      = $info["may_add_submissions"];
+  $may_edit_submissions     = isset($info["may_edit_submissions"]) ? "yes" : "no"; // (checkbox field)
 
   // do a little error checking on the num submissions field. If it's invalid, just set to to 10 without
   // informing them - it's not really necessary, I don't think
@@ -922,6 +1227,95 @@ function _ft_update_view_main_settings($view_id, $info)
 
       mysql_query("DELETE FROM {$g_table_prefix}public_view_omit_list WHERE view_id = $view_id");
       break;
+
+    case "hidden":
+      mysql_query("DELETE FROM {$g_table_prefix}client_views WHERE view_id = $view_id");
+      mysql_query("DELETE FROM {$g_table_prefix}public_view_omit_list WHERE view_id = $view_id");
+    	break;
+  }
+
+  // lastly, add in any default values for new submissions
+  mysql_query("DELETE FROM {$g_table_prefix}new_view_submission_defaults WHERE view_id = $view_id");
+
+  if (!empty($info["new_submissions"]) && $may_add_submissions == "yes")
+  {
+    $default_values = array_combine($info["new_submissions"], $info["new_submissions_vals"]);
+
+    $insert_statements = array();
+    $order = 1;
+    while (list($field_id, $value) = each($default_values))
+    {
+    	$value = ft_sanitize($value);
+    	$insert_statements[] = "($view_id, $field_id, '$value', $order)";
+    	$order++;
+    }
+    $insert_statement_str = implode(",\n", $insert_statements);
+
+    $query = mysql_query("
+      INSERT INTO {$g_table_prefix}new_view_submission_defaults (view_id, field_id, default_value, list_order)
+      VALUES $insert_statement_str
+    ");
+  }
+}
+
+
+function _ft_update_view_columns_settings($view_id, $info)
+{
+  global $g_table_prefix;
+
+  $sortable_id  = $info["submission_list_sortable_id"];
+  $sortable_rows = explode(",", $info["{$sortable_id}_sortable__rows"]);
+
+  mysql_query("DELETE FROM {$g_table_prefix}view_columns WHERE view_id = $view_id");
+
+  $insert_statements = array();
+  $list_order = 1;
+  foreach ($sortable_rows as $row_id)
+  {
+  	// if the user didn't select a field for this row, ignore it
+  	if (empty($info["field_id_{$row_id}"]))
+  	  continue;
+
+    $field_id     = $info["field_id_{$row_id}"];
+    $is_sortable  = (isset($info["is_sortable_{$row_id}"])) ? "yes" : "no";
+
+    $auto_size    = "";
+    $custom_width = "";
+    if (isset($info["auto_size_{$row_id}"]))
+    {
+    	$auto_size = "yes";
+    }
+    else
+    {
+    	$auto_size = "no";
+
+    	// validate the custom width field
+    	if (!isset($info["custom_width_{$row_id}"]))
+    	  $auto_size = "yes";
+    	else
+    	{
+    		$custom_width = trim($info["custom_width_{$row_id}"]);
+    		if (!is_numeric($custom_width))
+    		{
+    		  $auto_size = "yes";
+    		  $custom_width = "";
+    		}
+    	}
+    }
+
+    $truncate = $info["truncate_{$row_id}"];
+
+    $insert_statements[] = "($view_id, $field_id, $list_order, '$is_sortable', '$auto_size', '$custom_width', '$truncate')";
+    $list_order++;
+  }
+
+  if (!empty($insert_statements))
+  {
+	  $insert_statement_str = implode(",\n", $insert_statements);
+	  $query = mysql_query("
+	    INSERT INTO {$g_table_prefix}view_columns (view_id, field_id, list_order, is_sortable, auto_size, custom_width, truncate)
+	    VALUES $insert_statement_str
+	  ") or die(mysql_error());
   }
 }
 
@@ -937,56 +1331,76 @@ function _ft_update_view_field_settings($view_id, $info)
 {
   global $g_table_prefix;
 
-  $field_info = array();
-  $field_ids = split(",", $info["field_ids"]);
+  $sortable_id  = $info["view_fields_sortable_id"];
+  $grouped_info = explode("~", $info["{$sortable_id}_sortable__rows"]);
+  $new_groups   = explode(",", $info["{$sortable_id}_sortable__new_groups"]);
 
-  for ($i=0; $i<count($field_ids); $i++)
-  {
-    $field_id = $field_ids[$i];
-    $field_order   = (isset($info["field_{$field_id}_order"])) ? $info["field_{$field_id}_order"] : "";
-    $is_column     = (isset($info["field_{$field_id}_is_column"])) ? true : false;
-    $is_sortable   = (isset($info["field_{$field_id}_is_sortable"])) ? true : false;
-    $is_editable   = (isset($info["field_{$field_id}_is_editable"])) ? true : false;
-    $is_searchable = (isset($info["field_{$field_id}_is_searchable"])) ? true : false;
-    $field_tab     = (isset($info["field_{$field_id}_tab"])) ? $info["field_{$field_id}_tab"] : "";
-
-    // check to see if a key with this field order doesn't already exist. If it does, we place it directly
-    // AFTER the item. We do this by adding 0.1 to the value. After we ksort() the array, the array will be
-    // ordered properly. [Note: the strval() explicitly casts the order as a string, to keep the
-    // array_key_exists function happy]
-    if (array_key_exists($field_order, $field_info))
-    {
-      while (array_key_exists("$field_order", $field_info))
-        $field_order = strval($field_order + 0.1);
-    }
-
-    $field_info[$field_order] = array(
-      "field_id" => $field_id,
-      "is_sortable" => $is_sortable,
-      "is_column" => $is_column,
-      "is_editable" => $is_editable,
-      "is_searchable" => $is_searchable,
-      "field_tab" => $field_tab
-        );
-  }
-  ksort($field_info);
-
+  // empty the old View fields; we're about to update them
   mysql_query("DELETE FROM {$g_table_prefix}view_fields WHERE view_id = $view_id");
-  $order = 1;
-  foreach ($field_info as $key => $hash)
-  {
-    $field_id    = $hash["field_id"];
-    $is_column   = ($hash["is_column"]) ? "yes" : "no";
-    $is_sortable = ($hash["is_sortable"]) ? "yes" : "no";
-    $is_editable = ($hash["is_editable"]) ? "yes" : "no";
-    $is_searchable = ($hash["is_searchable"]) ? "yes" : "no";
-    $field_tab   = (!empty($hash["field_tab"])) ? $hash["field_tab"] : "NULL";
 
-    mysql_query("
-      INSERT INTO {$g_table_prefix}view_fields (view_id, field_id, tab_number, is_column, is_sortable, is_editable, is_searchable, list_order)
-      VALUES ($view_id, $field_id, $field_tab, '$is_column', '$is_sortable', '$is_editable', '$is_searchable', $order)
-        ");
-    $order++;
+  // if there are any deleted groups, delete 'em! (N.B. we're not interested in deleted groups
+  // that were just created in the page
+  if (isset($info["deleted_groups"]) && !empty($info["deleted_groups"]))
+  {
+    $deleted_group_ids = explode(",", $info["deleted_groups"]);
+    foreach ($deleted_group_ids as $group_id)
+    {
+      if (preg_match("/^NEW/", $group_id))
+        continue;
+
+      mysql_query("DELETE FROM {$g_table_prefix}list_groups WHERE group_id = $group_id");
+    }
+  }
+
+  $ordered_group_ids = array();
+  $new_group_order = 1;
+  foreach ($grouped_info as $curr_grouped_info)
+  {
+    list($curr_group_id, $ordered_field_ids_str) = explode("|", $curr_grouped_info);
+    $ordered_field_ids = explode(",", $ordered_field_ids_str);
+
+    $group_name = $info["group_name_{$curr_group_id}"];
+    $group_tab  = (isset($info["group_tab_{$curr_group_id}"]) && !empty($info["group_tab_{$curr_group_id}"])) ?
+      $info["group_tab_{$curr_group_id}"] : "";
+
+    if (preg_match("/^NEW/", $curr_group_id))
+    {
+    	@mysql_query("
+	      INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
+	      VALUES ('view_fields_{$view_id}', '$group_name', '$group_tab', $new_group_order)
+	        ");
+	    $curr_group_id = mysql_insert_id();
+    }
+    else
+    {
+	    @mysql_query("
+	      UPDATE {$g_table_prefix}list_groups
+	      SET    group_name  = '$group_name',
+	             custom_data = '$group_tab',
+	             list_order  = $new_group_order
+	      WHERE  group_id = $curr_group_id
+	        ");
+    }
+    $new_group_order++;
+
+    $field_order = 1;
+    foreach ($ordered_field_ids as $field_id)
+    {
+    	if (empty($field_id) || !is_numeric($field_id))
+    	  continue;
+
+    	$is_editable   = (in_array($field_id, $info["editable_fields"])) ? "yes" : "no";
+    	$is_searchable = (in_array($field_id, $info["searchable_fields"])) ? "yes" : "no";
+    	$is_new_sort_group = (in_array($field_id, $new_groups)) ? "yes" : "no";
+
+    	$query = mysql_query("
+	      INSERT INTO {$g_table_prefix}view_fields (view_id, field_id, group_id, is_editable,
+	        is_searchable, list_order, is_new_sort_group)
+	      VALUES ($view_id, $field_id, $curr_group_id, '$is_editable', '$is_searchable',
+    	    $field_order, '$is_new_sort_group')
+	        ");
+      $field_order++;
+    }
   }
 }
 
@@ -1005,22 +1419,12 @@ function _ft_update_view_tab_settings($view_id, $info)
 
   $info = ft_sanitize($info);
 
-  $tab_label1 = isset($info["tab_label1"]) ? $info["tab_label1"] : "";
-  $tab_label2 = isset($info["tab_label2"]) ? $info["tab_label2"] : "";
-  $tab_label3 = isset($info["tab_label3"]) ? $info["tab_label3"] : "";
-  $tab_label4 = isset($info["tab_label4"]) ? $info["tab_label4"] : "";
-  $tab_label5 = isset($info["tab_label5"]) ? $info["tab_label5"] : "";
-  $tab_label6 = isset($info["tab_label6"]) ? $info["tab_label6"] : "";
-
-  @mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '$tab_label1' WHERE view_id = $view_id AND tab_number = 1");
-  @mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '$tab_label2' WHERE view_id = $view_id AND tab_number = 2");
-  @mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '$tab_label3' WHERE view_id = $view_id AND tab_number = 3");
-  @mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '$tab_label4' WHERE view_id = $view_id AND tab_number = 4");
-  @mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '$tab_label5' WHERE view_id = $view_id AND tab_number = 5");
-  @mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '$tab_label6' WHERE view_id = $view_id AND tab_number = 6");
-
-  // empty the tab info stored in sessions
-  unset($_SESSION["ft"]["view_{$view_id}_tab_info"]);
+  @mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '{$info["tabs"][0]}' WHERE view_id = $view_id AND tab_number = 1");
+  @mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '{$info["tabs"][1]}' WHERE view_id = $view_id AND tab_number = 2");
+  @mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '{$info["tabs"][2]}' WHERE view_id = $view_id AND tab_number = 3");
+  @mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '{$info["tabs"][3]}' WHERE view_id = $view_id AND tab_number = 4");
+  @mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '{$info["tabs"][4]}' WHERE view_id = $view_id AND tab_number = 5");
+  @mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '{$info["tabs"][5]}' WHERE view_id = $view_id AND tab_number = 6");
 
   return array(true, $LANG["notify_form_tabs_updated"]);
 }
@@ -1044,10 +1448,15 @@ function _ft_update_view_filter_settings($view_id, $info)
   mysql_query("DELETE FROM {$g_table_prefix}view_filters WHERE view_id = $view_id");
 
   // get a hash of field_id => col name for use in building the SQL statements
-  $form_fields = ft_get_form_fields($form_id);
+  $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true));
   $field_columns = array();
   for ($i=0; $i<count($form_fields); $i++)
-    $field_columns[$form_fields[$i]["field_id"]] = $form_fields[$i]["col_name"];
+  {
+    $field_columns[$form_fields[$i]["field_id"]] = array(
+      "col_name"      => $form_fields[$i]["col_name"],
+      "is_date_field" => $form_fields[$i]["is_date_field"]
+    );
+  }
 
   $standard_filter_errors   = _ft_update_view_standard_filters($view_id, $info, $field_columns);
   $client_map_filter_errors = _ft_update_view_client_map_filters($view_id, $info, $field_columns);
@@ -1097,19 +1506,18 @@ function _ft_update_view_standard_filters($view_id, $info, $field_columns)
       continue;
 
     $field_id = $info["standard_filter_{$i}_field_id"];
+    $col_name = $field_columns[$field_id]["col_name"];
     $values   = "";
 
     // date field
-    if ($field_columns[$info["standard_filter_{$i}_field_id"]] == "submission_date" ||
-        $field_columns[$info["standard_filter_{$i}_field_id"]] == "last_modified_date")
+    if ($field_columns[$field_id]["is_date_field"] == "yes")
     {
       $values   = $info["standard_filter_{$i}_filter_date_values"];
       $operator = $info["standard_filter_{$i}_operator_date"];
 
       // build the SQL statement
       $sql_operator = ($operator == "after") ? ">" : "<";
-      $field_name = $field_columns[$field_id];
-      $sql = "$field_name $sql_operator '$values'";
+      $sql = "$col_name $sql_operator '$values'";
     }
     else
     {
@@ -1144,8 +1552,6 @@ function _ft_update_view_standard_filters($view_id, $info, $field_columns)
 
       $sql_statements_arr = array();
       $values_arr = explode("|", $values);
-      $field_name = $field_columns[$field_id];
-
       foreach ($values_arr as $value)
       {
         // if this is a LIKE operator (not_like, like), wrap the value in %..%
@@ -1162,17 +1568,17 @@ function _ft_update_view_standard_filters($view_id, $info, $field_columns)
         {
           // empty string being searched AGAINST; i.e. checking the field is NOT empty or LIKE empty
           if (empty($trimmed_value))
-            $sql_statements_arr[] = "$field_name $sql_operator '$escaped_value' OR $field_name IS NOT NULL";
+            $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name IS NOT NULL";
           else
-            $sql_statements_arr[] = "$field_name $sql_operator '$escaped_value' OR $field_name IS NULL";
+            $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name IS NULL";
         }
         else
         {
           // if the value is EMPTY, we need to add an additional IS NULL / IS NOT NULL check
           if (empty($trimmed_value))
-            $sql_statements_arr[] = "$field_name $sql_operator '$escaped_value' OR $field_name $null_test";
+            $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name $null_test";
           else
-            $sql_statements_arr[] = "$field_name $sql_operator '$escaped_value'";
+            $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value'";
         }
       }
 
@@ -1254,7 +1660,7 @@ function _ft_update_view_client_map_filters($view_id, $info, $field_columns)
         break;
     }
 
-    $field_name = $field_columns[$field_id];
+    $col_name = $field_columns[$field_id]["col_name"];
     $original_client_field = $client_field;
 
     // now we're going to build the actual SQL query that contains the Smarty placeholders for the account info.
@@ -1265,7 +1671,7 @@ function _ft_update_view_client_map_filters($view_id, $info, $field_columns)
     if ($operator == "like" || $operator == "not_like")
       $sql_client_field = "%$sql_client_field%";
 
-    $sql = addslashes("($field_name $sql_operator '$sql_client_field')");
+    $sql = addslashes("($col_name $sql_operator '$sql_client_field')");
 
     $query = mysql_query("
       INSERT INTO {$g_table_prefix}view_filters (view_id, filter_type, field_id, operator, filter_values, filter_sql)
@@ -1328,7 +1734,9 @@ function ft_update_public_view_omit_list($info, $view_id)
 
   $client_ids = (isset($info["selected_client_ids"])) ? $info["selected_client_ids"] : array();
   foreach ($client_ids as $account_id)
+  {
     mysql_query("INSERT INTO {$g_table_prefix}public_view_omit_list (view_id, account_id) VALUES ($view_id, $account_id)");
+  }
 
   return array(true, $LANG["notify_public_view_omit_list_updated"]);
 }
@@ -1441,7 +1849,7 @@ function ft_get_default_view($form_id)
     WHERE  form_id = $form_id
     ORDER BY view_order
     LIMIT 1
-      ") or die(mysql_error());
+      ");
 
   $view_id = "";
   $view_info = mysql_fetch_assoc($query);
@@ -1452,3 +1860,166 @@ function ft_get_default_view($form_id)
   return $view_id;
 }
 
+
+/**
+ * This feature was added in 2.1.0 - it lets administrators define default values for all new submissions
+ * created with the View. This was added to solve a problem where submissions were created in a View where
+ * that new submission wouldn't meet the criteria for inclusion. But beyond that, this is a handy feature to
+ * cut down on configuration time for new data sets.
+ *
+ * @param $view_id
+ * @return array
+ */
+function ft_get_new_view_submission_defaults($view_id)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT *
+    FROM {$g_table_prefix}new_view_submission_defaults
+    WHERE view_id = $view_id
+    ORDER BY list_order
+  ");
+
+  $info = array();
+  while ($row = mysql_fetch_assoc($query))
+  {
+  	$info[] = $row;
+  }
+
+  return $info;
+}
+
+
+/**
+ * This makes a copy of all field groups for a View and returns a hash of old group IDs to new group IDs.
+ * It's used in the create View functionality when the user wants to base the new View on an existing
+ * one.
+ *
+ * @param integer $source_view_id
+ * @param integer $target_view_id
+ * @return array
+ */
+function ft_duplicate_view_field_groups($source_view_id, $target_view_id)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}list_groups
+    WHERE group_type = 'view_fields_{$source_view_id}'
+    ORDER BY list_order
+  ");
+
+  $map = array();
+  while ($row = mysql_fetch_assoc($query))
+  {
+  	$row = ft_sanitize($row);
+  	$group_id    = $row["group_id"];
+    $group_type  = "view_fields_{$target_view_id}";
+    $group_name  = $row["group_name"];
+    $custom_data = $row["custom_data"];
+    $list_order  = $row["list_order"];
+
+    mysql_query("
+      INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
+      VALUES ('$group_type', '$group_name', '$custom_data', $list_order)
+    ") or die(mysql_error());
+    $map[$group_id] = mysql_insert_id();
+  }
+
+  return $map;
+}
+
+
+/**
+ * Helper function that's called when creating new Views. It populates the View fields and View column
+ * with ALL form fields and 5 columns (Submission ID, Submission Date + 3 others).
+ *
+ * @param integer $form_id
+ * @param integer $view_id
+ */
+function _ft_populate_new_view_fields($form_id, $view_id)
+{
+	global $g_table_prefix, $LANG;
+
+  mysql_query("
+    INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
+    VALUES ('view_fields_$view_id', '{$LANG["phrase_default_tab_label"]}', 1, 1)
+  ");
+  $view_fields_group_id = mysql_insert_id();
+
+  $count = 1;
+  $num_custom_fields_added = 0;
+  $form_fields = ft_get_form_fields($form_id);
+
+  $form_field_view_inserts = array();
+  $view_column_inserts     = array();
+  $view_column_order = 1;
+  foreach ($form_fields as $field)
+  {
+    $field_id = $field["field_id"];
+
+    // make the submission ID, submission date and the 1st 3 columns visible by default
+    $is_column   = "no";
+    $is_sortable = "no";
+    if ($field["col_name"] == "submission_id" || $field["col_name"] == "submission_date")
+    {
+      $is_column   = "yes";
+      $is_sortable = "yes";
+    }
+    else
+    {
+      if ($num_custom_fields_added < 3)
+      {
+        $is_column   = "yes";
+        $is_sortable = "yes";
+        $num_custom_fields_added++;
+      }
+    }
+
+    // by default, make every field editable except the system fields
+    $is_editable = ($field["is_system_field"] == "yes") ? "no" : "yes";
+    $is_new_sort_group = $field["is_new_sort_group"];
+
+    $form_field_view_inserts[] = "($view_id, $field_id, $view_fields_group_id, '$is_editable', $count, '$is_new_sort_group')";
+    $count++;
+
+    // if this is a column field, add the view_columns record
+    if ($is_column == "yes")
+    {
+    	$auto_size = "yes";
+    	$custom_width = "";
+      if ($field["col_name"] == "submission_id")
+      {
+      	$auto_size    = "no";
+      	$custom_width = 50;
+      }
+      else if ($field["col_name"] == "submission_date")
+      {
+      	$auto_size    = "no";
+      	$custom_width = 160;
+      }
+      $view_column_inserts[] = "($view_id, $field_id, $view_column_order, 'yes', '$auto_size', '$custom_width', 'truncate')";
+      $view_column_order++;
+    }
+  }
+
+  // should NEVER be empty, but check anyway
+  if (!empty($form_field_view_inserts))
+  {
+	  $form_field_view_insert_str = implode(",\n", $form_field_view_inserts);
+	  mysql_query("
+	    INSERT INTO {$g_table_prefix}view_fields (view_id, field_id, group_id, is_editable, list_order, is_new_sort_group)
+	    VALUES $form_field_view_insert_str
+	  ");
+  }
+  if (!empty($view_column_inserts))
+  {
+  	$view_columns_insert_str = implode(",\n", $view_column_inserts);
+	  mysql_query("
+	    INSERT INTO {$g_table_prefix}view_columns (view_id, field_id, list_order, is_sortable, auto_size, custom_width, truncate)
+	    VALUES $view_columns_insert_str
+	  ");
+  }
+}

@@ -2,14 +2,14 @@
 
   <h1>{$LANG.phrase_create_admin_account}</h1>
 
+  {include file='messages.tpl'}
+
   {if !$account_created}
 
     <form name="create_account_form" action="{$same_page}" method="post" onsubmit="return rsv.validate(this, rules)">
-	    <div>
+	    <div class="margin_bottom_large">
 	      {$LANG.text_create_admin_account}
 	    </div>
-
-  	  {include file='messages.tpl'}
 
 	    <table cellpadding="0">
 	    <tr>

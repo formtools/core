@@ -16,14 +16,14 @@
       <th width="200" class="pad_left_small">{$LANG.word_email}</th>
       <th class="pad_left_small">{$LANG.phrase_first_name}</th>
       <th class="pad_left_small">{$LANG.phrase_name_or_last_name}</th>
-      <th class="del" width="60">{$LANG.word_delete|upper}</th>
+      <th class="del"></th>
     </tr>
     {foreach from=$registered_form_emails item=email_info}
       <tr>
-        <td>{$email_info.email_field_label}</td>
-        <td>{$email_info.first_name_field_label|default:'&#8212;'}</td>
-        <td>{$email_info.last_name_field_label|default:'&#8212;'}</td>
-        <th class="del"><a href="#" onclick="return emails_ns.delete_form_email_field_config({$email_info.form_email_id})">{$LANG.word_delete|upper}</a></th>
+        <td class="pad_left_small">{$email_info.email_field_label}</td>
+        <td class="pad_left_small">{$email_info.first_name_field_label|default:'&#8212;'}</td>
+        <td class="pad_left_small">{$email_info.last_name_field_label|default:'&#8212;'}</td>
+        <td class="del"><a href="#" onclick="return emails_ns.delete_form_email_field_config({$email_info.form_email_id})"></a></td>
       </tr>
     {/foreach}
     </table>
@@ -35,19 +35,19 @@
 
       <table class="margin_bottom_large" cellspacing="1" cellpadding="0">
         <tr>
-          <td width="100" class="pad_right_large">{$LANG.word_email}</td>
-          <td width="120">{dropdown options=$columns name="email_field"}</td>
+          <td width="140" class="pad_right_large">{$LANG.word_email}</td>
+          <td width="120">{dropdown options=$columns name="email_field_id" tabindex="1"}</td>
           <td rowspan="3" align="center" width="120">
-            <input type="submit" name="update_email_settings" value="{$LANG.phrase_register_new_email}" />
+            <input type="submit" name="update_email_settings" value="{$LANG.phrase_register_new_email}" tabindex="4" />
           </td>
         </tr>
         <tr>
           <td class="pad_right_large">{$LANG.phrase_first_name}</td>
-          <td>{dropdown options=$columns name="first_name_field" blank_option_text=$LANG.word_na}</td>
+          <td>{dropdown options=$columns name="first_name_field_id" blank_option_text=$LANG.word_na tabindex="2"}</td>
         </tr>
         <tr>
-          <td class="pad_right_large">{$LANG.phrase_last_name}</td>
-          <td>{dropdown options=$columns name="last_name_field" blank_option_text=$LANG.word_na}</td>
+          <td class="pad_right_large">{$LANG.phrase_name_or_last_name}</td>
+          <td>{dropdown options=$columns name="last_name_field_id" blank_option_text=$LANG.word_na tabindex="3"}</td>
         </tr>
       </table>
 

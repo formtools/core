@@ -9,13 +9,18 @@
 *}
 
 <div class="margin_bottom_large">
-  {$LANG.phrase_total_results_c} <b>{$num_results}</b>&nbsp;
+  {if $show_total_results}
+    {$LANG.phrase_total_results_c} <b>{$num_results}</b>&nbsp;
 
-  {* if there's more than one page, display a message with what rows are being shown *}
-  {$viewing_range}
+    {* if there's more than one page, display a message with what rows are being shown *}
+    {$viewing_range}
+  {/if}
 
   {if $total_pages > 1}
-    <div id="list_nav">{$LANG.word_page_c}
+    <div id="list_nav">
+      {if $show_page_label}
+        {$LANG.word_page_c}
+      {/if}
 
       {* if we're not on the first page, provide a "<<" (previous page) link *}
       {if $current_page != 1}

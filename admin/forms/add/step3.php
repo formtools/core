@@ -56,48 +56,49 @@ $page_vars["direct_form_para_2"] = $direct_form_para_2;
 $page_vars["code_form_para_2"] = $code_form_para_2;
 
 $current_section = (!empty($form_info["submission_type"])) ? "\"{$form_info["submission_type"]}\"" : "null";
-$page_vars["head_js"] = "var rules = [];
-
+$page_vars["head_js"] =<<< END
+var rules = [];
 var page_ns = {};
 page_ns.current_section = $current_section;
 page_ns.show_section = function(section)
 {
   if (page_ns.current_section != null)
   {
-    Effect.Fade($(page_ns.current_section), { duration: 0.4 });
-    Effect.Appear($(section), { duration: 0.4, delay: 0.5 });
+    $("#" + page_ns.current_section).fadeOut({ duration: 400 });
+    setTimeout(function() { $("#" + section).fadeIn({ duration: 400, }); }, 410);
   }
   else
-    Effect.Appear($(section), { duration: 0.4 });
+    $("#" + section).fadeIn({ duration: 400 });
 
   // if the user just selected a submission type, highlight the appropriate box and store the
   // type to send along to the database. This information isn't needed outside of the Add Form
   // process, but it's nice to be able to re-fill the appropriate submission type box when
   if (section == 'direct')
   {
-    $('direct_box').removeClassName('grey_box');
-    $('direct_box').addClassName('blue_box');
-    $('code_box').removeClassName('blue_box');
-    $('code_box').addClassName('grey_box');
+    $('#direct_box').removeClass('grey_box');
+    $('#direct_box').addClass('blue_box');
+    $('#code_box').removeClass('blue_box');
+    $('#code_box').addClass('grey_box');
   }
   if (section == 'code')
   {
-    $('direct_box').addClassName('grey_box');
-    $('direct_box').removeClassName('blue_box');
-    $('code_box').addClassName('blue_box');
-    $('code_box').removeClassName('grey_box');
+    $('#direct_box').addClass('grey_box');
+    $('#direct_box').removeClass('blue_box');
+    $('#code_box').addClass('blue_box');
+    $('#code_box').removeClass('grey_box');
   }
   if (section != 'direct' && section != 'code')
   {
-    $('direct_box').addClassName('grey_box');
-    $('direct_box').removeClassName('blue_box');
-    $('code_box').addClassName('grey_box');
-    $('code_box').removeClassName('blue_box');
+    $('#direct_box').addClass('grey_box');
+    $('#direct_box').removeClass('blue_box');
+    $('#code_box').addClass('grey_box');
+    $('#code_box').removeClass('blue_box');
   }
 
   page_ns.current_section = section;
 }
 
-rsv.onCompleteHandler = function() { ft.select_all('selected_user_ids[]'); return true; }";
+rsv.onCompleteHandler = function() { ft.select_all('selected_user_ids[]'); return true; }
+END;
 
 ft_display_page("admin/forms/add/step3.tpl", $page_vars);

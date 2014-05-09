@@ -39,7 +39,7 @@ if (isset($_POST["username"]) && !empty($_POST["username"]))
   $error = ft_login($_POST);
 
 $username = (isset($_POST["username"]) && !empty($_POST["username"])) ? $_POST["username"] : "";
-$username = strip_tags($username);
+$username = ft_strip_chars($username);
 
 // -------------------------------------------------------------------------------------------
 
@@ -53,7 +53,9 @@ $page_vars["error"] = $error;
 if ($is_upgraded)
 {
   $new_version = $settings["program_version"];
-	if ($settings["release_type"] == "beta")
+	if ($settings["release_type"] == "alpha")
+	  $new_version = "{$settings['program_version']}-alpha-{$settings['release_date']}";
+  else if ($settings["release_type"] == "beta")
 	  $new_version = "{$settings['program_version']}-beta-{$settings['release_date']}";
 
   $replacements = array("version" => $new_version);
@@ -69,7 +71,7 @@ $page_vars["program_name"]  = $settings["program_name"];
 $page_vars["login_heading"] = sprintf("%s %s", $settings['program_name'], $LANG["word_administration"]);
 $page_vars["username"]      = $username;
 $page_vars["is_logged_in"]  = false;
-$page_vars["head_js"]  = "Event.observe(document, 'dom:loaded', function() { document.login.username.focus(); });";
+$page_vars["head_js"]  = "$(function() { document.login.username.focus(); });";
 $page_vars["head_string"] = "<noscript><style type=\"text/css\">.login_outer_table { display: none; }</style></noscript>";
 
 if (isset($_GET["message"]))

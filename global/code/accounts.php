@@ -6,7 +6,7 @@
  *
  * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Accounts
  */
 
@@ -178,11 +178,10 @@ function ft_login($infohash, $login_as_client = false)
 
   ft_cache_account_menu($account_info["account_id"]);
 
-  // if this is an administrator, build and cache the upgrade link and ensure the API version is up to date
+  // if this is an administrator, ensure the API version is up to date
   if ($account_info["account_type"] == "admin")
   {
     ft_update_api_version();
-    ft_build_and_cache_upgrade_info();
   }
   else
   {
@@ -196,6 +195,9 @@ function ft_login($infohash, $login_as_client = false)
   // redirect the user to whatever login page they specified in their settings
   $login_url = ft_construct_page_url($account_info["login_page"]);
   $login_url = "$g_root_url{$login_url}";
+
+  if (!$login_as_client)
+    ft_update_last_logged_in($account_info["account_id"]);
 
   session_write_close();
   header("Location: $login_url");
@@ -351,8 +353,11 @@ function ft_send_password($info)
   $smarty_template_email_subject = file_get_contents("$g_root_dir/global/emails/forget_password_subject.tpl");
   $email_subject = trim(ft_eval_smarty_string($smarty_template_email_subject, $placeholders));
 
+  // TODO
 
-  // if Swift Mailer is enabled, send the emails with that
+  // if Swift Mailer is enabled, send the emails with that. In case there's a problem sending the message with
+  // Swift, it falls back the default mail() function.
+  $swift_mail_error = false;
   if (ft_check_module_enabled("swift_mailer"))
   {
     $sm_settings = ft_get_module_settings("", "swift_mailer");
@@ -381,13 +386,16 @@ function ft_send_password($info)
       // if the email couldn't be sent, display the appropriate error message. Otherwise
       // the default success message is used
       if (!$success)
+      {
+      	$swift_mail_error = true;
         $message = $sm_message;
+      }
     }
   }
-  else
+
+  if (!ft_check_module_enabled("swift_mailer") || $swift_mail_error)
   {
-    // send email [note: the double quotes around the email recipient and content are intentional:
-    // some systems fail without it]
+    // send email [note: the double quotes around the email recipient and content are intentional: some systems fail without it]
     if (!@mail("$email", $email_subject, $email_content))
     {
       $success = false;
@@ -445,6 +453,29 @@ function ft_set_account_settings($account_id, $settings)
   }
 
   extract(ft_process_hooks("end", compact("account_id", "settings"), array()), EXTR_OVERWRITE);
+}
+
+
+/**
+ * Updates the last logged in date for an account.
+ *
+ * @param $account_id
+ */
+function ft_update_last_logged_in($account_id)
+{
+  global $g_table_prefix;
+
+  $account_id = ft_sanitize($account_id);
+  if (!is_numeric($account_id))
+    return;
+
+  $now = ft_get_current_datetime();
+
+  @mysql_query("
+    UPDATE {$g_table_prefix}accounts
+    SET    last_logged_in = '$now'
+    WHERE  account_id = $account_id
+  ");
 }
 
 

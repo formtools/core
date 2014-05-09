@@ -16,13 +16,13 @@ $form_info = ft_get_form($form_id);
 $form_name = $form_info["form_name"];
 $auto_delete_submission_files = $form_info["auto_delete_submission_files"];
 
-
 // get the names and URLs of all uploaded files
 $form_fields = ft_get_form_fields($form_id);
 $file_field_hash = array(); // field_id => upload folder URL
 foreach ($form_fields as $field)
 {
-  if ($field["field_type"] == "file")
+	// TODO
+  if ($field["field_type_id"] == "file")
   {
   	$field_id = $field["field_id"];
   	$field_settings = ft_get_extended_field_settings($field_id);
@@ -70,14 +70,17 @@ $page_vars["form_id"]    = $form_id;
 $page_vars["form_info"]  = $form_info;
 $page_vars["files_uploaded"] = $files_uploaded;
 $page_vars["file_field_hash"] = $file_field_hash;
-$page_vars["head_js"]    = "
-  var page_ns = {};
-  page_ns.show_uploaded_files = function()
-	{
-		Effect.Appear('uploaded_files', { duration: 0.6 });
-	}
+$page_vars["head_js"] =<<< END
+var page_ns = {};
+page_ns.show_uploaded_files = function(){
+  // TODO
+  Effect.Appear('uploaded_files', { duration: 0.6 });
+}
+var rules = ["required,delete_form,{$LANG["validation_delete_form_confirm"]}"];
 
-	var rules = [\"required,delete_form,{$LANG["validation_delete_form_confirm"]}\"];
-	";
+$(function() {
+  $("#delete_form").focus();
+});
+END;
 
 ft_display_page("admin/forms/delete_form.tpl", $page_vars);

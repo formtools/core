@@ -15,12 +15,13 @@
  */
 
 
-$folder = dirname(__FILE__);
 
 // always include the core library functions
+$folder = dirname(__FILE__);
 require_once("$folder/global/library.php");
 
 // if the API is supplied, include it as well
+$folder = dirname(__FILE__);
 @include_once("$folder/global/api/api.php");
 
 
@@ -143,48 +144,45 @@ function ft_process_form($form_data)
 
 
   // get a list of the custom form fields (i.e. non-system) for this form
-  $form_fields = ft_get_form_fields($form_id);
+  $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true));
 
   $custom_form_fields = array();
   foreach ($form_fields as $field_info)
   {
-    $field_id    = $field_info["field_id"];
-    $field_name  = $field_info["field_name"];
-    $col_name    = $field_info["col_name"];
-    $field_title = $field_info["field_title"];
-    $field_type  = $field_info["field_type"];
-    $include_on_redirect  = $field_info["include_on_redirect"];
+  	$is_system_field = $field_info["is_system_field"];
+    $field_name      = $field_info["field_name"];
 
     // ignore system fields
-    if ($field_type == "system")
+    if ($is_system_field == "yes")
       continue;
 
     $custom_form_fields[$field_name] = array(
-      "field_id" => $field_id,
-      "col_name" => $col_name,
-      "field_title" => $field_title,
-      "include_on_redirect" => $include_on_redirect,
-      "field_type" => $field_type
+      "field_id"    => $field_info["field_id"],
+      "col_name"    => $field_info["col_name"],
+      "field_title" => $field_info["field_title"],
+      "include_on_redirect" => $field_info["include_on_redirect"],
+      "field_type_id" => $field_info["field_type_id"],
+      "is_date_field" => $field_info["is_date_field"],
+      "is_file_field" => $field_info["is_file_field"]
         );
   }
 
 
   // now examine the contents of the POST/GET submission and get a list of those fields
   // which we're going to update
-  $valid_form_fields     = array();
+  $valid_form_fields = array();
   while (list($form_field, $value) = each($form_data))
   {
     // if this field is included, store the value for adding to DB
     if (array_key_exists($form_field, $custom_form_fields))
     {
+      $curr_form_field = $custom_form_fields[$form_field];
+
       // ignore file fields - they're handled separately
-      if ($custom_form_fields[$form_field]["field_type"] == "file" || $custom_form_fields[$form_field]["field_type"] == "image")
+      if ($curr_form_field["is_file_field"] == "yes")
         continue;
 
-      $col_name = $custom_form_fields[$form_field]["col_name"];
-      $query_col_names[] = $col_name;
       $cleaned_value = $value;
-
       if (is_array($value))
       {
         if ($form_info["submission_strip_tags"] == "yes")
@@ -193,7 +191,7 @@ function ft_process_form($form_data)
             $value[$i] = strip_tags($value[$i]);
         }
 
-        $cleaned_value = join("$g_multi_val_delimiter", $value);
+        $cleaned_value = implode("$g_multi_val_delimiter", $value);
       }
       else
       {
@@ -201,10 +199,9 @@ function ft_process_form($form_data)
           $cleaned_value = strip_tags($value);
       }
 
-      $valid_form_fields[$col_name] = "'$cleaned_value'";
+      $valid_form_fields[$curr_form_field["col_name"]] = "'$cleaned_value'";
     }
   }
-
 
   $now = ft_get_current_datetime();
   $ip_address      = $_SERVER["REMOTE_ADDR"];
@@ -226,9 +223,7 @@ function ft_process_form($form_data)
       VALUES ($col_values_str '$now', '$now', '$ip_address', '$is_finalized')
            ";
 
-
-  // add the submission to the database (if form_tools_ignore_submission key isn't set by either the form or the
-  // Submission Pre-Parser module)
+  // add the submission to the database (if form_tools_ignore_submission key isn't set by either the form or a module
   $submission_id = "";
   if (!isset($form_data["form_tools_ignore_submission"]))
   {
@@ -250,10 +245,10 @@ function ft_process_form($form_data)
 
   $redirect_query_params = array();
 
-  // build the redirect query parameter array. Note that we loop through the original
+  // build the redirect query parameter array
   foreach ($form_fields as $field_info)
   {
-    if ($field_info["include_on_redirect"] == "no" || $field_info["field_type"] == "file" || $field_info["field_type"] == "image")
+    if ($field_info["include_on_redirect"] == "no" || $field_info["is_file_field"] == "yes")
       continue;
 
     switch ($field_info["col_name"])
@@ -263,12 +258,12 @@ function ft_process_form($form_data)
         break;
       case "submission_date":
         $settings = ft_get_settings();
-        $submission_date_formatted = ft_get_date($settings["default_timezone_offset"], $submission_date, $settings["default_date_format"]);
+        $submission_date_formatted = ft_get_date($settings["default_timezone_offset"], $now, $settings["default_date_format"]);
         $redirect_query_params[] = "submission_date=" . rawurlencode($submission_date_formatted);
         break;
       case "last_modified_date":
         $settings = ft_get_settings();
-        $submission_date_formatted = ft_get_date($settings["default_timezone_offset"], $submission_date, $settings["default_date_format"]);
+        $submission_date_formatted = ft_get_date($settings["default_timezone_offset"], $now, $settings["default_date_format"]);
         $redirect_query_params[] = "last_modified_date=" . rawurlencode($submission_date_formatted);
         break;
       case "ip_address":
@@ -292,6 +287,8 @@ function ft_process_form($form_data)
 
   // now that the submission has been added to the database, upload any files that were included and
   // store the file name in the appropriate field
+  /*
+  TODO - move to module
   while (list($form_field, $fileinfo) = each($_FILES))
   {
     if (empty($fileinfo["name"]))
@@ -312,6 +309,7 @@ function ft_process_form($form_data)
     if ($custom_form_fields[$form_field]["include_on_redirect"] == "yes")
       $redirect_query_params[] = "$form_field=$filename";
   }
+  */
 
   // send any emails
   ft_send_emails("on_submission", $form_id, $submission_id);

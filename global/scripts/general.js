@@ -4,9 +4,34 @@
  * Contains general javascript functions for use throughout the application.
  */
 
-// the main Form Tools namespace used for all functions in this file.
-var ft = {};
-ft.urls = [];
+$(function() {
+
+  // for non-sortable, standard list tables
+  $("td.del").live("mouseover", function(e) {
+    $(e.target).closest("tr").addClass("delete_row_hover");
+    $(this).attr("title", g.messages["word_remove"]);
+  });
+  $("td.del").live("mouseout", function(e) {
+    $(e.target).closest("tr").removeClass("delete_row_hover");
+  });
+  $("td.edit").live("mouseover", function(e) {
+    $(e.target).closest("tr").addClass("edit_row_hover");
+    $(this).attr("title", g.messages["word_edit"]);
+  });
+  $("td.edit").live("mouseout", function(e) {
+    $(e.target).closest("tr").removeClass("edit_row_hover");
+  });
+});
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+// the main Form Tools namespace
+var ft = {
+  urls: [],
+  check_url_dialog: $("<div></div>")
+}
 
 
 /**
@@ -17,30 +42,27 @@ ft.urls = [];
  * The assumption if that the PHP counterpart function with the same name has been called in the
  * calling page - that function creates the HTML & JS to interact with this function.
  *
+ * TODO
+ *
  * @param integer num_results the total number of results<b>
  * @param integer num_per_page the number of listings that should appear per page
  * @param integer current_page the current page
  */
-ft.display_dhtml_page_nav = function(num_results, num_per_page, current_page)
-{
+ft.display_dhtml_page_nav = function(num_results, num_per_page, current_page) {
   total_pages = Math.ceil(num_results / num_per_page);
 
   // hide/show the appropriate pages
-  for (var i=1; i<=total_pages; i++)
-  {
-    if (current_page == i)
-    {
-      if (!$("page_" + i))
-        alert("page " + i + " doesn't exist");
-
-      $("page_" + i).style.display = "block";
-      $("nav_page_" + i).innerHTML = "<span id=\"list_current_page\">" + i + "</span> ";
-    }
-    else
-    {
-      $("page_" + i).style.display = "none";
-      $("nav_page_" + i).innerHTML = "<a href='javascript:ft.display_dhtml_page_nav("
-        + num_results + ", " + num_per_page + ", " + i + ")'>" + i + "</a> ";
+  for (var i=1; i<=total_pages; i++) {
+    if (current_page == i) {
+      if (!$("#page_" + i)) {
+        alert("#page " + i + " doesn't exist");
+      }
+      $("#page_" + i).show();
+      $("#nav_page_" + i).html("<span id=\"list_current_page\">" + i + "</span> ");
+    } else {
+      $("#page_" + i).hide();
+      $("#nav_page_" + i).html("<a href='javascript:ft.display_dhtml_page_nav("
+        + num_results + ", " + num_per_page + ", " + i + ")'>" + i + "</a> ");
     }
   }
 
@@ -50,48 +72,45 @@ ft.display_dhtml_page_nav = function(num_results, num_per_page, current_page)
   var end = (max_end > num_results) ? num_results : max_end;
   var start = tmp + 1;
 
-  $("nav_viewing_num_start").innerHTML = start;
-  $("nav_viewing_num_end").innerHTML = end;
-
+  $("#nav_viewing_num_start").html(start);
+  $("#nav_viewing_num_end").html(end);
 
   // update the navigation links: <<
-  if (current_page > 1)
-  {
+  if (current_page > 1) {
     previous_page = current_page - 1;
-    $("nav_previous_page").innerHTML = "<a href='javascript:ft.display_dhtml_page_nav("
-      + num_results + ", " + num_per_page + ", " + previous_page + ")'>&laquo;</a> ";
+    $("#nav_previous_page").html("<a href='javascript:ft.display_dhtml_page_nav("
+      + num_results + ", " + num_per_page + ", " + previous_page + ")'>&laquo;</a> ");
+  } else {
+    $("#nav_previous_page").html("&laquo;");
   }
-  else
-    $("nav_previous_page").innerHTML = "&laquo;";
 
   // >>
-  if (current_page < total_pages)
-  {
+  if (current_page < total_pages) {
     next_page = current_page + 1;
-    $("nav_next_page").innerHTML = "<a href='javascript:ft.display_dhtml_page_nav("
-      + num_results + ", " + num_per_page + ", " + next_page + ")'>&raquo;</a> ";
+    $("#nav_next_page").html("<a href='javascript:ft.display_dhtml_page_nav("
+      + num_results + ", " + num_per_page + ", " + next_page + ")'>&raquo;</a> ");
+  } else {
+    $("#nav_next_page").html("&raquo;");
   }
-  else
-    $("nav_next_page").innerHTML = "&raquo;";
 }
-
 
 /**
  * Selects all options in a multi-select dropdown field.
  */
-ft.select_all_multi_dropdown_options = function(dd_field_id)
-{
-  for (var i=0; i<$(dd_field_id).options.length; i++)
+ft.select_all_multi_dropdown_options = function(dd_field_id) {
+  for (var i=0, len = $(dd_field_id).options.length; i<len; i++) {
     $(dd_field_id).options[i].selected = true;
+  }
 }
+
 
 /**
  * Selects all options in a multi-select dropdown field.
  */
-ft.unselect_all_multi_dropdown_options = function(dd_field_id)
-{
-  for (var i=0; i<$(dd_field_id).options.length; i++)
+ft.unselect_all_multi_dropdown_options = function(dd_field_id) {
+  for (var i=0, len = $(dd_field_id).options.length; i<len; i++) {
     $(dd_field_id).options[i].selected = false;
+  }
 }
 
 
@@ -102,8 +121,7 @@ ft.unselect_all_multi_dropdown_options = function(dd_field_id)
  * @param string text_val the display text of the select box
  * @param string value the value of the select box
  */
-ft.add_option = function(selectbox, text_val, value)
-{
+ft.add_option = function(selectbox, text_val, value) {
   var new_option = new Option(text_val, value);
   var sel_length = selectbox.length;
   selectbox.options[sel_length] = new_option;
@@ -116,11 +134,11 @@ ft.add_option = function(selectbox, text_val, value)
  * @param object selectbox the select box element
  * @param integer ind the index of the item to remove
  */
-ft.delete_option = function(selectbox, ind)
-{
+ft.delete_option = function(selectbox, ind) {
   var sel_length = selectbox.length;
-  if (sel_length > 0)
+  if (sel_length > 0) {
     selectbox.options[ind] = null;
+  }
 }
 
 
@@ -128,27 +146,25 @@ ft.delete_option = function(selectbox, ind)
  * Moves selected option(s) from one select box to another. This generally is used for multi-select
  * boxes to transfer options from one to the other.
  *
- * @param object sel_from the source select box element
- * @param object sel_to the target select box element
+ * @param object sel_from the source select box element, it's ID or a jQuery element
+ * @param object sel_to the target select box element, it's ID or a jQuery element
  */
-ft.move_options = function(sel_from, sel_to)
-{
+ft.move_options = function(sel_from, sel_to) {
+  sel_from = ft.get_dom_el(sel_from);
+  sel_to   = ft.get_dom_el(sel_to);
+
   var sel_length = sel_from.length;
   var sel_texts  = [];
   var sel_vals   = [];
-  var sel_count = 0;
-
-  var i;
+  var sel_count  = 0;
 
   // find the selected Options in reverse order and delete them from the 'from' Select
-  for (i=sel_length-1; i>=0; i--)
-  {
-    if (sel_from.options[i].selected)
-    {
+  for (var i=sel_length-1; i>=0; i--) {
+    if (sel_from.options[i].selected) {
       // if there's no value, that means the lawyer is away. Don't move them.
-      if (sel_from.options[i].value == "")
+      if (sel_from.options[i].value == "") {
         continue;
-
+      }
       sel_texts[sel_count] = sel_from.options[i].text;
       sel_vals[sel_count]  = sel_from.options[i].value;
       ft.delete_option(sel_from, i);
@@ -158,8 +174,9 @@ ft.move_options = function(sel_from, sel_to)
 
   // add the selected text/values in reverse order. This will add the Options to the 'to' Select
   // in the same order as they were in the 'from' Select
-  for (i=sel_count-1; i>=0; i--)
+  for (var i=sel_count-1; i>=0; i--) {
     ft.add_option(sel_to, sel_texts[i], sel_vals[i]);
+  }
 }
 
 
@@ -167,91 +184,34 @@ ft.move_options = function(sel_from, sel_to)
  * Helper function used to select all options in a multi-select dropdown. This is used on form submit
  * to ensure the contents are passed along to the server.
  */
-ft.select_all = function(el)
-{
-  for (var i=0; i<el.length; i++)
+ft.select_all = function(el) {
+  el = ft.get_dom_el(el);
+  for (var i=0; i<el.length; i++) {
     el[i].selected = true;
-
+  }
   return true;
 }
 
 
 /**
- * Opens a URL in a popup window, to let the user confirm it is what they intended.
- */
-ft.verify_url = function(url_field, form_page)
-{
-  var url = $(url_field).value;
-  if (!url)
-  {
-    ft.display_message("ft_message", false, g.messages["validation_no_url"]);
-    return false;
-  }
-  else if (!ft.is_valid_url(url))
-  {
-    ft.display_message("ft_message", false, g.messages["validation_invalid_url"]);
-    return false;
-  }
-  else
-  {
-    ft.urls.push([form_page, url_field]);
-    var verify_url_page = g.root_url + "/admin/verify_url.php?form_page=" + form_page + "&url=" + escape(url);
-
-    window.open(verify_url_page, "verify_url", "width=900,height=600,menu=no,toolbar=no,resizable=yes");
-  }
-}
-
-
-/**
- * This is called by the popup after the user confirms a URL. It sets the URL specified in the ft.urls
- * array as complete, and marks the field as verified for the page validation.
- */
-ft.verify_url_page = function(form_page, url)
-{
-  $("form_url_" + form_page + "_button").removeClassName("red");
-  $("form_url_" + form_page + "_button").addClassName("green");
-  $("form_url_" + form_page + "_button").value = g.messages["word_verified"];
-
-  // now update the URL
-  for (var i=0; i<ft.urls.length; i++)
-  {
-    if (ft.urls[i][0] == form_page)
-    {
-      $(ft.urls[i][1]).value = url;
-      break;
-    }
-  }
-
-  $("form_url_" + form_page + "_verified").value = "yes";
-}
-
-
-/**
- * Helper function to return the current checked value in a set of radio buttons.
+ * This is a helper function introduced after migrating to jQuery. I found that a lot of the functions expected
+ * either the ID (string) of a node, or the plain DOM node. But now we also introduced jQuery nodes being
+ * thrown around. So, this function takes any of the three as a param and always returns the appropriate DOM node.
  *
- * @param mixed value
+ * @param mixed string/DOM element/jQuery element
  */
-ft.get_checked_value = function(el)
-{
-  if (!el)
-    return "";
-
-  // a single radio field
-  if (el.length == undefined)
-  {
-    if (el.checked)
-      return el.value;
-    else
-      return "";
+ft.get_dom_el = function(mixed) {
+  var el = null;
+  if (typeof mixed == "string") {
+    el = document.getElementById(mixed);
   }
-
-  for (var i=0; i<el.length; i++)
-  {
-    if (el[i].checked)
-      return el[i].value;
+  else if (typeof mixed.jquery != 'undefined') {
+    el = mixed[0];
   }
-
-  return "";
+  else {
+    el = mixed;
+  }
+  return el;
 }
 
 
@@ -259,161 +219,325 @@ ft.get_checked_value = function(el)
  * Changes the currently displayed tab. Used for "inner-tabs" - tabs within a particular page / tab.
  * It also makes an Ajax call to pass the tabset name and current tab values to the server.
  */
-ft.change_inner_tab = function(tab, num_tabs, tabset_name)
-{
-  for (var i=1; i<=num_tabs; i++)
-  {
-    if (i == tab)
-    {
-      $("inner_tab" + i).removeClassName("inner_tab_unselected");
-      $("inner_tab" + i).addClassName("inner_tab_selected");
-      $("inner_tab_content" + i).style.display = "block";
-    }
-    else
-    {
-      $("inner_tab" + i).removeClassName("inner_tab_selected");
-      $("inner_tab" + i).addClassName("inner_tab_unselected");
-      $("inner_tab_content" + i).style.display = "none";
-    }
+ft.change_inner_tab = function(tab, tabset_name) {
+console.log(tabset_name);
+
+  $("#" + tabset_name + " .tab_row div").removeClass("selected");
+  $("#" + tabset_name + " .tab_row div.inner_tab" + tab).addClass("selected");
+  $("#" + tabset_name + " .inner_tab_content>div").hide();
+  $("#" + tabset_name + " .inner_tab_content>div.inner_tab_content" + tab).show();
+
+  // store the value in memory on the server
+  if (tabset_name) {
+    var page_url = g.root_url + "/global/code/actions.php";
+    $.ajax({
+      url:   page_url,
+      data:  { action: "remember_inner_tab", tabset: tabset_name, tab: tab },
+      type:  "POST",
+      error: ft.error_handler
+    });
   }
-
-  // store the value on the server
-  page_url = g.root_url + "/global/code/actions.php";
-
-  switch (tabset_name)
-  {
-    case "edit_view_tab":
-      new Ajax.Request(page_url, {
-        parameters: { action: "remember_edit_view_tab", edit_view_tab: tab },
-        method: 'post'
-          });
-      break;
-    case "edit_email_tab":
-      new Ajax.Request(page_url, {
-        parameters: { action: "remember_edit_email_tab", edit_email_tab: tab },
-        //onSuccess: function(transport) { alert("Success: " + transport.responseText); },
-        //onFailure: function(transport) { alert("Failure: " + transport.responseText); },
-        method: 'post'
-          });
-      break;
-  }
-
   return false;
 }
 
+
+/**
+ * This should be explicitly called on any page that uses JS inner tabs. It initializes the
+ * components, adding the appropriate JS events.
+ */
+ft.init_inner_tabs = function() {
+  $(".inner_tabset").each(function() {
+    var tabset_name = $(this).attr("id");
+    var row = 1;
+    $(this).find(".tab_row div").each(function() {
+      $(this).bind("click", { tab: row, tabset_name: tabset_name }, function(e) {
+        ft.change_inner_tab(e.data.tab, e.data.tabset_name);
+      });
+      row++;
+    });
+  });
+}
+
+
+/**
+ * Curious little function. This is a generic helper for adding event handlers to elements. It's passed a list of stuff
+ * to do: what elements trigger which elements to be hidden/shown/enabled/disabled. A single event can trigger multiple
+ * actions. The function can be called at any point (even before the DOM is ready).
+ *
+ * The hide/show lacks pizazz: it just instantly hides/shows the required sections. But I made the second function
+ * param an object so down the road it can extended.
+ *
+ * @param array an array of objects. Each object has the following structure
+ *    {
+ *      el:      the element that is clicked/blurred/whatevered (ID, DOM node or jQuery node)
+ *      targets: an array of element info. Each index is itself an object:
+ *               {
+ *                 el:     the element to show / hide (ID, DOM node or jQuery node)
+ *                 action: "show" / "hide" / "disable" / "enable" (string)
+ *               }
+ *    }
+ * @param object options. Right now this object may contain a single property: "event" (defaults to click).
+ */
+ft.click = function(info) {
+  $(function() {
+    for (var i=0, j=info.length; i<j; i++) {
+      var el = ft.get_dom_el(info[i].el);
+
+      $(el).bind("click", { targets: info[i].targets }, function(e) {
+        for (var m=0, n=e.data.targets.length; m<n; m++) {
+        var curr_target = e.data.targets[m];
+        var target_el   = ft.get_dom_el(curr_target.el);
+          if (curr_target.action == "show") {
+          $(target_el).show();
+          } else if (curr_target.action == "hide") {
+            $(target_el).hide();
+          } else if (curr_target.action == "disable") {
+            $(target_el).attr("disabled", "disabled")
+          } else if (curr_target.action == "enable") {
+            $(target_el).attr("disabled", "");
+          }
+        }
+      });
+    }
+  });
+}
 
 
 /**
  * The error handler for the RSV validation library. This overrides the built-in error handler.
  */
-function g_rsvErrors(f, errorInfo)
-{
+function g_rsvErrors(f, errorInfo) {
   var errorHTML = "";
   var problemFields = [];
   var problemStrings = [];
 
-  for (var i=0; i<errorInfo.length; i++)
-  {
-    if (!$(problemStrings).include(errorInfo[i][1]))
-    {
+  for (var i=0; i<errorInfo.length; i++) {
+    if ($.inArray(errorInfo[i][1], problemStrings) == -1) {
       errorHTML += rsv.errorHTMLItemBullet + errorInfo[i][1] + "<br />";
       problemStrings.push(errorInfo[i][1]);
     }
-
-    if (errorInfo[i][0].length)
-    {
-      $(errorInfo[i][0][0]).addClassName("rsvErrorField");
-
-      if (i==0)
-      {
+    if (errorInfo[i][0].length) {
+      $(errorInfo[i][0][0]).addClass("rsvErrorField");
+      if (i == 0) {
         try {
           $(errorInfo[i][0][0]).focus();
         } catch(e) { }
       }
-    }
-    else
-    {
-      $(errorInfo[i][0]).addClassName("rsvErrorField");
-
-      if (i==0)
-      {
+    } else {
+      $(errorInfo[i][0]).addClass("rsvErrorField");
+      if (i==0) {
         try {
           $(errorInfo[i][0]).focus();
         } catch(e) { }
       }
     }
-
     problemFields.push(errorInfo[i][0]);
   }
 
-  if (errorInfo.length > 0)
-  {
+  if (errorInfo.length > 0) {
     ft.display_message(rsv.errorTargetElementId, 0, errorHTML);
     return false;
   }
 
   // a hack-like solution to get around the fact that by overriding RSV's built-in error handler
   // any defined onCompleteHandler will be ignored
-  if (rsv.onCompleteHandler)
+  if (rsv.onCompleteHandler) {
     return rsv.onCompleteHandler();
+  }
 
   return true;
 }
 
 
 /**
- * Generic function for displaying a message in the UI, as returned from an Ajax response handler. This
- * does all the fancy-pants stuff like blind-upping the message, and changing the colour on the message
- * with the Fade Anything Technique (fat.js) to draw attention to it.
+ * Generic function for displaying a message in the UI, as returned from an Ajax response handler.
  *
- * Assumption: the element with the target_id contains a single DIV tag. This is done so that the styles
- * may be applied to the inner DIV, allowing the outer div to be smoothly blind-upped and -downed.
+ * There's one weirdness about this function. The main messages.tpl file outputs a div#ft_message
+ * element that contains an empty 8px high div followed by a div#ft_message_inner element. The idea
+ * was that it would always provide an 8px-high empty space to pad things out properly on the screen.
+ * Other message elements don't contain that padding.
+ *
+ * This was a dumb decision, made early on. It should be simplified by moving the padding out of the
+ * element.
  *
  * @param string target_id the HTML target element
- * @param boolean success whether this is an error or a notification
+ * @param boolean success whether this is an error or a notification: 1 or 0
  * @param string message the message to display
  */
-ft.display_message = function(target_id, success, message)
-{
-  var messageClass = (success == 1) ? "notify" : "error";
-  var closeImage = "";
+ft.display_message = function(target_id, success, message) {
 
-  // if target_id is the main "ft_message" id string, we do something a little special:
+  // TODO. What on EARTH was I thinking here? I think I may need to lay off the smack.
+  success = parseInt(success);
+  var messageClass = (success == 1) ? "notify" : "error";
+
+  // if target_id is the main "ft_message" id string, we do something a little special
   var inner_target_id = (target_id == "ft_message") ? "ft_message_inner" : target_id;
 
   // remove all old class names and add the new one
-  if (success)
-  {
-    $(inner_target_id).removeClassName("error");
-    from_colour = g.notify_colours[0];
-    to_colour   = g.notify_colours[1];
-  }
-  else
-  {
-    $(inner_target_id).removeClassName("notify");
-    from_colour = g.error_colours[0];
-    to_colour   = g.error_colours[1];
+  var colour;
+  if (success == 1) {
+    $("#" + inner_target_id).removeClass("error");
+    colour = g.notify_colours[1];
+  } else {
+    $("#" + inner_target_id).removeClass("notify");
+    colour = g.error_colours[1];
   }
 
-  $(inner_target_id).addClassName(messageClass);
+  if ($("#" + target_id).length) {
+    $("#" + inner_target_id).addClass(messageClass);
+    $("#" + inner_target_id).html("<div style=\"padding:8px\">"
+      + "<a href=\"#\" onclick=\"return ft.hide_message('" + target_id + "')\" style=\"float:right\" class=\"pad_left_large\">X</a>"
+      + message + "</div>");
+    $("#" + target_id).show();
 
-  $(inner_target_id).innerHTML = "<div style=\"padding:8px\">"
-    + "<a href=\"#\" onclick=\"return ft.hide_message('" + target_id + "')\" style=\"float:right\" class=\"pad_left_large\">X</a>"
-    + message + "</div>";
-  $(target_id).style.display = "block";
-
-  // add the nice fade effect for the notification message
-  Fat.fade_element(inner_target_id, 60, 1500, "#" + from_colour, "#" + to_colour);
+    // add the nice highlight effect for the notification message
+    $(function() { $("#" + inner_target_id).effect("highlight", { color: "#" + colour }, 1200); });
+  }
 }
 
 
 /**
- * Hides a message on the screen by fading it out and blinding up at the same time.
+ * With 2.1.0, the "Check URL" functionality is greatly simplified. Instead of opening a separate popup
+ * where the user can confirm/deny the URL, it opens a dialog window containing the page in an iframe.
+ * There is no approve / deny functionality - it's left to the discretion of the user.
+ *
+ * This function needs to be called on page load. It maps all Check URL buttons to the corresponding
  */
-ft.hide_message = function(target_id)
-{
-  Effect.BlindUp($(target_id));
-  Effect.Fade($(target_id));
+ft.init_check_url_buttons = function() {
+  $(".check_url").live("click", function() {
+    var check_url_id = $(this).attr("id");
+    var url_field_id = check_url_id.replace(/^check_url__/, "");
+
+    // if there's no URL, just output a message
+    var url = $.trim($("#" + url_field_id).val());
+    if (url == "") {
+      ft.display_message("ft_message", false, g.messages["validation_no_url"]);
+      $("#" + url_field_id).focus();
+      return false;
+    }
+
+    if (!ft.is_valid_url(url)) {
+      ft.display_message("ft_message", false, g.messages["validation_invalid_url"]);
+      $("#" + url_field_id).select().focus();
+      return false;
+    }
+
+    ft.create_dialog({
+      dialog:     ft.check_url_dialog,
+      title:      g.messages["phrase_check_url"] + " - <i>" + url + "</i>",
+      min_width:  800,
+      min_height: 500,
+      content: "<iframe class=\"check_url_iframe\" src=\"" + url + "\"></iframe>",
+      buttons: [{
+        text: g.messages["word_close"],
+        click: function() {
+          $(this).dialog("close");
+          $("#" + url_field_id).focus();
+        }
+      }]
+    });
+  });
+}
+
+/**
+ * This handles all dialog window creation in Form Tools. Dialogs take two forms:
+ * 1. The markup for the dialog already exists in the page. This is handy for dialogs for adding/editing stuff,
+ *    where by and large the markup is pre-defined
+ * 2. dialogs that change all the time - like errors & notifications. Here, there's not much point pre-creating
+ *    a hidden element containing the dialog content, since the content is always different.
+ *
+ * This function handles both scenarios.
+ *
+ * [jQuery settings like to be in camel; Form Tools uses underscore. Hence the oddity of switching here]
+ */
+ft.create_dialog = function(info) {
+  var settings = $.extend({
+
+    // a reference to the dialog window itself. If this isn't included, the dialog is a one-off
+    dialog:     "<div></div>",
+
+    // there are two ways to create a dialog. Either specify the ID of the element in the page
+    // containing the markup, or just pass the HTML here.
+    content:    "",
+    title:      "",
+    auto_open:  true,
+    modal:      true,
+    min_width:  400,
+    min_height: 100,
+    buttons:    [],
+    popup_type: null,
+    open:       function() {},
+    close:      function() {}
+  }, info);
+
+
+  // if there's a popup_type specified and we want to add in an icon
+  if (settings.popup_type) {
+    var content = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\"><tr>";
+    switch (settings.popup_type) {
+      case "warning":
+        content += "<td valign=\"top\"><span class=\"popup_icon popup_type_warning\"></span></td>";
+        break;
+      case "error":
+        content += "<td valign=\"top\"><span class=\"popup_icon popup_type_error\"></span></td>";
+        break;
+      case "info":
+        content += "<td valign=\"top\"><span class=\"popup_icon popup_type_info\"></span></td>";
+        break;
+    }
+    content += "<td>" + settings.content + "</td></tr></table>";
+  } else {
+    content = settings.content;
+  }
+
+  var dialog_content = "";
+  if (settings.content) {
+    dialog_content = $(settings.dialog).html(content);
+  } else {
+    dialog_content = $(settings.dialog);
+  }
+
+  dialog_content.dialog({
+    title:     settings.title,
+    modal:     settings.modal,
+    autoOpen:  settings.auto_open,
+    minWidth:  settings.min_width,
+    minHeight: settings.min_height,
+    buttons:   settings.buttons,
+    open:      settings.open,
+    close:     settings.close
+  });
+}
+
+
+/**
+ * Simple helper function to show / hide an Ajax loading icon.
+ */
+ft.dialog_activity_icon = function(popup, action) {
+  var dialog = $(popup).closest(".ui-dialog");
+  if (action == "show") {
+  if ($(dialog).find(".ajax_activity").length == 0) {
+      $(dialog).find(".ui-dialog-buttonpane").append("<div class=\"ajax_activity\"></div>");
+  }
+  } else {
+    $(dialog).find(".ajax_activity").remove();
+  }
+}
+
+
+/**
+ * Disables a button (by label) in a dialog window.
+ */
+ft.dialog_disable_button = function(popup, label) {
+  $(popup).closest(".ui-dialog").find(".ui-dialog-buttonpane button:contains(" + label + ")").button("disable");
+}
+
+
+/**
+ * Hides a message on the screen by by blinding it up.
+ */
+ft.hide_message = function(target_id) {
+  $("#" + target_id).hide("blind");
   return false;
 }
 
@@ -422,17 +546,14 @@ ft.hide_message = function(target_id)
  * Checks that a folder has both read and write permissions, and displays the result in an element
  * in the page.
  */
-ft.test_folder_permissions = function(folder, target_message_id)
-{
-  var info = "file_upload_dir=" + folder + "&action=test_folder_permissions&return_vals[]=target_message_id:" + target_message_id;
-
-  var params = info.toQueryParams();
-  var ajaxActionsURL = g.root_url + "/global/code/actions.php";
-  new Ajax.Request(ajaxActionsURL, {
-    parameters: params,
-    method: 'post',
-    onSuccess: ft.response_handler,
-    onFailure: function() { alert("Problem loading page"); }
+ft.test_folder_permissions = function(folder, target_message_id) {
+  $.ajax({
+    url:      g.root_url + "/global/code/actions.php",
+    data:     "file_upload_dir=" + folder + "&action=test_folder_permissions&return_vals[]=target_message_id:" + target_message_id,
+    dataType: "json",
+    type:     "POST",
+    success:  ft.response_handler,
+    error:    ft.error_handler
   });
 }
 
@@ -440,19 +561,84 @@ ft.test_folder_permissions = function(folder, target_message_id)
 /**
  * Checks that a folder and a URL are both referring to the same location.
  */
-ft.test_folder_url_match = function(folder, url, target_message_id)
-{
-  var info = "file_upload_dir=" + folder + "&file_upload_url=" + url + "&action=test_folder_url_match"
-    + "&return_vals[]=target_message_id:" + target_message_id;
-
-  var params = info.toQueryParams();
-  var ajaxActionsURL = g.root_url + "/global/code/actions.php";
-  new Ajax.Request(ajaxActionsURL, {
-    parameters: params,
-    method: 'post',
-    onSuccess: ft.response_handler,
-    onFailure: ft.error_handler
+ft.test_folder_url_match = function(folder, url, target_message_id) {
+  $.ajax({
+    url:      g.root_url + "/global/code/actions.php",
+    data:     "file_upload_dir=" + folder + "&file_upload_url=" + url + "&action=test_folder_url_match" + "&return_vals[]=target_message_id:" + target_message_id,
+    dataType: "json",
+    type:     "POST",
+    success:  ft.response_handler,
+    error:    ft.error_handler
   });
+}
+
+
+/**
+ * Different field types allow different field sizes. It wouldn't make sense for textareas or file fields, for
+ * instance, to have a storage size of 1 character. This function is called whenever a user changes a field's
+ * type: it updates the list of available field sizes. Since some fields may only have a single field size,
+ * the second target_el parameter is the element CONTAINING the field size dropdown. It re-creates the
+ * dropdown (or single field size string) in that element.
+ *
+ * If the new available field sizes contain the currently selected field size, it just sets the new size
+ * to the same value.
+ *
+ * @param node the field type dropdown that the user just changed
+ * @param string the ID of the element where the new field size dropdown will be updated
+ * @param object options assorted, configurable options
+ */
+ft.update_field_size_dropdown = function(el, target_el, options) {
+  var field_type_id = $(el).val();
+
+  var opts = $.extend({
+    name:                 null,
+    id:                   null,
+    selected:             null,
+    field_type_size_list: page_ns.field_types["field_type_" + field_type_id],
+    field_size_labels:    page_ns.field_sizes,
+  }, options);
+
+  var field_type_sizes = opts.field_type_size_list.split(",");
+  var dd_options = [];
+  for (var i=0; i<field_type_sizes.length; i++) {
+  dd_options.push({
+    value:    field_type_sizes[i],
+    text:     opts.field_size_labels[field_type_sizes[i]],
+    selected: (field_type_sizes[i] == opts.selected) ? " selected" : ""
+  });
+  }
+
+  var html = "";
+
+  // if there are no options, the admin made a boo-boo and didn't assign any field sizes to the field type
+  if (dd_options.length == 0) {
+
+  } else if (dd_options.length == 1) {
+    html = "<input type=\"hidden\"";
+    if (opts.name) {
+      html += " name=\"" + opts.name + "\"";
+    }
+    if (opts.id) {
+      html += " id=\"" + opts.id + "\"";
+    }
+    html += " value=\"" + dd_options[0].value + "\" />" + dd_options[0].text;
+  } else {
+    html = "<select";
+    if (opts.name) {
+      html += " name=\"" + opts.name + "\"";
+    }
+    if (opts.id) {
+      html += " id=\"" + opts.id + "\"";
+    }
+    html += ">\n";
+
+    for (var i=0; i<dd_options.length; i++) {
+      html += "<option value=\"" + dd_options[i].value + "\"" + dd_options[i].selected + ">" + dd_options[i].text + "</option>\n";
+    }
+    html += "</select>";
+  }
+
+  $(target_el).html(html);
 }
 
 
@@ -462,140 +648,50 @@ ft.test_folder_url_match = function(folder, url, target_message_id)
  * actions.php script - which is passed back to here - identifying the page element ID to insert the
  * error/success message.
  */
-ft.response_handler = function(transport)
-{
-  var info = transport.responseText.evalJSON();
-
-  ft.display_message(info.target_message_id, info.success, info.message);
+ft.response_handler = function(data) {
+  ft.display_message(data.target_message_id, data.success, data.message);
 }
 
-ft.error_handler = function(transport)
-{
-  ft.display_message("ft_message", false, "Error: " + transport.responseText);
+/**
+ * TODO expand this to work with dialogs. It should close all open dialogs and hide their loading images, if shown.
+ */
+ft.error_handler = function(xml_http_request, text_status, error_thrown) {
+  ft.display_message("ft_message", false, "Error: " + error_thrown);
 }
+
 
 /**
  * Called when the administrator clicks on the "Update" link - it gets the upgrade info form
  * from the server, inserts it into the page and submits it.
  */
-ft.check_updates = function()
-{
-  if ($("upgrade_form") != null)
-    $("upgrade_form").submit();
-  else
-  {
-    var ajaxActionsURL = g.root_url + "/global/code/actions.php";
-    new Ajax.Request(ajaxActionsURL, {
-      parameters: { action: "get_upgrade_form_html" },
-      method:     'post',
-      onSuccess:  ft.embed_and_submit_upgrade_form
+ft.check_updates = function() {
+  if ($("#upgrade_form").length) {
+    $("#upgrade_form").submit();
+  } else {
+    $.ajax({
+      url:      g.root_url + "/global/code/actions.php",
+      data:     "action=get_upgrade_form_html",
+      dataType: "html",
+      type:     "POST",
+      success:  ft.embed_and_submit_upgrade_form,
+
+      // bit of an assumption here: it assumes that every page has the default ft_message notification
+      // element. If it doesn't, the error just won't show
+      error:    ft.error_handler
     });
   }
 
   return false;
 }
 
-ft.embed_and_submit_upgrade_form = function(transport)
-{
-  var body = $$("body")[0];
-  var div = document.createElement("div");
-  div.innerHTML = transport.responseText;
-  body.appendChild(div);
 
+ft.embed_and_submit_upgrade_form = function(data) {
+  $("body").append(data);
   ft.queue.push([
-    function() { $("upgrade_form").submit(); },
-    function() { return ($("upgrade_form").length > 0); }
+    function() { $("#upgrade_form").submit(); },
+    function() { return ($("#upgrade_form").length > 0); }
   ]);
   ft.process_queue();
-}
-
-
-/**
- * The Fade Anything Technique - Adam Michela
- * http://www.axentric.com/aside/fat/
- *
- * @version 1.0-RC1
- */
-var Fat = {
-  make_hex : function (r,g,b)
-  {
-    r = r.toString(16); if (r.length == 1) r = '0' + r;
-    g = g.toString(16); if (g.length == 1) g = '0' + g;
-    b = b.toString(16); if (b.length == 1) b = '0' + b;
-    return "#" + r + g + b;
-  },
-  fade_all : function ()
-  {
-    var a = document.getElementsByTagName("*");
-    for (var i = 0; i < a.length; i++)
-    {
-      var o = a[i];
-      var r = /fade-?(\w{3,6})?/.exec(o.className);
-      if (r)
-      {
-        if (!r[1]) r[1] = "";
-        if (o.id) Fat.fade_element(o.id,null,null,"#"+r[1]);
-      }
-    }
-  },
-  fade_element : function (id, fps, duration, from, to)
-  {
-    if (!fps) fps = 30;
-    if (!duration) duration = 3000;
-    if (!from || from == "#") from = "#FFFF33";
-    if (!to) to = this.get_bgcolor(id);
-
-    var frames = Math.round(fps * (duration / 1000));
-    var interval = duration / frames;
-    var delay = interval;
-    var frame = 0;
-
-    if (from.length < 7) from += from.substr(1,3);
-    if (to.length < 7) to += to.substr(1,3);
-
-    var rf = parseInt(from.substr(1,2),16);
-    var gf = parseInt(from.substr(3,2),16);
-    var bf = parseInt(from.substr(5,2),16);
-    var rt = parseInt(to.substr(1,2),16);
-    var gt = parseInt(to.substr(3,2),16);
-    var bt = parseInt(to.substr(5,2),16);
-
-    var r,g,b,h;
-    while (frame < frames)
-    {
-      r = Math.floor(rf * ((frames-frame)/frames) + rt * (frame/frames));
-      g = Math.floor(gf * ((frames-frame)/frames) + gt * (frame/frames));
-      b = Math.floor(bf * ((frames-frame)/frames) + bt * (frame/frames));
-      h = this.make_hex(r,g,b);
-
-      setTimeout("Fat.set_bgcolor('"+id+"','"+h+"')", delay);
-
-      frame++;
-      delay = interval * frame;
-    }
-    setTimeout("Fat.set_bgcolor('"+id+"','"+to+"')", delay);
-  },
-  set_bgcolor : function(id, c)
-  {
-    var o = $(id);
-    o.style.backgroundColor = c;
-  },
-  get_bgcolor : function(id)
-  {
-    var o = $(id);
-    while(o)
-    {
-      var c;
-      if (window.getComputedStyle) c = window.getComputedStyle(o,null).getPropertyValue("background-color");
-      if (o.currentStyle) c = o.currentStyle.backgroundColor;
-      if ((c != "" && c != "transparent") || o.tagName == "BODY") { break; }
-      o = o.parentNode;
-    }
-    if (c == undefined || c == "" || c == "transparent") c = "#FFFFFF";
-    var rgb = c.match(/rgb\s*\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)/);
-    if (rgb) c = this.make_hex(parseInt(rgb[1]),parseInt(rgb[2]),parseInt(rgb[3]));
-    return c;
-  }
 }
 
 
@@ -604,71 +700,40 @@ var Fat = {
  * at one time. The idea is that often an element needs a different class at a different time, e.g.
  * "red", "blue", green" but cannot have more than one at once. This function ensures it's correct.
  *
- * @param object el a Prototype extended node
+ * @param object el a node
  * @param string class the class name to apply
  * @param array all_classes. All class that may
  */
-ft.toggle_unique_class = function(el, new_class, all_classes)
-{
-  for (var i=0; i<all_classes.length; i++)
-  {
-    if (el.hasClassName(all_classes[i]))
-      el.removeClassName(all_classes[i]);
+ft.toggle_unique_class = function(el, new_class, all_classes) {
+  for (var i=0; i<all_classes.length; i++) {
+    if ($(el).hasClass(all_classes[i])) {
+      $(el).removeClass(all_classes[i]);
+    }
   }
-
-  el.addClassName(new_class);
+  $(el).addClass(new_class);
 }
 
 
 /**
- * Helper function to return the first ancestor node of any other node. If the node isn't found, it
- * returns null.
+ * This function is used to bundle together a sequential group of nodes into a Document Fragment
+ * so it may be inserted into the DOM with a single action. The node_list param may be a mixed
+ * array of jQuery nodes or plain DOM nodes.
  *
- * @param object a Prototype extended node
+ * TODO
  *
+ * @param array node_list
+ * @return node a document fragment
  */
-ft.get_ancestor_node = function(el, target_node)
-{
-  target_node = target_node.toUpperCase();
-  var found_el = null;
-  while (el.ancestors().length)
-  {
-    if (el.nodeName == target_node)
-    {
-      found_el = el;
-      break;
-    }
-    el = el.ancestors()[0];
+ft.group_nodes = function(node_list) {
+  var fragment = document.createDocumentFragment();
+  for (var i=0, j=node_list.length; i<j; i++) {
+    fragment.appendChild(node_list[i][0]); // TODO
   }
-
-  return found_el;
+  return fragment;
 }
 
-
 /**
- * RUZEE.Ellisis 0.1
- * (c) 2007 Steffen Rusitschka
- *
- * RUZEE.Ellipsis is freely distributable under the terms of an MIT-style license.
- * For details, see http://www.ruzee.com/
- */
-function ellipsis(e)
-{
-    var w = e.getWidth() - 10000;
-    var t = e.innerHTML;
-    e.innerHTML = "<span>" + t + "</span>";
-    e = e.down();
-    while (t.length > 0 && e.getWidth() >= w) {
-      t = t.substr(0, t.length - 1);
-      e.innerHTML = t + "...";
-    }
-  }
-
-document.write('<style type="text/css">' + '.ellipsis { margin-right:-10000px; } #content { overflow: hidden }</style>');
-
-
-/**
- * A generic JS queuing function. For purpose and usage, see my post:
+ * A generic JS queuing function. For purpose and usage, see post:
  * http://www.benjaminkeen.com/?p=136
  *
  * [0] : code to execute - (function)
@@ -676,14 +741,12 @@ document.write('<style type="text/css">' + '.ellipsis { margin-right:-10000px; }
  * [2] : interval ID (managed internally by script) - (integer)
  */
 ft.queue = [];
-ft.process_queue = function()
-{
+ft.process_queue = function() {
   if (!ft.queue.length)
     return;
 
   // if this code hasn't begun being executed, start 'er up
-  if (!ft.queue[0][2])
-  {
+  if (!ft.queue[0][2]) {
     // run the code
     ft.queue[0][0]();
     timeout_id = window.setInterval("ft.check_queue_item_complete()", 50);
@@ -691,18 +754,34 @@ ft.process_queue = function()
   }
 }
 
-ft.check_queue_item_complete = function()
-{
-  if (ft.queue[0][1]())
-  {
+ft.check_queue_item_complete = function() {
+  if (ft.queue[0][1]()) {
     window.clearInterval(ft.queue[0][2]);
     ft.queue.shift();
     ft.process_queue();
   }
 }
 
-ft.is_valid_url = function(url)
-{
-  var RegExp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+ft.is_valid_url = function(url) {
+  var RegExp = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
   return RegExp.test(url);
 }
+
+
+/**
+ * Helper function to find the value for a field name, serialized with jQuery serializeArray().
+ *
+ * @param array arr each index is a hash with two keys: name and value
+ * @param string name
+ */
+ft._extract_array_val = function(arr, name) {
+  var value = "";
+  for (var i=0, j=arr.length; i<j; i++) {
+  	if (arr[i].name == name) {
+      value = arr[i].value;
+      break;
+  	}
+  }
+  return value;
+}
+

@@ -41,7 +41,7 @@ $page_vars["has_extra_password_requirements"] = (!empty($client_info["settings"]
 $page_vars["has_min_password_length"] = !empty($client_info["settings"]["min_password_length"]);
 $page_vars["password_special_char"] = ft_eval_smarty_string($LANG["phrase_password_special_char"], array("chars" => $g_password_special_chars));
 $page_vars["phrase_password_min"]   = ft_eval_smarty_string($LANG["phrase_password_min"], array("length" => $client_info["settings"]["min_password_length"]));
-$page_vars["head_js"] =<<< EOF
+$page_vars["head_js"] =<<< END
 var rules = [];
 rules.push("required,first_name,{$LANG["validation_no_first_name"]}");
 rules.push("required,last_name,{$LANG["validation_no_last_name"]}");
@@ -51,7 +51,7 @@ rules.push("is_alpha,username,{$LANG['validation_invalid_username']}");
 rules.push("if:password!=,required,password_2,{$LANG["validation_no_account_password_confirmed"]}");
 rules.push("if:password!=,same_as,password,password_2,{$LANG["validation_passwords_different"]}");
 $conditional_rules
-EOF;
+END;
 
 ft_display_page("clients/account/index.tpl", $page_vars);
 

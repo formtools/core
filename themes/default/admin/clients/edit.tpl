@@ -4,11 +4,12 @@
   <tr>
     <td width="45"><a href="./"><img src="{$images_url}/icon_accounts.gif" border="0" width="34" height="34" /></a></td>
     <td class="title">
-      <a href="./">{$LANG.word_clients|upper}</a>: {$client_info.first_name|upper} {$client_info.last_name|upper}
-      (<span class="bold">{$client_id}</span>)
+      <a href="./">{$LANG.word_clients}</a>
+      <span class="joiner">&raquo;</span> {$client_info.first_name} {$client_info.last_name}
+      (<span class="identifier">{$client_id}</span>)
     </td>
     <td align="right">
-      <a href="index.php?login={$client_id}">{$LANG.word_login_link}</a>
+      <a href="index.php?login={$client_id}" title="{$LANG.phrase_login_as_user}"><img src="{$images_url}/login.png" border="0" /></a>
     </td>
   </tr>
   </table>

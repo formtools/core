@@ -7,7 +7,7 @@
   <table cellpadding="0" cellspacing="0" height="35">
   <tr>
     <td width="45"><img src="{$images_url}/icon_modules.gif" width="34" height="34" /></td>
-    <td class="title">{$LANG.word_modules|upper}</td>
+    <td class="title">{$LANG.word_modules}</td>
   </tr>
   </table>
 
@@ -79,51 +79,36 @@
 
           <table class="list_table" cellspacing="1" cellpadding="0">
           <tr>
-            <th>
-
-              {assign var="up_down" value=""}
-              {if     $order == "module_name-DESC"}
-                {assign var=sort_order value="order=module_name-ASC"}
-                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
-              {elseif $order == "module_name-ASC"}
-                {assign var=sort_order value="order=module_name-DESC"}
-                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
-              {else}
-                {assign var=sort_order value="order=module_name-DESC"}
-              {/if}
-
-              <table cellspacing="0" cellpadding="0" align="center" class="pad_left_small">
-              <tr>
-                <td><a href="{$same_page}?{$sort_order}">{$LANG.word_module}</a></td>
-                <td class="pad_left">{$up_down}</td>
-              </tr>
-              </table>
-
+            {assign var="up_down" value=""}
+            {if     $order == "module_name-DESC"}
+              {assign var=sort_order value="order=module_name-ASC"}
+              {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+            {elseif $order == "module_name-ASC"}
+              {assign var=sort_order value="order=module_name-DESC"}
+              {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+            {else}
+              {assign var=sort_order value="order=module_name-DESC"}
+            {/if}
+            <th{if $up_down} class="over"{/if}>
+              <a href="{$same_page}?{$sort_order}">{$LANG.word_module} {$up_down}</a>
             </th>
             <th class="pad_left pad_right">{$LANG.word_version}</th>
-            <th width="70">
 
-              {assign var="up_down" value=""}
-              {if     $order == "is_enabled-DESC"}
-                {assign var=sort_order value="order=is_enabled-ASC"}
-                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
-              {elseif $order == "is_enabled-ASC"}
-                {assign var=sort_order value="order=is_enabled-DESC"}
-                {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
-              {else}
-                {assign var=sort_order value="order=is_enabled-DESC"}
-              {/if}
-
-              <table cellspacing="0" cellpadding="0" align="center" class="pad_left_small">
-              <tr>
-                <td><a href="{$same_page}?{$sort_order}">{$LANG.word_enabled}</a></td>
-                <td class="pad_left">{$up_down}</td>
-              </tr>
-              </table>
-
+            {assign var="up_down" value=""}
+            {if     $order == "is_enabled-DESC"}
+              {assign var=sort_order value="order=is_enabled-ASC"}
+              {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+            {elseif $order == "is_enabled-ASC"}
+              {assign var=sort_order value="order=is_enabled-DESC"}
+              {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+            {else}
+              {assign var=sort_order value="order=is_enabled-DESC"}
+            {/if}
+            <th width="70"{if $up_down} class="over"{/if}>
+              <a href="{$same_page}?{$sort_order}">{$LANG.word_enabled} {$up_down}</a>
             </th>
             <th width="70">{$LANG.word_select|upper}</th>
-            <th width="70" class="del">{$LANG.word_uninstall|upper}</th>
+            <th width="70" class="del2">{$LANG.word_uninstall|upper}</th>
           </tr>
 
         {/if}
@@ -155,9 +140,9 @@
 							{/if}
             {/if}
           </td>
-          <td valign="top" class="del" align="center">
+          <td valign="top" class="del2" align="center">
             {if $module.module_type != "core"}
-              <a href="{$same_page}?uninstall={$module.module_id}" onclick="return page.uninstall_module({$module.custom_delete_file})">{$LANG.word_uninstall|upper}</a>
+              <a href="#" onclick="return page_ns.uninstall_module({$module.module_id})">{$LANG.word_uninstall|upper}</a>
             {/if}
           </td>
         </tr>

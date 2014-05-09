@@ -18,8 +18,9 @@ function smarty_function_dropdown($params, &$smarty)
   $blank_option_text  = (isset($params["blank_option_text"])) ? $params["blank_option_text"] : $LANG["phrase_please_select"];
 
   $attributes = array(
-    "id"   => $params["id"],
-    "name" => $params["name"]
+    "id"       => isset($params["id"]) ? $params["id"] : "",
+    "name"     => isset($params["name"]) ? $params["name"] : "",
+    "tabindex" => isset($params["tabindex"]) ? $params["tabindex"] : ""
       );
 
   $attribute_str = "";

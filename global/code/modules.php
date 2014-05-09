@@ -3,9 +3,9 @@
 /**
  * This file defines all functions relating to Form Tools modules.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Modules
  */
 
@@ -103,9 +103,6 @@ function ft_uninstall_module($module_id)
   $deleted = false;
   if ($g_delete_module_folder_on_uninstallation)
     $deleted = ft_delete_folder("$g_root_dir/modules/$module_folder");
-
-  // update the Upgrade link, to omit this module
-  ft_build_and_cache_upgrade_info();
 
   if ($deleted)
     $message = $LANG["notify_module_uninstalled"];
@@ -299,7 +296,7 @@ function ft_search_modules($search_criteria)
 /**
  * Retrieves the list of all modules currently in the database.
  *
- * @return array $theme_info an ordered array of hashes, each hash being the theme info.
+ * @return array $module_info an ordered array of hashes, each hash being the module info
  */
 function ft_get_modules()
 {
@@ -353,7 +350,7 @@ function ft_get_module_count()
  */
 function ft_init_module_page($account_type = "admin")
 {
-  global $g_root_dir, $g_session_type, $g_session_save_path, $LANG;
+  global $g_root_dir, $g_session_type, $g_session_save_path, $g_check_ft_sessions, $LANG;
 
   if ($g_session_type == "database")
     $sess = new SessionManager();
@@ -365,6 +362,9 @@ function ft_init_module_page($account_type = "admin")
   header("Cache-control: private");
   header("Content-Type: text/html; charset=utf-8");
   ft_check_permission($account_type);
+
+  if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"]))
+  	ft_check_sessions_timeout();
 
   $module_folder = _ft_get_current_module_folder();
 
@@ -453,7 +453,7 @@ function ft_update_module_list()
       $info = ft_sanitize($info);
 
       // check the required info file fields
-      $required_fields = array("author", "version", "date", "origin_language", "supports_ft_versions");
+      $required_fields = array("author", "version", "date", "origin_language");
       $all_found = true;
       foreach ($required_fields as $field)
       {
@@ -479,7 +479,6 @@ function ft_update_module_list()
       $module_version       = $info["version"];
       $module_date          = $info["date"];
       $origin_language      = $info["origin_language"];
-      $supports_ft_versions = $info["supports_ft_versions"];
       $nav                  = $info["nav"];
 
       $module_name          = $lang_info["module_name"];
@@ -492,9 +491,9 @@ function ft_update_module_list()
 
       mysql_query("
         INSERT INTO {$g_table_prefix}modules (is_installed, is_enabled, origin_language, module_name, module_folder, version,
-          author, author_email, author_link, description, module_date, supports_ft_versions)
+          author, author_email, author_link, description, module_date)
         VALUES ('no','no', '$origin_language', '$module_name', '$folder', '$module_version', '$author', '$author_email', '$author_link',
-          '$module_description', '$module_datetime', '$supports_ft_versions')
+          '$module_description', '$module_datetime')
           ") or die(mysql_error());
       $module_id = mysql_insert_id();
 
@@ -522,9 +521,6 @@ function ft_update_module_list()
     }
   }
   closedir($dh);
-
-  // update the Upgrade link
-  ft_build_and_cache_upgrade_info();
 
   return array(true, $LANG["notify_module_list_updated"]);
 }
@@ -562,7 +558,6 @@ function ft_get_module_info_file_contents($module_folder)
   $info["version"] = isset($values["version"]) ? $values["version"] : "";
   $info["date"] = isset($values["date"]) ? $values["date"] : "";
   $info["origin_language"] = isset($values["origin_language"]) ? $values["origin_language"] : "";
-  $info["supports_ft_versions"] = isset($values["supports_ft_versions"]) ? $values["supports_ft_versions"] : "";
   $info["nav"] = isset($values["nav"]) ? $values["nav"] : array();
 
   return $info;
@@ -857,7 +852,6 @@ function ft_upgrade_module($module_id)
   $module_version       = $info["version"];
   $module_date          = $info["date"];
   $origin_language      = $info["origin_language"];
-  $supports_ft_versions = $info["supports_ft_versions"];
   $nav                  = $info["nav"];
 
   $module_name          = $lang_info["module_name"];
@@ -877,8 +871,7 @@ function ft_upgrade_module($module_id)
            author_email = '$author_email',
            author_link = '$author_link',
            description = '$module_description',
-           module_date = '$module_datetime',
-           supports_ft_versions = '$supports_ft_versions'
+           module_date = '$module_datetime'
     WHERE  module_id = $module_id
       ") or die(mysql_error());
 
@@ -908,8 +901,6 @@ function ft_upgrade_module($module_id)
     "version" => $new_version
   );
   $message = ft_eval_smarty_string($LANG["notify_module_updated"], $placeholders);
-
-  ft_build_and_cache_upgrade_info();
 
   return array(true, $message);
 }

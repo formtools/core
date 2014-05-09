@@ -66,6 +66,11 @@
         <td><input type="text" name="date_format" value="{$client_info.date_format}" style="width: 80px" /> <span class="medium_grey">{$text_date_formatting_link}</span></td>
         <td align="center"><input type="checkbox" name="may_edit_date_format" {if $client_info.settings.may_edit_date_format == "yes"}checked{/if} /></td>
       </tr>
+      <tr>
+        <td class="pad_left_small">{$LANG.phrase_forms_page_default_message}</td>
+        <td><textarea name="forms_page_default_message" style="width:98%">{$client_info.settings.forms_page_default_message}</textarea></td>
+        <td align="center"></td>
+      </tr>
       </table>
 
 	    <p class="subtitle">{$LANG.phrase_security_settings}</p>

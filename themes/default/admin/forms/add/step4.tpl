@@ -3,13 +3,17 @@
   <table cellpadding="0" cellspacing="0" class="margin_bottom_large">
   <tr>
     <td width="45"><a href="../"><img src="{$images_url}/icon_forms.gif" border="0" width="34" height="34" /></a></td>
-    <td class="title"><a href="../">{$LANG.word_forms|upper}</a>: {$LANG.phrase_add_form|upper}</td>
+    <td class="title">
+      <a href="../">{$LANG.word_forms}</a> <span class="joiner">&raquo;</span>
+      <a href="./">{$LANG.phrase_add_form}</a> <span class="joiner">&raquo;</span>
+      {$LANG.phrase_external_form}
+    </td>
   </tr>
   </table>
 
   <table cellpadding="0" cellspacing="0" width="100%" class="add_form_nav">
   <tr>
-    <td class="selected"><a href="step1.php">{$LANG.word_checklist}</a></td>
+    <td class="selected"><a href="step1.php">{$LANG.word_start}</a></td>
     <td class="selected"><a href="step2.php">{$LANG.phrase_form_info}</a></td>
     <td class="selected"><a href="step3.php">{$LANG.phrase_test_submission}</a></td>
     <td class="selected">{$LANG.phrase_database_setup}</td>
@@ -32,86 +36,100 @@
       {$LANG.text_add_form_step_3_para_2}
     </div>
 
-    <form action="{$same_page}" method="post">
+    <form action="{$same_page}" method="post" id="step4_form">
       <input type="hidden" name="form_id" value="{$form_id}" />
 
-      <table class="list_table" width="100%" cellpadding="0" cellspacing="1">
-      <tr>
-        <th width="40">{$LANG.word_order}</th>
-        <th>{$LANG.phrase_form_field_name}</td>
-        <th nowrap>{$LANG.phrase_display_name}<span class="pad_right">&nbsp;</span><input type="button" class="bold" value="{$LANG.phrase_smart_fill}" onclick="page_ns.smart_fill()" /></th>
-        <th>{$LANG.phrase_sample_data}</td>
-        <th>{$LANG.phrase_field_size}</th>
-        <th width="50" class="del">{$LANG.word_delete}</th>
-      </tr>
+      <div class="sortable groupable add_form_step4" id="{$sortable_id}">
+        <input type="hidden" class="tabindex_col_selectors" value=".rows .col3 input|.rows .col5 select" />
+        <ul class="header_row">
+          <li class="col1">{$LANG.word_order}</li>
+          <li class="col2">{$LANG.phrase_form_field_name}</li>
+          <li class="col3">{$LANG.phrase_display_name}<span class="pad_right">&nbsp;</span><input type="button" class="bold" value="{$LANG.phrase_smart_fill}" onclick="page_ns.smart_fill()" /></li>
+          <li class="col4">{$LANG.phrase_sample_data}</li>
+          <li class="col5 colN del"></li>
+        </ul>
+        <div class="clear"></div>
 
-      {foreach from=$form_fields item=field name=row}
-        {assign var=row_count value=$smarty.foreach.row.iteration}
-        {assign var=field_id value=$field.field_id}
+        <ul class="rows">
+        {assign var=previous_item value=""}
+        {foreach from=$form_fields item=field name=row}
+          {assign var=row_count value=$smarty.foreach.row.iteration}
+          {assign var=field_id value=$field.field_id}
+          {assign var=style value=""}
 
-        {assign var=style value=""}
-        {if $field.field_type == "system"}
-          {assign var=style value="background-color: #C6F1C9"} {* TODO Use a class instead *}
-        {/if}
-
-        {assign var=include_on_redirect value=""}
-        {if $field.include_on_redirect == "yes"}
-          {assign var=include_on_redirect value="checked"}
-        {/if}
-
-        <tr style="{$style}">
-          <td align="center">
-            <input type="hidden" name="field_{$field_id}" value="1" />
-            <input type="text" name="field_{$field_id}_order" style="width: 30px" value="{$row_count}" tabindex="{$row_count}" />
-          </td>
-          <td class="blue pad_left_small">{$field.field_name}</td>
-          <td class="blue pad_left_small">
-            <input type="text" name="field_{$field_id}_display_name" id="field_{$field_id}_display_name" style="width: 96%;" value="{$field.field_title}"
-              tabindex="{$row_count+10000}" />
-          </td>
-          <td class="pad_left_small">{$field.field_test_value|truncate:30}</td>
-          <td class="pad_left_small" width="100">
-
-            {if $field.field_type == "system"}
-
-              {* pass along hidden field to let the reorder function know that this field is a system field.
-                 This prevents the program from trying to rename the column *}
-              {$LANG.word_na}
-              <input type="hidden" name="field_{$field_id}_system" value="1" />
-              <input type="hidden" name="field_{$field_id}_size" value="small" />
-
-            {else}
-
-              {if $field.field_test_value == $LANG.word_file_b_uc}
-                <select disabled>
-              {else}
-                <select name="field_{$field_id}_size" tabindex="{$row_count+20000}">
-              {/if}
-
-              <option {if $field.field_size == "tiny"}selected{/if} value="tiny">{$LANG.phrase_size_tiny}</option>
-              <option {if $field.field_size == "small"}selected{/if} value="small">{$LANG.phrase_size_small}</option>
-              <option {if $field.field_size == "medium" || $field.field_test_value == $LANG.word_file_b_uc}selected{/if} value="medium">{$LANG.phrase_size_medium}</option>
-              <option {if $field.field_size == "large"}selected{/if} value="large">{$LANG.phrase_size_large}</option>
-              <option {if $field.field_size == "very_large"}selected{/if} value='very_large'>{$LANG.phrase_size_very_large}</option>
-              </select>
-
-              {* if a file field, pass along a hidden field with the 256 character value *}
-              {if $field.field_test_value == $LANG.word_file_b_uc}
-                <input type="hidden" name="field_{$field_id}_size" value="medium" />
-              {/if}
+          {if $field.is_new_sort_group == "yes"}
+            {if $previous_item != ""}
+              </div>
+              <div class="clear"></div>
+            </li>
             {/if}
+            <li class="sortable_row{if $smarty.foreach.row.last} rowN{/if}">
+              {assign var=next_item_is_new_sort_group value=$form_fields[$smarty.foreach.row.iteration].is_new_sort_group}
+              <div class="row_content{if $next_item_is_new_sort_group == 'no'} grouped_row{/if}">
+          {/if}
 
-          </td>
-          <td class="del">
-          {if $field.field_type != "system"}<input type="checkbox" name="field_{$field_id}_remove" tabindex="{$row_count+30000}" />{/if}
-          </td>
-        </tr>
-      {/foreach}
-      </table>
+          {assign var=previous_item value=$i}
 
-      <p>
-        <input type="submit" name="action" value="{$LANG.word_update|upper}" />
-      </p>
+            <div class="row_group{if $field.is_system_field == "yes"} system_field{/if}{if $smarty.foreach.row.last} rowN{/if}">
+              <input type="hidden" class="sr_order" value="{$field_id}" />
+              <ul>
+                <li class="col1 sort_col">{$row_count}</li>
+                <li class="col2 blue">{$field.field_name}</li>
+                <li class="col3"><input type="text" name="field_{$field_id}_display_name" id="field_{$field_id}_display_name" value="{$field.field_title}" /></li>
+                <li class="col4 ellipsis">
+                  {if $field.is_system_field == "yes"}
+                    <span class="light_grey">&#8212;</span>
+                  {else}
+                    {$field.field_test_value|default:"&nbsp;"}
+                  {/if}
+                </li>
+                <!--
+                <li class="col5">
+                  {if $field.is_system_field == "yes"}
+
+                    {* pass along hidden field to let the reorder function know that this field is a system field.
+                       This prevents the program from trying to rename the column *}
+                    {$LANG.word_na}
+                    <input type="hidden" name="field_{$field_id}_system" value="1" />
+                    <input type="hidden" name="field_{$field_id}_size" value="small" />
+
+                  {else}
+
+                    {if $field.field_test_value == $LANG.word_file_b_uc}
+                      <select disabled>
+                    {else}
+                      <select name="field_{$field_id}_size">
+                    {/if}
+
+                    <option {if $field.field_size == "tiny"}selected{/if} value="tiny">{$LANG.phrase_size_tiny}</option>
+                    <option {if $field.field_size == "small"}selected{/if} value="small">{$LANG.phrase_size_small}</option>
+                    <option {if $field.field_size == "medium" || $field.field_test_value == $LANG.word_file_b_uc}selected{/if} value="medium">{$LANG.phrase_size_medium}</option>
+                    <option {if $field.field_size == "large"}selected{/if} value="large">{$LANG.phrase_size_large}</option>
+                    <option {if $field.field_size == "very_large"}selected{/if} value="very_large">{$LANG.phrase_size_very_large}</option>
+                    </select>
+
+                    {* if a file field, pass along a hidden field with the 256 character value *}
+                    {if $field.field_test_value == $LANG.word_file_b_uc}
+                      <input type="hidden" name="field_{$field_id}_size" value="medium" />
+                    {/if}
+                  {/if}
+                </li>
+                 -->
+                <li class="col5 colN{if $field.is_system_field == "no"} del{/if}"></li>
+              </ul>
+              <div class="clear"></div>
+            </div>
+
+          {if $smarty.foreach.row.last}
+            </div>
+            <div class="clear"></div>
+          </li>
+          {/if}
+
+        {/foreach}
+        </ul>
+        <div class="clear"></div>
+      </div>
 
       <p>
         <input type="submit" name="next_step" class="next_step" value="{$LANG.word_next_step_rightarrow}"

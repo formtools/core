@@ -1,7 +1,7 @@
 <html>
 <head>
   <title>{$LANG.phrase_verify_url}</title>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/prototype.js"></script>
+  <script type="text/javascript" src="{$g_root_url}/global/scripts/jquery.js"></script>
   <script type="text/javascript" src="{$g_root_url}/global/scripts/general.js"></script>
 
   {$head_js}
@@ -10,20 +10,20 @@
   {literal}
   body { margin: 0px; }
   input {
-	  font: 11px Verdana, sans-serif;
+    font: 11px Verdana, sans-serif;
   }
   #top_row {
     height: 32px;
     background-image: url({/literal}{$images_url}{literal}/popup_bg.jpg);
-	  padding-left: 6px;
+    padding-left: 6px;
     padding-bottom: 0px;
     padding-top: 14px;
     border-bottom: 1px solid #666666;
   }
   #title {
-	  font: 14px Verdana, sans-serif;
-	  font-weight: bold;
-	  color: #ffffff;
+    font: 14px Verdana, sans-serif;
+    font-weight: bold;
+    color: #ffffff;
     padding-left: 50px
   }
   #logo {
@@ -44,36 +44,37 @@
   var page_ns = {};
   page_ns.accept_url = function()
   {
-	  var url = $("url").value;
-	  if (!url)
-	  {
-	    alert(g.messages["validation_no_url"]);
-	    return false;
-	  }
-	  else if (!ft.is_valid_url(url))
-	  {
-	    alert(g.messages["validation_invalid_url"]);
-	    return false;
-	  }
+    var url = $("#url").val();
+    if (!url)
+    {
+      alert(g.messages["validation_no_url"]);
+      return false;
+    }
+    else if (!ft.is_valid_url(url))
+    {
+      alert(g.messages["validation_invalid_url"]);
+      return false;
+    }
 
     window.opener.ft.verify_url_page("{/literal}{$form_page}{literal}", url);
     window.close();
   }
+
   page_ns.update_url = function()
   {
-	  var url = $("url").value;
-	  if (!url)
-	  {
-	    alert(g.messages["validation_no_url"]);
-	    return false;
-	  }
-	  else if (!ft.is_valid_url(url))
-	  {
-	    alert(g.messages["validation_invalid_url"]);
-	    return false;
-	  }
+    var url = $("#url").val();
+    if (!url)
+    {
+      alert(g.messages["validation_no_url"]);
+      return false;
+    }
+    else if (!ft.is_valid_url(url))
+    {
+      alert(g.messages["validation_invalid_url"]);
+      return false;
+    }
 
-    $("iframe_content").src = url;
+    $("#iframe_content")[0].src = url;
   }
   </script>
   {/literal}

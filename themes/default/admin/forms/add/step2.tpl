@@ -3,13 +3,17 @@
   <table cellpadding="0" cellspacing="0" class="margin_bottom_large">
   <tr>
     <td width="45"><a href="../"><img src="{$images_url}/icon_forms.gif" border="0" width="34" height="34" /></a></td>
-    <td class="title"><a href="../">{$LANG.word_forms|upper}</a>: {$LANG.phrase_add_form|upper}</td>
+    <td class="title">
+      <a href="../">{$LANG.word_forms}</a> <span class="joiner">&raquo;</span>
+      <a href="./">{$LANG.phrase_add_form}</a> <span class="joiner">&raquo;</span>
+      {$LANG.phrase_external_form}
+    </td>
   </tr>
   </table>
 
   <table cellpadding="0" cellspacing="0" width="100%" class="add_form_nav margin_bottom_large">
   <tr>
-    <td class="selected"><a href="step1.php{$form_query_str}">{$LANG.word_checklist}</a></td>
+    <td class="selected"><a href="step1.php">{$LANG.word_start}</a></td>
     <td class="selected">{$LANG.phrase_form_info}</td>
     <td class="unselected">{$LANG.phrase_test_submission}</td>
     <td class="unselected">{$LANG.phrase_database_setup}</td>
@@ -27,105 +31,120 @@
 
     <form method="post" id="add_form" name="add_form" action="{$same_page}" onsubmit="return rsv.validate(this, rules)">
       {$page_values.hidden_fields}
-      {foreach from=$page_values.multi_page_form_urls item=url name=r}
-        {assign var=curr_page value=$smarty.foreach.r.iteration}
-        <input type="hidden" id="form_url_{$curr_page+1}_verified" name="form_url_{$curr_page+1}_verified" value="yes" />
-      {/foreach}
+      <input type="hidden" id="form_type" value="external" />
+      <input type="hidden" id="submission_type" value="{$submission_type}" />
 
-      <table width="100%" class="list_table" cellpadding="1" cellspacing="1">
+      <table width="100%" class="list_table">
       <tr>
-        <td class="red" align="center" width="15">*</td>
-        <td class="pad_left_small" width="120">{$LANG.phrase_form_name}</td>
-        <td><input type="text" name="form_name" value="{$page_values.form_name|escape}" style="width: 99%" /></td>
+        <td class="pad_left_small" width="200">{$LANG.phrase_form_name}</td>
+        <td><input type="text" name="form_name" id="form_name" value="{$page_values.form_name|escape}" style="width: 99%" /></td>
       </tr>
+      {if $submission_type == "code"}
+      <tbody>
+	      <tr>
+	        <td class="pad_left_small">{$LANG.phrase_is_multi_page_form_q}</td>
+	        <td>
+	          <input type="radio" name="is_multi_page_form" class="is_multi_page_form" id="impf1" value="yes"
+	            {if $page_values.is_multi_page_form == "yes"}checked{/if} />
+	            <label for="impf1">{$LANG.word_yes}</label>
+	          <input type="radio" name="is_multi_page_form" class="is_multi_page_form" id="impf2" value="no"
+	            {if $page_values.is_multi_page_form == "no"}checked{/if} />
+	            <label for="impf2">{$LANG.word_no}</label>
+	        </td>
+	      </tr>
+      </tbody>
+      {/if}
       <tr>
-        <td valign="top" class="red" align="center">*</td>
-        <td valign="top" class="pad_left_small">{$LANG.phrase_form_url_sp}</td>
+        <td valign="top" class="pad_left_small">
+          {if $submission_type == "direct"}
+            <input type="hidden" name="is_multi_page_form" value="no" />
+            {$LANG.phrase_form_url}
+          {else}
+		        <span id="form_label_single" {if $page_values.is_multi_page_form == "yes"}style="display:none"{/if}>{$LANG.phrase_form_url}</span>
+		        <span id="form_label_multiple" {if $page_values.is_multi_page_form == "no"}style="display:none"{/if}>{$LANG.phrase_form_urls}</span>
+          {/if}
+        </td>
         <td>
-
-          <table width="100%" cellpadding="0" cellspacing="0">
-          <tr>
-            <td>
-              <input type="hidden" id="original_form_url" value="{$page_values.form_url|escape}" />
-              <input type="text" name="form_url" id="form_url" value="{$page_values.form_url}" style="width: 98%"
-                onkeyup="mf_ns.unverify_url_field(this.value, $('original_form_url').value, 1)" />
-            </td>
-            <td width="60" align="center">
-              {if $page_values.form_url != ""}
-                <input type="button" id="form_url_1_button" class="green" onclick="ft.verify_url($('form_url'), 1)"
-                  value="{$LANG.word_verified|escape}" />
-                <input type="hidden" id="form_url_1_verified" name="form_url_verified" value="yes" />
-              {else}
-                <input type="button" id="form_url_1_button" class="light_grey" onclick="ft.verify_url($('form_url'), 1)"
-                  value="{$LANG.phrase_verify_url|escape}" />
-                <input type="hidden" id="form_url_1_verified" name="form_url_verified" value="no" />
-              {/if}
-            </td>
-          </tr>
-          </table>
-
-          <input type="checkbox" name="is_multi_page_form" id="is_multi_page_form" onchange="mf_ns.toggle_multi_page_form_fields(this.checked)"
-            {if $page_values.is_multi_page_form == "yes"}checked{/if} />
-            <label for="is_multi_page_form">This a multi-page form</label>
-
-          <input type="hidden" name="num_pages_in_multi_page_form" id="num_pages_in_multi_page_form" value="{$num_pages_in_multi_page_form}" />
-
-          <div id="multi_page_form_urls" {if $page_values.is_multi_page_form != "yes"}style="display:none"{/if} class="margin_bottom_large">
-	          <table width="100%" cellpadding="0" cellspacing="0" id="multi_page_form_url_table">
-	          <tbody>
-	          {foreach from=$page_values.multi_page_form_urls item=url name=r}
-	            {assign var=curr_page value=$smarty.foreach.r.iteration}
+          {if $submission_type == "direct"}
+		        <table width="100%" cellpadding="0" cellspacing="0">
+		        <tr>
+		          <td><input type="text" name="form_url" id="form_url" value="{$page_values.form_url}" style="width: 98%" /></td>
+		          <td width="60"><input type="button" class="check_url" id="check_url__form_url" value="{$LANG.phrase_check_url|escape}" /></td>
+		        </tr>
+		        </table>
+	        {else}
+	          <div id="form_url_single" {if $page_values.is_multi_page_form == "yes"}style="display:none"{/if}>
+		          <table width="100%" cellpadding="0" cellspacing="0">
 		          <tr>
-		            <td width="70" class="bold">{$LANG.word_page} {$curr_page+1}</tdm>
-		            <td>
-                  <input type="hidden" id="original_form_url_{$curr_page+1}" value="{$url.form_url}" />
-		              <input type="text" name="form_url_{$curr_page+1}" id="form_url_{$curr_page+1}" value="{$url.form_url}" style="width: 98%"
-		                onkeyup="mf_ns.unverify_url_field(this.value, $('original_form_url_{$curr_page+1}').value, {$curr_page+1})" />
-		            </td>
-		            <td width="60" align="right">
-		              <input type="button" class="green" id="form_url_{$curr_page+1}_button"
-		                onclick="ft.verify_url('form_url_{$curr_page+1}', {$curr_page+1})" value="{$LANG.word_verified|escape}" />
-		            </td>
+		            <td><input type="text" name="form_url" id="form_url" value="{$page_values.form_url}" style="width: 98%" /></td>
+		            <td width="60"><input type="button" class="check_url" id="check_url__form_url" value="{$LANG.phrase_check_url|escape}" /></td>
 		          </tr>
-	          {/foreach}
-	          </tbody>
-	          </table>
-
-	          <table width="100%" cellpadding="0" cellspacing="0" class="margin_top_small">
-	          <tr>
-	            <td width="70"> </td>
-	            <td><input type="button" value="{$LANG.phrase_add_row}" onclick="mf_ns.add_multi_page_form_page(this.form)" /></td>
-	          </tr>
-	          </table>
-          </div>
-
-          <div class="medium_grey">
-            {$LANG.text_add_form_step_2_text_1}
-          </div>
+		          </table>
+	          </div>
+	          <div id="form_url_multiple" {if $page_values.is_multi_page_form == "no"}style="display:none"{/if}>
+			        <div class="sortable multi_page_form_list">
+			          <ul class="header_row">
+			            <li class="col1">{$LANG.word_page}</li>
+			            <li class="col2">{$LANG.phrase_form_url}</li>
+			            <li class="col3"></li>
+			            <li class="col4 colN del"></li>
+			          </ul>
+			          <div class="clear"></div>
+			          <ul class="rows">
+			            {assign var=previous_item value=""}
+			            {foreach from=$page_values.multi_page_form_urls item=i name=row}
+			              {assign var=count value=$smarty.foreach.row.iteration}
+			              <li class="sortable_row{if $smarty.foreach.row.last} rowN{/if}">
+			                <div class="row_content">
+			                  <div class="row_group{if $smarty.foreach.row.last} rowN{/if}">
+			                    <input type="hidden" class="sr_order" value="{$count}" />
+			                    <ul>
+			                      <li class="col1 sort_col">{$count}</li>
+			                      <li class="col2"><input type="text" name="multi_page_urls[]" id="mp_url_{$count}" value="{$i.form_url|escape}" /></li>
+			                      <li class="col3"><input type="button" class="check_url" id="check_url__mp_url_{$count}" value="{$LANG.phrase_check_url|escape}" /></li>
+			                      <li class="col4 colN del"></li>
+			                    </ul>
+			                    <div class="clear"></div>
+			                  </div>
+			                </div>
+			                <div class="clear"></div>
+			              </li>
+			            {/foreach}
+			            {if $page_values.multi_page_form_urls|@count == 0}
+			              <li class="sortable_row">
+			                <div class="row_content">
+			                  <div class="row_group rowN">
+			                    <input type="hidden" class="sr_order" value="1" />
+			                    <ul>
+			                      <li class="col1 sort_col">1</li>
+			                      <li class="col2"><input type="text" name="multi_page_urls[]" id="mp_url_0" /></li>
+			                      <li class="col3"><input type="button" class="check_url" id="check_url__mp_url_0" value="{$LANG.phrase_check_url|escape}" /></li>
+			                      <li class="col4 colN del"></li>
+			                    </ul>
+			                    <div class="clear"></div>
+			                  </div>
+			                </div>
+			                <div class="clear"></div>
+			              </li>
+			            {/if}
+			          </ul>
+			        </div>
+			        <div class="clear"></div>
+		          <div>
+		            <a href="#" onclick="return mf_ns.add_multi_page_form_page()">{$LANG.phrase_add_row}</a>
+		          </div>
+		        </div>
+          {/if}
         </td>
       </tr>
+      {if $submission_type == "direct"}
       <tr>
-        <td valign="top" class="red" align="center"> </td>
         <td valign="top" class="pad_left_small">{$LANG.phrase_redirect_url}</td>
         <td>
           <table width="100%" cellpadding="0" cellspacing="0">
           <tr>
-            <td>
-              <input type="hidden" id="original_redirect_url" value="{$page_values.redirect_url}" />
-              <input type="text" name="redirect_url" id="redirect_url" value="{$page_values.redirect_url}" style="width: 99%;"
-                onkeyup="mf_ns.unverify_url_field(this.value, $('original_redirect_url').value, 'redirect')" />
-            </td>
-            <td width="60" align="center">
-              {if $page_values.redirect_url != ""}
-	              <input type="button" id="form_url_redirect_button" class="green" value="{$LANG.word_verified}"
-	                onclick="ft.verify_url('redirect_url', 'redirect')" />
-	              <input type="hidden" id="form_url_redirect_verified" value="yes" />
-	            {else}
-	              <input type="button" id="form_url_redirect_button" class="light_grey" value="{$LANG.phrase_verify_url}"
-	                onclick="ft.verify_url('redirect_url', 'redirect')" />
-	              <input type="hidden" id="form_url_redirect_verified" value="no" />
-	            {/if}
-            </td>
+            <td><input type="text" name="redirect_url" id="redirect_url" value="{$page_values.redirect_url}" style="width: 98%" /></td>
+            <td width="60"><input type="button" class="check_url" id="check_url__redirect_url" value="{$LANG.phrase_check_url|escape}" /></td>
           </tr>
           </table>
           <div class="medium_grey">
@@ -133,30 +152,28 @@
           </div>
         </td>
       </tr>
+      {/if}
+
       <tr>
-        <td class="red" align="center" valign="top">*</td>
-        <td class="pad_left_small" valign="top" width="160">{$LANG.phrase_who_can_access}</td>
+        <td class="pad_left_small" valign="top">{$LANG.phrase_who_can_access}</td>
         <td>
 
           <table cellspacing="1" cellpadding="0" >
           <tr>
             <td>
-              <input type="radio" name="access_type" id="at1" value="admin" {if $page_values.access_type == 'admin'}checked{/if}
-                onclick="mf_ns.toggle_access_type(this.value)" />
+              <input type="radio" name="access_type" id="at1" value="admin" {if $page_values.access_type == 'admin'}checked{/if} />
                 <label for="at1">{$LANG.phrase_admin_only}</label>
             </td>
           </tr>
           <tr>
             <td>
-              <input type="radio" name="access_type" id="at2" value="public" {if $page_values.access_type == 'public'}checked{/if}
-                onclick="mf_ns.toggle_access_type(this.value)" />
+              <input type="radio" name="access_type" id="at2" value="public" {if $page_values.access_type == 'public'}checked{/if} />
                 <label for="at2">{$LANG.word_public} <span class="light_grey">{$LANG.phrase_all_clients_have_access}</span></label>
             </td>
           </tr>
           <tr>
             <td>
-              <input type="radio" name="access_type" id="at3" value="private" {if $page_values.access_type == 'private'}checked{/if}
-                onclick="mf_ns.toggle_access_type(this.value)" />
+              <input type="radio" name="access_type" id="at3" value="private" {if $page_values.access_type == 'private'}checked{/if} />
                 <label for="at3">{$LANG.word_private} <span class="light_grey">{$LANG.phrase_only_specific_clients_have_access}</span></label>
             </td>
           </tr>
@@ -172,7 +189,7 @@
             <tr>
               <td>
                 {clients_dropdown name_id="available_client_ids[]" multiple="true" multiple_action="hide"
-                  clients=$selected_client_ids size="4" style="width: 140px"}
+                  clients=$selected_client_ids size="4" style="width: 220px"}
               </td>
               <td align="center" valign="middle" width="100">
                 <input type="button" value="{$LANG.word_add_uc_rightarrow}"
@@ -182,7 +199,7 @@
               </td>
               <td>
                 {clients_dropdown name_id="selected_client_ids[]" multiple="true" multiple_action="show"
-                  clients=$selected_client_ids size="4" style="width: 140px"}
+                  clients=$selected_client_ids size="4" style="width: 220px"}
               </td>
             </tr>
             </table>
@@ -192,13 +209,15 @@
       </tr>
       </table>
 
-      <p>
-        {$LANG.text_form_contains_file_fields}
-        <input type="radio" name="uploading_files" id="uploading_files1" value="yes" {if $SESSION.uploading_files == "yes"}checked{/if} />
-          <label for="uploading_files1">{$LANG.word_yes}</label>
-        <input type="radio" name="uploading_files" id="uploading_files2" value="no" {if $SESSION.uploading_files == "no"}checked{/if} />
-          <label for="uploading_files2">{$LANG.word_no}</label>
-      </p>
+      {if $submission_type == "direct"}
+	      <p>
+	        {$LANG.text_form_contains_file_fields}
+	        <input type="radio" name="uploading_files" id="uploading_files1" value="yes" {if $SESSION.uploading_files == "yes"}checked{/if} />
+	          <label for="uploading_files1">{$LANG.word_yes}</label>
+	        <input type="radio" name="uploading_files" id="uploading_files2" value="no" {if $SESSION.uploading_files == "no"}checked{/if} />
+	          <label for="uploading_files2">{$LANG.word_no}</label>
+	      </p>
+      {/if}
 
       <p>
         <input type="submit" name="submit" class="next_step" value="{$LANG.word_next_step_rightarrow}" />

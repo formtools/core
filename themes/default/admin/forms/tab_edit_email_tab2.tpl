@@ -1,5 +1,5 @@
             {if $registered_form_emails|@count == 0}
-              <div class="box">
+              <div class="hint margin_bottom">
                 {eval_smarty_string placeholder_str=$LANG.notify_no_user_email_fields_configured}
               </div>
             {/if}
@@ -7,17 +7,26 @@
             <table cellpadding="2" cellspacing="1" width="100%">
             <tr>
               <td width="10" valign="top" class="red">*</td>
-              <td width="140" valign="top">{$LANG.word_recipient_sp}</td>
+              <td width="160" valign="top">{$LANG.word_recipient_sp}</td>
               <td>
 
                 <table cellspacing="0" cellpadding="0">
                 <tr>
                   <td>
+                    <div class="hint margin_bottom">
+                      {if $form_info.access_type == "admin"}
+                        This form has <b>administrator</b> access type, so no clients have access to it and are not listed in the dropdown
+                        below.
+                      {/if}
+                      <a href="edit.php?page=email_settings">Click here</a> to specify which form fields are email fields, so you can
+                      target them in your email templates.
+                    </div>
+
                     <table cellspacing="0">
                     <tr>
                       <td>
                         <select id="recipient_options" onchange="emails_ns.show_custom_email_field('recipients', this.value)"
-                          onkeyup="emails_ns.show_custom_email_field('recipients', this.value)">
+                            onkeyup="emails_ns.show_custom_email_field('recipients', this.value)">
                           <option value="" selected>{$LANG.phrase_please_select}</option>
                           <optgroup label="{$LANG.word_administrator}">
                             <option value="admin">{$admin_info.first_name} {$admin_info.last_name} &lt;{$admin_info.email}&gt;</option>
@@ -52,7 +61,7 @@
                     </tr>
                     </table>
 
-                    <div id="custom_recipients" class="box" style="display:none;margin-top: 2px;">
+                    <div id="custom_recipients" class="box" style="display:none; margin-top: 2px;">
                       <table cellspacing="0">
                       <tr>
                         <td>
@@ -105,15 +114,17 @@
                       {assign var='recipient_type' value="&nbsp;<span class=\"bold\">[cc]</span>"}
                     {elseif $recipient_type == "bcc"}
                       {assign var='recipient_type' value="&nbsp;<span class=\"bold\">[bcc]</span>"}
+                    {elseif $recipient_type == "main"}
+                      {assign var='recipient_type' value=""}
                     {/if}
 
                     {if $recipient.recipient_user_type == "admin"}
                       <div id="recipient_{$count}">
-                        {$admin_info.first_name} {$admin_info.last_name} &lt;{$admin_info.email}&gt;{$recipient_type}&nbsp;
+                        {$admin_info.first_name} {$admin_info.last_name} &lt;{$admin_info.email}{$recipient_type}&gt;&nbsp;
                         <a href="#" onclick="return emails_ns.remove_recipient({$count})">[x]</a>
                         <input type="hidden" name="recipients[]" value="{$count}" />
                         <input type="hidden" name="recipient_{$count}_user_type" value="admin" />
-                        <input type="hidden" id="recipient_{$count}_type" name="recipient_{$count}_type" value="{$recipient.recipient_type}" />
+                        <input type="hidden" id="recipient_{$count}_type" name="recipient_{$count}_type" value="{$recipient_type}" />
                       </div>
                     {elseif $recipient.recipient_user_type == "form_email_field"}
                       <div id="recipient_{$count}">

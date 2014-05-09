@@ -15,8 +15,8 @@
  * zipfile.
  *
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @version 2.0.6
- * @package 2-0-6
+ * @version 2.1.0
+ * @package 2-1-0
  */
 
 
@@ -50,15 +50,14 @@ $g_db_hostname = "";
 /**
  * The name of the database. Most often, hosting providers provide you with some sort of user
  * interface for creating databases and assigning user accounts to them. If you are creating a new
- * database for Form Tools, I would recommend "form_tools" for clarity. Enter the database name
- * here.
+ * database for Form Tools, I would recommend "formtools" for clarity.
  * @global string $g_db_name
  */
 $g_db_name = "";
 
 /**
- * The MySQL username. Note: this user account must have privileges for creating new tables, in
- * addition to adding and removing records.
+ * The MySQL username. Note: this user account must have privileges for adding and deleting tables, and
+ * adding and deleting records.
  * @global string $g_db_username
  */
 $g_db_username = "";
@@ -117,6 +116,7 @@ $g_default_error_reporting = 1;
  */
 $g_debug = true;
 $g_smarty_debug = false;
+$g_js_debug = false;
 
 /**
  * This tells Smarty to create the compiled templates in subdirectories, which is slightly more efficient.
@@ -192,6 +192,7 @@ $g_password_special_chars = "~!@#$%^&";
  */
 $g_password_history_size = 10;
 
+
 // -------------------------------------------------------------------------------------------------
 
 
@@ -200,17 +201,17 @@ $g_password_history_size = 10;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.0.6";
+$g_current_version = "2.1.0";
 
 /**
- * The release type: beta or main
+ * The release type: alpha, beta or main
  */
-$g_release_type = "main";
+$g_release_type = "alpha";
 
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110418";
+$g_release_date = "20110426";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.
@@ -253,14 +254,17 @@ require_once("$folder/code/accounts.php");
 require_once("$folder/code/clients.php");
 require_once("$folder/code/emails.php");
 require_once("$folder/code/fields.php");
-require_once("$folder/code/field_option_groups.php");
+require_once("$folder/code/field_sizes.php");
+require_once("$folder/code/field_types.php");
 require_once("$folder/code/files.php");
 require_once("$folder/code/forms.php");
 require_once("$folder/code/general.php");
 require_once("$folder/code/hooks.php");
 require_once("$folder/code/languages.php");
+require_once("$folder/code/list_groups.php");
 require_once("$folder/code/menus.php");
 require_once("$folder/code/modules.php");
+require_once("$folder/code/option_lists.php");
 require_once("$folder/code/sessions.php");
 require_once("$folder/code/settings.php");
 require_once("$folder/code/submissions.php");
@@ -273,7 +277,6 @@ require_once("$folder/smarty/Smarty.class.php");
 
 if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page))
 {
-  // if the config file exists, we can assume the user isn't installed
   $g_link = ft_db_connect();
 
   // our Smarty instance, used for rendering the webpages

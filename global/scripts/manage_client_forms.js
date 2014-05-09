@@ -16,73 +16,35 @@ cf_ns.num_rows = 0; // the total number of forms (overridden by calling page)
  *
  * Assumption: the calling page has defined the data structures for the form list and form Views.
  */
-cf_ns.add_form_row = function()
-{
-  // get the current table
-  var tbody = $("client_forms_table").getElementsByTagName("tbody")[0];
-
+cf_ns.add_form_row = function() {
   var curr_row = ++cf_ns.num_rows;
-  var row = document.createElement("tr");
-  row.setAttribute("id", "row_" + curr_row);
 
-  var td1 = document.createElement("td");
-  td1.setAttribute("valign", "top");
-  var sel = document.createElement("select");
-  sel.onchange = function(evt) { cf_ns.select_form(curr_row, this.value); };
-  sel.setAttribute("name", "form_row_" + curr_row);
-  sel.style.cssText = "width:100%";
-  sel.appendChild(new Option(g.messages["phrase_please_select"], ""));
+  var row = $("<tr id=\"row_" + curr_row + "\"></tr>");
+  var td1 = $("<td valign=\"top\"></td>");
 
-  for (var i=0; i<page_ns.forms.length; i++)
-  {
+  var sel = $("<select name=\"form_row_" + curr_row + "\" class=\"selected_form\"></select>");
+  sel.bind("change", { curr_row: curr_row }, function(e) { cf_ns.select_form(e.data.curr_row, $(this).val()); });
+  sel.append("<option value=\"\">" + g.messages["phrase_please_select"] + "</option>");
+
+  for (var i=0, j=page_ns.forms.length; i<j; i++) {
     var form_id   = page_ns.forms[i][0];
     var form_name = page_ns.forms[i][1];
-
-    var new_option = new Option(form_name, form_id);
-    sel.appendChild(new_option);
+    sel.append("<option value=\"" + form_id + "\">" + form_name + "</option>");
   }
-  td1.appendChild(sel);
+  td1.append(sel);
 
-  var td2 = document.createElement("td");
-  var span = document.createElement("span");
-  span.setAttribute("id", "row_" + curr_row + "_available_views_span");
-  $(span).addClassName("medium_grey");
-  $(span).addClassName("pad_left");
-  span.appendChild(document.createTextNode(g.messages["phrase_please_select_form"]));
-  td2.appendChild(span);
-
-  var td3 = document.createElement("td");
-  td3.setAttribute("align", "center");
-  td3.setAttribute("valign", "center");
-  var span = document.createElement("span");
-  span.setAttribute("id", "row_" + curr_row + "_actions");
-  td3.appendChild(span);
-
-  var td4 = document.createElement("td");
-  var span = document.createElement("span");
-  span.setAttribute("id", "row_" + curr_row + "_selected_views_span");
-  $(span).addClassName("medium_grey");
-  $(span).addClassName("pad_left_small");
-  td4.appendChild(span);
-
-  var td5 = document.createElement("td");
-  td5.setAttribute("align", "center");
-  $(td5).addClassName("del");
-  var delete_link = document.createElement("a");
-  delete_link.setAttribute("href", "#");
-  delete_link.onclick = function(evt) { cf_ns.delete_row(curr_row); };
-  delete_link.appendChild(document.createTextNode(g.messages["word_delete"].toUpperCase()));
-  td5.appendChild(delete_link);
+  var td2 = $("<td><span id=\"row_" + curr_row + "_available_views_span\" class=\"medium_grey pad_left\">" + g.messages["phrase_please_select_form"] + "</span></td>");
+  var td3 = $("<td align=\"center\" valign=\"center\"><span id=\"row_" + curr_row + "_actions\"></span></td>");
+  var td4 = $("<td><span id=\"row_" + curr_row + "_selected_views_span\" class=\"medium_grey\"></span></td>");
+  var td5 = $("<td align=\"center\" class=\"del\"></td>");
+  td5.bind("click", { curr_row: curr_row }, function(e) { cf_ns.delete_row(e.data.curr_row); });
 
   // add the table data cells to the row
-  row.appendChild(td1);
-  row.appendChild(td2);
-  row.appendChild(td3);
-  row.appendChild(td4);
-  row.appendChild(td5);
+  var cells = ft.group_nodes([td1, td2, td3, td4, td5]);
+  row.append(cells);
 
   // add the row to the table
-  tbody.appendChild(row);
+  $("#client_forms_table tbody").append(row);
 
   // update the form count
   document.client_forms.num_forms.value = cf_ns.num_rows;
@@ -95,83 +57,55 @@ cf_ns.add_form_row = function()
  * Called when the user selects a form from one of the dropdowns in the first column. It shows
  * the appropriate View content in the second column.
  */
-cf_ns.select_form = function(row, form_id)
-{
-  // if the user just selected the default option,
-  if (form_id == "")
-  {
-    $("row_" + row + "_available_views_span").innerHTML = "<span class=\"pad_left medium_grey\">"
-      + g.messages["phrase_please_select_form"] + "</span>";
-    $("row_" + row + "_actions").innerHTML = "";
-    $("row_" + row + "_selected_views_span").innerHTML = "";
+cf_ns.select_form = function(row, form_id) {
+
+  // if the user just selected the default option
+  if (form_id == "") {
+    $("#row_" + row + "_available_views_span").html("<span class=\"pad_left medium_grey\">" + g.messages["phrase_please_select_form"] + "</span>");
+    $("#row_" + row + "_actions, #row_" + row + "_selected_views_span").html("");
     return;
   }
 
   // if the form has already been selected
-  if (cf_ns.form_is_selected(form_id))
-  {
-    $("row_" + row + "_available_views_span").innerHTML = "<span class=\"pad_left medium_grey\">"
-      + g.messages["phrase_form_already_selected"] + "</span>";
-    $("row_" + row + "_actions").innerHTML = "";
-    $("row_" + row + "_selected_views_span").innerHTML = "";
+  if (cf_ns.form_is_selected(form_id)) {
+    $("#row_" + row + "_available_views_span").html("<span class=\"medium_grey\">" + g.messages["phrase_form_already_selected"] + "</span>");
+    $("#row_" + row + "_actions, #row_" + row + "_selected_views_span").html("");
     return;
   }
 
   // build and add the available Views
-  var available_dd = document.createElement("select");
-  available_dd.setAttribute("name", "row_" + row + "_available_views[]");
-  available_dd.setAttribute("id", "row_" + row + "_available_views");
-  available_dd.setAttribute("multiple", true);
-  available_dd.setAttribute("size", "4");
-  available_dd.style.cssText = "width:100%"
-
+  var available_dd = $("<select name=\"row_" + row + "_available_views[]\" id=\"row_" + row + "_available_views\" multiple size=\"4\"></select>");
   var form_index = null;
-  for (var i=0; i<page_ns.form_views.length; i++)
-  {
-    if (form_id == page_ns.form_views[i][0])
+  for (var i=0; i<page_ns.form_views.length; i++) {
+    if (form_id == page_ns.form_views[i][0]) {
       form_index = i;
+      break;
+    }
   }
 
-  for (var i=0; i<page_ns.form_views[form_index][1].length; i++)
-  {
+  for (var i=0, j=page_ns.form_views[form_index][1].length; i<j; i++) {
     var view_id   = page_ns.form_views[form_index][1][i][0];
     var view_name = page_ns.form_views[form_index][1][i][1];
-
-    available_dd.appendChild(new Option(view_name, view_id));
+    available_dd.append($("<option value=\"" + view_id + "\">" + view_name + "</option>"));
   }
-  $("row_" + row + "_available_views_span").innerHTML = "";
-  $("row_" + row + "_available_views_span").removeClassName("medium_grey");
-  $("row_" + row + "_available_views_span").removeClassName("pad_left");
-  $("row_" + row + "_available_views_span").appendChild(available_dd);
+  $("#row_" + row + "_available_views_span").html("");
+  $("#row_" + row + "_available_views_span").removeClass("medium_grey pad_left");
+  $("#row_" + row + "_available_views_span").append(available_dd);
 
 
   // add the << >> nav for the row
-  var add_button = document.createElement("input");
-  add_button.setAttribute("type", "button");
-  add_button.setAttribute("value", g.messages["word_add_uc_rightarrow"].unescapeHTML());
-  add_button.onclick = function(evt) { ft.move_options($("row_" + row + "_available_views"), $("row_" + row + "_selected_views")); };
+  var add = $("<input type=\"button\" value=\"" + g.messages["word_add_uc_rightarrow"] + "\" />");
+  add.bind("click", function(e) { ft.move_options("row_" + row + "_available_views", "row_" + row + "_selected_views"); });
+  var remove = $("<input type=\"button\" value=\"" + g.messages["word_remove_uc_leftarrow"] + "\" />");
+  add.bind("click", function(e) { ft.move_options("row_" + row + "_selected_views", "row_" + row + "_available_views"); });
 
-  var remove_button = document.createElement("input");
-  remove_button.setAttribute("type", "button");
-  remove_button.setAttribute("value", g.messages["word_remove_uc_leftarrow"].unescapeHTML());
-  remove_button.onclick = function(evt) { ft.move_options($("row_" + row + "_selected_views"), $("row_" + row + "_available_views")); };
+  $("#row_" + row + "_actions").html(ft.group_nodes([add, remove]));
 
-  $("row_" + row + "_actions").innerHTML = "";
-  $("row_" + row + "_actions").appendChild(add_button);
-  $("row_" + row + "_actions").appendChild(remove_button);
+  var selected_dd = $("<select name=\"row_" + row + "_selected_views[]\" id=\"row_" + row + "_selected_views\" multiple size=\"4\"></select>");
 
-
-  var selected_dd = document.createElement("select");
-  selected_dd.setAttribute("name", "row_" + row + "_selected_views[]");
-  selected_dd.setAttribute("id", "row_" + row + "_selected_views");
-  selected_dd.setAttribute("multiple", true);
-  selected_dd.setAttribute("size", "4");
-  selected_dd.style.cssText = "width:100%"
-
-  $("row_" + row + "_selected_views_span").innerHTML = "";
-  $("row_" + row + "_selected_views_span").removeClassName("medium_grey");
-  $("row_" + row + "_selected_views_span").removeClassName("pad_left");
-  $("row_" + row + "_selected_views_span").appendChild(selected_dd);
+  $("#row_" + row + "_selected_views_span").html("");
+  $("#row_" + row + "_selected_views_span").removeClass("medium_grey pad_left");
+  $("#row_" + row + "_selected_views_span").append(selected_dd);
 
   return false;
 }
@@ -187,16 +121,9 @@ cf_ns.select_form = function(row, form_id)
  *
  * @param integer row
  */
-cf_ns.delete_row = function(row)
-{
-  // get the current table
-  var tbody = $("client_forms_table").getElementsByTagName("tbody")[0];
-
-  for (i=tbody.childNodes.length-1; i>0; i--)
-  {
-    if (tbody.childNodes[i].id == "row_" + row)
-      tbody.removeChild(tbody.childNodes[i]);
-  }
+cf_ns.delete_row = function(row) {
+  $("#client_forms_table tbody #row_" + row).fadeOut(400);
+  setTimeout(function() { $("#client_forms_table tbody #row_" + row).remove(); }, 450);
 }
 
 
@@ -205,40 +132,32 @@ cf_ns.delete_row = function(row)
  *
  * @param object the form
  */
-cf_ns.check_fields = function(f)
-{
+cf_ns.check_fields = function(f) {
   // ensures that everything is selected in the Selected Views column to pas salong to the server
-  for (var i=1; i<=cf_ns.num_rows; i++)
-  {
-    if ($("row_" + i + "_selected_views"))
-    {
-      ft.select_all($("row_" + i + "_selected_views"));
+  for (var i=1; i<=cf_ns.num_rows; i++) {
+    if ($("#row_" + i + "_selected_views").length > 0) {
+      ft.select_all("row_" + i + "_selected_views");
     }
   }
-
-  $("num_forms").value = cf_ns.num_rows;
-
+  $("#num_forms").val(cf_ns.num_rows);
   return true;
 }
 
 
 /**
- * A helper function to find if a form has already been selected on the page
+ * A helper function to find if a form has already been selected on the page. It's a bit weird since it detects for
+ * > 1 items (since the newly selected row will have the same form_id value as an existing field).
  *
  * @return boolean
  */
-cf_ns.form_is_selected = function(form_id)
-{
-  var is_selected = false;
+cf_ns.form_is_selected = function(form_id) {
+  var select_count = 0;
 
-  for (var i=1; i<=cf_ns.num_rows; i++)
-  {
-    if ($("form_row_" + i) && $("form_row_" + i).value == form_id)
-    {
-      is_selected = true;
-      break;
+  $(".selected_form").each(function() {
+    if (this.value == form_id) {
+      select_count++;
     }
-  }
+  });
 
-  return is_selected;
+  return (select_count > 1);
 }

@@ -3,10 +3,13 @@
   <table cellpadding="0" cellspacing="0" width="100%" class="margin_bottom_large">
   <tr>
     <td width="45"><a href="./"><img src="{$images_url}/icon_forms.gif" border="0" width="34" height="34" /></a></td>
-    <td class="title"><a href="./">{$LANG.word_forms|upper}</a>: {$form_info.form_name|upper} (<span class="bold">{$form_id}</span>)</td>
-    <td align="right">
-      <div style="float:right; padding-left: 6px;">
-	      <a href="submissions.php?form_id={$form_id}"><img src="{$images_url}/view_small.gif" border="0" alt="{$LANG.phrase_view_submissions}"
+    <td class="title">
+      <a href="./">{$LANG.word_forms}</a> <span class="joiner">&raquo;</span>
+      {$form_info.form_name} (<span class="identifier">{$form_id}</span>)
+    </td>
+    <td align="right" valign="top">
+      <div style="float:right; padding-left: 4px;">
+	      <a href="{$view_submissions_link}"><img src="{$images_url}/admin_edit.png" border="0" alt="{$LANG.phrase_view_submissions}"
 	        title="{$LANG.phrase_view_submissions}" /></a>
 	    </div>
     </td>
@@ -25,8 +28,6 @@
     {ft_include file='admin/forms/tab_field_options.tpl'}
   {elseif $page == "files"}
     {ft_include file='admin/forms/tab_files.tpl'}
-  {elseif $page == "images"}
-    {ft_include file='../../modules/image_manager/templates/tab_images.tpl'}
   {elseif $page == "emails"}
     {ft_include file='admin/forms/tab_emails.tpl'}
   {elseif $page == "email_settings"}

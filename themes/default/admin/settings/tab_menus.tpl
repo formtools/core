@@ -10,13 +10,13 @@
 
     {$pagination}
 
-    <table class="list_table" cellspacing="1" cellpadding="1">
+    <table class="list_table" cellspacing="1" cellpadding="0">
     <tr>
       <th>{$LANG.word_menu}</th>
       <th>{$LANG.phrase_menu_type}</th>
       <th>{$LANG.word_account_sp}</th>
-      <th width="60">{$LANG.word_edit|upper}</th>
-      <th width="60" class="del">{$LANG.word_delete|upper}</th>
+      <th class="edit"></th>
+      <th class="del"></th>
     </tr>
 
     {foreach from=$menus item=menu name=row}
@@ -50,16 +50,16 @@
             {/if}
           {/if}
         </td>
-        <td align="center">
+        <td class="edit">
           {if $menu_info.menu_type == "admin"}
-            <a href="{$same_page}?page=edit_admin_menu&menu_id={$menu_id}">{$LANG.word_edit|upper}</a>
+            <a href="{$same_page}?page=edit_admin_menu&menu_id={$menu_id}"></a>
           {else}
-            <a href="{$same_page}?page=edit_client_menu&menu_id={$menu_id}">{$LANG.word_edit|upper}</a>
+            <a href="{$same_page}?page=edit_client_menu&menu_id={$menu_id}"></a>
           {/if}
         </td>
-        <td class="del">
+        <td{if $menu_info.menu_type != "admin"} class="del"{/if}>
           {if $menu.menu_type == "client"}
-            <a href="#" onclick="return page_ns.delete_menu({$menu_id})">{$LANG.word_delete|upper}</a>
+            <a href="#" onclick="return page_ns.delete_menu({$menu_id})"></a>
           {/if}
         </td>
       </tr>

@@ -4,9 +4,9 @@
  * This file defines all user account functions for the administrator account. Also see accounts.php (for
  * general functions) and clients.php for functions related to client accounts.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Administrator
  */
 
@@ -130,7 +130,8 @@ function ft_add_client($infohash)
     "min_password_length"       => $settings["min_password_length"],
     "num_password_history"      => $settings["num_password_history"],
     "required_password_chars"   => $settings["required_password_chars"],
-    "may_edit_max_failed_login_attempts" => $settings["clients_may_edit_max_failed_login_attempts"]
+    "may_edit_max_failed_login_attempts" => $settings["clients_may_edit_max_failed_login_attempts"],
+    "forms_page_default_message" => $settings["forms_page_default_message"]
   );
 
   ft_set_account_settings($new_user_id, $account_settings);
@@ -334,6 +335,7 @@ function ft_admin_update_client($infohash, $tab_num)
       $min_password_length       = $infohash["min_password_length"];
       $num_password_history      = $infohash["num_password_history"];
       $required_password_chars   = (is_array($infohash["required_password_chars"])) ? implode(",", $infohash["required_password_chars"]) : "";
+      $forms_page_default_message = $infohash["forms_page_default_message"];
 
       // update the client custom account settings table
       $settings = array(
@@ -350,7 +352,8 @@ function ft_admin_update_client($infohash, $tab_num)
         "max_failed_login_attempts" => $max_failed_login_attempts,
         "required_password_chars" => $required_password_chars,
         "min_password_length" => $min_password_length,
-        "num_password_history" => $num_password_history
+        "num_password_history" => $num_password_history,
+        "forms_page_default_message" => $forms_page_default_message
       );
       ft_set_account_settings($account_id, $settings);
       break;

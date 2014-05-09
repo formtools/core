@@ -1,6 +1,6 @@
 {ft_include file="header.tpl"}
 
-  <div class="title">{$LANG.phrase_forgot_password|upper}</div>
+  <div class="title">{$LANG.phrase_forgot_password}</div>
 
   {ft_include file='messages.tpl'}
 
@@ -22,7 +22,7 @@
       <tr>
         <td class="login_table_text">{$LANG.word_username}</td>
         <td><input type="textbox" size="25" name="username" value="{$username}"></td>
-        <td align='center'><input type="submit" value="{$LANG.word_email|upper}">&nbsp;</td>
+        <td><input type="submit" value="{$LANG.word_email|upper}" class="margin_left_large margin_right_large"></td>
       </tr>
       <tr>
         <td colspan="2">&nbsp;</td>

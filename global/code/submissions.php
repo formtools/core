@@ -3,9 +3,9 @@
 /**
  * This file defines all functions related to managing form submissions.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Submissions
  */
 
@@ -19,9 +19,10 @@
  * string.
  *
  * @param integer $form_id
+ * @param integer $view_id
  * @param boolean $is_finalized whether the submission is finalized or not.
  */
-function ft_create_blank_submission($form_id, $is_finalized = false)
+function ft_create_blank_submission($form_id, $view_id, $is_finalized = false)
 {
   global $g_table_prefix;
 
@@ -31,13 +32,41 @@ function ft_create_blank_submission($form_id, $is_finalized = false)
   $now = ft_get_current_datetime();
   $ip  = $_SERVER["REMOTE_ADDR"];
 
+  // if the administrator has specified any default values for submissions created through this View
+  $default_insert_pairs = array(
+    "submission_date"    => $now,
+    "last_modified_date" => $now,
+    "ip_address"         => $ip
+  );
+
+  $special_defaults = ft_get_new_view_submission_defaults($view_id);
+  if (!empty($special_defaults))
+  {
+    // find the field's DB column names so we can do our insert
+    $field_id_to_value_map = array();
+    foreach ($special_defaults as $curr_default_info)
+    {
+      $field_id_to_value_map[$curr_default_info["field_id"]] = ft_sanitize($curr_default_info["default_value"]);
+    }
+
+    $field_ids = array_keys($field_id_to_value_map);
+    $field_id_to_column_name_map = ft_get_field_col_by_field_id($form_id, $field_ids);
+
+    while (list($field_id, $col_name) = each($field_id_to_column_name_map))
+    {
+      $default_insert_pairs[$col_name] = $field_id_to_value_map[$field_id];
+    }
+  }
+
+  $col_names  = implode(", ", array_keys($default_insert_pairs));
+  $col_values = "'" . implode("', '", array_values($default_insert_pairs)) . "'";
+
   mysql_query("
-    INSERT INTO {$g_table_prefix}form_{$form_id} (submission_date, last_modified_date, ip_address)
-    VALUES ('$now', '$now', '$ip')
+    INSERT INTO {$g_table_prefix}form_{$form_id} ($col_names)
+    VALUES ($col_values)
       ");
 
   $new_submission_id = mysql_insert_id();
-
   extract(ft_process_hooks("end", compact("form_id", "now", "ip", "new_submission_id"), array()), EXTR_OVERWRITE);
 
   return $new_submission_id;
@@ -330,8 +359,15 @@ function ft_delete_file_submission($form_id, $submission_id, $field_id, $force_d
   $field_info = ft_get_form_field($field_id);
   $extended_field_settings = ft_get_extended_field_settings($field_id);
 
-  $col_name    = $field_info["col_name"];
-  $file_folder = $extended_field_settings["file_upload_dir"];
+  print_r($extended_field_settings);
+  exit;
+
+  $col_name = $field_info["col_name"];
+  $file_folder = "";
+  foreach ($extended_field_settings as $setting_info)
+  {
+//  	if ($setting_info[""])
+  }
 
   // if the column name wasn't found, the $field_id passed in was invalid. Return false.
   if (empty($col_name))
@@ -373,21 +409,21 @@ function ft_delete_file_submission($form_id, $submission_id, $field_id, $force_d
         {
           $success = false;
           $update_database_record = false;
-          $replacements = array("js_link" => "return ms.delete_submission_file($field_id, 'file', true)");
+          $replacements = array("js_link" => "return ms.delete_submission_file($field_id, true)");
           $message = ft_eval_smarty_string($LANG["notify_file_not_deleted_no_exist"], $replacements);
         }
         else if (is_file("$file_folder/$file") && (!is_readable("$file_folder/$file") || !is_writable("$file_folder/$file")))
         {
           $success = false;
           $update_database_record = false;
-          $replacements = array("js_link" => "return ms.delete_submission_file($field_id, 'file', true)");
+          $replacements = array("js_link" => "return ms.delete_submission_file($field_id, true)");
           $message = ft_eval_smarty_string($LANG["notify_file_not_deleted_permissions"], $replacements);
         }
         else
         {
           $success = false;
           $update_database_record = false;
-          $replacements = array("js_link" => "return ms.delete_submission_file($field_id, 'file', true)");
+          $replacements = array("js_link" => "return ms.delete_submission_file($field_id, true)");
           $message = ft_eval_smarty_string($LANG["notify_file_not_deleted_unknown_error"], $replacements);
         }
       }
@@ -415,15 +451,14 @@ function ft_delete_file_submission($form_id, $submission_id, $field_id, $force_d
 
 
 /**
- * Retrieves everything about a form submission for use in a display / edit form submission page.
- * It contains all meta-information about the field, from the form_fields and view_tabs. If the
- * optional view_id parameter is included, only the fields in the View are returned (AND all system
- * fields, if they're not included).
+ * Retrieves everything about a form submission. It contains a lot of meta-information about the field,
+ * from the form_fields and view_tabs. If the optional view_id parameter is included, only the fields
+ * in the View are returned (AND all system fields, if they're not included).
  *
  * @param integer $form_id the unique form ID
  * @param integer $submission_id the unique submission ID
  * @param integer $view_id an optional view ID parameter
- * @return array Returns an array of hashes. Each index is a separate form field and it's value is
+ * @return array Returns an array of hashes. Each index is a separate form field and its value is
  *           a hash of information about it, such as value, field type, field size, etc.
  */
 function ft_get_submission($form_id, $submission_id, $view_id = "")
@@ -503,9 +538,7 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
 
 /**
  * Retrieves ONLY the submission data itself. If you require "meta" information about the submision
- * such as it's field type, size, database table name etc, use {@link
- * http://www.formtools.org/developerdoc/1-4-6/Submissions/_code---submissions.php.html#functionget_submission
- * get_submission}.
+ * such as it's field type, size, database table name etc, use ft_get_submision().
  *
  * @param integer $form_id The unique form ID.
  * @param integer $submission_id The unique submission ID.
@@ -589,7 +622,7 @@ function ft_get_search_submission_ids($form_id, $view_id, $results_per_page, $or
 
   // determine the various SQL clauses
   $order_by            = _ft_get_search_submissions_order_by_clause($form_id, $order);
-  $limit_clause        = _ft_get_search_submissions_limit_clause(1, $results_per_page);
+  $limit_clause        = _ft_get_limit_clause(1, $results_per_page);
   $filter_clause       = _ft_get_search_submissions_view_filter_clause($view_id);
   $search_where_clause = _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $search_columns);
 
@@ -617,12 +650,9 @@ function ft_get_search_submission_ids($form_id, $view_id, $results_per_page, $or
 /**
  * Updates an individual form submission. Called by both clients and administrator.
  *
- * This updates all field types, including files. Note: it does not DELETE files - that's handled
- * separately by ft_delete_file_submission.
- *
  * @param array $infohash This parameter should be a hash (e.g. $_POST or $_GET) containing the
  *             various fields from the update submission page. The contents of it change for each
- *             form content.
+ *             form and form View, of course.
  * @return array Returns array with indexes:<br/>
  *               [0]: true/false (success / failure)<br/>
  *               [1]: message string<br/>
@@ -637,53 +667,88 @@ function ft_update_submission($form_id, $submission_id, $infohash)
   $infohash = ft_sanitize($infohash);
   extract(ft_process_hooks("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
-  // assumes that each tab as at least a single field (UPDATE button should be hidden in those cases)
+  // assumes that each tab as at least a single field (UPDATE button should be hidden if there are none)
   $field_ids = split(",", $infohash["field_ids"]);
 
   $form_fields = ft_get_form_fields($form_id);
-  $db_column_names = array();
+  $field_types_processing_info = ft_get_field_type_processing_info();
 
+  // this gets all settings for the fields, taking into account whatever has been overridden
+  $field_settings = ft_get_form_field_field_type_settings($field_ids, $form_fields);
+
+  $db_column_names = array();
   $now = ft_get_current_datetime();
   $query = array();
   $query[] = "last_modified_date = '$now'";
 
   $file_fields = array();
-
   $submission_date_changed = false;
 
   foreach ($form_fields as $row)
   {
+    $field_id = $row["field_id"];
+
     // if the field ID isn't in the page's tab, ignore it
-    if (!in_array($row["field_id"], $field_ids))
+    if (!in_array($field_id, $field_ids))
       continue;
 
     // if the field ID isn't editable, the person's being BAD and trying to hack a field value. Ignore it.
-    if (!in_array($row["field_id"], $infohash["editable_field_ids"]))
+    if (!in_array($field_id, $infohash["editable_field_ids"]))
       continue;
 
-    // keep track of the file fields & their IDs. These will be used to upload the files (if need be)
-    if ($row['field_type'] == "file")
-      $file_fields[] = array("field_id" => $row['field_id'], "col_name" => $row['col_name'], "field_type" => "file");
-    else if ($row["field_type"] == "image")
-      $file_fields[] = array("field_id" => $row['field_id'], "col_name" => $row['col_name'], "field_type" => "image");
+    // if this is a FILE field that doesn't have any overridden PHP processing code, don't handle it
+    // yet. We'll do it separately below
+    if ($field_types_processing_info[$row["field_type_id"]]["is_file_field"] == "yes")
+    {
+      $file_data = array(
+        "field_id"   => $field_id,
+        "field_info" => $row,
+        "data"       => $infohash,
+        "file_data"  => $_FILES,
+        "code"       => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
+        "settings"   => $field_settings[$field_id]
+      );
+      if (empty($field_types_processing_info[$row["field_type_id"]]["php_processing"]))
+      {
+        $file_fields[] = $file_data;
+        continue;
+      }
+      else
+      {
+        $value = ft_process_form_field($file_data);
+        $query[] = $row["col_name"] . " = '$value'";
+      }
+    }
+
+    // if this is the Submission Date or Last Modified Date fields, check that the information the user has
+    // supplied is a valid MySQL datetime. If it's invalid or empty, we DON'T update the value
+    if ($row["col_name"] == "submission_date" || $row["col_name"] == "last_modified_date")
+    {
+      if (!isset($infohash[$row["col_name"]]) || empty($infohash[$row["col_name"]]) || !ft_is_valid_datetime($infohash[$row["col_name"]]))
+        continue;
+      $submission_date_changed = true;
+    }
+
+    // see if this field type has any special PHP processing to do
+    if (!empty($field_types_processing_info[$row["field_type_id"]]["php_processing"]))
+    {
+      $data = array(
+        "field_info" => $row,
+        "data"       => $infohash,
+        "code"       => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
+        "settings"   => $field_settings[$field_id]
+      );
+      $value = ft_process_form_field($data);
+      $query[] = $row["col_name"] . " = '$value'";
+    }
     else
     {
-      // if this is the Submission Date or Last Modified Date fields, check that the information the user has
-      // supplied is a valid MySQL datetime. If it's invalid or empty, we DON'T update the value
-      if ($row["col_name"] == "submission_date" || $row["col_name"] == "last_modified_date")
+      if (isset($infohash[$row["field_name"]]))
       {
-        if (!isset($infohash[$row["col_name"]]) || empty($infohash[$row["col_name"]]) || !ft_is_valid_datetime($infohash[$row["col_name"]]))
-          continue;
-
-        $submission_date_changed = true;
-      }
-
-      if (isset($infohash[$row["col_name"]]))
-      {
-        if (is_array($infohash[$row["col_name"]]))
-          $query[] = $row["col_name"] . " = '" . join("$g_multi_val_delimiter", $infohash[$row["col_name"]]) . "'";
+        if (is_array($infohash[$row["field_name"]]))
+          $query[] = $row["col_name"] . " = '" . join("$g_multi_val_delimiter", $infohash[$row["field_name"]]) . "'";
         else
-          $query[] = $row["col_name"] . " = '" . $infohash[$row["col_name"]] . "'";
+          $query[] = $row["col_name"] . " = '" . $infohash[$row["field_name"]] . "'";
       }
       else
         $query[] = $row["col_name"] . " = ''";
@@ -704,37 +769,27 @@ function ft_update_submission($form_id, $submission_id, $infohash)
     return array(false, $LANG["notify_submission_not_updated"]);
 
 
-  // now the submission exists in the database, upload any files
+  // now process any file fields - TODO move to module
+/*
   if (!empty($file_fields))
   {
     $problem_files = array();
-
     while (list($form_field_name, $fileinfo) = each($_FILES))
     {
       // if nothing was included in this field, just ignore it
-      if (empty($fileinfo['name']))
+      if (empty($fileinfo["name"]))
         continue;
 
       foreach ($file_fields as $field_info)
       {
         $field_id   = $field_info["field_id"];
-        $col_name   = $field_info["col_name"];
-        $field_type = $field_info["field_type"];
+        $field_name = $field_info["field_info"]["field_name"];
 
-        if ($col_name == $form_field_name)
+        if ($field_name == $form_field_name)
         {
-          if ($field_type == "file")
-          {
-            list($success2, $message2) = ft_upload_submission_file($form_id, $submission_id, $field_id, $fileinfo);
-            if (!$success2)
-              $problem_files[] = array($fileinfo['name'], $message2);
-          }
-          else if ($field_type == "image")
-          {
-            list ($success2, $message2) = ft_upload_submission_image($form_id, $submission_id, $field_id, $fileinfo);
-            if (!$success2)
-              $problem_files[] = array($fileinfo['name'], $message2);
-          }
+          list($success2, $message2) = ft_upload_submission_file($form_id, $submission_id, $fileinfo, $field_info);
+          if (!$success2)
+            $problem_files[] = array($fileinfo["name"], $message2);
         }
       }
     }
@@ -748,9 +803,11 @@ function ft_update_submission($form_id, $submission_id, $infohash)
       return array(false, $message);
     }
   }
+*/
 
   // if the submission date just changed, update sessions in case it was the FIRST submission (this updates the
   // search date dropdown)
+  // TODO!
   if ($submission_date_changed)
     _ft_cache_form_stats($form_id);
 
@@ -766,6 +823,8 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 /**
  * Updates a single form submission. Accepts an hash of form field names to values or
  * col names to values.
+ *
+ * TODO check all references to this function
  *
  * @param integer $form_id
  * @param integer $submission_id
@@ -910,7 +969,7 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
 
   // determine the various SQL clauses for the searches
   $order_by             = _ft_get_search_submissions_order_by_clause($form_id, $order);
-  $limit_clause         = _ft_get_search_submissions_limit_clause($page_num, $results_per_page);
+  $limit_clause         = _ft_get_limit_clause($page_num, $results_per_page);
   $select_clause        = _ft_get_search_submissions_select_clause($columns);
   $filter_clause        = _ft_get_search_submissions_view_filter_clause($view_id);
   $submission_id_clause = _ft_get_search_submissions_submission_id_clause($submission_ids);
@@ -982,42 +1041,32 @@ function _ft_get_search_submissions_order_by_clause($form_id, $order)
   {
     // sorting by column, format: col_x-desc / col_y-asc
     list($column, $direction) = split("-", $order);
-    $field_info = ft_get_form_field_by_colname($form_id, $column);
+    $field_info = ft_get_field_order_info_by_colname($form_id, $column);
 
-    if ($field_info["data_type"] == "number")
-      $order_by = "CAST($column as SIGNED) $direction";
-    else
-      $order_by = "$column $direction";
+    // no field can be found if the administrator just changed the DB field contents and
+    // then went back to the submissions page where they'd already done a sort (and had it cached)
+    if (!empty($field_info))
+    {
+      if ($field_info["is_date_field"] == "yes")
+      {
+        $order_by = "CAST($column as DATETIME) $direction";
+      }
+      else
+      {
+        if ($field_info["data_type"] == "number")
+          $order_by = "CAST($column as SIGNED) $direction";
+        else
+          $order_by = "$column $direction";
+      }
 
-    // important! If the ORDER BY column wasn't the submission_id, we need to add
-    // the submission ID as the secondary sorting column
-    if ($column != "submission_id")
-      $order_by .= ", submission_id";
+      // important! If the ORDER BY column wasn't the submission_id, we need to add
+      // the submission ID as the secondary sorting column
+      if ($column != "submission_id")
+        $order_by .= ", submission_id";
+    }
   }
 
   return $order_by;
-}
-
-
-/**
- * Used in the ft_search_submissions function to abstract away a few minor details.
- *
- * @param integer $page_num
- * @param integer $results_per_page
- * @return string
- */
-function _ft_get_search_submissions_limit_clause($page_num, $results_per_page)
-{
-  $limit_clause = "";
-  if ($results_per_page != "all")
-  {
-    if (empty($page_num))
-      $page_num = 1;
-    $first_item = ($page_num - 1) * $results_per_page;
-    $limit_clause = "LIMIT $first_item, $results_per_page";
-  }
-
-  return $limit_clause;
 }
 
 
@@ -1189,11 +1238,12 @@ function _ft_get_search_submissions_submission_id_clause($submission_ids)
 /**
  * This function is used for displaying and exporting the data. Basically it merges all information
  * about a particular field from the view_fields table with the form_fields and field_options table,
- * providing ALL information about a field in a single variable. This functionality is needed repeatedly
- * on multiple pages throughout the script, hence the abstraction.
+ * providing ALL information about a field in a single variable.
  *
  * It accepts the result of the ft_get_view_fields() function as the first parameter and an optional
  * boolean to let it know whether to return ALL results or not.
+ *
+ * TODO deprecate... or something
  *
  * @param array $view_fields
  * @param boolean $return_all_fields
@@ -1215,7 +1265,7 @@ function ft_get_submission_field_info($view_fields, $return_all_fields = false)
                                'col_name'      => $field['col_name'],
                                'list_order'    => $field['list_order']);
 
-      $field_info = ft_get_form_field($field_id, true);
+      $field_info = ft_get_form_field($field_id);
       $curr_field_info["field_info"] = $field_info;
 
       $display_fields[] = $curr_field_info;
@@ -1306,4 +1356,78 @@ function ft_check_submission_exists($form_id, $submission_id)
     return (mysql_num_rows($query) == 1);
   else
     return null;
+}
+
+
+/**
+ * This generic function processes any form field with a field type that requires additional
+ * processing, e.g. phone number fields, date fields etc. - anything that needs a little extra PHP
+ * in order to convert the form data into
+ *
+ * This function must
+ *
+ * @param array $info
+ */
+function ft_process_form_field($vars)
+{
+  eval($vars["code"]);
+  $value = (isset($value)) ? $value : "";
+  return ft_sanitize($value);
+}
+
+
+/**
+ * Used for retrieving the data for a mapped form field; i.e. a dropdown, radio group or checkbox group
+ * field whose source contents is the contents of a different form field.
+ *
+ * @param integer $form_id
+ * @param array $results a complex data structure
+ */
+function ft_get_mapped_form_field_data($setting_value)
+{
+  global $g_table_prefix;
+
+  $trimmed = preg_replace("/form_field:/", "", $setting_value);
+
+  // this prevents anything wonky being shown if the following query fails (for whatever reason)
+  $formatted_results = "";
+
+  list($form_id, $field_id, $order) = explode("|", $trimmed);
+  if (!empty($form_id) && !empty($field_id) && !empty($order))
+  {
+    $map = ft_get_field_col_by_field_id($form_id, $field_id);
+    $col_name = $map[$field_id];
+    $query = @mysql_query("
+      SELECT submission_id, $col_name
+      FROM   {$g_table_prefix}form_{$form_id}
+      ORDER BY $col_name $order
+    ");
+    if ($query)
+    {
+      $results = array();
+      while ($row = mysql_fetch_assoc($query))
+      {
+        $results[] = array(
+          "option_value" => $row["submission_id"],
+          "option_name"  => $row[$col_name]
+        );
+      }
+
+      // yuck! But we need to force the form field info into the same format as the option lists,
+      // so the Field Types don't need to do additional work to display both cases
+      $formatted_results = array(
+        "type"     => "form_field",
+        "form_id"  => $form_id,
+        "field_id" => $field_id,
+        "options" => array(
+          array(
+            "group_info" => array(),
+            "options" => $results
+          )
+        )
+      );
+    }
+  }
+
+  return $formatted_results;
 }

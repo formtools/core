@@ -1,4 +1,4 @@
-Editor.Parser = (function() {
+var SparqlParser = Editor.Parser = (function() {
   function wordRegexp(words) {
     return new RegExp("^(?:" + words.join("|") + ")$", "i");
   }
@@ -6,18 +6,18 @@ Editor.Parser = (function() {
                         "isblank", "isliteral", "union", "a"]);
   var keywords = wordRegexp(["base", "prefix", "select", "distinct", "reduced", "construct", "describe",
                              "ask", "from", "named", "where", "order", "limit", "offset", "filter", "optional",
-                             "graph", "by", "asc", "desc", ]);
+                             "graph", "by", "asc", "desc"]);
   var operatorChars = /[*+\-<>=&|]/;
 
   var tokenizeSparql = (function() {
     function normal(source, setState) {
       var ch = source.next();
       if (ch == "$" || ch == "?") {
-        source.nextWhile(matcher(/[\w\d]/));
+        source.nextWhileMatches(/[\w\d]/);
         return "sp-var";
       }
-      else if (ch == "<" && !source.applies(matcher(/[\s\u00a0=]/))) {
-        source.nextWhile(matcher(/[^\s\u00a0>]/));
+      else if (ch == "<" && !source.matches(/[\s\u00a0=]/)) {
+        source.nextWhileMatches(/[^\s\u00a0>]/);
         if (source.equals(">")) source.next();
         return "sp-uri";
       }
@@ -33,18 +33,18 @@ Editor.Parser = (function() {
         return "sp-comment";
       }
       else if (operatorChars.test(ch)) {
-        source.nextWhile(matcher(operatorChars));
+        source.nextWhileMatches(operatorChars);
         return "sp-operator";
       }
       else if (ch == ":") {
-        source.nextWhile(matcher(/[\w\d\._\-]/));
+        source.nextWhileMatches(/[\w\d\._\-]/);
         return "sp-prefixed";
       }
       else {
-        source.nextWhile(matcher(/[_\w\d]/));
+        source.nextWhileMatches(/[_\w\d]/);
         if (source.equals(":")) {
           source.next();
-          source.nextWhile(matcher(/[\w\d_\-]/));
+          source.nextWhileMatches(/[\w\d_\-]/);
           return "sp-prefixed";
         }
         var word = source.get(), type;
@@ -92,7 +92,7 @@ Editor.Parser = (function() {
       else if (context.align)
         return context.col - (closing ? context.width : 0);
       else
-        return context.indent + (closing ? 0 : 2);
+        return context.indent + (closing ? 0 : indentUnit);
     }
   }
 
@@ -130,7 +130,7 @@ Editor.Parser = (function() {
         else if (/[\]\}\)]/.test(content)) {
           while (context && context.type == "pattern")
             popContext();
-          if (context && content == matching[context.type]) 
+          if (context && content == matching[context.type])
             popContext();
         }
         else if (content == "." && context && context.type == "pattern") {

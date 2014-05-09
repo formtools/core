@@ -3,7 +3,7 @@
   <table cellpadding="0" cellspacing="0" height="35">
   <tr>
     <td width="45"><img src="{$images_url}/icon_themes.gif" width="34" height="29" /></td>
-    <td class="title">{$LANG.word_themes|upper}</td>
+    <td class="title">{$LANG.word_themes}</td>
   </tr>
   </table>
 
@@ -44,7 +44,10 @@
           {assign var='index' value=$smarty.foreach.row.index}
           {assign var='theme_info' value=$themes[$index]}
           <tr>
-            <td valign="top"><a href="{$g_root_url}/themes/{$theme_info.theme_folder}/about/screenshot.gif" rel="lightbox" title="{$theme_info.theme_name|escape}"><img src="{$g_root_url}/themes/{$theme_info.theme_folder}/about/thumbnail.gif" border="0" /></a></td>
+            <td valign="top">
+              <a href="{$g_root_url}/themes/{$theme_info.theme_folder}/about/screenshot.gif" class="fancybox"
+                title="{$theme_info.theme_name|escape}"><img src="{$g_root_url}/themes/{$theme_info.theme_folder}/about/thumbnail.gif" border="0" /></a>
+            </td>
             <td valign="top" class="pad_left">
               <div>
                 <span class="bold">{$theme_info.theme_name}</span>

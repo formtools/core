@@ -13,9 +13,15 @@
  */
 function smarty_function_clients_dropdown($params, &$smarty)
 {
+	global $LANG;
+
   $default_value = (isset($params["default"])) ? $params["default"] : "";
   $onchange      = (isset($params["onchange"])) ? $params["onchange"] : "";
   $style         = (isset($params["style"])) ? $params["style"] : "";
+  $class         = (isset($params["class"])) ? $params["class"] : "";
+  $include_blank_option = (isset($params["include_blank_option"])) ? $params["include_blank_option"] : false;
+  $blank_option         = (isset($params["blank_option"])) ? $params["blank_option"] : $LANG["phrase_please_select"];
+  $blank_option_is_optgroup  = (isset($params["blank_option_is_optgroup"])) ? $params["blank_option_is_optgroup"] : false;
 
   // for MULTIPLE item dropdown lists
   $multiple         = (isset($params["multiple"])) ? $params["multiple"] : "";
@@ -33,6 +39,7 @@ function smarty_function_clients_dropdown($params, &$smarty)
   $attributes = array(
     "id"   => $params["name_id"],
     "name" => $params["name_id"],
+    "class" => $params["class"],
     "onchange" => $onchange,
     "style" => $style,
     "multiple" => $multiple,
@@ -83,13 +90,23 @@ function smarty_function_clients_dropdown($params, &$smarty)
   else
   {
     $options = array();
+
+    if ($include_blank_option)
+    {
+    	if ($blank_option_is_optgroup)
+    	  $options[] = "<optgroup label=\"$blank_option\">";
+    	else
+    	  $options[] = "<option value=\"\">$blank_option</option>";
+    }
+
     foreach ($rows as $row_info)
       $options[] = "<option value=\"{$row_info["account_id"]}\" " . (($default_value == $row_info["account_id"]) ? "selected" : "") . ">{$row_info["name"]}</option>";
+
+    if ($include_blank_option && $blank_option_is_optgroup)
+      $options[] = "</optgroup>";
 
     $html = "<select $attribute_str>" . join("\n", $options) . "</select>";
   }
 
   return $html;
 }
-
-?>

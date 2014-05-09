@@ -13,10 +13,10 @@
       <table class="list_table" id="client_forms_table" cellpadding="0" cellspacing="1">
       <tbody><tr>
         <th>{$LANG.word_form}</th>
-        <th width="150">{$LANG.phrase_available_views}</th>
+        <th width="160">{$LANG.phrase_available_views}</th>
         <th width="90">{$LANG.word_action}</th>
-        <th width="150">{$LANG.phrase_selected_views}</th>
-        <th width="60" class="del">{$LANG.word_delete|upper}</th>
+        <th width="160">{$LANG.phrase_selected_views}</th>
+        <th class="del"></th>
       </tr>
 
       {* loop through all forms to which this client has been assigned *}
@@ -26,10 +26,10 @@
         {assign var=row value=$smarty.foreach.i.iteration}
 
          <tr id="row_{$row}">
-           <td valign="top">{forms_dropdown name_id="form_row_`$row`" include_blank_option=true style="width:100%" default=$form_info.form_id onchange="cf_ns.select_form(`$row`, this.value)"}</td>
+           <td valign="top">{forms_dropdown name_id="form_row_`$row`" include_blank_option=true default=$form_info.form_id onchange="cf_ns.select_form(`$row`, this.value)" class="selected_form"}</td>
            <td>
              <span id="row_{$row}_available_views_span">
-               <select name="row_{$row}_available_views[]" id="row_{$row}_available_views" multiple size="4" style="width:100%">
+               <select name="row_{$row}_available_views[]" id="row_{$row}_available_views" multiple size="4">
                  {* only display those Views to which this client is not already assigned *}
                  {foreach from=$all_form_views[$form_info.form_id] item=view_row name=vr}
 
@@ -49,20 +49,20 @@
            </td>
            <td valign="center" align="center">
              <span id="row_{$row}_actions">
-               <input type="button" onclick="return ft.move_options($('row_{$row}_available_views'), $('row_{$row}_selected_views'))" value="{$LANG.word_add_uc_rightarrow}" />
-               <input type="button" onclick="return ft.move_options($('row_{$row}_selected_views'), $('row_{$row}_available_views'))" value="{$LANG.word_remove_uc_leftarrow}" />
+               <input type="button" onclick="return ft.move_options('row_{$row}_available_views', 'row_{$row}_selected_views')" value="{$LANG.word_add_uc_rightarrow}" />
+               <input type="button" onclick="return ft.move_options('row_{$row}_selected_views', 'row_{$row}_available_views')" value="{$LANG.word_remove_uc_leftarrow}" />
              </span>
            </td>
            <td>
              <span id="row_{$row}_selected_views_span">
-               <select name="row_{$row}_selected_views[]" id="row_{$row}_selected_views" multiple size="4" style="width:100%">
+               <select name="row_{$row}_selected_views[]" id="row_{$row}_selected_views" multiple size="4">
                {foreach from=$views item=view_row name=vr}
                  <option value="{$view_row.view_id}">{$view_row.view_name}</option>
                {/foreach}
                </select>
              </span>
            </td>
-           <td class="del" align="center"><a href="#" onclick="return cf_ns.delete_row({$row})">{$LANG.word_delete|upper}</a></td>
+           <td class="del" onclick="return cf_ns.delete_row({$row})"> </td>
          </tr>
       {/foreach}</tbody>
       </table>

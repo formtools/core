@@ -27,10 +27,8 @@ $conditional_rules = implode("\n", $conditional_validation);
 
 
 // define info for template
-$page_vars = array();
 $page_vars["page"] = "main";
 $page_vars["page_url"] = ft_get_page_url("edit_client_main", array("client_id" => $client_id));
-$page_vars["tabs"] = $tabs;
 $page_vars["head_title"]   = "{$LANG["phrase_edit_client"]} - {$LANG["word_main"]}";
 $page_vars["client_info"]  = $client_info;
 $page_vars["client_id"]    = $client_id;
@@ -41,7 +39,7 @@ $page_vars["has_min_password_length"] = !empty($client_info["settings"]["min_pas
 $page_vars["password_special_char"] = ft_eval_smarty_string($LANG["phrase_password_special_char"], array("chars" => $g_password_special_chars));
 $page_vars["phrase_password_min"]   = ft_eval_smarty_string($LANG["phrase_password_min"], array("length" => $client_info["settings"]["min_password_length"]));
 
-$page_vars["head_js"] =<<<EOF
+$page_vars["head_js"] =<<<END
 var rules = [];
 rules.push("required,first_name,{$LANG['validation_no_client_first_name']}");
 rules.push("required,last_name,{$LANG['validation_no_client_last_name']}");
@@ -53,7 +51,7 @@ rules.push("if:password!=,required,password_2,{$LANG["validation_no_account_pass
 rules.push("if:password!=,same_as,password,password_2,{$LANG["validation_passwords_different"]}");
 $conditional_rules
 
-Event.observe(document, 'dom:loaded', function() { $("add_client").focusFirstElement(); });
-EOF;
+$(function() { $("#add_client :input:visible:enabled:first").focus(); });
+END;
 
 ft_display_page("admin/clients/edit.tpl", $page_vars);

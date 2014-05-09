@@ -25,6 +25,7 @@ $search_criteria = array(
   "status"    => $status,
   "client_id" => $client_id
     );
+
 $num_forms = ft_get_form_count();
 $forms     = ft_search_forms($client_id, true, $search_criteria);
 $clients   = ft_get_client_list();
@@ -43,5 +44,42 @@ $page_vars["order"] = $order;
 $page_vars["clients"] = $clients;
 $page_vars["search_criteria"] = $search_criteria;
 $page_vars["pagination"] = ft_get_dhtml_page_nav(count($forms), $_SESSION["ft"]["settings"]["num_forms_per_page"], 1);
+$page_vars["js_messages"] = array("word_remove", "word_edit");
+$page_vars["head_js"] =<<< END
+
+var page_ns = {};
+page_ns.show_form_dialog = $("<div></div>");
+
+$(function() {
+  $(".show_form").each(function() {
+    var url = $(this).attr("href");
+    $(this).bind("click", { url: url }, function(e) {
+      ft.create_dialog({
+        dialog:     page_ns.show_form_dialog,
+        title:      "Show Form",
+        min_width:  800,
+        min_height: 500,
+        content: "<iframe class=\"check_url_iframe\" src=\"" + e.data.url + "\"></iframe>",
+        buttons: [{
+          text: "{$LANG["phrase_open_form_in_new_tab_or_win"]}",
+          click: function() {
+            window.open(url);
+            $(this).dialog("close");
+          }
+        },
+        {
+          text: "{$LANG["word_close"]}",
+          click: function() {
+            $(this).dialog("close");
+          }
+        }]
+      });
+      return false;
+    });
+  });
+});
+
+
+END;
 
 ft_display_page("admin/forms/index.tpl", $page_vars);

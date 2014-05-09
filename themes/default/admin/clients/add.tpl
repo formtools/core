@@ -4,7 +4,8 @@
   <tr>
     <td width="45"><a href="./"><img src="{$images_url}/icon_accounts.gif" border="0" width="34" height="34" /></a></td>
     <td class="title">
-      {$LANG.phrase_add_client|upper}
+      <a href="./">{$LANG.word_clients}</a> <span class="joiner">&raquo;</span>
+      {$LANG.phrase_add_client}
     </td>
   </tr>
   </table>

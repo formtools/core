@@ -3,7 +3,7 @@
   <table cellpadding="0" cellspacing="0" height="35" class="margin_bottom_large">
   <tr>
     <td width="45"><img src="{$images_url}/icon_settings.gif" width="34" height="34" /></td>
-    <td class="title">{$LANG.word_settings|upper}</td>
+    <td class="title">{$LANG.word_settings}</td>
   </tr>
   </table>
 
@@ -15,12 +15,6 @@
       {ft_include file='admin/settings/tab_accounts.tpl'}
     {elseif $page == "files"}
       {ft_include file='admin/settings/tab_files.tpl'}
-    {elseif $page == "wysiwyg"}
-      {ft_include file='admin/settings/tab_wysiwyg.tpl'}
-    {elseif $page == "themes"}
-      {ft_include file='admin/settings/tab_themes.tpl'}
-    {elseif $page == "themes_about"}
-      {ft_include file='admin/settings/tab_themes_about.tpl'}
     {elseif $page == "menus"}
       {ft_include file='admin/settings/tab_menus.tpl'}
     {elseif $page == "add_menu"}

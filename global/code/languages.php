@@ -5,9 +5,9 @@
  * ft_get_date function also permits localization of dates, but the general.php file seemed a
  * better location for it.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Languages
  */
 

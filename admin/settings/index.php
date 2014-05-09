@@ -25,27 +25,23 @@ if (isset($request["page"]) && !empty($request["page"]))
 else
   $page = ft_load_field("page", "settings_tab", "main");
 
-
+$same_page = ft_get_clean_php_self();
 $tabs = array(
   "main" => array(
       "tab_label" => $LANG["word_main"],
-      "tab_link" => "{$_SERVER["PHP_SELF"]}?page=main"
+      "tab_link" => "{$same_page}?page=main"
         ),
   "accounts" => array(
       "tab_label" => $LANG["word_accounts"],
-      "tab_link" => "{$_SERVER["PHP_SELF"]}?page=accounts"
+      "tab_link" => "{$same_page}?page=accounts"
         ),
   "files" => array(
       "tab_label" => $LANG["word_files"],
-      "tab_link" => "{$_SERVER["PHP_SELF"]}?page=files"
-        ),
-  "wysiwyg" => array(
-      "tab_label" => $LANG["word_wysiwyg"],
-      "tab_link" => "{$_SERVER["PHP_SELF"]}?page=wysiwyg"
+      "tab_link" => "{$same_page}?page=files"
         ),
   "menus" => array(
       "tab_label" => $LANG["word_menus"],
-      "tab_link" => "{$_SERVER["PHP_SELF"]}?page=menus",
+      "tab_link" => "{$same_page}?page=menus",
       "pages" => array("edit_admin_menu", "edit_client_menu")
         )
     );
@@ -61,9 +57,6 @@ switch ($page)
     break;
   case "files":
     require("page_files.php");
-    break;
-  case "wysiwyg":
-    require("page_wysiwyg.php");
     break;
   case "menus":
     require("page_menus.php");

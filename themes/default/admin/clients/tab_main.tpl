@@ -8,6 +8,17 @@
 
       <table class="list_table" cellpadding="0" cellspacing="1">
       <tr>
+        <td width="15"> </td>
+        <td class="pad_left_small">{$LANG.phrase_last_logged_in}</td>
+        <td class="pad_left_small medium_grey">
+          {if $client_info.last_logged_in != ""}
+            {$client_info.last_logged_in|custom_format_date:$SESSION.account.timezone_offset:$SESSION.account.date_format}
+          {else}
+            {$LANG.word_never}
+          {/if}
+        </td>
+      </tr>
+      <tr>
         <td width="15" align="center" class="red">*</td>
         <td class="pad_left_small">{$LANG.word_status}</td>
         <td>
@@ -50,17 +61,17 @@
 
       <p class="subtitle">{$LANG.phrase_change_login_info}</p>
 
-		  {if $has_extra_password_requirements}
-		  <div class="grey_box margin_bottom_large">
-		    {$LANG.phrase_password_requirements_c}
-		    <ul class="margin_bottom_small margin_top_small">
-		      {if $has_min_password_length}<li>{$phrase_password_min}</li>{/if}
-		      {if "uppercase"|in_array:$required_password_chars}<li>{$LANG.phrase_password_one_uppercase}</li>{/if}
-		      {if "number"|in_array:$required_password_chars}<li>{$LANG.phrase_password_one_number}</li>{/if}
-		      {if "special_char"|in_array:$required_password_chars}<li>{$password_special_char}</li>{/if}
-		    </ul>
-		  </div>
-		  {/if}
+      {if $has_extra_password_requirements}
+      <div class="grey_box margin_bottom_large">
+        {$LANG.phrase_password_requirements_c}
+        <ul class="margin_bottom_small margin_top_small">
+          {if $has_min_password_length}<li>{$phrase_password_min}</li>{/if}
+          {if "uppercase"|in_array:$required_password_chars}<li>{$LANG.phrase_password_one_uppercase}</li>{/if}
+          {if "number"|in_array:$required_password_chars}<li>{$LANG.phrase_password_one_number}</li>{/if}
+          {if "special_char"|in_array:$required_password_chars}<li>{$password_special_char}</li>{/if}
+        </ul>
+      </div>
+      {/if}
 
       <table class="list_table" cellpadding="0" cellspacing="1">
       <tr>

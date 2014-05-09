@@ -529,7 +529,6 @@ rsv.validate = function(form, rules)
 
       // apply the error CSS class (if defined) all the fields and place the focus on the first
       // offending field
-
       rsv.styleField(rsv.returnHash[i][0], i==0);
     }
 

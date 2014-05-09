@@ -12,12 +12,17 @@
 require_once("../session_start.php");
 ft_check_permission("user");
 
+header('Cache-Control: no-cache, must-revalidate');
+header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+//header('Content-type: application/json');
 
 // the action to take and the ID of the page where it will be displayed (allows for
 // multiple calls on same page to load content in unique areas)
 $request = array_merge($_GET, $_POST);
 $action  = $request["action"];
 
+// To be deprecated! This is the pre-jQuery way to return vars back. Change to use return_vars, which passes an object
+// ------------
 // Find out if we need to return anything back with the response. This mechanism allows us to pass any information
 // between the Ajax submit function and the Ajax return function. Usage:
 //   "return_vals[]=question1:answer1&return_vals[]=question2:answer2&..."
@@ -28,9 +33,21 @@ if (isset($request["return_vals"]))
   foreach ($request["return_vals"] as $pair)
   {
     list($key, $value) = split(":", $pair);
-    $vals[] = "$key: \"$value\"";
+    $vals[] = "\"$key\": \"$value\"";
   }
-  $return_val_str = ", " . join(", ", $vals);
+  $return_val_str = ", " . implode(", ", $vals);
+}
+
+// new method (see comment above). Doesn't allow double quotes in the key or value
+$return_str = "";
+if (isset($request["return_vars"]))
+{
+  $vals = array();
+  while (list($key, $value) = each($request["return_vars"]))
+  {
+    $vals[] = "\"$key\": \"$value\"";
+  }
+  $return_str = ", " . implode(", ", $vals);
 }
 
 
@@ -39,21 +56,24 @@ switch ($action)
   case "test_folder_permissions":
     list($success, $message) = ft_check_upload_folder($request["file_upload_dir"]);
     $success = ($success) ? 1 : 0;
-    echo "{ success: $success, message: \"$message\"{$return_val_str} }";
+    echo "{ \"success\": \"$success\", \"message\": \"$message\"{$return_val_str} }";
     break;
 
   case "test_folder_url_match":
     list($success, $message) = ft_check_folder_url_match($request["file_upload_dir"], $request["file_upload_url"]);
     $success = ($success) ? 1 : 0;
-    echo "{ success: $success, message: \"$message\"{$return_val_str} }";
+    echo "{ \"success\": \"$success\", \"message\": \"$message\"{$return_val_str} }";
     break;
 
-  case "remember_edit_view_tab":
-    $_SESSION["ft"]["edit_view_tab"] = $request["edit_view_tab"];
-    break;
+  // expects the tabset name and inner_tab to contain an alphanumeric string only
+  case "remember_inner_tab":
+    $tabset = strip_tags($request["tabset"]);
+    $tab    = strip_tags($request["tab"]);
 
-  case "remember_edit_email_tab":
-    $_SESSION["ft"]["edit_email_tab"] = $request["edit_email_tab"];
+    if (!array_key_exists("inner_tabs", $_SESSION["ft"]))
+      $_SESSION["ft"]["inner_tabs"] = array();
+
+    $_SESSION["ft"]["inner_tabs"][$tabset] = $tab;
     break;
 
   case "select_submission":
@@ -148,7 +168,7 @@ switch ($action)
   case "send_test_email":
     list($success, $message) = ft_send_test_email($request);
     $success = ($success) ? 1 : 0;
-    echo "{ success: $success, message: \"$message\" }";
+    echo "{ \"success\": \"$success\", \"message\": \"$message\" }";
     break;
 
   case "display_test_email":
@@ -167,17 +187,16 @@ switch ($action)
     $submission_id = $_SESSION["ft"]["last_submission_id"];
     $field_id      = $request["field_id"];
     $force_delete  = ($request["force_delete"] == "true") ? true : false;
-
     if (empty($form_id) || empty($submission_id))
     {
-      echo "{ success: false, message: \"{$LANG["notify_invalid_session_values_re_login"]}\" } ";
+      echo "{ \"success\": \"false\", \"message\": \"{$LANG["notify_invalid_session_values_re_login"]}\" } ";
       exit;
     }
-
     list($success, $message) = ft_delete_file_submission($form_id, $submission_id, $field_id, $force_delete);
     $success = ($success) ? 1 : 0;
     $message = ft_sanitize($message);
-    echo "{ success: $success, message: \"$message\"{$return_val_str} }";
+    $message = preg_replace("/\\\'/", "'", $message);
+    echo "{ \"success\": \"$success\", \"message\": \"$message\"{$return_val_str} }";
     break;
 
   case "edit_submission_send_email":
@@ -196,7 +215,7 @@ switch ($action)
       $success = 0;
       $message = $LANG["notify_email_not_sent"];
     }
-    echo "{ success: $success, message: \"$message\" }";
+    echo "{ \"success\": \"$success\", \"message\": \"$message\" }";
     break;
 
   case "remember_edit_email_advanced_settings":
@@ -241,13 +260,13 @@ switch ($action)
     if ($form_info["is_complete"] != 'yes')
       ft_finalize_form($form_id);
 
-    echo "{ success: 1, message: \"\" }";
+    echo "{ \"success\": \"1\", \"message\": \"\" }";
     break;
 
   case "get_js_webpage_parse_method":
     $url = $request["url"];
     $method = ft_get_js_webpage_parse_method($url);
-    echo "{ scrape_method: \"$method\" }";
+    echo "{ \"scrape_method\": \"$method\" }";
     break;
 
   // used on the Add Form Step 5 page and Edit Field Options pages. It uploads
@@ -270,8 +289,8 @@ switch ($action)
       if (!isset($_FILES["form_page_{$i}"]))
         continue;
 
-      $filename        = $upload_tmp_file_prefix . $_FILES["form_page_{$i}"]["name"];
-      $tmp_location    = $_FILES["form_page_{$i}"]["tmp_name"];
+      $filename     = $upload_tmp_file_prefix . $_FILES["form_page_{$i}"]["name"];
+      $tmp_location = $_FILES["form_page_{$i}"]["tmp_name"];
 
       list($g_success, $g_message, $final_filename) = ft_upload_file($file_upload_dir, $filename, $tmp_location);
       if ($g_success)
@@ -288,11 +307,11 @@ switch ($action)
 
     if ($error)
     {
-      echo "{ success: 0, message: '{$LANG["notify_smart_fill_upload_fields_fail"]}' }";
+      echo "{ \"success\": \"0\", \"message\": \"{$LANG["notify_smart_fill_upload_fields_fail"]}\" }";
     }
     else
     {
-      $params = array("success: 1");
+      $params = array("\"success\": \"1\"");
       foreach ($uploaded_file_info as $url)
         $params[] = "url_1: \"$url\"";
 
@@ -329,17 +348,141 @@ switch ($action)
     }
     else
     {
-      echo "{ success: 0, message: '{$LANG["notify_smart_fill_upload_fields_fail"]}' }";
+      echo "{ \"success\": \"0\", \"message\": \"{$LANG["notify_smart_fill_upload_fields_fail"]}\" }";
       exit;
     }
     break;
 
   case "get_upgrade_form_html":
-  	echo "<form action=\"http://www.formtools.org/upgrade.php\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
-  	foreach ($_SESSION["ft"]["upgrade_info"] as $component_info)
+    $components = ft_get_formtools_installed_components();
+    $post_url = ($components["rt"] == "alpha") ? "http://alpha.formtools.org/upgrade.php" : "http://www.formtools.org/upgrade.php";
+    echo "<form action=\"$post_url\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
+    while (list($key, $value) = each($components))
     {
-    	echo "<input type=\"hidden\" name=\"{$component_info["k"]}\" value=\"{$component_info["v"]}\" />\n";
+      echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
     }
     echo "</form>";
+    break;
+
+  case "get_extended_field_settings":
+    $field_id      = $request["field_id"];
+    $field_type_id = $request["field_type_id"];
+    $settings = ft_get_extended_field_settings($field_id);
+    $info = array(
+      "field_id"      => $field_id,
+      "field_type_id" => $field_type_id,
+      "settings"      => $settings
+    );
+    echo ft_convert_to_json($info);
+    break;
+
+  case "get_option_lists":
+    $option_lists = ft_get_option_lists("all");
+    $option_list_info = array();
+    foreach ($option_lists["results"] as $option_list) {
+      $option_list_info[$option_list["list_id"]] = $option_list["option_list_name"];
+    }
+    echo ft_convert_to_json($option_list_info);
+    break;
+
+  // used on the Edit Form -> Fields tab to
+  case "get_form_list":
+    $form_list = ft_get_form_list();
+    $forms = array();
+    foreach ($form_list as $form_info) {
+      $forms[$form_info["form_id"]] = $form_info["form_name"];
+    }
+    echo ft_convert_to_json($forms);
+    break;
+
+  case "get_form_fields":
+    $form_id     = $request["form_id"];
+    $field_id    = $request["field_id"];
+    $field_order = $request["field_order"];
+    $form_fields = ft_get_form_fields($form_id);
+    $fields = array();
+    foreach ($form_fields as $field_info)
+    {
+      $fields[$field_info["field_id"]] = $field_info["field_title"]; // TODO. This throws an error with single quotes in field titles...
+    }
+    $return_info = array(
+      "form_id"     => $form_id,
+      "field_id"    => $field_id,
+      "field_order" => $field_order,
+      "fields"      => $fields
+    );
+    echo ft_convert_to_json($return_info);
   	break;
+
+  case "create_new_view":
+    $form_id   = $request["form_id"];
+    $group_id  = $request["group_id"];
+    $view_name = $request["view_name"];
+    $duplicate_view_id = "";
+
+    // here, create_view_from_view_id either contains the ID of the View that the user wants to copy,
+    // or "blank_view_no_fields", meaning a totally blank View or "blank_view_all_fields" meaning
+    // they want all View fields added by default
+    if (isset($request["create_view_from_view_id"]) && !empty($request["create_view_from_view_id"]))
+    {
+      $duplicate_view_id = $request["create_view_from_view_id"];
+    }
+
+    $view_id = ft_create_new_view($form_id, $group_id, $view_name, $duplicate_view_id);
+
+    // always set the default Edit View tab to the first one
+    $_SESSION["ft"]["edit_view_tab"] = 1;
+    echo "{ \"success\": \"1\", \"view_id\": \"$view_id\" }";
+    break;
+
+  case "create_new_view_group":
+    $form_id    = $_SESSION["ft"]["form_id"];
+    $group_type = "form_{$form_id}_view_group";
+    $group_name = $request["group_name"];
+    $info = ft_add_list_group($group_type, $group_name);
+    echo ft_convert_to_json($info);
+    break;
+
+  case "delete_view":
+    $view_id = $request["view_id"];
+    ft_delete_view($view_id);
+    echo "{ \"success\": \"1\", \"view_id\": \"$view_id\" }";
+    break;
+
+  // this is called when the user clicks on the "Save Changes" button on the Edit Field dialog on the
+  // Fields tab. It sends all file
+  case "update_form_fields":
+    $form_id = $request["form_id"];
+    $changed_field_ids = $request["data"]["changed_field_ids"];
+
+    // update whatever information has been included in the request
+    $problems = array();
+    $count = 1;
+    $new_field_map = array();
+    foreach ($changed_field_ids as $field_id)
+    {
+      if (!isset($request["data"]["field_$field_id"]))
+        continue;
+
+      // if this is a NEW field, we just ignore it here. New fields are only added by updating the main page, not
+      // via the Edit Field dialog
+      if (preg_match("/^NEW/", $field_id))
+        continue;
+
+       list($success, $message) = ft_update_field($form_id, $field_id, $request["data"]["field_$field_id"]);
+      if (!$success)
+      {
+        $problems[] = array("field_id" => $field_id, "error" => $message);
+      }
+    }
+    if (!empty($problems))
+    {
+      $problems_json = ft_convert_to_json($problems);
+      echo "{ \"success\": \"0\", \"problems\": $problems_json{$return_str} }";
+    }
+    else
+    {
+      echo "{ \"success\": \"1\"{$return_str} }";
+    }
+    break;
 }

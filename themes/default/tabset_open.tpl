@@ -4,8 +4,6 @@
 
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
-
-      {* loop through $tabs *}
       {foreach from=$tabs key=curr_tab_key item=curr_tab}
 
         {* we show a tab as enabled if:
@@ -26,8 +24,25 @@
         <td width="1" height="26" style="border-bottom: 1px solid #cfcfcf"> </td>
       {/foreach}
 
-      <td height="26" style="border-bottom: 1px solid #cfcfcf;">&nbsp;</td>
+      <td height="26" style="border-bottom: 1px solid #cfcfcf;">
+				<div class="prevnext_links">
+				  {if $show_tabset_nav_links}
+				    {assign var=prev_label value=$prev_tabset_link_label|default:$LANG.word_previous_leftarrow}
+				    {if $prev_tabset_link}
+				      <span><a href="{$prev_tabset_link}">{$prev_label}</a></span>
+				    {else}
+				      <span class="no_link">{$prev_label}</span>
+				    {/if}
 
+				    {assign var=next_label value=$next_tabset_link_label|default:$LANG.word_next_rightarrow}
+				    {if $next_tabset_link}
+				      <span><a href="{$next_tabset_link}">{$next_label}</a></span>
+				    {else}
+				      <span class="no_link">{$next_label}</span>
+				    {/if}
+				  {/if}
+				</div>
+      </td>
     </tr>
     </table>
 

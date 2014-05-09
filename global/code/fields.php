@@ -7,7 +7,7 @@
  *
  * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage Fields
  */
 
@@ -16,133 +16,56 @@
 
 
 /**
- * Adds new form field(s) for storage in the database. This function was updated in 1.4.6 to allow
- * for adding multiple fields in one go. It ignores all fields that don't include a form field name.
- *
- * Note: this function could use some real improvements to the data validation and error handling.
- * Currently it mostly relies on the JS validation in the form page. This isn't such a huge sin, however,
- * since the Add Fields page is written in entirely all javascript - so it's exceedingly unlikely that
- * this function will receive invalid data. Still, it should be re-examined when I get around to
- * standardizing the error message handling.
+ * Adds new form field(s) to the database. This was totally re-written in 2.1.0, for the new Edit Fields
+ * page.
  *
  * @param integer $infohash a hash containing the contents of the Edit Form Advanced -> Add Fields page.
- * @param integer $form_id The unique form ID.
+ * @param integer $form_id The unique form ID
  * @return array Returns array with indexes:<br/>
  *               [0]: true/false (success / failure)<br/>
  *               [1]: message string<br/>
  */
-function ft_add_form_fields($infohash, $form_id)
+function ft_add_form_fields($form_id, $fields)
 {
-  global $g_debug, $g_table_prefix, $LANG;
+  global $g_debug, $g_table_prefix, $LANG, $g_field_sizes;
 
   $success = true;
   $message = "";
+  $fields = ft_sanitize($fields);
 
-  $infohash = ft_sanitize($infohash);
-
-  // grab the "global" values
-  $auto_generate_col_names = isset($infohash["auto_generate_col_names"]) ? true : false;
-  $num_rows                = isset($infohash["num_fields"]) ? $infohash["num_fields"] : 0; // bah! Consistency!?
-
-  // if for some reason there are no rows, just return
-  if ($num_rows == 0)
-    return;
-
-
-  // find out how many fields there are already created for this form. This is used for the field order
-  $form_fields = ft_get_form_fields($form_id);
-  $form_info   = ft_get_form($form_id);
-  $num_fields  = count($form_fields);
-  $order = $num_fields + 1;
-
-  // if we're auto-generating the column names, get a list of unique strings (of length $num_fields)
-  // in preparation for use
-  $unique_col_names = array();
-  if ($auto_generate_col_names)
+  foreach ($fields as $field_info)
   {
-    $existing_col_names = array();
-    foreach ($form_fields as $field)
-      $existing_col_names[] = $field["col_name"];
-
-    // auto-generated database field names are of the form col_X where X is any integer starting with 1
-    $curr_num = 1;
-    while (count($unique_col_names) < $num_rows)
-    {
-       if (!in_array("col_$curr_num", $existing_col_names))
-         $unique_col_names[] = "col_$curr_num";
-
-       $curr_num++;
-    }
-  }
-
-
-  // loop through $infohash and, if the data is valid, add each form field
-  for ($i=1; $i<=$num_rows; $i++)
-  {
-    // ignore any blank / deleted fields
-    if (!isset($infohash["field_name_$i"]) || empty($infohash["field_name_$i"]))
-      continue;
-
-    // extract values for use
-    $include_on_redirect = isset($infohash["include_on_redirect_$i"]) ? "yes" : "no";
-    $field_name    = $infohash["field_name_$i"];
-    $field_title   = $infohash["field_title_$i"];
-    $field_size    = $infohash["field_size_$i"];
-    $data_type     = $infohash["data_type_$i"];
-
-    // figure out the column name
-    $col_name = "";
-    if ($auto_generate_col_names)
-    {
-      // grab the next free unique column name
-      $col_name = array_shift($unique_col_names);
-    }
-    else
-    {
-      // this should never happen, but check for it anyway.
-      if (!isset($infohash["col_name_$i"]) || empty($infohash["col_name_$i"]))
-        continue;
-
-      $col_name = $infohash["col_name_$i"];
-    }
+    $field_name    = $field_info["form_field_name"];
+    $field_size    = $field_info["field_size"];
+    $field_type_id = $field_info["field_type_id"];
+    $display_name  = $field_info["display_name"];
+    $include_on_redirect = $field_info["include_on_redirect"];
+    $list_order = $field_info["list_order"];
+    $col_name   = $field_info["col_name"];
+    $is_new_sort_group = $field_info["is_new_sort_group"];
 
     // add the new field to form_fields
-    $query = "INSERT INTO {$g_table_prefix}form_fields (form_id, field_name, field_size, field_type,
-        data_type, field_title, col_name, list_order, include_on_redirect)
-      VALUES ($form_id, '$field_name', '$field_size', 'textbox',
-        '$data_type', '$field_title', '$col_name', $order, '$include_on_redirect')";
+    $query = "
+      INSERT INTO {$g_table_prefix}form_fields (form_id, field_name, field_size, field_type_id,
+        data_type, field_title, col_name, list_order, is_new_sort_group, include_on_redirect)
+      VALUES ($form_id, '$field_name', '$field_size', $field_type_id,
+        'string', '$display_name', '$col_name', $list_order, '$is_new_sort_group', '$include_on_redirect')
+    ";
 
     $result = mysql_query($query)
       or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
 
+    $new_field_size = $g_field_sizes[$field_size]["sql"];
+    list($is_success, $err_message) = _ft_add_table_column("{$g_table_prefix}form_{$form_id}", $col_name, $new_field_size);
 
-    // if the form already exists, add the field
-    if ($form_info['is_complete'] == "yes")
+    // if the alter table didn't work, return with an error message
+    if (!$is_success)
     {
-      $new_field_size = "";
-
-      switch ($field_size)
-      {
-        case "tiny":       $new_field_size = "VARCHAR(5)";   break;
-        case "small":      $new_field_size = "VARCHAR(20)";  break;
-        case "medium":     $new_field_size = "VARCHAR(255)"; break;
-        case "large":      $new_field_size = "TEXT";         break;
-        case "very_large": $new_field_size = "MEDIUMTEXT";   break;
-        default:           $new_field_size = "VARCHAR(255)"; break;
-      }
-
-      list ($is_success, $err_message) = _ft_add_table_column("{$g_table_prefix}form_{$form_id}", $col_name, $new_field_size);
-
-      // if the alter message didn't work, return with an error message
-      if (!$is_success)
-      {
-        $success = false;
-
-        $replacement_info = array("fieldname" => $field_name);
-        $message = ft_eval_smarty_string($LANG["notify_form_field_not_added"], $replacement_info);
-        if ($g_debug) $message .= " \"$err_message\"";
-        return array($success, $message);
-      }
+      $success = false;
+      $replacement_info = array("fieldname" => $field_name);
+      $message = ft_eval_smarty_string($LANG["notify_form_field_not_added"], $replacement_info);
+      if ($g_debug) $message .= " \"$err_message\"";
+      return array($success, $message);
     }
   }
 
@@ -153,102 +76,78 @@ function ft_add_form_fields($infohash, $form_id)
 
 
 /**
- * Deletes unwanted form fields. Called in two instances:
- * 1. by administrator during form building process.<br/>
- * 2. by administrator during form editing process.<br/>
+ * Deletes unwanted form fields. Called by administrator when creating an external form and when
+ * editing a form.
  *
- * If the field being removed is a FILE or and IMAGE field, it checks to see if the
- * auto_delete_submission_files setting for this form is set to "yes". If it is, it removes ALL
- * files that were associated with this field. Otherwise, it leaves all files intact.
+ * Note: field types that require additional functionality when deleting a field type (e.g.
+ * file fields which need to delete uploaded files), they need to define the appropriate hook.
+ * Generally this means the "delete_fields" hook in the ft_update_form_fields_tab() function.
  *
- * @param integer $infohash a hash containing the contents of the Edit Form Advanced tab.
+ * @param integer $form_id
+ * @param array an array of field IDs to delete
  * @return array Returns array with indexes:<br/>
  *               [0]: true/false (success / failure)<br/>
  *               [1]: message string<br/>
  */
-function ft_delete_form_fields($infohash, $form_id)
+function ft_delete_form_fields($form_id, $field_ids)
 {
   global $g_table_prefix, $LANG;
 
-  // return values
+  // default return values
   $success = true;
   $message = "";
 
-  // find out if the form exists
+  // find out if the form exists and is complete
   $form_info = ft_get_form($form_id);
   $form_table_exists = ($form_info["is_complete"] == "yes") ? true : false;
 
-  $remove_field_ids = array();
-  $files_to_remove = array();
-
-  // stores the Views IDs of any View that is affected by deleting one of the form field, regardless of the field
-  // or form
+  // stores the Views IDs of any View that is affected by deleting one of the form field, regardless of the field or form
   $affected_views = array();
-
-  while (list($key, $value) = each($infohash))
+  $removed_field_ids = array();
+  foreach ($field_ids as $field_id)
   {
-    if (preg_match("/^field_(\d+)_remove$/", $key, $match))
+    $field_id = trim($field_id);
+    if (empty($field_id))
+      continue;
+
+    @mysql_query("DELETE FROM {$g_table_prefix}form_fields WHERE field_id = $field_id");
+    if (!$form_table_exists)
+      continue;
+
+    mysql_query("DELETE FROM {$g_table_prefix}new_view_submission_defaults WHERE field_id = $field_id");
+
+    // see if this field had been flagged as an email field (either as the email field, first or last name).
+    // if it's the email field, delete the whole row. If it's either the first or last name, just empty the value
+    $query = mysql_query("SELECT form_email_id FROM {$g_table_prefix}form_email_fields WHERE email_field_id = $field_id");
+    while ($row = mysql_fetch_assoc($query))
     {
-      $field_id = $match[1];
-      $remove_field_ids[] = $field_id;
-
-      $old_field_info = ft_get_form_field($field_id);
-      $field_type = $old_field_info["field_type"];
-
-      // if this if a file or image field, log all files that have been uploaded through this field, so we can
-      // remove them if need be
-      if ($field_type == "file" || $field_type == "image")
-      {
-        $filename_hash = ft_get_uploaded_filenames($form_id, $field_id, $field_type);
-        $files_to_remove = array_values($filename_hash);
-      }
-
-      mysql_query("DELETE FROM {$g_table_prefix}form_fields WHERE field_id = $field_id");
-
-      // get a list of any Views that referenced this form field
-      $view_query = mysql_query("SELECT view_id FROM {$g_table_prefix}view_fields WHERE field_id = $field_id");
-      while ($row = mysql_fetch_assoc($view_query))
-        $affected_views[] = $row["view_id"];
-
-      // delete any View filters that are set up on this form field
-      mysql_query("DELETE FROM {$g_table_prefix}view_filters WHERE field_id = $field_id AND form_id = $form_id");
-
-      // if the form already exists, then remove the column
-      if ($form_table_exists)
-      {
-        $drop_column = $old_field_info['col_name'];
-        mysql_query("ALTER TABLE {$g_table_prefix}form_$form_id DROP $drop_column");
-
-        // if any Views had this field as the default sort order, reset them to having the submission_date
-        // field as the default sort order
-        mysql_query("
-          UPDATE {$g_table_prefix}views
-          SET     default_sort_field = 'submission_date'
-          WHERE   default_sort_field = '$drop_column' AND
-                  form_id = $form_id
-                    ");
-      }
+      ft_unset_field_as_email_field($row["email_form_id"]);
     }
-  }
+    mysql_query("UPDATE {$g_table_prefix}form_email_fields SET first_name_field_id = '' WHERE first_name_field_id = $field_id");
+    mysql_query("UPDATE {$g_table_prefix}form_email_fields SET last_name_field_id = '' WHERE last_name_field_id = $field_id");
 
-  // if required, remove all associated files
-  if ($form_info['auto_delete_submission_files'] == "yes")
-  {
-    // delete them all
-    if (!empty($files_to_remove))
+    // get a list of any Views that referenced this form field
+    $view_query = mysql_query("SELECT view_id FROM {$g_table_prefix}view_fields WHERE field_id = $field_id");
+    while ($row = mysql_fetch_assoc($view_query))
     {
-      foreach ($files_to_remove as $file)
-        @unlink($file);
+      $affected_views[] = $row["view_id"];
+      ft_delete_view_field($row["view_id"], $field_id);
     }
-  }
 
+    $old_field_info = ft_get_form_field($field_id);
+    $drop_column = $old_field_info["col_name"];
+    mysql_query("ALTER TABLE {$g_table_prefix}form_$form_id DROP $drop_column");
 
-  // if there are any Views that reference this field, delete the fields too!
-  foreach ($remove_field_ids as $field_id)
-  {
-    $view_ids = ft_get_field_views($field_id);
-    foreach ($view_ids as $view_id)
-      ft_delete_view_field($view_id, $field_id);
+    // if any Views had this field as the default sort order, reset them to having the submission_date
+    // field as the default sort order
+    mysql_query("
+      UPDATE {$g_table_prefix}views
+      SET     default_sort_field = 'submission_date'
+      WHERE   default_sort_field = '$drop_column' AND
+              form_id = $form_id
+                ");
+
+    $removed_field_ids[] = $field_id;
   }
 
   // update the list_order of this form's fields
@@ -260,7 +159,7 @@ function ft_delete_form_fields($infohash, $form_id)
     ft_auto_update_view_field_order($view_id);
 
   // determine the return message
-  if (count($remove_field_ids) > 1)
+  if (count($removed_field_ids) > 1)
     $message = $LANG["notify_form_fields_removed"];
   else
     $message = $LANG["notify_form_field_removed"];
@@ -321,29 +220,63 @@ function ft_get_field_col_by_field_name($form_id, $field_name_or_names)
 
 
 /**
+ * Another getter function. This one finds out the column name for a field or fields,
+ * based on their field IDs.
+ *
+ * @param integer $form_id
+ * @param mixed $field_id_or_ids integer or array of integers (field IDs)
+ * @return array a hash of field_ids to col_names (only one key-value paid if single field ID passed)
+ */
+function ft_get_field_col_by_field_id($form_id, $field_id_or_ids)
+{
+  global $g_table_prefix;
+
+  $form_id         = ft_sanitize($form_id);
+  $field_id_or_ids = ft_sanitize($field_id_or_ids);
+
+  $field_id_str = "";
+  if (is_array($field_id_or_ids))
+    $field_id_str = implode(",", $field_id_or_ids);
+  else
+    $field_id_str = $field_id_or_ids;
+
+  $query = mysql_query("
+    SELECT field_id, col_name
+    FROM   {$g_table_prefix}form_fields
+    WHERE  form_id = $form_id AND
+           field_id IN ($field_id_str)
+  ");
+
+  $return_info = array();
+  while ($row = mysql_fetch_assoc($query))
+  {
+    $return_info[$row["field_id"]] = $row["col_name"];
+  }
+
+  return $return_info;
+}
+
+
+/**
  * Returns the field title by the field database column string.
  *
  * @param integer $form_id
  * @param string $col_name
  * @return string
  */
-function ft_get_field_title_by_field_col($form_id, $col_name)
+function ft_get_field_title_by_field_id($field_id)
 {
   global $g_table_prefix;
 
-  $form_id  = ft_sanitize($form_id);
-  $col_name = ft_sanitize($col_name);
+  $col_name = ft_sanitize($field_id);
 
   $return_info = "";
-
   $query = mysql_query("
     SELECT field_title
     FROM   {$g_table_prefix}form_fields
-    WHERE  form_id = $form_id AND
-           col_name = '$col_name'
+    WHERE  field_id = '$field_id'
     ");
   $result = mysql_fetch_assoc($query);
-
   $return_info = (isset($result["field_title"])) ? $result["field_title"] : "";
 
   return $return_info;
@@ -389,52 +322,37 @@ function ft_get_field_options($field_id)
 
 
 /**
- * Retrieves all information about a specific form template field. If the $get_options parameter
- * is set and the field being returned is a multiple select option (radio buttons, select,
- * checkboxes, multi-select), it returns the options in an "options" key.
- *
- * TODO: when needed, this should be updated to (a) return the ordered field options (maybe...)
- * but also the module for each.
+ * Retrieves all information about a specific form template field.
  *
  * @param integer $field_id the unique field ID
- * @param boolean $get_options returns
  * @return array A hash of information about this field.
  */
-function ft_get_form_field($field_id, $get_options = false)
+function ft_get_form_field($field_id, $custom_params = array())
 {
   global $g_table_prefix;
 
-  $query = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}form_fields
-    WHERE  field_id = $field_id
-           ");
+  $params = array(
+    "include_field_type_info" => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false
+  );
 
-  $info = mysql_fetch_assoc($query);
-
-  // append any custom field settings (like custom image manager fields)
-  $query = mysql_query("
-    SELECT setting_name, setting_value
-    FROM   {$g_table_prefix}field_settings
-    WHERE  field_id = $field_id
-           ");
-  $settings = array();
-  while ($row = mysql_fetch_assoc($query))
-    $settings[$row["setting_name"]] = $row["setting_value"];
-
-  $info["settings"] = $settings;
-
-  // lastly, if required, append any options for this field
-  if ($get_options)
+  if ($params["include_field_type_info"])
   {
-    $field_type = $info["field_type"];
-    $multi_select_fields = array("radio-buttons", "select", "checkboxes", "multi-select");
-
-    if (in_array($field_type, $multi_select_fields))
-    {
-      $info["options"] = ft_get_field_options($field_id);
-    }
+    $query = mysql_query("
+      SELECT *
+      FROM   {$g_table_prefix}form_fields ff, {$g_table_prefix}field_types ft
+      WHERE  ff.field_id = $field_id AND
+             ff.field_type_id = ft.field_type_id
+    ");
   }
+  else
+  {
+    $query = mysql_query("
+      SELECT *
+      FROM   {$g_table_prefix}form_fields
+      WHERE  field_id = $field_id
+    ");
+  }
+  $info = mysql_fetch_assoc($query);
 
   extract(ft_process_hooks("end", compact("field_id", "info"), array("info")), EXTR_OVERWRITE);
 
@@ -473,69 +391,107 @@ function ft_get_form_field_id_by_field_name($field_name, $form_id)
  * Retrieves all custom settings for an individual form field from the field_settings table.
  *
  * @param integer $field_id the unique field ID
- * @param string $module the module folder name
- * @return mixed if the module parameter is set, it returns a HASH of values (setting_name => setting_value);
- *     if not, it returns an array of hashes, containing setting_name, setting_value and module keys.
+ * @return array an array of hashes
  */
-function ft_get_form_field_settings($field_id, $module)
+function ft_get_form_field_settings($field_id)
 {
   global $g_table_prefix;
 
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}field_settings
+    WHERE  field_id = $field_id
+  ");
+
   $settings = array();
-  if (empty($module))
-  {
-    $query = mysql_query("
-      SELECT *
-      FROM   {$g_table_prefix}field_settings
-      WHERE  field_id = $field_id
-             ");
+  while ($row = mysql_fetch_assoc($query))
+    $settings[$row["setting_id"]] = $row["setting_value"];
 
-    while ($row = mysql_fetch_assoc($query))
-      $settings[] = $row;
-  }
-  else
-  {
-    $query = mysql_query("
-      SELECT *
-      FROM   {$g_table_prefix}field_settings
-      WHERE  field_id = $field_id AND
-             module = '$module'
-             ");
-
-    while ($row = mysql_fetch_assoc($query))
-      $settings[$row["setting_name"]] = $row["setting_value"];
-  }
-
-  extract(ft_process_hooks("end", compact("field_id", "module", "settings"), array("settings")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("field_id", "settings"), array("settings")), EXTR_OVERWRITE);
 
   return $settings;
 }
 
 
 /**
- * Retrieves all field information about a form, ordered by list_order.
+ * Retrieves all field information about a form, ordered by list_order. The 2nd and 3rd optional
+ * parameters let you return a subset of the fields for a particular page. This function is purely
+ * concerned with the raw fields themselves: not how they are arbitrarily grouped in a View. To
+ * retrieve the grouped fields list for a View, use ft_get_view_fields().
  *
  * @param integer $form_id the unique form ID
+ * @param array $custom_settings optional settings
  * @return array an array of hash information
  */
-function ft_get_form_fields($form_id)
+function ft_get_form_fields($form_id, $custom_params = array())
 {
   global $g_table_prefix;
 
-  $query = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}form_fields
-    WHERE  form_id = $form_id
-    ORDER BY list_order
-           ") or die(mysql_error());
+  $params = array(
+    "page"                    => (isset($custom_params["page"])) ? $custom_params["page"] : 1,
+    "num_fields_per_page"     => (isset($custom_params["num_fields_per_page"])) ? $custom_params["num_fields_per_page"] : "all",
+    "include_field_type_info" => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false,
+    "include_field_settings"  => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false
+  );
+
+  $limit_clause = _ft_get_limit_clause($params["page"], $params["num_fields_per_page"]);
+
+  if ($params["include_field_type_info"])
+  {
+    $query = mysql_query("
+      SELECT ff.*, ft.field_type_name, ft.is_file_field, ft.is_date_field
+      FROM   {$g_table_prefix}form_fields ff, {$g_table_prefix}field_types ft
+      WHERE  ff.form_id = $form_id AND
+             ff.field_type_id = ft.field_type_id
+      ORDER BY ff.list_order
+      $limit_clause
+    ");
+  }
+  else
+  {
+    $query = mysql_query("
+      SELECT *
+      FROM   {$g_table_prefix}form_fields
+      WHERE  form_id = $form_id
+      ORDER BY list_order
+      $limit_clause
+    ");
+  }
 
   $infohash = array();
   while ($row = mysql_fetch_assoc($query))
+  {
+    if ($params["include_field_settings"])
+    {
+      $row["settings"] = ft_get_form_field_settings($row["field_id"]);
+    }
     $infohash[] = $row;
+  }
 
   extract(ft_process_hooks("end", compact("form_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
   return $infohash;
+}
+
+
+/**
+ * Returns the total number of form fields in a form.
+ *
+ * @param integer $form_id
+ */
+function ft_get_num_form_fields($form_id)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT count(*) as c
+    FROM   {$g_table_prefix}form_fields
+    WHERE  form_id = $form_id
+  ");
+
+  $info = mysql_fetch_assoc($query);
+
+  return $info["c"];
 }
 
 
@@ -545,17 +501,18 @@ function ft_get_form_fields($form_id)
  *
  * @param integer $form_id
  * @param string $col_name
+ * @return array
  */
-function ft_get_form_field_by_colname($form_id, $col_name)
+function ft_get_field_order_info_by_colname($form_id, $col_name)
 {
   global $g_table_prefix;
 
   $query = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}form_fields
-    WHERE  form_id = $form_id AND
-           col_name = '$col_name'
-    LIMIT 1
+    SELECT ff.data_type, ft.is_date_field
+    FROM   {$g_table_prefix}form_fields ff, {$g_table_prefix}field_types ft
+    WHERE  ff.form_id = $form_id AND
+           ff.col_name = '$col_name' AND
+           ff.field_type_id = ft.field_type_id
       ");
 
   $infohash = array();
@@ -567,43 +524,75 @@ function ft_get_form_field_by_colname($form_id, $col_name)
 
 
 /**
- * The field_settings table stores custom overridden settings from the settings table for a particular form
- * field. This function retrieves all settings (or a single setting) for a field, taking into account whether
- * it's been overridden or not.
+ * This function was totally rewritten in 2.1.0 for the new field settings structure. The ft_form_fields table
+ * stores all the main settings for form fields which are shared across all fields, regardless of their
+ * type. But some field types have "extended" settings, i.e. settings that only relate to that field type;
+ * e.g. file upload fields allow for custom file upload URL & folders. Extended settings can now be created
+ * by the administrator for any form field type through the Custom Fields module.
  *
- * For example, if the field is an image field, the Image Manager defines a lot of default settings for image
- * fields - like default upload URL, thumbnail sizes and so on. However, since every one of those settings
- * can be manually overridden for a single image field, this function returns either the original value OR
- * the custom overridden value.
+ * Inheritance
+ * -----------
+ * When editing a field, the user has the option of checking the "Use Default" option for each field. If that's
+ * checked, it will always inherit the setting value from the "default_value" setting value, defined in the
+ * Custom Fields field type setting. Database-wise, if that value is checked, nothing is stored in the database:
+ * this keeps the DB size as trim as possible.
  *
- * TODO BUG: The optional 3rd param apparently has no affect...
+ * This function always returns all extended settings for a field, even those that use the default. The format
+ * is:
+ *
+ *   array(
+ *     array(
+ *       "setting_id"    => X,
+ *       "setting_value" => "...",
+ *       "uses_default"  => true/false
+ *     ),
+ *     ...
+ *   );
  *
  * @param integer $field_id
- * @param string $module the module folder or "core"
- * @param string $setting_name (optional)
+ * @param string $setting_id (optional)
+ * @return array an array of hashes
  */
-function ft_get_extended_field_settings($field_id, $module = "core", $setting_name = "")
+function ft_get_extended_field_settings($field_id, $setting_id = "")
 {
-  $module_settings = ft_get_module_settings("", $module);
-  $custom_settings = ft_get_form_field_settings($field_id, $module);
+  // get whatever custom settings are defined for this field
+  $custom_settings = ft_get_form_field_settings($field_id);
 
+  // now get a list of all available settings for this field type
+  $field_type_id = ft_get_field_type_id($field_id);
+  $field_type_settings = ft_get_field_type_settings($field_type_id);
   $settings = array();
-  while (list($setting_name, $setting_value) = each($module_settings))
+  foreach ($field_type_settings as $curr_setting)
   {
-    if (array_key_exists($setting_name, $custom_settings))
-      $settings[$setting_name] = $custom_settings[$setting_name];
-    else
-      $settings[$setting_name] = $module_settings[$setting_name];
+    $curr_setting_id = $curr_setting["setting_id"];
+    if (!empty($setting_id) && $setting_id != $curr_setting_id)
+      continue;
+
+    $uses_default  = true;
+    $setting_value = $curr_setting["default_value"];
+    if (array_key_exists($curr_setting_id, $custom_settings))
+    {
+      $uses_default  = false;
+      $setting_value = $custom_settings[$curr_setting_id];
+    }
+
+    $settings[] = array(
+      "setting_id"    => $curr_setting_id,
+      "setting_value" => $setting_value,
+      "uses_default"  => $uses_default
+    );
   }
 
-  extract(ft_process_hooks("end", compact("field_id", "module", "setting_name"), array("settings")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("field_id", "setting_name"), array("settings")), EXTR_OVERWRITE);
 
   return $settings;
 }
 
 
 /**
- * Deletes any extended field settings for a particular form field.
+ * Deletes any extended field settings for a particular form field. Not thrilled about the "extended" in this
+ * function name, but I wanted to emphasize that this function deletes ONLY the settings in the field_settings
+ * table and not the actual values in the form_fields table.
  *
  * @param integer $field_id
  */
@@ -618,61 +607,59 @@ function ft_delete_extended_field_settings($field_id)
 
 
 /**
- * Reorders template fields and updates the corresponding column name field.
+ * Called on he Add External Form Step 4 page. It reorders the form fields and their groupings.
  *
- * Called by administrator in Add Form Step 3 page and on Advanced tab when editing. For the special
- * system fields (submission ID, submission Date and IP address), we don't want to override the
- * default DB table column names. To prevent this, we let this function know which fields are system
- * fields by passing hidden values:<br/>
- *
- * <input type="hidden" name="field_X_system" value="1" />
- *
- * @param integer $infohash A hash containing the contents of the Edit Form Advanced tab.
- * @param boolean $set_default_form_field_names if true, this renames the columns
+ * @param integer $form_id
+ * @param integer $infohash the POST data from the form
+ * @param boolean $set_default_form_field_names if true, this tell the function to rename the columns
  */
-function ft_reorder_form_fields($infohash, $form_id, $set_default_form_field_names = false)
+function ft_update_form_fields($form_id, $infohash, $set_default_form_field_names = false)
 {
-  global $g_table_prefix;
+  global $g_table_prefix, $g_debug;
 
-  $new_order = array();
+  $infohash = ft_sanitize($infohash);
 
-  // loop through $infohash and for each field_X_order values, log the new order
-  while (list($key, $val) = each($infohash))
+  $sortable_id = $infohash["sortable_id"];
+  $sortable_rows       = explode(",", $infohash["{$sortable_id}_sortable__rows"]);
+  $sortable_new_groups = explode(",", $infohash["{$sortable_id}_sortable__new_groups"]);
+
+  extract(ft_process_hooks("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
+
+  // get a list of the system fields so we don't overwrite anything special
+  $existing_form_field_info = ft_get_form_fields($form_id);
+  $system_field_ids = array();
+  foreach ($existing_form_field_info as $form_field)
   {
-    // find the field id
-    preg_match("/^field_(\d+)_order$/", $key, $match);
-
-    if (!empty($match[1]))
-    {
-      $field_id = $match[1];
-
-      // update the $account_order
-      $new_order[$field_id] = $val;
-    }
+    if ($form_field["is_system_field"] == "yes")
+      $system_field_ids[] = $form_field["field_id"];
   }
-  asort($new_order);
-  reset($infohash);
 
-  // now loop through the correct_order array and update the column names
   $order = 1;
   $custom_col_num = 1;
-  while (list($key, $value) = each($new_order))
+  foreach ($sortable_rows as $field_id)
   {
-    $col_name_qry = "";
-    if ($set_default_form_field_names)
+    $set_clauses = array("list_order = $order");
+    if ($set_default_form_field_names && !in_array($field_id, $system_field_ids))
     {
-      if (!isset($infohash["field_{$key}_system"]))
-      {
-        $col_name_qry = ", col_name = 'col_$custom_col_num' ";
-        $custom_col_num++;
-      }
+      $set_clauses[] = "col_name = 'col_$custom_col_num'";
+      $custom_col_num++;
     }
+
+    if (isset($infohash["field_{$field_id}_display_name"]))
+      $set_clauses[] = "field_title = '" . $infohash["field_{$field_id}_display_name"] . "'";
+
+    if (isset($infohash["field_{$field_id}_size"]))
+      $set_clauses[] = "field_size = '" . $infohash["field_{$field_id}_size"] . "'";
+
+    $is_new_sort_group = (in_array($field_id, $sortable_new_groups)) ? "yes" : "no";
+    $set_clauses[] = "is_new_sort_group = '$is_new_sort_group'";
+
+    $set_clauses_str = implode(",\n", $set_clauses);
 
     mysql_query("
       UPDATE {$g_table_prefix}form_fields
-      SET    list_order = $order
-             $col_name_qry
-      WHERE  field_id = $key AND
+      SET    $set_clauses_str
+      WHERE  field_id = $field_id AND
              form_id = $form_id
                 ");
     $order++;
@@ -711,223 +698,184 @@ function ft_auto_update_form_field_order($form_id)
 
 
 /**
- * Adds/updates all options for a given field. This is used for textboxes, textareas, system, WYWISYG and
- * password fields. For other field types, see the corresponding function:
- *
- *     file:                                     ft_update_field_file_settings()
- *     radios/checkboxes/single & multi-select:  ft_update_multi_field_settings()
+ * Adds/updates all options for a given field. This is called when the user edits fields from the dialog
+ * window on the Fields tab. It updates all information about a field: including the custom settings.
  *
  * @param integer $form_id The unique form ID
  * @param integer $field_id The unique field ID
- * @param integer $info a hash containing the contents of the Edit Form Advanced tab
- * @return array Returns array with indexes:<br/>
- *               [0]: true/false (success / failure)<br/>
- *               [1]: message string<br/>
+ * @param integer $info a hash containing tab1 and/or tab2 indexes, containing all the latest values for
+ *                the field
+ * @param array [0] success/fail (boolean), [1] empty string for success, or error message
  */
-function ft_update_field($form_id, $field_id, $info)
+function ft_update_field($form_id, $field_id, $tab_info)
 {
-  global $g_table_prefix, $g_debug, $LANG;
+  global $g_table_prefix, $g_field_sizes, $g_debug, $LANG;
 
-  $info = ft_sanitize($info);
-  $field_title         = $info["field_title"];
-  $field_type          = $info["field_type"];
-  $include_on_redirect = (isset($info["include_on_redirect"])) ? "yes" : "no";
+  $tab_info = ft_sanitize($tab_info);
+  $existing_form_field_info = ft_get_form_field($field_id);
 
-  $old_field_info = ft_get_form_field($field_id, false);
-
-  // update each field
-  if ($field_type == "system")
+  // TAB 1: this tab contains the standard settings shared by all fields, regardless of type: display text,
+  // form field name, field type, pass on, field size, data type and database col name
+  $db_col_name_changes = array();
+  if (is_array($tab_info["tab1"]))
   {
-    mysql_query("
-      UPDATE {$g_table_prefix}form_fields
-      SET    field_title = '$field_title',
-             include_on_redirect = '$include_on_redirect'
-      WHERE  field_id = $field_id
-        ");
-  }
-  else
-  {
-    $field_size = $info["field_size"];
-    mysql_query("
-      UPDATE {$g_table_prefix}form_fields
-      SET    field_size = '$field_size',
-             field_title = '$field_title',
-             field_type = '$field_type',
-             include_on_redirect = '$include_on_redirect'
-      WHERE  field_id = $field_id
-        ");
+    $info = $tab_info["tab1"];
+    $display_name = _ft_extract_array_val($info, "edit_field__display_text");
 
-    // if the field size just changed, update the database table too
-    if ($old_field_info["field_size"] != $field_size)
+    // bit weird. this field is a checkbox, so if it's not checked it won't be in the request and
+    // _ft_extract_array_val returns an empty string
+    $include_on_redirect = _ft_extract_array_val($info, "edit_field__pass_on");
+    $include_on_redirect = (empty($include_on_redirect)) ? "no" : "yes";
+
+    if ($existing_form_field_info["is_system_field"] == "yes")
     {
-      $new_field_size = "";
-      switch ($field_size)
+      $query = "
+        UPDATE {$g_table_prefix}form_fields
+        SET    field_title = '$display_name',
+               include_on_redirect = '$include_on_redirect'
+        WHERE  field_id = $field_id
+      ";
+      $result = mysql_query($query);
+      if (!$result)
       {
-        case "tiny":       $new_field_size = "VARCHAR(5)";   break;
-        case "small":      $new_field_size = "VARCHAR(20)";  break;
-        case "medium":     $new_field_size = "VARCHAR(255)"; break;
-        case "large":      $new_field_size = "TEXT";         break;
-        case "very_large": $new_field_size = "MEDIUMTEXT";   break;
-        default:           $new_field_size = "VARCHAR(255)"; break;
+        return array(false, $LANG["phrase_query_problem"] . $query);
       }
-      _ft_alter_table_column("{$g_table_prefix}form_{$form_id}", $old_field_info["col_name"], $old_field_info["col_name"], $new_field_size);
+    }
+    else
+    {
+      $field_name    = _ft_extract_array_val($info, "edit_field__field_name");
+      $field_type_id = _ft_extract_array_val($info, "edit_field__field_type");
+      $field_size    = _ft_extract_array_val($info, "edit_field__field_size");
+      $data_type     = _ft_extract_array_val($info, "edit_field__data_type");
+      $col_name      = _ft_extract_array_val($info, "edit_field__db_column");
+
+      $query = mysql_query("
+        UPDATE {$g_table_prefix}form_fields
+        SET    field_name = '$field_name',
+               field_type_id = '$field_type_id',
+               field_size = '$field_size',
+               field_title = '$display_name',
+               include_on_redirect = '$include_on_redirect',
+               col_name = '$col_name'
+        WHERE  field_id = $field_id
+          ");
+
+      // if the column name or field size just changed, we need to "physically" update the form's database table
+      // If this fails, we rollback both the field TYPE and the field size.
+      // BUG The *one* potential issue here is if the user just deleted a field type, then updated a field which - for
+      // whatever reason - fails. But this is very much a fringe case
+      $old_field_size    = $existing_form_field_info["field_size"];
+      $old_col_name      = $existing_form_field_info["col_name"];
+      $old_field_type_id = $existing_form_field_info["field_type_id"];
+      if ($old_field_size != $field_size || $old_col_name != $col_name)
+      {
+        $new_field_size_sql = $g_field_sizes[$field_size]["sql"];
+        $table_name = "{$g_table_prefix}form_{$form_id}";
+
+        list($is_success, $err_message) = _ft_alter_table_column($table_name, $old_col_name, $col_name, $new_field_size_sql);
+        if ($is_success)
+        {
+          if ($old_col_name != $col_name)
+            $db_col_name_changes[] = $field_id;
+        }
+        else
+        {
+          $query = mysql_query("
+            UPDATE {$g_table_prefix}form_fields
+            SET    field_type_id = '$old_field_type_id',
+                   field_size    = '$old_field_size',
+                   col_name      = '$old_col_name'
+            WHERE  field_id = $field_id
+              ");
+          return array(false, $LANG["phrase_query_problem"] . $err_message);
+        }
+      }
+
+      // if the field type just changed, the field-specific settings are orphaned. Drop them. In this instance, the
+      // client-side code ensures that the contents of the second tab are always passed so the code below will add
+      // any default values that are needed
+      if ($old_field_type_id != $field_type_id)
+      {
+        ft_delete_extended_field_settings($field_id);
+      }
+    }
+  }
+
+  // if any of the database column names just changed we need to update any View filters that relied on them
+  if (!empty($db_col_name_changes))
+  {
+    foreach ($db_col_name_changes as $field_id)
+    {
+      ft_update_field_filters($field_id);
+    }
+  }
+
+  // TAB 2: update the custom field settings for this field type. tab2 can be any of these values:
+  //  1. a string "null": indicating that the user didn't change anything on the tab)
+  //  2. the empty string: indicating that things DID change, but nothing is being passed on. This can happen
+  //                      when the user checked the "Use Default Value" for all fields on the tab & the tab
+  //                      doesn't contain an option list or form field
+  //  3. an array of values
+  if ($tab_info["tab2"] != "null")
+  {
+    $info = is_array($tab_info["tab2"]) ? $tab_info["tab2"] : array();
+
+    // since the second tab is being updated, we can rely on all the latest & greatest values being passed
+    // in the request, so clean out all old values
+    ft_delete_extended_field_settings($field_id);
+
+    // convert the $info (which is an array of hashes) into a friendlier hash. This makes detecting for Option
+    // List fields much easier
+    $setting_hash = array();
+    for ($i=0; $i<count($info); $i++)
+    {
+      $setting_hash[$info[$i]["name"]] = $info[$i]["value"];
+    }
+
+    $new_settings = array();
+    while (list($setting_name, $setting_value) = each($setting_hash))
+    {
+      // ignore the additional field ID and field order rows that are custom to Option List / Form Field types. They'll
+      // be handled below
+      if (preg_match("/edit_field__setting_(\d)+_field_id/", $setting_name) || preg_match("/edit_field__setting_(\d)+_field_order/", $setting_name))
+        continue;
+
+      // TODO BUG. newlines aren't surviving this... why was it added? double quotes? single quotes?
+      $setting_value = ft_sanitize(stripslashes($setting_value));
+      $setting_id    = preg_replace("/edit_field__setting_/", "", $setting_name);
+
+      // if this field is being mapped to a form field, we serialize the form ID, field ID and order into a single var and
+      // give it a "form_field:" prefix, so we know exactly what the data contains & we can select the appropriate form ID
+      // and not Option List ID on re-editing. This keeps everything pretty simple, rather than spreading the data amongst
+      // multiple fields
+      if (array_key_exists("edit_field__setting_{$setting_id}_field_id", $setting_hash))
+      {
+        $setting_value = "form_field:$setting_value|" . $setting_hash["edit_field__setting_{$setting_id}_field_id"] . "|"
+          . $setting_hash["edit_field__setting_{$setting_id}_field_order"];
+      }
+
+      $new_settings[] = "($field_id, $setting_id, '$setting_value')";
+    }
+
+    if (!empty($new_settings))
+    {
+      $new_settings_str = implode(",", $new_settings);
+      $query = "
+        INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
+        VALUES $new_settings_str
+      ";
+
+      $result = @mysql_query($query) or die($query . " - " . mysql_error());
+      if (!$result)
+      {
+        return array(false, $LANG["phrase_query_problem"] . $query . ", " . mysql_error());
+      }
     }
   }
 
   $success = true;
   $message = $LANG["notify_form_field_options_updated"];
   extract(ft_process_hooks("end", compact("field_id"), array("success", "message")), EXTR_OVERWRITE);
-
-  return array($success, $message);
-}
-
-
-/**
- * This function is called on the update field options page for radio buttons, checkboxes, select
- * and multi-select fields.
- *
- * @param integer $form_id
- * @param integer $field_id
- * @param array $info
- */
-function ft_update_multi_field_settings($form_id, $field_id, $info)
-{
-  global $g_table_prefix, $g_debug, $LANG;
-
-  $info = ft_sanitize($info);
-  $field_title         = $info["field_title"];
-  $field_type          = $info["field_type"];
-  $include_on_redirect = (isset($info["include_on_redirect"])) ? "yes" : "no";
-  $group_id            = (isset($info["group_id"]) && !empty($info["group_id"])) ? $info["group_id"] : "NULL";
-  $field_size          = $info["field_size"];
-
-  $old_field_info = ft_get_form_field($field_id, false);
-
-  mysql_query("
-    UPDATE {$g_table_prefix}form_fields
-    SET    field_size = '$field_size',
-           field_title = '$field_title',
-           field_type = '$field_type',
-           include_on_redirect = '$include_on_redirect',
-           field_group_id = $group_id
-    WHERE  field_id = $field_id
-      ");
-
-  // if the field size just changed, update the database table too
-  if ($old_field_info["field_size"] != $field_size)
-  {
-    $new_field_size = "";
-    switch ($field_size)
-    {
-      case "tiny":       $new_field_size = "VARCHAR(5)";   break;
-      case "small":      $new_field_size = "VARCHAR(20)";  break;
-      case "medium":     $new_field_size = "VARCHAR(255)"; break;
-      case "large":      $new_field_size = "TEXT";         break;
-      case "very_large": $new_field_size = "MEDIUMTEXT";   break;
-      default:           $new_field_size = "VARCHAR(255)"; break;
-    }
-    _ft_alter_table_column("{$g_table_prefix}form_{$form_id}", $old_field_info["col_name"], $old_field_info["col_name"], $new_field_size);
-  }
-
-  $success = true;
-  $message = $LANG["notify_form_field_options_updated"];
-  extract(ft_process_hooks("end", compact("field_id", "info"), array("success", "message")), EXTR_OVERWRITE);
-
-  return array($success, $message);
-}
-
-
-/**
- * Adds/updates all options for a file.
- *
- * If the upload folder is invalid, it returns an error.
- *
- * @param integer $infohash A hash containing the contents of the Edit Form Advanced tab.
- * @param integer $field_id The unique field ID.
- * @return array Returns array with indexes:<br/>
- *               [0]: true/false (success / failure)<br/>
- *               [1]: message string<br/>
- */
-function ft_update_field_file_settings($form_id, $field_id, $infohash)
-{
-  global $g_table_prefix, $g_debug, $LANG;
-
-  $infohash = ft_sanitize($infohash);
-
-  // first, update the common settings
-  $field_title         = $infohash["field_title"];
-  $include_on_redirect = (isset($infohash["include_on_redirect"])) ? "yes" : "no";
-
-  $old_field_info = ft_get_form_field($field_id, false);
-
-  mysql_query("
-    UPDATE {$g_table_prefix}form_fields
-    SET    field_size = 'medium',
-           field_title = '$field_title',
-           field_type = 'file',
-           include_on_redirect = '$include_on_redirect'
-    WHERE  field_id = $field_id
-      ");
-
-  // ensure the database field size is "medium"
-  _ft_alter_table_column("{$g_table_prefix}form_{$form_id}", $old_field_info["col_name"], $old_field_info["col_name"], "VARCHAR(255)");
-
-  // delete old settings
-  $old_extended_settings = ft_get_extended_field_settings($field_id, "core");
-  ft_delete_extended_field_settings($field_id);
-
-  $new_settings = array();
-  $num_settings = $infohash["num_settings"];
-  for ($i=1; $i<=$num_settings; $i++)
-  {
-    // if this row was deleted or not specified, skip it
-    if (!isset($infohash["row_{$i}"]) || empty($infohash["row_{$i}"]))
-      continue;
-
-    switch ($infohash["row_{$i}"])
-    {
-      case "file_upload_folder":
-        $new_settings["file_upload_dir"] = $infohash["file_upload_dir_{$i}"];
-        $new_settings["file_upload_url"] = $infohash["file_upload_url_{$i}"];
-        break;
-      case "file_upload_max_size":
-        $new_settings["file_upload_max_size"] = $infohash["file_upload_max_size_{$i}"];
-        break;
-      case "file_upload_filetypes":
-        $new_settings["file_upload_filetypes"] = $infohash["file_upload_filetypes_{$i}"];
-        break;
-    }
-  }
-
-  // add the new settings
-  while (list($key, $value) = each($new_settings))
-  {
-    mysql_query("
-      INSERT INTO {$g_table_prefix}field_settings (field_id, setting_name, setting_value, module)
-      VALUES ($field_id, '$key', '$value', 'core')
-        ");
-  }
-
-  // all right! Database update complete, let's see if the file upload folder info changed, and if so, move the files.
-  $new_extended_settings = ft_get_extended_field_settings($field_id);
-
-  // (1) they just REMOVED a custom file upload folder
-  if (isset($old_field_info["settings"]["file_upload_dir"]) && !isset($new_settings["file_upload_dir"]))
-    ft_move_field_files($field_id, $old_field_info["settings"]["file_upload_dir"], $new_extended_settings["file_upload_dir"]);
-
-  // (2) just ADDED a new custom file upload folder
-  else if (!isset($old_field_info["settings"]["file_upload_dir"]) && isset($new_settings["file_upload_dir"]))
-    ft_move_field_files($field_id, $new_extended_settings["file_upload_dir"], $new_settings["file_upload_dir"]);
-
-  // (3) the custom file upload folder CHANGED
-  else if (isset($old_field_info["settings"]["file_upload_dir"]) && isset($new_settings["file_upload_dir"]) &&
-    $old_field_info["settings"]["file_upload_dir"] != $new_settings["file_upload_dir"])
-    ft_move_field_files($field_id, $old_field_info["settings"]["file_upload_dir"], $new_settings["file_upload_dir"]);
-
-
-  $success = true;
-  $message = $LANG["notify_image_field_settings_updated"];
-  extract(ft_process_hooks("end", compact("infohash", "field_id"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -994,9 +942,9 @@ function ft_update_field_filters($field_id)
   $affected_filters = mysql_query("SELECT * FROM {$g_table_prefix}view_filters WHERE field_id = $field_id");
 
   // get form field
-  $field_info = ft_get_form_field($field_id);
-  $col_name   = $field_info["col_name"];
-  $field_type = $field_info["field_type"];
+  $field_info = ft_get_form_field($field_id, array("include_field_type_info" => true));
+  $col_name      = $field_info["col_name"];
+  $field_type_id = $field_info["field_type_id"];
 
   // loop through all of the affected filters & update the SQL
   while ($filter_info = mysql_fetch_assoc($affected_filters))
@@ -1005,8 +953,8 @@ function ft_update_field_filters($field_id)
     $filter_values = $filter_info["filter_values"];
     $operator      = $filter_info["operator"];
 
-    // date field
-    if ($field_type == "submission_date" || $field_type == "last_modified_date")
+    // date field [TODO... there's a difference between datetimes and varchars cast as datetimes]
+    if ($field_info["is_date_field"] == "yes")
     {
       $sql_operator = ($operator == "after") ? ">" : "<";
       $sql = "$col_name $sql_operator '$values'";

@@ -10,6 +10,14 @@ $g_table_prefix = ft_load_field("g_table_prefix", "g_table_prefix", "ft_", "ft_i
 
 $step_complete = false;
 $error = "";
+$tables_already_exist = false;
+$existing_tables = array();
+
+if (isset($_POST["overwrite_tables"]))
+{
+  ft_install_delete_tables($hostname, $db_name, $username, $password, $g_table_prefix);
+  $_POST["create_database"] = 1;
+}
 
 if (isset($_POST["create_database"]))
 {
@@ -20,11 +28,21 @@ if (isset($_POST["create_database"]))
   // all checks out! Now try to create the database tables
   if ($success)
   {
-    list($success, $error) = ft_install_create_database($hostname, $db_name, $username, $password, $g_table_prefix);
-    if ($success)
+    $existing_tables = ft_check_no_existing_tables($hostname, $db_name, $username, $password, $g_table_prefix);
+
+    if (empty($existing_tables))
     {
-      header("location: step4.php");
-      exit;
+	    list($success, $error) = ft_install_create_database($hostname, $db_name, $username, $password, $g_table_prefix);
+	    if ($success)
+	    {
+	      header("location: step4.php");
+	      exit;
+	    }
+    }
+    else
+    {
+    	$success = false;
+    	$tables_already_exist = true;
     }
   }
 }
@@ -35,6 +53,8 @@ $page_vars = array();
 $page_vars["step"] = 3;
 $page_vars["error"] = $error;
 $page_vars["step_complete"] = $step_complete;
+$page_vars["tables_already_exist"] = $tables_already_exist;
+$page_vars["existing_tables"] = $existing_tables;
 $page_vars["g_db_hostname"] = $hostname;
 $page_vars["g_db_name"] = $db_name;
 $page_vars["g_db_username"] = $username;

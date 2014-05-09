@@ -5,7 +5,7 @@
  *
  * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-0-6
+ * @package 2-1-0
  * @subpackage General
  */
 
@@ -42,26 +42,8 @@ function ft_db_connect()
   if ($g_unicode)
     @mysql_query("SET NAMES 'utf8'", $link);
 
-
   if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"]))
-  {
-    $now = date("U");
-
-    // check to see if the session has timed-out
-    if (isset($_SESSION["ft"]["account"]["last_activity_unixtime"]) && isset($_SESSION["ft"]["account"]["sessions_timeout"]))
-    {
-      $sessions_timeout_mins = $_SESSION["ft"]["account"]["sessions_timeout"];
-      $timeout_secs = $sessions_timeout_mins * 60;
-
-      if ($_SESSION["ft"]["account"]["last_activity_unixtime"] + $timeout_secs < $now)
-      {
-        ft_logout_user("notify_sessions_timeout");
-      }
-    }
-
-    // log this unixtime for checking the sessions timeout
-    $_SESSION["ft"]["account"]["last_activity_unixtime"] = $now;
-  }
+  	ft_check_sessions_timeout();
 
   return $link;
 }
@@ -159,6 +141,42 @@ function ft_display_message($results, $messages)
 
 
 /**
+ * Added in 2.1.0. The idea behind this is that every now and then, we need to display a custom message
+ * in a page - e.g. after redirecting somewhere, or some unusual case. These situations are handled by passing
+ * a ?message=XXX query string parameter. This function is called in the ft_display_page function directly
+ * so it all happens "automatically" with no additional configuration needed on each page.
+ *
+ * Caveats:
+ * - it will override $g_success and $g_message to always output it in the page. This is good! But keep it in mind.
+ * - the messages should be very simple and not contain relative links. Bear in mind the user can hack it and paste
+ *   those flags onto any page.
+ *
+ * @param $flag
+ */
+function ft_display_custom_page_message($flag)
+{
+	global $LANG;
+
+	$g_success = "";
+	$g_message = "";
+  switch ($flag)
+  {
+  	case "no_views":
+			$g_success = false;
+			$g_message = $LANG["notify_no_views"];
+  		break;
+  	case "notify_internal_form_created":
+			$g_success = true;
+			$g_message = $LANG["notify_internal_form_created"];
+  		break;
+  }
+
+  return array($g_success, $g_message);
+}
+
+
+
+/**
  * This function evaluates any string that contains Smarty logic / variables. It handles
  * parsing the email templates, filename strings and other such functionality. It uses on the
  * eval.tpl template, found in /global/smarty.
@@ -235,13 +253,21 @@ function ft_trim_string($str, $length, $flag = "ellipsis")
  *
  * This uses the pagination.tpl template, found in the theme's root folder.
  *
+ * *** This function kind of sucks now... I just kept adding params and over time it's become totally daft.
+ * This should be refactored to do a JS-like extend() option on the various permitted settings ***
+ *
  * @param integer $num_results The total number of results found.
  * @param integer $num_per_page The max number of results to list per page.
  * @param integer $current_page The current page number being examined (defaults to 1).
  * @param string $pass_along_str The string to include in nav links.
  * @param string $page_str The string used in building the page nav to indicate the page number
+ * @param string $theme the theme name
+ * @param array $settings a hash with the following settings:
+ *                   "show_total_results" => true/false (default: true)
+ *                   "show_page_label"    => true/false (default: true)
  */
-function ft_get_page_nav($num_results, $num_per_page, $current_page = 1, $pass_along_str = "", $page_str = "page", $theme = "")
+function ft_get_page_nav($num_results, $num_per_page, $current_page = 1, $pass_along_str = "", $page_str = "page",
+  $theme = "", $settings = array())
 {
   global $g_max_nav_pages, $g_smarty_debug, $g_root_dir, $g_root_url, $LANG, $g_smarty_use_sub_dirs;
 
@@ -261,11 +287,14 @@ function ft_get_page_nav($num_results, $num_per_page, $current_page = 1, $pass_a
 
   $smarty->assign("g_root_dir", $g_root_dir);
   $smarty->assign("g_root_url", $g_root_url);
-  $smarty->assign("samepage", $_SERVER["PHP_SELF"]);
+  $smarty->assign("samepage", ft_get_clean_php_self());
   $smarty->assign("num_results", $num_results);
   $smarty->assign("num_per_page", $num_per_page);
   $smarty->assign("current_page", $current_page);
   $smarty->assign("page_str", $page_str);
+  $smarty->assign("show_total_results", (isset($settings["show_total_results"])) ? $settings["show_total_results"] : true);
+  $smarty->assign("show_page_label", (isset($settings["show_page_label"])) ? $settings["show_page_label"] : true);
+
 
   // display the total number of results found
   $range_start = ($current_page - 1) * $num_per_page + 1;
@@ -342,7 +371,7 @@ function ft_get_dhtml_page_nav($num_results, $num_per_page, $current_page = 1)
   $smarty->assign("SESSION", $_SESSION["ft"]);
   $smarty->assign("g_root_dir", $g_root_dir);
   $smarty->assign("g_root_url", $g_root_url);
-  $smarty->assign("samepage", $_SERVER["PHP_SELF"]);
+  $smarty->assign("samepage", ft_get_clean_php_self());
   $smarty->assign("num_results", $num_results);
   $smarty->assign("num_per_page", $num_per_page);
   $smarty->assign("current_page", $current_page);
@@ -484,8 +513,6 @@ function ft_check_client_may_view($client_id, $form_id, $view_id)
 {
   global $g_root_url;
   $boot_out_user = false;
-
-  //$search = ft_search_forms($client_id);
 
   // $permissions = ft_get_client_form_views($account_info["account_id"]);
   $permissions = $_SESSION["ft"]["permissions"];
@@ -678,19 +705,20 @@ function ft_strip_tags($input)
  * Used to convert language file strings into their JS-compatible counterparts, all within an
  * "g" namespace.
  *
- * @param array keys The $LANG keus
+ * @param array keys The $LANG keys
+ * @param array keys The $L keys
  * @return string $js the javascript string (WITHOUT the <script> tags)
  */
-function ft_generate_js_messages($keys)
+function ft_generate_js_messages($keys = "", $module_keys = "")
 {
-  global $g_root_url, $LANG;
+  global $g_root_url, $LANG, $L;
 
   $theme = $_SESSION["ft"]["account"]["theme"];
-
   $rows = "";
+
+  $js_rows = array();
   if (!empty($keys))
   {
-    $js_rows = array();
     for ($i=0; $i<count($keys); $i++)
     {
       $key = $keys[$i];
@@ -700,17 +728,29 @@ function ft_generate_js_messages($keys)
         $js_rows[] = "g.messages[\"$key\"] = \"$str\";";
       }
     }
-    $rows = join("\n", $js_rows);
   }
+  if (!empty($module_keys))
+  {
+    for ($i=0; $i<count($module_keys); $i++)
+    {
+      $key = $module_keys[$i];
+      if (array_key_exists($key, $L))
+      {
+        $str = preg_replace("/\"/", "\\\"", $L[$key]);
+        $js_rows[] = "g.messages[\"$key\"] = \"$str\";";
+      }
+    }
+  }
+  $rows = join("\n", $js_rows);
 
-  $js = "// our namespace
-  if (typeof g == \"undefined\")
-    g = {};
-
-  g.theme_folder = \"$theme\";
-  g.messages     = [];
-  $rows
-    ";
+  $js =<<< END
+if (typeof g == "undefined") {
+  g = {};
+}
+g.theme_folder = "$theme";
+g.messages     = [];
+$rows
+END;
 
   extract(ft_process_hooks("end", compact("js"), array("js")), EXTR_OVERWRITE);
 
@@ -1287,4 +1327,165 @@ if (!function_exists('mime_content_type'))
       return 'application/octet-stream';
     }
   }
+}
+
+
+/**
+ * This is called on all page loads. It checks to ensure that the person's sessions haven't timed out. If not,
+ * it updates the last_activity_unixtime in the user's sessions - otherwise they're logged out.
+ */
+function ft_check_sessions_timeout()
+{
+  $now = date("U");
+
+  // check to see if the session has timed-out
+  if (isset($_SESSION["ft"]["account"]["last_activity_unixtime"]) && isset($_SESSION["ft"]["account"]["sessions_timeout"]))
+  {
+    $sessions_timeout_mins = $_SESSION["ft"]["account"]["sessions_timeout"];
+    $timeout_secs = $sessions_timeout_mins * 60;
+
+    if ($_SESSION["ft"]["account"]["last_activity_unixtime"] + $timeout_secs < $now)
+    {
+      ft_logout_user("notify_sessions_timeout");
+    }
+  }
+
+  // log this unixtime for checking the sessions timeout
+  $_SESSION["ft"]["account"]["last_activity_unixtime"] = $now;
+}
+
+
+/**
+ * Figures out an SQL LIMIT clause, based on page number & num per page.
+ *
+ * @param integer $page_num
+ * @param integer $results_per_page a number or "all"
+ * @return string
+ */
+function _ft_get_limit_clause($page_num, $results_per_page)
+{
+  $limit_clause = "";
+  if ($results_per_page != "all")
+  {
+    if (empty($page_num) || !is_numeric($page_num))
+      $page_num = 1;
+
+    $first_item = ($page_num - 1) * $results_per_page;
+    $limit_clause = "LIMIT $first_item, $results_per_page";
+  }
+
+  return $limit_clause;
+}
+
+/**
+ * Helper function to locate the value key in the request info. This is used in the ft_update_field
+ * function. It can be used any time we use the jQuery serializeArray() function. The javascript
+ * version of this is called ft._extract_array_val
+ *
+ * @param array $array each index is a hash with two keys: name and value
+ * @param string $name
+ */
+function _ft_extract_array_val($array, $name)
+{
+  $value = "";
+  for ($i=0; $i<count($array); $i++)
+  {
+  	if ($array[$i]["name"] == $name)
+  	{
+  		$value = $array[$i]["value"];
+  		break;
+  	}
+  }
+
+  return $value;
+}
+
+
+/**
+ * Helper function to remove all but those chars specified in the section param.
+ *
+ * @param string the string to examine
+ * @param string a string of acceptable chars
+ * @return string the cleaned string
+ */
+function ft_strip_chars($str, $whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+{
+  $valid_chars = preg_quote($whitelist);
+  return preg_replace("/[^$valid_chars]/", "", $str);
+}
+
+
+/**
+ * Another security-related function. This returns a clean version of PHP_SELF for use in the templates. This wards
+ * against URI Cross-site scripting attacks.
+ *
+ * @return the cleaned $_SERVER["PHP_SELF"]
+ */
+function ft_get_clean_php_self()
+{
+  return htmlspecialchars(strip_tags($_SERVER['PHP_SELF']), ENT_QUOTES);
+}
+
+
+/**
+ * This was added in 2.1.0. and replaces ft_build_and_cache_upgrade_info() which really wasn't necessary.
+ * It returns a hash of information to pass in a hidden form when the user clicks "Update".
+ */
+function ft_get_formtools_installed_components()
+{
+  global $g_current_version, $g_release_type, $g_release_date;
+
+  $settings = ft_get_settings();
+
+  // a hash storing the installed component info
+  $components = array();
+
+  // get the main build version
+  $program_version = $g_current_version;
+  $release_date    = $g_release_date;
+  $release_type    = $g_release_type;
+
+  $version = $program_version;
+  if ($release_type == "alpha")
+  {
+    $version = "{$program_version}-alpha-{$release_date}";
+  }
+  else if ($release_type == "beta")
+  {
+    $version = "{$program_version}-beta-{$release_date}";
+  }
+
+  $components["m"]   = $version;
+  $components["rt"]  = $release_type;
+  $components["rd"]  = $release_date;
+  $components["api"] = $settings["api_version"];
+
+  // not sure about this, but I've added it for backward compatibility, just in case...
+  if ($release_type == "beta")
+  {
+  	$components["beta"] = "yes";
+    $components["bv"]   = $version;
+  }
+
+  // get the theme info
+  $themes = ft_get_themes();
+  $count = 1;
+  foreach ($themes as $theme_info)
+  {
+    $components["t{$count}"]  = $theme_info["theme_folder"];
+    $components["tv{$count}"] = $theme_info["theme_version"];
+    $count++;
+  }
+
+  // get the module info
+  $modules = ft_get_modules();
+  $count = 1;
+  foreach ($modules as $module_info)
+  {
+    $components["m{$count}"]  = $module_info["module_folder"];
+    $components["mv{$count}"] = $module_info["version"];
+    $count++;
+  }
+
+  return $components;
 }

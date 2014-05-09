@@ -15,10 +15,8 @@ $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/man
 // -------------------------------------------------------------------------------------------
 
 // compile header information
-$page_vars = array();
 $page_vars["page"] = "settings";
 $page_vars["page_url"] = ft_get_page_url("edit_client_settings", array("client_id" => $client_id));
-$page_vars["tabs"] = $tabs;
 $page_vars["head_title"]  = "{$LANG["phrase_edit_client"]} - {$LANG["word_settings"]}";
 $page_vars["phrase_one_special_char"] = ft_eval_smarty_string($LANG["phrase_one_special_char"], array("chars" => $g_password_special_chars));
 $page_vars["client_info"] = $client_info;
@@ -26,7 +24,7 @@ $page_vars["forms"]       = $forms;
 $page_vars["client_id"]   = $client_id;
 $page_vars["text_date_formatting_link"] = ft_eval_smarty_string($LANG["text_date_formatting_link"], $replacement_info);
 
-$page_vars["head_js"] =<<< EOF
+$page_vars["head_js"] =<<< END
 var rules = [];
 rules.push("required,page_titles,{$LANG["validation_no_titles"]}");
 rules.push("required,menu_id,{$LANG["validation_no_menu"]}");
@@ -38,7 +36,7 @@ rules.push("required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}"
 rules.push("digits_only,sessions_timeout,{$LANG["validation_invalid_sessions_timeout"]}");
 rules.push("required,date_format,{$LANG["validation_no_date_format"]}");
 
-Event.observe(document, 'dom:loaded', function() { $("settings_form").focusFirstElement(); });
-EOF;
+$(function() { $("#settings_form :input:visible:enabled:first").focus(); });
+END;
 
 ft_display_page("admin/clients/edit.tpl", $page_vars);

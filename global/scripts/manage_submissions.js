@@ -9,30 +9,33 @@
 if (typeof ms == "undefined")
   var ms = {};
 
+ms.confirm_delete_dialog = $("<div id=\"confirm_delete_dialog\"></div>");
+
 
 /**
  * Validation function called when the user clicks the "download" or "view" buttons for the Excel
  * download and Printer-Friendly page. If the "selected" option is selected, it checks that the
  * user has selected at least one submission.
  *
+ * TODO move this to the Export Manager module.
+ *
  * @param string action what to do: "print_preview" / ""
  * @param string select_option
  * @return boolean
  */
-ms.check_selected = function(action, select_option)
-{
+ms.check_selected = function(action, select_option) {
   var selected_ids = ms.get_selected_submissions();
 
-  if (select_option == "all")
+  if (select_option == "all") {
     return true;
+  }
 
-  if (!selected_ids.length)
-  {
-    if (action == "print_preview")
+  if (!selected_ids.length) {
+    if (action == "print_preview") {
       alert(g.messages["validation_select_rows_to_view"]);
-    else
+    } else {
       alert(g.messages["validation_select_rows_to_download"]);
-
+    }
     return false;
   }
 
@@ -46,16 +49,9 @@ ms.check_selected = function(action, select_option)
  *
  * @return array selected_ids
  */
-ms.get_selected_submissions = function()
-{
+ms.get_selected_submissions = function() {
   var selected_ids = [];
-  for (var i=0; i<ms.page_submission_ids.length; i++)
-  {
-    var curr_id = ms.page_submission_ids[i];
-    if ($('submission_cb_' + curr_id).checked)
-      selected_ids.push(curr_id);
-  }
-
+  $(".select_row_cb:checked").each(function() { selected_ids.push(parseInt(this.value)); });
   return selected_ids;
 }
 
@@ -66,76 +62,84 @@ ms.get_selected_submissions = function()
  *
  * @param string page
  */
-ms.delete_submissions = function(page)
-{
+ms.delete_submissions = function(page) {
   // find out if there are submissions selected on another page
   var num_selected_on_other_pages = 0;
   var selected_ids_on_page = ms.get_selected_submissions();
 
-  if (ms.all_submissions_in_result_set_selected)
-  {
+  if (ms.all_submissions_in_result_set_selected) {
     // find out how many submissions in the ms.all_submissions_selected_omit_list are found
     // on other pages
     var other_pages_omit_list_count = 0;
-    for (var i=0; i<ms.all_submissions_selected_omit_list.length; i++)
-    {
-      if (!ms.page_submission_ids.include(ms.all_submissions_selected_omit_list[i]))
+    for (var i=0; i<ms.all_submissions_selected_omit_list.length; i++) {
+      if ($.inArray(ms.all_submissions_selected_omit_list[i], ms.page_submission_ids) == -1) {
         other_pages_omit_list_count++;
+      }
     }
 
     // now calculate the total selected on other pages
     num_selected_on_other_pages = ms.search_num_results - (other_pages_omit_list_count + ms.num_results_per_page);
-  }
-  else
-  {
-    for (var i=0; i<ms.selected_submission_ids.length; i++)
-    {
-      if (!selected_ids_on_page.include(ms.selected_submission_ids[i]))
+  } else {
+    for (var i=0; i<ms.selected_submission_ids.length; i++) {
+      if ($.inArray(parseInt(ms.selected_submission_ids[i]), selected_ids_on_page) == -1) {
         num_selected_on_other_pages++;
+      }
     }
   }
 
+
   // if there are none selected, alert the user and return
-  if (!ms.selected_submission_ids.length && !num_selected_on_other_pages)
-  {
+  if (!ms.selected_submission_ids.length && !num_selected_on_other_pages) {
     ft.display_message("ft_message", false, g.messages["validation_select_submissions_to_delete"]);
     return;
   }
 
-  if (num_selected_on_other_pages > 0)
-  {
+  if (num_selected_on_other_pages > 0) {
     // if the user has submissions selected on this page AND other pages, give them
     // the option to either delete ALL submissions or just those selected on this page.
-    if (selected_ids_on_page.length)
-    {
+    if (selected_ids_on_page.length) {
       var message = g.messages["confirm_delete_submissions_on_other_pages"].replace(/\{\$num_selected_on_page\}/, selected_ids_on_page.length);
       message = message.replace(/\{\$num_selected_on_other_pages\}/, num_selected_on_other_pages);
       message = message.replace(/\{\$delete_all_submissions_onclick\}/, "onclick=\"window.location='?delete'\"");
-
       var id_string = selected_ids_on_page.join(",");
       message = message.replace(/\{\$delete_submissions_on_page_onclick\}/, "onclick=\"window.location='?delete=" + id_string + "'\"");
-
       ft.display_message("ft_message", false, message);
       return;
-    }
-    else
-    {
+    } else {
       var message = g.messages["confirm_delete_submissions_on_other_pages2"].replace(/\{\$num_selected_on_page\}/, selected_ids_on_page.length);
       message = message.replace(/\{\$num_selected_on_other_pages\}/, num_selected_on_other_pages);
       message = message.replace(/\{\$delete_all_submissions_onclick\}/, "onclick=\"window.location='?delete'\"");
-
       ft.display_message("ft_message", false, message);
       return;
     }
   }
 
-  if (ms.selected_submission_ids.length == 1)
-    var answer = confirm(g.messages["confirm_delete_submission"]);
-  else
-    var answer = confirm(g.messages["confirm_delete_submissions"]);
+  var message = "";
+  if (ms.selected_submission_ids.length == 1) {
+	message = g.messages["confirm_delete_submission"];
+  } else {
+	message = g.messages["confirm_delete_submissions"];
+  }
 
-  if (answer)
-    window.location = '?delete';
+  ft.create_dialog({
+    dialog:    ft.check_url_dialog,
+    title:     g.messages["phrase_please_confirm"],
+    content:   message,
+    popup_type: "warning",
+    buttons: [{
+      text: g.messages["word_yes"],
+      click: function() {
+        window.location = "?delete";
+      }
+    },
+    {
+      text: g.messages["word_no"],
+      click: function() {
+        $(this).dialog("close");
+      }
+    }]
+  });
+
 }
 
 
@@ -145,8 +149,7 @@ ms.delete_submissions = function(page)
  * @param integer submission_id
  * @param string target_webpage where to link to after deleting the submission
  */
-ms.delete_submission = function(submission_id, target_webpage)
-{
+ms.delete_submission = function(submission_id, target_webpage) {
   if (confirm(g.messages["confirm_delete_submission"]))
     window.location = target_webpage + "?delete=" + submission_id;
 
@@ -155,48 +158,58 @@ ms.delete_submission = function(submission_id, target_webpage)
 
 
 /**
- * Called on page load, it ensures that the selected / unselected rows have the appropriate class.
+ * Called on page load, it ensures that the selected / unselected rows have the appropriate class,
+ * and adds the appropriate event handlers to the rows.
  */
-ms.init_page = function()
-{
-  var all_checked = true;
-
-  if (ms.page_submission_ids.length == 0)
+ms.init_submissions_page = function() {
+  if (ms.page_submission_ids.length == 0) {
     return;
-
-  ms.change_search_field($("search_field").value);
-
-  // check the selected rows and make sure they have the appropriate class
-  for (var i=0; i<ms.page_submission_ids.length; i++)
-  {
-    var curr_id = ms.page_submission_ids[i];
-
-    if ($("submission_cb_" + curr_id).checked)
-      $("submission_row_" + curr_id).className = "selected_row_color";
-    else
-      all_checked = false;
   }
 
-  // if all the rows are selected
-  if (all_checked)
-  {
-    if (ms.all_submissions_in_result_set_selected)
-    {
-      if (ms.all_submissions_selected_omit_list.length == 0)
-        ms._update_select_all_button("all_in_result_set_selected");
-      else
-        ms._update_select_all_button("all_on_page_selected");
+  ms.change_search_field($("#search_field").val());
+
+  // check the selected rows and make sure they have the appropriate class
+  var all_checked = true;
+  $(".select_row_cb").each(function() {
+    if (this.checked) {
+      $(this).closest("tr").addClass("selected_row_color").removeClass("unselected_row_color");
+    } else {
+      all_checked = false;
     }
-    else
-    {
-      if (ms.selected_submission_ids.length == ms.search_num_results)
+  });
+
+  // if all the rows are selected
+  if (all_checked) {
+    if (ms.all_submissions_in_result_set_selected) {
+      if (ms.all_submissions_selected_omit_list.length == 0) {
         ms._update_select_all_button("all_in_result_set_selected");
-      else
+      } else {
         ms._update_select_all_button("all_on_page_selected");
+      }
+    } else {
+      if (ms.selected_submission_ids.length == ms.search_num_results) {
+        ms._update_select_all_button("all_in_result_set_selected");
+      } else {
+        ms._update_select_all_button("all_on_page_selected");
+      }
     }
   }
 
   ms.update_display_row_count();
+
+
+  $(".select_row_cb").bind("click", function() {
+    ms.select_row(this, ms.num_results_per_page);
+  });
+
+  $("#submissions_table tr:gt(0)").bind("click", function(e) {
+    if (e.target.nodeName == "INPUT" || e.target.nodeName == "A")
+      return;
+
+    var select_row_cb = $(this).find(".select_row_cb");
+    select_row_cb.attr("checked", select_row_cb.attr("checked") ? false : true);
+    ms.select_row(select_row_cb[0], ms.num_results_per_page);
+  });
 }
 
 
@@ -205,80 +218,74 @@ ms.init_page = function()
  * what's selected and what isn't. It keep a log of all selected rows - REGARDLESS OF PAGE -
  * in the ms.selected_submission_ids array. It also updates the "X row(s) selected" display text.
  *
- * @param integer id the unique submission ID
+ * @param element the checkbox
  * @param integer results_per_page the number of results in the page
  */
-ms.select_row = function(id, results_per_page)
-{
-  if (document.current_form['submission_cb_' + id].checked)
-  {
-    ft.toggle_unique_class($("submission_row_" + id), "selected_row_color", ["selected_row_color","unselected_row_color"]);
+ms.select_row = function(cb, results_per_page) {
+  var submission_id = cb.value;
+  if (cb.checked) {
+    ft.toggle_unique_class($(cb).closest("tr")[0], "selected_row_color", ["selected_row_color", "unselected_row_color"]);
 
-    if (ms.all_submissions_in_result_set_selected)
-      ms.all_submissions_selected_omit_list = $(ms.all_submissions_selected_omit_list).without(id);
-    else
-      ms.selected_submission_ids.push(id);
-
+    if (ms.all_submissions_in_result_set_selected) {
+      ms.all_submissions_selected_omit_list = $.grep(ms.all_submissions_selected_omit_list, function(i) { return i != submission_id; });
+    } else {
+      ms.selected_submission_ids.push(submission_id);
+    }
     var selected_ids = ms.get_selected_submissions();
 
     // all submissions in result set are selected
-    if (ms.all_submissions_in_result_set_selected)
-    {
+    if (ms.all_submissions_in_result_set_selected) {
       // if the user just selected the only row that wasn't selected on the page, update the select all button
       // based on whether all results are now selected or not
-      if (ms.all_submissions_selected_omit_list.length == 0)
+      if (ms.all_submissions_selected_omit_list.length == 0) {
         ms._update_select_all_button("all_in_result_set_selected");
-      else
-      {
+      } else {
         // case 1: multiple pages, and all on page are selected
-        if (ms.page_submission_ids.length == selected_ids.length)
+        if (ms.page_submission_ids.length == selected_ids.length) {
           ms._update_select_all_button("all_on_page_selected");
-
         // case 2: single page (total results <= max num on page) and all are selected
-        else if (ms.search_num_results == selected_ids.length)
+        } else if (ms.search_num_results == selected_ids.length) {
           ms._update_select_all_button("all_on_page_selected");
+        }
       }
-    }
-    else
-    {
-      if (ms.selected_submission_ids.length == ms.search_num_results)
+    } else {
+      if (ms.selected_submission_ids.length == ms.search_num_results) {
         ms._update_select_all_button("all_in_result_set_selected");
-
       // case 2: multiple pages, and all on page are selected
-      else if (ms.page_submission_ids.length == selected_ids.length)
+      } else if (ms.page_submission_ids.length == selected_ids.length) {
         ms._update_select_all_button("all_on_page_selected");
-
       // case 3: single page (total results <= max num on page) and all are selected
-      else if (ms.search_num_results == selected_ids.length)
+      } else if (ms.search_num_results == selected_ids.length) {
         ms._update_select_all_button("all_on_page_selected");
+      }
     }
 
     // pass this individual submission ID to the server for storage
-    var page_url = g.root_url + "/global/code/actions.php?action=select_submission&form_id=" + ms.form_id + "&submission_id=" + id;
-    new Ajax.Request(page_url, {
-      method: 'get',
-      onFailure: function() { alert("Couldn't load page: " + page_url); }
+    $.ajax({
+      url:   g.root_url + "/global/code/actions.php?action=select_submission&form_id=" + ms.form_id + "&submission_id=" + submission_id,
+      type:  "GET",
+      error: function() { alert("Couldn't load page: " + page_url); }
     });
   }
   else
   {
-    ft.toggle_unique_class($("submission_row_" + id), "unselected_row_color", ["selected_row_color","unselected_row_color"]);
+    ft.toggle_unique_class($(cb).closest("tr")[0], "unselected_row_color", ["selected_row_color","unselected_row_color"]);
 
-    if (ms.all_submissions_in_result_set_selected)
-    {
-      if (!ms.all_submissions_selected_omit_list.include(id))
-        ms.all_submissions_selected_omit_list.push(id);
+    if (ms.all_submissions_in_result_set_selected) {
+      if ($.inArray(submission_id, ms.all_submissions_selected_omit_list) == -1) {
+        ms.all_submissions_selected_omit_list.push(submission_id);
+      }
+    } else {
+      ms.selected_submission_ids = $.grep(ms.selected_submission_ids, function(i) { return i != submission_id; });
     }
-    else
-      ms.selected_submission_ids = $(ms.selected_submission_ids).without(id);
 
     ms._update_select_all_button("all_on_page_not_selected");
 
     // remove this row from sessions
-    var page_url = g.root_url + "/global/code/actions.php?action=unselect_submission&form_id=" + ms.form_id + "&submission_id=" + id;
-    new Ajax.Request(page_url, {
-      method: 'get',
-      onFailure: function() { alert("Couldn't load page: " + page_url); }
+    $.ajax({
+      url:   g.root_url + "/global/code/actions.php?action=unselect_submission&form_id=" + ms.form_id + "&submission_id=" + submission_id,
+      type:  "GET",
+      error: function() { alert("Couldn't load page: " + page_url); }
     });
   }
 
@@ -291,28 +298,23 @@ ms.select_row = function(id, results_per_page)
  *
  * @return num_selected returns the number of currently selected rows.
  */
-ms.update_display_row_count = function()
-{
+ms.update_display_row_count = function() {
   var num_selected = 0;
-  if (ms.all_submissions_in_result_set_selected)
+  if (ms.all_submissions_in_result_set_selected) {
     num_selected = ms.search_num_results - ms.all_submissions_selected_omit_list.length;
-  else
+  } else {
     num_selected = ms.selected_submission_ids.length;
+  }
 
-  if (num_selected == 0)
-  {
-    ft.toggle_unique_class($("display_num_selected_rows"), "light_grey", ["green","light_grey"]);
-    $("display_num_selected_rows").innerHTML = g.messages["phrase_rows_selected"].replace(/\{\$num_rows\}/, "0");
-  }
-  else if (ms.selected_submission_ids.length == 1 && !ms.all_submissions_in_result_set_selected)
-  {
-    ft.toggle_unique_class($("display_num_selected_rows"), "green", ["green","light_grey"]);
-    $("display_num_selected_rows").innerHTML = g.messages["phrase_row_selected"].replace(/\{\$num_rows\}/, "1");
-  }
-  else
-  {
-    ft.toggle_unique_class($("display_num_selected_rows"), "green", ["green","light_grey"]);
-    $("display_num_selected_rows").innerHTML = g.messages["phrase_rows_selected"].replace(/\{\$num_rows\}/, num_selected);
+  if (num_selected == 0) {
+    ft.toggle_unique_class($("#display_num_selected_rows")[0], "light_grey", ["green", "light_grey"]);
+    $("#display_num_selected_rows").html(g.messages["phrase_rows_selected"].replace(/\{\$num_rows\}/, "0"));
+  } else if (ms.selected_submission_ids.length == 1 && !ms.all_submissions_in_result_set_selected) {
+    ft.toggle_unique_class($("#display_num_selected_rows")[0], "green", ["green", "light_grey"]);
+    $("#display_num_selected_rows").html(g.messages["phrase_row_selected"].replace(/\{\$num_rows\}/, "1"));
+  } else {
+    ft.toggle_unique_class($("#display_num_selected_rows")[0], "green", ["green", "light_grey"]);
+    $("#display_num_selected_rows").html(g.messages["phrase_rows_selected"].replace(/\{\$num_rows\}/, num_selected));
   }
 
   return num_selected;
@@ -322,44 +324,39 @@ ms.update_display_row_count = function()
 /**
  * Selects all submission rows on the page. This is called ONLY when the user clicks on the "Select All" button.
  */
-ms.select_all_on_page = function()
-{
-  // check all submissions on the page
-  for (var i=0; i<ms.page_submission_ids.length; i++)
-  {
-    var curr_id = ms.page_submission_ids[i];
-    ft.toggle_unique_class($("submission_row_" + curr_id), "selected_row_color", ["unselected_row_color", "selected_row_color"]);
-    $('submission_cb_' + curr_id).checked = true;
-    ms.all_submissions_selected_omit_list = $(ms.all_submissions_selected_omit_list).without(curr_id);
+ms.select_all_on_page = function() {
+  $(".select_row_cb").each(function() {
+    $(this).attr("checked", "checked").closest("tr").addClass("selected_row_color").removeClass("unselected_row_color");
 
-    if (!$(ms.selected_submission_ids).include(curr_id))
+    var curr_id = this.value;
+    ms.all_submissions_selected_omit_list = $.grep(ms.all_submissions_selected_omit_list, function(i) { return i != curr_id; });
+    if ($.inArray(curr_id, ms.selected_submission_ids) == -1) {
       ms.selected_submission_ids.push(curr_id);
-  }
+    }
+  });
 
-  if (ms.all_submissions_in_result_set_selected)
-  {
+  if (ms.all_submissions_in_result_set_selected) {
     // if the user just selected the only row that wasn't selected on the page, update the select all button
     // based on whether all results are now selected or not
-    if (ms.all_submissions_selected_omit_list.length == 0)
+    if (ms.all_submissions_selected_omit_list.length == 0) {
       ms._update_select_all_button("all_in_result_set_selected");
-    else
+    } else {
       ms._update_select_all_button("all_on_page_selected");
-  }
-  else
-  {
-    if (ms.selected_submission_ids.length == ms.search_num_results)
+    }
+  } else {
+    if (ms.selected_submission_ids.length == ms.search_num_results) {
       ms._update_select_all_button("all_in_result_set_selected");
-    else
+    } else {
       ms._update_select_all_button("all_on_page_selected");
+    }
   }
 
   // pass these submission IDs to the server to store in sessions
-  var page_url = g.root_url + "/global/code/actions.php?action=select_submissions&form_id=" + ms.form_id +
-    "&submission_ids=" + ms.page_submission_ids.join(",");
-
-  new Ajax.Request(page_url, {
-    method: 'get',
-    onFailure: function() { alert("Couldn't load page: " + page_url); }
+  $.ajax({
+    url:   g.root_url + "/global/code/actions.php?action=select_submissions&form_id=" + ms.form_id
+             + "&submission_ids=" + ms.page_submission_ids.join(","),
+    type:  "GET",
+    error: function() { alert("Couldn't load page: " + page_url); }
   });
 
   ms.update_display_row_count();
@@ -369,17 +366,15 @@ ms.select_all_on_page = function()
 /**
  * Selects all submissions in the current result set.
  */
-ms.select_all_in_result_set = function()
-{
+ms.select_all_in_result_set = function() {
   ms._update_select_all_button("all_in_result_set_selected");
   ms.all_submissions_selected_omit_list = [];
 
   // pass these submission IDs to the server to store in sessions
-  var page_url = g.root_url + "/global/code/actions.php?action=select_all_submissions&form_id=" + ms.form_id;
-
-  new Ajax.Request(page_url, {
-    method: 'get',
-    onFailure: function () { alert("Couldn't load page: " + page_url); }
+  $.ajax({
+    url:   g.root_url + "/global/code/actions.php?action=select_all_submissions&form_id=" + ms.form_id,
+    type:  "GET",
+    error: function () { alert("Couldn't load page: " + page_url); }
   });
 
   ms.update_display_row_count();
@@ -389,21 +384,19 @@ ms.select_all_in_result_set = function()
 /**
  * Unselects all submission rows on the page.
  */
-ms.unselect_all = function()
-{
-  for (var i=0; i<ms.page_submission_ids.length; i++)
-  {
-    var curr_id = ms.page_submission_ids[i];
-    ft.toggle_unique_class($("submission_row_" + curr_id), "unselected_row_color", ["unselected_row_color","selected_row_color"]);
-    $('submission_cb_' + curr_id).checked = false;
-  }
+ms.unselect_all = function() {
+  $(".select_row_cb").each(function() {
+    $(this).attr("checked", "").closest("tr").addClass("unselected_row_color").removeClass("selected_row_color");
+  });
 
   ms._update_select_all_button("unselect_all");
   ms.all_submissions_in_result_set_selected = false;
 
   // pass this to the server to store in sessions
-  var page_url = g.root_url + "/global/code/actions.php?action=unselect_all_submissions&form_id=" + ms.form_id;
-  new Ajax.Request(page_url, { method: 'get' });
+  $.ajax({
+    url:  g.root_url + "/global/code/actions.php?action=unselect_all_submissions&form_id=" + ms.form_id,
+    type: "GET"
+  });
 
   ms.selected_submission_ids = [];
   ms.update_display_row_count();
@@ -413,14 +406,16 @@ ms.unselect_all = function()
 /**
  * Used to hide/show the additional date search options.
  *
+ * TODO
+ *
  * @param string choice the column name
  */
-ms.change_search_field = function(choice)
-{
-  if (choice == "submission_date" || choice == "last_modified_date")
-    $("search_dropdown_section").style.display = "block";
-  else
-    $("search_dropdown_section").style.display = "none";
+ms.change_search_field = function(choice) {
+  if (choice == "submission_date" || choice == "last_modified_date") {
+    $("#search_dropdown_section").show();
+  } else {
+    $("#search_dropdown_section").hide();
+  }
 }
 
 
@@ -428,98 +423,130 @@ ms.change_search_field = function(choice)
  * Called internally. This updates the appearance and functionality of the "select all" button, which
  * acts differently based on what rows are selected at any give time.
  */
-ms._update_select_all_button = function(flag)
-{
-  if (flag == "all_on_page_selected")
-  {
-    $("select_button").value = g.messages["phrase_select_all_X_results"].replace(/\{\$numresults\}/, ms.search_num_results);
-    $("select_button").onclick = function() { ms.select_all_in_result_set(); }
-    $("select_button").disabled = false;
-    ft.toggle_unique_class($("select_button"), "blue", ["blue","light_grey","black"]);
+ms._update_select_all_button = function(flag) {
+  if (flag == "all_on_page_selected") {
+    $("#select_button").val(g.messages["phrase_select_all_X_results"].replace(/\{\$numresults\}/, ms.search_num_results))
+      .attr("disabled", "")
+      .removeAttr("onclick")
+      .unbind("click")
+      .bind("click", function() { ms.select_all_in_result_set(); });
+    ft.toggle_unique_class($("#select_button")[0], "blue", ["blue","light_grey","black"]);
   }
-  if (flag == "all_on_page_not_selected")
-  {
-    $("select_button").value = g.messages["phrase_select_all_on_page"];
-    ft.toggle_unique_class($("select_button"), "black", ["blue","light_grey","black"]);
-    $("select_button").disabled = false;
-    $("select_button").onclick = function() { ms.select_all_on_page(); }
+  if (flag == "all_on_page_not_selected") {
+    $("#select_button").val(g.messages["phrase_select_all_on_page"])
+      .attr("disabled", "")
+      .removeAttr("onclick")
+      .unbind("click")
+      .bind("click", function() { ms.select_all_on_page(); });
+    ft.toggle_unique_class($("#select_button")[0], "black", ["blue","light_grey","black"]);
   }
 
   // only ever gets called when the user selected the "Select All X results"
-  if (flag == "all_in_result_set_selected")
-  {
-    $("select_button").value = g.messages["phrase_all_X_results_selected"].replace(/\{\$numresults\}/, ms.search_num_results);
-    ft.toggle_unique_class($("select_button"), "light_grey", ["blue","light_grey","black"]);
-    $("select_button").disabled = true;
+  if (flag == "all_in_result_set_selected") {
+    $("#select_button").val(g.messages["phrase_all_X_results_selected"].replace(/\{\$numresults\}/, ms.search_num_results))
+      .attr("disabled", "disabled");
     ms.all_submissions_in_result_set_selected = true;
+    ft.toggle_unique_class($("#select_button")[0], "light_grey", ["blue","light_grey","black"]);
   }
 
   // only ever called when the user clicks "Unselect All" button
-  if (flag == "unselect_all")
-  {
+  if (flag == "unselect_all") {
     ms.selected_submission_ids = [];
     ms.all_submissions_in_result_set_selected = false;
-    $("select_button").value = g.messages["phrase_select_all_on_page"];
-    ft.toggle_unique_class($("select_button"), "black", ["blue","light_grey","black"]);
-    $("select_button").disabled = false;
-    $("select_button").onclick = function() { ms.select_all_on_page(); }
+    $("#select_button").val(g.messages["phrase_select_all_on_page"])
+      .attr("disabled", "")
+      .removeAttr("onclick")
+      .unbind("click")
+      .bind("click", function() { ms.select_all_on_page(); });
+    ft.toggle_unique_class($("#select_button")[0], "black", ["blue","light_grey","black"]);
   }
 }
 
 
 /**
- * Deletes a submission file or image.
+ * Deletes a submission file. I chose to leave this in the Core rather than associate it with the
+ * file data type simply because it would make the field type too complicated. In retrospect, the
+ * File field type should have been implemented as a separate module to complement the Custom
+ * Fields module. That would have allowed for far more control beyond the fields available
+ * in the Custom Fields module.
+ *
+ * TODO - move to separate module
  *
  * @param field_id
  * @param file_type "file" or "image"
- * @param force_delete
- */
-ms.delete_submission_file = function(field_id, file_type, force_delete)
-{
-  if (file_type == "file")
-  {
-    var page_url = g.root_url + "/global/code/actions.php?action=delete_submission_file&field_id=" + field_id
-      + "&return_vals[]=target_message_id:file_field_" + field_id + "_message_id"
-      + "&return_vals[]=field_id:" + field_id
-      + "&force_delete=" + force_delete;
-  }
+ * @param force_delete boolean
+ms.delete_submission_file = function(field_id, force_delete) {
+  var page_url = g.root_url + "/global/code/actions.php";
 
-  var confirmDelete = true;
-  if (!force_delete)
-  {
-    var confirmDelete = confirm(g.messages["confirm_delete_submission_file"]);
-  }
+  var data = {
+    action:       "delete_submission_file",
+    field_id:     field_id,
+    return_vals:  ["target_message_id:file_field_" + field_id + "_message_id", "field_id:" + field_id],
+    force_delete: force_delete
+  };
 
-  if (confirmDelete)
-  {
-    new Ajax.Request(page_url, {
-      method: 'get',
-      onSuccess: ms.delete_submission_file_response,
-      onFailure: function() { alert("Couldn't load page: " + page_url); }
+  var confirm_delete = true;
+  if (!force_delete) {
+    ft.create_dialog({
+      dialog:     ms.confirm_delete_dialog,
+      popup_type: "warning",
+      title:      g.messages["phrase_please_confirm"],
+      content:    g.messages["confirm_delete_submission_file"],
+      buttons: [{
+        "text":  g.messages["word_yes"],
+        "click": function() {
+        ft.dialog_activity_icon($("#confirm_delete_dialog"), "show");
+          $.ajax({
+            url:      page_url,
+            data:     data,
+            type:     "GET",
+            dataType: "json",
+            success:  ms.delete_submission_file_response,
+            error:    function(el) { alert("Couldn't load page: " + page_url); }
+          });
+        }
+      },
+      {
+        "text":  g.messages["word_no"],
+        "click": function() {
+          $(this).dialog("close");
+        }
+      }]
+    });
+  } else {
+    $.ajax({
+      url:      page_url,
+      data:     data,
+      type:     "GET",
+      dataType: "json",
+      success:  ms.delete_submission_file_response,
+      error:    function(el) { alert("Couldn't load page: " + page_url); }
     });
   }
+
+  return false;
 }
+*/
 
 
 /**
  * Handles the successful responses for the delete file feature. Whether or not the file was *actually*
  * deleted is a separate matter. If the file couldn't be delete, the user is provided the option of deleting
  * the database record anyway.
- */
-ms.delete_submission_file_response = function(transport)
-{
-  var info = transport.responseText.evalJSON();
+ms.delete_submission_file_response = function(data) {
+  ft.dialog_activity_icon($("#confirm_delete_dialog"), "hide");
+  $("#confirm_delete_dialog").dialog("close");
 
   // if it was a success, remove the link from the page
-  if (info.success == 1)
-  {
-    var field_id = info.field_id;
-    $("field_" + field_id + "_link").innerHTML = "";
-    $("field_" + field_id + "_upload_field").show();
+  if (data.success == 1) {
+  var field_id = data.field_id;
+    $("#cf_file_" + field_id + "_content").html("");
+    $("#cf_file_" + field_id + "_no_content").show();
   }
 
-  ft.display_message(info.target_message_id, info.success, info.message);
+  ft.display_message(data.target_message_id, data.success, data.message);
 }
+*/
 
 
 /**
@@ -528,22 +555,22 @@ ms.delete_submission_file_response = function(transport)
  * @param integer submission_id
  * @param integer email_id
  */
-ms.edit_submission_page_send_email = function(submission_id)
-{
-  var email_id = $("form_tools_email_template_id").value;
-  var page_url = g.root_url + "/global/code/actions.php?action=edit_submission_send_email&submission_id="
-    + submission_id + "&email_id=" + email_id + "&form_id=" + $("form_id").value;
+ms.edit_submission_page_send_email = function(submission_id) {
+  var email_id = $("#form_tools_email_template_id").val();
 
-  if (!email_id)
-  {
+  if (!email_id) {
     ft.display_message("ft_message", false, g.messages["notify_no_email_template_selected"]);
     return;
   }
+  var page_url = g.root_url + "/global/code/actions.php?action=edit_submission_send_email&submission_id="
+    + submission_id + "&email_id=" + email_id + "&form_id=" + $("#form_id").val();
 
-  new Ajax.Request(page_url, {
-    method: 'get',
-    onSuccess: ms.email_sent,
-    onFailure: function() { alert("Couldn't load page: " + page_url); }
+  $.ajax({
+    url:      page_url,
+    type:     "GET",
+    dataType: "json",
+    success:  ms.email_sent,
+    error:    function() { alert("Couldn't load page: " + page_url); }
   });
 }
 
@@ -551,8 +578,6 @@ ms.edit_submission_page_send_email = function(submission_id)
 /**
  * Called after an email has been successfully
  */
-ms.email_sent = function(transport)
-{
-  var info = transport.responseText.evalJSON();
-  ft.display_message("ft_message", info.success, info.message);
+ms.email_sent = function(data) {
+  ft.display_message("ft_message", data.success, data.message);
 }
