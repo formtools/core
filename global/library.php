@@ -107,7 +107,7 @@ $g_check_ft_sessions = (isset($g_check_ft_sessions)) ? $g_check_ft_sessions : tr
  * last error/warning/notice that occurs.
  * @global string $g_default_error_reporting
  */
-$g_default_error_reporting = 1;
+$g_default_error_reporting = 2047;
 
 /**
  * This feature currently has limited support in the code, but will be implemented more fully at a
@@ -212,7 +212,7 @@ $g_release_type = "alpha";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110526";
+$g_release_date = "20110527";
 
 /**
  * The minimum required PHP version needed to run Form Tools.

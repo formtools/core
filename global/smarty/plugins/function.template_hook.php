@@ -6,7 +6,7 @@
  * File:     function.template_hook
  * Type:     function
  * Name:     template_hook
- * Purpose:  processes whatever template hooks are defined at a particular template 
+ * Purpose:  processes whatever template hooks are defined at a particular template
  *           location.
  * -------------------------------------------------------------
  */
@@ -18,5 +18,5 @@ function smarty_function_template_hook($params, &$smarty)
     return;
   }
 
-  echo ft_process_template_hooks($params["location"], $smarty->_tpl_vars);
+  echo ft_process_template_hook_calls($params["location"], $smarty->_tpl_vars);
 }

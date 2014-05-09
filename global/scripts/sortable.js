@@ -179,6 +179,7 @@ sortable_ns._add_common_event_delegation = function(el) {
     }
   });
 
+
   /*
   Hmm... TODO
 
@@ -580,12 +581,12 @@ sortable_ns.add_group = function() {
 sortable_ns.insert_new_group = function(info) {
 
   var info = $.extend({
-	// required!
-	group_name:   "",
-	group_id:     "",
+  	// required!
+	  group_name:   "",
+  	group_id:     "",
 
-	// optional
-	is_groupable: false
+  	// optional
+	  is_groupable: false
   }, info);
 
   var group_label    = $(".sortable__new_group_name").val();

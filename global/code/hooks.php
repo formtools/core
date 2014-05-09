@@ -28,7 +28,7 @@
  *   The first parameter should be "start" or "after". It determines
  *   The function also takes a 3rd, optional parameter: priority. 1-100
  *
- * @copyright Encore Web Studios 2010
+ * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
  * @package 2-1-0
  * @subpackage General
@@ -46,19 +46,19 @@
  * @param string $when when in the functions the hooks should be processed. For code hooks, these are
  *    either "start" or "end"; for template hooks, this is the location attribute of the {template_hook ...}
  *    tag.
- * @param string $core_function the name of the core function to which this hook is to be attached
+ * @param string $function_name the name of the function to which this hook is to be attached
  * @param string $hook_function the name of the hook function, found in the modules library.php file
  * @param integer $priority 1-100 (100 lowest, 1 highest). Optional setting that determines the order
  *    in which this hook gets processed, in relation to OTHER hooks attached to the same event.
  * @param boolean $force_unique if set to true, this will only register hooks that haven't been set
  *    with this module, location, hook and core function.
  */
-function ft_register_hook($hook_type, $module_folder, $when, $core_function, $hook_function, $priority = 50, $force_unique = false)
+function ft_register_hook($hook_type, $module_folder, $when, $function_name, $hook_function, $priority = 50, $force_unique = false)
 {
   global $g_table_prefix;
 
   $when          = ft_sanitize($when);
-  $core_function = ft_sanitize($core_function);
+  $function_name = ft_sanitize($function_name);
   $hook_function = ft_sanitize($hook_function);
 
   $may_proceed = true;
@@ -66,11 +66,11 @@ function ft_register_hook($hook_type, $module_folder, $when, $core_function, $ho
   {
     $query = mysql_query("
       SELECT count(*) as c
-      FROM   {$g_table_prefix}hooks
+      FROM   {$g_table_prefix}hook_calls
       WHERE  hook_type = '$hook_type' AND
              action_location = '$when' AND
              module_folder = '$module_folder' AND
-             core_function = '$core_function' AND
+             function_name = '$function_name' AND
              hook_function = '$hook_function'
         ");
 
@@ -80,8 +80,8 @@ function ft_register_hook($hook_type, $module_folder, $when, $core_function, $ho
   }
 
   $result = mysql_query("
-    INSERT INTO {$g_table_prefix}hooks (hook_type, action_location, module_folder, core_function, hook_function, priority)
-    VALUES ('$hook_type', '$when', '$module_folder', '$core_function', '$hook_function', $priority)
+    INSERT INTO {$g_table_prefix}hook_calls (hook_type, action_location, module_folder, function_name, hook_function, priority)
+    VALUES ('$hook_type', '$when', '$module_folder', '$function_name', '$hook_function', $priority)
       ");
 
   if ($result)
@@ -103,7 +103,7 @@ function ft_register_hook($hook_type, $module_folder, $when, $core_function, $ho
 function ft_unregister_module_hooks($module_folder)
 {
   global $g_table_prefix;
-  mysql_query("DELETE FROM {$g_table_prefix}hooks WHERE module_folder = '$module_folder'");
+  mysql_query("DELETE FROM {$g_table_prefix}hook_calls WHERE module_folder = '$module_folder'");
 }
 
 
@@ -111,19 +111,19 @@ function ft_unregister_module_hooks($module_folder)
  * Returns all hooks associated with a particular function event, ordered by priority.
  *
  * @param string $event
- * @param string $core_function
+ * @param string $function_name
  * @return array a hash of hook information
  */
-function ft_get_hooks($event, $hook_type, $core_function)
+function ft_get_hook_calls($event, $hook_type, $function_name)
 {
   global $g_table_prefix;
 
   $query = mysql_query("
     SELECT *
-    FROM   {$g_table_prefix}hooks
+    FROM   {$g_table_prefix}hook_calls
     WHERE  hook_type = '$hook_type' AND
            action_location = '$event' AND
-           core_function = '$core_function'
+           function_name = '$function_name'
     ORDER BY priority ASC
       ");
 
@@ -141,13 +141,13 @@ function ft_get_hooks($event, $hook_type, $core_function)
  * @param string $module_folder
  * @return array
  */
-function ft_get_module_hooks($module_folder)
+function ft_get_module_hook_calls($module_folder)
 {
   global $g_table_prefix;
 
   $query = mysql_query("
     SELECT *
-    FROM   {$g_table_prefix}hooks
+    FROM   {$g_table_prefix}hook_calls
     WHERE  module_folder = '$module_folder'
     ORDER BY priority ASC
       ");
@@ -177,13 +177,13 @@ function ft_get_module_hooks($module_folder)
  * @param $vars whatever vars are being passed to the hooks from the context of the calling function
  * @param $overridable_vars whatever variables may be overridden by the hook
  */
-function ft_process_hooks($event, $vars, $overridable_vars)
+function ft_process_hook_calls($event, $vars, $overridable_vars)
 {
   $backtrace = debug_backtrace();
   $calling_function = $backtrace[1]["function"];
 
   // get the hooks associated with this core function and event
-  $hooks = ft_get_hooks($event, "code", $calling_function);
+  $hooks = ft_get_hook_calls($event, "code", $calling_function);
 
   // extract the var passed from the calling function into the current scope
   $return_vals = array();
@@ -192,7 +192,7 @@ function ft_process_hooks($event, $vars, $overridable_vars)
     // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
     // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
     $vars["form_tools_hook_info"] = $hook_info;
-    $updated_vars = ft_process_hook($hook_info["module_folder"], $hook_info["hook_function"], $vars, $overridable_vars, $calling_function);
+    $updated_vars = ft_process_hook_call($hook_info["module_folder"], $hook_info["hook_function"], $vars, $overridable_vars, $calling_function);
 
     // now return whatever values have been overwritten by the hooks
     foreach ($overridable_vars as $var_name)
@@ -214,7 +214,7 @@ function ft_process_hooks($event, $vars, $overridable_vars)
  * @param string $hook_function
  * @param array $vars
  */
-function ft_process_hook($module_folder, $hook_function, $vars, $overridable_vars, $calling_function)
+function ft_process_hook_call($module_folder, $hook_function, $vars, $overridable_vars, $calling_function)
 {
   global $g_root_dir;
 
@@ -251,9 +251,9 @@ function ft_process_hook($module_folder, $hook_function, $vars, $overridable_var
  *
  * @param string $location
  */
-function ft_process_template_hooks($location, $template_vars)
+function ft_process_template_hook_calls($location, $template_vars)
 {
-  $hooks = ft_get_hooks($location, "template", "");
+  $hooks = ft_get_hook_calls($location, "template", "");
 
   // extract the var passed from the calling function into the current scope
   foreach ($hooks as $hook_info)
@@ -261,7 +261,7 @@ function ft_process_template_hooks($location, $template_vars)
     // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
     // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
     $template_vars["form_tools_hook_info"] = $hook_info;
-    ft_process_template_hook($hook_info["module_folder"], $hook_info["hook_function"], $location, $template_vars);
+    ft_process_template_hook_call($hook_info["module_folder"], $hook_info["hook_function"], $location, $template_vars);
   }
 }
 
@@ -274,7 +274,7 @@ function ft_process_template_hooks($location, $template_vars)
  * @param string $hook_function
  * @return string
  */
-function ft_process_template_hook($module_folder, $hook_function, $location, $template_vars)
+function ft_process_template_hook_call($module_folder, $hook_function, $location, $template_vars)
 {
   global $g_root_dir;
 
@@ -284,13 +284,202 @@ function ft_process_template_hook($module_folder, $hook_function, $location, $te
   return $html;
 }
 
+
 /**
  * Deletes a hook by hook ID.
  *
  * @param integer $hook_id
  */
-function ft_delete_hook($hook_id)
+function ft_delete_hook_calls($hook_id)
 {
   global $g_table_prefix;
-  mysql_query("DELETE FROM {$g_table_prefix}hooks WHERE hook_id = $hook_id");
+  mysql_query("DELETE FROM {$g_table_prefix}hook_calls WHERE hook_id = $hook_id");
+}
+
+
+/**
+ * Called automatically after upgrading the Core, theme or module. This parses the entire Form Tools code base -
+ * including any installed modules - and updates the list of available hooks. As of 2.1.0, the available hooks
+ * are listed in the ft_hooks table, and the actual hook calls are in the hook_calls table (formerly the hooks
+ * table).
+ *
+ * Before 2.1.0, the list of hooks was stored in /global/misc/hook_info.ini. However it only stored hooks for the
+ * Core and habitually got out of date. This is a lot, lot better!
+ */
+function ft_update_available_hooks()
+{
+  global $g_table_prefix;
+
+  $ft_root = realpath(dirname(__FILE__) . "/../../");
+  $hook_locations = array(
+    // code hooks
+	"process.php"        => "core",
+	"global/code"        => "core",
+	"global/api/api.php" => "api",
+    "modules"            => "module",
+
+    // template hooks
+    "themes/default"  => "core"
+  );
+
+  $results = array(
+    "code_hooks"     => array(),
+    "template_hooks" => array()
+  );
+  while (list($file_or_folder, $component) = each($hook_locations))
+  {
+  	_ft_find_hooks("$ft_root/$file_or_folder", $ft_root, $component, $results);
+  }
+
+  // now update the database
+  mysql_query("TRUNCATE {$g_table_prefix}hooks");
+  foreach ($results["code_hooks"] as $hook_info)
+  {
+    $component       = $hook_info["component"];
+    $file            = $hook_info["file"];
+    $function_name   = $hook_info["function_name"];
+    $action_location = $hook_info["action_location"];
+    $params_str      = implode(",", $hook_info["params"]);
+    $overridable_str = implode(",", $hook_info["overridable"]);
+
+    mysql_query("
+      INSERT INTO {$g_table_prefix}hooks (hook_type, component, filepath, action_location, function_name, params, overridable)
+      VALUES ('code', '$component', '$file', '$action_location', '$function_name', '$params_str', '$overridable_str')
+    ");
+  }
+
+  foreach ($results["template_hooks"] as $hook_info)
+  {
+    $component = $hook_info["component"];
+    $template  = $hook_info["template"];
+    $location  = $hook_info["location"];
+
+    mysql_query("
+      INSERT INTO {$g_table_prefix}hooks (hook_type, component, filepath, action_location, function_name, params, overridable)
+      VALUES ('template', '$component', '$template', '$location', '', '', '')
+    ");
+  }
+}
+
+
+/**
+ * Used by the ft_update_available_hooks function to find all the hooks in the Form Tools script.
+ *
+ * @param string $curr_folder
+ * @param string $root_folder
+ * @param string $component "core", "module" or "api"
+ * @param array $results
+ */
+function _ft_find_hooks($curr_folder, $root_folder, $component, &$results)
+{
+  if (is_file($curr_folder))
+  {
+    $is_php_file = preg_match("/\.php$/", $curr_folder);
+    $is_tpl_file = preg_match("/\.tpl$/", $curr_folder);
+    if ($is_php_file)
+      $results["code_hooks"] = array_merge($results["code_hooks"], _ft_extract_code_hooks($curr_folder, $root_folder, $component));
+    if ($is_tpl_file)
+      $results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
+  }
+  else
+  {
+    $handle = opendir($curr_folder);
+    while (($file = readdir($handle)) !== false)
+    {
+      if ($file == '.' || $file == '..')
+         continue;
+
+      $filepath = $curr_folder . '/' . $file;
+      if (is_link($filepath))
+        continue;
+      if (is_file($filepath))
+      {
+      	$is_php_file = preg_match("/\.php$/", $filepath);
+      	$is_tpl_file = preg_match("/\.tpl$/", $filepath);
+      	if ($is_php_file)
+      	  $results["code_hooks"]     = array_merge($results["code_hooks"], _ft_extract_code_hooks($filepath, $root_folder, $component));
+      	if ($is_tpl_file)
+      	  $results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
+      }
+      else if (is_dir($filepath))
+      {
+        _ft_find_hooks($filepath, $root_folder, $component, $results);
+      }
+    }
+    closedir($handle);
+  }
+}
+
+
+function _ft_extract_code_hooks($filepath, $root_folder, $component)
+{
+  $lines = file($filepath);
+  $current_function = "";
+  $found_hooks = array();
+  foreach ($lines as $line)
+  {
+    if (preg_match("/^function\s([^(]*)/", $line, $matches))
+    {
+      $current_function = $matches[1];
+      continue;
+    }
+
+    // this assumes that the hooks are always on a single line
+    if (preg_match("/extract\(\s*ft_process_hook_calls\(\s*[\"']([^\"']*)[\"']\s*,\s*compact\(([^)]*)\)\s*,\s*array\(([^)]*)\)/", $line, $matches))
+    {
+      $action_location = $matches[1];
+      $params          = $matches[2];
+      $overridable     = $matches[3];
+
+      // all params should be variables. No whitespace, no double-quotes, no single-quotes
+      $params = str_replace("\"", "", $params);
+      $params = str_replace(" ", "", $params);
+      $params = str_replace("'", "", $params);
+      $params = explode(",", $params);
+
+      // same as overridable vars!
+      $overridable = str_replace("\"", "", $overridable);
+      $overridable = str_replace(" ", "", $overridable);
+      $overridable = str_replace("'", "", $overridable);
+      $overridable = explode(",", $overridable);
+      $root_folder = preg_quote($root_folder);
+      $file = preg_replace("%" . $root_folder . "%", "", $filepath);
+
+      $found_hooks[] = array(
+        "file"            => $file,
+        "function_name"   => $current_function,
+        "action_location" => $action_location,
+        "params"          => $params,
+        "overridable"     => $overridable,
+        "component"       => $component
+      );
+    }
+  }
+
+  return $found_hooks;
+}
+
+
+function _ft_extract_template_hooks($filepath, $root_folder, $component)
+{
+  $lines = file($filepath);
+  $current_function = "";
+  $found_hooks = array();
+
+  foreach ($lines as $line)
+  {
+    // this assumes that the hooks are always on a single line
+    if (preg_match("/\{template_hook\s+location\s*=\s*[\"']([^}\"]*)/", $line, $matches))
+    {
+      $root_folder = preg_quote($root_folder);
+      $template = preg_replace("%" . $root_folder . "%", "", $filepath);
+      $found_hooks[] = array(
+        "template"  => $template,
+        "location"  => $matches[1],
+        "component" => $component
+      );
+    }
+  }
+
+  return $found_hooks;
 }

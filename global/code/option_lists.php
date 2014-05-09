@@ -62,7 +62,7 @@ function ft_get_option_lists($page_num = 1, $order = "option_list_name-ASC")
   $return_hash["results"] = $option_lists;
   $return_hash["num_results"]  = $count_hash["c"];
 
-  extract(ft_process_hooks("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
   return $return_hash;
 }
@@ -473,7 +473,7 @@ function ft_update_option_list($list_id, $info)
 
   $success = true;
   $message = $LANG["notify_option_list_updated"];
-  extract(ft_process_hooks("end", compact("list_id", "info"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("list_id", "info"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -663,7 +663,7 @@ function ft_delete_option_list($list_id)
 
   $success = true;
   $message = $LANG["notify_option_list_deleted"];
-  extract(ft_process_hooks("end", compact("list_id"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("list_id"), array("success", "message")), EXTR_OVERWRITE);
 
   return array(true, $message);
 }

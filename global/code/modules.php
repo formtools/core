@@ -131,7 +131,7 @@ function ft_uninstall_module($module_id)
   else
     $message = $LANG["notify_module_uninstalled_files_not_deleted"];
 
-  extract(ft_process_hooks("end", compact("module_id", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("module_id", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -192,7 +192,7 @@ function ft_get_module_menu_items($module_id, $module_folder)
     $menu_items[] = $row;
   }
 
-  extract(ft_process_hooks("end", compact("menu_items", "module_id", "module_folder"), array("menu_items")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("menu_items", "module_id", "module_folder"), array("menu_items")), EXTR_OVERWRITE);
 
   return $menu_items;
 }
@@ -210,7 +210,7 @@ function ft_get_module($module_id)
   $query = mysql_query("SELECT * FROM {$g_table_prefix}modules WHERE module_id = $module_id");
   $result = mysql_fetch_assoc($query);
 
-  extract(ft_process_hooks("end", compact("module_id", "result"), array("result")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("module_id", "result"), array("result")), EXTR_OVERWRITE);
 
   return $result;
 }
@@ -250,7 +250,7 @@ function ft_search_modules($search_criteria)
   if (!isset($search_criteria["order"]))
     $search_criteria["order"] = "module_name-DESC";
 
-  extract(ft_process_hooks("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
 
   // verbose, but at least it prevents any invalid sorting...
   $order_clause = "";
@@ -330,7 +330,7 @@ function ft_get_modules()
   while ($module = mysql_fetch_assoc($query))
     $modules_info[] = $module;
 
-  extract(ft_process_hooks("start", compact("modules_info"), array("modules_info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("modules_info"), array("modules_info")), EXTR_OVERWRITE);
 
   return $modules_info;
 }
@@ -399,7 +399,7 @@ function ft_init_module_page($account_type = "admin")
   $LANG[$module_folder] = $content;
   $GLOBALS["L"] = $content;
 
-  extract(ft_process_hooks("end", compact("account_type", "module_folder"), array()), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("account_type", "module_folder"), array()), EXTR_OVERWRITE);
 }
 
 
@@ -702,7 +702,7 @@ function ft_include_module($module_folder)
   $content = ft_get_module_lang_file_contents($module_folder);
   $LANG[$module_folder] = $content;
 
-  extract(ft_process_hooks("end", compact("module_folder"), array()), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("module_folder"), array()), EXTR_OVERWRITE);
 }
 
 
@@ -763,7 +763,7 @@ function ft_install_module($module_id)
   $module_info = ft_get_module($module_id);
   $module_folder = $module_info["module_folder"];
 
-   $success = true;
+  $success = true;
   $message = ft_eval_smarty_string($LANG["notify_module_installed"], array("link" => "$g_root_url/modules/$module_folder"));
 
   $has_custom_install_script = false;

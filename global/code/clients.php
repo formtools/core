@@ -30,7 +30,7 @@ function ft_update_client($account_id, $info)
   $message = $LANG["notify_account_updated"];
   $info = ft_sanitize($info);
 
-  extract(ft_process_hooks("start", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
 
   $client_info = ft_get_account_info($account_id);
 
@@ -184,7 +184,7 @@ function ft_update_client($account_id, $info)
       break;
   }
 
-  extract(ft_process_hooks("end", compact("account_id", "info"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("account_id", "info"), array("success", "message")), EXTR_OVERWRITE);
 
   // update sessions
   $_SESSION["ft"]["settings"] = ft_get_settings();
@@ -220,7 +220,7 @@ function ft_delete_client($account_id)
 
   $success = true;
   $message = $LANG["notify_account_deleted"];
-  extract(ft_process_hooks("end", compact("account_id"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("account_id"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -242,7 +242,7 @@ function ft_disable_client($account_id)
 
   mysql_query("UPDATE {$g_table_prefix}accounts SET account_status = 'disabled' WHERE account_id = $account_id");
 
-  extract(ft_process_hooks("end", compact("account_id"), array()), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("account_id"), array()), EXTR_OVERWRITE);
 }
 
 
@@ -298,7 +298,7 @@ function ft_search_clients($search_criteria = array())
 {
   global $g_table_prefix;
 
-  extract(ft_process_hooks("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
 
   if (!isset($search_criteria["order"]))
     $search_criteria["order"] = "client_id-DESC";
@@ -357,7 +357,7 @@ function ft_search_clients($search_criteria = array())
   while ($client = mysql_fetch_assoc($client_query_result))
     $clients[] = $client;
 
-  extract(ft_process_hooks("end", compact("search_criteria", "clients"), array("clients")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("search_criteria", "clients"), array("clients")), EXTR_OVERWRITE);
 
   return $clients;
 }
@@ -470,7 +470,7 @@ function ft_get_client_form_views($account_id)
     $info[$form_id] = $view_ids;
   }
 
-  extract(ft_process_hooks("end", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
 
   return $info;
 }

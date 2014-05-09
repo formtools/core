@@ -129,7 +129,7 @@ function ft_get_view($view_id, $custom_params = array())
   $view_info["client_omit_list"] = (isset($view_info["access_type"]) && $view_info["access_type"] == "public") ?
     ft_get_public_view_omit_list($view_id) : array();
 
-  extract(ft_process_hooks("end", compact("view_id", "view_info"), array("view_info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("view_id", "view_info"), array("view_info")), EXTR_OVERWRITE);
 
   return $view_info;
 }
@@ -163,7 +163,7 @@ function ft_get_views($form_id)
   $return_hash["results"] = $view_info;
   $return_hash["num_results"]  = count($view_info);
 
-  extract(ft_process_hooks("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
   return $return_hash;
 }
@@ -186,7 +186,7 @@ function ft_get_view_ids($form_id)
   while ($row = mysql_fetch_assoc($query))
     $view_ids[] = $row["view_id"];
 
-  extract(ft_process_hooks("end", compact("view_ids"), array("view_ids")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("view_ids"), array("view_ids")), EXTR_OVERWRITE);
 
   return $view_ids;
 }
@@ -252,7 +252,7 @@ function ft_get_view_tabs($view_id, $return_non_empty_tabs_only = false)
     $tab_info[$row["tab_number"]] = array("tab_label" => $row["tab_label"]);
   }
 
-  extract(ft_process_hooks("end", compact("view_id", "tab_info"), array("tab_info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("view_id", "tab_info"), array("tab_info")), EXTR_OVERWRITE);
 
   return $tab_info;
 }
@@ -412,7 +412,7 @@ function ft_create_new_view($form_id, $group_id, $view_name = "", $create_from_v
     }
   }
 
-  extract(ft_process_hooks("end", compact("view_id"), array()), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("view_id"), array()), EXTR_OVERWRITE);
 
   return $view_id;
 }
@@ -719,7 +719,7 @@ function ft_delete_view($view_id)
 
   $success = true;
   $message = $LANG["notify_view_deleted"];
-  extract(ft_process_hooks("end", compact("view_id"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("view_id"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -794,7 +794,7 @@ function ft_get_view_clients($view_id)
   while ($account = mysql_fetch_assoc($account_query))
     $account_info[] = $account;
 
-  extract(ft_process_hooks("end", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
 
   return $account_info;
 }
@@ -878,7 +878,7 @@ function ft_update_view($view_id, $info)
 
   $success = true;
   $message = $LANG["notify_view_updated"];
-  extract(ft_process_hooks("end", compact("view_id", "info"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("view_id", "info"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -948,7 +948,7 @@ function ft_get_view_filter_sql($view_id)
         );
   }
 
-  extract(ft_process_hooks("start", compact("placeholders", "is_client_account"), array("placeholders", "is_client_account")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("placeholders", "is_client_account"), array("placeholders", "is_client_account")), EXTR_OVERWRITE);
 
   $result = mysql_query("
     SELECT filter_type, filter_sql
@@ -1031,7 +1031,7 @@ function ft_get_form_views($form_id, $account_id = "")
       $view_hash[] = $row;
   }
 
-  extract(ft_process_hooks("end", compact("view_hash"), array("view_hash")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("view_hash"), array("view_hash")), EXTR_OVERWRITE);
 
   return $view_hash;
 }
@@ -1831,7 +1831,7 @@ function ft_get_view_list($form_id)
   while ($row = mysql_fetch_assoc($query))
     $result[] = $row;
 
-  extract(ft_process_hooks("end", compact("form_id", "result"), array("result")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("form_id", "result"), array("result")), EXTR_OVERWRITE);
 
   return $result;
 }

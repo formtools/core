@@ -15,7 +15,6 @@
  */
 
 
-
 // always include the core library functions
 $folder = dirname(__FILE__);
 require_once("$folder/global/library.php");
@@ -65,7 +64,7 @@ function ft_process_form($form_data)
   $form_id = $form_data["form_tools_form_id"];
   $form_info = ft_get_form($form_id);
 
-  extract(ft_process_hooks("start", compact("form_info", "form_id", "form_data"), array("form_data")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("form_info", "form_id", "form_data"), array("form_data")), EXTR_OVERWRITE);
 
   // check to see if this form has been completely set up
   if ($form_info["is_complete"] == "no")
@@ -167,7 +166,6 @@ function ft_process_form($form_data)
         );
   }
 
-
   // now examine the contents of the POST/GET submission and get a list of those fields
   // which we're going to update
   $valid_form_fields = array();
@@ -204,8 +202,7 @@ function ft_process_form($form_data)
   }
 
   $now = ft_get_current_datetime();
-  $ip_address      = $_SERVER["REMOTE_ADDR"];
-  $is_finalized    = "yes";
+  $ip_address = $_SERVER["REMOTE_ADDR"];
 
   $col_names = array_keys($valid_form_fields);
   $col_names_str = join(", ", $col_names);
@@ -220,10 +217,10 @@ function ft_process_form($form_data)
   // build our query
   $query = "
       INSERT INTO {$g_table_prefix}form_$form_id ($col_names_str submission_date, last_modified_date, ip_address, is_finalized)
-      VALUES ($col_values_str '$now', '$now', '$ip_address', '$is_finalized')
+      VALUES ($col_values_str '$now', '$now', '$ip_address', 'yes')
            ";
 
-  // add the submission to the database (if form_tools_ignore_submission key isn't set by either the form or a module
+  // add the submission to the database (if form_tools_ignore_submission key isn't set by either the form or a module)
   $submission_id = "";
   if (!isset($form_data["form_tools_ignore_submission"]))
   {
@@ -239,7 +236,7 @@ function ft_process_form($form_data)
     }
 
     $submission_id = mysql_insert_id();
-    extract(ft_process_hooks("end", compact("form_id", "submission_id"), array()), EXTR_OVERWRITE);
+    extract(ft_process_hook_calls("end", compact("form_id", "submission_id"), array()), EXTR_OVERWRITE);
   }
 
 
@@ -285,31 +282,8 @@ function ft_process_form($form_data)
     }
   }
 
-  // now that the submission has been added to the database, upload any files that were included and
-  // store the file name in the appropriate field
-  /*
-  TODO - move to module
-  while (list($form_field, $fileinfo) = each($_FILES))
-  {
-    if (empty($fileinfo["name"]))
-      continue;
-
-    if (array_key_exists($form_field, $custom_form_fields))
-    {
-      $field_id   = $custom_form_fields[$form_field]["field_id"];
-      $field_type = $custom_form_fields[$form_field]["field_type"];
-
-      if      ($field_type == "file")
-        list($success, $message, $filename) = ft_upload_submission_file($form_id, $submission_id, $field_id, $fileinfo);
-      else if ($field_type == "image")
-        list($success, $message, $filename) = ft_upload_submission_image($form_id, $submission_id, $field_id, $fileinfo);
-    }
-
-    // if required, add the filename to the redirect query params
-    if ($custom_form_fields[$form_field]["include_on_redirect"] == "yes")
-      $redirect_query_params[] = "$form_field=$filename";
-  }
-  */
+  // now process any file fields
+  extract(ft_process_hook_calls("manage_files", compact("form_id", "submission_id"), array("success", "message")), EXTR_OVERWRITE);
 
   // send any emails
   ft_send_emails("on_submission", $form_id, $submission_id);

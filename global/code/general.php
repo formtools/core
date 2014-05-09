@@ -213,7 +213,7 @@ function ft_eval_smarty_string($placeholder_str, $placeholders = array(), $theme
 
   $output = $smarty->fetch("eval.tpl");
 
-  extract(ft_process_hooks("end", compact("output", "placeholder_str", "placeholders", "theme"), array("output")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("output", "placeholder_str", "placeholders", "theme"), array("output")), EXTR_OVERWRITE);
 
   return $output;
 }
@@ -420,7 +420,7 @@ function ft_check_permission($account_type)
   $boot_out_user = false;
   $message_flag = "";
 
-  extract(ft_process_hooks("end", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
 
   // some VERY complex logic here. The "user" account permission type is included so that people logged in
   // via the Submission Accounts can still view certain pages, e.g. pages with the Pages module. This checks that
@@ -517,7 +517,7 @@ function ft_check_client_may_view($client_id, $form_id, $view_id)
   // $permissions = ft_get_client_form_views($account_info["account_id"]);
   $permissions = isset($_SESSION["ft"]["permissions"]) ? $_SESSION["ft"]["permissions"] : array();
 
-  extract(ft_process_hooks("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
 
   if (!array_key_exists($form_id, $permissions))
     ft_logout_user("notify_invalid_permissions");
@@ -752,7 +752,7 @@ g.messages     = [];
 $rows
 END;
 
-  extract(ft_process_hooks("end", compact("js"), array("js")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("js"), array("js")), EXTR_OVERWRITE);
 
   return $js;
 }

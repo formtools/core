@@ -3,6 +3,9 @@
 require_once("../global/library.php");
 require_once("library.php");
 
+// the home-stretch! populate the hooks table
+ft_update_available_hooks();
+
 // add whatever themes and modules are in the modules and themes folders
 ft_update_module_list();
 ft_update_theme_list();

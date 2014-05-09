@@ -26,7 +26,7 @@ function ft_get_theme($theme_id)
   $query = mysql_query("SELECT * FROM {$g_table_prefix}themes WHERE theme_id = $theme_id");
   $theme_info = mysql_fetch_assoc($query);
 
-  extract(ft_process_hooks("end", compact("theme_id", "theme_info"), array("theme_info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("theme_id", "theme_info"), array("theme_info")), EXTR_OVERWRITE);
 
   return $theme_info;
 }
@@ -46,7 +46,7 @@ function ft_get_theme_by_theme_folder($theme_folder)
   $query = mysql_query("SELECT * FROM {$g_table_prefix}themes WHERE theme_folder = '$theme_folder'");
   $theme_info = mysql_fetch_assoc($query);
 
-  extract(ft_process_hooks("end", compact("theme_folder", "theme_info"), array("theme_info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("theme_folder", "theme_info"), array("theme_info")), EXTR_OVERWRITE);
 
   return $theme_info;
 }
@@ -69,7 +69,7 @@ function ft_get_themes($enabled_only = false)
   while ($theme = mysql_fetch_assoc($query))
     $theme_info[] = $theme;
 
-  extract(ft_process_hooks("end", compact("theme_info"), array("theme_info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("theme_info"), array("theme_info")), EXTR_OVERWRITE);
 
   return $theme_info;
 }
@@ -140,7 +140,7 @@ function ft_update_theme_list()
 
   $success = true;
   $message = $LANG["notify_theme_list_updated"];
-  extract(ft_process_hooks("end", array(), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", array(), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -244,7 +244,7 @@ function ft_display_page($template, $page_vars, $theme = "")
   if ($g_smarty_debug)
     $g_smarty->debugging = true;
 
-  extract(ft_process_hooks("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
 
   $g_smarty->display(ft_get_smarty_template_with_fallback($theme, $template));
 
@@ -390,7 +390,7 @@ function ft_display_module_page($template, $page_vars = array(), $theme = "")
   if ($g_smarty_debug)
     $g_smarty->debugging = true;
 
-  extract(ft_process_hooks("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
 
   $g_smarty->display("$g_root_dir/modules/$module_folder/$template");
 

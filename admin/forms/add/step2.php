@@ -3,6 +3,8 @@
 require("../../../global/session_start.php");
 ft_check_permission("admin");
 
+$sortable_id = "multi_page_form_list";
+
 $form_id = ft_load_field("form_id", "add_form_form_id", "");
 $request = array_merge($_POST, $_GET);
 $submission_type = ft_load_field("submission_type", "submission_type");
@@ -151,6 +153,7 @@ $page_vars["page_url"] = ft_get_page_url("add_form2");
 $page_vars["head_title"] = "{$LANG['phrase_add_form']} - {$LANG["phrase_step_2"]}";
 $page_vars["page_values"] = $page_values;
 $page_vars["form_id"] = $form_id;
+$page_vars["sortable_id"] = $sortable_id;
 $page_vars["submission_type"] = $submission_type;
 $page_vars["num_pages_in_multi_page_form"] = $num_pages_in_multi_page_form;
 $page_vars["selected_client_ids"] = $selected_client_ids;
@@ -158,8 +161,8 @@ $page_vars["js_messages"] = array("validation_no_url", "phrase_check_url", "word
   "word_verified", "word_close", "validation_no_form_url");
 
 $page_vars["head_string"] =<<< EOF
-<script type="text/javascript" src="$g_root_url/global/scripts/manage_forms.js"></script>
-<script type="text/javascript" src="$g_root_url/global/scripts/sortable.js"></script>
+  <script src="$g_root_url/global/scripts/manage_forms.js"></script>
+  <script src="$g_root_url/global/scripts/sortable.js"></script>
 EOF;
 
 $page_vars["head_js"] =<<< END
@@ -181,7 +184,6 @@ rsv.onCompleteHandler = function() {
 
 $(function() {
   $("#form_name").focus();
-
   $(".is_multi_page_form").bind("click", function() {
     if ($(this).val() == "yes") {
       $("#form_url_single, #form_label_single").hide();
@@ -191,7 +193,6 @@ $(function() {
       $("#form_url_multiple, #form_label_multiple").hide();
     }
   });
-
   ft.init_check_url_buttons();
 });
 

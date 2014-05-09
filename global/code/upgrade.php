@@ -1215,16 +1215,32 @@ function ft_upgrade_form_tools()
     ");
   }
 
-  if ($old_version_info["release_date"] < 20110523)
+  if ($old_version_info["release_date"] < 20110527)
   {
   	mysql_query("
-  	  UPDATE {$g_table_prefix}field_typest
+  	  UPDATE {$g_table_prefix}field_types
   	  SET    raw_field_type_map_multi_select_id = 16
   	  WHERE  field_type_identifier = 'radio_buttons'
   	");
 
-  	// TODO update date View smarty markup here (added {strip})
+  	mysql_query("ALTER TABLE {$g_table_prefix}ft_hooks RENAME {$g_table_prefix}hook_calls");
+    mysql_query("ALTER TABLE {$g_table_prefix}hook_calls CHANGE core_function function_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
+
+    mysql_query("
+      CREATE TABLE {$g_table_prefix}hooks (
+        id mediumint(8) unsigned NOT NULL auto_increment,
+        hook_type enum('code','template') NOT NULL,
+        component enum('core','api','module') NOT NULL,
+        filepath varchar(255) NOT NULL,
+        action_location varchar(255) NOT NULL,
+        function_name varchar(255) NOT NULL,
+        params mediumtext,
+        overridable mediumtext,
+        PRIMARY KEY (id)
+      )");
   }
+
+  // TODO update radios, date View smarty markup here (added {strip})
 
   // ----------------------------------------------------------------------------------------------
 
@@ -1237,6 +1253,10 @@ function ft_upgrade_form_tools()
       "release_type"    => $g_release_type
     );
     ft_set_settings($new_settings);
+
+    // any time the Core version changed, update the list of available hooks in the database
+    ft_update_available_hooks();
+
     $is_upgraded = true;
     $success     = true;
   }

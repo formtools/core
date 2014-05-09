@@ -192,7 +192,7 @@ function ft_update_main_settings($infohash)
 
   ft_set_settings($settings);
 
-  extract(ft_process_hooks("end", compact("settings"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("settings"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -281,7 +281,7 @@ function ft_update_account_settings($infohash)
 
   ft_set_settings($settings);
 
-  extract(ft_process_hooks("end", compact("settings"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("settings"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -394,7 +394,7 @@ function ft_update_file_settings($infohash)
 */
   }
 
-  extract(ft_process_hooks("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -432,7 +432,7 @@ function ft_update_wysiwyg_settings($infohash)
 
   ft_set_settings($settings);
 
-  extract(ft_process_hooks("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -598,7 +598,7 @@ function ft_update_theme_settings($infohash)
   $success = true;
   $message = $LANG["notify_themes_settings_updated"];
 
-  extract(ft_process_hooks("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }

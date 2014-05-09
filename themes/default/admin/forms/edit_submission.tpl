@@ -10,9 +10,9 @@
             title="{$LANG.phrase_edit_form}" width="48" height="23" /></a>
         </div>
         <div class="views_dropdown">
-	      {views_dropdown form_id=$form_id submission_id=$submission_id selected=$view_id omit_hidden_views=true
-	        onchange="window.location='`$same_page`?form_id=`$form_id`&submission_id=`$submission_id`&view_id=' + this.value"}
-	    </div>
+        {views_dropdown form_id=$form_id submission_id=$submission_id selected=$view_id omit_hidden_views=true
+          onchange="window.location='`$same_page`?form_id=`$form_id`&submission_id=`$submission_id`&view_id=' + this.value"}
+      </div>
       </td>
     </tr>
     </table>
@@ -47,23 +47,23 @@
           <h3>{$group.group_name|upper}</h3>
         {/if}
 
-	      {if $fields|@count > 0}
-	        <table class="list_table" cellpadding="1" cellspacing="1" border="0" width="100%">
-	      {/if}
+        {if $fields|@count > 0}
+          <table class="list_table" cellpadding="1" cellspacing="1" border="0" width="100%">
+        {/if}
 
-	      {foreach from=$fields item=curr_field}
-	        {assign var=field_id value=$field.field_id}
-	        <tr>
-	          <td width="150" class="pad_left_small" valign="top">{$curr_field.field_title}</td>
-	          <td valign="top">
-	            {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$curr_field field_types=$field_types}
-	          </td>
-	        </tr>
-	      {/foreach}
+        {foreach from=$fields item=curr_field}
+          {assign var=field_id value=$field.field_id}
+          <tr>
+            <td width="150" class="pad_left_small" valign="top">{$curr_field.field_title}</td>
+            <td valign="top">
+              {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$curr_field field_types=$field_types}
+            </td>
+          </tr>
+        {/foreach}
 
-	      {if $fields|@count > 0}
-	        </table>
-	      {/if}
+        {if $fields|@count > 0}
+          </table>
+        {/if}
 
       {/foreach}
 

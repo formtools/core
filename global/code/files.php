@@ -59,7 +59,7 @@ function ft_get_unique_filename($folder, $filename)
     }
   }
 
-  extract(ft_process_hooks("end", compact("return_filename"), array("return_filename")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("return_filename"), array("return_filename")), EXTR_OVERWRITE);
 
   // return the appropriate filename
   return $return_filename;

@@ -41,17 +41,17 @@
       </tr>
       {if $submission_type == "code"}
       <tbody>
-	      <tr>
-	        <td class="pad_left_small">{$LANG.phrase_is_multi_page_form_q}</td>
-	        <td>
-	          <input type="radio" name="is_multi_page_form" class="is_multi_page_form" id="impf1" value="yes"
-	            {if $page_values.is_multi_page_form == "yes"}checked{/if} />
-	            <label for="impf1">{$LANG.word_yes}</label>
-	          <input type="radio" name="is_multi_page_form" class="is_multi_page_form" id="impf2" value="no"
-	            {if $page_values.is_multi_page_form == "no"}checked{/if} />
-	            <label for="impf2">{$LANG.word_no}</label>
-	        </td>
-	      </tr>
+        <tr>
+          <td class="pad_left_small">{$LANG.phrase_is_multi_page_form_q}</td>
+          <td>
+            <input type="radio" name="is_multi_page_form" class="is_multi_page_form" id="impf1" value="yes"
+              {if $page_values.is_multi_page_form == "yes"}checked{/if} />
+              <label for="impf1">{$LANG.word_yes}</label>
+            <input type="radio" name="is_multi_page_form" class="is_multi_page_form" id="impf2" value="no"
+              {if $page_values.is_multi_page_form == "no"}checked{/if} />
+              <label for="impf2">{$LANG.word_no}</label>
+          </td>
+        </tr>
       </tbody>
       {/if}
       <tr>
@@ -60,80 +60,80 @@
             <input type="hidden" name="is_multi_page_form" value="no" />
             {$LANG.phrase_form_url}
           {else}
-		        <span id="form_label_single" {if $page_values.is_multi_page_form == "yes"}style="display:none"{/if}>{$LANG.phrase_form_url}</span>
-		        <span id="form_label_multiple" {if $page_values.is_multi_page_form == "no"}style="display:none"{/if}>{$LANG.phrase_form_urls}</span>
+            <span id="form_label_single" {if $page_values.is_multi_page_form == "yes"}style="display:none"{/if}>{$LANG.phrase_form_url}</span>
+            <span id="form_label_multiple" {if $page_values.is_multi_page_form == "no"}style="display:none"{/if}>{$LANG.phrase_form_urls}</span>
           {/if}
         </td>
         <td>
           {if $submission_type == "direct"}
-		        <table width="100%" cellpadding="0" cellspacing="0">
-		        <tr>
-		          <td><input type="text" name="form_url" id="form_url" value="{$page_values.form_url}" style="width: 98%" /></td>
-		          <td width="60"><input type="button" class="check_url" id="check_url__form_url" value="{$LANG.phrase_check_url|escape}" /></td>
-		        </tr>
-		        </table>
-	        {else}
-	          <div id="form_url_single" {if $page_values.is_multi_page_form == "yes"}style="display:none"{/if}>
-		          <table width="100%" cellpadding="0" cellspacing="0">
-		          <tr>
-		            <td><input type="text" name="form_url" id="form_url" value="{$page_values.form_url}" style="width: 98%" /></td>
-		            <td width="60"><input type="button" class="check_url" id="check_url__form_url" value="{$LANG.phrase_check_url|escape}" /></td>
-		          </tr>
-		          </table>
-	          </div>
-	          <div id="form_url_multiple" {if $page_values.is_multi_page_form == "no"}style="display:none"{/if}>
-			        <div class="sortable multi_page_form_list">
-			          <ul class="header_row">
-			            <li class="col1">{$LANG.word_page}</li>
-			            <li class="col2">{$LANG.phrase_form_url}</li>
-			            <li class="col3"></li>
-			            <li class="col4 colN del"></li>
-			          </ul>
-			          <div class="clear"></div>
-			          <ul class="rows">
-			            {assign var=previous_item value=""}
-			            {foreach from=$page_values.multi_page_form_urls item=i name=row}
-			              {assign var=count value=$smarty.foreach.row.iteration}
-			              <li class="sortable_row{if $smarty.foreach.row.last} rowN{/if}">
-			                <div class="row_content">
-			                  <div class="row_group{if $smarty.foreach.row.last} rowN{/if}">
-			                    <input type="hidden" class="sr_order" value="{$count}" />
-			                    <ul>
-			                      <li class="col1 sort_col">{$count}</li>
-			                      <li class="col2"><input type="text" name="multi_page_urls[]" id="mp_url_{$count}" value="{$i.form_url|escape}" /></li>
-			                      <li class="col3"><input type="button" class="check_url" id="check_url__mp_url_{$count}" value="{$LANG.phrase_check_url|escape}" /></li>
-			                      <li class="col4 colN del"></li>
-			                    </ul>
-			                    <div class="clear"></div>
-			                  </div>
-			                </div>
-			                <div class="clear"></div>
-			              </li>
-			            {/foreach}
-			            {if $page_values.multi_page_form_urls|@count == 0}
-			              <li class="sortable_row">
-			                <div class="row_content">
-			                  <div class="row_group rowN">
-			                    <input type="hidden" class="sr_order" value="1" />
-			                    <ul>
-			                      <li class="col1 sort_col">1</li>
-			                      <li class="col2"><input type="text" name="multi_page_urls[]" id="mp_url_0" /></li>
-			                      <li class="col3"><input type="button" class="check_url" id="check_url__mp_url_0" value="{$LANG.phrase_check_url|escape}" /></li>
-			                      <li class="col4 colN del"></li>
-			                    </ul>
-			                    <div class="clear"></div>
-			                  </div>
-			                </div>
-			                <div class="clear"></div>
-			              </li>
-			            {/if}
-			          </ul>
-			        </div>
-			        <div class="clear"></div>
-		          <div>
-		            <a href="#" onclick="return mf_ns.add_multi_page_form_page()">{$LANG.phrase_add_row}</a>
-		          </div>
-		        </div>
+            <table width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td><input type="text" name="form_url" id="form_url" value="{$page_values.form_url}" style="width: 98%" /></td>
+              <td width="60"><input type="button" class="check_url" id="check_url__form_url" value="{$LANG.phrase_check_url|escape}" /></td>
+            </tr>
+            </table>
+          {else}
+            <div id="form_url_single" {if $page_values.is_multi_page_form == "yes"}style="display:none"{/if}>
+              <table width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td><input type="text" name="form_url" id="form_url" value="{$page_values.form_url}" style="width: 98%" /></td>
+                <td width="60"><input type="button" class="check_url" id="check_url__form_url" value="{$LANG.phrase_check_url|escape}" /></td>
+              </tr>
+              </table>
+            </div>
+            <div id="form_url_multiple" {if $page_values.is_multi_page_form == "no"}style="display:none"{/if}>
+              <div class="sortable multi_page_form_list" id="{$sortable_id}">
+                <ul class="header_row">
+                  <li class="col1">{$LANG.word_page}</li>
+                  <li class="col2">{$LANG.phrase_form_url}</li>
+                  <li class="col3"></li>
+                  <li class="col4 colN del"></li>
+                </ul>
+                <div class="clear"></div>
+                <ul class="rows">
+                  {assign var=previous_item value=""}
+                  {foreach from=$page_values.multi_page_form_urls item=i name=row}
+                    {assign var=count value=$smarty.foreach.row.iteration}
+                    <li class="sortable_row{if $smarty.foreach.row.last} rowN{/if}">
+                      <div class="row_content">
+                        <div class="row_group{if $smarty.foreach.row.last} rowN{/if}">
+                          <input type="hidden" class="sr_order" value="{$count}" />
+                          <ul>
+                            <li class="col1 sort_col">{$count}</li>
+                            <li class="col2"><input type="text" name="multi_page_urls[]" id="mp_url_{$count}" value="{$i.form_url|escape}" /></li>
+                            <li class="col3"><input type="button" class="check_url" id="check_url__mp_url_{$count}" value="{$LANG.phrase_check_url|escape}" /></li>
+                            <li class="col4 colN del"></li>
+                          </ul>
+                          <div class="clear"></div>
+                        </div>
+                      </div>
+                      <div class="clear"></div>
+                    </li>
+                  {/foreach}
+                  {if $page_values.multi_page_form_urls|@count == 0}
+                    <li class="sortable_row">
+                      <div class="row_content">
+                        <div class="row_group rowN">
+                          <input type="hidden" class="sr_order" value="1" />
+                          <ul>
+                            <li class="col1 sort_col">1</li>
+                            <li class="col2"><input type="text" name="multi_page_urls[]" id="mp_url_0" /></li>
+                            <li class="col3"><input type="button" class="check_url" id="check_url__mp_url_0" value="{$LANG.phrase_check_url|escape}" /></li>
+                            <li class="col4 colN del"></li>
+                          </ul>
+                          <div class="clear"></div>
+                        </div>
+                      </div>
+                      <div class="clear"></div>
+                    </li>
+                  {/if}
+                </ul>
+              </div>
+              <div class="clear"></div>
+              <div>
+                <a href="#" onclick="return mf_ns.add_multi_page_form_page()">{$LANG.phrase_add_row}</a>
+              </div>
+            </div>
           {/if}
         </td>
       </tr>
@@ -210,13 +210,13 @@
       </table>
 
       {if $submission_type == "direct"}
-	      <p>
-	        {$LANG.text_form_contains_file_fields}
-	        <input type="radio" name="uploading_files" id="uploading_files1" value="yes" {if $SESSION.uploading_files == "yes"}checked{/if} />
-	          <label for="uploading_files1">{$LANG.word_yes}</label>
-	        <input type="radio" name="uploading_files" id="uploading_files2" value="no" {if $SESSION.uploading_files == "no"}checked{/if} />
-	          <label for="uploading_files2">{$LANG.word_no}</label>
-	      </p>
+        <p>
+          {$LANG.text_form_contains_file_fields}
+          <input type="radio" name="uploading_files" id="uploading_files1" value="yes" {if $SESSION.uploading_files == "yes"}checked{/if} />
+            <label for="uploading_files1">{$LANG.word_yes}</label>
+          <input type="radio" name="uploading_files" id="uploading_files2" value="no" {if $SESSION.uploading_files == "no"}checked{/if} />
+            <label for="uploading_files2">{$LANG.word_no}</label>
+        </p>
       {/if}
 
       <p>

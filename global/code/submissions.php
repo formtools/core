@@ -67,7 +67,7 @@ function ft_create_blank_submission($form_id, $view_id, $is_finalized = false)
       ");
 
   $new_submission_id = mysql_insert_id();
-  extract(ft_process_hooks("end", compact("form_id", "now", "ip", "new_submission_id"), array()), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("form_id", "now", "ip", "new_submission_id"), array()), EXTR_OVERWRITE);
 
   return $new_submission_id;
 }
@@ -86,7 +86,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 {
   global $g_table_prefix, $LANG;
 
-  extract(ft_process_hooks("start", compact("form_id", "view_id", "submission_id", "is_admin"), array()), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("form_id", "view_id", "submission_id", "is_admin"), array()), EXTR_OVERWRITE);
 
   $form_info = ft_get_form($form_id);
   $form_fields = ft_get_form_fields($form_id);
@@ -169,7 +169,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
   _ft_cache_form_stats($form_id);
   _ft_cache_view_stats($view_id);
 
-  extract(ft_process_hooks("end", compact("form_id", "view_id", "submission_id", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("form_id", "view_id", "submission_id", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
 
   // update sessions
   if (isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) && in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]))
@@ -217,7 +217,7 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
   }
 
   $submissions_to_delete = $submission_ids;
-  extract(ft_process_hooks("start", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"),
+  extract(ft_process_hook_calls("start", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"),
     array("submission_ids")), EXTR_OVERWRITE);
 
   $form_info = ft_get_form($form_id);
@@ -330,7 +330,7 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
     ft_send_emails("on_delete", $form_id, $submission_id);
 
   $submissions_to_delete = $submission_ids;
-  extract(ft_process_hooks("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"),
+  extract(ft_process_hook_calls("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"),
     array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
@@ -417,7 +417,7 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
     $return_arr = $ordered_return_arr;
   }
 
-  extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "return_arr"), array("return_arr")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("form_id", "submission_id", "view_id", "return_arr"), array("return_arr")), EXTR_OVERWRITE);
 
   return $return_arr;
 }
@@ -444,7 +444,7 @@ function ft_get_submission_info($form_id, $submission_id)
 
   $submission = mysql_fetch_assoc($submission_info);
 
-  extract(ft_process_hooks("end", compact("form_id", "submission_id", "submission"), array("submission")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("form_id", "submission_id", "submission"), array("submission")), EXTR_OVERWRITE);
 
   return $submission;
 }
@@ -552,7 +552,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
   $message = $LANG["notify_form_submission_updated"];
 
   $infohash = ft_sanitize($infohash);
-  extract(ft_process_hooks("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
   // assumes that each tab as at least a single field (UPDATE button should be hidden if there are none)
   $field_ids = split(",", $infohash["field_ids"]);
@@ -583,8 +583,9 @@ function ft_update_submission($form_id, $submission_id, $infohash)
     if (!in_array($field_id, $infohash["editable_field_ids"]))
       continue;
 
-    // if this is a FILE field that doesn't have any overridden PHP processing code, don't handle it
-    // yet. We'll do it separately below
+    // if this is a FILE field that doesn't have any overridden PHP processing code, just store the info
+    // about the field. Presumably, the module / field type has registered the appropriate hooks for
+    // processing the file. We pass that field + file into to the hook.
     if ($field_types_processing_info[$row["field_type_id"]]["is_file_field"] == "yes")
     {
       $file_data = array(
@@ -594,6 +595,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
         "code"       => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
         "settings"   => $field_settings[$field_id]
       );
+
       if (empty($field_types_processing_info[$row["field_type_id"]]["php_processing"]))
       {
         $file_fields[] = $file_data;
@@ -632,7 +634,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
       if (isset($infohash[$row["field_name"]]))
       {
         if (is_array($infohash[$row["field_name"]]))
-          $query[] = $row["col_name"] . " = '" . join("$g_multi_val_delimiter", $infohash[$row["field_name"]]) . "'";
+          $query[] = $row["col_name"] . " = '" . implode("$g_multi_val_delimiter", $infohash[$row["field_name"]]) . "'";
         else
           $query[] = $row["col_name"] . " = '" . $infohash[$row["field_name"]] . "'";
       }
@@ -656,7 +658,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
     return array(false, $LANG["notify_submission_not_updated"]);
 
   // now process any file fields
-  extract(ft_process_hooks("manage_files", compact("form_id", "submission_id", "file_fields"), array("success", "message", "something")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("manage_files", compact("form_id", "submission_id", "file_fields"), array("success", "message")), EXTR_OVERWRITE);
 
   // if the submission date just changed, update sessions in case it was the FIRST submission (this updates the
   // search date dropdown)
@@ -667,7 +669,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
   // send any emails
   ft_send_emails("on_edit", $form_id, $submission_id);
 
-  extract(ft_process_hooks("end", compact("form_id", "submission_id", "infohash"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("form_id", "submission_id", "infohash"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -873,7 +875,7 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
   $return_hash["search_num_results"] = $search_num_results;
   $return_hash["view_num_results"]   = $view_num_results;
 
-  extract(ft_process_hooks("end", compact("form_id", "submission_id", "view_id", "results_per_page", "page_num", "order",
+  extract(ft_process_hook_calls("end", compact("form_id", "submission_id", "view_id", "results_per_page", "page_num", "order",
     "columns", "search_fields", "submission_ids", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
   return $return_hash;

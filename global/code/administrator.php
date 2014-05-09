@@ -29,7 +29,7 @@ function ft_add_client($infohash)
 
   $form_vals = ft_sanitize($infohash);
 
-  extract(ft_process_hooks("start", compact("form_vals"), array("form_vals")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("form_vals"), array("form_vals")), EXTR_OVERWRITE);
 
   $success = true;
   $message = "";
@@ -139,7 +139,7 @@ function ft_add_client($infohash)
   // store this password in the password history queue
   ft_add_password_to_password_history($new_user_id, $password);
 
-  extract(ft_process_hooks("end", compact("new_user_id", "account_settings"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("new_user_id", "account_settings"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message, $new_user_id);
 }
@@ -159,7 +159,7 @@ function ft_admin_update_client($infohash, $tab_num)
 {
   global $g_table_prefix, $g_debug, $LANG, $g_password_special_chars;
 
-  extract(ft_process_hooks("start", compact("infohash", "tab_num"), array("infohash", "tab_num")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("infohash", "tab_num"), array("infohash", "tab_num")), EXTR_OVERWRITE);
 
   $success = true;
   $message = $LANG["notify_client_account_updated"];
@@ -440,7 +440,7 @@ function ft_admin_update_client($infohash, $tab_num)
       break;
   }
 
-  extract(ft_process_hooks("end", compact("infohash", "tab_num"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("infohash", "tab_num"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -464,7 +464,7 @@ function ft_get_admin_info()
 
   $admin_info = mysql_fetch_assoc($query);
 
-  extract(ft_process_hooks("main", compact("admin_info"), array("admin_info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("main", compact("admin_info"), array("admin_info")), EXTR_OVERWRITE);
 
   return $admin_info;
 }
@@ -546,7 +546,7 @@ function ft_update_admin_account($infohash, $account_id)
   $message = $LANG["notify_account_updated"];
   $infohash = ft_sanitize($infohash);
 
-  extract(ft_process_hooks("start", compact("infohash", "account_id"), array("infohash")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("infohash", "account_id"), array("infohash")), EXTR_OVERWRITE);
 
   $rules = array();
   $rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
@@ -628,7 +628,7 @@ function ft_update_admin_account($infohash, $account_id)
     $_SESSION["ft"]["account"]["password"] = md5(md5($password));
   }
 
-  extract(ft_process_hooks("end", compact("infohash", "account_id"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("infohash", "account_id"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }

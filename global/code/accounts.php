@@ -61,7 +61,7 @@ function ft_get_account_info($account_id)
 
   $account_info["settings"] = $settings;
 
-  extract(ft_process_hooks("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
 
   return $account_info;
 }
@@ -92,7 +92,7 @@ function ft_get_account_settings($account_id)
   while ($row = mysql_fetch_assoc($query))
     $hash[$row['setting_name']] = $row["setting_value"];
 
-  extract(ft_process_hooks("main", compact("account_id", "hash"), array("hash")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("main", compact("account_id", "hash"), array("hash")), EXTR_OVERWRITE);
 
   return $hash;
 }
@@ -172,7 +172,7 @@ function ft_login($infohash, $login_as_client = false)
     }
   }
 
-  extract(ft_process_hooks("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
 
   // all checks out. Log them in, after populating sessions
   $_SESSION["ft"]["settings"] = $settings;
@@ -225,7 +225,7 @@ function ft_logout_user($message_flag = "")
 {
   global $g_root_url, $g_session_type;
 
-  extract(ft_process_hooks("main", array(), array()));
+  extract(ft_process_hook_calls("main", array(), array()));
 
   // this ensures sessions are started
   if ($g_session_type == "database")
@@ -288,7 +288,7 @@ function ft_send_password($info)
 
   $info = ft_sanitize($info);
 
-  extract(ft_process_hooks("start", compact("info"), array("info")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("info"), array("info")), EXTR_OVERWRITE);
 
   $success = true;
   $message = $LANG["notify_login_info_emailed"];
@@ -408,7 +408,7 @@ function ft_send_password($info)
     }
   }
 
-  extract(ft_process_hooks("end", compact("success", "message", "info"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("success", "message", "info"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -425,7 +425,7 @@ function ft_set_account_settings($account_id, $settings)
 {
   global $g_table_prefix;
 
-  extract(ft_process_hooks("start", compact("account_id", "settings"), array("settings")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("account_id", "settings"), array("settings")), EXTR_OVERWRITE);
 
   while (list($setting_name, $setting_value) = each($settings))
   {
@@ -456,7 +456,7 @@ function ft_set_account_settings($account_id, $settings)
     }
   }
 
-  extract(ft_process_hooks("end", compact("account_id", "settings"), array()), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("account_id", "settings"), array()), EXTR_OVERWRITE);
 }
 
 
