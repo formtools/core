@@ -9,7 +9,7 @@
               {$LANG.text_test_email}
             </div>
 
-            <table cellpadding="0" cellspacing="1" class="list_table" width="100%">
+            <table cellpadding="0" cellspacing="1" class="list_table margin_bottom_large" width="100%">
             <tr>
               <td width="150" class="pad_left_small">{$LANG.phrase_email_format}</td>
               <td>
@@ -40,16 +40,14 @@
               <td>
                 <input type="radio" name="test_email_data_source" id="test_email_data_random_submission"
                   value="random_submission" {if $test_email_data_source == "random_submission"}checked{/if} />
-                  <label for="test_email_data_random_submission">{$LANG.phrase_random_form_submission}</span></label><br />
+                  <label for="test_email_data_random_submission">{$LANG.phrase_random_form_submission}</label><br />
                 <input type="radio" name="test_email_data_source" id="test_email_data_submission_id"
                   value="submission_id" {if $test_email_data_source == "submission_id"}checked{/if} />
                   <label for="test_email_data_submission_id">{$LANG.phrase_submission_id}</label>
-                  <input type="input" name="test_email_submission_id" size="5" value="{$test_email_submission_id}" />
+                  <input type="input" id="test_email_submission_id" name="test_email_submission_id" size="5" value="{$test_email_submission_id}" />
               </td>
             </tr>
             </table>
-
-            <br />
 
             <div id="display_text" class="hidden" style="padding: 8px; margin-bottom: 6px; background-color: #f9f9f9; border: 1px solid #666666;">
               <div class="bold">{$LANG.phrase_text_email}</div>

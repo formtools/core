@@ -1,0 +1,183 @@
+.scroll-pane { overflow: auto; width: 423px; float:left; }
+.scroll-content { width: 900px; float: left; }
+
+/* * html .scroll-content-item { display: inline; } IE6 float double margin bug */
+
+.scroll-bar-wrap { clear: left; padding: 0 4px 0 2px; margin: 0 -1px -1px -1px; border-top: 0px; }
+.scroll-bar-wrap .ui-slider { background: none; border:0; height: 2em; margin: 0 auto;  }
+.scroll-bar-wrap .ui-handle-helper-parent { position: relative; width: 100%; height: 100%; margin: 0 auto; }
+.scroll-bar-wrap .ui-slider-handle { top:.2em; height: 1.5em; margin-top: 5px;}
+.scroll-bar-wrap .ui-slider-handle .ui-icon { margin: -8px auto 0; position: relative; top: 50%; }
+
+.scroll-pane {
+  min-height: 21px;
+}
+
+body .scroll-bar-wrap .ui-slider {
+  height: 1.7em;
+}
+body .scroll-bar-wrap .ui-slider-handle {
+  height: 1.3em;
+}
+.sub_col1 {
+  width: 170px;
+}
+.rows .sub_col1 {
+  width: 170px;
+  padding-left: 1px;
+}
+.rows .sub_col1 input {
+  width: 164px;
+}
+.sub_col2 {
+  width: 190px;
+}
+.sub_col2 select {
+  width: 188px;
+}
+.sub_col3 {
+  width: 57px;
+  text-align: center;
+}
+.sub_col4 {
+  width: 182px;
+}
+.sub_col4 select {
+  width: 180px;
+}
+.sub_col5 {
+  width: 100px;
+}
+.sub_col5 select {
+  width: 98px;
+}
+.sub_col6 {
+  width: 192px;
+}
+.rows .sub_col6 input {
+  width: 184px;
+}
+body .edit_fields {
+  background: transparent url(../images/fields_table_bg.png) repeat-y;
+}
+body .edit_fields .col3 {
+  width: 424px;
+}
+body .edit_fields .header_row .col3 {
+  background: none;
+  border-right: 0px;
+}
+.edit_fields .rows .col3 {
+  overflow: hidden;
+}
+.edit_fields .header_row li.splitter, li.splitter,
+body .sortable div.row_content .system_field li.splitter,
+body .sortable div.row_content li.splitter
+{
+  width: 1px;
+  background-color: #999999;
+  background-image: none;
+  border-bottom: 0px;
+}
+body .sortable div.row_content .system_field li.splitter {
+  background-color: transparent;
+}
+.sortable li.subcol_header {
+  width: 419px;
+  overflow: hidden;
+}
+body .sortable div.row_content .system_field li.col0 {
+  background-color: transparent;
+  border-bottom: 0px;
+}
+.sortable .rows div.row_content li.col0 {
+  background-color: transparent;
+  border-bottom: 0px;
+}
+.sortable .rows .scroll-content {
+  width: 900px;
+}
+.sortable ul.rows li .scroll-content li {
+  margin-right: 0px;
+  padding-right: 1px;
+}
+body .edit_fields .rows .col3 {
+  width: 419px;
+}
+body .sortable .rows .colN {
+  margin-right: 0px;
+}
+body .scroll-bar-wrap .ui-slide {
+  height: 1.5em;
+}
+.scroll-bar-wrap .ui-slider-handle .ui-icon {
+  margin: -9px auto 0px;
+}
+body .scroll-bar-wrap .ui-slider {
+  height: 1.6em;
+}
+body .scroll-bar-wrap .ui-slider-handle {
+  height: 1.3em;
+}
+
+
+/* the Edit Form -> Fields tab */
+.edit_fields .col2 {
+  width: 182px;
+}
+.edit_fields .col2 input {
+  width: 176px;
+}
+.edit_fields .col4 {
+  width: 178px;
+}
+.edit_fields .col4 select {
+  width: 175px;
+}
+.edit_fields .col5 {
+  width: 50px;
+  text-align: center;
+}
+.edit_fields .colN {
+  width: 18px;
+}
+
+
+/* for the edit field dialog window */
+#edit_field__display_text, #edit_field__field_name, #edit_field__db_column {
+  width: 300px;
+}
+#edit_field_template .prev_field {
+  float: left;
+  margin-left: 4px;
+}
+#edit_field_template .next_field {
+  float: right;
+  margin-right: 4px;
+}
+#edit_field_template .field_nav {
+  cursor: pointer;
+  margin-top: 4px;
+  color: green;
+}
+#edit_field_template a.disabled {
+  color: #cccccc;
+}
+
+/* ... this needs to be used in a lot of places ... */
+.inner_tab_content tr {
+  height: 23px;
+}
+#edit_field_template .inner_tabset {
+  min-height: 210px;
+}
+#edit_field__field_settings_loading {
+  font-style: italic;
+}
+#edit_field__field_settings table td {
+  vertical-align: top;
+}
+
+#edit_field .check_area:hover {
+  background-color: #f2f2f2 !important;
+}

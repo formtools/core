@@ -199,8 +199,6 @@ function ft_get_num_option_lists()
  * all existing option lists to see if an identical set already exists. If it does, it returns the existing
  * option list ID and if not, creates a new one and returns that ID.
  *
- * TODO
- *
  * @param integer $form_id
  * @param array $option_list_info
  * @return integer $list_id the new or existing option list ID
@@ -226,6 +224,10 @@ function ft_create_unique_option_list($form_id, $option_list_info)
     // the options in that group. Since we're just comparing a brand new list, we know that it only has one group:
     // hence, rule out those option lists with more than one group
     if (count($grouped_option_list_info) > 1)
+      continue;
+
+    // fringe case. Technically, a user may have created an Option List then deleted all options & groups.
+    if (count($grouped_option_list_info) == 0)
       continue;
 
     $curr_options = $grouped_option_list_info[0]["options"];

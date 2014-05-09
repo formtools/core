@@ -142,9 +142,7 @@ emails_ns.remove_recipient = function(num) {
     $("#no_recipients").show();
   }
 
-  $("#recipient_" + num).html("");
-  $("#recipient_" + num).hide();
-
+  $("#recipient_" + num).html("").hide();
   return false;
 }
 
@@ -239,8 +237,6 @@ emails_ns._add_recipient = function(info) {
 /**
  * Sends a test email, via Ajax.
  *
- * TODO
- *
  * @param the DOM form node
  * @param string the action to take: "send" or "display"
  */
@@ -294,6 +290,12 @@ emails_ns.send_test_email = function(f, action) {
 emails_ns.display_test_email = function(data) {
 
   emails_ns.log_activity(false);
+
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   var success = data[0];
 
   if (success) {
@@ -366,10 +368,15 @@ emails_ns.display_test_email = function(data) {
 /**
  * Called after sending a test email. Displays the appropriate message.
  */
-emails_ns.send_test_email_response = function(transport) {
+emails_ns.send_test_email_response = function(data) {
   emails_ns.log_activity(false);
-  var json = transport.responseText.evalJSON();
-  ft.display_message("ft_message", json.success, json.message);
+
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
+  ft.display_message("ft_message", data.success, data.message);
 }
 
 

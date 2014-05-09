@@ -21,7 +21,8 @@ if ($mysql_loaded)
   else
   {
     $valid_mysql_version = false;
-    if (version_compare(mysql_get_server_info(), $g_required_mysql_version, '>=')) // TODO check the param on this func
+    //if (version_compare(mysql_get_server_info(), $g_required_mysql_version, '>=')) // TODO check the param on this func
+    if (substr(mysql_get_client_info(), 0, 1) >= 4)
       $valid_mysql_version = true;
   }
 }

@@ -1,0 +1,92 @@
+.main_tabset {
+  margin: 0px;
+  list-style: none;
+  padding-left: 0px;
+  margin-bottom: -5px;
+}
+.main_tabset li {
+  float: left;
+  height: 26px;
+  margin-right: 1px;
+}
+.main_tabset li a {
+  padding: 1px 6px 0px;
+  display: block;
+  color: #555555;
+}
+.main_tabset li {
+  background-color: #efefef;
+  min-width: 96px;
+  border-top: 1px solid #cfcfcf;
+  border-left: 1px solid #cfcfcf;
+  border-right: 1px solid #cfcfcf;
+  -webkit-border-top-left-radius: 8px;
+  -webkit-border-top-right-radius: 8px;
+  -moz-border-radius-topleft: 8px;
+  -moz-border-radius-topright: 8px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  whitespace: no-wrap;
+  height: 22px;
+  text-align: center;
+}
+.main_tabset li.selected {
+  border-bottom: 1px solid #ffffff;
+  background-color: white;
+  margin-bottom: -1px;
+}
+.main_tabset li.selected a {
+  color: green;
+}
+.main_tabset a:hover {
+  text-decoration: none;
+  color: #0b4a03;
+}
+.tab_content {
+  padding: 10px 18px;
+  vertical-align: top;
+  background-color: #ffffff;
+  border: 1px solid #cfcfcf;
+}
+
+/* Javascript tabsets */
+.inner_tabset {
+  border: 1px solid #dddddd;
+}
+.inner_tabset .tab_row {
+  background-color: #efefef;
+  height: 20px;
+}
+.inner_tabset .tab_row div {
+  float: left;
+  text-align: center;
+  cursor: pointer;
+}
+.inner_tabset .threeCols div {
+  width: 33.33%;
+}
+.inner_tabset .fourCols div {
+  width: 25%;
+}
+.inner_tabset .fiveCols div {
+  width: 20%;
+}
+.inner_tabset .tab_row div.selected {
+  background-color: white;
+  color: green;
+}
+.inner_tabset .tab_row div.selected a {
+  display: block;
+  text-decoration: none;
+}
+.inner_tab_content {
+  background-color: #f9f9f9;
+  padding: 10px;
+  padding-top: 10px;
+  background-color: #ffffff;
+}
+.inner_tab_unselected a {
+  display: block;
+  text-decoration: none;
+  color: #666666;
+}

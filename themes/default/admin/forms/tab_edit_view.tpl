@@ -4,7 +4,7 @@
 
     <div class="underline margin_top_large">
       <div style="float:right; padding-right: 20px; margin-top: -4px;">{$previous_view_link} &nbsp; {$next_view_link}</div>
-      <span class="subtitle"><a href="edit.php?page=views">{$LANG.phrase_edit_view|upper}</a></span> &raquo; <span>{$view_info.view_name}</span>
+      <span class="subtitle"><a href="edit.php?page=views">{$LANG.word_views|upper}</a></span> &raquo; <span>{$view_info.view_name}</span>
     </div>
 
     {ft_include file='messages.tpl'}
@@ -14,8 +14,8 @@
 
       <div class="inner_tabset" id="edit_view">
         <div class="tab_row fiveCols">
-          <div class="inner_tab1{if $edit_view_tab == 1} selected{/if}">General</div>
-          <div class="inner_tab2{if $edit_view_tab == 2} selected{/if}">Columns</div>
+          <div class="inner_tab1{if $edit_view_tab == 1} selected{/if}">{$LANG.word_general}</div>
+          <div class="inner_tab2{if $edit_view_tab == 2} selected{/if}">{$LANG.word_columns}</div>
           <div class="inner_tab3{if $edit_view_tab == 3} selected{/if}">{$LANG.word_fields}</div>
           <div class="inner_tab4{if $edit_view_tab == 4} selected{/if}">{$LANG.word_tabs}</div>
           <div class="inner_tab5{if $edit_view_tab == 5} selected{/if}">{$LANG.word_filters}</div>

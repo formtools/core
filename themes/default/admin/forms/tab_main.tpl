@@ -3,7 +3,7 @@
   {ft_include file="messages.tpl"}
 
   <form method="post" name="edit_form" id="edit_form" action="{$same_page}" onsubmit="return rsv.validate(this, rules)">
-    <input type="hidden" name="form_id" value="{$form_id}" />
+    <input type="hidden" name="form_id" id="form_id" value="{$form_id}" />
     <table class="list_table margin_bottom_large" width="100%" cellpadding="0" cellspacing="1">
     <tr>
       <td class="pad_left_small" width="200" valign="top">{$LANG.word_status}</td>
@@ -16,7 +16,7 @@
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_form_name}</td>
-      <td><input type="text" name="form_name" value="{$form_info.form_name}" style="width: 99%" /></td>
+      <td><input type="text" name="form_name" value="{$form_info.form_name|escape}" style="width: 99%" /></td>
     </tr>
     <tr>
       <td valign="top" class="pad_left_small">{$LANG.phrase_form_type}</td>
@@ -158,7 +158,7 @@
           <td>
             <div style="float:right;margin-left: 20px">
               <input type="button" id="client_omit_list_button"
-                value="Manage Client Omit List{if $form_info.access_type == 'public'} ({$num_clients_on_omit_list}){/if}"
+                value="{$LANG.phrase_manage_client_omit_list}{if $form_info.access_type == 'public'} ({$num_clients_on_omit_list}){/if}"
                 onclick="window.location='edit.php?page=public_form_omit_list&form_id={$form_id}'"
                 {if $form_info.access_type != 'public'}disabled{/if} /><br />
             </div>
@@ -236,7 +236,7 @@
     </table>
 
     <p>
-      <input type="submit" name="update_main" value="{$LANG.word_update|upper}" />
+      <input type="submit" name="update_main" value="{$LANG.word_update}" />
     </p>
 
    </form>

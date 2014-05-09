@@ -1,0 +1,178 @@
+/* sortable Views page */
+.view_list .header_row .col2 {
+  font-weight: normal;
+}
+.view_list .col2 {
+  width: 60px;
+  color: #336699;
+  font-weight: bold;
+}
+.view_list .rows .col2 {
+  width: 57px;
+  padding-left: 3px;
+}
+.view_list .header_row .col3 {
+  width: 239px;
+  padding-left: 0px;
+}
+.view_list .col3 {
+  width: 237px;
+  padding-left: 2px;
+}
+.view_list .col4 {
+  width: 161px;
+}
+.view_list .col4 select {
+  width: 160px;
+}
+.view_list .col5, .view_list .col6, .view_list .col7, .view_list .col8 {
+  width: 35px;
+  text-align: center;
+  height: 23px;
+}
+.view_list .col5 a, .view_list .col6 a, .view_list .col7 a, .view_list .col8 a {
+  display: block;
+  text-decoration: none;
+  height: 23px;
+}
+.view_list .header_row .col5 div {
+  background: transparent url(../images/columns.png) no-repeat center center;
+  width: 35px;
+  height: 20px;
+}
+.view_list .header_row .col6 div {
+  background: transparent url(../images/fields.png) no-repeat center center;
+  width: 35px;
+  height: 20px;
+}
+.view_list .header_row .col7 div {
+  background: transparent url(../images/tabs.png) no-repeat center center;
+  width: 35px;
+  height: 20px;
+}
+.view_list .header_row .col8 div {
+  background: transparent url(../images/filter.png) no-repeat center center;
+  width: 35px;
+  height: 20px;
+}
+
+.view_list .col5 a:hover, .view_list .col6 a:hover, .view_list .col7 a:hover, .view_list .col8 a:hover {
+  color: orange;
+}
+
+/* edit View fields sortable */
+.edit_view_fields .header_row .col2 {
+  width: 251px;
+  padding-left: 0px;
+}
+.edit_view_fields .col2 {
+  width: 249px;
+  padding-left: 2px;
+  text-align: left;
+}
+.edit_view_fields .header_row .col3 {
+  width: 175px;
+  padding-left: 0px;
+}
+.edit_view_fields .col3 {
+  width: 173px;
+  padding-left: 2px;
+}
+.edit_view_fields .col4 {
+  width: 87px;
+  text-align: center;
+}
+.edit_view_fields .col5 {
+  width: 87px;
+  text-align: center;
+}
+
+.new_view_default_submission_vals {
+  width: 491px;
+}
+.new_view_default_submission_vals .col2 {
+  width: 200px;
+}
+.new_view_default_submission_vals .col2 select {
+  width: 198px;
+}
+.new_view_default_submission_vals .col3 {
+  width: 217px;
+}
+.new_view_default_submission_vals .col3 input {
+  width: 211px;
+}
+
+.view_fields_list {
+  border: 1px solid #cccccc;
+  border-bottom: 0px;
+  height: 220px;
+  overflow-y: scroll;
+}
+.view_fields_list ul {
+  list-style: none;
+  margin: 0px;
+  padding-left: 0px;
+}
+.view_fields_list ul li {
+  padding: 2px 0px 2px 2px;
+}
+.view_fields_list ul li:hover {
+  background-color: #efefef;
+}
+.view_fields_list ul li input {
+  margin-right: 8px;
+  float: left;
+}
+.view_fields_list ul li label {
+  display: block;
+}
+
+/* standard View filter styles */
+.standard_filters .col2 {
+  width: 209px;
+}
+.standard_filters .col2 select {
+  width: 208px;
+}
+.standard_filters .col3 {
+  width: 172px;
+}
+.standard_filters .col3 input {
+  width: 165px;
+}
+.standard_filters .col4 {
+  width: 208px;
+}
+.standard_filters .col5 {
+  text-align: center;
+}
+#standard_filters_table .cf_date_group input {
+  width: 126px;
+}
+#standard_filters_table .cf_date_group img {
+  margin-bottom: -4px;
+  padding: 1px;
+}
+
+/* edit view page */
+#edit_view .sortable_group_header input {
+  width: 240px;
+}
+#edit_view .sortable_group_header select {
+  float: left;
+  margin: 6px 0px 1px 4px;
+  width: 180px;
+}
+#new_view_dialog table, #new_view_dialog input {
+  width: 100%;
+}
+.add_view_group_popup td {
+  padding: 2px;
+}
+.add_view_group_popup .new_group_name {
+  width: 100%;
+}
+#tab_options_table input {
+  width: 98%;
+}

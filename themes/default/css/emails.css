@@ -1,0 +1,22 @@
+.template { font-size: 11px; color: #666666; font-family: "Courier New"; }
+#list_current_page { border: 1px solid #336699; background-color: #E5F3FE; font-weight: bold; padding: 2px; }
+
+.subpanel {
+  background-color: #e9e9e9;
+  padding:3px;
+  border-right: 1px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
+  border-top: 1px solid #e1e1e1;
+  border-left: 1px solid #e1e1e1;
+}
+table.subpanel td {
+  background-color: #e9e9e9;
+}
+#email_recipients {
+  border: 1p solid #336699;
+  background-color: #F2F8FF;
+  line-height: 20px;
+  margin-top: 4px;
+}
+#email_recipients a:visited, #email_recipients a:link { color: red; text-decoration: none }
+#email_recipients a:hover { text-decoration: underline; }

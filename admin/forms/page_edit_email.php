@@ -12,12 +12,7 @@ $template_info  = ft_get_email_template($email_id);
 $event_trigger_arr =  explode(",", $template_info["email_event_trigger"]);
 $template_info["email_event_trigger"] = $event_trigger_arr;
 $clients         = $form_info["client_info"];
-
 $admin_info      = ft_get_admin_info();
-$settings = $_SESSION["ft"]["settings"];
-$datetime_example = ft_get_date($settings["timezone_offset"], ft_get_current_datetime(), $settings["default_date_format"]);
-$replacement_info = array("currenttime" => "<span class=\"highlighted_text bold\">$datetime_example</span>");
-$submission_date_str = ft_eval_smarty_string($LANG["text_form_submission_date_placeholder"], $replacement_info);
 
 $edit_email_tab = (isset($_SESSION["ft"]["inner_tabs"]["edit_email_template"])) ? $_SESSION["ft"]["inner_tabs"]["edit_email_template"] : 1;
 if (isset($request["edit_email_template"]))
@@ -60,7 +55,6 @@ $page_vars["views"]      = $views["results"];
 $page_vars["filtered_views"] = $filtered_views;
 $page_vars["selected_edit_submission_views"] = $selected_edit_submission_views;
 $page_vars["admin_info"] = $admin_info;
-$page_vars["submission_date_str"] = $submission_date_str;
 $page_vars["file_field_text"] = $file_field_text;
 $page_vars["columns"]    = $columns;
 $page_vars["js_messages"] = array("validation_invalid_email", "validation_no_custom_recipient_email",
@@ -69,8 +63,13 @@ $page_vars["js_messages"] = array("validation_invalid_email", "validation_no_cus
   "validation_no_main_email_recipient", "validation_no_email_content", "validation_no_email_template_name",
   "validation_no_email_template_view_mapping_value", "validation_no_email_template_view_id",
   "validation_no_custom_from_email", "validation_invalid_custom_from_email", "validation_no_custom_reply_to_email",
-  "validation_invalid_custom_reply_to_email", "validation_no_email_from_field"
+  "validation_invalid_custom_reply_to_email", "validation_no_email_from_field", "phrase_form_field_placeholders"
 );
+
+// a little hacky, but not too bad. Override the form nav links so that it always links to the email tab
+$page_vars["prev_tabset_link"] = (!empty($links["prev_form_id"])) ? "edit.php?page=emails&form_id={$links["prev_form_id"]}" : "";
+$page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "edit.php?page=emails&form_id={$links["next_form_id"]}" : "";
+
 $page_vars["template_info"]  = $template_info;
 $page_vars["edit_email_tab"] = $edit_email_tab;
 $page_vars["num_submissions"] = $num_submissions;
@@ -90,7 +89,6 @@ rsv.onCompleteHandler = function() { ft.select_all($("#selected_edit_submission_
 // log the total number of recipients
 $(function() {
   ft.init_inner_tabs();
-
   emails_ns.num_recipients = parseInt($('#num_recipients').val());
   emails_ns.recipient_num  = parseInt($('#num_recipients').val()) + 1;
 
@@ -102,6 +100,12 @@ $(function() {
   $("#edit_email_template_form").bind("submit", function() {
     return emails_ns.onsubmit_check_email_settings(this);
   });
+
+  $(".placeholders_section").bind("click", function() {
+    ft.show_form_field_placeholders_dialog({ form_id: {$form_id} });
+  });
+
+  $("#test_email_submission_id").bind("keyup", function() { $("#test_email_data_submission_id").attr("checked", "checked"); });
 });
 END;
 

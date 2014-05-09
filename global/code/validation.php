@@ -86,7 +86,7 @@ function validate_fields($fields, $rules)
   for ($i=0; $i<count($rules); $i++)
   {
     // split row into component parts
-    $row = split(",", $rules[$i]);
+    $row = explode(",", $rules[$i]);
 
     // while the row begins with "if:..." test the condition. If true, strip the if:..., part and
     // continue evaluating the rest of the line. Keep repeating this while the line begins with an
@@ -101,11 +101,11 @@ function validate_fields($fields, $rules)
       $parts = array();
       if (preg_match("/!=/", $condition))
       {
-        $parts = split("!=", $condition);
+        $parts = explode("!=", $condition);
         $comparison = "not_equal";
       }
       else
-        $parts = split("=", $condition);
+        $parts = explode("=", $condition);
 
       $field_to_check = $parts[0];
       $value_to_check = $parts[1];
@@ -247,7 +247,7 @@ function validate_fields($fields, $rules)
             // if the user supplied two length fields, make sure the field is within that range
             if (preg_match("/-/", $rule_string))
             {
-              list($start, $end) = split("-", $rule_string);
+              list($start, $end) = explode("-", $rule_string);
               if (strlen($fields[$field_name]) < $start || strlen($fields[$field_name]) > $end)
                 $errors[] = $error_message;
             }
@@ -310,7 +310,7 @@ function validate_fields($fields, $rules)
               $errors[] = $error_message;
             break;
           case "equal":
-            list($start, $end) = split("-", $rule_string);
+            list($start, $end) = explode("-", $rule_string);
 
             if (($fields[$field_name] < $start) || ($fields[$field_name] > $end))
               $errors[] = $error_message;

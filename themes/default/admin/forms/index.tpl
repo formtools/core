@@ -147,7 +147,7 @@
               <th width="90" class="sortable_col{if $up_down} over{/if}">
                 <a href="{$same_page}?{$sort_order}">{$LANG.word_status} {$up_down}</a>
               </th>
-              <th width="90">{$LANG.word_submissions|upper}</th>
+              <th width="90">{$LANG.word_submissions}</th>
               <th class="edit"></th>
               <th class="del"></th>
             </tr>
@@ -159,7 +159,7 @@
             <td class="pad_left_small">
               {if $form_info.form_type == "external"}
                 {$form_info.form_name}
-                <a href="{$form_info.form_url}" class="show_form" target="_blank" title="Open form in dialog window"></a>
+                <a href="{$form_info.form_url}" class="show_form" target="_blank" title="{$LANG.phrase_open_form_in_dialog}"></a>
               {else}
                 {$form_info.form_name}
               {/if}
@@ -195,7 +195,7 @@
                 {elseif $clients|@count == 1}
                   <span class="pad_left_small">{$clients[0].first_name} {$clients[0].last_name}</span>
                 {else}
-                  <select>
+                  <select class="clients_dropdown">
                     {foreach from=$clients item=client name=row2}
                       <option>{$client.first_name} {$client.last_name}</option>
                     {/foreach}
@@ -259,11 +259,11 @@
 
   {/if}
 
-  <p>
-    <form method="post" action="add/">
-      <input type="submit" name="new_form" value="{$LANG.phrase_add_form|upper}" />
-    </form>
-  </p>
+  <form method="post" action="add/">
+    <p>
+      <input type="submit" name="new_form" value="{$LANG.phrase_add_form}" />
+    </p>
+  </form>
 
   {template_hook location="admin_forms_list_bottom"}
 

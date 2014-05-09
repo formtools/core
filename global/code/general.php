@@ -26,7 +26,7 @@
 function ft_db_connect()
 {
   global $g_db_hostname, $g_db_username, $g_db_password, $g_db_name, $g_unicode, $g_db_ssl,
-    $g_check_ft_sessions;
+    $g_check_ft_sessions, $g_set_sql_mode;
 
   if ($g_db_ssl)
     $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true, MYSQL_CLIENT_SSL);
@@ -49,6 +49,9 @@ function ft_db_connect()
   // if required, set all queries as UTF-8 (enabled by default)
   if ($g_unicode)
     @mysql_query("SET NAMES 'utf8'", $link);
+
+  if ($g_set_sql_mode)
+    @mysql_query("SET SQL_MODE=''", $link);
 
   if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"]))
     ft_check_sessions_timeout();
@@ -181,6 +184,10 @@ function ft_display_custom_page_message($flag)
       $g_success = true;
       $g_message = $LANG["notify_change_temp_password"];
       break;
+    case "new_submission":
+      $g_success = true;
+      $g_message = $LANG["notify_new_submission_created"];
+      break;
   }
 
   return array($g_success, $g_message);
@@ -280,14 +287,14 @@ function ft_trim_string($str, $length, $flag = "ellipsis")
 function ft_get_page_nav($num_results, $num_per_page, $current_page = 1, $pass_along_str = "", $page_str = "page",
   $theme = "", $settings = array())
 {
-  global $g_max_nav_pages, $g_smarty_debug, $g_root_dir, $g_root_url, $LANG, $g_smarty_use_sub_dirs;
+  global $g_max_nav_pages, $g_smarty_debug, $g_smarty, $g_root_dir, $g_root_url, $LANG, $g_smarty_use_sub_dirs;
 
   $current_page = ($current_page < 1) ? 1 : $current_page;
 
   if (empty($theme))
     $theme = $_SESSION["ft"]["account"]["theme"];
 
-  $smarty = new Smarty();
+  $smarty = $g_smarty;
   $smarty->template_dir = "$g_root_dir/themes/$theme";
   $smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
   $smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
@@ -370,11 +377,11 @@ function ft_get_page_nav($num_results, $num_per_page, $current_page = 1, $pass_a
  */
 function ft_get_dhtml_page_nav($num_results, $num_per_page, $current_page = 1)
 {
-  global $g_smarty_debug, $g_root_dir, $g_root_url, $LANG, $g_smarty_use_sub_dirs;
+  global $g_smarty, $g_smarty_debug, $g_root_dir, $g_root_url, $LANG, $g_smarty_use_sub_dirs;
 
   $theme = $_SESSION["ft"]["account"]["theme"];
 
-  $smarty = new Smarty();
+  $smarty = $g_smarty; // new Smarty();
   $smarty->template_dir = "$g_root_dir/themes/$theme";
   $smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
   $smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
@@ -423,8 +430,13 @@ function ft_get_dhtml_page_nav($num_results, $num_per_page, $current_page = 1)
  * Should be called on ALL Form Tools pages - including modules.
  *
  * @param string $account_type The account type - "admin" / "client" / "user" (for Submission Accounts module)
+ * @param boolean $auto_logout either automatically log the user out if they don't have permission to view the page (or
+ *     sessions have expired), or - if set to false, just return the result as a boolean (true = has permission,
+ *     false = doesn't have permission)
+ * @return array (if $auto_logout is set to false)
+ *
  */
-function ft_check_permission($account_type)
+function ft_check_permission($account_type, $auto_logout = true)
 {
   global $g_root_url, $g_table_prefix;
 
@@ -435,24 +447,32 @@ function ft_check_permission($account_type)
 
   // some VERY complex logic here. The "user" account permission type is included so that people logged in
   // via the Submission Accounts can still view certain pages, e.g. pages with the Pages module. This checks that
-  // IF the minumum account type of the page is a "user", it EITHER has the user account info set (i.e. the submission ID)
+  // IF the minimum account type of the page is a "user", it EITHER has the user account info set (i.e. the submission ID)
   // or it's a regular client or admin account with the account_id set. Crumby, but it'll have to suffice for now.
   if ($account_type == "user")
   {
     if ((!isset($_SESSION["ft"]["account"]["submission_id"]) || empty($_SESSION["ft"]["account"]["submission_id"])) &&
        empty($_SESSION["ft"]["account"]["account_id"]))
     {
-      header("location: $g_root_url/modules/submission_accounts/logout.php");
-      exit;
+    	if ($auto_logout)
+    	{
+        header("location: $g_root_url/modules/submission_accounts/logout.php");
+        exit;
+    	}
+    	else
+    	{
+    		$boot_out_user = true;
+        $message_flag = "notify_no_account_id_in_sessions";
+    	}
     }
   }
-   // check the user ID is in sessions
-  else if      (empty($_SESSION["ft"]["account"]["account_id"]))
+  // check the user ID is in sessions
+  else if (!isset($_SESSION["ft"]["account"]["account_id"]) || empty($_SESSION["ft"]["account"]["account_id"]))
   {
     $boot_out_user = true;
     $message_flag = "notify_no_account_id_in_sessions";
   }
-  else if ($_SESSION["ft"]["account"]["account_type"] == "client" && $account_type == "admin")
+  else if (!isset($_SESSION["ft"]["account"]["account_type"]) || ($_SESSION["ft"]["account"]["account_type"] == "client" && $account_type == "admin"))
   {
     $boot_out_user = true;
     $message_flag = "notify_invalid_permissions";
@@ -473,8 +493,17 @@ function ft_check_permission($account_type)
     }
   }
 
-  if ($boot_out_user)
+  if ($boot_out_user && $auto_logout)
+  {
     ft_logout_user($message_flag);
+  }
+  else
+  {
+    return array(
+      "has_permission" => !$boot_out_user, // we invert it because we want to return TRUE if they have permission
+      "message"        => $message_flag
+    );
+  }
 }
 
 
@@ -517,26 +546,43 @@ function ft_check_db_table_exists($table)
  * Because of this, any time the administrator changes the permissions for a client, they'll need te re-login to
  * access that new information.
  *
+ * Very daft this function doesn't return a boolean, but oh well. The fourth param was added to get around that.
+ *
  * @param integer $form_id The unique form ID
  * @param integer $client_id The unique client ID
+ * @param integer $view_id
+ * @param boolean
  */
-function ft_check_client_may_view($client_id, $form_id, $view_id)
+function ft_check_client_may_view($client_id, $form_id, $view_id, $return_boolean = false)
 {
   global $g_root_url;
-  $boot_out_user = false;
 
-  // $permissions = ft_get_client_form_views($account_info["account_id"]);
   $permissions = isset($_SESSION["ft"]["permissions"]) ? $_SESSION["ft"]["permissions"] : array();
 
   extract(ft_process_hook_calls("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
 
+  $may_view = true;
   if (!array_key_exists($form_id, $permissions))
-    ft_logout_user("notify_invalid_permissions");
+  {
+    $may_view = false;
+    if (!$return_boolean)
+    {
+      ft_logout_user("notify_invalid_permissions");
+    }
+  }
   else
   {
     if (!empty($view_id) && !in_array($view_id, $permissions[$form_id]))
-      ft_logout_user("notify_invalid_permissions");
+    {
+      $may_view = false;
+      if (!$return_boolean)
+      {
+        ft_logout_user("notify_invalid_permissions");
+      }
+    }
   }
+
+  return $may_view;
 }
 
 
@@ -563,6 +609,9 @@ function ft_check_client_may_view($client_id, $form_id, $view_id)
 function ft_get_date($offset, $datetime, $format)
 {
   global $LANG;
+
+  if (strlen($datetime) != 19)
+    return "";
 
   $year = substr($datetime, 0, 4);
   $mon  = substr($datetime, 5, 2);
@@ -601,7 +650,7 @@ function ft_get_date($offset, $datetime, $format)
 
     // now replace the @'s with their translated equivalents
     $eng_strings = date(join(",", $char_map), $timestamp);
-    $eng_string_arr = split(",", $eng_strings);
+    $eng_string_arr = explode(",", $eng_strings);
     for ($char_ind=0; $char_ind<count($char_map); $char_ind++)
     {
       $eng_string = $eng_string_arr[$char_ind];
@@ -851,6 +900,8 @@ function ft_verify_core_tables_exist()
 {
   global $g_table_prefix, $g_ft_tables, $g_db_name;
 
+  $g_db_name = ft_get_clean_db_entity($g_db_name);
+
   $result = mysql_query("SHOW TABLES FROM $g_db_name");
   $found_tables = array();
   while ($row = mysql_fetch_array($result))
@@ -965,9 +1016,6 @@ function ft_construct_url($url, $query_str = "")
  */
 function ft_convert_to_json($arr)
 {
-//  if (function_exists('json_encode'))
-//    return json_encode($arr);
-
   $parts = array();
   $is_list = false;
 
@@ -1380,9 +1428,10 @@ if (!function_exists('mime_content_type'))
  * This is called on all page loads. It checks to ensure that the person's sessions haven't timed out. If not,
  * it updates the last_activity_unixtime in the user's sessions - otherwise they're logged out.
  */
-function ft_check_sessions_timeout()
+function ft_check_sessions_timeout($auto_logout = true)
 {
   $now = date("U");
+  $sessions_valid = true;
 
   // check to see if the session has timed-out
   if (isset($_SESSION["ft"]["account"]["last_activity_unixtime"]) && isset($_SESSION["ft"]["account"]["sessions_timeout"]))
@@ -1392,12 +1441,21 @@ function ft_check_sessions_timeout()
 
     if ($_SESSION["ft"]["account"]["last_activity_unixtime"] + $timeout_secs < $now)
     {
-      ft_logout_user("notify_sessions_timeout");
+    	if ($auto_logout)
+    	{
+        ft_logout_user("notify_sessions_timeout");
+    	}
+    	else
+    	{
+    		$sessions_valid = false;
+    	}
     }
   }
 
   // log this unixtime for checking the sessions timeout
   $_SESSION["ft"]["account"]["last_activity_unixtime"] = $now;
+
+  return $sessions_valid;
 }
 
 
@@ -1581,4 +1639,154 @@ function ft_display_serious_error($error)
 </body>
 </html>
 END;
+}
+
+
+/**
+ * Used for determining page load time.
+ */
+function ft_get_microtime_float()
+{
+  list($usec, $sec) = explode(" ", microtime());
+  return ((float)$usec + (float)$sec);
+}
+
+
+/**
+ * Generates the placeholders for a particular form submission. This is used in the email templates, and here and there
+ * for providing placeholder functionality to fields (like the "Edit Submission Label" textfield for a form, where they can
+ * enter placeholders populated here).
+ *
+ * This returns ALL available placeholders for a form, regardless of View.
+ *
+ * @param integer $form_id
+ * @param integer $submission_id
+ * @param array $client_info a hash of information about the appropriate user (optional)
+ * @return array a hash of placeholders and their replacement values (e.g. $arr["FORMURL"] => 17)
+ */
+function ft_get_submission_placeholders($form_id, $submission_id, $client_info = "")
+{
+  global $g_root_url;
+
+  $placeholders = array();
+
+  $settings        = ft_get_settings();
+  $form_info       = ft_get_form($form_id);
+  $submission_info = ft_get_submission($form_id, $submission_id);
+  $admin_info      = ft_get_admin_info();
+  $file_field_type_ids = ft_get_file_field_type_ids();
+  $field_types     = ft_get_field_types(true);
+
+  // now loop through the info stored for this particular submission and for this particular field,
+  // add the custom submission responses to the placeholder hash
+
+  $form_field_params = array(
+    "include_field_type_info"   => true,
+    "include_field_settings"    => true,
+    "evaluate_dynamic_settings" => true
+  );
+  $form_fields = ft_get_form_fields($form_id, $form_field_params);
+
+  foreach ($submission_info as $field_info)
+  {
+    $field_id      = $field_info["field_id"];
+    $field_name    = $field_info["field_name"];
+    $field_type_id = $field_info["field_type_id"];
+
+    if ($field_info["is_system_field"] == "no")
+      $placeholders["QUESTION_$field_name"] = $field_info["field_title"];
+
+    if (in_array($field_type_id, $file_field_type_ids))
+    {
+      $field_settings = ft_get_field_settings($field_id);
+      $placeholders["FILENAME_$field_name"] = $field_info["content"];
+      $placeholders["FILEURL_$field_name"]  = "{$field_settings["folder_url"]}/{$field_info["content"]}";
+    }
+    else
+    {
+      $detailed_field_info = array();
+      foreach ($form_fields as $curr_field_info)
+      {
+        if ($curr_field_info["field_id"] != $field_id)
+          continue;
+
+        $detailed_field_info = $curr_field_info;
+        break;
+      }
+
+      $params = array(
+        "form_id"       => $form_id,
+        "submission_id" => $submission_id,
+        "value"         => $field_info["content"],
+        "field_info"    => $detailed_field_info,
+        "field_types"   => $field_types,
+        "settings"      => $settings,
+        "context"       => "email_template"
+      );
+      $value = ft_generate_viewable_field($params);
+      $placeholders["ANSWER_$field_name"] = $value;
+
+      // for backward compatibility
+      if ($field_name == "core__submission_date")
+        $placeholders["SUBMISSIONDATE"] = $value;
+      else if ($field_name == "core__last_modified")
+        $placeholders["LASTMODIFIEDDATE"] = $value;
+      else if ($field_name == "core__ip_address")
+        $placeholders["IPADDRESS"] = $value;
+    }
+  }
+
+  // other misc placeholders
+  $placeholders["ADMINEMAIL"]   = $admin_info["email"];
+  $placeholders["FORMNAME"]     = $form_info["form_name"];
+  $placeholders["FORMURL"]      = $form_info["form_url"];
+  $placeholders["SUBMISSIONID"] = $submission_id;
+  $placeholders["LOGINURL"]     = $g_root_url . "/index.php";
+
+  if (!empty($client_info))
+  {
+    $placeholders["EMAIL"]       = $client_info["email"];
+    $placeholders["FIRSTNAME"]   = $client_info["first_name"];
+    $placeholders["LASTNAME"]    = $client_info["last_name"];
+    $placeholders["COMPANYNAME"] = $client_info["company_name"];
+  }
+
+  extract(ft_process_hook_calls("end", compact("placeholders"), array("placeholders")), EXTR_OVERWRITE);
+
+  return $placeholders;
+}
+
+
+/**
+ * Added in 2.1.0, to get around a problem with database names having hyphens in them. I named the function
+ * generically because it may come in handy for escaping other db aspects, like col names etc.
+ *
+ * @param string $str
+ * @param string
+ */
+function ft_get_clean_db_entity($str)
+{
+  if (strpos($str, "-") !== false)
+    $str = "`$str`";
+
+  return $str;
+}
+
+
+/**
+ * Helper function to remove all empty strings from an array.
+ *
+ * @param array $array
+ * @return array
+ */
+function ft_array_remove_empty_els($array)
+{
+  $updated_array = array();
+  foreach ($array as $el)
+  {
+    if (!empty($el))
+      $updated_array[] = $el;
+  }
+
+  return $updated_array;
 }

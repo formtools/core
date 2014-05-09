@@ -1,0 +1,16 @@
+/* the option list sortable list */
+.edit_option_list .col2 {
+  width: 312px;
+}
+.edit_option_list .col2 input {
+  width: 306px;
+}
+.edit_option_list .col3 {
+  width: 312px;
+}
+.edit_option_list .col3 input {
+  width: 306px;
+}
+.edit_option_list .col4 {
+  width: 70px;
+}

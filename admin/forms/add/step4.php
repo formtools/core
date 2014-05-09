@@ -53,7 +53,7 @@ $page_vars["form_id"] = $form_id;
 $page_vars["form_fields"] = $form_fields;
 $page_vars["head_title"] = "{$LANG['phrase_add_form']} - {$LANG["phrase_step_4"]}";
 $page_vars["head_string"] =<<< END
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/sortable.js"></script>
+  <script src="{$g_root_url}/global/scripts/sortable.js"></script>
 END;
 $page_vars["head_js"] =<<< END
   var page_ns = {};
@@ -63,7 +63,6 @@ $page_vars["head_js"] =<<< END
   };
 
   page_ns.smart_fill = function() {
-
     // if any of the fields contain a value already, inform the user
     var str = '';
     var has_value = false;
@@ -72,7 +71,6 @@ $page_vars["head_js"] =<<< END
         has_value = true;
       }
     }
-
     if (has_value) {
      ft.create_dialog({
        title:     "{$LANG["phrase_please_confirm"]}",

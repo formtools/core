@@ -86,7 +86,7 @@
       </tr>
       <tr>
         <td> </td>
-        <td class="pad_left_small">{$LANG.phrase_new_password_reenter}</td>
+        <td class="pad_left_small">{$LANG.phrase_new_password}</td>
         <td><input type="password" name="password_2" value="" size="20" autocomplete="off" /></td>
       </tr>
       </table>

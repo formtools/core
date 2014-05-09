@@ -1,0 +1,58 @@
+/* jQuery dialog styles */
+body .ui-widget-header {
+  background: url(../images/popup_header_bg.png) repeat-x scroll 50% 50%;
+}
+body .ui-widget-header span {
+  color: white;
+}
+body .ui-daterangepicker .ui-widget-header {
+  background-image: none;
+  background-color: #dddddd; /* 3b7d40 */
+}
+body .ui-daterangepicker .ui-widget-header span {
+  color: black;
+}
+body .ui-daterangepicker .ui-widget-header .ui-widget-content .ui-widget-header {
+  background-color: #3b7d40;
+}
+body .ui-daterangepicker .ui-widget-header .ui-widget-content .ui-widget-header span {
+  color: white;
+}
+body .ui-daterangepicker {
+  padding: 2px !important;
+}
+body .ui-daterangepicker ul {
+  font-size: 11px;
+  text-align: left;
+  width: 140px;
+}
+body .ui-daterangepicker ul li a {
+  margin: 1px 3px;
+}
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { height: 25px; }
+.ui-timepicker-div dl dd { margin: -25px 0 10px 65px; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-dialog a:link, .ui-dialog a:visited {
+  color: green;
+}
+.popup_icon {
+  width: 48px;
+  height: 48px;
+  margin-right: 8px;
+  float: left;
+}
+.popup_type_warning {
+  background-image: url(../../../global/images/alert.png);
+}
+.popup_type_error {
+  background-image: url(../../../global/images/error.png);
+}
+.popup_type_info {
+  background-image: url(../../../global/images/info.png);
+}
+.ui-widget-header span.edit_field_title_field_type {
+  color: #efefef;
+  margin-left: 5px;
+}

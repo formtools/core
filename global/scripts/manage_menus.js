@@ -80,8 +80,6 @@ mm.change_page = function(row, page) {
     case "edit_form_fields":
     case "edit_form_views":
     case "edit_form_emails":
-    case "edit_form_database":
-    case "edit_form_add_fields":
       var form_dd = $("#form_dropdown_template").html().replace(/%%X%%/gi, row);
       $("#row_" + row + "_options").html(form_dd);
       break;

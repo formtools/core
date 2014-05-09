@@ -35,10 +35,6 @@ $_SESSION["ft"]["last_submission_id"] = $submission_id;
 // for the update function and to determine whether the page contains any editable fields
 $editable_field_ids = _ft_get_editable_view_fields($view_id);
 
-// get the tabs for this View
-$view_tabs = ft_get_view_tabs($view_id, true);
-
-
 // handle POST requests
 if (isset($_POST) && !empty($_POST))
 {
@@ -54,6 +50,22 @@ if (isset($_POST) && !empty($_POST))
 
 $form_info      = ft_get_form($form_id);
 $view_info      = ft_get_view($view_id);
+
+// this is crumby
+$has_tabs = false;
+foreach ($view_info["tabs"] as $tab_info)
+{
+  if (!empty($tab_info["tab_label"]))
+  {
+    $has_tabs = true;
+    break;
+  }
+}
+if ($has_tabs)
+  $tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
+else
+  $tab_number = "";
+
 $grouped_fields = ft_get_grouped_view_fields($view_id, $tab_number, $form_id, $submission_id);
 
 $page_field_ids      = array();
@@ -69,15 +81,16 @@ foreach ($grouped_fields as $group)
 }
 $page_field_types = ft_get_field_types(true, $page_field_type_ids);
 
+
 // construct the tab list
 $view_tabs = ft_get_view_tabs($view_id, true);
-$tabs      = array();
 $same_page = ft_get_clean_php_self();
+$tabs      = array();
 while (list($key, $value) = each($view_tabs))
 {
   $tabs[$key] = array(
     "tab_label" => $value["tab_label"],
-    "tab_link"  => "{$same_page}?tab=$key&form_id=$form_id&submission_id={$submission_id}"
+    "tab_link"  => "{$same_page}?tab=$key&form_id=$form_id&submission_id=$submission_id"
     );
 }
 
@@ -102,11 +115,12 @@ if (isset($_SESSION["ft"]["new_search"]) && $_SESSION["ft"]["new_search"] == "ye
 list($prev_link_html, $search_results_link_html, $next_link_html) = _ft_code_get_link_html($form_id, $view_id, $submission_id, $search["results_per_page"]);
 
 // construct the page label
-$submission_placeholders = _ft_get_placeholder_hash($form_id, $submission_id);
+$submission_placeholders = ft_get_submission_placeholders($form_id, $submission_id);
 $edit_submission_page_label = ft_eval_smarty_string($form_info["edit_submission_page_label"], $submission_placeholders);
 
 // get all the shared resources
-$shared_resources_list = ft_get_settings("edit_submission_onload_resources");
+$settings = ft_get_settings("", "core");
+$shared_resources_list = $settings["edit_submission_onload_resources"];
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
 foreach ($shared_resources_array as $resource)
@@ -124,6 +138,7 @@ $page_vars["tabs"] = $tabs;
 $page_vars["form_info"]   = $form_info;
 $page_vars["grouped_views"] = $grouped_views;
 $page_vars["tab_number"] = $tab_number;
+$page_vars["settings"] = $settings;
 $page_vars["page_field_ids"] = $page_field_ids;
 $page_vars["grouped_fields"] = $grouped_fields;
 $page_vars["field_types"] = $page_field_types;
@@ -143,7 +158,7 @@ $page_vars["page_field_ids_str"] = implode(",", $page_field_ids);
 $page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected", "confirm_delete_submission_file",
   "phrase_please_confirm", "word_no", "word_yes");
 $page_vars["head_string"] =<<< EOF
-  <script src="$g_root_url/global/scripts/manage_submissions.js"></script>
+  <script src="$g_root_url/global/scripts/manage_submissions.js?v=20110809"></script>
   <script src="$g_root_url/global/scripts/field_types.php"></script>
   <link rel="stylesheet" href="$g_root_url/global/css/field_types.php" type="text/css" />
 $shared_resources

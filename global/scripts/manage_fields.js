@@ -102,21 +102,28 @@ $(function() {
     var field_settings = page_ns.field_settings["field_type_" + field_type_id];
     var field_type_label = $("#edit_field__field_type option[value=" + field_type_id + "]").text();
     if (field_settings == undefined) {
-      $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (" + field_settings.length + ")");
+      $("#edit_field_template .inner_tab2").html(field_type_label + " " + g.messages["word_settings"] + " (" + field_settings.length + ")");
       $("#edit_field__field_settings").html("<div class=\"notify\"><div style=\"padding:6px\">" + g.messages["notify_no_field_settings"] + "</div></div>");
     } else {
-      $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (" + field_settings.length + ")");
+      $("#edit_field_template .inner_tab2").html(field_type_label + " " + g.messages["word_settings"] + " (" + field_settings.length + ")");
       var html = fields_ns.generate_field_type_markup(fields_ns.__current_field_id, field_type_id, field_settings);
       $("#edit_field__field_settings").html(html);
-
-      // here we empty the memory cache for tab 2. This ensures that when the user clicks Save Changes, any orphaned
-      // field settings aren't incorrectly passed along to the server
-      delete fields_ns.memory["field_" + fields_ns.__current_field_id].tab2;
     }
     $("#edit_field__field_settings_loading").hide();
     $(".use_default").each(function() {
       $(this).attr("disabled", "");
     });
+  });
+
+  $("#edit_field__field_type").live("blur", function() {
+    fields_ns.__last_field_type_id    = fields_ns.__current_field_type_id;
+    fields_ns.__current_field_type_id = this.value;
+    fields_ns.__check_shared_characteristics_cond1 = true;
+    fields_ns.check_shared_characteristics();
+
+    // here we empty the memory cache for tab 2. This ensures that when the user clicks Save Changes, any orphaned
+    // field settings aren't incorrectly passed along to the server
+    delete fields_ns.memory["field_" + fields_ns.__current_field_id].tab2;
   });
 
 
@@ -160,9 +167,9 @@ $(function() {
     var curr_value      = field_sizes_div.find("[name=field_" + curr_field_id + "_size]").val();
 
     ft.update_field_size_dropdown(this, field_sizes_div, {
-      name:     "field_" + curr_field_id + "_size",
-      class:    "field_types",
-      selected: curr_value
+      name:       "field_" + curr_field_id + "_size",
+      html_class: "field_sizes",
+      selected:   curr_value
     });
   });
 
@@ -234,9 +241,10 @@ var fields_ns = {
   // does it actually do an Ajax request to save the contents & update the main page
   memory: { changed_field_ids: [] },
 
-  // used to solve a nagging asynchronous problem on page load, when a user clicks from Option Lists to edit the
-  // field immediate on page load. In that scenario, the extended field setting info can load prior to the Option
-  // List and form requests having been loaded. Hence, this is used to load the values so they can be loaded properly
+  // used to solve a nagging asynchronous problem on page load: when a user clicks from the Option Lists page (or other pages)
+  // to edit the field immediately on page load. In that scenario, the extended field setting info can load before to the
+  // Option List and form requests having been loaded. This variable is used to store the values after they've been initially
+  // returned from the server so the fields are displayed & populated properly
   onload_field_setting_values: [],
 
   // these are loaded dynamically on page load. The option lists is just the list of available option lists
@@ -245,8 +253,16 @@ var fields_ns = {
   forms:        null,
   form_fields: {}, //  stores form_X: [fields]
 
-  __current_field_id: null,
-  __disable_focusin: false
+  __current_field_id:      null,
+  __current_field_type_id: null,
+  __last_field_type_id:    null,
+  __disable_focusin:       false,
+
+  // when the user changes a field type in the Edit Field dialog, we check to see if any of the old
+  // settings should be copied across. These two conditions both need to be met in order for that code to
+  // run
+  __check_shared_characteristics_cond1: false, // the onblur event of the field type
+  __check_shared_characteristics_cond2: false  // the settings page is actually loaded
 };
 
 
@@ -259,6 +275,10 @@ fields_ns.reinit_sliders = function() {
 
 
 fields_ns.get_option_lists_response = function(data) {
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
   fields_ns.option_lists = data;
 }
 
@@ -446,7 +466,7 @@ fields_ns.update_fields_dropdown = function() {
  */
 fields_ns.smart_fill = function() {
   ft.create_dialog({
-  dialog:     fields_ns.smart_fill_dialog,
+    dialog:     fields_ns.smart_fill_dialog,
     popup_type: "warning",
     min_width:  450,
     title:      g.messages["phrase_smart_fill"],
@@ -667,6 +687,11 @@ fields_ns.edit_field = function(row_group) {
   var field_id = $(row_group).find(".sr_order").val();
   var is_new_field = (field_id.match(/^NEW/) != null) ? true : false;
 
+  // if we're here, then we just started editing a field: the user hasn't changed the field type ID
+  fields_ns.__last_field_type_id = null;
+
+  fields_ns.__check_shared_characteristics = false;
+
   // find out if this field has already been edited and has values in memory
   var field_values_cached = ($.inArray(field_id, fields_ns.memory.changed_field_ids) != -1) ? true : false;
   var tab1_fields = null;
@@ -697,6 +722,8 @@ fields_ns.edit_field = function(row_group) {
   var field_type_id = null;
   fields_ns.__current_field_id = field_id;
 
+  var field_type_str = null;
+
   // system fields only allow the display text and pass-on fields to be edited
   if (is_system_field) {
     $(".edit_field__non_system").hide();
@@ -705,6 +732,7 @@ fields_ns.edit_field = function(row_group) {
     $("#edit_field__field_type_system").html(row_group.find(".system_field_type_label").html());
     $("#edit_field__db_column_div_system").html(row_group.find(".system_field_db_column").html());
     $("#edit_field__pass_on").attr("checked", row_group.find(".pass_on").attr("checked"));
+    field_type_str = $("#edit_field__field_type option[value=" + field_type_id + "]").text();
   } else {
     $(".edit_field__non_system").show();
     $(".edit_field__system").hide();
@@ -740,10 +768,15 @@ fields_ns.edit_field = function(row_group) {
       $("#edit_field__data_type").val(row_group.find(".data_types").val());
       $("#edit_field__db_column").val(row_group.find(".db_column").val());
     }
+
+    // the string version of the field type
+    field_type_str = $("#edit_field__field_type :selected").text();
   }
 
+  fields_ns.__current_field_type_id = field_type_id;
+  fields_ns.__last_field_type_id    = field_type_id;
+
   // load the Field-Specific Settings tab
-  var field_type_str = $("#edit_field__field_type :selected").text();
   var has_field_settings = fields_ns.init_field_settings_tab(field_type_id, field_id);
 
   // update the previous/next links (grey them out if one or both aren't relevant)
@@ -816,12 +849,12 @@ fields_ns.init_field_settings_tab = function(field_type_id, field_id) {
 
   // no extended settings
   if (field_settings == undefined) {
-    $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (0)");
+    $("#edit_field_template .inner_tab2").html(field_type_label + " " + g.messages["word_settings"] + " (0)");
     $("#edit_field__field_settings").html("<div class=\"notify\"><div style=\"padding:6px\">" + g.messages["notify_no_field_settings"] + "</div></div>");
     $("#edit_field__field_settings_loading").hide();
     return false;
   } else {
-    $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (" + field_settings.length + ")");
+    $("#edit_field_template .inner_tab2").html(field_type_label + " " + g.messages["word_settings"] + " (" + field_settings.length + ")");
   }
 
   // generate the field settings markup and embed it in the page
@@ -839,14 +872,16 @@ fields_ns.init_field_settings_tab = function(field_type_id, field_id) {
     $("#edit_field__field_settings").hide();
     ft.dialog_activity_icon($("#edit_field_template"), "show");
 
-    $.ajax({
-      url:      g.root_url + "/global/code/actions.php",
-      type:     "POST",
-      dataType: "json",
-      data:     { field_id: field_id, field_type_id: field_type_id, action: "get_extended_field_settings" },
-      success:  fields_ns.load_field_settings_response,
-      error:    ft.error_handler
-    });
+    if (!/^NEW/.test(field_id)) {
+      $.ajax({
+        url:      g.root_url + "/global/code/actions.php",
+        type:     "POST",
+        dataType: "json",
+        data:     { field_id: field_id, field_type_id: field_type_id, action: "get_extended_field_settings" },
+        success:  fields_ns.load_field_settings_response,
+        error:    ft.error_handler
+      });
+    }
   }
   else
   {
@@ -863,8 +898,9 @@ fields_ns.init_field_settings_tab = function(field_type_id, field_id) {
 
 /**
  * This is called whenever the user opens the Edit Field dialog on a field that has a field type with
- * extended settings. It constructs the markup and if all the markup was available, stores it in cache
- * (fields_ns.cached_field_setting_markup).
+ * extended settings - that includes going from field to field with the "prev/next" nav. It constructs the
+ * markup and if all the markup was available, stores it in cache (fields_ns.cached_field_setting_markup).
+ * This function also checks shared characteristics to map over as much shared data as possible.
  *
  * @param integer field_id
  * @param integer field_type_id
@@ -874,6 +910,8 @@ fields_ns.generate_field_type_markup = function(field_id, field_type_id, field_s
   var html = "";
   if (fields_ns.cached_field_settings_markup["field_type_" + field_type_id] !== undefined) {
     html = fields_ns.cached_field_settings_markup["field_type_" + field_type_id];
+    fields_ns.__check_shared_characteristics_cond2 = true;
+    fields_ns.check_shared_characteristics();
   } else {
     // the assumption is that we can cache the markup we're about to generate. However, some field types rely on
     // other requests: namely, option lists and form fields. At the time this function is called, those requests
@@ -882,7 +920,7 @@ fields_ns.generate_field_type_markup = function(field_id, field_type_id, field_s
 
     // all fields are disabled by default. Once the Ajax call to load the values for the actual field
     // has completed, they are enabled & the Ajax loading icon is hidden to signify readiness
-    html = "<table cellspacing=\"0\" cellpadding=\"\0\" width=\"100%\" class=\"check_areas\">"
+    html = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" class=\"check_areas\">"
          + "<tr>"
            + "<th width=\"200\" class=\"underline medium_grey\">" + g.messages["word_setting"] + "</th>"
            + "<th width=\"150\" align=\"center\" class=\"underline medium_grey\">" + g.messages["phrase_use_default_value_q"] + "</th>"
@@ -985,15 +1023,21 @@ fields_ns.generate_field_type_markup = function(field_id, field_type_id, field_s
                   var forms_ready = (fields_ns.forms != null);
                   if (option_lists_ready && forms_ready) {
                     $("#option_list_div_" + setting_id).html(fields_ns._generate_option_list_markup(setting_id, default_value));
+                    fields_ns.__check_shared_characteristics_cond2 = true;
+                    fields_ns.check_shared_characteristics();
                   }
 
-                  // here, the option list markup has been loaded, but the default value not actually be set properly. This
-                  // can occur because at the time that this function was called, the extended fields weren't loaded
+                  // here, the Option List markup has been loaded, but the value hasn't been set. This can occur because at
+                  // the time that this function was called, the extended fields weren't loaded. See comment above for the
+                  // definition of onload_field_setting_values
                   for (var j=0; j<fields_ns.onload_field_setting_values.length; j++) {
                     if (fields_ns.onload_field_setting_values[j].setting_id == setting_id) {
                       $("#option_list_div_" + setting_id).html(fields_ns._generate_option_list_markup(setting_id, fields_ns.onload_field_setting_values[j].setting_value));
                     }
                   }
+
+                  // no emptying of onload_field_setting_values?
+
                   return option_lists_ready;
                 }
               ]);
@@ -1010,8 +1054,11 @@ fields_ns.generate_field_type_markup = function(field_id, field_type_id, field_s
     }
     html += "</table>";
 
+    // if we can cache it, we can
     if (may_cache) {
       fields_ns.cached_field_settings_markup["field_type_" + field_type_id] = html;
+      fields_ns.__check_shared_characteristics_cond2 = true;
+      fields_ns.check_shared_characteristics();
     }
   }
 
@@ -1090,7 +1137,7 @@ fields_ns.edit_option_list = function(setting_id) {
 
   if (!list_id) {
     $("#edit_field_template_message").removeClass("hidden");
-    ft.display_message("edit_field_template_message", 0, "You must select an Option List and then Save Changes before being able to edit it.");
+    ft.display_message("edit_field_template_message", 0, g.messages["notify_edit_option_list_after_save"]);
     return false;
   }
 
@@ -1104,7 +1151,7 @@ fields_ns.edit_option_list = function(setting_id) {
    ft.create_dialog({
       dialog:     fields_ns.confirm_redirect_dialog,
       popup_type: "warning",
-      content:    "One or more fields have been updated. Would you like to save your changes before redirecting?",
+      content:    g.messages["confirm_save_change_before_redirect"],
       title:      g.messages["phrase_please_confirm"],
       buttons: [
         {
@@ -1170,9 +1217,13 @@ fields_ns.create_new_option_list = function(setting_id) {
  * This is called for fields that have types with one or more (possible) extended fields.
  */
 fields_ns.load_field_settings_response = function(data) {
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
 
   // store the info in memory. This memory is invalidated anytime the user changes the field type
-  // for the field (TODO!)
+  // for the field
   fields_ns.cached_loaded_extended_field["field_id_" + data.field_id] = {
     loaded:        true,
     field_type_id: data.field_type_id,
@@ -1391,6 +1442,11 @@ fields_ns.save_changes = function() {
 
 
 fields_ns.save_changes_response = function(data) {
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   // if there were no problems updating the fields, we just update the parent page with the latest values
   // and close the dialog
   if (data.success == 1) {
@@ -1443,7 +1499,7 @@ fields_ns.save_changes_response = function(data) {
     //
     delete fields_ns.cached_loaded_extended_field["field_id_" + field_id];
   } else {
-    // TODO
+    ft.display_message("ft_message", 0, g.messages["notify_error_saving_fields"]);
   }
 }
 
@@ -1528,7 +1584,13 @@ fields_ns.load_form_fields = function(params) {
   });
 }
 
+
 fields_ns.get_form_fields_response = function(data) {
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   fields_ns.form_fields["form_" + data.form_id] = data.fields;
 
   // if the user still has this form selected in the Edit Field dialog, load the info into a dropdown
@@ -1573,11 +1635,11 @@ fields_ns.generate_form_fields_section = function(params) {
 
   var html = "<table class=\"grey_box\">"
     + "<tr>"
-      + "<td width=\"100\">Select Field</td>"
+      + "<td width=\"100\">" + g.messages["phrase_select_field"] + "</td>"
       + "<td>" + field_dd + "</td>"
     + "</tr>"
     + "<tr>"
-      + "<td>Order</td>"
+      + "<td>" + g.messages["word_order"] + "</td>"
       + "<td><select name=\"edit_field__setting_" + setting_id + "_field_order\">"
         + "<option value=\"ASC\"" + ((params.field_order == "ASC") ? " selected" : "") + ">ASC</option>"
         + "<option value=\"DESC\"" + ((params.field_order == "DESC") ? " selected" : "") + ">DESC</option>"
@@ -1599,5 +1661,82 @@ fields_ns.click_use_default = function(el) {
     $("#edit_field__setting_" + setting_id).focus();
   }
   $(el).trigger("change");
+}
+
+
+/**
+ * This is called onblur after the user changed a field type AND after the actual field settings are returned and loaded
+ * for a field. It checks for both conditions; when they're both completed, it
+ */
+fields_ns.check_shared_characteristics = function() {
+  var curr_ft_id = fields_ns.__current_field_type_id;
+  var last_ft_id = fields_ns.__last_field_type_id;
+
+  if (curr_ft_id == last_ft_id) {
+    return;
+  }
+  if (!fields_ns.__check_shared_characteristics_cond1 || !fields_ns.__check_shared_characteristics_cond2) {
+    return;
+  }
+
+  var curr_setting_ids = [];
+  for (var i=0; i<page_ns.field_settings["field_type_" + curr_ft_id].length; i++) {
+    var curr_setting_id = page_ns.field_settings["field_type_" + curr_ft_id][i].setting_id;
+    if (page_ns.shared_characteristics["s" + curr_setting_id] != undefined) {
+      curr_setting_ids.push(curr_setting_id);
+    }
+  }
+  var last_setting_ids = [];
+  for (var i=0; i<page_ns.field_settings["field_type_" + last_ft_id].length; i++) {
+    var last_setting_id = page_ns.field_settings["field_type_" + last_ft_id][i].setting_id;
+    if (page_ns.shared_characteristics["s" + last_setting_id] != undefined) {
+      last_setting_ids.push(last_setting_id);
+    }
+  }
+
+  if (!curr_setting_ids.length || !last_setting_ids.length) {
+    return;
+  }
+
+  // So. We have the subset of all setting IDs of both the PREVIOUS and CURRENT field types that have
+  // associated shared characteristics. Now we need to determine which are actually shared so we can copy over the old
+  // setting values
+
+  var found_map = [];
+  for (var i=0; i<last_setting_ids.length; i++) {
+    var last_shared_characteristic_ids = page_ns.shared_characteristics["s" + last_setting_ids[i]];
+
+    for (var j=0; j<curr_setting_ids.length; j++) {
+      var curr_shared_characteristic_ids = page_ns.shared_characteristics["s" + curr_setting_ids[j]];
+
+      for (var k=0; k<curr_shared_characteristic_ids.length; k++) {
+
+        // FINALLY, we know there's a map. Make a note of the old & new setting IDs
+        if ($.inArray(curr_shared_characteristic_ids[k], last_shared_characteristic_ids) != -1) {
+          found_map.push([last_setting_ids[i], curr_setting_ids[j]]);
+        }
+      }
+    }
+  }
+
+  var old_values = fields_ns.memory["field_" + fields_ns.__current_field_id].tab2;
+  for (var i=0; i<found_map.length; i++) {
+    var old_setting_id = found_map[i][0];
+    var new_setting_id = found_map[i][1];
+
+    for (var j=0; j<old_values.length; j++) {
+      if (old_values[j].name == undefined || old_values[j].value == undefined) {
+        continue;
+      }
+      if (old_values[j].name != "edit_field__setting_" + old_setting_id) {
+        continue;
+      }
+      $("#edit_field__use_default_value_" + new_setting_id).attr("checked", "");
+      $("#edit_field__setting_" + new_setting_id).val(old_values[j].value).removeClass("light_grey").attr("disabled", "");
+    }
+  }
+
+  fields_ns.__check_shared_characteristics_cond1 = false;
+  fields_ns.__check_shared_characteristics_cond2 = false;
 }
 

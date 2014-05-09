@@ -27,12 +27,12 @@
       <div class="login_panel_inner">
         <table cellpadding="0" cellspacing="1">
         <tr>
-          <td>{$LANG.word_username}</td>
-          <td><input type="text" name="username" value="{$username}" /></td>
+          <td><label for="username">{$LANG.word_username}</label></td>
+          <td><input type="text" name="username" id="username" value="{$username}" /></td>
         </tr>
         <tr>
-          <td>{$LANG.word_password}</td>
-          <td><input type="password" name="password" value="" /></td>
+          <td><label for="password">{$LANG.word_password}</label></td>
+          <td><input type="password" name="password" id="password" value="" /></td>
         </tr>
         </table>
 

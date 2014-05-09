@@ -77,7 +77,7 @@ $page_vars["js_messages"] = array("validation_delete_non_empty_option_list", "co
   "phrase_please_confirm", "word_yes", "word_no", "word_edit", "word_remove");
 $page_vars["pagination"] = ft_get_page_nav($num_option_lists, $num_option_lists_per_page, $option_list_page);
 $page_vars["head_string"] =<<< END
-<script type="text/javascript" src="$g_root_url/global/scripts/manage_option_lists.js"></script>
+<script src="$g_root_url/global/scripts/manage_option_lists.js"></script>
 END;
 
 ft_display_page("admin/forms/option_lists/index.tpl", $page_vars);

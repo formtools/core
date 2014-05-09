@@ -55,7 +55,6 @@ foreach ($form_fields as $field)
   $field_id        = $field["field_id"];
   $is_system_field = ($field["is_system_field"] == "yes") ? "true" : "false";
   $is_date_field   = ($field["is_date_field"] == "yes") ? "true" : "false";
-  //$option_list_id = (empty($field["option_list_id"])) ? "null" : $field["option_list_id"];
   $field_type_id = $field["field_type_id"];
 
   $all_form_fields[] = "{ field_id: $field_id, display_name: \"$display_name\", "
@@ -170,7 +169,7 @@ $page_vars["head_string"] =<<< END
   <script src="$g_root_url/global/scripts/manage_views.js?v=3"></script>
 END;
 
-$replacements = array("user_doc_link" => "http://docs.formtools.org/userdoc/index.php?page=view_filters");
+$replacements = array("user_doc_link" => "http://docs.formtools.org/userdoc2_1/index.php?page=view_filters");
 $page_vars["text_filters_tips"] = ft_eval_smarty_string($LANG["text_filters_tips"], $replacements);
 $replacements = array("number" => "<input type=\"text\" name=\"num_standard_filter_rows\" id=\"num_standard_filter_rows\" value=\"1\" size=\"2\" />");
 $page_vars["add_standard_filter_num_rows_input_field"] = ft_eval_smarty_string($LANG["phrase_add_num_rows"], $replacements);
@@ -182,7 +181,7 @@ $page_vars["js_messages"] = array("word_remove", "validation_no_tabs_defined", "
         "validation_no_num_submissions_per_page", "validation_no_view_fields", "validation_no_column_selected",
         "validation_no_view_fields_selected", "phrase_first_name", "phrase_last_name", "phrase_company_name",
         "word_email", "word_notes", "word_id", "phrase_remove_row", "phrase_available_tabs", "word_close",
-        "phrase_add_fields", "phrase_create_group", "word_cancel", "word_yes", "word_no");
+        "phrase_add_fields", "phrase_create_group", "word_cancel", "word_yes", "word_no", "phrase_auto_size", "word_width_c");
 
 $field_type_map_lines = array();
 while(list($field_type_id, $field_type_name) = each($field_types))

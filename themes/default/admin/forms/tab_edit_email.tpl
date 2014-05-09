@@ -15,12 +15,11 @@
       <input type="hidden" name="num_recipients" id="num_recipients" value="{$template_info.recipients|@count}" />
 
       <div class="inner_tabset" id="edit_email_template">
-        <div class="tab_row fiveCols">
+        <div class="tab_row fourCols">
           <div class="inner_tab1{if $edit_email_tab == 1} selected{/if}">{$LANG.word_configuration}</div>
           <div class="inner_tab2{if $edit_email_tab == 2} selected{/if}">{$LANG.word_recipient_sp}</div>
           <div class="inner_tab3{if $edit_email_tab == 3} selected{/if}">{$LANG.word_content}</div>
           <div class="inner_tab4{if $edit_email_tab == 4} selected{/if}">{$LANG.word_test}</div>
-          <div class="inner_tab5{if $edit_email_tab == 5} selected{/if}">{$LANG.word_reference}</div>
         </div>
         <div class="inner_tab_content">
           <div class="inner_tab_content1" {if $edit_email_tab != 1}style="display:none"{/if}>
@@ -34,9 +33,6 @@
           </div>
           <div class="inner_tab_content4" {if $edit_email_tab != 4}style="display:none"{/if}>
             {ft_include file="admin/forms/tab_edit_email_tab4.tpl"}
-          </div>
-          <div class="inner_tab_content5" {if $edit_email_tab != 5}style="display:none"{/if}>
-            {ft_include file="admin/forms/tab_edit_email_tab5.tpl"}
           </div>
         </div>
       </div>

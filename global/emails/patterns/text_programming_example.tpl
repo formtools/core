@@ -1,7 +1,8 @@
 <!--
-  This is an example for programmers: it contains all the information about the field
-  that is available to you in the Smarty loop. Try using the "Display Email" option on
-  the Test tab to see what kind of values each attribute contains.
+  This is an example for programmers: it contains all the information about the
+  field that is available to you in the Smarty loop. Try using the "Display
+  Email" option on the Test tab to see what kind of values each attribute
+  contains.
 -->
 
 {literal}{foreach from=$fields item=field}
@@ -11,7 +12,7 @@ Field: {$field.field_title}
 [form_id]: {$field.form_id}
 [field_name]: {$field.field_name}
 [field_size]: {$field.field_size}
-[field_type]: {$field.field_type}
+[field_type_id]: {$field.field_type_id}
 [data_type]: {$field.data_type}
 [field_title]: {$field.field_title}
 [col_name]: {$field.col_name}

@@ -14,10 +14,9 @@
         <a href="edit.php?form_id={$form_id}"><img src="{$images_url}/admin_view.png" border="0" alt="{$LANG.phrase_edit_form}"
           title="{$LANG.phrase_edit_form}" width="48" height="23" /></a>
       </div>
-      <div class="views_dropdown">
-        {views_dropdown grouped_views=$grouped_views form_id=$form_id selected=$view_id
-          onchange="window.location='`$same_page`?form_id=`$form_id`&page=1&view_id=' + this.value"}
-      </div>
+      {views_dropdown grouped_views=$grouped_views form_id=$form_id selected=$view_id
+        onchange="window.location='`$same_page`?form_id=`$form_id`&page=1&view_id=' + this.value"
+        open_html='<div class="views_dropdown">' close_html='</div>' hide_single_view=true}
     </td>
   </tr>
   </table>
@@ -37,8 +36,7 @@
 
     <div class="notify margin_top_large">
       <div style="padding: 8px">
-        Oops! This View hasn't been fully set up yet. <a href="edit.php?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2">Click here</a> to specify which fields
-        should appear as columns on this page.
+        {$LANG.notify_view_missing_columns} {$notify_view_missing_columns_admin_fix}
       </div>
     </div>
 
@@ -81,7 +79,7 @@
               {if $search_num_results < $view_num_results}
                 class="bold" value="{$LANG.phrase_show_all} ({$view_num_results})"
               {else}
-                value="{$LANG.phrase_show_all}"
+                value="{$LANG.phrase_show_all}" disabled
               {/if} />
           </td>
         </tr>
@@ -91,14 +89,22 @@
 
   {/if}
 
+  {submission_listing_quicklinks context="admin"}
+
   {$pagination}
 
   {if $search_num_results == 0}
-    <div class="notify yellow_bg">
+
+    <div class="notify margin_bottom_large">
       <div style="padding:8px">
         {$LANG.text_no_search_results}
       </div>
     </div>
+
+    {if $view_info.may_add_submissions == "yes"}
+      <input type="button" id="add_submission" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='{$same_page}?add_submission'" />
+    {/if}
+
   {else}
 
     <form name="current_form" action="{$same_page}" method="post">
@@ -149,10 +155,11 @@
               <div class="truncate_no_fixed_width">
             {/if}
               {display_custom_field form_id=$form_id view_id=$view_id submission_id=$submission_id
-                value=$search_row.$col_name field_info=$curr_field field_types=$field_types settings=$settings}
+                value=$search_row.$col_name field_info=$curr_field field_types=$field_types settings=$settings
+                context="submission_listing"}
             {if $curr_field.truncate == "truncate"}
               </div>
-            {/if	}
+            {/if}
           </td>
         {/foreach}
         <td class="edit"><a href="edit_submission.php?form_id={$form_id}&view_id={$view_id}&submission_id={$submission_id}" title="{$LANG.word_edit}"></a></td>
@@ -163,15 +170,15 @@
     <div class="margin_top margin_bottom">
       <div style="float:right; padding:1px" id="display_num_selected_rows" class="{if $preselected_subids|@count == 0}light_grey{else}green{/if}"></div>
       {template_hook location="admin_submission_listings_buttons1"}
-      {if $view_info.may_add_submissions == "yes"}
-        <input type="button" id="add_submission" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='{$same_page}?add_submission'" />
+      {if $view_info.may_delete_submissions == "yes"}
+        <input type="button" value="{$LANG.word_delete}" class="red" onclick="ms.delete_submissions()" />
       {/if}
       {template_hook location="admin_submission_listings_buttons2"}
       <input type="button" id="select_button" value="{$LANG.phrase_select_all_on_page}" onclick="ms.select_all_on_page();" />
       <input type="button" id="unselect_button" value="{$LANG.phrase_unselect_all}" onclick="ms.unselect_all()" />
       {template_hook location="admin_submission_listings_buttons3"}
-      {if $view_info.may_delete_submissions == "yes"}
-        <input type="button" value="{$LANG.word_delete}" class="red" onclick="ms.delete_submissions()" />
+      {if $view_info.may_add_submissions == "yes"}
+        <input type="button" id="add_submission" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='{$same_page}?add_submission'" />
       {/if}
       {template_hook location="admin_submission_listings_buttons4"}
     </div>

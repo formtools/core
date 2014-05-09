@@ -5,10 +5,9 @@
     <td width="45"><a href="../"><img src="{$images_url}/icon_forms.gif" border="0" width="34" height="34" /></a></td>
     <td class="title">{$form_info.form_name}</td>
     <td align="right" valign="top">
-      <div class="views_dropdown">
-        {views_dropdown grouped_views=$grouped_views form_id=$form_id selected=$view_id
-          onchange="window.location='`$same_page`?form_id=`$form_id`&page=1&view_id=' + this.value"}
-      </div>
+      {views_dropdown grouped_views=$grouped_views form_id=$form_id selected=$view_id
+        onchange="window.location='`$same_page`?form_id=`$form_id`&page=1&view_id=' + this.value"
+        open_html='<div class="views_dropdown">' close_html='</div>' hide_single_view=true}
     </td>
   </tr>
   </table>
@@ -20,7 +19,7 @@
       {$LANG.text_no_submissions_found}
     </p>
 
-    {if $view_info.may_add_submissions == "yes"}
+    {if $view_info.may_add_submissions == "yes" && $form_info.is_active == "yes"}
       <input type="button" id="add_submission" value="{$LANG.word_add}" onclick="window.location='{$same_page}?add_submission'" />
     {/if}
 
@@ -28,7 +27,7 @@
 
     <div class="notify margin_top_large">
       <div style="padding: 8px">
-        Oops! Sorry, this View hasn't been fully set up yet.
+        {$LANG.notify_view_missing_columns}
       </div>
     </div>
 
@@ -79,14 +78,23 @@
     </div>
   {/if}
 
+  {submission_listing_quicklinks context="admin"}
+
   {$pagination}
 
   {if $search_num_results == 0}
-    <div class="notify yellow_bg">
+
+    <div class="notify yellow_bg margin_bottom_large">
       <div style="padding:8px">
-        There are no results with this search criteria / View.
+        {$LANG.text_no_search_results}
       </div>
     </div>
+
+
+    {if $view_info.may_add_submissions == "yes" && $form_info.is_active == "yes"}
+      <input type="button" id="add_submission" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='{$same_page}?add_submission'" />
+    {/if}
+
   {else}
 
     <form name="current_form" action="{$same_page}" method="post">
@@ -160,19 +168,16 @@
 
       {template_hook location="client_submission_listings_buttons1"}
 
-      {if $view_info.may_add_submissions == "yes"}
-        <input type="button" id="add_submission" value="{$LANG.word_add}" onclick="window.location='{$same_page}?add_submission'" />
-      {/if}
-
-      {template_hook location="client_submission_listings_buttons2"}
-
-      <input type="button" id="select_button" value="{$LANG.phrase_select_all_on_page}" onclick="ms.select_all_on_page();" />
-      <input type="button" id="unselect_button" value="{$LANG.phrase_unselect_all}" onclick="ms.unselect_all()" />
-
-      {template_hook location="client_submission_listings_buttons3"}
-
       {if $view_info.may_delete_submissions == "yes"}
         <input type="button" value="{$LANG.word_delete}" class="red" onclick="ms.delete_submissions()" />
+      {/if}
+      {template_hook location="client_submission_listings_buttons2"}
+      <input type="button" id="select_button" value="{$LANG.phrase_select_all_on_page}" onclick="ms.select_all_on_page();" />
+      <input type="button" id="unselect_button" value="{$LANG.phrase_unselect_all}" onclick="ms.unselect_all()" />
+      {template_hook location="client_submission_listings_buttons3"}
+
+      {if $view_info.may_add_submissions == "yes" && $form_info.is_active == "yes"}
+        <input type="button" id="add_submission" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='{$same_page}?add_submission'" />
       {/if}
 
       {template_hook location="client_submission_listings_buttons4"}

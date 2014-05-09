@@ -67,7 +67,7 @@
       {/foreach}</tbody>
       </table>
 
-      <script type="text/javascript">
+      <script>
       cf_ns.num_rows = {$client_forms|@count};
       {* if there aren't any forms assigned to this client already, add a blank one ready for the admin to edit *}
       {if $client_forms|@count == 0}

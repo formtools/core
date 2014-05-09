@@ -1,0 +1,130 @@
+.incomplete {
+  width: 200px;
+  padding: 5px;
+  border: 1px solid #999999;
+  background-color: #ffffcc;
+  text-align: center;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+
+/* the add form step 2 page has a slightly wider space available */
+#add_form .multi_page_form_list {
+  width: 529px;
+}
+#add_form .multi_page_form_list .col2 {
+  width: 355px;
+}
+#add_form .multi_page_form_list .col2 input{
+  width: 349px;
+}
+#add_form .multi_page_form_list .col3 {
+  width: 100px;
+}
+#add_form .multi_page_form_list .col3 input {
+  width: 98px;
+}
+
+/* the add form step 4 sortable list */
+.add_form_step4 .col1 {
+  color: #666666;
+}
+.add_form_step4 .col2 {
+  width: 193px;
+}
+.add_form_step4 .rows .col2 {
+  padding-left: 3px;
+  width: 190px;
+}
+.add_form_step4 .col3 {
+  width: 202px;
+}
+.add_form_step4 .rows .col3 input {
+  width: 195px;
+}
+.add_form_step4 .col4 {
+  width: 266px;
+}
+.add_form_step4 .rows .col4 {
+  padding-left: 3px;
+  width: 263px;
+}
+.add_form_step4 .col5 {
+  width: 18px;
+}
+
+/* add external form step 5 */
+.review_field_options .col2 {
+  width: 261px;
+}
+.review_field_options .col2 input {
+  width: 255px;
+}
+.review_field_options .col3 {
+  width: 261px;
+}
+.review_field_options .col3 input {
+  width: 255px;
+}
+
+
+.multi_page_form_list {
+  width: 491px;
+}
+.multi_page_form_list .col2 {
+  width: 317px;
+}
+.multi_page_form_list .col2 input{
+  width: 311px;
+}
+.multi_page_form_list .col3 {
+  width: 100px;
+}
+.multi_page_form_list .col3 input {
+  width: 98px;
+}
+
+.new_submission_default_vals {
+  width: 194px;
+}
+.new_submission_default_val_fields {
+  width: 272px;
+}
+
+.placeholders_section {
+  padding: 6px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  background-color: #efefef;
+  float: right;
+  margin-left: 6px;
+}
+.placeholders_section:hover {
+  background-color: #dddddd;
+  cursor: pointer;
+}
+.placeholders_section img {
+  float: right;
+}
+.placeholders_link {
+  margin: 0px 8px 0px 2px;
+}
+#placeholders_dialog_content {
+  text-align: left;
+  height: 500px;
+}
+.placeholder_field_overlay {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  cursor: pointer;
+  z-index: 2;
+  margin: 2px;
+  padding-left: 5px;
+}
+
+#new_field_position {
+  max-width: 280px;
+}

@@ -23,33 +23,26 @@
   </table>
 
   <br />
-
   <div>
-
     <div class="subtitle underline">{$LANG.phrase_final_touches_page_6|upper}</div>
-
     <p>
       {$LANG.text_add_form_step_5_para_1}
     </p>
-
     <code><pre class="green">
       &lt;input type="hidden" name="form_tools_initialize_form" value="1" /&gt;</pre></code>
 
     <p>
       {$LANG.text_add_form_step_5_para_5}
     </p>
-
     <code><pre class="green">
       $fields = ft_api_init_form_page({$form_id});</pre></code>
 
     <p>
       {$LANG.text_add_form_step_5_para_2}
     </p>
-
     <p>
       {$text_add_form_step_5_para}
     </p>
-
     {if $uploading_files == "yes"}
       <p>
         {$text_add_form_step_5_para_4}
@@ -59,7 +52,7 @@
   </div>
 
   <form method="post" action="../">
-    <input type="submit" name="action" value="{$LANG.phrase_form_list_uc}" />
+    <input type="submit" name="action" value="{$LANG.phrase_form_list}" />
   </form>
 
 {ft_include file='footer.tpl'}

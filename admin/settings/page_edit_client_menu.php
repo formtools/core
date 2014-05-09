@@ -14,8 +14,8 @@ else
 
 if (isset($request["update_client_menu"]))
 {
-	$info = $_POST;
-	$info["sortable_id"] = $sortable_id;
+  $info = $_POST;
+  $info["sortable_id"] = $sortable_id;
   list($g_success, $g_message) = ft_update_client_menu($info);
 }
 
@@ -31,8 +31,8 @@ $menus = ft_get_menu_list();
 $menu_names = array();
 foreach ($menus as $curr_menu_info)
 {
-	if ($menu_id == $curr_menu_info["menu_id"])
-	  continue;
+  if ($menu_id == $curr_menu_info["menu_id"])
+    continue;
 
   $menu_names[] = "\"" . htmlspecialchars($curr_menu_info["menu"]) . "\"";
 }
@@ -62,8 +62,8 @@ $page_vars["is_new_menu"] = $is_new_menu;
 $page_vars["selected_client_ids"] = $selected_client_ids;
 $page_vars["sortable_id"] = $sortable_id;
 $page_vars["head_string"] =<<< END
-  <script type="text/javascript" src="$g_root_url/global/scripts/sortable.js"></script>
-  <script type="text/javascript" src="$g_root_url/global/scripts/manage_menus.js"></script>
+  <script src="$g_root_url/global/scripts/sortable.js"></script>
+  <script src="$g_root_url/global/scripts/manage_menus.js"></script>
 END;
 $page_vars["js_messages"] = array("word_remove", "word_na", "word_form_c", "word_client_c", "word_url_c",
   "validation_menu_name_taken", "phrase_delete_row", "phrase_connect_rows", "phrase_disconnect_rows");

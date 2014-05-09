@@ -1,0 +1,33 @@
+.login_panel {
+  border: 1px solid #999999;
+  display: inline-block;
+}
+.login_panel_inner {
+  background-color: #e9e9e9;
+  margin: 3px;
+  padding: 16px;
+}
+.login_panel_inner input[type=text], .login_panel_inner input[type=password] {
+  font-size: 11pt;
+  width: 160px;
+  margin-right: 10px;
+}
+.login_panel table {
+  float: left;
+}
+.login_panel td {
+  color: #336699;
+  min-width: 80px;
+  font-size: 9pt;
+}
+.login_error {
+  background-color: #4b9743;
+  color: white;
+  padding-top: 1px;
+  padding-bottom: 1px;
+  margin: 3px;
+}
+.login_submit {
+  float: left;
+  margin-top: 15px;
+}

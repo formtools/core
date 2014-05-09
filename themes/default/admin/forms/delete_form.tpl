@@ -5,8 +5,9 @@
     <td width="45"><img src="{$images_url}/icon_forms.gif" width="34" height="34" /></td>
     <td class="title">
 	    <a href="./">{$LANG.word_forms}</a> <span class="joiner">&raquo;</span>
-	    {$LANG.phrase_delete_form} <span class="joiner">&raquo;</span>
-	    {$form_info.form_name} (<span class="identifier">{$form_id}</span>)
+	    <a href="./">{$form_info.form_name}</a> (<span class="identifier">{$form_id}</span>)
+	    <span class="joiner">&raquo;</span>
+	    {$LANG.phrase_delete_form}
     </td>
   </tr>
   </table>
@@ -24,7 +25,7 @@
     <input type="checkbox" name="delete_form" id="delete_form" value="yes" />
     <label for="delete_form">{$LANG.text_confirm_delete_form}</label><br />
 
-    {if $files_uploaded}
+    {if $uploaded_files|@count > 0}
       <input type="checkbox" name="delete_files" id="delete_files" value="yes" />
       <label for="delete_files">{$LANG.text_delete_all_forms}</label>
       (<a href="#" onclick="page_ns.show_uploaded_files(); return false">{$LANG.phrase_view_uploaded_files}</a>)<br />
@@ -35,24 +36,13 @@
     <input type="submit" name="sss2" value="{$LANG.phrase_delete_form|upper}" class="bold" />
   </form>
 
-  {if $files_uploaded}
+  {if $uploaded_files|@count > 0}
     <div id="uploaded_files" style="display: none;">
       <br />
       <hr size="1" />
-
-      {assign var=has_at_least_one_file value=false}
-      {foreach from=$file_field_hash key=field_id item=v}
-
-         {foreach from=$files_uploaded.$field_id item=file}
-           <a href="{$v[1]}/{$file}" target="_blank">{$file}</a><br />
-           {assign var=has_at_least_one_file value=true}
-         {/foreach}
-
+      {foreach from=$uploaded_files item=file_info}
+        <a href="{$file_info.folder_url}/{$file_info.filename}" target="_blank">{$file_info.filename}</a><br />
       {/foreach}
-
-      {if !$has_at_least_one_file}
-        <span class="medium_grey">{$LANG.phrase_no_files_uploaded}</span>
-      {/if}
     </div>
   {/if}
 

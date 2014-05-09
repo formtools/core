@@ -1,0 +1,284 @@
+/* new sortable (drag-drop) "tables" - shared styles */
+.sortable {
+  border: 1px solid #DDDDDD;
+  padding: 1px;
+}
+.sortable ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+.sortable li {
+  float: left;
+}
+.sortable ul.header_row li.col0 {
+  border: 0px;
+}
+.sortable ul.header_row li {
+  height: 22px;
+  border-right: 1px solid white;
+  white-space: nowrap;
+}
+
+.sortable li.sortable_row {
+  float: none;
+  border-right: none;
+  margin-bottom: 1px;
+}
+.groupable li.sortable_row {
+  background: transparent url(../../../global/images/group_block.png) repeat-y left bottom;
+}
+body .sortable_groups .empty_group {
+  height: 2px;
+  background-color: #efefef;
+}
+
+/* these match the 1px border-right on the headers so it's easier to set widths for columns in the header and rows */
+.sortable ul.rows li {
+  margin-right: 1px;
+}
+.sortable .rows li.sortable_row {
+  margin-right: 0px;
+}
+.sortable .rows div.group_block_top {
+  width: 14px;
+  height: 2px;
+  border-right: none;
+  background-color: white;
+  float: left;
+}
+.sortable .rows div.row_content li {
+  float: left;
+  background-color: #efefef;
+  border-bottom: 1px solid #cccccc;
+}
+body .sortable .rows li.rowN {
+  margin-bottom: 0px;
+}
+.sortable .rows div.row_content .rowN li {
+  border-bottom: 0px;
+}
+body .sortable .rows div.over .sort_col {
+  background: #dddddd url(../images/sort.png) no-repeat 90% center;
+}
+body .sortable div.row_content .system_field li {
+  background-color: #C6F1C9;
+}
+.sortable .sort_col {
+  background-image: url(../images/sort.png);
+  background-repeat: no-repeat;
+  background-position: 90% center;
+  padding-left: 3px;
+  width: 50px;
+  cursor: move;
+}
+.groupable li.sort_col {
+  width: 36px;
+}
+.sortable .rowN {
+  border-bottom: none;
+}
+.sortable .rows .rowN .row_content {
+  border-bottom: 0px;
+}
+.sortable .rows div.row_content li .scroll-content li {
+  background-color:	#f2f2f2;
+}
+.sortable .rows div.row_content .system_field li .scroll-content li {
+  background-color: #ddf7df;
+}
+.sortable .colN, body .sortable ul.header_row .colN {
+  border-right: none;
+}
+.sortable ul li.del {
+  text-align: center;
+  width: 18px;
+}
+.sortable ul li.edit {
+  text-align: center;
+  width: 18px;
+}
+.sortable .rows .del, .sortable .rows .edit, .sortable .rows .edit a {
+  height: 21px;
+  display: block;
+  cursor: pointer;
+}
+.sortable .rows .del {
+  background: transparent url(../images/delete.png) no-repeat 2px 4px;
+}
+.sortable .rows .edit {
+  background: transparent url(../images/edit.png) no-repeat center 2px;
+}
+
+.sortable .rows .system_field .del {
+  /*background: inherit;*/
+}
+.sortable .rows .del:hover {
+  background: transparent url(../images/delete.png) no-repeat -22px 4px;
+}
+.sortable .header_row li {
+  background-image: url(../images/list_table_heading.jpg);
+  text-align: center;
+  color: white;
+}
+.sortable .header_row .col1 {
+  width: 53px;
+  margin-right: 0px;
+}
+.sortable .col1 {
+  color: #666666;
+}
+.sortable .sortable_row li {
+  height: 21px;
+}
+body .sortable li.rowN {
+  margin-top: 1px;
+}
+
+/* URGH! */
+body .sortable .rows .delete_row_hover li,
+.list_table tr.delete_row_hover,
+.list_table tr.delete_row_hover td {
+  background-color: #770000;
+  color: #ffffff;
+}
+body .sortable .rows div.delete_row_hover li ul.scroll-content li,
+body .sortable .rows div.row_content .delete_row_hover li .scroll-content li {
+  background-color: #881f1f;
+}
+body .sortable .rows .delete_row_hover li,
+body .sortable .rows .delete_row_hover span,
+body .sortable .rows .delete_row_hover a,
+.list_table tr.delete_row_hover a,
+.list_table tr.delete_row_hover span {
+  color: #ffffff;
+}
+.list_table tr.delete_row_hover span.num_submissions_box {
+  color: black;
+}
+
+body .sortable .rows .delete_row_hover li.sort_col {
+  color: #ffffaa;
+}
+body .sortable .rows div.delete_row_hover li.sort_col,
+body .sortable .rows div.row_content .delete_row_hover li {
+  background-color: #770000;
+}
+body .sortable .rows div.row_content .delete_row_hover li.col0 {
+  background-color: transparent;
+}
+body .sortable .rows div.row_content .delete_row_hover li.splitter {
+  background-color: #999999;
+}
+
+/* URGH 2! */
+body .sortable .rows .edit_row_hover li,
+body .sortable .rows div.edit_row_hover li.sort_col,
+.list_table tr.edit_row_hover,
+.list_table tr.edit_row_hover td,
+body .sortable .rows div.edit_row_hover li ul.scroll-content li,
+body .sortable .rows div.row_content .edit_row_hover li .scroll-content li,
+body .sortable .rows div.edit_row_hover li.sort_col,
+body .sortable .rows div.row_content .edit_row_hover li {
+  background-color: #dddddd;
+}
+body .sortable .rows div.row_content .edit_row_hover li.splitter {
+  background-color: #999999;
+}
+body .sortable .rows .edit_row_hover li.sort_col {
+  color: #000000;
+}
+body .sortable .rows div.row_content .edit_row_hover li.col0 {
+  background-color: transparent;
+}
+
+.row_group {
+  position: relative;
+  float: right;
+}
+.sortable .rows .col0 {
+  background-color: transparent;
+  width: 12px;
+  height: 15px;
+  position: absolute;
+  left: -14px;
+  top: 16px;
+  z-index: 2;
+}
+
+.sortable_group {
+  margin-bottom: 8px;
+}
+
+.sortable_group_header {
+  background-color: #d5edd7;
+  -moz-border-radius-topleft: 6px;
+  -moz-border-radius-topright: 6px;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+.sortable_group_footer {
+  background-color: #d5edd7;
+  -moz-border-radius-bottomleft: 6px;
+  -moz-border-radius-bottomright: 6px;
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
+  height: 20px;
+}
+body .padded_footer {
+  height: 23px;
+}
+.sortable_group_footer a {
+  float:right;
+  margin-right: 5px;
+}
+.sortable_group_header label {
+  padding: 6px 6px 6px 12px;
+  width: 140px;
+  float: left;
+  color: #345437;
+}
+.sortable_group_header input {
+  float: left;
+  margin: 6px 0px 1px;
+  width: 300px;
+}
+.sortable_group_header .sort {
+  cursor: move;
+  padding: 6px;
+  background: transparent url(../images/sort.png) no-repeat 50% center;
+  -moz-border-radius-topleft: 6px;
+  border-top-left-radius: 6px;
+  height: 20px;
+  width: 10px;
+  float: left;
+}
+.sortable_group_header .sort:hover {
+  background-color: #beddc0;
+}
+
+.sortable_group_header .delete_group {
+  float: right;
+  background: transparent url(../images/delete_group.png) no-repeat -22px 3px;
+  width: 18px;
+  height: 20px;
+  margin: 6px 2px 6px 0px;
+}
+
+.sortable_group_header .delete_group:hover {
+  background: transparent url(../images/delete_group.png) no-repeat 2px 3px;
+  cursor: pointer;
+}
+
+.sortable .rows div.grouped_row .row_group li {
+  border-bottom: 1px solid transparent;
+}
+.sortable .rows div.grouped_row div.row_group:last-child li {
+  border-bottom: 1px solid #cccccc;
+}
+.sortable .rows div.grouped_row div.row_group:last-child li.col0 {
+  border-bottom: 1px solid transparent;
+}
+body .sortable .rows div.grouped_row div.rowN:last-child li {
+  border-bottom: 0px;
+}

@@ -64,7 +64,7 @@
     {template_hook location="admin_add_client_bottom"}
 
     <p>
-      <input type="submit" name="add_client" value="{$LANG.phrase_add_client|upper}" />
+      <input type="submit" name="add_client" value="{$LANG.phrase_add_client}" />
     </p>
 
   </form>

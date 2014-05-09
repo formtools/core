@@ -44,8 +44,6 @@
     {ft_include file='admin/forms/tab_add_view.tpl'}
   {elseif $page == "database"}
     {ft_include file='admin/forms/tab_database.tpl'}
-  {elseif $page == "add_fields"}
-    {ft_include file='admin/forms/tab_add_fields.tpl'}
   {else}
     {ft_include file='admin/forms/tab_main.tpl'}
   {/if}

@@ -5,10 +5,9 @@
     <tr>
       <td><span class="title">{$edit_submission_page_label}</span></td>
       <td align="right">
-        <div class="views_dropdown">
-          {views_dropdown grouped_views=$grouped_views form_id=$form_id submission_id=$submission_id selected=$view_id omit_hidden_views=true
-            onchange="window.location='`$same_page`?form_id=`$form_id`&submission_id=`$submission_id`&view_id=' + this.value"}
-        </div>
+        {views_dropdown grouped_views=$grouped_views form_id=$form_id submission_id=$submission_id selected=$view_id omit_hidden_views=true
+          onchange="window.location='`$same_page`?form_id=`$form_id`&submission_id=`$submission_id`&view_id=' + this.value"
+          open_html='<div class="views_dropdown">' close_html='</div>' hide_single_view=true}
       </td>
     </tr>
     </table>
@@ -52,7 +51,8 @@
           <tr>
             <td width="150" class="pad_left_small" valign="top">{$curr_field.field_title}</td>
             <td valign="top">
-              {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$curr_field field_types=$field_types}
+              {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$curr_field
+                field_types=$field_types settings=$settings}
             </td>
           </tr>
         {/foreach}
@@ -76,12 +76,12 @@
         </span>
         {* only show the update button if there are editable fields in the tab *}
         {if $page_field_ids|@count > 0 && $tab_has_editable_fields}
-          <input type="submit" name="update" value="{$LANG.word_update|upper}" />
+          <input type="submit" name="update" value="{$LANG.word_update}" />
         {/if}
         {if $view_info.may_delete_submissions == "yes"}
-          <input type="button" name="delete" value="{$LANG.word_delete|upper}" class="red" onclick="return ms.delete_submission({$submission_id}, 'submissions.php')"/>
+            <input type="button" name="delete" value="{$LANG.word_delete}" class="red" onclick="return ms.delete_submission({$submission_id}, 'index.php')"/>
         {/if}
-        {if $view_info.may_add_submissions == "yes"}
+        {if $view_info.may_add_submissions == "yes" && $form_info.is_active == "yes"}
           <span class="button_separator">|</span>
           <input type="button" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='index.php?form_id={$form_id}&add_submission'" />
         {/if}

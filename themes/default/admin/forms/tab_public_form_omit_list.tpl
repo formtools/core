@@ -40,7 +40,7 @@
     </table>
 
     <p>
-      <input type="submit" name="update_public_form_omit_list" value="{$LANG.word_update|upper}" />
+      <input type="submit" name="update_public_form_omit_list" value="{$LANG.word_update}" />
       <input type="button" value="{$LANG.phrase_clear_omit_list}" class="blue" onclick="page_ns.clear_omit_list()" />
     </p>
   </form>

@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * Smarty plugin
  * -------------------------------------------------------------
  * File:     function.edit_custom_field
@@ -9,9 +9,10 @@
  * Purpose:  This is used on the Edit Submission pages. It does all the clever stuff needed to generate the
  *           actual markup for a single field, with whatever user-defined settings have been employed.
  *
- *           It's strongly coupled to the ft_get_grouped_view_fields
- *           function (when called with the form ID & submission ID params) to ensure that all data is efficiently
- *           returned for use by this function.
+ *           It's strongly coupled to the ft_get_grouped_view_fields function (when called with the form ID &
+ *           submission ID params) to ensure that all data is efficiently returned for use by this function.
+ *
+ *           It can be used to edit fields
  * -------------------------------------------------------------
  */
 function smarty_function_edit_custom_field($params, &$smarty)
@@ -21,11 +22,6 @@ function smarty_function_edit_custom_field($params, &$smarty)
   if (empty($params["form_id"]))
   {
     $smarty->trigger_error("assign: missing 'form_id' parameter.");
-    return;
-  }
-  if (empty($params["submission_id"]))
-  {
-    $smarty->trigger_error("assign: missing 'submission_id' parameter.");
     return;
   }
   if (empty($params["field_info"]))
@@ -38,11 +34,19 @@ function smarty_function_edit_custom_field($params, &$smarty)
     $smarty->trigger_error("assign: missing 'field_types' parameter.");
     return;
   }
+  if (empty($params["settings"]))
+  {
+    $smarty->trigger_error("assign: missing 'settings' parameter.");
+    return;
+  }
 
-  $form_id       = $params["form_id"];
-  $submission_id = $params["submission_id"];
-  $field_info    = $params["field_info"];
-  $field_types   = $params["field_types"];
+  $form_id     = $params["form_id"];
+  $field_info  = $params["field_info"];
+  $field_types = $params["field_types"];
+  $settings    = $params["settings"];
+
+  $submission_id = isset($params["submission_id"]) ? $params["submission_id"] : "";
+
 
   // loop through the field types and store the one we're interested in in $field_type_info
   $field_type_info = array();
@@ -78,10 +82,10 @@ function smarty_function_edit_custom_field($params, &$smarty)
     "FIELD_ID"      => $field_info["field_id"],
     "NAME"          => $field_info["field_name"],
     "COLNAME"       => $field_info["col_name"],
-    "VALUE"         => $field_info["submission_info"]["value"],
-    "SETTINGS"      => ft_get_settings("", "core"), // SLOW! TODO
+    "VALUE"         => isset($field_info["submission_value"]) ? $field_info["submission_value"] : "",
+    "SETTINGS"      => $settings,
     "CONTEXTPAGE"   => "edit_submission",
-    "ACCOUNT_INFO"  => $_SESSION["ft"]["account"],
+    "ACCOUNT_INFO"  => isset($_SESSION["ft"]["account"]) ? $_SESSION["ft"]["account"] : array(),
     "g_root_url"    => $g_root_url,
     "g_root_dir"    => $g_root_dir,
     "g_multi_val_delimiter" => $g_multi_val_delimiter
@@ -96,7 +100,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
     $value                   = $setting_info["default_value"];
     $identifier              = $setting_info["field_setting_identifier"];
 
-    foreach ($field_info["submission_info"]["settings"] as $setting)
+    foreach ($field_info["field_settings"] as $setting)
     {
       $found = false;
       while (list($setting_id, $setting_value) = each($setting))

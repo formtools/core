@@ -3,11 +3,6 @@
 require("../../global/session_start.php");
 ft_check_permission("admin");
 
-if (isset($_GET['delete']) && isset($_GET['form_id']))
-{
-  list($g_success, $g_message) = ft_delete_form($_GET["form_id"]);
-}
-
 _ft_cache_form_stats();
 if (isset($_GET["reset"]))
 {

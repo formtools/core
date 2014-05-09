@@ -70,13 +70,12 @@
                   <div class="clear"></div>
                 </li>
                 {/if}
-               <li class="sortable_row">
-                <div class="row_content">
+                <li class="sortable_row">
                 {assign var=next_item_is_new_sort_group value=$views[$smarty.foreach.row.iteration].is_new_sort_group}
                 <div class="row_content{if $next_item_is_new_sort_group == 'no'} grouped_row{/if}">
               {/if}
 
-              {assign var=previous_item value=$i}
+              {assign var=previous_item value=$view}
 
                 <div class="row_group{if $smarty.foreach.row.last} rowN{/if}">
                   <input type="hidden" class="sr_order" value="{$view.view_id}" />
@@ -144,11 +143,10 @@
     </div>
 
     <p>
-      <input type="submit" name="update_views" value="{$LANG.word_update|upper}" />
+      <input type="submit" name="update_views" value="{$LANG.word_update}" />
     </p>
 
     {/if}
-
   </form>
 
   <div id="new_view_dialog" class="ft_dialog hidden">

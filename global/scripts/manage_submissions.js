@@ -15,8 +15,6 @@ if (typeof ms == "undefined")
  * download and Printer-Friendly page. If the "selected" option is selected, it checks that the
  * user has selected at least one submission.
  *
- * TODO move this to the Export Manager module.
- *
  * @param string action what to do: "print_preview" / ""
  * @param string select_option
  * @return boolean
@@ -148,8 +146,24 @@ ms.delete_submissions = function(page) {
  * @param string target_webpage where to link to after deleting the submission
  */
 ms.delete_submission = function(submission_id, target_webpage) {
-  if (confirm(g.messages["confirm_delete_submission"]))
-    window.location = target_webpage + "?delete=" + submission_id;
+  ft.create_dialog({
+    dialog:    ft.check_url_dialog,
+    title:     g.messages["phrase_please_confirm"],
+    content:   g.messages["confirm_delete_submission"],
+    popup_type: "warning",
+    buttons: [{
+      text: g.messages["word_yes"],
+      click: function() {
+        window.location = target_webpage + "?delete=" + submission_id;
+      }
+    },
+    {
+      text: g.messages["word_no"],
+      click: function() {
+        $(this).dialog("close");
+      }
+    }]
+  });
 
   return false;
 }
@@ -164,7 +178,7 @@ ms.init_submissions_page = function() {
     return;
   }
 
-  if ($("search_field")) {
+  if ($("#search_field").length) {
     ms.change_search_field($("#search_field").val());
   }
 
@@ -489,9 +503,15 @@ ms.edit_submission_page_send_email = function(submission_id) {
 
 
 /**
- * Called after an email has been successfully
+ * Called after an email has been sent, or failed to be sent due to session timeout.
  */
 ms.email_sent = function(data) {
+
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   ft.display_message("ft_message", data.success, data.message);
 }
 
@@ -509,6 +529,11 @@ ms.check_search_keyword = function() {
 
 // checks that if a user is doing a search on a date field, there's a valid date or date range in the date field
 ms.check_valid_date = function() {
+  var curr_value = $("#search_field").val();
+  if (!curr_value.match(/\|date$/)) {
+    return true;
+  }
+
   var date_field = $("#search_date");
   var val = date_field.val();
   if (!val.match(/^\d{1,2}?\/\d{1,2}\/\d{4}$/) &&

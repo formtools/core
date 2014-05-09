@@ -29,4 +29,10 @@
     <a href="index.php{$query_params}">{$LANG.phrase_login_panel_leftarrows}</a>
   </p>
 
+  <noscript>
+    <div class="error" style="padding:6px;">
+      {$LANG.text_js_required}
+    </div>
+  </noscript>
+
 {ft_include file="footer.tpl"}

@@ -6,7 +6,7 @@ $request = array_merge($_POST, $_GET);
 
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
 $form_id = ft_load_field("form_id", "curr_form_id");
-if (empty($form_id))
+if (empty($form_id) || !is_numeric($form_id))
 {
   session_write_close();
   header("location: index.php");
@@ -47,13 +47,12 @@ $_SESSION["ft"]["last_link_page"] = "submissions";
 
 $form_info = ft_get_form($form_id);
 $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true, "include_field_settings" => true));
-
 $view_info = ft_get_view($view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes")
 {
   $submission_id = ft_create_blank_submission($form_id, $view_id, true);
-  header("location: edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id");
+  header("location: edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id&message=new_submission");
   exit;
 }
 
@@ -96,7 +95,7 @@ if (isset($_GET["delete"]))
   // in order to delete it
   if (!empty($_GET["delete"]))
   {
-    $ids = split(",", $_GET["delete"]);
+    $ids = explode(",", $_GET["delete"]);
     foreach ($ids as $id)
     {
       list($g_success, $g_message) = ft_delete_submission($form_id, $view_id, $id, true);
@@ -126,6 +125,7 @@ if (isset($_POST["search"]))
 // all the fields in the View
 $all_view_field_columns = array();
 $searchable_columns  = array();
+
 foreach ($view_info["fields"] as $field_info)
 {
   $all_view_field_columns[$field_info["field_id"]] = $field_info["col_name"];
@@ -156,7 +156,11 @@ foreach ($view_info["columns"] as $column_info)
   }
 }
 
-// display_fields contains ALL the information we need for the fields in the template
+// display_fields contains ALL the information we need for the fields in the template, i.e. a composite
+// of the view column, view field and form field information. For this page it only contains fields marked
+// as columns. The submissions.tpl template also needs a bunch of other stuff, but for passing to the
+// {display_custom_field} smarty function, actually very field keys are needed (see description in
+// ft_generate_viewable_field)
 $display_fields = array();
 foreach ($view_info["columns"] as $col_info)
 {
@@ -315,6 +319,7 @@ $page_vars["page_submission_ids"] = $submission_id_str;
 $page_vars["order"] = $order;
 $page_vars["field_types"] = $field_types;
 $page_vars["has_searchable_field"] = $has_searchable_field;
+$page_vars["notify_view_missing_columns_admin_fix"] = ft_eval_smarty_string($LANG["notify_view_missing_columns_admin_fix"], array("LINK" => "edit.php?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2"));
 $page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
 $page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download",
@@ -334,7 +339,6 @@ END;
 $page_vars["head_js"] =<<< END
 var rules = [];
 rules.push("function,ms.check_search_keyword");
-rules.push("if:search_field=submission_date,required,search_date,{$LANG["validation_please_enter_search_date_range"]}");
 rules.push("function,ms.check_valid_date");
 if (typeof ms == "undefined") {
   ms = {};
@@ -347,6 +351,7 @@ ms.selected_submission_ids = [$preselected_subids_str]; // regardless of page; o
 ms.all_submissions_selected_omit_list = [$all_submissions_selected_omit_list_str]; // if all submissions in result set selected, the unselected rows (for this page only!) are stored here
 ms.search_num_results = $search_num_results; // the total number of View-search results, regardless of page
 ms.form_id = $form_id;
+ms.view_id = $view_id;
 ms.num_results_per_page = $results_per_page;
 
 $(function() {

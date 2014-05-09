@@ -13,7 +13,7 @@ if (isset($request["update"]))
   list($g_success, $g_message) = ft_update_theme_settings($_POST);
 
 if (isset($_POST["refresh_theme_list"]))
-	list($g_success, $g_message) = ft_update_theme_list();
+  list($g_success, $g_message) = ft_update_theme_list();
 
 if (isset($_GET["mass_assign"]))
   list($g_success, $g_message) = ft_update_client_themes($_GET["accounts"], $_GET["theme_id"]);
@@ -24,9 +24,9 @@ $themes = ft_get_themes();
 $updated_themes = array();
 foreach ($themes as $theme_info)
 {
-	$cache_folder = "$g_root_dir/themes/{$theme_info["theme_folder"]}/cache";
-	$theme_info["cache_folder_writable"] = is_writable($cache_folder);
-	$updated_themes[] = $theme_info;
+  $cache_folder = "$g_root_dir/themes/{$theme_info["theme_folder"]}/cache";
+  $theme_info["cache_folder_writable"] = is_writable($cache_folder);
+  $updated_themes[] = $theme_info;
 }
 
 // compile the header information
@@ -43,15 +43,13 @@ $page_vars["head_js"] =<<< EOF
 var rules = [];
 rules.push("required,admin_theme_id,{$LANG["validation_no_admin_theme"]}");
 rules.push("required,default_client_theme_id,{$LANG["validation_no_default_client_theme"]}");
-
 $(function() {
-	$(".fancybox").fancybox();
+  $(".fancybox").fancybox();
 });
-
 EOF;
 
 $page_vars["head_string"] =<<< EOF
-<script type="text/javascript" src="$g_root_url/global/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script src="$g_root_url/global/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 <link rel="stylesheet" href="$g_root_url/global/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
 EOF;
 

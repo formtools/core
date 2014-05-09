@@ -18,7 +18,6 @@
       </div>
 
     {else}
-
       {$pagination}
 
       <table class="list_table" cellspacing="1" cellpadding="1">
@@ -82,11 +81,7 @@
 
     {/if}
 
-    <p>
-      <div style="float:right">
-        <input type="submit" name="edit_email_user_settings" value="{$LANG.phrase_configure_form_email_fields}" />
-      </div>
-
+    <div class="margin_top_large">
       {if $all_form_emails|@count > 0}
         <select name="create_email_from_email_id">
           <option value="">{$LANG.phrase_new_blank_email}</option>
@@ -98,6 +93,7 @@
         </select>
       {/if}
       <input type="submit" name="add_email" value="{$LANG.phrase_create_new_email}" />
-    </p>
+      <input type="submit" name="edit_email_user_settings" value="{$LANG.phrase_configure_form_email_fields} ({$num_registered_form_emails})" />
+    </div>
 
   </form>

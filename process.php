@@ -28,7 +28,7 @@ $folder = dirname(__FILE__);
 if (empty($_POST))
 {
   $page_vars = array("message_type" => "error", "message" => $LANG["processing_no_post_vars"]);
-  ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+  ft_display_page("error.tpl", $page_vars);
   exit;
 }
 
@@ -36,7 +36,7 @@ if (empty($_POST))
 else if (empty($_POST["form_tools_form_id"]))
 {
   $page_vars = array("message_type" => "error", "message" => $LANG["processing_no_form_id"]);
-  ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+  ft_display_page("error.tpl", $page_vars);
   exit;
 }
 
@@ -64,13 +64,21 @@ function ft_process_form($form_data)
   $form_id = $form_data["form_tools_form_id"];
   $form_info = ft_get_form($form_id);
 
+  // do we have a form for this id?
+  if (!ft_check_form_exists($form_id))
+  {
+    $page_vars = array("message_type" => "error", "message" => $LANG["processing_invalid_form_id"]);
+    ft_display_page("error.tpl", $page_vars);
+    exit;
+  }
+
   extract(ft_process_hook_calls("start", compact("form_info", "form_id", "form_data"), array("form_data")), EXTR_OVERWRITE);
 
   // check to see if this form has been completely set up
   if ($form_info["is_complete"] == "no")
   {
     $page_vars = array("message_type" => "error", "message" => $LANG["processing_form_incomplete"]);
-    ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+    ft_display_page("error.tpl", $page_vars);
     exit;
   }
 
@@ -84,7 +92,7 @@ function ft_process_form($form_data)
     }
 
     $page_vars = array("message_type" => "error", "message" => $LANG["processing_form_disabled"]);
-    ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+    ft_display_page("error.tpl", $page_vars);
     exit;
   }
 
@@ -92,7 +100,7 @@ function ft_process_form($form_data)
   if (!ft_check_form_exists($form_id))
   {
     $page_vars = array("message_type" => "error", "message" => $LANG["processing_invalid_form_id"]);
-    ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+    ft_display_page("error.tpl", $page_vars);
     exit;
   }
 
@@ -135,7 +143,7 @@ function ft_process_form($form_data)
       else
       {
         $page_vars = array("message_type" => "error", "message" => $LANG["processing_no_form_url_for_recaptcha"]);
-        ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+        ft_display_page("error.tpl", $page_vars);
         exit;
       }
     }
@@ -238,7 +246,7 @@ function ft_process_form($form_data)
       $page_vars = array("message_type" => "error", "error_code" => 304, "error_type" => "system",
         "debugging"=> "Failed query in <b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, line " . __LINE__ .
             ": <i>" . nl2br($query) . "</i>", mysql_error());
-      ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+      ft_display_page("error.tpl", $page_vars);
       exit;
     }
 
@@ -292,12 +300,16 @@ function ft_process_form($form_data)
     }
   }
 
-  // now process any file fields. This is placed after the redirect query param code block above to allow whatever file upload
-  // module to append the filename to the query string, if needed
-  extract(ft_process_hook_calls("manage_files", compact("form_id", "submission_id", "file_fields", "redirect_query_params"), array("success", "message", "redirect_query_params")), EXTR_OVERWRITE);
+  // only upload files & send emails if we're not ignoring the submission
+  if (!isset($form_data["form_tools_ignore_submission"]))
+  {
+    // now process any file fields. This is placed after the redirect query param code block above to allow whatever file upload
+    // module to append the filename to the query string, if needed
+    extract(ft_process_hook_calls("manage_files", compact("form_id", "submission_id", "file_fields", "redirect_query_params"), array("success", "message", "redirect_query_params")), EXTR_OVERWRITE);
 
-  // send any emails
-  ft_send_emails("on_submission", $form_id, $submission_id);
+    // send any emails
+    ft_send_emails("on_submission", $form_id, $submission_id);
+  }
 
   // if the redirect URL has been specified either in the database or as part of the form
   // submission, redirect the user [form submission form_tools_redirect_url value overrides
@@ -327,6 +339,6 @@ function ft_process_form($form_data)
 
   // the user should never get here! This means that the no redirect URL has been specified
   $page_vars = array("message_type" => "error", "message" => $LANG["processing_no_redirect_url"]);
-  ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+  ft_display_page("error.tpl", $page_vars);
   exit;
 }

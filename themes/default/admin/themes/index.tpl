@@ -14,7 +14,6 @@
   </div>
 
   <form action="{$same_page}" method="post">
-
     <table cellspacing="0" cellpadding="1" class="margin_bottom_large">
       <tr>
         <td width="180">{$LANG.phrase_administrator_theme}</td>
@@ -33,7 +32,7 @@
         <div>{$LANG.text_no_themes}</div>
       {else}
 
-        <table cellspacing="1" cellpadding="0" width="100%" class="list_table">
+        <table cellspacing="1" cellpadding="0" width="100%" class="list_table check_areas">
         <tr>
           <th width="200">{$LANG.word_image}</th>
           <th>{$LANG.phrase_theme_info}</th>
@@ -65,7 +64,7 @@
                 </div>
               {/if}
             </td>
-            <td valign="top" align="center">
+            <td valign="top" align="center" class="check_area">
               <input type="checkbox" name="is_enabled[]" value="{$theme_info.theme_folder}"
                 {if $theme_info.is_enabled == 'yes'}checked{/if}
                 {if !$theme_info.cache_folder_writable}disabled{/if} />
@@ -78,8 +77,8 @@
       {/if}
 
       <p>
-        <input type="submit" name="update" value="{$LANG.word_update|upper}" />
-        <input type="submit" name="refresh_theme_list" class="blue" value="{$LANG.phrase_refresh_theme_list|upper}" />
+        <input type="submit" name="update" value="{$LANG.word_update}" />
+        <input type="submit" name="refresh_theme_list" class="blue" value="{$LANG.phrase_refresh_theme_list}" />
       </p>
     </form>
 

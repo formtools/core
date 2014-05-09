@@ -19,8 +19,10 @@ $emails_page = ft_load_field("emails_page", "form_{$form_id}_emails_page", 1);
 $form_email_info  = ft_get_email_templates($form_id, $emails_page);
 $form_emails      = $form_email_info["results"];
 $num_form_emails  = $form_email_info["num_results"];
+$registered_form_emails = ft_get_email_fields($form_id);
+$num_registered_form_emails = count($registered_form_emails);
 
-// a little irksome, but we also need to retrieve ALL emails, for the Create Email From Existing Email dropdown
+// a little irksome, but we also need to retrieve ALL emails, for the "Create Email From Existing Email" dropdown
 $all_form_emails = ft_get_email_template_list($form_id);
 $php_self = ft_get_clean_php_self();
 
@@ -38,16 +40,33 @@ $page_vars["js_messages"] = array("word_edit", "word_remove");
 // build values to pass along in nav query string
 $pass_along_str = "page=emails&form_id=$form_id";
 $page_vars["pagination"] = ft_get_page_nav($num_form_emails, $_SESSION["ft"]["settings"]["num_emails_per_page"], $emails_page, $pass_along_str, "emails_page");
+$page_vars["num_registered_form_emails"] = $num_registered_form_emails;
 
-$page_vars["head_js"] = "
+$page_vars["head_js"] =<<< END
 var page_ns = {};
-page_ns.delete_email = function(email_id)
-{
-  if (confirm(\"{$LANG["confirm_delete_email_template"]}\"))
-    window.location = \"$php_self?form_id=$form_id&page=emails&delete=\" + email_id;
+page_ns.delete_dialog = $("<div></div>");
+page_ns.delete_email = function(email_id) {
+  ft.create_dialog({
+    title:      "{$LANG["phrase_please_confirm"]}",
+    content:    "{$LANG["confirm_delete_email_template"]}",
+    popup_type: "warning",
+    buttons: [{
+      text:  "{$LANG["word_yes"]}",
+      click: function() {
+        window.location = "$php_self?form_id=$form_id&page=emails&delete=" + email_id;
+        $(this).dialog("close");
+      }
+    },
+    {
+      text:  "{$LANG["word_no"]}",
+      click: function() {
+        $(this).dialog("close");
+      }
+    }]
+  });
 
   return false;
 }
-";
+END;
 
 ft_display_page("admin/forms/edit.tpl", $page_vars);

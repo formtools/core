@@ -11,7 +11,7 @@
   {else}
 
     <div class="margin_bottom_large">
-      {$LANG.text_used_field_option_group}
+      {$LANG.text_used_option_list}
     </div>
 
     <table cellspacing="1" cellpadding="0" class="list_table margin_bottom_large">

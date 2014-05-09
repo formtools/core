@@ -2,7 +2,7 @@
             <tr>
               <td width="10" class="red">*</td>
               <td width="180">{$LANG.phrase_email_template_name}</td>
-              <td><input type="text" name="email_template_name" value="{$template_info.email_template_name|escape}" style="width:300px;" maxlength="100" /></td>
+              <td><input type="text" name="email_template_name" value="{$template_info.email_template_name|escape}" style="width:484px;" maxlength="100" /></td>
             </tr>
             <tr>
               <td class="red">*</td>
@@ -33,7 +33,7 @@
             </table>
 
             <div class="grey_box">
-              <div style="margin_top">
+              <div>
                 <a href="#" onclick="return emails_ns.toggle_advanced_settings()">{$LANG.phrase_advanced_settings_rightarrow}</a>
               </div>
 
@@ -99,8 +99,8 @@
                         </td>
                         <td valign="center" align="center">
                           <span id="row_{$row}_actions">
-                            <input type="button" onclick="return ft.move_options($('available_edit_submission_views'), $('selected_edit_submission_views'))" value="{$LANG.word_add_uc_rightarrow}" /><br />
-                            <input type="button" onclick="return ft.move_options($('selected_edit_submission_views'), $('available_edit_submission_views'))" value="{$LANG.word_remove_uc_leftarrow}" />
+                            <input type="button" onclick="return ft.move_options('available_edit_submission_views', 'selected_edit_submission_views')" value="{$LANG.word_add_uc_rightarrow}" /><br />
+                            <input type="button" onclick="return ft.move_options('selected_edit_submission_views', 'available_edit_submission_views')" value="{$LANG.word_remove_uc_leftarrow}" />
                           </span>
                         </td>
                         <td>
@@ -122,7 +122,7 @@
                     {views_dropdown name_id="limit_email_content_to_fields_in_view" form_id=$form_id show_empty_label=true
                       selected=$template_info.limit_email_content_to_fields_in_view}
                     <div class="medium_grey">
-                      This option only works for HTML and text content generated with Smarty Loops.
+                      {$LANG.text_limit_email_content_desc}
                     </div>
                   </td>
                 </tr>

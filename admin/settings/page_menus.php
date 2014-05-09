@@ -30,22 +30,22 @@ var page_ns = {
 
 page_ns.delete_menu = function(menu_id) {
   ft.create_dialog({
-	  dialog:   page_ns.delete_menu_dialog,
-	  title:    "{$LANG["phrase_please_confirm"]}",
-	  content:  "{$LANG["confirm_delete_menu"]}",
-	  popup_type: "warning",
-	  buttons: {
-	    "{$LANG["word_yes"]}": function() {
-	      window.location = "index.php?page=menus&delete=" + menu_id;
-	      $(this).dialog("close");
-	    },
-	    "{$LANG["word_no"]}": function() {
-	      $(this).dialog("close");
-	    }
-	  }
-	});
+    dialog:   page_ns.delete_menu_dialog,
+    title:    "{$LANG["phrase_please_confirm"]}",
+    content:  "{$LANG["confirm_delete_menu"]}",
+    popup_type: "warning",
+    buttons: {
+      "{$LANG["word_yes"]}": function() {
+        window.location = "index.php?page=menus&delete=" + menu_id;
+        $(this).dialog("close");
+      },
+      "{$LANG["word_no"]}": function() {
+        $(this).dialog("close");
+      }
+    }
+  });
 
-	return false;
+  return false;
 }
 END;
 

@@ -98,10 +98,10 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
   // loop the form templates to find out if there are any file fields. If there are - and the user
   // configured it - delete any associated files
   $file_delete_problems = array();
+  $file_fields_to_delete = array();
   if ($auto_delete_submission_files == "yes")
   {
     $file_field_type_ids = ft_get_file_field_type_ids();
-    $file_fields_to_delete = array();
     foreach ($form_fields as $field_info)
     {
       $field_type_id = $field_info["field_type_id"];
@@ -144,7 +144,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
     if (empty($file_delete_problems))
     {
       $success = true;
-      $message = ($form_has_file_field) ? $LANG["notify_submission_and_files_deleted"] : $LANG["notify_submission_deleted"];
+      $message = ($file_fields_to_delete) ? $LANG["notify_submission_and_files_deleted"] : $LANG["notify_submission_deleted"];
     }
     else
     {
@@ -233,8 +233,8 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
   {
     $file_field_type_ids = ft_get_file_field_type_ids();
     $file_fields_to_delete = array();
-  	foreach ($submissions_to_delete as $submission_id)
-  	{
+    foreach ($submissions_to_delete as $submission_id)
+    {
       foreach ($form_fields as $field_info)
       {
         $field_type_id = $field_info["field_type_id"];
@@ -256,7 +256,7 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
           "filename"      => $filename
         );
       }
-  	}
+    }
 
     if (!empty($file_fields_to_delete))
     {
@@ -299,9 +299,9 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
       $message = $LANG["notify_submission_deleted"];
   }
 
-  // update sessions to ensure the first submission date and num submissions for this form View are correct
+  // TODO update sessions to ensure the first submission date and num submissions for this form View are correct
   _ft_cache_form_stats($form_id);
-  _ft_cache_view_stats($view_id);
+  _ft_cache_view_stats($form_id, $view_id);
 
   $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
   $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
@@ -339,6 +339,7 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
 
   $form_fields = ft_get_form_fields($form_id);
   $submission  = ft_get_submission_info($form_id, $submission_id);
+
   $view_fields = (!empty($view_id)) ? ft_get_view_fields($view_id) : array();
 
   if (empty($submission))
@@ -538,7 +539,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
   extract(ft_process_hook_calls("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
   // assumes that each tab as at least a single field (UPDATE button should be hidden if there are none)
-  $field_ids = split(",", $infohash["field_ids"]);
+  $field_ids = explode(",", $infohash["field_ids"]);
 
   $form_fields = ft_get_form_fields($form_id);
   $field_types_processing_info = ft_get_field_type_processing_info();
@@ -603,7 +604,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
         "data"         => $infohash,
         "code"         => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
         "settings"     => $field_settings[$field_id],
-        "account_info" => $_SESSION["ft"]["account"]
+        "account_info" => isset($_SESSION["ft"]["account"]) ? $_SESSION["ft"]["account"] : array()
       );
       $value = ft_process_form_field($data);
       $query[] = $row["col_name"] . " = '$value'";
@@ -645,80 +646,6 @@ function ft_update_submission($form_id, $submission_id, $infohash)
   extract(ft_process_hook_calls("end", compact("form_id", "submission_id", "infohash"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
-}
-
-
-/**
- * Updates a single form submission. Accepts an hash of form field names to values or
- * col names to values.
- *
- * TODO check all references to this function
- *
- * @param integer $form_id
- * @param integer $submission_id
- * @param array $info a hash of form field names to values. If the 4th parameter is set to true, the
- *       keys should be database column names
- * @param boolean $use_col_names_as_info_hash_keys
- */
-function ft_update_submission_info($form_id, $submission_id, $info, $use_col_names_as_info_hash_keys = false)
-{
-  global $g_table_prefix;
-
-  $info = ft_sanitize($info);
-
-  $form_fields = ft_get_form_fields($form_id);
-  $valid_fields = array();
-  foreach ($form_fields as $field_info)
-  {
-    if ($field_info["field_type"] == "system")
-      continue;
-
-    $valid_fields[$field_info["field_name"]] = $field_info["col_name"];
-  }
-
-
-  // if we've been passed form field names, find the database columns for each field
-  if (!$use_col_names_as_info_hash_keys)
-  {
-    $col_names_to_values_hash = array();
-
-    // now convert the array keys to DB column names
-    while (list($field_name, $value) = each($info))
-    {
-      if (!array_key_exists($field_name, $valid_fields))
-        continue;
-
-      $col_name = $valid_fields[$field_name];
-      $col_names_to_values_hash[$col_name] = $value;
-    }
-  }
-  else
-  {
-    $col_names_to_values_hash = $info;
-  }
-
-  // finally, remove any DB col names that don't exist
-  $col_name_query = array();
-
-  while (list($col_name, $value) = each($col_names_to_values_hash))
-  {
-    if (array_search($col_name, $valid_fields) === false)
-      continue;
-
-    $col_name_query[] = "$col_name = '$value'";
-  }
-
-  $query_str = join(",\n", $col_name_query);
-
-  if (empty($query_str))
-    return;
-
-  // here, we finally have a VALID array of col_name => value
-  @mysql_query("
-    UPDATE {$g_table_prefix}form_{$form_id}
-    SET    $query_str
-    WHERE  submission_id = $submission_id
-      ");
 }
 
 
@@ -804,7 +731,7 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
   $search_where_clause  = _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $searchable_columns);
 
   // (1) our main search query that returns a PAGE of submission info
-  $search_query = mysql_query("
+  $search_query = "
       SELECT $select_clause
       FROM   {$g_table_prefix}form_{$form_id}
       WHERE  is_finalized = 'yes'
@@ -813,11 +740,13 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
              $submission_id_clause
       ORDER BY $order_by
              $limit_clause
-                ")
-    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: ", mysql_error());
+  ";
+  $search_result = mysql_query($search_query)
+    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>; Query: $search_query; Error: ", mysql_error());
+
 
   $search_result_rows = array();
-  while ($row = mysql_fetch_assoc($search_query))
+  while ($row = mysql_fetch_assoc($search_result))
     $search_result_rows[] = $row;
 
   // (2) find out how many results there are in this current search
@@ -868,7 +797,7 @@ function _ft_get_search_submissions_order_by_clause($form_id, $order)
   if (!empty($order))
   {
     // sorting by column, format: col_x-desc / col_y-asc
-    list($column, $direction) = split("-", $order);
+    list($column, $direction) = explode("-", $order);
     $field_info = ft_get_field_order_info_by_colname($form_id, $column);
 
     // no field can be found if the administrator just changed the DB field contents and
@@ -916,9 +845,15 @@ function _ft_get_search_submissions_select_clause($columns)
   }
   else
   {
+    $columns = array_unique($columns);
+
     // if submission_id isn't included, add it - it'll be needed at some point
     if (!in_array("submission_id", $columns))
       $columns[] = "submission_id";
+
+    // just in case. This prevents empty column names (which shouldn't get here, but do if something
+    // goes wrong) getting into the column list
+    $columns = ft_array_remove_empty_els($columns);
 
     $select_clause = join(", ", $columns);
   }
@@ -1012,7 +947,7 @@ function _ft_get_search_submissions_search_where_clause($form_id, $search_fields
         // search by date range
         if (strpos($search_date, "-") !== false)
         {
-          $dates = split(" - ", $search_date);
+          $dates = explode(" - ", $search_date);
           $start = $dates[0];
           $end   = $dates[1];
           if ($g_search_form_date_field_format == "d/m/y") {
@@ -1101,7 +1036,7 @@ function _ft_get_search_submissions_submission_id_clause($submission_ids)
  * It accepts the result of the ft_get_view_fields() function as the first parameter and an optional
  * boolean to let it know whether to return ALL results or not.
  *
- * TODO deprecate... or something
+ * TODO maybe deprecate? Only used mass_edit
  *
  * @param array $view_fields
  * @param boolean $return_all_fields
@@ -1145,12 +1080,13 @@ function ft_check_view_contains_submission($form_id, $view_id, $submission_id)
 
   $filter_sql_clause = join(" AND ", $filter_sql);
 
-  $query = mysql_query("
+  $query = @mysql_query("
     SELECT count(*) as c
     FROM   {$g_table_prefix}form_{$form_id}
     WHERE  submission_id = $submission_id AND
            ($filter_sql_clause)
       ");
+
   $result = mysql_fetch_assoc($query);
 
   return $result["c"] == 1;
@@ -1279,4 +1215,52 @@ function ft_get_mapped_form_field_data($setting_value)
   }
 
   return $formatted_results;
+}
+
+
+/**
+ * Added in 2.1.0. This lets modules add an icon to a "quicklink" icon row on the Submission Listing page. To add it,
+ * they need to define a hook call and return a $quicklinks hash with the following keys:
+ *   icon_url
+ *   alt_text
+ *
+ * @param $context "admin" or "client"
+ */
+function ft_display_submission_listing_quicklinks($context, $page_data)
+{
+  global $g_root_url;
+
+  $quicklinks = array();
+  extract(ft_process_hook_calls("main", compact("context"), array("quicklinks"), array("quicklinks")), EXTR_OVERWRITE);
+
+  if (empty($quicklinks))
+    return "";
+
+
+  echo "<ul id=\"ft_quicklinks\">";
+
+  $num_quicklinks = count($quicklinks);
+  for ($i=0; $i<$num_quicklinks; $i++)
+  {
+    $classes[] = array();
+    if ($i == 0)
+      $classes[] = "ft_quicklinks_first";
+    if ($i == $num_quicklinks - 1)
+      $classes[] = "ft_quicklinks_last";
+
+    $class = implode(" ", $classes);
+
+    $quicklink_info = $quicklinks[$i];
+    $icon_url       = isset($quicklink_info["icon_url"]) ? $quicklink_info["icon_url"] : "";
+    $title_text     = isset($quicklink_info["title_text"]) ? $quicklink_info["title_text"] : "";
+    $onclick        = isset($quicklink_info["onclick"]) ? $quicklink_info["onclick"] : "";
+    $title_text = htmlspecialchars($title_text);
+
+    if (empty($icon_url))
+      continue;
+
+    echo "<li class=\"$class\" onclick=\"$onclick\"><img src=\"$icon_url\" title=\"$title_text\" /></li>\n";
+  }
+
+  echo "</ul>";
 }

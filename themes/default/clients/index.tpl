@@ -53,26 +53,22 @@
     {else}
 	    <table class="list_table" cellpadding="1" cellspacing="1" style="width:600px">
 	    <tr>
-	      <th>
-	        {assign var="up_down" value=""}
-	        {if     $search_criteria.order == "form_name-DESC"}
-	          {assign var=order_col value="order=form_name-ASC"}
-	          {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
-	        {elseif $search_criteria.order == "form_name-ASC"}
-	          {assign var=order_col value="order=form_name-DESC"}
-	          {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
-	        {else}
-	          {assign var=order_col value="order=form_name-DESC"}
-	        {/if}
-	        <table cellspacing="0" cellpadding="0" align="center">
-	        <tr>
-	          <td><a href="{$same_page}?{$order_col}">{$LANG.word_form}</a></td>
-	          <td class="pad_left">{$up_down}</td>
-	        </tr>
-	        </table>
+	      {assign var="up_down" value=""}
+          {if     $search_criteria.order == "form_name-DESC"}
+	        {assign var=order_col value="order=form_name-ASC"}
+	        {assign var=up_down value="<img src=\"`$theme_url`/images/sort_down.gif\" />"}
+	      {elseif $search_criteria.order == "form_name-ASC"}
+	        {assign var=order_col value="order=form_name-DESC"}
+	        {assign var=up_down value="<img src=\"`$theme_url`/images/sort_up.gif\" />"}
+	      {else}
+	        {assign var=order_col value="order=form_name-DESC"}
+	      {/if}
+          <th class="sortable_col{if $up_down} over{/if}">
+            <a href="{$same_page}?{$order_col}">{$LANG.word_form} {$up_down}</a>
+          </th>
 	      </th>
 	      <th width="80">{$LANG.word_status}</th>
-	      <th width="100">{$LANG.word_submissions|upper}</th>
+	      <th width="100">{$LANG.word_submissions}</th>
 	    </tr>
 
 	    {* loop through all forms assigned to this client *}

@@ -91,7 +91,7 @@
     </table>
 
     <p>
-      <input type="submit" name="add_form" class="add_form" value="{$LANG.phrase_add_form|upper}" />
+      <input type="submit" name="add_form" class="add_form" value="{$LANG.phrase_add_form}" />
     </p>
   </form>
 

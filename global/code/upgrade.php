@@ -37,6 +37,9 @@ function ft_upgrade_form_tools()
   $message     = "";
   $old_version_info = ft_get_core_version_info();
 
+  // upgrading to 2.1.0 can take a while (not THIS long, but this should be safe)
+  set_time_limit(600);
+
 
   // ----------------------------------------------------------------------------------------------
   // 2.0.0 beta updates
@@ -44,7 +47,7 @@ function ft_upgrade_form_tools()
   if ($old_version_info["release_date"] < 20090113)
   {
     // add the Hooks table
-    mysql_query("
+    @mysql_query("
       CREATE TABLE {$g_table_prefix}hooks (
         hook_id mediumint(8) unsigned NOT NULL auto_increment,
         action_location enum('start','end') NOT NULL,
@@ -53,13 +56,13 @@ function ft_upgrade_form_tools()
         hook_function varchar(255) NOT NULL,
         priority tinyint(4) NOT NULL default '50',
         PRIMARY KEY (hook_id)
-      ) TYPE=MyISAM DEFAULT CHARSET=utf8
+      ) DEFAULT CHARSET=utf8
       ");
   }
 
   if ($old_version_info["release_date"] < 20090301)
   {
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}email_templates
       CHANGE email_reply_to email_reply_to
       ENUM('none', 'admin', 'client', 'user', 'custom')
@@ -69,7 +72,7 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20090317)
   {
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}views
       ADD may_add_submissions ENUM('yes', 'no') NOT NULL DEFAULT 'no'
         ");
@@ -77,15 +80,15 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20090402)
   {
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}hooks
       ADD hook_type ENUM('code', 'template') NOT NULL DEFAULT 'code' AFTER hook_id
         ");
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}hooks
       CHANGE action_location action_location VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
         ");
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}account_settings
       CHANGE setting_value setting_value MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
         ");
@@ -93,7 +96,7 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20090510)
   {
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}view_fields
       ADD is_searchable ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER is_editable
         ");
@@ -102,7 +105,7 @@ function ft_upgrade_form_tools()
   // bug #117
   if ($old_version_info["release_date"] < 20090627)
   {
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}view_filters
       CHANGE operator operator ENUM('equals', 'not_equals', 'like', 'not_like', 'before', 'after')
       CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'equals'
@@ -111,7 +114,7 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20090815)
   {
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}forms
       ADD edit_submission_page_label TEXT NULL
         ");
@@ -123,7 +126,7 @@ function ft_upgrade_form_tools()
     foreach ($forms as $form_info)
     {
       $form_id = $form_info["form_id"];
-      mysql_query("
+      @mysql_query("
         UPDATE {$g_table_prefix}forms
         SET    edit_submission_page_label = '{\$LANG.phrase_edit_submission|upper}'
         WHERE  form_id = $form_id
@@ -169,7 +172,7 @@ function ft_upgrade_form_tools()
     while ($row = mysql_fetch_assoc($query))
     {
       $view_id = $row["view_id"];
-      mysql_query("UPDATE {$g_table_prefix}views SET has_standard_filter = 'yes' WHERE view_id = $view_id");
+      @mysql_query("UPDATE {$g_table_prefix}views SET has_standard_filter = 'yes' WHERE view_id = $view_id");
     }
   }
 
@@ -238,12 +241,12 @@ function ft_upgrade_form_tools()
         first_name_field VARCHAR( 255 ) NULL,
         last_name_field VARCHAR( 255 ) NULL,
         PRIMARY KEY (form_email_id)
-      ) TYPE=MyISAM DEFAULT CHARSET=utf8
+      ) DEFAULT CHARSET=utf8
         ");
 
     // [5] rename the "recipient_user_type" enum options to call the "user" option "form_email_field" instead,
     // but first, store all the recipient_ids so we can update them after the DB change
-    $recipients_id_query = mysql_query("
+    $recipients_id_query = @mysql_query("
       SELECT recipient_id
       FROM   {$g_table_prefix}email_template_recipients
       WHERE  recipient_user_type = 'user'
@@ -272,7 +275,7 @@ function ft_upgrade_form_tools()
 
     // [6] now update the old "user" email field data to the new "form email field" table
     // and update the corresponding DB tables
-    $forms_query = mysql_query("SELECT form_id, user_email_field, user_first_name_field, user_last_name_field FROM {$g_table_prefix}forms");
+    $forms_query = @mysql_query("SELECT form_id, user_email_field, user_first_name_field, user_last_name_field FROM {$g_table_prefix}forms");
     while ($form_info = mysql_fetch_assoc($forms_query))
     {
       $form_id = $form_info["form_id"];
@@ -362,12 +365,13 @@ function ft_upgrade_form_tools()
       "email_template_edit_submission_views", "email_template_recipients", "field_options",
       "field_option_groups", "field_settings", "forms", "form_email_fields", "form_fields",
       "hooks", "menus", "menu_items", "modules", "module_menu_items", "multi_page_form_urls",
-      "public_form_omit_list", "public_view_omit_list", "settings", "themes", "views",
+      "public_form_omit_list", "public_view_omit_list", "settings", "sessions", "themes", "views",
       "view_fields", "view_filters", "view_tabs"
     );
     foreach ($core_tables as $table)
     {
       @mysql_query("ALTER TABLE {$g_table_prefix}$table TYPE=MyISAM");
+      @mysql_query("ALTER TABLE {$g_table_prefix}$table ENGINE=MyISAM");
     }
 
     // convert all the custom tables to MyISAM as well
@@ -376,6 +380,7 @@ function ft_upgrade_form_tools()
     {
       $form_id = $form_info["form_id"];
       @mysql_query("ALTER TABLE {$g_table_prefix}form_{$form_id} TYPE=MyISAM");
+      @mysql_query("ALTER TABLE {$g_table_prefix}form_{$form_id} ENGINE=MyISAM");
     }
   }
 
@@ -461,11 +466,13 @@ function ft_upgrade_form_tools()
       mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, 'November 30, 2011', 'MM d, yy', 5, 'yes')");
       mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, 'Wed Nov 30, 2011 ', 'D M d, yy', 6, 'yes')");
       mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, 'Wednesday, November 30, 2011', 'DD, MM d, yy', 7, 'yes')");
-      mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '30/11/2011 8:00 PM', 'datetime:dd/mm/yy|h:mm TT|ampm`true', 8, 'yes')");
-      mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '11/30/2011 8:00 PM', 'datetime:mm/dd/yy|h:mm TT|ampm`true', 9, 'yes')");
-      mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '2011-11-30 8:00 PM', 'datetime:yy-mm-dd|h:mm TT|ampm`true', 10, 'yes')");
-      mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '2011-11-30 20:00', 'datetime:yy-mm-dd|hh:mm', 11, 'yes')");
-      mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '2011-11-30 20:00:00', 'datetime:yy-mm-dd|hh:mm:ss|showSecond`true', 12, 'yes')");
+      mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '30. 08. 2011.', 'dd. mm. yy.', 8, 'yes')");
+      mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '30/11/2011 8:00 PM', 'datetime:dd/mm/yy|h:mm TT|ampm`true', 9, 'yes')");
+      mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '11/30/2011 8:00 PM', 'datetime:mm/dd/yy|h:mm TT|ampm`true', 10, 'yes')");
+      mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '2011-11-30 8:00 PM', 'datetime:yy-mm-dd|h:mm TT|ampm`true', 11, 'yes')");
+      mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '2011-11-30 20:00', 'datetime:yy-mm-dd|hh:mm', 12, 'yes')");
+      mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '2011-11-30 20:00:00', 'datetime:yy-mm-dd|hh:mm:ss|showSecond`true', 13, 'yes')");
+      mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '30. 08. 2011. 20:00', 'datetime:dd. mm. yy.|hh:mm', 14, 'yes')");
 
       // time
       mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (24, '8:00 AM', 'h:mm TT|ampm`true', 1, 'yes')");
@@ -586,10 +593,16 @@ function ft_upgrade_form_tools()
       mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (5, 'yes', NULL, NULL, '{\$LANG.phrase_multi_select_dropdown}', 'multi_select_dropdown', 1, 'no', 'no', 'multi-select', 13, 7, '1char,2chars,tiny,small,medium,large', '{if \$contents != \"\"}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_first value=true}\r\n  {strip}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$option.option_value|in_array:\$vals}\r\n        {if \$is_first == false}, {/if}\r\n        {\$option.option_name}\r\n        {assign var=is_first value=false}\r\n      {/if}\r\n    {/foreach}\r\n  {/foreach}\r\n  {/strip}\r\n{/if}', '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">\r\n    This field isn''t assigned to an Option List. \r\n  </div>\r\n{else}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  <select name=\"{\$NAME}[]\" multiple size=\"{if \$num_rows}{\$num_rows}{else}5{/if}\">\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {if \$group_info.group_name}\r\n      <optgroup label=\"{\$group_info.group_name|escape}\">\r\n    {/if}\r\n    {foreach from=\$options item=option name=row}\r\n      <option value=\"{\$option.option_value}\"\r\n        {if \$option.option_value|in_array:\$vals}selected{/if}>{\$option.option_name}</option>\r\n    {/foreach}\r\n    {if \$group_info.group_name}\r\n      </optgroup>\r\n    {/if}\r\n  {/foreach}\r\n  </select>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '', '', '')");
       mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (6, 'yes', NULL, NULL, '{\$LANG.phrase_radio_buttons}', 'radio_buttons', 1, 'no', 'no', 'radio-buttons', 16, 4, '1char,2chars,tiny,small,medium,large', '{if \$contents != \"\"}\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$VALUE == \$option.option_value}{\$option.option_name}{/if}\r\n    {/foreach}\r\n  {/foreach}\r\n{/if}\r\n', '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">\r\n    This field isn''t assigned to an Option List. \r\n  </div>\r\n{else}\r\n  {assign var=is_in_columns value=false}\r\n  {if \$formatting == \"cf_option_list_2cols\" || \r\n      \$formatting == \"cf_option_list_3cols\" || \r\n      \$formatting == \"cf_option_list_4cols\"}\r\n    {assign var=is_in_columns value=true}\r\n  {/if}\r\n\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n\r\n    {if \$group_info.group_name}\r\n      <div class=\"cf_option_list_group_label\">{\$group_info.group_name}</div>\r\n    {/if}\r\n\r\n    {if \$is_in_columns}<div class=\"{\$formatting}\">{/if}\r\n\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$is_in_columns}<div class=\"column\">{/if}\r\n        <input type=\"radio\" name=\"{\$NAME}\" id=\"{\$NAME}_{\$counter}\" \r\n          value=\"{\$option.option_value}\"\r\n          {if \$VALUE == \$option.option_value}checked{/if} />\r\n          <label for=\"{\$NAME}_{\$counter}\">{\$option.option_name}</label>\r\n      {if \$is_in_columns}</div>{/if}\r\n      {if \$formatting == \"vertical\"}<br />{/if}\r\n      {assign var=counter value=\$counter+1}\r\n    {/foreach}\r\n\r\n    {if \$is_in_columns}</div>{/if}\r\n  {/foreach}\r\n\r\n  {if \$comments}<div class=\"cf_field_comments\">{\$comments}</div>{/if}\r\n{/if}\r\n', '', '/* All CSS styles for this field type are found in Shared Resources */\r\n', '')");
       mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (7, 'yes', NULL, NULL, '{\$LANG.word_checkboxes}', 'checkboxes', 1, 'no', 'no', 'checkboxes', 19, 5, '1char,2chars,tiny,small,medium,large', '{if \$contents != \"\"}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_first value=true}\r\n  {strip}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$option.option_value|in_array:\$vals}\r\n        {if \$is_first == false}, {/if}\r\n        {\$option.option_name}\r\n        {assign var=is_first value=false}\r\n      {/if}\r\n    {/foreach}\r\n  {/foreach}\r\n  {/strip}\r\n{/if}', '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">\r\n    This field isn''t assigned to an Option List. \r\n  </div>\r\n{else}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_in_columns value=false}\r\n  {if \$formatting == \"cf_option_list_2cols\" || \r\n      \$formatting == \"cf_option_list_3cols\" || \r\n      \$formatting == \"cf_option_list_4cols\"}\r\n    {assign var=is_in_columns value=true}\r\n  {/if}\r\n\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n\r\n    {if \$group_info.group_name}\r\n      <div class=\"cf_option_list_group_label\">{\$group_info.group_name}</div>\r\n    {/if}\r\n\r\n    {if \$is_in_columns}<div class=\"{\$formatting}\">{/if}\r\n\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$is_in_columns}<div class=\"column\">{/if}\r\n        <input type=\"checkbox\" name=\"{\$NAME}[]\" id=\"{\$NAME}_{\$counter}\" \r\n          value=\"{\$option.option_value|escape}\" \r\n          {if \$option.option_value|in_array:\$vals}checked{/if} />\r\n          <label for=\"{\$NAME}_{\$counter}\">{\$option.option_name}</label>\r\n      {if \$is_in_columns}</div>{/if}\r\n      {if \$formatting == \"vertical\"}<br />{/if}\r\n      {assign var=counter value=\$counter+1}\r\n    {/foreach}\r\n\r\n    {if \$is_in_columns}</div>{/if}\r\n  {/foreach}\r\n\r\n  {if {\$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div> \r\n  {/if}\r\n{/if}\r\n', '', '/* all CSS is found in Shared Resources */\r\n', '')");
-      mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (8, 'no', '{\$LANG.text_non_deletable_fields}', NULL, 'Date', 'date', 2, 'no', 'yes', '', NULL, 1, 'small', '{if \$VALUE}\r\n  {if \$display_format == \"yy-mm-dd\" || !\$display_format}\r\n    {\$VALUE|custom_format_date:\"\":\"Y-m-d\"}\r\n  {elseif \$display_format == \"dd/mm/yy\"}\r\n    {\$VALUE|custom_format_date:\"\":\"d/m/Y\"}\r\n  {elseif \$display_format == \"mm/dd/yy\"}\r\n    {\$VALUE|custom_format_date:\"\":\"m/d/Y\"}\r\n  {elseif \$display_format == \"M d, yy\"}\r\n    {\$VALUE|custom_format_date:\"\":\"M j, Y\"}\r\n  {elseif \$display_format == \"MM d, yy\"}\r\n    {\$VALUE|custom_format_date:\"\":\"F j, Y\"}\r\n  {elseif \$display_format == \"D M d, yy\"}\r\n    {\$VALUE|custom_format_date:\"\":\"D M j, Y\"}\r\n  {elseif \$display_format == \"DD, MM d, yy\"}\r\n    {\$VALUE|custom_format_date:\"\":\"l M j, Y\"}\r\n  {elseif \$display_format == \"datetime:dd/mm/yy|h:mm TT|ampm`true\"}\r\n    {\$VALUE|custom_format_date:\"\":\"d/m/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:mm/dd/yy|h:mm TT|ampm`true\"}\r\n    {\$VALUE|custom_format_date:\"\":\"m/d/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|h:mm TT|ampm`true\"}\r\n    {\$VALUE|custom_format_date:\"\":\"Y-m-d g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm\"}\r\n    {\$VALUE|custom_format_date:\"\":\"Y-m-d H:i\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm:ss|showSecond`true\"}\r\n    {\$VALUE|custom_format_date:\"\":\"Y-m-d H:i:s\"}\r\n  {/if}\r\n{/if}\r\n', '{assign var=class value=\"cf_datepicker\"}\r\n{if \$display_format|strpos:\"datetime\" === 0}\r\n  {assign var=class value=\"cf_datetimepicker\"}\r\n{/if}\r\n\r\n{assign var=\"val\" value=\"\"}\r\n{if \$VALUE}\r\n  {if \$display_format == \"yy-mm-dd\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\"\":\"Y-m-d\"}\r\n  {elseif \$display_format == \"dd/mm/yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\"\":\"d/m/Y\"}\r\n  {elseif \$display_format == \"mm/dd/yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\"\":\"m/d/Y\"}\r\n  {elseif \$display_format == \"M d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\"\":\"M j, Y\"}\r\n  {elseif \$display_format == \"MM d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\"\":\"F j, Y\"}\r\n  {elseif \$display_format == \"D M d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\"\":\"D M j, Y\"}\r\n  {elseif \$display_format == \"DD, MM d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\"\":\"l M j, Y\"}\r\n  {elseif \$display_format == \"datetime:dd/mm/yy|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\"\":\"d/m/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:mm/dd/yy|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\"\":\"m/d/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\"\":\"Y-m-d g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\"\":\"Y-m-d H:i\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm:ss|showSecond`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\"\":\"Y-m-d H:i:s\"}\r\n  {/if}\r\n{/if}\r\n\r\n<div class=\"cf_date_group\">\r\n  <input type=\"input\" name=\"{\$NAME}\" id=\"{\$NAME}_id\" \r\n    class=\"cf_datefield {\$class}\" value=\"{\$val}\" /><img class=\"ui-datepicker-trigger\" src=\"{\$g_root_url}/global/images/calendar.png\" id=\"{\$NAME}_icon_id\" />\r\n  <input type=\"hidden\" id=\"{\$NAME}_format\" value=\"{\$display_format}\" />\r\n  {if \$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div>\r\n  {/if}\r\n</div>\r\n', '\$field_name     = \$vars[\"field_info\"][\"field_name\"];\r\n\$date           = \$vars[\"data\"][\$field_name];\r\n\$display_format = \$vars[\"settings\"][\"display_format\"];\r\n\r\nif (empty(\$date))\r\n{\r\n  \$value = \"\";\r\n}\r\nelse\r\n{\r\n  if (strpos(\$display_format, \"datetime:\") === 0)\r\n  {\r\n    \$parts = explode(\" \", \$date);\r\n    switch (\$display_format)\r\n    {\r\n      case \"datetime:dd/mm/yy|h:mm TT|ampm`true\":\r\n        \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n          substr(\$date, 6);        \r\n        break;\r\n    }\r\n    \$value = date(\"Y-m-d H:i:s\", strtotime(\$date));    \r\n  }\r\n  else\r\n  {\r\n    if (\$display_format == \"dd/mm/yy\")\r\n    {\r\n      \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n        substr(\$date, 6);\r\n    }\r\n    \$value = date(\"Y-m-d H:i:s\", strtotime(\$date));\r\n  }\r\n}\r\n \r\n', '.cf_datepicker {\r\n  width: 150px; \r\n}\r\n.cf_datetimepicker {\r\n  width: 160px; \r\n}\r\n.ui-datepicker-trigger {\r\n  cursor: pointer; \r\n}\r\n', '\$(function() {\r\n  // the datetimepicker has a bug that prevents the icon from appearing. So\r\n  // instead, we add the image manually into the page and assign the open event\r\n  // handler to the image\r\n  var default_settings = {\r\n    changeYear: true,\r\n    changeMonth: true   \r\n  }\r\n\r\n  \$(\".cf_datepicker\").each(function() {\r\n    var field_name = \$(this).attr(\"name\");\r\n    var settings = default_settings;\r\n    if (\$(\"#\" + field_name + \"_id\").length) {\r\n      settings.dateFormat = \$(\"#\" + field_name + \"_format\").val();\r\n    }\r\n    \$(this).datepicker(settings);\r\n    \$(\"#\" + field_name + \"_icon_id\").bind(\"click\",\r\n      { field_id: \"#\" + field_name + \"_id\" }, function(e) {      \r\n      \$.datepicker._showDatepicker(\$(e.data.field_id)[0]);\r\n    });\r\n  });\r\n    \r\n  \$(\".cf_datetimepicker\").each(function() {\r\n    var field_name = \$(this).attr(\"name\");\r\n    var settings = default_settings;\r\n    if (\$(\"#\" + field_name + \"_id\").length) {\r\n      var settings_str = \$(\"#\" + field_name + \"_format\").val();\r\n      settings_str = settings_str.replace(/datetime:/, \"\");\r\n      var settings_list = settings_str.split(\"|\");\r\n      var settings = {};\r\n      settings.dateFormat = settings_list[0];\r\n      settings.timeFormat = settings_list[1];      \r\n      for (var i=2; i<settings_list.length; i++) {\r\n        var parts = settings_list[i].split(\"`\");\r\n        if (parts[1] === \"true\") {\r\n          parts[1] = true;\r\n        }\r\n        settings[parts[0]] = parts[1];\r\n      }\r\n    }\r\n    \$(this).datetimepicker(settings);\r\n    \$(\"#\" + field_name + \"_icon_id\").bind(\"click\",\r\n      { field_id: \"#\" + field_name + \"_id\" }, function(e) {      \r\n      \$.datepicker._showDatepicker(\$(e.data.field_id)[0]);\r\n    });\r\n  });  \r\n});\r\n\r\n\r\n')");
-      mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (9, 'yes', NULL, NULL, 'Time', 'time', 2, 'no', 'no', '', NULL, 2, 'small', '', '<div class=\"cf_date_group\">\r\n  <input type=\"input\" name=\"{\$NAME}\" value=\"{\$VALUE}\" class=\"cf_datefield cf_timepicker\" />\r\n  <input type=\"hidden\" id=\"{\$NAME}_id\" value=\"{\$display_format}\" />\r\n  \r\n  {if \$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div>\r\n  {/if}\r\n</div>\r\n', '\r\n', '.cf_timepicker {\r\n  width: 60px; \r\n}\r\n.ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }\r\n.ui-timepicker-div dl{ text-align: left; }\r\n.ui-timepicker-div dl dt{ height: 25px; }\r\n.ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }\r\n.ui-timepicker-div td { font-size: 90%; }\r\n\r\n', '\$(function() {  \r\n  var default_settings = {\r\n    buttonImage:     g.root_url + \"/global/images/clock.png\",      \r\n    showOn:          \"both\",\r\n    buttonImageOnly: true\r\n  }\r\n  \$(\".cf_timepicker\").each(function() {\r\n    var field_name = \$(this).attr(\"name\");\r\n    var settings = default_settings;\r\n    if (\$(\"#\" + field_name + \"_id\").length) {\r\n      var settings_list = \$(\"#\" + field_name + \"_id\").val().split(\"|\");      \r\n      if (settings_list.length > 0) {\r\n        settings.timeFormat = settings_list[0];\r\n        for (var i=1; i<settings_list.length; i++) {\r\n          var parts = settings_list[i].split(\"`\");\r\n          if (parts[1] === \"true\") {\r\n            parts[1] = true;\r\n          } else if (parts[1] === \"false\") {\r\n            parts[1] = false;\r\n          }\r\n          settings[parts[0]] = parts[1];\r\n        }\r\n      }\r\n    }\r\n    \$(this).timepicker(settings);\r\n  });\r\n});\r\n\r\n')");
-      mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (10, 'yes', NULL, NULL, 'Phone Number', 'phone', 2, 'no', 'no', '', NULL, 3, 'small,medium', '{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\n\$output = \"\";\r\n\$has_content = false;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (empty(\$piece))\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {    \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$output .= \$value;\r\n    if (!empty(\$value))\r\n    {\r\n      \$has_content = true;\r\n    }\r\n    \$counter++;\r\n  } else {\r\n    \$output .= \$piece;\r\n  }\r\n}\r\n\r\nif (!empty(\$output) && \$has_content)\r\n  echo \$output;\r\n{/php}', '{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$name   = \$this->get_template_vars(\"NAME\");\r\n\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (strlen(\$piece) == 0)\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {\r\n    \$size = strlen(\$piece); \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$value = htmlspecialchars(\$value);\r\n    echo \"<input type=\\\\\"text\\\\\" name=\\\\\"{\$name}_\$counter\\\\\" value=\\\\\"\$value\\\\\"\r\n            size=\\\\\"\$size\\\\\" maxlength=\\\\\"\$size\\\\\" />\";\r\n    \$counter++;\r\n  } else {\r\n    echo \$piece;\r\n  }\r\n}\r\n{/php}\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '\$field_name = \$vars[\"field_info\"][\"field_name\"];\r\n\$joiner = \"|\";\r\n\r\n\$count = 1;\r\n\$parts = array();\r\nwhile (isset(\$vars[\"data\"][\"{\$field_name}_\$count\"]))\r\n{\r\n  \$parts[] = \$vars[\"data\"][\"{\$field_name}_\$count\"];\r\n  \$count++;\r\n}\r\n\$value = implode(\"|\", \$parts);\r\n\r\n\r\n', '', '')");
-      mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (11, 'yes', NULL, NULL, 'Code / Markup field', 'code_markup', 2, 'no', 'no', 'textarea', NULL, 4, 'large,very_large', '{if \$CONTEXTPAGE == \"edit_submission\"}\r\n  <textarea id=\"{\$NAME}_id\" name=\"{\$NAME}\">{\$VALUE}</textarea>\r\n  <script>\r\n  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(\"{\$NAME}_id\", \r\n  {literal}{{/literal}\r\n    height: \"{\$SIZE_PX}px\",\r\n    path:   \"{\$g_root_url}/global/codemirror/js/\",\r\n    readOnly: true,\r\n    {if \$code_markup == \"HTML\" || \$code_markup == \"XML\"}\r\n      parserfile: [\"parsexml.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/xmlcolors.css\"\r\n    {elseif \$code_markup == \"CSS\"}\r\n      parserfile: [\"parsecss.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/csscolors.css\"\r\n    {elseif \$code_markup == \"JavaScript\"}  \r\n      parserfile: [\"tokenizejavascript.js\", \"parsejavascript.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/jscolors.css\"\r\n    {/if}\r\n  {literal}});{/literal}\r\n  </script>\r\n{else}\r\n  {\$VALUE|strip_tags}\r\n{/if}\r\n', '<div class=\"editor\">\r\n  <textarea id=\"{\$NAME}_id\" name=\"{\$NAME}\">{\$VALUE}</textarea>\r\n</div>\r\n<script>\r\n  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(\"{\$NAME}_id\", \r\n  {literal}{{/literal}\r\n    height: \"{\$SIZE_PX}px\",\r\n    path:   \"{\$g_root_url}/global/codemirror/js/\",\r\n    {if \$code_markup == \"HTML\" || \$code_markup == \"XML\"}\r\n      parserfile: [\"parsexml.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/xmlcolors.css\"\r\n    {elseif \$code_markup == \"CSS\"}\r\n      parserfile: [\"parsecss.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/csscolors.css\"\r\n    {elseif \$code_markup == \"JavaScript\"}  \r\n      parserfile: [\"tokenizejavascript.js\", \"parsejavascript.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/jscolors.css\"\r\n    {/if}\r\n  {literal}});{/literal}\r\n</script>\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '', '.cf_view_markup_field {\r\n  margin: 0px; \r\n}\r\n', '')");
+
+      mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (8, 'no', '{\$LANG.text_non_deletable_fields}', NULL, 'Date', 'date', 2, 'no', 'yes', '', NULL, 1, 'small',
+      '{strip}\r\n  {if \$VALUE}\r\n    {assign var=tzo value=\"\"}\r\n    {if \$apply_timezone_offset == \"yes\"}\r\n      {assign var=tzo value=\$ACCOUNT_INFO.timezone_offset}\r\n    {/if}\r\n    {if \$display_format == \"yy-mm-dd\" || !\$display_format}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d\"}\r\n    {elseif \$display_format == \"dd/mm/yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d/m/Y\"}\r\n    {elseif \$display_format == \"mm/dd/yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"m/d/Y\"}\r\n    {elseif \$display_format == \"M d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"M j, Y\"}\r\n    {elseif \$display_format == \"MM d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"F j, Y\"}\r\n    {elseif \$display_format == \"D M d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"D M j, Y\"}\r\n    {elseif \$display_format == \"DD, MM d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"l M j, Y\"}\r\n    {elseif \$display_format == \"dd. mm. yy.\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d. m. Y.\"}\r\n    {elseif \$display_format == \"datetime:dd/mm/yy|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d/m/Y g:i A\"}\r\n    {elseif \$display_format == \"datetime:mm/dd/yy|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"m/d/Y g:i A\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d g:i A\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm:ss|showSecond`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i:s\"}\r\n    {elseif \$display_format == \"datetime:dd. mm. yy.|hh:mm\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d. m. Y. H:i\"}\r\n    {/if}\r\n{/if}{/strip}',
+      '{assign var=class value=\"cf_datepicker\"}\r\n{if \$display_format|strpos:\"datetime\" === 0}\r\n  {assign var=class value=\"cf_datetimepicker\"}\r\n{/if}\r\n\r\n{assign var=\"val\" value=\"\"}\r\n{if \$VALUE}\r\n  {assign var=tzo value=\"\"}\r\n  {if \$apply_timezone_offset == \"yes\"}\r\n    {assign var=tzo value=\$ACCOUNT_INFO.timezone_offset}\r\n  {/if}\r\n  {if \$display_format == \"yy-mm-dd\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d\"}\r\n  {elseif \$display_format == \"dd/mm/yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d/m/Y\"}\r\n  {elseif \$display_format == \"mm/dd/yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"m/d/Y\"}\r\n  {elseif \$display_format == \"M d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"M j, Y\"}\r\n  {elseif \$display_format == \"MM d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"F j, Y\"}\r\n  {elseif \$display_format == \"D M d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"D M j, Y\"}\r\n  {elseif \$display_format == \"DD, MM d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"l M j, Y\"}\r\n  {elseif \$display_format == \"dd. mm. yy.\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d. m. Y.\"}\r\n  {elseif \$display_format == \"datetime:dd/mm/yy|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d/m/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:mm/dd/yy|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"m/d/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm:ss|showSecond`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i:s\"}\r\n  {elseif \$display_format == \"datetime:dd. mm. yy.|hh:mm\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d. m. Y. H:i\"}\r\n  {/if}\r\n{/if}\r\n\r\n<div class=\"cf_date_group\">\r\n  <input type=\"input\" name=\"{\$NAME}\" id=\"{\$NAME}_id\" \r\n    class=\"cf_datefield {\$class}\" value=\"{\$val}\" /><img class=\"ui-datepicker-trigger\" src=\"{\$g_root_url}/global/images/calendar.png\" id=\"{\$NAME}_icon_id\" />\r\n  <input type=\"hidden\" id=\"{\$NAME}_format\" value=\"{\$display_format}\" />\r\n  {if \$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div>\r\n  {/if}\r\n</div>',
+      '\$field_name     = \$vars[\"field_info\"][\"field_name\"];\r\n\$date           = \$vars[\"data\"][\$field_name];\r\n\$display_format = \$vars[\"settings\"][\"display_format\"];\r\n\$atzo           = \$vars[\"settings\"][\"apply_timezone_offset\"];\r\n\$account_info   = isset(\$vars[\"account_info\"]) ? \$vars[\"account_info\"] : array();\r\n\r\nif (empty(\$date))\r\n{\r\n  \$value = \"\";\r\n}\r\nelse\r\n{\r\n  if (strpos(\$display_format, \"datetime:\") === 0)\r\n  {\r\n    \$parts = explode(\" \", \$date);\r\n    switch (\$display_format)\r\n    {\r\n      case \"datetime:dd/mm/yy|h:mm TT|ampm`true\":\r\n        \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n          substr(\$date, 6);\r\n        break;\r\n      case \"datetime:dd. mm. yy.|hh:mm\":\r\n        \$date = substr(\$date, 4, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n          substr(\$date, 8, 4) . \" \" . substr(\$date, 14);\r\n        break;\r\n    }\r\n  }\r\n  else\r\n  {\r\n    if (\$display_format == \"dd/mm/yy\")\r\n    {\r\n      \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n        substr(\$date, 6);\r\n    } \r\n    else if (\$display_format == \"dd. mm. yy.\")\r\n    {\r\n      \$parts = explode(\" \", \$date);\r\n      \$date = trim(\$parts[1], \".\") . \"/\" . trim(\$parts[0], \".\") . \"/\" . trim(\$parts[2], \".\");\r\n    }\r\n  }\r\n\r\n  \$time = strtotime(\$date);\r\n  \r\n  // lastly, if this field has a timezone offset being applied to it, do the\r\n  // appropriate math on the date\r\n  if (\$atzo == \"yes\" && !isset(\$account_info[\"timezone_offset\"]))\r\n  {\r\n    \$seconds_offset = \$account_info[\"timezone_offset\"] * 60 * 60;\r\n    \$time += \$seconds_offset;\r\n  }\r\n\r\n  \$value = date(\"Y-m-d H:i:s\", \$time);\r\n}'
+      '.cf_datepicker {\r\n  width: 160px; \r\n}\r\n.cf_datetimepicker {\r\n  width: 160px; \r\n}\r\n.ui-datepicker-trigger {\r\n  cursor: pointer; \r\n}\r\n', '\$(function() {\r\n  // the datetimepicker has a bug that prevents the icon from appearing. So\r\n  // instead, we add the image manually into the page and assign the open event\r\n  // handler to the image\r\n  var default_settings = {\r\n    changeYear: true,\r\n    changeMonth: true   \r\n  }\r\n\r\n  \$(\".cf_datepicker\").each(function() {\r\n    var field_name = \$(this).attr(\"name\");\r\n    var settings = default_settings;\r\n    if (\$(\"#\" + field_name + \"_id\").length) {\r\n      settings.dateFormat = \$(\"#\" + field_name + \"_format\").val();\r\n    }\r\n    \$(this).datepicker(settings);\r\n    \$(\"#\" + field_name + \"_icon_id\").bind(\"click\",\r\n      { field_id: \"#\" + field_name + \"_id\" }, function(e) {      \r\n      \$.datepicker._showDatepicker(\$(e.data.field_id)[0]);\r\n    });\r\n  });\r\n    \r\n  \$(\".cf_datetimepicker\").each(function() {\r\n    var field_name = \$(this).attr(\"name\");\r\n    var settings = default_settings;\r\n    if (\$(\"#\" + field_name + \"_id\").length) {\r\n      var settings_str = \$(\"#\" + field_name + \"_format\").val();\r\n      settings_str = settings_str.replace(/datetime:/, \"\");\r\n      var settings_list = settings_str.split(\"|\");\r\n      var settings = {};\r\n      settings.dateFormat = settings_list[0];\r\n      settings.timeFormat = settings_list[1];      \r\n      for (var i=2; i<settings_list.length; i++) {\r\n        var parts = settings_list[i].split(\"`\");\r\n        if (parts[1] === \"true\") {\r\n          parts[1] = true;\r\n        }\r\n        settings[parts[0]] = parts[1];\r\n      }\r\n    }\r\n    \$(this).datetimepicker(settings);\r\n    \$(\"#\" + field_name + \"_icon_id\").bind(\"click\",\r\n      { field_id: \"#\" + field_name + \"_id\" }, function(e) {      \r\n      \$.datepicker._showDatepicker(\$(e.data.field_id)[0]);\r\n    });\r\n  });  \r\n});')");
+
+      mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (9, 'yes', NULL, NULL, '{\$LANG.word_time}', 'time', 2, 'no', 'no', '', NULL, 2, 'small', '', '<div class=\"cf_date_group\">\r\n  <input type=\"input\" name=\"{\$NAME}\" value=\"{\$VALUE}\" class=\"cf_datefield cf_timepicker\" />\r\n  <input type=\"hidden\" id=\"{\$NAME}_id\" value=\"{\$display_format}\" />\r\n  \r\n  {if \$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div>\r\n  {/if}\r\n</div>\r\n', '\r\n', '.cf_timepicker {\r\n  width: 60px; \r\n}\r\n.ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }\r\n.ui-timepicker-div dl{ text-align: left; }\r\n.ui-timepicker-div dl dt{ height: 25px; }\r\n.ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }\r\n.ui-timepicker-div td { font-size: 90%; }\r\n\r\n', '\$(function() {  \r\n  var default_settings = {\r\n    buttonImage:     g.root_url + \"/global/images/clock.png\",      \r\n    showOn:          \"both\",\r\n    buttonImageOnly: true\r\n  }\r\n  \$(\".cf_timepicker\").each(function() {\r\n    var field_name = \$(this).attr(\"name\");\r\n    var settings = default_settings;\r\n    if (\$(\"#\" + field_name + \"_id\").length) {\r\n      var settings_list = \$(\"#\" + field_name + \"_id\").val().split(\"|\");      \r\n      if (settings_list.length > 0) {\r\n        settings.timeFormat = settings_list[0];\r\n        for (var i=1; i<settings_list.length; i++) {\r\n          var parts = settings_list[i].split(\"`\");\r\n          if (parts[1] === \"true\") {\r\n            parts[1] = true;\r\n          } else if (parts[1] === \"false\") {\r\n            parts[1] = false;\r\n          }\r\n          settings[parts[0]] = parts[1];\r\n        }\r\n      }\r\n    }\r\n    \$(this).timepicker(settings);\r\n  });\r\n});\r\n\r\n')");
+      mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (10, 'yes', NULL, NULL, '{\$LANG.phrase_phone_number}', 'phone', 2, 'no', 'no', '', NULL, 3, 'small,medium', '{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\n\$output = \"\";\r\n\$has_content = false;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (empty(\$piece))\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {    \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$output .= \$value;\r\n    if (!empty(\$value))\r\n    {\r\n      \$has_content = true;\r\n    }\r\n    \$counter++;\r\n  } else {\r\n    \$output .= \$piece;\r\n  }\r\n}\r\n\r\nif (!empty(\$output) && \$has_content)\r\n  echo \$output;\r\n{/php}', '{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$name   = \$this->get_template_vars(\"NAME\");\r\n\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (strlen(\$piece) == 0)\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {\r\n    \$size = strlen(\$piece); \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$value = htmlspecialchars(\$value);\r\n    echo \"<input type=\\\\\"text\\\\\" name=\\\\\"{\$name}_\$counter\\\\\" value=\\\\\"\$value\\\\\"\r\n            size=\\\\\"\$size\\\\\" maxlength=\\\\\"\$size\\\\\" />\";\r\n    \$counter++;\r\n  } else {\r\n    echo \$piece;\r\n  }\r\n}\r\n{/php}\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '\$field_name = \$vars[\"field_info\"][\"field_name\"];\r\n\$joiner = \"|\";\r\n\r\n\$count = 1;\r\n\$parts = array();\r\nwhile (isset(\$vars[\"data\"][\"{\$field_name}_\$count\"]))\r\n{\r\n  \$parts[] = \$vars[\"data\"][\"{\$field_name}_\$count\"];\r\n  \$count++;\r\n}\r\n\$value = implode(\"|\", \$parts);\r\n\r\n\r\n', '', '')");
+      mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (11, 'yes', NULL, NULL, '{\$LANG.phrase_code_markup_field}', 'code_markup', 2, 'no', 'no', 'textarea', NULL, 4, 'large,very_large', '{if \$CONTEXTPAGE == \"edit_submission\"}\r\n  <textarea id=\"{\$NAME}_id\" name=\"{\$NAME}\">{\$VALUE}</textarea>\r\n  <script>\r\n  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(\"{\$NAME}_id\", \r\n  {literal}{{/literal}\r\n    height: \"{\$SIZE_PX}px\",\r\n    path:   \"{\$g_root_url}/global/codemirror/js/\",\r\n    readOnly: true,\r\n    {if \$code_markup == \"HTML\" || \$code_markup == \"XML\"}\r\n      parserfile: [\"parsexml.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/xmlcolors.css\"\r\n    {elseif \$code_markup == \"CSS\"}\r\n      parserfile: [\"parsecss.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/csscolors.css\"\r\n    {elseif \$code_markup == \"JavaScript\"}  \r\n      parserfile: [\"tokenizejavascript.js\", \"parsejavascript.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/jscolors.css\"\r\n    {/if}\r\n  {literal}});{/literal}\r\n  </script>\r\n{else}\r\n  {\$VALUE|strip_tags}\r\n{/if}\r\n', '<div class=\"editor\">\r\n  <textarea id=\"{\$NAME}_id\" name=\"{\$NAME}\">{\$VALUE}</textarea>\r\n</div>\r\n<script>\r\n  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(\"{\$NAME}_id\", \r\n  {literal}{{/literal}\r\n    height: \"{\$SIZE_PX}px\",\r\n    path:   \"{\$g_root_url}/global/codemirror/js/\",\r\n    {if \$code_markup == \"HTML\" || \$code_markup == \"XML\"}\r\n      parserfile: [\"parsexml.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/xmlcolors.css\"\r\n    {elseif \$code_markup == \"CSS\"}\r\n      parserfile: [\"parsecss.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/csscolors.css\"\r\n    {elseif \$code_markup == \"JavaScript\"}  \r\n      parserfile: [\"tokenizejavascript.js\", \"parsejavascript.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/jscolors.css\"\r\n    {/if}\r\n  {literal}});{/literal}\r\n</script>\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '', '.cf_view_markup_field {\r\n  margin: 0px; \r\n}\r\n', '')");
     }
 
     if (!in_array("{$g_table_prefix}field_types", $existing_tables))
@@ -610,6 +623,20 @@ function ft_upgrade_form_tools()
       mysql_query("INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, list_order) VALUES ('field_types', '$standard_fields', 1)");
       mysql_query("INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, list_order) VALUES ('field_types', '$special_fields', 2)");
     }
+
+    // this will automatically fail if the fields already exist
+    @mysql_query("
+      ALTER TABLE {$g_table_prefix}modules
+      ADD is_premium ENUM('yes', 'no') NOT NULL DEFAULT 'no' AFTER is_enabled,
+      ADD module_key VARCHAR(15) NULL AFTER is_premium
+    ");
+
+    @mysql_query("ALTER TABLE {$g_table_prefix}field_types ADD view_field_rendering_type ENUM('none', 'php', 'smarty') NOT NULL DEFAULT 'none' AFTER compatible_field_sizes");
+    @mysql_query("ALTER TABLE {$g_table_prefix}field_types ADD view_field_php_function VARCHAR(255) NULL AFTER view_field_rendering_type");
+    @mysql_query("ALTER TABLE {$g_table_prefix}field_types ADD view_field_php_function_source VARCHAR(255) NULL AFTER view_field_rendering_type");
+
+    mysql_query("ALTER TABLE {$g_table_prefix}hooks RENAME {$g_table_prefix}hook_calls");
+    mysql_query("ALTER TABLE {$g_table_prefix}hook_calls CHANGE core_function function_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
 
     // okay! At this point, we've created the new tables for the field types & can safely add the new file and tinyMCE field
     // types. In order to upgrade to 2.1.0, the user MUST have installed the WYSIWYG and file upload modules
@@ -638,6 +665,7 @@ function ft_upgrade_form_tools()
     // to the new DB structure) we need to ensure those two modules are installed. The code at the top of this section
     // ensured that those two modules are in fact found in the folder, but now we need to install them as well
     $modules = ft_get_modules();
+
     foreach ($modules as $module_info)
     {
       $module_id    = $module_info["module_id"];
@@ -646,10 +674,10 @@ function ft_upgrade_form_tools()
       if ($is_installed == "yes")
         continue;
 
-      ft_install_module($module_id);
+      ft_install_module(array("install" => $module_id));
     }
 
-    $query = mysql_query("
+    $query = @mysql_query("
       CREATE TABLE {$g_table_prefix}new_view_submission_defaults (
         view_id mediumint(9) NOT NULL,
         field_id mediumint(9) NOT NULL,
@@ -659,7 +687,7 @@ function ft_upgrade_form_tools()
       ) DEFAULT CHARSET=utf8
     ");
 
-    $query = mysql_query("
+    $query = @mysql_query("
       CREATE TABLE {$g_table_prefix}view_columns (
         view_id mediumint(9) NOT NULL,
         field_id mediumint(9) NOT NULL,
@@ -671,6 +699,8 @@ function ft_upgrade_form_tools()
         PRIMARY KEY  (view_id,field_id,list_order)
       ) DEFAULT CHARSET=utf8
     ");
+
+
 
     // changed Tables: simple changes that don't require any data manipulation
     mysql_query("ALTER TABLE {$g_table_prefix}accounts ADD last_logged_in DATETIME NULL AFTER account_status");
@@ -693,7 +723,7 @@ function ft_upgrade_form_tools()
 
     mysql_query("ALTER TABLE {$g_table_prefix}forms DROP default_view_id");
     mysql_query("ALTER TABLE {$g_table_prefix}forms ADD form_type ENUM('internal','external') NOT NULL DEFAULT 'external' AFTER form_id");
-    mysql_query("ALTER TABLE {$g_table_prefix}forms ADD add_submission_button_label VARCHAR(255) NULL DEFAULT '{$LANG["word_add"]}'");
+    mysql_query("ALTER TABLE {$g_table_prefix}forms ADD add_submission_button_label VARCHAR(255) NULL DEFAULT '{$LANG["word_add_rightarrow"]}'");
     mysql_query("ALTER TABLE {$g_table_prefix}forms CHANGE form_url form_url VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL");
 
     mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('edit_submission_shared_resources_js', '\$(function() {\r\n  \$(\".fancybox\").fancybox();\r\n});\r\n', 'core')");
@@ -969,8 +999,15 @@ function ft_upgrade_form_tools()
 
       foreach ($view_ids as $view_id)
       {
-        $view_fields = ft_get_view_fields($view_id);
-        foreach ($view_fields as $view_field_info)
+        // we can't use ft_get_view_fields here because the Core code references DB changes
+        // that can't be made yet
+        $view_fields_query = mysql_query("
+          SELECT field_id, tab_number, is_column, is_sortable
+          FROM   {$g_table_prefix}view_fields
+          WHERE  view_id = $view_id
+        ");
+
+        while ($view_field_info = mysql_fetch_assoc($view_fields_query))
         {
           $field_id    = $view_field_info["field_id"];
           $tab_number  = $view_field_info["tab_number"];
@@ -1217,14 +1254,11 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20110527)
   {
-  	mysql_query("
-  	  UPDATE {$g_table_prefix}field_types
-  	  SET    raw_field_type_map_multi_select_id = 16
-  	  WHERE  field_type_identifier = 'radio_buttons'
-  	");
-
-  	mysql_query("ALTER TABLE {$g_table_prefix}ft_hooks RENAME {$g_table_prefix}hook_calls");
-    mysql_query("ALTER TABLE {$g_table_prefix}hook_calls CHANGE core_function function_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    raw_field_type_map_multi_select_id = 16
+      WHERE  field_type_identifier = 'radio_buttons'
+    ");
 
     mysql_query("
       CREATE TABLE {$g_table_prefix}hooks (
@@ -1238,11 +1272,12 @@ function ft_upgrade_form_tools()
         overridable mediumtext,
         PRIMARY KEY (id)
       )");
+
   }
 
   if ($old_version_info["release_date"] < 20110528)
   {
-  	// assorted updates to the Date field type
+    // assorted updates to the Date field type
     mysql_query("
       INSERT INTO {$g_table_prefix}field_type_settings (field_type_id, field_label, field_setting_identifier, field_type,
         field_orientation, default_value_type, default_value, list_order)
@@ -1260,7 +1295,7 @@ function ft_upgrade_form_tools()
     ");
 
     mysql_query("
-      UPDATE ft_field_types
+      UPDATE {$g_table_prefix}field_types
       SET    view_field_smarty_markup = '{strip}\r\n  {if \$VALUE}\r\n    {assign var=tzo value=\"\"}\r\n    {if \$apply_timezone_offset == \"yes\"}\r\n      {assign var=tzo value=\$ACCOUNT_INFO.timezone_offset}\r\n    {/if}\r\n    {if \$display_format == \"yy-mm-dd\" || !\$display_format}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d\"}\r\n    {elseif \$display_format == \"dd/mm/yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d/m/Y\"}\r\n    {elseif \$display_format == \"mm/dd/yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"m/d/Y\"}\r\n    {elseif \$display_format == \"M d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"M j, Y\"}\r\n    {elseif \$display_format == \"MM d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"F j, Y\"}\r\n    {elseif \$display_format == \"D M d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"D M j, Y\"}\r\n    {elseif \$display_format == \"DD, MM d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"l M j, Y\"}\r\n    {elseif \$display_format == \"datetime:dd/mm/yy|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d/m/Y g:i A\"}\r\n    {elseif \$display_format == \"datetime:mm/dd/yy|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"m/d/Y g:i A\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d g:i A\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm:ss|showSecond`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i:s\"}\r\n    {/if}\r\n{/if}{/strip}\r\n',
              edit_field_smarty_markup = '{assign var=class value=\"cf_datepicker\"}\r\n{if \$display_format|strpos:\"datetime\" === 0}\r\n  {assign var=class value=\"cf_datetimepicker\"}\r\n{/if}\r\n\r\n{assign var=\"val\" value=\"\"}\r\n{if \$VALUE}\r\n  {assign var=tzo value=\"\"}\r\n  {if \$apply_timezone_offset == \"yes\"}\r\n    {assign var=tzo value=\$ACCOUNT_INFO.timezone_offset}\r\n  {/if}\r\n  {if \$display_format == \"yy-mm-dd\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d\"}\r\n  {elseif \$display_format == \"dd/mm/yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d/m/Y\"}\r\n  {elseif \$display_format == \"mm/dd/yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"m/d/Y\"}\r\n  {elseif \$display_format == \"M d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"M j, Y\"}\r\n  {elseif \$display_format == \"MM d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"F j, Y\"}\r\n  {elseif \$display_format == \"D M d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"D M j, Y\"}\r\n  {elseif \$display_format == \"DD, MM d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"l M j, Y\"}\r\n  {elseif \$display_format == \"datetime:dd/mm/yy|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d/m/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:mm/dd/yy|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"m/d/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm:ss|showSecond`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i:s\"}\r\n  {/if}\r\n{/if}\r\n\r\n<div class=\"cf_date_group\">\r\n  <input type=\"input\" name=\"{\$NAME}\" id=\"{\$NAME}_id\" \r\n    class=\"cf_datefield {\$class}\" value=\"{\$val}\" /><img class=\"ui-datepicker-trigger\" src=\"{\$g_root_url}/global/images/calendar.png\" id=\"{\$NAME}_icon_id\" />\r\n  <input type=\"hidden\" id=\"{\$NAME}_format\" value=\"{\$display_format}\" />\r\n  {if \$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div>\r\n  {/if}\r\n</div>\r\n',
              php_processing = '\$field_name     = \$vars[\"field_info\"][\"field_name\"];\r\n\$date           = \$vars[\"data\"][\$field_name];\r\n\$display_format = \$vars[\"settings\"][\"display_format\"];\r\n\$atzo           = \$vars[\"settings\"][\"apply_timezone_offset\"];\r\n\$account_info   = isset(\$vars[\"account_info\"]) ? \$vars[\"account_info\"] : array();\r\n\r\nif (empty(\$date))\r\n{\r\n  \$value = \"\";\r\n}\r\nelse\r\n{\r\n  if (strpos(\$display_format, \"datetime:\") === 0)\r\n  {\r\n    \$parts = explode(\" \", \$date);\r\n    switch (\$display_format)\r\n    {\r\n      case \"datetime:dd/mm/yy|h:mm TT|ampm`true\":\r\n        \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n          substr(\$date, 6);        \r\n        break;\r\n    }\r\n  }\r\n  else\r\n  {\r\n    if (\$display_format == \"dd/mm/yy\")\r\n    {\r\n      \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n        substr(\$date, 6);\r\n    }\r\n  }\r\n  \$time = strtotime(\$date);\r\n  \r\n  // lastly, if this field has a timezone offset being applied to it, do the\r\n  // appropriate math on the date\r\n  if (\$atzo == \"yes\" && !isset(\$account_info[\"timezone_offset\"]))\r\n  {\r\n    \$seconds_offset = \$account_info[\"timezone_offset\"] * 60 * 60;\r\n    \$time += \$seconds_offset;\r\n  }\r\n\r\n  \$value = date(\"Y-m-d H:i:s\", \$time);\r\n}\r\n\r\n\r\n'
@@ -1275,13 +1310,209 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20110612)
   {
-  	@mysql_query("ALTER TABLE {$g_table_prefix}accounts ADD temp_reset_password VARCHAR(50) NULL");
+    @mysql_query("ALTER TABLE {$g_table_prefix}accounts ADD temp_reset_password VARCHAR(50) NULL");
+  }
+
+  if ($old_version_info["release_date"] < 20110622)
+  {
+    @mysql_query("UPDATE {$g_table_prefix}field_types SET view_field_php_function_source = 'core'");
+
+    // for compatibility with existing field type modules
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET     view_field_rendering_type = 'smarty'
+    ");
+
+    // textbox
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'smarty',
+             view_field_php_function_source = 'core',
+             view_field_php_function = ''
+      WHERE  field_type_identifier = 'textbox'
+    ");
+
+    // textarea
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'smarty',
+             view_field_php_function_source = 'core',
+             view_field_php_function = '',
+             view_field_smarty_markup = '{if \$CONTEXTPAGE == \"edit_submission\"}  \r\n  {\$VALUE|nl2br}\r\n{else}\r\n  {\$VALUE}\r\n{/if}',
+             edit_field_smarty_markup = '{* figure out all the classes *}\r\n{assign var=classes value=\$height}\r\n{if \$highlight_colour}\r\n  {assign var=classes value=\"`\$classes` `\$highlight_colour`\"}\r\n{/if}\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_wordcounter max`\$maxlength`\"}\r\n{else if \$input_length == \"chars\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_textcounter max`\$maxlength`\"}\r\n{/if}\r\n\r\n<textarea name=\"{\$NAME}\" id=\"{\$NAME}_id\" class=\"{\$classes}\">{\$VALUE}</textarea>\r\n\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} {\$LANG.phrase_word_limit_p} <span></span> {\$LANG.phrase_remaining_words}\r\n  </div>\r\n{elseif \$input_length == \"chars\" && \$max_length != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} {\$LANG.phrase_characters_limit_p} <span></span> {\$LANG.phrase_remaining_characters}\r\n  </div>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments|nl2br}</div>\r\n{/if}'
+      WHERE  field_type_identifier = 'textarea'
+    ");
+
+    // password
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET     view_field_rendering_type = 'none'
+      WHERE   field_type_identifier = 'password'
+    ");
+
+    // dropdown
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_dropdown',
+             view_field_smarty_markup = '{strip}{if \$contents != \"\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$VALUE == \$option.option_value}{\$option.option_name}{/if}\r\n    {/foreach}\r\n  {/foreach}\r\n{/if}{/strip}',
+             edit_field_smarty_markup = '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">{\$LANG.phrase_not_assigned_to_option_list}</div>\r\n{else}\r\n  <select name=\"{\$NAME}\">\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {if \$group_info.group_name}\r\n      <optgroup label=\"{\$group_info.group_name|escape}\">\r\n    {/if}\r\n    {foreach from=\$options item=option name=row}\r\n      <option value=\"{\$option.option_value}\"\r\n        {if \$VALUE == \$option.option_value}selected{/if}>{\$option.option_name}</option>\r\n    {/foreach}\r\n    {if \$group_info.group_name}\r\n      </optgroup>\r\n    {/if}\r\n  {/foreach}\r\n  </select>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}'
+      WHERE  field_type_identifier = 'dropdown'
+    ");
+
+    // multi-select dropdown
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_multi_select_dropdown',
+             view_field_smarty_markup = '{if \$contents != \"\"}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_first value=true}\r\n  {strip}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$option.option_value|in_array:\$vals}\r\n        {if \$is_first == false}, {/if}\r\n        {\$option.option_name}\r\n        {assign var=is_first value=false}\r\n      {/if}\r\n    {/foreach}\r\n  {/foreach}\r\n  {/strip}\r\n{/if}',
+             edit_field_smarty_markup = '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">{\$LANG.phrase_not_assigned_to_option_list}</div>\r\n{else}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  <select name=\"{\$NAME}[]\" multiple size=\"{if \$num_rows}{\$num_rows}{else}5{/if}\">\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {if \$group_info.group_name}\r\n      <optgroup label=\"{\$group_info.group_name|escape}\">\r\n    {/if}\r\n    {foreach from=\$options item=option name=row}\r\n      <option value=\"{\$option.option_value}\"\r\n        {if \$option.option_value|in_array:\$vals}selected{/if}>{\$option.option_name}</option>\r\n    {/foreach}\r\n    {if \$group_info.group_name}\r\n      </optgroup>\r\n    {/if}\r\n  {/foreach}\r\n  </select>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}',
+      WHERE  field_type_identifier = 'multi_select_dropdown'
+    ");
+
+    // radio buttons
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_radios',
+             view_field_smarty_markup = '{strip}{if \$contents != \"\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$VALUE == \$option.option_value}{\$option.option_name}{/if}\r\n    {/foreach}\r\n  {/foreach}\r\n{/if}{/strip}',
+             edit_field_smarty_markup = '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">{\$LANG.phrase_not_assigned_to_option_list}</div>\r\n{else}\r\n  {assign var=is_in_columns value=false}\r\n  {if \$formatting == \"cf_option_list_2cols\" || \r\n      \$formatting == \"cf_option_list_3cols\" || \r\n      \$formatting == \"cf_option_list_4cols\"}\r\n    {assign var=is_in_columns value=true}\r\n  {/if}\r\n\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n\r\n    {if \$group_info.group_name}\r\n      <div class=\"cf_option_list_group_label\">{\$group_info.group_name}</div>\r\n    {/if}\r\n\r\n    {if \$is_in_columns}<div class=\"{\$formatting}\">{/if}\r\n\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$is_in_columns}<div class=\"column\">{/if}\r\n        <input type=\"radio\" name=\"{\$NAME}\" id=\"{\$NAME}_{\$counter}\" \r\n          value=\"{\$option.option_value}\"\r\n          {if \$VALUE == \$option.option_value}checked{/if} />\r\n          <label for=\"{\$NAME}_{\$counter}\">{\$option.option_name}</label>\r\n      {if \$is_in_columns}</div>{/if}\r\n      {if \$formatting == \"vertical\"}<br />{/if}\r\n      {assign var=counter value=\$counter+1}\r\n    {/foreach}\r\n\r\n    {if \$is_in_columns}</div>{/if}\r\n  {/foreach}\r\n\r\n  {if \$comments}<div class=\"cf_field_comments\">{\$comments}</div>{/if}\r\n{/if}'
+      WHERE  field_type_identifier = 'radio_buttons'
+    ");
+
+    // checkboxes
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_checkboxes',
+             view_field_smarty_markup = '{strip}{if \$contents != \"\"}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_first value=true}\r\n  {strip}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$option.option_value|in_array:\$vals}\r\n        {if \$is_first == false}, {/if}\r\n        {\$option.option_name}\r\n        {assign var=is_first value=false}\r\n      {/if}\r\n    {/foreach}\r\n  {/foreach}\r\n  {/strip}\r\n{/if}{/strip}',
+             edit_field_smarty_markup = '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">{\$LANG.phrase_not_assigned_to_option_list}</div>\r\n{else}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_in_columns value=false}\r\n  {if \$formatting == \"cf_option_list_2cols\" || \r\n      \$formatting == \"cf_option_list_3cols\" || \r\n      \$formatting == \"cf_option_list_4cols\"}\r\n    {assign var=is_in_columns value=true}\r\n  {/if}\r\n\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n\r\n    {if \$group_info.group_name}\r\n      <div class=\"cf_option_list_group_label\">{\$group_info.group_name}</div>\r\n    {/if}\r\n\r\n    {if \$is_in_columns}<div class=\"{\$formatting}\">{/if}\r\n\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$is_in_columns}<div class=\"column\">{/if}\r\n        <input type=\"checkbox\" name=\"{\$NAME}[]\" id=\"{\$NAME}_{\$counter}\" \r\n          value=\"{\$option.option_value|escape}\" \r\n          {if \$option.option_value|in_array:\$vals}checked{/if} />\r\n          <label for=\"{\$NAME}_{\$counter}\">{\$option.option_name}</label>\r\n      {if \$is_in_columns}</div>{/if}\r\n      {if \$formatting == \"vertical\"}<br />{/if}\r\n      {assign var=counter value=\$counter+1}\r\n    {/foreach}\r\n\r\n    {if \$is_in_columns}</div>{/if}\r\n  {/foreach}\r\n\r\n  {if {\$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div> \r\n  {/if}\r\n{/if}'
+      WHERE  field_type_identifier = 'checkboxes'
+    ");
+
+    // date
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_date'
+      WHERE  field_type_identifier = 'date'
+    ");
+
+    // time
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'none'
+      WHERE  field_type_identifier = 'time'
+    ");
+
+    // phone
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_phone_number'
+      WHERE  field_type_identifier = 'phone'
+    ");
+
+    // code / markup
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_code_markup'
+      WHERE  field_type_identifier = 'code_markup'
+    ");
+  }
+
+  if ($old_version_info["release_date"] < 20110630)
+  {
+    mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('field_type_settings_shared_characteristics', 'field_comments:textbox,comments`textarea,comments`password,comments`dropdown,comments`multi_select_dropdown,comments`radio_buttons,comments`checkboxes,comments`date,comments`time,comments`phone,comments`code_markup,comments`file,comments`google_maps_field,comments`tinymce,comments|data_source:dropdown,contents`multi_select_dropdown,contents`radio_buttons,contents`checkboxes,contents|column_formatting:checkboxes,formatting`radio_buttons,formatting|maxlength_attr:textbox,maxlength|colour_highlight:textbox,highlight|folder_path:file,folder_path|folder_url:file,folder_url|permitted_file_types:file,folder_url|max_file_size:file,max_file_size|date_display_format:date,display_format|apply_timezone_offset:date,apply_timezone_offset', 'core')");
+  }
+
+  // yet more field type updates
+  if ($old_version_info["release_date"] < 20110702)
+  {
+    mysql_query("UPDATE {$g_table_prefix}field_types SET field_type_name = '{\$LANG.word_time}' WHERE field_type_identifier = 'time'");
+    mysql_query("UPDATE {$g_table_prefix}field_types SET field_type_name = '{\$LANG.word_date}' WHERE field_type_identifier = 'date'");
+    mysql_query("UPDATE {$g_table_prefix}field_types SET field_type_name = '{\$LANG.phrase_phone_number}' WHERE field_type_identifier = 'phone'");
+    mysql_query("UPDATE {$g_table_prefix}field_types SET field_type_name = '{\$LANG.phrase_code_markup_field}' WHERE field_type_identifier = 'code_markup'");
+
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    edit_field_smarty_markup = '{* figure out all the classes *}\r\n{assign var=classes value=\$height}\r\n{if \$highlight_colour}\r\n  {assign var=classes value=\"`\$classes` `\$highlight_colour`\"}\r\n{/if}\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_wordcounter max`\$maxlength`\"}\r\n{elseif \$input_length == \"chars\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_textcounter max`\$maxlength`\"}\r\n{/if}\r\n\r\n<textarea name=\"{\$NAME}\" id=\"{\$NAME}_id\" class=\"{\$classes}\">{\$VALUE}</textarea>\r\n\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} {\$LANG.phrase_word_limit_p} <span></span> {\$LANG.phrase_remaining_words}\r\n  </div>\r\n{elseif \$input_length == \"chars\" && \$maxlength != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} {\$LANG.phrase_characters_limit_p} <span></span> {\$LANG.phrase_remaining_characters}\r\n  </div>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments|nl2br}</div>\r\n{/if}',
+             resources_js = '/**\r\n * The following code provides a simple text/word counter option for any  \r\n * textarea. It either just keeps counting up, or limits the results to a\r\n * certain number - all depending on what the user has selected via the\r\n * field type settings.\r\n */\r\nvar cf_counter = {};\r\ncf_counter.get_max_count = function(el) {\r\n  var classes = \$(el).attr(''class'').split(\" \").slice(-1);\r\n  var max = null;\r\n  for (var i=0; i<classes.length; i++) {\r\n    var result = classes[i].match(/max(\\\\d+)/);\r\n    if (result != null) {\r\n      max = result[1];\r\n      break;\r\n    }\r\n  }\r\n  return max;\r\n}\r\n\r\n\$(function() {\r\n  \$(\"textarea[class~=''cf_wordcounter'']\").each(function() {\r\n    var max = cf_counter.get_max_count(this);\r\n    if (max == null) {\r\n      return;\r\n    }\r\n    \$(this).bind(\"keydown\", function() {\r\n      var val = \$(this).val();\r\n      var len        = val.split(/[\\\\s]+/);\r\n      var field_name = \$(this).attr(\"name\");\r\n      var num_words  = len.length - 1;\r\n      if (num_words > max) {\r\n        var allowed_words = val.split(/[\\\\s]+/, max);\r\n        truncated_str = allowed_words.join(\" \");\r\n        \$(this).val(truncated_str);\r\n      } else {\r\n        \$(\"#\" + field_name + \"_counter\").find(\"span\").html(parseInt(max) - parseInt(num_words));\r\n      }\r\n    });     \r\n    \$(this).trigger(\"keydown\");\r\n  });\r\n\r\n  \$(\"textarea[class~=''cf_textcounter'']\").each(function() {\r\n    var max = cf_counter.get_max_count(this);\r\n    if (max == null) {\r\n      return;\r\n    }\r\n    \$(this).bind(\"keydown\", function() {    \r\n      var field_name = \$(this).attr(\"name\");      \r\n      if (this.value.length > max) {\r\n        this.value = this.value.substring(0, max);\r\n      } else {\r\n        \$(\"#\" + field_name + \"_counter\").find(\"span\").html(max - this.value.length);\r\n      }\r\n    });\r\n    \$(this).trigger(\"keydown\");\r\n  }); \r\n});'
+      WHERE  field_type_identifier = 'textarea'
+    ");
+
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_smarty_markup = '{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\n\$output = \"\";\r\n\$has_content = false;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (empty(\$piece))\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {    \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$output .= \$value;\r\n    if (!empty(\$value))\r\n    {\r\n      \$has_content = true;\r\n    }\r\n    \$counter++;\r\n  } else {\r\n    \$output .= \$piece;\r\n  }\r\n}\r\n\r\nif (!empty(\$output) && \$has_content)\r\n  echo \$output;\r\n{/php}',
+             edit_field_smarty_markup = '{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$name   = \$this->get_template_vars(\"NAME\");\r\n\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (strlen(\$piece) == 0)\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {\r\n    \$size = strlen(\$piece); \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$value = htmlspecialchars(\$value);\r\n    echo \"<input type=\\\\\"text\\\\\" name=\\\\\"{\$name}_\$counter\\\\\" value=\\\\\"\$value\\\\\"\r\n            size=\\\\\"\$size\\\\\" maxlength=\\\\\"\$size\\\\\" />\";\r\n    \$counter++;\r\n  } else {\r\n    echo \$piece;\r\n  }\r\n}\r\n{/php}\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}'
+      WHERE  field_type_identifier = 'phone'
+    ");
+
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    edit_field_smarty_markup = '<div class=\"editor\">\r\n  <textarea id=\"{\$NAME}_id\" name=\"{\$NAME}\">{\$VALUE}</textarea>\r\n</div>\r\n<script>\r\n  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(\"{\$NAME}_id\", \r\n  {literal}{{/literal}\r\n    height: \"{\$height}px\",\r\n    path:   \"{\$g_root_url}/global/codemirror/js/\",\r\n    {if \$code_markup == \"HTML\" || \$code_markup == \"XML\"}\r\n      parserfile: [\"parsexml.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/xmlcolors.css\"\r\n    {elseif \$code_markup == \"CSS\"}\r\n      parserfile: [\"parsecss.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/csscolors.css\"\r\n    {elseif \$code_markup == \"JavaScript\"}  \r\n      parserfile: [\"tokenizejavascript.js\", \"parsejavascript.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/jscolors.css\"\r\n    {/if}\r\n  {literal}});{/literal}\r\n</script>\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}'
+      WHERE  field_type_identifier = 'code_markup'
+    ");
+  }
+
+  if ($old_version_info["release_date"] < 20110716)
+  {
+    $field_type_info = ft_get_field_type_by_identifier("code_markup");
+    foreach ($field_type_info["settings"] as $curr_field_type_info)
+    {
+    	if ($curr_field_type_info["field_setting_identifier"] != "height")
+    	  continue;
+
+    	$setting_id = $curr_field_type_info["setting_id"];
+    	mysql_query("UPDATE {$g_table_prefix}field_type_settings SET default_value = '200' WHERE setting_id = $setting_id") or die(mysql_error());
+    }
+  }
+
+  // update the Date field type for additional custom date formats
+  if ($old_version_info["release_date"] < 20110811)
+  {
+		$field_type_info = ft_get_field_type_by_identifier("date");
+		$field_type_id = $field_type_info["field_type_id"];
+		$custom_date_format_info = ft_get_field_type_setting_by_identifier($field_type_id, "display_format");
+
+		$setting_id = $custom_date_format_info["setting_id"];
+		mysql_query("DELETE FROM {$g_table_prefix}field_type_setting_options WHERE setting_id = $setting_id");
+
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '2011-11-30', 'yy-mm-dd', 1, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '30/11/2011 (dd/mm/yyyy)', 'dd/mm/yy', 2, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '11/30/2011 (mm/dd/yyyy)', 'mm/dd/yy', 3, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, 'Nov 30, 2011', 'M d, yy', 4, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, 'November 30, 2011', 'MM d, yy', 5, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, 'Wed Nov 30, 2011 ', 'D M d, yy', 6, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, 'Wednesday, November 30, 2011', 'DD, MM d, yy', 7, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '30. 08. 2011.', 'dd. mm. yy.', 8, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '30/11/2011 8:00 PM', 'datetime:dd/mm/yy|h:mm TT|ampm`true', 9, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '11/30/2011 8:00 PM', 'datetime:mm/dd/yy|h:mm TT|ampm`true', 10, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '2011-11-30 8:00 PM', 'datetime:yy-mm-dd|h:mm TT|ampm`true', 11, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '2011-11-30 20:00', 'datetime:yy-mm-dd|hh:mm', 12, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '2011-11-30 20:00:00', 'datetime:yy-mm-dd|hh:mm:ss|showSecond`true', 13, 'yes')");
+		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '30. 08. 2011. 20:00', 'datetime:dd. mm. yy.|hh:mm', 14, 'yes')");
+
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_smarty_markup = '{strip}\r\n  {if \$VALUE}\r\n    {assign var=tzo value=\"\"}\r\n    {if \$apply_timezone_offset == \"yes\"}\r\n      {assign var=tzo value=\$ACCOUNT_INFO.timezone_offset}\r\n    {/if}\r\n    {if \$display_format == \"yy-mm-dd\" || !\$display_format}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d\"}\r\n    {elseif \$display_format == \"dd/mm/yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d/m/Y\"}\r\n    {elseif \$display_format == \"mm/dd/yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"m/d/Y\"}\r\n    {elseif \$display_format == \"M d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"M j, Y\"}\r\n    {elseif \$display_format == \"MM d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"F j, Y\"}\r\n    {elseif \$display_format == \"D M d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"D M j, Y\"}\r\n    {elseif \$display_format == \"DD, MM d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"l M j, Y\"}\r\n    {elseif \$display_format == \"dd. mm. yy.\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d. m. Y.\"}\r\n    {elseif \$display_format == \"datetime:dd/mm/yy|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d/m/Y g:i A\"}\r\n    {elseif \$display_format == \"datetime:mm/dd/yy|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"m/d/Y g:i A\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d g:i A\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm:ss|showSecond`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i:s\"}\r\n    {elseif \$display_format == \"datetime:dd. mm. yy.|hh:mm\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d. m. Y. H:i\"}\r\n    {/if}\r\n{/if}{/strip}',
+             edit_field_smarty_markup = '{assign var=class value=\"cf_datepicker\"}\r\n{if \$display_format|strpos:\"datetime\" === 0}\r\n  {assign var=class value=\"cf_datetimepicker\"}\r\n{/if}\r\n\r\n{assign var=\"val\" value=\"\"}\r\n{if \$VALUE}\r\n  {assign var=tzo value=\"\"}\r\n  {if \$apply_timezone_offset == \"yes\"}\r\n    {assign var=tzo value=\$ACCOUNT_INFO.timezone_offset}\r\n  {/if}\r\n  {if \$display_format == \"yy-mm-dd\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d\"}\r\n  {elseif \$display_format == \"dd/mm/yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d/m/Y\"}\r\n  {elseif \$display_format == \"mm/dd/yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"m/d/Y\"}\r\n  {elseif \$display_format == \"M d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"M j, Y\"}\r\n  {elseif \$display_format == \"MM d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"F j, Y\"}\r\n  {elseif \$display_format == \"D M d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"D M j, Y\"}\r\n  {elseif \$display_format == \"DD, MM d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"l M j, Y\"}\r\n  {elseif \$display_format == \"dd. mm. yy.\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d. m. Y.\"}\r\n  {elseif \$display_format == \"datetime:dd/mm/yy|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d/m/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:mm/dd/yy|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"m/d/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm:ss|showSecond`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i:s\"}\r\n  {elseif \$display_format == \"datetime:dd. mm. yy.|hh:mm\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d. m. Y. H:i\"}\r\n  {/if}\r\n{/if}\r\n\r\n<div class=\"cf_date_group\">\r\n  <input type=\"input\" name=\"{\$NAME}\" id=\"{\$NAME}_id\" \r\n    class=\"cf_datefield {\$class}\" value=\"{\$val}\" /><img class=\"ui-datepicker-trigger\" src=\"{\$g_root_url}/global/images/calendar.png\" id=\"{\$NAME}_icon_id\" />\r\n  <input type=\"hidden\" id=\"{\$NAME}_format\" value=\"{\$display_format}\" />\r\n  {if \$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div>\r\n  {/if}\r\n</div>',
+             php_processing = '\$field_name     = \$vars[\"field_info\"][\"field_name\"];\r\n\$date           = \$vars[\"data\"][\$field_name];\r\n\$display_format = \$vars[\"settings\"][\"display_format\"];\r\n\$atzo           = \$vars[\"settings\"][\"apply_timezone_offset\"];\r\n\$account_info   = isset(\$vars[\"account_info\"]) ? \$vars[\"account_info\"] : array();\r\n\r\nif (empty(\$date))\r\n{\r\n  \$value = \"\";\r\n}\r\nelse\r\n{\r\n  if (strpos(\$display_format, \"datetime:\") === 0)\r\n  {\r\n    \$parts = explode(\" \", \$date);\r\n    switch (\$display_format)\r\n    {\r\n      case \"datetime:dd/mm/yy|h:mm TT|ampm`true\":\r\n        \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n          substr(\$date, 6);\r\n        break;\r\n      case \"datetime:dd. mm. yy.|hh:mm\":\r\n        \$date = substr(\$date, 4, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n          substr(\$date, 8, 4) . \" \" . substr(\$date, 14);\r\n        break;\r\n    }\r\n  }\r\n  else\r\n  {\r\n    if (\$display_format == \"dd/mm/yy\")\r\n    {\r\n      \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n        substr(\$date, 6);\r\n    } \r\n    else if (\$display_format == \"dd. mm. yy.\")\r\n    {\r\n      \$parts = explode(\" \", \$date);\r\n      \$date = trim(\$parts[1], \".\") . \"/\" . trim(\$parts[0], \".\") . \"/\" . trim(\$parts[2], \".\");\r\n    }\r\n  }\r\n\r\n  \$time = strtotime(\$date);\r\n  \r\n  // lastly, if this field has a timezone offset being applied to it, do the\r\n  // appropriate math on the date\r\n  if (\$atzo == \"yes\" && !isset(\$account_info[\"timezone_offset\"]))\r\n  {\r\n    \$seconds_offset = \$account_info[\"timezone_offset\"] * 60 * 60;\r\n    \$time += \$seconds_offset;\r\n  }\r\n\r\n  \$value = date(\"Y-m-d H:i:s\", \$time);\r\n}\r\n\r\n'
+      WHERE  field_type_id = $field_type_id
+        ");
   }
 
 
-  // TODO update radios View-smarty-markup (added {strip})
-
   // ----------------------------------------------------------------------------------------------
+
 
   // if the full version string (version-type-date) is different, update the database
   if ($old_version_info["full"] != "{$g_current_version}-{$g_release_type}-{$g_release_date}")
@@ -1317,7 +1548,7 @@ function ft_upgrade_form_tools()
  *
  * Now the current version information is stored in 3 fields in the settings table:
  *    "program_version" - JUST the main build info (e.g. 2.0.0)
- *    "release_type"    - "beta" or "main"
+ *    "release_type"    - "alpha", "beta" or "main"
  *    "release_date"    - the date in the format YYYYMMDD
  *
  *
@@ -1418,5 +1649,3 @@ function ft_get_version_info($version_string)
 
   return $version_parts;
 }
-
-

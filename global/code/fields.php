@@ -44,6 +44,11 @@ function ft_add_form_fields($form_id, $fields)
     $col_name   = $field_info["col_name"];
     $is_new_sort_group = $field_info["is_new_sort_group"];
 
+    // in order for the field to be added, it needs to have the label, name, size and column name. Otherwise they're
+    // ignored
+    if (empty($display_name) || empty($field_name) || empty($field_size) || empty($col_name))
+      continue;
+
     // add the new field to form_fields
     $query = "
       INSERT INTO {$g_table_prefix}form_fields (form_id, field_name, field_size, field_type_id,
@@ -104,6 +109,7 @@ function ft_delete_form_fields($form_id, $field_ids)
   // stores the Views IDs of any View that is affected by deleting one of the form field, regardless of the field or form
   $affected_views = array();
   $removed_field_ids = array();
+
   foreach ($field_ids as $field_id)
   {
     $field_id = trim($field_id);
@@ -113,6 +119,8 @@ function ft_delete_form_fields($form_id, $field_ids)
     // ignore brand new fields - nothing to delete!
     if (preg_match("/^NEW/", $field_id))
       continue;
+
+    $old_field_info = ft_get_form_field($field_id);
 
     @mysql_query("DELETE FROM {$g_table_prefix}form_fields WHERE field_id = $field_id");
     if (!$form_table_exists)
@@ -138,7 +146,6 @@ function ft_delete_form_fields($form_id, $field_ids)
       ft_delete_view_field($row["view_id"], $field_id);
     }
 
-    $old_field_info = ft_get_form_field($field_id);
     $drop_column = $old_field_info["col_name"];
     mysql_query("ALTER TABLE {$g_table_prefix}form_$form_id DROP $drop_column");
 
@@ -146,7 +153,8 @@ function ft_delete_form_fields($form_id, $field_ids)
     // field as the default sort order
     mysql_query("
       UPDATE {$g_table_prefix}views
-      SET     default_sort_field = 'submission_date'
+      SET     default_sort_field = 'submission_date',
+              default_sort_field_order = 'desc'
       WHERE   default_sort_field = '$drop_column' AND
               form_id = $form_id
                 ");
@@ -168,7 +176,7 @@ function ft_delete_form_fields($form_id, $field_ids)
   else
     $message = $LANG["notify_form_field_removed"];
 
-  extract(ft_process_hook_calls("end", compact("infohash", "form_id", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("infohash", "form_id", "field_ids", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -226,6 +234,8 @@ function ft_get_field_col_by_field_name($form_id, $field_name_or_names)
 /**
  * Another getter function. This one finds out the column name for a field or fields,
  * based on their field IDs.
+ *
+ * Bah! This should return a single bloody col_name string when passed a single field_id. Refactor!
  *
  * @param integer $form_id
  * @param mixed $field_id_or_ids integer or array of integers (field IDs)
@@ -308,6 +318,33 @@ function ft_get_field_type_id_by_field_id($field_id)
 
 
 /**
+ * Returns the field title by the field database column string.
+ *
+ * @param integer $form_id
+ * @param string $col_name
+ * @return string
+ */
+function ft_get_field_title_by_field_col($form_id, $col_name)
+{
+  global $g_table_prefix;
+
+  $form_id  = ft_sanitize($form_id);
+  $col_name = ft_sanitize($col_name);
+
+  $query = mysql_query("
+    SELECT field_title
+    FROM   {$g_table_prefix}form_fields
+    WHERE  form_id = $form_id AND
+           col_name = '$col_name'
+    ");
+  $result = mysql_fetch_assoc($query);
+
+  $return_info = (isset($result["field_title"])) ? $result["field_title"] : "";
+  return $return_info;
+}
+
+
+/**
  * Returns all the field options for a particular multi-select field.
  *
  * @param integer $form_id the unique field ID.
@@ -356,7 +393,9 @@ function ft_get_form_field($field_id, $custom_params = array())
   global $g_table_prefix;
 
   $params = array(
-    "include_field_type_info" => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false
+    "include_field_type_info"   => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false,
+    "include_field_settings"    => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false,
+    "evaluate_dynamic_settings" => (isset($custom_params["evaluate_dynamic_settings"])) ? $custom_params["evaluate_dynamic_settings"] : false
   );
 
   if ($params["include_field_type_info"])
@@ -378,9 +417,44 @@ function ft_get_form_field($field_id, $custom_params = array())
   }
   $info = mysql_fetch_assoc($query);
 
+  if ($params["include_field_settings"])
+  {
+    $info["settings"] = ft_get_form_field_settings($field_id, $params["evaluate_dynamic_settings"]);
+  }
+
   extract(ft_process_hook_calls("end", compact("field_id", "info"), array("info")), EXTR_OVERWRITE);
 
   return $info;
+}
+
+
+/**
+ * A getter function to retrieve everything about a form field from the database column name. This
+ * is just a wrapper for ft_get_form_field().
+ *
+ * @param integer $form_id
+ * @param string $col_name
+ * @param array
+ */
+function ft_get_form_field_by_colname($form_id, $col_name, $params = array())
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}form_fields
+    WHERE  form_id = $form_id AND
+           col_name = '$col_name'
+    LIMIT 1
+      ");
+
+  $info = mysql_fetch_assoc($query);
+
+  if (empty($info))
+    return array();
+
+  $field_id = $info["field_id"];
+  return ft_get_form_field($field_id, $params);
 }
 
 
@@ -427,7 +501,7 @@ function ft_get_form_field_settings($field_id, $evaluate_dynamic_fields = false)
       SELECT *
       FROM   {$g_table_prefix}field_settings fs, {$g_table_prefix}field_type_settings fts
       WHERE  fs.setting_id = fts.setting_id AND
-             $field_id = $field_id
+             field_id = $field_id
     ");
   }
   else
@@ -665,17 +739,21 @@ function ft_get_field_settings($field_id)
 {
   global $g_table_prefix;
 
+  if (empty($field_id) || !is_numeric($field_id))
+  	return array();
+
   // get the overridden settings
-  $query = mysql_query("
+  $query = "
     SELECT fts.field_type_id, fs.field_id, fts.field_setting_identifier, fs.setting_value
-    FROM   ft_field_type_settings fts, ft_field_settings fs
+    FROM   {$g_table_prefix}field_type_settings fts, {$g_table_prefix}field_settings fs
     WHERE  fts.setting_id = fs.setting_id AND
            fs.field_id = $field_id
     ORDER BY fs.field_id
-  ");
+      ";
+  $result = mysql_query($query);
 
   $overridden_settings = array();
-  while ($row = mysql_fetch_assoc($query))
+  while ($row = mysql_fetch_assoc($result))
   {
     $overridden_settings[$row["field_setting_identifier"]] = $row["setting_value"];
   }
@@ -700,9 +778,7 @@ function ft_get_field_settings($field_id)
       if (count($parts) != 2)
         $value = "";
       else
-      {
         $value = ft_get_settings($parts[0], $parts[1]);
-      }
     }
 
     // if the field has been overwritten use that instead!
@@ -715,6 +791,22 @@ function ft_get_field_settings($field_id)
   return $complete_settings;
 }
 
+
+function ft_get_field_setting($field_id, $setting_id)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT setting_value
+    FROM   {$g_table_prefix}field_settings
+    WHERE  field_id = $field_id AND
+           setting_id = $setting_id
+  ");
+
+  $result = mysql_fetch_assoc($query);
+
+  return (isset($result["setting_value"])) ? $result["setting_value"] : "";
+}
 
 
 /**
@@ -735,7 +827,7 @@ function ft_delete_extended_field_settings($field_id)
 
 
 /**
- * Called on he Add External Form Step 4 page. It reorders the form fields and their groupings.
+ * Called on the Add External Form Step 4 page. It reorders the form fields and their groupings.
  *
  * @param integer $form_id
  * @param integer $infohash the POST data from the form
@@ -944,7 +1036,7 @@ function ft_update_field($form_id, $field_id, $tab_info)
   //                      when the user checked the "Use Default Value" for all fields on the tab & the tab
   //                      doesn't contain an option list or form field
   //  3. an array of values
-  if ($tab_info["tab2"] != "null")
+  if (isset($tab_info["tab2"]) && $tab_info["tab2"] != "null")
   {
     $info = is_array($tab_info["tab2"]) ? $tab_info["tab2"] : array();
 
@@ -1011,45 +1103,29 @@ function ft_update_field($form_id, $field_id, $tab_info)
 
 
 /**
- * Returns all files associated with a particular form field. Different field types may store the
- * files differently. So each file upload module needs to add a hook to this function to return
- * the appropriate information.
+ * Returns all files associated with a particular form field or fields. Different field types may store the
+ * files differently, so EVERY file upload module needs to add a hook to this function to return the
+ * appropriate information.
  *
- * TODO.
+ * The module functions should return an array of hashes with the following structure:
+ *    array(
+ *      "submission_id" =>
+ *      "field_id"      =>
+ *      "field_type_id" =>
+ *      "folder_path"   =>
+ *      "folder_url"    =>
+ *      "filename"      =>
+ *    ),
+ *    ...
  *
- * @param integer $form_id the unique form ID.
- * @param integer $field_id the unique field ID.
+ * @param integer $form_id the unique form ID
+ * @param array $field_ids an array of field IDs
  */
-function ft_get_uploaded_filenames($form_id, $field_id)
+function ft_get_uploaded_files($form_id, $field_ids)
 {
-  global $g_table_prefix;
-
-  // get the column name for this field
-  $field_info = ft_get_form_field($field_id);
-  $col_name   = $field_info["col_name"];
-  $extended_field_settings = ft_get_field_settings($field_id);
-  $folder = $extended_field_settings["folder_path"]; // folder_path is REQUIRED for any field type, note... hmm.
-
-  // if col_name is empty, the field doesn't exist - so the user is probably just setting up the form.
-  // Just return an empty array.
-  if (empty($col_name))
-    return array();
-
-  $query = "
-    SELECT submission_id, $col_name
-    FROM   {$g_table_prefix}form_{$form_id}
-    WHERE  $col_name != ''
-           ";
-  $result = mysql_query($query);
-
-  $filename_hash = array();
-  while ($record = mysql_fetch_assoc($result))
-  {
-    if (!empty($record[$col_name]))
-      $filename_hash[$record["submission_id"]] = "$folder/{$record[$col_name]}";
-  }
-
-  return $filename_hash;
+  $uploaded_files = array();
+  extract(ft_process_hook_calls("start", compact("form_id", "field_ids"), array("uploaded_files")), EXTR_OVERWRITE);
+  return $uploaded_files;
 }
 
 
@@ -1084,7 +1160,7 @@ function ft_update_field_filters($field_id)
     if ($field_info["is_date_field"] == "yes")
     {
       $sql_operator = ($operator == "after") ? ">" : "<";
-      $sql = "$col_name $sql_operator '$values'";
+      $sql = "$col_name $sql_operator '$values'"; // TODO values doesn't exist. This throws an error...
     }
     else
     {

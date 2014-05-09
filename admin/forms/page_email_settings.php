@@ -20,10 +20,10 @@ foreach ($registered_form_emails as $row)
   $used_cols[] = $row["last_name_field_id"];
 }
 
-$trimmed_columns = array();
+$trimmed_cols = array();
 foreach ($form_fields as $field_info)
 {
-  if (!in_array($field_info["field_id"], $used_cols))
+  if (!in_array($field_info["field_id"], $used_cols) && $field_info["is_system_field"] == "no")
     $trimmed_cols[$field_info["field_id"]] = $field_info["field_title"];
 }
 
@@ -36,7 +36,7 @@ $page_vars["columns"]    = $trimmed_cols;
 $page_vars["registered_form_emails"] = $registered_form_emails;
 $page_vars["js_messages"] = array("confirm_delete_email_field_config", "phrase_please_confirm", "word_yes", "word_no", "word_remove");
 $page_vars["head_string"] =<<<END
-<script type="text/javascript" src="$g_root_url/global/scripts/manage_email_templates.js"></script>
+<script src="$g_root_url/global/scripts/manage_email_templates.js"></script>
 END;
 
 $page_vars["head_js"] =<<<END

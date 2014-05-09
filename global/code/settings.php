@@ -132,6 +132,7 @@ function ft_set_settings($settings, $module = "")
           ");
     }
 
+    // hmm... TODO. This looks suspiciously like a bug... [a module could overwrite a core var]
     $_SESSION["ft"]["settings"][$setting_name] = $setting_value;
   }
 }
@@ -440,7 +441,7 @@ function ft_update_theme_settings($infohash)
 
     $client_links_table .= "</tr></table>";
 
-    $submit_button = "<input type=\"button\" value=\"{$LANG["phrase_update_accounts"]}\" onclick=\"window.location='index.php?page=themes&mass_assign=1&accounts=$client_id_str&theme_id=' + $('mass_update_client_theme').value\" />";
+    $submit_button = "<input type=\"button\" value=\"{$LANG["phrase_update_accounts"]}\" onclick=\"window.location='index.php?page=themes&mass_assign=1&accounts=$client_id_str&theme_id=' + $('#mass_update_client_theme').val()\" />";
 
     $placeholders = array(
       "theme_dropdown" => $dd,

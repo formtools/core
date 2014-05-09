@@ -44,12 +44,10 @@
       </table>
     </span>
     <p>
-      Almost done! This page tries to find all your form fields and determine their field types. Click the Smart Fill
-      button on the right to get started. You will be only allowed to proceed when all actions have been resolved -
-      issues that need your attention appear in the "Action Needed" column.
+      {$LANG.text_add_form_field_types1}
     </p>
     <p>
-      If your form isn't in HTML, click the Skip Step button to proceed. This can all be configured later.
+      {$LANG.text_add_form_field_types2}
     </p>
   </div>
 
@@ -77,7 +75,7 @@
           <tr style="{$style}">
             <td class="blue pad_left_small" width="180" id="field_{$field_id}_title">{$field.field_title}</td>
             <td class="pad_left_small">
-              <!-- why are we passing this as a hidden field? Is it really necessary? Kind of bloats the POST request...-->
+              {* why are we passing this as a hidden field? Is it really necessary? Kind of bloats the POST request... *}
               <input type="hidden" id="field_{$field_id}_name" value="{$field.field_name}" />
               <div id="field_{$field_id}_type_div" class="light_grey">{$LANG.word_unknown}</div>
             </td>
@@ -95,13 +93,13 @@
       <tr>
         <td width="150" valign="top"><input type="button" id="refresh_page_button" value="{$LANG.phrase_refresh_page}" onclick="sf_ns.refresh_page()" /></td>
         <td>
-          This reloads the contents of your form(s). Note: this will overwrite any changes you have made on this page.
+          {$LANG.text_add_form_field_types3}
         </td>
       </tr>
       <tr>
         <td width="150" valign="top"><input type="button" id="refresh_page_button" value="{$LANG.phrase_skip_step}" onclick="sf_ns.skip_step()" /></td>
         <td>
-          In case you run into problems, click here to skip this step. All unresolved fields are set to use the default values. You can customize these fields later.
+          {$LANG.text_add_form_field_types4}
         </td>
       </tr>
       </table>
@@ -124,6 +122,7 @@
         </tr>
         </table>
       </div>
+
     </div>
 
     <div id="review_field_options" style="display:none">
@@ -244,7 +243,7 @@
           <td><div id="not_found_action_needed"></div></td>
         </tr>
         <tr>
-          <td>Field Type</td>
+          <td>{$LANG.phrase_field_type}</td>
           <td>
             <select id="not_found_field_type">
               <option value="">{$LANG.phrase_please_select}</option>
@@ -277,7 +276,6 @@
           </span>
           <a href="#" onclick="return sf_ns.show_page('main_field_table', null)">{$LANG.phrase_back_to_field_list}</a>
         </div>
-
       </div>
 
     </form>
@@ -288,69 +286,56 @@
     {/foreach}
 
 
-  <div id="multiple_fields_not_found_single_page_form" style="display:none">
-    There were multiple fields that couldn't be found in the form page you specified. This is mostly
-    likely caused by one of the following:
-    <ol>
-      <li>You incorrectly entered your form URL.<br />
-        <b>Solution</b>: <a href="step2.php">Click here</a> to return to the Form Information page
-        to check your settings.</li>
-      <li>You changed your form(s) after making the test submission.<br />
-        <b>Solution</b>: <a href="step3.php?uninitialize=1">Click here</a> to put through another test submission.</li>
-      <li>Your form is password protected and the script couldn't access the page.<br />
-        <b>Solution</b>: In another tab / window of this browser, log into your form then click the
-        Refresh Page button below to try to re-find the fields.</li>
-    </ol>
+    <div id="multiple_fields_not_found_single_page_form" style="display:none">
+      {$LANG.text_add_form_field_types_multiple_fields_found}
+      <ol>
+        <li>{$LANG.text_add_form_field_types_multiple_fields_found2}<br />
+          <b>{$LANG.word_solution}</b>: {$LANG.text_add_form_field_types_multiple_fields_found3}</li>
+        <li>{$LANG.text_add_form_field_types_multiple_fields_found4}<br />
+          <b>{$LANG.word_solution}</b>: {$LANG.text_add_form_field_types_multiple_fields_found5}</li>
+        <li>{$LANG.text_add_form_field_types_multiple_fields_found6}<br />
+          <b>{$LANG.word_solution}</b>: {$LANG.text_add_form_field_types_multiple_fields_found7}</li>
+      </ol>
+      {$text_add_form_field_types_multiple_fields_found8}
+    </div>
 
-    If none of the above solutions work, you may also want to try
-    <a href="#" onclick="ft.display_message('ft_message', 1, $('#upload_files_text').html())">manually uploading your forms for processing</a>.
-  </div>
+    <div id="multiple_fields_not_found_multi_page_form" style="display:none">
+      {$LANG.text_add_form_field_types_multiple_fields_found9}
+      <ol>
+        <li>{$LANG.text_add_form_field_types_multiple_fields_found10}<br />
+          <b>{$LANG.word_solution}</b>: {$LANG.text_add_form_field_types_multiple_fields_found3}</li>
+        <li>{$LANG.text_add_form_field_types_multiple_fields_found4}<br />
+          <b>{$LANG.word_solution}</b>: {$LANG.text_add_form_field_types_multiple_fields_found5}</li>
+        <li>{$LANG.text_add_form_field_types_multiple_fields_found11}<br />
+          <b>{$LANG.word_solution}</b>: {$LANG.text_add_form_field_types_multiple_fields_found7}</li>
+      </ol>
+      {$text_add_form_field_types_multiple_fields_found8}
+    </div>
 
-  <div id="multiple_fields_not_found_multi_page_form" style="display:none">
-    There were multiple fields that couldn't be found in the form pages you specified. This is mostly
-    likely caused by one of these:
-    <ol>
-      <li>You entered one or more of the form URLs of your multi-page form incorrectly.<br />
-        <b>Solution</b>: <a href="step2.php">Click here</a> to return to the Form Information page
-        to check your settings.</li>
-      <li>You changed your form(s) after making the test submission.<br />
-        <b>Solution</b>: <a href="step3.php?uninitialize=1">Click here</a> to put through another test submission.</li>
-      <li>One or more pages of your form are password protected and the script couldn't access the page.<br />
-        <b>Solution</b>: In another tab / window of this browser, log into your form then click the
-        Refresh Page button below to try to re-find the fields.</li>
-    </ol>
+    <div id="upload_files_text" style="display:none">
+      {$LANG.text_add_form_field_types_manual_upload}
 
-    If none of the above solutions work, you may also want to try
-    <a href="#" onclick="ft.display_message('ft_message', 1, $('#upload_files_text').html())">manually uploading your forms for processing</a>.
-  </div>
+      <form action="{$g_root_url}/global/code/actions.php?action=upload_scraped_pages_for_smart_fill"
+        target="upload_files_iframe" method="post" enctype="multipart/form-data"
+        onsubmit="return sf_ns.validate_upload_files(this)">
+        <input type="hidden" name="num_pages" value="{$form_urls|@count}" />
 
-  <div id="upload_files_text" style="display:none">
-    If you have been unable to Smart Fill your fields, you may want to try an alternative solution: upload
-    copies of your forms in the fields below.
-
-    <form action="{$g_root_url}/global/code/actions.php?action=upload_scraped_pages_for_smart_fill"
-      target="upload_files_iframe" method="post" enctype="multipart/form-data"
-      onsubmit="return sf_ns.validate_upload_files(this)">
-      <input type="hidden" name="num_pages" value="{$form_urls|@count}" />
-
-      <table cellspacing="0" cellpadding="0" class="margin_top margin_bottom">
-      {foreach from=$form_urls item=url name="row"}
-        {assign var=row_count value=$smarty.foreach.row.iteration}
+        <table cellspacing="0" cellpadding="0" class="margin_top margin_bottom">
+        {foreach from=$form_urls item=url name="row"}
+          {assign var=row_count value=$smarty.foreach.row.iteration}
+          <tr>
+            <td width="90">{$LANG.phrase_form_page} {$row_count}</td>
+            <td><input type="file" name="form_page_{$row_count}" /></td>
+          </tr>
+        {/foreach}
         <tr>
-          <td width="90">{$LANG.phrase_form_page} {$row_count}</td>
-          <td><input type="file" name="form_page_{$row_count}" /></td>
+          <td> </td>
+          <td><input type="submit" value="{$LANG.phrase_upload_files}" class="margin_top_small" /></td>
         </tr>
-      {/foreach}
-      <tr>
-        <td> </td>
-        <td><input type="submit" value="{$LANG.phrase_upload_files}" class="margin_top_small" /></td>
-      </tr>
-      </table>
-
-    </form>
-    Note: do <b>not</b> upload raw PHP pages (or other server-side code) - just upload the HTML versions. To get this,
-    view and save the page from your web browser.
-  </div>
+        </table>
+      </form>
+      {$LANG.text_add_form_field_types_manual_upload2}
+    </div>
 
   <iframe name="upload_files_iframe" id="upload_files_iframe" src="" style="width: 0px; height: 0px" frameborder="0"
     onload="sf_ns.log_files_as_uploaded()"></iframe>

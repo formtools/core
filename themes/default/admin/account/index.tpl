@@ -32,7 +32,7 @@
     </tr>
     <tr>
       <td class="pad_left">{$LANG.phrase_login_page}</td>
-      <td>{pages_dropdown menu_type="admin" name_id="login_page" default=$admin_info.login_page omit_pages="custom_url"}</td>
+      <td>{pages_dropdown menu_type="admin" name_id="login_page" default=$admin_info.login_page omit_pages="custom_url,logout"}</td>
     </tr>
     <tr>
       <td class="pad_left">{$LANG.phrase_logout_url}</td>
@@ -82,7 +82,7 @@
     {template_hook location="admin_account_bottom"}
 
     <p>
-      <input type="submit" value="{$LANG.word_update|upper}" />
+      <input type="submit" value="{$LANG.word_update}" />
     </p>
 
   </form>

@@ -4,13 +4,13 @@
 
 <table cellpadding="0" cellspacing="1">
 {foreach from=$fields item=field}
-{if $field.field_type == "system"}
+{if $field.is_system_field == "yes"}
 {if $field.col_name == "submission_id"}
   <tr>
     <td style="font-weight: bold">{$field.field_title}</td>
     <td>{literal}{$SUBMISSIONID}{/literal}</td>
   </tr>
-{elseif $field.col_name == "last_modified"}
+{elseif $field.col_name == "last_modified_date"}
   <tr>
     <td style="font-weight: bold">{$LANG.phrase_last_modified}</td>
     <td>{literal}{$LASTMODIFIEDDATE}{/literal}</td>
@@ -21,7 +21,7 @@
     <td>{literal}{$IPADDRESS}{/literal}</td>
   </tr>
 {/if}
-{elseif $field.field_type == "file"}
+{elseif $field.is_file_field == "yes"}
 {literal}{if $FILENAME_{/literal}{$field.field_name}{literal}}{/literal}
   <tr>
     <td style="font-weight: bold">{$field.field_title}</td>

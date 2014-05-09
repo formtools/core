@@ -107,7 +107,7 @@ $g_check_ft_sessions = (isset($g_check_ft_sessions)) ? $g_check_ft_sessions : tr
  * last error/warning/notice that occurs.
  * @global string $g_default_error_reporting
  */
-$g_default_error_reporting = 2047;
+$g_default_error_reporting = 1;
 
 /**
  * This feature currently has limited support in the code, but will be implemented more fully at a
@@ -200,6 +200,12 @@ $g_password_history_size = 10;
  */
 $g_search_form_date_field_format = "d/m/y";
 
+/**
+ * Added in 2.1.0 and enabled by default. This overrides the default SQL mode for any query, to prevent
+ * problems that may arise due to MySQL strict mode being on.
+ */
+$g_set_sql_mode = true;
+
 
 // -------------------------------------------------------------------------------------------------
 
@@ -214,12 +220,12 @@ $g_current_version = "2.1.0";
 /**
  * The release type: alpha, beta or main
  */
-$g_release_type = "alpha";
+$g_release_type = "main";
 
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110612";
+$g_release_date = "20110815";
 
 /**
  * The minimum required PHP version needed to run Form Tools.
@@ -253,6 +259,16 @@ $g_multi_val_delimiter = ", ";
 $g_success = "";
 $g_message = "";
 
+/**
+ * Simple benchmarking code. When enabled, this outputs a page load time in the footer.
+ */
+$g_enable_benchmarking = false;
+$g_benchmark_start     = "";
+
+/**
+ * Used for caching data sets during large, repeat operations.
+ */
+$g_cache = array();
 
 /**
  * Added in 2.1.0 to provide better error checking on the login page. This is used to confirm that all the Core
@@ -304,7 +320,6 @@ if (is_file(dirname(__FILE__) . "/config.php"))
   include_once(dirname(__FILE__) . "/config.php");
 }
 
-
 // explicitly set the error reporting value
 error_reporting($g_default_error_reporting);
 
@@ -347,4 +362,9 @@ if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page))
 
   if (isset($_GET["logout"]))
     ft_logout_user();
+}
+
+if ($g_enable_benchmarking)
+{
+  $g_benchmark_start = ft_get_microtime_float();
 }

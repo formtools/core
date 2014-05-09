@@ -9,12 +9,23 @@
 
 // -------------------------------------------------------------------------------------------------
 
+// this var prevents the default behaviour of auto-logging the user out
+$g_check_ft_sessions = false;
 require_once("../session_start.php");
-ft_check_permission("user");
 
-//header('Cache-Control: no-cache, must-revalidate');
-//header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-//header('Content-type: application/json');
+// check the permissions
+$permission_check = ft_check_permission("user", false);
+
+// check the sessions haven't timeoutted
+$sessions_still_valid = ft_check_sessions_timeout(false);
+if (!$sessions_still_valid)
+{
+  @session_destroy();
+  $_SESSION["ft"] = array();
+
+  $permission_check["has_permission"] = false;
+  $permission_check["message"] = "session_expired";
+}
 
 // the action to take and the ID of the page where it will be displayed (allows for
 // multiple calls on same page to load content in unique areas)
@@ -50,6 +61,12 @@ if (isset($request["return_vars"]))
   $return_str = ", " . implode(", ", $vals);
 }
 
+if (!$permission_check["has_permission"])
+{
+  $message = $permission_check["message"];
+  echo "{ \"success\": \"0\", \"ft_logout\": \"1\", \"message\": \"$message\"{$return_val_str} }";
+  exit;
+}
 
 switch ($action)
 {
@@ -183,7 +200,7 @@ switch ($action)
     $submission_id = $request["submission_id"];
     $email_id      = $request["email_id"];
 
-    $success = ft_process_email_template($form_id, $submission_id, $email_id);
+    list($success, $message) = ft_process_email_template($form_id, $submission_id, $email_id);
     if ($success)
     {
       $success = 1;
@@ -191,9 +208,11 @@ switch ($action)
     }
     else
     {
+      $edit_email_template_link = "[<a href=\"{$g_root_url}/admin/forms/edit.php?form_id=$form_id&email_id=$email_id&page=edit_email\">edit email template</a>]";
       $success = 0;
-      $message = $LANG["notify_email_not_sent"];
+      $message = $LANG["notify_email_not_sent_c"] . mb_strtolower($message) . " " . $edit_email_template_link;
     }
+    $message = addslashes($message);
     echo "{ \"success\": \"$success\", \"message\": \"$message\" }";
     break;
 
@@ -207,14 +226,16 @@ switch ($action)
     switch ($scrape_method)
     {
       case "file_get_contents":
-        $html = file_get_contents($url);
+        $url = ft_construct_url($url, "ft_sessions_url_override=1");
+      	$html = file_get_contents($url);
         header("Cache-Control: no-cache, must-revalidate");
         header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
         echo $html;
         break;
 
       case "curl":
-        $c = curl_init();
+        $url = ft_construct_url($url, "ft_sessions_url_override=1");
+      	$c = curl_init();
         curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($c, CURLOPT_URL, $url);
         $html = curl_exec($c);
@@ -395,7 +416,7 @@ switch ($action)
       "fields"      => $fields
     );
     echo ft_convert_to_json($return_info);
-  	break;
+    break;
 
   case "create_new_view":
     $form_id   = $request["form_id"];
@@ -468,4 +489,43 @@ switch ($action)
       echo "{ \"success\": \"1\"{$return_str} }";
     }
     break;
+
+  // used to return a page outlining all the form field placeholders available
+  case "get_form_field_placeholders":
+    $form_id = $request["form_id"];
+
+    $text_reference_tab_info = ft_eval_smarty_string($LANG["text_reference_tab_info"], array("g_root_url" => $g_root_url));
+
+    $page_vars = array();
+    $page_vars["form_id"] = $form_id;
+    $page_vars["form_fields"] = ft_get_form_fields($form_id, array("include_field_type_info" => true));
+    $page_vars["text_reference_tab_info"] = $text_reference_tab_info;
+
+    ft_display_page("admin/forms/form_placeholders.tpl", $page_vars);
+    break;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

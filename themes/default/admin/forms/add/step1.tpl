@@ -22,10 +22,10 @@
   </tr>
   </table>
 
-  <div class="subtitle underline">1. GETTING STARTED</div>
+  <div class="subtitle underline">1. {$LANG.phrase_getting_started|upper}</div>
 
   <p>
-    Choose which method you want to use to integrate your form with Form Tools.
+    {$LANG.text_add_form_choose_integration_method}
   </p>
 
   <form method="post" action="{$same_page}">

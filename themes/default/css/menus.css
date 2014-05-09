@@ -1,0 +1,33 @@
+/* the edit menu sortable list */
+.edit_menu .col2 {
+  width: 176px;
+}
+.edit_menu .col2 select {
+  width: 174px;
+}
+.edit_menu .col3 {
+  width: 172px;
+}
+.edit_menu .header_row .col3 {
+  width: 171px;
+}
+.edit_menu .col3 input {
+  width: 165px;
+}
+.edit_menu .col4 {
+  width: 197px;
+}
+.edit_menu .col4 select {
+  width: 99%;
+}
+.edit_menu .rows .col4 {
+  width: 193px;
+  padding-left: 3px;
+}
+.edit_menu .col5 {
+  width: 78px;
+  text-align: center;
+}
+.edit_menu li.col6 {
+  width: 70px;
+}

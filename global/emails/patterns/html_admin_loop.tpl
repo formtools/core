@@ -5,18 +5,18 @@
 <table cellpadding="0" cellspacing="1">
 {literal}{foreach from=$fields item=field}
 {if $field.col_name != "submission_date"}
-  {if $field.field_type == "file"}
+  {if $field.is_file_field == "yes"}
     <tr>
-      <td style="font-weight: bold">{$field.field_title}:</td>
-      <td><a href="{$field.folder_url}/{$field.answer}">{$field.answer}</a></td>		
+      <td style="font-weight: bold">{$field.field_title}</td>
+      <td><a href="{$field.folder_url}/{$field.answer}">{$field.answer}</a></td>
     </tr>
-	{else}
+  {else}
     <tr>
-      <td style="font-weight: bold">{$field.field_title}:</td>
+      <td style="font-weight: bold">{$field.field_title}</td>
       <td>{$field.answer}</td>
     </tr>
   {/if}
-{/if}	
+{/if}
 {/foreach}{/literal}
 </table>
 

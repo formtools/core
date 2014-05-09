@@ -122,17 +122,17 @@
       <td>
         {assign var=required_password_chars_arr value=","|explode:$settings.required_password_chars}
         <div>
-	        <input type="checkbox" name="required_password_chars[]" value="uppercase" id="rpc1" {if "uppercase"|in_array:$required_password_chars_arr}checked{/if} />
-	          <label for="rpc1">{$LANG.phrase_one_char_upper}</label>
-	      </div>
+          <input type="checkbox" name="required_password_chars[]" value="uppercase" id="rpc1" {if "uppercase"|in_array:$required_password_chars_arr}checked{/if} />
+            <label for="rpc1">{$LANG.phrase_one_char_upper}</label>
+        </div>
         <div>
-	        <input type="checkbox" name="required_password_chars[]" value="number" id="rpc2" {if "number"|in_array:$required_password_chars_arr}checked{/if} />
-	          <label for="rpc2">{$LANG.phrase_one_char_number}</label>
-	      </div>
+          <input type="checkbox" name="required_password_chars[]" value="number" id="rpc2" {if "number"|in_array:$required_password_chars_arr}checked{/if} />
+            <label for="rpc2">{$LANG.phrase_one_char_number}</label>
+        </div>
         <div>
-	        <input type="checkbox" name="required_password_chars[]" value="special_char" id="rpc3" {if "special_char"|in_array:$required_password_chars_arr}checked{/if} />
-	          <label for="rpc3">{$phrase_one_special_char}</label>
-	      </div>
+          <input type="checkbox" name="required_password_chars[]" value="special_char" id="rpc3" {if "special_char"|in_array:$required_password_chars_arr}checked{/if} />
+            <label for="rpc3">{$phrase_one_special_char}</label>
+        </div>
       </td>
       <td>
       </td>
@@ -159,7 +159,7 @@
     </table>
 
     <p>
-      <input type="submit" name="update_accounts" value="{$LANG.word_update|upper}" />
+      <input type="submit" name="update_accounts" value="{$LANG.word_update}" />
     </p>
 
   </form>

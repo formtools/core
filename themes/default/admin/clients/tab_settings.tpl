@@ -160,7 +160,7 @@
       {template_hook location="admin_edit_client_settings_bottom"}
 
       <p>
-        <input type="submit" name="update_client" value="{$LANG.word_update|upper}" />
+        <input type="submit" name="update_client" value="{$LANG.word_update}" />
       </p>
 
     </form>
