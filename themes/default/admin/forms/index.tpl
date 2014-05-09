@@ -65,6 +65,8 @@
 
       {$pagination}
 
+      {template_hook location="admin_forms_list_top"}
+
       <form action="{$same_page}" method="post">
 
       {assign var="table_group_id" value="1"}
@@ -260,5 +262,6 @@
     </form>
   </p>
 
+  {template_hook location="admin_forms_list_bottom"}
 
 {ft_include file="footer.tpl"}

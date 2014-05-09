@@ -909,5 +909,7 @@ function ft_upgrade_module($module_id)
   );
   $message = ft_eval_smarty_string($LANG["notify_module_updated"], $placeholders);
 
+  ft_build_and_cache_upgrade_info();
+
   return array(true, $message);
 }

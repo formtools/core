@@ -271,6 +271,9 @@ function ft_initialize_form($form_data)
 {
   global $g_table_prefix, $g_root_dir, $g_multi_val_delimiter, $LANG;
 
+  $display_notification_page = isset($form_data["form_tools_display_notification_page"]) ?
+    $form_data["form_tools_display_notification_page"] : true;
+
   // escape the incoming values
   $form_data = ft_sanitize($form_data);
   $form_id = $form_data["form_tools_form_id"];
@@ -304,6 +307,7 @@ function ft_initialize_form($form_data)
   unset($form_data["form_tools_initialize_form"]);
   unset($form_data["form_tools_submission_id"]);
   unset($form_data["form_tools_form_id"]);
+  unset($form_data["form_tools_display_notification_page"]);
 
   $order = 1;
 
@@ -398,13 +402,17 @@ function ft_initialize_form($form_data)
     WHERE   form_id = $form_id
               ");
 
-  // alert a "test submission complete" message
-  $page_vars = array();
-  $page_vars["message"] = $LANG["processing_init_complete"];
-  $page_vars["message_type"] = "notify";
-  $page_vars["title"] = $LANG["phrase_test_submission_received"];
-  ft_display_page("../../global/smarty/messages.tpl", $page_vars);
-  exit;
+  // alert a "test submission complete" message. The only time this wouldn't be outputted would be
+  // if this function is being called programmatically, like with the blank_form module
+  if ($display_notification_page)
+  {
+    $page_vars = array();
+    $page_vars["message"] = $LANG["processing_init_complete"];
+    $page_vars["message_type"] = "notify";
+    $page_vars["title"] = $LANG["phrase_test_submission_received"];
+    ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+    exit;
+  }
 }
 
 
@@ -1380,7 +1388,7 @@ function ft_update_form_database_tab($infohash)
       // if any physical aspect of the form (column name, field type) needs to be changed, change it
       if (($old_field_info['col_name'] != $field["col_name"]) || ($old_field_info['field_size'] != $field["field_size"]))
       {
-      	$db_col_change_hash[$old_field_info['col_name']] = $field["col_name"];
+        $db_col_change_hash[$old_field_info['col_name']] = $field["col_name"];
 
         $new_field_size = "";
         switch ($field["field_size"])

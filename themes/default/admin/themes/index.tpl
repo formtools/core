@@ -2,7 +2,7 @@
 
   <table cellpadding="0" cellspacing="0" height="35">
   <tr>
-    <td width="45"><img src="{$images_url}/icon_themes.gif" width="34" height="34" /></td>
+    <td width="45"><img src="{$images_url}/icon_themes.gif" width="34" height="29" /></td>
     <td class="title">{$LANG.word_themes|upper}</td>
   </tr>
   </table>
