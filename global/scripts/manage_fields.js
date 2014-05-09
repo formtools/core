@@ -160,9 +160,9 @@ $(function() {
     var curr_value      = field_sizes_div.find("[name=field_" + curr_field_id + "_size]").val();
 
     ft.update_field_size_dropdown(this, field_sizes_div, {
-      name:     "field_" + curr_field_id + "_size",
-      class:    "field_types",
-      selected: curr_value
+      name:       "field_" + curr_field_id + "_size",
+      html_class: "field_types",
+      selected:   curr_value
     });
   });
 

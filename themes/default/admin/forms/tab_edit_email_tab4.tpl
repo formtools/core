@@ -40,7 +40,7 @@
               <td>
                 <input type="radio" name="test_email_data_source" id="test_email_data_random_submission"
                   value="random_submission" {if $test_email_data_source == "random_submission"}checked{/if} />
-                  <label for="test_email_data_random_submission">{$LANG.phrase_random_form_submission}</span></label><br />
+                  <label for="test_email_data_random_submission">{$LANG.phrase_random_form_submission}</label><br />
                 <input type="radio" name="test_email_data_source" id="test_email_data_submission_id"
                   value="submission_id" {if $test_email_data_source == "submission_id"}checked{/if} />
                   <label for="test_email_data_submission_id">{$LANG.phrase_submission_id}</label>

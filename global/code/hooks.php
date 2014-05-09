@@ -312,9 +312,9 @@ function ft_update_available_hooks()
   $ft_root = realpath(dirname(__FILE__) . "/../../");
   $hook_locations = array(
     // code hooks
-	"process.php"        => "core",
-	"global/code"        => "core",
-	"global/api/api.php" => "api",
+  "process.php"        => "core",
+  "global/code"        => "core",
+  "global/api/api.php" => "api",
     "modules"            => "module",
 
     // template hooks
@@ -327,7 +327,7 @@ function ft_update_available_hooks()
   );
   while (list($file_or_folder, $component) = each($hook_locations))
   {
-  	_ft_find_hooks("$ft_root/$file_or_folder", $ft_root, $component, $results);
+    _ft_find_hooks("$ft_root/$file_or_folder", $ft_root, $component, $results);
   }
 
   // now update the database
@@ -383,29 +383,32 @@ function _ft_find_hooks($curr_folder, $root_folder, $component, &$results)
   else
   {
     $handle = opendir($curr_folder);
-    while (($file = readdir($handle)) !== false)
+    if ($handle)
     {
-      if ($file == '.' || $file == '..')
-         continue;
+      while (($file = readdir($handle)) !== false)
+      {
+        if ($file == '.' || $file == '..')
+           continue;
 
-      $filepath = $curr_folder . '/' . $file;
-      if (is_link($filepath))
-        continue;
-      if (is_file($filepath))
-      {
-      	$is_php_file = preg_match("/\.php$/", $filepath);
-      	$is_tpl_file = preg_match("/\.tpl$/", $filepath);
-      	if ($is_php_file)
-      	  $results["code_hooks"]     = array_merge($results["code_hooks"], _ft_extract_code_hooks($filepath, $root_folder, $component));
-      	if ($is_tpl_file)
-      	  $results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
+        $filepath = $curr_folder . '/' . $file;
+        if (is_link($filepath))
+          continue;
+        if (is_file($filepath))
+        {
+          $is_php_file = preg_match("/\.php$/", $filepath);
+          $is_tpl_file = preg_match("/\.tpl$/", $filepath);
+          if ($is_php_file)
+            $results["code_hooks"]     = array_merge($results["code_hooks"], _ft_extract_code_hooks($filepath, $root_folder, $component));
+          if ($is_tpl_file)
+            $results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
+        }
+        else if (is_dir($filepath))
+        {
+          _ft_find_hooks($filepath, $root_folder, $component, $results);
+        }
       }
-      else if (is_dir($filepath))
-      {
-        _ft_find_hooks($filepath, $root_folder, $component, $results);
-      }
+      closedir($handle);
     }
-    closedir($handle);
   }
 }
 
@@ -415,6 +418,8 @@ function _ft_extract_code_hooks($filepath, $root_folder, $component)
   $lines = file($filepath);
   $current_function = "";
   $found_hooks = array();
+  $root_folder = preg_quote($root_folder);
+
   foreach ($lines as $line)
   {
     if (preg_match("/^function\s([^(]*)/", $line, $matches))
@@ -441,7 +446,6 @@ function _ft_extract_code_hooks($filepath, $root_folder, $component)
       $overridable = str_replace(" ", "", $overridable);
       $overridable = str_replace("'", "", $overridable);
       $overridable = explode(",", $overridable);
-      $root_folder = preg_quote($root_folder);
       $file = preg_replace("%" . $root_folder . "%", "", $filepath);
 
       $found_hooks[] = array(
@@ -464,13 +468,13 @@ function _ft_extract_template_hooks($filepath, $root_folder, $component)
   $lines = file($filepath);
   $current_function = "";
   $found_hooks = array();
+  $root_folder = preg_quote($root_folder);
 
   foreach ($lines as $line)
   {
     // this assumes that the hooks are always on a single line
     if (preg_match("/\{template_hook\s+location\s*=\s*[\"']([^}\"]*)/", $line, $matches))
     {
-      $root_folder = preg_quote($root_folder);
       $template = preg_replace("%" . $root_folder . "%", "", $filepath);
       $found_hooks[] = array(
         "template"  => $template,

@@ -1361,7 +1361,6 @@ $LANG["notify_email_not_sent"] = "Sorry, the email could not be sent.";
 $LANG["text_form_tools_form_url"] = "The full URL of the form. This only has a value for External forms.";
 $LANG["validation_modules_search_no_status"] = "Please select either the Enabled or Disabled checkboxes.";
 
-
 // removed!
 //$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";
 //$LANG["validation_no_num_views_per_page"] = "Please enter the number of views per page.";

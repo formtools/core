@@ -694,6 +694,7 @@ ft.update_field_size_dropdown = function(el, target_el, options) {
     name:                 null,
     id:                   null,
     selected:             null,
+    html_class:           null,
     field_type_size_list: page_ns.field_types["field_type_" + field_type_id],
     field_size_labels:    page_ns.field_sizes,
   }, options);
@@ -701,11 +702,11 @@ ft.update_field_size_dropdown = function(el, target_el, options) {
   var field_type_sizes = opts.field_type_size_list.split(",");
   var dd_options = [];
   for (var i=0; i<field_type_sizes.length; i++) {
-  dd_options.push({
-    value:    field_type_sizes[i],
-    text:     opts.field_size_labels[field_type_sizes[i]],
-    selected: (field_type_sizes[i] == opts.selected) ? " selected" : ""
-  });
+    dd_options.push({
+      value:    field_type_sizes[i],
+      text:     opts.field_size_labels[field_type_sizes[i]],
+      selected: (field_type_sizes[i] == opts.selected) ? " selected" : ""
+    });
   }
 
   var html = "";
@@ -729,6 +730,9 @@ ft.update_field_size_dropdown = function(el, target_el, options) {
     }
     if (opts.id) {
       html += " id=\"" + opts.id + "\"";
+    }
+    if (opts.html_class) {
+      html += " class=\"" + opts.html_class + "\"";
     }
     html += ">\n";
 

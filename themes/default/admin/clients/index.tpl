@@ -18,9 +18,7 @@
   {else}
 
     <div id="search_form" class=" margin_bottom_large">
-
       <form action="{$same_page}" method="post">
-
         <table cellspacing="2" cellpadding="0" id="search_form_table">
         <tr>
           <td class="blue" width="70">{$LANG.word_search}</td>
@@ -44,9 +42,7 @@
           </td>
         </tr>
         </table>
-
       </form>
-
     </div>
 
     {if $clients|@count == 0}
@@ -62,7 +58,6 @@
       {$pagination}
 
       <form action="{$same_page}" method="post">
-
       {assign var="table_group_id" value="1"}
 
       {* this displays ALL clients on the page, but groups them in separate tables - only one shown
@@ -217,17 +212,16 @@
       {/if}
 
     {/if}
-
     </form>
 
   {/if}
 
   {template_hook location="admin_list_clients_bottom"}
 
-  <p>
-    <form method="post" action="add.php">
+  <form method="post" action="add.php">
+    <p>
       <input type="submit" value="{$LANG.phrase_add_client}" />
-    </form>
-  </p>
+    </p>
+  </form>
 
 {ft_include file="footer.tpl"}

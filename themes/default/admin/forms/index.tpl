@@ -259,11 +259,11 @@
 
   {/if}
 
-  <p>
-    <form method="post" action="add/">
+  <form method="post" action="add/">
+    <p>
       <input type="submit" name="new_form" value="{$LANG.phrase_add_form}" />
-    </form>
-  </p>
+    </p>
+  </form>
 
   {template_hook location="admin_forms_list_bottom"}
 
