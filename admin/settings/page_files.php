@@ -12,8 +12,8 @@ $file_upload_filetypes = explode(",", $_SESSION["ft"]["settings"]["file_upload_f
 $other_filetypes = array();
 foreach ($file_upload_filetypes as $filetype)
 {
-	if (!in_array($filetype, $all_preset_types))
-	  $other_filetypes[] = $filetype;
+  if (!in_array($filetype, $all_preset_types))
+    $other_filetypes[] = $filetype;
 }
 $other_filetypes_str = implode(",", $other_filetypes);
 $max_filesize = ft_get_upload_max_filesize();
@@ -31,7 +31,7 @@ $page_vars["other_filetypes"] = $other_filetypes_str;
 $page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_files"]}";
 $page_vars["allow_url_fopen"] = (ini_get("allow_url_fopen") == "1");
 $page_vars["head_js"] = "
-	var rules = [];
-	";
+  var rules = [];
+  ";
 
 ft_display_page("admin/settings/index.tpl", $page_vars);

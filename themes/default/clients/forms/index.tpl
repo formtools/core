@@ -34,52 +34,48 @@
 
   {ft_include file="messages.tpl"}
 
-  <div id="search_form">
-
-    <form action="{$same_page}" method="post" name="search_form" onsubmit="return rsv.validate(this, rules)">
-      <input type="hidden" name="search" value="1" />
-      <input type="hidden" name="select_all" value="{if $curr_view_select_all == "yes"}1{/if}"  />
-
-      <table cellspacing="0" cellpadding="0" id="search_form_table">
-      <tr>
-        <td class="blue" width="70">{$LANG.word_search}</td>
-        <td>
-          <table cellspacing="2" cellpadding="0">
-          <tr>
-            <td>
-              {form_view_fields_dropdown name_id="search_field" form_id=$form_id view_id=$view_id
+  {if $has_searchable_field}
+    <div id="search_form">
+      <form action="{$same_page}" method="post" name="search_form" onsubmit="return rsv.validate(this, rules)">
+        <input type="hidden" name="search" value="1" />
+        <input type="hidden" name="select_all" value="{if $curr_view_select_all == "yes"}1{/if}"  />
+        <table cellspacing="0" cellpadding="0" id="search_form_table">
+        <tr>
+          <td class="blue" width="70">{$LANG.word_search}</td>
+          <td>
+            <table cellspacing="2" cellpadding="0">
+            <tr>
+              <td>
+                {form_view_fields_dropdown name_id="search_field" form_id=$form_id view_id=$view_id
                   blank_option_value="all" blank_option_text=$LANG.phrase_all_fields
                   onchange="ms.change_search_field(this.value)" onkeyup="ms.change_search_field(this.value)"
                   default=$curr_search_fields.search_field}
-            </td>
-            <td>
-              <div id="search_dropdown_section"
-                {if $curr_search_fields.search_field != "submission_date" &&
-                    $curr_search_fields.search_field != "last_modified_date"}style="display: none"{/if}>
-                {date_range_search_dropdown name_id="search_date" form_id=$form_id view_id=$view_id
-                  default=$curr_search_fields.search_date}
-              </div>
-            </td>
-          </tr>
-          </table>
-        </td>
-        <td width="20" align="center">{$LANG.word_for}</td>
-        <td>
-          <input type="text" style="width: 120px;" name="search_keyword" value="{$curr_search_fields.search_keyword|escape}" />
-        </td>
-        <td>
-          <input type="submit" name="search" value="{$LANG.word_search}" />
-          <input type="button" name="" value="{$LANG.phrase_show_all}" onclick="window.location='index.php?page=1&reset=1'"
-            {if $search_num_results < $view_num_results}class="bold"{/if} />
-        </td>
-      </tr>
-      </table>
-
-    </form>
-
-  </div>
-
-  <br />
+              </td>
+              <td>
+                <div id="search_dropdown_section"
+                  {if $curr_search_fields.search_field != "submission_date" &&
+                      $curr_search_fields.search_field != "last_modified_date"}style="display: none"{/if}>
+                  {date_range_search_dropdown name_id="search_date" form_id=$form_id view_id=$view_id
+                    default=$curr_search_fields.search_date}
+                </div>
+              </td>
+            </tr>
+            </table>
+          </td>
+          <td width="20" align="center">{$LANG.word_for}</td>
+          <td>
+            <input type="text" style="width: 120px;" name="search_keyword" value="{$curr_search_fields.search_keyword|escape}" />
+          </td>
+          <td>
+            <input type="submit" name="search" value="{$LANG.word_search}" />
+            <input type="button" name="" value="{$LANG.phrase_show_all}" onclick="window.location='index.php?page=1&reset=1'"
+              {if $search_num_results < $view_num_results}class="bold"{/if} />
+          </td>
+        </tr>
+        </table>
+      </form>
+    </div>
+  {/if}
 
   {$pagination}
 
@@ -183,10 +179,6 @@
     {template_hook location="client_submission_listings_bottom"}
 
     </form>
-
-    {* display the export options - TODO
-    {module_function name=export_manager_export_options account_type="client" account_id=$SESSION.account.account_id}
-*}
 
     {/if}
 

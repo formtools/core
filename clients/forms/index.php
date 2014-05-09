@@ -6,10 +6,6 @@ ft_check_permission("client");
 $request = array_merge($_POST, $_GET);
 $account_id = $_SESSION["ft"]["account"]["account_id"];
 
-// TODO
-//if (ft_check_module_enabled("export_manager"))
-//  ft_include_module("export_manager");
-
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
 $form_id = ft_load_field("form_id", "curr_form_id");
 if (empty($form_id))
@@ -252,6 +248,16 @@ $preselected_subids_str = implode(",", $preselected_subids);
 
 $field_types = ft_get_field_types(true);
 
+$has_searchable_field = false;
+foreach ($view_info["fields"] as $field_info)
+{
+  if ($field_info["is_searchable"] == "yes")
+  {
+  	$has_searchable_field = true;
+  	break;
+  }
+}
+
 // ------------------------------------------------------------------------------------------------
 
 // compile the header information
@@ -274,6 +280,7 @@ $page_vars["results_per_page"]   = $results_per_page;
 $page_vars["display_fields"]     = $display_fields;
 $page_vars["order"]              = $order;
 $page_vars["field_types"]        = $field_types;
+$page_vars["has_searchable_field"] = $has_searchable_field;
 $page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
 $page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download", "validation_select_submissions_to_delete",

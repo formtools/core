@@ -1183,7 +1183,7 @@ function ft_upgrade_form_tools()
       foreach ($option_list_id_to_field_ids[$curr_option_list_id] as $field_id)
       {
         // slow and crappy!
-        $field_type_id = ft_get_field_type_by_field_id($field_id);
+        $field_type_id = ft_get_field_type_id_by_field_id($field_id);
         $setting_id    = ft_get_field_type_setting_id_by_identifier($field_type_id, "formatting");
 
         // for checkbox & radios fields that were assigned to an option list with a "n/a" orientation, don't
@@ -1199,6 +1199,20 @@ function ft_upgrade_form_tools()
     }
 
     mysql_query("ALTER TABLE {$g_table_prefix}option_lists DROP field_orientation");
+  }
+
+  if ($old_version_info["release_date"] < 20110521)
+  {
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    field_field_smarty_markup = '{\$VALUE|htmlspecialchars}'
+      WHERE  field_type_identifier = 'textbox'
+    ");
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    field_field_smarty_markup = '{if \$CONTEXTPAGE == \"edit_submission\"}\t\n  {\$VALUE|nl2br}\r\n{else}\r\n  {\$VALUE}\r\n{/if}'
+      WHERE  field_type_identifier = 'textarea'
+    ");
   }
 
   // ----------------------------------------------------------------------------------------------

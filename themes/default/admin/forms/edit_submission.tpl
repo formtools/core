@@ -7,7 +7,7 @@
       <td align="right">
         <div style="float:right; padding-left: 4px;">
           <a href="edit.php?form_id={$form_id}"><img src="{$images_url}/admin_view.png" border="0" alt="{$LANG.phrase_edit_form}"
-            title="{$LANG.phrase_edit_form}" /></a>
+            title="{$LANG.phrase_edit_form}" width="48" height="23" /></a>
         </div>
 	      {views_dropdown form_id=$form_id submission_id=$submission_id selected=$view_id omit_hidden_views=true
 	        onchange="window.location='`$same_page`?form_id=`$form_id`&submission_id=`$submission_id`&view_id=' + this.value"}

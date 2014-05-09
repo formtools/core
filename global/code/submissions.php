@@ -1101,28 +1101,19 @@ function _ft_get_search_submissions_submission_id_clause($submission_ids)
  * @param array $view_fields
  * @param boolean $return_all_fields
  */
-function ft_get_submission_field_info($view_fields, $return_all_fields = false)
+function ft_get_submission_field_info($view_fields)
 {
   $display_fields = array();
   foreach ($view_fields as $field)
   {
     $field_id = $field["field_id"];
-
-    if ($field['is_column'] == "yes" || $return_all_fields)
-    {
-      $curr_field_info = array('field_id'      => $field_id,
-                               'is_sortable'   => $field['is_sortable'],
-                               'is_searchable' => $field['is_searchable'],
-                               'is_column'     => $field['is_column'],
-                               'field_title'   => $field['field_title'],
-                               'col_name'      => $field['col_name'],
-                               'list_order'    => $field['list_order']);
-
-      $field_info = ft_get_form_field($field_id);
-      $curr_field_info["field_info"] = $field_info;
-
-      $display_fields[] = $curr_field_info;
-    }
+    $curr_field_info = array("field_id"    => $field_id,
+                             "field_title" => $field["field_title"],
+                             "col_name"    => $field["col_name"],
+                             "list_order"  => $field["list_order"]);
+    $field_info = ft_get_form_field($field_id);
+    $curr_field_info["field_info"] = $field_info;
+    $display_fields[] = $curr_field_info;
   }
 
   return $display_fields;

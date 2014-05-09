@@ -1345,6 +1345,7 @@ $LANG["validation_internal_form_too_many_fields"] = "Sorry, you can only created
 $LANG["word_identifier"] = "Identifier";
 
 $LANG["notify_module_already_installed"] = "Oops, this module is already installed!";
+$LANG["phrase_update_order"] = "Update Order";
 
 // removed!
 //$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";

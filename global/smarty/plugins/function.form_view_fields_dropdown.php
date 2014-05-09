@@ -13,21 +13,21 @@
  */
 function smarty_function_form_view_fields_dropdown($params, &$smarty)
 {
-	global $LANG;
+  global $LANG;
 
-	if (empty($params["name_id"]))
+  if (empty($params["name_id"]))
   {
-	  $smarty->trigger_error("assign: missing 'name_id' parameter. This is used to give the select field a name and id value.");
+    $smarty->trigger_error("assign: missing 'name_id' parameter. This is used to give the select field a name and id value.");
     return;
   }
-	if (empty($params["form_id"]))
+  if (empty($params["form_id"]))
   {
-	  $smarty->trigger_error("assign: missing 'form_id' parameter.");
+    $smarty->trigger_error("assign: missing 'form_id' parameter.");
     return;
   }
-	if (empty($params["view_id"]))
+  if (empty($params["view_id"]))
   {
-	  $smarty->trigger_error("assign: missing 'view_id' parameter.");
+    $smarty->trigger_error("assign: missing 'view_id' parameter.");
     return;
   }
 
@@ -46,11 +46,11 @@ function smarty_function_form_view_fields_dropdown($params, &$smarty)
     "style" => $style
       );
 
-	$attribute_str = "";
+  $attribute_str = "";
   while (list($key, $value) = each($attributes))
   {
-  	if (!empty($value))
-  	  $attribute_str .= " $key=\"$value\"";
+    if (!empty($value))
+      $attribute_str .= " $key=\"$value\"";
   }
 
   $view_fields = ft_get_view_fields($view_id);
@@ -69,7 +69,7 @@ function smarty_function_form_view_fields_dropdown($params, &$smarty)
     $rows[] = "<option value=\"{$col_name}\" " . (($default_value == $col_name) ? "selected" : "") . ">{$field_title}</option>";
   }
 
-	$dd = "<select $attribute_str>" . join("\n", $rows) . "</select>";
+  $dd = "<select $attribute_str>" . join("\n", $rows) . "</select>";
 
   return $dd;
 }

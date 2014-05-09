@@ -110,6 +110,10 @@ function ft_delete_form_fields($form_id, $field_ids)
     if (empty($field_id))
       continue;
 
+    // ignore brand new fields - nothing to delete!
+    if (preg_match("/^NEW/", $field_id))
+      continue;
+
     @mysql_query("DELETE FROM {$g_table_prefix}form_fields WHERE field_id = $field_id");
     if (!$form_table_exists)
       continue;
@@ -283,13 +287,10 @@ function ft_get_field_title_by_field_id($field_id)
 /**
  * Returns the field type ID by the field ID.
  *
- * TODO... this is inconsistently named. Should be called ft_get_field_type_id_by_field_id() and
- * a function by this name should return all information about the field type.
- *
  * @param integer $field_id
  * @return integer the field ID
  */
-function ft_get_field_type_by_field_id($field_id)
+function ft_get_field_type_id_by_field_id($field_id)
 {
   global $g_table_prefix;
 
@@ -670,7 +671,7 @@ function ft_get_field_settings($field_id)
     $overridden_settings[$row["field_setting_identifier"]] = $row["setting_value"];
   }
 
-  $field_type_id = ft_get_field_type_by_field_id($field_id);
+  $field_type_id = ft_get_field_type_id_by_field_id($field_id);
   $default_field_type_settings = ft_get_field_type_settings($field_type_id);
 
   // now overlay the two and return all field settings for all fields

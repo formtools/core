@@ -1,7 +1,7 @@
 /* This file needs some SERIOUS reorganization & splitting into separate files! */
 html {
-	overflow-y: scroll;
-	overflow-x: auto;
+  overflow-y: scroll;
+  overflow-x: auto;
 }
 body, html {
   height: 100%;
@@ -238,7 +238,7 @@ a#logout_link { color: #990000; }
 /*-------------- list tables ---------------*/
 .list_table, .submissions_table {
   border: 1px solid #dddddd;
-	border-spacing: 1px;
+  border-spacing: 1px;
   width: 100%;
 }
 
@@ -302,13 +302,13 @@ a#logout_link { color: #990000; }
   background-image: url(../images/delete_bg.jpg);
 }
 .list_table .del2 a:link, .list_table .del2 a:visited {
-	color: white;
+  color: white;
 }
 .list_table .del2 a:hover {
-	color: orange;
+  color: orange;
 }
 .list_table td.del {
-	background: url("../images/delete.png") no-repeat scroll 2px 3px transparent;
+  background: url("../images/delete.png") no-repeat scroll 2px 3px transparent;
   text-align: center;
   width: 18px;
   height: 20px;
@@ -319,11 +319,11 @@ a#logout_link { color: #990000; }
   display: block;
 }
 .list_table td.del:hover {
-	background: transparent url(../images/delete.png) no-repeat -22px 3px;
+  background: transparent url(../images/delete.png) no-repeat -22px 3px;
 }
 .list_table td.edit, .list_table th.edit {
   width: 18px;
-	height: 18px;
+  height: 18px;
 }
 .list_table td.edit {
   text-align: center;
@@ -393,6 +393,9 @@ a#logout_link { color: #990000; }
 }
 
 /*----------------- misc -------------------*/
+#search_form {
+  margin-bottom: 8px;
+}
 #search_form_table {
   border-top: 1px solid #dddddd;
   border-bottom: 1px solid #dddddd;
@@ -459,13 +462,13 @@ a#logout_link { color: #990000; }
   cursor: pointer;
 }
 .inner_tabset .threeCols div {
-	width: 33.33%;
+  width: 33.33%;
 }
 .inner_tabset .fourCols div {
-	width: 25%;
+  width: 25%;
 }
 .inner_tabset .fiveCols div {
-	width: 20%;
+  width: 20%;
 }
 .inner_tabset .tab_row div.selected {
   background-color: white;
@@ -571,8 +574,8 @@ table.subpanel td {
   background: transparent url(../../../global/images/group_block.png) repeat-y left bottom;
 }
 body .sortable_groups .empty_group {
-	height: 2px;
-	background-color: #efefef;
+  height: 2px;
+  background-color: #efefef;
 }
 
 /* these match the 1px border-right on the headers so it's easier to set widths for columns in the header and rows */
@@ -595,7 +598,7 @@ body .sortable_groups .empty_group {
   border-bottom: 1px solid #cccccc;
 }
 body .sortable .rows li.rowN {
-	margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 .sortable .rows div.row_content .rowN li {
   border-bottom: 0px;
@@ -607,15 +610,15 @@ body .sortable div.row_content .system_field li {
   background-color: #C6F1C9;
 }
 .sortable .sort_col {
-	background-image: url(../images/sort.png);
+  background-image: url(../images/sort.png);
   background-repeat: no-repeat;
   background-position: 90% center;
-	padding-left: 3px;
-	width: 50px;
+  padding-left: 3px;
+  width: 50px;
   cursor: move;
 }
 .groupable li.sort_col {
-	width: 36px;
+  width: 36px;
 }
 .sortable .rowN {
   border-bottom: none;
@@ -649,7 +652,7 @@ body .sortable div.row_content .system_field li {
   background: transparent url(../images/delete.png) no-repeat 2px 4px;
 }
 .sortable .rows .edit {
-	background: transparent url(../images/edit.png) no-repeat center 2px;
+  background: transparent url(../images/edit.png) no-repeat center 2px;
 }
 
 .sortable .rows .system_field .del {
@@ -668,7 +671,7 @@ body .sortable div.row_content .system_field li {
   margin-right: 0px;
 }
 .sortable .col1 {
-	color: #666666;
+  color: #666666;
 }
 .sortable .sortable_row li {
   height: 21px;
@@ -704,7 +707,7 @@ body .sortable .rows .delete_row_hover li.sort_col {
 }
 body .sortable .rows div.delete_row_hover li.sort_col,
 body .sortable .rows div.row_content .delete_row_hover li {
-	background-color: #770000;
+  background-color: #770000;
 }
 body .sortable .rows div.row_content .delete_row_hover li.col0 {
   background-color: transparent;
@@ -740,12 +743,12 @@ body .sortable .rows div.row_content .edit_row_hover li.col0 {
 }
 .sortable .rows .col0 {
   background-color: transparent;
-	width: 12px;
-	height: 15px;
-	position: absolute;
-	left: -14px;
-	top: 16px;
-	z-index: 2;
+  width: 12px;
+  height: 15px;
+  position: absolute;
+  left: -14px;
+  top: 16px;
+  z-index: 2;
 }
 
 .sortable_group {
@@ -876,35 +879,35 @@ body .sortable .rows div.row_content .edit_row_hover li.col0 {
 
 /* sortable Views page */
 .view_list .header_row .col2 {
-	font-weight: normal;
+  font-weight: normal;
 }
 .view_list .col2 {
-	width: 60px;
-	color: #336699;
-	font-weight: bold;
+  width: 60px;
+  color: #336699;
+  font-weight: bold;
 }
 .view_list .rows .col2 {
   width: 57px;
   padding-left: 3px;
 }
 .view_list .header_row .col3 {
-	width: 239px;
-	padding-left: 0px;
+  width: 239px;
+  padding-left: 0px;
 }
 .view_list .col3 {
-	width: 237px;
-	padding-left: 2px;
+  width: 237px;
+  padding-left: 2px;
 }
 .view_list .col4 {
-	width: 161px;
+  width: 161px;
 }
 .view_list .col4 select {
   width: 160px;
 }
 .view_list .col5, .view_list .col6, .view_list .col7, .view_list .col8 {
-	width: 35px;
-	text-align: center;
-	height: 23px;
+  width: 35px;
+  text-align: center;
+  height: 23px;
 }
 .view_list .col5 a, .view_list .col6 a, .view_list .col7 a, .view_list .col8 a {
   display: block;
@@ -973,7 +976,7 @@ body .sortable .rows div.row_content .edit_row_hover li.col0 {
   border-bottom: 1px solid transparent;
 }
 body .sortable .rows div.grouped_row div.rowN:last-child li {
-	border-bottom: 0px;
+  border-bottom: 0px;
 }
 
 /* the edit menu sortable list */
@@ -996,7 +999,7 @@ body .sortable .rows div.grouped_row div.rowN:last-child li {
   width: 197px;
 }
 .edit_menu .rows .col4 {
-	width: 193px;
+  width: 193px;
   padding-left: 3px;
 }
 .edit_menu .col5 {
@@ -1022,7 +1025,7 @@ body .sortable .rows div.grouped_row div.rowN:last-child li {
   width: 234px;
 }
 .submission_list .col4 .custom_width {
-	width: 30px;
+  width: 30px;
 }
 .submission_list .col5 {
   width: 100px;
@@ -1060,7 +1063,7 @@ body .sortable .rows div.grouped_row div.rowN:last-child li {
   width: 193px;
 }
 .add_form_step4 .rows .col2 {
-	padding-left: 3px;
+  padding-left: 3px;
   width: 190px;
 }
 .add_form_step4 .col3 {
@@ -1073,7 +1076,7 @@ body .sortable .rows div.grouped_row div.rowN:last-child li {
   width: 266px;
 }
 .add_form_step4 .rows .col4 {
-	padding-left: 3px;
+  padding-left: 3px;
   width: 263px;
 }
 .add_form_step4 .col5 {
@@ -1082,34 +1085,34 @@ body .sortable .rows div.grouped_row div.rowN:last-child li {
 
 /* the Edit Form -> Fields tab */
 .edit_fields .col2 {
-	width: 182px;
+  width: 182px;
 }
 .edit_fields .col2 input {
   width: 176px;
 }
 .edit_fields .col4 {
-	width: 178px;
+  width: 178px;
 }
 .edit_fields .col4 select {
   width: 175px;
 }
 .edit_fields .col5 {
-	width: 50px;
-	text-align: center;
+  width: 50px;
+  text-align: center;
 }
 .edit_fields .colN {
-	width: 18px;
+  width: 18px;
 }
 
 /* Add External form step 5 */
 .review_field_options .col2 {
-	width: 261px;
+  width: 261px;
 }
 .review_field_options .col2 input {
   width: 255px;
 }
 .review_field_options .col3 {
-	width: 261px;
+  width: 261px;
 }
 .review_field_options .col3 input {
   width: 255px;
@@ -1134,7 +1137,7 @@ body .sortable .rows div.grouped_row div.rowN:last-child li {
   height: 20px;
 }
 body .padded_footer {
-	height: 23px;
+  height: 23px;
 }
 .sortable_group_footer a {
   float:right;
@@ -1142,24 +1145,24 @@ body .padded_footer {
 }
 .sortable_group_header label {
   padding: 6px 6px 6px 12px;
-	width: 140px;
-	float: left;
-	color: #345437;
+  width: 140px;
+  float: left;
+  color: #345437;
 }
 .sortable_group_header input {
   float: left;
-	margin: 6px 0px 1px;
+  margin: 6px 0px 1px;
   width: 300px;
 }
 .sortable_group_header .sort {
-	cursor: move;
-	padding: 6px;
+  cursor: move;
+  padding: 6px;
   background: transparent url(../images/sort.png) no-repeat 50% center;
   -moz-border-radius-topleft: 6px;
   border-top-left-radius: 6px;
   height: 20px;
   width: 10px;
-	float: left;
+  float: left;
 }
 .sortable_group_header .sort:hover {
   background-color: #beddc0;
@@ -1167,23 +1170,23 @@ body .padded_footer {
 
 .sortable_group_header .delete_group {
   float: right;
-	background: transparent url(../images/delete_group.png) no-repeat -22px 3px;
+  background: transparent url(../images/delete_group.png) no-repeat -22px 3px;
   width: 18px;
   height: 20px;
   margin: 6px 2px 6px 0px;
 }
 
 .sortable_group_header .delete_group:hover {
-	background: transparent url(../images/delete_group.png) no-repeat 2px 3px;
-	cursor: pointer;
+  background: transparent url(../images/delete_group.png) no-repeat 2px 3px;
+  cursor: pointer;
 }
 
 /* popup styles */
 body .ui-widget-header {
-	background: url(../images/popup_header_bg.png) repeat-x scroll 50% 50%;
+  background: url(../images/popup_header_bg.png) repeat-x scroll 50% 50%;
 }
 body .ui-widget-header span {
-	color: white;
+  color: white;
 }
 .desc {
   font-style: italic;
@@ -1207,8 +1210,8 @@ body .ui-widget-header span {
 }
 
 .joiner {
-	color: #999999;
-	font-size: 10px;
+  color: #999999;
+  font-size: 10px;
   line-height: 11px;
 }
 
@@ -1236,7 +1239,7 @@ body .ui-widget-header span {
 }
 
 #edit_field_template .field_nav {
-	cursor: pointer;
+  cursor: pointer;
   margin-top: 4px;
   color: green;
 }
@@ -1267,10 +1270,10 @@ body .ui-widget-header span {
   width: 491px;
 }
 .multi_page_form_list .col2 {
-	width: 317px;
+  width: 317px;
 }
 .multi_page_form_list .col2 input{
-	width: 311px;
+  width: 311px;
 }
 .multi_page_form_list .col3 {
   width: 100px;
@@ -1284,10 +1287,10 @@ body .ui-widget-header span {
   width: 529px;
 }
 #add_form .multi_page_form_list .col2 {
-	width: 355px;
+  width: 355px;
 }
 #add_form .multi_page_form_list .col2 input{
-	width: 349px;
+  width: 349px;
 }
 #add_form .multi_page_form_list .col3 {
   width: 100px;
@@ -1300,10 +1303,10 @@ body .ui-widget-header span {
   width: 491px;
 }
 .new_view_default_submission_vals .col2 {
-	width: 200px;
+  width: 200px;
 }
 .new_view_default_submission_vals .col2 select {
-	width: 198px;
+  width: 198px;
 }
 .new_view_default_submission_vals .col3 {
   width: 217px;
@@ -1313,7 +1316,7 @@ body .ui-widget-header span {
 }
 
 .ui-dialog a:link, .ui-dialog a:visited {
-	color: green;
+  color: green;
 }
 #new_view_dialog table, #new_view_dialog input {
   width: 100%;
@@ -1325,12 +1328,12 @@ body .ui-widget-header span {
 }
 #edit_view .sortable_group_header select {
   float: left;
-	margin: 6px 0px 1px 4px;
-	width: 180px;
+  margin: 6px 0px 1px 4px;
+  width: 180px;
 }
 
 #tab_options_table input {
-	width: 98%;
+  width: 98%;
 }
 
 .view_fields_list {
@@ -1358,11 +1361,11 @@ body .ui-widget-header span {
   display: block;
 }
 .check_area:hover {
-	background-color: #dfdfdf !important;
+  background-color: #dfdfdf !important;
 }
 
 .add_view_group_popup td {
-	padding: 2px;
+  padding: 2px;
 }
 .add_view_group_popup .new_group_name {
   width: 100%;
@@ -1386,7 +1389,7 @@ body .ui-widget-header span {
 }
 
 .edit_submission {
-	width: 100%;
+  width: 100%;
 }
 .edit_submission h3 {
   border-bottom: 1px solid #cccccc;
@@ -1507,3 +1510,9 @@ a.show_form {
   float: right;
   margin: 2px 4px;
 }
+
+#edit_field .check_area:hover {
+  background-color: #f2f2f2 !important;
+}
+
+

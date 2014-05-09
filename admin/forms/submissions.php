@@ -2,13 +2,7 @@
 
 require("../../global/session_start.php");
 ft_check_permission("admin");
-
 $request = array_merge($_POST, $_GET);
-
-
-// TODO. This is not acceptable
-//if (ft_check_module_enabled("export_manager"))
-//  ft_include_module("export_manager");
 
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
 $form_id = ft_load_field("form_id", "curr_form_id");
@@ -150,7 +144,6 @@ foreach ($view_info["columns"] as $col_info)
 {
   $curr_field_id = $col_info["field_id"];
   $data_to_merge = $col_info;
-
   foreach ($view_info["fields"] as $view_field_info)
   {
     if ($view_field_info["field_id"] != $curr_field_id)
@@ -169,7 +162,6 @@ foreach ($view_info["columns"] as $col_info)
 
   $display_fields[] = $data_to_merge;
 }
-
 
 // determine the sort order
 if (isset($_GET["order"]))
@@ -258,6 +250,16 @@ $preselected_subids_str = implode(",", $preselected_subids);
 // to pass to the smarty template
 $field_types = ft_get_field_types(true);
 
+$has_searchable_field = false;
+foreach ($view_info["fields"] as $field_info)
+{
+  if ($field_info["is_searchable"] == "yes")
+  {
+  	$has_searchable_field = true;
+  	break;
+  }
+}
+
 // ------------------------------------------------------------------------------------------------
 
 // compile the header information
@@ -278,8 +280,9 @@ $page_vars["preselected_subids"] = $preselected_subids;
 $page_vars["results_per_page"]   = $results_per_page;
 $page_vars["display_fields"]    = $display_fields;
 $page_vars["page_submission_ids"] = $submission_id_str;
-$page_vars["order"]              = $order;
+$page_vars["order"] = $order;
 $page_vars["field_types"] = $field_types;
+$page_vars["has_searchable_field"] = $has_searchable_field;
 $page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
 $page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download", "validation_select_submissions_to_delete",

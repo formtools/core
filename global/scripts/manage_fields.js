@@ -87,15 +87,7 @@ $(function() {
   // this handles all the "Use Default Value?" checkboxes. It enables/disables the custom setting for the row
   // and places focus on the customizable option, if Use Default Value is disabled
   $(".use_default").live("click", function() {
-    var is_checked = $(this).attr("checked");
-    var setting_id = $(this).attr("id").replace(/^edit_field__use_default_value_/, "");
-    var settings_selectors = '#edit_field__setting_' + setting_id + ',[id^="edit_field__setting_' + setting_id + '_"]';
-    if (is_checked) {
-      $(settings_selectors).attr("disabled", "disabled").addClass("light_grey");
-    } else {
-      $(settings_selectors).attr("disabled", "").removeClass("light_grey");
-      $("#edit_field__setting_" + setting_id).focus();
-    }
+    fields_ns.click_use_default(this);
   });
 
   // called whenever the user changes a field type in the Edit Field popup
@@ -114,7 +106,7 @@ $(function() {
       $("#edit_field__field_settings").html("<div class=\"notify\"><div style=\"padding:6px\">" + g.messages["notify_no_field_settings"] + "</div></div>");
     } else {
       $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (" + field_settings.length + ")");
-      var html = fields_ns.generate_field_type_markup(field_type_id, field_settings);
+      var html = fields_ns.generate_field_type_markup(fields_ns.__current_field_id, field_type_id, field_settings);
       $("#edit_field__field_settings").html(html);
 
       // here we empty the memory cache for tab 2. This ensures that when the user clicks Save Changes, any orphaned
@@ -144,11 +136,17 @@ $(function() {
       fields_ns.memory["field_" + fields_ns.__current_field_id].tab2 = $("#edit_field_form_tab2").serializeArray();
     }
   });
+
+  // this seems a little odd, but it makes the script more intuitive, I think. If the user changes one of the main
+  // settings on the main page, then edits the custom field type settings via the dialog window, we need to save
+  // ALL info about the field - including the info on the main tab. Hence, any time they change content on the second
+  // tab, it saves the whole shebang
   $(".inner_tab_content2").bind("change", function(e) {
     if (typeof fields_ns.memory["field_" + fields_ns.__current_field_id] == 'undefined') {
       fields_ns.memory["field_" + fields_ns.__current_field_id] = { tab1: null, tab2: null };
       fields_ns.memory.changed_field_ids.push(fields_ns.__current_field_id);
     }
+    fields_ns.memory["field_" + fields_ns.__current_field_id].tab1 = $("#edit_field_form_tab1").serializeArray();
     fields_ns.memory["field_" + fields_ns.__current_field_id].tab2 = $("#edit_field_form_tab2").serializeArray();
   });
 
@@ -184,6 +182,17 @@ $(function() {
       }
     }
   });
+
+
+  $(".check_areas").live("click", function(e) {
+    if (!$(e.target).hasClass("check_area")) {
+      return;
+    }
+    var field = $(e.target).find("input")[0];
+    field.checked = !field.checked;
+    fields_ns.click_use_default(field);
+  });
+
 
   // load all option lists into memory
   $.ajax({
@@ -227,6 +236,11 @@ var fields_ns = {
   // works by keeping track of ALL changed fields, and only when the user clicks the "Save Changes" field
   // does it actually do an Ajax request to save the contents & update the main page
   memory: { changed_field_ids: [] },
+
+  // used to solve a nagging asynchronous problem on page load, when a user clicks from Option Lists to edit the
+  // field immediate on page load. In that scenario, the extended field setting info can load prior to the Option
+  // List and form requests having been loaded. Hence, this is used to load the values so they can be loaded properly
+  onload_field_setting_values: [],
 
   // these are loaded dynamically on page load. The option lists is just the list of available option lists
   // that the user can choose from; the forms are all forms OTHER than the current one
@@ -648,7 +662,6 @@ fields_ns.change_scroll_area = function(percentage, ignore) {
  * @param node row_group - the row_group node, containing the entire row of data already in the page.
  */
 fields_ns.edit_field = function(row_group) {
-
   $("#edit_field_template_message").addClass("hidden");
   var is_system_field = $(row_group).hasClass("system_field");
 
@@ -816,7 +829,7 @@ fields_ns.init_field_settings_tab = function(field_type_id, field_id) {
   }
 
   // generate the field settings markup and embed it in the page
-  var html = fields_ns.generate_field_type_markup(field_type_id, field_settings);
+  var html = fields_ns.generate_field_type_markup(field_id, field_type_id, field_settings);
   $("#edit_field__field_settings").html(html);
 
   // now load the actual settings for this field from the server. If this information is already loaded (or is
@@ -857,10 +870,11 @@ fields_ns.init_field_settings_tab = function(field_type_id, field_id) {
  * extended settings. It constructs the markup and if all the markup was available, stores it in cache
  * (fields_ns.cached_field_setting_markup).
  *
+ * @param integer field_id
  * @param integer field_type_id
  * @param array settings
  */
-fields_ns.generate_field_type_markup = function(field_type_id, field_settings) {
+fields_ns.generate_field_type_markup = function(field_id, field_type_id, field_settings) {
   var html = "";
   if (fields_ns.cached_field_settings_markup["field_type_" + field_type_id] !== undefined) {
     html = fields_ns.cached_field_settings_markup["field_type_" + field_type_id];
@@ -872,10 +886,10 @@ fields_ns.generate_field_type_markup = function(field_type_id, field_settings) {
 
     // all fields are disabled by default. Once the Ajax call to load the values for the actual field
     // has completed, they are enabled & the Ajax loading icon is hidden to signify readiness
-    html = "<table cellspacing=\"0\" cellpadding=\"\0\" width=\"100%\">"
+    html = "<table cellspacing=\"0\" cellpadding=\"\0\" width=\"100%\" class=\"check_areas\">"
          + "<tr>"
            + "<th width=\"200\" class=\"underline medium_grey\">" + g.messages["word_setting"] + "</th>"
-           + "<th width=\"150\" class=\"underline medium_grey\">" + g.messages["phrase_use_default_value_q"] + "</th>"
+           + "<th width=\"150\" align=\"center\" class=\"underline medium_grey\">" + g.messages["phrase_use_default_value_q"] + "</th>"
            + "<th class=\"underline medium_grey\">" + g.messages["word_value"] + "</th>"
          + "</tr>";
 
@@ -883,7 +897,7 @@ fields_ns.generate_field_type_markup = function(field_type_id, field_settings) {
       var info = field_settings[i];
       html += "<tr>"
             + "<td>" + info.field_label + "</td>"
-            + "<td>";
+            + "<td class=\"check_area\" align=\"center\">";
 
       var display_use_default_checkbox = true;
       if (info.field_type == "option_list_or_form_field") {
@@ -894,7 +908,7 @@ fields_ns.generate_field_type_markup = function(field_type_id, field_settings) {
       // absence of a custom value, it will use the default
       if (display_use_default_checkbox) {
         html += "<input type=\"checkbox\" class=\"use_default\" "
-              + "id=\"edit_field__use_default_value_" + info.setting_id + "\" checked disabled />";
+              + "id=\"edit_field__use_default_value_" + info.setting_id + "\" checked />";
       } else {
         html += "<span class=\"light_grey\">&#8212;</span>";
       }
@@ -976,6 +990,14 @@ fields_ns.generate_field_type_markup = function(field_type_id, field_settings) {
                   if (option_lists_ready && forms_ready) {
                     $("#option_list_div_" + setting_id).html(fields_ns._generate_option_list_markup(setting_id, default_value));
                   }
+
+                  // here, the option list markup has been loaded, but the default value not actually be set properly. This
+                  // can occur because at the time that this function was called, the extended fields weren't loaded
+                  for (var j=0; j<fields_ns.onload_field_setting_values.length; j++) {
+                    if (fields_ns.onload_field_setting_values[j].setting_id == setting_id) {
+                      $("#option_list_div_" + setting_id).html(fields_ns._generate_option_list_markup(setting_id, fields_ns.onload_field_setting_values[j].setting_value));
+                    }
+                  }
                   return option_lists_ready;
                 }
               ]);
@@ -1005,6 +1027,8 @@ fields_ns.generate_field_type_markup = function(field_type_id, field_settings) {
  * This is called once fields_ns.option_lists AND fields_ns.forms are populated with the appropriate info.
  * It generates the markup for the main select box, which the user can choose to pick an Option List or map the
  * field to another form's field.
+ *
+ * Kind of a klutzy function. Only ever used to load the Option List markup on page load - not the Form Field markup.
  */
 fields_ns._generate_option_list_markup = function(setting_id, default_value) {
   var option_list_selected = false;
@@ -1025,13 +1049,8 @@ fields_ns._generate_option_list_markup = function(setting_id, default_value) {
     if (value == page_ns.form_id) {
       return;
     }
-    var selected = "";
-    if (value == default_value) {
-      selected = " selected";
-      form_selected = true;
-    }
-    // note the "ft" (field type) prefix!
-    forms_html += "<option value=\"ft" + value + "\"" + selected + ">" + text + "</option>";
+    // note the "ft" field type prefix!
+    forms_html += "<option value=\"ft" + value + "\">" + text + "</option>";
   });
 
   if (option_list_html == "" && forms_html == "")
@@ -1053,7 +1072,7 @@ fields_ns._generate_option_list_markup = function(setting_id, default_value) {
   html += "</select>"
        + "<div id=\"edit_field__option_list_options\"" + option_list_options_hidden + ">"
          + "<a href=\"#\" onclick=\"return fields_ns.edit_option_list(" + setting_id + ")\">" + g.messages["phrase_edit_option_list"] + "</a> | "
-         + "<a href=\"\">" + g.messages["phrase_create_new_option_list"] + "</a>"
+         + "<a href=\"#\" onclick=\"return fields_ns.create_new_option_list(" + setting_id + ")\">" + g.messages["phrase_create_new_option_list"] + "</a>"
        + "</div>";
 
   var forms_hidden = (forms_selected) ? "" : " style=\"display:none\"";
@@ -1071,7 +1090,14 @@ fields_ns._generate_option_list_markup = function(setting_id, default_value) {
  * so that the user can edit the option list details right in the dialog.
  */
 fields_ns.edit_option_list = function(setting_id) {
-  var list_id              = $("#edit_field__setting_" + setting_id).val();
+  var list_id = $("#edit_field__setting_" + setting_id).val();
+
+  if (!list_id) {
+    $("#edit_field_template_message").removeClass("hidden");
+    ft.display_message("edit_field_template_message", 0, "You must select an Option List and then Save Changes before being able to edit it.");
+    return false;
+  }
+
   var edit_option_list_url = g.root_url + "/admin/forms/option_lists/edit.php?page=main&list_id=" + list_id;
 
   if (fields_ns.memory.changed_field_ids.length == 0) {
@@ -1132,6 +1158,15 @@ fields_ns.edit_option_list = function(setting_id) {
     });
   }
   return false;
+}
+
+
+/**
+ * Called when the user clicks on the "Create New Option List" link. All it does is redirect to the Option List page
+ * and tell it to create a new Option List & assign it to the current field ID.
+ */
+fields_ns.create_new_option_list = function(setting_id) {
+  window.location = "./option_lists/index.php?add_option_list=1&field_id=" + fields_ns.__current_field_id;
 }
 
 
@@ -1242,6 +1277,12 @@ fields_ns.display_field_settings = function(field_type_id, settings) {
             $("#edit_field__setting_" + curr_setting_id).val(settings[i].setting_value);
             $("#edit_field__option_list_options").show();
             $("#edit_field__form_options").hide();
+
+            // in case the option list section wasn't loaded yet, store it in memory
+            fields_ns.onload_field_setting_values.push({
+              setting_id:    curr_setting_id,
+              setting_value: settings[i].setting_value
+            });
           }
         }
         break;
@@ -1472,10 +1513,8 @@ fields_ns.load_form_fields = function(params) {
 fields_ns.get_form_fields_response = function(data) {
   fields_ns.form_fields["form_" + data.form_id] = data.fields;
 
-  // if the user still has this form selected in the Edit Field dialog, load the info into a dropdown.
-  // yeesh... this is a bug!
+  // if the user still has this form selected in the Edit Field dialog, load the info into a dropdown
   if ($(".option_list_or_form_field :selected").val() == "ft" + data.form_id.toString()) {
-    //var form_id = parseInt(data.form_id.replace(/^ft/, ""));
     fields_ns.generate_form_fields_section({ form_id: data.form_id, field_id: data.field_id, field_order: data.field_order });
   }
 }
@@ -1529,3 +1568,18 @@ fields_ns.generate_form_fields_section = function(params) {
 
   $("#edit_field__form_options").html(html);
 }
+
+
+fields_ns.click_use_default = function(el) {
+  var is_checked = $(el).attr("checked");
+  var setting_id = $(el).attr("id").replace(/^edit_field__use_default_value_/, "");
+  var settings_selectors = '#edit_field__setting_' + setting_id + ',[id^="edit_field__setting_' + setting_id + '_"]';
+  if (is_checked) {
+    $(settings_selectors).attr("disabled", "disabled").addClass("light_grey");
+  } else {
+    $(settings_selectors).attr("disabled", "").removeClass("light_grey");
+    $("#edit_field__setting_" + setting_id).focus();
+  }
+}
+
+

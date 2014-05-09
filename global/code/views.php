@@ -1335,6 +1335,7 @@ function _ft_update_view_field_settings($view_id, $info)
   $grouped_info = explode("~", $info["{$sortable_id}_sortable__rows"]);
   $new_groups   = explode(",", $info["{$sortable_id}_sortable__new_groups"]);
 
+
   // empty the old View fields; we're about to update them
   mysql_query("DELETE FROM {$g_table_prefix}view_fields WHERE view_id = $view_id");
 
@@ -1383,14 +1384,18 @@ function _ft_update_view_field_settings($view_id, $info)
     }
     $new_group_order++;
 
+    // if the user unchecked the "Allow fields to be edited" checkbox, nothing is passed for this field
+    $editable_fields   = (isset($info["editable_fields"])) ? $info["editable_fields"] : array();
+    $searchable_fields = (isset($info["searchable_fields"])) ? $info["searchable_fields"] : array();
+
     $field_order = 1;
     foreach ($ordered_field_ids as $field_id)
     {
       if (empty($field_id) || !is_numeric($field_id))
         continue;
 
-      $is_editable   = (in_array($field_id, $info["editable_fields"])) ? "yes" : "no";
-      $is_searchable = (in_array($field_id, $info["searchable_fields"])) ? "yes" : "no";
+      $is_editable   = (in_array($field_id, $editable_fields)) ? "yes" : "no";
+      $is_searchable = (in_array($field_id, $searchable_fields)) ? "yes" : "no";
       $is_new_sort_group = (in_array($field_id, $new_groups)) ? "yes" : "no";
 
       $query = mysql_query("

@@ -313,7 +313,7 @@ function ft_get_num_fields_using_option_list($list_id)
     FROM   {$g_table_prefix}field_settings fs, {$g_table_prefix}field_type_settings fts
     WHERE  fs.setting_value = $list_id AND
            fs.setting_id = fts.setting_id AND
-           fts.field_type = 'option_list'
+           fts.field_type = 'option_list_or_form_field'
       ");
   $result = mysql_fetch_assoc($query);
 
@@ -338,7 +338,7 @@ function ft_get_fields_using_option_list($list_id, $group_by_form)
     FROM   {$g_table_prefix}field_settings fs, {$g_table_prefix}field_type_settings fts
     WHERE  fs.setting_value = $list_id AND
            fs.setting_id = fts.setting_id AND
-           fts.field_type = 'option_list'
+           fts.field_type = 'option_list_or_form_field'
       ");
 
   $field_ids = array();
@@ -476,19 +476,17 @@ function ft_update_option_list($list_id, $info)
 
 
 /**
- * Creates an identical copy of an existing option list. This can be handy if the user was using a
- * single group for multiple fields, but one of the form fields changed. They can just create a new copy,
- * tweak it and re-assign the field.
+ * Creates an identical copy of an existing Option List, or creates a new blank one. This can be handy if
+ * the user was using a single group for multiple fields, but one of the form fields changed. They can just
+ * create a new copy, tweak it and re-assign the field.
  *
- * If no group ID is passed, it creates a new blank field option group (sorry for the crappy function
- * name).
+ * If no Option List ID is passed in the first param, it creates a new blank Option List (sorry for the crappy
+ * function name).
  *
- * TODO. This doesn't look right. Is the form_fields table's option_list_id really needed anymore?
- *
- * @param integer $group_id
+ * @param integer $list_id
  * @param integer $field_id if this parameter is set, the new Option List will be assigned to whatever
- *   field IDs are specified
- * @return mixed the group ID if successful, false if not
+ *   field IDs are specified. Note: this only works for Field Types that have a single
+ * @return mixed the list ID if successful, false if not
  */
 function ft_duplicate_option_list($list_id = "", $field_ids = array())
 {
@@ -543,7 +541,7 @@ function ft_duplicate_option_list($list_id = "", $field_ids = array())
 
     $new_list_id = mysql_insert_id();
 
-    // add add the option groups and their options
+    // add add the option groups and their field options
     foreach ($option_list_info["options"] as $grouped_option_info)
     {
       $group_info = $grouped_option_info["group_info"];
@@ -572,20 +570,38 @@ function ft_duplicate_option_list($list_id = "", $field_ids = array())
     }
   }
 
-  /*
-  // nope!
+  // if we need to map this new option list to a field - or fields, loop through them and add them
+  // one by one. Note: field types may use multiple Option Lists, which makes this extremely difficult. But
+  // to make it as generic as possible, this code picks the first Option List field for the field type (as determined
+  // by the setting list order)
   if (!empty($field_ids))
   {
     foreach ($field_ids as $field_id)
     {
-      @mysql_query("
-        UPDATE {$g_table_prefix}form_fields
-        SET    option_list_id = $new_list_id
-        WHERE  field_id = $field_id
-          ");
+      $field_type_id = ft_get_field_type_id_by_field_id($field_id);
+      $field_settings = ft_get_field_type_settings($field_type_id);
+
+      $option_list_setting_id = "";
+      foreach ($field_settings as $field_setting_info)
+      {
+      	if ($field_setting_info["field_type"] == "option_list_or_form_field")
+      	{
+      	  $option_list_setting_id = $field_setting_info["setting_id"];
+      	  break;
+      	}
+      }
+
+      // this should ALWAYS have found a setting, but just in case...
+      if (!empty($option_list_setting_id))
+      {
+      	mysql_query("DELETE FROM {$g_table_prefix}field_settings WHERE field_id = $field_id AND setting_id = $option_list_setting_id");
+        @mysql_query("
+          INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
+          VALUES ($field_id, $option_list_setting_id, $new_list_id)
+           ");
+      }
     }
   }
-  */
 
   return $new_list_id;
 }
