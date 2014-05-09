@@ -568,8 +568,6 @@ function ft_update_submission($form_id, $submission_id, $infohash)
   $query[] = "last_modified_date = '$now'";
 
   $file_fields = array();
-  $submission_date_changed = false;
-
   foreach ($form_fields as $row)
   {
     $field_id = $row["field_id"];
@@ -584,7 +582,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 
     // if this is a FILE field that doesn't have any overridden PHP processing code, just store the info
     // about the field. Presumably, the module / field type has registered the appropriate hooks for
-    // processing the file. We pass that field + file into to the hook.
+    // processing the file. Without it, the module wouldn't work. We pass that field + file into to the hook.
     if ($field_types_processing_info[$row["field_type_id"]]["is_file_field"] == "yes")
     {
       $file_data = array(
@@ -611,7 +609,6 @@ function ft_update_submission($form_id, $submission_id, $infohash)
     {
       if (!isset($infohash[$row["field_name"]]) || empty($infohash[$row["field_name"]]))
         continue;
-      $submission_date_changed = true;
     }
 
     // see if this field type has any special PHP processing to do
@@ -657,12 +654,6 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 
   // now process any file fields
   extract(ft_process_hook_calls("manage_files", compact("form_id", "submission_id", "file_fields"), array("success", "message")), EXTR_OVERWRITE);
-
-  // if the submission date just changed, update sessions in case it was the FIRST submission (this updates the
-  // search date dropdown)
-  // TODO! This sucks.
-  if ($submission_date_changed)
-    _ft_cache_form_stats($form_id);
 
   // send any emails
   ft_send_emails("on_edit", $form_id, $submission_id);

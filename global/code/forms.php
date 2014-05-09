@@ -168,7 +168,8 @@ function ft_create_internal_form($request)
  * It also includes an optional parameter to remove all files that were uploaded through file fields in the
  * form; defaulted to FALSE.
  *
- * TODO - finish with appropriate field type hooks
+ * All field types marked as "file" MUST have a setting for "folder_path". That's used here to locate (and other places)
+ * to locate the file to be actually removed.
  *
  * @param integer $form_id the unique form ID
  * @param boolean $remove_associated_files A boolean indicating whether or not all files that were
@@ -182,31 +183,26 @@ function ft_delete_form($form_id, $remove_associated_files = false)
 
   $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true));
 
-  // TODO - module hook here
-  /*
-    // get the names and paths of all uploaded files
-    $file_field_hash = array(); // field_id => upload folder path
-    while ($field = mysql_fetch_assoc($form_template))
+  // remove the files
+  if ($remove_associated_files)
+  {
+    foreach ($form_fields as $form_field_info)
     {
-      if ($field['field_type'] == "file")
-        $file_field_hash[$field['field_id']] = $field['file_upload_dir'];
-    }
+      $field_id = $form_field_info["field_id"];
+      if ($form_field_info["is_file_field"] == "no")
+        continue;
 
-    // now determine all files + paths and remove them
-    if (!empty($file_field_hash))
-    {
-      foreach ($file_field_hash as $field_id => $upload_dir)
+      $uploaded_files = ft_get_uploaded_filenames($form_id, $field_id);
+
+      if (!empty($uploaded_files))
       {
-        $uploaded_files = ft_get_uploaded_filenames($form_id, $field_id);
-
-        if (!empty($uploaded_files))
+        foreach ($uploaded_files as $file)
         {
-          foreach ($uploaded_files as $file)
-            @unlink("$upload_dir/$file");
+          @unlink($file);
         }
       }
     }
-  */
+  }
 
   // remove the table
   $query = "DROP TABLE IF EXISTS {$g_table_prefix}form_$form_id";
@@ -565,7 +561,7 @@ function ft_get_form_list()
   $results = array();
   while ($row = mysql_fetch_assoc($query))
   {
-  	$results[] = $row;
+    $results[] = $row;
   }
 
   return $results;
@@ -593,27 +589,27 @@ function ft_get_form_view_list()
   $results = array();
   while ($row = mysql_fetch_assoc($query))
   {
-  	$form_id = $row["form_id"];
-  	$view_query = mysql_query("
-  	  SELECT view_id, view_name
-  	  FROM   {$g_table_prefix}views
-  	  WHERE  form_id = $form_id
-  	");
+    $form_id = $row["form_id"];
+    $view_query = mysql_query("
+      SELECT view_id, view_name
+      FROM   {$g_table_prefix}views
+      WHERE  form_id = $form_id
+    ");
 
-  	$views = array();
-  	while ($row2 = mysql_fetch_assoc($view_query))
-  	{
+    $views = array();
+    while ($row2 = mysql_fetch_assoc($view_query))
+    {
       $views[] = array(
         "view_id"   => $row2["view_id"],
         "view_name" => $row2["view_name"]
       );
-  	}
+    }
 
-  	$results[] = array(
-  	  "form_id"   => $form_id,
-  	  "form_name" => $row["form_name"],
-  	  "views"     => $views
-  	);
+    $results[] = array(
+      "form_id"   => $form_id,
+      "form_name" => $row["form_name"],
+      "views"     => $views
+    );
   }
 
   return $results;
@@ -985,8 +981,8 @@ function ft_set_form_field_types($form_id, $info)
   $option_lists = array();
   foreach ($form_fields as $field_info)
   {
-  	if ($field_info["is_system_field"] == "yes")
-  	  continue;
+    if ($field_info["is_system_field"] == "yes")
+      continue;
 
     $field_id = $field_info["field_id"];
 
@@ -1028,12 +1024,12 @@ function ft_set_form_field_types($form_id, $info)
   // finally, if there was any option list defined for any of the form field, add the info!
   if (!empty($option_lists))
   {
-  	$field_types = ft_get_field_types();
-  	$field_type_id_to_option_list_map = array();
-  	foreach ($field_types as $field_type_info)
-  	{
+    $field_types = ft_get_field_types();
+    $field_type_id_to_option_list_map = array();
+    foreach ($field_types as $field_type_info)
+    {
       $field_type_id_to_option_list_map[$field_type_info["field_type_id"]] = $field_type_info["raw_field_type_map_multi_select_id"];
-  	}
+    }
 
     while (list($field_id, $option_list_info) = each($option_lists))
     {

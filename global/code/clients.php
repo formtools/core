@@ -106,8 +106,15 @@ function ft_update_client($account_id, $info)
                   email = '$email'
           WHERE   account_id = $account_id
                ";
-      mysql_query($query)
-        or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
+      if (mysql_query($query))
+      {
+      	// if the password wasn't empty, reset the temporary password, in case it was set
+      	if (!empty($info["password"]))
+      	  mysql_query("UPDATE {$g_table_prefix}accounts SET temp_reset_password = NULL where account_id = $account_id");
+      }
+      else {
+      	ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
+      }
       break;
 
     case "settings":

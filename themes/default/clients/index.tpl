@@ -7,12 +7,12 @@
   </tr>
   </table>
 
+  {ft_include file="messages.tpl"}
+
   {if $forms_page_default_message}
-    <p>
+    <div class="margin_bottom_large">
       {$forms_page_default_message}
-    </p>
-  {else}
-    <div class="margin_bottom_large"> </div>
+    </div>
   {/if}
 
   {* here, there are no forms assigned to this client *}

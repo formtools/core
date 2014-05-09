@@ -996,7 +996,6 @@ $LANG["notify_file_not_deleted_no_exist"] = "The file has not been deleted becau
 $LANG["notify_file_not_deleted_permissions"] = "The file has not been deleted because it has the wrong permissions. <a href=\"#\" onclick=\"{\$js_link}\">Click here</a> to ignore this error message and just remove the reference from the database.";
 $LANG["notify_file_not_deleted_unknown_error"] = "There was an unknown error when trying to delete this file. <a href=\"#\" onclick=\"{\$js_link}\">Click here</a> to ignore this error message and just remove the reference from the database.";
 $LANG["notify_file_not_uploaded"] = "The file could not be uploaded.";
-$LANG["notify_file_too_large"] = "This file is too large.";
 $LANG["notify_file_upload_settings_updated"] = "The file upload settings have been successfully updated.";
 $LANG["notify_file_upload_settings_updated_files_moved"] = "The file upload settings have been successfully updated and the associated files have been moved to the new folder.";
 $LANG["notify_file_upload_settings_updated_files_not_moved"] = "The file upload settings have been updated, but the following file(s) could not be moved:";
@@ -1358,6 +1357,10 @@ $LANG["phrase_year_to_date"] = "Year to date";
 $LANG["phrase_the_previous_month"] = "The previous Month";
 
 $LANG["notify_invalid_search_dates"] = "Please use the datepicker to enter a valid date or dates.";
+$LANG["notify_change_temp_password"] = "You just logged in with a temporary password. You should reset your password now!";
+
+$LANG["notify_file_too_large"] = "This file is too large. The file was {\$FILESIZE}KB, but the maximum permitted file upload size is {\$MAXFILESIZE}KB.";
+
 
 // removed!
 //$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";

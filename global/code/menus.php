@@ -884,16 +884,18 @@ function ft_get_page_url($page_identifier, $params = array())
 
 
 /**
- * TODO. This was added to solve the problem of being able to construct a valid URL for the login
+ * This was added to solve the problem of being able to construct a valid URL for the login
  * function, to redirect to whatever custom login page the admin/client has selected. The
  * page identifier is stored in the login_page field (rename to login_page_identifier?).
  *
  * There seems to be some cross-over between this function and ft_get_page_url. Think about!
  *
- * @param string $page_identifier
- * @param string $custom_options
+ * @param string $page_identifier special strings that have meaning to Form Tools, used to identify
+ *                  pages within its interface. See the top of /global/code/menus.php for a list.
+ * @param string $custom_options again used by Form Tools
+ * @param array $args an arbitrary hash of key-value pairs to be passed in the query string
  */
-function ft_construct_page_url($page_identifier, $custom_options = "")
+function ft_construct_page_url($page_identifier, $custom_options = "", $args = array())
 {
   global $g_pages;
 
@@ -943,6 +945,18 @@ function ft_construct_page_url($page_identifier, $custom_options = "")
       else
         $url = $g_pages[$page_identifier];
       break;
+  }
+
+  if (!empty($args))
+  {
+  	$params = array();
+  	while (list($key, $value) = each($args))
+  	  $params[] = "$key=$value";
+
+  	if (strpos("?", $url) === false)
+  	  $url .= "?" . implode("&", $params);
+  	else
+  	  $url .= "&" . implode("&", $params);
   }
 
   return $url;

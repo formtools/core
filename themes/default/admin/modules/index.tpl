@@ -124,7 +124,7 @@
             <div class="medium_grey">{$module.description}</div>
           </td>
           <td valign="top" align="center">{$module.version}</td>
-          <td valign="top" align="center"{if $module.is_installed == "yes"}class="check_area"{/if}>
+          <td valign="top" align="center" {if $module.is_installed == "yes"}class="check_area"{/if}>
             {if $module.is_installed == "no"}
               <a href="{$same_page}?install={$module.module_id}">{$LANG.word_install|upper}</a>
             {else}

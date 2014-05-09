@@ -617,15 +617,15 @@ function ft_update_admin_account($infohash, $account_id)
   $_SESSION["ft"]["account"] = ft_get_account_info($account_id);
   $_SESSION["ft"]["account"]["is_logged_in"] = true;
 
-  if (!empty($password))
-    $_SESSION["ft"]["account"]["password"] = md5(md5($password));
-
-  // if the password just changed, update sessions
+  // if the password just changed, update sessions and empty any temporary password that happens to have been
+  // stored
   if (!empty($password))
   {
     $_SESSION["ft"]["account"]  = ft_get_account_info($account_id);
     $_SESSION["ft"]["account"]["is_logged_in"] = true;
     $_SESSION["ft"]["account"]["password"] = md5(md5($password));
+
+    mysql_query("UPDATE {$g_table_prefix}accounts SET temp_reset_password = NULL where account_id = $account_id");
   }
 
   extract(ft_process_hook_calls("end", compact("infohash", "account_id"), array("success", "message")), EXTR_OVERWRITE);

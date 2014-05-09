@@ -51,7 +51,7 @@ function ft_db_connect()
     @mysql_query("SET NAMES 'utf8'", $link);
 
   if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"]))
-  	ft_check_sessions_timeout();
+    ft_check_sessions_timeout();
 
   return $link;
 }
@@ -163,20 +163,24 @@ function ft_display_message($results, $messages)
  */
 function ft_display_custom_page_message($flag)
 {
-	global $LANG;
+  global $LANG;
 
-	$g_success = "";
-	$g_message = "";
+  $g_success = "";
+  $g_message = "";
   switch ($flag)
   {
-  	case "no_views":
-			$g_success = false;
-			$g_message = $LANG["notify_no_views"];
-  		break;
-  	case "notify_internal_form_created":
-			$g_success = true;
-			$g_message = $LANG["notify_internal_form_created"];
-  		break;
+    case "no_views":
+      $g_success = false;
+      $g_message = $LANG["notify_no_views"];
+      break;
+    case "notify_internal_form_created":
+      $g_success = true;
+      $g_message = $LANG["notify_internal_form_created"];
+      break;
+    case "change_temp_password":
+      $g_success = true;
+      $g_message = $LANG["notify_change_temp_password"];
+      break;
   }
 
   return array($g_success, $g_message);
@@ -857,16 +861,16 @@ function ft_verify_core_tables_exist()
   $missing_tables = array();
   foreach ($g_ft_tables as $table_name)
   {
-  	if (!in_array("{$g_table_prefix}$table_name", $found_tables))
-  	{
-  	  $all_tables_found = false;
-  	  $missing_tables[] = "{$g_table_prefix}$table_name";
-  	}
+    if (!in_array("{$g_table_prefix}$table_name", $found_tables))
+    {
+      $all_tables_found = false;
+      $missing_tables[] = "{$g_table_prefix}$table_name";
+    }
   }
 
   if (!$all_tables_found)
   {
-  	$missing_tables_str = "<blockquote><pre>" . implode("\n", $missing_tables) . "</pre></blockquote>";
+    $missing_tables_str = "<blockquote><pre>" . implode("\n", $missing_tables) . "</pre></blockquote>";
     ft_display_serious_error("Form Tools couldn't find all the database tables. Please check your /global/config.php file to confirm the <b>\$g_table_prefix</b> setting. The following tables are missing: {$missing_tables_str}");
     exit;
   }
@@ -1170,7 +1174,6 @@ function ft_get_js_webpage_parse_method($form_url)
 {
   // set a 1 minute maximum execution time for this request
   @set_time_limit(60);
-
   $scrape_method = "";
 
   // we buffer the file_get_contents call in case the URL is invalid and a fatal error is generated
@@ -1434,11 +1437,11 @@ function _ft_extract_array_val($array, $name)
   $value = "";
   for ($i=0; $i<count($array); $i++)
   {
-  	if ($array[$i]["name"] == $name)
-  	{
-  		$value = $array[$i]["value"];
-  		break;
-  	}
+    if ($array[$i]["name"] == $name)
+    {
+      $value = $array[$i]["value"];
+      break;
+    }
   }
 
   return $value;
@@ -1507,7 +1510,7 @@ function ft_get_formtools_installed_components()
   // not sure about this, but I've added it for backward compatibility, just in case...
   if ($release_type == "beta")
   {
-  	$components["beta"] = "yes";
+    $components["beta"] = "yes";
     $components["bv"]   = $version;
   }
 

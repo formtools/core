@@ -124,11 +124,13 @@ function ft_login($infohash, $login_as_client = false)
 
   // extract info about this user's account
   $query = mysql_query("
-    SELECT account_id, account_type, account_status, password, login_page
+    SELECT account_id, account_type, account_status, password, temp_reset_password, login_page
     FROM   {$g_table_prefix}accounts
     WHERE  username = '$username'
       ");
   $account_info = mysql_fetch_assoc($query);
+
+  $has_temp_reset_password = (empty($account_info["temp_reset_password"])) ? false : true;
 
   // error check user login info
   if (!$login_as_client)
@@ -136,9 +138,12 @@ function ft_login($infohash, $login_as_client = false)
     if (empty($password))                                 return $LANG["validation_no_password"];
     if ($account_info["account_status"] == "disabled")    return $LANG["validation_account_disabled"];
     if ($account_info["account_status"] == "pending")     return $LANG["validation_account_pending"];
-    if (empty($password))                                 return $LANG["validation_account_not_recognized"];
+    if (empty($username))                                 return $LANG["validation_account_not_recognized"];
 
-    if (md5(md5($password)) != $account_info["password"])
+    $password_correct      = (md5(md5($password)) == $account_info["password"]);
+    $temp_password_correct = (md5(md5($password)) == $account_info["temp_reset_password"]);
+
+    if (!$password_correct && !$temp_password_correct)
     {
       // if this is a client account and the administrator has enabled the maximum failed login attempts feature,
       // keep track of the count
@@ -178,6 +183,8 @@ function ft_login($infohash, $login_as_client = false)
   $_SESSION["ft"]["settings"] = $settings;
   $_SESSION["ft"]["account"]  = ft_get_account_info($account_info["account_id"]);
   $_SESSION["ft"]["account"]["is_logged_in"] = true;
+
+  // this is deliberate.
   $_SESSION["ft"]["account"]["password"] = md5(md5($password));
 
   ft_cache_account_menu($account_info["account_id"]);
@@ -196,8 +203,17 @@ function ft_login($infohash, $login_as_client = false)
   if ($account_info["account_type"] == "client")
     $_SESSION["ft"]["permissions"] = ft_get_client_form_views($account_info["account_id"]);
 
+
+  // if the user just logged in with a temporary password, append some args to pass to the login page
+  // so that they will be prompted to changing it upon login
+  $reset_password_args = array();
+  if ((md5(md5($password)) == $account_info["temp_reset_password"]))
+  {
+    $reset_password_args["message"] = "change_temp_password";
+  }
+
   // redirect the user to whatever login page they specified in their settings
-  $login_url = ft_construct_page_url($account_info["login_page"]);
+  $login_url = ft_construct_page_url($account_info["login_page"], "", $reset_password_args);
   $login_url = "$g_root_url{$login_url}";
 
   if (!$login_as_client)
@@ -331,10 +347,13 @@ function ft_send_password($info)
   $new_password = ft_generate_password();
   $encrypted_password = md5(md5($new_password));
 
-  // update the database with the new password (encrypted)
+  // update the database with the new password (encrypted). As of 2.1.0 there's a second field to store the
+  // temporary generated password, leaving the original password intact. This prevents a situation arising when
+  // someone other than the admin / client uses the "Forget Password" feature and invalidates a valid, known password.
+  // Any time the user successfully logs in,
   mysql_query("
     UPDATE {$g_table_prefix}accounts
-    SET    password = '$encrypted_password'
+    SET    temp_reset_password = '$encrypted_password'
     WHERE  account_id = $account_id
       ");
 
@@ -357,15 +376,13 @@ function ft_send_password($info)
   $smarty_template_email_subject = file_get_contents("$g_root_dir/global/emails/forget_password_subject.tpl");
   $email_subject = trim(ft_eval_smarty_string($smarty_template_email_subject, $placeholders));
 
-  // TODO
-
   // if Swift Mailer is enabled, send the emails with that. In case there's a problem sending the message with
   // Swift, it falls back the default mail() function.
   $swift_mail_error = false;
-  if (ft_check_module_enabled("swift_mailer"))
+  $swift_mail_enabled = ft_check_module_enabled("swift_mailer");
+  if ($swift_mail_enabled)
   {
     $sm_settings = ft_get_module_settings("", "swift_mailer");
-
     if ($sm_settings["swiftmailer_enabled"] == "yes")
     {
       ft_include_module("swift_mailer");
@@ -397,7 +414,8 @@ function ft_send_password($info)
     }
   }
 
-  if (!ft_check_module_enabled("swift_mailer") || $swift_mail_error)
+  // if there was an error sending with Swift, or if it wasn't installed, send it by mail()
+  if (!$swift_mail_enabled || $swift_mail_error)
   {
     // send email [note: the double quotes around the email recipient and content are intentional: some systems fail without it]
     if (!@mail("$email", $email_subject, $email_content))

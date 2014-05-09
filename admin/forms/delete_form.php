@@ -17,17 +17,19 @@ $form_name = $form_info["form_name"];
 $auto_delete_submission_files = $form_info["auto_delete_submission_files"];
 
 // get the names and URLs of all uploaded files
+$file_field_type_ids = ft_get_file_field_type_ids();
+
 $form_fields = ft_get_form_fields($form_id);
 $file_field_hash = array(); // field_id => upload folder URL
+
 foreach ($form_fields as $field)
 {
-	// TODO
-  if ($field["field_type_id"] == "file")
-  {
-  	$field_id = $field["field_id"];
-  	$field_settings = ft_get_extended_field_settings($field_id);
-  	$file_field_hash[$field["field_id"]] = array($field_settings["file_upload_dir"], $field_settings["file_upload_url"]);
-  }
+  if (!in_array($field["field_type_id"], $file_field_type_ids))
+    continue;
+
+  $field_id = $field["field_id"];
+  $field_settings = ft_get_field_settings($field_id);
+  $file_field_hash[$field["field_id"]] = array($field_settings["folder_path"], $field_settings["folder_url"]);
 }
 
 // now get all files for each ID
@@ -41,8 +43,8 @@ if (!empty($file_field_hash))
     $files = array();
     foreach ($uploaded_files as $file)
     {
-    	$filename_only = preg_replace("/.*([\/\\\])/", "", $file);
-    	$files[] = $filename_only;
+      $filename_only = preg_replace("/.*([\/\\\])/", "", $file);
+      $files[] = $filename_only;
     }
     $files_uploaded[$field_id] = $files;
   }
@@ -73,8 +75,7 @@ $page_vars["file_field_hash"] = $file_field_hash;
 $page_vars["head_js"] =<<< END
 var page_ns = {};
 page_ns.show_uploaded_files = function(){
-  // TODO
-  Effect.Appear('uploaded_files', { duration: 0.6 });
+  $('#uploaded_files').show(600);
 }
 var rules = ["required,delete_form,{$LANG["validation_delete_form_confirm"]}"];
 

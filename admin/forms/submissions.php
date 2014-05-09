@@ -230,8 +230,6 @@ if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$vi
 
 // this sets the total number of submissions that the admin can see in this form and View in the form_X_num_submissions
 // and view_X_num_submissions keys
-
-// TODO really???
 _ft_cache_form_stats($form_id);
 _ft_cache_view_stats($form_id, $view_id);
 

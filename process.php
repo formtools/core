@@ -56,7 +56,7 @@ else
 function ft_process_form($form_data)
 {
   global $g_table_prefix, $g_multi_val_delimiter, $g_query_str_multi_val_separator, $g_root_dir, $LANG,
-   $g_api_version, $g_api_recaptcha_private_key;
+    $g_api_version, $g_api_recaptcha_private_key;
 
   // ensure the incoming values are escaped
   $form_data = ft_sanitize($form_data);
@@ -146,24 +146,35 @@ function ft_process_form($form_data)
   $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true));
 
   $custom_form_fields = array();
+  $file_fields = array();
   foreach ($form_fields as $field_info)
   {
-  	$is_system_field = $field_info["is_system_field"];
+    $field_id        = $field_info["field_id"];
+    $is_system_field = $field_info["is_system_field"];
     $field_name      = $field_info["field_name"];
 
     // ignore system fields
     if ($is_system_field == "yes")
       continue;
 
-    $custom_form_fields[$field_name] = array(
-      "field_id"    => $field_info["field_id"],
-      "col_name"    => $field_info["col_name"],
-      "field_title" => $field_info["field_title"],
-      "include_on_redirect" => $field_info["include_on_redirect"],
-      "field_type_id" => $field_info["field_type_id"],
-      "is_date_field" => $field_info["is_date_field"],
-      "is_file_field" => $field_info["is_file_field"]
-        );
+    if ($field_info["is_file_field"] == "no")
+    {
+      $custom_form_fields[$field_name] = array(
+        "field_id"    => $field_id,
+        "col_name"    => $field_info["col_name"],
+        "field_title" => $field_info["field_title"],
+        "include_on_redirect" => $field_info["include_on_redirect"],
+        "field_type_id" => $field_info["field_type_id"],
+        "is_date_field" => $field_info["is_date_field"]
+      );
+    }
+    else
+    {
+      $file_fields[] = array(
+        "field_id"   => $field_id,
+        "field_info" => $field_info
+      );
+    }
   }
 
   // now examine the contents of the POST/GET submission and get a list of those fields
@@ -175,10 +186,6 @@ function ft_process_form($form_data)
     if (array_key_exists($form_field, $custom_form_fields))
     {
       $curr_form_field = $custom_form_fields[$form_field];
-
-      // ignore file fields - they're handled separately
-      if ($curr_form_field["is_file_field"] == "yes")
-        continue;
 
       $cleaned_value = $value;
       if (is_array($value))
@@ -216,8 +223,8 @@ function ft_process_form($form_data)
 
   // build our query
   $query = "
-      INSERT INTO {$g_table_prefix}form_$form_id ($col_names_str submission_date, last_modified_date, ip_address, is_finalized)
-      VALUES ($col_values_str '$now', '$now', '$ip_address', 'yes')
+    INSERT INTO {$g_table_prefix}form_$form_id ($col_names_str submission_date, last_modified_date, ip_address, is_finalized)
+    VALUES ($col_values_str '$now', '$now', '$ip_address', 'yes')
            ";
 
   // add the submission to the database (if form_tools_ignore_submission key isn't set by either the form or a module)
@@ -271,19 +278,23 @@ function ft_process_form($form_data)
         $field_name = $field_info["field_name"];
 
         // if $value is an array, convert it to a string, separated by $g_query_str_multi_val_separator
-        if (is_array($form_data[$field_name]))
+        if (isset($form_data[$field_name]))
         {
-          $value_str = join($g_query_str_multi_val_separator, $form_data[$field_name]);
-          $redirect_query_params[] = "$field_name=" . rawurlencode($value_str);
+          if (is_array($form_data[$field_name]))
+          {
+            $value_str = join($g_query_str_multi_val_separator, $form_data[$field_name]);
+            $redirect_query_params[] = "$field_name=" . rawurlencode($value_str);
+          }
+          else
+            $redirect_query_params[] = "$field_name=" . rawurlencode($form_data[$field_name]);
         }
-        else
-          $redirect_query_params[] = "$field_name=" . rawurlencode($form_data[$field_name]);
         break;
     }
   }
 
-  // now process any file fields
-  extract(ft_process_hook_calls("manage_files", compact("form_id", "submission_id"), array("success", "message")), EXTR_OVERWRITE);
+  // now process any file fields. This is placed after the redirect query param code block above to allow whatever file upload
+  // module to append the filename to the query string, if needed
+  extract(ft_process_hook_calls("manage_files", compact("form_id", "submission_id", "file_fields", "redirect_query_params"), array("success", "message", "redirect_query_params")), EXTR_OVERWRITE);
 
   // send any emails
   ft_send_emails("on_submission", $form_id, $submission_id);

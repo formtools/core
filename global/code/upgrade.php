@@ -402,7 +402,7 @@ function ft_upgrade_form_tools()
           option_order smallint(6) NOT NULL,
           is_new_sort_group enum('yes','no') NOT NULL,
           PRIMARY KEY  (setting_id,option_order)
-        ) TYPE=MyISAM DEFAULT CHARSET=utf8
+        ) DEFAULT CHARSET=utf8
       ");
 
       // textbox - size
@@ -497,7 +497,7 @@ function ft_upgrade_form_tools()
           default_value varchar(255) default NULL,
           list_order smallint(6) NOT NULL,
           PRIMARY KEY  (setting_id)
-        ) TYPE=MyISAM DEFAULT CHARSET=utf8
+        ) DEFAULT CHARSET=utf8
       ");
 
       // textbox
@@ -576,7 +576,7 @@ function ft_upgrade_form_tools()
           resources_css mediumtext,
           resources_js mediumtext,
           PRIMARY KEY (field_type_id)
-        ) TYPE=MyISAM DEFAULT CHARSET=utf8
+        ) DEFAULT CHARSET=utf8
       ");
 
       mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (1, 'no', '{\$LANG.text_non_deletable_fields}', NULL, '{\$LANG.word_textbox}', 'textbox', 1, 'no', 'no', 'textbox', NULL, 1, '1char,2chars,tiny,small,medium,large,very_large', '\r\n', '<input type=\"text\" name=\"{\$NAME}\" value=\"{\$VALUE|escape}\" \r\n  class=\"{\$size}{if \$highlight} {\$highlight}{/if}\" \r\n  {if \$maxlength}maxlength=\"{\$maxlength}\"{/if} />\r\n \r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '\r\n', 'input.cf_size_tiny {\r\n  width: 30px; \r\n}\r\ninput.cf_size_small {\r\n  width: 80px; \r\n}\r\ninput.cf_size_medium {\r\n  width: 150px; \r\n}\r\ninput.cf_size_large {\r\n  width: 250px;\r\n}\r\ninput.cf_size_full_width {\r\n  width: 99%; \r\n}\r\n\r\n', '')");
@@ -602,7 +602,7 @@ function ft_upgrade_form_tools()
           custom_data text NOT NULL,
           list_order smallint(6) NOT NULL,
           PRIMARY KEY  (group_id)
-        ) TYPE=MyISAM DEFAULT CHARSET=utf8
+        ) DEFAULT CHARSET=utf8
       ");
 
       $standard_fields = ft_sanitize($LANG["phrase_standard_fields"]);
@@ -656,7 +656,7 @@ function ft_upgrade_form_tools()
         default_value text NOT NULL,
         list_order smallint(6) NOT NULL,
         PRIMARY KEY  (view_id,field_id)
-      ) TYPE=MyISAM DEFAULT CHARSET=utf8
+      ) DEFAULT CHARSET=utf8
     ");
 
     $query = mysql_query("
@@ -669,7 +669,7 @@ function ft_upgrade_form_tools()
         custom_width varchar(10) default NULL,
         `truncate` enum('truncate','no_truncate') NOT NULL default 'truncate',
         PRIMARY KEY  (view_id,field_id,list_order)
-      ) TYPE=MyISAM DEFAULT CHARSET=utf8
+      ) DEFAULT CHARSET=utf8
     ");
 
     // changed Tables: simple changes that don't require any data manipulation
@@ -1272,6 +1272,12 @@ function ft_upgrade_form_tools()
   {
     mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value) VALUES ('default_date_field_search_value', 'none')");
   }
+
+  if ($old_version_info["release_date"] < 20110608)
+  {
+  	mysql_query("ALTER TABLE {$g_table_prefix}accounts ADD temp_reset_password VARCHAR(50) NULL");
+  }
+
 
   // TODO update radios View-smarty-markup (added {strip})
 

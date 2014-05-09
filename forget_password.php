@@ -19,8 +19,8 @@ if (!empty($id))
   if (!empty($info))
   {
     $g_theme  = $info['theme'];
-	  $language = $info["ui_language"];
-	  include_once("global/lang/{$language}.php");
+    $language = $info["ui_language"];
+    include_once("global/lang/{$language}.php");
   }
 }
 

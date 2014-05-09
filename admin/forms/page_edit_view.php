@@ -1,7 +1,5 @@
 <?php
 
-// TODO: examine every line in this file & benchmark!
-
 $view_fields_sortable_id = "view_fields";
 $submission_list_sortable_id = "submission_list";
 

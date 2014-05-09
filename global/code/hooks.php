@@ -216,14 +216,13 @@ function ft_process_hook_calls($event, $vars, $overridable_vars)
  */
 function ft_process_hook_call($module_folder, $hook_function, $vars, $overridable_vars, $calling_function)
 {
-  global $g_root_dir;
-
   // add the overridable variable list and calling function in special hash keys, to provide a little
   // info to the developer with regard to the context in which it's being called and what can be overridden
   $vars["form_tools_overridable_vars"] = $overridable_vars;
   $vars["form_tools_calling_function"] = $calling_function;
 
-  @include_once("$g_root_dir/modules/$module_folder/library.php");
+  $folder = dirname(__FILE__);
+  @include_once(realpath("$folder/../../modules/$module_folder/library.php"));
 
   if (!function_exists($hook_function))
     return $overridable_vars;

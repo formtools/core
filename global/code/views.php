@@ -35,7 +35,7 @@ function ft_add_default_view($form_id)
   mysql_query("
     INSERT INTO {$g_table_prefix}views (form_id, view_name, view_order, num_submissions_per_page,
       default_sort_field, default_sort_field_order)
-    VALUES ($form_id, '{$LANG["phrase_all_submissions"]}', '1', $num_submissions_per_page, 'submission_date', 'asc')
+    VALUES ($form_id, '{$LANG["phrase_all_submissions"]}', '1', $num_submissions_per_page, 'submission_date', 'desc')
       ");
   $view_id = mysql_insert_id();
 

@@ -1004,23 +1004,18 @@ function ft_update_field($form_id, $field_id, $tab_info)
  * Returns all files associated with a particular form field. This is compatible with both the
  * built-in "File" field as well as the Image fields of the Image Manager
  *
- * TODO check all references to this function. The third param has been added as an optional field,
- * but if all calling contexts have that value available (field type: "file" or "image") then make the field
- * required.
- *
  * @param integer $form_id the unique form ID.
  * @param integer $field_id the unique field ID.
- * @return array a hash of [submission ID] => [path (not URL!) + filename]
  */
-function ft_get_uploaded_filenames($form_id, $field_id, $field_type = "")
+function ft_get_uploaded_filenames($form_id, $field_id)
 {
   global $g_table_prefix;
 
   // get the column name for this field
   $field_info = ft_get_form_field($field_id);
   $col_name   = $field_info["col_name"];
-  $extended_field_settings = ft_get_extended_field_settings($field_id);
-  $folder = $extended_field_settings["file_upload_dir"];
+  $extended_field_settings = ft_get_field_settings($field_id);
+  $folder = $extended_field_settings["folder_path"]; // folder_path is REQUIRED for any field type, note... hmm.
 
   // if col_name is empty, the field doesn't exist - so the user is probably just setting up the form.
   // Just return an empty array.
