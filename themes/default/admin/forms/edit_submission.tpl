@@ -11,8 +11,7 @@
         </div>
         <div class="views_dropdown">
         {views_dropdown form_id=$form_id submission_id=$submission_id selected=$view_id omit_hidden_views=true
-          onchange="window.location='`$same_page`?form_id=`$form_id`&submission_id=`$submission_id`&view_id=' + this.value"
-          open_html='<div class="views_dropdown">' close_html='</div>' hide_single_view=true}
+          onchange="window.location='`$same_page`?form_id=`$form_id`&submission_id=`$submission_id`&view_id=' + this.value"}
       </div>
       </td>
     </tr>
@@ -58,8 +57,7 @@
           <tr>
             <td width="150" class="pad_left_small" valign="top">{$curr_field.field_title}</td>
             <td valign="top">
-              {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$curr_field
-                field_types=$field_types settings=$settings}
+              {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$curr_field field_types=$field_types}
             </td>
           </tr>
         {/foreach}
@@ -104,3 +102,20 @@
   </div>
 
 {ft_include file='footer.tpl'}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

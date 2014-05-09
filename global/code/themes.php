@@ -162,8 +162,7 @@ function ft_update_theme_list()
 function ft_display_page($template, $page_vars, $theme = "")
 {
   global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_debug, $LANG,
-    $g_smarty, $g_smarty_use_sub_dirs, $g_js_debug, $g_benchmark_start, $g_enable_benchmarking,
-    $g_upgrade_info;
+    $g_smarty, $g_smarty_use_sub_dirs, $g_js_debug, $g_benchmark_start, $g_enable_benchmarking;
 
   if (empty($theme) && (isset($_SESSION["ft"]["account"]["theme"])))
     $theme = $_SESSION["ft"]["account"]["theme"];
@@ -200,7 +199,7 @@ function ft_display_page($template, $page_vars, $theme = "")
 
 
   // if this page has been told to dislay a custom message, override g_success and g_message
-  if (!isset($g_upgrade_info["message"]) && isset($_GET["message"]))
+  if (isset($_GET["message"]))
   {
     list($g_success, $g_message) = ft_display_custom_page_message($_GET["message"]);
   }
@@ -225,7 +224,7 @@ function ft_display_page($template, $page_vars, $theme = "")
   $js_messages = (isset($page_vars["js_messages"])) ? ft_generate_js_messages($page_vars["js_messages"]) : "";
 
   if (!empty($page_vars["head_js"]) || !empty($js_messages))
-    $page_vars["head_js"] = "<script>\n//<![CDATA[\n{$page_vars["head_js"]}\n$js_messages\n//]]>\n</script>";
+    $page_vars["head_js"] = "<script type=\"text/javascript\">\n//<![CDATA[\n{$page_vars["head_js"]}\n$js_messages\n//]]>\n</script>";
 
   if (!isset($page_vars["head_css"]))
     $page_vars["head_css"] = "";
@@ -360,7 +359,7 @@ function ft_display_module_page($template, $page_vars = array(), $theme = "")
   // if we need to include custom JS messages in the page, add it to the generated JS. Note: even if the js_messages
   // key is defined but still empty, the ft_generate_js_messages function is called, returning the "base" JS - like
   // the JS version of g_root_url. Only if it is not defined will that info not be included. This feature was hacked
-  // in 2.1 to support js_messages from a single module file
+  // in 2.1 to support js_messages from a single module files
   $js_messages = "";
   if (isset($page_vars["js_messages"]) || isset($page_vars["module_js_messages"]))
   {

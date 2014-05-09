@@ -26,7 +26,7 @@ $page_vars["selected_client_ids"] = $selected_client_ids;
 $page_vars["num_clients_on_omit_list"] = $num_clients_on_omit_list;
 $page_vars["sortable_id"] = $sortable_id;
 $page_vars["js_messages"] = array("validation_no_url", "phrase_check_url", "word_page", "validation_invalid_url",
-  "word_close", "validation_no_form_url", "phrase_form_field_placeholders");
+  "word_close", "validation_no_form_url");
 $page_vars["head_string"] =<<< END
 <script src="$g_root_url/global/scripts/manage_forms.js"></script>
 <script src="$g_root_url/global/scripts/sortable.js"></script>
@@ -54,7 +54,7 @@ ft.click([
       { el: "custom_clients",          action: "show" },
       { el: "client_omit_list_button", action: "disable" }
     ]
-  }
+  },
 ]);
 
 var rules = [];

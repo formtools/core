@@ -85,6 +85,7 @@
             </td>
             <td valign="top" width="90" class="subpanel">
               <div class="bold nowrap">{$LANG.word_web}</div>
+
               <input type="checkbox" name="file_upload_filetypes[]" value="css" id="css" {if "css"|in_array:$file_upload_filetypes}checked{/if} />
                 <label for="css">css</label><br />
               <input type="checkbox" name="file_upload_filetypes[]" value="js" id="js" {if "js"|in_array:$file_upload_filetypes}checked{/if} />

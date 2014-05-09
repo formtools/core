@@ -13,7 +13,7 @@
   <ul>
     <li><a href="{$g_root_url}">{$LANG.text_log_in_to_ft}</a></li>
     <li><a href="http://docs.formtools.org/tutorials/adding_first_form/">{$LANG.text_tutorial_adding_first_form}</a></li>
-    <li><a href="http://docs.formtools.org/userdoc2_1/">{$LANG.text_review_user_doc}</a></li>
+    <li><a href="http://docs.formtools.org/userdoc/">{$LANG.text_review_user_doc}</a></li>
   </ul>
 
 {include file="../../install/templates/install_footer.tpl"}

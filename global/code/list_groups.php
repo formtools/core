@@ -20,35 +20,35 @@
  */
 function ft_add_list_group($group_type, $group_name, $next_order = "")
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $group_name = ft_sanitize($group_name);
+	$group_name = ft_sanitize($group_name);
 
-  if (empty($next_order))
-  {
-    // get the next list_order for this group
-    $query = mysql_query("
-      SELECT list_order
-      FROM   {$g_table_prefix}list_groups
-      WHERE  group_type = '$group_type'
-      ORDER BY list_order DESC LIMIT 1
-    ");
-    $result = mysql_fetch_assoc($query);
+	if (empty($next_order))
+	{
+		// get the next list_order for this group
+		$query = mysql_query("
+		  SELECT list_order
+		  FROM   {$g_table_prefix}list_groups
+		  WHERE  group_type = '$group_type'
+		  ORDER BY list_order DESC LIMIT 1
+		");
+		$result = mysql_fetch_assoc($query);
 
-    $next_order = (!isset($result["list_order"])) ? 1 : $result["list_order"] + 1;
-  }
+		$next_order = (!isset($result["list_order"])) ? 1 : $result["list_order"] + 1;
+	}
 
-  $query = mysql_query("
-    INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
-    VALUES ('$group_type', '$group_name', '', $next_order)
-  ");
+	$query = mysql_query("
+	  INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, list_order)
+	  VALUES ('$group_type', '$group_name', $next_order)
+	");
 
-  $group_id = mysql_insert_id();
+	$group_id = mysql_insert_id();
 
-  return array(
-    "group_id"   => $group_id,
-    "group_name" => $group_name
-  );
+	return array(
+	  "group_id"   => $group_id,
+	  "group_name" => $group_name
+	);
 }
 
 
@@ -59,7 +59,7 @@ function ft_add_list_group($group_type, $group_name, $next_order = "")
  */
 function ft_delete_list_group($group_id)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  return mysql_query("DELETE FROM {$g_table_prefix}list_groups WHERE group_id = $group_id");
+	return mysql_query("DELETE FROM {$g_table_prefix}list_groups WHERE group_id = $group_id");
 }

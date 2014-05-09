@@ -88,14 +88,14 @@
             <td width="15" class="red" align="center">*</td>
             <td class="pad_left_small" width="180">{$LANG.phrase_auto_disable_account}</td>
             <td>
-              <select name="max_failed_login_attempts">
-                <option value=""   {if $client_info.settings.max_failed_login_attempts == ""}selected{/if}>{$LANG.word_na}</option>
-                <option value="3"  {if $client_info.settings.max_failed_login_attempts == "3"}selected{/if}>3</option>
-                <option value="4"  {if $client_info.settings.max_failed_login_attempts == "4"}selected{/if}>4</option>
-                <option value="5"  {if $client_info.settings.max_failed_login_attempts == "5"}selected{/if}>5</option>
-                <option value="6"  {if $client_info.settings.max_failed_login_attempts == "6"}selected{/if}>6</option>
-                <option value="10" {if $client_info.settings.max_failed_login_attempts == "10"}selected{/if}>10</option>
-              </select>
+			        <select name="max_failed_login_attempts">
+			          <option value=""   {if $client_info.settings.max_failed_login_attempts == ""}selected{/if}>{$LANG.word_na}</option>
+			          <option value="3"  {if $client_info.settings.max_failed_login_attempts == "3"}selected{/if}>3</option>
+			          <option value="4"  {if $client_info.settings.max_failed_login_attempts == "4"}selected{/if}>4</option>
+			          <option value="5"  {if $client_info.settings.max_failed_login_attempts == "5"}selected{/if}>5</option>
+			          <option value="6"  {if $client_info.settings.max_failed_login_attempts == "6"}selected{/if}>6</option>
+			          <option value="10" {if $client_info.settings.max_failed_login_attempts == "10"}selected{/if}>10</option>
+			        </select>
             </td>
           </tr>
         {/if}
@@ -104,7 +104,7 @@
         {template_hook location="edit_client_settings_bottom"}
 
         <p>
-          <input type="submit" name="update_account_settings" value="{$LANG.word_update}" />
+          <input type="submit" name="update_account_settings" value="{$LANG.word_update|upper}" />
         </p>
 
       </form>

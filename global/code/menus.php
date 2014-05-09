@@ -79,6 +79,7 @@ $g_pages = array(
   // before 2.0.3, themes used to be grouped under "Settings". The settings_themes key is kept
   // to minimize regression
   "settings_themes" => "/admin/themes/index.php",
+
   "themes_about" => "/admin/themes/about.php",
   "settings_menus" => "/admin/settings/index.php?page=menus",
 
@@ -463,8 +464,7 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
   }
   $select_lines[] = array("type" => "optgroup_close");
 
-  // if the Pages module is enabled, display any custom pages that have been defined. Note: this would be better handled
-  // in the hook added below
+  // if the Pages module is enabled, display any custom pages that have been defined
   if (ft_check_module_enabled("pages"))
   {
     ft_include_module("pages");
@@ -482,8 +482,6 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
     $select_lines[] = array("type" => "optgroup_close");
   }
 
-  extract(ft_process_hook_calls("middle", compact("select_lines"), array("select_lines")), EXTR_OVERWRITE);
-
   $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_other"]);
   $select_lines[] = array("type" => "option", "k" => "your_account", "v" => $LANG["phrase_your_account"]);
   $select_lines[] = array("type" => "option", "k" => "settings_themes", "v" => "{$LANG["word_themes"]}");
@@ -492,10 +490,7 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
   $select_lines[] = array("type" => "option", "k" => "settings_accounts", "v" => "{$LANG["word_settings"]} - {$LANG["word_accounts"]}");
   $select_lines[] = array("type" => "option", "k" => "settings_files", "v" => "{$LANG["word_settings"]} - {$LANG["word_files"]}");
   $select_lines[] = array("type" => "option", "k" => "settings_menus", "v" => "{$LANG["word_settings"]} - {$LANG["word_menus"]}");
-  if (!in_array("logout", $omit_pages))
-  {
-    $select_lines[] = array("type" => "option", "k" => "logout", "v" => $LANG["word_logout"]);
-  }
+  $select_lines[] = array("type" => "option", "k" => "logout", "v" => $LANG["word_logout"]);
   $select_lines[] = array("type" => "optgroup_close");
 
   $select_lines[] = array("type" => "select_close");
@@ -597,8 +592,6 @@ function ft_get_client_menu_pages_dropdown($selected, $attributes, $omit_pages =
       $select_lines[] = array("type" => "optgroup_close");
     }
   }
-
-  extract(ft_process_hook_calls("middle", compact("select_lines"), array("select_lines")), EXTR_OVERWRITE);
 
   $select_lines[] = array("type" => "select_close");
 
@@ -905,11 +898,6 @@ function ft_construct_page_url($page_identifier, $custom_options = "", $args = a
   global $g_pages;
 
   $url = "";
-  extract(ft_process_hook_calls("start", compact("url", "page_identifier", "custom_options", "args"), array("url")), EXTR_OVERWRITE);
-
-  if (!empty($url))
-    return $url;
-
   switch ($page_identifier)
   {
     case "custom_url":
@@ -946,7 +934,7 @@ function ft_construct_page_url($page_identifier, $custom_options = "", $args = a
           $url = "/modules/$module_folder/";
         }
       }
-      // pages (from the Pages module). This should be removed from the Core, and make it use the hook defined above
+      // pages (from the Pages module)
       else if (preg_match("/^page_(\d+)/", $page_identifier, $matches))
       {
         $page_id = $matches[1];

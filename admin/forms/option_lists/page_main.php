@@ -37,10 +37,9 @@ $existing_option_list_names_js = "page_ns.option_list_names = [$list_names];";
 
 // ------------------------------------------------------------------------------------------------
 
-
 // compile template info
 $page_vars["list_info"] = $list_info;
-$page_vars["text_option_list_used_by_fields"] = ft_eval_smarty_string($LANG["text_option_list_used_by_fields"], $placeholders);
+$page_vars["text_field_option_group_used_by_fields"] = ft_eval_smarty_string($LANG["text_field_option_group_used_by_fields"], $placeholders);
 $page_vars["tabs"] = $tabs;
 $page_vars["page_url"] = ft_get_page_url("edit_option_list");
 $page_vars["head_title"] = $LANG["phrase_edit_option_list"];
@@ -51,9 +50,7 @@ $page_vars["js_messages"] = array("word_delete", "validation_no_smart_fill_value
   "validation_smart_fill_no_field_found", "validation_smart_fill_cannot_fill", "validation_smart_fill_invalid_field_type",
   "validation_smart_fill_upload_all_pages", "validation_upload_html_files_only", "validation_smart_fill_no_page",
   "validation_no_option_list_name", "validation_option_list_name_taken", "validation_num_rows_to_add", "word_error",
-  "word_okay", "phrase_please_confirm", "word_yes", "word_no", "confirm_delete_group", "phrase_create_group", "word_cancel",
-  "notify_field_options_smart_filled"
-);
+  "word_okay", "phrase_please_confirm", "word_yes", "word_no", "confirm_delete_group", "phrase_create_group", "word_cancel");
 $page_vars["head_string"] =<<< END
   <script src="$g_root_url/global/scripts/manage_option_lists.js"></script>
   <script src="$g_root_url/global/scripts/sortable.js"></script>

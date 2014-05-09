@@ -8,8 +8,8 @@ $account_id = $_SESSION["ft"]["account"]["account_id"];
 
 if (isset($_GET["reset"]))
 {
-  $_SESSION["ft"]["form_sort_order"] = "";
-  $_SESSION["ft"]["form_search_keyword"] = "";
+	$_SESSION["ft"]["form_sort_order"] = "";
+	$_SESSION["ft"]["form_search_keyword"] = "";
 }
 $order   = ft_load_field("order", "form_sort_order", "form_name-ASC");
 $keyword = ft_load_field("keyword", "form_search_keyword", "");
@@ -39,5 +39,4 @@ $page_vars["js_messages"] = array("phrase_open_form_in_new_tab_or_win", "word_cl
 $page_vars["head_js"] =<<< END
 $(function() { ft.init_show_form_links(); });
 END;
-
 ft_display_page("clients/index.tpl", $page_vars);

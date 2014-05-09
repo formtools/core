@@ -64,7 +64,7 @@
     {template_hook location="edit_client_main_bottom"}
 
     <p>
-      <input type="submit" name="update" value="{$LANG.word_update}" />
+      <input type="submit" name="update" value="{$LANG.word_update|upper}" />
     </p>
 
   </form>

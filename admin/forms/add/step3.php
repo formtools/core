@@ -38,8 +38,8 @@ $code_form_para_2 = ft_eval_smarty_string($LANG["text_add_form_step_2_para_6"], 
 
 if (isset($_POST["refresh"]) && $form_info["is_initialized"] == "no")
 {
-  $g_success = false;
-  $g_message = $LANG["notify_no_test_submission"];
+	$g_success = false;
+	$g_message = $LANG["notify_no_test_submission"];
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -60,35 +60,41 @@ $page_vars["head_js"] =<<< END
 var rules = [];
 var page_ns = {};
 page_ns.current_section = $current_section;
-page_ns.show_section = function(section) {
-  if (page_ns.current_section != null) {
+page_ns.show_section = function(section)
+{
+  if (page_ns.current_section != null)
+  {
     $("#" + page_ns.current_section).fadeOut({ duration: 400 });
     setTimeout(function() { $("#" + section).fadeIn({ duration: 400, }); }, 410);
-  } else {
-    $("#" + section).fadeIn({ duration: 400 });
   }
+  else
+    $("#" + section).fadeIn({ duration: 400 });
 
   // if the user just selected a submission type, highlight the appropriate box and store the
   // type to send along to the database. This information isn't needed outside of the Add Form
   // process, but it's nice to be able to re-fill the appropriate submission type box when
-  if (section == 'direct') {
+  if (section == 'direct')
+  {
     $('#direct_box').removeClass('grey_box');
     $('#direct_box').addClass('blue_box');
     $('#code_box').removeClass('blue_box');
     $('#code_box').addClass('grey_box');
   }
-  if (section == 'code') {
+  if (section == 'code')
+  {
     $('#direct_box').addClass('grey_box');
     $('#direct_box').removeClass('blue_box');
     $('#code_box').addClass('blue_box');
     $('#code_box').removeClass('grey_box');
   }
-  if (section != 'direct' && section != 'code') {
+  if (section != 'direct' && section != 'code')
+  {
     $('#direct_box').addClass('grey_box');
     $('#direct_box').removeClass('blue_box');
     $('#code_box').addClass('grey_box');
     $('#code_box').removeClass('blue_box');
   }
+
   page_ns.current_section = section;
 }
 

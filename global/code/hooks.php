@@ -118,7 +118,7 @@ function ft_get_hook_calls($event, $hook_type, $function_name)
 {
   global $g_table_prefix;
 
-  $query = @mysql_query("
+  $query = mysql_query("
     SELECT *
     FROM   {$g_table_prefix}hook_calls
     WHERE  hook_type = '$hook_type' AND
@@ -128,7 +128,7 @@ function ft_get_hook_calls($event, $hook_type, $function_name)
       ");
 
   $results = array();
-  while ($row = @mysql_fetch_assoc($query))
+  while ($row = mysql_fetch_assoc($query))
     $results[] = $row;
 
   return $results;
@@ -170,17 +170,14 @@ function ft_get_module_hook_calls($module_folder)
  *
  * "Priority" is actually very weird. Although it does allow hooks to define in what order they get
  * called, the priority to overriding the variables actually falls to the hooks with the LOWEST
- * priority. This can and should be adjusted, but right now there's no need for it. The fourth param
- * was added in part to solve this: that lets the calling function concatenate all overridden vars from
- * all calling functions and use all the data to determine what to do.
+ * priority. This can and should be adjusted, but right now there's no need for it.
  *
  * @param string $event the name of the event in the function calling the hook (e.g. "start", "end",
- *     "manage_files" etc.)
+ *     "manage_files" etc.
  * @param $vars whatever vars are being passed to the hooks from the context of the calling function
  * @param $overridable_vars whatever variables may be overridden by the hook
- * @param $overridable_vars_to_be_concatenated
  */
-function ft_process_hook_calls($event, $vars, $overridable_vars, $overridable_vars_to_be_concatenated = array())
+function ft_process_hook_calls($event, $vars, $overridable_vars)
 {
   $backtrace = debug_backtrace();
   $calling_function = $backtrace[1]["function"];
@@ -192,12 +189,6 @@ function ft_process_hook_calls($event, $vars, $overridable_vars, $overridable_va
   $return_vals = array();
   foreach ($hooks as $hook_info)
   {
-    // this clause was added in 2.1 - it should have been included in 2.0.x, but it was missed. This prevents any hooks
-    // being processed for modules that are not enabled.
-    $module_folder = $hook_info["module_folder"];
-    if (!ft_check_module_enabled($module_folder))
-      continue;
-
     // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
     // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
     $vars["form_tools_hook_info"] = $hook_info;
@@ -207,19 +198,7 @@ function ft_process_hook_calls($event, $vars, $overridable_vars, $overridable_va
     foreach ($overridable_vars as $var_name)
     {
       if (array_key_exists($var_name, $updated_vars))
-      {
-        if (in_array($var_name, $overridable_vars_to_be_concatenated))
-        {
-          if (!array_key_exists($var_name, $return_vals))
-            $return_vals[$var_name] = array();
-
-          $return_vals[$var_name][] = $updated_vars[$var_name];
-        }
-        else
-        {
-          $return_vals[$var_name] = $updated_vars[$var_name];
-        }
-      }
+        $return_vals[$var_name] = $updated_vars[$var_name];
     }
   }
 
@@ -270,27 +249,18 @@ function ft_process_hook_call($module_folder, $hook_function, $vars, $overridabl
  * template. This is used purely to insert content into the templates.
  *
  * @param string $location
- * @param array an array of all variables currently in the template
- * @param array in most cases, template hooks just contain the single "location" parameter which identifies
- *     where the hook is from. But hooks may also contain any additional rbitrary attribute names. This
- *     param contains all of them.
  */
-function ft_process_template_hook_calls($location, $template_vars, $all_params = array())
+function ft_process_template_hook_calls($location, $template_vars)
 {
   $hooks = ft_get_hook_calls($location, "template", "");
 
   // extract the var passed from the calling function into the current scope
   foreach ($hooks as $hook_info)
   {
-    $module_folder = $hook_info["module_folder"];
-    if (!ft_check_module_enabled($module_folder))
-      continue;
-
     // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
     // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
     $template_vars["form_tools_hook_info"] = $hook_info;
-
-    ft_process_template_hook_call($hook_info["module_folder"], $hook_info["hook_function"], $location, $template_vars, $all_params);
+    ft_process_template_hook_call($hook_info["module_folder"], $hook_info["hook_function"], $location, $template_vars);
   }
 }
 
@@ -303,26 +273,12 @@ function ft_process_template_hook_calls($location, $template_vars, $all_params =
  * @param string $hook_function
  * @return string
  */
-function ft_process_template_hook_call($module_folder, $hook_function, $location, $template_vars, $all_template_hook_params = array())
+function ft_process_template_hook_call($module_folder, $hook_function, $location, $template_vars)
 {
   global $g_root_dir;
 
   @include_once("$g_root_dir/modules/$module_folder/library.php");
-
-  // this is very unfortunate, but has to be done for backward compatibility. Up until July 2011, template hooks only ever
-  // needed the single "location" attribute + the template var information. But with the Data Visualization module, it needs to be more
-  // flexible. The generated hooks for each visualization can be used in pages generated in the Pages module, and we need to add a
-  // "height" and "width" attributes to the hook to permit the user to tinker around with the size (hardcoding the size of the
-  // visualization makes no sense, because it can be used in different contexts). But... to get that information to the template hook
-  // calls functions we CAN'T pass in an additional param, because it would break all hook call functions. So instead, we add the
-  // information into the $template_vars info for use by the hook call function. Boo!
-  $template_vars["form_tools_all_template_hook_params"] = $all_template_hook_params;
-
-  $html = "";
-  if (function_exists($hook_function))
-  {
-    $html = @$hook_function($location, $template_vars);
-  }
+  $html = @$hook_function($location, $template_vars);
 
   return $html;
 }
@@ -356,9 +312,9 @@ function ft_update_available_hooks()
   $ft_root = realpath(dirname(__FILE__) . "/../../");
   $hook_locations = array(
     // code hooks
-  "process.php"        => "core",
-  "global/code"        => "core",
-  "global/api/api.php" => "api",
+	"process.php"        => "core",
+	"global/code"        => "core",
+	"global/api/api.php" => "api",
     "modules"            => "module",
 
     // template hooks
@@ -371,7 +327,7 @@ function ft_update_available_hooks()
   );
   while (list($file_or_folder, $component) = each($hook_locations))
   {
-    _ft_find_hooks("$ft_root/$file_or_folder", $ft_root, $component, $results);
+  	_ft_find_hooks("$ft_root/$file_or_folder", $ft_root, $component, $results);
   }
 
   // now update the database
@@ -426,33 +382,30 @@ function _ft_find_hooks($curr_folder, $root_folder, $component, &$results)
   }
   else
   {
-    $handle = @opendir($curr_folder);
-    if ($handle)
+    $handle = opendir($curr_folder);
+    while (($file = readdir($handle)) !== false)
     {
-      while (($file = readdir($handle)) !== false)
-      {
-        if ($file == '.' || $file == '..')
-           continue;
+      if ($file == '.' || $file == '..')
+         continue;
 
-        $filepath = $curr_folder . '/' . $file;
-        if (is_link($filepath))
-          continue;
-        if (is_file($filepath))
-        {
-          $is_php_file = preg_match("/\.php$/", $filepath);
-          $is_tpl_file = preg_match("/\.tpl$/", $filepath);
-          if ($is_php_file)
-            $results["code_hooks"]     = array_merge($results["code_hooks"], _ft_extract_code_hooks($filepath, $root_folder, $component));
-          if ($is_tpl_file)
-            $results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
-        }
-        else if (is_dir($filepath))
-        {
-          _ft_find_hooks($filepath, $root_folder, $component, $results);
-        }
+      $filepath = $curr_folder . '/' . $file;
+      if (is_link($filepath))
+        continue;
+      if (is_file($filepath))
+      {
+      	$is_php_file = preg_match("/\.php$/", $filepath);
+      	$is_tpl_file = preg_match("/\.tpl$/", $filepath);
+      	if ($is_php_file)
+      	  $results["code_hooks"]     = array_merge($results["code_hooks"], _ft_extract_code_hooks($filepath, $root_folder, $component));
+      	if ($is_tpl_file)
+      	  $results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
       }
-      closedir($handle);
+      else if (is_dir($filepath))
+      {
+        _ft_find_hooks($filepath, $root_folder, $component, $results);
+      }
     }
+    closedir($handle);
   }
 }
 
@@ -462,8 +415,6 @@ function _ft_extract_code_hooks($filepath, $root_folder, $component)
   $lines = file($filepath);
   $current_function = "";
   $found_hooks = array();
-  $root_folder = preg_quote($root_folder);
-
   foreach ($lines as $line)
   {
     if (preg_match("/^function\s([^(]*)/", $line, $matches))
@@ -490,6 +441,7 @@ function _ft_extract_code_hooks($filepath, $root_folder, $component)
       $overridable = str_replace(" ", "", $overridable);
       $overridable = str_replace("'", "", $overridable);
       $overridable = explode(",", $overridable);
+      $root_folder = preg_quote($root_folder);
       $file = preg_replace("%" . $root_folder . "%", "", $filepath);
 
       $found_hooks[] = array(
@@ -512,13 +464,13 @@ function _ft_extract_template_hooks($filepath, $root_folder, $component)
   $lines = file($filepath);
   $current_function = "";
   $found_hooks = array();
-  $root_folder = preg_quote($root_folder);
 
   foreach ($lines as $line)
   {
     // this assumes that the hooks are always on a single line
     if (preg_match("/\{template_hook\s+location\s*=\s*[\"']([^}\"]*)/", $line, $matches))
     {
+      $root_folder = preg_quote($root_folder);
       $template = preg_replace("%" . $root_folder . "%", "", $filepath);
       $found_hooks[] = array(
         "template"  => $template,

@@ -58,7 +58,7 @@
           <tr>
             <th>{$LANG.phrase_field_label}</th>
             <th>{$LANG.phrase_form_field}</th>
-            <th>{$LANG.phrase_label_response_placeholders}</th>
+            <th>Label / Response Placeholders</th>
           </tr>
           {foreach from=$form_fields item=field name=row}
             <tr>
@@ -93,6 +93,32 @@
               </td>
             </tr>
           {/foreach}
+          </table>
+
+          <br />
+
+          <p class="subtitle">{$LANG.phrase_user_account_placeholders|upper}</p>
+          <p>
+            {$LANG.text_user_account_placeholders_explanation}
+          </p>
+
+          <table cellpadding="1" cellspacing="1" class="list_table" width="100%">
+          <tr>
+            <td valign="top" class="blue" width="160">{literal}{$FIRSTNAME}{/literal}</td>
+            <td>{$LANG.text_first_name}</td>
+          </tr>
+          <tr>
+            <td valign="top" class="blue" width="160">{literal}{$LASTNAME}{/literal}</td>
+            <td>{$LANG.text_last_name}</td>
+          </tr>
+          <tr>
+            <td valign="top" class="blue" width="160">{literal}{$COMPANYNAME}{/literal}</td>
+            <td>{$LANG.text_company_name}</td>
+          </tr>
+          <tr>
+            <td valign="top" class="blue" width="160">{literal}{$EMAIL}{/literal}</td>
+            <td>{$LANG.text_email_address}</td>
+          </tr>
           </table>
 
         </div>

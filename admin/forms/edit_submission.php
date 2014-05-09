@@ -21,6 +21,7 @@ $_SESSION["ft"]["last_link_page"] = "edit";
 // determine whether the page contains any editable fields
 $editable_field_ids = _ft_get_editable_view_fields($view_id);
 
+
 // update the submission
 if (isset($_POST) && !empty($_POST))
 {
@@ -52,6 +53,7 @@ $grouped_fields = ft_get_grouped_view_fields($view_id, $tab_number, $form_id, $s
 
 $page_field_ids      = array();
 $page_field_type_ids = array();
+
 foreach ($grouped_fields as $group)
 {
   foreach ($group["fields"] as $field_info)
@@ -100,10 +102,8 @@ list($prev_link_html, $search_results_link_html, $next_link_html) = _ft_code_get
 $submission_placeholders = ft_get_submission_placeholders($form_id, $submission_id);
 $edit_submission_page_label = ft_eval_smarty_string($form_info["edit_submission_page_label"], $submission_placeholders);
 
-
 // get all the shared resources
-$settings = ft_get_settings("", "core");
-$shared_resources_list = $settings["edit_submission_onload_resources"];
+$shared_resources_list = ft_get_settings("edit_submission_onload_resources");
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
 foreach ($shared_resources_array as $resource)
@@ -123,7 +123,6 @@ $page_vars["form_id"] = $form_id;
 $page_vars["view_id"] = $view_id;
 $page_vars["submission_id"] = $submission_id;
 $page_vars["tabs"] = $tabs;
-$page_vars["settings"] = $settings;
 $page_vars["tab_number"] = $tab_number;
 $page_vars["grouped_fields"] = $grouped_fields;
 $page_vars["field_types"] = $page_field_types;

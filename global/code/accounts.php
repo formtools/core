@@ -33,25 +33,6 @@ function ft_account_exists($account_id)
 
 
 /**
- * Helper function to determine if the user currently logged in is an administrator or not.
- *
- * return boolean. False if client or not logged in.
- */
-function ft_is_admin()
-{
-  $account_id = isset($_SESSION["ft"]["account"]["account_id"]) ? $_SESSION["ft"]["account"]["account_id"] : "";
-	if (empty($account_id))
-	  return false;
-
-	$account_info = ft_get_account_info($account_id);
-	if (empty($account_info) || $account_info["account_type"] != "admin")
-	  return false;
-
-  return true;
-}
-
-
-/**
  * Retrieves all information about any user account (administrator or client).
  *
  * @param integer $user_id the unique account ID
@@ -71,11 +52,9 @@ function ft_get_account_info($account_id)
 
   $account_info = mysql_fetch_assoc($result);
 
-  if (empty($account_info))
-    return array();
-
   // also extract any account-specific settings from account_settings
   $query = mysql_query("SELECT * FROM {$g_table_prefix}account_settings WHERE account_id = $account_id");
+
   $settings = array();
   while ($row = mysql_fetch_assoc($query))
     $settings[$row["setting_name"]] = $row["setting_value"];
@@ -573,7 +552,6 @@ function ft_add_password_to_password_history($account_id, $password)
   $new_password_history = implode(",", $trimmed_list);
   ft_set_account_settings($account_id, array("password_history" => $new_password_history));
 }
-
 
 // ------------------------------------------------------------------------------------------------
 

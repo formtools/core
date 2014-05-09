@@ -43,9 +43,11 @@ $page_vars["head_js"] =<<< EOF
 var rules = [];
 rules.push("required,admin_theme_id,{$LANG["validation_no_admin_theme"]}");
 rules.push("required,default_client_theme_id,{$LANG["validation_no_default_client_theme"]}");
+
 $(function() {
   $(".fancybox").fancybox();
 });
+
 EOF;
 
 $page_vars["head_string"] =<<< EOF

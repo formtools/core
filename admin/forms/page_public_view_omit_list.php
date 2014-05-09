@@ -8,12 +8,13 @@ if (isset($request["update_public_view_omit_list"]))
 $form_info = ft_get_form($form_id);
 $view_omit_list = ft_get_public_view_omit_list($view_id);
 
-// ------------------------------------------------------------------------------------------------
-
 // override the form nav links so that it always links to the Views page
 $page_vars["prev_tabset_link"] = (!empty($links["prev_form_id"])) ? "edit.php?page=views&form_id={$links["prev_form_id"]}" : "";
 $page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "edit.php?page=views&form_id={$links["next_form_id"]}" : "";
 
+// ------------------------------------------------------------------------------------------------
+
+// compile the templates information
 $page_vars["page"]       = "public_view_omit_list";
 $page_vars["page_url"]   = ft_get_page_url("edit_form_public_view_omit_list", array("form_id" => $form_id, "view_id" => $view_id));
 $page_vars["view_id"]    = $view_id;

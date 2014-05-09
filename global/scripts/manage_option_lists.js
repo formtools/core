@@ -152,12 +152,6 @@ sf_ns.smart_fill_field = function() {
 
 
 sf_ns.process_js_webpage_parse_method_response = function(data) {
-
-  // check the user wasn't logged out / denied permissions
-  if (!ft.check_ajax_response_permissions(data)) {
-    return;
-  }
-
   // if their server doesn't support any of the page scraping methods, offer them the option
   // of uploading the file manually
   if (data.scrape_method == "") {
@@ -205,7 +199,7 @@ sf_ns.log_form_page_as_loaded = function() {
   // if this was the result of manually uploading a file, be optimistic and tell them it worked (this is
   // overwritten if anything fails)
   if (sf_ns.manual_file_upload_attempted) {
-    ft.display_message("smart_fill_messages", true, g.messages["notify_field_options_smart_filled"]);
+    ft.display_message("smart_fill_messages", true, "Your field options have been Smart Filled.");
   }
 
   sf_ns.delete_all_rows();
@@ -274,18 +268,18 @@ sf_ns.log_form_page_as_loaded = function() {
         grouped_fields.push({
           "group_name": "",
           "fields":     [{ "value": field.value, "label": "" }]
-      });
+    	});
 
       // multiple checkboxes
       } else {
-      var fields = [];
+    	var fields = [];
         for (var i=0; i<field.length; i++) {
           fields.push({ "value": field[i].value, "label": "" });
         }
         grouped_fields.push({
           "group_name": "",
           "fields":     fields
-      });
+    	});
       }
       break;
 
@@ -295,29 +289,29 @@ sf_ns.log_form_page_as_loaded = function() {
   }
 
   if (grouped_fields[0].fields.length == 0) {
-    alert("no fields found!"); // ...!
+    alert("no fields found!")
   } else {
-    // create the groups
-    // *** bit concerned about timing issues here, but haven't encountered problems in FF 3.6 ***
-    var row_count = 1;
-    for (var i=0; i<grouped_fields.length; i++) {
-      sf_ns.num_new_groups++;
-      var info = {
-        group_id:   "NEW" + sf_ns.num_new_groups,
-        group_name: grouped_fields[i].group_name
-      }
-      sortable_ns.insert_new_group(info);
+	// create the groups
+	// *** bit concerned about timing issues here, but haven't encountered problems in FF 3.6 ***
+	var row_count = 1;
+	for (var i=0; i<grouped_fields.length; i++) {
+	  sf_ns.num_new_groups++;
+	  var info = {
+	    group_id:   "NEW" + sf_ns.num_new_groups,
+	    group_name: grouped_fields[i].group_name
+	  }
+	  sortable_ns.insert_new_group(info);
 
-      // add the right number of blank rows
-      sf_ns.add_field_options(grouped_fields[i].fields.length, $(".sortable_group:last .rows"));
+	  // add the right number of blank rows
+	  sf_ns.add_field_options(grouped_fields[i].fields.length, $(".sortable_group:last .rows"));
 
-      // now add the actual items. This relies on sf_ns.num_rows having being reset to 0 earlier on
-      for (var j=0; j<grouped_fields[i].fields.length; j++) {
-        $("input[name=field_option_value_" + row_count + "]").val(grouped_fields[i].fields[j].value);
-        $("input[name=field_option_text_" + row_count + "]").val(grouped_fields[i].fields[j].label);
-        row_count++;
-      }
-    }
+	  // now add the actual items. This relies on sf_ns.num_rows having being reset to 0 earlier on
+	  for (var j=0; j<grouped_fields[i].fields.length; j++) {
+		$("input[name=field_option_value_" + row_count + "]").val(grouped_fields[i].fields[j].value);
+		$("input[name=field_option_text_" + row_count + "]").val(grouped_fields[i].fields[j].label);
+		row_count++;
+	  }
+	}
 
     if (has_option_lists) {
       $(".add_ungrouped_rows").hide();
@@ -353,9 +347,10 @@ sf_ns.log_activity = function(is_busy) {
 
 /**
  * This function can be optionally called by the user if the Smart Fill couldn't read the web pages. It
- * uploads copies of the forms to the server.
+ * uploads copies of the forms to the server. The
  */
-sf_ns.validate_upload_file = function(f) {
+sf_ns.validate_upload_file = function(f)
+{
   // check all the fields have been entered
   if (!f["form_page_1"].value) {
     alert(g.messages["validation_smart_fill_no_page"]);

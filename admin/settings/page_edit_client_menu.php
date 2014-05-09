@@ -14,8 +14,8 @@ else
 
 if (isset($request["update_client_menu"]))
 {
-  $info = $_POST;
-  $info["sortable_id"] = $sortable_id;
+	$info = $_POST;
+	$info["sortable_id"] = $sortable_id;
   list($g_success, $g_message) = ft_update_client_menu($info);
 }
 
@@ -31,8 +31,8 @@ $menus = ft_get_menu_list();
 $menu_names = array();
 foreach ($menus as $curr_menu_info)
 {
-  if ($menu_id == $curr_menu_info["menu_id"])
-    continue;
+	if ($menu_id == $curr_menu_info["menu_id"])
+	  continue;
 
   $menu_names[] = "\"" . htmlspecialchars($curr_menu_info["menu"]) . "\"";
 }

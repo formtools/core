@@ -354,7 +354,7 @@ function ft_get_field_type_setting_by_identifier($field_type_id, $field_type_set
 
   if (!empty($field_setting_info))
   {
-    $setting_id = $field_setting_info["setting_id"];
+  	$setting_id = $field_setting_info["setting_id"];
     $options_query = mysql_query("
       SELECT *
       FROM   {$g_table_prefix}field_type_setting_options
@@ -402,6 +402,56 @@ function ft_get_field_type_setting_id_by_identifier($field_type_id, $field_type_
 
   return (!empty($field_setting_info)) ? $field_setting_info["setting_id"] : "";
 }
+
+
+
+/**
+ * Returns all settings for a field type, including the options - if requested.
+ *
+ * @param integer $field_type_id
+ * @param boolean $return_options
+
+function ft_get_field_type_settings($field_type_id, $return_options = false)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}field_type_settings
+    WHERE  field_type_id = $field_type_id
+    ORDER BY list_order
+  ");
+
+  $info = array();
+  while ($row = mysql_fetch_assoc($query))
+  {
+    $setting_id = $row["setting_id"];
+    if ($return_options)
+    {
+      $options = array();
+      $options_query = mysql_query("
+        SELECT *
+        FROM   {$g_table_prefix}field_type_setting_options
+        WHERE  setting_id = $setting_id
+        ORDER BY option_order
+      ");
+      while ($option_row = mysql_fetch_assoc($options_query))
+      {
+        $options[] = array(
+          "option_text"       => $option_row["option_text"],
+          "option_value"      => $option_row["option_value"],
+          "option_order"      => $option_row["option_order"],
+          "is_new_sort_group" => $option_row["is_new_sort_group"]
+        );
+      }
+      $row["options"] = $options;
+    }
+    $info[] = $row;
+  }
+
+  return $info;
+}
+*/
 
 
 /**
@@ -503,20 +553,15 @@ function ft_get_field_type_settings($field_type_id_or_ids, $return_options = fal
  *   ...
  * ]
  */
-function ft_generate_field_type_settings_js($options = array())
+function ft_generate_field_type_settings_js($namespace = "page_ns")
 {
   global $g_table_prefix, $LANG;
-
-  $namespace = isset($options["page_ns"]) ? $options["page_ns"] : "page_ns";
-  $js_key    = isset($options["js_key"]) ? $options["js_key"] : "field_type_id";
 
   $query = mysql_query("
     SELECT DISTINCT field_type_id
     FROM   {$g_table_prefix}field_type_settings
   ");
 
-
-  $field_type_id_to_identifier_map = ft_get_field_type_id_to_identifier();
   $curr_js = array("{$namespace}.field_settings = {};");
 
   $field_setting_rows = array();
@@ -525,7 +570,7 @@ function ft_generate_field_type_settings_js($options = array())
     $field_type_id = $row["field_type_id"];
 
     $settings_query = mysql_query("
-      SELECT setting_id, field_label, field_setting_identifier, field_type, field_orientation, default_value
+      SELECT setting_id, field_label, field_type, field_orientation, default_value
       FROM   {$g_table_prefix}field_type_settings
       WHERE field_type_id = $field_type_id
       ORDER BY list_order
@@ -536,7 +581,6 @@ function ft_generate_field_type_settings_js($options = array())
     {
       $setting_id = $settings_row["setting_id"];
       $field_label = $settings_row["field_label"];
-      $field_setting_identifier = $settings_row["field_setting_identifier"];
       $field_type = $settings_row["field_type"];
       $default_value = $settings_row["default_value"];
       $field_orientation = $settings_row["field_orientation"];
@@ -568,7 +612,6 @@ END;
   {
     setting_id:  $setting_id,
     field_label: "$field_label",
-    field_setting_identifier: "$field_setting_identifier",
     field_type:  "$field_type",
     default_value: "$default_value",
     field_orientation:  "$field_orientation",
@@ -577,14 +620,7 @@ END;
 END;
     }
 
-    if ($js_key == "field_type_id")
-      $curr_js[] = "{$namespace}.field_settings[\"field_type_$field_type_id\"] = [";
-    else
-    {
-      $field_type_identifier = $field_type_id_to_identifier_map[$field_type_id];
-      $curr_js[] = "{$namespace}.field_settings[\"$field_type_identifier\"] = [";
-    }
-
+    $curr_js[] = "{$namespace}.field_settings[\"field_type_$field_type_id\"] = [";
     $curr_js[] = implode(",\n", $settings_js);
     $curr_js[] = "];";
   }
@@ -857,51 +893,51 @@ function ft_get_default_date_field_search_value($choice)
   $php_date_format = "";
   $date_field_search_js_format = "";
   if ($g_search_form_date_field_format == "d/m/y") {
-    $php_date_format = "j/n/Y";
-    $date_field_search_js_format = "d/m/yy";
+  	$php_date_format = "j/n/Y";
+  	$date_field_search_js_format = "d/m/yy";
   } else {
-    $php_date_format = "n/j/Y";
-    $date_field_search_js_format = "m/d/yy";
+  	$php_date_format = "n/j/Y";
+  	$date_field_search_js_format = "m/d/yy";
   }
 
   $value = "";
   switch ($choice)
   {
-    case "none":
+  	case "none":
       $value = $LANG["phrase_select_date"];
       break;
-    case "today":
-      $value = date($php_date_format);
+  	case "today":
+  	  $value = date($php_date_format);
       break;
-    case "last_7_days":
-      $now  = date("U");
-      $then = $now - (60 * 60 * 24 * 7);
-      $value = date($php_date_format, $then) . " - " . date($php_date_format, $now);
+  	case "last_7_days":
+  	  $now  = date("U");
+  	  $then = $now - (60 * 60 * 24 * 7);
+  	  $value = date($php_date_format, $then) . " - " . date($php_date_format, $now);
       break;
-    case "month_to_date":
+  	case "month_to_date":
       $current_month = date("n");
       $current_year  = date("Y");
       if ($g_search_form_date_field_format == "d/m/y") {
         $value = "1/$current_month/$current_year - " . date($php_date_format);
       } else {
-        $value = "$current_month/1/$current_year - " . date($php_date_format);
+      	$value = "$current_month/1/$current_year - " . date($php_date_format);
       }
       break;
-    case "year_to_date":
+  	case "year_to_date":
       $current_year  = date("Y");
       $value = "1/1/$current_year - " . date($php_date_format);
       break;
-    case "previous_month":
-      $current_month = date("n");
-      $previous_month = ($current_month == 1) ? 12 : $current_month-1;
-      $current_year  = date("Y");
-      $mid_previous_month = mktime(0, 0, 0, $previous_month, 15, $current_year);
-      $num_days_in_last_month = date("t", $mid_previous_month);
-      if ($g_search_form_date_field_format == "d/m/y") {
-        $value = "1/$previous_month/$current_year - $num_days_in_last_month/$previous_month/$current_year";
-      } else {
-        $value = "$previous_month/1/$current_year - $previous_month/$num_days_in_last_month/$current_year";
-      }
+  	case "previous_month":
+  	  $current_month = date("n");
+  	  $previous_month = ($current_month == 1) ? 12 : $current_month-1;
+  	  $current_year  = date("Y");
+  	  $mid_previous_month = mktime(0, 0, 0, $previous_month, 15, $current_year);
+  	  $num_days_in_last_month = date("t", $mid_previous_month);
+  	  if ($g_search_form_date_field_format == "d/m/y") {
+  	  	$value = "1/$previous_month/$current_year - $num_days_in_last_month/$previous_month/$current_year";
+  	  } else {
+  	  	$value = "$previous_month/1/$current_year - $previous_month/$num_days_in_last_month/$current_year";
+  	  }
       break;
   }
 
@@ -926,7 +962,7 @@ function ft_get_file_field_type_ids()
   $field_type_ids = array();
   while ($row = mysql_fetch_assoc($query))
   {
-    $field_type_ids[] = $row["field_type_id"];
+  	$field_type_ids[] = $row["field_type_id"];
   }
 
   return $field_type_ids;
@@ -946,7 +982,7 @@ function ft_get_date_field_type_ids()
   $field_type_ids = array();
   while ($row = mysql_fetch_assoc($query))
   {
-    $field_type_ids[] = $row["field_type_id"];
+  	$field_type_ids[] = $row["field_type_id"];
   }
 
   return $field_type_ids;
@@ -964,7 +1000,7 @@ function ft_get_field_type_id_to_identifier()
   $map = array();
   foreach ($field_types as $field_type_info)
   {
-    $map[$field_type_info["field_type_id"]] = $field_type_info["field_type_identifier"];
+  	$map[$field_type_info["field_type_id"]] = $field_type_info["field_type_identifier"];
   }
 
   return $map;
@@ -1000,7 +1036,7 @@ function ft_get_field_type_id_to_identifier()
  */
 function ft_generate_viewable_field($params)
 {
-  global $LANG, $g_root_url, $g_root_dir, $g_multi_val_delimiter, $g_cache;
+  global $LANG, $g_root_url, $g_root_dir, $g_multi_val_delimiter;
 
   // REQUIRED
   $form_id       = $params["form_id"];
@@ -1026,13 +1062,16 @@ function ft_generate_viewable_field($params)
   $field_settings = $field_info["settings"];
 
   $output = "";
-  if ($field_type_info["view_field_rendering_type"] == "none" || empty($markup_with_placeholders))
+  if (empty($markup_with_placeholders))
   {
-    $output = $value;
+    if ($field_info["col_name"] == "submission_id")
+      $output = $submission_id;
+    else
+      $output = $value;
   }
   else
   {
-    $account_info = isset($_SESSION["ft"]["account"]) ? $_SESSION["ft"]["account"] : array();
+  	$account_info = isset($_SESSION["ft"]["account"]) ? $_SESSION["ft"]["account"] : array();
 
     // now construct all available placeholders
     $placeholders = array(
@@ -1079,17 +1118,7 @@ function ft_generate_viewable_field($params)
         $parts = explode(",", $value);
         if (count($parts) == 2)
         {
-        	$dynamic_setting_str = $value; // "setting_name,module_folder/'core'"
-          if (!array_key_exists("dynamic_settings", $g_cache))
-        	  $g_cache["dynamic_settings"] = array();
-
-        	if (array_key_exists($dynamic_setting_str, $g_cache["dynamic_settings"]))
-        	  $value = $g_cache["dynamic_settings"][$dynamic_setting_str];
-          else
-          {
-            $value = ft_get_settings($parts[0], $parts[1]);
-            $g_cache["dynamic_settings"][$dynamic_setting_str] = $value;
-          }
+          $value = ft_get_settings($parts[0], $parts[1]);
         }
       }
 
@@ -1102,479 +1131,16 @@ function ft_generate_viewable_field($params)
         }
         else
         {
-        	$option_list_id = $value;
-
-        	if (!array_key_exists("option_lists", $g_cache))
-        	  $g_cache["option_lists"] = array();
-
-        	if (array_key_exists($option_list_id, $g_cache["option_lists"]))
-        	  $value = $g_cache["option_lists"][$option_list_id];
-          else
-          {
-            $value = ft_get_option_list($option_list_id);
-            $g_cache["option_lists"][$option_list_id] = $value;
-          }
+          $value = ft_get_option_list($value);
         }
       }
 
       $placeholders[$identifier] = $value;
     }
 
-    if ($field_type_info["view_field_rendering_type"] == "php")
-    {
-      $php_function = $field_type_info["view_field_php_function"];
-
-      // if this is a module, include the module's library.php file so we have access to the function
-      if ($field_type_info["view_field_php_function_source"] != "core" && is_numeric($field_type_info["view_field_php_function_source"]))
-      {
-      	$module_folder = ft_get_module_folder_from_module_id($field_type_info["view_field_php_function_source"]);
-        @include_once("$g_root_dir/modules/$module_folder/library.php");
-      }
-
-      if (function_exists($php_function))
-      {
-        $output = $php_function($placeholders);
-      }
-    }
-    else
-    {
-      $output = ft_eval_smarty_string($markup_with_placeholders, $placeholders);
-    }
+    // very, very, very slow
+    $output = ft_eval_smarty_string($markup_with_placeholders, $placeholders);
   }
 
   return $output;
-}
-
-
-
-// The following code contains the functions to generate the field type markup for the Core fields. The Core field
-// types may be rendered by Smarty or these function. These are much faster, so they're enabled by default.
-
-
-function ft_display_field_type_date($placeholders)
-{
-  if (empty($placeholders["VALUE"]))
-    return;
-
-  $tzo = "";
-  if ($placeholders["apply_timezone_offset"] == "yes" && isset($placeholders["ACCOUNT_INFO"]["timezone_offset"]))
-    $tzo = $placeholders["ACCOUNT_INFO"]["timezone_offset"];
-
-  switch ($placeholders["display_format"])
-  {
-    case "yy-mm-dd":
-      $php_format = "Y-m-d";
-      break;
-    case "dd/mm/yy":
-      $php_format = "d/m/Y";
-      break;
-    case "mm/dd/yy":
-      $php_format = "m/d/Y";
-      break;
-    case "M d, yy":
-      $php_format = "M j, Y";
-      break;
-    case "MM d, yy":
-      $php_format = "F j, Y";
-      break;
-    case "D M d, yy":
-      $php_format = "D M j, Y";
-      break;
-    case "DD, MM d, yy":
-      $php_format = "l M j, Y";
-      break;
-    case "dd. mm. yy.":
-      $php_format = "d. m. Y.";
-      break;
-
-    case "datetime:dd/mm/yy|h:mm TT|ampm`true":
-      $php_format = "d/m/Y g:i A";
-      break;
-    case "datetime:mm/dd/yy|h:mm TT|ampm`true":
-      $php_format = "m/d/Y g:i A";
-      break;
-    case "datetime:yy-mm-dd|h:mm TT|ampm`true":
-      $php_format = "Y-m-d g:i A";
-      break;
-    case "datetime:yy-mm-dd|hh:mm":
-      $php_format = "Y-m-d H:i";
-      break;
-    case "datetime:yy-mm-dd|hh:mm:ss|showSecond`true":
-      $php_format = "Y-m-d H:i:s";
-      break;
-    case "datetime:dd. mm. yy.|hh:mm":
-      $php_format = "d. m. Y. H:i";
-      break;
-
-    default:
-      break;
-  }
-
-  return ft_get_date($tzo, $placeholders["VALUE"], $php_format);
-}
-
-
-function ft_display_field_type_radios($placeholders)
-{
-  // if this isn't assigned to an Option List / form field, ignore the sucker
-  if (empty($placeholders["contents"]))
-    return;
-
-  $output = "";
-  foreach ($placeholders["contents"]["options"] as $curr_group_info)
-  {
-    $group_info = $curr_group_info["group_info"];
-    $options    = $curr_group_info["options"];
-
-    foreach ($options as $option_info)
-    {
-      if ($placeholders["VALUE"] == $option_info["option_value"])
-      {
-        $output = $option_info["option_name"];
-        break;
-      }
-    }
-  }
-
-  return $output;
-}
-
-
-function ft_display_field_type_checkboxes($placeholders)
-{
-  // if this isn't assigned to an Option List / form field, ignore it!
-  if (empty($placeholders["contents"]))
-    return;
-
-  $g_multi_val_delimiter = $placeholders["g_multi_val_delimiter"];
-  $vals = explode($g_multi_val_delimiter, $placeholders["VALUE"]);
-
-  $output = "";
-  $is_first = true;
-  foreach ($placeholders["contents"]["options"] as $curr_group_info)
-  {
-    $options = $curr_group_info["options"];
-
-    foreach ($options as $option_info)
-    {
-      if (in_array($option_info["option_value"], $vals))
-      {
-        if (!$is_first)
-          $output .= $g_multi_val_delimiter;
-
-        $output .= $option_info["option_name"];
-        $is_first = false;
-      }
-    }
-  }
-
-  return $output;
-}
-
-
-function ft_display_field_type_dropdown($placeholders)
-{
-  if (empty($placeholders["contents"]))
-    return;
-
-  $output = "";
-  foreach ($placeholders["contents"]["options"] as $curr_group_info)
-  {
-    $options = $curr_group_info["options"];
-    foreach ($options as $option_info)
-    {
-      if ($placeholders["VALUE"] == $option_info["option_value"])
-      {
-        $output = $option_info["option_name"];
-        break;
-      }
-    }
-  }
-
-  return $output;
-}
-
-
-function ft_display_field_type_multi_select_dropdown($placeholders)
-{
-  // if this isn't assigned to an Option List / form field, ignore it!
-  if (empty($placeholders["contents"]))
-    return;
-
-  $g_multi_val_delimiter = $placeholders["g_multi_val_delimiter"];
-  $vals = explode($g_multi_val_delimiter, $placeholders["VALUE"]);
-
-  $output = "";
-  $is_first = true;
-  foreach ($placeholders["contents"]["options"] as $curr_group_info)
-  {
-    $options = $curr_group_info["options"];
-
-    foreach ($options as $option_info)
-    {
-      if (in_array($option_info["option_value"], $vals))
-      {
-        if (!$is_first)
-          $output .= $g_multi_val_delimiter;
-
-        $output .= $option_info["option_name"];
-        $is_first = false;
-      }
-    }
-  }
-
-  return $output;
-}
-
-
-function ft_display_field_type_phone_number($placeholders)
-{
-  $phone_number_format = $placeholders["phone_number_format"];
-  $values = explode("|", $placeholders["VALUE"]);
-
-  $pieces = preg_split("/(x+)/", $phone_number_format, 0, PREG_SPLIT_DELIM_CAPTURE);
-  $counter = 1;
-  $output = "";
-  $has_content = false;
-  foreach ($pieces as $piece)
-  {
-    if (empty($piece))
-      continue;
-
-    if ($piece[0] == "x")
-    {
-      $value = (isset($values[$counter-1])) ? $values[$counter-1] : "";
-      $output .= $value;
-      if (!empty($value))
-      {
-        $has_content = true;
-      }
-      $counter++;
-    } else {
-      $output .= $piece;
-    }
-  }
-
-  if (!empty($output) && $has_content)
-    return $output;
-  else
-    return "";
-}
-
-
-function ft_display_field_type_code_markup($placeholders)
-{
-  $output = "";
-  if ($placeholders["CONTEXTPAGE"] == "edit_submission")
-  {
-    $code_markup = $placeholders["code_markup"];
-    $field_name  = $placeholders["NAME"];
-    $value       = $placeholders["VALUE"];
-    $height      = $placeholders["height"];
-    $g_root_url  = $placeholders["g_root_url"];
-    $output =<<< END
-  <textarea id="{$name}_id" name="{$name}">{$value}</textarea>
-  <script>
-  var code_mirror_{$name} = new CodeMirror.fromTextArea("{$name}_id", {
-    height:   "{$height}px",
-    path:     "{$g_root_url}/global/codemirror/js/",
-    readOnly: true,
-    {if $code_markup == "HTML" || $code_markup == "XML"}
-      parserfile: ["parsexml.js"],
-      stylesheet: "{$g_root_url}/global/codemirror/css/xmlcolors.css"
-    {elseif $code_markup == "CSS"}
-      parserfile: ["parsecss.js"],
-      stylesheet: "{$g_root_url}/global/codemirror/css/csscolors.css"
-    {elseif $code_markup == "JavaScript"}
-      parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
-      stylesheet: "{$g_root_url}/global/codemirror/css/jscolors.css"
-    {/if}
-  });
-  </script>
-END;
-  }
-  else
-  {
-    $output = strip_tags($placeholders["VALUE"]);
-  }
-
-  return $output;
-}
-
-
-/**
- * Used when updating a field. This is passed those field that have just had their field type changed. It figures
- * out what values
- *
- * @param array $field_type_map
- * @param string $field_type_settings_shared_characteristics
- * @param integer $field_id
- * @param integer $new_field_type_id
- * @param integer $old_field_type_id
- */
-function ft_get_shared_field_setting_info($field_type_map, $field_type_settings_shared_characteristics, $field_id, $new_field_type_id, $old_field_type_id)
-{
-  $new_field_type_identifier = $field_type_map[$new_field_type_id];
-  $old_field_type_identifier = $field_type_map[$old_field_type_id];
-
-  $groups = explode("|", $field_type_settings_shared_characteristics);
-  $return_info = array();
-  foreach ($groups as $group_info)
-  {
-  	list($group_name, $vals) = explode(":", $group_info);
-
-    $pairs = explode("`", $vals);
-    $settings = array();
-    foreach ($pairs as $str)
-    {
-      list($field_type_identifier, $setting_identifier) = explode(",", $str);
-      $settings[$field_type_identifier] = $setting_identifier;
-    }
-
-    $shared_field_types = array_keys($settings);
-    if (!in_array($new_field_type_identifier, $shared_field_types) || !in_array($old_field_type_identifier, $shared_field_types))
-      continue;
-
-    $old_setting_id = ft_get_field_type_setting_id_by_identifier($old_field_type_id, $settings[$new_field_type_identifier]);
-    $new_setting_id = ft_get_field_type_setting_id_by_identifier($new_field_type_id, $settings[$old_field_type_identifier]);
-
-    $old_setting_value = ft_get_field_setting($field_id, $old_setting_id);
-    $return_info[] = array(
-      "field_id"       => $field_id,
-      "old_setting_id" => $old_setting_id,
-      "new_setting_id" => $new_setting_id,
-      "setting_value"  => $old_setting_value
-    );
-  }
-
-  return $return_info;
-}
-
-
-/**
- * This is used exclusively on the Edit Forms -> fields tab. It returns a JS version of the shared characteristics
- * information for use by the page. The JS it returns in an anonymous JS object of the following form:
- *   {
- *     s(setting ID): array(characteristic IDs),
- *     ...
- *   }
- *
- * "Characteristic ID" is a made-up number for the sake of the use-case. We just need a way to recognize the shared
- * characteristics - that's what it does.
- *
- * @return string
- */
-function ft_get_field_type_setting_shared_characteristics_js()
-{
-  $field_type_settings_shared_characteristics = ft_get_settings("field_type_settings_shared_characteristics");
-  $info = ft_get_field_type_and_setting_info();
-  $field_type_id_to_identifier = $info["field_type_id_to_identifier"];
-  $field_identifier_to_id = array_flip($field_type_id_to_identifier);
-
-  $groups = explode("|", $field_type_settings_shared_characteristics);
-  $return_info = array();
-
-  // this is what we're trying to generate: a hash of setting id => array( characteristic IDs )
-  // The Òcharacteristic IDÓ is a new (temporary) number for characteristic. In every situation that I can
-  // think of, the value array will contain a single entry (why would a setting be mapped to multiple
-  // characteristics?). However, the interface doesn't limit it. To be safe, IÕll stash it in an array.
-  $setting_ids_to_characteristic_ids = array();
-
-  $characteristic_id = 1;
-  foreach ($groups as $group_info)
-  {
-  	list($group_name, $vals) = explode(":", $group_info);
-
-    $pairs = explode("`", $vals);
-    $settings = array();
-    foreach ($pairs as $str)
-    {
-      // we need to do a little legwork here to actually find the setting ID. The problem is that many
-      // field types reference fields with the same setting identifier (it's only required to be unique within the
-      // field type - not ALL field types).
-      list($field_type_identifier, $setting_identifier) = explode(",", $str);
-
-      // the shared characteristic settings may reference uninstalled modules
-      if (!array_key_exists($field_type_identifier, $field_identifier_to_id))
-        continue;
-
-      $field_type_id = $field_identifier_to_id[$field_type_identifier];
-      $all_field_type_setting_ids = $info["field_type_ids_to_setting_ids"][$field_type_id];
-
-      // loop through all the settings for this field type and locate the one we're interested in
-      foreach ($all_field_type_setting_ids as $setting_id)
-      {
-      	if ($info["setting_id_to_identifier"][$setting_id] != $setting_identifier)
-      	  continue;
-
-      	if (!array_key_exists($setting_id, $setting_ids_to_characteristic_ids))
-      	  $setting_ids_to_characteristic_ids[$setting_id] = array();
-
-      	$setting_ids_to_characteristic_ids[$setting_id][] = $characteristic_id;
-      }
-    }
-
-    $characteristic_id++;
-  }
-
-  // now convert the info into a simple JS object. We could have done it above, but this keeps it simple.
-  $js_lines = array();
-  while (list($setting_id, $characteristic_ids) = each($setting_ids_to_characteristic_ids))
-  {
-    $js_lines[] = "s{$setting_id}:[" . implode(",", $characteristic_ids) . "]";
-  }
-  $js = "{" . implode(",", $js_lines) . "}";
-
-  return $js;
-}
-
-
-/**
- * A little tricky to name. We often need the key info about the field type and their settings (i.e. IDs and names)
- * in different ways. This function returns the info in different data structures. The top level structure returned
- * is a hash. You can pick and choose what info you want. Since it's all generated with a single SQL query, it's much
- * faster to use this than separate functions.
- *
- * Note: this function returns a superset of ft_get_field_type_id_to_identifier(). If you need to access the settings
- * as well as the field type info, chances are this will be a better candidate.
- *
- * @return array
- */
-function ft_get_field_type_and_setting_info()
-{
-  global $g_table_prefix;
-
-  $query = mysql_query("
-    SELECT ft.field_type_id, ft.field_type_name, ft.field_type_identifier, fts.*
-    FROM {$g_table_prefix}field_types ft
-    LEFT JOIN {$g_table_prefix}field_type_settings fts ON (ft.field_type_id = fts.field_type_id)
-  ");
-
-  $field_type_id_to_identifier   = array();
-  $field_type_ids_to_setting_ids = array();
-  $setting_id_to_identifier      = array();
-  while ($row = mysql_fetch_assoc($query))
-  {
-  	$field_type_id = $row["field_type_id"];
-  	$setting_id    = $row["setting_id"];
-
-  	if (!array_key_exists($field_type_id, $field_type_id_to_identifier))
-      $field_type_id_to_identifier[$field_type_id] = $row["field_type_identifier"];
-
-  	if (!array_key_exists($field_type_id, $field_type_ids_to_setting_ids))
-      $field_type_ids_to_setting_ids[$field_type_id] = array();
-
-    $field_type_ids_to_setting_ids[$field_type_id][] = $setting_id;
-
-  	if (!array_key_exists($setting_id, $setting_id_to_identifier))
-      $setting_id_to_identifier[$setting_id] = $row["field_setting_identifier"];
-  }
-
-  $return_info = array(
-    "field_type_id_to_identifier"   => $field_type_id_to_identifier,
-    "field_type_ids_to_setting_ids" => $field_type_ids_to_setting_ids,
-    "setting_id_to_identifier"      => $setting_id_to_identifier
-  );
-
-  return $return_info;
 }

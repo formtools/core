@@ -1,8 +1,7 @@
 /**
  * File: general.js
  *
- * Contains general javascript functions for use throughout the application. Also includes the underscore.js
- * library, which contains a few handy functions not included in jQuery.
+ * Contains general javascript functions for use throughout the application.
  */
 
 $(function() {
@@ -29,11 +28,6 @@ $(function() {
     }
     var field = $(e.target).find("input");
     var field_type = field.attr("type");
-
-    if (field[0].disabled) {
-      return;
-    }
-
     // for radios, we only check the fields - not uncheck them
     if (field_type == "radio") {
       if (!field[0].checked) {
@@ -44,28 +38,26 @@ $(function() {
     }
   });
 
-  // this adds the functionality so that when a user clicks on the language placeholder icon, it opens
-  // the dialog window containing the available placeholder list. This was a LOT simpler before I had
-  // to make it work with IE. The iframe was needed to hover the element above the textboxes. *sigh*
-  // Pre-requisites: there's a hidden field (id=form_id) in the page
-  var counter = 1;
-  $(".lang_placeholder_field").each(function() {
-    var pos   = $(this).position();
-    var width = pos.left + $(this).width();
-    var iframe = $("<iframe src=\"\" id=\"placeholder_field_overlay" + counter + "\" class=\"placeholder_field_overlay\" marginwidth=\"0\" marginheight=\"0\" allowtransparency=\"true\"></iframe>").css({ "left": width })
-    $(this).before(iframe);
 
-    var form_id = $("#form_id").val();
-    var ifrm = $("#placeholder_field_overlay" + counter)[0];
-    ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
-    ifrm.document.open();
-    ifrm.document.write('<img src="../../global/images/lang_placeholder_field_icon.png" style="cursor: pointer" onclick="parent.ft.show_form_field_placeholders_dialog({ form_id: ' + form_id + ' });" />');
-    ifrm.document.close();
-    counter++;
+  // this adds the functionality so that when a user clicks on the language placeholder icon, it
+  // opens the dialog window containing the appropriate
+  // requirements: there's a hidden field (id=form_id) in the page
+  $(".lang_placeholder_field").each(function() {
+    var pos   = $(this).offset();
+    var width = pos.left + $(this).width();
+    var overlay = $("<div class=\"placeholder_field_overlay\"></div>").css({ "left": width })
+    $(this).before(overlay);
   });
 
   $(window).resize(function() {
-    ft.re_init_placeholder_field_overlays();
+    $(".lang_placeholder_field").each(function() {
+      var pos   = $(this).offset();
+      var width = pos.left + $(this).width();
+      $(this).parent().find(".placeholder_field_overlay").css({ "left": width })
+    });
+  });
+  $(".placeholder_field_overlay").live("click", function() {
+    ft.show_form_field_placeholders_dialog({ form_id: $("#form_id").val() });
   });
 });
 
@@ -139,7 +131,6 @@ ft.display_dhtml_page_nav = function(num_results, num_per_page, current_page) {
     $("#nav_next_page").html("&raquo;");
   }
 }
-
 
 /**
  * Selects all options in a multi-select dropdown field.
@@ -282,9 +273,6 @@ ft.change_inner_tab = function(tab, tabset_name) {
       error: ft.error_handler
     });
   }
-
-  ft.re_init_placeholder_field_overlays();
-
   return false;
 }
 
@@ -535,23 +523,23 @@ ft.create_dialog = function(info) {
   var settings = $.extend({
 
     // a reference to the dialog window itself. If this isn't included, the dialog is a one-off
-    dialog:      "<div></div>",
+    dialog:     "<div></div>",
 
     // there are two ways to create a dialog. Either specify the ID of the element in the page
     // containing the markup, or just pass the HTML here.
-    content:     "",
-    title:       "",
-    auto_open:   true,
-    modal:       true,
-    min_width:   400,
-    min_height:  100,
-    buttons:     [],
-    popup_type:  null,
-    open:        function() {},
-    close:       function() {},
-    resize:      function() {},
-    resize_stop: function() {},
+    content:    "",
+    title:      "",
+    auto_open:  true,
+    modal:      true,
+    min_width:  400,
+    min_height: 100,
+    max_height: 500,
+    buttons:    [],
+    popup_type: null,
+    open:       function() {},
+    close:      function() {}
   }, info);
+
 
   // if there's a popup_type specified and we want to add in an icon
   if (settings.popup_type) {
@@ -579,28 +567,17 @@ ft.create_dialog = function(info) {
     dialog_content = $(settings.dialog);
   }
 
-  var final_settings = {
-    title:      settings.title,
-    modal:      settings.modal,
-    autoOpen:   settings.auto_open,
-    minWidth:   settings.min_width,
-    minHeight:  settings.min_height,
-    maxHeight:  settings.max_height,
-    buttons:    settings.buttons,
-    open:       settings.open,
-    close:      settings.close,
-    resize:     settings.resize,
-    resizeStop: settings.resize_stop
-  };
-
-  if (settings.width) {
-    final_settings.width = settings.width;
-  }
-  if (settings.width) {
-    final_settings.height = settings.height;
-  }
-
-  dialog_content.dialog(final_settings);
+  dialog_content.dialog({
+    title:     settings.title,
+    modal:     settings.modal,
+    autoOpen:  settings.auto_open,
+    minWidth:  settings.min_width,
+    minHeight: settings.min_height,
+    maxHeight: settings.max_height,
+    buttons:   settings.buttons,
+    open:      settings.open,
+    close:     settings.close
+  });
 }
 
 
@@ -640,8 +617,9 @@ ft.hide_message = function(target_id) {
  * Used in any pages that need to display the placeholder page.
  */
 ft.show_form_field_placeholders_dialog = function(options) {
+
   ft.create_dialog({
-    title:  g.messages["phrase_form_field_placeholders"],
+    title: "Form field placeholders",
     dialog: ft.form_field_placeholders_dialog,
     min_width:  800,
     min_height: 500,
@@ -716,7 +694,6 @@ ft.update_field_size_dropdown = function(el, target_el, options) {
     name:                 null,
     id:                   null,
     selected:             null,
-    html_class:           null,
     field_type_size_list: page_ns.field_types["field_type_" + field_type_id],
     field_size_labels:    page_ns.field_sizes,
   }, options);
@@ -724,11 +701,11 @@ ft.update_field_size_dropdown = function(el, target_el, options) {
   var field_type_sizes = opts.field_type_size_list.split(",");
   var dd_options = [];
   for (var i=0; i<field_type_sizes.length; i++) {
-    dd_options.push({
-      value:    field_type_sizes[i],
-      text:     opts.field_size_labels[field_type_sizes[i]],
-      selected: (field_type_sizes[i] == opts.selected) ? " selected" : ""
-    });
+  dd_options.push({
+    value:    field_type_sizes[i],
+    text:     opts.field_size_labels[field_type_sizes[i]],
+    selected: (field_type_sizes[i] == opts.selected) ? " selected" : ""
+  });
   }
 
   var html = "";
@@ -753,9 +730,6 @@ ft.update_field_size_dropdown = function(el, target_el, options) {
     if (opts.id) {
       html += " id=\"" + opts.id + "\"";
     }
-    if (opts.html_class) {
-      html += " class=\"" + opts.html_class + "\"";
-    }
     html += ">\n";
 
     for (var i=0; i<dd_options.length; i++) {
@@ -775,15 +749,8 @@ ft.update_field_size_dropdown = function(el, target_el, options) {
  * error/success message.
  */
 ft.response_handler = function(data) {
-
-  // check the user wasn't logged out / denied permissions
-  if (!ft.check_ajax_response_permissions(data)) {
-    return;
-  }
-
   ft.display_message(data.target_message_id, data.success, data.message);
 }
-
 
 /**
  * TODO expand this to work with dialogs. It should close all open dialogs and hide their loading
@@ -820,11 +787,6 @@ ft.check_updates = function() {
 
 
 ft.embed_and_submit_upgrade_form = function(data) {
-  // check the user wasn't logged out / denied permissions
-  if (!ft.check_ajax_response_permissions(data)) {
-    return;
-  }
-
   $("body").append(data);
   ft.queue.push([
     function() { $("#upgrade_form").submit(); },
@@ -884,6 +846,7 @@ ft.process_queue = function() {
 
   // if this code hasn't begun being executed, start 'er up
   if (!ft.queue[0][2]) {
+    // run the code
     ft.queue[0][0]();
     timeout_id = window.setInterval("ft.check_queue_item_complete()", 50);
     ft.queue[0][2] = timeout_id;
@@ -904,32 +867,6 @@ ft.is_valid_url = function(url) {
 }
 
 
-ft.check_ajax_response_permissions = function(json) {
-  try {
-    if (typeof json.ft_logout != undefined && json.ft_logout == 1) {
-      ft.create_dialog({
-        title:      "Sessions expired",
-        content:    "Sorry, your session has expired. Please click the button below to log back in.",
-        popup_type: "error",
-        buttons: [
-          {
-            text:  "Return to login screen",
-            click: function() {
-              window.location = g.root_url;
-            }
-          }
-        ]
-      });
-      return false;
-    }
-  }
-  catch (e) {
-  }
-
-  return true;
-}
-
-
 /**
  * Helper function to find the value for a field name, serialized with jQuery serializeArray().
  *
@@ -945,13 +882,5 @@ ft._extract_array_val = function(arr, name) {
     }
   }
   return value;
-}
-
-ft.re_init_placeholder_field_overlays = function() {
-  $(".lang_placeholder_field").each(function() {
-    var pos   = $(this).offset();
-    var width = pos.left + $(this).width();
-    $(this).parent().find(".placeholder_field_overlay").css({ "left": width })
-  });
 }
 

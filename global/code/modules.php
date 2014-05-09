@@ -3,7 +3,7 @@
 /**
  * This file defines all functions relating to Form Tools modules.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2010
  * @author Encore Web Studios <formtools@encorewebstudios.com>
  * @package 2-1-0
  * @subpackage Modules
@@ -160,28 +160,6 @@ function ft_get_module_id_from_module_folder($module_folder)
 
 
 /**
- * Since it's often more convenient to identify modules by its unique folder name, this function is
- * provided to find the module ID. If not found, returns the empty string.
- *
- * @param string $module_folder
- */
-function ft_get_module_folder_from_module_id($module_id)
-{
-  global $g_table_prefix;
-
-  $result = mysql_query("
-    SELECT module_folder
-    FROM   {$g_table_prefix}modules
-    WHERE  module_id = $module_id
-      ");
-
-  $info = mysql_fetch_assoc($result);
-
-  return (isset($info["module_folder"])) ? $info["module_folder"] : "";
-}
-
-
-/**
  * This is called implicitly by the ft_display_module_page function (only!). That function is used
  * to display any module page; it automatically calls this function to load any custom navigation
  * menu items for a particular module. Then, the theme's modules_header.tpl template uses this
@@ -274,26 +252,25 @@ function ft_search_modules($search_criteria)
 
   extract(ft_process_hook_calls("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
 
-  // verbose, but at least it prevents any invalid sorting. We always return modules that aren't installed first
-  // so they show up on the first page of results. The calling page then sorts the ones that require upgrading next
-  $order_clause = "is_installed DESC";
+  // verbose, but at least it prevents any invalid sorting...
+  $order_clause = "";
   switch ($search_criteria["order"])
   {
     case "module_name-DESC":
-      $order_clause .= ", module_name DESC";
+      $order_clause = "module_name DESC";
       break;
     case "module_name-ASC":
-      $order_clause .= ", module_name ASC";
+      $order_clause = "module_name ASC";
       break;
     case "is_enabled-DESC":
-      $order_clause .= ", is_enabled DESC";
+      $order_clause = "is_enabled DESC";
       break;
     case "is_enabled-ASC":
-      $order_clause .= ", is_enabled ASC";
+      $order_clause = "is_enabled ASC";
       break;
 
     default:
-      $order_clause .= ", module_name";
+      $order_clause = "module_name";
       break;
   }
   $order_clause = "ORDER BY $order_clause";
@@ -452,35 +429,18 @@ function ft_set_module_settings($settings)
 /**
  * Updates the list of enabled & disabled modules.
  *
- * There seems to be a bug with the way this function is called or something. Occasionally all modules
- * are no longer enabled...
- *
  * @param array $request
  */
 function ft_update_enabled_modules($request)
 {
   global $g_table_prefix, $LANG;
 
-  $module_ids_in_page = $request["module_ids_in_page"]; // a comma-delimited string
-  $enabled_module_ids = isset($request["is_enabled"]) ? $request["is_enabled"] : array();
+  $is_enabled = isset($request["is_enabled"]) ? $request["is_enabled"] : array();
 
-  if (!empty($module_ids_in_page))
-  {
-    mysql_query("
-      UPDATE {$g_table_prefix}modules
-      SET    is_enabled = 'no'
-      WHERE  module_id IN ($module_ids_in_page)
-    ");
-  }
+  mysql_query("UPDATE {$g_table_prefix}modules SET is_enabled = 'no'");
 
-  foreach ($enabled_module_ids as $module_id)
-  {
-    mysql_query("
-      UPDATE {$g_table_prefix}modules
-      SET    is_enabled = 'yes'
-      WHERE  module_id = $module_id
-    ");
-  }
+  foreach ($is_enabled as $module_id)
+    mysql_query("UPDATE {$g_table_prefix}modules SET is_enabled = 'yes' WHERE module_id = $module_id");
 
   return array(true, $LANG["notify_enabled_module_list_updated"]);
 }
@@ -550,7 +510,6 @@ function ft_update_module_list()
       $author_link          = $info["author_link"];
       $module_version       = $info["version"];
       $module_date          = $info["date"];
-      $is_premium           = $info["is_premium"];
       $origin_language      = $info["origin_language"];
       $nav                  = $info["nav"];
 
@@ -558,15 +517,15 @@ function ft_update_module_list()
       $module_description   = $lang_info["module_description"];
 
       // convert the date into a MySQL datetime
-      list($year, $month, $day) = explode("-", $module_date);
+      list($year, $month, $day) = split("-", $module_date);
       $timestamp = mktime(null, null, null, $month, $day, $year);
       $module_datetime = ft_get_current_datetime($timestamp);
 
       mysql_query("
-        INSERT INTO {$g_table_prefix}modules (is_installed, is_enabled, is_premium, origin_language, module_name,
-          module_folder, version, author, author_email, author_link, description, module_date)
-        VALUES ('no','no', '$is_premium', '$origin_language', '$module_name', '$folder', '$module_version',
-          '$author', '$author_email', '$author_link', '$module_description', '$module_datetime')
+        INSERT INTO {$g_table_prefix}modules (is_installed, is_enabled, origin_language, module_name, module_folder, version,
+          author, author_email, author_link, description, module_date)
+        VALUES ('no','no', '$origin_language', '$module_name', '$folder', '$module_version', '$author', '$author_email', '$author_link',
+          '$module_description', '$module_datetime')
           ") or die(mysql_error());
       $module_id = mysql_insert_id();
 
@@ -581,7 +540,7 @@ function ft_update_module_list()
           if (empty($lang_file_key) || empty($url))
             continue;
 
-          $display_text = isset($lang_info[$lang_file_key]) ? $lang_info[$lang_file_key] : $LANG[$lang_file_key];
+          $display_text = $lang_info[$lang_file_key];
 
           mysql_query("
             INSERT INTO {$g_table_prefix}module_menu_items (module_id, display_text, url, is_submenu, list_order)
@@ -630,7 +589,6 @@ function ft_get_module_info_file_contents($module_folder)
   $info["author_link"] = isset($values["author_link"]) ? $values["author_link"] : "";
   $info["version"] = isset($values["version"]) ? $values["version"] : "";
   $info["date"] = isset($values["date"]) ? $values["date"] : "";
-  $info["is_premium"] = (isset($values["is_premium"]) && $values["is_premium"] == "yes") ? "yes" : "no";
   $info["origin_language"] = isset($values["origin_language"]) ? $values["origin_language"] : "";
   $info["nav"] = isset($values["nav"]) ? $values["nav"] : array();
 
@@ -805,11 +763,9 @@ function ft_load_module_field($module_folder, $field_name, $session_name, $defau
  * @param integer $module_id
  * @return array [0] T/F, [1] error / success message.
  */
-function ft_install_module($info)
+function ft_install_module($module_id)
 {
   global $LANG, $g_root_dir, $g_root_url, $g_table_prefix;
-
-  $module_id = $info["install"];
 
   $module_info = ft_get_module($module_id);
   $module_folder = $module_info["module_folder"];
@@ -830,6 +786,7 @@ function ft_install_module($info)
       // get the module language file contents and store the info in the $LANG global for
       // so it can be accessed by the installation script
       $LANG[$module_folder] = ft_get_module_lang_file_contents($module_folder);
+
       list($success, $custom_message) = $install_function_name($module_id);
 
       // if there was a custom message returned (error or notification), overwrite the default
@@ -843,18 +800,13 @@ function ft_install_module($info)
   // update the record in the module table to mark it as both is_installed and is_enabled.
   if (!$has_custom_install_script || ($has_custom_install_script && $success))
   {
-  	$module_key_clause = "";
-  	if (isset($info["k"]))
-  	{
-      $module_key_clause = ", module_key = '{$info["k"]}'";
-  	}
     mysql_query("
       UPDATE {$g_table_prefix}modules
       SET    is_installed = 'yes',
              is_enabled = 'yes'
-             $module_key_clause
-      WHERE  module_id = $module_id
+      WHERE   module_id = $module_id
         ");
+
   }
 
   return array($success, $message);
@@ -888,7 +840,7 @@ function ft_module_needs_upgrading($module_id)
  */
 function ft_upgrade_module($module_id)
 {
-  global $LANG, $g_root_url, $g_root_dir, $g_table_prefix;
+  global $LANG, $g_root_dir, $g_table_prefix;
 
   $module_info = ft_get_module($module_id);
   $module_folder = $module_info["module_folder"];
@@ -935,7 +887,7 @@ function ft_upgrade_module($module_id)
   $module_description   = $lang_info["module_description"];
 
   // convert the date into a MySQL datetime
-  list($year, $month, $day) = explode("-", $module_date);
+  list($year, $month, $day) = split("-", $module_date);
   $timestamp = mktime(null, null, null, $month, $day, $year);
   $module_datetime = ft_get_current_datetime($timestamp);
 
@@ -974,11 +926,9 @@ function ft_upgrade_module($module_id)
 
   // And we're done! inform the user that it's been upgraded
   $placeholders = array(
-    "module"  => $module_name,
-    "version" => $new_version,
-    "link"    => "$g_root_url/modules/$module_folder"
+    "module" => $module_name,
+    "version" => $new_version
   );
-
   $message = ft_eval_smarty_string($LANG["notify_module_updated"], $placeholders);
 
   return array(true, $message);

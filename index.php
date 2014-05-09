@@ -2,21 +2,15 @@
 
 require_once("global/session_start.php");
 ft_verify_form_tools_installed();
-$g_upgrade_info = ft_upgrade_form_tools();
-
-// only verify the core tables exist if there wasn't a problem upgrading
-if (!($g_upgrade_info["upgraded"] && !$g_upgrade_info["success"]))
-{
-  ft_verify_core_tables_exist();
-}
+ft_verify_core_tables_exist();
+$upgrade_info = ft_upgrade_form_tools();
 
 // if this user is already logged in, redirect them to their specified login page
 if (isset($_SESSION["ft"]["account"]) && isset($_SESSION["ft"]["account"]["is_logged_in"]) &&
   isset($_SESSION["ft"]["account"]["login_page"]) && $_SESSION["ft"]["account"]["is_logged_in"] == 1)
 {
   $login_page = $_SESSION["ft"]["account"]["login_page"];
-  $page = ft_construct_page_url($login_page);
-  header("location: {$g_root_url}$page");
+  header("location: {$g_root_url}{$g_pages[$login_page]}");
   exit;
 }
 
@@ -57,9 +51,9 @@ $page_vars["page_url"] = ft_get_page_url("login");
 $page_vars["head_title"] = $LANG["phrase_admin_panel"];
 $page_vars["error"] = $error;
 
-if ($g_upgrade_info["upgraded"])
+if ($upgrade_info["upgraded"])
 {
-  if ($g_upgrade_info["success"])
+  if ($upgrade_info["success"])
   {
     $new_version = $settings["program_version"];
     if ($settings["release_type"] == "alpha")
@@ -73,7 +67,7 @@ if ($g_upgrade_info["upgraded"])
   else
   {
   	$g_success = false;
-  	$g_message = $g_upgrade_info["message"];
+  	$g_message = $upgrade_info["message"];
   }
 }
 $replacements = array(
@@ -89,7 +83,7 @@ $page_vars["is_logged_in"]  = false;
 $page_vars["head_js"]  = "$(function() { document.login.username.focus(); });";
 $page_vars["head_string"] = "<noscript><style type=\"text/css\">.login_outer_table { display: none; }</style></noscript>";
 
-if (!isset($g_upgrade_info["message"]) && isset($_GET["message"]))
+if (isset($_GET["message"]))
 {
   $g_success = false;
 

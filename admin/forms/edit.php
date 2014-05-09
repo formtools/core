@@ -6,12 +6,6 @@ ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
 $form_id = ft_load_field("form_id", "form_id", "");
 
-if (!ft_check_form_exists($form_id))
-{
-  header("location: index.php");
-  exit;
-}
-
 // store the current selected tab in memory - except for pages which require additional
 // query string info. For those, use the parent page
 if (isset($request["page"]) && !empty($request["page"]))

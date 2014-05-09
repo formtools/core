@@ -39,15 +39,13 @@ function ft_create_blank_email_template($form_id, $create_email_from_email_id = 
     // WISHLIST: to have a generic "copy_table_row" function...
     $query = mysql_query("
       INSERT INTO {$g_table_prefix}email_templates (form_id, email_template_name, email_status,
-        view_mapping_type, view_mapping_view_id, limit_email_content_to_fields_in_view, email_event_trigger,
-        include_on_edit_submission_page, subject, email_from, email_from_account_id, custom_from_name,
-        custom_from_email, email_reply_to, email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email,
-        html_template, text_template)
+        view_mapping_type, view_mapping_view_id, email_event_trigger, include_on_edit_submission_page,
+        subject, email_from, email_from_account_id, custom_from_name, custom_from_email, email_reply_to,
+        email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email, html_template, text_template)
         (SELECT form_id, email_template_name, email_status,
-           view_mapping_type, view_mapping_view_id, limit_email_content_to_fields_in_view, email_event_trigger,
-           include_on_edit_submission_page, subject, email_from, email_from_account_id, custom_from_name,
-           custom_from_email, email_reply_to, email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email,
-           html_template, text_template
+           view_mapping_type, view_mapping_view_id, email_event_trigger, include_on_edit_submission_page,
+           subject, email_from, email_from_account_id, custom_from_name, custom_from_email, email_reply_to,
+           email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email, html_template, text_template
          FROM {$g_table_prefix}email_templates WHERE email_id = $create_email_from_email_id)
     ");
     $email_id = mysql_insert_id();
@@ -59,15 +57,14 @@ function ft_create_blank_email_template($form_id, $create_email_from_email_id = 
       $recipient_user_type    = $recipient["recipient_user_type"];
       $recipient_type         = $recipient["recipient_type"];
       $account_id             = !empty($recipient["account_id"]) ? $recipient["account_id"] : "NULL";
-      $form_email_id          = !empty($recipient["form_email_id"]) ? $recipient["form_email_id"] : "NULL";
       $custom_recipient_name  = $recipient["custom_recipient_name"];
       $custom_recipient_email = $recipient["custom_recipient_email"];
 
       mysql_query("
         INSERT INTO {$g_table_prefix}email_template_recipients (email_template_id, recipient_user_type,
-          recipient_type, account_id, form_email_id, custom_recipient_name, custom_recipient_email)
-        VALUES ($email_id, '$recipient_user_type', '$recipient_type', $account_id, $form_email_id,
-        '$custom_recipient_name', '$custom_recipient_email')
+          recipient_type, account_id, custom_recipient_name, custom_recipient_email)
+        VALUES ($email_id, '$recipient_user_type', '$recipient_type', $account_id, '$custom_recipient_name',
+          '$custom_recipient_email')
           ") or die(mysql_error());
     }
 
@@ -222,7 +219,6 @@ function ft_send_test_email($info)
 
   $recipient = $info["test_email_recipient"];
 
-
   // if Swift Mailer is enabled, send the emails with that
   $continue = true;
   if (ft_check_module_enabled("swift_mailer"))
@@ -233,7 +229,7 @@ function ft_send_test_email($info)
     {
       ft_include_module("swift_mailer");
 
-      // we deliberately ignore anything other than the specified recipient
+      // TODO
       $email_info["cc"]  = array();
       $email_info["bcc"] = array();
       $email_info["to"]  = array();
@@ -251,6 +247,7 @@ function ft_send_test_email($info)
   $eol = _ft_get_email_eol_char();
 
 
+  // TODO. Add a new option to the interface saying "include cc, bcc recipients".
   $from = "";
   if (isset($email_info["from"]) && !empty($email_info["from"]))
   {
@@ -265,13 +262,32 @@ function ft_send_test_email($info)
     $reply_to = htmlspecialchars_decode($reply_to);
   }
 
-  // as with Swift Mailer, we deliberately ignore anything other than the specified recipient
+  $cc = "";
+  if (isset($email_info["cc"]) && !empty($email_info["cc"]))
+  {
+    $ccs = array();
+    foreach ($email_info["cc"] as $cc_info)
+      $ccs[] = $cc_info["recipient_line"];
+
+    $cc = htmlspecialchars_decode(implode(", ", $ccs));
+  }
+
+  $bcc = "";
+  if (isset($email_info["bcc"]) && !empty($email_info["bcc"]))
+  {
+    $bccs = array();
+    foreach ($email_info["bcc"] as $bcc_info)
+      $bccs[] = $bcc_info["recipient_line"];
+
+    $bcc = htmlspecialchars_decode(implode(", ", $bccs));
+  }
+
   $header_info = array(
     "eol"      => $eol,
     "from"     => $from,
     "reply_to" => $reply_to,
-    "cc"       => "",
-    "bcc"      => ""
+    "cc"       => $cc,
+    "bcc"      => $bcc
   );
 
   // construct the email headers [move to helper function]
@@ -337,13 +353,11 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   else
     $fields_for_email_template = ft_get_form_fields($form_id, array("include_field_type_info" => true));
 
+  // TODO  $file_info
 
   // this returns a hash with three keys: html_content, text_content and submission_id
   $templates = _ft_get_email_template_content($form_id, $submission_id, $email_template, $is_test, $test_settings);
   $submission_id = $templates["submission_id"];
-
-  // unfortunately we need this, even though it was just called in _ft_get_email_template_content()
-  $submission_info = ft_get_submission($form_id, $submission_id);
 
   // retrieve the placeholders and their substitutes
   $submission_placeholders = ft_get_submission_placeholders($form_id, $submission_id);
@@ -394,9 +408,11 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   $smarty->assign("LANG", $LANG);
   $smarty->assign("fields", $fields_for_email_template);
 
+  $return_info = array();
+
   if (!empty($templates["text"]))
   {
-    list($templates["text"], $attachments) = _ft_extract_email_attachment_info($templates["text"], $form_id, $submission_placeholders);
+    list($templates["text"], $attachments) = _ft_extract_email_attachment_info($templates["text"], $form_id, $file_info);
     foreach ($attachments as $attachment_info)
     {
       if (!in_array($attachment_info, $return_info["attachments"]))
@@ -413,7 +429,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 
   if (!empty($templates["html"]))
   {
-    list($templates["html"], $attachments) = _ft_extract_email_attachment_info($templates["html"], $form_id, $submission_placeholders);
+    list($templates["html"], $attachments) = _ft_extract_email_attachment_info($templates["html"], $form_id, $file_info);
     foreach ($attachments as $attachment_info)
     {
       if (!in_array($attachment_info, $return_info["attachments"]))
@@ -1074,7 +1090,7 @@ function ft_send_emails($event, $form_id, $submission_id)
   $email_templates = array();
   foreach ($all_form_email_templates as $template_info)
   {
-    $events = explode(",", $template_info["email_event_trigger"]);
+    $events = split(",", $template_info["email_event_trigger"]);
 
     if (!in_array($event, $events))
       continue;
@@ -1279,9 +1295,9 @@ function _ft_get_form_email_field_headers($form_email_id, $submission_info)
   $form_email_field_info = ft_get_form_email_field_info($form_email_id);
 
   // retrieve the user's name and email address from the form submission
-  $first_name_field_id = $form_email_field_info["first_name_field_id"];
-  $last_name_field_id  = $form_email_field_info["last_name_field_id"];
-  $email_field_id      = $form_email_field_info["email_field_id"];
+  $first_name_field = $form_email_field_info["first_name_field"];
+  $last_name_field  = $form_email_field_info["last_name_field"];
+  $email_field      = $form_email_field_info["email_field"];
 
   $submission_first_name = "";
   $submission_last_name  = "";
@@ -1291,16 +1307,16 @@ function _ft_get_form_email_field_headers($form_email_id, $submission_info)
   {
     if (!empty($first_name_field))
     {
-      if ($row["field_id"] == $first_name_field_id)
+      if ($row["col_name"] == $first_name_field)
         $submission_first_name = trim($row["content"]);
     }
     if (!empty($last_name_field))
     {
-      if ($row["field_id"] == $last_name_field_id)
+      if ($row["col_name"] == $last_name_field)
         $submission_last_name = trim($row["content"]);
     }
     // email
-    if ($row["field_id"] == $email_field_id)
+    if ($row["col_name"] == $email_field)
       $submission_email = trim($row["content"]);
   }
 
@@ -1378,67 +1394,53 @@ function ft_delete_email_template($email_id)
 
 
 /**
- * This function is tightly coupled with ft_get_email_components and has gotten increasingly more awful as
- * time passed. It examines the content of an email template and detects any field and file attachments.
- * Field attachments are files that have been uploaded through a form field; file attachments are just files
- * on the server that want to be sent out. It then returns the updated email template (i.e. minus the
- * attachment string) and information about the attachment (file name, location, mimetype) for use by the
- * emailing function (only Swift Mailer module at this time).
+ * This function is tightly coupled with ft_get_email_components. I know, I know. It examines the content
+ * of an email template and detects any field and file attachments. Field attachments are files that have
+ * been uploaded through a form field; file attachments are just files on the server that want to be sent
+ * out. It then returns the updated email template (i.e. minus the attachment string) and information about
+ * the attachment (file name, location, mimetype) for use by the emailing function (only Swift Mailer module
+ * at this time).
  *
  * @param string $template_str the email template (HTML or text)
  * @param integer $form_id
- * @param array $submission_placeholders this contains all the info about the
+ * @param array $file_info information about all files
  */
-function _ft_extract_email_attachment_info($template_str, $form_id, $submission_placeholders)
+function _ft_extract_email_attachment_info($template_str, $form_id, $file_info)
 {
   global $g_root_dir;
 
-  // see if there are any filename placeholders (i.e. uploaded files in this submission)
-  $file_field_name_to_filename_hash = array();
-  while (list($placeholder, $value) = each($submission_placeholders))
-  {
-    if (!preg_match("/^FILENAME_/", $placeholder))
-      continue;
-
-    $field_name = preg_replace("/^FILENAME_/", "", $placeholder);
-    $file_field_name_to_filename_hash[$field_name] = $value;
-  }
+  // if there are any fields marked as attachments, store them and remove the attachment string
+  $field_attachments_regexp = '/\{\$attachment\s+field=("|\')(.+)("|\')\}/';
+  $file_attachments_regexp  = '/\{\$attachment\s+file=("|\')(.+)("|\')\}/';
 
   $attachment_info = array();
-  if (!empty($file_field_name_to_filename_hash))
+  if (preg_match_all($field_attachments_regexp, $template_str, $matches))
   {
-    // if there are any fields marked as attachments, store them and remove the attachment string
-    $field_attachments_regexp = '/\{\$attachment\s+field=("|\')(.+)("|\')\}/';
-
-    if (preg_match_all($field_attachments_regexp, $template_str, $matches))
+    foreach ($matches[2] as $field_name)
     {
-      foreach ($matches[2] as $field_name)
+      $field_id = ft_get_form_field_id_by_field_name($field_name, $form_id);
+      if (!empty($field_name) && array_key_exists($field_name, $file_info))
       {
-        $field_id = ft_get_form_field_id_by_field_name($field_name, $form_id);
-        if (!empty($field_name) && array_key_exists($field_name, $file_field_name_to_filename_hash))
-        {
-          $field_settings = ft_get_field_settings($field_id);
-          $file_upload_dir = $field_settings["folder_path"];
-          $file_and_path = "$file_upload_dir/{$file_field_name_to_filename_hash[$field_name]}";
+        $field_settings = ft_get_extended_field_settings($field_id, "core", "file_upload_dir");
+        $file_upload_dir = $field_settings["file_upload_dir"];
+        $file_and_path = "$file_upload_dir/{$file_info[$field_name]}";
 
-          if (is_file($file_and_path))
-          {
-            $info = array(
-              "field_name"    => $field_name,
-              "file_and_path" => $file_and_path,
-              "filename"      => $file_field_name_to_filename_hash[$field_name],
-              "mimetype"      => mime_content_type($file_and_path)
-            );
-            $attachment_info[] = $info;
-          }
+        if (is_file($file_and_path))
+        {
+          $info = array(
+            "field_name" => $field_name,
+            "file_and_path" => $file_and_path,
+            "filename" => $file_info[$field_name],
+            "mimetype" => mime_content_type($file_and_path)
+          );
+          $attachment_info[] = $info;
         }
       }
-
-      $template_str = preg_replace($field_attachments_regexp, "", $template_str);
     }
+
+    $template_str = preg_replace($field_attachments_regexp, "", $template_str);
   }
 
-  $file_attachments_regexp  = '/\{\$attachment\s+file=("|\')(.+)("|\')\}/';
   if (preg_match_all($file_attachments_regexp, $template_str, $matches))
   {
     foreach ($matches[2] as $file_and_relative_path)
@@ -1450,7 +1452,7 @@ function _ft_extract_email_attachment_info($template_str, $form_id, $submission_
 
         $info = array(
           "file_and_path" => "$g_root_dir/$file_and_relative_path",
-          "filename"      => $file_name
+          "filename" => $file_name
         );
         $attachment_info[] = $info;
       }
@@ -1501,7 +1503,7 @@ function _ft_get_email_template_content($form_id, $submission_id, $email_templat
         {
           $sql_clauses = ft_get_view_filter_sql($email_template["view_mapping_view_id"]);
           if (!empty($sql_clauses))
-            $where_clause = "WHERE (" . join(" AND ", $sql_clauses) . ") ";
+            $where_clause = "AND (" . join(" AND ", $sql_clauses) . ") ";
         }
 
         $result = mysql_query("

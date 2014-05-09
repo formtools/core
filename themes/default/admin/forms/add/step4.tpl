@@ -83,6 +83,38 @@
                     {$field.field_test_value|default:"&nbsp;"}
                   {/if}
                 </li>
+                <!--
+                <li class="col5">
+                  {if $field.is_system_field == "yes"}
+
+                    {* pass along hidden field to let the reorder function know that this field is a system field.
+                       This prevents the program from trying to rename the column *}
+                    {$LANG.word_na}
+                    <input type="hidden" name="field_{$field_id}_system" value="1" />
+                    <input type="hidden" name="field_{$field_id}_size" value="small" />
+
+                  {else}
+
+                    {if $field.field_test_value == $LANG.word_file_b_uc}
+                      <select disabled>
+                    {else}
+                      <select name="field_{$field_id}_size">
+                    {/if}
+
+                    <option {if $field.field_size == "tiny"}selected{/if} value="tiny">{$LANG.phrase_size_tiny}</option>
+                    <option {if $field.field_size == "small"}selected{/if} value="small">{$LANG.phrase_size_small}</option>
+                    <option {if $field.field_size == "medium" || $field.field_test_value == $LANG.word_file_b_uc}selected{/if} value="medium">{$LANG.phrase_size_medium}</option>
+                    <option {if $field.field_size == "large"}selected{/if} value="large">{$LANG.phrase_size_large}</option>
+                    <option {if $field.field_size == "very_large"}selected{/if} value="very_large">{$LANG.phrase_size_very_large}</option>
+                    </select>
+
+                    {* if a file field, pass along a hidden field with the 256 character value *}
+                    {if $field.field_test_value == $LANG.word_file_b_uc}
+                      <input type="hidden" name="field_{$field_id}_size" value="medium" />
+                    {/if}
+                  {/if}
+                </li>
+                 -->
                 <li class="col5 colN{if $field.is_system_field == "no"} del{/if}"></li>
               </ul>
               <div class="clear"></div>

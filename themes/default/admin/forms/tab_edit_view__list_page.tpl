@@ -1,25 +1,16 @@
     <div class="hint margin_bottom_large">
-      {$LANG.text_edit_view_list_page}
+      This tab controls which fields appear as columns on the Submission Listing page, and a few additional
+      settings for those fields. Note: we recommend you add no more than 4 or 5 of the most important fields
+      in the View.
     </div>
 
-    <div id="no_view_columns_defined" class="margin_bottom" {if $view_info.columns|@count > 0}style="display:none"{/if}>
-      <div class="error">
-        <div style="padding: 6px">
-          No columns defined! You won't be able to use this View until you choose some form fields to
-          appear as columns. Click the Add Row link below.
-        </div>
-      </div>
-    </div>
-
-    <div class="sortable submission_list check_areas margin_bottom" id="{$submission_list_sortable_id}" {if $view_info.columns|@count == 0}style="display:none"{/if}>
-      <input type="hidden" class="sortable__custom_delete_handler" value="view_ns.delete_view_column" />
-
+    <div class="sortable submission_list check_areas margin_bottom" id="{$submission_list_sortable_id}">
       <ul class="header_row">
         <li class="col1">{$LANG.word_order}</li>
         <li class="col2">{$LANG.word_field}</li>
         <li class="col3">{$LANG.word_sortable}</li>
-        <li class="col4">{$LANG.phrase_column_width}</li>
-        <li class="col5">{$LANG.word_truncate_q}</li>
+        <li class="col4">Column Width</li>
+        <li class="col5">Truncate?</li>
         <li class="col6 colN del"></li>
       </ul>
       <div class="clear"></div>
@@ -35,7 +26,9 @@
         {/if}
         <li class="sortable_row">
           <div class="row_content">
-            {assign var=previous_item value=$i}
+
+          {assign var=previous_item value=$i}
+
             <div class="row_group{if $smarty.foreach.view_columns.last} rowN{/if}">
               <input type="hidden" class="sr_order" value="{$i.list_order}" />
               <ul>
@@ -58,8 +51,8 @@
                 <li class="col4 {if $i.auto_size == "yes"}light_grey{/if}">
                   <input type="checkbox" name="auto_size_{$row_num}" id="auto_size_{$row_num}"
                     {if $i.auto_size == "yes"}checked{/if} class="auto_size" /><label for="auto_size_{$row_num}"
-                      class="{if $i.auto_size == "yes"}black{else}light_grey{/if}">{$LANG.phrase_auto_size}</label>
-                  &#8212; {$LANG.word_width_c}
+                      class="{if $i.auto_size == "yes"}black{else}light_grey{/if}">Auto-size</label>
+                  &#8212; width:
                   <input type="text" name="custom_width_{$row_num}" class="custom_width" value="{$i.custom_width|escape}"
                     {if $i.auto_size == "yes"}disabled{/if} />px
                 </li>

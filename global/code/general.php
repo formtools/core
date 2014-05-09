@@ -26,7 +26,7 @@
 function ft_db_connect()
 {
   global $g_db_hostname, $g_db_username, $g_db_password, $g_db_name, $g_unicode, $g_db_ssl,
-    $g_check_ft_sessions, $g_set_sql_mode;
+    $g_check_ft_sessions;
 
   if ($g_db_ssl)
     $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true, MYSQL_CLIENT_SSL);
@@ -49,9 +49,6 @@ function ft_db_connect()
   // if required, set all queries as UTF-8 (enabled by default)
   if ($g_unicode)
     @mysql_query("SET NAMES 'utf8'", $link);
-
-  if ($g_set_sql_mode)
-    @mysql_query("SET SQL_MODE=''", $link);
 
   if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"]))
     ft_check_sessions_timeout();
@@ -183,10 +180,6 @@ function ft_display_custom_page_message($flag)
     case "change_temp_password":
       $g_success = true;
       $g_message = $LANG["notify_change_temp_password"];
-      break;
-    case "new_submission":
-      $g_success = true;
-      $g_message = $LANG["notify_new_submission_created"];
       break;
   }
 
@@ -430,13 +423,8 @@ function ft_get_dhtml_page_nav($num_results, $num_per_page, $current_page = 1)
  * Should be called on ALL Form Tools pages - including modules.
  *
  * @param string $account_type The account type - "admin" / "client" / "user" (for Submission Accounts module)
- * @param boolean $auto_logout either automatically log the user out if they don't have permission to view the page (or
- *     sessions have expired), or - if set to false, just return the result as a boolean (true = has permission,
- *     false = doesn't have permission)
- * @return array (if $auto_logout is set to false)
- *
  */
-function ft_check_permission($account_type, $auto_logout = true)
+function ft_check_permission($account_type)
 {
   global $g_root_url, $g_table_prefix;
 
@@ -447,32 +435,24 @@ function ft_check_permission($account_type, $auto_logout = true)
 
   // some VERY complex logic here. The "user" account permission type is included so that people logged in
   // via the Submission Accounts can still view certain pages, e.g. pages with the Pages module. This checks that
-  // IF the minimum account type of the page is a "user", it EITHER has the user account info set (i.e. the submission ID)
+  // IF the minumum account type of the page is a "user", it EITHER has the user account info set (i.e. the submission ID)
   // or it's a regular client or admin account with the account_id set. Crumby, but it'll have to suffice for now.
   if ($account_type == "user")
   {
     if ((!isset($_SESSION["ft"]["account"]["submission_id"]) || empty($_SESSION["ft"]["account"]["submission_id"])) &&
        empty($_SESSION["ft"]["account"]["account_id"]))
     {
-    	if ($auto_logout)
-    	{
-        header("location: $g_root_url/modules/submission_accounts/logout.php");
-        exit;
-    	}
-    	else
-    	{
-    		$boot_out_user = true;
-        $message_flag = "notify_no_account_id_in_sessions";
-    	}
+      header("location: $g_root_url/modules/submission_accounts/logout.php");
+      exit;
     }
   }
-  // check the user ID is in sessions
-  else if (!isset($_SESSION["ft"]["account"]["account_id"]) || empty($_SESSION["ft"]["account"]["account_id"]))
+   // check the user ID is in sessions
+  else if      (empty($_SESSION["ft"]["account"]["account_id"]))
   {
     $boot_out_user = true;
     $message_flag = "notify_no_account_id_in_sessions";
   }
-  else if (!isset($_SESSION["ft"]["account"]["account_type"]) || ($_SESSION["ft"]["account"]["account_type"] == "client" && $account_type == "admin"))
+  else if ($_SESSION["ft"]["account"]["account_type"] == "client" && $account_type == "admin")
   {
     $boot_out_user = true;
     $message_flag = "notify_invalid_permissions";
@@ -493,17 +473,8 @@ function ft_check_permission($account_type, $auto_logout = true)
     }
   }
 
-  if ($boot_out_user && $auto_logout)
-  {
+  if ($boot_out_user)
     ft_logout_user($message_flag);
-  }
-  else
-  {
-    return array(
-      "has_permission" => !$boot_out_user, // we invert it because we want to return TRUE if they have permission
-      "message"        => $message_flag
-    );
-  }
 }
 
 
@@ -546,43 +517,26 @@ function ft_check_db_table_exists($table)
  * Because of this, any time the administrator changes the permissions for a client, they'll need te re-login to
  * access that new information.
  *
- * Very daft this function doesn't return a boolean, but oh well. The fourth param was added to get around that.
- *
  * @param integer $form_id The unique form ID
  * @param integer $client_id The unique client ID
- * @param integer $view_id
- * @param boolean
  */
-function ft_check_client_may_view($client_id, $form_id, $view_id, $return_boolean = false)
+function ft_check_client_may_view($client_id, $form_id, $view_id)
 {
   global $g_root_url;
+  $boot_out_user = false;
 
+  // $permissions = ft_get_client_form_views($account_info["account_id"]);
   $permissions = isset($_SESSION["ft"]["permissions"]) ? $_SESSION["ft"]["permissions"] : array();
 
   extract(ft_process_hook_calls("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
 
-  $may_view = true;
   if (!array_key_exists($form_id, $permissions))
-  {
-    $may_view = false;
-    if (!$return_boolean)
-    {
-      ft_logout_user("notify_invalid_permissions");
-    }
-  }
+    ft_logout_user("notify_invalid_permissions");
   else
   {
     if (!empty($view_id) && !in_array($view_id, $permissions[$form_id]))
-    {
-      $may_view = false;
-      if (!$return_boolean)
-      {
-        ft_logout_user("notify_invalid_permissions");
-      }
-    }
+      ft_logout_user("notify_invalid_permissions");
   }
-
-  return $may_view;
 }
 
 
@@ -609,9 +563,6 @@ function ft_check_client_may_view($client_id, $form_id, $view_id, $return_boolea
 function ft_get_date($offset, $datetime, $format)
 {
   global $LANG;
-
-  if (strlen($datetime) != 19)
-    return "";
 
   $year = substr($datetime, 0, 4);
   $mon  = substr($datetime, 5, 2);
@@ -650,7 +601,7 @@ function ft_get_date($offset, $datetime, $format)
 
     // now replace the @'s with their translated equivalents
     $eng_strings = date(join(",", $char_map), $timestamp);
-    $eng_string_arr = explode(",", $eng_strings);
+    $eng_string_arr = split(",", $eng_strings);
     for ($char_ind=0; $char_ind<count($char_map); $char_ind++)
     {
       $eng_string = $eng_string_arr[$char_ind];
@@ -1428,10 +1379,9 @@ if (!function_exists('mime_content_type'))
  * This is called on all page loads. It checks to ensure that the person's sessions haven't timed out. If not,
  * it updates the last_activity_unixtime in the user's sessions - otherwise they're logged out.
  */
-function ft_check_sessions_timeout($auto_logout = true)
+function ft_check_sessions_timeout()
 {
   $now = date("U");
-  $sessions_valid = true;
 
   // check to see if the session has timed-out
   if (isset($_SESSION["ft"]["account"]["last_activity_unixtime"]) && isset($_SESSION["ft"]["account"]["sessions_timeout"]))
@@ -1441,21 +1391,12 @@ function ft_check_sessions_timeout($auto_logout = true)
 
     if ($_SESSION["ft"]["account"]["last_activity_unixtime"] + $timeout_secs < $now)
     {
-    	if ($auto_logout)
-    	{
-        ft_logout_user("notify_sessions_timeout");
-    	}
-    	else
-    	{
-    		$sessions_valid = false;
-    	}
+      ft_logout_user("notify_sessions_timeout");
     }
   }
 
   // log this unixtime for checking the sessions timeout
   $_SESSION["ft"]["account"]["last_activity_unixtime"] = $now;
-
-  return $sessions_valid;
 }
 
 
@@ -1707,11 +1648,11 @@ function ft_get_submission_placeholders($form_id, $submission_id, $client_info =
       $detailed_field_info = array();
       foreach ($form_fields as $curr_field_info)
       {
-        if ($curr_field_info["field_id"] != $field_id)
-          continue;
+      	if ($curr_field_info["field_id"] != $field_id)
+      	  continue;
 
-        $detailed_field_info = $curr_field_info;
-        break;
+      	$detailed_field_info = $curr_field_info;
+      	break;
       }
 
       $params = array(
@@ -1772,21 +1713,3 @@ function ft_get_clean_db_entity($str)
   return $str;
 }
 
-
-/**
- * Helper function to remove all empty strings from an array.
- *
- * @param array $array
- * @return array
- */
-function ft_array_remove_empty_els($array)
-{
-  $updated_array = array();
-  foreach ($array as $el)
-  {
-    if (!empty($el))
-      $updated_array[] = $el;
-  }
-
-  return $updated_array;
-}

@@ -47,7 +47,8 @@ $page_vars["js_messages"] = array("phrase_delete_row");
 $page_vars["head_js"] =<<< END
   var page_ns = {};
   page_ns.dialog = $("<div></div>");
-  page_ns.delete_client = function(account_id) {
+  page_ns.delete_client = function(account_id)
+  {
     ft.create_dialog({
       dialog:     page_ns.dialog,
       title:      "{$LANG["phrase_please_confirm"]}",

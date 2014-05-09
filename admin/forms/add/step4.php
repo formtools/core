@@ -63,6 +63,7 @@ $page_vars["head_js"] =<<< END
   };
 
   page_ns.smart_fill = function() {
+
     // if any of the fields contain a value already, inform the user
     var str = '';
     var has_value = false;
@@ -71,6 +72,7 @@ $page_vars["head_js"] =<<< END
         has_value = true;
       }
     }
+
     if (has_value) {
      ft.create_dialog({
        title:     "{$LANG["phrase_please_confirm"]}",

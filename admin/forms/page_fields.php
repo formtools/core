@@ -43,8 +43,6 @@ $field_settings_js   = ft_generate_field_type_settings_js();
 
 $php_self = ft_get_clean_php_self();
 
-$shared_characteristics_js = ft_get_field_type_setting_shared_characteristics_js();
-
 
 // compile the template fields
 $page_vars["page"]        = "fields";
@@ -71,7 +69,7 @@ if ($num_fields_per_page != "all")
 
 $page_vars["head_string"] =<<< END
   <script src="{$g_root_url}/global/scripts/sortable.js"></script>
-  <script src="{$g_root_url}/global/scripts/manage_fields.js?v=3"></script>
+  <script src="{$g_root_url}/global/scripts/manage_fields.js"></script>
 END;
 
 $replacement_info = array("views_tab_link" => "$php_self?page=views&form_id=$form_id");
@@ -85,10 +83,7 @@ $page_vars["js_messages"] = array("validation_no_form_field_name", "validation_i
   "notify_no_field_settings", "word_value", "word_field", "phrase_use_default_value_q", "word_setting",
   "phrase_please_select", "notify_field_changes_saved", "phrase_create_new_option_list", "phrase_edit_option_list",
   "word_no", "word_yes", "validation_no_display_text_single", "validation_no_form_field_single",
-  "validation_no_db_column_single", "notify_edit_field_new_field", "notify_edit_option_list_after_save",
-  "confirm_save_change_before_redirect", "notify_error_saving_fields", "phrase_select_field", "word_order",
-  "word_settings"
-);
+  "validation_no_db_column_single", "notify_edit_field_new_field");
 
 $edit_field_onload_js = "";
 if (isset($_GET["field_id"])) {
@@ -103,8 +98,7 @@ EOF;
 $page_vars["head_js"] =<<<END
 var page_ns = {
   reserved_words: [$reserved_words],
-  form_id: $form_id,
-  shared_characteristics: $shared_characteristics_js
+  form_id:        $form_id
 };
 $field_type_sizes_js
 $field_sizes_js

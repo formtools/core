@@ -18,5 +18,5 @@ function smarty_function_template_hook($params, &$smarty)
     return;
   }
 
-  echo ft_process_template_hook_calls($params["location"], $smarty->_tpl_vars, $params);
+  echo ft_process_template_hook_calls($params["location"], $smarty->_tpl_vars);
 }

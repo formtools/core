@@ -35,7 +35,6 @@ function smarty_function_forms_dropdown($params, &$smarty)
   $attribute_str = implode(" ", $attributes);
 
   $include_blank_option = (isset($params["include_blank_option"])) ? $params["include_blank_option"] : false;
-  $blank_option_label   = (isset($params["blank_option_label"])) ? $params["blank_option_label"] : $LANG["phrase_please_select"];
   $blank_option_is_optgroup = (isset($params["blank_option_is_optgroup"])) ? $params["blank_option_is_optgroup"] : false;
   $hide_incomplete_forms = (isset($params["hide_incomplete_forms"])) ? $params["hide_incomplete_forms"] : true;
   $omit_forms    = (isset($params["omit_forms"])) ? $params["omit_forms"] : array(); // a list of forms to omit from the list
@@ -84,9 +83,9 @@ function smarty_function_forms_dropdown($params, &$smarty)
     if ($include_blank_option)
     {
       if ($blank_option_is_optgroup)
-        $options[] = "<optgroup label=\"{$blank_option_label}\">";
+        $options[] = "<optgroup label=\"{$LANG["phrase_please_select"]}\">";
       else
-        $options[] = "<option value=\"\">{$blank_option_label}</option>";
+        $options[] = "<option value=\"\">{$LANG["phrase_please_select"]}</option>";
     }
 
     foreach ($rows as $row_info)

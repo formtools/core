@@ -259,6 +259,8 @@ function ft_get_view_tabs($view_id, $return_non_empty_tabs_only = false)
  * Otherwise, it creates a new blank view has *all* fields associated with it by default, a single tab
  * that is not enabled by default, no filters, and no clients assigned to it.
  *
+ * TODO check this function works with tabs, filters etc. containing ', " and other chars. Need to re-sanitize?
+ *
  * @param integer $form_id the unique form ID
  * @param integer $group_id the view group ID that we're adding this View to
  * @param integer $create_from_view_id (optional) either the ID of the View from which to base this new View on,
@@ -311,17 +313,16 @@ function ft_create_new_view($form_id, $group_id, $view_name = "", $create_from_v
     $default_sort_field_order = $view_info["default_sort_field_order"];
     $may_add_submissions      = $view_info["may_add_submissions"];
     $may_edit_submissions     = $view_info["may_edit_submissions"];
-    $may_delete_submissions   = $view_info["may_delete_submissions"];
     $has_standard_filter      = $view_info["has_standard_filter"];
     $has_client_map_filter    = $view_info["has_client_map_filter"];
 
     mysql_query("
       INSERT INTO {$g_table_prefix}views (form_id, access_type, view_name, view_order, is_new_sort_group, group_id,
         num_submissions_per_page, default_sort_field, default_sort_field_order, may_add_submissions, may_edit_submissions,
-        may_delete_submissions, has_client_map_filter, has_standard_filter)
+        has_client_map_filter, has_standard_filter)
       VALUES ($form_id, '$access_type', '$view_name', $next_order, 'yes', $group_id, $num_submissions_per_page,
         '$default_sort_field', '$default_sort_field_order', '$may_add_submissions', '$may_edit_submissions',
-        '$may_delete_submissions', '$has_client_map_filter', '$has_standard_filter')
+        '$has_client_map_filter', '$has_standard_filter')
         ");
     $view_id = mysql_insert_id();
 
@@ -405,30 +406,6 @@ function ft_create_new_view($form_id, $group_id, $view_name = "", $create_from_v
         VALUES ($view_id, '$filter_type', $field_id, '$operator', '$filter_values', '$filter_sql')
           ");
     }
-
-    // default submission values
-    $submission_defaults = ft_get_new_view_submission_defaults($create_from_view_id);
-    foreach ($submission_defaults as $row)
-    {
-    	$field_id      = $row["field_id"];
-    	$default_value = ft_sanitize($row["default_value"]);
-    	$list_order    = $row["list_order"];
-
-    	mysql_query("
-    	  INSERT INTO {$g_table_prefix}new_view_submission_defaults (view_id, field_id, default_value, list_order)
-    	  VALUES ($view_id, $field_id, '$default_value', $list_order)
-    	");
-    }
-
-    // public View omit list
-    $client_ids = ft_get_public_view_omit_list($create_from_view_id);
-    foreach ($client_ids as $client_id)
-    {
-      mysql_query("
-        INSERT INTO {$g_table_prefix}public_view_omit_list (view_id, account_id)
-        VALUES ($view_id, $client_id)
-      ");
-    }
   }
 
   extract(ft_process_hook_calls("end", compact("view_id"), array()), EXTR_OVERWRITE);
@@ -511,12 +488,11 @@ function ft_get_view_fields($view_id, $custom_params = array())
   );
 
   $result = mysql_query("
-    SELECT vf.field_id
-    FROM   {$g_table_prefix}list_groups lg, {$g_table_prefix}view_fields vf
-    WHERE  lg.group_type = 'view_fields_$view_id' AND
-           lg.group_id = vf.group_id
-    ORDER BY lg.list_order ASC, vf.list_order ASC
-  ");
+    SELECT field_id
+    FROM   {$g_table_prefix}view_fields
+    WHERE  view_id = $view_id
+    ORDER BY list_order
+      ");
 
   $fields_info = array();
   while ($field_info = mysql_fetch_assoc($result))
@@ -603,8 +579,11 @@ function ft_get_grouped_view_fields($view_id, $tab_number = "", $form_id = "", $
       $fields_info[] = $row;
     }
 
-    // now, if the submission ID is set it returns an additional submission_value key
-    if (!empty($field_ids))
+    // now, if the submission ID is set, add an additional key: submission_info. That contains a hash with
+    // two keys:
+    //    value:    whatever is actually stored for this fields
+    //    settings: an array of hashes. Each hash contains setting_id => setting_value
+    if (!empty($submission_id))
     {
       // do a single query to get a list of ALL settings for any of the field IDs we're dealing with
       $field_id_str = implode(",", $field_ids);
@@ -630,13 +609,13 @@ function ft_get_grouped_view_fields($view_id, $tab_number = "", $form_id = "", $
       {
         $curr_col_name = $curr_field_info["col_name"];
         $curr_field_id = $curr_field_info["field_id"];
-        $curr_field_info["field_settings"] = (array_key_exists($curr_field_id, $field_settings)) ? $field_settings[$curr_field_id] : array();
-
-        if (!empty($submission_id))
-          $curr_field_info["submission_value"] = $submission_info[$curr_col_name];
-
+        $curr_field_info["submission_info"] = array(
+          "value"    => $submission_info[$curr_col_name],
+          "settings" => (array_key_exists($curr_field_id, $field_settings)) ? $field_settings[$curr_field_id] : array()
+        );
         $updated_fields_info[] = $curr_field_info;
       }
+
       $fields_info = $updated_fields_info;
     }
 
@@ -1010,15 +989,15 @@ function ft_get_form_views($form_id, $account_id = "")
 
   if (!empty($account_id))
   {
+    // TODO this could be more efficient, I think
     $query = mysql_query("
       SELECT v.*
-      FROM   {$g_table_prefix}views v, {$g_table_prefix}list_groups lg
+      FROM   {$g_table_prefix}views v
       WHERE  v.form_id = $form_id AND
-             v.group_id = lg.group_id AND
              (v.access_type = 'public' OR
               v.view_id IN (SELECT cv.view_id FROM {$g_table_prefix}client_views cv WHERE account_id = '$account_id'))
-      ORDER BY lg.list_order, v.view_order
-    ");
+      ORDER BY v.view_order
+        ");
 
     // now run through the omit list, just to confirm this client isn't on it!
     while ($row = mysql_fetch_assoc($query))
@@ -1039,10 +1018,9 @@ function ft_get_form_views($form_id, $account_id = "")
   {
     $query = mysql_query("
       SELECT *
-      FROM   {$g_table_prefix}views v, {$g_table_prefix}list_groups lg
-      WHERE  v.form_id = $form_id AND
-             v.group_id = lg.group_id
-      ORDER BY lg.list_order, v.view_order
+      FROM   {$g_table_prefix}views v
+      WHERE  form_id = $form_id
+      ORDER BY v.view_order
         ");
 
     while ($row = mysql_fetch_assoc($query))
@@ -1807,7 +1785,7 @@ function _ft_cache_view_stats($form_id, $view_id = "")
           or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__, mysql_error());
 
       $info = mysql_fetch_assoc($count_query);
-      $_SESSION["ft"]["view_{$view_id}_num_submissions"] = $info["c"];
+      $_SESSION["ft"]["view_{$form_id}_num_submissions"] = $info["c"];
     }
   }
 }

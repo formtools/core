@@ -62,15 +62,14 @@
             <div id="standard_filter_{$count}_values_dates_div" {if !$selected_field_is_date_field}style="display:none"{/if} class="cf_date_group">
               <input type="text" name="standard_filter_{$count}_filter_date_values" id="standard_date_{$count}" value="{$filter_values|escape}" /><img
                 src="{$g_root_url}/global/images/calendar.png" id="standard_date_image_{$count}" border="0" />
-            </div>
-            <script>
-              $(function() {literal}{{/literal} $("#standard_date_{$count}").datetimepicker({literal}{{/literal}
+              <script>
+              $("#standard_date_{$count}").datetimepicker({literal}{{/literal}
                 showSecond: true,
                 timeFormat: "hh:mm:ss",
                 dateFormat: "yy-mm-dd"
-                {literal}}{/literal});
               {literal}}{/literal});
-            </script>
+              </script>
+            </div>
             <div id="standard_filter_{$count}_values_div" {if $selected_field_is_date_field}style="display:none"{/if}>
               <input type="text" name="standard_filter_{$count}_filter_values" style="width: 144px;" value="{$filter_values|escape}" />
             </div>

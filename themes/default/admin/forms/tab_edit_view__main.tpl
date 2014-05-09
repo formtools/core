@@ -2,7 +2,7 @@
   <tr>
     <td width="180" class="pad_left">{$LANG.phrase_view_name}</td>
     <td>
-      <input type="text" maxlength="100" style="width: 300px;" name="view_name" value="{$view_info.view_name|escape}" />
+      <input type="text" maxlength="100" style="width: 300px;" name="view_name" value="{$view_info.view_name}" />
     </td>
   </tr>
   <tr>
@@ -63,16 +63,16 @@
       </tr>
       </table>
 
-      {if $form_info.access_type == "admin" || $form_info.access_type == "private"}
-        <div class="hint">
-          {if $form_info.access_type == "admin"}
-            {$LANG.text_form_view_permission_info_admin}
-          {elseif $form_info.access_type == "private"}
-            {$LANG.text_form_view_permission_info_private}
-          {/if}
-          <a href="?page=main">{$LANG.phrase_edit_form_access_type_b}</a>
-        </div>
-      {/if}
+		  {if $form_info.access_type == "admin" || $form_info.access_type == "private"}
+		    <div class="hint">
+		      {if $form_info.access_type == "admin"}
+		        {$LANG.text_form_view_permission_info_admin}
+		      {elseif $form_info.access_type == "private"}
+		        {$LANG.text_form_view_permission_info_private}
+		      {/if}
+		      <a href="?page=main">{$LANG.phrase_edit_form_access_type_b}</a>
+		    </div>
+		  {/if}
 
       <div id="custom_clients" {if $view_info.access_type != 'private'}style="display:none"{/if} class="margin_top">
         <table cellpadding="1" cellspacing="0" class="list_table">
@@ -112,8 +112,9 @@
       <label for="cmds1">{$LANG.word_yes}</label>
       <input type="radio" name="may_delete_submissions" value="no" id="cmds2" {if $view_info.may_delete_submissions == "no"}checked{/if} />
       <label for="cmds2">{$LANG.word_no}</label>
-      <div class="hint margin_bottom">
-        {$LANG.text_delete_view_submissions}
+
+      <div class="hint margin_bottom_large">
+        This determines whether or not people can delete submissions when accessing this View.
       </div>
     </td>
   </tr>
@@ -128,13 +129,15 @@
   </tr>
   <tbody id="add_submission_default_values" {if $view_info.may_add_submissions == "no"}style="display: none"{/if}>
     <tr>
-      <td width="180" valign="top" class="pad_left">{$LANG.phrase_default_values_new_submissions}</td>
+      <td width="180" valign="top" class="pad_left">Default Values for New Submissions</td>
       <td>
-        <div class="hint margin_bottom">
-          {$LANG.text_default_values_in_view}
-        </div>
+	      <div class="hint margin_bottom_large">
+	        This section is optional. All submissions created with this View will contain the default values
+	        specified here.
+	      </div>
+
         <div id="no_new_submission_default_values" {if $new_view_submission_defaults|@count > 0}class="hidden"{/if}>
-          <a href="">{$LANG.phrase_add_default_settings_rightarrow}</a>
+          <a href="">Add default settings &raquo;</a>
         </div>
 
         <div id="new_submission_default_values" {if $new_view_submission_defaults|@count == 0}class="hidden"{/if}>
@@ -173,7 +176,7 @@
             </tbody>
           </table>
 
-          <div>
+          <div class="margin_top">
             <a href="#" onclick="return view_ns.add_default_values_for_submission()">{$LANG.phrase_add_row}</a>
           </div>
         </div>

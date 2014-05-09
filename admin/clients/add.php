@@ -2,6 +2,7 @@
 
 require("../../global/session_start.php");
 ft_check_permission("admin");
+
 $request = array_merge($_POST, $_GET);
 
 $post_values = array();

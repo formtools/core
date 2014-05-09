@@ -18,7 +18,9 @@
   {else}
 
     <div id="search_form" class=" margin_bottom_large">
+
       <form action="{$same_page}" method="post">
+
         <table cellspacing="2" cellpadding="0" id="search_form_table">
         <tr>
           <td class="blue" width="70">{$LANG.word_search}</td>
@@ -33,16 +35,18 @@
           <td>
             <input type="text" size="20" name="keyword" value="{$search_criteria.keyword|escape}" />
             <input type="submit" name="search_forms" value="{$LANG.word_search}" />
-            <input type="button" name="reset" onclick="window.location='{$same_page}?reset=1'"
+            <input type="button" name="reset" value="{$LANG.phrase_show_all}" onclick="window.location='{$same_page}?reset=1'"
               {if $clients|@count < $num_clients}
-                value="{$LANG.phrase_show_all} ({$num_clients})"  class="bold"
+                class="bold"
               {else}
-                value="{$LANG.phrase_show_all}" class="light_grey" disabled
+                class="light_grey" disabled
               {/if} />
           </td>
         </tr>
         </table>
+
       </form>
+
     </div>
 
     {if $clients|@count == 0}
@@ -58,6 +62,7 @@
       {$pagination}
 
       <form action="{$same_page}" method="post">
+
       {assign var="table_group_id" value="1"}
 
       {* this displays ALL clients on the page, but groups them in separate tables - only one shown
@@ -93,7 +98,7 @@
               {else}
                 {assign var=sort_order value="order=client_id-DESC"}
               {/if}
-              <th width="30" class="sortable_col{if $up_down} over{/if}">
+              <th width="30"{if $up_down} class="over"{/if}>
                 <a href="{$same_page}?{$sort_order}">{$LANG.word_id|upper} {$up_down}</a>
               </th>
 
@@ -107,7 +112,7 @@
               {else}
                 {assign var=sort_order value="order=first_name-DESC"}
               {/if}
-              <th class="sortable_col{if $up_down} over{/if}">
+              <th{if $up_down} class="over"{/if}>
                 <a href="{$same_page}?{$sort_order}">{$LANG.phrase_first_name} {$up_down}</a>
               </th>
 
@@ -121,7 +126,7 @@
               {else}
                 {assign var=sort_order value="order=last_name-DESC"}
               {/if}
-              <th class="sortable_col{if $up_down} over{/if}">
+              <th{if $up_down} class="over"{/if}>
                 <a href="{$same_page}?{$sort_order}">{$LANG.phrase_last_name} {$up_down}</a>
               </th>
 
@@ -135,7 +140,7 @@
               {else}
                 {assign var=sort_order value="order=email-DESC"}
               {/if}
-              <th class="sortable_col{if $up_down} over{/if}">
+              <th{if $up_down} class="over"{/if}>
                 <a href="{$same_page}?{$sort_order}">{$LANG.word_email} {$up_down}</a>
               </td>
 
@@ -149,7 +154,7 @@
               {else}
                 {assign var=sort_order value="order=status-DESC"}
               {/if}
-              <th width="70" class="sortable_col{if $up_down} over{/if}">
+              <th width="70"{if $up_down} class="over"{/if}>
                 <a href="{$same_page}?{$sort_order}">{$LANG.word_status} {$up_down}</a>
               </th>
 
@@ -163,7 +168,7 @@
               {else}
                 {assign var=sort_order value="order=last_logged_in-DESC"}
               {/if}
-              <th class="sortable_col{if $up_down} over{/if}">
+              <th{if $up_down} class="over"{/if}>
                 <a href="{$same_page}?{$sort_order}">{$LANG.phrase_last_logged_in} {$up_down}</a>
               </th>
               <th width="70">{$LANG.word_login|upper}</th>
@@ -212,16 +217,17 @@
       {/if}
 
     {/if}
+
     </form>
 
   {/if}
 
   {template_hook location="admin_list_clients_bottom"}
 
-  <form method="post" action="add.php">
-    <p>
+  <p>
+    <form method="post" action="add.php">
       <input type="submit" value="{$LANG.phrase_add_client}" />
-    </p>
-  </form>
+    </form>
+  </p>
 
 {ft_include file="footer.tpl"}

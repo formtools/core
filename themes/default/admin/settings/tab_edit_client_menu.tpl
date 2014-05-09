@@ -59,9 +59,14 @@
                 <li class="col4" id="row_{$i.list_order}_options">
                   {if $i.page_identifier == "custom_url"}
                     URL:&nbsp;<input type="text" name="custom_options_{$i.list_order}" id="custom_options_{$i.list_order}" value="{$i.custom_options|escape}" style="width:155px" />
-                  {elseif $i.page_identifier == "client_form_submissions"}
-                    {forms_dropdown name_id="custom_options_`$i.list_order`" default=$i.custom_options
-                      include_blank_option=true blank_option_is_optgroup=true}
+                  {elseif $i.page_identifier == "form_submissions" ||
+                          $i.page_identifier == "edit_form_main" ||
+                          $i.page_identifier == "edit_form_fields" ||
+                          $i.page_identifier == "edit_form_views" ||
+                          $i.page_identifier == "edit_form_emails"}
+                    {$LANG.word_form_c}&nbsp;{forms_dropdown name_id="custom_options_`$i.list_order`" style="width:155px" default=$i.custom_options}
+                  {elseif $i.page_identifier == "edit_client"}
+                    {$LANG.word_client_c}&nbsp;{clients_dropdown name_id="custom_options_`$i.list_order`" style="width:150px" default=$i.custom_options}
                   {else}
                     <span class="medium_grey">{$LANG.word_na}</span>
                   {/if}

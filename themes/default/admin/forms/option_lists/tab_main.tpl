@@ -7,7 +7,7 @@
 
     {if $num_fields_using_option_list > 1}
       <div class="hint margin_bottom_large">
-        {$text_option_list_used_by_fields}
+        {$text_field_option_group_used_by_fields}
       </div>
     {/if}
 
@@ -39,13 +39,13 @@
       <input type="hidden" class="sortable__new_group_name" value="{$LANG.phrase_group_name}" />
       <input type="hidden" class="sortable__delete_group_handler" value="sf_ns.delete_group" />
 
-      {* the duplicate markup sucks, but it's simple this way *}
+      {* the duplicate markup sucks, but it's simplest this way *}
       {if $list_info.options|@count == 0}
         <div class="sortable_group">
           <div class="sortable_group_header{if $list_info.is_grouped == "no"} hidden{/if}">
             <div class="sort"></div>
             <label>{$LANG.phrase_group_name}</label>
-            <input type="text" name="group_name_NEW1" class="group_name" value="{if $group_info.group_name}{eval var=$group_info.group_name}{/if}" />
+            <input type="text" name="group_name_NEW1" class="group_name" value="{eval var=$group_info.group_name}" />
             <div class="delete_group"></div>
             <input type="hidden" class="group_order" value="NEW1" />
             <div class="clear"></div>
@@ -165,7 +165,7 @@
   <div class="clear"></div>
 
   <div class="grey_box margin_top_large">
-    <div><a href="#" id="option_lists_advanced_settings_link">{$LANG.phrase_import_option_list_rightarrow}</a></div>
+    <div><a href="#" id="option_lists_advanced_settings_link">Import Option List &raquo;</a></div>
     <div class="hidden" id="option_lists_advanced_settings">
       <div id="smart_fill_messages"></div>
       <table cellspacing="1" cellpadding="0" width="100%" class="margin_bottom_large" height="40">
@@ -188,14 +188,17 @@
       </table>
 
       <div class="margin_top_large">
-        <div style="float:right"><a href="http://docs.formtools.org/userdoc2_1/index.php?page=fog_editing" target="_blank">{$LANG.phrase_smart_fill_user_documentation}</a></div>
+        <div style="float:right"><a href="http://docs.formtools.org/userdoc/index.php?page=fog_editing" target="_blank">{$LANG.phrase_smart_fill_user_documentation}</a></div>
       </div>
       <div class="clear"></div>
     </div>
   </div>
 
   <div id="upload_files_text" style="display:none">
-    {$LANG.text_smart_fill_option_list_problem}
+    We were unable to Smart Fill your field options. However, as an alternative, you can try uploading
+    a copy of your form page in the field below. Note: do <b>not</b> upload raw PHP pages (or other
+    server-side code) - just upload the HTML version. To get this, view and save the page from your web
+    browser.
 
     <form action="{$g_root_url}/global/code/actions.php?action=upload_scraped_page_for_smart_fill"
       target="hidden_iframe" method="post" enctype="multipart/form-data"
