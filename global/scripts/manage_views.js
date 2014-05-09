@@ -755,7 +755,7 @@ view_ns._close_add_fields_dialog = function(dialog) {
  */
 view_ns.get_available_view_fields = function() {
   var selected_field_ids = [];
-  $(".inner_tab_content2 .sr_order").each(function() { selected_field_ids.push(parseInt(this.value)); });
+  $(".inner_tab_content3 .sr_order").each(function() { selected_field_ids.push(parseInt(this.value)); });
 
   var html = "";
   var num_fields = 0;

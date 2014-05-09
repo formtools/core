@@ -177,9 +177,10 @@ $g_api_header_charset = "utf-8";
 $g_api_sessions_timeout = 3600;
 
 /**
- * Permissible characters in a filename. All other characters are stripped out.
+ * Permissible characters in a filename. All other characters are stripped out. *** including a hyphen here
+ * leads to problems. ***
  */
-$g_filename_char_whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-0123456789";
+$g_filename_char_whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789";
 
 /**
  * Special chars, required in password (optional setting through interface).
@@ -211,7 +212,7 @@ $g_release_type = "alpha";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110426";
+$g_release_date = "20110519";
 
 /**
  * This is an if-all-else-fails value. It should NEVER be changed.

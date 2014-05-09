@@ -22,19 +22,10 @@
 
   {if $g_success}
     {assign var=class value="notify"}
-    <script>
-    {literal}
-    // TODO way for this to be a class instead...?
-    $(function() { $("#ft_message_inner").effect("highlight", {color: "#" + g.notify_colours[1] }, 1200); });
-    {/literal}
-    </script>
+    <script>{literal}$(function() { $("#ft_message_inner").effect("highlight", {color: "#" + g.notify_colours[1] }, 1200); });{/literal}</script>
   {else}
     {assign var=class value="error"}
-    <script>
-    {literal}
-    $(function() { $("#ft_message_inner").effect("highlight", {color: "#" + g.error_colours[1] }, 1200); });
-    {/literal}
-    </script>
+    <script>{literal}$(function() { $("#ft_message_inner").effect("highlight", {color: "#" + g.error_colours[1] }, 1200); });{/literal}</script>
   {/if}
 
   <div id="ft_message">

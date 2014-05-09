@@ -9,8 +9,6 @@
 if (typeof ms == "undefined")
   var ms = {};
 
-ms.confirm_delete_dialog = $("<div id=\"confirm_delete_dialog\"></div>");
-
 
 /**
  * Validation function called when the user clicks the "download" or "view" buttons for the Excel
@@ -461,92 +459,6 @@ ms._update_select_all_button = function(flag) {
     ft.toggle_unique_class($("#select_button")[0], "black", ["blue","light_grey","black"]);
   }
 }
-
-
-/**
- * Deletes a submission file. I chose to leave this in the Core rather than associate it with the
- * file data type simply because it would make the field type too complicated. In retrospect, the
- * File field type should have been implemented as a separate module to complement the Custom
- * Fields module. That would have allowed for far more control beyond the fields available
- * in the Custom Fields module.
- *
- * TODO - move to separate module
- *
- * @param field_id
- * @param file_type "file" or "image"
- * @param force_delete boolean
-ms.delete_submission_file = function(field_id, force_delete) {
-  var page_url = g.root_url + "/global/code/actions.php";
-
-  var data = {
-    action:       "delete_submission_file",
-    field_id:     field_id,
-    return_vals:  ["target_message_id:file_field_" + field_id + "_message_id", "field_id:" + field_id],
-    force_delete: force_delete
-  };
-
-  var confirm_delete = true;
-  if (!force_delete) {
-    ft.create_dialog({
-      dialog:     ms.confirm_delete_dialog,
-      popup_type: "warning",
-      title:      g.messages["phrase_please_confirm"],
-      content:    g.messages["confirm_delete_submission_file"],
-      buttons: [{
-        "text":  g.messages["word_yes"],
-        "click": function() {
-        ft.dialog_activity_icon($("#confirm_delete_dialog"), "show");
-          $.ajax({
-            url:      page_url,
-            data:     data,
-            type:     "GET",
-            dataType: "json",
-            success:  ms.delete_submission_file_response,
-            error:    function(el) { alert("Couldn't load page: " + page_url); }
-          });
-        }
-      },
-      {
-        "text":  g.messages["word_no"],
-        "click": function() {
-          $(this).dialog("close");
-        }
-      }]
-    });
-  } else {
-    $.ajax({
-      url:      page_url,
-      data:     data,
-      type:     "GET",
-      dataType: "json",
-      success:  ms.delete_submission_file_response,
-      error:    function(el) { alert("Couldn't load page: " + page_url); }
-    });
-  }
-
-  return false;
-}
-*/
-
-
-/**
- * Handles the successful responses for the delete file feature. Whether or not the file was *actually*
- * deleted is a separate matter. If the file couldn't be delete, the user is provided the option of deleting
- * the database record anyway.
-ms.delete_submission_file_response = function(data) {
-  ft.dialog_activity_icon($("#confirm_delete_dialog"), "hide");
-  $("#confirm_delete_dialog").dialog("close");
-
-  // if it was a success, remove the link from the page
-  if (data.success == 1) {
-  var field_id = data.field_id;
-    $("#cf_file_" + field_id + "_content").html("");
-    $("#cf_file_" + field_id + "_no_content").show();
-  }
-
-  ft.display_message(data.target_message_id, data.success, data.message);
-}
-*/
 
 
 /**

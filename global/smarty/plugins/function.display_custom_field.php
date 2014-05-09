@@ -91,7 +91,7 @@ function smarty_function_display_custom_field($params, &$smarty)
       $curr_setting_id         = $setting_info["setting_id"];
       $curr_setting_field_type = $setting_info["field_type"];
       $value                   = $setting_info["default_value"];
-      $placeholder             = $setting_info["placeholder"];
+      $identifier              = $setting_info["field_setting_identifier"];
 
       if (isset($field_settings) && !empty($field_settings))
       {
@@ -119,7 +119,7 @@ function smarty_function_display_custom_field($params, &$smarty)
           $value = ft_get_option_list($value);
         }
       }
-      $placeholders[$placeholder] = $value;
+      $placeholders[$identifier] = $value;
     }
 
     echo ft_eval_smarty_string($markup_with_placeholders, $placeholders);

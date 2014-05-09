@@ -37,7 +37,7 @@ foreach ($menus as $curr_menu_info)
   $menu_names[] = "\"" . htmlspecialchars($curr_menu_info["menu"]) . "\"";
 }
 
-$menu_list = join(",", $menu_names);
+$menu_list = implode(",", $menu_names);
 
 $js = "var page_ns = {};
 page_ns.menu_names = [$menu_list];

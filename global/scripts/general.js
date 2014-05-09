@@ -220,8 +220,6 @@ ft.get_dom_el = function(mixed) {
  * It also makes an Ajax call to pass the tabset name and current tab values to the server.
  */
 ft.change_inner_tab = function(tab, tabset_name) {
-console.log(tabset_name);
-
   $("#" + tabset_name + " .tab_row div").removeClass("selected");
   $("#" + tabset_name + " .tab_row div.inner_tab" + tab).addClass("selected");
   $("#" + tabset_name + " .inner_tab_content>div").hide();

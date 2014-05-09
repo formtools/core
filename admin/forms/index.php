@@ -9,12 +9,12 @@ if (isset($_GET['delete']) && isset($_GET['form_id']))
 _ft_cache_form_stats();
 if (isset($_GET["reset"]))
 {
-	$_SESSION["ft"]["form_sort_order"] = "";
-	$_SESSION["ft"]["form_search_keyword"] = "";
-	$_SESSION["ft"]["form_search_status"] = "";
-	$_SESSION["ft"]["form_search_client_id"] = "";
+  $_SESSION["ft"]["form_sort_order"] = "";
+  $_SESSION["ft"]["form_search_keyword"] = "";
+  $_SESSION["ft"]["form_search_status"] = "";
+  $_SESSION["ft"]["form_search_client_id"] = "";
 }
-$order     = ft_load_field("order", "form_sort_order", "form_name-ASC");
+$order     = ft_load_field("order", "form_sort_order", "form_id-DESC");
 $keyword   = ft_load_field("keyword", "form_search_keyword", "");
 $status    = ft_load_field("status", "form_search_status", "");
 $client_id = ft_load_field("client_id", "form_search_client_id", "");

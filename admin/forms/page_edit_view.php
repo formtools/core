@@ -27,7 +27,6 @@ $view_tabs     = ft_get_view_tabs($view_id);
 $grouped_fields = ft_get_grouped_view_fields($view_id);
 $field_types = ft_get_field_type_names();
 
-
 $new_view_submission_defaults = ft_get_new_view_submission_defaults($view_id);
 
 // this returns ALL filters: standard and client map
@@ -55,11 +54,11 @@ foreach ($form_fields as $field)
   $field_id        = $field["field_id"];
   $is_system_field = ($field["is_system_field"] == "yes") ? "true" : "false";
   $is_date_field   = ($field["is_date_field"] == "yes") ? "true" : "false";
-  $option_list_id = (empty($field["option_list_id"])) ? "null" : $field["option_list_id"];
+  //$option_list_id = (empty($field["option_list_id"])) ? "null" : $field["option_list_id"];
   $field_type_id = $field["field_type_id"];
 
   $all_form_fields[] = "{ field_id: $field_id, display_name: \"$display_name\", "
-                       . "col_name: \"$col_name\", is_system_field: $is_system_field, option_list_id: $option_list_id, "
+                       . "col_name: \"$col_name\", is_system_field: $is_system_field, "
                        . "is_date_field: $is_date_field, field_type_id: $field_type_id }";
 
   if ($is_date_field == "true")

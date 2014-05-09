@@ -93,7 +93,7 @@ function ft_update_client($account_id, $info)
       {
         $success = false;
         array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-        $message = join("<br />", $errors);
+        $message = implode("<br />", $errors);
         return array($success, $message);
       }
 
@@ -136,7 +136,7 @@ function ft_update_client($account_id, $info)
       {
         $success = false;
         array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-        $message = join("<br />", $errors);
+        $message = implode("<br />", $errors);
         return array($success, $message);
       }
 
@@ -161,7 +161,7 @@ function ft_update_client($account_id, $info)
         while (list($column, $value) = each($settings))
           $sql_rows[] = "$column = '$value'";
 
-        $sql = join(",\n", $sql_rows);
+        $sql = implode(",\n", $sql_rows);
         $query = "
             UPDATE  {$g_table_prefix}accounts
             SET     $sql
@@ -335,7 +335,7 @@ function ft_search_clients($search_criteria = array())
     foreach ($fields as $field)
       $clauses[] = "$field LIKE '%$string%'";
 
-    $keyword_clause = join(" OR ", $clauses);
+    $keyword_clause = implode(" OR ", $clauses);
   }
 
   // add up the where clauses
@@ -343,7 +343,7 @@ function ft_search_clients($search_criteria = array())
   if (!empty($status_clause)) $where_clauses[] = "($status_clause)";
   if (!empty($keyword_clause)) $where_clauses[] = "($keyword_clause)";
 
-  $where_clause = "WHERE " . join(" AND ", $where_clauses);
+  $where_clause = "WHERE " . implode(" AND ", $where_clauses);
 
   // get the clients
   $client_query_result = mysql_query("
@@ -389,7 +389,7 @@ function ft_get_client_prev_next_links($account_id, $search_criteria = array())
     foreach ($fields as $field)
       $clauses[] = "$field LIKE '%$string%'";
 
-    $keyword_clause = join(" OR ", $clauses);
+    $keyword_clause = implode(" OR ", $clauses);
   }
 
   // add up the where clauses
@@ -397,7 +397,7 @@ function ft_get_client_prev_next_links($account_id, $search_criteria = array())
   if (!empty($status_clause)) $where_clauses[] = "($status_clause)";
   if (!empty($keyword_clause)) $where_clauses[] = "($keyword_clause)";
 
-  $where_clause = "WHERE " . join(" AND ", $where_clauses);
+  $where_clause = "WHERE " . implode(" AND ", $where_clauses);
 
   $order_clause = _ft_get_client_order_clause($search_criteria["order"]);
 

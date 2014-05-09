@@ -515,7 +515,7 @@ function ft_check_client_may_view($client_id, $form_id, $view_id)
   $boot_out_user = false;
 
   // $permissions = ft_get_client_form_views($account_info["account_id"]);
-  $permissions = $_SESSION["ft"]["permissions"];
+  $permissions = isset($_SESSION["ft"]["permissions"]) ? $_SESSION["ft"]["permissions"] : array();
 
   extract(ft_process_hooks("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
 
@@ -972,7 +972,8 @@ function ft_convert_to_json($arr)
       {
         //$value = preg_replace("/\s+/", "\n", $value);
         //$value = ft_sanitize($value);
-        $str .= '"' . ft_sanitize($value) . '"';
+        //$str .= '"' . ft_sanitize($value) . '"';
+        $str .= '"' . $value . '"';
       }
 
       $parts[] = $str;

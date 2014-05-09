@@ -40,8 +40,8 @@ foreach ($form_fields as $field)
 
   $best_guesses[] = "\"{$field['field_id']}\": \"$display_name_guess\"";
 }
-$best_guesses_js = join(",\n", $best_guesses);
-$field_id_str = join(",", $field_ids);
+$best_guesses_js = implode(",\n", $best_guesses);
+$field_id_str = implode(",", $field_ids);
 
 // ------------------------------------------------------------------------------------------------
 

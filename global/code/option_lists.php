@@ -483,9 +483,11 @@ function ft_update_option_list($list_id, $info)
  * If no group ID is passed, it creates a new blank field option group (sorry for the crappy function
  * name).
  *
+ * TODO. This doesn't look right. Is the form_fields table's option_list_id really needed anymore?
+ *
  * @param integer $group_id
- * @param integer $field_id if this parameter is set, the new field option group will be assigned to
- *    whatever field IDs are specified
+ * @param integer $field_id if this parameter is set, the new Option List will be assigned to whatever
+ *   field IDs are specified
  * @return mixed the group ID if successful, false if not
  */
 function ft_duplicate_option_list($list_id = "", $field_ids = array())
@@ -570,6 +572,8 @@ function ft_duplicate_option_list($list_id = "", $field_ids = array())
     }
   }
 
+  /*
+  // nope!
   if (!empty($field_ids))
   {
     foreach ($field_ids as $field_id)
@@ -581,6 +585,7 @@ function ft_duplicate_option_list($list_id = "", $field_ids = array())
           ");
     }
   }
+  */
 
   return $new_list_id;
 }

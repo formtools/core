@@ -48,9 +48,9 @@ $(function() {
   // add some event-delegated logic to only bother updating the fields dropdown with the latest content
   // after a field title actually changes
   $(".rows").bind("focusin", function(e) {
-  if (fields_ns.__disable_focusin) {
-    return;
-  }
+    if (fields_ns.__disable_focusin) {
+      return;
+    }
     var currentField = e.target;
     if ($(currentField).hasClass("display_text")) {
       fields_ns.__onfocus_display_text_value = $(currentField).val();
@@ -108,11 +108,12 @@ $(function() {
 
     var field_type_id = $(this).val();
     var field_settings = page_ns.field_settings["field_type_" + field_type_id];
+    var field_type_label = $("#edit_field__field_type option[value=" + field_type_id + "]").text();
     if (field_settings == undefined) {
-      $("#edit_field_template .inner_tab2").html(g.messages["phrase_field_specific_settings"] + " (0)");
+      $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (" + field_settings.length + ")");
       $("#edit_field__field_settings").html("<div class=\"notify\"><div style=\"padding:6px\">" + g.messages["notify_no_field_settings"] + "</div></div>");
     } else {
-      $("#edit_field_template .inner_tab2").html(g.messages["phrase_field_specific_settings"] + " (" + field_settings.length + ")");
+      $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (" + field_settings.length + ")");
       var html = fields_ns.generate_field_type_markup(field_type_id, field_settings);
       $("#edit_field__field_settings").html(html);
 
@@ -172,7 +173,7 @@ $(function() {
       $("#edit_field__option_list_options").show();
       $("#edit_field__form_options").hide();
     } else if ($(this).find(":selected").closest("optgroup").is("#edit_field__forms")) {
-      var form_id = this.value;
+      var form_id = this.value.replace(/^ft/, "");
       $("#edit_field__option_list_options").hide();
       $("#edit_field__form_options").show();
 
@@ -732,9 +733,8 @@ fields_ns.edit_field = function(row_group) {
     }
   }
 
-  var field_type_str = $("#edit_field__field_type :selected").text();
-
   // load the Field-Specific Settings tab
+  var field_type_str = $("#edit_field__field_type :selected").text();
   var has_field_settings = fields_ns.init_field_settings_tab(field_type_id, field_id);
 
   // update the previous/next links (grey them out if one or both aren't relevant)
@@ -801,14 +801,19 @@ fields_ns.edit_field = function(row_group) {
 fields_ns.init_field_settings_tab = function(field_type_id, field_id) {
   var field_settings = page_ns.field_settings["field_type_" + field_type_id];
 
+  // get the string name of the second tab. To make it totally clear, we give the second tab a label like
+  // "Textbox Settings" or "Phone Number Settings"
+  var field_type_label = $("#edit_field__field_type option[value=" + field_type_id + "]").text();
+
   // no extended settings
   if (field_settings == undefined) {
-    $("#edit_field_template .inner_tab2").html(g.messages["phrase_field_specific_settings"] + " (0)");
+    $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (0)");
     $("#edit_field__field_settings").html("<div class=\"notify\"><div style=\"padding:6px\">" + g.messages["notify_no_field_settings"] + "</div></div>");
     $("#edit_field__field_settings_loading").hide();
     return false;
+  } else {
+    $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (" + field_settings.length + ")");
   }
-  $("#edit_field_template .inner_tab2").html(g.messages["phrase_field_specific_settings"] + " (" + field_settings.length + ")");
 
   // generate the field settings markup and embed it in the page
   var html = fields_ns.generate_field_type_markup(field_type_id, field_settings);
@@ -1025,7 +1030,8 @@ fields_ns._generate_option_list_markup = function(setting_id, default_value) {
       selected = " selected";
       form_selected = true;
     }
-    forms_html += "<option value=\"" + value + "\"" + selected + ">" + text + "</option>";
+    // note the "ft" (field type) prefix!
+    forms_html += "<option value=\"ft" + value + "\"" + selected + ">" + text + "</option>";
   });
 
   if (option_list_html == "" && forms_html == "")
@@ -1085,10 +1091,10 @@ fields_ns.edit_option_list = function(setting_id) {
             $.ajax({
               url:      g.root_url + "/global/code/actions.php",
               data:     {
-              form_id:     page_ns.form_id,
-              action:      "update_form_fields",
-              data:        fields_ns.memory,
-              return_vars: { url: edit_option_list_url }
+                form_id:     page_ns.form_id,
+                action:      "update_form_fields",
+                data:        fields_ns.memory,
+                return_vars: { url: edit_option_list_url }
               },
               type:     "POST",
               dataType: "json",
@@ -1165,7 +1171,7 @@ fields_ns.load_field_settings_response = function(data) {
 /**
  * This updates the HTML to show some a field's settings. This is loaded after the settings
  * have become available. Note: it's possible that the option list or forms query hasn't been returned
- * yet. So for those,
+ * yet.
  */
 fields_ns.display_field_settings = function(field_type_id, settings) {
   for (var i=0, j=settings.length; i<j; i++) {
@@ -1201,8 +1207,8 @@ fields_ns.display_field_settings = function(field_type_id, settings) {
       case "option_list_or_form_field":
         var is_form_field = settings[i].setting_value.toString().match(/^form_field/);
 
-        // we can't just set the form field values because we have a few asyncronous dependencies:
-        //
+        // we can't just set the form field values because we have a few asyncronous dependencies: we need
+        // to ensure that both the Option Lists and the form list has been loaded
         if (is_form_field) {
           (function(setting_id, setting_value) {
             ft.queue.push([
@@ -1215,7 +1221,7 @@ fields_ns.display_field_settings = function(field_type_id, settings) {
                   var form_id     = parts[0];
                   var field_id    = parts[1];
                   var field_order = parts[2];
-                  $("#edit_field__setting_" + setting_id).val(parts[0]);
+                  $("#edit_field__setting_" + setting_id).val("ft" + parts[0]);
 
                   // now request the form fields
                   if (fields_ns.form_fields["form_" + form_id] == undefined) {
@@ -1234,6 +1240,8 @@ fields_ns.display_field_settings = function(field_type_id, settings) {
 
           } else {
             $("#edit_field__setting_" + curr_setting_id).val(settings[i].setting_value);
+            $("#edit_field__option_list_options").show();
+            $("#edit_field__form_options").hide();
           }
         }
         break;
@@ -1306,7 +1314,6 @@ fields_ns.save_changes = function() {
   if (!fields_ns.validate_field()) {
     return false;
   }
-
   $.ajax({
     url:      g.root_url + "/global/code/actions.php",
     data:     { form_id: page_ns.form_id, action: "update_form_fields", data: fields_ns.memory },
@@ -1325,7 +1332,6 @@ fields_ns.save_changes = function() {
 
 
 fields_ns.save_changes_response = function(data) {
-
   // if there were no problems updating the fields, we just update the parent page with the latest values
   // and close the dialog
   if (data.success == 1) {
@@ -1444,6 +1450,9 @@ fields_ns.load_form_fields = function(params) {
     field_order: null
   }, params);
 
+  // always remove the ft prefix
+  params.form_id = params.form_id.replace(/^ft/, "");
+
   $("#edit_field__form_options").html("<div class=\"loading_small\"></div>");
   $.ajax({
     url:      g.root_url + "/global/code/actions.php",
@@ -1463,9 +1472,12 @@ fields_ns.load_form_fields = function(params) {
 fields_ns.get_form_fields_response = function(data) {
   fields_ns.form_fields["form_" + data.form_id] = data.fields;
 
-  // if the user still has this form selected in the Edit Field dialog, load the info into a dropdown
-  if ($(".option_list_or_form_field :selected").val() == data.form_id.toString())
+  // if the user still has this form selected in the Edit Field dialog, load the info into a dropdown.
+  // yeesh... this is a bug!
+  if ($(".option_list_or_form_field :selected").val() == "ft" + data.form_id.toString()) {
+    //var form_id = parseInt(data.form_id.replace(/^ft/, ""));
     fields_ns.generate_form_fields_section({ form_id: data.form_id, field_id: data.field_id, field_order: data.field_order });
+  }
 }
 
 // this is called once we know that a form's fields have been loaded. It populates the section in the

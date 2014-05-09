@@ -17,8 +17,6 @@ if (empty($submission_id))
 $_SESSION["ft"]["last_submission_id"] = $submission_id;
 $_SESSION["ft"]["last_link_page"] = "edit";
 
-$tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
-
 // get a list of all editable fields in the View. This is used for security purposes for the update function and to
 // determine whether the page contains any editable fields
 $editable_field_ids = _ft_get_editable_view_fields($view_id);
@@ -32,20 +30,37 @@ if (isset($_POST) && !empty($_POST))
   list($g_success, $g_message) = ft_update_submission($form_id, $submission_id, $request);
 }
 
-$form_info      = ft_get_form($form_id);
-$view_info      = ft_get_view($view_id);
+$form_info = ft_get_form($form_id);
+$view_info = ft_get_view($view_id);
+
+// this is crumby
+$has_tabs = false;
+foreach ($view_info["tabs"] as $tab_info)
+{
+  if (!empty($tab_info["tab_label"]))
+  {
+    $has_tabs = true;
+    break;
+  }
+}
+if ($has_tabs)
+  $tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
+else
+  $tab_number = "";
+
 $grouped_fields = ft_get_grouped_view_fields($view_id, $tab_number, $form_id, $submission_id);
 
 $page_field_ids      = array();
 $page_field_type_ids = array();
+
 foreach ($grouped_fields as $group)
 {
-	foreach ($group["fields"] as $field_info)
-	{
-		$page_field_ids[] = $field_info["field_id"];
-		if (!in_array($field_info["field_type_id"], $page_field_type_ids))
-		  $page_field_type_ids[] = $field_info["field_type_id"];
-	}
+  foreach ($group["fields"] as $field_info)
+  {
+    $page_field_ids[] = $field_info["field_id"];
+    if (!in_array($field_info["field_type_id"], $page_field_type_ids))
+      $page_field_type_ids[] = $field_info["field_type_id"];
+  }
 }
 $page_field_types = ft_get_field_types(true, $page_field_type_ids);
 
@@ -126,5 +141,4 @@ $shared_resources
 EOF;
 
 ft_display_page("admin/forms/edit_submission.tpl", $page_vars);
-
 

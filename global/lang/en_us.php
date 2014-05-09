@@ -751,8 +751,6 @@ $LANG["text_email_template_tab"] = "This section lets you determine what content
 $LANG["text_email_template_text_1"] = "There has been a submission made through your form, {\$FORMNAME}.";
 $LANG["text_email_template_text_1_c"] = "There has been a submission made through your form, {\$FORMNAME}:";
 $LANG["text_email_template_thanks"] = "Thanks for your submission!";
-$LANG["text_example_wysiwyg"] = "WYSIWYG stands for \"<b>W</b>hat <b>Y</b>ou <b>S</b>ee <b>I</b>s <b>W</b>hat <b>Y</b>ou <b>G</b>et\"; it's a commonly used acronym for describing HTML/rich-text editors, like <a href=\"http://tinymce.moxiecode.com/\">TinyMCE</a> used in Form Tools. This is how the WYSIWYG fields will look, based on the settings defined above. You may assign any form field to use this WYSIWYG editor on the Edit Form -> Fields page/tab.";
-
 $LANG["text_field_orientation_explanation"] = "This is relevant only for radio-buttons and checkboxes. It determines whether the fields should be grouped vertically or horizontally on the page.";
 $LANG["text_file_extension_info"] = "Enter file extensions separated with commas (e.g. jpg,gif,png) or leave blank to allow any file type.";
 $LANG["text_file_field_placeholders_info"] = "File fields have two special placeholders: FILEURL and FILENAME. FILEURL is the full URL to the file, so you can link directly to it in your emails; FILENAME is just the file name.";
@@ -1344,6 +1342,9 @@ $LANG["phrase_new_view_all_fields"] = "New View - All fields";
 
 $LANG["validation_invalid_admin_username"] = "Your username may only consist of alphanumeric characters (a-Z and 0-9).";
 $LANG["validation_internal_form_too_many_fields"] = "Sorry, you can only created forms with 1000 fields or less.";
+$LANG["word_identifier"] = "Identifier";
+
+$LANG["notify_module_already_installed"] = "Oops, this module is already installed!";
 
 // removed!
 //$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";

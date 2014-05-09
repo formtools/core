@@ -79,11 +79,15 @@ function ft_get_account_settings($account_id)
 {
   global $g_table_prefix;
 
-  $query  = mysql_query("
-          SELECT setting_name, setting_value
-          FROM   {$g_table_prefix}account_settings
-          WHERE  account_id = $account_id
-          ");
+  if (empty($account_id))
+    return array();
+
+  $query = mysql_query("
+    SELECT setting_name, setting_value
+    FROM   {$g_table_prefix}account_settings
+    WHERE  account_id = $account_id
+  ");
+
   $hash = array();
   while ($row = mysql_fetch_assoc($query))
     $hash[$row['setting_name']] = $row["setting_value"];

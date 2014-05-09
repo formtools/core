@@ -4,25 +4,25 @@ $sortable_id = "edit_fields";
 
 if (isset($request["update_fields"]))
 {
-	$request["sortable_id"] = $sortable_id;
+  $request["sortable_id"] = $sortable_id;
   list($g_success, $g_message) = ft_update_form_fields_tab($form_id, $request);
 }
 
 $form_info = ft_get_form($form_id);
 if (isset($request["num_fields_per_page"]))
 {
-	$num_fields_per_page = $request["num_fields_per_page"];
-	ft_set_settings(array("admin_num_fields_per_page_{$form_id}" => $request["num_fields_per_page"]));
-	$_GET["fields_page"] = 1;
+  $num_fields_per_page = $request["num_fields_per_page"];
+  ft_set_settings(array("admin_num_fields_per_page_{$form_id}" => $request["num_fields_per_page"]));
+  $_GET["fields_page"] = 1;
 }
 else
 {
-	$saved_num_fields_per_page = ft_get_settings("admin_num_fields_per_page_{$form_id}");
+  $saved_num_fields_per_page = ft_get_settings("admin_num_fields_per_page_{$form_id}");
   $num_fields_per_page = (!empty($saved_num_fields_per_page)) ? $saved_num_fields_per_page : "all";
 }
 
 if (empty($num_fields_per_page))
-	ft_set_settings("admin_num_fields_per_page_{$form_id}", "all");
+  ft_set_settings("admin_num_fields_per_page_{$form_id}", "all");
 
 
 $fields_page = ft_load_field("fields_page", "fields_page", 1);
@@ -35,7 +35,7 @@ foreach ($reserved_words as $word)
 {
   $escaped_words[] = "\"$word\"";
 }
-$reserved_words = join(",", $escaped_words);
+$reserved_words = implode(",", $escaped_words);
 
 $field_type_sizes_js = ft_generate_field_type_sizes_map_js();
 $field_sizes_js      = ft_generate_field_type_size_labels();
@@ -59,12 +59,12 @@ if ($num_fields_per_page != "all")
 {
   $page_vars["order_start_number"] = (($fields_page - 1) * $num_fields_per_page) + 1;
   $page_vars["num_fields_per_page"] = $num_fields_per_page;
-	$pagination_settings = array(
-	  "show_total_results" => false,
-	  "show_page_label"    => false
-	);
-	$page_vars["pagination"] = ft_get_page_nav($total_form_fields, $num_fields_per_page, $fields_page, "", "fields_page", "",
-	  $pagination_settings);
+  $pagination_settings = array(
+    "show_total_results" => false,
+    "show_page_label"    => false
+  );
+  $page_vars["pagination"] = ft_get_page_nav($total_form_fields, $num_fields_per_page, $fields_page, "", "fields_page", "",
+    $pagination_settings);
 }
 
 $page_vars["head_string"] =<<< END
@@ -87,11 +87,11 @@ $page_vars["js_messages"] = array("validation_no_form_field_name", "validation_i
 
 $edit_field_onload_js = "";
 if (isset($_GET["field_id"])) {
-	$edit_field_onload_js =<<< EOF
-	var row_group = $(".sr_order[value={$_GET["field_id"]}]").closest(".row_group");
-	if (row_group.length) {
-	  fields_ns.edit_field(row_group);
-	}
+  $edit_field_onload_js =<<< EOF
+  var row_group = $(".sr_order[value={$_GET["field_id"]}]").closest(".row_group");
+  if (row_group.length) {
+    fields_ns.edit_field(row_group);
+  }
 EOF;
 }
 

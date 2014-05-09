@@ -2,7 +2,7 @@
 
 require_once("global/session_start.php");
 ft_verify_form_tools_installed();
-$is_upgraded = ft_upgrade_form_tools();
+$upgrade_info = ft_upgrade_form_tools();
 
 // if this user is already logged in, redirect them to their specified login page
 if (isset($_SESSION["ft"]["account"]) && isset($_SESSION["ft"]["account"]["is_logged_in"]) &&
@@ -50,16 +50,24 @@ $page_vars["page_url"] = ft_get_page_url("login");
 $page_vars["head_title"] = $LANG["phrase_admin_panel"];
 $page_vars["error"] = $error;
 
-if ($is_upgraded)
+if ($upgrade_info["upgraded"])
 {
-  $new_version = $settings["program_version"];
-	if ($settings["release_type"] == "alpha")
-	  $new_version = "{$settings['program_version']}-alpha-{$settings['release_date']}";
-  else if ($settings["release_type"] == "beta")
-	  $new_version = "{$settings['program_version']}-beta-{$settings['release_date']}";
+  if ($upgrade_info["success"])
+  {
+    $new_version = $settings["program_version"];
+    if ($settings["release_type"] == "alpha")
+      $new_version = "{$settings['program_version']}-alpha-{$settings['release_date']}";
+    else if ($settings["release_type"] == "beta")
+      $new_version = "{$settings['program_version']}-beta-{$settings['release_date']}";
 
-  $replacements = array("version" => $new_version);
-	$page_vars["upgrade_notification"] = ft_eval_smarty_string($LANG["text_upgraded"], $replacements, $g_theme);
+    $replacements = array("version" => $new_version);
+    $page_vars["upgrade_notification"] = ft_eval_smarty_string($LANG["text_upgraded"], $replacements, $g_theme);
+  }
+  else
+  {
+  	$g_success = false;
+  	$g_message = $upgrade_info["message"];
+  }
 }
 $replacements = array(
   "program_name"         => $settings["program_name"],

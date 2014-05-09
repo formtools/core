@@ -32,13 +32,13 @@ foreach ($forms as $form_info)
     $view_name = htmlspecialchars($form_view["view_name"]);
     $v[] = "[$view_id, \"$view_name\"]";
   }
-  $views = join(",", $v);
+  $views = implode(",", $v);
 
   $form_views_js_info[] = "page_ns.form_views.push([$form_id,[$views]])";
 }
 
-$forms_js = join(";\n", $forms_js_rows);
-$form_views_js = join(";\n", $form_views_js_info);
+$forms_js = implode(";\n", $forms_js_rows);
+$form_views_js = implode(";\n", $form_views_js_info);
 
 // loop through each form and add all the Views
 $all_form_views = array();

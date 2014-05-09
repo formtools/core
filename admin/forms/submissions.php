@@ -233,7 +233,7 @@ $submission_ids = array();
 for ($i=0; $i<count($search_rows); $i++)
   $submission_ids[] = $search_rows[$i]["submission_id"];
 
-$submission_id_str = join(",", $submission_ids);
+$submission_id_str = implode(",", $submission_ids);
 
 
 // set as STRING for used in JS below
@@ -247,13 +247,13 @@ if ($select_all_submissions_returned == "true")
   $all_submissions_selected_omit_list = isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]) ?
      $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] : array();
 
-  $all_submissions_selected_omit_list_str = join(",", $all_submissions_selected_omit_list);
+  $all_submissions_selected_omit_list_str = implode(",", $all_submissions_selected_omit_list);
   $preselected_subids = array_diff($submission_ids, $all_submissions_selected_omit_list);
 }
 else
   $preselected_subids = isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) ? $_SESSION["ft"]["form_{$form_id}_selected_submissions"] : array();
 
-$preselected_subids_str = join(",", $preselected_subids);
+$preselected_subids_str = implode(",", $preselected_subids);
 
 // to pass to the smarty template
 $field_types = ft_get_field_types(true);

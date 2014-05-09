@@ -161,8 +161,21 @@ function ft_get_module_hooks($module_folder)
 
 
 /**
- * Our main process hooks function. This finds and calls ft_process_hook for each hook defined
- * for this event & calling function. It processes each one sequentially in order of priority.
+ * Our main process hooks function. This finds and calls ft_process_hook for each hook defined for
+ * this event & calling function. It processes each one sequentially in order of priority.
+ *
+ * I changed the logic of this functionality in 2.1.0 - now I think it will work more intuitively.
+ * Precisely what was being allowed to be overridden didn't make sense; this should work better now
+ * (but all modules will need to be examined).
+ *
+ * "Priority" is actually very weird. Although it does allow hooks to define in what order they get
+ * called, the priority to overriding the variables actually falls to the hooks with the LOWEST
+ * priority. This can and should be adjusted, but right now there's no need for it.
+ *
+ * @param string $event the name of the event in the function calling the hook (e.g. "start", "end",
+ *     "manage_files" etc.
+ * @param $vars whatever vars are being passed to the hooks from the context of the calling function
+ * @param $overridable_vars whatever variables may be overridden by the hook
  */
 function ft_process_hooks($event, $vars, $overridable_vars)
 {
@@ -173,32 +186,22 @@ function ft_process_hooks($event, $vars, $overridable_vars)
   $hooks = ft_get_hooks($event, "code", $calling_function);
 
   // extract the var passed from the calling function into the current scope
+  $return_vals = array();
   foreach ($hooks as $hook_info)
   {
     // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
     // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
     $vars["form_tools_hook_info"] = $hook_info;
-
     $updated_vars = ft_process_hook($hook_info["module_folder"], $hook_info["hook_function"], $vars, $overridable_vars, $calling_function);
 
-    // update $vars with any values that have been updated by the hook
-    while (list($key, $value) = each($vars))
+    // now return whatever values have been overwritten by the hooks
+    foreach ($overridable_vars as $var_name)
     {
-      if (array_key_exists($key, $updated_vars))
-        $vars[$key] = $updated_vars[$key];
+      if (array_key_exists($var_name, $updated_vars))
+        $return_vals[$var_name] = $updated_vars[$var_name];
     }
-    reset($vars);
   }
 
-  // now return whatever values have been overwritten by the hooks
-  $return_vals = array();
-  foreach ($overridable_vars as $var_name)
-  {
-    if (array_key_exists($var_name, $vars))
-      $return_vals[$var_name] = $vars[$var_name];
-  }
-
-  // return the variables defined in the current scope
   return $return_vals;
 }
 

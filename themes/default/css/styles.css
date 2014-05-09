@@ -1500,3 +1500,10 @@ body .ui-widget-header span {
   color: #efefef;
   margin-left: 5px;
 }
+a.show_form {
+  width: 13px;
+  height: 13px;
+  background-image: url(../../../global/images/open_new_window.png);
+  float: right;
+  margin: 2px 4px;
+}

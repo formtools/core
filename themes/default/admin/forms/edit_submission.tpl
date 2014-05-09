@@ -67,7 +67,7 @@
 
       <input type="hidden" name="field_ids" value="{$page_field_ids_str}" />
 
-      {* if there are no fields in this tab, display a message to let the user know *}
+      {* if there are no fields in this tab/page, display a message to let the user know *}
       {if $page_field_ids|@count == 0}
         <div class="margin_bottom_large">{$LANG.notify_no_fields_in_tab}</div>
       {/if}

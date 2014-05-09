@@ -35,6 +35,28 @@ function ft_check_module_enabled($module_folder)
 
 
 /**
+ * Finds out if a module is available. By "available", we mean: has the files uploaded to the modules
+ * folder and has a corresponding record in the modules table. It may not be installed/enabled.
+ *
+ * @param string $module_folder
+ * @return boolean
+ */
+function ft_check_module_available($module_folder)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT count(*) as c
+    FROM   {$g_table_prefix}modules
+    WHERE  module_folder = '$module_folder'
+      ");
+
+  $result = mysql_fetch_assoc($query);
+  return $result["c"] == 1;
+}
+
+
+/**
  * Uninstalls a module from the database.
  *
  * @param integer $module_id

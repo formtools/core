@@ -31,7 +31,7 @@ foreach ($lists["results"] as $curr_list_info)
   $list_names[] = "\"" . htmlspecialchars($curr_list_info["option_list_name"]) . "\"";
 }
 
-$list_names = join(",", $list_names);
+$list_names = implode(",", $list_names);
 
 $existing_option_list_names_js = "page_ns.option_list_names = [$list_names];";
 

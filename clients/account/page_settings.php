@@ -36,7 +36,7 @@ if ($client_info["settings"]["may_edit_sessions_timeout"] == "yes")
 if ($client_info["settings"]["may_edit_date_format"] == "yes")
   $js[] = "rules.push(\"required,date_format,{$LANG["validation_no_date_format"]}\")";
 
-$page_vars["head_js"] = join(";\n", $js);
+$page_vars["head_js"] = implode(";\n", $js);
 
 
 ft_display_page("clients/account/index.tpl", $page_vars);

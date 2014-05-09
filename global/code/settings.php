@@ -33,51 +33,51 @@
  */
 function ft_get_settings($settings = "", $module = "")
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$where_module_clause =  (!empty($module)) ? "WHERE module = '$module'" : "";
+  $where_module_clause =  (!empty($module)) ? "WHERE module = '$module'" : "";
   $and_module_clause   =  (!empty($module)) ? "AND module = '$module'" : "";
 
-	$return_val = "";
-	if (empty($settings))
-	{
-		$query = mysql_query("
-			SELECT setting_name, setting_value
-			FROM   {$g_table_prefix}settings
-			$where_module_clause
-				");
-		$return_val = array();
-		while ($row = mysql_fetch_assoc($query))
-			$return_val[$row['setting_name']] = $row['setting_value'];
-	}
-	else if (is_string($settings))
-	{
-		$query = mysql_query("
-			SELECT setting_value
-			FROM   {$g_table_prefix}settings
-			WHERE  setting_name = '$settings'
-			$and_module_clause
-				");
-	  $info = mysql_fetch_assoc($query);
-		$return_val = $info["setting_value"];
-	}
-	else if (is_array($settings))
-	{
+  $return_val = "";
+  if (empty($settings))
+  {
+    $query = mysql_query("
+      SELECT setting_name, setting_value
+      FROM   {$g_table_prefix}settings
+      $where_module_clause
+        ");
+    $return_val = array();
+    while ($row = mysql_fetch_assoc($query))
+      $return_val[$row['setting_name']] = $row['setting_value'];
+  }
+  else if (is_string($settings))
+  {
+    $query = mysql_query("
+      SELECT setting_value
+      FROM   {$g_table_prefix}settings
+      WHERE  setting_name = '$settings'
+      $and_module_clause
+        ");
+    $info = mysql_fetch_assoc($query);
+    $return_val = $info["setting_value"];
+  }
+  else if (is_array($settings))
+  {
     $return_val = array();
     foreach ($settings as $setting)
     {
-    	$query = mysql_query("
-    	  SELECT setting_value
-    	  FROM   {$g_table_prefix}settings
-    	  WHERE   setting_name = '$setting'
-    	  $and_module_clause
-    	    ");
-			$info = mysql_fetch_assoc($query);
-			$return_val[$setting] = $info["setting_value"];
+      $query = mysql_query("
+        SELECT setting_value
+        FROM   {$g_table_prefix}settings
+        WHERE   setting_name = '$setting'
+        $and_module_clause
+          ");
+      $info = mysql_fetch_assoc($query);
+      $return_val[$setting] = $info["setting_value"];
     }
-	}
+  }
 
-	return $return_val;
+  return $return_val;
 }
 
 
@@ -90,9 +90,9 @@ function ft_get_settings($settings = "", $module = "")
  */
 function ft_set_settings($settings, $module = "")
 {
-	global $g_table_prefix;
+  global $g_table_prefix;
 
-	$and_module_clause = (!empty($module)) ? "AND module = '$module'" : "";
+  $and_module_clause = (!empty($module)) ? "AND module = '$module'" : "";
 
   while (list($setting_name, $setting_value) = each($settings))
   {
@@ -109,27 +109,27 @@ function ft_set_settings($settings, $module = "")
     {
       if (!empty($module))
       {
-	    	mysql_query("
-				  INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module)
-				  VALUES ('$setting_name', '$setting_value', '$module')
-				    ");
+        mysql_query("
+          INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module)
+          VALUES ('$setting_name', '$setting_value', '$module')
+            ");
       }
       else
       {
-	    	mysql_query("
-				  INSERT INTO {$g_table_prefix}settings (setting_name, setting_value)
-				  VALUES ('$setting_name', '$setting_value')
-				    ");
+        mysql_query("
+          INSERT INTO {$g_table_prefix}settings (setting_name, setting_value)
+          VALUES ('$setting_name', '$setting_value')
+            ");
       }
     }
     else
     {
-			mysql_query("
-			  UPDATE {$g_table_prefix}settings
-			  SET    setting_value = '$setting_value'
-			  WHERE  setting_name  = '$setting_name'
-			  $and_module_clause
-			    ");
+      mysql_query("
+        UPDATE {$g_table_prefix}settings
+        SET    setting_value = '$setting_value'
+        WHERE  setting_name  = '$setting_name'
+        $and_module_clause
+          ");
     }
 
     $_SESSION["ft"]["settings"][$setting_name] = $setting_value;
@@ -148,36 +148,36 @@ function ft_set_settings($settings, $module = "")
  */
 function ft_update_main_settings($infohash)
 {
-	global $g_table_prefix, $g_root_url, $LANG;
+  global $g_table_prefix, $g_root_url, $LANG;
 
-	$success = true;
-	$message = $LANG["notify_setup_options_updated"];
+  $success = true;
+  $message = $LANG["notify_setup_options_updated"];
 
-	$infohash = ft_sanitize($infohash);
+  $infohash = ft_sanitize($infohash);
 
-	$rules = array();
-	$rules[] = "required,program_name,{$LANG["validation_no_program_name"]}";
-	$rules[] = "required,num_clients_per_page,{$LANG["validation_no_num_clients_per_page"]}";
-	$rules[] = "digits_only,num_clients_per_page,{$LANG["validation_invalid_num_clients_per_page"]}";
-	$rules[] = "required,num_emails_per_page,{$LANG["validation_no_num_emails_per_page"]}";
-	$rules[] = "digits_only,num_emails_per_page,{$LANG["validation_invalid_num_emails_per_page"]}";
-	$rules[] = "required,num_forms_per_page,{$LANG["validation_no_num_forms_per_page"]}";
-	$rules[] = "digits_only,num_forms_per_page,{$LANG["validation_invalid_num_forms_per_page"]}";
-	$rules[] = "required,num_option_lists_per_page,{$LANG["validation_no_num_option_lists_per_page"]}";
-	$rules[] = "digits_only,num_option_lists_per_page,{$LANG["validation_invalid_num_option_lists_per_page"]}";
-	$rules[] = "required,num_menus_per_page,{$LANG["validation_no_num_menus_per_page"]}";
-	$rules[] = "digits_only,num_menus_per_page,{$LANG["validation_invalid_num_menus_per_page"]}";
-	$rules[] = "required,num_modules_per_page,{$LANG["validation_no_num_modules_per_page"]}";
-	$rules[] = "digits_only,num_modules_per_page,{$LANG["validation_invalid_num_modules_per_page"]}";
-	$errors = validate_fields($infohash, $rules);
+  $rules = array();
+  $rules[] = "required,program_name,{$LANG["validation_no_program_name"]}";
+  $rules[] = "required,num_clients_per_page,{$LANG["validation_no_num_clients_per_page"]}";
+  $rules[] = "digits_only,num_clients_per_page,{$LANG["validation_invalid_num_clients_per_page"]}";
+  $rules[] = "required,num_emails_per_page,{$LANG["validation_no_num_emails_per_page"]}";
+  $rules[] = "digits_only,num_emails_per_page,{$LANG["validation_invalid_num_emails_per_page"]}";
+  $rules[] = "required,num_forms_per_page,{$LANG["validation_no_num_forms_per_page"]}";
+  $rules[] = "digits_only,num_forms_per_page,{$LANG["validation_invalid_num_forms_per_page"]}";
+  $rules[] = "required,num_option_lists_per_page,{$LANG["validation_no_num_option_lists_per_page"]}";
+  $rules[] = "digits_only,num_option_lists_per_page,{$LANG["validation_invalid_num_option_lists_per_page"]}";
+  $rules[] = "required,num_menus_per_page,{$LANG["validation_no_num_menus_per_page"]}";
+  $rules[] = "digits_only,num_menus_per_page,{$LANG["validation_invalid_num_menus_per_page"]}";
+  $rules[] = "required,num_modules_per_page,{$LANG["validation_no_num_modules_per_page"]}";
+  $rules[] = "digits_only,num_modules_per_page,{$LANG["validation_invalid_num_modules_per_page"]}";
+  $errors = validate_fields($infohash, $rules);
 
-	if (!empty($errors))
-	{
-		$success = false;
-		array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-		$message = join("<br />", $errors);
-		return array ($success, $message, "");
-	}
+  if (!empty($errors))
+  {
+    $success = false;
+    array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
+    $message = join("<br />", $errors);
+    return array ($success, $message, "");
+  }
 
   $settings = array(
     "program_name"              => trim($infohash["program_name"]),
@@ -194,7 +194,7 @@ function ft_update_main_settings($infohash)
 
   extract(ft_process_hooks("end", compact("settings"), array("success", "message")), EXTR_OVERWRITE);
 
-	return array($success, $message);
+  return array($success, $message);
 }
 
 
@@ -209,40 +209,40 @@ function ft_update_main_settings($infohash)
  */
 function ft_update_account_settings($infohash)
 {
-	global $g_table_prefix, $g_root_url, $LANG;
+  global $g_table_prefix, $g_root_url, $LANG;
 
-	$success = true;
-	$message = $LANG["notify_setup_options_updated"];
+  $success = true;
+  $message = $LANG["notify_setup_options_updated"];
 
-	$infohash = ft_sanitize($infohash);
+  $infohash = ft_sanitize($infohash);
 
-	$rules = array();
-	$rules[] = "required,default_page_titles,{$LANG["validation_no_page_titles"]}";
-	$rules[] = "required,default_client_menu_id,{$LANG["validation_no_menu_id"]}";
-	$rules[] = "required,default_theme,{$LANG["validation_no_theme"]}";
-	$rules[] = "required,default_login_page,{$LANG["validation_no_login_page"]}";
-	$rules[] = "required,default_logout_url,{$LANG["validation_no_logout_url"]}";
-	$rules[] = "required,default_language,{$LANG["validation_no_default_language"]}";
-	$rules[] = "required,default_sessions_timeout,{$LANG["validation_no_default_sessions_timeout"]}";
-	$rules[] = "digits_only,default_sessions_timeout,{$LANG["validation_invalid_default_sessions_timeout"]}";
-	$rules[] = "required,default_date_format,{$LANG["validation_no_date_format"]}";
-	$errors = validate_fields($infohash, $rules);
+  $rules = array();
+  $rules[] = "required,default_page_titles,{$LANG["validation_no_page_titles"]}";
+  $rules[] = "required,default_client_menu_id,{$LANG["validation_no_menu_id"]}";
+  $rules[] = "required,default_theme,{$LANG["validation_no_theme"]}";
+  $rules[] = "required,default_login_page,{$LANG["validation_no_login_page"]}";
+  $rules[] = "required,default_logout_url,{$LANG["validation_no_logout_url"]}";
+  $rules[] = "required,default_language,{$LANG["validation_no_default_language"]}";
+  $rules[] = "required,default_sessions_timeout,{$LANG["validation_no_default_sessions_timeout"]}";
+  $rules[] = "digits_only,default_sessions_timeout,{$LANG["validation_invalid_default_sessions_timeout"]}";
+  $rules[] = "required,default_date_format,{$LANG["validation_no_date_format"]}";
+  $errors = validate_fields($infohash, $rules);
 
-	if (!empty($errors))
-	{
-		$success = false;
-		array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-		$message = join("<br />", $errors);
-		return array ($success, $message, "");
-	}
+  if (!empty($errors))
+  {
+    $success = false;
+    array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
+    $message = join("<br />", $errors);
+    return array ($success, $message, "");
+  }
 
-	$clients_may_edit_page_titles      = isset($infohash["clients_may_edit_page_titles"]) ? "yes" : "no";
-	$clients_may_edit_footer_text      = isset($infohash["clients_may_edit_footer_text"]) ? "yes" : "no";
-	$clients_may_edit_theme            = isset($infohash["clients_may_edit_theme"]) ? "yes" : "no";
-	$clients_may_edit_logout_url       = isset($infohash["clients_may_edit_logout_url"]) ? "yes" : "no";
-	$clients_may_edit_ui_language      = isset($infohash["clients_may_edit_ui_language"]) ? "yes" : "no";
-	$clients_may_edit_timezone_offset  = isset($infohash["clients_may_edit_timezone_offset"]) ? "yes" : "no";
-	$clients_may_edit_sessions_timeout = isset($infohash["clients_may_edit_sessions_timeout"]) ? "yes" : "no";
+  $clients_may_edit_page_titles      = isset($infohash["clients_may_edit_page_titles"]) ? "yes" : "no";
+  $clients_may_edit_footer_text      = isset($infohash["clients_may_edit_footer_text"]) ? "yes" : "no";
+  $clients_may_edit_theme            = isset($infohash["clients_may_edit_theme"]) ? "yes" : "no";
+  $clients_may_edit_logout_url       = isset($infohash["clients_may_edit_logout_url"]) ? "yes" : "no";
+  $clients_may_edit_ui_language      = isset($infohash["clients_may_edit_ui_language"]) ? "yes" : "no";
+  $clients_may_edit_timezone_offset  = isset($infohash["clients_may_edit_timezone_offset"]) ? "yes" : "no";
+  $clients_may_edit_sessions_timeout = isset($infohash["clients_may_edit_sessions_timeout"]) ? "yes" : "no";
   $clients_may_edit_date_format      = isset($infohash["clients_may_edit_date_format"]) ? "yes" : "no";
   $clients_may_edit_max_failed_login_attempts = isset($infohash["clients_may_edit_max_failed_login_attempts"]) ? "yes" : "no";
 
@@ -253,8 +253,8 @@ function ft_update_account_settings($infohash)
   $settings = array(
     "default_page_titles"          => $infohash["default_page_titles"],
     "default_footer_text"          => $infohash["default_footer_text"],
-	  "default_client_menu_id"       => $infohash["default_client_menu_id"],
-	  "default_theme"                => $infohash["default_theme"],
+    "default_client_menu_id"       => $infohash["default_client_menu_id"],
+    "default_theme"                => $infohash["default_theme"],
     "default_login_page"           => $infohash["default_login_page"],
     "default_logout_url"           => $infohash["default_logout_url"],
     "default_language"             => $infohash["default_language"],
@@ -283,7 +283,7 @@ function ft_update_account_settings($infohash)
 
   extract(ft_process_hooks("end", compact("settings"), array("success", "message")), EXTR_OVERWRITE);
 
-	return array($success, $message);
+  return array($success, $message);
 }
 
 
@@ -298,105 +298,105 @@ function ft_update_account_settings($infohash)
  */
 function ft_update_file_settings($infohash)
 {
-	global $g_table_prefix, $g_root_url, $LANG;
+  global $g_table_prefix, $g_root_url, $LANG;
 
-	$success = true;
-	$message = $LANG["notify_setup_options_updated"];
+  $success = true;
+  $message = $LANG["notify_setup_options_updated"];
 
-	$original_file_upload_dir = $infohash["original_file_upload_dir"];
-	$file_upload_dir = rtrim(trim($infohash["file_upload_dir"]), "/\\");
-	$file_upload_url = rtrim(trim($infohash["file_upload_url"]), "/\\");
-	$file_upload_max_size = $infohash["file_upload_max_size"];
+  $original_file_upload_dir = $infohash["original_file_upload_dir"];
+  $file_upload_dir = rtrim(trim($infohash["file_upload_dir"]), "/\\");
+  $file_upload_url = rtrim(trim($infohash["file_upload_url"]), "/\\");
+  $file_upload_max_size = $infohash["file_upload_max_size"];
 
-	$file_upload_filetypes = (is_array($infohash["file_upload_filetypes"])) ? join(",", $infohash["file_upload_filetypes"]) : "";
-	if (!empty($infohash["file_upload_filetypes_other"]))
-	{
-		if (empty($file_upload_filetypes))
-		  $file_upload_filetypes = $infohash["file_upload_filetypes_other"];
-		else
-		  $file_upload_filetypes .= ",{$infohash["file_upload_filetypes_other"]}";
-	}
-	$file_upload_filetypes = mb_strtolower($file_upload_filetypes);
+  $file_upload_filetypes = (is_array($infohash["file_upload_filetypes"])) ? join(",", $infohash["file_upload_filetypes"]) : "";
+  if (!empty($infohash["file_upload_filetypes_other"]))
+  {
+    if (empty($file_upload_filetypes))
+      $file_upload_filetypes = $infohash["file_upload_filetypes_other"];
+    else
+      $file_upload_filetypes .= ",{$infohash["file_upload_filetypes_other"]}";
+  }
+  $file_upload_filetypes = mb_strtolower($file_upload_filetypes);
 
-	$settings = array(
-	  "file_upload_dir" => $file_upload_dir,
+  $settings = array(
+    "file_upload_dir" => $file_upload_dir,
     "file_upload_url" => $file_upload_url,
-	  "file_upload_max_size" => $file_upload_max_size,
-	  "file_upload_filetypes" => $file_upload_filetypes
-	);
+    "file_upload_max_size" => $file_upload_max_size,
+    "file_upload_filetypes" => $file_upload_filetypes
+  );
 
-	ft_set_settings($settings);
+  ft_set_settings($settings);
 
-	// check the folder was valid
-	list($is_valid_folder, $folder_message) = ft_check_upload_folder($file_upload_dir);
-	if (!$is_valid_folder)
-		return array($is_valid_folder, $folder_message);
+  // check the folder was valid
+  list($is_valid_folder, $folder_message) = ft_check_upload_folder($file_upload_dir);
+  if (!$is_valid_folder)
+    return array($is_valid_folder, $folder_message);
 
-	// if the folder has just changed, move all the files to the new folder. This involves the following:
-	//   1. finding each and every file upload field that uses the default file upload folder, and move all the
-	//      files, one by one
-	//   2. any default (blank) images used by the Image Manager
-	if ($original_file_upload_dir != $file_upload_dir)
-	{
-		// TODO
+  // if the folder has just changed, move all the files to the new folder. This involves the following:
+  //   1. finding each and every file upload field that uses the default file upload folder, and move all the
+  //      files, one by one
+  //   2. any default (blank) images used by the Image Manager
+  if ($original_file_upload_dir != $file_upload_dir)
+  {
+    // TODO
 
 /*
-		// get all the filenames associated with this field
-		$filename_hash = ft_get_uploaded_filenames($form_id, $field_id);
-		$filenames = array_values($filename_hash);
+    // get all the filenames associated with this field
+    $filename_hash = ft_get_uploaded_filenames($form_id, $field_id);
+    $filenames = array_values($filename_hash);
 
-		if (!empty($filenames))
-		{
-			$problem_files = array();
+    if (!empty($filenames))
+    {
+      $problem_files = array();
 
-			$field_info = get_form_field($field_id);
-			$database_column_name = $field_info['col_name'];
+      $field_info = get_form_field($field_id);
+      $database_column_name = $field_info['col_name'];
 
-			foreach ($filename_hash as $sub_id => $file)
-			{
-				$submission_id = $filename_hash[$sub_id];
+      foreach ($filename_hash as $sub_id => $file)
+      {
+        $submission_id = $filename_hash[$sub_id];
 
-				// check that a file with this name doesn't already exist in the new folder. If it does,
-				// find a unique filename, move it, and update the database
-				$new_filename = $file;
-				if (file_exists("$file_upload_dir/$file"))
-					$new_filename = check_duplicate_filename($file_upload_dir, $file);
+        // check that a file with this name doesn't already exist in the new folder. If it does,
+        // find a unique filename, move it, and update the database
+        $new_filename = $file;
+        if (file_exists("$file_upload_dir/$file"))
+          $new_filename = check_duplicate_filename($file_upload_dir, $file);
 
-				// now move the file. Record any problems that occur
-				if (!rename("$original_file_upload_dir/$file", "$file_upload_dir/$new_filename"))
-					$problem_files[] = $file;
-				else
-				{
-					// if the filename has changed, update the database record
-					if ($file != $new_filename)
-					{
-						$query = "
-							UPDATE {$g_table_prefix}form_{$form_id}
-							SET    $database_column_name = '$new_filename'
-							WHERE  submission_id = $submission_id
-										 ";
-						$result = mysql_query($query);
-					}
-				}
-			}
+        // now move the file. Record any problems that occur
+        if (!rename("$original_file_upload_dir/$file", "$file_upload_dir/$new_filename"))
+          $problem_files[] = $file;
+        else
+        {
+          // if the filename has changed, update the database record
+          if ($file != $new_filename)
+          {
+            $query = "
+              UPDATE {$g_table_prefix}form_{$form_id}
+              SET    $database_column_name = '$new_filename'
+              WHERE  submission_id = $submission_id
+                     ";
+            $result = mysql_query($query);
+          }
+        }
+      }
 
-			if (empty($problem_files))
-				return array(true, $LANG["notify_file_upload_settings_updated_files_moved"]);
-			else
-			{
-				$message = $LANG["notify_file_upload_settings_updated_files_not_moved"] . "<br /><br />";
-				array_walk($problem_files, create_function('&$el', '$el = "&bull;&nbsp; " . $el;'));
-				$message .= join("<br />", $problem_files);
-				$message .= "<br />" . $LANG["text_reason_files_not_moved"];
-				return array(false, $message);
-			}
-		}
+      if (empty($problem_files))
+        return array(true, $LANG["notify_file_upload_settings_updated_files_moved"]);
+      else
+      {
+        $message = $LANG["notify_file_upload_settings_updated_files_not_moved"] . "<br /><br />";
+        array_walk($problem_files, create_function('&$el', '$el = "&bull;&nbsp; " . $el;'));
+        $message .= join("<br />", $problem_files);
+        $message .= "<br />" . $LANG["text_reason_files_not_moved"];
+        return array(false, $message);
+      }
+    }
 */
-	}
+  }
 
-	extract(ft_process_hooks("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
 
-	return array($success, $message);
+  return array($success, $message);
 }
 
 
@@ -411,30 +411,30 @@ function ft_update_file_settings($infohash)
  */
 function ft_update_wysiwyg_settings($infohash)
 {
-	global $g_table_prefix, $g_root_url, $LANG;
+  global $g_table_prefix, $g_root_url, $LANG;
 
-	$success = true;
-	$message = $LANG["notify_wysiwyg_settings_updated"];
+  $success = true;
+  $message = $LANG["notify_wysiwyg_settings_updated"];
 
-	$infohash = ft_sanitize($infohash);
+  $infohash = ft_sanitize($infohash);
 
-	$tinymce_path_info_location = isset($infohash["tinymce_path_info_location"]) ? $infohash["tinymce_path_info_location"] : "bottom";
-	$tinymce_resize             = isset($infohash["tinymce_resize"]) ? $infohash["tinymce_resize"] : "no";
+  $tinymce_path_info_location = isset($infohash["tinymce_path_info_location"]) ? $infohash["tinymce_path_info_location"] : "bottom";
+  $tinymce_resize             = isset($infohash["tinymce_resize"]) ? $infohash["tinymce_resize"] : "no";
 
-	$settings = array(
+  $settings = array(
     "tinymce_toolbar"            => $infohash["tinymce_toolbar"],
     "tinymce_toolbar_location"   => $infohash["tinymce_toolbar_location"],
     "tinymce_toolbar_align"      => $infohash["tinymce_toolbar_align"],
     "tinymce_show_path"          => $infohash["tinymce_show_path"],
-	  "tinymce_path_info_location" => $infohash["tinymce_path_info_location"],
-	  "tinymce_resize"             => $infohash["tinymce_resize"]
+    "tinymce_path_info_location" => $infohash["tinymce_path_info_location"],
+    "tinymce_resize"             => $infohash["tinymce_resize"]
   );
 
   ft_set_settings($settings);
 
-	extract(ft_process_hooks("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
 
-	return array($success, $message);
+  return array($success, $message);
 }
 
 
@@ -453,24 +453,24 @@ function ft_update_wysiwyg_settings($infohash)
  */
 function ft_update_theme_settings($infohash)
 {
-	global $g_table_prefix, $g_root_url, $g_root_dir, $LANG;
+  global $g_table_prefix, $g_root_url, $g_root_dir, $LANG;
 
   // lots to validate! First, check the default admin & client themes have been entered
-	$rules = array();
-	$rules[] = "required,admin_theme,{$LANG["validation_no_admin_theme"]}";
-	$rules[] = "required,default_client_theme,{$LANG["validation_no_default_client_theme"]}";
-	$errors = validate_fields($infohash, $rules);
+  $rules = array();
+  $rules[] = "required,admin_theme,{$LANG["validation_no_admin_theme"]}";
+  $rules[] = "required,default_client_theme,{$LANG["validation_no_default_client_theme"]}";
+  $errors = validate_fields($infohash, $rules);
 
-	if (!isset($infohash["is_enabled"]))
-		$errors[] = $LANG["validation_no_enabled_themes"];
+  if (!isset($infohash["is_enabled"]))
+    $errors[] = $LANG["validation_no_enabled_themes"];
 
-	if (!empty($errors))
-	{
-		$success = false;
-		array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-		$message = join("<br />", $errors);
-		return array($success, $message);
-	}
+  if (!empty($errors))
+  {
+    $success = false;
+    array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
+    $message = join("<br />", $errors);
+    return array($success, $message);
+  }
 
   $enabled_themes = $infohash["is_enabled"];
 
@@ -479,7 +479,7 @@ function ft_update_theme_settings($infohash)
   $default_client_theme = $infohash["default_client_theme"];
 
   if (!in_array($admin_theme, $enabled_themes) || !in_array($default_client_theme, $enabled_themes))
-		return array(false, $LANG["validation_default_admin_and_client_themes_not_enabled"]);
+    return array(false, $LANG["validation_default_admin_and_client_themes_not_enabled"]);
 
   // lastly, if there are already client accounts assigned to disabled themes, we need to sort it out.
   // We handle it the same way as deleting the client menus: if anyone is assigned to this theme,
@@ -503,29 +503,29 @@ function ft_update_theme_settings($infohash)
 
   if (!empty($client_info))
   {
-  	$message = $LANG["notify_disabled_theme_already_assigned"];
-  	$placeholder_str = $LANG["phrase_assign_all_listed_client_accounts_to_theme"];
+    $message = $LANG["notify_disabled_theme_already_assigned"];
+    $placeholder_str = $LANG["phrase_assign_all_listed_client_accounts_to_theme"];
 
-  	$themes = ft_get_themes(true);
-	  $dd = "<select id=\"mass_update_client_theme\">";
+    $themes = ft_get_themes(true);
+    $dd = "<select id=\"mass_update_client_theme\">";
 
-	  foreach ($themes as $theme)
-	  	$dd .= "<option value=\"{$theme["theme_id"]}\">{$theme["theme_name"]}</option>";
-	  $dd .= "</select>";
+    foreach ($themes as $theme)
+      $dd .= "<option value=\"{$theme["theme_id"]}\">{$theme["theme_name"]}</option>";
+    $dd .= "</select>";
 
-  	// a bit bad (hardcoded HTML!), but organize the account list in 3 columns
-  	$client_links_table = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n<tr>";
-  	$num_affected_clients = count($client_info);
-  	for ($i=0; $i<$num_affected_clients; $i++)
+    // a bit bad (hardcoded HTML!), but organize the account list in 3 columns
+    $client_links_table = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n<tr>";
+    $num_affected_clients = count($client_info);
+    for ($i=0; $i<$num_affected_clients; $i++)
     {
-    	$account_info = $client_info[$i];
-    	$client_id  = $account_info["account_id"];
-    	$first_name = $account_info["first_name"];
-    	$last_name  = $account_info["last_name"];
-    	$client_ids[] = $client_id;
+      $account_info = $client_info[$i];
+      $client_id  = $account_info["account_id"];
+      $first_name = $account_info["first_name"];
+      $last_name  = $account_info["last_name"];
+      $client_ids[] = $client_id;
 
-    	if ($i != 0 && $i % 3 == 0)
-    		$client_links_table .= "</tr>\n<tr>";
+      if ($i != 0 && $i % 3 == 0)
+        $client_links_table .= "</tr>\n<tr>";
 
       $client_links_table .= "<td width=\"33%\">&bull;&nbsp;<a href=\"$g_root_url/admin/clients/edit.php?page=settings&client_id=$client_id\" target=\"_blank\">$first_name $last_name</a></td>\n";
     }
@@ -542,9 +542,9 @@ function ft_update_theme_settings($infohash)
     $submit_button = "<input type=\"button\" value=\"{$LANG["phrase_update_accounts"]}\" onclick=\"window.location='index.php?page=themes&mass_assign=1&accounts=$client_id_str&theme_id=' + $('mass_update_client_theme').value\" />";
 
     $placeholders = array(
-	    "theme_dropdown" => $dd,
-	    "submit_button" => $submit_button
-	  );
+      "theme_dropdown" => $dd,
+      "submit_button" => $submit_button
+    );
 
     $mass_assign_html = "<div class=\"margin_top_large margin_bottom_large\">" . ft_eval_smarty_string($placeholder_str, $placeholders) . "</div>";
     $html = $message . $mass_assign_html . $client_links_table;
@@ -576,14 +576,14 @@ function ft_update_theme_settings($infohash)
   mysql_query("UPDATE {$g_table_prefix}themes SET is_enabled = 'no'");
   foreach ($enabled_themes as $theme)
   {
-  	$cache_folder = "$g_root_dir/themes/$theme/cache";
+    $cache_folder = "$g_root_dir/themes/$theme/cache";
 
     // try and set the cache folder as writable
     if (!is_writable($cache_folder))
       @chmod($cache_folder, 0777);
 
-  	if (!is_writable($cache_folder))
-  	  continue;
+    if (!is_writable($cache_folder))
+      continue;
 
     mysql_query("
       UPDATE {$g_table_prefix}themes
@@ -592,15 +592,15 @@ function ft_update_theme_settings($infohash)
         ");
   }
 
-	// reset the settings in sessions
-	$_SESSION["ft"]["settings"] = ft_get_settings();
+  // reset the settings in sessions
+  $_SESSION["ft"]["settings"] = ft_get_settings();
 
-	$success = true;
-	$message = $LANG["notify_themes_settings_updated"];
+  $success = true;
+  $message = $LANG["notify_themes_settings_updated"];
 
-	extract(ft_process_hooks("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hooks("end", compact("infohash"), array("success", "message")), EXTR_OVERWRITE);
 
-	return array($success, $message);
+  return array($success, $message);
 }
 
 
@@ -613,7 +613,7 @@ function ft_update_theme_settings($infohash)
  */
 function ft_get_current_timezone_offset()
 {
-	$timezone_offset = "";
+  $timezone_offset = "";
   if (isset($_SESSION["ft"]["account"]["timezone_offset"]))
     $timezone_offset = $_SESSION["ft"]["account"]["timezone_offset"];
   else

@@ -12,8 +12,8 @@
 require_once("../session_start.php");
 ft_check_permission("user");
 
-header('Cache-Control: no-cache, must-revalidate');
-header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+//header('Cache-Control: no-cache, must-revalidate');
+//header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
 //header('Content-type: application/json');
 
 // the action to take and the ID of the page where it will be displayed (allows for
@@ -38,7 +38,7 @@ if (isset($request["return_vals"]))
   $return_val_str = ", " . implode(", ", $vals);
 }
 
-// new method (see comment above). Doesn't allow double quotes in the key or value
+// new method (see comment above). Doesn't allow double quotes in the key or value [Note: return_vars vs return_vals !]
 $return_str = "";
 if (isset($request["return_vars"]))
 {
@@ -178,27 +178,6 @@ switch ($action)
     echo ft_convert_to_json($info);
     break;
 
-  // called by the administrator or client on the Edit Submission page. Note that we pull the submission ID
-  // and the form ID from sessions rather than have them explictly passed by the JS. This is a security precaution -
-  // it prevents a potential hacker exploiting this function here. Instead they'd have to set the sessions by another
-  // route which is trickier
-  case "delete_submission_file":
-    $form_id       = $_SESSION["ft"]["curr_form_id"];
-    $submission_id = $_SESSION["ft"]["last_submission_id"];
-    $field_id      = $request["field_id"];
-    $force_delete  = ($request["force_delete"] == "true") ? true : false;
-    if (empty($form_id) || empty($submission_id))
-    {
-      echo "{ \"success\": \"false\", \"message\": \"{$LANG["notify_invalid_session_values_re_login"]}\" } ";
-      exit;
-    }
-    list($success, $message) = ft_delete_file_submission($form_id, $submission_id, $field_id, $force_delete);
-    $success = ($success) ? 1 : 0;
-    $message = ft_sanitize($message);
-    $message = preg_replace("/\\\'/", "'", $message);
-    echo "{ \"success\": \"$success\", \"message\": \"$message\"{$return_val_str} }";
-    break;
-
   case "edit_submission_send_email":
     $form_id       = $request["form_id"];
     $submission_id = $request["submission_id"];
@@ -315,7 +294,7 @@ switch ($action)
       foreach ($uploaded_file_info as $url)
         $params[] = "url_1: \"$url\"";
 
-      echo "{ " . join(", ", $params) . " }";
+      echo "{ " . implode(", ", $params) . " }";
     }
     break;
 
@@ -355,8 +334,7 @@ switch ($action)
 
   case "get_upgrade_form_html":
     $components = ft_get_formtools_installed_components();
-    $post_url = ($components["rt"] == "alpha") ? "http://alpha.formtools.org/upgrade.php" : "http://www.formtools.org/upgrade.php";
-    echo "<form action=\"$post_url\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
+    echo "<form action=\"http://www.formtools.org/upgrade.php\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
     while (list($key, $value) = each($components))
     {
       echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
@@ -385,7 +363,7 @@ switch ($action)
     echo ft_convert_to_json($option_list_info);
     break;
 
-  // used on the Edit Form -> Fields tab to
+  // used on the Edit Form -> Fields tab
   case "get_form_list":
     $form_list = ft_get_form_list();
     $forms = array();
@@ -395,15 +373,16 @@ switch ($action)
     echo ft_convert_to_json($forms);
     break;
 
+  // used for the Edit Form -> fields tab. Note that any dynamic settings ARE evaluated.
   case "get_form_fields":
     $form_id     = $request["form_id"];
     $field_id    = $request["field_id"];
     $field_order = $request["field_order"];
-    $form_fields = ft_get_form_fields($form_id);
+    $form_fields = ft_get_form_fields($form_id); // array("evaluate_dynamic_settings" => true)
     $fields = array();
     foreach ($form_fields as $field_info)
     {
-      $fields[$field_info["field_id"]] = $field_info["field_title"]; // TODO. This throws an error with single quotes in field titles...
+      $fields[$field_info["field_id"]] = $field_info["field_title"];
     }
     $return_info = array(
       "form_id"     => $form_id,
@@ -450,7 +429,7 @@ switch ($action)
     break;
 
   // this is called when the user clicks on the "Save Changes" button on the Edit Field dialog on the
-  // Fields tab. It sends all file
+  // Fields tab
   case "update_form_fields":
     $form_id = $request["form_id"];
     $changed_field_ids = $request["data"]["changed_field_ids"];
@@ -469,7 +448,7 @@ switch ($action)
       if (preg_match("/^NEW/", $field_id))
         continue;
 
-       list($success, $message) = ft_update_field($form_id, $field_id, $request["data"]["field_$field_id"]);
+      list($success, $message) = ft_update_field($form_id, $field_id, $request["data"]["field_$field_id"]);
       if (!$success)
       {
         $problems[] = array("field_id" => $field_id, "error" => $message);

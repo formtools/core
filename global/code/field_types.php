@@ -42,12 +42,8 @@ $g_raw_field_types = array(
   "file"          => "word_file"
 );
 
-// This is crumby, but it's safe. The date and textbox fields can never be edited or deleted
-// through any UI (including the Custom Fields modules) so their IDs are unique. For a few minor fringe
-// situations, we need to know those IDs
-$g_default_textbox_field_type_id = 1;
-$g_default_date_field_type_id = 8;
-$g_default_date_field_type_datetime_setting_id = 22;
+// pity this has to be hardcoded... but right now the field setting options don't have their own unique
+// identifiers
 $g_default_datetime_format = "datetime:yy-mm-dd|h:mm TT|ampm`true";
 
 
@@ -239,6 +235,46 @@ function ft_get_field_type($field_type_id, $return_all_info = false)
 }
 
 
+function ft_get_field_type_by_identifier($identifier)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}field_types
+    WHERE  field_type_identifier = '$identifier'
+  ");
+
+  $info = mysql_fetch_assoc($query);
+
+  if (!empty($info))
+  {
+    $field_type_id = $info["field_type_id"];
+    $info["settings"] = ft_get_field_type_settings($field_type_id);
+  }
+
+  return $info;
+}
+
+function ft_get_field_type_id_by_identifier($identifier)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}field_types
+    WHERE  field_type_identifier = '$identifier'
+  ");
+
+  $info = mysql_fetch_assoc($query);
+
+  if (empty($info))
+    return "";
+  else
+    return $info["field_type_id"];
+}
+
+
 /**
  * This finds out the field type ID for a particular field.
  *
@@ -294,6 +330,80 @@ function ft_get_field_type_setting($setting_id)
 
   return $info;
 }
+
+
+/**
+ * Returns all information about a field type settings for a field type, as identified by its
+ * field type identifier string.
+ *
+ * @param integer $field_type_id
+ * @param string $field_type_setting_identifier
+ * @return array
+ */
+function ft_get_field_type_setting_by_identifier($field_type_id, $field_type_setting_identifier)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}field_type_settings
+    WHERE  field_type_id = $field_type_id AND
+           field_setting_identifier = '$field_type_setting_identifier'
+  ");
+
+  $field_setting_info = mysql_fetch_assoc($query);
+
+  if (!empty($field_setting_info))
+  {
+  	$setting_id = $field_setting_info["setting_id"];
+    $options_query = mysql_query("
+      SELECT *
+      FROM   {$g_table_prefix}field_type_setting_options
+      WHERE  setting_id = $setting_id
+      ORDER BY option_order
+    ");
+
+    $options = array();
+    while ($row = mysql_fetch_assoc($options_query))
+    {
+      $options[] = array(
+        "option_text"       => $row["option_text"],
+        "option_value"      => $row["option_value"],
+        "option_order"      => $row["option_order"],
+        "is_new_sort_group" => $row["is_new_sort_group"]
+      );
+    }
+
+    $field_setting_info["options"] = $options;
+  }
+
+  return $field_setting_info;
+}
+
+
+/**
+ * Returns the setting ID by its identifier.
+ *
+ * @param integer $field_type_id
+ * @param string $field_type_setting_identifier
+ * @return integer
+ */
+function ft_get_field_type_setting_id_by_identifier($field_type_id, $field_type_setting_identifier)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}field_type_settings
+    WHERE  field_type_id = $field_type_id AND
+           field_setting_identifier = '$field_type_setting_identifier'
+  ");
+
+  $field_setting_info = mysql_fetch_assoc($query);
+
+  return (!empty($field_setting_info)) ? $field_setting_info["setting_id"] : "";
+}
+
 
 
 /**
@@ -686,7 +796,7 @@ function ft_get_field_type_processing_info()
  * field - including the field type settings that weren't overridden.
  *
  * @param $field_ids
- * @return array a hash of [field_id][placeholder] = values
+ * @return array a hash of [field_id][identifier] = values
  */
 function ft_get_form_field_field_type_settings($field_ids = array(), $form_fields)
 {
@@ -699,7 +809,7 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
 
   // get the overridden settings
   $query = mysql_query("
-    SELECT fts.field_type_id, fs.field_id, fts.placeholder, fs.setting_value
+    SELECT fts.field_type_id, fs.field_id, fts.field_setting_identifier, fs.setting_value
     FROM   ft_field_type_settings fts, ft_field_settings fs
     WHERE  fts.setting_id = fs.setting_id AND
            fs.field_id IN ($field_id_str)
@@ -708,7 +818,7 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
   $overridden_settings = array();
   while ($row = mysql_fetch_assoc($query))
   {
-    $overridden_settings[$row["field_id"]][$row["placeholder"]] = $row["setting_value"];
+    $overridden_settings[$row["field_id"]][$row["field_setting_identifier"]] = $row["setting_value"];
   }
 
   // now figure out what field_type_ids we're concerned about
@@ -725,7 +835,8 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
     $field_id_to_field_type_id_map[$field_info["field_id"]] = $field_info["field_type_id"];
   }
 
-  // this returns ALL the default field type settings
+  // this returns ALL the default field type settings. The function is "dumb": it doesn't evaluate
+  // any of the dynamic default values - that's done below
   $default_field_type_settings = ft_get_field_type_settings($relevant_field_type_ids);
 
   // now overlay the two and return all field settings for all fields
@@ -736,13 +847,28 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
     $field_type_settings = $default_field_type_settings[$field_id_to_field_type_id_map[$field_id]];
     foreach ($field_type_settings as $setting_info)
     {
-      $placeholder = $setting_info["placeholder"];
-      $value       = $setting_info["default_value"];
+      $identifier         = $setting_info["field_setting_identifier"];
+      $default_value_type = $setting_info["default_value_type"];
+      if ($default_value_type == "static")
+        $value = $setting_info["default_value"];
+      else
+      {
+        $parts = explode(",", $setting_info["default_value"]);
 
-      if (isset($overridden_settings[$field_id]) && isset($overridden_settings[$field_id][$placeholder]))
-        $value = $overridden_settings[$field_id][$placeholder];
+        // dynamic setting values should ALWAYS be of the form "setting_name,module_folder/'core'". If they're
+        // not, just ignore it
+        if (count($parts) != 2)
+          $value = "";
+        else
+        {
+          $value = ft_get_settings($parts[0], $parts[1]);
+        }
+      }
 
-      $results[$field_id][$placeholder] = $value;
+      if (isset($overridden_settings[$field_id]) && isset($overridden_settings[$field_id][$identifier]))
+        $value = $overridden_settings[$field_id][$identifier];
+
+      $results[$field_id][$identifier] = $value;
     }
   }
 

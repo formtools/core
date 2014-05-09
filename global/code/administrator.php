@@ -76,7 +76,7 @@ function ft_add_client($infohash)
   {
     $success = false;
     array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-    $message = join("<br />", $errors);
+    $message = implode("<br />", $errors);
     return array($success, $message, "");
   }
 
@@ -227,7 +227,7 @@ function ft_admin_update_client($infohash, $tab_num)
       {
         $success = false;
         array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-        $message = join("<br />", $errors);
+        $message = implode("<br />", $errors);
         return array($success, $message);
       }
 
@@ -285,7 +285,7 @@ function ft_admin_update_client($infohash, $tab_num)
       {
         $success = false;
         array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-        $message = join("<br />", $errors);
+        $message = implode("<br />", $errors);
         return array($success, $message);
       }
 
@@ -567,7 +567,7 @@ function ft_update_admin_account($infohash, $account_id)
   {
     $success = false;
     array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-    $message = join("<br />", $errors);
+    $message = implode("<br />", $errors);
     return array($success, $message);
   }
 

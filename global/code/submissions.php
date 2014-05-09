@@ -338,119 +338,6 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 
 
 /**
- * Deletes a file that has been uploaded through a particular form submission file field.
- *
- * Now say that 10 times fast.
- *
- * @param integer $form_id the unique form ID
- * @param integer $submission_id a unique submission ID
- * @param integer $field_id a unique form field ID
- * @param boolean $force_delete this forces the file to be deleted from the database, even if the
- *                file itself doesn't exist or doesn't have the right permissions.
- * @return array Returns array with indexes:<br/>
- *               [0]: true/false (success / failure)<br/>
- *               [1]: message string<br/>
- */
-function ft_delete_file_submission($form_id, $submission_id, $field_id, $force_delete = false)
-{
-  global $g_table_prefix, $LANG;
-
-  // get the column name and upload folder for this field
-  $field_info = ft_get_form_field($field_id);
-  $extended_field_settings = ft_get_extended_field_settings($field_id);
-
-  print_r($extended_field_settings);
-  exit;
-
-  $col_name = $field_info["col_name"];
-  $file_folder = "";
-  foreach ($extended_field_settings as $setting_info)
-  {
-//  	if ($setting_info[""])
-  }
-
-  // if the column name wasn't found, the $field_id passed in was invalid. Return false.
-  if (empty($col_name))
-    return array(false, $LANG["notify_submission_no_field_id"]);
-
-  $query = "
-    SELECT $col_name
-    FROM   {$g_table_prefix}form_{$form_id}
-    WHERE  submission_id = $submission_id
-            ";
-
-  $result = mysql_query($query);
-  $file_info = mysql_fetch_row($result);
-  $file = $file_info[0];
-
-  $update_database_record = false;
-  $success = true;
-  $message = "";
-
-  if (!empty($file))
-  {
-    if ($force_delete)
-    {
-      @unlink("$file_folder/$file");
-      $message = $LANG["notify_file_deleted"];
-      $update_database_record = true;
-    }
-    else
-    {
-      if (@unlink("$file_folder/$file"))
-      {
-        $success = true;
-        $message = $LANG["notify_file_deleted"];
-        $update_database_record = true;
-      }
-      else
-      {
-        if (!is_file("$file_folder/$file"))
-        {
-          $success = false;
-          $update_database_record = false;
-          $replacements = array("js_link" => "return ms.delete_submission_file($field_id, true)");
-          $message = ft_eval_smarty_string($LANG["notify_file_not_deleted_no_exist"], $replacements);
-        }
-        else if (is_file("$file_folder/$file") && (!is_readable("$file_folder/$file") || !is_writable("$file_folder/$file")))
-        {
-          $success = false;
-          $update_database_record = false;
-          $replacements = array("js_link" => "return ms.delete_submission_file($field_id, true)");
-          $message = ft_eval_smarty_string($LANG["notify_file_not_deleted_permissions"], $replacements);
-        }
-        else
-        {
-          $success = false;
-          $update_database_record = false;
-          $replacements = array("js_link" => "return ms.delete_submission_file($field_id, true)");
-          $message = ft_eval_smarty_string($LANG["notify_file_not_deleted_unknown_error"], $replacements);
-        }
-      }
-    }
-  }
-
-  // if need be, update the database record to remove the reference to the file in the database. Generally this
-  // should always work, but in case something funky happened, like the permissions on the file were changed to
-  // forbid deleting, I think it's best if the record doesn't get deleted to remind the admin/client it's still
-  // there.
-  if ($update_database_record)
-  {
-    $query = mysql_query("
-      UPDATE {$g_table_prefix}form_{$form_id}
-      SET    $col_name = ''
-      WHERE  submission_id = $submission_id
-             ");
-  }
-
-  extract(ft_process_hooks("end", compact("form_id", "submission_id", "field_id", "force_delete"),
-    array("success", "message")), EXTR_OVERWRITE);
-
-  return array($success, $message);
-}
-
-
-/**
  * Retrieves everything about a form submission. It contains a lot of meta-information about the field,
  * from the form_fields and view_tabs. If the optional view_id parameter is included, only the fields
  * in the View are returned (AND all system fields, if they're not included).
@@ -704,7 +591,6 @@ function ft_update_submission($form_id, $submission_id, $infohash)
         "field_id"   => $field_id,
         "field_info" => $row,
         "data"       => $infohash,
-        "file_data"  => $_FILES,
         "code"       => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
         "settings"   => $field_settings[$field_id]
       );
@@ -765,49 +651,16 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 
   $result = mysql_query($query);
 
+  // if there was a problem updating the submission, don't even bother calling the file upload hook. Just exit right away
   if (!$result)
     return array(false, $LANG["notify_submission_not_updated"]);
 
-
-  // now process any file fields - TODO move to module
-/*
-  if (!empty($file_fields))
-  {
-    $problem_files = array();
-    while (list($form_field_name, $fileinfo) = each($_FILES))
-    {
-      // if nothing was included in this field, just ignore it
-      if (empty($fileinfo["name"]))
-        continue;
-
-      foreach ($file_fields as $field_info)
-      {
-        $field_id   = $field_info["field_id"];
-        $field_name = $field_info["field_info"]["field_name"];
-
-        if ($field_name == $form_field_name)
-        {
-          list($success2, $message2) = ft_upload_submission_file($form_id, $submission_id, $fileinfo, $field_info);
-          if (!$success2)
-            $problem_files[] = array($fileinfo["name"], $message2);
-        }
-      }
-    }
-
-    if (!empty($problem_files))
-    {
-      $message = $LANG["notify_submission_updated_file_problems"] . "<br /><br />";
-      foreach ($problem_files as $problem)
-        $message .= "&bull; <b>{$problem[0]}</b>: $problem[1]<br />\n";
-
-      return array(false, $message);
-    }
-  }
-*/
+  // now process any file fields
+  extract(ft_process_hooks("manage_files", compact("form_id", "submission_id", "file_fields"), array("success", "message", "something")), EXTR_OVERWRITE);
 
   // if the submission date just changed, update sessions in case it was the FIRST submission (this updates the
   // search date dropdown)
-  // TODO!
+  // TODO! This sucks.
   if ($submission_date_changed)
     _ft_cache_form_stats($form_id);
 

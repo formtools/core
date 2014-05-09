@@ -258,17 +258,14 @@ function ft_get_field_col_by_field_id($form_id, $field_id_or_ids)
 
 
 /**
- * Returns the field title by the field database column string.
+ * Returns the field title by the field ID.
  *
- * @param integer $form_id
- * @param string $col_name
- * @return string
+ * @param integer $field_id
+ * @return string the field title
  */
 function ft_get_field_title_by_field_id($field_id)
 {
   global $g_table_prefix;
-
-  $col_name = ft_sanitize($field_id);
 
   $return_info = "";
   $query = mysql_query("
@@ -280,6 +277,32 @@ function ft_get_field_title_by_field_id($field_id)
   $return_info = (isset($result["field_title"])) ? $result["field_title"] : "";
 
   return $return_info;
+}
+
+
+/**
+ * Returns the field type ID by the field ID.
+ *
+ * TODO... this is inconsistently named. Should be called ft_get_field_type_id_by_field_id() and
+ * a function by this name should return all information about the field type.
+ *
+ * @param integer $field_id
+ * @return integer the field ID
+ */
+function ft_get_field_type_by_field_id($field_id)
+{
+  global $g_table_prefix;
+
+  $field_type_id = "";
+  $query = mysql_query("
+    SELECT field_type_id
+    FROM   {$g_table_prefix}form_fields
+    WHERE  field_id = '$field_id'
+    ");
+  $result = mysql_fetch_assoc($query);
+  $field_type_id = (isset($result["field_type_id"])) ? $result["field_type_id"] : "";
+
+  return $field_type_id;
 }
 
 
@@ -393,19 +416,45 @@ function ft_get_form_field_id_by_field_name($field_name, $form_id)
  * @param integer $field_id the unique field ID
  * @return array an array of hashes
  */
-function ft_get_form_field_settings($field_id)
+function ft_get_form_field_settings($field_id, $evaluate_dynamic_fields = false)
 {
   global $g_table_prefix;
 
-  $query = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}field_settings
-    WHERE  field_id = $field_id
-  ");
+  if ($evaluate_dynamic_fields)
+  {
+    $query = mysql_query("
+      SELECT *
+      FROM   {$g_table_prefix}field_settings fs, {$g_table_prefix}field_type_settings fts
+      WHERE  fs.setting_id = fts.setting_id AND
+             $field_id = $field_id
+    ");
+  }
+  else
+  {
+    $query = mysql_query("
+      SELECT *
+      FROM   {$g_table_prefix}field_settings
+      WHERE  field_id = $field_id
+    ");
+  }
 
   $settings = array();
   while ($row = mysql_fetch_assoc($query))
-    $settings[$row["setting_id"]] = $row["setting_value"];
+  {
+    if ($evaluate_dynamic_fields && $row["default_value_type"] == "dynamic")
+    {
+      $settings[$row["setting_id"]] = "";
+      $parts = explode(",", $row["setting_value"]);
+      if (count($parts) == 2)
+      {
+        $settings[$row["setting_id"]] = ft_get_settings($parts[0], $parts[1]);
+      }
+    }
+    else
+    {
+      $settings[$row["setting_id"]] = $row["setting_value"];
+    }
+  }
 
   extract(ft_process_hooks("end", compact("field_id", "settings"), array("settings")), EXTR_OVERWRITE);
 
@@ -428,10 +477,11 @@ function ft_get_form_fields($form_id, $custom_params = array())
   global $g_table_prefix;
 
   $params = array(
-    "page"                    => (isset($custom_params["page"])) ? $custom_params["page"] : 1,
-    "num_fields_per_page"     => (isset($custom_params["num_fields_per_page"])) ? $custom_params["num_fields_per_page"] : "all",
-    "include_field_type_info" => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false,
-    "include_field_settings"  => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false
+    "page"                      => (isset($custom_params["page"])) ? $custom_params["page"] : 1,
+    "num_fields_per_page"       => (isset($custom_params["num_fields_per_page"])) ? $custom_params["num_fields_per_page"] : "all",
+    "include_field_type_info"   => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false,
+    "include_field_settings"    => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false,
+    "evaluate_dynamic_settings" => (isset($custom_params["evaluate_dynamic_settings"])) ? $custom_params["evaluate_dynamic_settings"] : false
   );
 
   $limit_clause = _ft_get_limit_clause($params["page"], $params["num_fields_per_page"]);
@@ -463,7 +513,7 @@ function ft_get_form_fields($form_id, $custom_params = array())
   {
     if ($params["include_field_settings"])
     {
-      $row["settings"] = ft_get_form_field_settings($row["field_id"]);
+      $row["settings"] = ft_get_form_field_settings($row["field_id"], $params["evaluate_dynamic_settings"]);
     }
     $infohash[] = $row;
   }
@@ -587,6 +637,73 @@ function ft_get_extended_field_settings($field_id, $setting_id = "")
 
   return $settings;
 }
+
+
+/**
+ * ft_get_extended_field_settings() doesn't quite do what I need, so I added this secondary function. It's
+ * similar to ft_get_form_field_field_type_settings(), except for a single field.
+ *
+ * All it does is return all settings for a form field TAKING INTO ACCOUNT what's been overridden.
+ *
+ * Note: it returns the information as a hash of identifier => value pairs. This is fine, because no two field
+ * settings for a single field type may have the same identifier.
+ *
+ * @param $field_id
+ * @return array a hash of [identifier] = values
+ */
+function ft_get_field_settings($field_id)
+{
+  global $g_table_prefix;
+
+  // get the overridden settings
+  $query = mysql_query("
+    SELECT fts.field_type_id, fs.field_id, fts.field_setting_identifier, fs.setting_value
+    FROM   ft_field_type_settings fts, ft_field_settings fs
+    WHERE  fts.setting_id = fs.setting_id AND
+           fs.field_id = $field_id
+    ORDER BY fs.field_id
+  ");
+
+  $overridden_settings = array();
+  while ($row = mysql_fetch_assoc($query))
+  {
+    $overridden_settings[$row["field_setting_identifier"]] = $row["setting_value"];
+  }
+
+  $field_type_id = ft_get_field_type_by_field_id($field_id);
+  $default_field_type_settings = ft_get_field_type_settings($field_type_id);
+
+  // now overlay the two and return all field settings for all fields
+  $complete_settings = array();
+  foreach ($default_field_type_settings as $setting_info)
+  {
+    $identifier         = $setting_info["field_setting_identifier"];
+    $default_value_type = $setting_info["default_value_type"];
+    if ($default_value_type == "static")
+      $value = $setting_info["default_value"];
+    else
+    {
+      $parts = explode(",", $setting_info["default_value"]);
+
+      // dynamic setting values should ALWAYS be of the form "setting_name,module_folder/'core'". If they're
+      // not, just ignore it
+      if (count($parts) != 2)
+        $value = "";
+      else
+      {
+        $value = ft_get_settings($parts[0], $parts[1]);
+      }
+    }
+
+    if (isset($overridden_settings[$field_id]) && isset($overridden_settings[$field_id][$identifier]))
+      $value = $overridden_settings[$field_id][$identifier];
+
+    $complete_settings[$identifier] = $value;
+  }
+
+  return $complete_settings;
+}
+
 
 
 /**
@@ -848,8 +965,9 @@ function ft_update_field($form_id, $field_id, $tab_info)
       // give it a "form_field:" prefix, so we know exactly what the data contains & we can select the appropriate form ID
       // and not Option List ID on re-editing. This keeps everything pretty simple, rather than spreading the data amongst
       // multiple fields
-      if (array_key_exists("edit_field__setting_{$setting_id}_field_id", $setting_hash))
+      if (preg_match("/^ft/", $setting_value))
       {
+        $setting_value = preg_replace("/^ft/", "", $setting_value);
         $setting_value = "form_field:$setting_value|" . $setting_hash["edit_field__setting_{$setting_id}_field_id"] . "|"
           . $setting_hash["edit_field__setting_{$setting_id}_field_order"];
       }

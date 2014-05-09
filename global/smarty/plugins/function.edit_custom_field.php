@@ -92,7 +92,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
     $curr_setting_id         = $setting_info["setting_id"];
     $curr_setting_field_type = $setting_info["field_type"];
     $value                   = $setting_info["default_value"];
-    $placeholder             = $setting_info["placeholder"];
+    $identifier              = $setting_info["field_setting_identifier"];
 
     foreach ($field_info["submission_info"]["settings"] as $setting)
     {
@@ -110,6 +110,17 @@ function smarty_function_edit_custom_field($params, &$smarty)
         break;
     }
 
+    // next, if the setting is dynamic, convert the stored value
+    if ($default_value_type == "dynamic")
+    {
+      // dynamic setting values should ALWAYS be of the form "setting_name,module_folder/'core'". If they're not, just ignore it
+      $parts = explode(",", $value);
+      if (count($parts) == 2)
+      {
+        $value = ft_get_settings($parts[0], $parts[1]);
+      }
+    }
+
     // if this setting type is a dropdown list and $value is non-empty, get the list of options
     if ($curr_setting_field_type == "option_list_or_form_field" && !empty($value))
     {
@@ -123,7 +134,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
       }
     }
 
-    $placeholders[$placeholder] = $value;
+    $placeholders[$identifier] = $value;
   }
 
   echo ft_eval_smarty_string($markup_with_placeholders, $placeholders);

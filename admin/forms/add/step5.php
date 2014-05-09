@@ -22,7 +22,7 @@ for ($i=1; $i<=count($form_urls); $i++)
   $iframe_loaded_js_rows[] = "page_ns.form_{$i}_loaded = false;";
 }
 
-$iframe_loaded_js = join("\n", $iframe_loaded_js_rows);
+$iframe_loaded_js = implode("\n", $iframe_loaded_js_rows);
 $num_pages = count($form_urls);
 
 // get the list of (non-system) field IDs
@@ -35,7 +35,7 @@ foreach ($form_fields as $field_info)
   $custom_field_ids[] = $field_info["field_id"];
 }
 
-$custom_field_id_str = join(",", $custom_field_ids);
+$custom_field_id_str = implode(",", $custom_field_ids);
 
 
 // this chunk of code determines what method should be used to make the form web page(s) available to

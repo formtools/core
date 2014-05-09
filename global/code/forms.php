@@ -325,8 +325,11 @@ function ft_finalize_form($form_id)
  */
 function ft_initialize_form($form_data)
 {
-  global $g_table_prefix, $g_root_dir, $g_multi_val_delimiter, $LANG, $g_default_textbox_field_type_id,
-	$g_default_date_field_type_id, $g_default_date_field_type_datetime_setting_id, $g_default_datetime_format;
+  global $g_table_prefix, $g_root_dir, $g_multi_val_delimiter, $LANG, $g_default_datetime_format;
+
+  $textbox_field_type_id = ft_get_field_type_id_by_identifier("textbox");
+  $date_field_type_id    = ft_get_field_type_id_by_identifier("date");
+  $date_field_type_datetime_setting_id = ft_get_field_type_setting_id_by_identifier($date_field_type_id, "display_format");
 
   $display_notification_page = isset($form_data["form_tools_display_notification_page"]) ?
     $form_data["form_tools_display_notification_page"] : true;
@@ -371,7 +374,7 @@ function ft_initialize_form($form_data)
   $query = mysql_query("
     INSERT INTO {$g_table_prefix}form_fields (form_id, field_name, field_test_value, field_type_id, is_system_field,
         data_type, field_title, col_name, list_order, is_new_sort_group)
-    VALUES ($form_id, 'core__submission_id', '', $g_default_textbox_field_type_id, 'yes', 'number', '{$LANG["word_id"]}',
+    VALUES ($form_id, 'core__submission_id', '', $textbox_field_type_id, 'yes', 'number', '{$LANG["word_id"]}',
         'submission_id', '$order', 'yes')
   ");
 
@@ -440,13 +443,13 @@ function ft_initialize_form($form_data)
   $query = mysql_query("
     INSERT INTO {$g_table_prefix}form_fields (form_id, field_name, field_test_value, field_type_id, is_system_field,
       field_title, data_type, col_name, list_order)
-    VALUES ($form_id, 'core__submission_date', '', $g_default_date_field_type_id, 'yes', '{$LANG["word_date"]}',
+    VALUES ($form_id, 'core__submission_date', '', $date_field_type_id, 'yes', '{$LANG["word_date"]}',
       'date', 'submission_date', '$order1')
       ");
   $submission_date_field_id = mysql_insert_id();
   mysql_query("
     INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
-    VALUES ($submission_date_field_id, $g_default_date_field_type_datetime_setting_id, '$g_default_datetime_format')
+    VALUES ($submission_date_field_id, $date_field_type_datetime_setting_id, '$g_default_datetime_format')
       ");
 
   // last modified date
@@ -454,13 +457,13 @@ function ft_initialize_form($form_data)
   $query = mysql_query("
     INSERT INTO {$g_table_prefix}form_fields (form_id, field_name, field_test_value, field_type_id, is_system_field,
       field_title, data_type, col_name, list_order)
-    VALUES ($form_id, 'core__last_modified', '', $g_default_date_field_type_id, 'yes', '{$LANG["phrase_last_modified"]}',
+    VALUES ($form_id, 'core__last_modified', '', $date_field_type_id, 'yes', '{$LANG["phrase_last_modified"]}',
       'date', 'last_modified_date', '$order2')
       ");
   $last_modified_date_field_id = mysql_insert_id();
   mysql_query("
     INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
-    VALUES ($last_modified_date_field_id, $g_default_date_field_type_datetime_setting_id, '$g_default_datetime_format')
+    VALUES ($last_modified_date_field_id, $date_field_type_datetime_setting_id, '$g_default_datetime_format')
       ");
 
   // ip address
@@ -468,7 +471,7 @@ function ft_initialize_form($form_data)
   $query = mysql_query("
     INSERT INTO {$g_table_prefix}form_fields (form_id, field_name, field_test_value, field_type_id, is_system_field,
       field_title, data_type, col_name, list_order)
-    VALUES ($form_id, 'core__ip_address', '', $g_default_textbox_field_type_id, 'yes', '{$LANG["phrase_ip_address"]}',
+    VALUES ($form_id, 'core__ip_address', '', $textbox_field_type_id, 'yes', '{$LANG["phrase_ip_address"]}',
       'number', 'ip_address', '$order3')
       ");
 
@@ -992,9 +995,11 @@ function ft_set_form_main_settings($infohash)
  */
 function ft_set_form_field_types($form_id, $info)
 {
-  global $g_table_prefix, $g_default_textbox_field_type_id;
+  global $g_table_prefix;
 
   extract(ft_process_hooks("start", compact("info", "form_id"), array("info")), EXTR_OVERWRITE);
+
+  $textbox_field_type_id = ft_get_field_type_id_by_identifier("textbox");
 
   // set a 5 minute maximum execution time for this request
   @set_time_limit(300);
@@ -1013,7 +1018,7 @@ function ft_set_form_field_types($form_id, $info)
     $field_id = $field_info["field_id"];
 
     // update all the field types
-    $field_type_id = $g_default_textbox_field_type_id;
+    $field_type_id = $textbox_field_type_id;
     if (isset($info["field_{$field_id}_type"]))
       $field_type_id = $info["field_{$field_id}_type"];
     if (isset($info["field_{$field_id}_size"]))

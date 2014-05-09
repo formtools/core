@@ -128,8 +128,8 @@ $page_vars["form_id"] = $form_id;
 $page_vars["view_id"] = $view_id;
 $page_vars["view_info"] = $view_info;
 $page_vars["edit_submission_page_label"] = $edit_submission_page_label;
-$page_vars["submission_tab_fields"] = $submission_tab_fields;
-$page_vars["submission_tab_field_id_str"] = join(",", $submission_tab_field_ids);
+//$page_vars["submission_tab_fields"] = $submission_tab_fields;
+//$page_vars["submission_tab_field_id_str"] = implode(",", $submission_tab_field_ids);
 $page_vars["tab_number"] = $tab_number;
 $page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected", "confirm_delete_submission_file",
   "phrase_please_confirm", "word_no", "word_yes");
