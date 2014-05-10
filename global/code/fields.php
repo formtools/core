@@ -168,7 +168,7 @@ function ft_delete_form_fields($form_id, $field_ids)
   else
     $message = $LANG["notify_form_field_removed"];
 
-  extract(ft_process_hook_calls("end", compact("infohash", "form_id", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("infohash", "form_id", "field_ids", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -417,6 +417,36 @@ function ft_get_form_field($field_id, $custom_params = array())
   extract(ft_process_hook_calls("end", compact("field_id", "info"), array("info")), EXTR_OVERWRITE);
 
   return $info;
+}
+
+
+/**
+ * A getter function to retrieve everything about a form field from the database column name. This
+ * is just a wrapper for ft_get_form_field().
+ *
+ * @param integer $form_id
+ * @param string $col_name
+ * @param array
+ */
+function ft_get_form_field_by_colname($form_id, $col_name, $params = array())
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT *
+    FROM   {$g_table_prefix}form_fields
+    WHERE  form_id = $form_id AND
+           col_name = '$col_name'
+    LIMIT 1
+      ");
+
+  $info = mysql_fetch_assoc($query);
+
+  if (empty($info))
+    return array();
+
+  $field_id = $info["field_id"];
+  return ft_get_form_field($field_id, $params);
 }
 
 
@@ -768,7 +798,7 @@ function ft_delete_extended_field_settings($field_id)
 
 
 /**
- * Called on he Add External Form Step 4 page. It reorders the form fields and their groupings.
+ * Called on the Add External Form Step 4 page. It reorders the form fields and their groupings.
  *
  * @param integer $form_id
  * @param integer $infohash the POST data from the form
@@ -1098,7 +1128,7 @@ function ft_update_field_filters($field_id)
     $operator      = $filter_info["operator"];
 
     // date field [TODO... there's a difference between datetimes and varchars cast as datetimes]
-    if ($field_info["	"] == "yes")
+    if ($field_info["is_date_field"] == "yes")
     {
       $sql_operator = ($operator == "after") ? ">" : "<";
       $sql = "$col_name $sql_operator '$values'";

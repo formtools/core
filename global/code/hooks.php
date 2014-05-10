@@ -398,7 +398,7 @@ function _ft_find_hooks($curr_folder, $root_folder, $component, &$results)
   }
   else
   {
-    $handle = opendir($curr_folder);
+    $handle = @opendir($curr_folder);
     if ($handle)
     {
       while (($file = readdir($handle)) !== false)

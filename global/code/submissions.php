@@ -98,10 +98,10 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
   // loop the form templates to find out if there are any file fields. If there are - and the user
   // configured it - delete any associated files
   $file_delete_problems = array();
+  $file_fields_to_delete = array();
   if ($auto_delete_submission_files == "yes")
   {
     $file_field_type_ids = ft_get_file_field_type_ids();
-    $file_fields_to_delete = array();
     foreach ($form_fields as $field_info)
     {
       $field_type_id = $field_info["field_type_id"];
@@ -144,7 +144,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
     if (empty($file_delete_problems))
     {
       $success = true;
-      $message = ($form_has_file_field) ? $LANG["notify_submission_and_files_deleted"] : $LANG["notify_submission_deleted"];
+      $message = ($file_fields_to_delete) ? $LANG["notify_submission_and_files_deleted"] : $LANG["notify_submission_deleted"];
     }
     else
     {

@@ -442,6 +442,8 @@ $g_sql[] = "CREATE TABLE %PREFIX%modules (
   module_id mediumint(8) unsigned NOT NULL auto_increment,
   is_installed enum('yes','no') NOT NULL default 'no',
   is_enabled enum('yes','no') NOT NULL default 'no',
+  is_premium enum('yes','no') NOT NULL default 'no',
+  module_key varchar(12) default NULL,
   origin_language varchar(50) NOT NULL,
   module_name varchar(100) NOT NULL,
   module_folder varchar(100) NOT NULL,

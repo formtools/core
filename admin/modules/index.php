@@ -6,7 +6,7 @@ ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
 
 if (isset($request["install"]))
-  list($g_success, $g_message) = ft_install_module($request["install"]);
+  list($g_success, $g_message) = ft_install_module($request);
 
 if (isset($request["enable_modules"]))
   list($g_success, $g_message) = ft_update_enabled_modules($request);
@@ -32,9 +32,9 @@ $keyword     = ft_load_field("keyword", "module_search_keyword", "");
 $status      = ft_load_field("status", "module_search_status", array("enabled", "disabled"));
 
 $search_criteria = array(
-  "order"       => $order,
-  "keyword"     => $keyword,
-  "status"      => $status,
+  "order"   => $order,
+  "keyword" => $keyword,
+  "status"  => $status
     );
 $num_modules = ft_get_module_count();
 $modules     = ft_search_modules($search_criteria);
@@ -69,36 +69,10 @@ $page_vars["order"]       = $order;
 $page_vars["search_criteria"] = $search_criteria;
 $page_vars["module_ids_in_page"] = $module_ids_in_page;
 $page_vars["pagination"]  = ft_get_dhtml_page_nav(count($modules), $_SESSION["ft"]["settings"]["num_modules_per_page"], 1);
-$page_vars["head_js"] =<<< END
-var page_ns = {
-  uninstall_module_dialog: $("<div></div>")
-};
-page_ns.uninstall_module = function(module_id) {
-  ft.create_dialog({
-    dialog:     page_ns.uninstall_module_dialog,
-    title:      "{$LANG["phrase_please_confirm"]}",
-    content:    "{$LANG["confirm_uninstall_module"]}",
-    popup_type: "warning",
-    buttons: {
-      "{$LANG["word_yes"]}": function() {
-        window.location = "index.php?uninstall=" + module_id;
-      },
-      "{$LANG["word_no"]}": function() {
-        $(this).dialog("close");
-      }
-    }
-  });
-  return false;
-}
-
-$(function() {
-  $("#search_form form").bind("submit", function() {
-    if (!$("#status_enabled").attr("checked") && !$("#status_disabled").attr("checked")) {
-      ft.display_message("ft_message", 0, "{$LANG["validation_modules_search_no_status"]}");
-      return false;
-    }
-  });
-});
+$page_vars["js_messages"] = array("validation_modules_search_no_status", "phrase_please_enter_license_key", "word_yes", "word_no",
+  "phrase_please_confirm", "confirm_uninstall_module", "word_close", "word_verify", "notify_invalid_license_key");
+$page_vars["head_string"] =<<< END
+<script src="../../global/scripts/manage_modules.js"></script>
 END;
 
 ft_display_page("admin/modules/index.tpl", $page_vars);

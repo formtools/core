@@ -8,8 +8,8 @@ $account_id = $_SESSION["ft"]["account"]["account_id"];
 
 if (isset($_GET["reset"]))
 {
-	$_SESSION["ft"]["form_sort_order"] = "";
-	$_SESSION["ft"]["form_search_keyword"] = "";
+  $_SESSION["ft"]["form_sort_order"] = "";
+  $_SESSION["ft"]["form_search_keyword"] = "";
 }
 $order   = ft_load_field("order", "form_sort_order", "form_name-ASC");
 $keyword = ft_load_field("keyword", "form_search_keyword", "");

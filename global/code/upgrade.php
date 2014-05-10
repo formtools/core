@@ -693,7 +693,7 @@ function ft_upgrade_form_tools()
 
     mysql_query("ALTER TABLE {$g_table_prefix}forms DROP default_view_id");
     mysql_query("ALTER TABLE {$g_table_prefix}forms ADD form_type ENUM('internal','external') NOT NULL DEFAULT 'external' AFTER form_id");
-    mysql_query("ALTER TABLE {$g_table_prefix}forms ADD add_submission_button_label VARCHAR(255) NULL DEFAULT '{$LANG["word_add"]}'");
+    mysql_query("ALTER TABLE {$g_table_prefix}forms ADD add_submission_button_label VARCHAR(255) NULL DEFAULT '{$LANG["word_add_rightarrow"]}'");
     mysql_query("ALTER TABLE {$g_table_prefix}forms CHANGE form_url form_url VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL");
 
     mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('edit_submission_shared_resources_js', '\$(function() {\r\n  \$(\".fancybox\").fancybox();\r\n});\r\n', 'core')");
@@ -1397,7 +1397,18 @@ function ft_upgrade_form_tools()
     ");
   }
 
+  if ($old_version_info["release_date"] < 20110626)
+  {
+    mysql_query("
+      ALTER TABLE {$g_table_prefix}modules
+      ADD is_premium ENUM('yes', 'no') NOT NULL DEFAULT 'no' AFTER is_enabled,
+      ADD module_key VARCHAR(15) NULL AFTER is_premium
+    ");
+  }
+
+
   // ----------------------------------------------------------------------------------------------
+
 
   // if the full version string (version-type-date) is different, update the database
   if ($old_version_info["full"] != "{$g_current_version}-{$g_release_type}-{$g_release_date}")

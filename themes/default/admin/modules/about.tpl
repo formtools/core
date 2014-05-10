@@ -15,6 +15,18 @@
     <td width="140" class="pad_left_small">{$LANG.word_module}</td>
     <td class="pad_left_small bold">{$module_info.module_name}</td>
   </tr>
+  {if $module_info.is_premium == "yes"}
+    <tr>
+      <td class="pad_left_small">{$LANG.phrase_license_key}</td>
+      <td class="pad_left_small">
+        {if $module_info.module_key}
+          <span class="medium_grey">{$module_info.module_key}</span>
+        {else}
+          <span class="light_grey">{$LANG.phrase_not_entered_yet}</span>
+        {/if}
+      </td>
+    </tr>
+  {/if}
   <tr>
     <td class="pad_left_small">{$LANG.phrase_module_description}</td>
     <td class="pad_left_small">{$module_info.description}</td>

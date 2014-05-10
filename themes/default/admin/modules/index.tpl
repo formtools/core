@@ -50,7 +50,7 @@
 
     {$pagination}
 
-    <form action="{$same_page}" method="post" class="check_areas">
+    <form action="{$same_page}" method="post" class="check_areas" id="modules_form">
       <input type="hidden" name="module_ids_in_page" value="{$module_ids_in_page}" />
 
       {assign var="table_group_id" value="1"}
@@ -124,7 +124,9 @@
           <td valign="top" align="center">{$module.version}</td>
           <td valign="top" align="center" {if $module.is_installed == "yes"}class="check_area"{/if}>
             {if $module.is_installed == "no"}
-              <a href="{$same_page}?install={$module.module_id}">{$LANG.word_install|upper}</a>
+              <input type="hidden" class="module_id" value="{$module.module_id}" />
+              <input type="hidden" class="module_folder" value="{$module.module_folder}" />
+              <a href="{$same_page}?install={$module.module_id}"{if $module.is_premium == "yes"} class="is_premium"{/if}>{$LANG.word_install|upper}</a>
             {else}
               <input type="checkbox" name="is_enabled[]" value="{$module.module_id}" {if $module.is_enabled == 'yes'}checked{/if} />
             {/if}
@@ -139,9 +141,7 @@
             {/if}
           </td>
           <td valign="top" class="del2" align="center">
-            {if $module.module_type != "core"}
-              <a href="#" onclick="return page_ns.uninstall_module({$module.module_id})">{$LANG.word_uninstall|upper}</a>
-            {/if}
+            <a href="#" onclick="return mm.uninstall_module({$module.module_id})">{$LANG.word_uninstall|upper}</a>
           </td>
         </tr>
 
@@ -164,6 +164,16 @@
 
     </form>
 
+    <div id="premium_module_dialog" class="hidden">
+      <span class="popup_icon popup_type_info"></span>
+      <div class="margin_bottom_large">
+        {$LANG.text_enter_license_key}
+      </div>
+      <div class="license_key_panel">
+        <span class="margin_right_large">{$LANG.phrase_license_key}</span>
+        <input type="text" id="key_section1" maxlength="4" value="" />-<input type="text" id="key_section2" maxlength="4" value="" />-<input type="text" id="key_section3" maxlength="4" value="" />
+      </div>
+    </div>
   {/if}
 
 {include file='footer.tpl'}

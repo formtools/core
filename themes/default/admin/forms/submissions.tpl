@@ -93,11 +93,17 @@
   {$pagination}
 
   {if $search_num_results == 0}
-    <div class="notify yellow_bg">
+
+    <div class="notify margin_bottom_large">
       <div style="padding:8px">
         {$LANG.text_no_search_results}
       </div>
     </div>
+
+    {if $view_info.may_add_submissions == "yes"}
+      <input type="button" id="add_submission" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='{$same_page}?add_submission'" />
+    {/if}
+
   {else}
 
     <form name="current_form" action="{$same_page}" method="post">

@@ -1430,6 +1430,14 @@ $LANG["phrase_word_limit_p"] = "word limit.";
 $LANG["phrase_characters_limit_p"] = "characters limit.";
 $LANG["phrase_remaining_words"] = "remaining words";
 $LANG["phrase_remaining_characters"] = "remaining characters";
+$LANG["phrase_license_key"] = "License Key";
+$LANG["phrase_please_enter_license_key"] = "Please enter your license key";
+$LANG["word_verify"] = "Verify";
+$LANG["text_enter_license_key"] = "In order to install this module, you must enter your license key. You should have been emailed this key after purchasing the module. If you didn't receive it, you can always <a href=\"http://accounts.formtools.org\" target=\"_blank\">log into your Form Tools account</a> to track it down.";
+$LANG["phrase_not_entered_yet"] = "Not entered yet";
+$LANG["phrase_your_license_key"] = "Your license key is";
+$LANG["notify_invalid_license_key"] = "Sorry, that does not appear to be a valid license key. Please try entering it again.";
+
 
 // removed!
 //$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";

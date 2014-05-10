@@ -317,9 +317,9 @@ function ft_finalize_form($form_id)
   $query = "
       UPDATE {$g_table_prefix}forms
       SET    is_initialized = 'yes',
-            is_complete = 'yes',
-            is_active = 'yes',
-            date_created = '$now'
+             is_complete = 'yes',
+             is_active = 'yes',
+             date_created = '$now'
       WHERE  form_id = $form_id
           ";
   mysql_query($query)
@@ -1297,8 +1297,6 @@ function ft_update_form_fields_tab($form_id, $infohash)
 
   $new_sort_groups = explode(",", $infohash["{$sortable_id}_sortable__new_groups"]);
 
-  //old_field_200_type_id
-
   foreach ($field_ids as $field_id)
   {
     $is_new_field = preg_match("/^NEW/", $field_id) ? true : false;
@@ -1320,8 +1318,10 @@ function ft_update_form_fields_tab($form_id, $infohash)
     $old_col_name        = (isset($infohash["old_col_{$field_id}_name"])) ? $infohash["old_col_{$field_id}_name"] : "";
     $is_system_field     = (in_array($field_id, $infohash["system_fields"])) ? "yes" : "no";
 
-    if (!$is_new_field && $field_type_id != $infohash["old_field_{$field_id}_type_id"])
+    if (!$is_new_field && $is_system_field == "no" && $field_type_id != $infohash["old_field_{$field_id}_type_id"])
+    {
       $changed_field_types_field_ids[] = $field_id;
+    }
 
     $field_info[] = array(
       "is_new_field"        => $is_new_field,
@@ -1440,9 +1440,9 @@ function ft_update_form_fields_tab($form_id, $infohash)
       $query = "
         UPDATE {$g_table_prefix}form_fields
         SET    field_title = '$display_name',
-              include_on_redirect = '$include_on_redirect',
-              list_order = $list_order,
-              is_new_sort_group = '$is_new_sort_group'
+               include_on_redirect = '$include_on_redirect',
+               list_order = $list_order,
+               is_new_sort_group = '$is_new_sort_group'
         WHERE  field_id = $field_id
                   ";
     }
@@ -1451,13 +1451,13 @@ function ft_update_form_fields_tab($form_id, $infohash)
       $query = "
         UPDATE {$g_table_prefix}form_fields
         SET    field_name = '$field_name',
-              field_title = '$display_name',
-              field_size = '$field_size',
-              col_name = '$col_name',
-              field_type_id  = '$field_type_id',
-              include_on_redirect = '$include_on_redirect',
-              list_order = $list_order,
-              is_new_sort_group = '$is_new_sort_group'
+               field_title = '$display_name',
+               field_size = '$field_size',
+               col_name = '$col_name',
+               field_type_id  = '$field_type_id',
+               include_on_redirect = '$include_on_redirect',
+               list_order = $list_order,
+               is_new_sort_group = '$is_new_sort_group'
         WHERE  field_id = $field_id
                   ";
     }
@@ -1491,7 +1491,7 @@ function ft_update_form_fields_tab($form_id, $infohash)
   $success = true;
   $message = $LANG["notify_field_changes_saved"];
 
-  extract(ft_process_hook_calls("end", compact("infohash", "form_id"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("infohash", "field_info", "form_id"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }

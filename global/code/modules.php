@@ -549,6 +549,7 @@ function ft_update_module_list()
       $author_link          = $info["author_link"];
       $module_version       = $info["version"];
       $module_date          = $info["date"];
+      $is_premium           = $info["is_premium"];
       $origin_language      = $info["origin_language"];
       $nav                  = $info["nav"];
 
@@ -561,10 +562,10 @@ function ft_update_module_list()
       $module_datetime = ft_get_current_datetime($timestamp);
 
       mysql_query("
-        INSERT INTO {$g_table_prefix}modules (is_installed, is_enabled, origin_language, module_name, module_folder, version,
-          author, author_email, author_link, description, module_date)
-        VALUES ('no','no', '$origin_language', '$module_name', '$folder', '$module_version', '$author', '$author_email', '$author_link',
-          '$module_description', '$module_datetime')
+        INSERT INTO {$g_table_prefix}modules (is_installed, is_enabled, is_premium, origin_language, module_name,
+          module_folder, version, author, author_email, author_link, description, module_date)
+        VALUES ('no','no', '$is_premium', '$origin_language', '$module_name', '$folder', '$module_version',
+          '$author', '$author_email', '$author_link', '$module_description', '$module_datetime')
           ") or die(mysql_error());
       $module_id = mysql_insert_id();
 
@@ -628,6 +629,7 @@ function ft_get_module_info_file_contents($module_folder)
   $info["author_link"] = isset($values["author_link"]) ? $values["author_link"] : "";
   $info["version"] = isset($values["version"]) ? $values["version"] : "";
   $info["date"] = isset($values["date"]) ? $values["date"] : "";
+  $info["is_premium"] = (isset($values["is_premium"]) && $values["is_premium"] == "yes") ? "yes" : "no";
   $info["origin_language"] = isset($values["origin_language"]) ? $values["origin_language"] : "";
   $info["nav"] = isset($values["nav"]) ? $values["nav"] : array();
 
@@ -802,9 +804,11 @@ function ft_load_module_field($module_folder, $field_name, $session_name, $defau
  * @param integer $module_id
  * @return array [0] T/F, [1] error / success message.
  */
-function ft_install_module($module_id)
+function ft_install_module($info)
 {
   global $LANG, $g_root_dir, $g_root_url, $g_table_prefix;
+
+  $module_id = $info["install"];
 
   $module_info = ft_get_module($module_id);
   $module_folder = $module_info["module_folder"];
@@ -825,7 +829,6 @@ function ft_install_module($module_id)
       // get the module language file contents and store the info in the $LANG global for
       // so it can be accessed by the installation script
       $LANG[$module_folder] = ft_get_module_lang_file_contents($module_folder);
-
       list($success, $custom_message) = $install_function_name($module_id);
 
       // if there was a custom message returned (error or notification), overwrite the default
@@ -839,13 +842,18 @@ function ft_install_module($module_id)
   // update the record in the module table to mark it as both is_installed and is_enabled.
   if (!$has_custom_install_script || ($has_custom_install_script && $success))
   {
+  	$module_key_clause = "";
+  	if (isset($info["k"]))
+  	{
+      $module_key_clause = ", module_key = '{$info["k"]}'";
+  	}
     mysql_query("
       UPDATE {$g_table_prefix}modules
       SET    is_installed = 'yes',
              is_enabled = 'yes'
-      WHERE   module_id = $module_id
+             $module_key_clause
+      WHERE  module_id = $module_id
         ");
-
   }
 
   return array($success, $message);

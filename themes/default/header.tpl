@@ -20,10 +20,10 @@
   <link type="text/css" rel="stylesheet" href="{$g_root_url}/global/css/main.css?v=2_0_5">
   <link type="text/css" rel="stylesheet" href="{$theme_url}/css/styles.css?v=2_0_5">
   <link href="{$g_root_url}/global/css/smoothness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"/>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/jquery.js"></script>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/jquery-ui-1.8.6.custom.min.js"></script>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/general.js?v=2_1_0"></script>
-  <script type="text/javascript" src="{$g_root_url}/global/scripts/rsv.js?v=2_1_0"></script>
+  <script src="{$g_root_url}/global/scripts/jquery.js"></script>
+  <script src="{$g_root_url}/global/scripts/jquery-ui-1.8.6.custom.min.js"></script>
+  <script src="{$g_root_url}/global/scripts/general.js?v=2_1_0"></script>
+  <script src="{$g_root_url}/global/scripts/rsv.js?v=2_1_0"></script>
   {$head_string}
   {$head_js}
   {$head_css}
