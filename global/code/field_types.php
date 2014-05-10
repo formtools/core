@@ -404,6 +404,24 @@ function ft_get_field_type_setting_id_by_identifier($field_type_id, $field_type_
 }
 
 
+function ft_get_field_type_setting_id_to_identifier()
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT setting_id, field_setting_identifier
+    FROM   {$g_table_prefix}field_type_settings
+  ");
+
+  $map = array();
+  while ($row = mysql_fetch_assoc($query))
+  {
+    $map[$row["setting_id"]] = $row["field_setting_identifier"];
+  }
+
+  return $map;
+}
+
 
 /**
  * Returns all settings for a field type, including the options - if requested.
@@ -553,15 +571,20 @@ function ft_get_field_type_settings($field_type_id_or_ids, $return_options = fal
  *   ...
  * ]
  */
-function ft_generate_field_type_settings_js($namespace = "page_ns")
+function ft_generate_field_type_settings_js($options = array())
 {
   global $g_table_prefix, $LANG;
+
+  $namespace = isset($options["page_ns"]) ? $options["page_ns"] : "page_ns";
+  $js_key    = isset($options["js_key"]) ? $options["js_key"] : "field_type_id";
 
   $query = mysql_query("
     SELECT DISTINCT field_type_id
     FROM   {$g_table_prefix}field_type_settings
   ");
 
+
+  $field_type_id_to_identifier_map = ft_get_field_type_id_to_identifier();
   $curr_js = array("{$namespace}.field_settings = {};");
 
   $field_setting_rows = array();
@@ -570,7 +593,7 @@ function ft_generate_field_type_settings_js($namespace = "page_ns")
     $field_type_id = $row["field_type_id"];
 
     $settings_query = mysql_query("
-      SELECT setting_id, field_label, field_type, field_orientation, default_value
+      SELECT setting_id, field_label, field_setting_identifier, field_type, field_orientation, default_value
       FROM   {$g_table_prefix}field_type_settings
       WHERE field_type_id = $field_type_id
       ORDER BY list_order
@@ -581,6 +604,7 @@ function ft_generate_field_type_settings_js($namespace = "page_ns")
     {
       $setting_id = $settings_row["setting_id"];
       $field_label = $settings_row["field_label"];
+      $field_setting_identifier = $settings_row["field_setting_identifier"];
       $field_type = $settings_row["field_type"];
       $default_value = $settings_row["default_value"];
       $field_orientation = $settings_row["field_orientation"];
@@ -612,6 +636,7 @@ END;
   {
     setting_id:  $setting_id,
     field_label: "$field_label",
+    field_setting_identifier: "$field_setting_identifier",
     field_type:  "$field_type",
     default_value: "$default_value",
     field_orientation:  "$field_orientation",
@@ -620,7 +645,14 @@ END;
 END;
     }
 
-    $curr_js[] = "{$namespace}.field_settings[\"field_type_$field_type_id\"] = [";
+    if ($js_key == "field_type_id")
+      $curr_js[] = "{$namespace}.field_settings[\"field_type_$field_type_id\"] = [";
+    else
+    {
+      $field_type_identifier = $field_type_id_to_identifier_map[$field_type_id];
+      $curr_js[] = "{$namespace}.field_settings[\"$field_type_identifier\"] = [";
+    }
+
     $curr_js[] = implode(",\n", $settings_js);
     $curr_js[] = "];";
   }
@@ -1405,3 +1437,79 @@ END;
     echo strip_tags($placeholders["VALUE"]);
   }
 }
+
+
+/**
+ * Used when updating a field. This is passed those field that have just had their field type changed. It figures
+ * out what values
+ *
+ * @param array $field_type_map
+ * @param string $field_type_settings_shared_characteristics
+ * @param integer $field_id
+ * @param integer $new_field_type_id
+ * @param integer $old_field_type_id
+ */
+function ft_get_shared_field_setting_info($field_type_map, $field_type_settings_shared_characteristics, $field_id, $new_field_type_id, $old_field_type_id)
+{
+  $new_field_type_identifier = $field_type_map[$new_field_type_id];
+  $old_field_type_identifier = $field_type_map[$old_field_type_id];
+
+  $groups = explode("|", $field_type_settings_shared_characteristics);
+  $return_info = array();
+  foreach ($groups as $group_info)
+  {
+  	list($group_name, $vals) = explode(":", $group_info);
+
+    $pairs = explode("`", $vals);
+    $settings = array();
+    foreach ($pairs as $str)
+    {
+      list($field_type_identifier, $setting_identifier) = explode(",", $str);
+      $settings[$field_type_identifier] = $setting_identifier;
+    }
+
+    $shared_field_types = array_keys($settings);
+    if (!in_array($new_field_type_identifier, $shared_field_types) || !in_array($old_field_type_identifier, $shared_field_types))
+      continue;
+
+    $old_setting_id = ft_get_field_type_setting_id_by_identifier($old_field_type_id, $settings[$new_field_type_identifier]);
+    $new_setting_id = ft_get_field_type_setting_id_by_identifier($new_field_type_id, $settings[$old_field_type_identifier]);
+
+    $old_setting_value = ft_get_field_setting($field_id, $old_setting_id);
+    $return_info[] = array(
+      "field_id"       => $field_id,
+      "old_setting_id" => $old_setting_id,
+      "new_setting_id" => $new_setting_id,
+      "setting_value"  => $old_setting_value
+    );
+  }
+
+  return $return_info;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -780,6 +780,23 @@ function ft_get_field_settings($field_id)
 }
 
 
+function ft_get_field_setting($field_id, $setting_id)
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT setting_value
+    FROM   {$g_table_prefix}field_settings
+    WHERE  field_id = $field_id AND
+           setting_id = $setting_id
+  ");
+
+  $result = mysql_fetch_assoc($query);
+
+  return (isset($result["setting_value"])) ? $result["setting_value"] : "";
+}
+
+
 /**
  * Deletes any extended field settings for a particular form field. Not thrilled about the "extended" in this
  * function name, but I wanted to emphasize that this function deletes ONLY the settings in the field_settings

@@ -564,6 +564,9 @@ function ft_get_date($offset, $datetime, $format)
 {
   global $LANG;
 
+  if (strlen($datetime) != 19)
+    return "";
+
   $year = substr($datetime, 0, 4);
   $mon  = substr($datetime, 5, 2);
   $day  = substr($datetime, 8, 2);

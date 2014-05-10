@@ -341,7 +341,6 @@ END;
 $page_vars["head_js"] =<<< END
 var rules = [];
 rules.push("function,ms.check_search_keyword");
-rules.push("if:search_field=submission_date,required,search_date,{$LANG["validation_please_enter_search_date_range"]}");
 rules.push("function,ms.check_valid_date");
 if (typeof ms == "undefined") {
   ms = {};

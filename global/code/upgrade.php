@@ -1406,6 +1406,11 @@ function ft_upgrade_form_tools()
     ");
   }
 
+  if ($old_version_info["release_date"] < 20110630)
+  {
+    mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('field_type_settings_shared_characteristics', 'field_comments:textbox,comments`textarea,comments`password,comments`dropdown,comments`multi_select_dropdown,comments`radio_buttons,comments`checkboxes,comments`date,comments`time,comments`phone,comments`code_markup,comments`file,comments`google_maps_field,comments`tinymce,comments|data_source:dropdown,contents`multi_select_dropdown,contents`radio_buttons,contents`checkboxes,contents|column_formatting:checkboxes,formatting`radio_buttons,formatting|maxlength_attr:textbox,maxlength|colour_highlight:textbox,highlight|folder_path:file,folder_path|folder_url:file,folder_url|permitted_file_types:file,folder_url|max_file_size:file,max_file_size|date_display_format:date,display_format|apply_timezone_offset:date,apply_timezone_offset', 'core')");
+  }
+
 
   // ----------------------------------------------------------------------------------------------
 

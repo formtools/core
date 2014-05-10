@@ -507,6 +507,11 @@ ms.check_search_keyword = function() {
 
 // checks that if a user is doing a search on a date field, there's a valid date or date range in the date field
 ms.check_valid_date = function() {
+  var curr_value = $("#search_field").val();
+  if (!curr_value.match(/\|date$/)) {
+    return true;
+  }
+
   var date_field = $("#search_date");
   var val = date_field.val();
   if (!val.match(/^\d{1,2}?\/\d{1,2}\/\d{4}$/) &&

@@ -665,7 +665,7 @@ function ft_get_form_name($form_id)
   $query = mysql_query("SELECT form_name FROM {$g_table_prefix}forms WHERE form_id = $form_id");
   $result = mysql_fetch_assoc($query);
 
-  return $result["c"];
+  return $result["form_name"];
 }
 
 
@@ -1300,28 +1300,20 @@ function ft_update_form_fields_tab($form_id, $infohash)
   foreach ($field_ids as $field_id)
   {
     $is_new_field = preg_match("/^NEW/", $field_id) ? true : false;
-
     $display_name        = (isset($infohash["field_{$field_id}_display_name"])) ? $infohash["field_{$field_id}_display_name"] : "";
     $form_field_name     = (isset($infohash["field_{$field_id}_name"])) ? $infohash["field_{$field_id}_name"] : "";
-
-    // this is only sent for non-system fields
-    $field_type_id       = isset($infohash["field_{$field_id}_type_id"]) ? $infohash["field_{$field_id}_type_id"] : "";
-
     $include_on_redirect = (isset($infohash["field_{$field_id}_include_on_redirect"])) ? "yes" : "no";
     $field_size          = (isset($infohash["field_{$field_id}_size"])) ? $infohash["field_{$field_id}_size"] : "";
     $col_name            = (isset($infohash["col_{$field_id}_name"])) ? $infohash["col_{$field_id}_name"] : "";
-
-    // won't be defined for new fields
-    $old_field_type_id   = (isset($infohash["old_field_{$field_id}_type_id"])) ? $infohash["old_field_{$field_id}_type_id"] : "";
-
     $old_field_size      = (isset($infohash["old_field_{$field_id}_size"])) ? $infohash["old_field_{$field_id}_size"] : "";
     $old_col_name        = (isset($infohash["old_col_{$field_id}_name"])) ? $infohash["old_col_{$field_id}_name"] : "";
     $is_system_field     = (in_array($field_id, $infohash["system_fields"])) ? "yes" : "no";
 
-    if (!$is_new_field && $is_system_field == "no" && $field_type_id != $infohash["old_field_{$field_id}_type_id"])
-    {
-      $changed_field_types_field_ids[] = $field_id;
-    }
+    // this is only sent for non-system fields
+    $field_type_id       = isset($infohash["field_{$field_id}_type_id"]) ? $infohash["field_{$field_id}_type_id"] : "";
+
+    // won't be defined for new fields
+    $old_field_type_id   = (isset($infohash["old_field_{$field_id}_type_id"])) ? $infohash["old_field_{$field_id}_type_id"] : "";
 
     $field_info[] = array(
       "is_new_field"        => $is_new_field,
@@ -1349,11 +1341,45 @@ function ft_update_form_fields_tab($form_id, $infohash)
   }
   reset($infohash);
 
-  // delete any extended field settings for those fields whose field type just changed. Note: this is compatible
-  // with editing the fields in the dialog window. When that happens & the user updates it, the code updates the
-  // old_field_type_id info in the page so this is never called.
-  foreach ($changed_field_types_field_ids as $field_id)
-    ft_delete_extended_field_settings($field_id);
+  // delete any extended field settings for those fields whose field type just changed. Two comments:
+  //   1. this is compatible with editing the fields in the dialog window. When that happens & the user updates
+  //      it, the code updates the old_field_type_id info in the page so this is never called.
+  //   2. with the addition of Shared Characteristics, this only deletes unmapped fields.
+  $changed_fields = array();
+  foreach ($field_info as $curr_field_info)
+  {
+    if ($curr_field_info["is_new_field"] || $curr_field_info["is_system_field"] == "yes" ||
+       $curr_field_info["field_type_id"] == $curr_field_info["old_field_type_id"])
+      continue;
+
+    $changed_fields[] = $curr_field_info;
+  }
+
+  if (!empty($changed_fields))
+  {
+    $field_type_settings_shared_characteristics = ft_get_settings("field_type_settings_shared_characteristics");
+    $field_type_map = ft_get_field_type_id_to_identifier();
+    $setting_map    = ft_get_field_type_setting_id_to_identifier();
+
+    $shared_settings = array();
+    foreach ($changed_fields as $changed_field_info)
+    {
+      $field_id = $changed_field_info["field_id"];
+      $shared_settings = ft_get_shared_field_setting_info($field_type_map, $field_type_settings_shared_characteristics, $field_id, $changed_field_info["field_type_id"], $changed_field_info["old_field_type_id"]);
+      ft_delete_extended_field_settings($field_id);
+    }
+
+    foreach ($shared_settings as $setting_info)
+    {
+      $field_id      = $setting_info["field_id"];
+      $setting_id    = $setting_info["new_setting_id"];
+      $setting_value = ft_sanitize($setting_info["setting_value"]);
+      mysql_query("
+        INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
+        VALUES ($field_id, $setting_id, '$setting_value')
+      ");
+    }
+  }
 
   // the database column name and size field both affect the form's actual database table structure. If either
   // of those changed, we need to update the database

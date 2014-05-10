@@ -54,7 +54,7 @@ ft.click([
       { el: "custom_clients",          action: "show" },
       { el: "client_omit_list_button", action: "disable" }
     ]
-  },
+  }
 ]);
 
 var rules = [];

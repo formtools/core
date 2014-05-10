@@ -1437,7 +1437,7 @@ $LANG["text_enter_license_key"] = "In order to install this module, you must ent
 $LANG["phrase_not_entered_yet"] = "Not entered yet";
 $LANG["phrase_your_license_key"] = "Your license key is";
 $LANG["notify_invalid_license_key"] = "Sorry, that does not appear to be a valid license key. Please try entering it again.";
-
+$LANG["text_premium_module_general_license_link"] = "Please <a href=\"http://accounts.formtools.org\" target=\"_blank\">log into your user account</a> to view your license keys for all your registered modules.";
 
 // removed!
 //$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";
