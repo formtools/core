@@ -29,7 +29,9 @@ function smarty_function_views_dropdown($params, &$smarty)
   $submission_id     = (isset($params["submission_id"])) ? $params["submission_id"] : "";
   $omit_hidden_views = (isset($params["omit_hidden_views"])) ? $params["omit_hidden_views"] : false;
   $create_view_dropdown = (isset($params["create_view_dropdown"])) ? $params["create_view_dropdown"] : false;
-
+  $open_html = (isset($params["open_html"])) ? $params["open_html"] : "";
+  $close_html = (isset($params["close_html"])) ? $params["close_html"] : "";
+  $hide_single_view = (isset($params["hide_single_view"])) ? $params["hide_single_view"] : false;
 
   // if the calling page has the view information already calculated, it can pass it to this function to
   // reduce the amount of work it needs to do. Otherwise, it will just do a separate request for the data
@@ -48,6 +50,7 @@ function smarty_function_views_dropdown($params, &$smarty)
       $attribute_str .= " $key=\"$value\"";
   }
 
+  $num_views = 0;
   $dd = "<select $attribute_str>";
 
   if ($show_empty_label)
@@ -72,12 +75,14 @@ function smarty_function_views_dropdown($params, &$smarty)
       if (empty($submission_id))
       {
         $view_options .= "<option value=\"$curr_view_id\" {$is_selected}>$view_name</option>\n";
+        $num_views++;
       }
       else
       {
         if (ft_check_view_contains_submission($form_id, $curr_view_id, $submission_id))
         {
           $view_options .= "<option value=\"$curr_view_id\" {$is_selected}>$view_name</option>";
+          $num_views++;
         }
       }
     }
@@ -95,6 +100,17 @@ function smarty_function_views_dropdown($params, &$smarty)
   }
 
   $dd .= "</select>";
+
+
+  if ($num_views <= 1 && $hide_single_view)
+  {
+  	// do nothing!
+  	$dd = "";
+  }
+  else
+  {
+  	$dd = $open_html . $dd . $close_html;
+  }
 
   return $dd;
 }

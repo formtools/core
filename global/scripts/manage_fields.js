@@ -845,14 +845,16 @@ fields_ns.init_field_settings_tab = function(field_type_id, field_id) {
     $("#edit_field__field_settings").hide();
     ft.dialog_activity_icon($("#edit_field_template"), "show");
 
-    $.ajax({
-      url:      g.root_url + "/global/code/actions.php",
-      type:     "POST",
-      dataType: "json",
-      data:     { field_id: field_id, field_type_id: field_type_id, action: "get_extended_field_settings" },
-      success:  fields_ns.load_field_settings_response,
-      error:    ft.error_handler
-    });
+    if (!/^NEW/.test(field_id)) {
+      $.ajax({
+        url:      g.root_url + "/global/code/actions.php",
+        type:     "POST",
+        dataType: "json",
+        data:     { field_id: field_id, field_type_id: field_type_id, action: "get_extended_field_settings" },
+        success:  fields_ns.load_field_settings_response,
+        error:    ft.error_handler
+      });
+    }
   }
   else
   {

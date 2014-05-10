@@ -1392,7 +1392,7 @@ $LANG["phrase_default_date_field_search_value"] = "Default date field search val
 $LANG["text_choose_form_type"] = "First, please choose your form type.";
 $LANG["text_internal_form_desc"] = "Internal forms exist only within Form Tools - not elsewhere on your site. Only Form Tools user accounts will have access to the form. Select this option if you don't have an existing form.";
 $LANG["text_external_form_desc"] = "External forms are forms that already exist on your website, or somewhere on the web. Select this option if you have your own form which you'd like to integrate with Form Tools.";
-$LANG["text_add_form_help_link"] = "If you run into any trouble during these steps, try reading out <a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\">user documentation</a>.";
+$LANG["text_add_form_help_link"] = "If you run into any trouble during these steps, try reading out <a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\" target=\"_blank\">user documentation</a>.";
 $LANG["phrase_getting_started"] = "getting started";
 $LANG["text_add_form_choose_integration_method"] = "Choose which method you want to use to integrate your form with Form Tools.";
 

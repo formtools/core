@@ -62,6 +62,9 @@ a.no_border:link, a.no_border:visited {
   outline: none;
 }
 .clear { clear: both; }
+.clear_left { clear: left; }
+.clear_right { clear: right; }
+
 img { border: none; }
 form { margin: 0px; }
 
@@ -303,6 +306,7 @@ form { margin: 0px; }
 }
 #search_field {
   margin-right: 1px;
+  max-width: 256px;
 }
 .next_step {
   color: #336699;

@@ -51,7 +51,7 @@ $(function() {
   $(".lang_placeholder_field").each(function() {
     var pos   = $(this).position();
     var width = pos.left + $(this).width();
-    var iframe = $("<iframe src=\"\" id=\"placeholder_field_overlay" + counter + "\" class=\"placeholder_field_overlay\" marginwidth=\"0\" allowtransparency=\"true\"></iframe>").css({ "left": width })
+    var iframe = $("<iframe src=\"\" id=\"placeholder_field_overlay" + counter + "\" class=\"placeholder_field_overlay\" marginwidth=\"0\" marginheight=\"0\" allowtransparency=\"true\"></iframe>").css({ "left": width })
     $(this).before(iframe);
 
     var form_id = $("#form_id").val();

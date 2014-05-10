@@ -18,7 +18,7 @@
   <link type="text/css" rel="stylesheet" href="{$theme_url}/css/styles.css?v=2_1_0">
   <link href="{$theme_url}/css/smoothness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"/>
   <script src="{$g_root_url}/global/scripts/jquery.js?v=2_1_0"></script>
-  <script src="{$g_root_url}/global/scripts/jquery-ui-1.8.6.custom.min.js"></script>
+  <script src="{$theme_url}/scripts/jquery-ui-1.8.6.custom.min.js"></script>
   <script src="{$g_root_url}/global/scripts/general.js?v=2_1_0"></script>
   <script src="{$g_root_url}/global/scripts/rsv.js?v=2_1_0"></script>
   {$head_string}
@@ -45,8 +45,10 @@
             {else}
               <b>{$settings.program_version}</b>
             {/if}
-            |
-            <a href="#" onclick="return ft.check_updates()" class="update_link">{$LANG.word_update}</a>
+            {if $SESSION.account.account_type == "admin"}
+              |
+              <a href="#" onclick="return ft.check_updates()" class="update_link">{$LANG.word_update}</a>
+            {/if}
           {/if}
         </td>
         <td><img src="{$theme_url}/images/account_section_right.jpg" border="0" /></td>

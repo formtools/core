@@ -5,10 +5,9 @@
     <td width="45"><a href="../"><img src="{$images_url}/icon_forms.gif" border="0" width="34" height="34" /></a></td>
     <td class="title">{$form_info.form_name}</td>
     <td align="right" valign="top">
-      <div class="views_dropdown">
-        {views_dropdown grouped_views=$grouped_views form_id=$form_id selected=$view_id
-          onchange="window.location='`$same_page`?form_id=`$form_id`&page=1&view_id=' + this.value"}
-      </div>
+      {views_dropdown grouped_views=$grouped_views form_id=$form_id selected=$view_id
+        onchange="window.location='`$same_page`?form_id=`$form_id`&page=1&view_id=' + this.value"
+        open_html='<div class="views_dropdown">' close_html='</div>' hide_single_view=true}
     </td>
   </tr>
   </table>

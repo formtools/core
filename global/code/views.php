@@ -259,8 +259,6 @@ function ft_get_view_tabs($view_id, $return_non_empty_tabs_only = false)
  * Otherwise, it creates a new blank view has *all* fields associated with it by default, a single tab
  * that is not enabled by default, no filters, and no clients assigned to it.
  *
- * TODO check this function works with tabs, filters etc. containing ', " and other chars. Need to re-sanitize?
- *
  * @param integer $form_id the unique form ID
  * @param integer $group_id the view group ID that we're adding this View to
  * @param integer $create_from_view_id (optional) either the ID of the View from which to base this new View on,
@@ -313,16 +311,17 @@ function ft_create_new_view($form_id, $group_id, $view_name = "", $create_from_v
     $default_sort_field_order = $view_info["default_sort_field_order"];
     $may_add_submissions      = $view_info["may_add_submissions"];
     $may_edit_submissions     = $view_info["may_edit_submissions"];
+    $may_delete_submissions   = $view_info["may_delete_submissions"];
     $has_standard_filter      = $view_info["has_standard_filter"];
     $has_client_map_filter    = $view_info["has_client_map_filter"];
 
     mysql_query("
       INSERT INTO {$g_table_prefix}views (form_id, access_type, view_name, view_order, is_new_sort_group, group_id,
         num_submissions_per_page, default_sort_field, default_sort_field_order, may_add_submissions, may_edit_submissions,
-        has_client_map_filter, has_standard_filter)
+        may_delete_submissions, has_client_map_filter, has_standard_filter)
       VALUES ($form_id, '$access_type', '$view_name', $next_order, 'yes', $group_id, $num_submissions_per_page,
         '$default_sort_field', '$default_sort_field_order', '$may_add_submissions', '$may_edit_submissions',
-        '$has_client_map_filter', '$has_standard_filter')
+        '$may_delete_submissions', '$has_client_map_filter', '$has_standard_filter')
         ");
     $view_id = mysql_insert_id();
 
@@ -405,6 +404,30 @@ function ft_create_new_view($form_id, $group_id, $view_name = "", $create_from_v
         INSERT INTO {$g_table_prefix}view_filters (view_id, filter_type, field_id, operator, filter_values, filter_sql)
         VALUES ($view_id, '$filter_type', $field_id, '$operator', '$filter_values', '$filter_sql')
           ");
+    }
+
+    // default submission values
+    $submission_defaults = ft_get_new_view_submission_defaults($create_from_view_id);
+    foreach ($submission_defaults as $row)
+    {
+    	$field_id      = $row["field_id"];
+    	$default_value = ft_sanitize($row["default_value"]);
+    	$list_order    = $row["list_order"];
+
+    	mysql_query("
+    	  INSERT INTO {$g_table_prefix}new_view_submission_defaults (view_id, field_id, default_value, list_order)
+    	  VALUES ($view_id, $field_id, '$default_value', $list_order)
+    	");
+    }
+
+    // public View omit list
+    $client_ids = ft_get_public_view_omit_list($create_from_view_id);
+    foreach ($client_ids as $client_id)
+    {
+      mysql_query("
+        INSERT INTO {$g_table_prefix}public_view_omit_list (view_id, account_id)
+        VALUES ($view_id, $client_id)
+      ");
     }
   }
 

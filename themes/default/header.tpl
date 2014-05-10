@@ -48,8 +48,10 @@
             {else}
               <b>{$settings.program_version}</b>
             {/if}
-            |
-            <a href="#" onclick="return ft.check_updates()" class="update_link">{$LANG.word_update}</a>
+            {if $SESSION.account.account_type == "admin"}
+              |
+              <a href="#" onclick="return ft.check_updates()" class="update_link">{$LANG.word_update}</a>
+            {/if}
           </td>
           <td><img src="{$theme_url}/images/account_section_right.jpg" border="0" /></td>
         </tr>

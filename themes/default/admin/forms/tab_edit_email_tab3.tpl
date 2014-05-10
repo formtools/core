@@ -1,7 +1,7 @@
   <div class="margin_top margin_bottom_large">
     <div class="placeholders_section">
-      <span class="placeholders_link">{$LANG.phrase_view_placeholders}</span>
       <img src="{$images_url}/placeholders.png" />
+      <span class="placeholders_link">{$LANG.phrase_view_placeholders}</span>
     </div>
     {$LANG.text_email_template_tab}
   </div>

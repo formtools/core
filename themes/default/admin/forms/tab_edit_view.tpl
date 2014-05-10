@@ -4,7 +4,7 @@
 
     <div class="underline margin_top_large">
       <div style="float:right; padding-right: 20px; margin-top: -4px;">{$previous_view_link} &nbsp; {$next_view_link}</div>
-      <span class="subtitle"><a href="edit.php?page=views">{$LANG.phrase_edit_view|upper}</a></span> &raquo; <span>{$view_info.view_name}</span>
+      <span class="subtitle"><a href="edit.php?page=views">{$LANG.word_views|upper}</a></span> &raquo; <span>{$view_info.view_name}</span>
     </div>
 
     {ft_include file='messages.tpl'}

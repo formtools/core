@@ -1070,7 +1070,7 @@ view_ns.add_view_column = function() {
 view_ns.delete_view_column = function(el) {
 
   // if there are no other groups in the page, show the default message
-  if ($(".sortable_group").length == 0) {
+  if ($(".submission_list .rows .sortable_row").length == 0) {
     $("#no_view_columns_defined").show();
     $("#submission_list").hide();
   }

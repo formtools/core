@@ -11,7 +11,8 @@
         </div>
         <div class="views_dropdown">
         {views_dropdown form_id=$form_id submission_id=$submission_id selected=$view_id omit_hidden_views=true
-          onchange="window.location='`$same_page`?form_id=`$form_id`&submission_id=`$submission_id`&view_id=' + this.value"}
+          onchange="window.location='`$same_page`?form_id=`$form_id`&submission_id=`$submission_id`&view_id=' + this.value"
+          open_html='<div class="views_dropdown">' close_html='</div>' hide_single_view=true}
       </div>
       </td>
     </tr>
@@ -102,20 +103,3 @@
   </div>
 
 {ft_include file='footer.tpl'}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
