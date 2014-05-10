@@ -39,6 +39,13 @@ $search_criteria = array(
 $num_modules = ft_get_module_count();
 $modules     = ft_search_modules($search_criteria);
 
+$module_ids = array();
+foreach ($modules as $module_info)
+{
+  $module_ids[] = $module_info["module_id"];
+}
+$module_ids_in_page = implode(",", $module_ids);
+
 // find out if any of the modules have been upgraded
 $updated_modules = array();
 foreach ($modules as $module_info)
@@ -60,6 +67,7 @@ $page_vars["modules"]     = $updated_modules;
 $page_vars["num_modules"] = $num_modules;
 $page_vars["order"]       = $order;
 $page_vars["search_criteria"] = $search_criteria;
+$page_vars["module_ids_in_page"] = $module_ids_in_page;
 $page_vars["pagination"]  = ft_get_dhtml_page_nav(count($modules), $_SESSION["ft"]["settings"]["num_modules_per_page"], 1);
 $page_vars["head_js"] =<<< END
 var page_ns = {

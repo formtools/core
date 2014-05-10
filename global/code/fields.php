@@ -310,6 +310,33 @@ function ft_get_field_type_id_by_field_id($field_id)
 
 
 /**
+ * Returns the field title by the field database column string.
+ *
+ * @param integer $form_id
+ * @param string $col_name
+ * @return string
+ */
+function ft_get_field_title_by_field_col($form_id, $col_name)
+{
+  global $g_table_prefix;
+
+  $form_id  = ft_sanitize($form_id);
+  $col_name = ft_sanitize($col_name);
+
+  $query = mysql_query("
+    SELECT field_title
+    FROM   {$g_table_prefix}form_fields
+    WHERE  form_id = $form_id AND
+           col_name = '$col_name'
+    ");
+  $result = mysql_fetch_assoc($query);
+
+  $return_info = (isset($result["field_title"])) ? $result["field_title"] : "";
+  return $return_info;
+}
+
+
+/**
  * Returns all the field options for a particular multi-select field.
  *
  * @param integer $form_id the unique field ID.

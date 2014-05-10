@@ -3,7 +3,7 @@
 /**
  * This file defines all functions relating to Form Tools modules.
  *
- * @copyright Encore Web Studios 2010
+ * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
  * @package 2-1-0
  * @subpackage Modules
@@ -451,18 +451,35 @@ function ft_set_module_settings($settings)
 /**
  * Updates the list of enabled & disabled modules.
  *
+ * There seems to be a bug with the way this function is called or something. Occasionally all modules
+ * are no longer enabled...
+ *
  * @param array $request
  */
 function ft_update_enabled_modules($request)
 {
   global $g_table_prefix, $LANG;
 
-  $is_enabled = isset($request["is_enabled"]) ? $request["is_enabled"] : array();
+  $module_ids_in_page = $request["module_ids_in_page"]; // a comma-delimited string
+  $enabled_module_ids = isset($request["is_enabled"]) ? $request["is_enabled"] : array();
 
-  mysql_query("UPDATE {$g_table_prefix}modules SET is_enabled = 'no'");
+  if (!empty($module_ids_in_page))
+  {
+    mysql_query("
+      UPDATE {$g_table_prefix}modules
+      SET    is_enabled = 'no'
+      WHERE  module_id IN ($module_ids_in_page)
+    ");
+  }
 
-  foreach ($is_enabled as $module_id)
-    mysql_query("UPDATE {$g_table_prefix}modules SET is_enabled = 'yes' WHERE module_id = $module_id");
+  foreach ($enabled_module_ids as $module_id)
+  {
+    mysql_query("
+      UPDATE {$g_table_prefix}modules
+      SET    is_enabled = 'yes'
+      WHERE  module_id = $module_id
+    ");
+  }
 
   return array(true, $LANG["notify_enabled_module_list_updated"]);
 }

@@ -189,6 +189,12 @@ function ft_process_hook_calls($event, $vars, $overridable_vars)
   $return_vals = array();
   foreach ($hooks as $hook_info)
   {
+  	// this clause was added in 2.1 - it should have been included in 2.0.x, but it was missed. This prevents any hooks
+  	// being processed for modules that are not enabled.
+  	$module_folder = $hook_info["module_folder"];
+    if (!ft_check_module_enabled($module_folder))
+      continue;
+
     // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
     // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
     $vars["form_tools_hook_info"] = $hook_info;
@@ -257,6 +263,10 @@ function ft_process_template_hook_calls($location, $template_vars)
   // extract the var passed from the calling function into the current scope
   foreach ($hooks as $hook_info)
   {
+  	$module_folder = $hook_info["module_folder"];
+    if (!ft_check_module_enabled($module_folder))
+      continue;
+
     // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
     // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
     $template_vars["form_tools_hook_info"] = $hook_info;

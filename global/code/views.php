@@ -488,11 +488,12 @@ function ft_get_view_fields($view_id, $custom_params = array())
   );
 
   $result = mysql_query("
-    SELECT field_id
-    FROM   {$g_table_prefix}view_fields
-    WHERE  view_id = $view_id
-    ORDER BY list_order
-      ");
+    SELECT vf.field_id
+    FROM   {$g_table_prefix}list_groups lg, {$g_table_prefix}view_fields vf
+    WHERE  lg.group_type = 'view_fields_$view_id' AND
+           lg.group_id = vf.group_id
+    ORDER BY lg.list_order ASC, vf.list_order ASC
+  ");
 
   $fields_info = array();
   while ($field_info = mysql_fetch_assoc($result))

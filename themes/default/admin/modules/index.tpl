@@ -51,6 +51,7 @@
     {$pagination}
 
     <form action="{$same_page}" method="post" class="check_areas">
+      <input type="hidden" name="module_ids_in_page" value="{$module_ids_in_page}" />
 
       {assign var="table_group_id" value="1"}
 
