@@ -260,6 +260,7 @@ function ft_process_template_hook_calls($location, $template_vars)
     // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
     // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
     $template_vars["form_tools_hook_info"] = $hook_info;
+
     ft_process_template_hook_call($hook_info["module_folder"], $hook_info["hook_function"], $location, $template_vars);
   }
 }
@@ -278,7 +279,12 @@ function ft_process_template_hook_call($module_folder, $hook_function, $location
   global $g_root_dir;
 
   @include_once("$g_root_dir/modules/$module_folder/library.php");
-  $html = @$hook_function($location, $template_vars);
+
+  $html = "";
+  if (function_exists($hook_function))
+  {
+    $html = @$hook_function($location, $template_vars);
+  }
 
   return $html;
 }

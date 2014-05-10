@@ -1424,7 +1424,12 @@ $LANG["notify_edit_option_list_after_save"] = "You must select an Option List an
 $LANG["confirm_save_change_before_redirect"] = "One or more fields have been updated. Would you like to save your changes before redirecting?";
 $LANG["notify_error_saving_fields"] = "There was an error saving the fields.";
 $LANG["notify_field_options_smart_filled"] = "Your field options have been Smart Filled.";
+$LANG["phrase_not_assigned_to_option_list"] = "This field isn't assigned to an Option List.";
 
+$LANG["phrase_word_limit_p"] = "word limit.";
+$LANG["phrase_characters_limit_p"] = "characters limit.";
+$LANG["phrase_remaining_words"] = "remaining words";
+$LANG["phrase_remaining_characters"] = "remaining characters";
 
 // removed!
 //$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";

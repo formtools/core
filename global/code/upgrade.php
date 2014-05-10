@@ -1217,13 +1217,13 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20110527)
   {
-  	mysql_query("
-  	  UPDATE {$g_table_prefix}field_types
-  	  SET    raw_field_type_map_multi_select_id = 16
-  	  WHERE  field_type_identifier = 'radio_buttons'
-  	");
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    raw_field_type_map_multi_select_id = 16
+      WHERE  field_type_identifier = 'radio_buttons'
+    ");
 
-  	mysql_query("ALTER TABLE {$g_table_prefix}ft_hooks RENAME {$g_table_prefix}hook_calls");
+    mysql_query("ALTER TABLE {$g_table_prefix}ft_hooks RENAME {$g_table_prefix}hook_calls");
     mysql_query("ALTER TABLE {$g_table_prefix}hook_calls CHANGE core_function function_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
 
     mysql_query("
@@ -1242,7 +1242,7 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20110528)
   {
-  	// assorted updates to the Date field type
+    // assorted updates to the Date field type
     mysql_query("
       INSERT INTO {$g_table_prefix}field_type_settings (field_type_id, field_label, field_setting_identifier, field_type,
         field_orientation, default_value_type, default_value, list_order)
@@ -1275,9 +1275,127 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20110612)
   {
-  	@mysql_query("ALTER TABLE {$g_table_prefix}accounts ADD temp_reset_password VARCHAR(50) NULL");
+    @mysql_query("ALTER TABLE {$g_table_prefix}accounts ADD temp_reset_password VARCHAR(50) NULL");
   }
 
+  if ($old_version_info["release_date"] < 20110622)
+  {
+    @mysql_query("ALTER TABLE {$g_table_prefix}field_types ADD view_field_rendering_type ENUM('none', 'php', 'smarty') NOT NULL DEFAULT 'none' AFTER compatible_field_sizes");
+    @mysql_query("ALTER TABLE {$g_table_prefix}field_types ADD view_field_php_function VARCHAR(255) NULL AFTER view_field_rendering_type");
+    @mysql_query("ALTER TABLE {$g_table_prefix}field_types ADD view_field_php_function_source VARCHAR(255) NULL AFTER view_field_rendering_type");
+    @mysql_query("UPDATE {$g_table_prefix}field_types SET view_field_php_function_source = 'core'");
+
+    // for compatibility with existing field type modules
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET     view_field_rendering_type = 'smarty'
+    ");
+
+    // textbox
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'smarty',
+             view_field_php_function_source = 'core',
+             view_field_php_function = ''
+      WHERE  field_type_identifier = 'textbox'
+    ");
+
+    // textarea
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'smarty',
+             view_field_php_function_source = 'core',
+             view_field_php_function = '',
+             view_field_smarty_markup = '{if \$CONTEXTPAGE == \"edit_submission\"}  \r\n  {\$VALUE|nl2br}\r\n{else}\r\n  {\$VALUE}\r\n{/if}',
+             edit_field_smarty_markup = '{* figure out all the classes *}\r\n{assign var=classes value=\$height}\r\n{if \$highlight_colour}\r\n  {assign var=classes value=\"`\$classes` `\$highlight_colour`\"}\r\n{/if}\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_wordcounter max`\$maxlength`\"}\r\n{else if \$input_length == \"chars\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_textcounter max`\$maxlength`\"}\r\n{/if}\r\n\r\n<textarea name=\"{\$NAME}\" id=\"{\$NAME}_id\" class=\"{\$classes}\">{\$VALUE}</textarea>\r\n\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} {\$LANG.phrase_word_limit_p} <span></span> {\$LANG.phrase_remaining_words}\r\n  </div>\r\n{elseif \$input_length == \"chars\" && \$max_length != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} {\$LANG.phrase_characters_limit_p} <span></span> {\$LANG.phrase_remaining_characters}\r\n  </div>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments|nl2br}</div>\r\n{/if}'
+      WHERE  field_type_identifier = 'textarea'
+    ");
+
+    // password
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET     view_field_rendering_type = 'none'
+      WHERE   field_type_identifier = 'password'
+    ");
+
+    // dropdown
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_dropdown',
+             view_field_smarty_markup = '{strip}{if \$contents != \"\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$VALUE == \$option.option_value}{\$option.option_name}{/if}\r\n    {/foreach}\r\n  {/foreach}\r\n{/if}{/strip}',
+             edit_field_smarty_markup = '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">{\$LANG.phrase_not_assigned_to_option_list}</div>\r\n{else}\r\n  <select name=\"{\$NAME}\">\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {if \$group_info.group_name}\r\n      <optgroup label=\"{\$group_info.group_name|escape}\">\r\n    {/if}\r\n    {foreach from=\$options item=option name=row}\r\n      <option value=\"{\$option.option_value}\"\r\n        {if \$VALUE == \$option.option_value}selected{/if}>{\$option.option_name}</option>\r\n    {/foreach}\r\n    {if \$group_info.group_name}\r\n      </optgroup>\r\n    {/if}\r\n  {/foreach}\r\n  </select>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}'
+      WHERE  field_type_identifier = 'dropdown'
+    ");
+
+    // multi-select dropdown
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_multi_select_dropdown',
+             view_field_smarty_markup = '{if \$contents != \"\"}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_first value=true}\r\n  {strip}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$option.option_value|in_array:\$vals}\r\n        {if \$is_first == false}, {/if}\r\n        {\$option.option_name}\r\n        {assign var=is_first value=false}\r\n      {/if}\r\n    {/foreach}\r\n  {/foreach}\r\n  {/strip}\r\n{/if}',
+             edit_field_smarty_markup = '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">{\$LANG.phrase_not_assigned_to_option_list}</div>\r\n{else}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  <select name=\"{\$NAME}[]\" multiple size=\"{if \$num_rows}{\$num_rows}{else}5{/if}\">\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {if \$group_info.group_name}\r\n      <optgroup label=\"{\$group_info.group_name|escape}\">\r\n    {/if}\r\n    {foreach from=\$options item=option name=row}\r\n      <option value=\"{\$option.option_value}\"\r\n        {if \$option.option_value|in_array:\$vals}selected{/if}>{\$option.option_name}</option>\r\n    {/foreach}\r\n    {if \$group_info.group_name}\r\n      </optgroup>\r\n    {/if}\r\n  {/foreach}\r\n  </select>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}',
+      WHERE  field_type_identifier = 'multi_select_dropdown'
+    ");
+
+    // radio buttons
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_radios',
+             view_field_smarty_markup = '{strip}{if \$contents != \"\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$VALUE == \$option.option_value}{\$option.option_name}{/if}\r\n    {/foreach}\r\n  {/foreach}\r\n{/if}{/strip}',
+             edit_field_smarty_markup = '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">{\$LANG.phrase_not_assigned_to_option_list}</div>\r\n{else}\r\n  {assign var=is_in_columns value=false}\r\n  {if \$formatting == \"cf_option_list_2cols\" || \r\n      \$formatting == \"cf_option_list_3cols\" || \r\n      \$formatting == \"cf_option_list_4cols\"}\r\n    {assign var=is_in_columns value=true}\r\n  {/if}\r\n\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n\r\n    {if \$group_info.group_name}\r\n      <div class=\"cf_option_list_group_label\">{\$group_info.group_name}</div>\r\n    {/if}\r\n\r\n    {if \$is_in_columns}<div class=\"{\$formatting}\">{/if}\r\n\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$is_in_columns}<div class=\"column\">{/if}\r\n        <input type=\"radio\" name=\"{\$NAME}\" id=\"{\$NAME}_{\$counter}\" \r\n          value=\"{\$option.option_value}\"\r\n          {if \$VALUE == \$option.option_value}checked{/if} />\r\n          <label for=\"{\$NAME}_{\$counter}\">{\$option.option_name}</label>\r\n      {if \$is_in_columns}</div>{/if}\r\n      {if \$formatting == \"vertical\"}<br />{/if}\r\n      {assign var=counter value=\$counter+1}\r\n    {/foreach}\r\n\r\n    {if \$is_in_columns}</div>{/if}\r\n  {/foreach}\r\n\r\n  {if \$comments}<div class=\"cf_field_comments\">{\$comments}</div>{/if}\r\n{/if}'
+      WHERE  field_type_identifier = 'radio_buttons'
+    ");
+
+    // checkboxes
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_checkboxes',
+             view_field_smarty_markup = '{strip}{if \$contents != \"\"}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_first value=true}\r\n  {strip}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$option.option_value|in_array:\$vals}\r\n        {if \$is_first == false}, {/if}\r\n        {\$option.option_name}\r\n        {assign var=is_first value=false}\r\n      {/if}\r\n    {/foreach}\r\n  {/foreach}\r\n  {/strip}\r\n{/if}{/strip}',
+             edit_field_smarty_markup = '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">{\$LANG.phrase_not_assigned_to_option_list}</div>\r\n{else}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_in_columns value=false}\r\n  {if \$formatting == \"cf_option_list_2cols\" || \r\n      \$formatting == \"cf_option_list_3cols\" || \r\n      \$formatting == \"cf_option_list_4cols\"}\r\n    {assign var=is_in_columns value=true}\r\n  {/if}\r\n\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n\r\n    {if \$group_info.group_name}\r\n      <div class=\"cf_option_list_group_label\">{\$group_info.group_name}</div>\r\n    {/if}\r\n\r\n    {if \$is_in_columns}<div class=\"{\$formatting}\">{/if}\r\n\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$is_in_columns}<div class=\"column\">{/if}\r\n        <input type=\"checkbox\" name=\"{\$NAME}[]\" id=\"{\$NAME}_{\$counter}\" \r\n          value=\"{\$option.option_value|escape}\" \r\n          {if \$option.option_value|in_array:\$vals}checked{/if} />\r\n          <label for=\"{\$NAME}_{\$counter}\">{\$option.option_name}</label>\r\n      {if \$is_in_columns}</div>{/if}\r\n      {if \$formatting == \"vertical\"}<br />{/if}\r\n      {assign var=counter value=\$counter+1}\r\n    {/foreach}\r\n\r\n    {if \$is_in_columns}</div>{/if}\r\n  {/foreach}\r\n\r\n  {if {\$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div> \r\n  {/if}\r\n{/if}'
+      WHERE  field_type_identifier = 'checkboxes'
+    ");
+
+    // date
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_date'
+      WHERE  field_type_identifier = 'date'
+    ");
+
+    // time
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'none'
+      WHERE  field_type_identifier = 'time'
+    ");
+
+    // phone
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_phone_number'
+      WHERE  field_type_identifier = 'phone'
+    ");
+
+    // code / markup
+    mysql_query("
+      UPDATE {$g_table_prefix}field_types
+      SET    view_field_rendering_type = 'php',
+             view_field_php_function_source = 'core',
+             view_field_php_function = 'ft_display_field_type_code_markup'
+      WHERE  field_type_identifier = 'code_markup'
+    ");
+  }
 
   // ----------------------------------------------------------------------------------------------
 

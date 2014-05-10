@@ -160,6 +160,28 @@ function ft_get_module_id_from_module_folder($module_folder)
 
 
 /**
+ * Since it's often more convenient to identify modules by its unique folder name, this function is
+ * provided to find the module ID. If not found, returns the empty string.
+ *
+ * @param string $module_folder
+ */
+function ft_get_module_folder_from_module_id($module_id)
+{
+  global $g_table_prefix;
+
+  $result = mysql_query("
+    SELECT module_folder
+    FROM   {$g_table_prefix}modules
+    WHERE  module_id = $module_id
+      ");
+
+  $info = mysql_fetch_assoc($result);
+
+  return (isset($info["module_folder"])) ? $info["module_folder"] : "";
+}
+
+
+/**
  * This is called implicitly by the ft_display_module_page function (only!). That function is used
  * to display any module page; it automatically calls this function to load any custom navigation
  * menu items for a particular module. Then, the theme's modules_header.tpl template uses this

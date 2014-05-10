@@ -354,7 +354,7 @@ function ft_get_field_type_setting_by_identifier($field_type_id, $field_type_set
 
   if (!empty($field_setting_info))
   {
-  	$setting_id = $field_setting_info["setting_id"];
+    $setting_id = $field_setting_info["setting_id"];
     $options_query = mysql_query("
       SELECT *
       FROM   {$g_table_prefix}field_type_setting_options
@@ -893,51 +893,51 @@ function ft_get_default_date_field_search_value($choice)
   $php_date_format = "";
   $date_field_search_js_format = "";
   if ($g_search_form_date_field_format == "d/m/y") {
-  	$php_date_format = "j/n/Y";
-  	$date_field_search_js_format = "d/m/yy";
+    $php_date_format = "j/n/Y";
+    $date_field_search_js_format = "d/m/yy";
   } else {
-  	$php_date_format = "n/j/Y";
-  	$date_field_search_js_format = "m/d/yy";
+    $php_date_format = "n/j/Y";
+    $date_field_search_js_format = "m/d/yy";
   }
 
   $value = "";
   switch ($choice)
   {
-  	case "none":
+    case "none":
       $value = $LANG["phrase_select_date"];
       break;
-  	case "today":
-  	  $value = date($php_date_format);
+    case "today":
+      $value = date($php_date_format);
       break;
-  	case "last_7_days":
-  	  $now  = date("U");
-  	  $then = $now - (60 * 60 * 24 * 7);
-  	  $value = date($php_date_format, $then) . " - " . date($php_date_format, $now);
+    case "last_7_days":
+      $now  = date("U");
+      $then = $now - (60 * 60 * 24 * 7);
+      $value = date($php_date_format, $then) . " - " . date($php_date_format, $now);
       break;
-  	case "month_to_date":
+    case "month_to_date":
       $current_month = date("n");
       $current_year  = date("Y");
       if ($g_search_form_date_field_format == "d/m/y") {
         $value = "1/$current_month/$current_year - " . date($php_date_format);
       } else {
-      	$value = "$current_month/1/$current_year - " . date($php_date_format);
+        $value = "$current_month/1/$current_year - " . date($php_date_format);
       }
       break;
-  	case "year_to_date":
+    case "year_to_date":
       $current_year  = date("Y");
       $value = "1/1/$current_year - " . date($php_date_format);
       break;
-  	case "previous_month":
-  	  $current_month = date("n");
-  	  $previous_month = ($current_month == 1) ? 12 : $current_month-1;
-  	  $current_year  = date("Y");
-  	  $mid_previous_month = mktime(0, 0, 0, $previous_month, 15, $current_year);
-  	  $num_days_in_last_month = date("t", $mid_previous_month);
-  	  if ($g_search_form_date_field_format == "d/m/y") {
-  	  	$value = "1/$previous_month/$current_year - $num_days_in_last_month/$previous_month/$current_year";
-  	  } else {
-  	  	$value = "$previous_month/1/$current_year - $previous_month/$num_days_in_last_month/$current_year";
-  	  }
+    case "previous_month":
+      $current_month = date("n");
+      $previous_month = ($current_month == 1) ? 12 : $current_month-1;
+      $current_year  = date("Y");
+      $mid_previous_month = mktime(0, 0, 0, $previous_month, 15, $current_year);
+      $num_days_in_last_month = date("t", $mid_previous_month);
+      if ($g_search_form_date_field_format == "d/m/y") {
+        $value = "1/$previous_month/$current_year - $num_days_in_last_month/$previous_month/$current_year";
+      } else {
+        $value = "$previous_month/1/$current_year - $previous_month/$num_days_in_last_month/$current_year";
+      }
       break;
   }
 
@@ -962,7 +962,7 @@ function ft_get_file_field_type_ids()
   $field_type_ids = array();
   while ($row = mysql_fetch_assoc($query))
   {
-  	$field_type_ids[] = $row["field_type_id"];
+    $field_type_ids[] = $row["field_type_id"];
   }
 
   return $field_type_ids;
@@ -982,7 +982,7 @@ function ft_get_date_field_type_ids()
   $field_type_ids = array();
   while ($row = mysql_fetch_assoc($query))
   {
-  	$field_type_ids[] = $row["field_type_id"];
+    $field_type_ids[] = $row["field_type_id"];
   }
 
   return $field_type_ids;
@@ -1000,7 +1000,7 @@ function ft_get_field_type_id_to_identifier()
   $map = array();
   foreach ($field_types as $field_type_info)
   {
-  	$map[$field_type_info["field_type_id"]] = $field_type_info["field_type_identifier"];
+    $map[$field_type_info["field_type_id"]] = $field_type_info["field_type_identifier"];
   }
 
   return $map;
@@ -1062,16 +1062,13 @@ function ft_generate_viewable_field($params)
   $field_settings = $field_info["settings"];
 
   $output = "";
-  if (empty($markup_with_placeholders))
+  if ($field_type_info["view_field_rendering_type"] == "none" || empty($markup_with_placeholders))
   {
-    if ($field_info["col_name"] == "submission_id")
-      $output = $submission_id;
-    else
-      $output = $value;
+    $output = $value;
   }
   else
   {
-  	$account_info = isset($_SESSION["ft"]["account"]) ? $_SESSION["ft"]["account"] : array();
+    $account_info = isset($_SESSION["ft"]["account"]) ? $_SESSION["ft"]["account"] : array();
 
     // now construct all available placeholders
     $placeholders = array(
@@ -1138,68 +1135,273 @@ function ft_generate_viewable_field($params)
       $placeholders[$identifier] = $value;
     }
 
-    // temporary
-    if (false) //$field_info["field_type_id"] == 8)
+    if ($field_type_info["view_field_rendering_type"] == "php")
     {
-      // test to see how much converting the Field Type logic to Smarty speeds up the generation of the page
-      $tzo = "";
-      if (!empty($placeholders["VALUE"]))
+      $php_function = $field_type_info["view_field_php_function"];
+
+      // if this is a module, include the module's library.php file so we have access to the function
+      if ($field_type_info["view_field_php_function_source"] != "core" && is_numeric($field_type_info["view_field_php_function_source"]))
       {
-      	if ($placeholders["apply_timezone_offset"] == "yes")
-      	  $tzo = $placeholders["ACCOUNT_INFO"]["timezone_offset"];
+      	$module_folder = ft_get_module_folder_from_module_id($field_type_info["view_field_php_function_source"]);
+        @include_once("$g_root_dir/modules/$module_folder/library.php");
+      }
 
-      	 switch ($placeholders["display_format"])
-      	 {
-      	 	case "yy-mm-dd":
-              $php_format = "Y-m-d";
-      	 	  break;
-      	 	case "dd/mm/yy":
-              $php_format = "d/m/Y";
-      	 	  break;
-      	 	case "mm/dd/yy":
-              $php_format = "m/d/Y";
-      	 	  break;
-      	 	case "M d, yy":
-              $php_format = "M j, Y";
-      	 	  break;
-      	 	case "MM d, yy":
-              $php_format = "F j, Y";
-      	 	  break;
-      	 	case "D M d, yy":
-              $php_format = "D M j, Y";
-      	 	  break;
-      	 	case "DD, MM d, yy":
-              $php_format = "l M j, Y";
-      	 	  break;
-      	 	case "datetime:dd/mm/yy|h:mm TT|ampm`true":
-              $php_format = "d/m/Y g:i A";
-      	 	  break;
-      	 	case "datetime:mm/dd/yy|h:mm TT|ampm`true":
-              $php_format = "m/d/Y g:i A";
-      	 	  break;
-      	 	case "datetime:yy-mm-dd|h:mm TT|ampm`true":
-              $php_format = "Y-m-d g:i A";
-      	 	  break;
-      	 	case "datetime:yy-mm-dd|hh:mm":
-              $php_format = "Y-m-d H:i";
-      	 	  break;
-      	 	case "datetime:yy-mm-dd|hh:mm:ss|showSecond`true":
-              $php_format = "Y-m-d H:i:s";
-      	 	  break;
-
-      	 	default:
-      	 	  break;
-      	 }
-      	 $output = ft_get_date($tzo, $placeholders["VALUE"], $php_format);
+      if (function_exists($php_function))
+      {
+        $output = $php_function($placeholders);
       }
     }
     else
     {
       $output = ft_eval_smarty_string($markup_with_placeholders, $placeholders);
     }
-
-    //echo $field_info["field_type_id"];
   }
 
   return $output;
+}
+
+
+
+// The following code contains the functions to generate the field type markup for the Core fields. The Core field
+// types may be rendered by Smarty or these function. These are much faster, so they're enabled by default.
+
+
+function ft_display_field_type_date($placeholders)
+{
+  if (empty($placeholders["VALUE"]))
+    return;
+
+  $tzo = "";
+  if ($placeholders["apply_timezone_offset"] == "yes")
+    $tzo = $placeholders["ACCOUNT_INFO"]["timezone_offset"];
+
+  switch ($placeholders["display_format"])
+  {
+    case "yy-mm-dd":
+      $php_format = "Y-m-d";
+      break;
+    case "dd/mm/yy":
+      $php_format = "d/m/Y";
+      break;
+    case "mm/dd/yy":
+      $php_format = "m/d/Y";
+      break;
+    case "M d, yy":
+      $php_format = "M j, Y";
+      break;
+    case "MM d, yy":
+      $php_format = "F j, Y";
+      break;
+    case "D M d, yy":
+      $php_format = "D M j, Y";
+      break;
+    case "DD, MM d, yy":
+      $php_format = "l M j, Y";
+      break;
+    case "datetime:dd/mm/yy|h:mm TT|ampm`true":
+      $php_format = "d/m/Y g:i A";
+      break;
+    case "datetime:mm/dd/yy|h:mm TT|ampm`true":
+      $php_format = "m/d/Y g:i A";
+      break;
+    case "datetime:yy-mm-dd|h:mm TT|ampm`true":
+      $php_format = "Y-m-d g:i A";
+      break;
+    case "datetime:yy-mm-dd|hh:mm":
+      $php_format = "Y-m-d H:i";
+      break;
+    case "datetime:yy-mm-dd|hh:mm:ss|showSecond`true":
+      $php_format = "Y-m-d H:i:s";
+      break;
+
+    default:
+      break;
+  }
+
+  return ft_get_date($tzo, $placeholders["VALUE"], $php_format);
+}
+
+
+function ft_display_field_type_radios($placeholders)
+{
+  // if this isn't assigned to an Option List / form field, ignore the sucker
+  if (empty($placeholders["contents"]))
+    return;
+
+  $output = "";
+  foreach ($placeholders["contents"]["options"] as $curr_group_info)
+  {
+    $group_info = $curr_group_info["group_info"];
+    $options    = $curr_group_info["options"];
+
+    foreach ($options as $option_info)
+    {
+      if ($placeholders["VALUE"] == $option_info["option_value"])
+      {
+        $output = $option_info["option_name"];
+        break;
+      }
+    }
+  }
+
+  return $output;
+}
+
+
+function ft_display_field_type_checkboxes($placeholders)
+{
+  // if this isn't assigned to an Option List / form field, ignore it!
+  if (empty($placeholders["contents"]))
+    return;
+
+  $g_multi_val_delimiter = $placeholders["g_multi_val_delimiter"];
+  $vals = explode($g_multi_val_delimiter, $placeholders["VALUE"]);
+
+  $output = "";
+  $is_first = true;
+  foreach ($placeholders["contents"]["options"] as $curr_group_info)
+  {
+    $options = $curr_group_info["options"];
+
+    foreach ($options as $option_info)
+    {
+      if (in_array($option_info["option_value"], $vals))
+      {
+        if (!$is_first)
+          $output .= $g_multi_val_delimiter;
+
+        $output .= $option_info["option_name"];
+        $is_first = false;
+      }
+    }
+  }
+
+  return $output;
+}
+
+
+function ft_display_field_type_dropdown($placeholders)
+{
+  if (empty($placeholders["contents"]))
+    return;
+
+  $output = "";
+  foreach ($placeholders["contents"]["options"] as $curr_group_info)
+  {
+    $options = $curr_group_info["options"];
+    foreach ($options as $option_info)
+    {
+      if ($placeholders["VALUE"] == $option_info["option_value"])
+      {
+        $output = $option_info["option_name"];
+        break;
+      }
+    }
+  }
+
+  return $output;
+}
+
+
+function ft_display_field_type_multi_select_dropdown($placeholders)
+{
+  // if this isn't assigned to an Option List / form field, ignore it!
+  if (empty($placeholders["contents"]))
+    return;
+
+  $g_multi_val_delimiter = $placeholders["g_multi_val_delimiter"];
+  $vals = explode($g_multi_val_delimiter, $placeholders["VALUE"]);
+
+  $output = "";
+  $is_first = true;
+  foreach ($placeholders["contents"]["options"] as $curr_group_info)
+  {
+    $options = $curr_group_info["options"];
+
+    foreach ($options as $option_info)
+    {
+      if (in_array($option_info["option_value"], $vals))
+      {
+        if (!$is_first)
+          $output .= $g_multi_val_delimiter;
+
+        $output .= $option_info["option_name"];
+        $is_first = false;
+      }
+    }
+  }
+
+  return $output;
+}
+
+
+function ft_display_field_type_phone_number($placeholders)
+{
+  $phone_number_format = $placeholders["phone_number_format"];
+  $values = explode("|", $placeholders["VALUE"]);
+
+  $pieces = preg_split("/(x+)/", $phone_number_format, 0, PREG_SPLIT_DELIM_CAPTURE);
+  $counter = 1;
+  $output = "";
+  $has_content = false;
+  foreach ($pieces as $piece)
+  {
+    if (empty($piece))
+      continue;
+
+    if ($piece[0] == "x")
+    {
+      $value = (isset($values[$counter-1])) ? $values[$counter-1] : "";
+      $output .= $value;
+      if (!empty($value))
+      {
+        $has_content = true;
+      }
+      $counter++;
+    } else {
+      $output .= $piece;
+    }
+  }
+
+  if (!empty($output) && $has_content)
+    return $output;
+  else
+    return "";
+}
+
+
+function ft_display_field_type_code_markup($placeholders)
+{
+  if ($placeholders["CONTEXTPAGE"] == "edit_submission")
+  {
+    $code_markup = $placeholders["code_markup"];
+    $field_name  = $placeholders["NAME"];
+    $value       = $placeholders["VALUE"];
+    $height      = $placeholders["height"];
+    $g_root_url  = $placeholders["g_root_url"];
+    echo <<< END
+  <textarea id="{$name}_id" name="{$name}">{$value}</textarea>
+  <script>
+  var code_mirror_{$name} = new CodeMirror.fromTextArea("{$name}_id", {
+    height:   "{$height}px",
+    path:     "{$g_root_url}/global/codemirror/js/",
+    readOnly: true,
+    {if $code_markup == "HTML" || $code_markup == "XML"}
+      parserfile: ["parsexml.js"],
+      stylesheet: "{$g_root_url}/global/codemirror/css/xmlcolors.css"
+    {elseif $code_markup == "CSS"}
+      parserfile: ["parsecss.js"],
+      stylesheet: "{$g_root_url}/global/codemirror/css/csscolors.css"
+    {elseif $code_markup == "JavaScript"}
+      parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
+      stylesheet: "{$g_root_url}/global/codemirror/css/jscolors.css"
+    {/if}
+  });
+  </script>
+END;
+  }
+  else
+  {
+    echo strip_tags($placeholders["VALUE"]);
+  }
 }
