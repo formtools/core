@@ -275,6 +275,10 @@ fields_ns.reinit_sliders = function() {
 
 
 fields_ns.get_option_lists_response = function(data) {
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
   fields_ns.option_lists = data;
 }
 
@@ -462,7 +466,7 @@ fields_ns.update_fields_dropdown = function() {
  */
 fields_ns.smart_fill = function() {
   ft.create_dialog({
-  dialog:     fields_ns.smart_fill_dialog,
+    dialog:     fields_ns.smart_fill_dialog,
     popup_type: "warning",
     min_width:  450,
     title:      g.messages["phrase_smart_fill"],
@@ -1213,6 +1217,10 @@ fields_ns.create_new_option_list = function(setting_id) {
  * This is called for fields that have types with one or more (possible) extended fields.
  */
 fields_ns.load_field_settings_response = function(data) {
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
 
   // store the info in memory. This memory is invalidated anytime the user changes the field type
   // for the field
@@ -1434,6 +1442,11 @@ fields_ns.save_changes = function() {
 
 
 fields_ns.save_changes_response = function(data) {
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   // if there were no problems updating the fields, we just update the parent page with the latest values
   // and close the dialog
   if (data.success == 1) {
@@ -1571,7 +1584,13 @@ fields_ns.load_form_fields = function(params) {
   });
 }
 
+
 fields_ns.get_form_fields_response = function(data) {
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   fields_ns.form_fields["form_" + data.form_id] = data.fields;
 
   // if the user still has this form selected in the Edit Field dialog, load the info into a dropdown

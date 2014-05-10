@@ -1258,6 +1258,12 @@ sf_ns.submit_form = function() {
 
 
 sf_ns.submit_form_response = function(info) {
+
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(info)) {
+    return;
+  }
+
   try {
     if (info.success) {
       window.location = "step6.php";

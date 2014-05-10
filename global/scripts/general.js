@@ -1,7 +1,8 @@
 /**
  * File: general.js
  *
- * Contains general javascript functions for use throughout the application.
+ * Contains general javascript functions for use throughout the application. Also includes the underscore.js
+ * library, which contains a few handy functions not included in jQuery.
  */
 
 $(function() {
@@ -55,12 +56,12 @@ $(function() {
     $(this).before(iframe);
 
     var form_id = $("#form_id").val();
-	var ifrm = $("#placeholder_field_overlay" + counter)[0];
-	ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
-	ifrm.document.open();
-	ifrm.document.write('<img src="../../global/images/lang_placeholder_field_icon.png" style="cursor: pointer" onclick="parent.ft.show_form_field_placeholders_dialog({ form_id: 1 });" />');
-	ifrm.document.close();
-	counter++;
+  var ifrm = $("#placeholder_field_overlay" + counter)[0];
+  ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
+  ifrm.document.open();
+  ifrm.document.write('<img src="../../global/images/lang_placeholder_field_icon.png" style="cursor: pointer" onclick="parent.ft.show_form_field_placeholders_dialog({ form_id: 1 });" />');
+  ifrm.document.close();
+  counter++;
   });
 
   $(window).resize(function() {
@@ -763,6 +764,12 @@ ft.update_field_size_dropdown = function(el, target_el, options) {
  * error/success message.
  */
 ft.response_handler = function(data) {
+
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   ft.display_message(data.target_message_id, data.success, data.message);
 }
 
@@ -802,6 +809,11 @@ ft.check_updates = function() {
 
 
 ft.embed_and_submit_upgrade_form = function(data) {
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   $("body").append(data);
   ft.queue.push([
     function() { $("#upgrade_form").submit(); },
@@ -878,6 +890,32 @@ ft.check_queue_item_complete = function() {
 ft.is_valid_url = function(url) {
   var RegExp = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
   return RegExp.test(url);
+}
+
+
+ft.check_ajax_response_permissions = function(json) {
+  try {
+    if (typeof json.ft_logout != undefined && json.ft_logout == 1) {
+      ft.create_dialog({
+        title:      "Sessions expired",
+        content:    "Sorry, your session has expired. Please click the button below to log back in.",
+        popup_type: "error",
+        buttons: [
+          {
+            text:  "Return to login screen",
+            click: function() {
+              window.location = g.root_url;
+            }
+          }
+        ]
+      });
+      return false;
+    }
+  }
+  catch (e) {
+  }
+
+  return true;
 }
 
 

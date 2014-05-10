@@ -225,7 +225,7 @@ $g_release_type = "beta";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110802";
+$g_release_date = "20110807";
 
 /**
  * The minimum required PHP version needed to run Form Tools.

@@ -1807,7 +1807,7 @@ function _ft_cache_view_stats($form_id, $view_id = "")
           or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__, mysql_error());
 
       $info = mysql_fetch_assoc($count_query);
-      $_SESSION["ft"]["view_{$form_id}_num_submissions"] = $info["c"];
+      $_SESSION["ft"]["view_{$view_id}_num_submissions"] = $info["c"];
     }
   }
 }

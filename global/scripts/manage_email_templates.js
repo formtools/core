@@ -290,6 +290,12 @@ emails_ns.send_test_email = function(f, action) {
 emails_ns.display_test_email = function(data) {
 
   emails_ns.log_activity(false);
+
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   var success = data[0];
 
   if (success) {
@@ -364,6 +370,12 @@ emails_ns.display_test_email = function(data) {
  */
 emails_ns.send_test_email_response = function(data) {
   emails_ns.log_activity(false);
+
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   ft.display_message("ft_message", data.success, data.message);
 }
 

@@ -9,12 +9,23 @@
 
 // -------------------------------------------------------------------------------------------------
 
+// this var prevents the default behaviour of auto-logging the user out
+$g_check_ft_sessions = false;
 require_once("../session_start.php");
-ft_check_permission("user");
 
-//header('Cache-Control: no-cache, must-revalidate');
-//header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-//header('Content-type: application/json');
+// check the permissions
+$permission_check = ft_check_permission("user", false);
+
+// check the sessions haven't timeoutted
+$sessions_still_valid = ft_check_sessions_timeout(false);
+if (!$sessions_still_valid)
+{
+  @session_destroy();
+  $_SESSION["ft"] = array();
+
+  $permission_check["has_permission"] = false;
+  $permission_check["message"] = "session_expired";
+}
 
 // the action to take and the ID of the page where it will be displayed (allows for
 // multiple calls on same page to load content in unique areas)
@@ -50,6 +61,12 @@ if (isset($request["return_vars"]))
   $return_str = ", " . implode(", ", $vals);
 }
 
+if (!$permission_check["has_permission"])
+{
+  $message = $permission_check["message"];
+  echo "{ \"success\": \"0\", \"ft_logout\": \"1\", \"message\": \"$message\"{$return_val_str} }";
+  exit;
+}
 
 switch ($action)
 {
@@ -397,7 +414,7 @@ switch ($action)
       "fields"      => $fields
     );
     echo ft_convert_to_json($return_info);
-  	break;
+    break;
 
   case "create_new_view":
     $form_id   = $request["form_id"];
@@ -473,17 +490,17 @@ switch ($action)
 
   // used to return a page outlining all the form field placeholders available
   case "get_form_field_placeholders":
-  	$form_id = $request["form_id"];
+    $form_id = $request["form_id"];
 
-  	$text_reference_tab_info = ft_eval_smarty_string($LANG["text_reference_tab_info"], array("g_root_url" => $g_root_url));
+    $text_reference_tab_info = ft_eval_smarty_string($LANG["text_reference_tab_info"], array("g_root_url" => $g_root_url));
 
-  	$page_vars = array();
-  	$page_vars["form_id"] = $form_id;
-  	$page_vars["form_fields"] = ft_get_form_fields($form_id, array("include_field_type_info" => true));
-  	$page_vars["text_reference_tab_info"] = $text_reference_tab_info;
+    $page_vars = array();
+    $page_vars["form_id"] = $form_id;
+    $page_vars["form_fields"] = ft_get_form_fields($form_id, array("include_field_type_info" => true));
+    $page_vars["text_reference_tab_info"] = $text_reference_tab_info;
 
     ft_display_page("admin/forms/form_placeholders.tpl", $page_vars);
-  	break;
+    break;
 }
 
 

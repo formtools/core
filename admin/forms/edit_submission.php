@@ -21,7 +21,6 @@ $_SESSION["ft"]["last_link_page"] = "edit";
 // determine whether the page contains any editable fields
 $editable_field_ids = _ft_get_editable_view_fields($view_id);
 
-
 // update the submission
 if (isset($_POST) && !empty($_POST))
 {

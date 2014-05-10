@@ -47,6 +47,11 @@ $(function() {
               create_view_from_view_id: $("#create_view_from_view_id").val()
             },
             success: function(data) {
+              // check the user wasn't logged out / denied permissions
+              if (!ft.check_ajax_response_permissions(data)) {
+                return;
+              }
+
               if (g.js_debug) {
                 console.log(data);
                 return;
@@ -96,6 +101,11 @@ view_ns.create_new_group = function() {
  * Creates a new View group (on the main Views page).
  */
 view_ns.create_new_group_response = function(data) {
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   ft.dialog_activity_icon($("#add_group_popup"), "hide");
   $("#add_group_popup").dialog("close");
   sortable_ns.insert_new_group({
@@ -143,6 +153,11 @@ view_ns.delete_view = function(el) {
 
 
 view_ns.delete_view_response = function(data) {
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   ft.dialog_activity_icon($("#delete_view_dialog"), "hide");
   $("#delete_view_dialog").dialog("close");
   sortable_ns.delete_row("view_list", $(".sr_order[value=" + data.view_id + "]"));

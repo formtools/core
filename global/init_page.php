@@ -4,11 +4,10 @@
 $g_smarty = new Smarty();
 
 $config_file_exists = false;
-if (is_file("$folder/config.php"))
+if (is_file(dirname(__FILE__) . "/config.php"))
 {
-  $folder = dirname(__FILE__);
   $config_file_exists = true;
-  include_once("$folder/config.php");
+  include_once(dirname(__FILE__) . "/config.php");
 }
 
 if ($config_file_exists)
@@ -18,7 +17,7 @@ if ($config_file_exists)
 
   // load the appropriate language file
   $g_language = ft_get_ui_language();
-  require_once("$folder/lang/{$g_language}.php");
+  require_once(dirname(__FILE__) . "/lang/{$g_language}.php");
 
   if (isset($_GET["logout"]))
     ft_logout_user();

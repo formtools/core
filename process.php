@@ -28,7 +28,7 @@ $folder = dirname(__FILE__);
 if (empty($_POST))
 {
   $page_vars = array("message_type" => "error", "message" => $LANG["processing_no_post_vars"]);
-  ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+  ft_display_page("error.tpl", $page_vars);
   exit;
 }
 
@@ -36,7 +36,7 @@ if (empty($_POST))
 else if (empty($_POST["form_tools_form_id"]))
 {
   $page_vars = array("message_type" => "error", "message" => $LANG["processing_no_form_id"]);
-  ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+  ft_display_page("error.tpl", $page_vars);
   exit;
 }
 
@@ -68,7 +68,7 @@ function ft_process_form($form_data)
   if (!ft_check_form_exists($form_id))
   {
     $page_vars = array("message_type" => "error", "message" => $LANG["processing_invalid_form_id"]);
-    ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+    ft_display_page("error.tpl", $page_vars);
     exit;
   }
 
@@ -78,7 +78,7 @@ function ft_process_form($form_data)
   if ($form_info["is_complete"] == "no")
   {
     $page_vars = array("message_type" => "error", "message" => $LANG["processing_form_incomplete"]);
-    ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+    ft_display_page("error.tpl", $page_vars);
     exit;
   }
 
@@ -92,7 +92,7 @@ function ft_process_form($form_data)
     }
 
     $page_vars = array("message_type" => "error", "message" => $LANG["processing_form_disabled"]);
-    ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+    ft_display_page("error.tpl", $page_vars);
     exit;
   }
 
@@ -100,7 +100,7 @@ function ft_process_form($form_data)
   if (!ft_check_form_exists($form_id))
   {
     $page_vars = array("message_type" => "error", "message" => $LANG["processing_invalid_form_id"]);
-    ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+    ft_display_page("error.tpl", $page_vars);
     exit;
   }
 
@@ -143,7 +143,7 @@ function ft_process_form($form_data)
       else
       {
         $page_vars = array("message_type" => "error", "message" => $LANG["processing_no_form_url_for_recaptcha"]);
-        ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+        ft_display_page("error.tpl", $page_vars);
         exit;
       }
     }
@@ -246,7 +246,7 @@ function ft_process_form($form_data)
       $page_vars = array("message_type" => "error", "error_code" => 304, "error_type" => "system",
         "debugging"=> "Failed query in <b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, line " . __LINE__ .
             ": <i>" . nl2br($query) . "</i>", mysql_error());
-      ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+      ft_display_page("error.tpl", $page_vars);
       exit;
     }
 
@@ -339,6 +339,6 @@ function ft_process_form($form_data)
 
   // the user should never get here! This means that the no redirect URL has been specified
   $page_vars = array("message_type" => "error", "message" => $LANG["processing_no_redirect_url"]);
-  ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+  ft_display_page("error.tpl", $page_vars);
   exit;
 }

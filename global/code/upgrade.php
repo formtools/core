@@ -47,7 +47,7 @@ function ft_upgrade_form_tools()
   if ($old_version_info["release_date"] < 20090113)
   {
     // add the Hooks table
-    mysql_query("
+    @mysql_query("
       CREATE TABLE {$g_table_prefix}hooks (
         hook_id mediumint(8) unsigned NOT NULL auto_increment,
         action_location enum('start','end') NOT NULL,
@@ -56,13 +56,13 @@ function ft_upgrade_form_tools()
         hook_function varchar(255) NOT NULL,
         priority tinyint(4) NOT NULL default '50',
         PRIMARY KEY (hook_id)
-      ) TYPE=MyISAM DEFAULT CHARSET=utf8
+      ) DEFAULT CHARSET=utf8
       ");
   }
 
   if ($old_version_info["release_date"] < 20090301)
   {
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}email_templates
       CHANGE email_reply_to email_reply_to
       ENUM('none', 'admin', 'client', 'user', 'custom')
@@ -72,7 +72,7 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20090317)
   {
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}views
       ADD may_add_submissions ENUM('yes', 'no') NOT NULL DEFAULT 'no'
         ");
@@ -80,15 +80,15 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20090402)
   {
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}hooks
       ADD hook_type ENUM('code', 'template') NOT NULL DEFAULT 'code' AFTER hook_id
         ");
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}hooks
       CHANGE action_location action_location VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
         ");
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}account_settings
       CHANGE setting_value setting_value MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
         ");
@@ -96,7 +96,7 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20090510)
   {
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}view_fields
       ADD is_searchable ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER is_editable
         ");
@@ -105,7 +105,7 @@ function ft_upgrade_form_tools()
   // bug #117
   if ($old_version_info["release_date"] < 20090627)
   {
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}view_filters
       CHANGE operator operator ENUM('equals', 'not_equals', 'like', 'not_like', 'before', 'after')
       CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'equals'
@@ -114,7 +114,7 @@ function ft_upgrade_form_tools()
 
   if ($old_version_info["release_date"] < 20090815)
   {
-    mysql_query("
+    @mysql_query("
       ALTER TABLE {$g_table_prefix}forms
       ADD edit_submission_page_label TEXT NULL
         ");
@@ -126,7 +126,7 @@ function ft_upgrade_form_tools()
     foreach ($forms as $form_info)
     {
       $form_id = $form_info["form_id"];
-      mysql_query("
+      @mysql_query("
         UPDATE {$g_table_prefix}forms
         SET    edit_submission_page_label = '{\$LANG.phrase_edit_submission|upper}'
         WHERE  form_id = $form_id
@@ -172,7 +172,7 @@ function ft_upgrade_form_tools()
     while ($row = mysql_fetch_assoc($query))
     {
       $view_id = $row["view_id"];
-      mysql_query("UPDATE {$g_table_prefix}views SET has_standard_filter = 'yes' WHERE view_id = $view_id");
+      @mysql_query("UPDATE {$g_table_prefix}views SET has_standard_filter = 'yes' WHERE view_id = $view_id");
     }
   }
 
@@ -241,12 +241,12 @@ function ft_upgrade_form_tools()
         first_name_field VARCHAR( 255 ) NULL,
         last_name_field VARCHAR( 255 ) NULL,
         PRIMARY KEY (form_email_id)
-      ) TYPE=MyISAM DEFAULT CHARSET=utf8
+      ) DEFAULT CHARSET=utf8
         ");
 
     // [5] rename the "recipient_user_type" enum options to call the "user" option "form_email_field" instead,
     // but first, store all the recipient_ids so we can update them after the DB change
-    $recipients_id_query = mysql_query("
+    $recipients_id_query = @mysql_query("
       SELECT recipient_id
       FROM   {$g_table_prefix}email_template_recipients
       WHERE  recipient_user_type = 'user'
@@ -275,7 +275,7 @@ function ft_upgrade_form_tools()
 
     // [6] now update the old "user" email field data to the new "form email field" table
     // and update the corresponding DB tables
-    $forms_query = mysql_query("SELECT form_id, user_email_field, user_first_name_field, user_last_name_field FROM {$g_table_prefix}forms");
+    $forms_query = @mysql_query("SELECT form_id, user_email_field, user_first_name_field, user_last_name_field FROM {$g_table_prefix}forms");
     while ($form_info = mysql_fetch_assoc($forms_query))
     {
       $form_id = $form_info["form_id"];
@@ -365,12 +365,13 @@ function ft_upgrade_form_tools()
       "email_template_edit_submission_views", "email_template_recipients", "field_options",
       "field_option_groups", "field_settings", "forms", "form_email_fields", "form_fields",
       "hooks", "menus", "menu_items", "modules", "module_menu_items", "multi_page_form_urls",
-      "public_form_omit_list", "public_view_omit_list", "settings", "themes", "views",
+      "public_form_omit_list", "public_view_omit_list", "settings", "sessions", "themes", "views",
       "view_fields", "view_filters", "view_tabs"
     );
     foreach ($core_tables as $table)
     {
       @mysql_query("ALTER TABLE {$g_table_prefix}$table TYPE=MyISAM");
+      @mysql_query("ALTER TABLE {$g_table_prefix}$table ENGINE=MyISAM");
     }
 
     // convert all the custom tables to MyISAM as well
@@ -379,6 +380,7 @@ function ft_upgrade_form_tools()
     {
       $form_id = $form_info["form_id"];
       @mysql_query("ALTER TABLE {$g_table_prefix}form_{$form_id} TYPE=MyISAM");
+      @mysql_query("ALTER TABLE {$g_table_prefix}form_{$form_id} ENGINE=MyISAM");
     }
   }
 
@@ -667,7 +669,7 @@ function ft_upgrade_form_tools()
       ft_install_module(array("install" => $module_id));
     }
 
-    $query = mysql_query("
+    $query = @mysql_query("
       CREATE TABLE {$g_table_prefix}new_view_submission_defaults (
         view_id mediumint(9) NOT NULL,
         field_id mediumint(9) NOT NULL,
@@ -677,7 +679,7 @@ function ft_upgrade_form_tools()
       ) DEFAULT CHARSET=utf8
     ");
 
-    $query = mysql_query("
+    $query = @mysql_query("
       CREATE TABLE {$g_table_prefix}view_columns (
         view_id mediumint(9) NOT NULL,
         field_id mediumint(9) NOT NULL,

@@ -1,8 +1,7 @@
 <?php
 
-$folder = dirname(__FILE__);
 $g_defer_init_page = true;
-require_once("$folder/library.php");
+require_once(dirname(__FILE__) . "/library.php");
 
 if ($g_session_type == "database")
 {
@@ -17,6 +16,4 @@ session_start();
 header("Cache-control: private");
 header("Content-Type: text/html; charset=utf-8");
 
-$folder = dirname(__FILE__);
-
-require_once("$folder/init_page.php");
+require_once(dirname(__FILE__) . "/init_page.php");

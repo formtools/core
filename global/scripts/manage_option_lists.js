@@ -152,6 +152,12 @@ sf_ns.smart_fill_field = function() {
 
 
 sf_ns.process_js_webpage_parse_method_response = function(data) {
+
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   // if their server doesn't support any of the page scraping methods, offer them the option
   // of uploading the file manually
   if (data.scrape_method == "") {

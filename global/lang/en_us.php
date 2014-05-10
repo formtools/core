@@ -1443,21 +1443,4 @@ $LANG["phrase_phone_number"] = "Phone Number";
 $LANG["phrase_code_markup_field"] = "Code / Markup Field";
 $LANG["word_help"] = "Help";
 
-// removed!
-//$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";
-//$LANG["validation_no_num_views_per_page"] = "Please enter the number of views per page.";
-//$LANG["notify_form_view_order_updated"] = "The View order has been updated.";
-// $LANG["phrase_field_option_group"] = "Field Option Group";
-// $LANG["phrase_field_option_groups"] = "Field Option Groups";
-// $LANG["phrase_new_group"] = "New Group";
-// $LANG["text_delete_field_warning"] = "deleting a field on this page will delete it from all submissions, so please be careful.";
-//$LANG["phrase_verify_url"] = "Verify URL";
-// $LANG["validation_urls_not_verified"] = "Please verify all the form URLs, or <a href=\"#\" onclick=\"return mf_ns.bypass_url_verification()\">click here</a> to bypass this step.";
-//$LANG["text_add_form_step_2_text_1"] = "Your form can be located on any website, but you can only submit the form information with PHP if it's located on the same server as this Form Tools installation.";
-// $LANG["phrase_assign_rows_to_tabs"] = "Assign rows {\$x} to {\$y} to tab {\$tab}";
-// $LANG["phrase_may_delete_view_submissions"] = "May delete submissions that appear in this View";
-//$LANG["phrase_create_new_group"] = "Create New Group &raquo;";
-//$LANG["phrase_use_lightbox"] = "Use Lightbox to display files";
-//$LANG["phrase_use_lightbox_caveat"] = "(Only enable if you're only uploading images through file fields)";
-//$LANG["phrase_field_label_placeholder"] = "Field Label Placeholder";
-//$LANG["phrase_field_response_placeholder"] = "Field Response Placeholder";
+$LANG["notify_new_submission_created"] = "Your new submission has been created. You may edit it below.";

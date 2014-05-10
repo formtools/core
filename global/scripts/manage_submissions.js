@@ -503,9 +503,15 @@ ms.edit_submission_page_send_email = function(submission_id) {
 
 
 /**
- * Called after an email has been successfully
+ * Called after an email has been sent, or failed to be sent due to session timeout.
  */
 ms.email_sent = function(data) {
+
+  // check the user wasn't logged out / denied permissions
+  if (!ft.check_ajax_response_permissions(data)) {
+    return;
+  }
+
   ft.display_message("ft_message", data.success, data.message);
 }
 

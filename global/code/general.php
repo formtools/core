@@ -184,6 +184,10 @@ function ft_display_custom_page_message($flag)
       $g_success = true;
       $g_message = $LANG["notify_change_temp_password"];
       break;
+    case "new_submission":
+      $g_success = true;
+      $g_message = $LANG["notify_new_submission_created"];
+      break;
   }
 
   return array($g_success, $g_message);
@@ -426,8 +430,13 @@ function ft_get_dhtml_page_nav($num_results, $num_per_page, $current_page = 1)
  * Should be called on ALL Form Tools pages - including modules.
  *
  * @param string $account_type The account type - "admin" / "client" / "user" (for Submission Accounts module)
+ * @param boolean $auto_logout either automatically log the user out if they don't have permission to view the page (or
+ *     sessions have expired), or - if set to false, just return the result as a boolean (true = has permission,
+ *     false = doesn't have permission)
+ * @return array (if $auto_logout is set to false)
+ *
  */
-function ft_check_permission($account_type)
+function ft_check_permission($account_type, $auto_logout = true)
 {
   global $g_root_url, $g_table_prefix;
 
@@ -438,24 +447,32 @@ function ft_check_permission($account_type)
 
   // some VERY complex logic here. The "user" account permission type is included so that people logged in
   // via the Submission Accounts can still view certain pages, e.g. pages with the Pages module. This checks that
-  // IF the minumum account type of the page is a "user", it EITHER has the user account info set (i.e. the submission ID)
+  // IF the minimum account type of the page is a "user", it EITHER has the user account info set (i.e. the submission ID)
   // or it's a regular client or admin account with the account_id set. Crumby, but it'll have to suffice for now.
   if ($account_type == "user")
   {
     if ((!isset($_SESSION["ft"]["account"]["submission_id"]) || empty($_SESSION["ft"]["account"]["submission_id"])) &&
        empty($_SESSION["ft"]["account"]["account_id"]))
     {
-      header("location: $g_root_url/modules/submission_accounts/logout.php");
-      exit;
+    	if ($auto_logout)
+    	{
+        header("location: $g_root_url/modules/submission_accounts/logout.php");
+        exit;
+    	}
+    	else
+    	{
+    		$boot_out_user = true;
+        $message_flag = "notify_no_account_id_in_sessions";
+    	}
     }
   }
-   // check the user ID is in sessions
-  else if      (empty($_SESSION["ft"]["account"]["account_id"]))
+  // check the user ID is in sessions
+  else if (!isset($_SESSION["ft"]["account"]["account_id"]) || empty($_SESSION["ft"]["account"]["account_id"]))
   {
     $boot_out_user = true;
     $message_flag = "notify_no_account_id_in_sessions";
   }
-  else if ($_SESSION["ft"]["account"]["account_type"] == "client" && $account_type == "admin")
+  else if (!isset($_SESSION["ft"]["account"]["account_type"]) || ($_SESSION["ft"]["account"]["account_type"] == "client" && $account_type == "admin"))
   {
     $boot_out_user = true;
     $message_flag = "notify_invalid_permissions";
@@ -476,8 +493,17 @@ function ft_check_permission($account_type)
     }
   }
 
-  if ($boot_out_user)
+  if ($boot_out_user && $auto_logout)
+  {
     ft_logout_user($message_flag);
+  }
+  else
+  {
+    return array(
+      "has_permission" => !$boot_out_user, // we invert it because we want to return TRUE if they have permission
+      "message"        => $message_flag
+    );
+  }
 }
 
 
@@ -1402,9 +1428,10 @@ if (!function_exists('mime_content_type'))
  * This is called on all page loads. It checks to ensure that the person's sessions haven't timed out. If not,
  * it updates the last_activity_unixtime in the user's sessions - otherwise they're logged out.
  */
-function ft_check_sessions_timeout()
+function ft_check_sessions_timeout($auto_logout = true)
 {
   $now = date("U");
+  $sessions_valid = true;
 
   // check to see if the session has timed-out
   if (isset($_SESSION["ft"]["account"]["last_activity_unixtime"]) && isset($_SESSION["ft"]["account"]["sessions_timeout"]))
@@ -1414,12 +1441,21 @@ function ft_check_sessions_timeout()
 
     if ($_SESSION["ft"]["account"]["last_activity_unixtime"] + $timeout_secs < $now)
     {
-      ft_logout_user("notify_sessions_timeout");
+    	if ($auto_logout)
+    	{
+        ft_logout_user("notify_sessions_timeout");
+    	}
+    	else
+    	{
+    		$sessions_valid = false;
+    	}
     }
   }
 
   // log this unixtime for checking the sessions timeout
   $_SESSION["ft"]["account"]["last_activity_unixtime"] = $now;
+
+  return $sessions_valid;
 }
 
 
