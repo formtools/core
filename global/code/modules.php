@@ -274,25 +274,26 @@ function ft_search_modules($search_criteria)
 
   extract(ft_process_hook_calls("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
 
-  // verbose, but at least it prevents any invalid sorting...
-  $order_clause = "";
+  // verbose, but at least it prevents any invalid sorting. We always return modules that aren't installed first
+  // so they show up on the first page of results. The calling page then sorts the ones that require upgrading next
+  $order_clause = "is_installed DESC";
   switch ($search_criteria["order"])
   {
     case "module_name-DESC":
-      $order_clause = "module_name DESC";
+      $order_clause .= ", module_name DESC";
       break;
     case "module_name-ASC":
-      $order_clause = "module_name ASC";
+      $order_clause .= ", module_name ASC";
       break;
     case "is_enabled-DESC":
-      $order_clause = "is_enabled DESC";
+      $order_clause .= ", is_enabled DESC";
       break;
     case "is_enabled-ASC":
-      $order_clause = "is_enabled ASC";
+      $order_clause .= ", is_enabled ASC";
       break;
 
     default:
-      $order_clause = "module_name";
+      $order_clause .= ", module_name";
       break;
   }
   $order_clause = "ORDER BY $order_clause";
@@ -887,7 +888,7 @@ function ft_module_needs_upgrading($module_id)
  */
 function ft_upgrade_module($module_id)
 {
-  global $LANG, $g_root_dir, $g_table_prefix;
+  global $LANG, $g_root_url, $g_root_dir, $g_table_prefix;
 
   $module_info = ft_get_module($module_id);
   $module_folder = $module_info["module_folder"];
@@ -973,9 +974,11 @@ function ft_upgrade_module($module_id)
 
   // And we're done! inform the user that it's been upgraded
   $placeholders = array(
-    "module" => $module_name,
-    "version" => $new_version
+    "module"  => $module_name,
+    "version" => $new_version,
+    "link"    => "$g_root_url/modules/$module_folder"
   );
+
   $message = ft_eval_smarty_string($LANG["notify_module_updated"], $placeholders);
 
   return array(true, $message);

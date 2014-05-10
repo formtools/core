@@ -56,6 +56,22 @@ foreach ($modules as $module_info)
   $updated_modules[] = $curr_module;
 }
 
+// now re-sort the list based on in_installed = no, needs_upgrading = yes, the rest
+$sorted_modules = array();
+$installed_modules = array();
+foreach ($updated_modules as $module_info)
+{
+  // we can rely on these guys being returned first
+  if ($module_info["is_installed"] == "no")
+    $sorted_modules[] = $module_info;
+  else if ($module_info["needs_upgrading"])
+    $sorted_modules[] = $module_info;
+  else
+    $installed_modules[] = $module_info;
+}
+
+$modules = array_merge($sorted_modules, $installed_modules);
+
 // ------------------------------------------------------------------------------------------
 
 // compile header information
@@ -63,7 +79,7 @@ $page_vars = array();
 $page_vars["page"]        = "modules";
 $page_vars["page_url"]    = ft_get_page_url("modules");
 $page_vars["head_title"]  = $LANG["word_modules"];
-$page_vars["modules"]     = $updated_modules;
+$page_vars["modules"]     = $modules;
 $page_vars["num_modules"] = $num_modules;
 $page_vars["order"]       = $order;
 $page_vars["search_criteria"] = $search_criteria;
