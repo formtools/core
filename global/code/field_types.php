@@ -1183,6 +1183,10 @@ function ft_display_field_type_date($placeholders)
     case "DD, MM d, yy":
       $php_format = "l M j, Y";
       break;
+    case "dd. mm. yy.":
+      $php_format = "d. m. Y.";
+      break;
+
     case "datetime:dd/mm/yy|h:mm TT|ampm`true":
       $php_format = "d/m/Y g:i A";
       break;
@@ -1197,6 +1201,9 @@ function ft_display_field_type_date($placeholders)
       break;
     case "datetime:yy-mm-dd|hh:mm:ss|showSecond`true":
       $php_format = "Y-m-d H:i:s";
+      break;
+    case "datetime:dd. mm. yy.|hh:mm":
+      $php_format = "d. m. Y. H:i";
       break;
 
     default:

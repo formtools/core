@@ -7,7 +7,7 @@
 
     {if $num_fields_using_option_list > 1}
       <div class="hint margin_bottom_large">
-        {$text_field_option_group_used_by_fields}
+        {$text_option_list_used_by_fields}
       </div>
     {/if}
 

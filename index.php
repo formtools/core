@@ -4,12 +4,12 @@ require_once("global/session_start.php");
 ft_verify_form_tools_installed();
 $g_upgrade_info = ft_upgrade_form_tools();
 
+
 // only verify the core tables exist if there wasn't a problem upgrading
 if (!($g_upgrade_info["upgraded"] && !$g_upgrade_info["success"]))
 {
   ft_verify_core_tables_exist();
 }
-
 
 // if this user is already logged in, redirect them to their specified login page
 if (isset($_SESSION["ft"]["account"]) && isset($_SESSION["ft"]["account"]["is_logged_in"]) &&
