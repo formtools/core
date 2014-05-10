@@ -109,6 +109,7 @@ function ft_delete_form_fields($form_id, $field_ids)
   // stores the Views IDs of any View that is affected by deleting one of the form field, regardless of the field or form
   $affected_views = array();
   $removed_field_ids = array();
+
   foreach ($field_ids as $field_id)
   {
     $field_id = trim($field_id);
@@ -118,6 +119,8 @@ function ft_delete_form_fields($form_id, $field_ids)
     // ignore brand new fields - nothing to delete!
     if (preg_match("/^NEW/", $field_id))
       continue;
+
+    $old_field_info = ft_get_form_field($field_id);
 
     @mysql_query("DELETE FROM {$g_table_prefix}form_fields WHERE field_id = $field_id");
     if (!$form_table_exists)
@@ -143,7 +146,6 @@ function ft_delete_form_fields($form_id, $field_ids)
       ft_delete_view_field($row["view_id"], $field_id);
     }
 
-    $old_field_info = ft_get_form_field($field_id);
     $drop_column = $old_field_info["col_name"];
     mysql_query("ALTER TABLE {$g_table_prefix}form_$form_id DROP $drop_column");
 
@@ -151,7 +153,8 @@ function ft_delete_form_fields($form_id, $field_ids)
     // field as the default sort order
     mysql_query("
       UPDATE {$g_table_prefix}views
-      SET     default_sort_field = 'submission_date'
+      SET     default_sort_field = 'submission_date',
+              default_sort_field_order = 'desc'
       WHERE   default_sort_field = '$drop_column' AND
               form_id = $form_id
                 ");

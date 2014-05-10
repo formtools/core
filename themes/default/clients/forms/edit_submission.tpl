@@ -79,7 +79,7 @@
           <input type="submit" name="update" value="{$LANG.word_update}" />
         {/if}
         {if $view_info.may_delete_submissions == "yes"}
-          <input type="button" name="delete" value="{$LANG.word_delete}" class="red" onclick="return ms.delete_submission({$submission_id}, 'submissions.php')"/>
+            <input type="button" name="delete" value="{$LANG.word_delete}" class="red" onclick="return ms.delete_submission({$submission_id}, 'index.php')"/>
         {/if}
         {if $view_info.may_add_submissions == "yes" && $form_info.is_active == "yes"}
           <span class="button_separator">|</span>

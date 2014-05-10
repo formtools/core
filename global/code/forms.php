@@ -361,7 +361,7 @@ function ft_initialize_form($form_data)
   if (!ft_check_form_exists($form_id, true))
   {
     $page_vars = array("message_type" => "error", "error_code" => 100);
-    ft_display_page(dirname(__FILE__) . "/../../error.tpl", $page_vars);
+    ft_display_page("error.tpl", $page_vars);
     exit;
   }
 
@@ -371,7 +371,7 @@ function ft_initialize_form($form_data)
   if ($form_info["is_complete"] == "yes")
   {
     $page_vars = array("message_type" => "error", "error_code" => 101);
-    ft_display_page(dirname(__FILE__) . "/../../error.tpl", $page_vars);
+    ft_display_page("error.tpl", $page_vars);
     exit;
   }
 
@@ -401,7 +401,7 @@ function ft_initialize_form($form_data)
   {
     $page_vars = array("message_type" => "error", "error_code" => 102, "error_type" => "system",
       "debugging" => "<b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, failed query: " . mysql_error());
-    ft_display_page(dirname(__FILE__) . "/../../error.tpl", $page_vars);
+    ft_display_page("error.tpl", $page_vars);
     exit;
   }
 
@@ -422,9 +422,9 @@ function ft_initialize_form($form_data)
 
     if (!$query)
     {
-      $page_vars = array("message_type" => "error", "error_code" => 103, "error_type" => "system",
+    	$page_vars = array("message_type" => "error", "error_code" => 103, "error_type" => "system",
         "debugging" => "<b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, failed query: " . mysql_error());
-      ft_display_page(dirname(__FILE__) . "/../../error.tpl", $page_vars);
+      ft_display_page("error.tpl", $page_vars);
       exit;
     }
 
@@ -446,7 +446,7 @@ function ft_initialize_form($form_data)
     {
       $page_vars = array("message_type" => "error", "error_code" => 104, "error_type" => "system",
         "debugging" => "<b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, failed query: " . mysql_error());
-      ft_display_page(dirname(__FILE__) . "/../../error.tpl", $page_vars);
+      ft_display_page("error.tpl", $page_vars);
       exit;
     }
 
@@ -502,11 +502,12 @@ function ft_initialize_form($form_data)
       'number', 'ip_address', '$order3')
       ");
 
+
   if (!$query)
   {
     $page_vars = array("message_type" => "error", "error_code" => 105, "error_type" => "system",
       "debugging" => "<b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, failed query: " . mysql_error());
-    ft_display_page(dirname(__FILE__) . "/../../error.tpl", $page_vars);
+    ft_display_page("error.tpl", $page_vars);
     exit;
   }
 
@@ -526,9 +527,10 @@ function ft_initialize_form($form_data)
     $page_vars["message"] = $LANG["processing_init_complete"];
     $page_vars["message_type"] = "notify";
     $page_vars["title"] = $LANG["phrase_test_submission_received"];
-    ft_display_page(dirname(__FILE__) . "/../../error.tpl", $page_vars);
+    ft_display_page("error.tpl", $page_vars);
     exit;
   }
+
 }
 
 
