@@ -579,7 +579,7 @@ function ft_get_form_list()
     SELECT *
     FROM   {$g_table_prefix}forms
     WHERE  is_complete = 'yes' AND
-          is_initialized = 'yes'
+           is_initialized = 'yes'
     ORDER BY form_name ASC
   ");
 

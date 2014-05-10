@@ -1719,3 +1719,21 @@ function ft_get_clean_db_entity($str)
   return $str;
 }
 
+
+/**
+ * Helper function to remove all empty strings from an array.
+ *
+ * @param array $array
+ * @return array
+ */
+function ft_array_remove_empty_els($array)
+{
+	$updated_array = array();
+	foreach ($array as $el)
+	{
+		if (!empty($el))
+		  $updated_array[] = $el;
+	}
+
+  return $updated_array;
+}

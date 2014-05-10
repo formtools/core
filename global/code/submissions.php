@@ -845,13 +845,15 @@ function _ft_get_search_submissions_select_clause($columns)
   }
   else
   {
+	  $columns = array_unique($columns);
+
     // if submission_id isn't included, add it - it'll be needed at some point
     if (!in_array("submission_id", $columns))
       $columns[] = "submission_id";
 
     // just in case. This prevents empty column names (which shouldn't get here, but do if something
     // goes wrong) getting into the column list
-    array_splice($columns, array_search("", $columns), 1);
+    $columns = ft_array_remove_empty_els($columns);
 
     $select_clause = join(", ", $columns);
   }

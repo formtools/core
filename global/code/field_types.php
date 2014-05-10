@@ -1487,6 +1487,10 @@ function ft_get_field_type_setting_shared_characteristics_js()
       // field type - not ALL field types).
       list($field_type_identifier, $setting_identifier) = explode(",", $str);
 
+      // the shared characteristic settings may reference uninstalled modules
+      if (!array_key_exists($field_type_identifier, $field_identifier_to_id))
+        continue;
+
       $field_type_id = $field_identifier_to_id[$field_type_identifier];
       $all_field_type_setting_ids = $info["field_type_ids_to_setting_ids"][$field_type_id];
 

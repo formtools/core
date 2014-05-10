@@ -736,10 +736,13 @@ function ft_get_field_settings($field_id)
 {
   global $g_table_prefix;
 
+  if (empty($field_id) || !is_numeric($field_id))
+  	return array();
+
   // get the overridden settings
   $query = "
     SELECT fts.field_type_id, fs.field_id, fts.field_setting_identifier, fs.setting_value
-    FROM   ft_field_type_settings fts, ft_field_settings fs
+    FROM   {$g_table_prefix}field_type_settings fts, {$g_table_prefix}field_settings fs
     WHERE  fts.setting_id = fs.setting_id AND
            fs.field_id = $field_id
     ORDER BY fs.field_id

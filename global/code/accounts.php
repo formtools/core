@@ -33,6 +33,25 @@ function ft_account_exists($account_id)
 
 
 /**
+ * Helper function to determine if the user currently logged in is an administrator or not.
+ *
+ * return boolean. False if client or not logged in.
+ */
+function ft_is_admin()
+{
+  $account_id = isset($_SESSION["ft"]["account"]["account_id"]) ? $_SESSION["ft"]["account"]["account_id"] : "";
+	if (empty($account_id))
+	  return false;
+
+	$account_info = ft_get_account_info($account_id);
+	if (empty($account_info) || $account_info["account_type"] != "admin")
+	  return false;
+
+  return true;
+}
+
+
+/**
  * Retrieves all information about any user account (administrator or client).
  *
  * @param integer $user_id the unique account ID
