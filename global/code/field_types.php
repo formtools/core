@@ -1204,7 +1204,7 @@ function ft_display_field_type_date($placeholders)
     return;
 
   $tzo = "";
-  if ($placeholders["apply_timezone_offset"] == "yes")
+  if ($placeholders["apply_timezone_offset"] == "yes" && isset($placeholders["ACCOUNT_INFO"]["timezone_offset"]))
     $tzo = $placeholders["ACCOUNT_INFO"]["timezone_offset"];
 
   switch ($placeholders["display_format"])

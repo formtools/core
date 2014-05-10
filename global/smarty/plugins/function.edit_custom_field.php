@@ -81,7 +81,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
     "VALUE"         => $field_info["submission_info"]["value"],
     "SETTINGS"      => ft_get_settings("", "core"), // SLOW! TODO
     "CONTEXTPAGE"   => "edit_submission",
-    "ACCOUNT_INFO"  => $_SESSION["ft"]["account"],
+    "ACCOUNT_INFO"  => isset($_SESSION["ft"]["account"]) ? $_SESSION["ft"]["account"] : array(),
     "g_root_url"    => $g_root_url,
     "g_root_dir"    => $g_root_dir,
     "g_multi_val_delimiter" => $g_multi_val_delimiter
