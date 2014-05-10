@@ -225,7 +225,7 @@ $g_release_type = "beta";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110714";
+$g_release_date = "20110720";
 
 /**
  * The minimum required PHP version needed to run Form Tools.
@@ -264,6 +264,11 @@ $g_message = "";
  */
 $g_enable_benchmarking = false;
 $g_benchmark_start     = "";
+
+/**
+ * Used for caching data sets during large, repeat operations.
+ */
+$g_cache = array();
 
 /**
  * Added in 2.1.0 to provide better error checking on the login page. This is used to confirm that all the Core

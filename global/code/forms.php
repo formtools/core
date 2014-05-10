@@ -546,8 +546,8 @@ function ft_get_form($form_id)
 
   $form_id = ft_sanitize($form_id);
 
-  $query = mysql_query("SELECT * FROM {$g_table_prefix}forms WHERE form_id = $form_id");
-  $form_info = mysql_fetch_assoc($query);
+  $query = @mysql_query("SELECT * FROM {$g_table_prefix}forms WHERE form_id = $form_id");
+  $form_info = @mysql_fetch_assoc($query);
 
   if (empty($form_info))
     return array();

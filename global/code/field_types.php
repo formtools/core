@@ -1068,7 +1068,7 @@ function ft_get_field_type_id_to_identifier()
  */
 function ft_generate_viewable_field($params)
 {
-  global $LANG, $g_root_url, $g_root_dir, $g_multi_val_delimiter;
+  global $LANG, $g_root_url, $g_root_dir, $g_multi_val_delimiter, $g_cache;
 
   // REQUIRED
   $form_id       = $params["form_id"];
@@ -1147,7 +1147,17 @@ function ft_generate_viewable_field($params)
         $parts = explode(",", $value);
         if (count($parts) == 2)
         {
-          $value = ft_get_settings($parts[0], $parts[1]);
+        	$dynamic_setting_str = $value; // "setting_name,module_folder/'core'"
+          if (!array_key_exists("dynamic_settings", $g_cache))
+        	  $g_cache["dynamic_settings"] = array();
+
+        	if (array_key_exists($dynamic_setting_str, $g_cache["dynamic_settings"]))
+        	  $value = $g_cache["dynamic_settings"][$dynamic_setting_str];
+          else
+          {
+            $value = ft_get_settings($parts[0], $parts[1]);
+            $g_cache["dynamic_settings"][$dynamic_setting_str] = $value;
+          }
         }
       }
 
@@ -1160,7 +1170,18 @@ function ft_generate_viewable_field($params)
         }
         else
         {
-          $value = ft_get_option_list($value);
+        	$option_list_id = $value;
+
+        	if (!array_key_exists("option_lists", $g_cache))
+        	  $g_cache["option_lists"] = array();
+
+        	if (array_key_exists($option_list_id, $g_cache["option_lists"]))
+        	  $value = $g_cache["option_lists"][$option_list_id];
+          else
+          {
+            $value = ft_get_option_list($option_list_id);
+            $g_cache["option_lists"][$option_list_id] = $value;
+          }
         }
       }
 
@@ -1489,30 +1510,4 @@ function ft_get_shared_field_setting_info($field_type_map, $field_type_settings_
 
   return $return_info;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

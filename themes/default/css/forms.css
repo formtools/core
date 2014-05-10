@@ -124,3 +124,7 @@
   margin: 2px;
   padding-left: 5px;
 }
+
+#new_field_position {
+  max-width: 280px;
+}

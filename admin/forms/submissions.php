@@ -4,8 +4,6 @@ require("../../global/session_start.php");
 ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
 
-$g_benchmark_start = ft_get_microtime_float();
-
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
 $form_id = ft_load_field("form_id", "curr_form_id");
 if (empty($form_id) || !is_numeric($form_id))
