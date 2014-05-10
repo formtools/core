@@ -768,7 +768,7 @@ $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">\"Can't con
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">\"Access denied for user:\"</span> means that there is a problem with your username / password combination.";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">\"Access denied for user: ... to database ...\"</span> means that although your username and password you supplied is correct, it was unable to connect to that particular database with that account. This can mean that either your database name is incorrect, or that this user account is not associated with that database.";
 $LANG["text_install_email_content_text"] = "There's plenty of resources on our website to help you get started, including our online documentation (http://docs.formtools.org) and tutorials (http://docs.formtools.org/tutorials). If you find you get stuck or have a question, pop by our forums (http://forums.formtools.org) and say hello.";
-$LANG["text_install_form_tools_server_not_supported"] = "Sorry, Form Tools will not be able to run on your server. <a href=\"http://docs.formtools.org/userdoc/?page=system_requirements\" target=\"_blank\">Please click here</a> for the minimum requirements.";
+$LANG["text_install_form_tools_server_not_supported"] = "Sorry, Form Tools will not be able to run on your server. <a href=\"http://docs.formtools.org/userdoc2_1/?page=system_requirements\" target=\"_blank\">Please click here</a> for the minimum requirements.";
 $LANG["text_install_intro"] = "Welcome to the Form Tools installation script! Please select your language.";
 $LANG["text_install_system_check"] = "This page runs a few tests on your system to ensure it's able to run Form Tools.";
 $LANG["text_js_required"] = "In order to login and use Form Tools, you must have javascript enabled in your browser. Please enable it now, and click refresh in your browser.";
@@ -789,7 +789,7 @@ $LANG["text_no_modules_found"] = "No modules were found. Try broadening your sea
 $LANG["text_no_recipients_added"] = "No recipients have been added.";
 $LANG["text_no_search_results"] = "There are no results with this search criteria / View.";
 $LANG["text_no_submissions_found"] = "Sorry, no submissions were found.";
-$LANG["text_no_themes"] = "You do not have any themes defined. Click the button below to refresh your theme list, or check the <a href=\"http://docs.formtools.org/userdoc/?page=themes\">Form Tools user documentation</a> for information about adding themes.";
+$LANG["text_no_themes"] = "You do not have any themes defined. Click the button below to refresh your theme list, or check the <a href=\"http://docs.formtools.org/userdoc2_1/?page=themes\">Form Tools user documentation</a> for information about adding themes.";
 $LANG["text_public_form_omit_list_page"] = "<b>Public</b> forms give you the benefit of letting all client accounts access them without having to manually assign each client to them. This page lets you pinpoint those clients who may not access this form, even though the form is marked as public.";
 $LANG["text_public_view_omit_list_page"] = "Public Views give you the benefit of letting all client accounts access them without having to manually assign each client to them. This page lets you pinpoint those clients who may not access this particular View.";
 $LANG["text_reason_files_not_moved"] = "The most likely cause of this is either the permissions on the files have been changed or they no longer exist.";
@@ -1438,6 +1438,9 @@ $LANG["phrase_not_entered_yet"] = "Not entered yet";
 $LANG["phrase_your_license_key"] = "Your license key is";
 $LANG["notify_invalid_license_key"] = "Sorry, that does not appear to be a valid license key. Please try entering it again.";
 $LANG["text_premium_module_general_license_link"] = "Please <a href=\"http://accounts.formtools.org\" target=\"_blank\">log into your user account</a> to view your license keys for all your registered modules.";
+$LANG["word_time"] = "Time";
+$LANG["phrase_phone_number"] = "Phone Number";
+$LANG["phrase_code_markup_field"] = "Code / Markup Field";
 
 // removed!
 //$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";

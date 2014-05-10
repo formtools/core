@@ -188,7 +188,7 @@
       </table>
 
       <div class="margin_top_large">
-        <div style="float:right"><a href="http://docs.formtools.org/userdoc/index.php?page=fog_editing" target="_blank">{$LANG.phrase_smart_fill_user_documentation}</a></div>
+        <div style="float:right"><a href="http://docs.formtools.org/userdoc2_1/index.php?page=fog_editing" target="_blank">{$LANG.phrase_smart_fill_user_documentation}</a></div>
       </div>
       <div class="clear"></div>
     </div>

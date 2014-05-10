@@ -44,6 +44,11 @@ function ft_add_form_fields($form_id, $fields)
     $col_name   = $field_info["col_name"];
     $is_new_sort_group = $field_info["is_new_sort_group"];
 
+    // in order for the field to be added, it needs to have the label, name, size and column name. Otherwise they're
+    // ignored
+    if (empty($display_name) || empty($field_name) || empty($field_size) || empty($col_name))
+      continue;
+
     // add the new field to form_fields
     $query = "
       INSERT INTO {$g_table_prefix}form_fields (form_id, field_name, field_size, field_type_id,
@@ -1148,7 +1153,7 @@ function ft_update_field_filters($field_id)
     if ($field_info["is_date_field"] == "yes")
     {
       $sql_operator = ($operator == "after") ? ">" : "<";
-      $sql = "$col_name $sql_operator '$values'";
+      $sql = "$col_name $sql_operator '$values'"; // TODO values doesn't exist. This throws an error...
     }
     else
     {

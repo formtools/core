@@ -101,6 +101,7 @@ list($prev_link_html, $search_results_link_html, $next_link_html) = _ft_code_get
 $submission_placeholders = ft_get_submission_placeholders($form_id, $submission_id);
 $edit_submission_page_label = ft_eval_smarty_string($form_info["edit_submission_page_label"], $submission_placeholders);
 
+
 // get all the shared resources
 $shared_resources_list = ft_get_settings("edit_submission_onload_resources");
 $shared_resources_array = explode("|", $shared_resources_list);

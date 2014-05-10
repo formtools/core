@@ -584,7 +584,7 @@ function ft_get_grouped_view_fields($view_id, $tab_number = "", $form_id = "", $
     // two keys:
     //    value:    whatever is actually stored for this fields
     //    settings: an array of hashes. Each hash contains setting_id => setting_value
-    if (!empty($submission_id))
+    if (!empty($submission_id) && !empty($field_ids))
     {
       // do a single query to get a list of ALL settings for any of the field IDs we're dealing with
       $field_id_str = implode(",", $field_ids);

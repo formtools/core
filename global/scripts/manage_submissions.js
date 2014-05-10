@@ -146,8 +146,24 @@ ms.delete_submissions = function(page) {
  * @param string target_webpage where to link to after deleting the submission
  */
 ms.delete_submission = function(submission_id, target_webpage) {
-  if (confirm(g.messages["confirm_delete_submission"]))
-    window.location = target_webpage + "?delete=" + submission_id;
+  ft.create_dialog({
+    dialog:    ft.check_url_dialog,
+    title:     g.messages["phrase_please_confirm"],
+    content:   g.messages["confirm_delete_submission"],
+    popup_type: "warning",
+    buttons: [{
+      text: g.messages["word_yes"],
+      click: function() {
+        window.location = target_webpage + "?delete=" + submission_id;
+      }
+    },
+    {
+      text: g.messages["word_no"],
+      click: function() {
+        $(this).dialog("close");
+      }
+    }]
+  });
 
   return false;
 }

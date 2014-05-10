@@ -300,12 +300,16 @@ function ft_process_form($form_data)
     }
   }
 
-  // now process any file fields. This is placed after the redirect query param code block above to allow whatever file upload
-  // module to append the filename to the query string, if needed
-  extract(ft_process_hook_calls("manage_files", compact("form_id", "submission_id", "file_fields", "redirect_query_params"), array("success", "message", "redirect_query_params")), EXTR_OVERWRITE);
+  // only upload files & send emails if we're not ignoring the submission
+  if (!isset($form_data["form_tools_ignore_submission"]))
+  {
+    // now process any file fields. This is placed after the redirect query param code block above to allow whatever file upload
+    // module to append the filename to the query string, if needed
+    extract(ft_process_hook_calls("manage_files", compact("form_id", "submission_id", "file_fields", "redirect_query_params"), array("success", "message", "redirect_query_params")), EXTR_OVERWRITE);
 
-  // send any emails
-  ft_send_emails("on_submission", $form_id, $submission_id);
+    // send any emails
+    ft_send_emails("on_submission", $form_id, $submission_id);
+  }
 
   // if the redirect URL has been specified either in the database or as part of the form
   // submission, redirect the user [form submission form_tools_redirect_url value overrides

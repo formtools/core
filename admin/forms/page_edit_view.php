@@ -169,7 +169,7 @@ $page_vars["head_string"] =<<< END
   <script src="$g_root_url/global/scripts/manage_views.js?v=3"></script>
 END;
 
-$replacements = array("user_doc_link" => "http://docs.formtools.org/userdoc/index.php?page=view_filters");
+$replacements = array("user_doc_link" => "http://docs.formtools.org/userdoc2_1/index.php?page=view_filters");
 $page_vars["text_filters_tips"] = ft_eval_smarty_string($LANG["text_filters_tips"], $replacements);
 $replacements = array("number" => "<input type=\"text\" name=\"num_standard_filter_rows\" id=\"num_standard_filter_rows\" value=\"1\" size=\"2\" />");
 $page_vars["add_standard_filter_num_rows_input_field"] = ft_eval_smarty_string($LANG["phrase_add_num_rows"], $replacements);

@@ -1404,6 +1404,7 @@ function ft_display_field_type_phone_number($placeholders)
 
 function ft_display_field_type_code_markup($placeholders)
 {
+  $output = "";
   if ($placeholders["CONTEXTPAGE"] == "edit_submission")
   {
     $code_markup = $placeholders["code_markup"];
@@ -1411,7 +1412,7 @@ function ft_display_field_type_code_markup($placeholders)
     $value       = $placeholders["VALUE"];
     $height      = $placeholders["height"];
     $g_root_url  = $placeholders["g_root_url"];
-    echo <<< END
+    $output =<<< END
   <textarea id="{$name}_id" name="{$name}">{$value}</textarea>
   <script>
   var code_mirror_{$name} = new CodeMirror.fromTextArea("{$name}_id", {
@@ -1434,8 +1435,10 @@ END;
   }
   else
   {
-    echo strip_tags($placeholders["VALUE"]);
+    $output = strip_tags($placeholders["VALUE"]);
   }
+
+  return $output;
 }
 
 

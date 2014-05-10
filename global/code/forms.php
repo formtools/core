@@ -1365,19 +1365,22 @@ function ft_update_form_fields_tab($form_id, $infohash)
     foreach ($changed_fields as $changed_field_info)
     {
       $field_id = $changed_field_info["field_id"];
-      $shared_settings = ft_get_shared_field_setting_info($field_type_map, $field_type_settings_shared_characteristics, $field_id, $changed_field_info["field_type_id"], $changed_field_info["old_field_type_id"]);
+      $shared_settings[] = ft_get_shared_field_setting_info($field_type_map, $field_type_settings_shared_characteristics, $field_id, $changed_field_info["field_type_id"], $changed_field_info["old_field_type_id"]);
       ft_delete_extended_field_settings($field_id);
     }
 
-    foreach ($shared_settings as $setting_info)
+    foreach ($shared_settings as $setting)
     {
-      $field_id      = $setting_info["field_id"];
-      $setting_id    = $setting_info["new_setting_id"];
-      $setting_value = ft_sanitize($setting_info["setting_value"]);
-      mysql_query("
-        INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
-        VALUES ($field_id, $setting_id, '$setting_value')
-      ");
+      foreach ($setting as $setting_info)
+      {
+        $field_id      = $setting_info["field_id"];
+        $setting_id    = $setting_info["new_setting_id"];
+        $setting_value = ft_sanitize($setting_info["setting_value"]);
+        mysql_query("
+          INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
+          VALUES ($field_id, $setting_id, '$setting_value')
+        ");
+      }
     }
   }
 
@@ -1424,7 +1427,7 @@ function ft_update_form_fields_tab($form_id, $infohash)
           @mysql_query("
             UPDATE {$g_table_prefix}form_fields
             SET    col_name   = '$col_name',
-                  field_size = '$field_size'
+                   field_size = '$field_size'
             WHERE  field_id = $field_id
                       ");
         }
@@ -1524,192 +1527,6 @@ function ft_update_form_fields_tab($form_id, $infohash)
 
 
 /**
- * Called by administrators; updates the content stored on the Database tab in the Edit
- * Form pages. It updates the following info about the form fields:
- *           - include on redirect<br />
- *           - form field<br />
- *           - field size<br />
- *           - field type<br />
- *           - database column
- * @param integer $infohash A hash containing the contents of the Edit Form Database tab.
- * @return array Returns array with indexes:<br/>
- *               [0]: true/false (success / failure)<br />
- *               [1]: message string<br/>
-
-function ft_update_form_database_tab($infohash)
-{
-  global $g_debug, $g_table_prefix, $LANG;
-
-  $form_id = $infohash["form_id"];
-  $infohash = ft_sanitize($infohash);
-
-  extract(ft_process_hook_calls("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
-
-  // get the field IDs we're working with
-  $field_ids = array();
-  while (list($key, $val) = each($infohash))
-  {
-    // find the field id (field type is always required)
-    preg_match("/^field_(\d+)_type$/", $key, $match);
-
-    if (!empty($match[1]))
-      $field_ids[] = $match[1];
-  }
-  reset($infohash);
-
-
-  // now gather all the info about the fields
-  $field_info = array();
-  foreach ($field_ids as $field_id)
-  {
-    // is this field to be included on redirect or not?
-    if (isset($infohash["field_{$field_id}_include_on_redirect"]) && !empty($infohash["field_{$field_id}_include_on_redirect"]))
-      $include_on_redirect = "yes";
-    else
-      $include_on_redirect = "no";
-
-    // field type (size)
-    if (isset($infohash["field_{$field_id}_size"]))
-      $field_size = $infohash["field_{$field_id}_size"];
-    else
-      $field_size = "";
-
-    // field data type (string/number)
-    if (isset($infohash["field_{$field_id}_data_type"]))
-      $data_type = $infohash["field_{$field_id}_data_type"];
-    else
-      $data_type = "";
-
-    // database column name
-    if (isset($infohash["col_{$field_id}_name"]))
-      $col_name = $infohash["col_{$field_id}_name"];
-    else
-      $col_name = "";
-
-    // field type (system, etc) - this is passed in a hidden field
-    $field_type = $infohash["field_{$field_id}_type"];
-
-    $field_info[] = array("field_id" => $field_id,
-                          "include_on_redirect" => $include_on_redirect,
-                          "field_size" => $field_size,
-                          "data_type" => $data_type,
-                          "col_name" => $col_name,
-                          "field_type" => $field_type);
-  }
-  reset($infohash);
-
-
-  // if the form actually exists (i.e. the user isn't in the middle of setting it up!), update the form table
-  $form_info = ft_get_form($form_id);
-
-  // this keeps track of any database column changes, in case of error
-  $db_col_changes = array();
-  $db_col_change_hash = array(); // added later. Could use refactoring
-
-  if ($form_info["is_complete"] == "yes")
-  {
-    // update each db column in turn
-    foreach ($field_info as $field)
-    {
-      // ignore system fields
-      if ($field["field_type"] == "system")
-        continue;
-
-      $old_field_info = ft_get_form_field($field["field_id"]);
-
-      // if any physical aspect of the form (column name, field type) needs to be changed, change it
-      if (($old_field_info['col_name'] != $field["col_name"]) || ($old_field_info['field_size'] != $field["field_size"]))
-      {
-        $db_col_change_hash[$old_field_info['col_name']] = $field["col_name"];
-
-        $new_field_size = "";
-        switch ($field["field_size"])
-        {
-          case "tiny":       $new_field_size = "VARCHAR(5)";   break;
-          case "small":      $new_field_size = "VARCHAR(20)";  break;
-          case "medium":     $new_field_size = "VARCHAR(255)"; break;
-          case "large":      $new_field_size = "TEXT";         break;
-          case "very_large": $new_field_size = "MEDIUMTEXT";   break;
-          default:           $new_field_size = "VARCHAR(255)"; break;
-        }
-
-        list ($is_success, $err_message) = _ft_alter_table_column("{$g_table_prefix}form_{$form_id}", $old_field_info["col_name"], $field["col_name"], $new_field_size);
-
-        if ($is_success)
-          $db_col_changes[$field["field_id"]] = $field["col_name"];
-
-
-        // if there was a problem, return an error immediately
-        else
-        {
-          // if there have already been successful database column name changes already made,
-          // update the database. This prevents things getting out of whack
-          if (!empty($db_col_changes))
-          {
-            while (list($field_id, $col_name) = each($db_col_changes))
-            {
-              $query = mysql_query("
-                UPDATE {$g_table_prefix}form_fields
-                SET    col_name = '$col_name'
-                WHERE  field_id = $field_id
-                          ");
-            }
-          }
-
-          $success = false;
-          $message = $LANG["validation_db_not_updated_invalid_input"];
-          if ($g_debug) $message .= " \"$err_message\"";
-          return array($success, $message);
-        }
-      }
-    }
-  }
-
-  // update the form template table values
-  foreach ($field_info as $field)
-  {
-    if ($field["field_type"] == "system")
-    {
-      $query = "
-        UPDATE {$g_table_prefix}form_fields
-        SET    include_on_redirect = '{$field["include_on_redirect"]}'
-        WHERE  field_id = {$field["field_id"]}
-                  ";
-    }
-    else
-    {
-      $query = "
-        UPDATE {$g_table_prefix}form_fields
-        SET    include_on_redirect = '{$field["include_on_redirect"]}',
-              field_size = '{$field["field_size"]}',
-              data_type  = '{$field["data_type"]}',
-              col_name   = '{$field["col_name"]}'
-        WHERE  field_id = {$field["field_id"]}
-                  ";
-    }
-
-    mysql_query($query)
-      or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
-  }
-
-  // lastly, if any of the database column names just changed we need to update any View filters
-  // that relied on them
-  if (!empty($db_col_changes))
-  {
-    while (list($field_id, $col_name) = each($db_col_changes))
-      ft_update_field_filters($field_id);
-  }
-
-  $success = true;
-  $message = $LANG["notify_fields_updated"];
-  extract(ft_process_hook_calls("end", compact("infohash", "form_id", "db_col_changes", "db_col_change_hash"), array("success", "message")), EXTR_OVERWRITE);
-
-  return array($success, $message);
-}
-*/
-
-
-/**
  * Simple helper function to examine a form and see if it contains a file upload field.
  *
  * @param integer $form_id
@@ -1723,8 +1540,8 @@ function ft_check_form_has_file_upload_field($form_id)
     SELECT count(*) as c
     FROM   {$g_table_prefix}form_fields ff, {$g_table_prefix}field_types fft
     WHERE  ff.form_id = $form_id AND
-          ff.field_type_id = fft.field_type_id AND
-          fft.is_file_field = 'yes'
+           ff.field_type_id = fft.field_type_id AND
+           fft.is_file_field = 'yes'
       ");
 
   $result = mysql_fetch_assoc($query);

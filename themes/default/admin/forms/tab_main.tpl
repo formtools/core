@@ -16,7 +16,7 @@
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_form_name}</td>
-      <td><input type="text" name="form_name" value="{$form_info.form_name}" style="width: 99%" /></td>
+      <td><input type="text" name="form_name" value="{$form_info.form_name|escape}" style="width: 99%" /></td>
     </tr>
     <tr>
       <td valign="top" class="pad_left_small">{$LANG.phrase_form_type}</td>

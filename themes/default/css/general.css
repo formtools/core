@@ -493,3 +493,8 @@ a.show_form {
   -webkit-border-radius: 3px;
   text-align: center;
 }
+.desc {
+  font-style: italic;
+  color: #999999;
+  margin-bottom: 6px;
+}
