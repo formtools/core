@@ -603,11 +603,8 @@ function ft_get_grouped_view_fields($view_id, $tab_number = "", $form_id = "", $
       $fields_info[] = $row;
     }
 
-    // now, if the submission ID is set, add an additional key: submission_info. That contains a hash with
-    // two keys:
-    //    value:    whatever is actually stored for this fields
-    //    settings: an array of hashes. Each hash contains setting_id => setting_value
-    if (!empty($submission_id) && !empty($field_ids))
+    // now, if the submission ID is set it returns an additional submission_value key
+    if (!empty($field_ids))
     {
       // do a single query to get a list of ALL settings for any of the field IDs we're dealing with
       $field_id_str = implode(",", $field_ids);
@@ -633,13 +630,13 @@ function ft_get_grouped_view_fields($view_id, $tab_number = "", $form_id = "", $
       {
         $curr_col_name = $curr_field_info["col_name"];
         $curr_field_id = $curr_field_info["field_id"];
-        $curr_field_info["submission_info"] = array(
-          "value"    => $submission_info[$curr_col_name],
-          "settings" => (array_key_exists($curr_field_id, $field_settings)) ? $field_settings[$curr_field_id] : array()
-        );
+        $curr_field_info["field_settings"] = (array_key_exists($curr_field_id, $field_settings)) ? $field_settings[$curr_field_id] : array();
+
+        if (!empty($submission_id))
+          $curr_field_info["submission_value"] = $submission_info[$curr_col_name];
+
         $updated_fields_info[] = $curr_field_info;
       }
-
       $fields_info = $updated_fields_info;
     }
 

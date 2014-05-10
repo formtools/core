@@ -119,7 +119,8 @@ $submission_placeholders = ft_get_submission_placeholders($form_id, $submission_
 $edit_submission_page_label = ft_eval_smarty_string($form_info["edit_submission_page_label"], $submission_placeholders);
 
 // get all the shared resources
-$shared_resources_list = ft_get_settings("edit_submission_onload_resources");
+$settings = ft_get_settings("", "core");
+$shared_resources_list = $settings["edit_submission_onload_resources"];
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
 foreach ($shared_resources_array as $resource)
@@ -137,6 +138,7 @@ $page_vars["tabs"] = $tabs;
 $page_vars["form_info"]   = $form_info;
 $page_vars["grouped_views"] = $grouped_views;
 $page_vars["tab_number"] = $tab_number;
+$page_vars["settings"] = $settings;
 $page_vars["page_field_ids"] = $page_field_ids;
 $page_vars["grouped_fields"] = $grouped_fields;
 $page_vars["field_types"] = $page_field_types;

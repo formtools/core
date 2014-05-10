@@ -263,7 +263,7 @@ $g_sql[] = "INSERT INTO %PREFIX%field_type_settings VALUES (28, 10, 'Field Comme
 
 // code / markup
 $g_sql[] = "INSERT INTO %PREFIX%field_type_settings VALUES (29, 11, 'Code / Markup Type', 'code_markup', 'select', 'na', 'static', 'HTML', 1)";
-$g_sql[] = "INSERT INTO %PREFIX%field_type_settings VALUES (30, 11, 'Height', 'height', 'select', 'na', 'static', 'size_medium', 2)";
+$g_sql[] = "INSERT INTO %PREFIX%field_type_settings VALUES (30, 11, 'Height', 'height', 'select', 'na', 'static', '200', 2)";
 $g_sql[] = "INSERT INTO %PREFIX%field_type_settings VALUES (31, 11, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 3)";
 
 $g_sql[] = "CREATE TABLE %PREFIX%field_types (

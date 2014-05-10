@@ -1440,6 +1440,18 @@ function ft_upgrade_form_tools()
     ");
   }
 
+  if ($old_version_info["release_date"] < 20110716)
+  {
+    $field_type_info = ft_get_field_type_by_identifier("code_markup");
+    foreach ($field_type_info["settings"] as $curr_field_type_info)
+    {
+    	if ($curr_field_type_info["field_setting_identifier"] != "height")
+    	  continue;
+
+    	$setting_id = $curr_field_type_info["setting_id"];
+    	mysql_query("UPDATE {$g_table_prefix}field_type_settings SET default_value = '200' WHERE setting_id = $setting_id") or die(mysql_error());
+    }
+  }
 
   // ----------------------------------------------------------------------------------------------
 

@@ -58,7 +58,8 @@
           <tr>
             <td width="150" class="pad_left_small" valign="top">{$curr_field.field_title}</td>
             <td valign="top">
-              {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$curr_field field_types=$field_types}
+              {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$curr_field
+                field_types=$field_types settings=$settings}
             </td>
           </tr>
         {/foreach}
