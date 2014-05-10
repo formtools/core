@@ -45,7 +45,7 @@
           <div class="sortable_group_header{if $list_info.is_grouped == "no"} hidden{/if}">
             <div class="sort"></div>
             <label>{$LANG.phrase_group_name}</label>
-            <input type="text" name="group_name_NEW1" class="group_name" value="{eval var=$group_info.group_name}" />
+            <input type="text" name="group_name_NEW1" class="group_name" value="{if $group_info.group_name}{eval var=$group_info.group_name}{/if}" />
             <div class="delete_group"></div>
             <input type="hidden" class="group_order" value="NEW1" />
             <div class="clear"></div>

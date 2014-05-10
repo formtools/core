@@ -89,7 +89,7 @@ if (isset($_GET["delete"]))
   // in order to delete it
   if (!empty($_GET["delete"]))
   {
-    $ids = split(",", $_GET["delete"]);
+    $ids = explode(",", $_GET["delete"]);
     foreach ($ids as $id)
       list($g_success, $g_message) = ft_delete_submission($form_id, $view_id, $id, true);
   }

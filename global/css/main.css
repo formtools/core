@@ -135,7 +135,7 @@ body .ui-dialog .tabbed_dialog {
 }
 
 input[type=text].lang_placeholder_field {
-  background-image: url(../images/lang_placeholder_field_icon.png);
+/*  background-image: url(../images/lang_placeholder_field_icon.png); */
   background-repeat: no-repeat;
   background-position: right;
   padding-right: 18px;

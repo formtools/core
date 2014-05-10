@@ -180,7 +180,7 @@ form { margin: 0px; }
   padding: 0px 3px;
 }
 .submissions_table th:hover a {
-  color: #f1fff5;
+  color: #ffffee;
 }
 .list_table th.del {
   text-align: center;

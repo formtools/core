@@ -52,7 +52,7 @@
   </div>
 
   <form method="post" action="../">
-    <input type="submit" name="action" value="{$LANG.phrase_form_list_uc}" />
+    <input type="submit" name="action" value="{$LANG.phrase_form_list}" />
   </form>
 
 {ft_include file='footer.tpl'}

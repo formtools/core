@@ -15,7 +15,7 @@
     <table width="100%">
       <tr>
         <td width="49%" valign="top">
-          <div class="grey_box">
+          <div class="grey_box add_form_select">
             <span style="float:right"><input type="submit" name="internal" class="blue bold" value="{$LANG.word_select|upper}" /></span>
             <div class="bold">{$LANG.word_internal}</div>
             <div class="medium_grey">
@@ -25,7 +25,7 @@
         </td>
         <td width="2%"> </td>
         <td width="49%" valign="top">
-          <div class="grey_box margin_bottom_large">
+          <div class="grey_box add_form_select margin_bottom_large">
             <span style="float:right"><input type="button" id="select_external" name="external" class="blue bold" value="{$LANG.word_select|upper}" /></span>
             <div class="bold">{$LANG.word_external}</div>
             <div class="medium_grey">

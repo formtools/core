@@ -49,7 +49,6 @@ $_SESSION["ft"]["last_link_page"] = "submissions";
 
 $form_info = ft_get_form($form_id);
 $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true, "include_field_settings" => true));
-
 $view_info = ft_get_view($view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes")
@@ -98,7 +97,7 @@ if (isset($_GET["delete"]))
   // in order to delete it
   if (!empty($_GET["delete"]))
   {
-    $ids = split(",", $_GET["delete"]);
+    $ids = explode(",", $_GET["delete"]);
     foreach ($ids as $id)
     {
       list($g_success, $g_message) = ft_delete_submission($form_id, $view_id, $id, true);
@@ -128,6 +127,7 @@ if (isset($_POST["search"]))
 // all the fields in the View
 $all_view_field_columns = array();
 $searchable_columns  = array();
+
 foreach ($view_info["fields"] as $field_info)
 {
   $all_view_field_columns[$field_info["field_id"]] = $field_info["col_name"];

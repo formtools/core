@@ -232,7 +232,7 @@ function ft_install_generate_config_file()
   // try and write to the config.php file directly. This will probably fail, but in the off-chance
   // the permissions are set, it saves the user the hassle of manually creating the file. I changed this
   // to use a relative path and realpath() in 2.1.0...
-  $file = realpath("../global/config.php");
+  $file = realpath("../global") . DIRECTORY_SEPARATOR . "config.php";
 
   $handle = @fopen($file, "w");
   if ($handle)

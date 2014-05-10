@@ -200,6 +200,12 @@ $g_password_history_size = 10;
  */
 $g_search_form_date_field_format = "d/m/y";
 
+/**
+ * Added in 2.1.0 and enabled by default. This overrides the default SQL mode for any query, to prevent
+ * problems that may arise due to MySQL strict mode being on.
+ */
+$g_set_sql_mode = true;
+
 
 // -------------------------------------------------------------------------------------------------
 
@@ -219,7 +225,7 @@ $g_release_type = "beta";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110702";
+$g_release_date = "20110710";
 
 /**
  * The minimum required PHP version needed to run Form Tools.

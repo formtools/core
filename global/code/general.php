@@ -26,7 +26,7 @@
 function ft_db_connect()
 {
   global $g_db_hostname, $g_db_username, $g_db_password, $g_db_name, $g_unicode, $g_db_ssl,
-    $g_check_ft_sessions;
+    $g_check_ft_sessions, $g_set_sql_mode;
 
   if ($g_db_ssl)
     $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true, MYSQL_CLIENT_SSL);
@@ -49,6 +49,9 @@ function ft_db_connect()
   // if required, set all queries as UTF-8 (enabled by default)
   if ($g_unicode)
     @mysql_query("SET NAMES 'utf8'", $link);
+
+  if ($g_set_sql_mode)
+    @mysql_query("SET SQL_MODE=''", $link);
 
   if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"]))
     ft_check_sessions_timeout();
@@ -604,7 +607,7 @@ function ft_get_date($offset, $datetime, $format)
 
     // now replace the @'s with their translated equivalents
     $eng_strings = date(join(",", $char_map), $timestamp);
-    $eng_string_arr = split(",", $eng_strings);
+    $eng_string_arr = explode(",", $eng_strings);
     for ($char_ind=0; $char_ind<count($char_map); $char_ind++)
     {
       $eng_string = $eng_string_arr[$char_ind];

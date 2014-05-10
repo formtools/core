@@ -557,7 +557,7 @@ function ft_update_module_list()
       $module_description   = $lang_info["module_description"];
 
       // convert the date into a MySQL datetime
-      list($year, $month, $day) = split("-", $module_date);
+      list($year, $month, $day) = explode("-", $module_date);
       $timestamp = mktime(null, null, null, $month, $day, $year);
       $module_datetime = ft_get_current_datetime($timestamp);
 
@@ -934,7 +934,7 @@ function ft_upgrade_module($module_id)
   $module_description   = $lang_info["module_description"];
 
   // convert the date into a MySQL datetime
-  list($year, $month, $day) = split("-", $module_date);
+  list($year, $month, $day) = explode("-", $module_date);
   $timestamp = mktime(null, null, null, $month, $day, $year);
   $module_datetime = ft_get_current_datetime($timestamp);
 

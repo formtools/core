@@ -443,7 +443,7 @@ $LANG["phrase_form_field_name"] = "Form Field Name";
 $LANG["phrase_form_fields"] = "Form Fields";
 $LANG["phrase_form_info"] = "Form Information";
 $LANG["phrase_form_info_2"] = "2. Form Information";
-$LANG["phrase_form_list_uc"] = "FORM LIST";
+$LANG["phrase_form_list"] = "Form List";
 $LANG["phrase_form_name"] = "Form Name";
 $LANG["phrase_form_page"] = "Form Page";
 $LANG["phrase_form_placeholders"] = "Form Placeholders";
@@ -1441,6 +1441,7 @@ $LANG["text_premium_module_general_license_link"] = "Please <a href=\"http://acc
 $LANG["word_time"] = "Time";
 $LANG["phrase_phone_number"] = "Phone Number";
 $LANG["phrase_code_markup_field"] = "Code / Markup Field";
+$LANG["word_help"] = "Help";
 
 // removed!
 //$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";

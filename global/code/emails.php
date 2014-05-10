@@ -339,6 +339,9 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   $templates = _ft_get_email_template_content($form_id, $submission_id, $email_template, $is_test, $test_settings);
   $submission_id = $templates["submission_id"];
 
+  // unfortunately we need this, even though it was just called in _ft_get_email_template_content()
+  $submission_info = ft_get_submission($form_id, $submission_id);
+
   // retrieve the placeholders and their substitutes
   $submission_placeholders = ft_get_submission_placeholders($form_id, $submission_id);
   $admin_info = ft_get_admin_info();
@@ -1070,7 +1073,7 @@ function ft_send_emails($event, $form_id, $submission_id)
   $email_templates = array();
   foreach ($all_form_email_templates as $template_info)
   {
-    $events = split(",", $template_info["email_event_trigger"]);
+    $events = explode(",", $template_info["email_event_trigger"]);
 
     if (!in_array($event, $events))
       continue;
@@ -1275,9 +1278,9 @@ function _ft_get_form_email_field_headers($form_email_id, $submission_info)
   $form_email_field_info = ft_get_form_email_field_info($form_email_id);
 
   // retrieve the user's name and email address from the form submission
-  $first_name_field = $form_email_field_info["first_name_field"];
-  $last_name_field  = $form_email_field_info["last_name_field"];
-  $email_field      = $form_email_field_info["email_field"];
+  $first_name_field_id = $form_email_field_info["first_name_field_id"];
+  $last_name_field_id  = $form_email_field_info["last_name_field_id"];
+  $email_field_id      = $form_email_field_info["email_field_id"];
 
   $submission_first_name = "";
   $submission_last_name  = "";
@@ -1287,16 +1290,16 @@ function _ft_get_form_email_field_headers($form_email_id, $submission_info)
   {
     if (!empty($first_name_field))
     {
-      if ($row["col_name"] == $first_name_field)
+      if ($row["field_id"] == $first_name_field_id)
         $submission_first_name = trim($row["content"]);
     }
     if (!empty($last_name_field))
     {
-      if ($row["col_name"] == $last_name_field)
+      if ($row["field_id"] == $last_name_field_id)
         $submission_last_name = trim($row["content"]);
     }
     // email
-    if ($row["col_name"] == $email_field)
+    if ($row["field_id"] == $email_field_id)
       $submission_email = trim($row["content"]);
   }
 

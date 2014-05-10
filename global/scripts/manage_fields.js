@@ -102,11 +102,12 @@ $(function() {
     var field_settings = page_ns.field_settings["field_type_" + field_type_id];
     var field_type_label = $("#edit_field__field_type option[value=" + field_type_id + "]").text();
     if (field_settings == undefined) {
-      $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (" + field_settings.length + ")");
+      $("#edit_field_template .inner_tab2").html(field_type_label + " " + g.messages["word_settings"] + " (" + field_settings.length + ")");
       $("#edit_field__field_settings").html("<div class=\"notify\"><div style=\"padding:6px\">" + g.messages["notify_no_field_settings"] + "</div></div>");
     } else {
-      $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (" + field_settings.length + ")");
+      $("#edit_field_template .inner_tab2").html(field_type_label + " " + g.messages["word_settings"] + " (" + field_settings.length + ")");
       var html = fields_ns.generate_field_type_markup(fields_ns.__current_field_id, field_type_id, field_settings);
+
       $("#edit_field__field_settings").html(html);
 
       // here we empty the memory cache for tab 2. This ensures that when the user clicks Save Changes, any orphaned
@@ -697,6 +698,8 @@ fields_ns.edit_field = function(row_group) {
   var field_type_id = null;
   fields_ns.__current_field_id = field_id;
 
+  var field_type_str = null;
+
   // system fields only allow the display text and pass-on fields to be edited
   if (is_system_field) {
     $(".edit_field__non_system").hide();
@@ -705,6 +708,7 @@ fields_ns.edit_field = function(row_group) {
     $("#edit_field__field_type_system").html(row_group.find(".system_field_type_label").html());
     $("#edit_field__db_column_div_system").html(row_group.find(".system_field_db_column").html());
     $("#edit_field__pass_on").attr("checked", row_group.find(".pass_on").attr("checked"));
+    field_type_str = $("#edit_field__field_type option[value=" + field_type_id + "]").text();
   } else {
     $(".edit_field__non_system").show();
     $(".edit_field__system").hide();
@@ -740,10 +744,12 @@ fields_ns.edit_field = function(row_group) {
       $("#edit_field__data_type").val(row_group.find(".data_types").val());
       $("#edit_field__db_column").val(row_group.find(".db_column").val());
     }
+
+    // the string version of the field type
+    field_type_str = $("#edit_field__field_type :selected").text();
   }
 
   // load the Field-Specific Settings tab
-  var field_type_str = $("#edit_field__field_type :selected").text();
   var has_field_settings = fields_ns.init_field_settings_tab(field_type_id, field_id);
 
   // update the previous/next links (grey them out if one or both aren't relevant)
@@ -816,12 +822,12 @@ fields_ns.init_field_settings_tab = function(field_type_id, field_id) {
 
   // no extended settings
   if (field_settings == undefined) {
-    $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (0)");
+    $("#edit_field_template .inner_tab2").html(field_type_label + " " + g.messages["word_settings"] + " (0)");
     $("#edit_field__field_settings").html("<div class=\"notify\"><div style=\"padding:6px\">" + g.messages["notify_no_field_settings"] + "</div></div>");
     $("#edit_field__field_settings_loading").hide();
     return false;
   } else {
-    $("#edit_field_template .inner_tab2").html(field_type_label + " Settings (" + field_settings.length + ")");
+    $("#edit_field_template .inner_tab2").html(field_type_label + " " + g.messages["word_settings"] + " (" + field_settings.length + ")");
   }
 
   // generate the field settings markup and embed it in the page
@@ -882,7 +888,7 @@ fields_ns.generate_field_type_markup = function(field_id, field_type_id, field_s
 
     // all fields are disabled by default. Once the Ajax call to load the values for the actual field
     // has completed, they are enabled & the Ajax loading icon is hidden to signify readiness
-    html = "<table cellspacing=\"0\" cellpadding=\"\0\" width=\"100%\" class=\"check_areas\">"
+    html = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" class=\"check_areas\">"
          + "<tr>"
            + "<th width=\"200\" class=\"underline medium_grey\">" + g.messages["word_setting"] + "</th>"
            + "<th width=\"150\" align=\"center\" class=\"underline medium_grey\">" + g.messages["phrase_use_default_value_q"] + "</th>"

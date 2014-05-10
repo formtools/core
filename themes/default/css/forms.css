@@ -116,8 +116,11 @@
   height: 500px;
 }
 .placeholder_field_overlay {
-  width: 21px;
-  height: 21px;
+  width: 16px;
+  height: 16px;
   position: absolute;
   cursor: pointer;
+  z-index: 2;
+  margin: 2px;
+  padding-left: 5px;
 }

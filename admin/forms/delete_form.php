@@ -13,6 +13,12 @@ if (!isset($form_id))
 }
 
 $form_info = ft_get_form($form_id);
+if (empty($form_info))
+{
+  session_write_close();
+  header("location: $g_root_url/admin/forms/");
+  exit;
+}
 $form_name = $form_info["form_name"];
 $auto_delete_submission_files = $form_info["auto_delete_submission_files"];
 

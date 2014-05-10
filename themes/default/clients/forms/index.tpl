@@ -20,7 +20,7 @@
       {$LANG.text_no_submissions_found}
     </p>
 
-    {if $view_info.may_add_submissions == "yes"}
+    {if $view_info.may_add_submissions == "yes" && $form_info.is_active == "yes"}
       <input type="button" id="add_submission" value="{$LANG.word_add}" onclick="window.location='{$same_page}?add_submission'" />
     {/if}
 
@@ -89,7 +89,8 @@
       </div>
     </div>
 
-    {if $view_info.may_add_submissions == "yes"}
+
+    {if $view_info.may_add_submissions == "yes" && $form_info.is_active == "yes"}
       <input type="button" id="add_submission" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='{$same_page}?add_submission'" />
     {/if}
 
@@ -174,7 +175,7 @@
       <input type="button" id="unselect_button" value="{$LANG.phrase_unselect_all}" onclick="ms.unselect_all()" />
       {template_hook location="client_submission_listings_buttons3"}
 
-      {if $view_info.may_add_submissions == "yes"}
+      {if $view_info.may_add_submissions == "yes" && $form_info.is_active == "yes"}
         <input type="button" id="add_submission" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='{$same_page}?add_submission'" />
       {/if}
 

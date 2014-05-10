@@ -29,6 +29,10 @@ $(function() {
     var field = $(e.target).find("input");
     var field_type = field.attr("type");
 
+    if (field[0].disabled) {
+      return;
+    }
+
     // for radios, we only check the fields - not uncheck them
     if (field_type == "radio") {
       if (!field[0].checked) {
@@ -39,18 +43,24 @@ $(function() {
     }
   });
 
-
-  // this adds the functionality so that when a user clicks on the language placeholder icon, it
-  // opens the dialog window containing the available placeholder list.
+  // this adds the functionality so that when a user clicks on the language placeholder icon, it opens
+  // the dialog window containing the available placeholder list. This was a LOT simpler before I had
+  // to make it work with IE. The iframe was needed to hover the element above the textboxes. *sigh*
   // Pre-requisites: there's a hidden field (id=form_id) in the page
+  var counter = 1;
   $(".lang_placeholder_field").each(function() {
-    var pos   = $(this).offset();
+    var pos   = $(this).position();
     var width = pos.left + $(this).width();
-    var overlay = $("<div class=\"placeholder_field_overlay\"></div>").css({ "left": width })
-    $(this).before(overlay);
-  });
-  $(".placeholder_field_overlay").live("click", function() {
-    ft.show_form_field_placeholders_dialog({ form_id: $("#form_id").val() });
+    var iframe = $("<iframe src=\"\" id=\"placeholder_field_overlay" + counter + "\" class=\"placeholder_field_overlay\" marginwidth=\"0\" allowtransparency=\"true\"></iframe>").css({ "left": width })
+    $(this).before(iframe);
+
+    var form_id = $("#form_id").val();
+	var ifrm = $("#placeholder_field_overlay" + counter)[0];
+	ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
+	ifrm.document.open();
+	ifrm.document.write('<img src="../../global/images/lang_placeholder_field_icon.png" style="cursor: pointer" onclick="parent.ft.show_form_field_placeholders_dialog({ form_id: 1 });" />');
+	ifrm.document.close();
+	counter++;
   });
 
   $(window).resize(function() {
@@ -618,7 +628,6 @@ ft.hide_message = function(target_id) {
  * Used in any pages that need to display the placeholder page.
  */
 ft.show_form_field_placeholders_dialog = function(options) {
-
   ft.create_dialog({
     title:  g.messages["phrase_form_field_placeholders"],
     dialog: ft.form_field_placeholders_dialog,
@@ -757,6 +766,7 @@ ft.response_handler = function(data) {
   ft.display_message(data.target_message_id, data.success, data.message);
 }
 
+
 /**
  * TODO expand this to work with dialogs. It should close all open dialogs and hide their loading
  * images, if shown.
@@ -851,7 +861,6 @@ ft.process_queue = function() {
 
   // if this code hasn't begun being executed, start 'er up
   if (!ft.queue[0][2]) {
-    // run the code
     ft.queue[0][0]();
     timeout_id = window.setInterval("ft.check_queue_item_complete()", 50);
     ft.queue[0][2] = timeout_id;

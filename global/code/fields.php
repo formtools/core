@@ -737,16 +737,17 @@ function ft_get_field_settings($field_id)
   global $g_table_prefix;
 
   // get the overridden settings
-  $query = mysql_query("
+  $query = "
     SELECT fts.field_type_id, fs.field_id, fts.field_setting_identifier, fs.setting_value
     FROM   ft_field_type_settings fts, ft_field_settings fs
     WHERE  fts.setting_id = fs.setting_id AND
            fs.field_id = $field_id
     ORDER BY fs.field_id
-  ");
+      ";
+  $result = mysql_query($query);
 
   $overridden_settings = array();
-  while ($row = mysql_fetch_assoc($query))
+  while ($row = mysql_fetch_assoc($result))
   {
     $overridden_settings[$row["field_setting_identifier"]] = $row["setting_value"];
   }
