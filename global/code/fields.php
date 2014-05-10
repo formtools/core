@@ -1033,7 +1033,7 @@ function ft_update_field($form_id, $field_id, $tab_info)
   //                      when the user checked the "Use Default Value" for all fields on the tab & the tab
   //                      doesn't contain an option list or form field
   //  3. an array of values
-  if ($tab_info["tab2"] != "null")
+  if (isset($tab_info["tab2"]) && $tab_info["tab2"] != "null")
   {
     $info = is_array($tab_info["tab2"]) ? $tab_info["tab2"] : array();
 

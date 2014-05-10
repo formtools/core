@@ -93,7 +93,7 @@
               {else}
                 {assign var=sort_order value="order=client_id-DESC"}
               {/if}
-              <th width="30"{if $up_down} class="over"{/if}>
+              <th width="30" class="sortable_col{if $up_down} over{/if}">
                 <a href="{$same_page}?{$sort_order}">{$LANG.word_id|upper} {$up_down}</a>
               </th>
 
@@ -107,7 +107,7 @@
               {else}
                 {assign var=sort_order value="order=first_name-DESC"}
               {/if}
-              <th{if $up_down} class="over"{/if}>
+              <th class="sortable_col{if $up_down} over{/if}">
                 <a href="{$same_page}?{$sort_order}">{$LANG.phrase_first_name} {$up_down}</a>
               </th>
 
@@ -121,7 +121,7 @@
               {else}
                 {assign var=sort_order value="order=last_name-DESC"}
               {/if}
-              <th{if $up_down} class="over"{/if}>
+              <th class="sortable_col{if $up_down} over{/if}">
                 <a href="{$same_page}?{$sort_order}">{$LANG.phrase_last_name} {$up_down}</a>
               </th>
 
@@ -135,7 +135,7 @@
               {else}
                 {assign var=sort_order value="order=email-DESC"}
               {/if}
-              <th{if $up_down} class="over"{/if}>
+              <th class="sortable_col{if $up_down} over{/if}">
                 <a href="{$same_page}?{$sort_order}">{$LANG.word_email} {$up_down}</a>
               </td>
 
@@ -149,7 +149,7 @@
               {else}
                 {assign var=sort_order value="order=status-DESC"}
               {/if}
-              <th width="70"{if $up_down} class="over"{/if}>
+              <th width="70" class="sortable_col{if $up_down} over{/if}">
                 <a href="{$same_page}?{$sort_order}">{$LANG.word_status} {$up_down}</a>
               </th>
 
@@ -163,7 +163,7 @@
               {else}
                 {assign var=sort_order value="order=last_logged_in-DESC"}
               {/if}
-              <th{if $up_down} class="over"{/if}>
+              <th class="sortable_col{if $up_down} over{/if}">
                 <a href="{$same_page}?{$sort_order}">{$LANG.phrase_last_logged_in} {$up_down}</a>
               </th>
               <th width="70">{$LANG.word_login|upper}</th>

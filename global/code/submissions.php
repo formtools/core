@@ -299,9 +299,9 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
       $message = $LANG["notify_submission_deleted"];
   }
 
-  // update sessions to ensure the first submission date and num submissions for this form View are correct
+  // TODO update sessions to ensure the first submission date and num submissions for this form View are correct
   _ft_cache_form_stats($form_id);
-  _ft_cache_view_stats($view_id);
+  _ft_cache_view_stats($form_id, $view_id);
 
   $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
   $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();

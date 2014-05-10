@@ -301,6 +301,9 @@ form { margin: 0px; }
   background-color: #efefef;
   padding: 5px;
 }
+#search_form_table select, .clients_dropdown {
+	max-width: 240px;
+}
 .search_keyword {
   width: 110px;
 }

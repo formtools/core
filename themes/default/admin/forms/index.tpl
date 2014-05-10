@@ -195,7 +195,7 @@
                 {elseif $clients|@count == 1}
                   <span class="pad_left_small">{$clients[0].first_name} {$clients[0].last_name}</span>
                 {else}
-                  <select>
+                  <select class="clients_dropdown">
                     {foreach from=$clients item=client name=row2}
                       <option>{$client.first_name} {$client.last_name}</option>
                     {/foreach}
