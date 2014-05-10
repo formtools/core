@@ -229,7 +229,7 @@ function ft_send_test_email($info)
     {
       ft_include_module("swift_mailer");
 
-      // TODO
+      // we deliberately ignore anything other than the specified recipient
       $email_info["cc"]  = array();
       $email_info["bcc"] = array();
       $email_info["to"]  = array();
@@ -247,7 +247,6 @@ function ft_send_test_email($info)
   $eol = _ft_get_email_eol_char();
 
 
-  // TODO. Add a new option to the interface saying "include cc, bcc recipients".
   $from = "";
   if (isset($email_info["from"]) && !empty($email_info["from"]))
   {
@@ -262,32 +261,13 @@ function ft_send_test_email($info)
     $reply_to = htmlspecialchars_decode($reply_to);
   }
 
-  $cc = "";
-  if (isset($email_info["cc"]) && !empty($email_info["cc"]))
-  {
-    $ccs = array();
-    foreach ($email_info["cc"] as $cc_info)
-      $ccs[] = $cc_info["recipient_line"];
-
-    $cc = htmlspecialchars_decode(implode(", ", $ccs));
-  }
-
-  $bcc = "";
-  if (isset($email_info["bcc"]) && !empty($email_info["bcc"]))
-  {
-    $bccs = array();
-    foreach ($email_info["bcc"] as $bcc_info)
-      $bccs[] = $bcc_info["recipient_line"];
-
-    $bcc = htmlspecialchars_decode(implode(", ", $bccs));
-  }
-
+  // as with Swift Mailer, we deliberately ignore anything other than the specified recipient
   $header_info = array(
     "eol"      => $eol,
     "from"     => $from,
     "reply_to" => $reply_to,
-    "cc"       => $cc,
-    "bcc"      => $bcc
+    "cc"       => "",
+    "bcc"      => ""
   );
 
   // construct the email headers [move to helper function]

@@ -627,34 +627,12 @@ view_ns.delete_filter_row = function(table, row) {
  * @param the form element
  */
 view_ns.process_form = function(f) {
-  // 1. Main tab
   var rules = [];
   rules.push("required,view_name," + g.messages['validation_no_view_name']);
   rules.push("required,num_submissions_per_page," + g.messages['validation_no_num_submissions_per_page']);
   if (!rsv.validate(f, rules)) {
     return ft.change_inner_tab(1, "edit_view"); // this always returns false
   }
-
-  // TODO
-  /*
-  // 2. Fields tab
-  if (view_ns.field_ids.length == 0) {
-    ft.display_message("ft_message", false, g.messages["validation_no_view_fields"]);
-    return ft.change_inner_tab(2, "edit_view");
-  }
-
-  // check that at least one field is marked as a column
-  var has_column_checked = false;
-  for (i=0; i<view_ns.field_ids.length; i++) {
-    if ($("#field_" + view_ns.field_ids[i] + "_is_column").attr("checked")) {
-      has_column_checked = true;
-    }
-  }
-  if (!has_column_checked) {
-    ft.display_message("ft_message", false, g.messages["validation_no_column_selected"]);
-    return ft.change_inner_tab(2, "edit_view"); // this always returns false
-  }
-  */
 
   // select all clients
   ft.select_all("selected_user_ids");
@@ -855,7 +833,6 @@ view_ns.add_field_group = function() {
         });
         view_ns.curr_new_group_id++;
 
-        // if there are no other groups in the page, show the default message
         $("#no_view_fields_defined").hide();
         $("#allow_editable_fields_toggle").show();
 
@@ -1034,15 +1011,14 @@ view_ns.remove_tabs = function() {
 /* Submission Listing tab code */
 
 
-
-
 /**
  * Adds a new row to the Submission List tab so that it will appear as a column on the Submission Listing page.
  */
 view_ns.add_view_column = function() {
+  $("#no_view_columns_defined").hide();
+  $("#submission_list").show();
 
   var row_num = ++view_ns.num_view_columns;
-
   var row_html = '<div class="row_group">'
     + '<input type="hidden" value="' + row_num + '" class="sr_order">'
     + '<ul>'
@@ -1063,8 +1039,8 @@ view_ns.add_view_column = function() {
       + '<li class="col3 check_area"><input type="checkbox" name="is_sortable_' + row_num + '" checked /></li>'
       + '<li class="col4 light_grey">'
         + '<input type="checkbox" name="auto_size_' + row_num + '" id="auto_size_' + row_num + '" class="auto_size" checked />'
-        + '<label for="auto_size_' + row_num + '" class="black">Auto-size</label>'
-        + ' &#8212; width: '
+        + '<label for="auto_size_' + row_num + '" class="black">' + g.messages["phrase_auto_size"] + '</label>'
+        + ' &#8212; ' + g.messages["word_width_c"] + ' '
         + '<input type="text" name="custom_width_' + row_num + '" class="custom_width" disabled />px'
       + '</li>'
       + '<li class="col5">'
@@ -1083,6 +1059,22 @@ view_ns.add_view_column = function() {
   $("#submission_list").find(".rows").append(new_row);
   sortable_ns.reorder_rows($("#submission_list"), false);
 
-  return false
+  return false;
+}
+
+
+/**
+ * A custom delete View column handler, added to detect if there are any columns left. If not, it shows the sortable
+ * section altogether and shows a message telling them to add. It uses the Core delete row function.
+ */
+view_ns.delete_view_column = function(el) {
+
+  // if there are no other groups in the page, show the default message
+  if ($(".sortable_group").length == 0) {
+    $("#no_view_columns_defined").show();
+    $("#submission_list").hide();
+  }
+
+  sortable_ns.delete_row("submission_list", el);
 }
 

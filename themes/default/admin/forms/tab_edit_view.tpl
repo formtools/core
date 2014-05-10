@@ -14,8 +14,8 @@
 
       <div class="inner_tabset" id="edit_view">
         <div class="tab_row fiveCols">
-          <div class="inner_tab1{if $edit_view_tab == 1} selected{/if}">General</div>
-          <div class="inner_tab2{if $edit_view_tab == 2} selected{/if}">Columns</div>
+          <div class="inner_tab1{if $edit_view_tab == 1} selected{/if}">{$LANG.word_general}</div>
+          <div class="inner_tab2{if $edit_view_tab == 2} selected{/if}">{$LANG.word_columns}</div>
           <div class="inner_tab3{if $edit_view_tab == 3} selected{/if}">{$LANG.word_fields}</div>
           <div class="inner_tab4{if $edit_view_tab == 4} selected{/if}">{$LANG.word_tabs}</div>
           <div class="inner_tab5{if $edit_view_tab == 5} selected{/if}">{$LANG.word_filters}</div>

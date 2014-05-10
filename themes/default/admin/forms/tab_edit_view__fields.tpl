@@ -1,12 +1,11 @@
     <div class="hint margin_bottom">
-      This tab controls which fields show up when editing a submission in this View, their order and whether
-      they are editable or not.
+      {$LANG.text_view_fields_info}
     </div>
 
     <div id="no_view_fields_defined" class="margin_bottom" {if $grouped_fields|@count > 0}style="display:none"{/if}>
       <div class="error">
         <div style="padding: 6px">
-          This View doesn't have any fields in it. Click the link below.
+          {$LANG.text_no_fields_in_view}
         </div>
       </div>
     </div>
@@ -18,12 +17,11 @@
     </div>
 
     <div class="sortable_groups check_areas" id="{$view_fields_sortable_id}">
-
-	    <input type="hidden" class="sortable__add_group_handler" value="view_ns.add_field_group" />
-	    <input type="hidden" class="sortable__delete_group_handler" value="view_ns.delete_field_group" />
-	    <input type="hidden" class="sortable__class" value="groupable edit_view_fields" />
-	    <input type="hidden" class="sortable__new_group_name" value="{$LANG.phrase_view_group}" />
-	    <input type="hidden" name="deleted_groups" id="deleted_groups" value="" />
+	  <input type="hidden" class="sortable__add_group_handler" value="view_ns.add_field_group" />
+	  <input type="hidden" class="sortable__delete_group_handler" value="view_ns.delete_field_group" />
+	  <input type="hidden" class="sortable__class" value="groupable edit_view_fields" />
+	  <input type="hidden" class="sortable__new_group_name" value="{$LANG.phrase_view_group}" />
+	  <input type="hidden" name="deleted_groups" id="deleted_groups" value="" />
 
       {foreach from=$grouped_fields item=curr_group_info name=group}
         {assign var=group_info value=$curr_group_info.group}

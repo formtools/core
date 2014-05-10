@@ -58,7 +58,7 @@
           <tr>
             <th>{$LANG.phrase_field_label}</th>
             <th>{$LANG.phrase_form_field}</th>
-            <th>Label / Response Placeholders</th>
+            <th>{$LANG.phrase_label_response_placeholders}</th>
           </tr>
           {foreach from=$form_fields item=field name=row}
             <tr>

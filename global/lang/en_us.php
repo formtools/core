@@ -32,6 +32,7 @@ $LANG["word_action"] = "Action";
 $LANG["word_actions"] = "Actions";
 $LANG["word_active"] = "Active";
 $LANG["word_add"] = "Add";
+$LANG["word_add_rightarrow"] = "Add &raquo;";
 $LANG["word_add_uc_rightarrow"] = "ADD &raquo;";
 $LANG["word_administration"] = "Administration";
 $LANG["word_administrator"] = "Administrator";
@@ -1116,6 +1117,7 @@ $LANG["date_pm"] = "pm";
 
 // Category: Processing
 $LANG["processing_form_disabled"] = "Sorry, this form has been disabled.";
+$LANG["processing_invalid_form_id"] = "Sorry, this doesn't appear to be a valid form ID.";
 $LANG["processing_form_incomplete"] = "Sorry, this form does not appear to be fully set up from within Form Tools. The most likely cause of this problem is that you removed the \"form_tools_initialize_form\" hidden form field, but didn't complete all the steps of the \"Add Form\" process.<br><br>Please log in and review the form configuration.";
 $LANG["processing_init_complete"] = "Thank you! Your test submission has been put through successfully. Please return to the Form Tools Administration panel and click the \"Refresh\" button at the bottom of the Add Form Step 3 page to finish setting up your form.";
 $LANG["processing_no_form_id"] = "process.php requires a form ID for processing. Make sure your form contains a hidden field with the name \"form_tools_form_id\" that's passing along the form ID.";
@@ -1131,7 +1133,6 @@ $LANG["api_notify_form_not_found"] = "Sorry, that form ID is not found.";
 $LANG["api_notify_view_not_found"] = "Sorry, that form View ID is not found.";
 
 
-// New in 2.0.3
 $LANG["phrase_security_settings"] = "Security Settings";
 $LANG["phrase_auto_disable_account"] = "Auto-disable account after # failed login attempts";
 $LANG["phrase_min_password_length"] = "Minimum password length";
@@ -1155,8 +1156,6 @@ $LANG["phrase_password_special_char"] = "It must contain at least one of the fol
 $LANG["phrase_password_min"] = "It must be at least <b>{\$length}</b> characters.";
 $LANG["validation_no_account_password_confirmed2"] = "Please re-enter the new password.";
 $LANG["validation_password_in_password_history"] = "For security, you cannot enter the same password as any of the last <b>{\$history_size}</b> passwords. Please enter a different password.";
-
-// -------------------------------------
 
 // changes
 //$LANG["phrase_browse_available_languages"] = "Browse available language packs.";
@@ -1289,6 +1288,7 @@ $LANG["notify_no_views_defined"] = "You don't have any Views defined. You will n
 $LANG["notify_new_default_view_created"] = "A new, default View containing all your form fields has been created.";
 $LANG["phrase_add_fields_rightarrow"] = "Add Field(s) &raquo;";
 $LANG["phrase_available_tabs"] = "Available Tabs";
+$LANG["phrase_select_field"] = "Select Field";
 $LANG["phrase_select_fields"] = "Select Fields";
 $LANG["phrase_available_fields"] = "Available Fields";
 $LANG["phrase_create_default_view"] = "Create Default View";
@@ -1360,6 +1360,71 @@ $LANG["notify_email_not_sent_c"] = "Sorry, the email could not be sent: ";
 $LANG["notify_email_not_sent"] = "Sorry, the email could not be sent.";
 $LANG["text_form_tools_form_url"] = "The full URL of the form. This only has a value for External forms.";
 $LANG["validation_modules_search_no_status"] = "Please select either the Enabled or Disabled checkboxes.";
+$LANG["phrase_label_response_placeholders"] = "Label / Response Placeholders";
+$LANG["phrase_open_form_in_dialog"] = "Open form in dialog window";
+$LANG["notify_view_missing_columns"] = "Oops! Sorry, this View hasn't been fully set up yet.";
+$LANG["notify_view_missing_columns_admin_fix"] = "<a href=\"{\$LINK}\">Click here</a> to specify which fields should appear as columns on this page.";
+$LANG["text_limit_email_content_desc"] = "This option only works for HTML and text content generated with Smarty Loops.";
+$LANG["notify_form_access_type_email_info"] = "This form has <b>administrator</b> access type, so no clients have access to it and are not listed in the dropdown below.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Click here</a> to specify which form fields are email fields, so you can target them in your email templates.";
+$LANG["phrase_view_placeholders"] = "View Placeholders";
+$LANG["text_no_fields_in_view"] = "This View doesn't have any fields in it. Click the link below.";
+$LANG["text_view_fields_info"] = "This tab controls which fields show up when editing a submission in this View, their order and whether they are editable or not.";
+$LANG["text_edit_view_list_page"] = "This tab controls which fields appear as columns on the Submission Listing page, and a few additional settings for those fields. Note: we recommend you add no more than 4 or 5 of the most important fields in the View.";
+$LANG["phrase_column_width"] = "Column Width";
+$LANG["word_truncate_q"] = "Truncate?";
+$LANG["phrase_auto_size"] = "Auto-size";
+$LANG["word_width_c"] = "width:";
+$LANG["text_delete_view_submissions"] = "This determines whether or not people can delete submissions when accessing this View.";
+$LANG["phrase_default_values_new_submissions"] = "Default Values for New Submissions";
+$LANG["text_default_values_in_view"] = "This section is optional. All submissions created with this View will contain the default values specified here.";
+$LANG["phrase_add_default_settings_rightarrow"] = "Add default settings &raquo;";
+$LANG["word_general"] = "General";
+$LANG["word_columns"] = "Columns";
+$LANG["phrase_10_per_page"] = "10 per page";
+$LANG["phrase_15_per_page"] = "15 per page";
+$LANG["phrase_20_per_page"] = "20 per page";
+$LANG["phrase_25_per_page"] = "25 per page";
+$LANG["phrase_50_per_page"] = "50 per page";
+$LANG["phrase_100_per_page"] = "100 per page";
+$LANG["phrase_manage_client_omit_list"] = "Manage Client Omit List";
+$LANG["phrase_default_date_field_search_value"] = "Default date field search value";
+$LANG["text_choose_form_type"] = "First, please choose your form type.";
+$LANG["text_internal_form_desc"] = "Internal forms exist only within Form Tools - not elsewhere on your site. Only Form Tools user accounts will have access to the form. Select this option if you don't have an existing form.";
+$LANG["text_external_form_desc"] = "External forms are forms that already exist on your website, or somewhere on the web. Select this option if you have your own form which you'd like to integrate with Form Tools.";
+$LANG["text_add_form_help_link"] = "If you run into any trouble during these steps, try reading out <a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\">user documentation</a>.";
+$LANG["phrase_getting_started"] = "getting started";
+$LANG["text_add_form_choose_integration_method"] = "Choose which method you want to use to integrate your form with Form Tools.";
+
+$LANG["text_add_form_field_types1"] = "Almost done! This page tries to find all your form fields and determine their field types. Click the Smart Fill button on the right to get started. You will be only allowed to proceed when all actions have been resolved - issues that need your attention appear in the \"Action Needed\" column.";
+$LANG["text_add_form_field_types2"] = "If your form isn't in HTML, click the Skip Step button to proceed. This can all be configured later.";
+$LANG["text_add_form_field_types3"] = "This reloads the contents of your form(s). Note: this will overwrite any changes you have made on this page.";
+$LANG["text_add_form_field_types4"] = "In case you run into problems, click here to skip this step. All unresolved fields are set to use the default values. You can customize these fields later.";
+
+
+$LANG["text_add_form_field_types_multiple_fields_found"] = "There were multiple fields that couldn't be found in the form page you specified. This is mostly likely caused by one of the following:";
+$LANG["text_add_form_field_types_multiple_fields_found2"] = "You incorrectly entered your form URL.";
+$LANG["word_solution"] = "Solution";
+$LANG["text_add_form_field_types_multiple_fields_found3"] = "<a href=\"step2.php\">Click here</a> to return to the Form Information page to check your settings.";
+$LANG["text_add_form_field_types_multiple_fields_found4"] = "You changed your form(s) after making the test submission";
+$LANG["text_add_form_field_types_multiple_fields_found5"] = "<a href=\"step3.php?uninitialize=1\">Click here</a> to put through another test submission.";
+$LANG["text_add_form_field_types_multiple_fields_found6"] = "Your form is password protected and the script couldn't access the page.";
+$LANG["text_add_form_field_types_multiple_fields_found7"] = "In another tab / window of this browser, log into your form then click the Refresh Page button below to try to re-find the fields.";
+$LANG["text_add_form_field_types_multiple_fields_found8"] = "If none of the above solutions work, you may also want to try <a href=\"#\" onclick=\"{\$ONCLICK}\">manually uploading your forms for processing</a>.";
+$LANG["text_add_form_field_types_multiple_fields_found9"] = "There were multiple fields that couldn't be found in the form pages you specified. This is mostly likely caused by one of these:";
+$LANG["text_add_form_field_types_multiple_fields_found10"] = "You entered one or more of the form URLs of your multi-page form incorrectly.";
+$LANG["text_add_form_field_types_multiple_fields_found11"] = "One or more pages of your form are password protected and the script couldn't access the page.";
+
+$LANG["text_add_form_field_types_manual_upload"] = "If you have been unable to Smart Fill your fields, you may want to try an alternative solution: upload copies of your forms in the fields below.";
+$LANG["text_add_form_field_types_manual_upload2"] = "Note: do <b>not</b> upload raw PHP pages (or other server-side code) - just upload the HTML versions. To get this, view and save the page from your web browser.";
+$LANG["phrase_import_option_list_rightarrow"] = "Import Option List &raquo;";
+$LANG["text_smart_fill_option_list_problem"] = "We were unable to Smart Fill your field options. However, as an alternative, you can try uploading a copy of your form page in the field below. Note: do <b>not</b> upload raw PHP pages (or other server-side code) - just upload the HTML version. To get this, view and save the page from your web browser.";
+$LANG["phrase_form_field_placeholders"] = "Form field placeholders";
+$LANG["notify_edit_option_list_after_save"] = "You must select an Option List and then Save Changes before being able to edit it.";
+$LANG["confirm_save_change_before_redirect"] = "One or more fields have been updated. Would you like to save your changes before redirecting?";
+$LANG["notify_error_saving_fields"] = "There was an error saving the fields.";
+$LANG["notify_field_options_smart_filled"] = "Your field options have been Smart Filled.";
+
 
 // removed!
 //$LANG["validation_invalid_num_views_per_page"] = "Please only enter numbers in the Num Views Per Page field.";

@@ -83,7 +83,9 @@ $page_vars["js_messages"] = array("validation_no_form_field_name", "validation_i
   "notify_no_field_settings", "word_value", "word_field", "phrase_use_default_value_q", "word_setting",
   "phrase_please_select", "notify_field_changes_saved", "phrase_create_new_option_list", "phrase_edit_option_list",
   "word_no", "word_yes", "validation_no_display_text_single", "validation_no_form_field_single",
-  "validation_no_db_column_single", "notify_edit_field_new_field");
+  "validation_no_db_column_single", "notify_edit_field_new_field", "notify_edit_option_list_after_save",
+  "confirm_save_change_before_redirect", "notify_error_saving_fields", "phrase_select_field", "word_order"
+);
 
 $edit_field_onload_js = "";
 if (isset($_GET["field_id"])) {

@@ -14,7 +14,6 @@
   </div>
 
   <form action="{$same_page}" method="post">
-
     <table cellspacing="0" cellpadding="1" class="margin_bottom_large">
       <tr>
         <td width="180">{$LANG.phrase_administrator_theme}</td>

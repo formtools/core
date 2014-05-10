@@ -57,15 +57,15 @@
       <td><input type="text" name="num_modules_per_page" value="{$settings.num_modules_per_page}" style="width: 30px" /></td>
     </tr>
     <tr>
-      <td class="pad_left_small">Default date field search value</td>
+      <td class="pad_left_small">{$LANG.phrase_default_date_field_search_value}</td>
       <td>
         <select name="default_date_field_search_value">
           <option value="none" {if $settings.default_date_field_search_value == "none"}selected{/if}>{$LANG.word_none}</option>
-          <option value="today" {if $settings.default_date_field_search_value == "today"}selected{/if}>Today</option>
-          <option value="last_7_days" {if $settings.default_date_field_search_value == "last_7_days"}selected{/if}>Last 7 days</option>
-          <option value="month_to_date" {if $settings.default_date_field_search_value == "month_to_date"}selected{/if}>Month to date</option>
-          <option value="year_to_date" {if $settings.default_date_field_search_value == "year_to_date"}selected{/if}>Year to date</option>
-          <option value="previous_month" {if $settings.default_date_field_search_value == "previous_month"}selected{/if}>The previous month</option>
+          <option value="today" {if $settings.default_date_field_search_value == "today"}selected{/if}>{$LANG.word_today}</option>
+          <option value="last_7_days" {if $settings.default_date_field_search_value == "last_7_days"}selected{/if}>{$LANG.phrase_last_7_days}</option>
+          <option value="month_to_date" {if $settings.default_date_field_search_value == "month_to_date"}selected{/if}>{$LANG.phrase_month_to_date}</option>
+          <option value="year_to_date" {if $settings.default_date_field_search_value == "year_to_date"}selected{/if}>{$LANG.phrase_year_to_date}</option>
+          <option value="previous_month" {if $settings.default_date_field_search_value == "previous_month"}selected{/if}>{$LANG.phrase_the_previous_month}</option>
         </select>
       </td>
     </tr>

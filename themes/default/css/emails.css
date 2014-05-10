@@ -1,13 +1,4 @@
 .template { font-size: 11px; color: #666666; font-family: "Courier New"; }
-.incomplete {
-  color: #cc0000;
-  width: 200px;
-  padding: 5px;
-  border: 1px solid #cc0000;
-  background-color: #ffffcc;
-  text-align: center;
-}
-
 #list_current_page { border: 1px solid #336699; background-color: #E5F3FE; font-weight: bold; padding: 2px; }
 
 .subpanel {

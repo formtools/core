@@ -162,7 +162,7 @@ ms.init_submissions_page = function() {
     return;
   }
 
-  if ($("search_field")) {
+  if ($("#search_field").length) {
     ms.change_search_field($("#search_field").val());
   }
 

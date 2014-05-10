@@ -28,7 +28,7 @@
 
     <div class="notify margin_top_large">
       <div style="padding: 8px">
-        Oops! Sorry, this View hasn't been fully set up yet.
+        {$LANG.notify_view_missing_columns}
       </div>
     </div>
 

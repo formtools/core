@@ -1,3 +1,14 @@
+.incomplete {
+  width: 200px;
+  padding: 5px;
+  border: 1px solid #999999;
+  background-color: #ffffcc;
+  text-align: center;
+  -webkit-border-radius: 6px;
+  -moz-border-radius: 6px;
+  border-radius: 6px;
+}
+
 /* the add form step 2 page has a slightly wider space available */
 #add_form .multi_page_form_list {
   width: 529px;

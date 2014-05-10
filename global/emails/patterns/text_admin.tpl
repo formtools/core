@@ -5,8 +5,7 @@
 {if $field.col_name == "submission_id"}
 {$field.field_title}: {literal}{$SUBMISSIONID}{/literal}
 {elseif $field.col_name == "last_modified_date"}
-{$LANG.phrase_last_modified}
-{literal}{$LASTMODIFIEDDATE}{/literal}
+{$LANG.phrase_last_modified}: {literal}{$LASTMODIFIEDDATE}{/literal}
 {elseif $field.col_name == "ip_address"}
 {$LANG.phrase_ip_address}: {literal}{$IPADDRESS}{/literal}
 {/if}

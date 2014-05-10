@@ -52,9 +52,11 @@ function ft_get_account_info($account_id)
 
   $account_info = mysql_fetch_assoc($result);
 
+  if (empty($account_info))
+    return array();
+
   // also extract any account-specific settings from account_settings
   $query = mysql_query("SELECT * FROM {$g_table_prefix}account_settings WHERE account_id = $account_id");
-
   $settings = array();
   while ($row = mysql_fetch_assoc($query))
     $settings[$row["setting_name"]] = $row["setting_value"];
@@ -552,6 +554,7 @@ function ft_add_password_to_password_history($account_id, $password)
   $new_password_history = implode(",", $trimmed_list);
   ft_set_account_settings($account_id, array("password_history" => $new_password_history));
 }
+
 
 // ------------------------------------------------------------------------------------------------
 

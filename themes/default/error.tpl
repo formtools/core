@@ -25,7 +25,7 @@
   <noscript>
     <br />
     <div class="error" style="padding:8px;">
-      Note: in order to login and use Form Tools, you must have javascript enabled in your browser. Please enable it now, then refresh this page.
+      {$LANG.text_js_required}
     </div>
   </noscript>
 

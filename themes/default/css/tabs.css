@@ -10,7 +10,7 @@
   margin-right: 1px;
 }
 .main_tabset li a {
-  padding-top: 1px;
+  padding: 1px 6px 0px;
   display: block;
   color: #555555;
 }

@@ -148,7 +148,6 @@ sf_ns.smart_fill = function() {
  * @param string field_type
  */
 sf_ns.update_field_type = function(field_id, field_type) {
-
   var found = [];
   $.each(page_ns.raw_field_types, function(raw_field_type, field_types) {
     if (raw_field_type != field_type) {
@@ -158,10 +157,9 @@ sf_ns.update_field_type = function(field_id, field_type) {
   });
 
   // if none were found, this probably means that the user was messing around with the Custom Fields module
-  // and deleted the field types. Just set it to a textbox.
+  // and deleted the field types. Ignore the row.
   if (found.length == 0) {
-    // TODO test
-    //$("#field_" + field_id + "_type_div").html(found.field_type_name);
+
   } else if (found.length == 1) {
     var item = found[0];
     html = "<input type=\"hidden\" name=\"field_" + field_id + "_type\" id=\"field_" + field_id + "_type\" value=\"" + item.field_type_id + "\">"

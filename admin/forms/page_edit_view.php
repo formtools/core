@@ -55,7 +55,6 @@ foreach ($form_fields as $field)
   $field_id        = $field["field_id"];
   $is_system_field = ($field["is_system_field"] == "yes") ? "true" : "false";
   $is_date_field   = ($field["is_date_field"] == "yes") ? "true" : "false";
-  //$option_list_id = (empty($field["option_list_id"])) ? "null" : $field["option_list_id"];
   $field_type_id = $field["field_type_id"];
 
   $all_form_fields[] = "{ field_id: $field_id, display_name: \"$display_name\", "
@@ -182,7 +181,7 @@ $page_vars["js_messages"] = array("word_remove", "validation_no_tabs_defined", "
         "validation_no_num_submissions_per_page", "validation_no_view_fields", "validation_no_column_selected",
         "validation_no_view_fields_selected", "phrase_first_name", "phrase_last_name", "phrase_company_name",
         "word_email", "word_notes", "word_id", "phrase_remove_row", "phrase_available_tabs", "word_close",
-        "phrase_add_fields", "phrase_create_group", "word_cancel", "word_yes", "word_no");
+        "phrase_add_fields", "phrase_create_group", "word_cancel", "word_yes", "word_no", "phrase_auto_size", "word_width_c");
 
 $field_type_map_lines = array();
 while(list($field_type_id, $field_type_name) = each($field_types))

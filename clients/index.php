@@ -39,4 +39,5 @@ $page_vars["js_messages"] = array("phrase_open_form_in_new_tab_or_win", "word_cl
 $page_vars["head_js"] =<<< END
 $(function() { ft.init_show_form_links(); });
 END;
+
 ft_display_page("clients/index.tpl", $page_vars);

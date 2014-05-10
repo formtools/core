@@ -226,6 +226,10 @@ function ft_create_unique_option_list($form_id, $option_list_info)
     if (count($grouped_option_list_info) > 1)
       continue;
 
+    // fringe case. Technically, a user may have created an Option List then deleted all options & groups.
+    if (count($grouped_option_list_info) == 0)
+      continue;
+
     $curr_options = $grouped_option_list_info[0]["options"];
     if (count($curr_options) != count($option_list_info["options"]))
       continue;

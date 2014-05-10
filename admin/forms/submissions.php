@@ -321,6 +321,7 @@ $page_vars["page_submission_ids"] = $submission_id_str;
 $page_vars["order"] = $order;
 $page_vars["field_types"] = $field_types;
 $page_vars["has_searchable_field"] = $has_searchable_field;
+$page_vars["notify_view_missing_columns_admin_fix"] = ft_eval_smarty_string($LANG["notify_view_missing_columns_admin_fix"], array("LINK" => "edit.php?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2"));
 $page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
 $page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download",

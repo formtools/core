@@ -159,7 +159,7 @@
             <td class="pad_left_small">
               {if $form_info.form_type == "external"}
                 {$form_info.form_name}
-                <a href="{$form_info.form_url}" class="show_form" target="_blank" title="Open form in dialog window"></a>
+                <a href="{$form_info.form_url}" class="show_form" target="_blank" title="{$LANG.phrase_open_form_in_dialog}"></a>
               {else}
                 {$form_info.form_name}
               {/if}

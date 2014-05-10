@@ -142,9 +142,7 @@ emails_ns.remove_recipient = function(num) {
     $("#no_recipients").show();
   }
 
-  $("#recipient_" + num).html("");
-  $("#recipient_" + num).hide();
-
+  $("#recipient_" + num).html("").hide();
   return false;
 }
 

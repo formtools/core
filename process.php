@@ -64,6 +64,14 @@ function ft_process_form($form_data)
   $form_id = $form_data["form_tools_form_id"];
   $form_info = ft_get_form($form_id);
 
+  // do we have a form for this id?
+  if (!ft_check_form_exists($form_id))
+  {
+    $page_vars = array("message_type" => "error", "message" => $LANG["processing_invalid_form_id"]);
+    ft_display_page("../../global/smarty/messages.tpl", $page_vars);
+    exit;
+  }
+
   extract(ft_process_hook_calls("start", compact("form_info", "form_id", "form_data"), array("form_data")), EXTR_OVERWRITE);
 
   // check to see if this form has been completely set up

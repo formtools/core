@@ -28,6 +28,7 @@ $(function() {
     }
     var field = $(e.target).find("input");
     var field_type = field.attr("type");
+
     // for radios, we only check the fields - not uncheck them
     if (field_type == "radio") {
       if (!field[0].checked) {
@@ -40,24 +41,20 @@ $(function() {
 
 
   // this adds the functionality so that when a user clicks on the language placeholder icon, it
-  // opens the dialog window containing the appropriate
-  // requirements: there's a hidden field (id=form_id) in the page
+  // opens the dialog window containing the available placeholder list.
+  // Pre-requisites: there's a hidden field (id=form_id) in the page
   $(".lang_placeholder_field").each(function() {
     var pos   = $(this).offset();
     var width = pos.left + $(this).width();
     var overlay = $("<div class=\"placeholder_field_overlay\"></div>").css({ "left": width })
     $(this).before(overlay);
   });
-
-  $(window).resize(function() {
-    $(".lang_placeholder_field").each(function() {
-      var pos   = $(this).offset();
-      var width = pos.left + $(this).width();
-      $(this).parent().find(".placeholder_field_overlay").css({ "left": width })
-    });
-  });
   $(".placeholder_field_overlay").live("click", function() {
     ft.show_form_field_placeholders_dialog({ form_id: $("#form_id").val() });
+  });
+
+  $(window).resize(function() {
+    ft.re_init_placeholder_field_overlays();
   });
 });
 
@@ -131,6 +128,7 @@ ft.display_dhtml_page_nav = function(num_results, num_per_page, current_page) {
     $("#nav_next_page").html("&raquo;");
   }
 }
+
 
 /**
  * Selects all options in a multi-select dropdown field.
@@ -273,6 +271,9 @@ ft.change_inner_tab = function(tab, tabset_name) {
       error: ft.error_handler
     });
   }
+
+  ft.re_init_placeholder_field_overlays();
+
   return false;
 }
 
@@ -619,7 +620,7 @@ ft.hide_message = function(target_id) {
 ft.show_form_field_placeholders_dialog = function(options) {
 
   ft.create_dialog({
-    title: "Form field placeholders",
+    title:  g.messages["phrase_form_field_placeholders"],
     dialog: ft.form_field_placeholders_dialog,
     min_width:  800,
     min_height: 500,
@@ -886,5 +887,13 @@ ft._extract_array_val = function(arr, name) {
     }
   }
   return value;
+}
+
+ft.re_init_placeholder_field_overlays = function() {
+  $(".lang_placeholder_field").each(function() {
+    var pos   = $(this).offset();
+    var width = pos.left + $(this).width();
+    $(this).parent().find(".placeholder_field_overlay").css({ "left": width })
+  });
 }
 

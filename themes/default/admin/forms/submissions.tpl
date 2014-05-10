@@ -37,8 +37,7 @@
 
     <div class="notify margin_top_large">
       <div style="padding: 8px">
-        Oops! This View hasn't been fully set up yet. <a href="edit.php?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2">Click here</a> to specify which fields
-        should appear as columns on this page.
+        {$LANG.notify_view_missing_columns} {$notify_view_missing_columns_admin_fix}
       </div>
     </div>
 
@@ -164,15 +163,15 @@
     <div class="margin_top margin_bottom">
       <div style="float:right; padding:1px" id="display_num_selected_rows" class="{if $preselected_subids|@count == 0}light_grey{else}green{/if}"></div>
       {template_hook location="admin_submission_listings_buttons1"}
-      {if $view_info.may_add_submissions == "yes"}
-        <input type="button" id="add_submission" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='{$same_page}?add_submission'" />
+      {if $view_info.may_delete_submissions == "yes"}
+        <input type="button" value="{$LANG.word_delete}" class="red" onclick="ms.delete_submissions()" />
       {/if}
       {template_hook location="admin_submission_listings_buttons2"}
       <input type="button" id="select_button" value="{$LANG.phrase_select_all_on_page}" onclick="ms.select_all_on_page();" />
       <input type="button" id="unselect_button" value="{$LANG.phrase_unselect_all}" onclick="ms.unselect_all()" />
       {template_hook location="admin_submission_listings_buttons3"}
-      {if $view_info.may_delete_submissions == "yes"}
-        <input type="button" value="{$LANG.word_delete}" class="red" onclick="ms.delete_submissions()" />
+      {if $view_info.may_add_submissions == "yes"}
+        <input type="button" id="add_submission" value="{eval var=$form_info.add_submission_button_label}" onclick="window.location='{$same_page}?add_submission'" />
       {/if}
       {template_hook location="admin_submission_listings_buttons4"}
     </div>

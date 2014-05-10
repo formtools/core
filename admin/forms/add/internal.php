@@ -9,8 +9,8 @@ if (isset($request["add_form"]))
   list($g_success, $g_message, $new_form_id) = ft_create_internal_form($request);
   if ($g_message)
   {
-  	header("location: ../edit.php?form_id={$new_form_id}&message=notify_internal_form_created");
-  	exit;
+    header("location: ../edit.php?form_id={$new_form_id}&message=notify_internal_form_created");
+    exit;
   }
 }
 
@@ -31,17 +31,17 @@ ft.click([
 $(function() {
   $("#form_name").focus();
   $("#create_internal_form").bind("submit",function(e) {
-	  var rules = [];
-		rules.push("required,form_name,{$LANG["validation_no_form_name"]}");
-		rules.push("required,num_fields,{$LANG["validation_no_num_form_fields"]}");
-		rules.push("digits_only,num_fields,{$LANG["validation_invalid_num_form_fields"]}");
-		rules.push("range<=1000,num_fields,{$LANG["validation_internal_form_too_many_fields"]}");
-		rules.push("required,access_type,{$LANG["validation_no_access_type"]}");
-	  if (!rsv.validate(this, rules)) {
-	    e.preventDefault();
-	  }
-	  ft.select_all("selected_client_ids[]");
-	});
+    var rules = [];
+    rules.push("required,form_name,{$LANG["validation_no_form_name"]}");
+    rules.push("required,num_fields,{$LANG["validation_no_num_form_fields"]}");
+    rules.push("digits_only,num_fields,{$LANG["validation_invalid_num_form_fields"]}");
+    rules.push("range<=1000,num_fields,{$LANG["validation_internal_form_too_many_fields"]}");
+    rules.push("required,access_type,{$LANG["validation_no_access_type"]}");
+    if (!rsv.validate(this, rules)) {
+      e.preventDefault();
+    }
+    ft.select_all("selected_client_ids[]");
+  });
 });
 END;
 

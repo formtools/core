@@ -23,16 +23,15 @@
       {assign var='index' value=$smarty.foreach.row.index}
       {assign var='menu_info' value=$menus[$index]}
       {assign var='menu_id' value=$menu_info.menu_id}
-
-       <tr>
-         <td class="pad_left_small">{$menu_info.menu}</td>
-         <td class="pad_left_small">
-           {if $menu_info.menu_type == "admin"}
-             <span class="light_green">{$LANG.phrase_admin_menu}</span>
-           {else}
-             <span class="blue">{$LANG.phrase_client_menu}</span>
-           {/if}
-         </td>
+      <tr>
+        <td class="pad_left_small">{$menu_info.menu}</td>
+        <td class="pad_left_small">
+          {if $menu_info.menu_type == "admin"}
+            <span class="light_green">{$LANG.phrase_admin_menu}</span>
+          {else}
+            <span class="blue">{$LANG.phrase_client_menu}</span>
+          {/if}
+        </td>
         <td class="pad_left_small">
           {if $menu_info.menu_type == "admin"}
             {$LANG.word_administrator}

@@ -538,7 +538,7 @@ function ft_initialize_form($form_data)
  * incomplete.
  *
  * @param integer $form_id the unique form ID
- * @return array A hash of form information
+ * @return array a hash of form information. If the form isn't found, it returns an empty array
  */
 function ft_get_form($form_id)
 {
@@ -548,6 +548,9 @@ function ft_get_form($form_id)
 
   $query = mysql_query("SELECT * FROM {$g_table_prefix}forms WHERE form_id = $form_id");
   $form_info = mysql_fetch_assoc($query);
+
+  if (empty($form_info))
+    return array();
 
   $form_info["client_info"] = ft_get_form_clients($form_id);
   $form_info["client_omit_list"] = ($form_info["access_type"] == "public") ? ft_get_public_form_omit_list($form_id) : array();
@@ -993,8 +996,9 @@ function ft_set_form_field_types($form_id, $info)
 
   $textbox_field_type_id = ft_get_field_type_id_by_identifier("textbox");
 
-  // set a 5 minute maximum execution time for this request. For long forms it can take some time.
-  @set_time_limit(300);
+  // set a 10 minute maximum execution time for this request. For long forms it can take a long time. 10 minutes
+  // is extremely excessive, but what the hey
+  @set_time_limit(600);
 
   $info = ft_sanitize($info);
   $form_fields = ft_get_form_fields($form_id);
@@ -1012,13 +1016,15 @@ function ft_set_form_field_types($form_id, $info)
     $field_type_id = $textbox_field_type_id;
     if (isset($info["field_{$field_id}_type"]))
       $field_type_id = $info["field_{$field_id}_type"];
+
+    $field_size = "medium";
     if (isset($info["field_{$field_id}_size"]))
       $field_size = $info["field_{$field_id}_size"];
 
     mysql_query("
       UPDATE {$g_table_prefix}form_fields
       SET    field_type_id = $field_type_id,
-            field_size = '$field_size'
+             field_size = '$field_size'
       WHERE  field_id = $field_id
         ");
 
@@ -1043,7 +1049,7 @@ function ft_set_form_field_types($form_id, $info)
     }
   }
 
-  // finally, if there was any option list defined for any of the form field, add the info!
+  // finally, if there were any Option List defined for any of the form field, add the info!
   if (!empty($option_lists))
   {
     $field_types = ft_get_field_types();

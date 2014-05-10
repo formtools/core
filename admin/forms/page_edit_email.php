@@ -63,7 +63,7 @@ $page_vars["js_messages"] = array("validation_invalid_email", "validation_no_cus
   "validation_no_main_email_recipient", "validation_no_email_content", "validation_no_email_template_name",
   "validation_no_email_template_view_mapping_value", "validation_no_email_template_view_id",
   "validation_no_custom_from_email", "validation_invalid_custom_from_email", "validation_no_custom_reply_to_email",
-  "validation_invalid_custom_reply_to_email", "validation_no_email_from_field"
+  "validation_invalid_custom_reply_to_email", "validation_no_email_from_field", "phrase_form_field_placeholders"
 );
 
 // a little hacky, but not too bad. Override the form nav links so that it always links to the email tab
@@ -104,6 +104,8 @@ $(function() {
   $(".placeholders_section").bind("click", function() {
     ft.show_form_field_placeholders_dialog({ form_id: {$form_id} });
   });
+
+  $("#test_email_submission_id").bind("keyup", function() { $("#test_email_data_submission_id").attr("checked", "checked"); });
 });
 END;
 

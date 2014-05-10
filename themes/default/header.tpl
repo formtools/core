@@ -1,16 +1,3 @@
-{*
-  This page is included in every administration page to generate the start of each the HTML pages, from the
-  opening DOCTYPE to the head, and the opening structure of the pages.
-
-  $head_title  - the <title> of the page
-  $theme       - the theme folder name
-  $logo_link   -
-  $head_js     - anything that will be included within <script></script> tags.
-  $head_css    - any CSS to be included within <style> tags.
-  $nav_page    - the current page, used for the navigation column on the left
-  $head_string - anything else to be outputted as is within the <head></head>
-  $version     - the program version
-*}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html dir="{$LANG.special_text_direction}">
 <head>

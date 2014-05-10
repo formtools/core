@@ -11,13 +11,13 @@
        <div style="float:right">{$pagination}</div>
       <span class="margin_right_large medium_grey">{$LANG.word_show}</span>
       <select name="num_fields_per_page">
-        <option value="all"{if $num_fields_per_page == "all"} selected{/if}>all fields</option>
-        <option value="10"{if $num_fields_per_page == "10"} selected{/if}>10 per page</option>
-        <option value="15"{if $num_fields_per_page == "15"} selected{/if}>15 per page</option>
-        <option value="20"{if $num_fields_per_page == "20"} selected{/if}>20 per page</option>
-        <option value="25"{if $num_fields_per_page == "25"} selected{/if}>25 per page</option>
-        <option value="50"{if $num_fields_per_page == "50"} selected{/if}>50 per page</option>
-        <option value="100"{if $num_fields_per_page == "100"} selected{/if}>100 per page</option>
+        <option value="all"{if $num_fields_per_page == "all"} selected{/if}>{$LANG.phrase_all_fields|lower}</option>
+        <option value="10"{if $num_fields_per_page == "10"} selected{/if}>{$LANG.phrase_10_per_page}</option>
+        <option value="15"{if $num_fields_per_page == "15"} selected{/if}>{$LANG.phrase_15_per_page}</option>
+        <option value="20"{if $num_fields_per_page == "20"} selected{/if}>{$LANG.phrase_20_per_page}</option>
+        <option value="25"{if $num_fields_per_page == "25"} selected{/if}>{$LANG.phrase_25_per_page}</option>
+        <option value="50"{if $num_fields_per_page == "50"} selected{/if}>{$LANG.phrase_50_per_page}</option>
+        <option value="100"{if $num_fields_per_page == "100"} selected{/if}>{$LANG.phrase_100_per_page}</option>
       </select>
       <input type="submit" value="{$LANG.word_update}" />
     </div>

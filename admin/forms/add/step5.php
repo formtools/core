@@ -60,6 +60,7 @@ $page_vars["form_info"] = $form_info;
 $page_vars["form_fields"] = $form_fields;
 $page_vars["form_urls"] = $form_urls;
 $page_vars["scrape_method"] = $scrape_method;
+$page_vars["text_add_form_field_types_multiple_fields_found8"] = ft_eval_smarty_string($LANG["text_add_form_field_types_multiple_fields_found8"], array("ONCLICK" => "ft.display_message('ft_message', 1, $('#upload_files_text').html())"));
 $page_vars["sortable_id"] = $sortable_id;
 $page_vars["js_messages"] = array("word_na", "word_found", "word_delete", "word_none", "notify_smart_fill_submitted",
   "phrase_not_found", "word_options", "phrase_multiple_fields_found", "notify_multiple_fields_found",

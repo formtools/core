@@ -18,7 +18,6 @@
       </div>
 
     {else}
-
       {$pagination}
 
       <table class="list_table" cellspacing="1" cellpadding="1">
@@ -98,29 +97,3 @@
     </div>
 
   </form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

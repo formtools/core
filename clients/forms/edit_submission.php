@@ -82,7 +82,6 @@ foreach ($grouped_fields as $group)
 $page_field_types = ft_get_field_types(true, $page_field_type_ids);
 
 
-
 // construct the tab list
 $view_tabs = ft_get_view_tabs($view_id, true);
 $same_page = ft_get_clean_php_self();

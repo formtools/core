@@ -1090,7 +1090,7 @@ fields_ns.edit_option_list = function(setting_id) {
 
   if (!list_id) {
     $("#edit_field_template_message").removeClass("hidden");
-    ft.display_message("edit_field_template_message", 0, "You must select an Option List and then Save Changes before being able to edit it.");
+    ft.display_message("edit_field_template_message", 0, g.messages["notify_edit_option_list_after_save"]);
     return false;
   }
 
@@ -1104,7 +1104,7 @@ fields_ns.edit_option_list = function(setting_id) {
    ft.create_dialog({
       dialog:     fields_ns.confirm_redirect_dialog,
       popup_type: "warning",
-      content:    "One or more fields have been updated. Would you like to save your changes before redirecting?",
+      content:    g.messages["confirm_save_change_before_redirect"],
       title:      g.messages["phrase_please_confirm"],
       buttons: [
         {
@@ -1443,7 +1443,7 @@ fields_ns.save_changes_response = function(data) {
     //
     delete fields_ns.cached_loaded_extended_field["field_id_" + field_id];
   } else {
-    ft.display_message("ft_message", 0, "There was an error saving the fields.");
+    ft.display_message("ft_message", 0, g.messages["notify_error_saving_fields"]);
   }
 }
 
@@ -1573,11 +1573,11 @@ fields_ns.generate_form_fields_section = function(params) {
 
   var html = "<table class=\"grey_box\">"
     + "<tr>"
-      + "<td width=\"100\">Select Field</td>"
+      + "<td width=\"100\">" + g.messages["phrase_select_field"] + "</td>"
       + "<td>" + field_dd + "</td>"
     + "</tr>"
     + "<tr>"
-      + "<td>Order</td>"
+      + "<td>" + g.messages["word_order"] + "</td>"
       + "<td><select name=\"edit_field__setting_" + setting_id + "_field_order\">"
         + "<option value=\"ASC\"" + ((params.field_order == "ASC") ? " selected" : "") + ">ASC</option>"
         + "<option value=\"DESC\"" + ((params.field_order == "DESC") ? " selected" : "") + ">DESC</option>"

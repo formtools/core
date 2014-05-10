@@ -60,9 +60,7 @@
                           $i.page_identifier == "edit_form_main" ||
                           $i.page_identifier == "edit_form_fields" ||
                           $i.page_identifier == "edit_form_views" ||
-                          $i.page_identifier == "edit_form_emails" ||
-                          $i.page_identifier == "edit_form_database" ||
-                          $i.page_identifier == "edit_form_add_fields"}
+                          $i.page_identifier == "edit_form_emails"}
                     {$LANG.word_form_c}&nbsp;{forms_dropdown name_id="custom_options_`$i.list_order`" style="width:155px" default=$i.custom_options}
                   {elseif $i.page_identifier == "edit_client"}
                     {$LANG.word_client_c}&nbsp;{clients_dropdown name_id="custom_options_`$i.list_order`" style="width:150px" default=$i.custom_options}

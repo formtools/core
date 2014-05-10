@@ -22,7 +22,7 @@ $num_form_emails  = $form_email_info["num_results"];
 $registered_form_emails = ft_get_email_fields($form_id);
 $num_registered_form_emails = count($registered_form_emails);
 
-// a little irksome, but we also need to retrieve ALL emails, for the Create Email From Existing Email dropdown
+// a little irksome, but we also need to retrieve ALL emails, for the "Create Email From Existing Email" dropdown
 $all_form_emails = ft_get_email_template_list($form_id);
 $php_self = ft_get_clean_php_self();
 

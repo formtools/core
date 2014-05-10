@@ -148,7 +148,6 @@
     </p>
 
     {/if}
-
   </form>
 
   <div id="new_view_dialog" class="ft_dialog hidden">

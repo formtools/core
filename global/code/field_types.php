@@ -1138,8 +1138,67 @@ function ft_generate_viewable_field($params)
       $placeholders[$identifier] = $value;
     }
 
-    // very, very, very slow
-    $output = ft_eval_smarty_string($markup_with_placeholders, $placeholders);
+    // temporary
+    if (false) //$field_info["field_type_id"] == 8)
+    {
+      // test to see how much converting the Field Type logic to Smarty speeds up the generation of the page
+      $tzo = "";
+      if (!empty($placeholders["VALUE"]))
+      {
+      	if ($placeholders["apply_timezone_offset"] == "yes")
+      	  $tzo = $placeholders["ACCOUNT_INFO"]["timezone_offset"];
+
+      	 switch ($placeholders["display_format"])
+      	 {
+      	 	case "yy-mm-dd":
+              $php_format = "Y-m-d";
+      	 	  break;
+      	 	case "dd/mm/yy":
+              $php_format = "d/m/Y";
+      	 	  break;
+      	 	case "mm/dd/yy":
+              $php_format = "m/d/Y";
+      	 	  break;
+      	 	case "M d, yy":
+              $php_format = "M j, Y";
+      	 	  break;
+      	 	case "MM d, yy":
+              $php_format = "F j, Y";
+      	 	  break;
+      	 	case "D M d, yy":
+              $php_format = "D M j, Y";
+      	 	  break;
+      	 	case "DD, MM d, yy":
+              $php_format = "l M j, Y";
+      	 	  break;
+      	 	case "datetime:dd/mm/yy|h:mm TT|ampm`true":
+              $php_format = "d/m/Y g:i A";
+      	 	  break;
+      	 	case "datetime:mm/dd/yy|h:mm TT|ampm`true":
+              $php_format = "m/d/Y g:i A";
+      	 	  break;
+      	 	case "datetime:yy-mm-dd|h:mm TT|ampm`true":
+              $php_format = "Y-m-d g:i A";
+      	 	  break;
+      	 	case "datetime:yy-mm-dd|hh:mm":
+              $php_format = "Y-m-d H:i";
+      	 	  break;
+      	 	case "datetime:yy-mm-dd|hh:mm:ss|showSecond`true":
+              $php_format = "Y-m-d H:i:s";
+      	 	  break;
+
+      	 	default:
+      	 	  break;
+      	 }
+      	 $output = ft_get_date($tzo, $placeholders["VALUE"], $php_format);
+      }
+    }
+    else
+    {
+      $output = ft_eval_smarty_string($markup_with_placeholders, $placeholders);
+    }
+
+    //echo $field_info["field_type_id"];
   }
 
   return $output;
