@@ -341,6 +341,7 @@ ms.selected_submission_ids = [$preselected_subids_str]; // regardless of page; o
 ms.all_submissions_selected_omit_list = [$all_submissions_selected_omit_list_str]; // if all submissions in result set selected, the unselected rows (for this page only!) are stored here
 ms.search_num_results = $search_num_results; // the total number of View-search results, regardless of page
 ms.form_id = $form_id;
+ms.view_id = $view_id;
 ms.num_results_per_page = $results_per_page;
 
 $(function() {

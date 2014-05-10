@@ -79,7 +79,6 @@ $g_pages = array(
   // before 2.0.3, themes used to be grouped under "Settings". The settings_themes key is kept
   // to minimize regression
   "settings_themes" => "/admin/themes/index.php",
-
   "themes_about" => "/admin/themes/about.php",
   "settings_menus" => "/admin/settings/index.php?page=menus",
 
@@ -595,6 +594,8 @@ function ft_get_client_menu_pages_dropdown($selected, $attributes, $omit_pages =
       $select_lines[] = array("type" => "optgroup_close");
     }
   }
+
+  extract(ft_process_hook_calls("middle", compact("select_lines"), array("select_lines")), EXTR_OVERWRITE);
 
   $select_lines[] = array("type" => "select_close");
 

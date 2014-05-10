@@ -33,3 +33,38 @@ tr.unselected_row_color {
 .submission_list li.col6 {
   width: 70px;
 }
+
+#ft_quicklinks {
+  margin: 0px 0px 0px 0px;
+  list-style: none;
+  float: right;
+}
+#ft_quicklinks li {
+  border: 1px solid #cccccc;
+  border-left: 0px;
+  padding: 2px 3px;
+  line-height: 10px;
+  background-color: #f2f2f2;
+  float: left;
+  cursor: pointer;
+}
+#ft_quicklinks li:hover {
+  background-color: #ffffff;
+}
+#ft_quicklinks li.ft_quicklinks_first {
+  border-left: 1px solid #cccccc;
+  -webkit-border-top-left-radius: 3px;
+  -webkit-border-bottom-left-radius: 3px;
+  -moz-border-radius-topleft: 3px;
+  -moz-border-radius-bottomleft: 3px;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+#ft_quicklinks li.ft_quicklinks_last {
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}

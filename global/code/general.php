@@ -520,26 +520,43 @@ function ft_check_db_table_exists($table)
  * Because of this, any time the administrator changes the permissions for a client, they'll need te re-login to
  * access that new information.
  *
+ * Very daft this function doesn't return a boolean, but oh well. The fourth param was added to get around that.
+ *
  * @param integer $form_id The unique form ID
  * @param integer $client_id The unique client ID
+ * @param integer $view_id
+ * @param boolean
  */
-function ft_check_client_may_view($client_id, $form_id, $view_id)
+function ft_check_client_may_view($client_id, $form_id, $view_id, $return_boolean = false)
 {
   global $g_root_url;
-  $boot_out_user = false;
 
-  // $permissions = ft_get_client_form_views($account_info["account_id"]);
   $permissions = isset($_SESSION["ft"]["permissions"]) ? $_SESSION["ft"]["permissions"] : array();
 
   extract(ft_process_hook_calls("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
 
+  $may_view = true;
   if (!array_key_exists($form_id, $permissions))
-    ft_logout_user("notify_invalid_permissions");
+  {
+    $may_view = false;
+    if (!$return_boolean)
+    {
+      ft_logout_user("notify_invalid_permissions");
+    }
+  }
   else
   {
     if (!empty($view_id) && !in_array($view_id, $permissions[$form_id]))
-      ft_logout_user("notify_invalid_permissions");
+    {
+      $may_view = false;
+      if (!$return_boolean)
+      {
+        ft_logout_user("notify_invalid_permissions");
+      }
+    }
   }
+
+  return $may_view;
 }
 
 
@@ -1654,11 +1671,11 @@ function ft_get_submission_placeholders($form_id, $submission_id, $client_info =
       $detailed_field_info = array();
       foreach ($form_fields as $curr_field_info)
       {
-      	if ($curr_field_info["field_id"] != $field_id)
-      	  continue;
+        if ($curr_field_info["field_id"] != $field_id)
+          continue;
 
-      	$detailed_field_info = $curr_field_info;
-      	break;
+        $detailed_field_info = $curr_field_info;
+        break;
       }
 
       $params = array(
@@ -1728,12 +1745,12 @@ function ft_get_clean_db_entity($str)
  */
 function ft_array_remove_empty_els($array)
 {
-	$updated_array = array();
-	foreach ($array as $el)
-	{
-		if (!empty($el))
-		  $updated_array[] = $el;
-	}
+  $updated_array = array();
+  foreach ($array as $el)
+  {
+    if (!empty($el))
+      $updated_array[] = $el;
+  }
 
   return $updated_array;
 }

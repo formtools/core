@@ -170,14 +170,17 @@ function ft_get_module_hook_calls($module_folder)
  *
  * "Priority" is actually very weird. Although it does allow hooks to define in what order they get
  * called, the priority to overriding the variables actually falls to the hooks with the LOWEST
- * priority. This can and should be adjusted, but right now there's no need for it.
+ * priority. This can and should be adjusted, but right now there's no need for it. The fourth param
+ * was added in part to solve this: that lets the calling function concatenate all overridden vars from
+ * all calling functions and use all the data to determine what to do.
  *
  * @param string $event the name of the event in the function calling the hook (e.g. "start", "end",
- *     "manage_files" etc.
+ *     "manage_files" etc.)
  * @param $vars whatever vars are being passed to the hooks from the context of the calling function
  * @param $overridable_vars whatever variables may be overridden by the hook
+ * @param $overridable_vars_to_be_concatenated
  */
-function ft_process_hook_calls($event, $vars, $overridable_vars)
+function ft_process_hook_calls($event, $vars, $overridable_vars, $overridable_vars_to_be_concatenated = array())
 {
   $backtrace = debug_backtrace();
   $calling_function = $backtrace[1]["function"];
@@ -189,9 +192,9 @@ function ft_process_hook_calls($event, $vars, $overridable_vars)
   $return_vals = array();
   foreach ($hooks as $hook_info)
   {
-  	// this clause was added in 2.1 - it should have been included in 2.0.x, but it was missed. This prevents any hooks
-  	// being processed for modules that are not enabled.
-  	$module_folder = $hook_info["module_folder"];
+    // this clause was added in 2.1 - it should have been included in 2.0.x, but it was missed. This prevents any hooks
+    // being processed for modules that are not enabled.
+    $module_folder = $hook_info["module_folder"];
     if (!ft_check_module_enabled($module_folder))
       continue;
 
@@ -204,7 +207,19 @@ function ft_process_hook_calls($event, $vars, $overridable_vars)
     foreach ($overridable_vars as $var_name)
     {
       if (array_key_exists($var_name, $updated_vars))
-        $return_vals[$var_name] = $updated_vars[$var_name];
+      {
+        if (in_array($var_name, $overridable_vars_to_be_concatenated))
+        {
+          if (!array_key_exists($var_name, $return_vals))
+            $return_vals[$var_name] = array();
+
+          $return_vals[$var_name][] = $updated_vars[$var_name];
+        }
+        else
+        {
+          $return_vals[$var_name] = $updated_vars[$var_name];
+        }
+      }
     }
   }
 
@@ -267,7 +282,7 @@ function ft_process_template_hook_calls($location, $template_vars, $all_params =
   // extract the var passed from the calling function into the current scope
   foreach ($hooks as $hook_info)
   {
-  	$module_folder = $hook_info["module_folder"];
+    $module_folder = $hook_info["module_folder"];
     if (!ft_check_module_enabled($module_folder))
       continue;
 

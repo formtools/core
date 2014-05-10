@@ -78,6 +78,8 @@
     </div>
   {/if}
 
+  {submission_listing_quicklinks context="admin"}
+
   {$pagination}
 
   {if $search_num_results == 0}

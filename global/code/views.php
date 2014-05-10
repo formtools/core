@@ -1010,15 +1010,15 @@ function ft_get_form_views($form_id, $account_id = "")
 
   if (!empty($account_id))
   {
-    // TODO this could be more efficient, I think
     $query = mysql_query("
       SELECT v.*
-      FROM   {$g_table_prefix}views v
+      FROM   {$g_table_prefix}views v, {$g_table_prefix}list_groups lg
       WHERE  v.form_id = $form_id AND
+             v.group_id = lg.group_id AND
              (v.access_type = 'public' OR
               v.view_id IN (SELECT cv.view_id FROM {$g_table_prefix}client_views cv WHERE account_id = '$account_id'))
-      ORDER BY v.view_order
-        ");
+      ORDER BY lg.list_order, v.view_order
+    ");
 
     // now run through the omit list, just to confirm this client isn't on it!
     while ($row = mysql_fetch_assoc($query))
@@ -1039,9 +1039,10 @@ function ft_get_form_views($form_id, $account_id = "")
   {
     $query = mysql_query("
       SELECT *
-      FROM   {$g_table_prefix}views v
-      WHERE  form_id = $form_id
-      ORDER BY v.view_order
+      FROM   {$g_table_prefix}views v, {$g_table_prefix}list_groups lg
+      WHERE  v.form_id = $form_id AND
+             v.group_id = lg.group_id
+      ORDER BY lg.list_order, v.view_order
         ");
 
     while ($row = mysql_fetch_assoc($query))
