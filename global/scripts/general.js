@@ -56,12 +56,12 @@ $(function() {
     $(this).before(iframe);
 
     var form_id = $("#form_id").val();
-  var ifrm = $("#placeholder_field_overlay" + counter)[0];
-  ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
-  ifrm.document.open();
-  ifrm.document.write('<img src="../../global/images/lang_placeholder_field_icon.png" style="cursor: pointer" onclick="parent.ft.show_form_field_placeholders_dialog({ form_id: ' + form_id + ' });" />');
-  ifrm.document.close();
-  counter++;
+    var ifrm = $("#placeholder_field_overlay" + counter)[0];
+    ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
+    ifrm.document.open();
+    ifrm.document.write('<img src="../../global/images/lang_placeholder_field_icon.png" style="cursor: pointer" onclick="parent.ft.show_form_field_placeholders_dialog({ form_id: ' + form_id + ' });" />');
+    ifrm.document.close();
+    counter++;
   });
 
   $(window).resize(function() {
@@ -535,23 +535,23 @@ ft.create_dialog = function(info) {
   var settings = $.extend({
 
     // a reference to the dialog window itself. If this isn't included, the dialog is a one-off
-    dialog:     "<div></div>",
+    dialog:      "<div></div>",
 
     // there are two ways to create a dialog. Either specify the ID of the element in the page
     // containing the markup, or just pass the HTML here.
-    content:    "",
-    title:      "",
-    auto_open:  true,
-    modal:      true,
-    min_width:  400,
-    min_height: 100,
-    max_height: 500,
-    buttons:    [],
-    popup_type: null,
-    open:       function() {},
-    close:      function() {}
+    content:     "",
+    title:       "",
+    auto_open:   true,
+    modal:       true,
+    min_width:   400,
+    min_height:  100,
+    buttons:     [],
+    popup_type:  null,
+    open:        function() {},
+    close:       function() {},
+    resize:      function() {},
+    resize_stop: function() {},
   }, info);
-
 
   // if there's a popup_type specified and we want to add in an icon
   if (settings.popup_type) {
@@ -579,17 +579,28 @@ ft.create_dialog = function(info) {
     dialog_content = $(settings.dialog);
   }
 
-  dialog_content.dialog({
-    title:     settings.title,
-    modal:     settings.modal,
-    autoOpen:  settings.auto_open,
-    minWidth:  settings.min_width,
-    minHeight: settings.min_height,
-    maxHeight: settings.max_height,
-    buttons:   settings.buttons,
-    open:      settings.open,
-    close:     settings.close
-  });
+  var final_settings = {
+    title:      settings.title,
+    modal:      settings.modal,
+    autoOpen:   settings.auto_open,
+    minWidth:   settings.min_width,
+    minHeight:  settings.min_height,
+    maxHeight:  settings.max_height,
+    buttons:    settings.buttons,
+    open:       settings.open,
+    close:      settings.close,
+    resize:     settings.resize,
+    resizeStop: settings.resize_stop
+  };
+
+  if (settings.width) {
+    final_settings.width = settings.width;
+  }
+  if (settings.width) {
+    final_settings.height = settings.height;
+  }
+
+  dialog_content.dialog(final_settings);
 }
 
 

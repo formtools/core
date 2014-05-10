@@ -107,7 +107,7 @@ ol, ul {
 
 /* jQuery modal dialog style override */
 body .ui-widget-overlay {
-  background: url(smoothness/images/ui-bg_flat_0_444444_40x100.png) repeat-x scroll 50% 50% #444444;
+/*  background: url(smoothness/images/ui-bg_flat_0_444444_40x100.png) repeat-x scroll 50% 50% #444444; */
   opacity: 0.4;
 }
 body .ui-dialog .ui-dialog-content {

@@ -19,7 +19,7 @@
   <link href="{$theme_url}/css/smoothness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"/>
   <script src="{$g_root_url}/global/scripts/jquery.js"></script>
   <script src="{$theme_url}/scripts/jquery-ui-1.8.6.custom.min.js"></script>
-  <script src="{$g_root_url}/global/scripts/general.js?v=20110802"></script>
+  <script src="{$g_root_url}/global/scripts/general.js?v=20110815"></script>
   <script src="{$g_root_url}/global/scripts/rsv.js?v=20110802"></script>
   {$head_string}
   {$head_js}

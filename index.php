@@ -4,7 +4,6 @@ require_once("global/session_start.php");
 ft_verify_form_tools_installed();
 $g_upgrade_info = ft_upgrade_form_tools();
 
-
 // only verify the core tables exist if there wasn't a problem upgrading
 if (!($g_upgrade_info["upgraded"] && !$g_upgrade_info["success"]))
 {
@@ -16,7 +15,8 @@ if (isset($_SESSION["ft"]["account"]) && isset($_SESSION["ft"]["account"]["is_lo
   isset($_SESSION["ft"]["account"]["login_page"]) && $_SESSION["ft"]["account"]["is_logged_in"] == 1)
 {
   $login_page = $_SESSION["ft"]["account"]["login_page"];
-  header("location: {$g_root_url}{$g_pages[$login_page]}");
+  $page = ft_construct_page_url($login_page);
+  header("location: {$g_root_url}$page");
   exit;
 }
 

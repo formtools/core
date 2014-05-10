@@ -492,7 +492,10 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
   $select_lines[] = array("type" => "option", "k" => "settings_accounts", "v" => "{$LANG["word_settings"]} - {$LANG["word_accounts"]}");
   $select_lines[] = array("type" => "option", "k" => "settings_files", "v" => "{$LANG["word_settings"]} - {$LANG["word_files"]}");
   $select_lines[] = array("type" => "option", "k" => "settings_menus", "v" => "{$LANG["word_settings"]} - {$LANG["word_menus"]}");
-  $select_lines[] = array("type" => "option", "k" => "logout", "v" => $LANG["word_logout"]);
+  if (!in_array("logout", $omit_pages))
+  {
+    $select_lines[] = array("type" => "option", "k" => "logout", "v" => $LANG["word_logout"]);
+  }
   $select_lines[] = array("type" => "optgroup_close");
 
   $select_lines[] = array("type" => "select_close");

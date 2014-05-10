@@ -107,7 +107,7 @@ $g_check_ft_sessions = (isset($g_check_ft_sessions)) ? $g_check_ft_sessions : tr
  * last error/warning/notice that occurs.
  * @global string $g_default_error_reporting
  */
-$g_default_error_reporting = 2047;
+$g_default_error_reporting = 1;
 
 /**
  * This feature currently has limited support in the code, but will be implemented more fully at a
@@ -220,12 +220,12 @@ $g_current_version = "2.1.0";
 /**
  * The release type: alpha, beta or main
  */
-$g_release_type = "beta";
+$g_release_type = "main";
 
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110811";
+$g_release_date = "20110815";
 
 /**
  * The minimum required PHP version needed to run Form Tools.
@@ -319,7 +319,6 @@ if (is_file(dirname(__FILE__) . "/config.php"))
   $config_file_exists = true;
   include_once(dirname(__FILE__) . "/config.php");
 }
-
 
 // explicitly set the error reporting value
 error_reporting($g_default_error_reporting);

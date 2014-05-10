@@ -1253,20 +1253,13 @@ function ft_display_submission_listing_quicklinks($context, $page_data)
     $quicklink_info = $quicklinks[$i];
     $icon_url       = isset($quicklink_info["icon_url"]) ? $quicklink_info["icon_url"] : "";
     $title_text     = isset($quicklink_info["title_text"]) ? $quicklink_info["title_text"] : "";
-    $href           = isset($quicklink_info["href"]) ? $quicklink_info["href"] : "";
     $onclick        = isset($quicklink_info["onclick"]) ? $quicklink_info["onclick"] : "";
     $title_text = htmlspecialchars($title_text);
 
     if (empty($icon_url))
       continue;
 
-    $link = "<a href=\"$href\"";
-    if (!empty($onclick))
-      $link .= " onclick=\"$onclick\"";
-
-    $link .= ">";
-
-    echo "<li class=\"$class\">$link<img src=\"$icon_url\" title=\"$title_text\" /></a></li>\n";
+    echo "<li class=\"$class\" onclick=\"$onclick\"><img src=\"$icon_url\" title=\"$title_text\" /></li>\n";
   }
 
   echo "</ul>";
