@@ -162,7 +162,8 @@ function ft_update_theme_list()
 function ft_display_page($template, $page_vars, $theme = "")
 {
   global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_debug, $LANG,
-    $g_smarty, $g_smarty_use_sub_dirs, $g_js_debug, $g_benchmark_start, $g_enable_benchmarking;
+    $g_smarty, $g_smarty_use_sub_dirs, $g_js_debug, $g_benchmark_start, $g_enable_benchmarking,
+    $g_upgrade_info;
 
   if (empty($theme) && (isset($_SESSION["ft"]["account"]["theme"])))
     $theme = $_SESSION["ft"]["account"]["theme"];
@@ -199,7 +200,7 @@ function ft_display_page($template, $page_vars, $theme = "")
 
 
   // if this page has been told to dislay a custom message, override g_success and g_message
-  if (isset($_GET["message"]))
+  if (!isset($g_upgrade_info["message"]) && isset($_GET["message"]))
   {
     list($g_success, $g_message) = ft_display_custom_page_message($_GET["message"]);
   }

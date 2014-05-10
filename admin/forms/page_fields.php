@@ -43,6 +43,8 @@ $field_settings_js   = ft_generate_field_type_settings_js();
 
 $php_self = ft_get_clean_php_self();
 
+$shared_characteristics_js = ft_get_field_type_setting_shared_characteristics_js();
+
 
 // compile the template fields
 $page_vars["page"]        = "fields";
@@ -69,7 +71,7 @@ if ($num_fields_per_page != "all")
 
 $page_vars["head_string"] =<<< END
   <script src="{$g_root_url}/global/scripts/sortable.js"></script>
-  <script src="{$g_root_url}/global/scripts/manage_fields.js?v=2"></script>
+  <script src="{$g_root_url}/global/scripts/manage_fields.js?v=3"></script>
 END;
 
 $replacement_info = array("views_tab_link" => "$php_self?page=views&form_id=$form_id");
@@ -101,7 +103,8 @@ EOF;
 $page_vars["head_js"] =<<<END
 var page_ns = {
   reserved_words: [$reserved_words],
-  form_id:        $form_id
+  form_id: $form_id,
+  shared_characteristics: $shared_characteristics_js
 };
 $field_type_sizes_js
 $field_sizes_js

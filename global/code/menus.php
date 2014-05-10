@@ -464,7 +464,8 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
   }
   $select_lines[] = array("type" => "optgroup_close");
 
-  // if the Pages module is enabled, display any custom pages that have been defined
+  // if the Pages module is enabled, display any custom pages that have been defined. Note: this would be better handled
+  // in the hook added below
   if (ft_check_module_enabled("pages"))
   {
     ft_include_module("pages");
@@ -481,6 +482,8 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
 
     $select_lines[] = array("type" => "optgroup_close");
   }
+
+  extract(ft_process_hook_calls("middle", compact("select_lines"), array("select_lines")), EXTR_OVERWRITE);
 
   $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_other"]);
   $select_lines[] = array("type" => "option", "k" => "your_account", "v" => $LANG["phrase_your_account"]);
@@ -898,6 +901,11 @@ function ft_construct_page_url($page_identifier, $custom_options = "", $args = a
   global $g_pages;
 
   $url = "";
+  extract(ft_process_hook_calls("start", compact("url", "page_identifier", "custom_options", "args"), array("url")), EXTR_OVERWRITE);
+
+  if (!empty($url))
+    return $url;
+
   switch ($page_identifier)
   {
     case "custom_url":
@@ -934,7 +942,7 @@ function ft_construct_page_url($page_identifier, $custom_options = "", $args = a
           $url = "/modules/$module_folder/";
         }
       }
-      // pages (from the Pages module)
+      // pages (from the Pages module). This should be removed from the Core, and make it use the hook defined above
       else if (preg_match("/^page_(\d+)/", $page_identifier, $matches))
       {
         $page_id = $matches[1];

@@ -101,7 +101,6 @@ function smarty_function_views_dropdown($params, &$smarty)
 
   $dd .= "</select>";
 
-
   if ($num_views <= 1 && $hide_single_view)
   {
   	// do nothing!

@@ -604,7 +604,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
         "data"         => $infohash,
         "code"         => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
         "settings"     => $field_settings[$field_id],
-        "account_info" => $_SESSION["ft"]["account"]
+        "account_info" => isset($_SESSION["ft"]["account"]) ? $_SESSION["ft"]["account"] : array()
       );
       $value = ft_process_form_field($data);
       $query[] = $row["col_name"] . " = '$value'";

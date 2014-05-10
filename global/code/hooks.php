@@ -118,7 +118,7 @@ function ft_get_hook_calls($event, $hook_type, $function_name)
 {
   global $g_table_prefix;
 
-  $query = mysql_query("
+  $query = @mysql_query("
     SELECT *
     FROM   {$g_table_prefix}hook_calls
     WHERE  hook_type = '$hook_type' AND
@@ -128,7 +128,7 @@ function ft_get_hook_calls($event, $hook_type, $function_name)
       ");
 
   $results = array();
-  while ($row = mysql_fetch_assoc($query))
+  while ($row = @mysql_fetch_assoc($query))
     $results[] = $row;
 
   return $results;

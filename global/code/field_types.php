@@ -404,74 +404,6 @@ function ft_get_field_type_setting_id_by_identifier($field_type_id, $field_type_
 }
 
 
-function ft_get_field_type_setting_id_to_identifier()
-{
-  global $g_table_prefix;
-
-  $query = mysql_query("
-    SELECT setting_id, field_setting_identifier
-    FROM   {$g_table_prefix}field_type_settings
-  ");
-
-  $map = array();
-  while ($row = mysql_fetch_assoc($query))
-  {
-    $map[$row["setting_id"]] = $row["field_setting_identifier"];
-  }
-
-  return $map;
-}
-
-
-/**
- * Returns all settings for a field type, including the options - if requested.
- *
- * @param integer $field_type_id
- * @param boolean $return_options
-
-function ft_get_field_type_settings($field_type_id, $return_options = false)
-{
-  global $g_table_prefix;
-
-  $query = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}field_type_settings
-    WHERE  field_type_id = $field_type_id
-    ORDER BY list_order
-  ");
-
-  $info = array();
-  while ($row = mysql_fetch_assoc($query))
-  {
-    $setting_id = $row["setting_id"];
-    if ($return_options)
-    {
-      $options = array();
-      $options_query = mysql_query("
-        SELECT *
-        FROM   {$g_table_prefix}field_type_setting_options
-        WHERE  setting_id = $setting_id
-        ORDER BY option_order
-      ");
-      while ($option_row = mysql_fetch_assoc($options_query))
-      {
-        $options[] = array(
-          "option_text"       => $option_row["option_text"],
-          "option_value"      => $option_row["option_value"],
-          "option_order"      => $option_row["option_order"],
-          "is_new_sort_group" => $option_row["is_new_sort_group"]
-        );
-      }
-      $row["options"] = $options;
-    }
-    $info[] = $row;
-  }
-
-  return $info;
-}
-*/
-
-
 /**
  * Returns all settings for a field type, including the options - if requested.
  *
@@ -1511,3 +1443,127 @@ function ft_get_shared_field_setting_info($field_type_map, $field_type_settings_
   return $return_info;
 }
 
+
+/**
+ * This is used exclusively on the Edit Forms -> fields tab. It returns a JS version of the shared characteristics
+ * information for use by the page. The JS it returns in an anonymous JS object of the following form:
+ *   {
+ *     s(setting ID): array(characteristic IDs),
+ *     ...
+ *   }
+ *
+ * "Characteristic ID" is a made-up number for the sake of the use-case. We just need a way to recognize the shared
+ * characteristics - that's what it does.
+ *
+ * @return string
+ */
+function ft_get_field_type_setting_shared_characteristics_js()
+{
+  $field_type_settings_shared_characteristics = ft_get_settings("field_type_settings_shared_characteristics");
+  $info = ft_get_field_type_and_setting_info();
+  $field_type_id_to_identifier = $info["field_type_id_to_identifier"];
+  $field_identifier_to_id = array_flip($field_type_id_to_identifier);
+
+  $groups = explode("|", $field_type_settings_shared_characteristics);
+  $return_info = array();
+
+  // this is what we're trying to generate: a hash of setting id => array( characteristic IDs )
+  // The Òcharacteristic IDÓ is a new (temporary) number for characteristic. In every situation that I can
+  // think of, the value array will contain a single entry (why would a setting be mapped to multiple
+  // characteristics?). However, the interface doesn't limit it. To be safe, IÕll stash it in an array.
+  $setting_ids_to_characteristic_ids = array();
+
+  $characteristic_id = 1;
+  foreach ($groups as $group_info)
+  {
+  	list($group_name, $vals) = explode(":", $group_info);
+
+    $pairs = explode("`", $vals);
+    $settings = array();
+    foreach ($pairs as $str)
+    {
+      // we need to do a little legwork here to actually find the setting ID. The problem is that many
+      // field types reference fields with the same setting identifier (it's only required to be unique within the
+      // field type - not ALL field types).
+      list($field_type_identifier, $setting_identifier) = explode(",", $str);
+
+      $field_type_id = $field_identifier_to_id[$field_type_identifier];
+      $all_field_type_setting_ids = $info["field_type_ids_to_setting_ids"][$field_type_id];
+
+      // loop through all the settings for this field type and locate the one we're interested in
+      foreach ($all_field_type_setting_ids as $setting_id)
+      {
+      	if ($info["setting_id_to_identifier"][$setting_id] != $setting_identifier)
+      	  continue;
+
+      	if (!array_key_exists($setting_id, $setting_ids_to_characteristic_ids))
+      	  $setting_ids_to_characteristic_ids[$setting_id] = array();
+
+      	$setting_ids_to_characteristic_ids[$setting_id][] = $characteristic_id;
+      }
+    }
+
+    $characteristic_id++;
+  }
+
+  // now convert the info into a simple JS object. We could have done it above, but this keeps it simple.
+  $js_lines = array();
+  while (list($setting_id, $characteristic_ids) = each($setting_ids_to_characteristic_ids))
+  {
+    $js_lines[] = "s{$setting_id}:[" . implode(",", $characteristic_ids) . "]";
+  }
+  $js = "{" . implode(",", $js_lines) . "}";
+
+  return $js;
+}
+
+
+/**
+ * A little tricky to name. We often need the key info about the field type and their settings (i.e. IDs and names)
+ * in different ways. This function returns the info in different data structures. The top level structure returned
+ * is a hash. You can pick and choose what info you want. Since it's all generated with a single SQL query, it's much
+ * faster to use this than separate functions.
+ *
+ * Note: this function returns a superset of ft_get_field_type_id_to_identifier(). If you need to access the settings
+ * as well as the field type info, chances are this will be a better candidate.
+ *
+ * @return array
+ */
+function ft_get_field_type_and_setting_info()
+{
+  global $g_table_prefix;
+
+  $query = mysql_query("
+    SELECT ft.field_type_id, ft.field_type_name, ft.field_type_identifier, fts.*
+    FROM {$g_table_prefix}field_types ft
+    LEFT JOIN {$g_table_prefix}field_type_settings fts ON (ft.field_type_id = fts.field_type_id)
+  ");
+
+  $field_type_id_to_identifier   = array();
+  $field_type_ids_to_setting_ids = array();
+  $setting_id_to_identifier      = array();
+  while ($row = mysql_fetch_assoc($query))
+  {
+  	$field_type_id = $row["field_type_id"];
+  	$setting_id    = $row["setting_id"];
+
+  	if (!array_key_exists($field_type_id, $field_type_id_to_identifier))
+      $field_type_id_to_identifier[$field_type_id] = $row["field_type_identifier"];
+
+  	if (!array_key_exists($field_type_id, $field_type_ids_to_setting_ids))
+      $field_type_ids_to_setting_ids[$field_type_id] = array();
+
+    $field_type_ids_to_setting_ids[$field_type_id][] = $setting_id;
+
+  	if (!array_key_exists($setting_id, $setting_id_to_identifier))
+      $setting_id_to_identifier[$setting_id] = $row["field_setting_identifier"];
+  }
+
+  $return_info = array(
+    "field_type_id_to_identifier"   => $field_type_id_to_identifier,
+    "field_type_ids_to_setting_ids" => $field_type_ids_to_setting_ids,
+    "setting_id_to_identifier"      => $setting_id_to_identifier
+  );
+
+  return $return_info;
+}

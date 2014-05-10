@@ -1344,7 +1344,8 @@ function ft_update_form_fields_tab($form_id, $infohash)
   // delete any extended field settings for those fields whose field type just changed. Two comments:
   //   1. this is compatible with editing the fields in the dialog window. When that happens & the user updates
   //      it, the code updates the old_field_type_id info in the page so this is never called.
-  //   2. with the addition of Shared Characteristics, this only deletes unmapped fields.
+  //   2. with the addition of Shared Characteristics, this only deletes fields that aren't mapped between the
+  //      two fields types (old and new)
   $changed_fields = array();
   foreach ($field_info as $curr_field_info)
   {
@@ -1359,7 +1360,6 @@ function ft_update_form_fields_tab($form_id, $infohash)
   {
     $field_type_settings_shared_characteristics = ft_get_settings("field_type_settings_shared_characteristics");
     $field_type_map = ft_get_field_type_id_to_identifier();
-    $setting_map    = ft_get_field_type_setting_id_to_identifier();
 
     $shared_settings = array();
     foreach ($changed_fields as $changed_field_info)
@@ -1693,7 +1693,7 @@ function _ft_cache_form_stats($form_id = "")
  *
  * @param integer $account_id if blank, return all finalized forms, otherwise returns the forms
  *              associated with this particular client.
- * @param boolean $is_admin Whether or not the user retrieving the data is an administrator or not.
+ * @param boolean $is_admin whether or not the user retrieving the data is an administrator or not.
  *              If it is, ALL forms are retrieved - even those that aren't yet finalized.
  * @param array $search_criteria an optional hash with any of the following keys:
  *                 "status"  - (string) online / offline
