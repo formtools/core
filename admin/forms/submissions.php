@@ -333,6 +333,7 @@ $page_vars["head_string"] =<<< END
 <script src="../../global/scripts/manage_submissions.js"></script>
 <script src="../../global/scripts/daterangepicker.jquery.js"></script>
 <script src="$g_root_url/global/scripts/field_types.php"></script>
+<link rel="stylesheet" href="$g_root_url/global/css/field_types.php" type="text/css" />
 $shared_resources
 END;
 

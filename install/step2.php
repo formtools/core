@@ -27,8 +27,9 @@ if ($mysql_loaded)
   }
 }
 
-$upload_folder_writable           = is_writable(realpath("$g_ft_installation_folder/../upload"));
-$default_theme_cache_dir_writable = is_writable(realpath("$g_ft_installation_folder/../themes/default/cache"));
+$upload_folder_writable            = is_writable(realpath("$g_ft_installation_folder/../upload"));
+$default_theme_cache_dir_writable  = is_writable(realpath("$g_ft_installation_folder/../themes/default/cache"));
+$core_field_types_module_available = ft_install_check_module_available("core_field_types");
 
 // ------------------------------------------------------------------------------------------------
 
@@ -43,5 +44,6 @@ $page_vars["phpversion"] = phpversion();
 $page_vars["mysql_get_client_info"] = mysql_get_client_info();
 $page_vars["upload_folder_writable"]  = $upload_folder_writable;
 $page_vars["default_theme_cache_dir_writable"]  = $default_theme_cache_dir_writable;
+$page_vars["core_field_types_module_available"] = $core_field_types_module_available;
 
 ft_install_display_page("templates/step2.tpl", $page_vars);

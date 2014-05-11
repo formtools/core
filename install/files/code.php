@@ -51,7 +51,7 @@ function ft_install_display_page($template, $page_vars)
     </div>
 
     <span style="float:left; padding-top: 8px; padding-right: 10px">
-      <a href="http://www.formtools.org" class="no_border"><img src="images/logo.jpg" border="0" width="359" height="61" /></a>
+      <a href="http://www.formtools.org" class="no_border"><img src="../themes/default/images/logo_green.jpg" border="0" height="61" /></a>
     </span>
   </div>
   <div id="content">
@@ -264,6 +264,9 @@ function ft_install_create_database($hostname, $db_name, $username, $password, $
   // connect to the database
   $link = @mysql_connect($hostname, $username, $password);
   @mysql_select_db($db_name);
+
+  // suppress strict mode
+  @mysql_query("SET SQL_MODE=''", $link);
 
   // check for the existence of Form Tools tables. It would be sad to accidentally delete/overwrite someone's
   // older installation!
@@ -521,62 +524,6 @@ function ft_install_delete_tables($hostname, $db_name, $username, $password, $ta
 }
 
 
-function ft_install_get_module_list()
-{
-  global $g_table_prefix, $g_root_dir;
-
-  $modules_folder = "$g_root_dir/modules";
-  $module_list = array();
-
-  // if we couldn't open the modules folder, it doesn't exist or something went wrong
-  $dh = opendir($modules_folder);
-  if (!$dh)
-    return array(false, "");
-
-  while (($folder = readdir($dh)) !== false)
-  {
-    if (is_dir("$modules_folder/$folder") && $folder != "." && $folder != "..")
-    {
-      $info = ft_get_module_info_file_contents($folder);
-
-      if (empty($info))
-        continue;
-
-      $info = ft_sanitize($info);
-
-      // check the required info file fields
-      $required_fields = array("author", "version", "date", "origin_language");
-      $all_found = true;
-      foreach ($required_fields as $field)
-      {
-        if (empty($info[$field]))
-          $all_found = false;
-      }
-      if (!$all_found)
-        continue;
-
-      // now check the language file contains the two required fields: module_name and module_description
-      $lang_file = "$modules_folder/$folder/lang/{$info["origin_language"]}.php";
-      $lang_info = _ft_get_module_lang_file_contents($lang_file);
-      $lang_info = ft_sanitize($lang_info);
-
-      // check the required language file fields
-      if ((!isset($lang_info["module_name"]) || empty($lang_info["module_name"])) ||
-          (!isset($lang_info["module_description"]) || empty($lang_info["module_description"])))
-        continue;
-
-      $module_list = array(
-        "module_name" => $lang_info["module_name"],
-        "version" => $info["version"]
-      );
-    }
-  }
-  closedir($dh);
-
-  return $module_list;
-}
-
-
 /**
  * This is sent at the very last step. It emails the administrator a short welcome email containing their
  * login information, with a few links to resources on our site.
@@ -647,13 +594,44 @@ function ft_check_no_existing_tables($hostname, $db_name, $username, $password, 
   $existing_tables = array();
   while ($row = mysql_fetch_array($query))
   {
-    $table = preg_replace("/^$table_prefix/", "", $row[0]);
-    if (in_array($table, $g_ft_tables))
-      $existing_tables[] = $row[0];
+    $curr_table_name = $row[0];
+    foreach ($g_ft_tables as $table_without_prefix)
+    {
+      if ($curr_table_name == "{$table_prefix}$table_without_prefix")
+      {
+        $existing_tables[] = $curr_table_name;
+        break;
+      }
+    }
   }
 
   @mysql_close($link);
 
   return $existing_tables;
+}
+
+
+/**
+ * Helper function that's used on Step 2 to confirm that the Core Field Types module folder exists.
+ *
+ * @param string $module_folder
+ */
+function ft_install_check_module_available($module_folder)
+{
+  $folder = realpath(dirname(__FILE__) . "/../../modules/$module_folder");
+  return is_dir($folder);
+}
+
+
+/**
+ * Added in 2.1.5, this is a wrapped for the Core Field Types module's installation function. It's called on the
+ * final step of the installation script. The module is unique; it's installation function can only be called for
+ * fresh installations. It's called separately prior to other module installation functions to ensure the field
+ * type tables are populated prior to other custom field type modules.
+ */
+function ft_install_core_field_types($module_folder)
+{
+  require_once(realpath(dirname(__FILE__) . "/../../modules/$module_folder/library.php"));
+  return cft_install_module();
 }
 

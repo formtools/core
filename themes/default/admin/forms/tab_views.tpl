@@ -144,6 +144,7 @@
 
     <p>
       <input type="submit" name="update_views" value="{$LANG.word_update}" />
+      {template_hook location="admin_edit_form_views_tab_button_row"}
     </p>
 
     {/if}

@@ -538,7 +538,6 @@ function ft_generate_field_type_settings_js($options = array())
     FROM   {$g_table_prefix}field_type_settings
   ");
 
-
   $field_type_id_to_identifier_map = ft_get_field_type_id_to_identifier();
   $curr_js = array("{$namespace}.field_settings = {};");
 
@@ -558,7 +557,7 @@ function ft_generate_field_type_settings_js($options = array())
     while ($settings_row = mysql_fetch_assoc($settings_query))
     {
       $setting_id = $settings_row["setting_id"];
-      $field_label = $settings_row["field_label"];
+      $field_label = ft_eval_smarty_string($settings_row["field_label"]);
       $field_setting_identifier = $settings_row["field_setting_identifier"];
       $field_type = $settings_row["field_type"];
       $default_value = $settings_row["default_value"];
@@ -575,7 +574,7 @@ function ft_generate_field_type_settings_js($options = array())
       while ($options_row = mysql_fetch_assoc($options_query))
       {
         $value = $options_row["option_value"];
-        $text  = $options_row["option_text"];
+        $text  = ft_eval_smarty_string($options_row["option_text"]);
         $options[] = "{ value: \"$value\", text: \"$text\" }";
       }
       $options_js = implode(",$delimiter", $options);
@@ -819,6 +818,10 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
   foreach ($field_ids as $field_id)
   {
     $results[$field_id] = array();
+
+    if (!isset($field_id_to_field_type_id_map[$field_id]) || !isset($default_field_type_settings[$field_id_to_field_type_id_map[$field_id]]))
+      continue;
+
     $field_type_settings = $default_field_type_settings[$field_id_to_field_type_id_map[$field_id]];
     foreach ($field_type_settings as $setting_info)
     {

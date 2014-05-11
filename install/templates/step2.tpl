@@ -1,6 +1,6 @@
 {include file="../../install/templates/install_header.tpl"}
 
-  <h1>{$LANG.phrase_system_check}</h1>
+  <h2>{$LANG.phrase_system_check}</h2>
 
   <p>
     {$LANG.text_install_system_check}
@@ -8,7 +8,7 @@
 
   <table cellspacing="0" cellpadding="2" width="600" class="info">
   <tr>
-    <td width="160">{$LANG.phrase_php_version}</td>
+    <td width="220">{$LANG.phrase_php_version}</td>
     <td class="bold">{$phpversion}</td>
     <td width="100" align="center">
       {if $valid_php_version}
@@ -20,9 +20,9 @@
   </tr>
   {if $mysql_loaded}
   <tr>
-    <td>{$LANG.phrase_mysql_version}</td>
-    <td class="bold">{$mysql_get_client_info}</td>
-    <td align="center">
+    <td valign="top">{$LANG.phrase_mysql_version}</td>
+    <td valign="top" class="bold">{$mysql_get_client_info}</td>
+    <td valign="top" align="center">
       {if $overridden_invalid_db_version}
         <span class="orange">{$LANG.word_overridden|upper}</span>
       {else}
@@ -88,11 +88,26 @@
       {/if}
     </td>
   </tr>
+  <tr>
+    <td><a href="http://modules.formtools.org/core_field_types/" target="_blank">{$LANG.phrase_core_field_types}</a> module available?</td>
+    <td class="bold">
+      {if $core_field_types_module_available}
+        {$LANG.word_yes}
+      {else}
+        {$LANG.word_no}
+      {/if}
+    </td>
+    <td align="center">
+      {if $core_field_types_module_available}
+        <span class="green">{$LANG.word_pass|upper}</span>
+      {else}
+        <span class="red">{$LANG.word_fail|upper}</span>
+      {/if}
+    </td>
+  </tr>
   </table>
 
-  <br />
-
-  {if !$valid_php_version || !$mysql_loaded || !$valid_mysql_version || !$sessions_loaded}
+  {if !$valid_php_version || !$mysql_loaded || !$valid_mysql_version || !$sessions_loaded || !$core_field_types_module_available}
 
     <p class="error" style="padding: 6px">
       {$LANG.text_install_form_tools_server_not_supported}

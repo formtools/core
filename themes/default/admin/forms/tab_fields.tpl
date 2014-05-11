@@ -186,6 +186,7 @@
 
     <div class="margin_top_large">
       <input type="submit" name="update_fields" value="{$LANG.word_update}" />
+      {template_hook location="admin_edit_form_fields_tab_button_row"}
     </div>
   </form>
 

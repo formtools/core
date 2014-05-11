@@ -1,6 +1,6 @@
 {include file="../../install/templates/install_header.tpl"}
 
-  <h1>{$LANG.phrase_create_admin_account}</h1>
+  <h2>{$LANG.phrase_create_admin_account}</h2>
 
   {include file='messages.tpl'}
 
@@ -44,7 +44,7 @@
 
 	  </form>
 
-    <script type="text/javascript">
+    <script>
     document.create_account_form.first_name.focus();
     </script>
 

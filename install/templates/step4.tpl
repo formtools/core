@@ -1,6 +1,6 @@
 {include file="../../install/templates/install_header.tpl"}
 
-  <h1>{$LANG.phrase_create_config_file}</h1>
+  <h2>{$LANG.phrase_create_config_file}</h2>
 
   {include file='messages.tpl'}
 

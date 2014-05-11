@@ -22,14 +22,15 @@
       <td valign="top" class="pad_left_small">{$LANG.phrase_form_type}</td>
       <td>
         <select name="form_type" id="form_type">
-          <option value="external" {if $form_info.form_type == "external"}selected{/if}>{$LANG.phrase_external_your_own_form}</option>
-          <option value="internal" {if $form_info.form_type == "internal"}selected{/if}>{$LANG.word_internal}</option>
+          <option value="external" {if $form_info.form_type == "external"}selected="selected"{/if}>{$LANG.phrase_external_your_own_form}</option>
+          <option value="internal" {if $form_info.form_type == "internal"}selected="selected"{/if}>{$LANG.word_internal}</option>
+          {template_hook location="admin_edit_form_main_tab_form_type_dropdown"}
         </select>
       </td>
     </tr>
     </table>
 
-    <div id="external_form_settings" {if $form_info.form_type == "internal"}style="display:none"{/if}>
+    <div id="form_settings__external" class="form_type_specific_options" {if $form_info.form_type != "external"}style="display:none"{/if}>
       <div class="subtitle underline margin_bottom_large margin_top_large">{$LANG.phrase_external_form_info|upper}</div>
 
       <table class="list_table margin_bottom_large" width="100%" cellpadding="0" cellspacing="1">
@@ -138,8 +139,9 @@
         </tr>
       </tbody>
       </table>
-
     </div>
+
+    {template_hook location="admin_edit_form_main_tab_after_main_settings"}
 
     <div class="subtitle underline margin_bottom_large margin_top_large">{$LANG.phrase_permissions_other_settings|upper}</div>
 
@@ -237,6 +239,7 @@
 
     <p>
       <input type="submit" name="update_main" value="{$LANG.word_update}" />
+      {template_hook location="admin_edit_form_main_tab_button_row"}
     </p>
 
    </form>

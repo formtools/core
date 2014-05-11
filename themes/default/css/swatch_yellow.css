@@ -50,3 +50,6 @@ body .ui-widget-header {
 .inner_tabset .tab_row div.selected {
   color: #6e6200;
 }
+.sortable_group_header .sort:hover {
+  background-color: #d2d0c5;
+}

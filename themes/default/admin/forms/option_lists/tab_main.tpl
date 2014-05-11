@@ -151,6 +151,7 @@
 
     <div style="float: left" class="margin_top_large">
       <input type="submit" name="update" value="{$LANG.word_update}" />
+      {template_hook location="edit_option_list_main"}
     </div>
   </form>
 

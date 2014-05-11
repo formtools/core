@@ -23,7 +23,9 @@
   float: none;
   border-right: none;
   margin-bottom: 1px;
-  overflow: hidden;
+}
+.sortable li.sortable_row li {
+	overflow: hidden;
 }
 .groupable li.sortable_row {
   background: transparent url(../../../global/images/group_block.png) repeat-y left bottom;
@@ -250,7 +252,6 @@ body .padded_footer {
 .sortable_group_header .sort:hover {
   background-color: #beddc0;
 }
-
 .sortable_group_header .delete_group {
   float: right;
   background: transparent url(../images/delete_group.png) no-repeat -22px 3px;
@@ -258,12 +259,10 @@ body .padded_footer {
   height: 20px;
   margin: 6px 2px 6px 0px;
 }
-
 .sortable_group_header .delete_group:hover {
   background: transparent url(../images/delete_group.png) no-repeat 2px 3px;
   cursor: pointer;
 }
-
 .sortable .rows div.grouped_row .row_group li {
   border-bottom: 1px solid transparent;
 }

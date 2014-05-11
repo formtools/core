@@ -110,6 +110,7 @@
         </select>
       {/if}
       <input type="submit" name="add_option_list" value="{$LANG.phrase_create_new_option_list_rightarrow}" />
+      {template_hook location="option_list_button_row"}
     </p>
 
   </form>

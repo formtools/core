@@ -35,6 +35,7 @@
         </td>
       </tr>
     </table>
+    {template_hook location="add_form_page"}
   </form>
 
   <div id="add_external_form_dialog" class="hidden">

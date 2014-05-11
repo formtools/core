@@ -2,7 +2,7 @@
 
   {if $tables_already_exist}
 
-    <h1>Tables already exist!</h1>
+    <h2>Tables already exist!</h2>
 
     {include file='messages.tpl'}
 
@@ -27,7 +27,7 @@
 
   {else}
 
-    <h1>{$LANG.phrase_create_database_tables}</h1>
+    <h2>{$LANG.phrase_create_database_tables}</h2>
 
     {include file='messages.tpl'}
 

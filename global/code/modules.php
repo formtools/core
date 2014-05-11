@@ -909,6 +909,7 @@ function ft_upgrade_module($module_id)
   $module_info = ft_get_module($module_id);
   $module_folder = $module_info["module_folder"];
   $module_name = $module_info["module_name"];
+  $old_module_version_date = $module_info["module_date"];
   $current_db_version = $module_info["version"];
 
   $info = ft_get_module_info_file_contents($module_folder);
@@ -917,17 +918,36 @@ function ft_upgrade_module($module_id)
   if ($current_db_version == $new_version)
     return array(false, "");
 
-  // if the module has its own upgrade function, call it!
+  // if the module has its own upgrade function, call it. In Oct 2011, a BIG problem was identified
+  // in the way modules were being updated. For backward compatibility, the new upgrade function
+  // must be named [module folder]__update (not ...__upgrade). if the __update function is defined,
+  // it will be called instead of the older __upgrade one.
   @include_once("$g_root_dir/modules/$module_folder/library.php");
-  $upgrade_function_name = "{$module_folder}__upgrade";
-  if (function_exists($upgrade_function_name))
-    $upgrade_function_name($current_db_version, $new_version);
+
+  // NEW "update" function
+  $update_function_name = "{$module_folder}__update";
+  if (function_exists($update_function_name))
+  {
+    list($success, $message) = $update_function_name($module_info, $info);
+    if (!$success)
+    {
+    	return array($success, $message);
+    }
+  }
+  else
+  {
+	  // OLD "upgrade" function
+	  $upgrade_function_name = "{$module_folder}__upgrade";
+	  if (function_exists($upgrade_function_name))
+	  {
+	    $upgrade_function_name($current_db_version, $new_version);
+	  }
+  }
 
   // now, update the main module record
   $info = ft_sanitize($info);
 
   // we're assuming the module developer hasn't removed any of the required fields...
-
 
   // now check the language file contains the two required fields: module_name and module_description
   $lang_file = "$g_root_dir/modules/$module_folder/lang/{$info["origin_language"]}.php";

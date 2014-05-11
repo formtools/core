@@ -45,7 +45,7 @@ $(function() {
   });
 
   $(".ft_themes_dropdown").bind("change", function() {
-	var id = $(this).attr("id");
+    var id = $(this).attr("id");
     $("." + id + "_swatches").hide();
     $("#" + this.value + "_" + id + "_swatches").show();
   });
@@ -556,7 +556,7 @@ ft.create_dialog = function(info) {
     open:        function() {},
     close:       function() {},
     resize:      function() {},
-    resize_stop: function() {},
+    resize_stop: function() {}
   }, info);
 
   // if there's a popup_type specified and we want to add in an icon
@@ -724,7 +724,7 @@ ft.update_field_size_dropdown = function(el, target_el, options) {
     selected:             null,
     html_class:           null,
     field_type_size_list: page_ns.field_types["field_type_" + field_type_id],
-    field_size_labels:    page_ns.field_sizes,
+    field_size_labels:    page_ns.field_sizes
   }, options);
 
   var field_type_sizes = opts.field_type_size_list.split(",");

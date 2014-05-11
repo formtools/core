@@ -1,16 +1,12 @@
 {include file="../../install/templates/install_header.tpl"}
 
-  <h1>{$LANG.word_welcome}</h1>
+  <h2>{$LANG.word_welcome}</h2>
 
   {include file='messages.tpl'}
 
-  <div class="notify">
+  <div class="notify margin_bottom_large">
     {$LANG.text_install_already_upgraded}
   </div>
-
-  <p>
-    {$LANG.text_install_intro}
-  </p>
 
   <form action="{$same_page}" method="post">
     <table cellspacing="0" cellpadding="0">

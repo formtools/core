@@ -65,12 +65,10 @@ rsv.onCompleteHandler = function() { ft.select_all("selected_client_ids[]"); ret
 
 $(function() {
   mf_ns.num_multi_page_form_pages = $num_pages_in_multi_page_form;
+
   $("#form_type").bind("change", function() {
-    if (this.value == "internal") {
-      $("#external_form_settings").hide();
-    } else {
-      $("#external_form_settings").show();
-    }
+    $(".form_type_specific_options").hide();
+    $("#form_settings__" + this.value).show();
   });
 
   $("#submission_type").bind("change", function() {

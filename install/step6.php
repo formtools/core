@@ -10,6 +10,9 @@ ft_update_available_hooks();
 ft_update_module_list();
 ft_update_theme_list();
 
+// install the Core field types
+list($success, $message) = ft_install_core_field_types("core_field_types");
+
 $modules = ft_get_modules();
 
 foreach ($modules as $module_info)
@@ -20,7 +23,10 @@ foreach ($modules as $module_info)
   if ($is_installed == "yes")
     continue;
 
-  ft_install_module($module_id);
+  // this will run the installation scripts for any module in the /modules folder. Note: the special "Core Field Types"
+  // module has a dummy installation function that gets called here. That ensures the module is marked as "enabled", etc.
+  // even though we actually installed it above.
+  ft_install_module(array("install" => $module_id));
 }
 
 // send "Welcome to Form Tools" email

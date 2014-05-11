@@ -1660,6 +1660,38 @@ function ft_upgrade_form_tools()
     }
   }
 
+  // 2.1.5
+  $has_problems = false;
+  if ($old_version_info["release_date"] < 20111022)
+  {
+    $upgrade_attempted = true;
+
+    $setting = array("core_version_upgrade_track" => "unknown");
+    ft_set_settings($setting);
+
+    $queries = array();
+    $queries[] = "
+      ALTER TABLE {$g_table_prefix}forms
+      CHANGE form_type form_type ENUM('internal', 'external', 'form_builder')
+      CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'external'
+    ";
+
+    foreach ($queries as $query)
+    {
+      $result = @mysql_query($query);
+      if (!$result)
+      {
+        $has_problems = true;
+        $success      = false;
+        $mysql_error  = "<i>$query></i> [" . mysql_error() . "]";
+        $error_message = ft_eval_smarty_string($LANG["notify_problem_upgrading"], array("version" => $g_current_version));
+        $link_text     = ft_eval_smarty_string($LANG["phrase_upgrade_problem_link"], array("link" => "http://docs.formtools.org/upgrading/?page=problems_upgrading"));
+        $message = $error_message . " " . $mysql_error . "<br />" . $_LANG["phrase_upgrade_problem_link"] . " " . $link_text;
+        break;
+      }
+    }
+  }
+
   // ----------------------------------------------------------------------------------------------
 
 
@@ -1667,10 +1699,14 @@ function ft_upgrade_form_tools()
   // update the database
   if ($old_version_info["full"] != "{$g_current_version}-{$g_release_type}-{$g_release_date}" && !$has_problems)
   {
+  	$upgrade_track = ft_get_settings("core_version_upgrade_track");
+  	$upgrade_track .= ",{$g_current_version}-{$g_release_type}-{$g_release_date}";
+
     $new_settings = array(
       "program_version" => $g_current_version,
       "release_date"    => $g_release_date,
-      "release_type"    => $g_release_type
+      "release_type"    => $g_release_type,
+      "core_version_upgrade_track" => $upgrade_track
     );
     ft_set_settings($new_settings);
 

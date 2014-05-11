@@ -66,7 +66,8 @@ var rules = [];
 rules.push("required,g_db_hostname,{$LANG["validation_no_db_hostname"]}");
 rules.push("required,g_db_name,{$LANG["validation_no_db_name"]}");
 rules.push("required,g_db_username,{$LANG["validation_no_db_username"]}");
-
+rules.push("required,g_table_prefix,{$LANG["validation_no_table_prefix"]}");
+rules.push("is_alpha,g_table_prefix,{$LANG["validation_invalid_table_prefix"]}");
 rsv.displayType = "alert-all";
 rsv.errorTextIntro = "{$LANG["phrase_error_text_intro"]}";
 EOF;

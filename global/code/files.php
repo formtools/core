@@ -382,10 +382,47 @@ function ft_upload_file($folder, $filename, $tmp_location)
  * @param string $folder
  * @return boolean
  */
-function ft_delete_folder($folder)
+function ft_delete_folder($directory)
 {
+	if (substr($directory, -1) == '/')
+	{
+		$directory = substr($directory, 0, -1);
+	}
+	if (!file_exists($directory) || !is_dir($directory))
+	{
+		return false;
+	}
+	elseif (is_readable($directory))
+	{
+		$handle = opendir($directory);
+		while (false !== ($item = readdir($handle)))
+		{
+			if ($item != '.' && $item != '..')
+			{
+				$path = $directory.'/'.$item;
+				if (is_dir($path))
+				{
+					ft_delete_folder($path);
+				}
+				else
+				{
+					unlink($path);
+				}
+			}
+		}
+		closedir($handle);
+		if (!rmdir($directory))
+		{
+  		return false;
+	  }
+	}
+	return true;
+
+/*
   if (is_dir($folder))
+  {
     $handle = opendir($folder);
+  }
   else
     return false;
 
@@ -411,6 +448,7 @@ function ft_delete_folder($folder)
     return false;
 
   return true;
+  */
 }
 
 

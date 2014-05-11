@@ -53,3 +53,6 @@ body .ui-widget-header {
 .prevnext_links span a:hover {
   background-color: #001d5e;
 }
+.sortable_group_header .sort:hover {
+  background-color: #dbcce8;
+}

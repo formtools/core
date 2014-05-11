@@ -122,13 +122,15 @@
             <div class="medium_grey">{$module.description}</div>
           </td>
           <td valign="top" align="center">{$module.version}</td>
-          <td valign="top" align="center" {if $module.is_installed == "yes"}class="check_area"{/if}>
+          <td valign="top" align="center" {if $module.is_installed == "yes" && $module.module_folder != "core_field_types"}class="check_area"{/if}>
             {if $module.is_installed == "no"}
               <input type="hidden" class="module_id" value="{$module.module_id}" />
               <input type="hidden" class="module_folder" value="{$module.module_folder}" />
               <a href="{$same_page}?install={$module.module_id}"{if $module.is_premium == "yes"} class="is_premium"{/if}>{$LANG.word_install|upper}</a>
             {else}
-              <input type="checkbox" name="is_enabled[]" value="{$module.module_id}" {if $module.is_enabled == 'yes'}checked{/if} />
+              {if $module.module_folder != "core_field_types"}
+                <input type="checkbox" name="is_enabled[]" value="{$module.module_id}" {if $module.is_enabled == 'yes'}checked{/if} />
+              {/if}
             {/if}
           </td>
           <td valign="top" align="center">
@@ -141,7 +143,9 @@
             {/if}
           </td>
           <td valign="top" class="del2" align="center">
-            <a href="#" onclick="return mm.uninstall_module({$module.module_id})">{$LANG.word_uninstall|upper}</a>
+            {if $module.module_folder != "core_field_types"}
+              <a href="#" onclick="return mm.uninstall_module({$module.module_id})">{$LANG.word_uninstall|upper}</a>
+            {/if}
           </td>
         </tr>
 

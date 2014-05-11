@@ -20,7 +20,7 @@ $(function() {
   $("#key_section1").bind("paste", function(e) {
     $(this).removeAttr("maxlength");
     setTimeout(function() {
-      var license_key = $("#key_section1").val();
+      var license_key = $.trim($("#key_section1").val());
       $("#key_section1").attr("maxlength", "4").val(license_key.substring(0, 4));
       if (license_key.length >= 14) {
         $("#key_section2").val(license_key.substring(5, 9));
