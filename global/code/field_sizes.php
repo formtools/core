@@ -4,9 +4,9 @@
  * This file contains all functions relating to the available database field sizes. Added in 2.1.0 to
  * stop hardcoding all references.
  *
- * @copyright Encore Web Studios 2010
+ * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-0
+ * @package 2-1-x
  * @subpackage FieldTypes
  */
 

@@ -126,8 +126,8 @@
                       {/if}
                     </li>
                     <li class="sub_col3 check_area">
-                      <input type="checkbox" name="field_{$field_id}_include_on_redirect" id="field_{$field_id}_include_on_redirect" {if $field.include_on_redirect == "yes"}checked{/if}
-                        class="pass_on" />
+                      <input type="checkbox" name="field_{$field_id}_include_on_redirect" id="field_{$field_id}_include_on_redirect"
+                        {if $field.include_on_redirect == "yes"}checked="checked"{/if} class="pass_on" />
                     </li>
                     <li class="sub_col4">
                       {if $field.is_system_field == "yes"}

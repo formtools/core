@@ -3,8 +3,7 @@
   old messages from the Add Form processes. It's a little klutzy, in that it uses an if-else
   to determine the context, but it's much better having it in a single location.
 *}
-
-{ft_include file="header.tpl"}
+{include file="header.tpl"}
 
   {if $context == "error_page"}
 
@@ -95,4 +94,4 @@
     </div>
   </noscript>
 
-{ft_include file="footer.tpl"}
+{include file="footer.tpl"}

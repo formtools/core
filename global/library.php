@@ -15,8 +15,8 @@
  * zipfile.
  *
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @version 2.1.0
- * @package 2-1-0
+ * @version 2.1.x
+ * @package 2-1-x
  */
 
 
@@ -215,7 +215,7 @@ $g_set_sql_mode = true;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.1.1";
+$g_current_version = "2.1.2";
 
 /**
  * The release type: alpha, beta or main

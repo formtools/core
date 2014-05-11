@@ -5,7 +5,7 @@
  *
  * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-0
+ * @package 2-1-x
  * @subpackage General
  */
 
@@ -27,6 +27,8 @@ function ft_db_connect()
 {
   global $g_db_hostname, $g_db_username, $g_db_password, $g_db_name, $g_unicode, $g_db_ssl,
     $g_check_ft_sessions, $g_set_sql_mode;
+
+  extract(ft_process_hook_calls("start", array(), array()), EXTR_OVERWRITE);
 
   if ($g_db_ssl)
     $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true, MYSQL_CLIENT_SSL);

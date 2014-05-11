@@ -6,7 +6,7 @@
  *
  * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-0
+ * @package 2-1-x
  * @subpackage Accounts
  */
 
@@ -48,6 +48,18 @@ function ft_is_admin()
 	  return false;
 
   return true;
+}
+
+
+/**
+ * Returns the account ID of the currently logged in user - or returns the empty string if there's no user account.
+ *
+ * @return integer the account ID
+ */
+function ft_get_current_account_id()
+{
+	$account_id = isset($_SESSION["ft"]["account"]["account_id"]) ? $_SESSION["ft"]["account"]["account_id"] : "";
+	return $account_id;
 }
 
 

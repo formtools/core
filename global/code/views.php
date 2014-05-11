@@ -5,7 +5,7 @@
  *
  * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-0
+ * @package 2-1-x
  * @subpackage Views
  */
 
@@ -957,12 +957,12 @@ function ft_get_view_filter_sql($view_id)
     $account_info = $_SESSION["ft"]["account"];
 
     $placeholders = array(
-      "account_id" => $account_info["account_id"],
-      "first_name" => $account_info["first_name"],
-      "last_name" => $account_info["last_name"],
-      "email" => $account_info["email"],
+      "account_id"   => $account_info["account_id"],
+      "first_name"   => $account_info["first_name"],
+      "last_name"    => $account_info["last_name"],
+      "email"        => $account_info["email"],
       "company_name" => $account_info["settings"]["company_name"]
-        );
+    );
   }
 
   extract(ft_process_hook_calls("start", compact("placeholders", "is_client_account"), array("placeholders", "is_client_account")), EXTR_OVERWRITE);

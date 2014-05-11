@@ -3,9 +3,9 @@
 /**
  * This file defines all functions relating to the menus / internal navigation within Form Tools.
  *
- * @copyright Encore Web Studios 2010
+ * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-0
+ * @package 2-1-x
  * @subpackage Menus
  */
 
@@ -295,7 +295,7 @@ function ft_get_admin_menu()
 
 
 /**
- * Returns everything about a client menu.
+ * Returns everything about a client menu. Bit of a misnomer, since it also returns the admin menu.
  *
  * @param integer $menu_id
  * @return array

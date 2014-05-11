@@ -30,7 +30,7 @@
  *
  * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-0
+ * @package 2-1-x
  * @subpackage General
  */
 
@@ -355,10 +355,11 @@ function ft_update_available_hooks()
 
   $ft_root = realpath(dirname(__FILE__) . "/../../");
   $hook_locations = array(
+
     // code hooks
-  "process.php"        => "core",
-  "global/code"        => "core",
-  "global/api/api.php" => "api",
+    "process.php"        => "core",
+    "global/code"        => "core",
+    "global/api/api.php" => "api",
     "modules"            => "module",
 
     // template hooks

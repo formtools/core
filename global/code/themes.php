@@ -4,9 +4,9 @@
  * This file defines all functions relating to Form Tools themes. Note: the Theme setting tab/page
  * is updated via ft_update_theme_settings, found in the settings.php file.
  *
- * @copyright Encore Web Studios 2010
+ * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-0
+ * @package 2-1-x
  * @subpackage Themes
  */
 
@@ -339,6 +339,7 @@ function ft_display_module_page($template, $page_vars = array(), $theme = "")
   }
   $g_smarty->assign("g_success", $g_success);
   $g_smarty->assign("g_message", $g_message);
+
 
   $module_id = ft_get_module_id_from_module_folder($module_folder);
   $module_nav = ft_get_module_menu_items($module_id, $module_folder);

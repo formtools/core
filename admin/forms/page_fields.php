@@ -45,7 +45,6 @@ $php_self = ft_get_clean_php_self();
 
 $shared_characteristics_js = ft_get_field_type_setting_shared_characteristics_js();
 
-
 // compile the template fields
 $page_vars["page"]        = "fields";
 $page_vars["page_url"]    = ft_get_page_url("edit_form_fields", array("form_id" => $form_id));

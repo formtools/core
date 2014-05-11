@@ -5,7 +5,7 @@
  *
  * @copyright Encore Web Studios 2011
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-0
+ * @package 2-1-x
  * @subpackage Emails
  */
 
@@ -1387,7 +1387,7 @@ function ft_delete_email_template($email_id)
  *
  * @param string $template_str the email template (HTML or text)
  * @param integer $form_id
- * @param array $submission_placeholders this contains all the info about the
+ * @param array $submission_placeholders
  */
 function _ft_extract_email_attachment_info($template_str, $form_id, $submission_placeholders)
 {
@@ -1443,6 +1443,27 @@ function _ft_extract_email_attachment_info($template_str, $form_id, $submission_
   {
     foreach ($matches[2] as $file_and_relative_path)
     {
+      if (is_file("$g_root_dir/$file_and_relative_path"))
+      {
+        $pathinfo = pathinfo($file_and_relative_path);
+        $file_name = $pathinfo["basename"];
+
+        $info = array(
+          "file_and_path" => "$g_root_dir/$file_and_relative_path",
+          "filename"      => $file_name
+        );
+        $attachment_info[] = $info;
+      }
+    }
+    $template_str = preg_replace($file_attachments_regexp, "", $template_str);
+  }
+
+  $file_attachments_regexp = '/\{\$attachment\s+fieldvalue=("|\')(.+)("|\')\}/';
+  if (preg_match_all($file_attachments_regexp, $template_str, $matches))
+  {
+    foreach ($matches[2] as $file_and_relative_path)
+    {
+      $file_and_relative_path = ft_eval_smarty_string("{\$" . $file_and_relative_path . "}", $submission_placeholders);
       if (is_file("$g_root_dir/$file_and_relative_path"))
       {
         $pathinfo = pathinfo($file_and_relative_path);
