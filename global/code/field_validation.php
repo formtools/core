@@ -277,7 +277,7 @@ function ft_get_php_field_validation_rules($field_ids)
 
   $query = mysql_query("
 	  SELECT *
-	  FROM   ft_field_validation fv, ft_field_type_validation_rules ftvr
+	  FROM   {$g_table_prefix}field_validation fv, {$g_table_prefix}field_type_validation_rules ftvr
 	  WHERE  fv.field_id IN ($field_id_str) AND
 	         fv.rule_id = ftvr.rule_id AND
 	         ftvr.custom_function_required != 'yes'
