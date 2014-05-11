@@ -14,7 +14,7 @@
  * overwritten, which makes upgrading a simple matter of overwriting all old files from the latest
  * zipfile.
  *
- * @copyright Benjamin Keen 2012
+ * @copyright Benjamin Keen 2014
  * @author Benjamin Keen <ben.keen@gmail.com>
  * @version 2.2.x
  * @package 2-2-x
@@ -236,7 +236,7 @@ $g_max_ft_form_fields = "";
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.2.6";
+$g_current_version = "2.2.7";
 
 /**
  * The release type: alpha, beta or main
@@ -246,7 +246,7 @@ $g_release_type = "main";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20130629";
+$g_release_date = "20140214";
 
 /**
  * The minimum required PHP version needed to run Form Tools.
