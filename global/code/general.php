@@ -1662,6 +1662,7 @@ function ft_display_serious_error($error)
     width: 600px;
     text-align: left;
     margin: 30px auto;
+    word-wrap: break-word;
   }
   </style>
 </head>

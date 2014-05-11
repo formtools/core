@@ -205,7 +205,7 @@ $(function() {
 
   // for the Edit Field validation tab
   $("#validation_table").bind("change", function(e) {
-  if (!$(e.target).hasClass("v_checked")) {
+    if (!$(e.target).hasClass("v_checked")) {
       return;
     }
     var error_str_field = $(e.target).closest("tr").find(".validation_error_message");
@@ -237,6 +237,9 @@ var fields_ns = {
   edit_field_dialog_opened: false,
   cached_field_settings_markup: [],
   cached_loaded_extended_field: [],
+  limit_fields_enabled: false,
+  max_fields: null,
+  num_fields: null, // initiated on page load, and contains the TOTAL number of fields in the form, regardless of the current page
 
   // this is used to store the contents of the Edit Field popup as the user navigates from field to field. It
   // works by keeping track of ALL changed fields, and only when the user clicks the "Save Changes" field
@@ -363,6 +366,20 @@ fields_ns.add_fields = function(e) {
     return false;
   }
 
+  // if the max number of fields is in place, check they're not adding more than they're allowed
+  if (fields_ns.limit_fields_enabled) {
+	var num_fields_on_page = fields_ns.get_num_fields_on_page();
+    var remaining_num_fields = fields_ns.max_fields - num_fields_on_page;
+    fields_ns.update_max_field_count();
+    if (remaining_num_fields <= 0) {
+      return false;
+    }
+
+    if (num_fields > remaining_num_fields) {
+      num_fields = remaining_num_fields;
+    }
+  }
+
   var group = $("#group_new_fields").attr("checked");
   var new_row_template = $("#new_row_template").html();
   var fragment = document.createDocumentFragment();
@@ -425,13 +442,16 @@ fields_ns.add_fields = function(e) {
     scroll_content: $(".scroll-content")
   });
 
+  fields_ns.num_fields++;
+  fields_ns.update_max_field_count();
+
   return false;
 }
 
 
 /**
  * Helper function to find out the maximum number of rows that can be visible on the page, as determined
- * by the user's window height. This is used for a little visual tricker: scrolling the field columns actually
+ * by the user's window height. This is used for a little visual trickery: scrolling the field columns actually
  * only scrolls the visible ones - not others. This significantly improves the responsiveness of the UI for
  * forms with large numbers of fields.
  */
@@ -1841,4 +1861,40 @@ fields_ns._get_default_error_message = function(field_type_id, rule_id) {
     }
   }
   return error;
+}
+
+
+/**
+ * Helper function to return the number of fields on the page.
+ */
+fields_ns.get_num_fields_on_page = function() {
+  return $("#rows .row_group").length;
+}
+
+
+/**
+ * Added in 2.2.3. This is used when the $g_max_ft_form_fields global is set, which limits the number of
+ * fields that a form may contain. This is called on page load and any time a user adds/deletes a field.
+ */
+fields_ns.update_max_field_count = function() {
+  if (!fields_ns.limit_fields_enabled) {
+    return;
+  }
+
+  var remaining_fields = fields_ns.max_fields - fields_ns.num_fields;
+  $("#max_field_count").html(fields_ns.max_fields);
+  $("#curr_field_count").html(fields_ns.num_fields);
+
+  if (remaining_fields <= 0) {
+    $("#add_num_fields,#new_field_position,#group_new_fields,#add_field").attr("disabled", "disabled");
+  } else {
+    $("#add_num_fields,#new_field_position,#group_new_fields,#add_field").removeAttr("disabled");
+  }
+}
+
+
+fields_ns.delete_field = function(el) {
+  sortable_ns.delete_row("edit_fields", el);
+  fields_ns.num_fields--;
+  setTimeout(function() { fields_ns.update_max_field_count(); }, 500);
 }

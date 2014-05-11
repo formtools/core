@@ -47,7 +47,7 @@
               {if $forms|@count < $num_forms}
                 value="{$LANG.phrase_show_all} ({$num_forms})" class="bold"
               {else}
-                value="{$LANG.phrase_show_all}" class="light_grey" disabled
+                value="{$LANG.phrase_show_all}" class="light_grey" disabled="disabled"
               {/if} />
           </td>
         </tr>
@@ -64,6 +64,14 @@
       </div>
 
     {else}
+
+      {if $max_forms_reached}
+        <div class="notify margin_bottom_large">
+          <div style="padding:6px">
+            {$notify_max_forms_reached}
+          </div>
+        </div>
+      {/if}
 
       {$pagination}
 
@@ -262,11 +270,13 @@
 
   {/if}
 
-  <form method="post" action="add/">
-    <p>
-      <input type="submit" name="new_form" value="{$LANG.phrase_add_form}" />
-    </p>
-  </form>
+  {if !$max_forms_reached}
+    <form method="post" action="add/">
+      <p>
+        <input type="submit" name="new_form" value="{$LANG.phrase_add_form}" />
+      </p>
+    </form>
+  {/if}
 
   {template_hook location="admin_forms_list_bottom"}
 

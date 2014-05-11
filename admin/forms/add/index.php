@@ -20,6 +20,8 @@ if (isset($request["new_form"]))
   $_SESSION["ft"]["add_form_form_id"] = "";
 }
 
+$num_forms = ft_get_form_count();
+
 // ------------------------------------------------------------------------------------------------
 
 // compile the header information
@@ -27,6 +29,10 @@ $page_values = array();
 $page_vars["page"]     = "add_form_choose_type";
 $page_vars["page_url"] = ft_get_page_url("add_form_choose_type");
 $page_vars["head_title"] = "{$LANG['phrase_add_form']}";
+$page_vars["max_forms_reached"] = (!empty($g_max_ft_forms) && $num_forms >= $g_max_ft_forms) ? true : false;
+$page_vars["max_forms"] = $g_max_ft_forms;
+$page_vars["notify_max_forms_reached"] = ft_eval_smarty_string($LANG["notify_max_forms_reached"], array("max_forms" => $g_max_ft_forms));
+
 $page_vars["head_js"] =<<< END
 
 $(function() {

@@ -1283,4 +1283,3 @@ sf_ns.submit_form_response = function(info) {
     ft.display_message("next_step_message", false, info.responseText);
   }
 }
-

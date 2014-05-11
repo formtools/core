@@ -266,10 +266,12 @@ function ft_validate_submission($form_id, $editable_field_ids, $request)
 }
 
 
-
 function ft_get_php_field_validation_rules($field_ids)
 {
   global $g_table_prefix;
+
+  if (empty($field_ids))
+    return array();
 
 	$field_id_str = implode(",", $field_ids);
 

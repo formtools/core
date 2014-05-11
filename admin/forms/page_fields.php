@@ -47,6 +47,7 @@ $field_validation_js = ft_generate_field_type_validation_js();
 $php_self = ft_get_clean_php_self();
 $shared_characteristics_js = ft_get_field_type_setting_shared_characteristics_js();
 
+
 // compile the template fields
 $page_vars["page"]         = "fields";
 $page_vars["page_url"]     = ft_get_page_url("edit_form_fields", array("form_id" => $form_id));
@@ -57,6 +58,8 @@ $page_vars["order_start_number"] = 1;
 $page_vars["num_fields_per_page"] = "all";
 $page_vars["pagination"] = "";
 $page_vars["sortable_id"] = $sortable_id;
+$page_vars["limit_fields"] = (isset($g_max_ft_form_fields) && !empty($g_max_ft_form_fields)) ? true : false;
+
 
 if ($num_fields_per_page != "all")
 {
@@ -72,7 +75,7 @@ if ($num_fields_per_page != "all")
 
 $page_vars["head_string"] =<<< END
   <script src="{$g_root_url}/global/scripts/sortable.js?v=2"></script>
-  <script src="{$g_root_url}/global/scripts/manage_fields.min.js"></script>
+  <script src="{$g_root_url}/global/scripts/manage_fields.js?v=3"></script>
 END;
 
 $replacement_info = array("views_tab_link" => "$php_self?page=views&form_id=$form_id");
@@ -93,6 +96,7 @@ $page_vars["js_messages"] = array("validation_no_form_field_name", "validation_i
 );
 
 $edit_field_onload_js = "";
+$limit_fields_enabled_js = ($page_vars["limit_fields"]) ? "fields_ns.limit_fields_enabled = true;\n  fields_ns.max_fields = $g_max_ft_form_fields;" : "";
 if (isset($_GET["field_id"])) {
   $edit_field_onload_js =<<< EOF
   var row_group = $(".sr_order[value={$_GET["field_id"]}]").closest(".row_group");
@@ -116,7 +120,10 @@ $field_validation_js
 
 $(function() {
   ft.init_inner_tabs();
+  fields_ns.num_fields = $total_form_fields;
   $edit_field_onload_js
+  $limit_fields_enabled_js
+  fields_ns.update_max_field_count();
 });
 END;
 

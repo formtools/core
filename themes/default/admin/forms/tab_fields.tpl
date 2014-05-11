@@ -40,6 +40,7 @@
       <input type="hidden" class="tabindex_col_selectors" value=".rows .col2 input|.rows .col3 .sub_col1 input|.rows .col3 .sub_col2 select|.rows .col3 .sub_col3 input|.rows .col3 .sub_col4 select|.rows .col3 .sub_col5 select|.rows .col3 .sub_col6 input" />
       <input type="hidden" class="sortable__edit_tooltip" value="{$LANG.phrase_edit_field}" />
       <input type="hidden" class="sortable__delete_tooltip" value="{$LANG.phrase_delete_field}" />
+      <input type="hidden" class="sortable__custom_delete_handler" value="fields_ns.delete_field" />
       <input type="hidden" name="sortable_row_offset" class="sortable__row_offset" value="{$order_start_number}" />
 
       <ul class="header_row">
@@ -206,10 +207,15 @@
         </select>
         <input type="checkbox" id="group_new_fields" />
           <label for="group_new_fields">{$LANG.phrase_group_rows}</label>
-        <input type="submit" name="add_field" value="{$LANG.word_add}" />
+        <input type="submit" name="add_field" id="add_field" value="{$LANG.word_add}" />
       </td>
     </tr>
     </table>
+    {if $limit_fields}
+      <div class="right medium_grey italic">{$LANG.text_limit_fields_info}</div>
+    {/if}
+    <div class="clear"></div>
+
   </form>
 
   <div class="hidden" id="new_row_template">

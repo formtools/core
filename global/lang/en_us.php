@@ -1251,3 +1251,7 @@ $LANG["notify_unknown_error"] = "An unknown error has occurred.";
 $LANG["validation_invalid_admin_username"] = "Your username may only consist of a-Z, 0-9, _, . and the @ character.";
 $LANG["validation_invalid_client_username"] = "The client's user name may only consist of a-Z, 0-9, _, . and the @ character.";
 $LANG["validation_invalid_client_username2"] = "Sorry, usernames may only consist of a-Z, 0-9, _, . and the @ character. Please enter a new username.";
+
+// New in 2.2.3
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
+$LANG["text_limit_fields_info"] = "You have used <span id=\"curr_field_count\" class=\"medium_grey italic bold\"></span> of <span id=\"max_field_count\" class=\"medium_grey italic bold\"></span> permitted fields.";

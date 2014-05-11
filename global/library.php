@@ -218,6 +218,16 @@ $g_set_sql_mode = true;
  */
 $g_hide_upgrade_link = false;
 
+/**
+ * Limits the number of forms that can be stored in the database.
+ */
+$g_max_ft_forms = "";
+
+/**
+ * Limits the number of fields that can be stored for a form.
+ */
+$g_max_ft_form_fields = "";
+
 // -------------------------------------------------------------------------------------------------
 
 
@@ -226,7 +236,7 @@ $g_hide_upgrade_link = false;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.2.2";
+$g_current_version = "2.2.3";
 
 /**
  * The release type: alpha, beta or main
@@ -236,7 +246,7 @@ $g_release_type = "main";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20120301";
+$g_release_date = "20120423";
 
 /**
  * The minimum required PHP version needed to run Form Tools.
