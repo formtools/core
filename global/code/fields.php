@@ -1039,6 +1039,7 @@ function ft_update_field($form_id, $field_id, $tab_info)
                field_type_id = '$field_type_id',
                field_size = '$field_size',
                field_title = '$display_name',
+               data_type = '$data_type',
                include_on_redirect = '$include_on_redirect',
                col_name = '$col_name'
         WHERE  field_id = $field_id
