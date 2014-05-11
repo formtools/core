@@ -5,10 +5,10 @@ ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
 
 $num_forms = ft_get_form_count();
-if ($num_forms > $g_max_ft_forms) // note it's not >=
+if (!empty($g_max_ft_forms) && $num_forms > $g_max_ft_forms) // note it's not >=
 {
-	header("location: ../index.php");
-	exit;
+  header("location: ../index.php");
+  exit;
 }
 
 if (isset($request["code"]) || isset($request["direct"]))
