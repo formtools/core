@@ -1637,6 +1637,8 @@ function _ft_alter_table_column($table, $old_col_name, $new_col_name, $col_type)
     $message = mysql_error();
   }
 
+  extract(ft_process_hook_calls("end", compact("table", "old_col_name", "new_col_name", "col_type"), array()), EXTR_OVERWRITE);
+
   return array($success, $message);
 }
 

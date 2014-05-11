@@ -215,7 +215,7 @@ $g_set_sql_mode = true;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.1.6";
+$g_current_version = "2.1.7";
 
 /**
  * The release type: alpha, beta or main
