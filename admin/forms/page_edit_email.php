@@ -91,7 +91,9 @@ END;
 $page_vars["head_js"] =<<< END
 rsv.onCompleteHandler = function() {
   ft.select_all($("#selected_edit_submission_views"));
-  ft.select_all($("#selected_when_sent_views"));
+  if ($("#selected_when_sent_views").length) {
+    ft.select_all($("#selected_when_sent_views"));
+  }
   return true;
 }
 

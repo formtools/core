@@ -107,7 +107,6 @@ ol, ul {
 
 /* jQuery modal dialog style override */
 body .ui-widget-overlay {
-/*  background: url(smoothness/images/ui-bg_flat_0_444444_40x100.png) repeat-x scroll 50% 50% #444444; */
   opacity: 0.4;
 }
 body .ui-dialog .ui-dialog-content {
@@ -133,14 +132,11 @@ body .ui-dialog .tabbed_dialog {
 .left {
   float: left;
 }
-
 input[type=text].lang_placeholder_field {
-/*  background-image: url(../images/lang_placeholder_field_icon.png); */
   background-repeat: no-repeat;
   background-position: right;
   padding-right: 18px;
 }
-
 table.padded_table td {
   padding: 6px;
 }
@@ -148,7 +144,9 @@ table.padded_table td {
   width: 100%;
   height: 480px;
 }
-
 .ellipsis {
   overflow: hidden;
+}
+.req {
+  color: red;
 }

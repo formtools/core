@@ -370,11 +370,13 @@ switch ($action)
   case "get_extended_field_settings":
     $field_id      = $request["field_id"];
     $field_type_id = $request["field_type_id"];
-    $settings = ft_get_extended_field_settings($field_id, "", true);
+    $settings      = ft_get_extended_field_settings($field_id, "", true);
+    $validation    = ft_get_field_validation($field_id);
     $info = array(
       "field_id"      => $field_id,
       "field_type_id" => $field_type_id,
-      "settings"      => $settings
+      "settings"      => $settings,
+      "validation"    => $validation
     );
     echo ft_convert_to_json($info);
     break;

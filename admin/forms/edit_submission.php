@@ -52,6 +52,7 @@ $grouped_fields = ft_get_grouped_view_fields($view_id, $tab_number, $form_id, $s
 
 $page_field_ids      = array();
 $page_field_type_ids = array();
+$page_has_required_fields = false;
 foreach ($grouped_fields as $group)
 {
   foreach ($group["fields"] as $field_info)
@@ -59,6 +60,9 @@ foreach ($grouped_fields as $group)
     $page_field_ids[] = $field_info["field_id"];
     if (!in_array($field_info["field_type_id"], $page_field_type_ids))
       $page_field_type_ids[] = $field_info["field_type_id"];
+
+    if ($field_info["is_required"])
+      $page_has_required_fields = true;
   }
 }
 $page_field_types = ft_get_field_types(true, $page_field_type_ids);
@@ -100,6 +104,8 @@ list($prev_link_html, $search_results_link_html, $next_link_html) = _ft_code_get
 $submission_placeholders = ft_get_submission_placeholders($form_id, $submission_id);
 $edit_submission_page_label = ft_eval_smarty_string($form_info["edit_submission_page_label"], $submission_placeholders);
 
+$validation_js = ft_generate_submission_js_validation($grouped_fields);
+
 
 // get all the shared resources
 $settings = ft_get_settings("", "core");
@@ -128,6 +134,7 @@ $page_vars["tab_number"] = $tab_number;
 $page_vars["grouped_fields"] = $grouped_fields;
 $page_vars["field_types"] = $page_field_types;
 $page_vars["previous_link_html"] = $prev_link_html;
+$page_vars["page_has_required_fields"] = $page_has_required_fields;
 $page_vars["search_results_link_html"] = $search_results_link_html;
 $page_vars["next_link_html"] = $next_link_html;
 $page_vars["tab_has_editable_fields"] = count($editable_tab_fields) > 0;
@@ -136,13 +143,16 @@ $page_vars["edit_submission_page_label"] = $edit_submission_page_label;
 $page_vars["page_field_ids"] = $page_field_ids;
 $page_vars["page_field_ids_str"] = implode(",", $page_field_ids);
 $page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected", "confirm_delete_submission_file",
-  "phrase_please_confirm", "word_no", "word_yes");
+  "phrase_please_confirm", "word_no", "word_yes", "word_close", "phrase_validation_error");
 $page_vars["head_string"] =<<< EOF
   <script src="$g_root_url/global/scripts/manage_submissions.js"></script>
   <script src="$g_root_url/global/scripts/field_types.php"></script>
   <link rel="stylesheet" href="$g_root_url/global/css/field_types.php" type="text/css" />
 $shared_resources
 EOF;
+$page_vars["head_js"] =<<< END
+$validation_js
+END;
 
 
 ft_display_page("admin/forms/edit_submission.tpl", $page_vars);

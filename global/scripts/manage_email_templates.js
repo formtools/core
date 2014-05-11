@@ -120,6 +120,7 @@ emails_ns.add_custom_recipient = function(f) {
     "valid_email,custom_recipient_email," + g.messages["validation_invalid_email"]
       ];
 
+  var error = null;
   if (rsv.validate(f, rules)) {
     emails_ns._add_recipient({
       name:                $("#custom_recipient_name").val(),

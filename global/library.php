@@ -215,7 +215,7 @@ $g_set_sql_mode = true;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.1.3";
+$g_current_version = "2.1.4";
 
 /**
  * The release type: alpha, beta or main
@@ -225,7 +225,7 @@ $g_release_type = "main";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110930";
+$g_release_date = "20111007";
 
 /**
  * The minimum required PHP version needed to run Form Tools.
@@ -288,6 +288,8 @@ $g_ft_tables = array(
   "field_type_setting_options",
   "field_type_settings",
   "field_types",
+  "field_type_validation_rules",
+  "field_validation",
   "form_email_fields",
   "form_fields",
   "forms",
@@ -331,6 +333,7 @@ require_once(dirname(__FILE__) . "/code/emails.php");
 require_once(dirname(__FILE__) . "/code/fields.php");
 require_once(dirname(__FILE__) . "/code/field_sizes.php");
 require_once(dirname(__FILE__) . "/code/field_types.php");
+require_once(dirname(__FILE__) . "/code/field_validation.php");
 require_once(dirname(__FILE__) . "/code/files.php");
 require_once(dirname(__FILE__) . "/code/forms.php");
 require_once(dirname(__FILE__) . "/code/general.php");

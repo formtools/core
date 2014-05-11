@@ -576,6 +576,9 @@ function ft_get_view_field_group_tabs($view_id)
  *
  * @param integer $view_id
  * @param integer $tab_number
+ * @param integer $form_id       - this is optional. If this and the next $submission_id param is defined,
+ *                                 details about the actual form submission is returned as well
+ * @param integer $submission_id
  * @return array
  */
 function ft_get_grouped_view_fields($view_id, $tab_number = "", $form_id = "", $submission_id = "")
@@ -617,6 +620,48 @@ function ft_get_grouped_view_fields($view_id, $tab_number = "", $form_id = "", $
       $field_ids[]   = $row["field_id"];
       $fields_info[] = $row;
     }
+
+    // for efficiency reasons, we just do a single query to find all validation rules for the all relevant fields
+    if (!empty($field_ids))
+    {
+      $field_ids_str = implode(",", $field_ids);
+      $validation_query = mysql_query("
+        SELECT *
+        FROM   {$g_table_prefix}field_validation fv, {$g_table_prefix}field_type_validation_rules ftvr
+        WHERE  fv.field_id IN ($field_ids_str) AND
+               fv.rule_id = ftvr.rule_id
+      ");
+
+      $rules_by_field_id = array();
+      while ($rule_info = mysql_fetch_assoc($validation_query))
+      {
+    	  $field_id = $rule_info["field_id"];
+      	if (!array_key_exists($field_id, $rules_by_field_id))
+      	{
+      	  $rules_by_field_id[$field_id]["is_required"] = false;
+    	    $rules_by_field_id[$field_id]["rules"] = array();
+      	}
+
+        $rules_by_field_id[$field_id]["rules"][] = $rule_info;
+        if ($rule_info["rsv_rule"] == "required" || ($rule_info["rsv_rule"] == "function" && $rule_info["custom_function_required"] == "yes"))
+        {
+      	  $rules_by_field_id[$field_id]["is_required"] = true;
+        }
+      }
+    }
+
+    // now merge the original field info with the new validation rules. "required" is a special validation rule: that's
+    // used to determine whether or not an asterix should appear next to the field. As such, we pass along a
+    // custom "is_required" key
+    $updated_field_info = array();
+    foreach ($fields_info as $field_info)
+    {
+    	$curr_field_id = $field_info["field_id"];
+    	$field_info["validation"] = array_key_exists($curr_field_id, $rules_by_field_id) ? $rules_by_field_id[$curr_field_id]["rules"] : array();
+    	$field_info["is_required"] = array_key_exists($curr_field_id, $rules_by_field_id) ? $rules_by_field_id[$curr_field_id]["is_required"] : false;
+      $updated_field_info[] = $field_info;
+    }
+    $fields_info = $updated_field_info;
 
     // now, if the submission ID is set it returns an additional submission_value key
     if (!empty($field_ids))

@@ -181,3 +181,6 @@ body .scroll-bar-wrap .ui-slider-handle {
 #edit_field .check_area:hover {
   background-color: #f2f2f2 !important;
 }
+.validation_error_message {
+  width: 100%;
+}

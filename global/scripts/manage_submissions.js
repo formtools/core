@@ -6,8 +6,9 @@
  */
 
 // our namespace for manage submission functions
-if (typeof ms == "undefined")
+if (typeof ms == "undefined") {
   var ms = {};
+}
 
 
 /**
@@ -15,17 +16,17 @@ if (typeof ms == "undefined")
  * download and Printer-Friendly page. If the "selected" option is selected, it checks that the
  * user has selected at least one submission.
  *
+ * TODO
+ *
  * @param string action what to do: "print_preview" / ""
  * @param string select_option
  * @return boolean
  */
 ms.check_selected = function(action, select_option) {
   var selected_ids = ms.get_selected_submissions();
-
   if (select_option == "all") {
     return true;
   }
-
   if (!selected_ids.length) {
     if (action == "print_preview") {
       alert(g.messages["validation_select_rows_to_view"]);
@@ -112,9 +113,9 @@ ms.delete_submissions = function(page) {
 
   var message = "";
   if (ms.selected_submission_ids.length == 1) {
-	  message = g.messages["confirm_delete_submission"];
+    message = g.messages["confirm_delete_submission"];
   } else {
-	  message = g.messages["confirm_delete_submissions"];
+    message = g.messages["confirm_delete_submissions"];
   }
 
   ft.create_dialog({
@@ -542,4 +543,36 @@ ms.check_valid_date = function() {
   } else {
     return true;
   }
+}
+
+
+ms.submit_form = function(f, error_info) {
+  if (!error_info.length) {
+    return true;
+  }
+  var first_el = null;
+  var error_str = "<ul>";
+  for (var i=0; i<error_info.length; i++) {
+    error_str += "<li>" + error_info[i][1] + "</li>";
+    if (first_el == null) {
+      first_el = error_info[i][0];
+    }
+  }
+  error_str += "</ul>";
+
+  ft.create_dialog({
+	title:      g.messages["phrase_validation_error"],
+    popup_type: "error",
+    width:      450,
+    content:    error_str,
+    buttons:    [{
+      text:  g.messages["word_close"],
+      click: function() {
+        $(this).dialog("close");
+        $(first_el).focus().select();
+      }
+    }]
+  })
+
+  return false;
 }

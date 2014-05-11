@@ -102,7 +102,7 @@ $(function() {
     var field_settings = page_ns.field_settings["field_type_" + field_type_id];
     var field_type_label = $("#edit_field__field_type option[value=" + field_type_id + "]").text();
     if (field_settings == undefined) {
-      $("#edit_field_template .inner_tab2").html(field_type_label + " " + g.messages["word_settings"] + " (" + field_settings.length + ")");
+      $("#edit_field_template .inner_tab2").html(field_type_label + " " + g.messages["word_settings"] + " (0)");
       $("#edit_field__field_settings").html("<div class=\"notify\"><div style=\"padding:6px\">" + g.messages["notify_no_field_settings"] + "</div></div>");
     } else {
       $("#edit_field_template .inner_tab2").html(field_type_label + " " + g.messages["word_settings"] + " (" + field_settings.length + ")");
@@ -113,6 +113,11 @@ $(function() {
     $(".use_default").each(function() {
       $(this).attr("disabled", "");
     });
+
+    // recreate the validation tab
+    var html = fields_ns.generate_field_type_validation_table(field_type_id);
+    fields_ns.update_validation_tab_label(field_type_id);
+    $("#validation_table").html(html);
   });
 
   $("#edit_field__field_type").live("blur", function() {
@@ -128,44 +133,24 @@ $(function() {
 
 
   // any time the user changes a value in any of the field in the Edit Field dialog, it stores the changes in
-  // fields_ns.memory. When they click Save Changes all changes are sent to the server for updating
-  $(".inner_tab_content1").bind("change", function(e) {
+  // fields_ns.memory. When they click Save Changes all changes are sent to the server for updating. This
+  // was simplified in 2.1.4 so that any change ANYWHERE, resubmits everything. It was getting absurdly complicated.
+  $(".inner_tab_content").bind("change", function(e) {
     if (typeof fields_ns.memory["field_" + fields_ns.__current_field_id] == 'undefined') {
-      fields_ns.memory["field_" + fields_ns.__current_field_id] = { tab1: null, tab2: null };
-      fields_ns.memory.changed_field_ids.push(fields_ns.__current_field_id);
-    }
-    fields_ns.memory["field_" + fields_ns.__current_field_id].tab1 = $("#edit_field_form_tab1").serializeArray();
-
-    // important! The Field Type field is special: that determines the contents of the second tab. So any time it changes,
-    // we also memorize the contents of the second tab to pass to the server. This ensures the server-side code always has
-    // the latest data to work with
-    if ($(e.target).attr("id") == "edit_field__field_type") {
-      fields_ns.memory["field_" + fields_ns.__current_field_id].tab2 = $("#edit_field_form_tab2").serializeArray();
-    }
-  });
-
-  // this seems a little odd, but it makes the script more intuitive, I think. If the user changes one of the main
-  // settings on the main page, then edits the custom field type settings via the dialog window, we need to save
-  // ALL info about the field - including the info on the main tab. Hence, any time they change content on the second
-  // tab, it saves the whole shebang
-  $(".inner_tab_content2").bind("change", function(e) {
-    if (typeof fields_ns.memory["field_" + fields_ns.__current_field_id] == 'undefined') {
-      fields_ns.memory["field_" + fields_ns.__current_field_id] = { tab1: null, tab2: null };
+      fields_ns.memory["field_" + fields_ns.__current_field_id] = { tab1: null, tab2: null, tab3: null };
       fields_ns.memory.changed_field_ids.push(fields_ns.__current_field_id);
     }
     fields_ns.memory["field_" + fields_ns.__current_field_id].tab1 = $("#edit_field_form_tab1").serializeArray();
     fields_ns.memory["field_" + fields_ns.__current_field_id].tab2 = $("#edit_field_form_tab2").serializeArray();
+    fields_ns.memory["field_" + fields_ns.__current_field_id].tab3 = $("#edit_field_form_tab3").serializeArray();
   });
-
 
   // this updates the list of field sizes in the page whenever the user changes the type
   $(".field_types").live("change keyup", function(e) {
     var tmp = $(this).attr("name").match(/field_(.+)_type_id/);
     var curr_field_id = tmp[1];
-
     var field_sizes_div = $(this).closest(".scroll-content").find(".field_sizes_div");
     var curr_value      = field_sizes_div.find("[name=field_" + curr_field_id + "_size]").val();
-
     ft.update_field_size_dropdown(this, field_sizes_div, {
       name:       "field_" + curr_field_id + "_size",
       html_class: "field_sizes",
@@ -216,6 +201,23 @@ $(function() {
     data:     { action: "get_form_list" },
     success:  fields_ns.get_form_list_response,
     error:    ft.error_handler
+  });
+
+  // for the Edit Field validation tab
+  $("#validation_table").bind("change", function(e) {
+  if (!$(e.target).hasClass("v_checked")) {
+      return;
+    }
+    var error_str_field = $(e.target).closest("tr").find(".validation_error_message");
+    if (e.target.checked) {
+      var rule_id = $(e.target).attr("id").replace(/edit_field__v_/, "");
+      error_str_field.removeClass("light_grey").attr("disabled", "");
+      if (error_str_field.val() == "") {
+        error_str_field.val(fields_ns._get_default_error_message(fields_ns.__current_field_type_id, rule_id));
+      }
+    } else {
+      error_str_field.addClass("light_grey").attr("disabled", "disabled");
+    }
   });
 });
 
@@ -689,11 +691,11 @@ fields_ns.edit_field = function(row_group) {
 
   // if we're here, then we just started editing a field: the user hasn't changed the field type ID
   fields_ns.__last_field_type_id = null;
-
   fields_ns.__check_shared_characteristics = false;
 
   // find out if this field has already been edited and has values in memory
   var field_values_cached = ($.inArray(field_id, fields_ns.memory.changed_field_ids) != -1) ? true : false;
+
   var tab1_fields = null;
   if (field_values_cached) {
     if (typeof fields_ns.memory["field_" + field_id].tab1 != "undefined") {
@@ -721,6 +723,7 @@ fields_ns.edit_field = function(row_group) {
 
   var field_type_id = null;
   fields_ns.__current_field_id = field_id;
+  fields_ns.__current_field_is_system_field = is_system_field;
 
   var field_type_str = null;
 
@@ -775,6 +778,8 @@ fields_ns.edit_field = function(row_group) {
 
   fields_ns.__current_field_type_id = field_type_id;
   fields_ns.__last_field_type_id    = field_type_id;
+
+  fields_ns.update_validation_tab_label(field_type_id);
 
   // load the Field-Specific Settings tab
   var has_field_settings = fields_ns.init_field_settings_tab(field_type_id, field_id);
@@ -864,9 +869,10 @@ fields_ns.init_field_settings_tab = function(field_type_id, field_id) {
   // now load the actual settings for this field from the server. If this information is already loaded (or is
   // currently loading), use that. Otherwise do a fresh Ajax request
   if (fields_ns.cached_loaded_extended_field["field_id_" + field_id] == undefined) {
-    fields_ns.cached_loaded_extended_field["field_id_" + field_id] = {
-      loaded:   false,
-      settings: []
+	fields_ns.cached_loaded_extended_field["field_id_" + field_id] = {
+      loaded:     false,
+      settings:   [],
+      validation: []
     };
     $("#edit_field__field_settings_loading").show();
     $("#edit_field__field_settings").hide();
@@ -888,7 +894,8 @@ fields_ns.init_field_settings_tab = function(field_type_id, field_id) {
     // if the request has already been returned from the server, display the data. Otherwise,
     // the Ajax response method will handle the loading of the data appropriately
     if (fields_ns.cached_loaded_extended_field["field_id_" + field_id].loaded) {
-      fields_ns.display_field_settings(field_type_id, fields_ns.cached_loaded_extended_field["field_id_" + field_id].settings);
+      var data = fields_ns.cached_loaded_extended_field["field_id_" + field_id];
+      fields_ns.display_field_settings(field_type_id, data.settings, data.validation);
     }
   }
 
@@ -1054,7 +1061,7 @@ fields_ns.generate_field_type_markup = function(field_id, field_type_id, field_s
     }
     html += "</table>";
 
-    // if we can cache it, we can
+    // if we can cache it, we do
     if (may_cache) {
       fields_ns.cached_field_settings_markup["field_type_" + field_type_id] = html;
       fields_ns.__check_shared_characteristics_cond2 = true;
@@ -1098,24 +1105,25 @@ fields_ns._generate_option_list_markup = function(setting_id, default_value) {
 
   if (option_list_html == "" && forms_html == "")
   {
-    return "No options lists available.";
+    return g.messages["phrase_no_option_lists_available"]
+        + "<div><a href=\"#\" onclick=\"return fields_ns.create_new_option_list()\">" + g.messages["phrase_create_new_option_list"] + "</a></div>";
   }
 
   var html = "<select class=\"option_list_or_form_field\" name=\"edit_field__setting_" + setting_id + "\" id=\"edit_field__setting_" + setting_id + "\">"
     + "<option value=\"\">" + g.messages["phrase_please_select"] + "</option>\n";
 
   if (option_list_html) {
-    html += "<optgroup id=\"edit_field__option_lists\" label=\"Available Option Lists\">" + option_list_html + "</optgroup>";
+    html += "<optgroup id=\"edit_field__option_lists\" label=\"" + g.messages["phrase_available_option_lists"] + "\">" + option_list_html + "</optgroup>";
   }
   if (forms_html) {
-    html += "<optgroup id=\"edit_field__forms\" label=\"Form Field Contents\">" + forms_html + "</optgroup>";
+    html += "<optgroup id=\"edit_field__forms\" label=\"" + g.messages["phrase_form_field_contents"] + "\">" + forms_html + "</optgroup>";
   }
 
   var option_list_options_hidden = (option_list_selected) ? "" : " style=\"display:none\"";
   html += "</select>"
        + "<div id=\"edit_field__option_list_options\"" + option_list_options_hidden + ">"
          + "<a href=\"#\" onclick=\"return fields_ns.edit_option_list(" + setting_id + ")\">" + g.messages["phrase_edit_option_list"] + "</a> | "
-         + "<a href=\"#\" onclick=\"return fields_ns.create_new_option_list(" + setting_id + ")\">" + g.messages["phrase_create_new_option_list"] + "</a>"
+         + "<a href=\"#\" onclick=\"return fields_ns.create_new_option_list()\">" + g.messages["phrase_create_new_option_list"] + "</a>"
        + "</div>";
 
   var forms_hidden = (forms_selected) ? "" : " style=\"display:none\"";
@@ -1208,8 +1216,9 @@ fields_ns.edit_option_list = function(setting_id) {
  * Called when the user clicks on the "Create New Option List" link. All it does is redirect to the Option List page
  * and tell it to create a new Option List & assign it to the current field ID.
  */
-fields_ns.create_new_option_list = function(setting_id) {
+fields_ns.create_new_option_list = function() {
   window.location = "./option_lists/index.php?add_option_list=1&field_id=" + fields_ns.__current_field_id;
+  return false;
 }
 
 
@@ -1227,13 +1236,14 @@ fields_ns.load_field_settings_response = function(data) {
   fields_ns.cached_loaded_extended_field["field_id_" + data.field_id] = {
     loaded:        true,
     field_type_id: data.field_type_id,
-    settings:      data.settings
+    settings:      data.settings,
+    validation:    data.validation
   };
 
   // if the user is currently editing the same field as the info returned in this request,
   // display the data
   if (data.field_id == fields_ns.__current_field_id) {
-    fields_ns.display_field_settings(data.field_type_id, data.settings);
+    fields_ns.display_field_settings(data.field_type_id, data.settings, data.validation);
   }
 
   // check to see if there are any open requests to the server. If none, hide the loading icon
@@ -1254,28 +1264,37 @@ fields_ns.load_field_settings_response = function(data) {
  * This updates the HTML to show a field's settings. This is loaded after the settings have become available.
  * Note: it's possible that the option list or forms request hasn't been returned yet.
  */
-fields_ns.display_field_settings = function(field_type_id, settings) {
+fields_ns.display_field_settings = function(field_type_id, settings, validation) {
 
   // see if there's already some values stashed in memory for this field. If there IS, we use those
-  // values rather that what's being passed via the settings param
-  if (typeof fields_ns.memory["field_" + fields_ns.__current_field_id] != 'undefined' &&
-      typeof fields_ns.memory["field_" + fields_ns.__current_field_id].tab2 != 'undefined') {
-    var unsaved_changes = fields_ns.memory["field_" + fields_ns.__current_field_id].tab2;
+  // values rather that what's being passed via the settings param. This is klutzy.
+  var load_validation_from_memory = false;
+  if (typeof fields_ns.memory["field_" + fields_ns.__current_field_id] != 'undefined') {
 
-    var updated_settings = [];
-    for (var i=0; i<settings.length; i++) {
-      var curr_setting_id = settings[i].setting_id;
-      var curr_setting = settings[i];
-      for (var j=0; j<unsaved_changes.length; j++) {
-        var setting_name = "edit_field__setting_" + curr_setting_id;
-        if (unsaved_changes[j].name == setting_name) {
-          curr_setting.setting_value = unsaved_changes[j].value;
-          curr_setting.uses_default = false;
+    // tab 2
+    if (typeof fields_ns.memory["field_" + fields_ns.__current_field_id].tab2 != 'undefined' &&
+    		fields_ns.memory["field_" + fields_ns.__current_field_id].tab2 != null) {
+      var unsaved_changes = fields_ns.memory["field_" + fields_ns.__current_field_id].tab2;
+      var updated_settings = [];
+      for (var i=0; i<settings.length; i++) {
+        var curr_setting_id = settings[i].setting_id;
+        var curr_setting = settings[i];
+        for (var j=0; j<unsaved_changes.length; j++) {
+          var setting_name = "edit_field__setting_" + curr_setting_id;
+          if (unsaved_changes[j].name == setting_name) {
+            curr_setting.setting_value = unsaved_changes[j].value;
+            curr_setting.uses_default = false;
+          }
         }
+        updated_settings.push(curr_setting);
       }
-      updated_settings.push(curr_setting);
+      settings = updated_settings;
     }
-    settings = updated_settings;
+
+    // tab 3
+    if (typeof fields_ns.memory["field_" + fields_ns.__current_field_id].tab3 != 'undefined') {
+      load_validation_from_memory = true;
+    }
   }
 
   for (var i=0, j=settings.length; i<j; i++) {
@@ -1347,7 +1366,7 @@ fields_ns.display_field_settings = function(field_type_id, settings) {
             $("#edit_field__option_list_options").show();
             $("#edit_field__form_options").hide();
 
-            // in case the option list section wasn't loaded yet, store it in memory
+            // in case the Option List section wasn't loaded yet, store it in memory
             fields_ns.onload_field_setting_values.push({
               setting_id:    curr_setting_id,
               setting_value: settings[i].setting_value
@@ -1362,9 +1381,48 @@ fields_ns.display_field_settings = function(field_type_id, settings) {
     }
   }
 
+  // now create the validation table
+  var html = fields_ns.generate_field_type_validation_table(field_type_id);
+  $("#validation_table").html(html);
+
+  // now display the validation rules
+  var num_rules = 0;
+  if (load_validation_from_memory) {
+    var rules = fields_ns.memory["field_" + fields_ns.__current_field_id].tab3;
+    for (var i=0; i<rules.length; i++) {
+      var match = rules[i].name.match(/^edit_field__v_(.*)_message$/);
+      if (match) {
+        var rule_id = match[1];
+        $("#edit_field__v_" + rule_id).attr("checked", "checked");
+        $("#edit_field__v_" + rule_id + "_message").removeClass("light_grey").attr("disabled", "").val(rules[i].value);
+      }
+    }
+  } else {
+    for (var i=0; i<validation.length; i++) {
+      var rule_id = validation[i].rule_id;
+      var message = validation[i].error_message.replace(/\\/g, "");
+      $("#edit_field__v_" + rule_id).attr("checked", "checked");
+      $("#edit_field__v_" + rule_id + "_message").removeClass("light_grey").attr("disabled", "").val(message);
+    }
+  }
+
+  fields_ns.update_validation_tab_label(field_type_id);
+
   // now show the markup
   $("#edit_field__field_settings_loading").hide();
   $("#edit_field__field_settings").show();
+}
+
+
+fields_ns.update_validation_tab_label = function(field_type_id) {
+  var num_rules = 0;
+  if (typeof page_ns.field_validation["field_type_" + field_type_id] != "undefined") {
+    num_rules = page_ns.field_validation["field_type_" + field_type_id].length;
+  }
+  if (fields_ns.__current_field_is_system_field) {
+    num_rules = 0;
+  }
+  $("#edit_field_template .inner_tab3").html(g.messages["word_validation"] + " (" + num_rules + ")");
 }
 
 
@@ -1407,7 +1465,6 @@ fields_ns.edit_next_field = function() {
 
 
 fields_ns.save_changes = function() {
-
   // 1. call Ajax query to save it
   // 2. if successful, update the parent page
   // 3. display message in page saying "saved!"
@@ -1424,6 +1481,7 @@ fields_ns.save_changes = function() {
   if (!fields_ns.validate_field()) {
     return false;
   }
+
   $.ajax({
     url:      g.root_url + "/global/code/actions.php",
     data:     { form_id: page_ns.form_id, action: "update_form_fields", data: fields_ns.memory },
@@ -1495,9 +1553,9 @@ fields_ns.save_changes_response = function(data) {
     fields_ns.memory.changed_field_ids = [];
 
     // we ALSO empty the cache here. Strictly speaking, this isn't necessary: we could just be smart and update the
-    // cache with the updated values, but (a) this keeps it simple and (b) ensures that one re-editing an editing
-    //
-    delete fields_ns.cached_loaded_extended_field["field_id_" + field_id];
+    // cache with the updated values, but (a) this keeps it simple and (b) ensures that one re-editing we get
+    // the latest content
+    fields_ns.cached_loaded_extended_field = [];
   } else {
     ft.display_message("ft_message", 0, g.messages["notify_error_saving_fields"]);
   }
@@ -1678,6 +1736,10 @@ fields_ns.check_shared_characteristics = function() {
   if (!fields_ns.__check_shared_characteristics_cond1 || !fields_ns.__check_shared_characteristics_cond2) {
     return;
   }
+  if (typeof page_ns.field_settings["field_type_" + curr_ft_id] == "undefined" ||
+      typeof page_ns.field_settings["field_type_" + last_ft_id] == "undefined") {
+    return;
+  }
 
   var curr_setting_ids = [];
   for (var i=0; i<page_ns.field_settings["field_type_" + curr_ft_id].length; i++) {
@@ -1708,9 +1770,7 @@ fields_ns.check_shared_characteristics = function() {
 
     for (var j=0; j<curr_setting_ids.length; j++) {
       var curr_shared_characteristic_ids = page_ns.shared_characteristics["s" + curr_setting_ids[j]];
-
       for (var k=0; k<curr_shared_characteristic_ids.length; k++) {
-
         // FINALLY, we know there's a map. Make a note of the old & new setting IDs
         if ($.inArray(curr_shared_characteristic_ids[k], last_shared_characteristic_ids) != -1) {
           found_map.push([last_setting_ids[i], curr_setting_ids[j]]);
@@ -1740,3 +1800,45 @@ fields_ns.check_shared_characteristics = function() {
   fields_ns.__check_shared_characteristics_cond2 = false;
 }
 
+
+fields_ns.generate_field_type_validation_table = function(field_type_id) {
+  var html = "";
+  if (typeof page_ns.field_validation["field_type_" + field_type_id] == "undefined") {
+    html = "<span class=\"medium_grey\"><i>" + g.messages["phrase_field_type_no_validation"] + "</span>";
+  } else {
+    html += "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">"
+            + "<tr>"
+              + "<td width=\"20\"></td>"
+              + "<td width=\"180\" class=\"medium_grey\"><i>" + g.messages["phrase_validation_rule"] + "</i></td>"
+              + "<td class=\"medium_grey\"><i>" + g.messages["text_error_message_to_show"] + "</i></td>"
+            + "</tr>";
+
+    var rules = page_ns.field_validation["field_type_" + field_type_id];
+    for (var i=0; i<rules.length; i++) {
+      var rule_id = rules[i].rule_id;
+      var label   = rules[i].label;
+      html += "<tr>"
+              + "<td><input type=\"checkbox\" name=\"edit_field__v_" + rule_id + "\" id=\"edit_field__v_" + rule_id + "\" class=\"v_checked\" /></td>"
+              + "<td><label for=\"edit_field__v_" + rule_id + "\">" + label + "</label></td>"
+              + "<td><input type=\"text\" id=\"edit_field__v_" + rule_id + "_message\" name=\"edit_field__v_" + rule_id + "_message\" class=\"validation_error_message light_grey\" disabled=\"disabled\" /></td>"
+            + "</tr>"
+    }
+
+    html += "</table>";
+  }
+
+  return html;
+}
+
+
+fields_ns._get_default_error_message = function(field_type_id, rule_id) {
+  var error = "";
+  var rules = page_ns.field_validation["field_type_" + field_type_id];
+  for (var i=0; i<rules.length; i++) {
+    if (rules[i].rule_id == rule_id) {
+      error = rules[i].error;
+      break;
+    }
+  }
+  return error;
+}

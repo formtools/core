@@ -1287,14 +1287,8 @@ function ft_update_form_fields_tab($form_id, $infohash)
   // stores the cleaned-up version of the POST content
   $field_info = array();
 
-  // stores those fields whose field types just changed. This is used to remove any now-redundant extended
-  // field settings
-  $changed_field_types_field_ids = array();
-
   $sortable_id = $infohash["sortable_id"];
   $field_ids = explode(",", $infohash["{$sortable_id}_sortable__rows"]);
-
-  // a bit of cleverness here
   $order = $infohash["sortable_row_offset"];
 
   $new_sort_groups = explode(",", $infohash["{$sortable_id}_sortable__new_groups"]);
@@ -1369,6 +1363,7 @@ function ft_update_form_fields_tab($form_id, $infohash)
       $field_id = $changed_field_info["field_id"];
       $shared_settings[] = ft_get_shared_field_setting_info($field_type_map, $field_type_settings_shared_characteristics, $field_id, $changed_field_info["field_type_id"], $changed_field_info["old_field_type_id"]);
       ft_delete_extended_field_settings($field_id);
+      ft_delete_field_validation($field_id);
     }
 
     foreach ($shared_settings as $setting)

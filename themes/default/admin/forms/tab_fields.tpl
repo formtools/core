@@ -7,8 +7,8 @@
   </div>
 
   <form action="{$same_page}" method="post">
-    <div class="underline pad_bottom_large margin_bottom_large">
-       <div style="float:right">{$pagination}</div>
+    <div class="underline pad_bottom margin_bottom_large">
+      <div style="float:right">{$pagination}</div>
       <span class="margin_right_large medium_grey">{$LANG.word_show}</span>
       <select name="num_fields_per_page">
         <option value="all"{if $num_fields_per_page == "all"} selected{/if}>{$LANG.phrase_all_fields|lower}</option>
@@ -65,9 +65,7 @@
         <li class="col4 edit"></li>
         <li class="col5 colN {if $field.is_system_field == "no"}del{/if}"></li>
       </ul>
-
       <div class="clear"></div>
-
       <ul class="rows check_areas" id="rows">
         {assign var=previous_item value=""}
         {foreach from=$form_fields item=field name=row}
@@ -267,6 +265,7 @@
       <div class="tab_row threeCols">
         <div class="inner_tab1 selected">{$LANG.phrase_main_settings}</div>
         <div class="inner_tab2"></div>
+        <div class="inner_tab3">Validation</div>
       </div>
       <div class="inner_tab_content">
         <div class="inner_tab_content1">
@@ -335,6 +334,12 @@
           <form id="edit_field_form_tab2">
             <div id="edit_field__field_settings_loading" class="medium_grey">{$LANG.phrase_loading_ellipsis}</div>
             <div id="edit_field__field_settings"></div>
+          </form>
+        </div>
+        <div class="inner_tab_content3" style="display:none">
+          <form id="edit_field_form_tab3">
+            <div class="edit_field__non_system" id="validation_table"></div>
+	          <div class="edit_field__system medium_grey"><i>{$LANG.phrase_system_fields_no_validation}</i></div>
           </form>
         </div>
       </div>

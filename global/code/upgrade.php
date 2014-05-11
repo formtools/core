@@ -1583,6 +1583,83 @@ function ft_upgrade_form_tools()
   }
 
 
+  // 2.1.4: field validation
+  $has_problems = false;
+  if ($old_version_info["release_date"] < 20111007)
+  {
+  	$upgrade_attempted = true;
+  	@mysql_query("ALTER TABLE {$g_table_prefix}form_fields DROP option_list_id");
+    @mysql_query("ALTER TABLE {$g_table_prefix}modules CHANGE module_key module_key VARCHAR(15)");
+
+    $queries = array();
+    $queries[] = "
+      CREATE TABLE {$g_table_prefix}field_type_validation_rules (
+        rule_id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+        field_type_id mediumint(9) NOT NULL,
+        rsv_rule varchar(50) NOT NULL,
+        rule_label varchar(100) NOT NULL,
+        rsv_field_name varchar(255) NOT NULL,
+        custom_function varchar(100) NOT NULL,
+        custom_function_required enum('yes','no','na') NOT NULL DEFAULT 'na',
+        default_error_message mediumtext NOT NULL,
+        list_order smallint(6) NOT NULL,
+        PRIMARY KEY (rule_id)
+      ) DEFAULT CHARSET=utf8
+    ";
+
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(1, 1, 'required', '{\$LANG.word_required}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_required}', 1)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(2, 1, 'valid_email', '{\$LANG.phrase_valid_email}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_valid_email}', 2)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(3, 1, 'digits_only', '{\$LANG.phrase_numbers_only}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_numbers_only}', 3)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(4, 1, 'letters_only', '{\$LANG.phrase_letters_only}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_letters_only}', 4)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(5, 1, 'is_alpha', '{\$LANG.phrase_alphanumeric}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_alpha}', 5)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(6, 2, 'required', '{\$LANG.word_required}', '{\$field_name}', '', '', '{\$LANG.validation_default_rule_required}', 1)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(7, 3, 'required', '{\$LANG.word_required}', '{\$field_name}', '', '', '{\$LANG.validation_default_rule_required}', 1)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(8, 4, 'required', '{\$LANG.word_required}', '{\$field_name}', '', '', '{\$LANG.validation_default_rule_required}', 1)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(9, 5, 'required', '{\$LANG.word_required}', '{\$field_name}[]', '', 'no', '{\$LANG.validation_default_rule_required}', 1)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(10, 6, 'required', '{\$LANG.word_required}', '{\$field_name}', '', '', '{\$LANG.validation_default_rule_required}', 1)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(11, 7, 'required', '{\$LANG.word_required}', '{\$field_name}[]', '', '', '{\$LANG.validation_default_rule_required}', 1)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(12, 8, 'required', '{\$LANG.word_required}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_required}', 1)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(13, 9, 'required', '{\$LANG.word_required}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_required}', 1)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(14, 10, 'function', '{\$LANG.word_required}', '', 'cf_phone.check_required', 'yes', '{\$LANG.validation_default_phone_num_required}', 1)";
+    $queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(15, 11, 'function', '{\$LANG.word_required}', '', 'cf_code.check_required', 'yes', '{\$LANG.validation_default_rule_required}', 1)";
+
+    $queries[] = "
+      CREATE TABLE {$g_table_prefix}field_validation (
+        rule_id mediumint(8) unsigned NOT NULL,
+        field_id mediumint(9) NOT NULL,
+        error_message mediumtext NOT NULL,
+        UNIQUE KEY rule_id (rule_id,field_id)
+      ) DEFAULT CHARSET=utf8
+    ";
+
+    // now update the field types that have changed: phone & code/markup
+    $queries[] = "UPDATE {$g_table_prefix}field_types SET resources_js = 'var cf_phone = {};\r\ncf_phone.check_required = function() {\r\n  var errors = [];\r\n  for (var i=0; i<rsv_custom_func_errors.length; i++) {\r\n    if (rsv_custom_func_errors[i].func != \"cf_phone.check_required\") {\r\n      continue;\r\n    }\r\n    var field_name = rsv_custom_func_errors[i].field;\r\n    var fields = $(\"input[name^=\\\\\"\" + field_name + \"_\\\\\"]\");\r\n    fields.each(function() {\r\n      if (!this.name.match(/_(\\\\d+)$/)) {\r\n        return;\r\n      }\r\n      var req_len = $(this).attr(\"maxlength\");\r\n      var actual_len = this.value.length;\r\n      if (req_len != actual_len || this.value.match(/\\\\D/)) {\r\n        var el = document.edit_submission_form[field_name];\r\n        errors.push([el, rsv_custom_func_errors[i].err]);\r\n        return false;\r\n      }\r\n    });\r\n  }\r\n\r\n  if (errors.length) {\r\n    return errors;\r\n  }\r\n\r\n  return true;\r\n  \r\n}' WHERE field_type_identifier = 'phone'";
+    $queries[] = "UPDATE {$g_table_prefix}field_types SET resources_js = 'var cf_code = {};\r\ncf_code.check_required = function() {\r\n  var errors = [];\r\n  for (var i=0; i<rsv_custom_func_errors.length; i++) {\r\n    if (rsv_custom_func_errors[i].func != \"cf_code.check_required\") {\r\n      continue;\r\n    }\r\n    var field_name = rsv_custom_func_errors[i].field;\r\n    var val = \$.trim(window[\"code_mirror_\" + field_name].getCode());\r\n    if (!val) {\r\n      var el = document.edit_submission_form[field_name];\r\n      errors.push([el, rsv_custom_func_errors[i].err]);\r\n    }\r\n  }\r\n  if (errors.length) {\r\n    return errors;\r\n  }\r\n  return true;  \r\n}\r\n' WHERE field_type_identifier = 'code_markup'";
+
+    foreach ($queries as $query)
+    {
+      $result = @mysql_query($query);
+      if (!$result)
+      {
+        $has_problems = true;
+        $success      = false;
+        $mysql_error  = "<i>$query></i> [" . mysql_error() . "]";
+        $error_message = ft_eval_smarty_string($LANG["notify_problem_upgrading"], array("version" => $g_current_version));
+        $link_text     = ft_eval_smarty_string($LANG["phrase_upgrade_problem_link"], array("link" => "http://docs.formtools.org/upgrading/?page=problems_upgrading"));
+        $message = $error_message . " " . $mysql_error . "<br />" . $_LANG["phrase_upgrade_problem_link"] . " " . $link_text;
+        break;
+      }
+    }
+
+    // if there were ANY problems, undo all the changes we just did
+    if ($has_problems)
+    {
+      @mysql_query("DROP TABLE {$g_table_prefix}field_type_validation_rules");
+      @mysql_query("DROP TABLE {$g_table_prefix}field_validation");
+      // the changes to the field types don't need to be undone; they just added functions
+    }
+  }
+
   // ----------------------------------------------------------------------------------------------
 
 

@@ -324,7 +324,6 @@ sortable_ns.get_sortable_row_markup = function(info) {
   }, info);
 
   var li = $("<li class=\"sortable_row\"></li>");
-
   if (settings.is_grouped) {
     li.append("<div class=\"group_block_top\"></div>");
   }

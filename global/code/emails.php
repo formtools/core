@@ -832,10 +832,11 @@ function ft_update_email_template($email_id, $info)
   }
   $email_from_account_id = (empty($email_from_account_id)) ? "NULL" : "'$email_from_account_id'";
   $email_from_form_email_id = (empty($email_from_form_email_id)) ? "NULL" : "'$email_from_form_email_id'";
-  $email_reply_to_account_id = (empty($email_reply_to_account_id)) ? "NULL" : "'email_reply_to_account_id'";
-  $email_reply_to_form_email_id = (empty($email_reply_to_form_email_id)) ? "NULL" : "'email_reply_to_form_email_id'";
+  $email_reply_to_account_id = (empty($email_reply_to_account_id)) ? "NULL" : "'$email_reply_to_account_id'";
+  $email_reply_to_form_email_id = (empty($email_reply_to_form_email_id)) ? "NULL" : "'$email_reply_to_form_email_id'";
   $email_from = (empty($email_from)) ? "NULL" : "'$email_from'";
   $email_reply_to = (empty($email_reply_to)) ? "NULL" : "'$email_reply_to'";
+
   // "Email Content" tab
   $html_template = $info["html_template"];
   $text_template = $info["text_template"];

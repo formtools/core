@@ -1094,6 +1094,27 @@ function ft_update_field($form_id, $field_id, $tab_info)
     }
   }
 
+  if (isset($tab_info["tab3"]) && $tab_info["tab3"] != "null")
+  {
+    $validation = is_array($tab_info["tab3"]) ? $tab_info["tab3"] : array();
+    mysql_query("DELETE FROM {$g_table_prefix}field_validation WHERE field_id = $field_id");
+    $new_rules = array();
+    foreach ($validation as $rule_info)
+    {
+    	// ignore the checkboxes - we don't need 'em
+    	if (!preg_match("/^edit_field__v_(.*)_message$/", $rule_info["name"], $matches))
+    	  continue;
+
+      $rule_id = $matches[1];
+      $error_message = ft_sanitize($rule_info["value"]);
+
+      mysql_query("
+        INSERT INTO {$g_table_prefix}field_validation (rule_id, field_id, error_message)
+        VALUES ($rule_id, $field_id, '$error_message')
+      ");
+    }
+  }
+
   $success = true;
   $message = $LANG["notify_form_field_options_updated"];
   extract(ft_process_hook_calls("end", compact("field_id"), array("success", "message")), EXTR_OVERWRITE);
@@ -1235,3 +1256,4 @@ function ft_change_field_type($form_id, $field_id, $new_field_type)
     _ft_alter_table_column("{$g_table_prefix}form_{$form_id}", $field_info["col_name"], $field_info["col_name"], "VARCHAR(255)");
   }
 }
+

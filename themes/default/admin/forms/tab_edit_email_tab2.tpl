@@ -71,7 +71,7 @@
                 <tr>
                   <td class="red">*</td>
                   <td class="pad_right">{$LANG.word_email}</td>
-                  <td><input type="text" id="custom_recipient_email" style="width:200px" /></td>
+                  <td><input type="text" id="custom_recipient_email" name="custom_recipient_email" style="width:200px" /></td>
                 </tr>
                 <tr>
                   <td class="red">*</td>
@@ -222,7 +222,7 @@
         {if $clients}
           <optgroup label="{$LANG.word_clients}">
           {foreach from=$clients item=client name=row}
-            <option value="{$client.account_id}" {if $template_info.email_reply_to_account_id == $client.account_id}selected{/if}>{$client.first_name} {$client.last_name} &lt;{$client.email}&gt;</option>
+            <option value="client_account_id_{$client.account_id}" {if $template_info.email_reply_to_account_id == $client.account_id}selected{/if}>{$client.first_name} {$client.last_name} &lt;{$client.email}&gt;</option>
           {/foreach}
           </optgroup>
         {/if}

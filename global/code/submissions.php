@@ -542,6 +542,13 @@ function ft_update_submission($form_id, $submission_id, $infohash)
   // assumes that each tab has at least a single field (UPDATE button should be hidden if there are none)
   $field_ids = explode(",", $infohash["field_ids"]);
 
+
+  // -----------------------------------------------------
+
+  //ft_update_submission
+
+
+
   $form_fields = ft_get_form_fields($form_id);
   $field_types_processing_info = ft_get_field_type_processing_info();
 

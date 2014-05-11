@@ -22,10 +22,12 @@ else
 }
 
 if (empty($num_fields_per_page))
+{
   ft_set_settings("admin_num_fields_per_page_{$form_id}", "all");
-
+}
 
 $fields_page = ft_load_field("fields_page", "fields_page", 1);
+
 $form_fields = ft_get_form_fields($form_id, array("page" => $fields_page, "num_fields_per_page" => $num_fields_per_page));
 $total_form_fields = ft_get_num_form_fields($form_id);
 
@@ -40,17 +42,17 @@ $reserved_words = implode(",", $escaped_words);
 $field_type_sizes_js = ft_generate_field_type_sizes_map_js();
 $field_sizes_js      = ft_generate_field_type_size_labels();
 $field_settings_js   = ft_generate_field_type_settings_js();
+$field_validation_js = ft_generate_field_type_validation_js();
 
 $php_self = ft_get_clean_php_self();
-
 $shared_characteristics_js = ft_get_field_type_setting_shared_characteristics_js();
 
 // compile the template fields
-$page_vars["page"]        = "fields";
-$page_vars["page_url"]    = ft_get_page_url("edit_form_fields", array("form_id" => $form_id));
-$page_vars["head_title"]  = "{$LANG["phrase_edit_form"]} - {$LANG["word_fields"]}";
-$page_vars["form_info"]   = $form_info;
-$page_vars["form_fields"] = $form_fields;
+$page_vars["page"]         = "fields";
+$page_vars["page_url"]     = ft_get_page_url("edit_form_fields", array("form_id" => $form_id));
+$page_vars["head_title"]   = "{$LANG["phrase_edit_form"]} - {$LANG["word_fields"]}";
+$page_vars["form_info"]    = $form_info;
+$page_vars["form_fields"]  = $form_fields;
 $page_vars["order_start_number"] = 1;
 $page_vars["num_fields_per_page"] = "all";
 $page_vars["pagination"] = "";
@@ -70,7 +72,7 @@ if ($num_fields_per_page != "all")
 
 $page_vars["head_string"] =<<< END
   <script src="{$g_root_url}/global/scripts/sortable.js"></script>
-  <script src="{$g_root_url}/global/scripts/manage_fields.js?v=3"></script>
+  <script src="{$g_root_url}/global/scripts/manage_fields.min.js"></script>
 END;
 
 $replacement_info = array("views_tab_link" => "$php_self?page=views&form_id=$form_id");
@@ -86,7 +88,8 @@ $page_vars["js_messages"] = array("validation_no_form_field_name", "validation_i
   "word_no", "word_yes", "validation_no_display_text_single", "validation_no_form_field_single",
   "validation_no_db_column_single", "notify_edit_field_new_field", "notify_edit_option_list_after_save",
   "confirm_save_change_before_redirect", "notify_error_saving_fields", "phrase_select_field", "word_order",
-  "word_settings"
+  "word_settings", "phrase_field_type_no_validation", "phrase_validation_rule", "text_error_message_to_show",
+  "phrase_no_option_lists_available", "phrase_available_option_lists", "phrase_form_field_contents", "word_validation"
 );
 
 $edit_field_onload_js = "";
@@ -105,9 +108,11 @@ var page_ns = {
   form_id: $form_id,
   shared_characteristics: $shared_characteristics_js
 };
+
 $field_type_sizes_js
 $field_sizes_js
 $field_settings_js
+$field_validation_js
 
 $(function() {
   ft.init_inner_tabs();

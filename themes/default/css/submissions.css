@@ -1,11 +1,9 @@
-
 tr.selected_row_color {
   background-color: #c6f1c9;
 }
 tr.unselected_row_color {
   background-color: #f2f2f2;
 }
-
 
 /* the edit menu sortable list */
 .submission_list .col2 {
@@ -33,7 +31,6 @@ tr.unselected_row_color {
 .submission_list li.col6 {
   width: 70px;
 }
-
 #ft_quicklinks {
   margin: 0px 0px 0px 0px;
   list-style: none;

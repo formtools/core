@@ -165,6 +165,19 @@ function ft_get_grouped_field_types()
         $settings[] = $settings_row;
 
       $field_type_info["settings"] = $settings;
+
+      $rules_query = mysql_query("
+        SELECT *
+        FROM   {$g_table_prefix}field_type_validation_rules
+        WHERE  field_type_id = $field_type_id
+        ORDER BY list_order
+          ");
+
+      $rules = array();
+      while ($rules_row = mysql_fetch_assoc($rules_query))
+        $rules[] = $rules_row;
+
+      $field_type_info["validation"] = $rules;
       $field_types[] = $field_type_info;
     }
     $curr_group = array(
@@ -228,7 +241,10 @@ function ft_get_field_type($field_type_id, $return_all_info = false)
   $info = mysql_fetch_assoc($query);
 
   if ($return_all_info)
-    $info["settings"] = ft_get_field_type_settings($field_type_id, true);
+  {
+    $info["settings"]   = ft_get_field_type_settings($field_type_id, true);
+    $info["validation"] = ft_get_field_type_validation_rules($field_type_id);
+  }
 
   return $info;
 }
@@ -510,6 +526,13 @@ function ft_generate_field_type_settings_js($options = array())
   $namespace = isset($options["page_ns"]) ? $options["page_ns"] : "page_ns";
   $js_key    = isset($options["js_key"]) ? $options["js_key"] : "field_type_id";
 
+  // for dev / prod
+  $minimize = true;
+
+  $delimiter = "\n";
+  if ($minimize)
+    $delimiter = "";
+
   $query = mysql_query("
     SELECT DISTINCT field_type_id
     FROM   {$g_table_prefix}field_type_settings
@@ -553,27 +576,14 @@ function ft_generate_field_type_settings_js($options = array())
       {
         $value = $options_row["option_value"];
         $text  = $options_row["option_text"];
-        $options[] =<<< END
-      {
-        value: "$value",
-        text:  "$text"
+        $options[] = "{ value: \"$value\", text: \"$text\" }";
       }
-END;
-      }
-      $options_js = implode(",\n", $options);
+      $options_js = implode(",$delimiter", $options);
       if (!empty($options_js))
         $options_js = "\n$options_js\n    ";
 
       $settings_js[] =<<< END
-  {
-    setting_id:  $setting_id,
-    field_label: "$field_label",
-    field_setting_identifier: "$field_setting_identifier",
-    field_type:  "$field_type",
-    default_value: "$default_value",
-    field_orientation:  "$field_orientation",
-    options: [$options_js]
-  }
+  { setting_id:  $setting_id, field_label: "$field_label", field_setting_identifier: "$field_setting_identifier", field_type:  "$field_type", default_value: "$default_value", field_orientation: "$field_orientation", options: [$options_js] }
 END;
     }
 
@@ -585,14 +595,15 @@ END;
       $curr_js[] = "{$namespace}.field_settings[\"$field_type_identifier\"] = [";
     }
 
-    $curr_js[] = implode(",\n", $settings_js);
+    $curr_js[] = implode(",$delimiter", $settings_js);
     $curr_js[] = "];";
   }
 
-  $field_setting_rows[] = implode("\n", $curr_js);
+  $field_setting_rows[] = implode("$delimiter", $curr_js);
 
-  return implode("\n", $field_setting_rows);
+  return implode("$delimiter", $field_setting_rows);
 }
+
 
 
 /**
@@ -1577,4 +1588,30 @@ function ft_get_field_type_and_setting_info()
   );
 
   return $return_info;
+}
+
+
+/**
+ * Returns all validation rules for a field type.
+ *
+ * @param $field_type_id
+ */
+function ft_get_field_type_validation_rules($field_type_id)
+{
+	global $g_table_prefix;
+
+	$query = mysql_query("
+	  SELECT *
+	  FROM   {$g_table_prefix}field_type_validation_rules
+	  WHERE  field_type_id = $field_type_id
+	  ORDER BY list_order
+	");
+
+	$rules = array();
+	while ($row = mysql_fetch_assoc($query))
+	{
+		$rules[] = $row;
+	}
+
+	return $rules;
 }

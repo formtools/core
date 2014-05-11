@@ -1157,9 +1157,30 @@ $LANG["validation_no_admin_theme_swatch"] = "Please select a swatch for the admi
 $LANG["validation_no_client_theme_swatch"] = "Please select a default swatch for the client accounts.";
 $LANG["validation_no_theme_swatch"] = "Please select a swatch for the selected theme.";
 $LANG["phrase_no_views_with_filters_p"] = "(No Views with filters defined)";
-
-// changes in 2.1.3
-$LANG["phrase_for_view_submissions"] = "Only submissions that fit into the following View(s)";
 $LANG["notify_problem_upgrading"] = "There was a problem upgrading to <b>{\$version}</b>:";
 $LANG["phrase_upgrade_problem_link"] = "Please <a href=\"{\$link}\">visit this page</a> regarding failed upgrades.";
 
+// changes in 2.1.3
+$LANG["phrase_for_view_submissions"] = "Only submissions that fit into the following View(s)";
+
+// New in 2.1.4
+$LANG["word_validation"] = "Validation";
+$LANG["validation_default_rule_required"] = "Please enter a value for the <b>{\$field}</b> field.";
+$LANG["validation_default_rule_valid_email"] = "Please enter a valid email address for the <b>{\$field}</b> field.";
+$LANG["validation_default_rule_numbers_only"] = "Please only enter numbers for the <b>{\$field}</b> field.";
+$LANG["validation_default_rule_letters_only"] = "Please only enter letters for the <b>{\$field}</b> field.";
+$LANG["validation_default_rule_alpha"] = "Please only enter letters and numbers for the <b>{\$field}</b> field.";
+$LANG["phrase_validation_error"] = "Validation Error";
+$LANG["phrase_system_fields_no_validation"] = "You may not add validation to system fields.";
+$LANG["phrase_field_type_no_validation"] = "There are no validation rules available for this field type.";
+$LANG["word_required"] = "Required";
+$LANG["phrase_valid_email"] = "Valid Email";
+$LANG["phrase_numbers_only"] = "Numbers Only";
+$LANG["phrase_letters_only"] = "Letters Only";
+$LANG["phrase_alphanumeric"] = "Alphanumeric (a-Z, 0-9)";
+$LANG["phrase_validation_rule"] = "Validation Rule";
+$LANG["text_error_message_to_show"] = "Error message to show if the field fails the validation";
+$LANG["phrase_no_option_lists_available"] = "No options lists available.";
+$LANG["phrase_available_option_lists"] = "Available Option Lists";
+$LANG["phrase_form_field_contents"] = "Form Field Contents";
+$LANG["validation_default_phone_num_required"] = "Please fill in the full telephone number for the <b>{\$field}</b> field - numbers only.";
