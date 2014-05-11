@@ -134,7 +134,7 @@
             {/if}
           </td>
           <td valign="top" align="center">
-            {if $module.is_enabled == "yes"}
+            {if $module.is_enabled == "yes" || $module.module_folder == "core_field_types"}
               {if $module.needs_upgrading}
                 <a href="{$same_page}?upgrade={$module_id}">{$LANG.word_upgrade|upper}</a>
               {else}

@@ -215,7 +215,7 @@ $g_set_sql_mode = true;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.1.8";
+$g_current_version = "2.1.9";
 
 /**
  * The release type: alpha, beta or main
@@ -225,7 +225,7 @@ $g_release_type = "main";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20111107";
+$g_release_date = "20111206";
 
 /**
  * The minimum required PHP version needed to run Form Tools.
@@ -312,7 +312,7 @@ $g_ft_tables = array(
   "view_columns",
   "view_fields",
   "view_filters",
-  "view_tabs",
+  "view_tabs"
 );
 
 // include all code libraries

@@ -998,7 +998,7 @@ function ft_upgrade_module($module_id)
     if (empty($lang_file_key) || empty($url))
       continue;
 
-    $display_text = $lang_info[$lang_file_key];
+    $display_text = isset($lang_info[$lang_file_key]) ? $lang_info[$lang_file_key] : $LANG[$lang_file_key];
 
     mysql_query("
       INSERT INTO {$g_table_prefix}module_menu_items (module_id, display_text, url, is_submenu, list_order)

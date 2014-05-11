@@ -60,16 +60,26 @@ function ft_add_form_fields($form_id, $fields)
     $result = mysql_query($query)
       or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
 
+    $new_field_id = mysql_insert_id();
+
     $new_field_size = $g_field_sizes[$field_size]["sql"];
     list($is_success, $err_message) = _ft_add_table_column("{$g_table_prefix}form_{$form_id}", $col_name, $new_field_size);
 
-    // if the alter table didn't work, return with an error message
+    // if the alter table didn't work, return with an error message and remove the entry we just added to the form_fields table
     if (!$is_success)
     {
+    	if (!empty($new_field_id) && is_numeric($new_field_id))
+    	{
+        mysql_query("
+          DELETE FROM {$g_table_prefix}form_fields
+          WHERE field_id = $new_field_id
+          LIMIT 1
+        ");
+    	}
       $success = false;
       $replacement_info = array("fieldname" => $field_name);
       $message = ft_eval_smarty_string($LANG["notify_form_field_not_added"], $replacement_info);
-      if ($g_debug) $message .= " \"$err_message\"";
+      if ($g_debug) $message .= " <i>\"$err_message\"</i>";
       return array($success, $message);
     }
   }
@@ -488,6 +498,50 @@ function ft_get_form_field_id_by_field_name($field_name, $form_id)
 
 
 /**
+ * Returns either a string (the field name), if a single field ID is passed, or a hash of field_id => field_names
+ * if an array is passed.
+ *
+ * @param mixed $field_id_or_ids
+ * @return mixed
+ */
+function ft_get_form_field_name_by_field_id($field_id_or_ids)
+{
+  global $g_table_prefix;
+
+  $field_ids = array();
+  if (is_array($field_id_or_ids))
+    $field_ids = $field_id_or_ids;
+  else
+    $field_ids[] = $field_id_or_ids;
+
+  $field_id_str = implode(",", $field_ids);
+
+  $query = mysql_query("
+    SELECT field_id, field_name
+    FROM   {$g_table_prefix}form_fields
+    WHERE  field_id IN ($field_id_str)
+      ");
+
+  $return_info = "";
+  if (is_array($field_id_or_ids))
+  {
+  	$result = mysql_fetch_assoc($query);
+  	$return_info = $result["field_name"];
+  }
+  else
+  {
+  	$return_info = array();
+  	while ($row = mysql_fetch_assoc($query))
+  	{
+  		$return_info[$row["field_id"]] = $row["field_name"];
+  	}
+  }
+
+  return $return_info;
+}
+
+
+/**
  * Retrieves all custom settings for an individual form field from the field_settings table.
  *
  * @param integer $field_id the unique field ID
@@ -558,7 +612,8 @@ function ft_get_form_fields($form_id, $custom_params = array())
     "num_fields_per_page"       => (isset($custom_params["num_fields_per_page"])) ? $custom_params["num_fields_per_page"] : "all",
     "include_field_type_info"   => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false,
     "include_field_settings"    => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false,
-    "evaluate_dynamic_settings" => (isset($custom_params["evaluate_dynamic_settings"])) ? $custom_params["evaluate_dynamic_settings"] : false
+    "evaluate_dynamic_settings" => (isset($custom_params["evaluate_dynamic_settings"])) ? $custom_params["evaluate_dynamic_settings"] : false,
+    "field_ids"                 => (isset($custom_params["field_ids"])) ? $custom_params["field_ids"] : "all"
   );
 
   $limit_clause = _ft_get_limit_clause($params["page"], $params["num_fields_per_page"]);
@@ -576,10 +631,17 @@ function ft_get_form_fields($form_id, $custom_params = array())
   }
   else
   {
+  	$field_id_clause = "";
+  	if ($params["field_ids"] != "all")
+  	{
+  		$field_id_clause = "AND field_id IN (" . implode(",", $params["field_ids"]) . ")";
+  	}
+
     $query = mysql_query("
       SELECT *
       FROM   {$g_table_prefix}form_fields
       WHERE  form_id = $form_id
+             $field_id_clause
       ORDER BY list_order
       $limit_clause
     ");

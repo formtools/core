@@ -15,19 +15,28 @@ if (empty($submission_id))
   exit;
 }
 $_SESSION["ft"]["last_submission_id"] = $submission_id;
-$_SESSION["ft"]["last_link_page"] = "edit";
+$_SESSION["ft"]["last_submission_id_{$form_id}"] = $submission_id;
+$_SESSION["ft"]["last_link_page_{$form_id}"] = "edit";
 
 // get a list of all editable fields in the View. This is used for security purposes for the update function and to
 // determine whether the page contains any editable fields
 $editable_field_ids = _ft_get_editable_view_fields($view_id);
 
 // update the submission
+$failed_validation = false;
 if (isset($_POST) && !empty($_POST))
 {
   $_SESSION["ft"]["new_search"] = "yes";
   $request["view_id"] = $view_id;
   $request["editable_field_ids"] = $editable_field_ids;
   list($g_success, $g_message) = ft_update_submission($form_id, $submission_id, $request);
+
+  // if there was any problem udpating this submission, make a special note of it: we'll use that info to merge the current POST request
+  // info with the original field values to ensure the page contains the latest data (i.e. for cases where they fail server-side validation)
+  if (!$g_success)
+  {
+  	$failed_validation = true;
+  }
 }
 
 $form_info = ft_get_form($form_id);
@@ -49,6 +58,10 @@ else
   $tab_number = "";
 
 $grouped_fields = ft_get_grouped_view_fields($view_id, $tab_number, $form_id, $submission_id);
+if ($failed_validation)
+{
+	$grouped_fields = ft_merge_form_submission($grouped_fields, $_POST);
+}
 
 $page_field_ids      = array();
 $page_field_type_ids = array();

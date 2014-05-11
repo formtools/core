@@ -1694,11 +1694,12 @@ function ft_upgrade_form_tools()
 
   // ----------------------------------------------------------------------------------------------
 
-
   // if no problems were encountered, and the the full version string (version-type-date) has changed,
   // update the database
   if ($old_version_info["full"] != "{$g_current_version}-{$g_release_type}-{$g_release_date}" && !$has_problems)
   {
+    $upgrade_attempted = true;
+
   	$upgrade_track = ft_get_settings("core_version_upgrade_track");
   	$upgrade_track .= ",{$g_current_version}-{$g_release_type}-{$g_release_date}";
 

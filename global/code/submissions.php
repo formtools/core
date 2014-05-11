@@ -542,12 +542,17 @@ function ft_update_submission($form_id, $submission_id, $infohash)
   // assumes that each tab has at least a single field (UPDATE button should be hidden if there are none)
   $field_ids = explode(",", $infohash["field_ids"]);
 
+  // perform any server-side validation
+  $errors = ft_validate_submission($form_id, $infohash["editable_field_ids"], $infohash);
 
-  // -----------------------------------------------------
-
-  //ft_update_submission
-
-
+  // if there are any problems, return right away
+  if (!empty($errors))
+  {
+    $success = false;
+    array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
+    $message = implode("<br />", $errors);
+    return array($success, $message);
+  }
 
   $form_fields = ft_get_form_fields($form_id);
   $field_types_processing_info = ft_get_field_type_processing_info();

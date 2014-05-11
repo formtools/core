@@ -29,7 +29,7 @@ $page_vars["js_messages"] = array("validation_no_url", "phrase_check_url", "word
   "word_close", "validation_no_form_url", "phrase_form_field_placeholders");
 $page_vars["head_string"] =<<< END
 <script src="$g_root_url/global/scripts/manage_forms.js?v=2"></script>
-<script src="$g_root_url/global/scripts/sortable.js"></script>
+<script src="$g_root_url/global/scripts/sortable.js?v=2"></script>
 END;
 
 $page_vars["head_js"] =<<< END

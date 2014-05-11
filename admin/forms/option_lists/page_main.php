@@ -56,7 +56,7 @@ $page_vars["js_messages"] = array("word_delete", "validation_no_smart_fill_value
 );
 $page_vars["head_string"] =<<< END
   <script src="$g_root_url/global/scripts/manage_option_lists.js"></script>
-  <script src="$g_root_url/global/scripts/sortable.js"></script>
+  <script src="$g_root_url/global/scripts/sortable.js?v=2"></script>
 END;
 
 $page_vars["head_js"] =<<< END

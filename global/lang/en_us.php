@@ -1229,3 +1229,6 @@ $LANG["phrase_problems_questions_forum"] = "Problems / Questions? Visit our foru
 $LANG["validation_no_table_prefix"] = "Please enter a database prefix.";
 $LANG["validation_invalid_table_prefix"] = "Please enter a database prefix consists of letter and the underscore character only.";
 $LANG["phrase_installation_help"] = "Installation Help";
+
+// New in 2.1.9
+$LANG["notify_create_form_failure"] = "The SQL query to create the form has failed. The most common cause is that your form has exceeded the maximum row size permitted by MySQL for VARCHAR fields. If the database error displayed below indicates this, try changing some of your \"Medium\" fields to \"Large\". On most environments, you can have no more than 50 or so fields with \"Medium\" size.";

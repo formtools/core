@@ -28,8 +28,6 @@ if (isset($request["page"]) && !empty($request["page"]))
       break;
   }
 
-  //$remember_page = ft_module_override_data("admin_edit_form_remember_page", array("remember_page" => $remember_page));
-
   $_SESSION["ft"]["form_{$form_id}_tab"] = $remember_page;
   $page = $request["page"];
 }
@@ -45,9 +43,10 @@ if (isset($request['edit_email_user_settings']))
 }
 
 $view_submissions_link = "submissions.php?form_id={$form_id}";
-if (isset($_SESSION["ft"]["last_link_page"]) && $_SESSION["ft"]["last_link_page"] == "edit")
+if (isset($_SESSION["ft"]["last_link_page_{$form_id}"]) && isset($_SESSION["ft"]["last_submission_id_{$form_id}"]) &&
+  $_SESSION["ft"]["last_link_page_{$form_id}"] == "edit")
 {
-  $view_submissions_link = "edit_submission.php?form_id={$form_id}&submission_id={$_SESSION["ft"]["last_submission_id"]}";
+  $view_submissions_link = "edit_submission.php?form_id={$form_id}&submission_id={$_SESSION["ft"]["last_submission_id_{$form_id}"]}";
 }
 
 $same_page = ft_get_clean_php_self();

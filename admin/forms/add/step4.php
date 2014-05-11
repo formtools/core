@@ -53,7 +53,7 @@ $page_vars["form_id"] = $form_id;
 $page_vars["form_fields"] = $form_fields;
 $page_vars["head_title"] = "{$LANG['phrase_add_form']} - {$LANG["phrase_step_4"]}";
 $page_vars["head_string"] =<<< END
-  <script src="{$g_root_url}/global/scripts/sortable.js"></script>
+  <script src="{$g_root_url}/global/scripts/sortable.js?v=2"></script>
 END;
 $page_vars["head_js"] =<<< END
   var page_ns = {};

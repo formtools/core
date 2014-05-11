@@ -162,7 +162,7 @@ $page_vars["js_messages"] = array("validation_no_url", "phrase_check_url", "word
 
 $page_vars["head_string"] =<<< EOF
   <script src="$g_root_url/global/scripts/manage_forms.js?v=2"></script>
-  <script src="$g_root_url/global/scripts/sortable.js"></script>
+  <script src="$g_root_url/global/scripts/sortable.js?v=2"></script>
 EOF;
 
 $page_vars["head_js"] =<<< END

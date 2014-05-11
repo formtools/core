@@ -1166,8 +1166,7 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
   if (!$success)
     return array(false, "Email components not returned properly (ft_get_email_components).");
 
-  extract(ft_process_hook_calls("start", compact("form_id", "submission_id", "email_id", "email_components"),
-    array("email_components")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("form_id", "submission_id", "email_id", "email_components"), array("email_components")), EXTR_OVERWRITE);
 
   // if Swift Mailer is enabled, send the emails with that
   $continue = true;

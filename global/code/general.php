@@ -190,7 +190,13 @@ function ft_display_custom_page_message($flag)
       $g_success = true;
       $g_message = $LANG["notify_new_submission_created"];
       break;
+    case "notify_sessions_timeout":
+      $g_success = true;
+      $g_message = $LANG["notify_sessions_timeout"];
+    	break;
   }
+
+  extract(ft_process_hook_calls("end", compact("flag"), array("g_success", "g_message")), EXTR_OVERWRITE);
 
   return array($g_success, $g_message);
 }

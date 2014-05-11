@@ -20,7 +20,7 @@ $page_vars["head_title"] = "{$_SESSION["ft"]["settings"]["program_name"]} - {$LA
 $page_vars["menu"] = $menu;
 $page_vars["sortable_id"] = $sortable_id;
 $page_vars["head_string"] =<<< END
-  <script src="$g_root_url/global/scripts/sortable.js"></script>
+  <script src="$g_root_url/global/scripts/sortable.js?v=2"></script>
   <script src="$g_root_url/global/scripts/manage_menus.js"></script>
 END;
 $page_vars["js_messages"] = array("word_remove", "word_na", "notify_required_admin_pages", "word_form_c", "word_client_c",

@@ -149,7 +149,7 @@ var sortable_ns = {
 
   // this is only used for the Edit Fields page, when you have a sortable that starts on a different row (e.g. page 2).
   // This should really be moved to be stored in page_sortables, but it's just not important right now
-  row_offset: 0,
+  row_offset: 0
 };
 
 
@@ -537,7 +537,7 @@ sortable_ns.add_group = function() {
       "text":  g.messages["phrase_create_group"],
       "click": function() {
         add_group_handler();
-      },
+      }
     },
     {
       "text":  g.messages["word_cancel"],

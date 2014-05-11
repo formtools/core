@@ -284,7 +284,7 @@ function ft_delete_form($form_id, $remove_associated_files = false)
  */
 function ft_finalize_form($form_id)
 {
-  global $g_table_prefix, $g_field_sizes;
+  global $g_table_prefix, $g_field_sizes, $LANG;
 
   $form_fields = ft_get_form_fields($form_id);
   $query = "
@@ -308,8 +308,15 @@ function ft_finalize_form($form_id)
             is_finalized ENUM('yes','no') default 'yes')
             DEFAULT CHARSET=utf8";
 
-  mysql_query($query)
-    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, line " . __LINE__ . ": <i>" . nl2br($query) . "</i>", mysql_error());
+  $result = mysql_query($query);
+  if (!$result)
+  {
+  	return array(
+  	  "success" => "0",
+  	  "message" => $LANG["notify_create_form_failure"],
+  	  "sql_error" => mysql_error()
+  	);
+  }
 
   $now = ft_get_current_datetime();
 
@@ -322,13 +329,24 @@ function ft_finalize_form($form_id)
              date_created = '$now'
       WHERE  form_id = $form_id
           ";
-  mysql_query($query)
-    or ft_handle_error("Failed query in <b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
+  $result = mysql_query($query);
+  if (!$result)
+  {
+  	return array(
+  	  "success"   => "0",
+  	  "sql_error" => mysql_error()
+  	);
+  }
 
   // finally, add the default View
   ft_add_default_view($form_id);
 
   extract(ft_process_hook_calls("end", compact("form_id"), array()), EXTR_OVERWRITE);
+
+  return array(
+  	"success" => 1,
+  	"message" => ""
+  );
 }
 
 
@@ -1281,6 +1299,9 @@ function ft_update_form_fields_tab($form_id, $infohash)
 {
   global $g_table_prefix, $g_root_url, $g_root_dir, $g_debug, $LANG, $g_field_sizes;
 
+  $success = true;
+  $message = $LANG["notify_field_changes_saved"];
+
   $infohash = ft_sanitize($infohash);
   extract(ft_process_hook_calls("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
 
@@ -1503,19 +1524,24 @@ function ft_update_form_fields_tab($form_id, $infohash)
   }
   if (!empty($new_fields))
   {
-    list($g_success, $g_message) = ft_add_form_fields($form_id, $new_fields);
+    list($is_success, $error) = ft_add_form_fields($form_id, $new_fields);
+
+    // if there was a problem adding any of the new fields, inform the user
+    if (!$is_success)
+    {
+      $success = false;
+      $message = $error;
+    }
   }
 
   // Lastly, delete the specified fields. Since some field types (e.g. files) may have additional functionality
-  // needed at this stage (e.g. deleting the actual files that had been uploaded via the form)
+  // needed at this stage (e.g. deleting the actual files that had been uploaded via the form). This occurs regardless
+  // of whether the add fields step worked or not
   $deleted_field_ids = explode(",", $infohash["{$sortable_id}_sortable__deleted_rows"]);
   extract(ft_process_hook_calls("delete_fields", compact("deleted_field_ids", "infohash", "form_id"), array()), EXTR_OVERWRITE);
 
   // now actually delete the fields
   ft_delete_form_fields($form_id, $deleted_field_ids);
-
-  $success = true;
-  $message = $LANG["notify_field_changes_saved"];
 
   extract(ft_process_hook_calls("end", compact("infohash", "field_info", "form_id"), array("success", "message")), EXTR_OVERWRITE);
 

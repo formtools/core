@@ -224,7 +224,7 @@ function ft_display_page($template, $page_vars, $theme = "", $swatch = "")
   $g_smarty->assign("swatch", $swatch);
 
   // if this page has been told to dislay a custom message, override g_success and g_message
-  if (!isset($g_upgrade_info["message"]) && isset($_GET["message"]))
+  if ((!isset($g_upgrade_info["message"]) || empty($g_upgrade_info["message"])) && isset($_GET["message"]))
   {
     list($g_success, $g_message) = ft_display_custom_page_message($_GET["message"]);
   }

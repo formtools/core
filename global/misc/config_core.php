@@ -2714,7 +2714,7 @@ $FILES = array(
   "themes/default/modules_header.tpl",
   "themes/default/pagination.tpl",
   "themes/default/scripts/",
-  "themes/default/scripts/jquery-ui-1.8.6.custom.min.js",
+  "themes/default/scripts/jquery-ui.js",
   "themes/default/tabset_close.tpl",
   "themes/default/tabset_open.tpl",
   "themes/index.html",

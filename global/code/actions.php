@@ -258,9 +258,14 @@ switch ($action)
     // finalize the form and redirect to step 6
     $form_info = ft_get_form($form_id);
     if ($form_info["is_complete"] != 'yes')
-      ft_finalize_form($form_id);
-
-    echo "{ \"success\": \"1\", \"message\": \"\" }";
+    {
+      $response = ft_finalize_form($form_id);
+      echo ft_convert_to_json($response);
+    }
+    else
+    {
+    	echo "{ \"success\": \"1\", \"message\": \"\" }";
+    }
     break;
 
   case "get_js_webpage_parse_method":

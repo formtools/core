@@ -62,7 +62,7 @@ $page_vars["is_new_menu"] = $is_new_menu;
 $page_vars["selected_client_ids"] = $selected_client_ids;
 $page_vars["sortable_id"] = $sortable_id;
 $page_vars["head_string"] =<<< END
-  <script src="$g_root_url/global/scripts/sortable.js"></script>
+  <script src="$g_root_url/global/scripts/sortable.js?v=2"></script>
   <script src="$g_root_url/global/scripts/manage_menus.js"></script>
 END;
 $page_vars["js_messages"] = array("word_remove", "word_na", "word_form_c", "word_client_c", "word_url_c",

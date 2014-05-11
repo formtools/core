@@ -41,7 +41,7 @@ $page_vars["js_messages"] = array("phrase_remove_row", "phrase_create_group", "w
   "confirm_delete_group", "phrase_create_new_view");
 $page_vars["num_views"] = $num_views;
 $page_vars["head_string"] =<<< END
-<script src="$g_root_url/global/scripts/sortable.js"></script>
+<script src="$g_root_url/global/scripts/sortable.js?v=2"></script>
 <script src="$g_root_url/global/scripts/manage_views.js?v=4"></script>
 END;
 

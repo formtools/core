@@ -71,7 +71,7 @@ if ($num_fields_per_page != "all")
 }
 
 $page_vars["head_string"] =<<< END
-  <script src="{$g_root_url}/global/scripts/sortable.js"></script>
+  <script src="{$g_root_url}/global/scripts/sortable.js?v=2"></script>
   <script src="{$g_root_url}/global/scripts/manage_fields.min.js"></script>
 END;
 

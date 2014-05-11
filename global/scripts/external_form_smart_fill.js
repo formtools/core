@@ -1259,18 +1259,28 @@ sf_ns.submit_form = function() {
 
 
 sf_ns.submit_form_response = function(info) {
-
   // check the user wasn't logged out / denied permissions
   if (!ft.check_ajax_response_permissions(info)) {
     return;
   }
 
   try {
-    if (info.success) {
+    if (info.success == 1) {
       window.location = "step6.php";
+    } else {
+      // the most likely reason we'd get here is with very large forms & the SQL query to create the table failed
+      $("#next_step").attr("disabled", false);
+      $("#ajax_activity_bottom").hide();
+      $("#ajax_no_activity_bottom").show();
+
+      var message = info.message;
+      if (info.sql_error) {
+        message += "<br /><br />SQL Error: <b>" + info.sql_error + "</b>";
+      }
+      ft.display_message("next_step_message", false, message);
     }
   } catch (err) {
-    ft.display_message("next_step_message", false, transport.responseText);
+    ft.display_message("next_step_message", false, info.responseText);
   }
 }
 

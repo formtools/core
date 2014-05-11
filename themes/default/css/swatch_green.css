@@ -6,6 +6,10 @@ body {
 }
 #account_section {
   background-image: url(../images/account_section_bg_green.jpg);
+  color: #3d7d40;
+}
+#account_section b {
+  color: white;
 }
 a:link, a:visited {
   color: #008800;

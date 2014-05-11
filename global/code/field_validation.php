@@ -41,13 +41,17 @@ function ft_get_field_validation($field_id)
 
 
 /**
- * Used on the Edit Submission pages. This generates the actual JS used for the RSV validation, according
- * to whatever rules the user has specified.
+ * Used on the Edit Submission pages, Form Builder - and anywhere that's actually displaying the fields for editing. This
+ * generates the JS used for the RSV validation, according to whatever rules the user has specified.
  *
  * @param array $grouped_fields
  */
-function ft_generate_submission_js_validation($grouped_fields)
+function ft_generate_submission_js_validation($grouped_fields, $settings = array())
 {
+	// overridable settings
+	$custom_error_handler = isset($settings["custom_error_handler"]) ? $settings["custom_error_handler"] : "ms.submit_form";
+	$form_element_id      = isset($settings["form_element_id"]) ? $settings["form_element_id"] : "edit_submission_form";
+
   $js_lines = array();
   $custom_func_errors = array();
   foreach ($grouped_fields as $group_info)
@@ -103,10 +107,11 @@ function ft_generate_submission_js_validation($grouped_fields)
   if (!empty($js_lines))
   {
     $rules = implode(";\n", $js_lines);
+    $custom_error_handler_str = (!empty($custom_error_handler)) ? "rsv.customErrorHandler = $custom_error_handler;" : "";
     $js =<<< END
 $(function() {
-  $("#edit_submission_form").bind("submit", function() { return rsv.validate(this, rules); });
-  rsv.customErrorHandler = ms.submit_form;
+  $("#{$form_element_id}").bind("submit", function() { return rsv.validate(this, rules); });
+  $custom_error_handler_str
 });
 var rules = [];
 $rules
@@ -188,8 +193,123 @@ function ft_delete_field_validation($field_id)
 }
 
 
-// to be added in a later version (2.1.5?)
+/**
+ * This is the main server-side validation function, called whenever updating a submission. The current version (Core 2.1.9)
+ * only performs a subset of the total validation rules; namely, those non-custom ones that
+ *
+ * @param array $editable_field_ids
+ * @param array $request
+ * @return array an array of errors, or an empty array if no errors
+ */
+function ft_validate_submission($form_id, $editable_field_ids, $request)
+{
+  if (empty($editable_field_ids))
+    return array();
+
+  $rules = ft_get_php_field_validation_rules($editable_field_ids);
+  $form_fields = ft_get_form_fields($form_id, array("field_ids" => $editable_field_ids));
+
+  // reorganize $form_fields to be a hash of field_id => array(form_name => "", field_tield => "")
+  $field_info = array();
+  foreach ($form_fields as $curr_field_info)
+  {
+  	$field_info[$curr_field_info["field_id"]] = array(
+  	  "field_name"  => $curr_field_info["field_name"],
+  	  "field_title" => $curr_field_info["field_title"]
+  	);
+  }
+
+  // construct the RSV-friendly validation
+  $validation = array();
+  foreach ($rules as $rule_info)
+  {
+  	$rule          = $rule_info["rsv_rule"];
+  	$field_id      = $rule_info["field_id"];
+  	$field_name    = $field_info[$field_id]["field_name"];
+  	$field_title   = $field_info[$field_id]["field_title"];
+  	$error_message = $rule_info["error_message"];
+
+    $placeholders = array(
+      "field"      => $field_title,
+      "field_name" => $field_name
+    );
+    $error_message = ft_eval_smarty_string($error_message, $placeholders);
+
+    $validation[] = "$rule,$field_name,$error_message";
+  }
+
+  $errors = array();
+  if (!empty($validation))
+  {
+  	$form_vals = ft_sanitize($request);
+    $errors = validate_fields($form_vals, $validation);
+  }
+
+  return $errors;
+}
+
+
+
 function ft_get_php_field_validation_rules($field_ids)
 {
+  global $g_table_prefix;
 
+	$field_id_str = implode(",", $field_ids);
+
+  $query = mysql_query("
+	  SELECT *
+	  FROM   ft_field_validation fv, ft_field_type_validation_rules ftvr
+	  WHERE  fv.field_id IN ($field_id_str) AND
+	         fv.rule_id = ftvr.rule_id AND
+	         ftvr.custom_function_required != 'yes'
+    ORDER BY fv.field_id, ftvr.list_order
+  ");
+
+  $rules = array();
+  while ($row = mysql_fetch_assoc($query))
+  {
+  	$rules[] = $row;
+  }
+
+  return $rules;
 }
+
+
+/**
+ * Called after a form submission is made, but it fails server-side validation. This merges the original content
+ * with whatever is in the POST request.
+ *
+ * @param array $grouped_fields
+ * @param array $request
+ */
+function ft_merge_form_submission($grouped_fields, $request)
+{
+	global $g_multi_val_delimiter;
+
+	$updated_grouped_fields = array();
+	foreach ($grouped_fields as $group_info)
+	{
+		$group  = $group_info["group"];
+		$fields = $group_info["fields"];
+
+		$updated_fields = array();
+		foreach ($fields as $field_info)
+		{
+			if (array_key_exists($field_info["field_name"], $request))
+			{
+				// TODO! This won't work for phone_number fields, other fields
+				$value = (is_array($request[$field_info["field_name"]])) ? implode($g_multi_val_delimiter, $request[$field_info["field_name"]]) : "";
+			  $field_info["submission_value"] = $value;
+			}
+			$updated_fields[] = $field_info;
+		}
+
+		$updated_grouped_fields[] = array(
+		  "group"  => $group,
+		  "fields" => $updated_fields
+		);
+	}
+
+  return $updated_grouped_fields;
+}
+

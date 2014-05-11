@@ -36,6 +36,7 @@ $_SESSION["ft"]["last_submission_id"] = $submission_id;
 $editable_field_ids = _ft_get_editable_view_fields($view_id);
 
 // handle POST requests
+$failed_validation = false;
 if (isset($_POST) && !empty($_POST))
 {
   // add the view ID to the request hash, for use by the ft_update_submission function
@@ -43,13 +44,20 @@ if (isset($_POST) && !empty($_POST))
   $request["editable_field_ids"] = $editable_field_ids;
   list($g_success, $g_message) = ft_update_submission($form_id, $submission_id, $request);
 
+  // if there was any problem udpating this submission, make a special note of it: we'll use that info to merge the current POST request
+  // info with the original field values to ensure the page contains the latest data (i.e. for cases where they fail server-side validation)
+  if (!$g_success)
+  {
+  	$failed_validation = true;
+  }
+
   // required. The reason being, this setting determines whether the submission IDs in the current form-view-search
   // are cached. Any time the data changes, the submission may then belong to different Views, so we need to re-cache it
   $_SESSION["ft"]["new_search"] = "yes";
 }
 
-$form_info      = ft_get_form($form_id);
-$view_info      = ft_get_view($view_id);
+$form_info = ft_get_form($form_id);
+$view_info = ft_get_view($view_id);
 
 // this is crumby
 $has_tabs = false;
@@ -67,6 +75,10 @@ else
   $tab_number = "";
 
 $grouped_fields = ft_get_grouped_view_fields($view_id, $tab_number, $form_id, $submission_id);
+if ($failed_validation)
+{
+	$grouped_fields = ft_merge_form_submission($grouped_fields, $_POST);
+}
 
 $page_field_ids      = array();
 $page_field_type_ids = array();
