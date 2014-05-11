@@ -3,8 +3,8 @@
 /**
  * This file defines all general functions used throughout Form Tools.
  *
- * @copyright Encore Web Studios 2012
- * @author Encore Web Studios <formtools@encorewebstudios.com>
+ * @copyright Benjamin Keen 2012
+ * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 2-2-x
  * @subpackage General
  */
@@ -747,6 +747,32 @@ function ft_sanitize($input)
 
 
 /**
+ * Undoes the "helpfulness" of Magic Quotes.
+ *
+ * @param mixed $input
+ * @return mixed
+ */
+function ft_undo_magic_quotes($input)
+{
+	if (!get_magic_quotes_gpc())
+	  return $input;
+
+  if (is_array($input))
+  {
+    $output = array();
+    foreach ($input as $k=>$i)
+      $output[$k] = ft_undo_magic_quotes($i);
+  }
+  else
+  {
+    $output = stripslashes($input);
+  }
+
+  return $output;
+}
+
+
+/**
  * Recursively strips tags from an array / string.
  *
  * @param mixed $input an array or string
@@ -781,7 +807,7 @@ function ft_generate_js_messages($keys = "", $module_keys = "")
 {
   global $g_root_url, $LANG, $L;
 
-  $theme = $_SESSION["ft"]["account"]["theme"];
+  $theme = (isset($_SESSION["ft"]["account"]["theme"])) ? $_SESSION["ft"]["account"]["theme"] : "";
   $rows = "";
 
   $js_rows = array();

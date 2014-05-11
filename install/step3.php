@@ -13,6 +13,20 @@ $error = "";
 $tables_already_exist = false;
 $existing_tables = array();
 
+if (isset($_POST["track_license_keys"]))
+{
+	$module_folders = $_POST["module_folders"];
+	$data = array();
+	foreach ($module_folders as $module_folder)
+	{
+		$data[$module_folder] = array(
+		  "k"  => $_POST["{$module_folder}_k"],
+		  "ek" => $_POST["{$module_folder}_ek"]
+		);
+	}
+	$_SESSION["ft_install"]["premium_module_keys"] = $data;
+}
+
 if (isset($_POST["overwrite_tables"]))
 {
   ft_install_delete_tables($hostname, $db_name, $username, $password, $g_table_prefix);

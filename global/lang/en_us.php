@@ -1236,3 +1236,12 @@ $LANG["notify_create_form_failure"] = "The SQL query to create the form has fail
 // New in 2.2.0
 $LANG["notify_suhosin_installed"] = "Warning: the <b>Suhosin PHP extension</b> is installed on your server. This may cause problems with your forms on your site. <a href=\"http://docs.formtools.org/installation/?page=suhosin\" target=\"_blank\">Click here</a> for more information.";
 $LANG["phrase_view_field_group"] = "View Field Group";
+
+// New in 2.2.1
+$LANG["phrase_premium_module_license_keys"] = "Premium module license keys";
+$LANG["text_enter_license_keys"] = "Please enter your license keys for the following modules. You may choose to skip this step now, but you won't be able to use them until you install them through the Form Tools admin interface.";
+$LANG["phrase_verify_license_keys"] = "Verify License Keys";
+$LANG["validation_incomplete_license_keys"] = "You must enter all of the license keys in order to install them here. If you don't have them all available, click the \"Skip Step\" button to continue. You will be able to install them later.";
+$LANG["notify_invalid_license_keys"] = "Sorry, one or more of the premium module license key was invalid. Please double-check the values and submit the form again.";
+$LANG["word_invalid"] = "Invalid";
+$LANG["word_continue"] = "Continue";

@@ -636,3 +636,46 @@ function ft_install_core_field_types($module_folder)
   return cft_install_module();
 }
 
+
+/**
+ * Added to detect the presence of Premium module and to allow the user to install them (i.e. enter their license
+ * keys during the installation step).
+ */
+function ft_install_get_premium_modules()
+{
+	global $g_root_dir;
+
+  $modules_folder = "$g_root_dir/modules";
+
+  // loop through all modules in this folder and, if the module contains the appropriate files, add it to the database
+  $module_info = array();
+  $dh = opendir($modules_folder);
+
+  // if we couldn't open the modules folder, it doesn't exist or something went wrong
+  if (!$dh)
+    return array(false, $message);
+
+  $premium_modules = array();
+  while (($folder = readdir($dh)) !== false)
+  {
+    if (is_dir("$modules_folder/$folder") && $folder != "." && $folder != "..")
+    {
+      $info = ft_get_module_info_file_contents($folder);
+
+      if (empty($info))
+        continue;
+
+      if ($info["is_premium"] == "no")
+        continue;
+
+      $lang_file = "$modules_folder/$folder/lang/{$info["origin_language"]}.php";
+      $lang_info = _ft_get_module_lang_file_contents($lang_file);
+      $info["module_name"] = isset($lang_info["module_name"]) ? $lang_info["module_name"] : "";
+      $info["module_folder"] = $folder;
+
+      $premium_modules[] = $info;
+    }
+  }
+
+  return $premium_modules;
+}

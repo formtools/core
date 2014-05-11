@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Form Tools - generic form processing, storage and access script
-Copyright (c) 2010  Encore Web Studios
+Copyright (c) 2012 Benjamin Keen
 http://www.formtools.org
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without

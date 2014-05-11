@@ -12,8 +12,8 @@
  */
 
 $theme_name = "Default";
-$theme_author = "Encore Web Studios";
-$theme_author_email = "formtools@encorewebstudios.com";
+$theme_author = "Benjamin Keen";
+$theme_author_email = "ben.keen@gmail.com";
 $theme_link = "http://themes.formtools.org";
 $theme_description = "The default Form Tools theme. It's a fixed-width theme requiring 1024 minimum width screens, with a few different colour swatches to choose from.";
 $theme_version = "1.0.0";

@@ -4,8 +4,8 @@
  * This file contains all functions relating to managing the Option Lists. Before 2.1.0, Option Lists
  * were called "Field Option Groups" & this file was named field_option_groups.php
  *
- * @copyright Encore Web Studios 2012
- * @author Encore Web Studios <formtools@encorewebstudios.com>
+ * @copyright Benjamin Keen 2012
+ * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 2-2-x
  * @subpackage OptionLists
  */

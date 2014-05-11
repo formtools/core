@@ -4,7 +4,7 @@
  * validation.php
  * --------------
  *
- * v2.3.1, Dec 2007
+ * v2.3.4, Jan 2012
  *
  * This script provides generic validation for any web form. For a discussion and example usage
  * of this script, go to http://www.benjaminkeen.com/software/php_validation
@@ -110,16 +110,62 @@ function validate_fields($fields, $rules)
       $field_to_check = $parts[0];
       $value_to_check = $parts[1];
 
-      // if the VALUE is NOT the same, we don't need to validate this field. Return.
-      if ($comparison == "equal" && $fields[$field_to_check] != $value_to_check)
+      if ($comparison == "equal")
       {
-        $satisfies_if_conditions = false;
-        break;
+        $fail = false;
+
+        // if the field being compared against doesn't exist, we reasonably say that the value won't be the same
+        if (!array_key_exists($field_to_check, $fields))
+          $fail = true;
+
+        // if the value being passed is an array (e.g. a checkbox / multi-select field), what would be considered
+        // "equal"? I think as long as the array contains AT LEAST that value, it's fair to pass this test
+        else if (is_array($fields[$field_to_check]))
+        {
+          if (!in_array($fields[$field_to_check], $fields))
+            $fail = true;
+        }
+
+        // lastly, do a straight string test
+        else if ($fields[$field_to_check] != $value_to_check)
+          $fail = true;
+
+        if ($fail)
+        {
+          $satisfies_if_conditions = false;
+          break;
+        }
+        else
+        {
+          array_shift($row);
+        }
       }
-      else if ($comparison == "not_equal" && $fields[$field_to_check] == $value_to_check)
+      else if ($comparison == "not_equal")
       {
-        $satisfies_if_conditions = false;
-        break;
+        $fail = true;
+
+        // if the field doesn't even exist, we can say they're not equal (i.e. doesn't fail!)
+        if (!array_key_exists($field_to_check, $fields))
+          $fail = false;
+
+        else if (is_array($fields[$field_to_check]))
+        {
+          if (!in_array($fields[$field_to_check], $fields))
+            $fail = false;
+        }
+
+        else if ($fields[$field_to_check] != $value_to_check)
+          $fail = false;
+
+        if ($fail)
+        {
+          $satisfies_if_conditions = false;
+          break;
+        }
+        else
+        {
+          array_shift($row);
+        }
       }
       else
         array_shift($row);    // remove this if-condition from line, and continue validating line

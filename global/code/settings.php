@@ -5,8 +5,8 @@
  * for the various areas of the Settings pages is a little hodge podge; e.g. the menus update code is
  * in menus.php.
  *
- * @copyright Encore Web Studios 2012
- * @author Encore Web Studios <formtools@encorewebstudios.com>
+ * @copyright Benjamin Keen 2012
+ * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 2-2-x
  * @subpackage Settings
  */

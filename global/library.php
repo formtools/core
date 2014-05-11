@@ -14,7 +14,8 @@
  * overwritten, which makes upgrading a simple matter of overwriting all old files from the latest
  * zipfile.
  *
- * @author Encore Web Studios <formtools@encorewebstudios.com>
+ * @copyright Benjamin Keen 2012
+ * @author Benjamin Keen <ben.keen@gmail.com>
  * @version 2.2.x
  * @package 2-2-x
  */
@@ -221,7 +222,7 @@ $g_set_sql_mode = true;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.2.0";
+$g_current_version = "2.2.1";
 
 /**
  * The release type: alpha, beta or main
@@ -231,7 +232,7 @@ $g_release_type = "main";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20111231";
+$g_release_date = "20120206";
 
 /**
  * The minimum required PHP version needed to run Form Tools.

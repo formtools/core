@@ -4,8 +4,8 @@
  * This file defines all functions relating to Form Tools themes. Note: the Theme setting tab/page
  * is updated via ft_update_theme_settings, found in the settings.php file.
  *
- * @copyright Encore Web Studios 2012
- * @author Encore Web Studios <formtools@encorewebstudios.com>
+ * @copyright Benjamin Keen 2012
+ * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 2-2-x
  * @subpackage Themes
  */

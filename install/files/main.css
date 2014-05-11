@@ -182,6 +182,11 @@ h2 {
   margin: 0px;
   padding: 0px;
 }
+h3 {
+  font-size: 10pt;
+  color: #006600;
+  margin-top: 0px;
+}
 .label {
   color: #666666;
 }
@@ -215,4 +220,45 @@ h2 {
   padding: 8px;
   border: 1px solid #cc0000;
   background-color: #fffffcc;
+}
+.panel {
+  border: 1px solid #cccccc;
+  padding: 8px;
+  background-color: #f2f2f2;
+  margin-top: 16px;
+}
+.hidden {
+  display: none;
+}
+.popup_type_error {
+	width: 48px;
+	height: 48px;
+  background-image: url(../../global/images/error.png);
+  margin-right: 8px;
+  float: left;
+}
+#verify_license_key_loading {
+  display: none;
+  float: right;
+  width: 32px;
+  height: 32px;
+  background-image: url(../../global/images/loading.gif);
+}
+span.fail {
+  margin-left: 10px;
+  background-color: #aa0000;
+  padding: 1px 10px;
+  color: white;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+span.pass {
+  margin-left: 10px;
+  background-color: green;
+  padding: 1px 10px;
+  color: white;
+  border-radius: 4px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
 }

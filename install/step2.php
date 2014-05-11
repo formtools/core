@@ -30,6 +30,10 @@ $upload_folder_writable            = is_writable(realpath("$g_ft_installation_fo
 $default_theme_cache_dir_writable  = is_writable(realpath("$g_ft_installation_folder/../themes/default/cache"));
 $core_field_types_module_available = ft_install_check_module_available("core_field_types");
 
+// find out if there are any premium modules in this package. If so, we need to ask the users to enter a license key for
+// each one
+$premium_modules = ft_install_get_premium_modules();
+
 // ------------------------------------------------------------------------------------------------
 
 $page_vars = array();
@@ -45,5 +49,8 @@ $page_vars["mysql_get_client_info"] = mysql_get_client_info();
 $page_vars["upload_folder_writable"]  = $upload_folder_writable;
 $page_vars["default_theme_cache_dir_writable"]  = $default_theme_cache_dir_writable;
 $page_vars["core_field_types_module_available"] = $core_field_types_module_available;
+$page_vars["premium_modules"] = $premium_modules;
+$page_vars["js_messages"] = array("word_error", "validation_incomplete_license_keys", "notify_invalid_license_keys",
+  "word_close", "word_invalid", "word_verified", "word_continue");
 
 ft_install_display_page("templates/step2.tpl", $page_vars);

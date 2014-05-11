@@ -4,8 +4,8 @@
  * This file contains all functions for generating the field validation code. The actual validation script
  * is a standalone script, and found in validation.php (same folder).
  *
- * @copyright Encore Web Studios 2012
- * @author Encore Web Studios <formtools@encorewebstudios.com>
+ * @copyright Benjamin Keen 2012
+ * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 2-2-x
  * @subpackage FieldValidation
  */

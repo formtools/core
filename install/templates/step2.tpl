@@ -115,18 +115,54 @@
 
   {else}
 
+    <form action="step3.php" method="post">
+
+	  {if $premium_modules|@count > 0}
+	    <div class="panel" id="premium_module_license_key_section">
+	      <div id="verify_license_key_loading" style="float: right;"><img src="../global/images/loading.gif" /></div>
+	      <h3>{$LANG.phrase_premium_module_license_keys}</h3>
+	      <p>
+	        {$LANG.text_enter_license_keys}
+	      </p>
+	      <table class="margin_bottom_large">
+	      {foreach from=$premium_modules item=info name=n}
+	        {assign var=i value=$smarty.foreach.n.iteration}
+		      <tr>
+		        <td class="bold" width="180">{$info.module_name}</td>
+		        <td>
+		          <input type="hidden" name="module_folders[]" id="module_folder_{$i}" value="{$info.module_folder}" />
+		          <input type="hidden" id="k_{$i}" name="{$info.module_folder}_k" value="" />
+		          <input type="hidden" id="ek_{$i}" name="{$info.module_folder}_ek" value="" />
+
+		          <input type="text" id="key_section1_{$i}" size="4" maxlength="4" value=""
+		            />-<input type="text" id="key_section2_{$i}" size="4" maxlength="4" value=""
+		            />-<input type="text" id="key_section3_{$i}" size="4" maxlength="4" value="" />
+		          <span id="pmvr_{$i}" class="premium_module_verification_response"></span>
+		        </td>
+		      </tr>
+	      {/foreach}
+	      </table>
+	      <div>
+	        <input type="hidden" id="num_premium_modules" value="{$premium_modules|@count}" />
+	        <input type="button" id="verify_license_keys" value="{$LANG.phrase_verify_license_keys}" />
+	        <input type="submit" id="skip_step" value="{$LANG.phrase_skip_step}" name="next" />
+	      </div>
+	    </div>
+	  {/if}
+
     {if $suhosin_loaded}
       <div class="warning">
         {$LANG.notify_suhosin_installed}
       </div>
     {/if}
 
-    <form action="step3.php" method="post">
-      <p>
-        <input type="submit" name="next" value="{$LANG.word_continue_rightarrow}" />
-      </p>
-    </form>
+      <div id="continue_block" {if $premium_modules|@count > 0}class="hidden"{/if}>
+	      <p>
+	        <input type="submit" name="next" value="{$LANG.word_continue_rightarrow}" />
+	      </p>
+	    </div>
 
+    </form>
   {/if}
 
 {include file="../../install/templates/install_footer.tpl"}

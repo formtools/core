@@ -5,8 +5,8 @@
  * this code was located in forms.php, but due to the size of the file, it's been refactored into this
  * separate file.
  *
- * @copyright Encore Web Studios 2012
- * @author Encore Web Studios <formtools@encorewebstudios.com>
+ * @copyright Benjamin Keen 2012
+ * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 2-2-x
  * @subpackage Fields
  */

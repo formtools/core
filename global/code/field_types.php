@@ -4,8 +4,8 @@
  * This file contains all functions relating to the field types (select, radios etc). Added in 2.1.0
  * with the addition of Custom Fields.
  *
- * @copyright Encore Web Studios 2012
- * @author Encore Web Studios <formtools@encorewebstudios.com>
+ * @copyright Benjamin Keen 2012
+ * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 2-2-x
  * @subpackage FieldTypes
  */

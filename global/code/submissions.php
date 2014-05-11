@@ -3,8 +3,8 @@
 /**
  * This file defines all functions related to managing form submissions.
  *
- * @copyright Encore Web Studios 2012
- * @author Encore Web Studios <formtools@encorewebstudios.com>
+ * @copyright Benjamin Keen 2012
+ * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 2-2-x
  * @subpackage Submissions
  */
@@ -539,8 +539,9 @@ function ft_update_submission($form_id, $submission_id, $infohash)
   $infohash = ft_sanitize($infohash);
   extract(ft_process_hook_calls("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
-  // assumes that each tab has at least a single field (UPDATE button should be hidden if there are none)
-  $field_ids = explode(",", $infohash["field_ids"]);
+  $field_ids = array();
+  if (!empty($infohash["field_ids"]))
+    $field_ids = explode(",", $infohash["field_ids"]);
 
   // perform any server-side validation
   $errors = ft_validate_submission($form_id, $infohash["editable_field_ids"], $infohash);
