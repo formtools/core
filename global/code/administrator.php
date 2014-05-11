@@ -4,9 +4,9 @@
  * This file defines all user account functions for the administrator account. Also see accounts.php (for
  * general functions) and clients.php for functions related to client accounts.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2012
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-x
+ * @package 2-2-x
  * @subpackage Administrator
  */
 

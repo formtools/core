@@ -4,9 +4,9 @@
  * This file defines all functions relating to Form Tools themes. Note: the Theme setting tab/page
  * is updated via ft_update_theme_settings, found in the settings.php file.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2012
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-x
+ * @package 2-2-x
  * @subpackage Themes
  */
 
@@ -253,8 +253,6 @@ function ft_display_page($template, $page_vars, $theme = "", $swatch = "")
 
   if (!isset($page_vars["head_css"]))
     $page_vars["head_css"] = "";
-  else if (!empty($page_vars["head_css"]))
-    $page_vars["head_css"] = "<style type=\"text/css\">\n{$page_vars["head_css"]}\n</style>";
 
   $g_smarty->assign("modules_dir", "$g_root_url/modules");
 
@@ -272,6 +270,13 @@ function ft_display_page($template, $page_vars, $theme = "", $swatch = "")
     $g_smarty->debugging = true;
 
   extract(ft_process_hook_calls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
+
+  // if the page or hook actually defined some CSS for inclusion in the page, wrap it in the appropriate style tag. This
+  // was safely moved here in 2.2.0, because nothing used it (!)
+  if (!empty($g_smarty->_tpl_vars["head_css"]))
+  {
+    $g_smarty->assign("head_css", "<style type=\"text/css\">\n{$g_smarty->_tpl_vars["head_css"]}\n</style>");
+  }
 
   $g_smarty->display(ft_get_smarty_template_with_fallback($theme, $template));
 

@@ -3,9 +3,9 @@
 /**
  * This file defines all functions related to emails sent by Form Tools.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2012
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-x
+ * @package 2-2-x
  * @subpackage Emails
  */
 
@@ -1331,12 +1331,12 @@ function _ft_get_form_email_field_headers($form_email_id, $submission_info)
 
   foreach ($submission_info as $row)
   {
-    if (!empty($first_name_field))
+    if (!empty($first_name_field_id))
     {
       if ($row["field_id"] == $first_name_field_id)
         $submission_first_name = trim($row["content"]);
     }
-    if (!empty($last_name_field))
+    if (!empty($last_name_field_id))
     {
       if ($row["field_id"] == $last_name_field_id)
         $submission_last_name = trim($row["content"]);

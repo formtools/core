@@ -56,7 +56,9 @@
         {foreach from=$fields item=curr_field}
           {assign var=field_id value=$field.field_id}
           <tr>
-            <td width="160" class="pad_left_small" valign="top">{$curr_field.field_title} <span class="req">{if $curr_field.is_required}*{/if}</span></td>
+            <td width="160" class="pad_left_small" valign="top">{$curr_field.field_title}
+              {if $curr_field.is_required && $curr_field.is_editable == "yes"}<span class="req">*</span>{/if}
+            </td>
             <td valign="top">
               {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$curr_field
                 field_types=$field_types settings=$settings}

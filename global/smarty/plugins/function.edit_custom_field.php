@@ -11,8 +11,6 @@
  *
  *           It's strongly coupled to the ft_get_grouped_view_fields function (when called with the form ID &
  *           submission ID params) to ensure that all data is efficiently returned for use by this function.
- *
- *           It can be used to edit fields
  * -------------------------------------------------------------
  */
 function smarty_function_edit_custom_field($params, &$smarty)

@@ -3,9 +3,9 @@
 /**
  * This file defines all functionality relating to generic list groups.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2012
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-x
+ * @package 2-2-x
  * @subpackage ListGroups
  */
 

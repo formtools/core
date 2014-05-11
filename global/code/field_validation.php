@@ -4,9 +4,9 @@
  * This file contains all functions for generating the field validation code. The actual validation script
  * is a standalone script, and found in validation.php (same folder).
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2012
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-x
+ * @package 2-2-x
  * @subpackage FieldValidation
  */
 
@@ -49,8 +49,9 @@ function ft_get_field_validation($field_id)
 function ft_generate_submission_js_validation($grouped_fields, $settings = array())
 {
 	// overridable settings
-	$custom_error_handler = isset($settings["custom_error_handler"]) ? $settings["custom_error_handler"] : "ms.submit_form";
-	$form_element_id      = isset($settings["form_element_id"]) ? $settings["form_element_id"] : "edit_submission_form";
+	$custom_error_handler     = isset($settings["custom_error_handler"]) ? $settings["custom_error_handler"] : "ms.submit_form";
+	$form_element_id          = isset($settings["form_element_id"]) ? $settings["form_element_id"] : "edit_submission_form";
+	$omit_non_editable_fields = isset($settings["omit_non_editable_fields"]) ? $settings["omit_non_editable_fields"] : true;
 
   $js_lines = array();
   $custom_func_errors = array();
@@ -59,6 +60,9 @@ function ft_generate_submission_js_validation($grouped_fields, $settings = array
     foreach ($group_info["fields"] as $field_info)
     {
       if (empty($field_info["validation"]))
+        continue;
+
+      if ($omit_non_editable_fields && $field_info["is_editable"] == "no")
         continue;
 
       $field_name  = $field_info["field_name"];
@@ -197,7 +201,7 @@ function ft_delete_field_validation($field_id)
  * This is the main server-side validation function, called whenever updating a submission. The current version (Core 2.1.9)
  * only performs a subset of the total validation rules; namely, those non-custom ones that
  *
- * @param array $editable_field_ids
+ * @param array $editable_field_ids - this contains ALL editable field IDs in the form
  * @param array $request
  * @return array an array of errors, or an empty array if no errors
  */
@@ -206,8 +210,16 @@ function ft_validate_submission($form_id, $editable_field_ids, $request)
   if (empty($editable_field_ids))
     return array();
 
-  $rules = ft_get_php_field_validation_rules($editable_field_ids);
-  $form_fields = ft_get_form_fields($form_id, array("field_ids" => $editable_field_ids));
+  // get the validation rules for the current page. The use of $request["field_ids"] is a fix for bug #339; this should be handled
+  // a lot better. The calling page (edit_submission.php amongst other) should be figuring out what fields are editable on that particular
+  // page and passing THAT info as $editable_field_ids
+  $editable_field_ids_on_tab = explode(",", $request["field_ids"]);
+
+  // return all validation rules for items on tab, including those marked as editable == "no"
+  $rules = ft_get_php_field_validation_rules($editable_field_ids_on_tab);
+
+  // gets all form fields in this View
+  $form_fields = ft_get_view_fields($request["view_id"]);
 
   // reorganize $form_fields to be a hash of field_id => array(form_name => "", field_tield => "")
   $field_info = array();
@@ -215,7 +227,8 @@ function ft_validate_submission($form_id, $editable_field_ids, $request)
   {
   	$field_info[$curr_field_info["field_id"]] = array(
   	  "field_name"  => $curr_field_info["field_name"],
-  	  "field_title" => $curr_field_info["field_title"]
+  	  "field_title" => $curr_field_info["field_title"],
+  	  "is_editable" => $curr_field_info["is_editable"]
   	);
   }
 
@@ -228,6 +241,10 @@ function ft_validate_submission($form_id, $editable_field_ids, $request)
   	$field_name    = $field_info[$field_id]["field_name"];
   	$field_title   = $field_info[$field_id]["field_title"];
   	$error_message = $rule_info["error_message"];
+
+  	// if this field is marked as non-editable, ignore it. We don't need to validate it
+  	if ($field_info[$field_id]["is_editable"] == "no")
+  	  continue;
 
     $placeholders = array(
       "field"      => $field_title,
@@ -298,7 +315,7 @@ function ft_merge_form_submission($grouped_fields, $request)
 			if (array_key_exists($field_info["field_name"], $request))
 			{
 				// TODO! This won't work for phone_number fields, other fields
-				$value = (is_array($request[$field_info["field_name"]])) ? implode($g_multi_val_delimiter, $request[$field_info["field_name"]]) : "";
+				$value = (is_array($request[$field_info["field_name"]])) ? implode($g_multi_val_delimiter, $request[$field_info["field_name"]]) : $request[$field_info["field_name"]];
 			  $field_info["submission_value"] = $value;
 			}
 			$updated_fields[] = $field_info;

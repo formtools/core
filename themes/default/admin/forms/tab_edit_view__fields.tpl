@@ -20,7 +20,7 @@
 	  <input type="hidden" class="sortable__add_group_handler" value="view_ns.add_field_group" />
 	  <input type="hidden" class="sortable__delete_group_handler" value="view_ns.delete_field_group" />
 	  <input type="hidden" class="sortable__class" value="groupable edit_view_fields" />
-	  <input type="hidden" class="sortable__new_group_name" value="{$LANG.phrase_view_group}" />
+	  <input type="hidden" class="sortable__new_group_name" value="{$LANG.phrase_view_field_group}" />
 	  <input type="hidden" name="deleted_groups" id="deleted_groups" value="" />
 
       {foreach from=$grouped_fields item=curr_group_info name=group}
@@ -30,7 +30,7 @@
           <div class="sortable_group">
             <div class="sortable_group_header">
               <div class="sort"></div>
-              <label>{$LANG.phrase_view_group}</label>
+              <label>{$LANG.phrase_view_field_group}</label>
               <input type="text" name="group_name_{$group_info.group_id}" class="group_name" value="{eval var=$group_info.group_name}" />
               <select name="group_tab_{$group_info.group_id}" class="tabs_dropdown">
                 <optgroup label="{$LANG.phrase_available_tabs}">

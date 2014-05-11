@@ -4,9 +4,9 @@
  * This file defines all functions related to files and folders within Form Tools. All direct image-related
  * functionality (uploading, resizing, etc) for the Image Manager module is found in images.php.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2012
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-x
+ * @package 2-2-x
  * @subpackage Files
  */
 

@@ -115,6 +115,12 @@
 
   {else}
 
+    {if $suhosin_loaded}
+      <div class="warning">
+        {$LANG.notify_suhosin_installed}
+      </div>
+    {/if}
+
     <form action="step3.php" method="post">
       <p>
         <input type="submit" name="next" value="{$LANG.word_continue_rightarrow}" />

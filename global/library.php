@@ -15,8 +15,8 @@
  * zipfile.
  *
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @version 2.1.x
- * @package 2-1-x
+ * @version 2.2.x
+ * @package 2-2-x
  */
 
 
@@ -172,6 +172,12 @@ $g_api_recaptcha_private_key = "";
 $g_api_header_charset = "utf-8";
 
 /**
+ * Used for the database charset. For rare cases, the utf8 character set isn't available, so this allows
+ * them to change it and install the script.
+ */
+$g_db_table_charset = "utf8";
+
+/**
  * The default sessions timeout for the API. Default is 1 hour (3600 seconds)
  */
 $g_api_sessions_timeout = 3600;
@@ -215,7 +221,7 @@ $g_set_sql_mode = true;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.1.9";
+$g_current_version = "2.2.0";
 
 /**
  * The release type: alpha, beta or main
@@ -225,7 +231,7 @@ $g_release_type = "main";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20111206";
+$g_release_date = "20111231";
 
 /**
  * The minimum required PHP version needed to run Form Tools.

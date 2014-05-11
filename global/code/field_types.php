@@ -4,9 +4,9 @@
  * This file contains all functions relating to the field types (select, radios etc). Added in 2.1.0
  * with the addition of Custom Fields.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2012
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-x
+ * @package 2-2-x
  * @subpackage FieldTypes
  */
 
@@ -1075,7 +1075,7 @@ function ft_generate_viewable_field($params)
 
       if (isset($field_settings) && !empty($field_settings))
       {
-        while (list($setting_id, $setting_value) = each($field_settings))
+  	    while (list($setting_id, $setting_value) = each($field_settings))
         {
           if ($setting_id == $curr_setting_id)
           {
@@ -1110,7 +1110,7 @@ function ft_generate_viewable_field($params)
       // if this setting type is a dropdown list and $value is non-empty, get the option list
       if ($curr_setting_field_type == "option_list_or_form_field" && !empty($value))
       {
-        if (preg_match("/form_field:/", $value))
+      	if (preg_match("/form_field:/", $value))
         {
           $value = ft_get_mapped_form_field_data($value);
         }

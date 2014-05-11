@@ -2,7 +2,6 @@
 
 require_once("library.php");
 
-
 // 1. PHP Version (4.3 or later)
 $valid_php_version = false;
 if (version_compare(phpversion(), $g_required_php_version, ">="))
@@ -38,6 +37,7 @@ $page_vars["step"] = 2;
 $page_vars["valid_php_version"] = $valid_php_version;
 $page_vars["mysql_loaded"] = $mysql_loaded;
 $page_vars["valid_mysql_version"] = $valid_mysql_version;
+$page_vars["suhosin_loaded"] = extension_loaded("suhosin");
 $page_vars["sessions_loaded"] = extension_loaded("session");
 $page_vars["overridden_invalid_db_version"] = $overridden_invalid_db_version;
 $page_vars["phpversion"] = phpversion();

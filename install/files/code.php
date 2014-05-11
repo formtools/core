@@ -259,7 +259,7 @@ function ft_install_generate_config_file()
  */
 function ft_install_create_database($hostname, $db_name, $username, $password, $table_prefix)
 {
-  global $g_sql, $g_current_version, $g_release_type, $g_release_date;
+  global $g_sql, $g_current_version, $g_release_type, $g_release_date, $g_db_table_charset;
 
   // connect to the database
   $link = @mysql_connect($hostname, $username, $password);
@@ -277,6 +277,7 @@ function ft_install_create_database($hostname, $db_name, $username, $password, $
     $query = preg_replace("/%FORMTOOLSVERSION%/", $g_current_version, $query);
     $query = preg_replace("/%FORMTOOLSRELEASEDATE%/", $g_release_date, $query);
     $query = preg_replace("/%FORMTOOLSRELEASETYPE%/", $g_release_type, $query);
+    $query = preg_replace("/%CHARSET%/", $g_db_table_charset, $query);
 
     // execute the queries. If any error occurs, break out of the installation loop, delete any and
     // all tables that have been created

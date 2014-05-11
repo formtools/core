@@ -36,6 +36,7 @@ $tabs = array(
 // start compiling the info here
 $page_vars = array();
 $page_vars["page"] = $page;
+$page_vars["unique_page_id"] = "edit_option_list_main_tab";
 $page_vars["tabs"] = $tabs;
 $page_vars["show_tabset_nav_links"] = true;
 $page_vars["prev_tabset_link"] = $prev_tabset_link;

@@ -3,9 +3,9 @@
 /**
  * This file contains all functions relating to managing forms within Form Tools.
  *
- * @copyright Encore Web Studios 2011
+ * @copyright Encore Web Studios 2012
  * @author Encore Web Studios <formtools@encorewebstudios.com>
- * @package 2-1-x
+ * @package 2-2-x
  * @subpackage Forms
  */
 
@@ -284,7 +284,7 @@ function ft_delete_form($form_id, $remove_associated_files = false)
  */
 function ft_finalize_form($form_id)
 {
-  global $g_table_prefix, $g_field_sizes, $LANG;
+  global $g_table_prefix, $g_field_sizes, $g_db_table_charset, $LANG;
 
   $form_fields = ft_get_form_fields($form_id);
   $query = "
@@ -306,7 +306,7 @@ function ft_finalize_form($form_id)
             last_modified_date DATETIME NOT NULL,
             ip_address VARCHAR(15),
             is_finalized ENUM('yes','no') default 'yes')
-            DEFAULT CHARSET=utf8";
+            DEFAULT CHARSET=$g_db_table_charset";
 
   $result = mysql_query($query);
   if (!$result)

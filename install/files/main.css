@@ -209,3 +209,10 @@ h2 {
 .divider {
   border-bottom: 1px dotted #cccccc;
 }
+.warning {
+	margin: 8px 0px 0px 0px;
+	color: #990000;
+  padding: 8px;
+  border: 1px solid #cc0000;
+  background-color: #fffffcc;
+}
