@@ -19,11 +19,11 @@
   border-right: 1px solid white;
   white-space: nowrap;
 }
-
 .sortable li.sortable_row {
   float: none;
   border-right: none;
   margin-bottom: 1px;
+  overflow: hidden;
 }
 .groupable li.sortable_row {
   background: transparent url(../../../global/images/group_block.png) repeat-y left bottom;

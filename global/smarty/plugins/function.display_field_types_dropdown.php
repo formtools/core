@@ -55,7 +55,7 @@ function smarty_function_display_field_types_dropdown($params, &$smarty)
     $rows[] = "</optgroup>";
   }
 
-  $dd = "<select $attribute_str>" . join("\n", $rows) . "</select>";
+  $dd = "<select $attribute_str>" . implode("", $rows) . "</select>";
 
   return $dd;
 }

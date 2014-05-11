@@ -102,23 +102,39 @@ function ft_uninstall_module($module_id)
     mysql_query("DELETE FROM {$g_table_prefix}modules WHERE module_id = $module_id");
     mysql_query("DELETE FROM {$g_table_prefix}module_menu_items WHERE module_id = $module_id");
 
-    // if this module was linked to any menu items, remove it!
+    // if this module was used in any menus, update them
     $query = mysql_query("
-      DELETE FROM   {$g_table_prefix}menu_items
+      SELECT DISTINCT menu_id
+      FROM   {$g_table_prefix}menu_items
       WHERE  page_identifier = 'module_$module_id'
-        ");
+    ");
 
-    // delete any hooks registered by this module
-    ft_unregister_module_hooks($module_folder);
+    $affected_menu_ids = array();
+    while ($row = mysql_fetch_assoc($query))
+      $affected_menu_ids[] = $row["menu_id"];
 
-    // if rows were deleted, re-cache the admin menu and update the ordering of the admin account.
-    // ASSUMPTION: only administrator accounts can have modules as items (will need to update at some
-    // point soon, no doubt).
-    if (mysql_affected_rows())
+    if (!empty($affected_menu_ids))
     {
+      mysql_query("
+        DELETE FROM {$g_table_prefix}menu_items
+        WHERE page_identifier = 'module_$module_id'
+          ");
+
+      // now update the orders of all affected menus
+      foreach ($affected_menu_ids as $menu_id)
+      {
+      	ft_update_menu_order($menu_id);
+      }
+
+      // if rows were deleted, re-cache the admin menu and update the ordering of the admin account.
+      // ASSUMPTION: only administrator accounts can have modules as items (will need to update at some
+      // point soon, no doubt).
       ft_cache_account_menu($_SESSION["ft"]["account"]["account_id"]);
       ft_update_menu_order($_SESSION["ft"]["account"]["menu_id"]);
     }
+
+    // delete any hooks registered by this module
+    ft_unregister_module_hooks($module_folder);
   }
 
   // now delete the entire module folder

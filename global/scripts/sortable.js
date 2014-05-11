@@ -61,6 +61,7 @@ $(function() {
 
   // initialization code UNIQUE to non-grouped sortables
   $(".sortable").each(function() {
+
     // if this sortable is part of a group, ignore it! This stuff is all taken care of already
     if ($(this).closest(".sortable_groups").length > 0) {
       return;
@@ -178,19 +179,6 @@ sortable_ns._add_common_event_delegation = function(el) {
       sortable_ns._update_connect_image({ el: curr_col0, action: action });
     }
   });
-
-
-  /*
-  Hmm... TODO
-
-  // ONLOAD, ADD ROW(S)
-  if (sortable_ns.delete_tooltip) {
-    $(this).find(".del").attr("title", sortable_ns.delete_tooltip);
-  }
-  if (sortable_ns.edit_tooltip) {
-    $(this).find(".edit").attr("title", sortable_ns.edit_tooltip);
-  }
-  */
 
   $(el).bind("mouseout", function(e) {
     if ($(e.target).hasClass("del")) {

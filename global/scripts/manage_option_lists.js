@@ -454,9 +454,10 @@ sf_ns.delete_group = function(el) {
 sf_ns.toggle_advanced_settings = function() {
   var display_setting = $("#option_lists_advanced_settings").css("display");
   if (display_setting == "none") {
-    $("#option_lists_advanced_settings").show("blind");
+    $("#option_lists_advanced_settings").slideDown(200);
+    $("#smart_fill_source_form_field").focus();
   } else {
-    $("#option_lists_advanced_settings").hide("blind");
+    $("#option_lists_advanced_settings").slideUp(200);
   }
   return false;
 }

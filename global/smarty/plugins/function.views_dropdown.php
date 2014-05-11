@@ -29,6 +29,7 @@ function smarty_function_views_dropdown($params, &$smarty)
   $submission_id     = (isset($params["submission_id"])) ? $params["submission_id"] : "";
   $omit_hidden_views = (isset($params["omit_hidden_views"])) ? $params["omit_hidden_views"] : false;
   $create_view_dropdown = (isset($params["create_view_dropdown"])) ? $params["create_view_dropdown"] : false;
+  $class             = (isset($params["class"])) ? $params["class"] : "";
   $open_html = (isset($params["open_html"])) ? $params["open_html"] : "";
   $close_html = (isset($params["close_html"])) ? $params["close_html"] : "";
   $hide_single_view = (isset($params["hide_single_view"])) ? $params["hide_single_view"] : false;
@@ -40,7 +41,8 @@ function smarty_function_views_dropdown($params, &$smarty)
   $attributes = array(
     "id"       => $name_id,
     "name"     => $name_id,
-    "onchange" => $onchange
+    "onchange" => $onchange,
+    "class"    => $class
       );
 
   $attribute_str = "";
@@ -51,7 +53,8 @@ function smarty_function_views_dropdown($params, &$smarty)
   }
 
   $num_views = 0;
-  $dd = "<select $attribute_str>";
+  $class_str = (empty($class)) ? "" : " class=\"$class\"";
+  $dd = "<select $attribute_str{$class_str}>";
 
   if ($show_empty_label)
     $dd .= "<option value=\"\">{$empty_label}</option>";

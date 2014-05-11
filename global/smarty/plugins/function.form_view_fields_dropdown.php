@@ -7,8 +7,11 @@
  * Type:     function
  * Name:     form_view_fields_dropdown
  * Purpose:  generates a dropdown of all fields in a View. Used on the main submission listing page
- *           in the search form for the administrator and client. As of 2.0.0 Beta 20090510, this
- *           only displays those fields marked as searchable.
+ *           in the search form for the administrator and client.
+ *
+ *           This is an old version that does some fancy stuff for the Submission Listing page. If you just
+ *           want a dropdown of the View fields with no other clutter, use {view_fields}. This function should
+ *           be renamed!
  * -------------------------------------------------------------
  */
 function smarty_function_form_view_fields_dropdown($params, &$smarty)

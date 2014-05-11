@@ -36,7 +36,8 @@ function ft_create_blank_submission($form_id, $view_id, $is_finalized = false)
   $default_insert_pairs = array(
     "submission_date"    => $now,
     "last_modified_date" => $now,
-    "ip_address"         => $ip
+    "ip_address"         => $ip,
+    "is_finalized"       => ($is_finalized) ? "yes" : "no"
   );
 
   $special_defaults = ft_get_new_view_submission_defaults($view_id);
@@ -538,7 +539,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
   $infohash = ft_sanitize($infohash);
   extract(ft_process_hook_calls("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
-  // assumes that each tab as at least a single field (UPDATE button should be hidden if there are none)
+  // assumes that each tab has at least a single field (UPDATE button should be hidden if there are none)
   $field_ids = explode(",", $infohash["field_ids"]);
 
   $form_fields = ft_get_form_fields($form_id);
@@ -1242,7 +1243,7 @@ function ft_display_submission_listing_quicklinks($context, $page_data)
   $num_quicklinks = count($quicklinks);
   for ($i=0; $i<$num_quicklinks; $i++)
   {
-    $classes[] = array();
+    $classes = array();
     if ($i == 0)
       $classes[] = "ft_quicklinks_first";
     if ($i == $num_quicklinks - 1)

@@ -42,7 +42,7 @@ $page_vars["js_messages"] = array("phrase_remove_row", "phrase_create_group", "w
 $page_vars["num_views"] = $num_views;
 $page_vars["head_string"] =<<< END
 <script src="$g_root_url/global/scripts/sortable.js"></script>
-<script src="$g_root_url/global/scripts/manage_views.js"></script>
+<script src="$g_root_url/global/scripts/manage_views.js?v=4"></script>
 END;
 
 ft_display_page("admin/forms/edit.tpl", $page_vars);

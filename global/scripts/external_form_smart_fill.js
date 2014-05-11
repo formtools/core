@@ -775,6 +775,7 @@ sf_ns.itemize_form_fields = function() {
                 break;
 
               // explicitly ignore buttons and reset fields
+              //case "image":
               case "button":
               case "reset":
                 break;

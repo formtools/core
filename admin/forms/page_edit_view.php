@@ -166,7 +166,7 @@ $page_vars["submission_list_sortable_id"] = $submission_list_sortable_id;
 $page_vars["head_string"] =<<< END
   <script src="$g_root_url/global/scripts/jquery-ui-timepicker-addon.js"></script>
   <script src="$g_root_url/global/scripts/sortable.js"></script>
-  <script src="$g_root_url/global/scripts/manage_views.js?v=3"></script>
+  <script src="$g_root_url/global/scripts/manage_views.js?v=4"></script>
 END;
 
 $replacements = array("user_doc_link" => "http://docs.formtools.org/userdoc2_1/index.php?page=view_filters");

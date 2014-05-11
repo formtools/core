@@ -800,6 +800,7 @@ view_ns.add_view_fields = function(field_ids) {
     var row_html = '<div class="row_group">'
       + '<input type="hidden" value="' + field_id + '" class="sr_order">'
       + '<ul>'
+        + '<li class="col0"></li>'
         + '<li class="col1 sort_col"></li>'
         + '<li class="col2">' + field_name + '</li>'
         + '<li class="col3 medium_grey">' + view_ns.field_type_map["ft" + field_info.field_type_id] + '</li>'

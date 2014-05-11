@@ -24,7 +24,7 @@
   {$head_string}
   {$head_js}
   {$head_css}
-  {template_hook location="modules_head_top"}
+  {template_hook location="modules_head_bottom"}
 </head>
 <body>
 

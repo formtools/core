@@ -1077,6 +1077,7 @@ $LANG["notify_multi_field_selected"] = "The field has been selected. <a href=\"#
 $LANG["notify_multi_field_updated"] = "This field has been updated. You will be able to configure the field options after setting up the form.";
 $LANG["notify_multiple_fields_found"] = "Multiple elements were found with this field name (<b>{\$field_name}</b>). This can occur if your page contains more than one form or if you accidentally named one of your forms the same as another. Please choose the one you want from the list below.";
 $LANG["notify_new_default_view_created"] = "A new, default View containing all your form fields has been created.";
+$LANG["notify_new_submission_created"] = "The submission has been created. You may edit it below.";
 $LANG["notify_no_account_id_in_sessions"] = "No user account ID was found in sessions. Please log in again below.";
 $LANG["notify_no_api_installed"] = "You don't have the API installed";
 $LANG["notify_no_client_permissions"] = "There are no settings available to edit.";

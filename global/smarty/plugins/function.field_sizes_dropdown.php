@@ -53,7 +53,7 @@ function smarty_function_field_sizes_dropdown($params, &$smarty)
 			{
 				$lang_key = $info["lang_key"];
 				if (in_array($key, $available_field_type_sizes))
-			    $html .= "<option value=\"$key\"" . (in_array($key, $default_values) ? " selected" : "") . ">{$LANG[$lang_key]}</option>\n";
+			    $html .= "<option value=\"$key\"" . (in_array($key, $default_values) ? " selected" : "") . ">{$LANG[$lang_key]}</option>";
 			}
 			$html .= "</select>";
 			reset($g_field_sizes);
@@ -65,7 +65,7 @@ function smarty_function_field_sizes_dropdown($params, &$smarty)
 		while (list($key, $info) = each($g_field_sizes))
 		{
 			$lang_key = $info["lang_key"];
-		  $html .= "<option value=\"$key\"" . (in_array($key, $default_values) ? " selected" : "") . ">{$LANG[$lang_key]}</option>\n";
+		  $html .= "<option value=\"$key\"" . (in_array($key, $default_values) ? " selected" : "") . ">{$LANG[$lang_key]}</option>";
 		}
 		$html .= "</select>";
 		reset($g_field_sizes);

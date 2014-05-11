@@ -6,7 +6,7 @@
  * File:     function.form_fields_dropdown
  * Type:     function
  * Name:     form_view_fields_dropdown
- * Purpose:  generates a dropdown of all forms in the database (ordered by form name).
+ * Purpose:  generates a dropdown of all fields in a form.
  * -------------------------------------------------------------
  */
 function smarty_function_form_fields_dropdown($params, &$smarty)

@@ -33,7 +33,7 @@
     </div>
 
     <div class="clear"></div>
-
+    {strip}
     <div class="sortable groupable scrollable edit_fields" id="{$sortable_id}">
       {* this optional field tells the sortable JS code to automatically tabindex the contents of the sortable
          table by column. The JS re-tabindexes everything after a re-ordering. *}
@@ -155,7 +155,7 @@
                         <span class="pad_left_small medium_grey system_field_db_column">{$field.col_name}</span>
                       {else}
                         <input type="hidden" name="old_col_{$field_id}_name" id="old_col_{$field_id}_name" value="{$field.col_name}" />
-                        <input type="text" name="col_{$field_id}_name" id="col_{$field_id}_name" class="db_column" value="{$field.col_name}" />
+                        <input type="text" name="col_{$field_id}_name" id="col_{$field_id}_name" class="db_column" value="{$field.col_name}" maxlength="64" />
                       {/if}
                     </li>
                   </ul>
@@ -182,6 +182,7 @@
         <div class="scroll-bar-bottom"></div>
       </div>
     </div>
+    {/strip}
 
     <div class="clear"></div>
 
@@ -243,7 +244,7 @@
               </select>
             </li>
             <li class="sub_col6">
-              <input type="text" name="col_%%ROW%%_name" id="col_%%ROW%%_name" class="db_column" value="" />
+              <input type="text" name="col_%%ROW%%_name" id="col_%%ROW%%_name" class="db_column" value="" maxlength="64" />
             </li>
           </ul>
         </li>
@@ -322,7 +323,7 @@
               <td><label for="edit_field__db_column">{$LANG.phrase_db_column}</label></td>
               <td>
                 <div class="edit_field__non_system" id="edit_field__db_column_div">
-                  <input type="text" id="edit_field__db_column" name="edit_field__db_column" />
+                  <input type="text" id="edit_field__db_column" name="edit_field__db_column" maxlength="64" />
                 </div>
                 <div id="edit_field__db_column_div_system" class="edit_field__system medium_grey"></div>
               </td>

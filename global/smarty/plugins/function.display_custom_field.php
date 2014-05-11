@@ -13,11 +13,12 @@ function smarty_function_display_custom_field($params, &$smarty)
 {
   // note that View ID is optional
   $required_params = array("form_id", "submission_id", "field_info", "field_types", "settings");
+
   foreach ($required_params as $param)
   {
     if (!isset($params[$param]))
     {
-      $smarty->trigger_error("assign: missing '$param' parameter.");
+//      $smarty->trigger_error("assign: missing '$param' parameter.");
       return;
     }
   }
