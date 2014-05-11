@@ -9,7 +9,6 @@ body, html {
   background-color: #ffffff;
 }
 body {
-  background-image: url(../images/top_row.jpg);
   background-repeat: repeat-x;
   background-position: center top;
   text-align: center;
@@ -49,7 +48,6 @@ input[type=text], input[type=password], textarea {
   padding-top: 24px;
 }
 a:link, a:visited {
-  color: #008800;
   text-decoration: none;
   outline: none;
 }
@@ -74,7 +72,6 @@ form { margin: 0px; }
 }
 
 #account_section {
-  background-image: url(../images/account_section_bg.jpg);
   background-repeat: repeat-x;
   height:25px;
   padding-left: 12px;
@@ -99,10 +96,8 @@ form { margin: 0px; }
   margin: 10px 0px;
 }
 
-
 /*-------------- page titles ---------------*/
 .title {
-  color: #2e6932;
   padding-bottom: 5px;
   font: 17.6px/20px Verdana,sans-serif;
 }
@@ -111,7 +106,6 @@ form { margin: 0px; }
   font-family: Verdana,sans-serif;
   line-height: 11px;
 }
-
 .title a:link, .title a:visited {
   text-decoration: none;
 }
@@ -120,7 +114,6 @@ form { margin: 0px; }
 }
 .subtitle {
   font-size: 8pt;
-  color: #4b6c4e;
   letter-spacing: 1px;
 }
 .underline {

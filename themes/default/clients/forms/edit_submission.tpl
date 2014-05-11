@@ -92,7 +92,7 @@
       {ft_include file='tabset_close.tpl'}
     {/if}
 
-    {template_hook location="admin_edit_submission_bottom"}
+    {template_hook location="client_edit_submission_bottom"}
   </div>
 
 {ft_include file='footer.tpl'}

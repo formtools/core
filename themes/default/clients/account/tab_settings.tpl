@@ -45,14 +45,14 @@
           <tr>
             <td width="15" class="red" align="center">*</td>
             <td class="pad_left_small" width="180">{$LANG.word_theme}</td>
-            <td>{themes_dropdown name_id="theme" default=$client_info.theme}</td>
+            <td>{themes_dropdown name_id="theme" default=$client_info.theme default_swatch=$client_info.swatch}</td>
           </tr>
         {/if}
         {if $client_info.settings.may_edit_logout_url == "yes"}
           <tr>
             <td width="15" class="red" align="center">*</td>
             <td class="pad_left_small" width="180">{$LANG.phrase_logout_url}</td>
-            <td><input type="text" name="logout_url" value="{$client_info.logout_url}" style="width: 300px" /></td>
+            <td><input type="text" name="logout_url" value="{$client_info.logout_url|escape}" style="width: 98%" /></td>
           </tr>
         {/if}
         {if $client_info.settings.may_edit_language == "yes"}

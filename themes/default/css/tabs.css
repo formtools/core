@@ -35,9 +35,6 @@
   background-color: white;
   margin-bottom: -1px;
 }
-.main_tabset li.selected a {
-  color: green;
-}
 .main_tabset a:hover {
   text-decoration: none;
   color: #0b4a03;
@@ -73,7 +70,6 @@
 }
 .inner_tabset .tab_row div.selected {
   background-color: white;
-  color: green;
 }
 .inner_tabset .tab_row div.selected a {
   display: block;

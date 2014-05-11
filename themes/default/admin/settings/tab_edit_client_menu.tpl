@@ -66,7 +66,7 @@
                     <span class="medium_grey">{$LANG.word_na}</span>
                   {/if}
                 </li>
-                <li class="col5 check_area"><input type="checkbox" name="submenu_{$i.list_order}" {if $i.is_submenu == "yes"}checked{/if} /></li>
+                <li class="col5 check_area"><input type="checkbox" name="submenu_{$i.list_order}" {if $i.is_submenu == "yes"}checked="checked"{/if} /></li>
                 <li class="col6 colN del"></li>
               </ul>
               <div class="clear"></div>

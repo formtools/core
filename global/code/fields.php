@@ -1156,11 +1156,10 @@ function ft_update_field_filters($field_id)
     $filter_values = $filter_info["filter_values"];
     $operator      = $filter_info["operator"];
 
-    // date field [TODO... there's a difference between datetimes and varchars cast as datetimes]
     if ($field_info["is_date_field"] == "yes")
     {
       $sql_operator = ($operator == "after") ? ">" : "<";
-      $sql = "$col_name $sql_operator '$values'"; // TODO values doesn't exist. This throws an error...
+      $sql = "$col_name $sql_operator '$filter_values'";
     }
     else
     {

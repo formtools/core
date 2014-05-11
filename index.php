@@ -23,6 +23,7 @@ if (isset($_SESSION["ft"]["account"]) && isset($_SESSION["ft"]["account"]["is_lo
 // default settings
 $settings = ft_get_settings();
 $g_theme  = $settings["default_theme"];
+$g_swatch = $settings["default_client_swatch"];
 
 // if an account id is included in the query string, use it to determine the appearance of the
 // interface, including logo and footer and even language
@@ -102,4 +103,4 @@ if (!isset($g_upgrade_info["message"]) && isset($_GET["message"]))
     $g_message = strip_tags($_GET["message"]);
 }
 
-ft_display_page("index.tpl", $page_vars, $g_theme);
+ft_display_page("index.tpl", $page_vars, $g_theme, $g_swatch);

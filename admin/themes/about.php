@@ -12,6 +12,12 @@ if (empty($theme_id))
 }
 $theme_info = ft_get_theme($theme_id);
 
+// if this theme uses swatches, generate a list of all available swatches
+if ($theme_info["uses_swatches"] == "yes")
+{
+	$theme_info["available_swatches"] = ft_get_theme_swatch_list($theme_info["swatches"]);
+}
+
 // compile header information
 $page_vars = array();
 $page_vars["page"]       = "themes_about";

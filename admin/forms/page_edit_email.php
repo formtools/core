@@ -32,6 +32,7 @@ $views = ft_get_views($form_id);
 
 $filtered_views = array();
 $selected_edit_submission_views = array();
+$selected_when_sent_views = array();
 foreach ($views["results"] as $view)
 {
   if (!empty($view["filters"]))
@@ -39,6 +40,9 @@ foreach ($views["results"] as $view)
 
   if (in_array($view["view_id"], $template_info["edit_submission_page_view_ids"]))
     $selected_edit_submission_views[] = $view;
+
+  if (in_array($view["view_id"], $template_info["when_sent_view_ids"]))
+    $selected_when_sent_views[] = $view;
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -54,6 +58,7 @@ $page_vars["clients"]    = $clients;
 $page_vars["views"]      = $views["results"];
 $page_vars["filtered_views"] = $filtered_views;
 $page_vars["selected_edit_submission_views"] = $selected_edit_submission_views;
+$page_vars["selected_when_sent_views"] = $selected_when_sent_views;
 $page_vars["admin_info"] = $admin_info;
 $page_vars["file_field_text"] = $file_field_text;
 $page_vars["columns"]    = $columns;
@@ -79,12 +84,16 @@ $page_vars["test_email_data_source"] = $test_email_data_source;
 $page_vars["test_email_submission_id"] = $test_email_submission_id;
 $page_vars["registered_form_emails"] = ft_get_email_fields($form_id);
 $page_vars["head_string"] =<<< END
-<script src="$g_root_url/global/scripts/manage_email_templates.js?v=2"></script>
+<script src="$g_root_url/global/scripts/manage_email_templates.js?v=3"></script>
 <script src="$g_root_url/global/codemirror/js/codemirror.js"></script>
 END;
 
 $page_vars["head_js"] =<<< END
-rsv.onCompleteHandler = function() { ft.select_all($("#selected_edit_submission_views")); return true; }
+rsv.onCompleteHandler = function() {
+  ft.select_all($("#selected_edit_submission_views"));
+  ft.select_all($("#selected_when_sent_views"));
+  return true;
+}
 
 // log the total number of recipients
 $(function() {
@@ -95,8 +104,20 @@ $(function() {
   // always set the select recipient field to empty
   $("#recipient_options").val("");
   $("input[name=include_on_edit_submission_page]").bind("change", function() {
-    emails_ns.change_include_on_edit_submission_page(this.value);
+    if (this.value == "specific_views") {
+      $('#include_on_edit_submission_page_views').show();
+    } else {
+      $('#include_on_edit_submission_page_views').hide();
+    }
   });
+  $("input[name=view_mapping_type]").bind("change", function() {
+    if (this.value == "specific") {
+      $('#when_sent_views').show();
+    } else {
+      $('#when_sent_views').hide();
+    }
+  });
+
   $("#edit_email_template_form").bind("submit", function() {
     return emails_ns.onsubmit_check_email_settings(this);
   });

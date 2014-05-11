@@ -44,6 +44,12 @@ $(function() {
     }
   });
 
+  $(".ft_themes_dropdown").bind("change", function() {
+	var id = $(this).attr("id");
+    $("." + id + "_swatches").hide();
+    $("#" + this.value + "_" + id + "_swatches").show();
+  });
+
   // this adds the functionality so that when a user clicks on the language placeholder icon, it opens
   // the dialog window containing the available placeholder list. This was a LOT simpler before I had
   // to make it work with IE. The iframe was needed to hover the element above the textboxes. *sigh*

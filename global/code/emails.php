@@ -39,12 +39,12 @@ function ft_create_blank_email_template($form_id, $create_email_from_email_id = 
     // WISHLIST: to have a generic "copy_table_row" function...
     $query = mysql_query("
       INSERT INTO {$g_table_prefix}email_templates (form_id, email_template_name, email_status,
-        view_mapping_type, view_mapping_view_id, limit_email_content_to_fields_in_view, email_event_trigger,
+        view_mapping_type, limit_email_content_to_fields_in_view, email_event_trigger,
         include_on_edit_submission_page, subject, email_from, email_from_account_id, custom_from_name,
         custom_from_email, email_reply_to, email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email,
         html_template, text_template)
         (SELECT form_id, email_template_name, email_status,
-           view_mapping_type, view_mapping_view_id, limit_email_content_to_fields_in_view, email_event_trigger,
+           view_mapping_type, limit_email_content_to_fields_in_view, email_event_trigger,
            include_on_edit_submission_page, subject, email_from, email_from_account_id, custom_from_name,
            custom_from_email, email_reply_to, email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email,
            html_template, text_template
@@ -78,6 +78,14 @@ function ft_create_blank_email_template($form_id, $create_email_from_email_id = 
         VALUES ($email_id, $view_id)
           ");
     }
+
+    foreach ($email_template_info["when_sent_view_ids"] as $view_id)
+    {
+      mysql_query("
+        INSERT INTO {$g_table_prefix}email_template_when_sent_views (email_id, view_id)
+        VALUES ($email_id, $view_id)
+          ");
+    }
   }
 
   extract(ft_process_hook_calls("end", compact("email_id"), array()), EXTR_OVERWRITE);
@@ -87,8 +95,7 @@ function ft_create_blank_email_template($form_id, $create_email_from_email_id = 
 
 
 /**
- * Returns a list of all email templates for a form. This returns everything from the email_templates
- * table, plus a "view_name" key->value pair from the Views table (if a View is specified).
+ * Returns a list of all email templates for a form, in no particular order.
  *
  * @param integer $form_id
  * @return array
@@ -97,22 +104,24 @@ function ft_get_email_templates($form_id, $page_num = 1)
 {
   global $g_table_prefix;
 
-  $num_emails_per_page = $_SESSION["ft"]["settings"]["num_emails_per_page"];
+  $num_emails_per_page = isset($_SESSION["ft"]["settings"]["num_emails_per_page"]) ? $_SESSION["ft"]["settings"]["num_emails_per_page"] : 10;
 
   // determine the LIMIT clause
   $limit_clause = "";
   if (empty($page_num))
+  {
     $page_num = 1;
+  }
+
   $first_item = ($page_num - 1) * $num_emails_per_page;
   $limit_clause = "LIMIT $first_item, $num_emails_per_page";
 
   $result = mysql_query("
-    SELECT et.*, v.view_name
-    FROM 	 {$g_table_prefix}email_templates et
-      LEFT JOIN {$g_table_prefix}views v ON v.view_id = et.view_mapping_view_id
-    WHERE  et.form_id = $form_id
-     $limit_clause
-      ") or die(mysql_error());
+    SELECT *
+    FROM 	 {$g_table_prefix}email_templates
+    WHERE  form_id = $form_id
+    $limit_clause
+  ");
 
   $count_result = mysql_query("
     SELECT count(*) as c
@@ -157,7 +166,17 @@ function ft_get_email_template_list($form_id)
 
   $info = array();
   while ($row = mysql_fetch_assoc($result))
+	{
+	  $email_id = $row["email_id"];
+	  $when_sent_view_ids = array();
+		$query = mysql_query("SELECT view_id FROM {$g_table_prefix}email_template_when_sent_views WHERE email_id = $email_id");
+		while ($row2 = mysql_fetch_assoc($query))
+		{
+		  $when_sent_view_ids[] = $row2["view_id"];
+		}
+		$row["when_sent_view_ids"] = $when_sent_view_ids;
     $info[] = $row;
+  }
 
   extract(ft_process_hook_calls("end", compact("form_id", "info"), array("info")), EXTR_OVERWRITE);
 
@@ -189,9 +208,19 @@ function ft_get_email_template($email_id)
   $email_view_query = mysql_query("SELECT view_id FROM {$g_table_prefix}email_template_edit_submission_views WHERE email_id = $email_id");
   $view_ids = array();
   while ($row = mysql_fetch_assoc($email_view_query))
+  {
     $view_ids[] = $row["view_id"];
-
+  }
   $email_template["edit_submission_page_view_ids"] = $view_ids;
+
+  // get the list of Views for which this email template is assigned to be sent
+  $email_view_query = mysql_query("SELECT view_id FROM {$g_table_prefix}email_template_when_sent_views WHERE email_id = $email_id");
+  $view_ids = array();
+  while ($row = mysql_fetch_assoc($email_view_query))
+  {
+    $view_ids[] = $row["view_id"];
+  }
+  $email_template["when_sent_view_ids"] = $view_ids;
 
   extract(ft_process_hook_calls("end", compact("email_template"), array("email_template")), EXTR_OVERWRITE);
 
@@ -370,15 +399,15 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
   $updated_fields_for_email_template = array();
   foreach ($fields_for_email_template as $field_info)
   {
-  	while (list($placeholder, $value) = each($submission_placeholders))
-  	{
+    while (list($placeholder, $value) = each($submission_placeholders))
+    {
       if ($placeholder != "ANSWER_{$field_info["field_name"]}")
         continue;
 
       $field_info["answer"] = $value;
       break;
-  	}
-  	reset($submission_placeholders);
+    }
+    reset($submission_placeholders);
     $updated_fields_for_email_template[] = $field_info;
   }
   $fields_for_email_template = $updated_fields_for_email_template;
@@ -431,8 +460,6 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
     }
     $return_info["html_content"] = $smarty->fetch("eval.tpl");
   }
-
-  // -----------------
 
 
   // compile the "to" / "from" / "reply-to" recipient list, based on this form submission. Virtually
@@ -764,7 +791,6 @@ function ft_update_email_template($email_id, $info)
   $email_template_name   = $info["email_template_name"];
   $email_status          = $info["email_status"];
   $view_mapping_type     = (isset($info["view_mapping_type"])) ? $info["view_mapping_type"] : "all";
-  $view_id               = (isset($info["view_mapping_view_id"]) && !empty($info["view_mapping_view_id"])) ? $info["view_mapping_view_id"] : "NULL";
   $email_event_trigger   = (isset($info["email_event_trigger"]) && !empty($info["email_event_trigger"])) ? join(",", $info["email_event_trigger"]) : "";
   $include_on_edit_submission_page = (isset($info["include_on_edit_submission_page"])) ? $info["include_on_edit_submission_page"] : "no";
   $limit_email_content_to_fields_in_view = (isset($info["limit_email_content_to_fields_in_view"]) && !empty($info["limit_email_content_to_fields_in_view"])) ? $info["limit_email_content_to_fields_in_view"] : "NULL";
@@ -819,7 +845,6 @@ function ft_update_email_template($email_id, $info)
     SET    email_template_name = '$email_template_name',
            email_status = '$email_status',
            view_mapping_type = '$view_mapping_type',
-           view_mapping_view_id = $view_id,
            limit_email_content_to_fields_in_view = $limit_email_content_to_fields_in_view,
            email_event_trigger = '$email_event_trigger',
            include_on_edit_submission_page = '$include_on_edit_submission_page',
@@ -846,6 +871,17 @@ function ft_update_email_template($email_id, $info)
   {
     mysql_query("
       INSERT INTO {$g_table_prefix}email_template_edit_submission_views (email_id, view_id)
+      VALUES ($email_id, $view_id)
+        ");
+  }
+
+  // update the email template when sent Views
+  mysql_query("DELETE FROM {$g_table_prefix}email_template_when_sent_views WHERE email_id = $email_id");
+  $selected_when_sent_views = isset($info["selected_when_sent_views"]) ? $info["selected_when_sent_views"] : array();
+  foreach ($selected_when_sent_views as $view_id)
+  {
+    mysql_query("
+      INSERT INTO {$g_table_prefix}email_template_when_sent_views (email_id, view_id)
       VALUES ($email_id, $view_id)
         ");
   }
@@ -1082,17 +1118,23 @@ function ft_send_emails($event, $form_id, $submission_id)
     if ($template_info["email_status"] == "disabled")
       continue;
 
-    // if this email template has been mapped to a particular View, make sure the View ID is valid & that the
-    // submission can be seen in the View
+    // if this email template has been mapped to or more particular View, make sure the View ID is
+    // valid & that the submission can be seen in at least one of the Views
     if ($template_info["view_mapping_type"] == "specific")
     {
-      $view_id = $template_info["view_mapping_view_id"];
+      $view_ids = $template_info["when_sent_view_ids"];
 
-      // if there's no View ID specified, there's been a problem with the input - or a View has been deleted
-      if (empty($view_id))
-        continue;
+      $found = false;
+      foreach ($view_ids as $view_id)
+      {
+        if (ft_check_view_contains_submission($form_id, $view_id, $submission_id))
+        {
+        	$found = true;
+        	break;
+        }
+      }
 
-      if (!ft_check_view_contains_submission($form_id, $view_id, $submission_id))
+      if (!$found)
         continue;
     }
 
@@ -1153,7 +1195,7 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
   $to = htmlspecialchars_decode($to);
 
   if (empty($to)){
-  	return array(false, "No main recipient specified.");
+    return array(false, "No main recipient specified.");
   }
 
   $headers = "MIME-Version: 1.0$eol";
@@ -1516,11 +1558,12 @@ function _ft_get_email_template_content($form_id, $submission_id, $email_templat
     switch ($test_email_data_source)
     {
       case "random_submission":
-        // if this email template has been mapped to a View ID, get the filters
+        // if this email template has been mapped to only be sent for one or more Views,
+        // find a submission that fits into the first in the list
         $where_clause = "";
-        if (!empty($email_template["view_mapping_view_id"]))
+        if (!empty($email_template["when_sent_view_ids"]))
         {
-          $sql_clauses = ft_get_view_filter_sql($email_template["view_mapping_view_id"]);
+          $sql_clauses = ft_get_view_filter_sql($email_template["when_sent_view_ids"][0]);
           if (!empty($sql_clauses))
             $where_clause = "WHERE (" . join(" AND ", $sql_clauses) . ") ";
         }

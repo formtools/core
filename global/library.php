@@ -215,7 +215,7 @@ $g_set_sql_mode = true;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.1.2";
+$g_current_version = "2.1.3";
 
 /**
  * The release type: alpha, beta or main
@@ -225,7 +225,7 @@ $g_release_type = "main";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20110827";
+$g_release_date = "20110930";
 
 /**
  * The minimum required PHP version needed to run Form Tools.
@@ -281,6 +281,7 @@ $g_ft_tables = array(
   "client_views",
   "email_template_edit_submission_views",
   "email_template_recipients",
+  "email_template_when_sent_views",
   "email_templates",
   "field_options",
   "field_settings",
@@ -309,7 +310,7 @@ $g_ft_tables = array(
   "view_columns",
   "view_fields",
   "view_filters",
-  "view_tabs"
+  "view_tabs",
 );
 
 // include all code libraries

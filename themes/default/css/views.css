@@ -154,6 +154,9 @@
   margin-bottom: -4px;
   padding: 1px;
 }
+#standard_filters_table select {
+  max-width: 320px;
+}
 
 /* edit view page */
 #edit_view .sortable_group_header input {

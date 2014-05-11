@@ -18,17 +18,17 @@
     <tr>
       <td class="pad_left_small" width="180">{$LANG.phrase_page_titles}</td>
       <td><input type="text" name="default_page_titles" style="width:98%" value="{$settings.default_page_titles|escape}" /></td>
-      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_page_titles" {if $settings.clients_may_edit_page_titles == "yes"}checked{/if} /></td>
+      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_page_titles" {if $settings.clients_may_edit_page_titles == "yes"}checked="checked"{/if} /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_footer_text}</td>
       <td><input type="text" name="default_footer_text" style="width:98%" value="{$settings.default_footer_text|escape}" /></td>
-      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_footer_text" {if $settings.clients_may_edit_footer_text == "yes"}checked{/if} /></td>
+      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_footer_text" {if $settings.clients_may_edit_footer_text == "yes"}checked="checked"{/if} /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_default_theme}</td>
-      <td>{themes_dropdown name_id="default_theme" default=$settings.default_theme}</td>
-      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_theme" {if $settings.clients_may_edit_theme == "yes"}checked{/if} /></td>
+      <td>{themes_dropdown name_id="default_theme" default=$settings.default_theme default_swatch=$settings.default_client_swatch}</td>
+      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_theme" {if $settings.clients_may_edit_theme == "yes"}checked="checked"{/if} /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_default_menu}</td>
@@ -43,7 +43,7 @@
     <tr>
       <td class="pad_left_small">{$LANG.phrase_logout_url}</td>
       <td><input type="text" name="default_logout_url" value="{$settings.default_logout_url}" style="width: 98%" /></td>
-      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_logout_url" {if $settings.clients_may_edit_logout_url == "yes"}checked{/if} /></td>
+      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_logout_url" {if $settings.clients_may_edit_logout_url == "yes"}checked="checked"{/if} /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_default_language}</td>
@@ -52,22 +52,22 @@
         <input type="button" value="{$LANG.phrase_refresh_list}" onclick="window.location='index.php?page=accounts&refresh_lang_list'" />
         <a href="http://translations.formtools.org" target="_blank">{$LANG.phrase_get_more}</a>
       </td>
-      <td align="center"><input type="checkbox" name="clients_may_edit_ui_language" {if $settings.clients_may_edit_ui_language == "yes"}checked{/if} /></td>
+      <td align="center"><input type="checkbox" name="clients_may_edit_ui_language" {if $settings.clients_may_edit_ui_language == "yes"}checked="checked"{/if} /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_system_time_offset}</td>
       <td>{timezone_offset_dropdown name_id="default_timezone_offset" default=$settings.default_timezone_offset}</td>
-      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_timezone_offset" {if $settings.clients_may_edit_timezone_offset == "yes"}checked{/if} /></td>
+      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_timezone_offset" {if $settings.clients_may_edit_timezone_offset == "yes"}checked="checked"{/if} /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_default_sessions_timeout}</td>
       <td><input type="text" name="default_sessions_timeout" value="{$settings.default_sessions_timeout}" style="width: 30px" /> {$LANG.word_minutes}</td>
-      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_sessions_timeout" {if $settings.clients_may_edit_sessions_timeout == "yes"}checked{/if} /></td>
+      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_sessions_timeout" {if $settings.clients_may_edit_sessions_timeout == "yes"}checked="checked"{/if} /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_date_format}</td>
       <td><input type="text" name="default_date_format" value="{$settings.default_date_format}" style="width: 80px" /> <span class="medium_grey">{$text_date_formatting_link}</span></td>
-      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_date_format" {if $settings.clients_may_edit_date_format == "yes"}checked{/if} /></td>
+      <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_date_format" {if $settings.clients_may_edit_date_format == "yes"}checked="checked"{/if} /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_forms_page_default_message}</td>
@@ -98,7 +98,7 @@
         </select>
       </td>
       <td class="check_area" align="center"><input type="checkbox" name="clients_may_edit_max_failed_login_attempts"
-        {if $settings.clients_may_edit_max_failed_login_attempts == "yes"}checked{/if} /></td>
+        {if $settings.clients_may_edit_max_failed_login_attempts == "yes"}checked="checked"{/if} /></td>
     </tr>
     <tr>
       <td class="pad_left_small">{$LANG.phrase_min_password_length}</td>
@@ -122,15 +122,15 @@
       <td>
         {assign var=required_password_chars_arr value=","|explode:$settings.required_password_chars}
         <div>
-          <input type="checkbox" name="required_password_chars[]" value="uppercase" id="rpc1" {if "uppercase"|in_array:$required_password_chars_arr}checked{/if} />
+          <input type="checkbox" name="required_password_chars[]" value="uppercase" id="rpc1" {if "uppercase"|in_array:$required_password_chars_arr}checked="checked"{/if} />
             <label for="rpc1">{$LANG.phrase_one_char_upper}</label>
         </div>
         <div>
-          <input type="checkbox" name="required_password_chars[]" value="number" id="rpc2" {if "number"|in_array:$required_password_chars_arr}checked{/if} />
+          <input type="checkbox" name="required_password_chars[]" value="number" id="rpc2" {if "number"|in_array:$required_password_chars_arr}checked="checked"{/if} />
             <label for="rpc2">{$LANG.phrase_one_char_number}</label>
         </div>
         <div>
-          <input type="checkbox" name="required_password_chars[]" value="special_char" id="rpc3" {if "special_char"|in_array:$required_password_chars_arr}checked{/if} />
+          <input type="checkbox" name="required_password_chars[]" value="special_char" id="rpc3" {if "special_char"|in_array:$required_password_chars_arr}checked="checked"{/if} />
             <label for="rpc3">{$phrase_one_special_char}</label>
         </div>
       </td>

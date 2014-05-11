@@ -252,11 +252,17 @@ function ft_update_account_settings($infohash)
   if (isset($infohash["required_password_chars"]) && is_array($infohash["required_password_chars"]))
     $required_password_chars = implode(",", $infohash["required_password_chars"]);
 
+  $default_theme = $infohash["default_theme"];
+  $default_client_swatch = "";
+  if (isset($infohash["{$default_theme}_default_theme_swatches"]))
+    $default_client_swatch = $infohash["{$default_theme}_default_theme_swatches"];
+
   $settings = array(
     "default_page_titles"          => $infohash["default_page_titles"],
     "default_footer_text"          => $infohash["default_footer_text"],
     "default_client_menu_id"       => $infohash["default_client_menu_id"],
-    "default_theme"                => $infohash["default_theme"],
+    "default_theme"                => $default_theme,
+    "default_client_swatch"        => $default_client_swatch,
     "default_login_page"           => $infohash["default_login_page"],
     "default_logout_url"           => $infohash["default_logout_url"],
     "default_language"             => $infohash["default_language"],
@@ -458,20 +464,31 @@ function ft_update_theme_settings($infohash)
 
   // update the admin settings
   $admin_id = $_SESSION["ft"]["account"]["account_id"];
+  $admin_swatch = "";
+  if (isset($infohash["{$admin_theme}_admin_theme_swatches"]))
+    $admin_swatch = $infohash["{$admin_theme}_admin_theme_swatches"];
+
   mysql_query("
     UPDATE {$g_table_prefix}accounts
-    SET    theme = '$admin_theme'
+    SET    theme = '$admin_theme',
+           swatch = '$admin_swatch'
     WHERE  account_id = $admin_id
       ");
 
-  $_SESSION["ft"]["account"]["theme"] = $admin_theme;
+  $_SESSION["ft"]["account"]["theme"]  = $admin_theme;
+  $_SESSION["ft"]["account"]["swatch"] = $admin_swatch;
 
-  // update the default client theme
-  mysql_query("
-    UPDATE {$g_table_prefix}settings
-    SET    setting_value = '$default_client_theme'
-    WHERE  setting_name = 'default_theme'
-      ");
+  $default_client_swatch = "";
+  if (isset($infohash["{$default_client_theme}_default_client_theme_swatches"]))
+    $default_client_swatch = $infohash["{$default_client_theme}_default_client_theme_swatches"];
+
+  // update the default client theme & swatch
+  $new_settings = array(
+    "default_theme"         => $default_client_theme,
+    "default_client_swatch" => $default_client_swatch
+  );
+  ft_set_settings($new_settings);
+
 
   // finally, update the enabled themes list. Only set the theme as enabled if the
   // cache folder is writable

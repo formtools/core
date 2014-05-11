@@ -1440,15 +1440,6 @@ function ft_update_form_fields_tab($form_id, $infohash)
     }
   }
 
-  // if any of the database column names just changed we need to update any View filters that relied on them
-  if (!empty($db_col_changes))
-  {
-    while (list($field_id, $changes) = each($db_col_changes))
-    {
-      ft_update_field_filters($field_id);
-    }
-  }
-
   // now update the fields, and, if need be, the form's database table
   foreach ($field_info as $field)
   {
@@ -1495,6 +1486,15 @@ function ft_update_form_fields_tab($form_id, $infohash)
 
     mysql_query($query)
       or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
+  }
+
+  // if any of the database column names just changed we need to update any View filters that relied on them
+  if (!empty($db_col_changes))
+  {
+    while (list($field_id, $changes) = each($db_col_changes))
+    {
+      ft_update_field_filters($field_id);
+    }
   }
 
   // okay! now add any new fields that the user just added

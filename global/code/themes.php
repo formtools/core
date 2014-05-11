@@ -115,25 +115,38 @@ function ft_update_theme_list()
       if (empty($info["theme_name"]))
         continue;
 
-      $theme_name         = $info["theme_name"];
-      $theme_author       = $info["theme_author"];
-      $theme_author_email = $info["theme_author_email"];
-      $theme_link         = $info["theme_link"];
-      $theme_description  = $info["theme_description"];
-      $theme_version      = $info["theme_version"];
+      $theme_name          = $info["theme_name"];
+      $theme_author        = $info["theme_author"];
+      $theme_author_email  = $info["theme_author_email"];
+      $theme_link          = $info["theme_link"];
+      $theme_description   = $info["theme_description"];
+      $theme_version       = $info["theme_version"];
+      $theme_uses_swatches = $info["theme_uses_swatches"];
+
+      $swatches = "";
+      if ($theme_uses_swatches == "yes")
+      {
+      	$swatch_info = array();
+      	while (list($key, $value) = each($info["theme_swatches"]))
+      	{
+          $swatch_info[] = "$key,$value";
+      	}
+      	$swatches = ft_sanitize(implode("|", $swatch_info));
+      }
 
       // try and set the cache folder as writable
-      if (!is_writable("$themes_folder/$folder/cache/"))
+      if (!is_writable("$themes_folder/$folder/cache/")) {
         @chmod("$themes_folder/$folder/cache/", 0777);
+      }
 
       $cache_folder_writable = (is_writable("$themes_folder/$folder/cache/")) ? "yes" : "no";
 
       mysql_query("
-        INSERT INTO {$g_table_prefix}themes (theme_folder, theme_name, author, theme_link, description, is_enabled,
-          theme_version)
-        VALUES ('$folder', '$theme_name', '$theme_author', '$theme_link', '$theme_description',
-          '$cache_folder_writable', '$theme_version')
-          ");
+        INSERT INTO {$g_table_prefix}themes (theme_folder, theme_name, uses_swatches, swatches,
+          author, theme_link, description, is_enabled, theme_version)
+        VALUES ('$folder', '$theme_name', '$theme_uses_swatches', '$swatches', '$theme_author',
+          '$theme_link', '$theme_description', '$cache_folder_writable', '$theme_version')
+      ");
     }
   }
   closedir($dh);
@@ -157,18 +170,26 @@ function ft_update_theme_list()
  *
  * @param string $template the location of the template file, relative to the theme folder
  * @param array $page_vars a hash of information to provide to the template
- * @param string $g_theme an optional parameter, letting you override the default template
+ * @param string $g_theme an optional parameter, letting you override the default theme
+ * @param string $g_theme an optional parameter, letting you override the default swatch
  */
-function ft_display_page($template, $page_vars, $theme = "")
+function ft_display_page($template, $page_vars, $theme = "", $swatch = "")
 {
   global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_debug, $LANG,
     $g_smarty, $g_smarty_use_sub_dirs, $g_js_debug, $g_benchmark_start, $g_enable_benchmarking,
     $g_upgrade_info;
 
   if (empty($theme) && (isset($_SESSION["ft"]["account"]["theme"])))
-    $theme = $_SESSION["ft"]["account"]["theme"];
+  {
+    $theme  = $_SESSION["ft"]["account"]["theme"];
+    $swatch = isset($_SESSION["ft"]["account"]["swatch"]) ? $_SESSION["ft"]["account"]["swatch"] : "";
+  }
   elseif (empty($theme))
-    $theme = ft_get_settings("default_theme");
+  {
+    $settings = ft_get_settings(array("default_theme", "default_client_swatch"));
+    $theme  = $settings["default_theme"];
+    $swatch = $settings["default_client_swatch"];
+  }
 
   if (!isset($_SESSION["ft"]["account"]["is_logged_in"]))
     $_SESSION["ft"]["account"]["is_logged_in"] = false;
@@ -181,7 +202,10 @@ function ft_display_page($template, $page_vars, $theme = "")
 
   // check the compile directory has the write permissions
   if (!is_writable($g_smarty->compile_dir))
-    ft_handle_error("The theme cache folder doesn't have write-permissions. Please update the <b>{$g_smarty->compile_dir}</b> to have full read-write permissions (777 on unix).", "");
+  {
+    ft_display_serious_error("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$g_smarty->compile_dir}</b> to have full read-write permissions (777 on unix).", "");
+		exit;
+  }
 
   $g_smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
   $g_smarty->assign("LANG", $LANG);
@@ -197,7 +221,7 @@ function ft_display_page($template, $page_vars, $theme = "")
   $g_smarty->assign("query_string", $_SERVER["QUERY_STRING"]);
   $g_smarty->assign("dir", $LANG["special_text_direction"]);
   $g_smarty->assign("g_enable_benchmarking", $g_enable_benchmarking);
-
+  $g_smarty->assign("swatch", $swatch);
 
   // if this page has been told to dislay a custom message, override g_success and g_message
   if (!isset($g_upgrade_info["message"]) && isset($_GET["message"]))
@@ -291,7 +315,7 @@ function ft_get_smarty_template_with_fallback($theme, $template)
  * @param array $page_vars a hash of information to display / provide to the template.
  * @param string $theme
  */
-function ft_display_module_page($template, $page_vars = array(), $theme = "")
+function ft_display_module_page($template, $page_vars = array(), $theme = "", $swatch = "")
 {
   global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_language, $LANG,
     $g_smarty, $L, $g_smarty_use_sub_dirs, $g_js_debug, $g_benchmark_start, $g_enable_benchmarking;
@@ -301,10 +325,17 @@ function ft_display_module_page($template, $page_vars = array(), $theme = "")
   // $module_id = ft_get_module_id_from_module_folder($module_folder);
   $default_module_language = "en_us";
 
-  if (empty($theme))
-    $theme = $_SESSION["ft"]["account"]["theme"];
-  else
-    $_SESSION["ft"]["account"]["theme"] = $theme;
+  if (empty($theme) && (isset($_SESSION["ft"]["account"]["theme"])))
+  {
+    $theme  = $_SESSION["ft"]["account"]["theme"];
+    $swatch = isset($_SESSION["ft"]["account"]["swatch"]) ? $_SESSION["ft"]["account"]["swatch"] : "";
+  }
+  elseif (empty($theme))
+  {
+    $settings = ft_get_settings(array("default_theme", "default_client_swatch"));
+    $theme  = $settings["default_theme"];
+    $swatch = $settings["default_client_swatch"];
+  }
 
   if (!isset($_SESSION["ft"]["account"]["is_logged_in"]))
     $_SESSION["ft"]["account"]["is_logged_in"] = false;
@@ -331,6 +362,7 @@ function ft_display_module_page($template, $page_vars = array(), $theme = "")
   $g_smarty->assign("query_string", $_SERVER["QUERY_STRING"]); // TODO FIX
   $g_smarty->assign("dir", $LANG["special_text_direction"]);
   $g_smarty->assign("g_enable_benchmarking", $g_enable_benchmarking);
+  $g_smarty->assign("swatch", $swatch);
 
   // if this page has been told to dislay a custom message, override g_success and g_message
   if (isset($_GET["message"]))
@@ -432,6 +464,26 @@ function ft_reset_admin_theme($theme)
 }
 
 
+/**
+ * Helper function to return a human friendly version of the available theme swatches.
+ *
+ * @param string $str the serialized swatch string found in the theme tables "swatches" field.
+ */
+function ft_get_theme_swatch_list($str)
+{
+  $swatch_list = array();
+  $pairs = explode("|", $str);
+  foreach ($pairs as $pair)
+  {
+  	list($swatch, $swatch_label) = explode(",", $pair);
+  	$swatch_list[] = ft_eval_smarty_string($swatch_label);
+  }
+  $swatch_list_str = implode(", ", $swatch_list);
+
+  return $swatch_list_str;
+}
+
+
 // ------------------------------------------------------------------------------------------------
 
 
@@ -452,6 +504,8 @@ function _ft_get_theme_info_file_contents($summary_file)
   $info["theme_link"] = isset($vars["theme_link"]) ? $vars["theme_link"] : "";
   $info["theme_description"] = isset($vars["theme_description"]) ? $vars["theme_description"] : "";
   $info["theme_version"] = isset($vars["theme_version"]) ? $vars["theme_version"] : "";
+  $info["theme_uses_swatches"] = isset($vars["theme_uses_swatches"]) ? $vars["theme_uses_swatches"] : "no";
+  $info["theme_swatches"] = isset($vars["theme_swatches"]) ? $vars["theme_swatches"] : array();
 
   return $info;
 }

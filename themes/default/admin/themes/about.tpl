@@ -25,6 +25,22 @@
     <td class="pad_left_small">{$theme_info.description}</td>
   </tr>
   <tr>
+    <td class="pad_left_small">{$LANG.phrase_uses_swatches}</td>
+    <td class="pad_left_small">
+      {if $theme_info.uses_swatches == "yes"}
+        {$LANG.word_yes}
+      {else}
+        {$LANG.word_no}
+      {/if}
+    </td>
+  </tr>
+  {if $theme_info.uses_swatches == "yes"}
+  <tr>
+    <td class="pad_left_small">{$LANG.phrase_available_swatches}</td>
+    <td class="pad_left_small">{$theme_info.available_swatches}</td>
+  </tr>
+  {/if}
+  <tr>
     <td class="pad_left_small">{$LANG.word_author}</td>
     <td class="pad_left_small">{$theme_info.author}
       {if $theme_info.author_email != ''}

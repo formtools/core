@@ -28,7 +28,7 @@
     </tr>
     <tr>
       <td class="pad_left">{$LANG.word_theme}</td>
-      <td>{themes_dropdown name_id="theme" default=$admin_info.theme}</td>
+      <td>{themes_dropdown name_id="theme" default=$admin_info.theme default_swatch=$admin_info.swatch}</td>
     </tr>
     <tr>
       <td class="pad_left">{$LANG.phrase_login_page}</td>

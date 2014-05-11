@@ -1,0 +1,49 @@
+/**
+ * Custom styles for the grey swatch.
+ */
+body {
+  background-image: url(../images/top_row_grey.jpg);
+}
+#account_section {
+  background-image: url(../images/account_section_bg_grey.jpg);
+}
+a:link, a:visited {
+  color: #008800;
+}
+a:hover {
+  color: #990000;
+}
+.title {
+  color: #2e6932;
+}
+.subtitle {
+  color: #4B6C4E;
+}
+.main_tabset li.selected a {
+  color: green;
+}
+.edit_submission h3 {
+  color: #4B6C4E;
+}
+body .sortable div.row_content .system_field li {
+  background-color: #e5e5cb;
+}
+.sortable .rows div.row_content .system_field li .scroll-content li {
+  background-color: #eeeed8;
+}
+.nav_link_submenu a:link, .nav_link_submenu a:visited {
+  color: #789078;
+}
+.nav_link a:hover, .nav_link_submenu a:hover {
+  color: #004400;
+  background-color: #efefef;
+}
+tr.selected_row_color {
+  background-color: #e5e5cb;
+}
+body .ui-widget-header {
+  background: url(../images/popup_header_bg_grey.png) repeat-x scroll 50% 50%;
+}
+.inner_tabset .tab_row div.selected {
+  color: green;
+}

@@ -93,6 +93,7 @@ function ft_add_client($infohash)
   $login_page       = $settings["default_login_page"];
   $logout_url       = $settings["default_logout_url"];
   $theme            = $settings["default_theme"];
+  $swatch           = $settings["default_client_swatch"];
   $menu_id          = $settings["default_client_menu_id"];
 
 
@@ -100,9 +101,9 @@ function ft_add_client($infohash)
   // accounts (including the administrator and any other future account types)
   $query = "
      INSERT INTO {$g_table_prefix}accounts (account_type, account_status, ui_language, timezone_offset, sessions_timeout,
-       date_format, login_page, logout_url, theme, menu_id, first_name, last_name, email, username, password)
+       date_format, login_page, logout_url, theme, swatch, menu_id, first_name, last_name, email, username, password)
      VALUES ('client', 'active', '$language', '$timezone_offset', '$sessions_timeout',
-       '$date_format', '$login_page', '$logout_url', '$theme',
+       '$date_format', '$login_page', '$logout_url', '$theme', '$swatch',
        $menu_id, '$first_name', '$last_name', '$email', '$username', '$password')";
   mysql_query($query)
     or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
@@ -299,6 +300,10 @@ function ft_admin_update_client($infohash, $tab_num)
       $sessions_timeout = $form_vals['sessions_timeout'];
       $date_format      = $form_vals['date_format'];
 
+      $swatch = "";
+      if (isset($infohash["{$theme}_theme_swatches"]))
+        $swatch = $infohash["{$theme}_theme_swatches"];
+
       $query = "
           UPDATE  {$g_table_prefix}accounts
           SET     ui_language = '$ui_language',
@@ -307,6 +312,7 @@ function ft_admin_update_client($infohash, $tab_num)
                   logout_url = '$logout_url',
                   menu_id = $menu_id,
                   theme = '$theme',
+                  swatch = '$swatch',
                   sessions_timeout = '$sessions_timeout',
                   date_format = '$date_format'
           WHERE   account_id = $account_id
@@ -584,6 +590,10 @@ function ft_update_admin_account($infohash, $account_id)
   $username         = $infohash["username"];
   $password         = $infohash["password"];
 
+  $swatch = "";
+  if (isset($infohash["{$theme}_theme_swatches"]))
+    $swatch = $infohash["{$theme}_theme_swatches"];
+
   // if the password is defined, md5 it
   $password_sql = (!empty($password)) ? "password = '" . md5(md5($password)) . "', " : "";
 
@@ -599,6 +609,7 @@ function ft_update_admin_account($infohash, $account_id)
               last_name = '$last_name',
               email = '$email',
               theme = '$theme',
+              swatch = '$swatch',
               login_page = '$login_page',
               logout_url = '$logout_url',
               ui_language = '$ui_language',

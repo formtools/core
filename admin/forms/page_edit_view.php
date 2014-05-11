@@ -105,7 +105,7 @@ foreach ($form_info["client_info"] as $client)
 
 // get the ID of the previous and next field options. We should probably cache this, but until I'm sure
 // it's slowing things down, we'll keep it simple
-$ordered_view_ids = ft_get_view_ids($form_id);
+$ordered_view_ids = ft_get_view_ids($form_id, true);
 $previous_view_link = "<span class=\"light_grey\">{$LANG["phrase_previous_view"]}</span>";
 $next_view_link = "<span class=\"light_grey\">{$LANG["phrase_next_view"]}</span>";
 $num_views = count($ordered_view_ids);

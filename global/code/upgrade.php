@@ -32,7 +32,7 @@ function ft_upgrade_form_tools()
 {
   global $g_table_prefix, $g_current_version, $g_release_type, $g_release_date, $LANG, $g_default_datetime_format;
 
-  $is_upgraded = false;
+  $upgrade_attempted = false;
   $success     = "";
   $message     = "";
   $old_version_info = ft_get_core_version_info();
@@ -1514,11 +1514,81 @@ function ft_upgrade_form_tools()
   }
 
 
+  // 2.1.3: swatches + new "email_template_when_sent_views" table to log multiple "when sent" email-View mapping
+  $has_problems = false;
+  if ($old_version_info["release_date"] < 20110927)
+  {
+  	$upgrade_attempted = true;
+  	$queries = array();
+  	$queries[] = "
+  	  ALTER TABLE {$g_table_prefix}themes
+  	    ADD uses_swatches ENUM('yes', 'no') NOT NULL DEFAULT 'no' AFTER theme_name,
+        ADD swatches MEDIUMTEXT NULL AFTER uses_swatches
+  	";
+  	$queries[] = "ALTER TABLE {$g_table_prefix}accounts ADD swatch VARCHAR(255) NOT NULL AFTER theme";
+    $queries[] = "UPDATE {$g_table_prefix}accounts SET swatch = 'green' WHERE theme = 'default'";
+    $queries[] = "
+      CREATE TABLE {$g_table_prefix}email_template_when_sent_views (
+        email_id MEDIUMINT NOT NULL,
+        view_id MEDIUMINT NOT NULL
+      ) DEFAULT CHARSET=utf8
+    ";
+    $find_query = mysql_query("
+      SELECT email_id, view_mapping_view_id
+      FROM   {$g_table_prefix}email_templates
+      WHERE  view_mapping_view_id != '' AND view_mapping_view_id IS NOT NULL
+    ");
+    while ($row = mysql_fetch_assoc($find_query))
+    {
+		  $email_id = $row["email_id"];
+		  $view_id  = $row["view_mapping_view_id"];
+      $queries[] = "INSERT INTO {$g_table_prefix}email_template_when_sent_views (email_id, view_id) VALUES ($email_id, $view_id)";
+    }
+
+    ft_set_settings(array("default_client_swatch" => "green"));
+  	foreach ($queries as $query)
+  	{
+  		$result = @mysql_query($query);
+      if (!$result)
+      {
+      	$has_problems = true;
+      	$success      = false;
+				$mysql_error  = "<i>$query></i> [" . mysql_error() . "]";
+
+        $error_message = ft_eval_smarty_string($LANG["notify_problem_upgrading"], array("version" => $g_current_version));
+        $link_text     = ft_eval_smarty_string($LANG["phrase_upgrade_problem_link"], array("link" => "http://docs.formtools.org/upgrading/?page=problems_upgrading"));
+      	$message = $error_message . " " . $mysql_error . "<br />" . $_LANG["phrase_upgrade_problem_link"] . " " . $link_text;
+      	break;
+      }
+  	}
+
+  	// if there were ANY problems, undo all the changes we just did
+  	if ($has_problems)
+  	{
+    	@mysql_query("ALTER TABLE {$g_table_prefix}themes DROP uses_swatches");
+    	@mysql_query("ALTER TABLE {$g_table_prefix}themes DROP swatches");
+    	@mysql_query("ALTER TABLE {$g_table_prefix}accounts DROP swatch");
+    	@mysql_query("DROP TABLE {$g_table_prefix}email_template_when_sent_views");
+    	@mysql_query("DELETE FROM {$g_table_prefix}settings WHERE setting_name='default_client_swatch' AND module='core'");
+    }
+    else
+    {
+    	// delete the old view_mapping_view_id column from the email_templates table
+      @mysql_query("ALTER TABLE {$g_table_prefix}email_templates DROP view_mapping_view_id");
+
+    	// refresh the theme list. This updates Form Tools to recognize the new swatches for the default theme, saving
+    	// the administrator from having to click the "Refresh Theme List" button
+      ft_update_theme_list();
+    }
+  }
+
+
   // ----------------------------------------------------------------------------------------------
 
 
-  // if the full version string (version-type-date) is different, update the database
-  if ($old_version_info["full"] != "{$g_current_version}-{$g_release_type}-{$g_release_date}")
+  // if no problems were encountered, and the the full version string (version-type-date) has changed,
+  // update the database
+  if ($old_version_info["full"] != "{$g_current_version}-{$g_release_type}-{$g_release_date}" && !$has_problems)
   {
     $new_settings = array(
       "program_version" => $g_current_version,
@@ -1527,15 +1597,13 @@ function ft_upgrade_form_tools()
     );
     ft_set_settings($new_settings);
 
-    // any time the Core version changed, update the list of available hooks in the database
+    // any time the Core version changes, we need to update the list of hooks found in the source files
     ft_update_available_hooks();
-
-    $is_upgraded = true;
-    $success     = true;
+    $success = true;
   }
 
   return array(
-    "upgraded" => $is_upgraded,
+    "upgraded" => $upgrade_attempted,
     "success"  => $success,
     "message"  => $message
   );

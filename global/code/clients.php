@@ -158,7 +158,12 @@ function ft_update_client($account_id, $info)
       if ($client_info["settings"]["may_edit_sessions_timeout"] == "yes")
         $settings["sessions_timeout"] = $info["sessions_timeout"];
       if ($client_info["settings"]["may_edit_theme"] == "yes")
+      {
         $settings["theme"] = $info["theme"];
+        $settings["swatch"] = "";
+        if (isset($info["{$info["theme"]}_theme_swatches"]))
+          $settings["swatch"] = $info["{$info["theme"]}_theme_swatches"];
+      }
       if ($client_info["settings"]["may_edit_date_format"] == "yes")
         $settings["date_format"] = $info["date_format"];
 

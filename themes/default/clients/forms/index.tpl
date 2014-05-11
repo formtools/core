@@ -78,7 +78,7 @@
     </div>
   {/if}
 
-  {submission_listing_quicklinks context="admin"}
+  {submission_listing_quicklinks context="client"}
 
   {$pagination}
 

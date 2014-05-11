@@ -457,15 +457,6 @@ emails_ns.check_one_main_recipient = function() {
 }
 
 
-emails_ns.change_include_on_edit_submission_page = function(selected) {
-  if (selected == "specific_views") {
-    $('#include_on_edit_submission_page_views').show();
-  } else {
-    $('#include_on_edit_submission_page_views').hide();
-  }
-}
-
-
 /**
  * This confirms that the user has entered at least one of the HTML and text templates.
  */
@@ -482,12 +473,10 @@ emails_ns.check_one_template_defined = function() {
 
 
 emails_ns.onsubmit_check_email_settings = function(f) {
-
   // configuration tab
   var rules = [];
   rules.push("required,email_template_name," + g.messages["validation_no_email_template_name"]);
   rules.push("required,view_mapping_type," + g.messages["validation_no_email_template_view_mapping_value"]);
-  rules.push("if:view_mapping_type=specific,required,view_mapping_view_id," + g.messages["validation_no_email_template_view_id"]);
   if (!rsv.validate(f, rules)) {
     return ft.change_inner_tab(1, "edit_email_template"); // this always returns false;
   }

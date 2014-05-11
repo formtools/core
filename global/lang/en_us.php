@@ -410,7 +410,6 @@ $LANG["phrase_finalize_form"] = "Finalize Form";
 $LANG["phrase_first_name"] = "First Name";
 $LANG["phrase_footer_text"] = "Footer Text";
 $LANG["phrase_for_any_form_submission"] = "For any form submission";
-$LANG["phrase_for_view_submissions"] = "Only for submissions in View:";
 $LANG["phrase_forgot_password"] = "Forgot your Password?";
 $LANG["phrase_form_already_selected"] = "Form already selected";
 $LANG["phrase_form_email_field_b_c"] = "[Form email field]:";
@@ -1138,4 +1137,29 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Form Tools is unable to determi
 $LANG["processing_no_post_vars"] = "process.php is not receiving any data. Note: this script cannot be loaded directly in your browser.<br />Make sure your form is sending via POST.";
 $LANG["processing_no_redirect_url"] = "The submission was processed correctly, but you haven't specified a redirect URL for this form! Edit your form in the Form Tools UI and add the redirect URL.";
 
-?>
+
+// New in 2.1.3
+$LANG["word_blue"]= "Blue";
+$LANG["word_green"] = "Green";
+$LANG["word_yellow"] = "Yellow";
+$LANG["word_red"] = "Red";
+$LANG["word_grey"] = "Grey";
+$LANG["word_orange"] = "Orange";
+$LANG["word_purple"] = "Purple";
+$LANG["word_aquamarine"] = "Aquamarine";
+$LANG["phrase_dark_blue"] = "Dark Blue";
+$LANG["phrase_light_brown"] = "Light Brown";
+$LANG["phrase_select_swatch"] = "Select swatch";
+$LANG["phrase_uses_swatches"] = "Uses Swatches";
+$LANG["phrase_available_swatches"] = "Available Swatches";
+$LANG["phrase_available_swatches_c"] = "Available Swatches:";
+$LANG["validation_no_admin_theme_swatch"] = "Please select a swatch for the administrator theme.";
+$LANG["validation_no_client_theme_swatch"] = "Please select a default swatch for the client accounts.";
+$LANG["validation_no_theme_swatch"] = "Please select a swatch for the selected theme.";
+$LANG["phrase_no_views_with_filters_p"] = "(No Views with filters defined)";
+
+// changes in 2.1.3
+$LANG["phrase_for_view_submissions"] = "Only submissions that fit into the following View(s)";
+$LANG["notify_problem_upgrading"] = "There was a problem upgrading to <b>{\$version}</b>:";
+$LANG["phrase_upgrade_problem_link"] = "Please <a href=\"{\$link}\">visit this page</a> regarding failed upgrades.";
+

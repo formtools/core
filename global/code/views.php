@@ -170,17 +170,32 @@ function ft_get_views($form_id)
 
 
 /**
- * A simple, fast, no-frills function to return an array of all View IDs for a form, ordered
- * by View Order.
+ * A simple, fast, no-frills function to return an array of all View IDs for a form. If you need it ordered,
+ * include the second parameter. The second param makes it slower, so only use when needed.
  *
  * @param integer $form_id
+ * @param boolean $order_results whether or not the results should be ordered. If so, it orders by view group,
+ *    then view_order.
  * @return array
  */
-function ft_get_view_ids($form_id)
+function ft_get_view_ids($form_id, $order_results = false)
 {
   global $g_table_prefix;
 
-  $query = mysql_query("SELECT view_id FROM {$g_table_prefix}views WHERE form_id = $form_id ORDER BY view_order");
+  if ($order_results)
+  {
+  	$query = mysql_query("
+  	  SELECT view_id
+  	  FROM   {$g_table_prefix}views v, {$g_table_prefix}list_groups lg
+  	  WHERE  v.group_id = lg.group_id AND
+  	         form_id = $form_id
+  	  ORDER BY lg.list_order, v.view_order
+  	");
+  }
+  else
+  {
+    $query = mysql_query("SELECT view_id FROM {$g_table_prefix}views WHERE form_id = $form_id");
+  }
 
   $view_ids = array();
   while ($row = mysql_fetch_assoc($query))
@@ -723,15 +738,13 @@ function ft_delete_view($view_id)
   mysql_query("DELETE FROM {$g_table_prefix}view_filters WHERE view_id = $view_id");
   mysql_query("DELETE FROM {$g_table_prefix}view_tabs WHERE view_id = $view_id");
   mysql_query("DELETE FROM {$g_table_prefix}public_view_omit_list WHERE view_id = $view_id");
-
   mysql_query("DELETE FROM {$g_table_prefix}list_groups WHERE group_type = 'view_fields_$view_id'");
-
   mysql_query("DELETE FROM {$g_table_prefix}email_template_edit_submission_views WHERE view_id = $view_id");
+  mysql_query("DELETE FROM {$g_table_prefix}email_template_when_sent_views WHERE view_id = $view_id");
   mysql_query("DELETE FROM {$g_table_prefix}new_view_submission_defaults WHERE view_id = $view_id");
   mysql_query("DELETE FROM {$g_table_prefix}views WHERE view_id = $view_id");
 
-  // hmm.. This needs to be handled better: the user needs to be notified prior to deleting a View to describe all the dependencies
-  mysql_query("UPDATE {$g_table_prefix}email_templates SET view_mapping_view_id = NULL WHERE view_mapping_view_id = $view_id");
+  // hmm... This should be handled better: the user needs to be notified prior to deleting a View to describe all the dependencies
   mysql_query("UPDATE {$g_table_prefix}email_templates SET limit_email_content_to_fields_in_view = NULL WHERE limit_email_content_to_fields_in_view = $view_id");
 
   $success = true;
@@ -1593,7 +1606,7 @@ function _ft_update_view_standard_filters($view_id, $info, $field_columns)
         {
           // empty string being searched AGAINST; i.e. checking the field is NOT empty or LIKE empty
           if (empty($trimmed_value))
-            $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name IS NOT NULL";
+            $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' AND $col_name IS NOT NULL";
           else
             $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name IS NULL";
         }

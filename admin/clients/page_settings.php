@@ -29,12 +29,22 @@ var rules = [];
 rules.push("required,page_titles,{$LANG["validation_no_titles"]}");
 rules.push("required,menu_id,{$LANG["validation_no_menu"]}");
 rules.push("required,theme,{$LANG["validation_no_theme"]}");
+rules.push("function,validate_swatch");
 rules.push("required,login_page,{$LANG["validation_no_client_login_page"]}");
 rules.push("required,logout_url,{$LANG["validation_no_logout_url"]}");
 rules.push("required,ui_language,{$LANG["validation_no_ui_language"]}");
 rules.push("required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}");
 rules.push("digits_only,sessions_timeout,{$LANG["validation_invalid_sessions_timeout"]}");
 rules.push("required,date_format,{$LANG["validation_no_date_format"]}");
+
+function validate_swatch() {
+  var theme     = $("#theme").val();
+  var swatch_id = "#" + theme + "_theme_swatches";
+  if ($(swatch_id).length > 0 && $(swatch_id).val() == "") {
+    return [[$(swatch_id)[0], "{$LANG["validation_no_theme_swatch"]}"]];
+  }
+  return true;
+}
 
 $(function() { $("#settings_form :input:visible:enabled:first").focus(); });
 END;

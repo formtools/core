@@ -1,7 +1,4 @@
 /* jQuery dialog styles */
-body .ui-widget-header {
-  background: url(../images/popup_header_bg.png) repeat-x scroll 50% 50%;
-}
 body .ui-widget-header span {
   color: white;
 }

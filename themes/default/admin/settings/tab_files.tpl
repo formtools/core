@@ -68,54 +68,54 @@
           <tr>
             <td width="90" class="subpanel">
               <div class="bold nowrap">{$LANG.phrase_images_media}</div>
-              <input type="checkbox" name="file_upload_filetypes[]" value="bmp" id="bmp" {if "bmp"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="bmp" id="bmp" {if "bmp"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="bmp">bmp</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="gif" id="gif" {if "gif"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="gif" id="gif" {if "gif"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="gif">gif</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="jpg,jpeg" id="jpg" {if "jpg"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="jpg,jpeg" id="jpg" {if "jpg"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="jpg">jpg / jpeg</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="png" id="png" {if "png"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="png" id="png" {if "png"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="png">png</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="avi" id="avi" {if "avi"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="avi" id="avi" {if "avi"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="avi">avi</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="mp3" id="mp3" {if "mp3"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="mp3" id="mp3" {if "mp3"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="mp3">mp3</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="mp4" id="mp4" {if "mp4"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="mp4" id="mp4" {if "mp4"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="mp4">mp4</label>
             </td>
             <td valign="top" width="90" class="subpanel">
               <div class="bold nowrap">{$LANG.word_web}</div>
-              <input type="checkbox" name="file_upload_filetypes[]" value="css" id="css" {if "css"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="css" id="css" {if "css"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="css">css</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="js" id="js" {if "js"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="js" id="js" {if "js"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="js">js</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="html,htm" id="html" {if "js"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="html,htm" id="html" {if "js"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="html">htm / html</label>
             </td>
             <td valign="top" width="90" class="subpanel">
               <div class="bold nowrap">{$LANG.word_data}</div>
-              <input type="checkbox" name="file_upload_filetypes[]" value="doc" id="doc" {if "doc"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="doc" id="doc" {if "doc"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="doc">doc</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="rtf" id="rtf" {if "rtf"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="rtf" id="rtf" {if "rtf"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="rtf">rtf</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="txt" id="txt" {if "txt"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="txt" id="txt" {if "txt"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="txt">txt</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="pdf" id="pdf" {if "pdf"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="pdf" id="pdf" {if "pdf"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="pdf">pdf</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="xml" id="xml" {if "xml"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="xml" id="xml" {if "xml"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="xml">xml</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="csv" id="csv" {if "csv"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="csv" id="csv" {if "csv"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="csv">csv</label><br />
             </td>
             <td valign="top" width="90" class="subpanel">
               <div class="bold nowrap">{$LANG.word_misc}</div>
-              <input type="checkbox" name="file_upload_filetypes[]" value="zip" id="zip" {if "zip"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="zip" id="zip" {if "zip"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="zip">zip</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="tar,tar.gz" id="tar" {if "tar"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="tar,tar.gz" id="tar" {if "tar"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="tar">tar / tar.gz</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="swf" id="swf" {if "swf"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="swf" id="swf" {if "swf"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="swf">swf</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="fla" id="fla" {if "fla"|in_array:$file_upload_filetypes}checked{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="fla" id="fla" {if "fla"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="fla">fla</label>
             </td>
           </tr>

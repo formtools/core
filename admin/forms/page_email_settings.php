@@ -36,7 +36,7 @@ $page_vars["columns"]    = $trimmed_cols;
 $page_vars["registered_form_emails"] = $registered_form_emails;
 $page_vars["js_messages"] = array("confirm_delete_email_field_config", "phrase_please_confirm", "word_yes", "word_no", "word_remove");
 $page_vars["head_string"] =<<<END
-<script src="$g_root_url/global/scripts/manage_email_templates.js"></script>
+<script src="$g_root_url/global/scripts/manage_email_templates.js?v=3"></script>
 END;
 
 $page_vars["head_js"] =<<<END

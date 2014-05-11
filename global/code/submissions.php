@@ -745,7 +745,6 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
   $search_result = mysql_query($search_query)
     or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>; Query: $search_query; Error: ", mysql_error());
 
-
   $search_result_rows = array();
   while ($row = mysql_fetch_assoc($search_result))
     $search_result_rows[] = $row;

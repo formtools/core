@@ -29,11 +29,6 @@ div#left_nav {
   padding-bottom: 2px;
   color: #555555;
 }
-.nav_link a:hover {
-  color: #004400;
-  background-image: url(../images/nav_bg.jpg);
-  background-repeat: repeat-y;
-}
 .nav_link_submenu a:link, .nav_link_submenu a:visited {
   width: 150px;
   display: block;
@@ -42,12 +37,6 @@ div#left_nav {
   padding-left: 10px;
   padding-top: 2px;
   padding-bottom: 2px;
-  color: #789078;
-}
-.nav_link_submenu a:hover {
-  color: #000000;
-  background-image: url(../images/nav_bg.jpg);
-  background-repeat: repeat-y;
 }
 .nav_link_selected {
   text-decoration: none;

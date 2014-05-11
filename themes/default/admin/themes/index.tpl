@@ -13,16 +13,16 @@
     {$LANG.text_theme_page_intro}
   </div>
 
-  <form action="{$same_page}" method="post">
+  <form action="{$same_page}" method="post" onsubmit="return rsv.validate(this, rules)">
     <table cellspacing="0" cellpadding="1" class="margin_bottom_large">
       <tr>
         <td width="180">{$LANG.phrase_administrator_theme}</td>
-        <td>{themes_dropdown name_id="admin_theme" default=$admin_theme}</td>
+        <td>{themes_dropdown name_id="admin_theme" default=$admin_theme default_swatch=$admin_theme_swatch}</td>
       </tr>
       <tr>
         <td>{$LANG.phrase_default_client_account_theme}</td>
         <td>
-          {themes_dropdown name_id="default_client_theme" default=$client_theme}
+          {themes_dropdown name_id="default_client_theme" default=$client_theme default_swatch=$client_theme_swatch}
           <span class="medium_grey">{$LANG.text_also_default_login_page_theme}</span>
         </td>
       </tr>
@@ -53,6 +53,9 @@
                 <span class="pad_right_large">{$theme_info.theme_version}</span>
                 [<a href="about.php?theme_id={$theme_info.theme_id}">{$LANG.word_about|upper}</a>]
               </div>
+              {if $theme_info.uses_swatches == "yes"}
+                <div>{$LANG.phrase_available_swatches_c} <span class="medium_grey">{$theme_info.available_swatches}</span></div>
+              {/if}
               {if $theme_info.author}<div>{$LANG.word_author_c} {$theme_info.author}</div>{/if}
               {if $theme_info.description}<p>{$theme_info.description}</p>{/if}
               {if !$theme_info.cache_folder_writable}
@@ -66,8 +69,8 @@
             </td>
             <td valign="top" align="center" class="check_area">
               <input type="checkbox" name="is_enabled[]" value="{$theme_info.theme_folder}"
-                {if $theme_info.is_enabled == 'yes'}checked{/if}
-                {if !$theme_info.cache_folder_writable}disabled{/if} />
+                {if $theme_info.is_enabled == 'yes'}checked="checked"{/if}
+                {if !$theme_info.cache_folder_writable}disabled="disabled"{/if} />
             </td>
           </tr>
         {/foreach}

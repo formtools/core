@@ -63,7 +63,8 @@
               </td>
               <td>
                 <div id="search_dropdown_section" style="display: none">
-				  <input type="text" name="search_date" id="search_date" value="{$curr_search_fields.search_date|default:$default_date_field_search_value}" />
+                  <input type="text" name="search_date" id="search_date"
+                    value="{$curr_search_fields.search_date|default:$default_date_field_search_value}" />
                 </div>
               </td>
             </tr>

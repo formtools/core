@@ -27,6 +27,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%accounts (
   login_page varchar(50) NOT NULL default 'client_forms',
   logout_url varchar(255) default NULL,
   theme varchar(50) NOT NULL default 'default',
+  swatch varchar(255) NOT NULL,
   menu_id mediumint(8) unsigned NOT NULL,
   first_name varchar(100) default NULL,
   last_name varchar(100) default NULL,
@@ -37,7 +38,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%accounts (
   PRIMARY KEY (account_id)
 ) DEFAULT CHARSET=utf8";
 
-$g_sql[] = "INSERT INTO %PREFIX%accounts (account_id, account_type, account_status, timezone_offset, login_page, menu_id, username, password) VALUES (1, 'admin', 'active', '0', 'admin_forms', 1, '', '')";
+$g_sql[] = "INSERT INTO %PREFIX%accounts (account_id, account_type, account_status, timezone_offset, login_page, swatch, menu_id, username, password) VALUES (1, 'admin', 'active', '0', 'admin_forms', 'green', 1, '', '')";
 
 $g_sql[] = "CREATE TABLE %PREFIX%client_forms (
   account_id mediumint(8) unsigned NOT NULL,
@@ -67,6 +68,11 @@ $g_sql[] = "CREATE TABLE %PREFIX%email_template_recipients (
   custom_recipient_name varchar(200) default NULL,
   custom_recipient_email varchar(200) default NULL,
   PRIMARY KEY  (recipient_id)
+) DEFAULT CHARSET=utf8";
+
+$g_sql[] = "CREATE TABLE %PREFIX%email_template_when_sent_views (
+  email_id mediumint(9) NOT NULL,
+  view_id mediumint(9) NOT NULL
 ) DEFAULT CHARSET=utf8";
 
 $g_sql[] = "CREATE TABLE %PREFIX%email_templates (
@@ -522,6 +528,7 @@ $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) V
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('clients_may_edit_timezone_offset', 'yes', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('clients_may_edit_ui_language', 'yes', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_client_menu_id', '2', 'core')";
+$g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_client_swatch', 'green', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_date_field_search_value', 'none', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_date_format', 'M jS y, g:i A', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('default_footer_text', '', 'core')";
@@ -556,12 +563,12 @@ $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) V
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('required_password_chars', '', 'core')";
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('timezone_offset', '0', 'core')";
 
-
-
 $g_sql[] = "CREATE TABLE %PREFIX%themes (
   theme_id mediumint(8) unsigned NOT NULL auto_increment,
   theme_folder varchar(100) NOT NULL,
   theme_name varchar(50) NOT NULL,
+  uses_swatches enum('yes', 'no') NOT NULL DEFAULT 'no',
+  swatches mediumtext NULL,
   author varchar(200) default NULL,
   author_email varchar(255) default NULL,
   author_link varchar(255) default NULL,
@@ -572,7 +579,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%themes (
   PRIMARY KEY (theme_id)
 ) DEFAULT CHARSET=utf8";
 
-$g_sql[] = "INSERT INTO %PREFIX%themes VALUES (1, 'default', 'Default', 'Encore Web Studios', 'formtools@encorewebstudios.com', 'http://www.encorewebstudios.com', 'http://themes.formtools.org/', 'The default Form Tools theme for all new installations. It''s a green-coloured fixed-width theme requiring 1024 minimum width screens.', 'yes', '1.0.0')";
+$g_sql[] = "INSERT INTO %PREFIX%themes VALUES (1, 'default', 'Default', 'yes', 'green', 'Encore Web Studios', 'formtools@encorewebstudios.com', 'http://www.encorewebstudios.com', 'http://themes.formtools.org/', 'The default Form Tools theme for all new installations. It''s a green-coloured fixed-width theme requiring 1024 minimum width screens.', 'yes', '1.0.0')";
 
 $g_sql[] = "CREATE TABLE %PREFIX%view_columns (
   view_id mediumint(9) NOT NULL,

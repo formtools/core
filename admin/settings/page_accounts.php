@@ -24,12 +24,23 @@ var rules = [];
 rules.push("required,default_page_titles,{$LANG["validation_no_page_titles"]}");
 rules.push("required,default_client_menu_id,{$LANG["validation_no_menu_id"]}");
 rules.push("required,default_theme,{$LANG["validation_no_theme"]}");
+rules.push("function,validate_swatch");
 rules.push("required,default_login_page,{$LANG["validation_no_login_page"]}");
 rules.push("required,default_logout_url,{$LANG["validation_no_logout_url"]}");
 rules.push("required,default_language,{$LANG["validation_no_default_language"]}");
 rules.push("required,default_sessions_timeout,{$LANG["validation_no_default_sessions_timeout"]}");
 rules.push("digits_only,default_sessions_timeout,{$LANG["validation_invalid_default_sessions_timeout"]}");
 rules.push("required,default_date_format,{$LANG["validation_no_date_format"]}");
+
+function validate_swatch() {
+  var theme     = $("#default_theme").val();
+  var swatch_id = "#" + theme + "_default_theme_swatches";
+  if ($(swatch_id).length > 0 && $(swatch_id).val() == "") {
+    return [[$(swatch_id)[0], "{$LANG["validation_no_theme_swatch"]}"]];
+  }
+  return true;
+}
+
 END;
 
 ft_display_page("admin/settings/index.tpl", $page_vars);

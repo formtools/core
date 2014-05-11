@@ -26,7 +26,6 @@ if (isset($_POST["add_account"]))
   }
 }
 
-
 $page_vars = array();
 $page_vars["step"] = 5;
 $page_vars["g_root_url"] = $g_root_url;
@@ -38,6 +37,7 @@ rules.push("required,last_name,{$LANG["validation_no_last_name"]}");
 rules.push("required,email,{$LANG["validation_no_admin_email"]}");
 rules.push("valid_email,email,{$LANG["validation_invalid_admin_email"]}");
 rules.push("required,username,{$LANG["validation_no_username"]}");
+rules.push("is_alpha,username,{$LANG['validation_invalid_admin_username']}");
 rules.push("required,password,{$LANG["validation_no_password"]}");
 rules.push("required,password_2,{$LANG["validation_no_second_password"]}");
 rules.push("same_as,password,password_2,{$LANG["validation_passwords_different"]}")
