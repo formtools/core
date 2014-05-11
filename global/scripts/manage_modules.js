@@ -80,8 +80,6 @@ $(function() {
         click: function() {
           mm.key = $("#key_section1").val() + "-" + $("#key_section2").val() + "-" + $("#key_section3").val();
           ft.dialog_activity_icon($("#premium_module_dialog"), "show");
-
-          // TODO needs timeout
           $.ajax({
             url:  "http://modules.formtools.org/validate.php",
             data: {
@@ -138,6 +136,12 @@ function mm_install_module_response(info) {
     if (info.e == 2) {
       $("#premium_module_dialog").dialog("close");
       ft.display_message("ft_message", 0, g.messages["notify_invalid_license_key"]);
+    } else if (info.e == 3) {
+      $("#premium_module_dialog").dialog("close");
+      ft.display_message("ft_message", 0, g.messages["notify_license_key_no_longer_valid"]);
+    } else {
+      $("#premium_module_dialog").dialog("close");
+      ft.display_message("ft_message", 0, g.messages["notify_unknown_error"]);
     }
   } else {
     $("#modules_form").append("<input type=\"hidden\" name=\"ek\" value=\"" + info.ek + "\" />"

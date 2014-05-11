@@ -177,7 +177,7 @@ function ft_display_page($template, $page_vars, $theme = "", $swatch = "")
 {
   global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_debug, $LANG,
     $g_smarty, $g_smarty_use_sub_dirs, $g_js_debug, $g_benchmark_start, $g_enable_benchmarking,
-    $g_upgrade_info;
+    $g_upgrade_info, $g_hide_upgrade_link;
 
   if (empty($theme) && (isset($_SESSION["ft"]["account"]["theme"])))
   {
@@ -217,6 +217,7 @@ function ft_display_page($template, $page_vars, $theme = "", $swatch = "")
   $g_smarty->assign("g_root_url", $g_root_url);
   $g_smarty->assign("g_debug", $g_debug);
   $g_smarty->assign("g_js_debug", ($g_js_debug) ? "true" : "false");
+  $g_smarty->assign("g_hide_upgrade_link", $g_hide_upgrade_link);
   $g_smarty->assign("same_page", ft_get_clean_php_self());
   $g_smarty->assign("query_string", $_SERVER["QUERY_STRING"]);
   $g_smarty->assign("dir", $LANG["special_text_direction"]);
@@ -323,7 +324,8 @@ function ft_get_smarty_template_with_fallback($theme, $template)
 function ft_display_module_page($template, $page_vars = array(), $theme = "", $swatch = "")
 {
   global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_language, $LANG,
-    $g_smarty, $L, $g_smarty_use_sub_dirs, $g_js_debug, $g_benchmark_start, $g_enable_benchmarking;
+    $g_smarty, $L, $g_smarty_use_sub_dirs, $g_js_debug, $g_benchmark_start, $g_enable_benchmarking,
+    $g_hide_upgrade_link;
 
   $module_folder = _ft_get_current_module_folder();
 
@@ -363,6 +365,7 @@ function ft_display_module_page($template, $page_vars = array(), $theme = "", $s
   $g_smarty->assign("g_root_dir", $g_root_dir);
   $g_smarty->assign("g_root_url", $g_root_url);
   $g_smarty->assign("g_js_debug", ($g_js_debug) ? "true" : "false");
+  $g_smarty->assign("g_hide_upgrade_link", $g_hide_upgrade_link);
   $g_smarty->assign("same_page", ft_get_clean_php_self());
   $g_smarty->assign("query_string", $_SERVER["QUERY_STRING"]); // TODO FIX
   $g_smarty->assign("dir", $LANG["special_text_direction"]);

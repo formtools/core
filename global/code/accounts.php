@@ -592,7 +592,7 @@ function ft_add_password_to_password_history($account_id, $password)
 
 /**
  * Helper function to determine if a username is valid or not. Checks to see that it only
- * contains alphanumeric chars and that it's not already taken.
+ * contains a-Z, 0-9, ., _ and @ chars and that it's not already taken.
  *
  * @param string $username a prospective username
  * @param integer $user_id optional paramter used when editing the username for an account
@@ -604,7 +604,7 @@ function _ft_is_valid_username($username, $account_id = "")
   global $g_table_prefix, $LANG;
 
   // check the username is alphanumeric
-  if (preg_match("/[^\w]/", $username))
+  if (preg_match("/[^\.a-zA-Z0-9_@]/", $username))
     return array(false, $LANG["validation_invalid_client_username2"]);
 
   $clause = "";

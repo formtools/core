@@ -645,7 +645,7 @@ function ft_install_get_premium_modules()
 {
 	global $g_root_dir;
 
-  $modules_folder = "$g_root_dir/modules";
+  $modules_folder = realpath(dirname(__FILE__) . "/../../modules");
 
   // loop through all modules in this folder and, if the module contains the appropriate files, add it to the database
   $module_info = array();

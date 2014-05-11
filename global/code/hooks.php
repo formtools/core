@@ -161,7 +161,7 @@ function ft_get_module_hook_calls($module_folder)
 
 
 /**
- * Our main process hooks function. This finds and calls ft_process_hook for each hook defined for
+ * Our main process hooks function. This finds and calls ft_process_hook_call for each hook defined for
  * this event & calling function. It processes each one sequentially in order of priority.
  *
  * I changed the logic of this functionality in 2.1.0 - now I think it will work more intuitively.
@@ -172,7 +172,8 @@ function ft_get_module_hook_calls($module_folder)
  * called, the priority to overriding the variables actually falls to the hooks with the LOWEST
  * priority. This can and should be adjusted, but right now there's no need for it. The fourth param
  * was added in part to solve this: that lets the calling function concatenate all overridden vars from
- * all calling functions and use all the data to determine what to do.
+ * all calling functions and use all the data to determine what to do. This is used for the quicklinks
+ * section on the main Submission Listing page.
  *
  * @param string $event the name of the event in the function calling the hook (e.g. "start", "end",
  *     "manage_files" etc.)
@@ -218,6 +219,12 @@ function ft_process_hook_calls($event, $vars, $overridable_vars, $overridable_va
         else
         {
           $return_vals[$var_name] = $updated_vars[$var_name];
+        }
+
+        // update $vars for any subsequent hook calls
+        if (array_key_exists($var_name, $vars))
+        {
+          $vars[$var_name] = $updated_vars[$var_name];
         }
       }
     }
@@ -336,7 +343,7 @@ function ft_process_template_hook_call($module_folder, $hook_function, $location
 function ft_delete_hook_call($hook_id)
 {
   global $g_table_prefix;
-  mysql_query("DELETE FROM {$g_table_prefix}hook_call WHERE hook_id = $hook_id");
+  mysql_query("DELETE FROM {$g_table_prefix}hook_calls WHERE hook_id = $hook_id");
 }
 
 

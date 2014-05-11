@@ -45,7 +45,7 @@
             {else}
               <b>{$settings.program_version}</b>
             {/if}
-            {if $SESSION.account.account_type == "admin"}
+            {if $SESSION.account.account_type == "admin" && !$g_hide_upgrade_link}
               |
               <a href="#" onclick="return ft.check_updates()" class="update_link">{$LANG.word_update}</a>
             {/if}
@@ -65,6 +65,7 @@
 
     <table cellspacing="0" cellpadding="0" width="100%">
     <tr>
+      {if !$hide_nav_menu}
       <td width="180" valign="top">
 
         <div id="left_nav">
@@ -84,4 +85,5 @@
         </div>
 
       </td>
+      {/if}
       <td valign="top">

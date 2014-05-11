@@ -212,8 +212,7 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
   }
 
   $submissions_to_delete = $submission_ids;
-  extract(ft_process_hook_calls("start", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"),
-    array("submission_ids")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("start", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("submission_ids")), EXTR_OVERWRITE);
 
   $form_info = ft_get_form($form_id);
   $form_fields = ft_get_form_fields($form_id);
@@ -314,8 +313,7 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
     ft_send_emails("on_delete", $form_id, $submission_id);
 
   $submissions_to_delete = $submission_ids;
-  extract(ft_process_hook_calls("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"),
-    array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }
@@ -790,8 +788,7 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
   $return_hash["search_num_results"] = $search_num_results;
   $return_hash["view_num_results"]   = $view_num_results;
 
-  extract(ft_process_hook_calls("end", compact("form_id", "submission_id", "view_id", "results_per_page", "page_num", "order",
-    "columns", "search_fields", "submission_ids", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("form_id", "submission_id", "view_id", "results_per_page", "page_num", "order", "columns", "search_fields", "submission_ids", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
   return $return_hash;
 }
@@ -1248,7 +1245,6 @@ function ft_display_submission_listing_quicklinks($context, $page_data)
 
   if (empty($quicklinks))
     return "";
-
 
   echo "<ul id=\"ft_quicklinks\">";
 

@@ -86,7 +86,8 @@ $page_vars["search_criteria"] = $search_criteria;
 $page_vars["module_ids_in_page"] = $module_ids_in_page;
 $page_vars["pagination"]  = ft_get_dhtml_page_nav(count($modules), $_SESSION["ft"]["settings"]["num_modules_per_page"], 1);
 $page_vars["js_messages"] = array("validation_modules_search_no_status", "phrase_please_enter_license_key", "word_yes", "word_no",
-  "phrase_please_confirm", "confirm_uninstall_module", "word_close", "word_verify", "notify_invalid_license_key");
+  "phrase_please_confirm", "confirm_uninstall_module", "word_close", "word_verify", "notify_invalid_license_key",
+  "notify_license_key_no_longer_valid", "notify_unknown_error");
 $page_vars["head_string"] =<<< END
 <script src="../../global/scripts/manage_modules.js"></script>
 END;

@@ -11,9 +11,9 @@ if (isset($_POST) && !empty($_POST))
   // if the user just changed their language file, reset the value in sessions and refresh the page
   if ($g_success && ($_POST["old_ui_language"] != $_POST["ui_language"]))
   {
-  	$_SESSION["ft"]["ui_language"] = $_POST["ui_language"];
-  	session_write_close();
-  	header("location: index.php?updated");
+    $_SESSION["ft"]["ui_language"] = $_POST["ui_language"];
+    session_write_close();
+    header("location: index.php?updated");
   }
 }
 
@@ -50,18 +50,25 @@ $page_vars["head_js"] =<<<END
   rules.push("required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}");
   rules.push("required,date_format,{$LANG["validation_no_date_format"]}");
   rules.push("required,username,{$LANG["validation_no_username"]}");
-  rules.push("is_alpha,username,{$LANG['validation_invalid_admin_username']}");
+  rules.push("function,validate_username");
   rules.push("if:password!=,required,password_2,{$LANG["validation_no_account_password_confirmed"]}");
   rules.push("if:password!=,same_as,password,password_2,{$LANG["validation_passwords_different"]}");
 
-	function validate_swatch() {
-	  var theme     = $("#theme").val();
-	  var swatch_id = "#" + theme + "_theme_swatches";
-	  if ($(swatch_id).length > 0 && $(swatch_id).val() == "") {
-	    return [[$(swatch_id)[0], "{$LANG["validation_no_theme_swatch"]}"]];
-	  }
-	  return true;
-	}
+  function validate_swatch() {
+    var theme     = $("#theme").val();
+    var swatch_id = "#" + theme + "_theme_swatches";
+    if ($(swatch_id).length > 0 && $(swatch_id).val() == "") {
+      return [[$(swatch_id)[0], "{$LANG["validation_no_theme_swatch"]}"]];
+    }
+    return true;
+  }
+  function validate_username() {
+    var username = $("input[name=username]").val();
+    if (username.match(/[^\.@a-zA-Z0-9_]/)) {
+      return [[$("input[name=username]")[0], "{$LANG['validation_invalid_admin_username']}"]];
+    }
+    return true;
+  }
 
   $(function() { document.login_info.first_name.focus(); });
 END;

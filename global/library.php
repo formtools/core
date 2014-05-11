@@ -213,6 +213,10 @@ $g_search_form_date_field_format = "d/m/y";
  */
 $g_set_sql_mode = true;
 
+/**
+ * This hides the upgrade link in the administrator's UI.
+ */
+$g_hide_upgrade_link = false;
 
 // -------------------------------------------------------------------------------------------------
 
@@ -222,7 +226,7 @@ $g_set_sql_mode = true;
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.2.1";
+$g_current_version = "2.2.2";
 
 /**
  * The release type: alpha, beta or main
@@ -232,7 +236,7 @@ $g_release_type = "main";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20120206";
+$g_release_date = "20120301";
 
 /**
  * The minimum required PHP version needed to run Form Tools.

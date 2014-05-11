@@ -1019,7 +1019,7 @@ function ft_get_view_filter_sql($view_id)
       "first_name"   => $account_info["first_name"],
       "last_name"    => $account_info["last_name"],
       "email"        => $account_info["email"],
-      "company_name" => $account_info["settings"]["company_name"]
+      "settings__company_name" => $account_info["settings"]["company_name"]
     );
   }
 

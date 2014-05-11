@@ -850,9 +850,6 @@ $LANG["validation_folder_invalid_permissions"] = "In order to run this test, the
 $LANG["validation_folder_not_writable"] = "This folder is not writeable.";
 $LANG["validation_internal_form_too_many_fields"] = "Sorry, you can only created forms with 1000 fields or less.";
 $LANG["validation_invalid_admin_email"] = "Please enter a valid adminstrator's email address.";
-$LANG["validation_invalid_admin_username"] = "Your username may only consist of alphanumeric characters (a-Z and 0-9).";
-$LANG["validation_invalid_client_username"] = "The client's user name may only consist of alphanumeric characters (a-Z and 0-9).";
-$LANG["validation_invalid_client_username2"] = "Sorry, username's may only contain letters, numbers and the underscore character. Please enter a new username.";
 $LANG["validation_invalid_column_name"] = "Column names may only be alphanumeric (a-Z, 0-9). Please check the column names.";
 $LANG["validation_invalid_custom_from_email"] = "Please enter a valid custom 'From' email address.";
 $LANG["validation_invalid_custom_reply_to_email"] = "Please enter a valid custom 'Reply-to' email address.";
@@ -1245,3 +1242,12 @@ $LANG["validation_incomplete_license_keys"] = "You must enter all of the license
 $LANG["notify_invalid_license_keys"] = "Sorry, one or more of the premium module license key was invalid. Please double-check the values and submit the form again.";
 $LANG["word_invalid"] = "Invalid";
 $LANG["word_continue"] = "Continue";
+
+// New in 2.2.2
+$LANG["notify_license_key_no_longer_valid"] = "Sorry, that license key is no longer valid.";
+$LANG["notify_unknown_error"] = "An unknown error has occurred.";
+
+// updated
+$LANG["validation_invalid_admin_username"] = "Your username may only consist of a-Z, 0-9, _, . and the @ character.";
+$LANG["validation_invalid_client_username"] = "The client's user name may only consist of a-Z, 0-9, _, . and the @ character.";
+$LANG["validation_invalid_client_username2"] = "Sorry, usernames may only consist of a-Z, 0-9, _, . and the @ character. Please enter a new username.";
