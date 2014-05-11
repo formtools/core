@@ -45,7 +45,11 @@
   {elseif $page == "database"}
     {ft_include file='admin/forms/tab_database.tpl'}
   {else}
-    {ft_include file='admin/forms/tab_main.tpl'}
+    {if "admin_edit_form_content"|hook_call_defined}
+      {template_hook location="admin_edit_form_content"}
+    {else}
+      {ft_include file='admin/forms/tab_main.tpl'}
+    {/if}
   {/if}
 
   {ft_include file='tabset_close.tpl'}

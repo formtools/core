@@ -16,6 +16,5 @@ function smarty_function_display_view_name($params, &$smarty)
     return;
 
   $view_info = ft_get_view($view_id);
-
   return $view_info["view_name"];
 }

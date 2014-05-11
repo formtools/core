@@ -186,7 +186,7 @@
           <tr>
             <td>
               {clients_dropdown name_id="available_client_ids[]" multiple="true" multiple_action="hide"
-                clients=$selected_client_ids size="4" style="width: 204px"}
+                clients=$selected_client_ids size="4" style="width: 202px"}
             </td>
             <td align="center" valign="middle" width="100">
               <input type="button" value="{$LANG.word_add_uc_rightarrow}"
@@ -196,7 +196,7 @@
             </td>
             <td>
               {clients_dropdown name_id="selected_client_ids[]" multiple="true" multiple_action="show"
-                clients=$selected_client_ids size="4" style="width: 204px"}
+                clients=$selected_client_ids size="4" style="width: 202px"}
             </td>
           </tr>
           </table>

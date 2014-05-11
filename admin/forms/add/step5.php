@@ -76,7 +76,7 @@ $page_vars["js_messages"] = array("word_na", "word_found", "word_delete", "word_
 $page_vars["head_css"] = "";
 $page_vars["head_string"] =<<< END
 <script src="$g_root_url/global/scripts/sortable.js"></script>
-<script src="$g_root_url/global/scripts/manage_forms.js"></script>
+<script src="$g_root_url/global/scripts/manage_forms.js?v=2"></script>
 <script src="$g_root_url/global/scripts/external_form_smart_fill.js"></script>
 END;
 

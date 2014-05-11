@@ -20,6 +20,7 @@
         <table cellspacing="2" cellpadding="0" id="search_form_table">
         <tr>
           <td class="blue" width="70">{$LANG.word_search}</td>
+          {if $clients|@count > 0}
           <td>
             <select name="client_id">
               <option value="" {if $search_criteria.client_id == ""}selected{/if}>{$LANG.phrase_forms_assigned_to_any_account}</option>
@@ -30,6 +31,7 @@
               </optgroup>
             </select>
           </td>
+          {/if}
           <td>
             <select name="status">
               <option value="" {if $search_criteria.status == ""}selected{/if}>{$LANG.phrase_all_statuses}</option>
@@ -170,6 +172,7 @@
               {elseif $form_info.form_type == "internal"}
                 <span class="orange">{$LANG.word_internal}</span>
               {/if}
+              {template_hook location="admin_forms_form_type_label"}
             </td>
             <td>
 

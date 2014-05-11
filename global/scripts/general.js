@@ -554,7 +554,7 @@ ft.create_dialog = function(info) {
     buttons:     [],
     popup_type:  null,
     open:        function() {},
-    close:       function() {},
+    close:       function() { $(this).dialog("destroy"); },
     resize:      function() {},
     resize_stop: function() {}
   }, info);

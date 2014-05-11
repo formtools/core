@@ -28,12 +28,15 @@ if (isset($request["page"]) && !empty($request["page"]))
       break;
   }
 
+  $remember_page = ft_module_override_data("admin_edit_form_remember_page", array("remember_page" => $remember_page));
+
   $_SESSION["ft"]["form_{$form_id}_tab"] = $remember_page;
   $page = $request["page"];
 }
 else
+{
   $page = ft_load_field("page", "form_{$form_id}_tab", "edit_form_main");
-
+}
 
 if (isset($request['edit_email_user_settings']))
 {
@@ -71,6 +74,8 @@ $tabs = array(
   )
 );
 
+$tabs = ft_module_override_data("admin_edit_form_tabs", $tabs);
+
 $order     = ft_load_field("order", "form_sort_order", "form_name-ASC");
 $keyword   = ft_load_field("keyword", "form_search_keyword", "");
 $status    = ft_load_field("status", "form_search_status", "");
@@ -92,8 +97,8 @@ $next_tabset_link = (!empty($links["next_form_id"])) ? "edit.php?page=$page&form
 
 // start compiling the page vars here, so we don't have to duplicate the shared stuff for each included code file below
 $page_vars = array();
-$page_vars["tabs"]       = $tabs;
-$page_vars["form_id"]    = $form_id;
+$page_vars["tabs"]    = $tabs;
+$page_vars["form_id"] = $form_id;
 $page_vars["view_submissions_link"] = $view_submissions_link;
 $page_vars["show_tabset_nav_links"] = true;
 $page_vars["prev_tabset_link"] = $prev_tabset_link;
@@ -137,7 +142,8 @@ switch ($page)
     break;
 
   default:
-    require("page_main.php");
+  	$vals = ft_module_override_data("admin_edit_form_page_name_include", array("page_name" => "page_main.php"));
+    require($vals["page_name"]);
     break;
 }
 

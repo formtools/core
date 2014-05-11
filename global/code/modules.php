@@ -975,7 +975,7 @@ function ft_upgrade_module($module_id)
   $timestamp = mktime(null, null, null, $month, $day, $year);
   $module_datetime = ft_get_current_datetime($timestamp);
 
-  mysql_query("
+  @mysql_query("
     UPDATE {$g_table_prefix}modules
     SET    origin_language = '$origin_language',
            module_name = '$module_name',
@@ -989,8 +989,8 @@ function ft_upgrade_module($module_id)
       ") or die(mysql_error());
 
   // remove and update the navigation links for this module
-  mysql_query("DELETE FROM {$g_table_prefix}module_menu_items WHERE module_id = $module_id");
-   $order = 1;
+  @mysql_query("DELETE FROM {$g_table_prefix}module_menu_items WHERE module_id = $module_id");
+  $order = 1;
   while (list($lang_file_key, $info) = each($nav))
   {
     $url        = $info[0];
@@ -1018,4 +1018,17 @@ function ft_upgrade_module($module_id)
   $message = ft_eval_smarty_string($LANG["notify_module_updated"], $placeholders);
 
   return array(true, $message);
+}
+
+
+/**
+ * Added in 2.1.6, to allow for simple "inline" hook overriding from within the PHP pages.
+ *
+ * @param string $location
+ * @param mixed $data
+ */
+function ft_module_override_data($location, $data)
+{
+  extract(ft_process_hook_calls("start", compact("location", "data"), array("data")), EXTR_OVERWRITE);
+	return $data;
 }

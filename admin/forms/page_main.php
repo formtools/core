@@ -28,7 +28,7 @@ $page_vars["sortable_id"] = $sortable_id;
 $page_vars["js_messages"] = array("validation_no_url", "phrase_check_url", "word_page", "validation_invalid_url",
   "word_close", "validation_no_form_url", "phrase_form_field_placeholders");
 $page_vars["head_string"] =<<< END
-<script src="$g_root_url/global/scripts/manage_forms.js"></script>
+<script src="$g_root_url/global/scripts/manage_forms.js?v=2"></script>
 <script src="$g_root_url/global/scripts/sortable.js"></script>
 END;
 

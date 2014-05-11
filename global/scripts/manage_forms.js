@@ -40,7 +40,7 @@ mf_ns.add_multi_page_form_page = function() {
  *   values.
  */
 mf_ns.check_first_form_url = function() {
-  if ($("#form_type").val() == "internal") {
+  if ($("#form_type").val() != "external") {
     return true;
   }
 

@@ -110,6 +110,7 @@ function ft_delete_form_fields($form_id, $field_ids)
   $affected_views = array();
   $removed_field_ids = array();
 
+  $deleted_field_info = array();
   foreach ($field_ids as $field_id)
   {
     $field_id = trim($field_id);
@@ -121,6 +122,7 @@ function ft_delete_form_fields($form_id, $field_ids)
       continue;
 
     $old_field_info = ft_get_form_field($field_id);
+    $deleted_field_info[] = $old_field_info;
 
     @mysql_query("DELETE FROM {$g_table_prefix}form_fields WHERE field_id = $field_id");
     if (!$form_table_exists)
@@ -176,7 +178,7 @@ function ft_delete_form_fields($form_id, $field_ids)
   else
     $message = $LANG["notify_form_field_removed"];
 
-  extract(ft_process_hook_calls("end", compact("infohash", "form_id", "field_ids", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
+  extract(ft_process_hook_calls("end", compact("deleted_field_info", "form_id", "field_ids", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
 
   return array($success, $message);
 }

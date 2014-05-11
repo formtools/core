@@ -782,7 +782,7 @@ $LANG["text_install_email_content_text"] = "There's plenty of resources on our w
 $LANG["text_install_form_tools_server_not_supported"] = "Sorry, Form Tools will not be able to run on your server. <a href=\"http://docs.formtools.org/userdoc2_1/?page=system_requirements\" target=\"_blank\">Please click here</a> for the minimum requirements.";
 $LANG["text_install_intro"] = "Welcome to the Form Tools installation script! Please select your language.";
 $LANG["text_install_system_check"] = "This page runs a few tests on your system to ensure it's able to run Form Tools.";
-$LANG["text_internal_form_desc"] = "Internal forms exist only within Form Tools - not elsewhere on your site. Only Form Tools user accounts will have access to the form. Select this option if you don't have an existing form.";
+$LANG["text_internal_form_desc"] = "Internal forms exist only within Form Tools - not elsewhere on your site. Only Form Tools user accounts will have access to the form. You don't need a pre-existing form to use this option: Form Tools creates it all for you.";
 $LANG["text_internal_form_intro"] = "Use the form below to create a new Internal form. All settings, including the number and content of the form fields can be be changed and configured later.";
 $LANG["text_js_required"] = "In order to login and use Form Tools, you must have javascript enabled in your browser. Please enable it now, and click refresh in your browser.";
 $LANG["text_last_modified_date_explanation_c"] = "The last time this submission was modified. For new submissions, this is the same as:";
