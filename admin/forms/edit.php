@@ -28,7 +28,7 @@ if (isset($request["page"]) && !empty($request["page"]))
       break;
   }
 
-  $remember_page = ft_module_override_data("admin_edit_form_remember_page", array("remember_page" => $remember_page));
+  //$remember_page = ft_module_override_data("admin_edit_form_remember_page", array("remember_page" => $remember_page));
 
   $_SESSION["ft"]["form_{$form_id}_tab"] = $remember_page;
   $page = $request["page"];
