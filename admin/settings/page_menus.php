@@ -5,10 +5,10 @@ $menu_page = ft_load_field("menu_page", "menu_page", 1);
 // if required, delete the menu. If any clients were assigned to this menu, the success response will
 // include their names
 if (isset($request["delete"]))
-  list($g_success, $g_message) = ft_delete_client_menu($request["delete"]);
+	list($g_success, $g_message) = ft_delete_client_menu($request["delete"]);
 
 if (isset($_GET["mass_assign"]))
-  list($g_success, $g_message) = ft_update_client_menus($_GET["accounts"], $_GET["menu_id"]);
+	list($g_success, $g_message) = ft_update_client_menus($_GET["accounts"], $_GET["menu_id"]);
 
 $menus = ft_get_menus($menu_page);
 

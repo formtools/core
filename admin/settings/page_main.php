@@ -1,7 +1,7 @@
 <?php
 
 if (isset($request["update_main"]))
-  list($g_success, $g_message) = ft_update_main_settings($_POST);
+	list($g_success, $g_message) = ft_update_main_settings($_POST);
 
 $page_vars = array();
 $page_vars["page"] = "main";

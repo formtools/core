@@ -9,16 +9,16 @@ $sortable_id = "add_form_step4";
 // go to next page
 if (!empty($_POST) && isset($_POST["next_step"]))
 {
-  // reorder fields and rename their column names, as per their new order
-  $_POST["sortable_id"] = $sortable_id;
-  ft_update_form_fields($form_id, $_POST, true);
+	// reorder fields and rename their column names, as per their new order
+	$_POST["sortable_id"] = $sortable_id;
+	ft_update_form_fields($form_id, $_POST, true);
 
-  $deleted_rows = explode(",", $_POST["{$sortable_id}_sortable__deleted_rows"]);
-  ft_delete_form_fields($form_id, $deleted_rows);
+	$deleted_rows = explode(",", $_POST["{$sortable_id}_sortable__deleted_rows"]);
+	ft_delete_form_fields($form_id, $deleted_rows);
 
-  session_write_close();
-  header("location: step5.php?form_id=$form_id");
-  exit;
+	session_write_close();
+	header("location: step5.php?form_id=$form_id");
+	exit;
 }
 
 $form_fields = ft_get_form_fields($form_id);
@@ -29,16 +29,16 @@ $best_guesses = array();
 $field_ids    = array();
 foreach ($form_fields as $field)
 {
-  $field_ids[] = $field["field_id"];
+	$field_ids[] = $field["field_id"];
 
-  if ($field["is_system_field"] == "yes")
-    continue;
+	if ($field["is_system_field"] == "yes")
+		continue;
 
-  // best guess at generating an appropriate Display Name
-  $temp = preg_replace("/_/", " ", $field["field_name"]);
-  $display_name_guess = ucwords($temp);
+	// best guess at generating an appropriate Display Name
+	$temp = preg_replace("/_/", " ", $field["field_name"]);
+	$display_name_guess = ucwords($temp);
 
-  $best_guesses[] = "\"{$field['field_id']}\": \"$display_name_guess\"";
+	$best_guesses[] = "\"{$field['field_id']}\": \"$display_name_guess\"";
 }
 $best_guesses_js = implode(",\n", $best_guesses);
 $field_id_str = implode(",", $field_ids);

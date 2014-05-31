@@ -4,27 +4,27 @@ require("../../global/session_start.php");
 ft_check_permission("admin");
 
 if (isset($_GET['delete']) && !empty($_GET['client_id']))
-  list($g_success, $g_message) = ft_delete_client($_GET['client_id']);
+	list($g_success, $g_message) = ft_delete_client($_GET['client_id']);
 
 if (isset($_GET['login']))
-  list($g_success, $g_message) = ft_login_as_client($_GET['login']);
+	list($g_success, $g_message) = ft_login_as_client($_GET['login']);
 
 
 if (isset($_GET["reset"]))
 {
-  $_SESSION["ft"]["client_sort_order"] = "";
-  $_SESSION["ft"]["client_search_keyword"] = "";
-  $_SESSION["ft"]["client_search_status"] = "";
+	$_SESSION["ft"]["client_sort_order"] = "";
+	$_SESSION["ft"]["client_search_keyword"] = "";
+	$_SESSION["ft"]["client_search_status"] = "";
 }
 $order   = ft_load_field("order", "client_sort_order", "last_name-ASC");
 $keyword = ft_load_field("keyword", "client_search_keyword", "");
 $status  = ft_load_field("status", "client_search_status", "");
 
 $search_criteria = array(
-  "order"     => $order,
-  "keyword"   => $keyword,
-  "status"    => $status
-    );
+	"order"     => $order,
+	"keyword"   => $keyword,
+	"status"    => $status
+);
 $num_clients = ft_get_client_count();
 
 // retrieve all client information

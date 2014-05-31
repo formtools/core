@@ -3,10 +3,10 @@
 $sortable_id = "edit_admin_menu";
 if (isset($request["update_admin_menu"]))
 {
-  $info = $_POST;
-  $info["sortable_id"] = $sortable_id;
-  $info["account_id"] = $_SESSION["ft"]["account"]["account_id"];
-  list($g_success, $g_message) = ft_update_admin_menu($info);
+	$info = $_POST;
+	$info["sortable_id"] = $sortable_id;
+	$info["account_id"] = $_SESSION["ft"]["account"]["account_id"];
+	list($g_success, $g_message) = ft_update_admin_menu($info);
 }
 
 $menu = ft_get_admin_menu();
@@ -24,7 +24,7 @@ $page_vars["head_string"] =<<< END
   <script src="$g_root_url/global/scripts/manage_menus.js"></script>
 END;
 $page_vars["js_messages"] = array("word_remove", "word_na", "notify_required_admin_pages", "word_form_c", "word_client_c",
-  "word_url_c", "word_forms", "word_clients", "word_settings", "phrase_your_account", "word_modules", "word_logout",
-  "phrase_delete_row", "phrase_connect_rows", "phrase_disconnect_rows");
+	"word_url_c", "word_forms", "word_clients", "word_settings", "phrase_your_account", "word_modules", "word_logout",
+	"phrase_delete_row", "phrase_connect_rows", "phrase_disconnect_rows");
 
 ft_display_page("admin/settings/index.tpl", $page_vars);

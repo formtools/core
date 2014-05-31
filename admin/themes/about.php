@@ -7,8 +7,8 @@ $theme_id = isset($request["theme_id"]) ? $request["theme_id"] : "";
 
 if (empty($theme_id))
 {
-  header("location: index.php");
-  exit;
+	header("location: index.php");
+	exit;
 }
 $theme_info = ft_get_theme($theme_id);
 

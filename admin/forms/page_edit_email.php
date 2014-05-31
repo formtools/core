@@ -3,7 +3,7 @@
 $email_id = ft_load_field("email_id", "email_id", "");
 
 if (isset($request["update_email_template"]))
-  list($g_success, $g_message) = ft_update_email_template($email_id, $request);
+	list($g_success, $g_message) = ft_update_email_template($email_id, $request);
 
 $form_info      = ft_get_form($form_id);
 $form_fields    = ft_get_form_fields($form_id);
@@ -16,7 +16,7 @@ $admin_info      = ft_get_admin_info();
 
 $edit_email_tab = (isset($_SESSION["ft"]["inner_tabs"]["edit_email_template"])) ? $_SESSION["ft"]["inner_tabs"]["edit_email_template"] : 1;
 if (isset($request["edit_email_template"]))
-  $edit_email_tab = $request["edit_email_template"];
+	$edit_email_tab = $request["edit_email_template"];
 
 $form_has_file_upload_field = ft_check_form_has_file_upload_field($form_id);
 $file_field_text = ($form_has_file_upload_field) ? $LANG["text_file_field_placeholders_info"] : "";
@@ -35,14 +35,14 @@ $selected_edit_submission_views = array();
 $selected_when_sent_views = array();
 foreach ($views["results"] as $view)
 {
-  if (!empty($view["filters"]))
-    $filtered_views[] = $view;
+	if (!empty($view["filters"]))
+		$filtered_views[] = $view;
 
-  if (in_array($view["view_id"], $template_info["edit_submission_page_view_ids"]))
-    $selected_edit_submission_views[] = $view;
+	if (in_array($view["view_id"], $template_info["edit_submission_page_view_ids"]))
+		$selected_edit_submission_views[] = $view;
 
-  if (in_array($view["view_id"], $template_info["when_sent_view_ids"]))
-    $selected_when_sent_views[] = $view;
+	if (in_array($view["view_id"], $template_info["when_sent_view_ids"]))
+		$selected_when_sent_views[] = $view;
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -63,12 +63,12 @@ $page_vars["admin_info"] = $admin_info;
 $page_vars["file_field_text"] = $file_field_text;
 $page_vars["columns"]    = $columns;
 $page_vars["js_messages"] = array("validation_invalid_email", "validation_no_custom_recipient_email",
-  "validation_no_test_email_recipient", "validation_no_test_email_submission_id", "word_cc_c", "word_bcc_c",
-  "word_from_c", "word_reply_to_c", "word_subject_c", "phrase_form_email_field_b_c", "phrase_form_email_fields",
-  "validation_no_main_email_recipient", "validation_no_email_content", "validation_no_email_template_name",
-  "validation_no_email_template_view_mapping_value", "validation_no_email_template_view_id",
-  "validation_no_custom_from_email", "validation_invalid_custom_from_email", "validation_no_custom_reply_to_email",
-  "validation_invalid_custom_reply_to_email", "validation_no_email_from_field", "phrase_form_field_placeholders"
+	"validation_no_test_email_recipient", "validation_no_test_email_submission_id", "word_cc_c", "word_bcc_c",
+	"word_from_c", "word_reply_to_c", "word_subject_c", "phrase_form_email_field_b_c", "phrase_form_email_fields",
+	"validation_no_main_email_recipient", "validation_no_email_content", "validation_no_email_template_name",
+	"validation_no_email_template_view_mapping_value", "validation_no_email_template_view_id",
+	"validation_no_custom_from_email", "validation_invalid_custom_from_email", "validation_no_custom_reply_to_email",
+	"validation_invalid_custom_reply_to_email", "validation_no_email_from_field", "phrase_form_field_placeholders"
 );
 
 // a little hacky, but not too bad. Override the form nav links so that it always links to the email tab

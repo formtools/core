@@ -4,8 +4,8 @@ require("library.php");
 
 if (isset($_POST["next"]))
 {
-  header("location: step2.php");
-  exit;
+	header("location: step2.php");
+	exit;
 }
 
 $page_vars = array();

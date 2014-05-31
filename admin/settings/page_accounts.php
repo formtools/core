@@ -1,11 +1,11 @@
 <?php
 
 if (isset($request["update_accounts"]))
-  list($g_success, $g_message) = ft_update_account_settings($request);
+	list($g_success, $g_message) = ft_update_account_settings($request);
 
 // if required, update the list of available languages
 if (isset($_GET["refresh_lang_list"]))
-  list($g_success, $g_message) = ft_refresh_language_list();
+	list($g_success, $g_message) = ft_refresh_language_list();
 
 $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>');
 

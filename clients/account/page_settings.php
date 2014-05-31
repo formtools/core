@@ -2,9 +2,9 @@
 
 if (isset($request["update_account_settings"]))
 {
-  $account_id = $_SESSION["ft"]["account"]["account_id"];
-  $request["page"] = "settings";
-  list($g_success, $g_message) = ft_update_client($account_id, $request);
+	$account_id = $_SESSION["ft"]["account"]["account_id"];
+	$request["page"] = "settings";
+	list($g_success, $g_message) = ft_update_client($account_id, $request);
 }
 
 $client_info = ft_get_account_info($account_id);
@@ -19,25 +19,25 @@ $page_vars["page_url"]    = ft_get_page_url("client_account_settings");
 
 $js = array("var rules = []");
 if ($client_info["settings"]["may_edit_page_titles"] == "yes")
-  $js[] = "rules.push(\"required,page_titles,{$LANG["validation_no_titles"]}\")";
+	$js[] = "rules.push(\"required,page_titles,{$LANG["validation_no_titles"]}\")";
 if ($client_info["settings"]["may_edit_theme"] == "yes")
 {
-  $js[] = "rules.push(\"required,theme,{$LANG["validation_no_theme"]}\")";
-  $js[] = "rules.push(\"function,validate_swatch\")";
+	$js[] = "rules.push(\"required,theme,{$LANG["validation_no_theme"]}\")";
+	$js[] = "rules.push(\"function,validate_swatch\")";
 }
 if ($client_info["settings"]["may_edit_logout_url"] == "yes")
-  $js[] = "rules.push(\"required,logout_url,{$LANG["validation_no_logout_url"]}\")";
+	$js[] = "rules.push(\"required,logout_url,{$LANG["validation_no_logout_url"]}\")";
 if ($client_info["settings"]["may_edit_language"] == "yes")
-  $js[] = "rules.push(\"required,ui_language,{$LANG["validation_no_ui_language"]}\")";
+	$js[] = "rules.push(\"required,ui_language,{$LANG["validation_no_ui_language"]}\")";
 if ($client_info["settings"]["may_edit_timezone_offset"] == "yes")
-  $js[] = "rules.push(\"required,timezone_offset,{$LANG["validation_no_timezone_offset"]}\")";
+	$js[] = "rules.push(\"required,timezone_offset,{$LANG["validation_no_timezone_offset"]}\")";
 if ($client_info["settings"]["may_edit_sessions_timeout"] == "yes")
 {
-  $js[] = "rules.push(\"required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}\")";
-  $js[] = "rules.push(\"digits_only,sessions_timeout,{$LANG["validation_invalid_sessions_timeout"]}\")";
+	$js[] = "rules.push(\"required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}\")";
+	$js[] = "rules.push(\"digits_only,sessions_timeout,{$LANG["validation_invalid_sessions_timeout"]}\")";
 }
 if ($client_info["settings"]["may_edit_date_format"] == "yes")
-  $js[] = "rules.push(\"required,date_format,{$LANG["validation_no_date_format"]}\")";
+	$js[] = "rules.push(\"required,date_format,{$LANG["validation_no_date_format"]}\")";
 
 $js[] =<<< END
 function validate_swatch() {

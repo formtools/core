@@ -6,8 +6,8 @@ ft_check_permission("admin");
 // delete any temporary Smart Fill uploaded files
 if (isset($_SESSION["ft"]["smart_fill_tmp_uploaded_files"]) && !empty($_SESSION["ft"]["smart_fill_tmp_uploaded_files"]))
 {
-  foreach ($_SESSION["ft"]["smart_fill_tmp_uploaded_files"] as $file)
-    @unlink($file);
+	foreach ($_SESSION["ft"]["smart_fill_tmp_uploaded_files"] as $file)
+		@unlink($file);
 }
 
 $_SESSION["ft"]["method"] = "";

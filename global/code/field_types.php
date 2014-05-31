@@ -4,8 +4,8 @@
  * This file contains all functions relating to the field types (select, radios etc). Added in 2.1.0
  * with the addition of Custom Fields.
  *
- * @copyright Encore Web Studios 2012
- * @author Encore Web Studios <formtools@encorewebstudios.com>
+ * @copyright Benjamin Keen 2014
+ * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 2-2-x
  * @subpackage FieldTypes
  */
@@ -77,18 +77,18 @@ function ft_get_field_types($return_settings = false, $field_type_ids = array())
 		ORDER BY g.list_order, ft.list_order
 	");
 
-	 $field_types = array();
-	 while ($row = mysql_fetch_assoc($query))
-	 {
-		 if ($return_settings) {
-			 $curr_field_type_id = $row["field_type_id"];
-			 $row["settings"] = ft_get_field_type_settings($curr_field_type_id, false);
-		 }
+	$field_types = array();
+	while ($row = mysql_fetch_assoc($query))
+	{
+		if ($return_settings) {
+			$curr_field_type_id = $row["field_type_id"];
+			$row["settings"] = ft_get_field_type_settings($curr_field_type_id, false);
+		}
 
-		 $field_types[] = $row;
-	 }
+		$field_types[] = $row;
+	}
 
-	 return $field_types;
+	return $field_types;
 }
 
 
@@ -162,7 +162,7 @@ function ft_get_grouped_field_types()
 
 			$settings = array();
 			while ($settings_row = mysql_fetch_assoc($settings_count_query))
-			$settings[] = $settings_row;
+				$settings[] = $settings_row;
 
 			$field_type_info["settings"] = $settings;
 
@@ -175,7 +175,7 @@ function ft_get_grouped_field_types()
 
 			$rules = array();
 			while ($rules_row = mysql_fetch_assoc($rules_query))
-			$rules[] = $rules_row;
+				$rules[] = $rules_row;
 
 			$field_type_info["validation"] = $rules;
 			$field_types[] = $field_type_info;
@@ -284,9 +284,9 @@ function ft_get_field_type_id_by_identifier($identifier)
 	$info = mysql_fetch_assoc($query);
 
 	if (empty($info))
-	return "";
+		return "";
 	else
-	return $info["field_type_id"];
+		return $info["field_type_id"];
 }
 
 
@@ -433,7 +433,7 @@ function ft_get_field_type_settings($field_type_id_or_ids, $return_options = fal
 	global $g_table_prefix;
 
 	if (empty($field_type_id_or_ids))
-	return array();
+		return array();
 
 	if (is_array($field_type_id_or_ids))
 	{
@@ -487,7 +487,7 @@ function ft_get_field_type_settings($field_type_id_or_ids, $return_options = fal
 		else
 		{
 			if (!array_key_exists($field_type_id, $info))
-			$info[$field_type_id] = array();
+				$info[$field_type_id] = array();
 
 			$info[$field_type_id][] = $row;
 		}
@@ -531,7 +531,7 @@ function ft_generate_field_type_settings_js($options = array())
 
 	$delimiter = "\n";
 	if ($minimize)
-	$delimiter = "";
+		$delimiter = "";
 
 	$query = mysql_query("
 		SELECT DISTINCT field_type_id
@@ -579,7 +579,7 @@ function ft_generate_field_type_settings_js($options = array())
 			}
 			$options_js = implode(",$delimiter", $options);
 			if (!empty($options_js))
-			$options_js = "\n$options_js\n    ";
+				$options_js = "\n$options_js\n    ";
 
 			$settings_js[] =<<< END
 	{ setting_id:  $setting_id, field_label: "$field_label", field_setting_identifier: "$field_setting_identifier", field_type:  "$field_type", default_value: "$default_value", field_orientation: "$field_orientation", options: [$options_js] }
@@ -587,7 +587,7 @@ END;
 		}
 
 		if ($js_key == "field_type_id")
-		$curr_js[] = "{$namespace}.field_settings[\"field_type_$field_type_id\"] = [";
+			$curr_js[] = "{$namespace}.field_settings[\"field_type_$field_type_id\"] = [";
 		else
 		{
 			$field_type_identifier = $field_type_id_to_identifier_map[$field_type_id];
@@ -674,12 +674,12 @@ function ft_get_raw_field_types_js($namespace = "page_ns")
 		foreach ($field_types as $field_type_info)
 		{
 			if ($field_type_info["raw_field_type_map"] != $raw_field_type)
-			continue;
+				continue;
 
 			if (in_array($raw_field_type, array("radio-buttons", "checkboxes", "select", "multi-select")))
 			{
 				if (empty($field_type_info["raw_field_type_map_multi_select_id"]))
-				continue;
+					continue;
 			}
 
 			$curr_mapped_field_types[] = array(
@@ -728,7 +728,7 @@ function ft_get_field_type_resources($resource_type)
 		FROM   {$g_table_prefix}field_types
 	");
 	while ($row = mysql_fetch_assoc($query))
-	$str .= $row[$db_column] . "\n";
+		$str .= $row[$db_column] . "\n";
 
 	return $str;
 }
@@ -776,7 +776,7 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
 	global $g_table_prefix;
 
 	if (empty($field_ids))
-	return array();
+		return array();
 
 	$field_id_str = implode(",", $field_ids);
 
@@ -801,10 +801,10 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
 	foreach ($form_fields as $field_info)
 	{
 		if (!in_array($field_info["field_id"], $field_ids))
-		continue;
+			continue;
 
 		if (!in_array($field_info["field_type_id"], $relevant_field_type_ids))
-		$relevant_field_type_ids[] = $field_info["field_type_id"];
+			$relevant_field_type_ids[] = $field_info["field_type_id"];
 
 		$field_id_to_field_type_id_map[$field_info["field_id"]] = $field_info["field_type_id"];
 	}
@@ -820,7 +820,7 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
 		$results[$field_id] = array();
 
 		if (!isset($field_id_to_field_type_id_map[$field_id]) || !isset($default_field_type_settings[$field_id_to_field_type_id_map[$field_id]]))
-		continue;
+			continue;
 
 		$field_type_settings = $default_field_type_settings[$field_id_to_field_type_id_map[$field_id]];
 		foreach ($field_type_settings as $setting_info)
@@ -828,7 +828,7 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
 			$identifier         = $setting_info["field_setting_identifier"];
 			$default_value_type = $setting_info["default_value_type"];
 			if ($default_value_type == "static")
-			$value = $setting_info["default_value"];
+				$value = $setting_info["default_value"];
 			else
 			{
 				$parts = explode(",", $setting_info["default_value"]);
@@ -836,7 +836,7 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
 				// dynamic setting values should ALWAYS be of the form "setting_name,module_folder/'core'". If they're
 				// not, just ignore it
 				if (count($parts) != 2)
-				$value = "";
+					$value = "";
 				else
 				{
 					$value = ft_get_settings($parts[0], $parts[1]);
@@ -844,7 +844,7 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
 			}
 
 			if (isset($overridden_settings[$field_id]) && isset($overridden_settings[$field_id][$identifier]))
-			$value = $overridden_settings[$field_id][$identifier];
+				$value = $overridden_settings[$field_id][$identifier];
 
 			$results[$field_id][$identifier] = $value;
 		}
@@ -1170,11 +1170,11 @@ function ft_generate_viewable_field($params)
 function ft_display_field_type_date($placeholders)
 {
 	if (empty($placeholders["VALUE"]))
-	return;
+		return;
 
 	$tzo = "";
 	if ($placeholders["apply_timezone_offset"] == "yes" && isset($placeholders["ACCOUNT_INFO"]["timezone_offset"]))
-	$tzo = $placeholders["ACCOUNT_INFO"]["timezone_offset"];
+		$tzo = $placeholders["ACCOUNT_INFO"]["timezone_offset"];
 
 	switch ($placeholders["display_format"])
 	{
@@ -1291,7 +1291,7 @@ function ft_display_field_type_checkboxes($placeholders)
 function ft_display_field_type_dropdown($placeholders)
 {
 	if (empty($placeholders["contents"]))
-	return;
+		return;
 
 	$output = "";
 	foreach ($placeholders["contents"]["options"] as $curr_group_info)
@@ -1337,7 +1337,7 @@ function ft_display_field_type_multi_select_dropdown($placeholders)
 			if (in_array($option_info["option_value"], $vals))
 			{
 				if (!$is_first)
-				$output .= $g_multi_val_delimiter;
+					$output .= $g_multi_val_delimiter;
 
 				$output .= $option_info["option_name"];
 				$is_first = false;
@@ -1361,7 +1361,7 @@ function ft_display_field_type_phone_number($placeholders)
 	foreach ($pieces as $piece)
 	{
 		if (empty($piece))
-		continue;
+			continue;
 
 		if ($piece[0] == "x")
 		{
@@ -1455,7 +1455,7 @@ function ft_get_shared_field_setting_info($field_type_map, $field_type_settings_
 
 		$shared_field_types = array_keys($settings);
 		if (!in_array($new_field_type_identifier, $shared_field_types) || !in_array($old_field_type_identifier, $shared_field_types))
-		continue;
+			continue;
 
 		$old_setting_id = ft_get_field_type_setting_id_by_identifier($old_field_type_id, $settings[$new_field_type_identifier]);
 		$new_setting_id = ft_get_field_type_setting_id_by_identifier($new_field_type_id, $settings[$old_field_type_identifier]);
@@ -1497,9 +1497,9 @@ function ft_get_field_type_setting_shared_characteristics_js()
 	$return_info = array();
 
 	// this is what we're trying to generate: a hash of setting id => array( characteristic IDs )
-	// The Òcharacteristic IDÓ is a new (temporary) number for characteristic. In every situation that I can
+	// The ï¿½characteristic IDï¿½ is a new (temporary) number for characteristic. In every situation that I can
 	// think of, the value array will contain a single entry (why would a setting be mapped to multiple
-	// characteristics?). However, the interface doesn't limit it. To be safe, IÕll stash it in an array.
+	// characteristics?). However, the interface doesn't limit it. To be safe, Iï¿½ll stash it in an array.
 	$setting_ids_to_characteristic_ids = array();
 
 	$characteristic_id = 1;
@@ -1518,7 +1518,7 @@ function ft_get_field_type_setting_shared_characteristics_js()
 
 			// the shared characteristic settings may reference uninstalled modules
 			if (!array_key_exists($field_type_identifier, $field_identifier_to_id))
-			continue;
+				continue;
 
 			$field_type_id = $field_identifier_to_id[$field_type_identifier];
 			$all_field_type_setting_ids = $info["field_type_ids_to_setting_ids"][$field_type_id];
@@ -1527,10 +1527,10 @@ function ft_get_field_type_setting_shared_characteristics_js()
 			foreach ($all_field_type_setting_ids as $setting_id)
 			{
 				if ($info["setting_id_to_identifier"][$setting_id] != $setting_identifier)
-				continue;
+					continue;
 
 				if (!array_key_exists($setting_id, $setting_ids_to_characteristic_ids))
-				$setting_ids_to_characteristic_ids[$setting_id] = array();
+					$setting_ids_to_characteristic_ids[$setting_id] = array();
 
 				$setting_ids_to_characteristic_ids[$setting_id][] = $characteristic_id;
 			}
@@ -1581,15 +1581,15 @@ function ft_get_field_type_and_setting_info()
 		$setting_id    = $row["setting_id"];
 
 		if (!array_key_exists($field_type_id, $field_type_id_to_identifier))
-		$field_type_id_to_identifier[$field_type_id] = $row["field_type_identifier"];
+			$field_type_id_to_identifier[$field_type_id] = $row["field_type_identifier"];
 
 		if (!array_key_exists($field_type_id, $field_type_ids_to_setting_ids))
-		$field_type_ids_to_setting_ids[$field_type_id] = array();
+			$field_type_ids_to_setting_ids[$field_type_id] = array();
 
 		$field_type_ids_to_setting_ids[$field_type_id][] = $setting_id;
 
 		if (!array_key_exists($setting_id, $setting_id_to_identifier))
-		$setting_id_to_identifier[$setting_id] = $row["field_setting_identifier"];
+			$setting_id_to_identifier[$setting_id] = $row["field_setting_identifier"];
 	}
 
 	$return_info = array(

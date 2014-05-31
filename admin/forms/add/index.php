@@ -6,18 +6,18 @@ ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
 if (isset($request["external"]))
 {
-  header("location: step1.php");
-  exit;
+	header("location: step1.php");
+	exit;
 }
 else if (isset($request["internal"]))
 {
-  header("location: internal.php");
-  exit;
+	header("location: internal.php");
+	exit;
 }
 
 if (isset($request["new_form"]))
 {
-  $_SESSION["ft"]["add_form_form_id"] = "";
+	$_SESSION["ft"]["add_form_form_id"] = "";
 }
 
 $num_forms = ft_get_form_count();

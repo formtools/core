@@ -1,10 +1,10 @@
 <?php
 
 if (isset($request["update_files"]))
-  list($g_success, $g_message) = ft_update_file_settings($request);
+	list($g_success, $g_message) = ft_update_file_settings($request);
 
 $all_preset_types = array("bmp","gif","jpg","jpeg","png","avi","mp3","mp4","css","js","htm","html","doc","rtf",
-  "txt","pdf","xml","csv","zip","tar","tar.gz","swf","fla");
+	"txt","pdf","xml","csv","zip","tar","tar.gz","swf","fla");
 
 $file_upload_filetypes = explode(",", $_SESSION["ft"]["settings"]["file_upload_filetypes"]);
 
@@ -12,8 +12,8 @@ $file_upload_filetypes = explode(",", $_SESSION["ft"]["settings"]["file_upload_f
 $other_filetypes = array();
 foreach ($file_upload_filetypes as $filetype)
 {
-  if (!in_array($filetype, $all_preset_types))
-    $other_filetypes[] = $filetype;
+	if (!in_array($filetype, $all_preset_types))
+		$other_filetypes[] = $filetype;
 }
 $other_filetypes_str = implode(",", $other_filetypes);
 $max_filesize = ft_get_upload_max_filesize();

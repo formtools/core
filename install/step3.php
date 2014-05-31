@@ -20,8 +20,8 @@ if (isset($_POST["track_license_keys"]))
 	foreach ($module_folders as $module_folder)
 	{
 		$data[$module_folder] = array(
-		  "k"  => $_POST["{$module_folder}_k"],
-		  "ek" => $_POST["{$module_folder}_ek"]
+			"k"  => $_POST["{$module_folder}_k"],
+			"ek" => $_POST["{$module_folder}_ek"]
 		);
 	}
 	$_SESSION["ft_install"]["premium_module_keys"] = $data;
@@ -29,36 +29,36 @@ if (isset($_POST["track_license_keys"]))
 
 if (isset($_POST["overwrite_tables"]))
 {
-  ft_install_delete_tables($hostname, $db_name, $username, $password, $g_table_prefix);
-  $_POST["create_database"] = 1;
+	ft_install_delete_tables($hostname, $db_name, $username, $password, $g_table_prefix);
+	$_POST["create_database"] = 1;
 }
 
 if (isset($_POST["create_database"]))
 {
-  // confirm the database settings are correctly entered. If they're not, the error messages are
-  // returned by this function, and the page is reloaded to display them
-  list($success, $error) = ft_install_check_db_settings($hostname, $db_name, $username, $password);
+	// confirm the database settings are correctly entered. If they're not, the error messages are
+	// returned by this function, and the page is reloaded to display them
+	list($success, $error) = ft_install_check_db_settings($hostname, $db_name, $username, $password);
 
-  // all checks out! Now try to create the database tables
-  if ($success)
-  {
-    $existing_tables = ft_check_no_existing_tables($hostname, $db_name, $username, $password, $g_table_prefix);
+	// all checks out! Now try to create the database tables
+	if ($success)
+	{
+		$existing_tables = ft_check_no_existing_tables($hostname, $db_name, $username, $password, $g_table_prefix);
 
-    if (empty($existing_tables))
-    {
-      list($success, $error) = ft_install_create_database($hostname, $db_name, $username, $password, $g_table_prefix);
-      if ($success)
-      {
-        header("location: step4.php");
-        exit;
-      }
-    }
-    else
-    {
-      $success = false;
-      $tables_already_exist = true;
-    }
-  }
+		if (empty($existing_tables))
+		{
+			list($success, $error) = ft_install_create_database($hostname, $db_name, $username, $password, $g_table_prefix);
+			if ($success)
+			{
+				header("location: step4.php");
+				exit;
+			}
+		}
+		else
+		{
+			$success = false;
+			$tables_already_exist = true;
+		}
+	}
 }
 
 // ------------------------------------------------------------------------------------------------

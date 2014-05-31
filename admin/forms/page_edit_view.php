@@ -9,10 +9,10 @@ $view_id = ft_load_field("view_id", "form_{$form_id}_view_id");
 // this updates all four sections of the view at once (since all may have been modified)
 if (isset($request["update_view"]))
 {
-  $request["form_id"] = $form_id;
-  $request["view_fields_sortable_id"] = $view_fields_sortable_id;
-  $request["submission_list_sortable_id"] = $submission_list_sortable_id;
-  list($g_success, $g_message) = ft_update_view($view_id, $request);
+	$request["form_id"] = $form_id;
+	$request["view_fields_sortable_id"] = $view_fields_sortable_id;
+	$request["submission_list_sortable_id"] = $submission_list_sortable_id;
+	list($g_success, $g_message) = ft_update_view($view_id, $request);
 }
 
 $form_info     = ft_get_form($form_id);
@@ -36,8 +36,8 @@ $num_client_map_filters = count($client_map_filters);
 $edit_view_tab = (isset($_SESSION["ft"]["inner_tabs"]["edit_view"])) ? $_SESSION["ft"]["inner_tabs"]["edit_view"] : 1;
 if (isset($request["edit_view_tab"]))
 {
-  $edit_view_tab = $request["edit_view_tab"];
-  $_SESSION["ft"]["inner_tabs"]["edit_view"] = $edit_view_tab;
+	$edit_view_tab = $request["edit_view_tab"];
+	$_SESSION["ft"]["inner_tabs"]["edit_view"] = $edit_view_tab;
 }
 
 $view_omit_list = ft_get_public_view_omit_list($view_id);
@@ -50,29 +50,29 @@ $all_form_fields = array();
 $date_field_ids = array();
 foreach ($form_fields as $field)
 {
-  $display_name = htmlspecialchars($field["field_title"]);
-  $col_name     = $field["col_name"];
-  $field_id        = $field["field_id"];
-  $is_system_field = ($field["is_system_field"] == "yes") ? "true" : "false";
-  $is_date_field   = ($field["is_date_field"] == "yes") ? "true" : "false";
-  $field_type_id = $field["field_type_id"];
+	$display_name = htmlspecialchars($field["field_title"]);
+	$col_name     = $field["col_name"];
+	$field_id        = $field["field_id"];
+	$is_system_field = ($field["is_system_field"] == "yes") ? "true" : "false";
+	$is_date_field   = ($field["is_date_field"] == "yes") ? "true" : "false";
+	$field_type_id = $field["field_type_id"];
 
-  $all_form_fields[] = "{ field_id: $field_id, display_name: \"$display_name\", "
-                       . "col_name: \"$col_name\", is_system_field: $is_system_field, "
-                       . "is_date_field: $is_date_field, field_type_id: $field_type_id }";
+	$all_form_fields[] = "{ field_id: $field_id, display_name: \"$display_name\", "
+		. "col_name: \"$col_name\", is_system_field: $is_system_field, "
+		. "is_date_field: $is_date_field, field_type_id: $field_type_id }";
 
-  if ($is_date_field == "true")
-    $date_field_ids[] = $field_id;
+	if ($is_date_field == "true")
+		$date_field_ids[] = $field_id;
 }
 $all_form_fields_js = "view_ns.all_form_fields = [" . implode(",\n", $all_form_fields) . "];";
 
 for ($i=1; $i<=count($view_tabs); $i++)
 {
-  if (empty($view_tabs["$i"]["tab_label"]))
-    continue;
+	if (empty($view_tabs["$i"]["tab_label"]))
+		continue;
 
-  $tab_name = addslashes($view_tabs["$i"]["tab_label"]);
-  $js_string .= "view_ns.view_tabs.push([\"$i\", \"$tab_name\"]);\n";
+	$tab_name = addslashes($view_tabs["$i"]["tab_label"]);
+	$js_string .= "view_ns.view_tabs.push([\"$i\", \"$tab_name\"]);\n";
 }
 
 // for the filters
@@ -84,12 +84,12 @@ $selected_users_str = "";
 $selected_user_ids = array();
 for ($i=0; $i<count($view_clients); $i++)
 {
-  $client_id  = $view_clients[$i]["account_id"];
-  $first_name = $view_clients[$i]["first_name"];
-  $last_name  = $view_clients[$i]["last_name"];
-  $selected_users_str .= "<option value=\"$client_id\">$first_name $last_name</option>\n";
+	$client_id  = $view_clients[$i]["account_id"];
+	$first_name = $view_clients[$i]["first_name"];
+	$last_name  = $view_clients[$i]["last_name"];
+	$selected_users_str .= "<option value=\"$client_id\">$first_name $last_name</option>\n";
 
-  $selected_user_ids[] = $client_id;
+	$selected_user_ids[] = $client_id;
 }
 
 // build the available users <options>. This is used to populate the Available Clients section
@@ -97,10 +97,10 @@ for ($i=0; $i<count($view_clients); $i++)
 $available_users_str = "";
 foreach ($form_info["client_info"] as $client)
 {
-  if (in_array($client["account_id"], $selected_user_ids))
-    continue;
+	if (in_array($client["account_id"], $selected_user_ids))
+		continue;
 
-  $available_users_str .= "<option value=\"{$client['account_id']}\">{$client['first_name']} {$client['last_name']}</option>\n";
+	$available_users_str .= "<option value=\"{$client['account_id']}\">{$client['first_name']} {$client['last_name']}</option>\n";
 }
 
 // get the ID of the previous and next field options. We should probably cache this, but until I'm sure
@@ -113,20 +113,20 @@ $num_views = count($ordered_view_ids);
 $same_page = ft_get_clean_php_self();
 for ($i=0; $i<$num_views; $i++)
 {
-  $curr_view_id = $ordered_view_ids[$i];
-  if ($curr_view_id == $view_id)
-  {
-    if ($i != 0)
-    {
-      $previous_view_id = $ordered_view_ids[$i-1];
-      $previous_view_link = "<a href=\"{$same_page}?page=edit_view&form_id=$form_id&view_id=$previous_view_id\">{$LANG["phrase_previous_view"]}</a>";
-    }
-    if ($i != $num_views - 1)
-    {
-      $next_view_id = $ordered_view_ids[$i+1];
-      $next_view_link = "<a href=\"{$same_page}?page=edit_view&form_id=$form_id&view_id=$next_view_id\">{$LANG["phrase_next_view"]}</a>";
-    }
-  }
+	$curr_view_id = $ordered_view_ids[$i];
+	if ($curr_view_id == $view_id)
+	{
+		if ($i != 0)
+		{
+			$previous_view_id = $ordered_view_ids[$i-1];
+			$previous_view_link = "<a href=\"{$same_page}?page=edit_view&form_id=$form_id&view_id=$previous_view_id\">{$LANG["phrase_previous_view"]}</a>";
+		}
+		if ($i != $num_views - 1)
+		{
+			$next_view_id = $ordered_view_ids[$i+1];
+			$next_view_link = "<a href=\"{$same_page}?page=edit_view&form_id=$form_id&view_id=$next_view_id\">{$LANG["phrase_next_view"]}</a>";
+		}
+	}
 }
 
 // override the form nav links so that it always links to the Views page
@@ -176,12 +176,12 @@ $page_vars["add_standard_filter_num_rows_input_field"] = ft_eval_smarty_string($
 $replacements = array("number" => "<input type=\"text\" name=\"num_client_map_filter_rows\" id=\"num_client_map_filter_rows\" value=\"1\" size=\"2\" />");
 $page_vars["add_client_map_filter_num_rows_input_field"] = ft_eval_smarty_string($LANG["phrase_add_num_rows"], $replacements);
 $page_vars["js_messages"] = array("word_remove", "validation_no_tabs_defined", "phrase_all_fields_displayed",
-        "validation_invalid_tab_assign_values", "validation_num_rows_to_add", "phrase_please_select", "word_before",
-        "word_after", "word_equals", "phrase_not_equal", "word_like", "phrase_not_like", "validation_no_view_name",
-        "validation_no_num_submissions_per_page", "validation_no_view_fields", "validation_no_column_selected",
-        "validation_no_view_fields_selected", "phrase_first_name", "phrase_last_name", "phrase_company_name",
-        "word_email", "word_notes", "word_id", "phrase_remove_row", "phrase_available_tabs", "word_close",
-        "phrase_add_fields", "phrase_create_group", "word_cancel", "word_yes", "word_no", "phrase_auto_size", "word_width_c");
+	"validation_invalid_tab_assign_values", "validation_num_rows_to_add", "phrase_please_select", "word_before",
+	"word_after", "word_equals", "phrase_not_equal", "word_like", "phrase_not_like", "validation_no_view_name",
+	"validation_no_num_submissions_per_page", "validation_no_view_fields", "validation_no_column_selected",
+	"validation_no_view_fields_selected", "phrase_first_name", "phrase_last_name", "phrase_company_name",
+	"word_email", "word_notes", "word_id", "phrase_remove_row", "phrase_available_tabs", "word_close",
+	"phrase_add_fields", "phrase_create_group", "word_cancel", "word_yes", "word_no", "phrase_auto_size", "word_width_c");
 
 $field_type_map_lines = array();
 while(list($field_type_id, $field_type_name) = each($field_types))

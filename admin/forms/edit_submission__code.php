@@ -15,50 +15,50 @@
  */
 function _ft_code_get_link_html($form_id, $view_id, $submission_id, $results_per_page)
 {
-  global $LANG;
+	global $LANG;
 
-  // defaults! As of 2.1.0, the navigation always appears. This is better for consistency's sake
-  $previous_link_html       = "<span class=\"light_grey\">{$LANG['word_previous_leftarrow']}</span>";
-  $next_link_html           = "<span class=\"light_grey\">{$LANG['word_next_rightarrow']}</span>";
-  $search_results_link_html = "<a href=\"submissions.php?form_id=$form_id\">{$LANG['phrase_back_to_search_results']}</a>";
+	// defaults! As of 2.1.0, the navigation always appears. This is better for consistency's sake
+	$previous_link_html       = "<span class=\"light_grey\">{$LANG['word_previous_leftarrow']}</span>";
+	$next_link_html           = "<span class=\"light_grey\">{$LANG['word_next_rightarrow']}</span>";
+	$search_results_link_html = "<a href=\"submissions.php?form_id=$form_id\">{$LANG['phrase_back_to_search_results']}</a>";
 
-  if (isset($_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"]) && !empty($_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"]))
-  {
-    $php_self = ft_get_clean_php_self();
-    $submission_ids = $_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"];
-    $current_sub_id_index = array_search($submission_id, $submission_ids);
+	if (isset($_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"]) && !empty($_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"]))
+	{
+		$php_self = ft_get_clean_php_self();
+		$submission_ids = $_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"];
+		$current_sub_id_index = array_search($submission_id, $submission_ids);
 
-    if (!empty($current_sub_id_index) || $current_sub_id_index === 0)
-    {
-      // PREVIOUS link
-      if ($submission_ids[0] != $submission_id && $current_sub_id_index != 0)
-      {
-        $previous_submission_id = $submission_ids[$current_sub_id_index - 1];
-        $previous_link_html = "<a href=\"$php_self?form_id=$form_id&view_id=$view_id&submission_id=$previous_submission_id\">{$LANG['word_previous_leftarrow']}</a>";
-      }
+		if (!empty($current_sub_id_index) || $current_sub_id_index === 0)
+		{
+			// PREVIOUS link
+			if ($submission_ids[0] != $submission_id && $current_sub_id_index != 0)
+			{
+				$previous_submission_id = $submission_ids[$current_sub_id_index - 1];
+				$previous_link_html = "<a href=\"$php_self?form_id=$form_id&view_id=$view_id&submission_id=$previous_submission_id\">{$LANG['word_previous_leftarrow']}</a>";
+			}
 
-      $submission_ids_per_page = array_chunk($submission_ids, 10);
+			$submission_ids_per_page = array_chunk($submission_ids, 10);
 
-      $return_page = 1;
-      for ($i=0; $i<count($submission_ids_per_page); $i++)
-      {
-        if (in_array($submission_id, $submission_ids_per_page[$i]))
-        {
-          $return_page = $i+1;
-          break;
-        }
-      }
+			$return_page = 1;
+			for ($i=0; $i<count($submission_ids_per_page); $i++)
+			{
+				if (in_array($submission_id, $submission_ids_per_page[$i]))
+				{
+					$return_page = $i+1;
+					break;
+				}
+			}
 
-      // NEXT link
-      if ($submission_ids[count($submission_ids) - 1] != $submission_id)
-      {
-        $next_submission_id = $submission_ids[$current_sub_id_index + 1];
-        $next_link_html = "<a href=\"$php_self?form_id=$form_id&view_id=$view_id&submission_id=$next_submission_id\">{$LANG['word_next_rightarrow']}</a>";
-      }
-    }
-  }
+			// NEXT link
+			if ($submission_ids[count($submission_ids) - 1] != $submission_id)
+			{
+				$next_submission_id = $submission_ids[$current_sub_id_index + 1];
+				$next_link_html = "<a href=\"$php_self?form_id=$form_id&view_id=$view_id&submission_id=$next_submission_id\">{$LANG['word_next_rightarrow']}</a>";
+			}
+		}
+	}
 
-  return array($previous_link_html, $search_results_link_html, $next_link_html);
+	return array($previous_link_html, $search_results_link_html, $next_link_html);
 }
 
 
@@ -70,22 +70,22 @@ function _ft_code_get_link_html($form_id, $view_id, $submission_id, $results_per
  */
 function _ft_code_get_view($request, $form_id)
 {
-  if (isset($request["view_id"]))
-  {
-    $view_id = $request["view_id"];
-    $_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
-  }
-  else
-  {
-    $view_id = isset($_SESSION["ft"]["form_{$form_id}_view_id"]) ? $_SESSION["ft"]["form_{$form_id}_view_id"] : "";
-  }
+	if (isset($request["view_id"]))
+	{
+		$view_id = $request["view_id"];
+		$_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
+	}
+	else
+	{
+		$view_id = isset($_SESSION["ft"]["form_{$form_id}_view_id"]) ? $_SESSION["ft"]["form_{$form_id}_view_id"] : "";
+	}
 
-  // if the View ID isn't set, here - they probably just linked to the page directly from an email, module
-  // or elsewhere in the script. For this case, find and use the default View
-  if (empty($view_id))
-  {
-    $view_id = ft_get_default_view($form_id);
-  }
+	// if the View ID isn't set, here - they probably just linked to the page directly from an email, module
+	// or elsewhere in the script. For this case, find and use the default View
+	if (empty($view_id))
+	{
+		$view_id = ft_get_default_view($form_id);
+	}
 
-  return $view_id;
+	return $view_id;
 }

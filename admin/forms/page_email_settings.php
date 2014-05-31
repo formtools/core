@@ -1,10 +1,10 @@
 <?php
 
 if (isset($request["update_email_settings"]))
-  list($g_success, $g_message) = ft_set_field_as_email_field($form_id, $request);
+	list($g_success, $g_message) = ft_set_field_as_email_field($form_id, $request);
 
 if (isset($request["delete_form_email_id"]))
-  list($g_success, $g_message) = ft_unset_field_as_email_field($request["delete_form_email_id"]);
+	list($g_success, $g_message) = ft_unset_field_as_email_field($request["delete_form_email_id"]);
 
 $form_info = ft_get_form($form_id);
 $form_fields = ft_get_form_fields($form_id);
@@ -15,16 +15,16 @@ $registered_form_emails = ft_get_email_fields($form_id);
 $used_cols = array();
 foreach ($registered_form_emails as $row)
 {
-  $used_cols[] = $row["email_field_id"];
-  $used_cols[] = $row["first_name_field_id"];
-  $used_cols[] = $row["last_name_field_id"];
+	$used_cols[] = $row["email_field_id"];
+	$used_cols[] = $row["first_name_field_id"];
+	$used_cols[] = $row["last_name_field_id"];
 }
 
 $trimmed_cols = array();
 foreach ($form_fields as $field_info)
 {
-  if (!in_array($field_info["field_id"], $used_cols) && $field_info["is_system_field"] == "no")
-    $trimmed_cols[$field_info["field_id"]] = $field_info["field_title"];
+	if (!in_array($field_info["field_id"], $used_cols) && $field_info["is_system_field"] == "no")
+		$trimmed_cols[$field_info["field_id"]] = $field_info["field_title"];
 }
 
 // compile the templates information

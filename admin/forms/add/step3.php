@@ -6,22 +6,22 @@ ft_check_permission("admin");
 $form_id = ft_load_field("form_id", "add_form_form_id", "");
 
 if (isset($_POST["submission_type"]))
-  @mysql_query("UPDATE {$g_table_prefix}forms SET submission_type = '{$_POST["submission_type"]}' WHERE form_id=$form_id");
+	@mysql_query("UPDATE {$g_table_prefix}forms SET submission_type = '{$_POST["submission_type"]}' WHERE form_id=$form_id");
 
 // if returning from a later stage and the user wants to resubmit the test submission, update the form
 if (isset($_GET['uninitialize']) && $_GET['uninitialize'] == 1)
-  ft_uninitialize_form($form_id);
+	ft_uninitialize_form($form_id);
 
 // retrieve the form info
 $form_info = ft_get_form($form_id);
 
 // determine the input field values for cutting & pasting
 $hidden_fields = '<input type="hidden" name="form_tools_initialize_form" value="1" />' . "\n"
-               . '<input type="hidden" name="form_tools_form_id" value="' . $form_id . '" />';
+	. '<input type="hidden" name="form_tools_form_id" value="' . $form_id . '" />';
 $form_tag = '<form action="' . $g_root_url . '/process.php" method="post"';
 
 if ($_SESSION["ft"]["uploading_files"] == "yes")
-  $form_tag .= ' enctype="multipart/form-data"';
+	$form_tag .= ' enctype="multipart/form-data"';
 
 $form_tag .= '>';
 
@@ -29,17 +29,17 @@ $replacement_info = array("linktoform" => "{$form_info['form_url']}");
 $direct_form_para_2 = ft_eval_smarty_string($LANG["text_add_form_step_2_para_3"], $replacement_info);
 
 $replacement_info = array(
-  "varname" => "<b>\$submission_hash</b>",
-  "postvar" => "\$_POST",
-  "sessionvar" => "\$_SESSION"
-    );
+	"varname" => "<b>\$submission_hash</b>",
+	"postvar" => "\$_POST",
+	"sessionvar" => "\$_SESSION"
+);
 $code_form_para_2 = ft_eval_smarty_string($LANG["text_add_form_step_2_para_6"], $replacement_info);
 
 
 if (isset($_POST["refresh"]) && $form_info["is_initialized"] == "no")
 {
-  $g_success = false;
-  $g_message = $LANG["notify_no_test_submission"];
+	$g_success = false;
+	$g_message = $LANG["notify_no_test_submission"];
 }
 
 // ------------------------------------------------------------------------------------------------

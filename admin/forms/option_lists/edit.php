@@ -12,8 +12,8 @@ $num_fields = ft_get_num_fields_using_option_list($list_id);
 
 if (empty($list_id))
 {
-  header("location: index.php");
-  exit;
+	header("location: index.php");
+	exit;
 }
 
 $links = ft_get_option_list_prev_next_links($list_id, $order);
@@ -23,14 +23,14 @@ $next_tabset_link = (!empty($links["next_option_list_id"])) ? "edit.php?page=$pa
 
 $same_page = ft_get_clean_php_self();
 $tabs = array(
-  "main" => array(
-    "tab_label" => $LANG["word_main"],
-    "tab_link" => "{$same_page}?page=main"
-      ),
-  "form_fields" => array(
-    "tab_label" => "{$LANG["phrase_form_fields"]} ($num_fields)",
-    "tab_link" => "{$same_page}?page=form_fields"
-      )
+	"main" => array(
+		"tab_label" => $LANG["word_main"],
+		"tab_link" => "{$same_page}?page=main"
+	),
+	"form_fields" => array(
+		"tab_label" => "{$LANG["phrase_form_fields"]} ($num_fields)",
+		"tab_link" => "{$same_page}?page=form_fields"
+	)
 );
 
 // start compiling the info here
@@ -44,14 +44,14 @@ $page_vars["next_tabset_link"] = $next_tabset_link;
 
 switch ($page)
 {
-  case "main":
-    require("page_main.php");
-    break;
-  case "form_fields":
-    require("page_form_fields.php");
-    break;
+	case "main":
+		require("page_main.php");
+		break;
+	case "form_fields":
+		require("page_form_fields.php");
+		break;
 
-  default:
-    require("page_main.php");
-    break;
+	default:
+		require("page_main.php");
+		break;
 }

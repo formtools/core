@@ -28,7 +28,7 @@
  *   The first parameter should be "start" or "after". It determines
  *   The function also takes a 3rd, optional parameter: priority. 1-100
  *
- * @copyright Benjamin Keen 2012
+ * @copyright Benjamin Keen 2014
  * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 2-2-x
  * @subpackage General
@@ -55,16 +55,16 @@
  */
 function ft_register_hook($hook_type, $module_folder, $when, $function_name, $hook_function, $priority = 50, $force_unique = false)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $when          = ft_sanitize($when);
-  $function_name = ft_sanitize($function_name);
-  $hook_function = ft_sanitize($hook_function);
+	$when          = ft_sanitize($when);
+	$function_name = ft_sanitize($function_name);
+	$hook_function = ft_sanitize($hook_function);
 
-  $may_proceed = true;
-  if ($force_unique)
-  {
-    $query = mysql_query("
+	$may_proceed = true;
+	if ($force_unique)
+	{
+		$query = mysql_query("
       SELECT count(*) as c
       FROM   {$g_table_prefix}hook_calls
       WHERE  hook_type = '$hook_type' AND
@@ -74,23 +74,23 @@ function ft_register_hook($hook_type, $module_folder, $when, $function_name, $ho
              hook_function = '$hook_function'
         ");
 
-    $result = mysql_fetch_assoc($query);
-    if ($result["c"] > 0)
-      $may_proceed = false;
-  }
+		$result = mysql_fetch_assoc($query);
+		if ($result["c"] > 0)
+			$may_proceed = false;
+	}
 
-  $result = mysql_query("
+	$result = mysql_query("
     INSERT INTO {$g_table_prefix}hook_calls (hook_type, action_location, module_folder, function_name, hook_function, priority)
     VALUES ('$hook_type', '$when', '$module_folder', '$function_name', '$hook_function', $priority)
       ");
 
-  if ($result)
-  {
-    $hook_id = mysql_insert_id();
-    return array(true, $hook_id);
-  }
-  else
-    return array(false, "");
+	if ($result)
+	{
+		$hook_id = mysql_insert_id();
+		return array(true, $hook_id);
+	}
+	else
+		return array(false, "");
 }
 
 
@@ -102,8 +102,8 @@ function ft_register_hook($hook_type, $module_folder, $when, $function_name, $ho
  */
 function ft_unregister_module_hooks($module_folder)
 {
-  global $g_table_prefix;
-  mysql_query("DELETE FROM {$g_table_prefix}hook_calls WHERE module_folder = '$module_folder'");
+	global $g_table_prefix;
+	mysql_query("DELETE FROM {$g_table_prefix}hook_calls WHERE module_folder = '$module_folder'");
 }
 
 
@@ -116,9 +116,9 @@ function ft_unregister_module_hooks($module_folder)
  */
 function ft_get_hook_calls($event, $hook_type, $function_name)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $query = @mysql_query("
+	$query = @mysql_query("
     SELECT *
     FROM   {$g_table_prefix}hook_calls
     WHERE  hook_type = '$hook_type' AND
@@ -127,11 +127,11 @@ function ft_get_hook_calls($event, $hook_type, $function_name)
     ORDER BY priority ASC
       ");
 
-  $results = array();
-  while ($row = @mysql_fetch_assoc($query))
-    $results[] = $row;
+	$results = array();
+	while ($row = @mysql_fetch_assoc($query))
+		$results[] = $row;
 
-  return $results;
+	return $results;
 }
 
 
@@ -143,20 +143,20 @@ function ft_get_hook_calls($event, $hook_type, $function_name)
  */
 function ft_get_module_hook_calls($module_folder)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $query = mysql_query("
+	$query = mysql_query("
     SELECT *
     FROM   {$g_table_prefix}hook_calls
     WHERE  module_folder = '$module_folder'
     ORDER BY priority ASC
       ");
 
-  $results = array();
-  while ($row = mysql_fetch_assoc($query))
-    $results[] = $row;
+	$results = array();
+	while ($row = mysql_fetch_assoc($query))
+		$results[] = $row;
 
-  return $results;
+	return $results;
 }
 
 
@@ -183,54 +183,54 @@ function ft_get_module_hook_calls($module_folder)
  */
 function ft_process_hook_calls($event, $vars, $overridable_vars, $overridable_vars_to_be_concatenated = array())
 {
-  $backtrace = debug_backtrace();
-  $calling_function = $backtrace[1]["function"];
+	$backtrace = debug_backtrace();
+	$calling_function = $backtrace[1]["function"];
 
-  // get the hooks associated with this core function and event
-  $hooks = ft_get_hook_calls($event, "code", $calling_function);
+	// get the hooks associated with this core function and event
+	$hooks = ft_get_hook_calls($event, "code", $calling_function);
 
-  // extract the var passed from the calling function into the current scope
-  $return_vals = array();
-  foreach ($hooks as $hook_info)
-  {
-    // this clause was added in 2.1 - it should have been included in 2.0.x, but it was missed. This prevents any hooks
-    // being processed for modules that are not enabled.
-    $module_folder = $hook_info["module_folder"];
-    if (!ft_check_module_enabled($module_folder))
-      continue;
+	// extract the var passed from the calling function into the current scope
+	$return_vals = array();
+	foreach ($hooks as $hook_info)
+	{
+		// this clause was added in 2.1 - it should have been included in 2.0.x, but it was missed. This prevents any hooks
+		// being processed for modules that are not enabled.
+		$module_folder = $hook_info["module_folder"];
+		if (!ft_check_module_enabled($module_folder))
+			continue;
 
-    // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
-    // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
-    $vars["form_tools_hook_info"] = $hook_info;
-    $updated_vars = ft_process_hook_call($hook_info["module_folder"], $hook_info["hook_function"], $vars, $overridable_vars, $calling_function);
+		// add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
+		// prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
+		$vars["form_tools_hook_info"] = $hook_info;
+		$updated_vars = ft_process_hook_call($hook_info["module_folder"], $hook_info["hook_function"], $vars, $overridable_vars, $calling_function);
 
-    // now return whatever values have been overwritten by the hooks
-    foreach ($overridable_vars as $var_name)
-    {
-      if (array_key_exists($var_name, $updated_vars))
-      {
-        if (in_array($var_name, $overridable_vars_to_be_concatenated))
-        {
-          if (!array_key_exists($var_name, $return_vals))
-            $return_vals[$var_name] = array();
+		// now return whatever values have been overwritten by the hooks
+		foreach ($overridable_vars as $var_name)
+		{
+			if (array_key_exists($var_name, $updated_vars))
+			{
+				if (in_array($var_name, $overridable_vars_to_be_concatenated))
+				{
+					if (!array_key_exists($var_name, $return_vals))
+						$return_vals[$var_name] = array();
 
-          $return_vals[$var_name][] = $updated_vars[$var_name];
-        }
-        else
-        {
-          $return_vals[$var_name] = $updated_vars[$var_name];
-        }
+					$return_vals[$var_name][] = $updated_vars[$var_name];
+				}
+				else
+				{
+					$return_vals[$var_name] = $updated_vars[$var_name];
+				}
 
-        // update $vars for any subsequent hook calls
-        if (array_key_exists($var_name, $vars))
-        {
-          $vars[$var_name] = $updated_vars[$var_name];
-        }
-      }
-    }
-  }
+				// update $vars for any subsequent hook calls
+				if (array_key_exists($var_name, $vars))
+				{
+					$vars[$var_name] = $updated_vars[$var_name];
+				}
+			}
+		}
+	}
 
-  return $return_vals;
+	return $return_vals;
 }
 
 
@@ -244,30 +244,30 @@ function ft_process_hook_calls($event, $vars, $overridable_vars, $overridable_va
  */
 function ft_process_hook_call($module_folder, $hook_function, $vars, $overridable_vars, $calling_function)
 {
-  // add the overridable variable list and calling function in special hash keys, to provide a little
-  // info to the developer with regard to the context in which it's being called and what can be overridden
-  $vars["form_tools_overridable_vars"] = $overridable_vars;
-  $vars["form_tools_calling_function"] = $calling_function;
+	// add the overridable variable list and calling function in special hash keys, to provide a little
+	// info to the developer with regard to the context in which it's being called and what can be overridden
+	$vars["form_tools_overridable_vars"] = $overridable_vars;
+	$vars["form_tools_calling_function"] = $calling_function;
 
-  $folder = dirname(__FILE__);
-  @include_once(realpath("$folder/../../modules/$module_folder/library.php"));
+	$folder = dirname(__FILE__);
+	@include_once(realpath("$folder/../../modules/$module_folder/library.php"));
 
-  if (!function_exists($hook_function))
-    return $overridable_vars;
+	if (!function_exists($hook_function))
+		return $overridable_vars;
 
-  $result = @$hook_function($vars);
+	$result = @$hook_function($vars);
 
-  $updated_values = array();
-  if (!empty($result))
-  {
-    while (list($key, $value) = each($result))
-    {
-      if (in_array($key, $overridable_vars))
-        $updated_values[$key] = $value;
-    }
-  }
+	$updated_values = array();
+	if (!empty($result))
+	{
+		while (list($key, $value) = each($result))
+		{
+			if (in_array($key, $overridable_vars))
+				$updated_values[$key] = $value;
+		}
+	}
 
-  return $updated_values;
+	return $updated_values;
 }
 
 
@@ -284,21 +284,21 @@ function ft_process_hook_call($module_folder, $hook_function, $vars, $overridabl
  */
 function ft_process_template_hook_calls($location, $template_vars, $all_params = array())
 {
-  $hooks = ft_get_hook_calls($location, "template", "");
+	$hooks = ft_get_hook_calls($location, "template", "");
 
-  // extract the var passed from the calling function into the current scope
-  foreach ($hooks as $hook_info)
-  {
-    $module_folder = $hook_info["module_folder"];
-    if (!ft_check_module_enabled($module_folder))
-      continue;
+	// extract the var passed from the calling function into the current scope
+	foreach ($hooks as $hook_info)
+	{
+		$module_folder = $hook_info["module_folder"];
+		if (!ft_check_module_enabled($module_folder))
+			continue;
 
-    // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
-    // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
-    $template_vars["form_tools_hook_info"] = $hook_info;
+		// add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
+		// prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
+		$template_vars["form_tools_hook_info"] = $hook_info;
 
-    ft_process_template_hook_call($hook_info["module_folder"], $hook_info["hook_function"], $location, $template_vars, $all_params);
-  }
+		ft_process_template_hook_call($hook_info["module_folder"], $hook_info["hook_function"], $location, $template_vars, $all_params);
+	}
 }
 
 
@@ -312,26 +312,26 @@ function ft_process_template_hook_calls($location, $template_vars, $all_params =
  */
 function ft_process_template_hook_call($module_folder, $hook_function, $location, $template_vars, $all_template_hook_params = array())
 {
-  global $g_root_dir;
+	global $g_root_dir;
 
-  @include_once("$g_root_dir/modules/$module_folder/library.php");
+	@include_once("$g_root_dir/modules/$module_folder/library.php");
 
-  // this is very unfortunate, but has to be done for backward compatibility. Up until July 2011, template hooks only ever
-  // needed the single "location" attribute + the template var information. But with the Data Visualization module, it needs to be more
-  // flexible. The generated hooks for each visualization can be used in pages generated in the Pages module, and we need to add a
-  // "height" and "width" attributes to the hook to permit the user to tinker around with the size (hardcoding the size of the
-  // visualization makes no sense, because it can be used in different contexts). But... to get that information to the template hook
-  // calls functions we CAN'T pass in an additional param, because it would break all hook call functions. So instead, we add the
-  // information into the $template_vars info for use by the hook call function. Boo!
-  $template_vars["form_tools_all_template_hook_params"] = $all_template_hook_params;
+	// this is very unfortunate, but has to be done for backward compatibility. Up until July 2011, template hooks only ever
+	// needed the single "location" attribute + the template var information. But with the Data Visualization module, it needs to be more
+	// flexible. The generated hooks for each visualization can be used in pages generated in the Pages module, and we need to add a
+	// "height" and "width" attributes to the hook to permit the user to tinker around with the size (hardcoding the size of the
+	// visualization makes no sense, because it can be used in different contexts). But... to get that information to the template hook
+	// calls functions we CAN'T pass in an additional param, because it would break all hook call functions. So instead, we add the
+	// information into the $template_vars info for use by the hook call function. Boo!
+	$template_vars["form_tools_all_template_hook_params"] = $all_template_hook_params;
 
-  $html = "";
-  if (function_exists($hook_function))
-  {
-    $html = @$hook_function($location, $template_vars);
-  }
+	$html = "";
+	if (function_exists($hook_function))
+	{
+		$html = @$hook_function($location, $template_vars);
+	}
 
-  return $html;
+	return $html;
 }
 
 
@@ -342,8 +342,8 @@ function ft_process_template_hook_call($module_folder, $hook_function, $location
  */
 function ft_delete_hook_call($hook_id)
 {
-  global $g_table_prefix;
-  mysql_query("DELETE FROM {$g_table_prefix}hook_calls WHERE hook_id = $hook_id");
+	global $g_table_prefix;
+	mysql_query("DELETE FROM {$g_table_prefix}hook_calls WHERE hook_id = $hook_id");
 }
 
 
@@ -358,58 +358,58 @@ function ft_delete_hook_call($hook_id)
  */
 function ft_update_available_hooks()
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $ft_root = realpath(dirname(__FILE__) . "/../../");
-  $hook_locations = array(
+	$ft_root = realpath(dirname(__FILE__) . "/../../");
+	$hook_locations = array(
 
-    // code hooks
-    "process.php"        => "core",
-    "global/code"        => "core",
-    "global/api/api.php" => "api",
-    "modules"            => "module",
+		// code hooks
+		"process.php"        => "core",
+		"global/code"        => "core",
+		"global/api/api.php" => "api",
+		"modules"            => "module",
 
-    // template hooks
-    "themes/default"  => "core"
-  );
+		// template hooks
+		"themes/default"  => "core"
+	);
 
-  $results = array(
-    "code_hooks"     => array(),
-    "template_hooks" => array()
-  );
-  while (list($file_or_folder, $component) = each($hook_locations))
-  {
-    _ft_find_hooks("$ft_root/$file_or_folder", $ft_root, $component, $results);
-  }
+	$results = array(
+		"code_hooks"     => array(),
+		"template_hooks" => array()
+	);
+	while (list($file_or_folder, $component) = each($hook_locations))
+	{
+		_ft_find_hooks("$ft_root/$file_or_folder", $ft_root, $component, $results);
+	}
 
-  // now update the database
-  mysql_query("TRUNCATE {$g_table_prefix}hooks");
-  foreach ($results["code_hooks"] as $hook_info)
-  {
-    $component       = $hook_info["component"];
-    $file            = $hook_info["file"];
-    $function_name   = $hook_info["function_name"];
-    $action_location = $hook_info["action_location"];
-    $params_str      = implode(",", $hook_info["params"]);
-    $overridable_str = implode(",", $hook_info["overridable"]);
+	// now update the database
+	mysql_query("TRUNCATE {$g_table_prefix}hooks");
+	foreach ($results["code_hooks"] as $hook_info)
+	{
+		$component       = $hook_info["component"];
+		$file            = $hook_info["file"];
+		$function_name   = $hook_info["function_name"];
+		$action_location = $hook_info["action_location"];
+		$params_str      = implode(",", $hook_info["params"]);
+		$overridable_str = implode(",", $hook_info["overridable"]);
 
-    mysql_query("
+		mysql_query("
       INSERT INTO {$g_table_prefix}hooks (hook_type, component, filepath, action_location, function_name, params, overridable)
       VALUES ('code', '$component', '$file', '$action_location', '$function_name', '$params_str', '$overridable_str')
     ");
-  }
+	}
 
-  foreach ($results["template_hooks"] as $hook_info)
-  {
-    $component = $hook_info["component"];
-    $template  = $hook_info["template"];
-    $location  = $hook_info["location"];
+	foreach ($results["template_hooks"] as $hook_info)
+	{
+		$component = $hook_info["component"];
+		$template  = $hook_info["template"];
+		$location  = $hook_info["location"];
 
-    mysql_query("
+		mysql_query("
       INSERT INTO {$g_table_prefix}hooks (hook_type, component, filepath, action_location, function_name, params, overridable)
       VALUES ('template', '$component', '$template', '$location', '', '', '')
     ");
-  }
+	}
 }
 
 
@@ -423,118 +423,118 @@ function ft_update_available_hooks()
  */
 function _ft_find_hooks($curr_folder, $root_folder, $component, &$results)
 {
-  if (is_file($curr_folder))
-  {
-    $is_php_file = preg_match("/\.php$/", $curr_folder);
-    $is_tpl_file = preg_match("/\.tpl$/", $curr_folder);
-    if ($is_php_file)
-      $results["code_hooks"] = array_merge($results["code_hooks"], _ft_extract_code_hooks($curr_folder, $root_folder, $component));
-    if ($is_tpl_file)
-      $results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
-  }
-  else
-  {
-    $handle = @opendir($curr_folder);
-    if ($handle)
-    {
-      while (($file = readdir($handle)) !== false)
-      {
-        if ($file == '.' || $file == '..')
-           continue;
+	if (is_file($curr_folder))
+	{
+		$is_php_file = preg_match("/\.php$/", $curr_folder);
+		$is_tpl_file = preg_match("/\.tpl$/", $curr_folder);
+		if ($is_php_file)
+			$results["code_hooks"] = array_merge($results["code_hooks"], _ft_extract_code_hooks($curr_folder, $root_folder, $component));
+		if ($is_tpl_file)
+			$results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
+	}
+	else
+	{
+		$handle = @opendir($curr_folder);
+		if ($handle)
+		{
+			while (($file = readdir($handle)) !== false)
+			{
+				if ($file == '.' || $file == '..')
+					continue;
 
-        $filepath = $curr_folder . '/' . $file;
-        if (is_link($filepath))
-          continue;
-        if (is_file($filepath))
-        {
-          $is_php_file = preg_match("/\.php$/", $filepath);
-          $is_tpl_file = preg_match("/\.tpl$/", $filepath);
-          if ($is_php_file)
-            $results["code_hooks"]     = array_merge($results["code_hooks"], _ft_extract_code_hooks($filepath, $root_folder, $component));
-          if ($is_tpl_file)
-            $results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
-        }
-        else if (is_dir($filepath))
-        {
-          _ft_find_hooks($filepath, $root_folder, $component, $results);
-        }
-      }
-      closedir($handle);
-    }
-  }
+				$filepath = $curr_folder . '/' . $file;
+				if (is_link($filepath))
+					continue;
+				if (is_file($filepath))
+				{
+					$is_php_file = preg_match("/\.php$/", $filepath);
+					$is_tpl_file = preg_match("/\.tpl$/", $filepath);
+					if ($is_php_file)
+						$results["code_hooks"]     = array_merge($results["code_hooks"], _ft_extract_code_hooks($filepath, $root_folder, $component));
+					if ($is_tpl_file)
+						$results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
+				}
+				else if (is_dir($filepath))
+				{
+					_ft_find_hooks($filepath, $root_folder, $component, $results);
+				}
+			}
+			closedir($handle);
+		}
+	}
 }
 
 
 function _ft_extract_code_hooks($filepath, $root_folder, $component)
 {
-  $lines = file($filepath);
-  $current_function = "";
-  $found_hooks = array();
-  $root_folder = preg_quote($root_folder);
+	$lines = file($filepath);
+	$current_function = "";
+	$found_hooks = array();
+	$root_folder = preg_quote($root_folder);
 
-  foreach ($lines as $line)
-  {
-    if (preg_match("/^function\s([^(]*)/", $line, $matches))
-    {
-      $current_function = $matches[1];
-      continue;
-    }
+	foreach ($lines as $line)
+	{
+		if (preg_match("/^function\s([^(]*)/", $line, $matches))
+		{
+			$current_function = $matches[1];
+			continue;
+		}
 
-    // this assumes that the hooks are always on a single line
-    if (preg_match("/extract\(\s*ft_process_hook_calls\(\s*[\"']([^\"']*)[\"']\s*,\s*compact\(([^)]*)\)\s*,\s*array\(([^)]*)\)/", $line, $matches))
-    {
-      $action_location = $matches[1];
-      $params          = $matches[2];
-      $overridable     = $matches[3];
+		// this assumes that the hooks are always on a single line
+		if (preg_match("/extract\(\s*ft_process_hook_calls\(\s*[\"']([^\"']*)[\"']\s*,\s*compact\(([^)]*)\)\s*,\s*array\(([^)]*)\)/", $line, $matches))
+		{
+			$action_location = $matches[1];
+			$params          = $matches[2];
+			$overridable     = $matches[3];
 
-      // all params should be variables. No whitespace, no double-quotes, no single-quotes
-      $params = str_replace("\"", "", $params);
-      $params = str_replace(" ", "", $params);
-      $params = str_replace("'", "", $params);
-      $params = explode(",", $params);
+			// all params should be variables. No whitespace, no double-quotes, no single-quotes
+			$params = str_replace("\"", "", $params);
+			$params = str_replace(" ", "", $params);
+			$params = str_replace("'", "", $params);
+			$params = explode(",", $params);
 
-      // same as overridable vars!
-      $overridable = str_replace("\"", "", $overridable);
-      $overridable = str_replace(" ", "", $overridable);
-      $overridable = str_replace("'", "", $overridable);
-      $overridable = explode(",", $overridable);
-      $file = preg_replace("%" . $root_folder . "%", "", $filepath);
+			// same as overridable vars!
+			$overridable = str_replace("\"", "", $overridable);
+			$overridable = str_replace(" ", "", $overridable);
+			$overridable = str_replace("'", "", $overridable);
+			$overridable = explode(",", $overridable);
+			$file = preg_replace("%" . $root_folder . "%", "", $filepath);
 
-      $found_hooks[] = array(
-        "file"            => $file,
-        "function_name"   => $current_function,
-        "action_location" => $action_location,
-        "params"          => $params,
-        "overridable"     => $overridable,
-        "component"       => $component
-      );
-    }
-  }
+			$found_hooks[] = array(
+				"file"            => $file,
+				"function_name"   => $current_function,
+				"action_location" => $action_location,
+				"params"          => $params,
+				"overridable"     => $overridable,
+				"component"       => $component
+			);
+		}
+	}
 
-  return $found_hooks;
+	return $found_hooks;
 }
 
 
 function _ft_extract_template_hooks($filepath, $root_folder, $component)
 {
-  $lines = file($filepath);
-  $current_function = "";
-  $found_hooks = array();
-  $root_folder = preg_quote($root_folder);
+	$lines = file($filepath);
+	$current_function = "";
+	$found_hooks = array();
+	$root_folder = preg_quote($root_folder);
 
-  foreach ($lines as $line)
-  {
-    // this assumes that the hooks are always on a single line
-    if (preg_match("/\{template_hook\s+location\s*=\s*[\"']([^}\"]*)/", $line, $matches))
-    {
-      $template = preg_replace("%" . $root_folder . "%", "", $filepath);
-      $found_hooks[] = array(
-        "template"  => $template,
-        "location"  => $matches[1],
-        "component" => $component
-      );
-    }
-  }
+	foreach ($lines as $line)
+	{
+		// this assumes that the hooks are always on a single line
+		if (preg_match("/\{template_hook\s+location\s*=\s*[\"']([^}\"]*)/", $line, $matches))
+		{
+			$template = preg_replace("%" . $root_folder . "%", "", $filepath);
+			$found_hooks[] = array(
+				"template"  => $template,
+				"location"  => $matches[1],
+				"component" => $component
+			);
+		}
+	}
 
-  return $found_hooks;
+	return $found_hooks;
 }

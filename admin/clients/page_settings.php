@@ -1,11 +1,11 @@
 <?php
 
 if (isset($_POST['update_client']))
-  list($g_success, $g_message) = ft_admin_update_client($request, 2);
+	list($g_success, $g_message) = ft_admin_update_client($request, 2);
 
 // if required, update the list of available languages
 if (isset($_GET["refresh_lang_list"]))
-  list($g_success, $g_message) = ft_refresh_language_list();
+	list($g_success, $g_message) = ft_refresh_language_list();
 
 $client_info = ft_get_account_info($client_id);
 $forms       = ft_search_forms($client_id);

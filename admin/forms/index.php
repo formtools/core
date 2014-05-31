@@ -6,10 +6,10 @@ ft_check_permission("admin");
 _ft_cache_form_stats();
 if (isset($_GET["reset"]))
 {
-  $_SESSION["ft"]["form_sort_order"] = "";
-  $_SESSION["ft"]["form_search_keyword"] = "";
-  $_SESSION["ft"]["form_search_status"] = "";
-  $_SESSION["ft"]["form_search_client_id"] = "";
+	$_SESSION["ft"]["form_sort_order"] = "";
+	$_SESSION["ft"]["form_search_keyword"] = "";
+	$_SESSION["ft"]["form_search_status"] = "";
+	$_SESSION["ft"]["form_search_client_id"] = "";
 }
 $order     = ft_load_field("order", "form_sort_order", "form_id-DESC");
 $keyword   = ft_load_field("keyword", "form_search_keyword", "");
@@ -17,11 +17,11 @@ $status    = ft_load_field("status", "form_search_status", "");
 $client_id = ft_load_field("client_id", "form_search_client_id", "");
 
 $search_criteria = array(
-  "order"     => $order,
-  "keyword"   => $keyword,
-  "status"    => $status,
-  "client_id" => $client_id
-    );
+	"order"     => $order,
+	"keyword"   => $keyword,
+	"status"    => $status,
+	"client_id" => $client_id
+);
 
 $num_forms = ft_get_form_count();
 $forms     = ft_search_forms($client_id, true, $search_criteria);

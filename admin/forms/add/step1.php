@@ -7,22 +7,22 @@ $request = array_merge($_POST, $_GET);
 $num_forms = ft_get_form_count();
 if (!empty($g_max_ft_forms) && $num_forms > $g_max_ft_forms) // note it's not >=
 {
-  header("location: ../index.php");
-  exit;
+	header("location: ../index.php");
+	exit;
 }
 
 if (isset($request["code"]) || isset($request["direct"]))
 {
-  $type = isset($request["code"]) ? "code" : "direct";
-  header("location: step2.php?submission_type=$type");
-  exit;
+	$type = isset($request["code"]) ? "code" : "direct";
+	header("location: step2.php?submission_type=$type");
+	exit;
 }
 
 $form_id = ft_load_field("form_id", "add_form_form_id", "");
 
 $form_info = array();
 if (!empty($form_id))
-  $form_info = ft_get_form($form_id);
+	$form_info = ft_get_form($form_id);
 
 // ------------------------------------------------------------------------------------------------
 

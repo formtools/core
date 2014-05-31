@@ -5,7 +5,7 @@
  * this code was located in forms.php, but due to the size of the file, it's been refactored into this
  * separate file.
  *
- * @copyright Benjamin Keen 2012
+ * @copyright Benjamin Keen 2014
  * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 2-2-x
  * @subpackage Fields
@@ -27,66 +27,66 @@
  */
 function ft_add_form_fields($form_id, $fields)
 {
-  global $g_debug, $g_table_prefix, $LANG, $g_field_sizes;
+	global $g_debug, $g_table_prefix, $LANG, $g_field_sizes;
 
-  $success = true;
-  $message = "";
-  $fields = ft_sanitize($fields);
+	$success = true;
+	$message = "";
+	$fields = ft_sanitize($fields);
 
-  foreach ($fields as $field_info)
-  {
-    $field_name    = $field_info["form_field_name"];
-    $field_size    = $field_info["field_size"];
-    $field_type_id = $field_info["field_type_id"];
-    $display_name  = $field_info["display_name"];
-    $include_on_redirect = $field_info["include_on_redirect"];
-    $list_order = $field_info["list_order"];
-    $col_name   = $field_info["col_name"];
-    $is_new_sort_group = $field_info["is_new_sort_group"];
+	foreach ($fields as $field_info)
+	{
+		$field_name    = $field_info["form_field_name"];
+		$field_size    = $field_info["field_size"];
+		$field_type_id = $field_info["field_type_id"];
+		$display_name  = $field_info["display_name"];
+		$include_on_redirect = $field_info["include_on_redirect"];
+		$list_order = $field_info["list_order"];
+		$col_name   = $field_info["col_name"];
+		$is_new_sort_group = $field_info["is_new_sort_group"];
 
-    // in order for the field to be added, it needs to have the label, name, size and column name. Otherwise they're
-    // ignored
-    if (empty($display_name) || empty($field_name) || empty($field_size) || empty($col_name))
-      continue;
+		// in order for the field to be added, it needs to have the label, name, size and column name. Otherwise they're
+		// ignored
+		if (empty($display_name) || empty($field_name) || empty($field_size) || empty($col_name))
+			continue;
 
-    // add the new field to form_fields
-    $query = "
+		// add the new field to form_fields
+		$query = "
       INSERT INTO {$g_table_prefix}form_fields (form_id, field_name, field_size, field_type_id,
         data_type, field_title, col_name, list_order, is_new_sort_group, include_on_redirect)
       VALUES ($form_id, '$field_name', '$field_size', $field_type_id,
         'string', '$display_name', '$col_name', $list_order, '$is_new_sort_group', '$include_on_redirect')
     ";
 
-    $result = mysql_query($query)
-      or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
+		$result = mysql_query($query)
+		or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
 
-    $new_field_id = mysql_insert_id();
+		$new_field_id = mysql_insert_id();
 
-    $new_field_size = $g_field_sizes[$field_size]["sql"];
-    list($is_success, $err_message) = _ft_add_table_column("{$g_table_prefix}form_{$form_id}", $col_name, $new_field_size);
+		$new_field_size = $g_field_sizes[$field_size]["sql"];
+		list($is_success, $err_message) = _ft_add_table_column("{$g_table_prefix}form_{$form_id}", $col_name, $new_field_size);
 
-    // if the alter table didn't work, return with an error message and remove the entry we just added to the form_fields table
-    if (!$is_success)
-    {
-    	if (!empty($new_field_id) && is_numeric($new_field_id))
-    	{
-        mysql_query("
+		// if the alter table didn't work, return with an error message and remove the entry we just added to the form_fields table
+		if (!$is_success)
+		{
+			if (!empty($new_field_id) && is_numeric($new_field_id))
+			{
+				mysql_query("
           DELETE FROM {$g_table_prefix}form_fields
           WHERE field_id = $new_field_id
           LIMIT 1
         ");
-    	}
-      $success = false;
-      $replacement_info = array("fieldname" => $field_name);
-      $message = ft_eval_smarty_string($LANG["notify_form_field_not_added"], $replacement_info);
-      if ($g_debug) $message .= " <i>\"$err_message\"</i>";
-      return array($success, $message);
-    }
-  }
+			}
+			$success = false;
+			$replacement_info = array("fieldname" => $field_name);
+			$message = ft_eval_smarty_string($LANG["notify_form_field_not_added"], $replacement_info);
+			if ($g_debug) $message .= " <i>\"$err_message\"</i>";
+			return array($success, $message);
+		}
+	}
 
-  extract(ft_process_hook_calls("end", compact("infohash", "form_id"), array("success", "message")), EXTR_OVERWRITE);
+	extract(ft_process_hook_calls("end", compact("infohash", "form_id"), array("success", "message")), EXTR_OVERWRITE);
 
-  return array($success, $message);
+	return array($success, $message);
 }
 
 
@@ -106,64 +106,64 @@ function ft_add_form_fields($form_id, $fields)
  */
 function ft_delete_form_fields($form_id, $field_ids)
 {
-  global $g_table_prefix, $LANG;
+	global $g_table_prefix, $LANG;
 
-  // default return values
-  $success = true;
-  $message = "";
+	// default return values
+	$success = true;
+	$message = "";
 
-  // find out if the form exists and is complete
-  $form_info = ft_get_form($form_id);
-  $form_table_exists = ($form_info["is_complete"] == "yes") ? true : false;
+	// find out if the form exists and is complete
+	$form_info = ft_get_form($form_id);
+	$form_table_exists = ($form_info["is_complete"] == "yes") ? true : false;
 
-  // stores the Views IDs of any View that is affected by deleting one of the form field, regardless of the field or form
-  $affected_views = array();
-  $removed_field_ids = array();
+	// stores the Views IDs of any View that is affected by deleting one of the form field, regardless of the field or form
+	$affected_views = array();
+	$removed_field_ids = array();
 
-  $deleted_field_info = array();
-  foreach ($field_ids as $field_id)
-  {
-    $field_id = trim($field_id);
-    if (empty($field_id))
-      continue;
+	$deleted_field_info = array();
+	foreach ($field_ids as $field_id)
+	{
+		$field_id = trim($field_id);
+		if (empty($field_id))
+			continue;
 
-    // ignore brand new fields - nothing to delete!
-    if (preg_match("/^NEW/", $field_id))
-      continue;
+		// ignore brand new fields - nothing to delete!
+		if (preg_match("/^NEW/", $field_id))
+			continue;
 
-    $old_field_info = ft_get_form_field($field_id);
-    $deleted_field_info[] = $old_field_info;
+		$old_field_info = ft_get_form_field($field_id);
+		$deleted_field_info[] = $old_field_info;
 
-    @mysql_query("DELETE FROM {$g_table_prefix}form_fields WHERE field_id = $field_id");
-    if (!$form_table_exists)
-      continue;
+		@mysql_query("DELETE FROM {$g_table_prefix}form_fields WHERE field_id = $field_id");
+		if (!$form_table_exists)
+			continue;
 
-    mysql_query("DELETE FROM {$g_table_prefix}new_view_submission_defaults WHERE field_id = $field_id");
+		mysql_query("DELETE FROM {$g_table_prefix}new_view_submission_defaults WHERE field_id = $field_id");
 
-    // see if this field had been flagged as an email field (either as the email field, first or last name).
-    // if it's the email field, delete the whole row. If it's either the first or last name, just empty the value
-    $query = mysql_query("SELECT form_email_id FROM {$g_table_prefix}form_email_fields WHERE email_field_id = $field_id");
-    while ($row = mysql_fetch_assoc($query))
-    {
-      ft_unset_field_as_email_field($row["email_form_id"]);
-    }
-    mysql_query("UPDATE {$g_table_prefix}form_email_fields SET first_name_field_id = '' WHERE first_name_field_id = $field_id");
-    mysql_query("UPDATE {$g_table_prefix}form_email_fields SET last_name_field_id = '' WHERE last_name_field_id = $field_id");
+		// see if this field had been flagged as an email field (either as the email field, first or last name).
+		// if it's the email field, delete the whole row. If it's either the first or last name, just empty the value
+		$query = mysql_query("SELECT form_email_id FROM {$g_table_prefix}form_email_fields WHERE email_field_id = $field_id");
+		while ($row = mysql_fetch_assoc($query))
+		{
+			ft_unset_field_as_email_field($row["email_form_id"]);
+		}
+		mysql_query("UPDATE {$g_table_prefix}form_email_fields SET first_name_field_id = '' WHERE first_name_field_id = $field_id");
+		mysql_query("UPDATE {$g_table_prefix}form_email_fields SET last_name_field_id = '' WHERE last_name_field_id = $field_id");
 
-    // get a list of any Views that referenced this form field
-    $view_query = mysql_query("SELECT view_id FROM {$g_table_prefix}view_fields WHERE field_id = $field_id");
-    while ($row = mysql_fetch_assoc($view_query))
-    {
-      $affected_views[] = $row["view_id"];
-      ft_delete_view_field($row["view_id"], $field_id);
-    }
+		// get a list of any Views that referenced this form field
+		$view_query = mysql_query("SELECT view_id FROM {$g_table_prefix}view_fields WHERE field_id = $field_id");
+		while ($row = mysql_fetch_assoc($view_query))
+		{
+			$affected_views[] = $row["view_id"];
+			ft_delete_view_field($row["view_id"], $field_id);
+		}
 
-    $drop_column = $old_field_info["col_name"];
-    mysql_query("ALTER TABLE {$g_table_prefix}form_$form_id DROP $drop_column");
+		$drop_column = $old_field_info["col_name"];
+		mysql_query("ALTER TABLE {$g_table_prefix}form_$form_id DROP $drop_column");
 
-    // if any Views had this field as the default sort order, reset them to having the submission_date
-    // field as the default sort order
-    mysql_query("
+		// if any Views had this field as the default sort order, reset them to having the submission_date
+		// field as the default sort order
+		mysql_query("
       UPDATE {$g_table_prefix}views
       SET     default_sort_field = 'submission_date',
               default_sort_field_order = 'desc'
@@ -171,26 +171,26 @@ function ft_delete_form_fields($form_id, $field_ids)
               form_id = $form_id
                 ");
 
-    $removed_field_ids[] = $field_id;
-  }
+		$removed_field_ids[] = $field_id;
+	}
 
-  // update the list_order of this form's fields
-  if ($form_table_exists)
-    ft_auto_update_form_field_order($form_id);
+	// update the list_order of this form's fields
+	if ($form_table_exists)
+		ft_auto_update_form_field_order($form_id);
 
-  // update the order of any Views that referenced this field
-  foreach ($affected_views as $view_id)
-    ft_auto_update_view_field_order($view_id);
+	// update the order of any Views that referenced this field
+	foreach ($affected_views as $view_id)
+		ft_auto_update_view_field_order($view_id);
 
-  // determine the return message
-  if (count($removed_field_ids) > 1)
-    $message = $LANG["notify_form_fields_removed"];
-  else
-    $message = $LANG["notify_form_field_removed"];
+	// determine the return message
+	if (count($removed_field_ids) > 1)
+		$message = $LANG["notify_form_fields_removed"];
+	else
+		$message = $LANG["notify_form_field_removed"];
 
-  extract(ft_process_hook_calls("end", compact("deleted_field_info", "form_id", "field_ids", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
+	extract(ft_process_hook_calls("end", compact("deleted_field_info", "form_id", "field_ids", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
 
-  return array($success, $message);
+	return array($success, $message);
 }
 
 
@@ -204,42 +204,42 @@ function ft_delete_form_fields($form_id, $field_ids)
  */
 function ft_get_field_col_by_field_name($form_id, $field_name_or_names)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $form_id             = ft_sanitize($form_id);
-  $field_name_or_names = ft_sanitize($field_name_or_names);
+	$form_id             = ft_sanitize($form_id);
+	$field_name_or_names = ft_sanitize($field_name_or_names);
 
-  $return_info = "";
+	$return_info = "";
 
-  if (is_array($field_name_or_names))
-  {
-    $return_info = array();
-    foreach ($field_name_or_names as $field_name)
-    {
-      $query = mysql_query("
+	if (is_array($field_name_or_names))
+	{
+		$return_info = array();
+		foreach ($field_name_or_names as $field_name)
+		{
+			$query = mysql_query("
         SELECT col_name
         FROM   {$g_table_prefix}form_fields
         WHERE  form_id = $form_id AND
                field_name = '$field_name'
         ");
-      $result = mysql_fetch_assoc($query);
-      $return_info[] = (isset($result["col_name"])) ? $result["col_name"] : "";
-    }
-  }
-  else
-  {
-    $query = mysql_query("
+			$result = mysql_fetch_assoc($query);
+			$return_info[] = (isset($result["col_name"])) ? $result["col_name"] : "";
+		}
+	}
+	else
+	{
+		$query = mysql_query("
       SELECT col_name
       FROM   {$g_table_prefix}form_fields
       WHERE  form_id = $form_id AND
              field_name = '$field_name'
       ");
-    $result = mysql_fetch_assoc($query);
+		$result = mysql_fetch_assoc($query);
 
-    $return_info = (isset($result["col_name"])) ? $result["col_name"] : "";
-  }
+		$return_info = (isset($result["col_name"])) ? $result["col_name"] : "";
+	}
 
-  return $return_info;
+	return $return_info;
 }
 
 
@@ -255,31 +255,31 @@ function ft_get_field_col_by_field_name($form_id, $field_name_or_names)
  */
 function ft_get_field_col_by_field_id($form_id, $field_id_or_ids)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $form_id         = ft_sanitize($form_id);
-  $field_id_or_ids = ft_sanitize($field_id_or_ids);
+	$form_id         = ft_sanitize($form_id);
+	$field_id_or_ids = ft_sanitize($field_id_or_ids);
 
-  $field_id_str = "";
-  if (is_array($field_id_or_ids))
-    $field_id_str = implode(",", $field_id_or_ids);
-  else
-    $field_id_str = $field_id_or_ids;
+	$field_id_str = "";
+	if (is_array($field_id_or_ids))
+		$field_id_str = implode(",", $field_id_or_ids);
+	else
+		$field_id_str = $field_id_or_ids;
 
-  $query = mysql_query("
+	$query = mysql_query("
     SELECT field_id, col_name
     FROM   {$g_table_prefix}form_fields
     WHERE  form_id = $form_id AND
            field_id IN ($field_id_str)
   ");
 
-  $return_info = array();
-  while ($row = mysql_fetch_assoc($query))
-  {
-    $return_info[$row["field_id"]] = $row["col_name"];
-  }
+	$return_info = array();
+	while ($row = mysql_fetch_assoc($query))
+	{
+		$return_info[$row["field_id"]] = $row["col_name"];
+	}
 
-  return $return_info;
+	return $return_info;
 }
 
 
@@ -291,18 +291,18 @@ function ft_get_field_col_by_field_id($form_id, $field_id_or_ids)
  */
 function ft_get_field_title_by_field_id($field_id)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $return_info = "";
-  $query = mysql_query("
+	$return_info = "";
+	$query = mysql_query("
     SELECT field_title
     FROM   {$g_table_prefix}form_fields
     WHERE  field_id = '$field_id'
     ");
-  $result = mysql_fetch_assoc($query);
-  $return_info = (isset($result["field_title"])) ? $result["field_title"] : "";
+	$result = mysql_fetch_assoc($query);
+	$return_info = (isset($result["field_title"])) ? $result["field_title"] : "";
 
-  return $return_info;
+	return $return_info;
 }
 
 
@@ -314,18 +314,18 @@ function ft_get_field_title_by_field_id($field_id)
  */
 function ft_get_field_type_id_by_field_id($field_id)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $field_type_id = "";
-  $query = mysql_query("
+	$field_type_id = "";
+	$query = mysql_query("
     SELECT field_type_id
     FROM   {$g_table_prefix}form_fields
     WHERE  field_id = '$field_id'
     ");
-  $result = mysql_fetch_assoc($query);
-  $field_type_id = (isset($result["field_type_id"])) ? $result["field_type_id"] : "";
+	$result = mysql_fetch_assoc($query);
+	$field_type_id = (isset($result["field_type_id"])) ? $result["field_type_id"] : "";
 
-  return $field_type_id;
+	return $field_type_id;
 }
 
 
@@ -338,21 +338,21 @@ function ft_get_field_type_id_by_field_id($field_id)
  */
 function ft_get_field_title_by_field_col($form_id, $col_name)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $form_id  = ft_sanitize($form_id);
-  $col_name = ft_sanitize($col_name);
+	$form_id  = ft_sanitize($form_id);
+	$col_name = ft_sanitize($col_name);
 
-  $query = mysql_query("
+	$query = mysql_query("
     SELECT field_title
     FROM   {$g_table_prefix}form_fields
     WHERE  form_id = $form_id AND
            col_name = '$col_name'
     ");
-  $result = mysql_fetch_assoc($query);
+	$result = mysql_fetch_assoc($query);
 
-  $return_info = (isset($result["field_title"])) ? $result["field_title"] : "";
-  return $return_info;
+	$return_info = (isset($result["field_title"])) ? $result["field_title"] : "";
+	return $return_info;
 }
 
 
@@ -364,33 +364,33 @@ function ft_get_field_title_by_field_col($form_id, $col_name)
  */
 function ft_get_field_options($field_id)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  // get the field option group ID
-  $query = mysql_query("
+	// get the field option group ID
+	$query = mysql_query("
     SELECT field_group_id
     FROM   {$g_table_prefix}form_fields
     WHERE  field_id = $field_id
       ");
-  $result = mysql_fetch_assoc($query);
-  $group_id = $result["field_group_id"];
+	$result = mysql_fetch_assoc($query);
+	$group_id = $result["field_group_id"];
 
-  if (!$group_id)
-    return array();
+	if (!$group_id)
+		return array();
 
-  $option_query = mysql_query("
+	$option_query = mysql_query("
     SELECT *
     FROM   {$g_table_prefix}field_options
     WHERE  field_group_id = $group_id
       ");
 
-  $options = array();
-  while ($row = mysql_fetch_assoc($option_query))
-    $options[] = $row;
+	$options = array();
+	while ($row = mysql_fetch_assoc($option_query))
+		$options[] = $row;
 
-  extract(ft_process_hook_calls("end", compact("field_id", "options"), array("options")), EXTR_OVERWRITE);
+	extract(ft_process_hook_calls("end", compact("field_id", "options"), array("options")), EXTR_OVERWRITE);
 
-  return $options;
+	return $options;
 }
 
 
@@ -402,41 +402,41 @@ function ft_get_field_options($field_id)
  */
 function ft_get_form_field($field_id, $custom_params = array())
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $params = array(
-    "include_field_type_info"   => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false,
-    "include_field_settings"    => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false,
-    "evaluate_dynamic_settings" => (isset($custom_params["evaluate_dynamic_settings"])) ? $custom_params["evaluate_dynamic_settings"] : false
-  );
+	$params = array(
+		"include_field_type_info"   => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false,
+		"include_field_settings"    => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false,
+		"evaluate_dynamic_settings" => (isset($custom_params["evaluate_dynamic_settings"])) ? $custom_params["evaluate_dynamic_settings"] : false
+	);
 
-  if ($params["include_field_type_info"])
-  {
-    $query = mysql_query("
+	if ($params["include_field_type_info"])
+	{
+		$query = mysql_query("
       SELECT *
       FROM   {$g_table_prefix}form_fields ff, {$g_table_prefix}field_types ft
       WHERE  ff.field_id = $field_id AND
              ff.field_type_id = ft.field_type_id
     ");
-  }
-  else
-  {
-    $query = mysql_query("
+	}
+	else
+	{
+		$query = mysql_query("
       SELECT *
       FROM   {$g_table_prefix}form_fields
       WHERE  field_id = $field_id
     ");
-  }
-  $info = mysql_fetch_assoc($query);
+	}
+	$info = mysql_fetch_assoc($query);
 
-  if ($params["include_field_settings"])
-  {
-    $info["settings"] = ft_get_form_field_settings($field_id, $params["evaluate_dynamic_settings"]);
-  }
+	if ($params["include_field_settings"])
+	{
+		$info["settings"] = ft_get_form_field_settings($field_id, $params["evaluate_dynamic_settings"]);
+	}
 
-  extract(ft_process_hook_calls("end", compact("field_id", "info"), array("info")), EXTR_OVERWRITE);
+	extract(ft_process_hook_calls("end", compact("field_id", "info"), array("info")), EXTR_OVERWRITE);
 
-  return $info;
+	return $info;
 }
 
 
@@ -450,9 +450,9 @@ function ft_get_form_field($field_id, $custom_params = array())
  */
 function ft_get_form_field_by_colname($form_id, $col_name, $params = array())
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $query = mysql_query("
+	$query = mysql_query("
     SELECT *
     FROM   {$g_table_prefix}form_fields
     WHERE  form_id = $form_id AND
@@ -460,13 +460,13 @@ function ft_get_form_field_by_colname($form_id, $col_name, $params = array())
     LIMIT 1
       ");
 
-  $info = mysql_fetch_assoc($query);
+	$info = mysql_fetch_assoc($query);
 
-  if (empty($info))
-    return array();
+	if (empty($info))
+		return array();
 
-  $field_id = $info["field_id"];
-  return ft_get_form_field($field_id, $params);
+	$field_id = $info["field_id"];
+	return ft_get_form_field($field_id, $params);
 }
 
 
@@ -479,21 +479,21 @@ function ft_get_form_field_by_colname($form_id, $col_name, $params = array())
  */
 function ft_get_form_field_id_by_field_name($field_name, $form_id)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $form_id    = ft_sanitize($form_id);
-  $field_name = ft_sanitize($field_name);
+	$form_id    = ft_sanitize($form_id);
+	$field_name = ft_sanitize($field_name);
 
-  $query = mysql_query("
+	$query = mysql_query("
     SELECT field_id
     FROM   {$g_table_prefix}form_fields
     WHERE  form_id = $form_id AND
            field_name = '$field_name'
       ");
-  $result = mysql_fetch_assoc($query);
+	$result = mysql_fetch_assoc($query);
 
-  $field_id = (isset($result["field_id"])) ? $result["field_id"] : "";
-  return $field_id;
+	$field_id = (isset($result["field_id"])) ? $result["field_id"] : "";
+	return $field_id;
 }
 
 
@@ -506,38 +506,38 @@ function ft_get_form_field_id_by_field_name($field_name, $form_id)
  */
 function ft_get_form_field_name_by_field_id($field_id_or_ids)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $field_ids = array();
-  if (is_array($field_id_or_ids))
-    $field_ids = $field_id_or_ids;
-  else
-    $field_ids[] = $field_id_or_ids;
+	$field_ids = array();
+	if (is_array($field_id_or_ids))
+		$field_ids = $field_id_or_ids;
+	else
+		$field_ids[] = $field_id_or_ids;
 
-  $field_id_str = implode(",", $field_ids);
+	$field_id_str = implode(",", $field_ids);
 
-  $query = mysql_query("
+	$query = mysql_query("
     SELECT field_id, field_name
     FROM   {$g_table_prefix}form_fields
     WHERE  field_id IN ($field_id_str)
       ");
 
-  $return_info = "";
-  if (is_array($field_id_or_ids))
-  {
-  	$result = mysql_fetch_assoc($query);
-  	$return_info = $result["field_name"];
-  }
-  else
-  {
-  	$return_info = array();
-  	while ($row = mysql_fetch_assoc($query))
-  	{
-  		$return_info[$row["field_id"]] = $row["field_name"];
-  	}
-  }
+	$return_info = "";
+	if (is_array($field_id_or_ids))
+	{
+		$result = mysql_fetch_assoc($query);
+		$return_info = $result["field_name"];
+	}
+	else
+	{
+		$return_info = array();
+		while ($row = mysql_fetch_assoc($query))
+		{
+			$return_info[$row["field_id"]] = $row["field_name"];
+		}
+	}
 
-  return $return_info;
+	return $return_info;
 }
 
 
@@ -549,47 +549,47 @@ function ft_get_form_field_name_by_field_id($field_id_or_ids)
  */
 function ft_get_form_field_settings($field_id, $evaluate_dynamic_fields = false)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  if ($evaluate_dynamic_fields)
-  {
-    $query = mysql_query("
+	if ($evaluate_dynamic_fields)
+	{
+		$query = mysql_query("
       SELECT *
       FROM   {$g_table_prefix}field_settings fs, {$g_table_prefix}field_type_settings fts
       WHERE  fs.setting_id = fts.setting_id AND
              field_id = $field_id
     ");
-  }
-  else
-  {
-    $query = mysql_query("
+	}
+	else
+	{
+		$query = mysql_query("
       SELECT *
       FROM   {$g_table_prefix}field_settings
       WHERE  field_id = $field_id
     ");
-  }
+	}
 
-  $settings = array();
-  while ($row = mysql_fetch_assoc($query))
-  {
-    if ($evaluate_dynamic_fields && $row["default_value_type"] == "dynamic")
-    {
-      $settings[$row["setting_id"]] = "";
-      $parts = explode(",", $row["setting_value"]);
-      if (count($parts) == 2)
-      {
-        $settings[$row["setting_id"]] = ft_get_settings($parts[0], $parts[1]);
-      }
-    }
-    else
-    {
-      $settings[$row["setting_id"]] = $row["setting_value"];
-    }
-  }
+	$settings = array();
+	while ($row = mysql_fetch_assoc($query))
+	{
+		if ($evaluate_dynamic_fields && $row["default_value_type"] == "dynamic")
+		{
+			$settings[$row["setting_id"]] = "";
+			$parts = explode(",", $row["setting_value"]);
+			if (count($parts) == 2)
+			{
+				$settings[$row["setting_id"]] = ft_get_settings($parts[0], $parts[1]);
+			}
+		}
+		else
+		{
+			$settings[$row["setting_id"]] = $row["setting_value"];
+		}
+	}
 
-  extract(ft_process_hook_calls("end", compact("field_id", "settings"), array("settings")), EXTR_OVERWRITE);
+	extract(ft_process_hook_calls("end", compact("field_id", "settings"), array("settings")), EXTR_OVERWRITE);
 
-  return $settings;
+	return $settings;
 }
 
 
@@ -605,22 +605,22 @@ function ft_get_form_field_settings($field_id, $evaluate_dynamic_fields = false)
  */
 function ft_get_form_fields($form_id, $custom_params = array())
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $params = array(
-    "page"                      => (isset($custom_params["page"])) ? $custom_params["page"] : 1,
-    "num_fields_per_page"       => (isset($custom_params["num_fields_per_page"])) ? $custom_params["num_fields_per_page"] : "all",
-    "include_field_type_info"   => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false,
-    "include_field_settings"    => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false,
-    "evaluate_dynamic_settings" => (isset($custom_params["evaluate_dynamic_settings"])) ? $custom_params["evaluate_dynamic_settings"] : false,
-    "field_ids"                 => (isset($custom_params["field_ids"])) ? $custom_params["field_ids"] : "all"
-  );
+	$params = array(
+		"page"                      => (isset($custom_params["page"])) ? $custom_params["page"] : 1,
+		"num_fields_per_page"       => (isset($custom_params["num_fields_per_page"])) ? $custom_params["num_fields_per_page"] : "all",
+		"include_field_type_info"   => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false,
+		"include_field_settings"    => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false,
+		"evaluate_dynamic_settings" => (isset($custom_params["evaluate_dynamic_settings"])) ? $custom_params["evaluate_dynamic_settings"] : false,
+		"field_ids"                 => (isset($custom_params["field_ids"])) ? $custom_params["field_ids"] : "all"
+	);
 
-  $limit_clause = _ft_get_limit_clause($params["page"], $params["num_fields_per_page"]);
+	$limit_clause = _ft_get_limit_clause($params["page"], $params["num_fields_per_page"]);
 
-  if ($params["include_field_type_info"])
-  {
-    $query = mysql_query("
+	if ($params["include_field_type_info"])
+	{
+		$query = mysql_query("
       SELECT ff.*, ft.field_type_name, ft.is_file_field, ft.is_date_field
       FROM   {$g_table_prefix}form_fields ff, {$g_table_prefix}field_types ft
       WHERE  ff.form_id = $form_id AND
@@ -628,16 +628,16 @@ function ft_get_form_fields($form_id, $custom_params = array())
       ORDER BY ff.list_order
       $limit_clause
     ");
-  }
-  else
-  {
-  	$field_id_clause = "";
-  	if ($params["field_ids"] != "all")
-  	{
-  		$field_id_clause = "AND field_id IN (" . implode(",", $params["field_ids"]) . ")";
-  	}
+	}
+	else
+	{
+		$field_id_clause = "";
+		if ($params["field_ids"] != "all")
+		{
+			$field_id_clause = "AND field_id IN (" . implode(",", $params["field_ids"]) . ")";
+		}
 
-    $query = mysql_query("
+		$query = mysql_query("
       SELECT *
       FROM   {$g_table_prefix}form_fields
       WHERE  form_id = $form_id
@@ -645,21 +645,21 @@ function ft_get_form_fields($form_id, $custom_params = array())
       ORDER BY list_order
       $limit_clause
     ");
-  }
+	}
 
-  $infohash = array();
-  while ($row = mysql_fetch_assoc($query))
-  {
-    if ($params["include_field_settings"])
-    {
-      $row["settings"] = ft_get_form_field_settings($row["field_id"], $params["evaluate_dynamic_settings"]);
-    }
-    $infohash[] = $row;
-  }
+	$infohash = array();
+	while ($row = mysql_fetch_assoc($query))
+	{
+		if ($params["include_field_settings"])
+		{
+			$row["settings"] = ft_get_form_field_settings($row["field_id"], $params["evaluate_dynamic_settings"]);
+		}
+		$infohash[] = $row;
+	}
 
-  extract(ft_process_hook_calls("end", compact("form_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
+	extract(ft_process_hook_calls("end", compact("form_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
-  return $infohash;
+	return $infohash;
 }
 
 
@@ -670,17 +670,17 @@ function ft_get_form_fields($form_id, $custom_params = array())
  */
 function ft_get_num_form_fields($form_id)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $query = mysql_query("
+	$query = mysql_query("
     SELECT count(*) as c
     FROM   {$g_table_prefix}form_fields
     WHERE  form_id = $form_id
   ");
 
-  $info = mysql_fetch_assoc($query);
+	$info = mysql_fetch_assoc($query);
 
-  return $info["c"];
+	return $info["c"];
 }
 
 
@@ -694,9 +694,9 @@ function ft_get_num_form_fields($form_id)
  */
 function ft_get_field_order_info_by_colname($form_id, $col_name)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $query = mysql_query("
+	$query = mysql_query("
     SELECT ff.data_type, ft.is_date_field
     FROM   {$g_table_prefix}form_fields ff, {$g_table_prefix}field_types ft
     WHERE  ff.form_id = $form_id AND
@@ -704,11 +704,11 @@ function ft_get_field_order_info_by_colname($form_id, $col_name)
            ff.field_type_id = ft.field_type_id
       ");
 
-  $infohash = array();
-  while ($row = mysql_fetch_assoc($query))
-    $infohash = $row;
+	$infohash = array();
+	while ($row = mysql_fetch_assoc($query))
+		$infohash = $row;
 
-  return $infohash;
+	return $infohash;
 }
 
 
@@ -745,45 +745,45 @@ function ft_get_field_order_info_by_colname($form_id, $col_name)
  */
 function ft_get_extended_field_settings($field_id, $setting_id = "", $convert_dynamic_values = false)
 {
-  // get whatever custom settings are defined for this field
-  $custom_settings = ft_get_form_field_settings($field_id);
+	// get whatever custom settings are defined for this field
+	$custom_settings = ft_get_form_field_settings($field_id);
 
-  // now get a list of all available settings for this field type
-  $field_type_id = ft_get_field_type_id($field_id);
-  $field_type_settings = ft_get_field_type_settings($field_type_id);
-  $settings = array();
-  foreach ($field_type_settings as $curr_setting)
-  {
-    $curr_setting_id = $curr_setting["setting_id"];
-    if (!empty($setting_id) && $setting_id != $curr_setting_id)
-      continue;
+	// now get a list of all available settings for this field type
+	$field_type_id = ft_get_field_type_id($field_id);
+	$field_type_settings = ft_get_field_type_settings($field_type_id);
+	$settings = array();
+	foreach ($field_type_settings as $curr_setting)
+	{
+		$curr_setting_id = $curr_setting["setting_id"];
+		if (!empty($setting_id) && $setting_id != $curr_setting_id)
+			continue;
 
-    $uses_default  = true;
-    $setting_value_type = $curr_setting["default_value_type"];
-    $setting_value      = $curr_setting["default_value"];
-    if (array_key_exists($curr_setting_id, $custom_settings))
-    {
-      $uses_default  = false;
-      $setting_value = $custom_settings[$curr_setting_id];
-    }
+		$uses_default  = true;
+		$setting_value_type = $curr_setting["default_value_type"];
+		$setting_value      = $curr_setting["default_value"];
+		if (array_key_exists($curr_setting_id, $custom_settings))
+		{
+			$uses_default  = false;
+			$setting_value = $custom_settings[$curr_setting_id];
+		}
 
-    if ($convert_dynamic_values && $setting_value_type == "dynamic")
-    {
-      $parts = explode(",", $setting_value);
-      if (count($parts) == 2)
-        $setting_value = ft_get_settings($parts[0], $parts[1]);
-    }
+		if ($convert_dynamic_values && $setting_value_type == "dynamic")
+		{
+			$parts = explode(",", $setting_value);
+			if (count($parts) == 2)
+				$setting_value = ft_get_settings($parts[0], $parts[1]);
+		}
 
-    $settings[] = array(
-      "setting_id"    => $curr_setting_id,
-      "setting_value" => $setting_value,
-      "uses_default"  => $uses_default
-    );
-  }
+		$settings[] = array(
+			"setting_id"    => $curr_setting_id,
+			"setting_value" => $setting_value,
+			"uses_default"  => $uses_default
+		);
+	}
 
-  extract(ft_process_hook_calls("end", compact("field_id", "setting_name"), array("settings")), EXTR_OVERWRITE);
+	extract(ft_process_hook_calls("end", compact("field_id", "setting_name"), array("settings")), EXTR_OVERWRITE);
 
-  return $settings;
+	return $settings;
 }
 
 
@@ -801,75 +801,75 @@ function ft_get_extended_field_settings($field_id, $setting_id = "", $convert_dy
  */
 function ft_get_field_settings($field_id)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  if (empty($field_id) || !is_numeric($field_id))
-  	return array();
+	if (empty($field_id) || !is_numeric($field_id))
+		return array();
 
-  // get the overridden settings
-  $query = "
+	// get the overridden settings
+	$query = "
     SELECT fts.field_type_id, fs.field_id, fts.field_setting_identifier, fs.setting_value
     FROM   {$g_table_prefix}field_type_settings fts, {$g_table_prefix}field_settings fs
     WHERE  fts.setting_id = fs.setting_id AND
            fs.field_id = $field_id
     ORDER BY fs.field_id
       ";
-  $result = mysql_query($query);
+	$result = mysql_query($query);
 
-  $overridden_settings = array();
-  while ($row = mysql_fetch_assoc($result))
-  {
-    $overridden_settings[$row["field_setting_identifier"]] = $row["setting_value"];
-  }
+	$overridden_settings = array();
+	while ($row = mysql_fetch_assoc($result))
+	{
+		$overridden_settings[$row["field_setting_identifier"]] = $row["setting_value"];
+	}
 
-  $field_type_id = ft_get_field_type_id_by_field_id($field_id);
-  $default_field_type_settings = ft_get_field_type_settings($field_type_id);
+	$field_type_id = ft_get_field_type_id_by_field_id($field_id);
+	$default_field_type_settings = ft_get_field_type_settings($field_type_id);
 
-  // now overlay the two and return all field settings for all fields
-  $complete_settings = array();
-  foreach ($default_field_type_settings as $setting_info)
-  {
-    $identifier         = $setting_info["field_setting_identifier"];
-    $default_value_type = $setting_info["default_value_type"];
-    if ($default_value_type == "static")
-      $value = $setting_info["default_value"];
-    else
-    {
-      $parts = explode(",", $setting_info["default_value"]);
+	// now overlay the two and return all field settings for all fields
+	$complete_settings = array();
+	foreach ($default_field_type_settings as $setting_info)
+	{
+		$identifier         = $setting_info["field_setting_identifier"];
+		$default_value_type = $setting_info["default_value_type"];
+		if ($default_value_type == "static")
+			$value = $setting_info["default_value"];
+		else
+		{
+			$parts = explode(",", $setting_info["default_value"]);
 
-      // dynamic setting values should ALWAYS be of the form "setting_name,module_folder/'core'". If they're
-      // not, just ignore it
-      if (count($parts) != 2)
-        $value = "";
-      else
-        $value = ft_get_settings($parts[0], $parts[1]);
-    }
+			// dynamic setting values should ALWAYS be of the form "setting_name,module_folder/'core'". If they're
+			// not, just ignore it
+			if (count($parts) != 2)
+				$value = "";
+			else
+				$value = ft_get_settings($parts[0], $parts[1]);
+		}
 
-    // if the field has been overwritten use that instead!
-    if (isset($overridden_settings[$identifier]))
-      $value = $overridden_settings[$identifier];
+		// if the field has been overwritten use that instead!
+		if (isset($overridden_settings[$identifier]))
+			$value = $overridden_settings[$identifier];
 
-    $complete_settings[$identifier] = $value;
-  }
+		$complete_settings[$identifier] = $value;
+	}
 
-  return $complete_settings;
+	return $complete_settings;
 }
 
 
 function ft_get_field_setting($field_id, $setting_id)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $query = mysql_query("
+	$query = mysql_query("
     SELECT setting_value
     FROM   {$g_table_prefix}field_settings
     WHERE  field_id = $field_id AND
            setting_id = $setting_id
   ");
 
-  $result = mysql_fetch_assoc($query);
+	$result = mysql_fetch_assoc($query);
 
-  return (isset($result["setting_value"])) ? $result["setting_value"] : "";
+	return (isset($result["setting_value"])) ? $result["setting_value"] : "";
 }
 
 
@@ -882,11 +882,11 @@ function ft_get_field_setting($field_id, $setting_id)
  */
 function ft_delete_extended_field_settings($field_id)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  mysql_query("DELETE FROM {$g_table_prefix}field_settings WHERE field_id = $field_id");
+	mysql_query("DELETE FROM {$g_table_prefix}field_settings WHERE field_id = $field_id");
 
-  extract(ft_process_hook_calls("end", compact("field_id"), array()), EXTR_OVERWRITE);
+	extract(ft_process_hook_calls("end", compact("field_id"), array()), EXTR_OVERWRITE);
 }
 
 
@@ -899,55 +899,55 @@ function ft_delete_extended_field_settings($field_id)
  */
 function ft_update_form_fields($form_id, $infohash, $set_default_form_field_names = false)
 {
-  global $g_table_prefix, $g_debug;
+	global $g_table_prefix, $g_debug;
 
-  $infohash = ft_sanitize($infohash);
+	$infohash = ft_sanitize($infohash);
 
-  $sortable_id = $infohash["sortable_id"];
-  $sortable_rows       = explode(",", $infohash["{$sortable_id}_sortable__rows"]);
-  $sortable_new_groups = explode(",", $infohash["{$sortable_id}_sortable__new_groups"]);
+	$sortable_id = $infohash["sortable_id"];
+	$sortable_rows       = explode(",", $infohash["{$sortable_id}_sortable__rows"]);
+	$sortable_new_groups = explode(",", $infohash["{$sortable_id}_sortable__new_groups"]);
 
-  extract(ft_process_hook_calls("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
+	extract(ft_process_hook_calls("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
 
-  // get a list of the system fields so we don't overwrite anything special
-  $existing_form_field_info = ft_get_form_fields($form_id);
-  $system_field_ids = array();
-  foreach ($existing_form_field_info as $form_field)
-  {
-    if ($form_field["is_system_field"] == "yes")
-      $system_field_ids[] = $form_field["field_id"];
-  }
+	// get a list of the system fields so we don't overwrite anything special
+	$existing_form_field_info = ft_get_form_fields($form_id);
+	$system_field_ids = array();
+	foreach ($existing_form_field_info as $form_field)
+	{
+		if ($form_field["is_system_field"] == "yes")
+			$system_field_ids[] = $form_field["field_id"];
+	}
 
-  $order = 1;
-  $custom_col_num = 1;
-  foreach ($sortable_rows as $field_id)
-  {
-    $set_clauses = array("list_order = $order");
-    if ($set_default_form_field_names && !in_array($field_id, $system_field_ids))
-    {
-      $set_clauses[] = "col_name = 'col_$custom_col_num'";
-      $custom_col_num++;
-    }
+	$order = 1;
+	$custom_col_num = 1;
+	foreach ($sortable_rows as $field_id)
+	{
+		$set_clauses = array("list_order = $order");
+		if ($set_default_form_field_names && !in_array($field_id, $system_field_ids))
+		{
+			$set_clauses[] = "col_name = 'col_$custom_col_num'";
+			$custom_col_num++;
+		}
 
-    if (isset($infohash["field_{$field_id}_display_name"]))
-      $set_clauses[] = "field_title = '" . $infohash["field_{$field_id}_display_name"] . "'";
+		if (isset($infohash["field_{$field_id}_display_name"]))
+			$set_clauses[] = "field_title = '" . $infohash["field_{$field_id}_display_name"] . "'";
 
-    if (isset($infohash["field_{$field_id}_size"]))
-      $set_clauses[] = "field_size = '" . $infohash["field_{$field_id}_size"] . "'";
+		if (isset($infohash["field_{$field_id}_size"]))
+			$set_clauses[] = "field_size = '" . $infohash["field_{$field_id}_size"] . "'";
 
-    $is_new_sort_group = (in_array($field_id, $sortable_new_groups)) ? "yes" : "no";
-    $set_clauses[] = "is_new_sort_group = '$is_new_sort_group'";
+		$is_new_sort_group = (in_array($field_id, $sortable_new_groups)) ? "yes" : "no";
+		$set_clauses[] = "is_new_sort_group = '$is_new_sort_group'";
 
-    $set_clauses_str = implode(",\n", $set_clauses);
+		$set_clauses_str = implode(",\n", $set_clauses);
 
-    mysql_query("
+		mysql_query("
       UPDATE {$g_table_prefix}form_fields
       SET    $set_clauses_str
       WHERE  field_id = $field_id AND
              form_id = $form_id
                 ");
-    $order++;
-  }
+		$order++;
+	}
 }
 
 
@@ -960,24 +960,24 @@ function ft_update_form_fields($form_id, $infohash, $set_default_form_field_name
  */
 function ft_auto_update_form_field_order($form_id)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  // we rely on this function returning the field by list_order
-  $form_fields = ft_get_form_fields($form_id);
+	// we rely on this function returning the field by list_order
+	$form_fields = ft_get_form_fields($form_id);
 
-  $count = 1;
-  foreach ($form_fields as $field_info)
-  {
-    $field_id = $field_info["field_id"];
+	$count = 1;
+	foreach ($form_fields as $field_info)
+	{
+		$field_id = $field_info["field_id"];
 
-    mysql_query("
+		mysql_query("
       UPDATE {$g_table_prefix}form_fields
       SET    list_order = $count
       WHERE  form_id = $form_id AND
              field_id = $field_id
         ");
-    $count++;
-  }
+		$count++;
+	}
 }
 
 
@@ -993,47 +993,47 @@ function ft_auto_update_form_field_order($form_id)
  */
 function ft_update_field($form_id, $field_id, $tab_info)
 {
-  global $g_table_prefix, $g_field_sizes, $g_debug, $LANG;
+	global $g_table_prefix, $g_field_sizes, $g_debug, $LANG;
 
-  $tab_info = ft_sanitize($tab_info);
-  $existing_form_field_info = ft_get_form_field($field_id);
+	$tab_info = ft_sanitize($tab_info);
+	$existing_form_field_info = ft_get_form_field($field_id);
 
-  // TAB 1: this tab contains the standard settings shared by all fields, regardless of type: display text,
-  // form field name, field type, pass on, field size, data type and database col name
-  $db_col_name_changes = array();
-  if (is_array($tab_info["tab1"]))
-  {
-    $info = $tab_info["tab1"];
-    $display_name = _ft_extract_array_val($info, "edit_field__display_text");
+	// TAB 1: this tab contains the standard settings shared by all fields, regardless of type: display text,
+	// form field name, field type, pass on, field size, data type and database col name
+	$db_col_name_changes = array();
+	if (is_array($tab_info["tab1"]))
+	{
+		$info = $tab_info["tab1"];
+		$display_name = _ft_extract_array_val($info, "edit_field__display_text");
 
-    // bit weird. this field is a checkbox, so if it's not checked it won't be in the request and
-    // _ft_extract_array_val returns an empty string
-    $include_on_redirect = _ft_extract_array_val($info, "edit_field__pass_on");
-    $include_on_redirect = (empty($include_on_redirect)) ? "no" : "yes";
+		// bit weird. this field is a checkbox, so if it's not checked it won't be in the request and
+		// _ft_extract_array_val returns an empty string
+		$include_on_redirect = _ft_extract_array_val($info, "edit_field__pass_on");
+		$include_on_redirect = (empty($include_on_redirect)) ? "no" : "yes";
 
-    if ($existing_form_field_info["is_system_field"] == "yes")
-    {
-      $query = "
+		if ($existing_form_field_info["is_system_field"] == "yes")
+		{
+			$query = "
         UPDATE {$g_table_prefix}form_fields
         SET    field_title = '$display_name',
                include_on_redirect = '$include_on_redirect'
         WHERE  field_id = $field_id
       ";
-      $result = mysql_query($query);
-      if (!$result)
-      {
-        return array(false, $LANG["phrase_query_problem"] . $query);
-      }
-    }
-    else
-    {
-      $field_name    = _ft_extract_array_val($info, "edit_field__field_name");
-      $field_type_id = _ft_extract_array_val($info, "edit_field__field_type");
-      $field_size    = _ft_extract_array_val($info, "edit_field__field_size");
-      $data_type     = _ft_extract_array_val($info, "edit_field__data_type");
-      $col_name      = _ft_extract_array_val($info, "edit_field__db_column");
+			$result = mysql_query($query);
+			if (!$result)
+			{
+				return array(false, $LANG["phrase_query_problem"] . $query);
+			}
+		}
+		else
+		{
+			$field_name    = _ft_extract_array_val($info, "edit_field__field_name");
+			$field_type_id = _ft_extract_array_val($info, "edit_field__field_type");
+			$field_size    = _ft_extract_array_val($info, "edit_field__field_size");
+			$data_type     = _ft_extract_array_val($info, "edit_field__data_type");
+			$col_name      = _ft_extract_array_val($info, "edit_field__db_column");
 
-      $query = mysql_query("
+			$query = mysql_query("
         UPDATE {$g_table_prefix}form_fields
         SET    field_name = '$field_name',
                field_type_id = '$field_type_id',
@@ -1045,146 +1045,146 @@ function ft_update_field($form_id, $field_id, $tab_info)
         WHERE  field_id = $field_id
           ");
 
-      // if the column name or field size just changed, we need to "physically" update the form's database table
-      // If this fails, we rollback both the field TYPE and the field size.
-      // BUG The *one* potential issue here is if the user just deleted a field type, then updated a field which - for
-      // whatever reason - fails. But this is very much a fringe case
-      $old_field_size    = $existing_form_field_info["field_size"];
-      $old_col_name      = $existing_form_field_info["col_name"];
-      $old_field_type_id = $existing_form_field_info["field_type_id"];
-      if ($old_field_size != $field_size || $old_col_name != $col_name)
-      {
-        $new_field_size_sql = $g_field_sizes[$field_size]["sql"];
-        $table_name = "{$g_table_prefix}form_{$form_id}";
+			// if the column name or field size just changed, we need to "physically" update the form's database table
+			// If this fails, we rollback both the field TYPE and the field size.
+			// BUG The *one* potential issue here is if the user just deleted a field type, then updated a field which - for
+			// whatever reason - fails. But this is very much a fringe case
+			$old_field_size    = $existing_form_field_info["field_size"];
+			$old_col_name      = $existing_form_field_info["col_name"];
+			$old_field_type_id = $existing_form_field_info["field_type_id"];
+			if ($old_field_size != $field_size || $old_col_name != $col_name)
+			{
+				$new_field_size_sql = $g_field_sizes[$field_size]["sql"];
+				$table_name = "{$g_table_prefix}form_{$form_id}";
 
-        list($is_success, $err_message) = _ft_alter_table_column($table_name, $old_col_name, $col_name, $new_field_size_sql);
-        if ($is_success)
-        {
-          if ($old_col_name != $col_name)
-            $db_col_name_changes[] = $field_id;
-        }
-        else
-        {
-          $query = mysql_query("
+				list($is_success, $err_message) = _ft_alter_table_column($table_name, $old_col_name, $col_name, $new_field_size_sql);
+				if ($is_success)
+				{
+					if ($old_col_name != $col_name)
+						$db_col_name_changes[] = $field_id;
+				}
+				else
+				{
+					$query = mysql_query("
             UPDATE {$g_table_prefix}form_fields
             SET    field_type_id = '$old_field_type_id',
                    field_size    = '$old_field_size',
                    col_name      = '$old_col_name'
             WHERE  field_id = $field_id
               ");
-          return array(false, $LANG["phrase_query_problem"] . $err_message);
-        }
-      }
+					return array(false, $LANG["phrase_query_problem"] . $err_message);
+				}
+			}
 
-      // if the field type just changed, the field-specific settings are orphaned. Drop them. In this instance, the
-      // client-side code ensures that the contents of the second tab are always passed so the code below will add
-      // any default values that are needed
-      if ($old_field_type_id != $field_type_id)
-      {
-        ft_delete_extended_field_settings($field_id);
-      }
-    }
-  }
+			// if the field type just changed, the field-specific settings are orphaned. Drop them. In this instance, the
+			// client-side code ensures that the contents of the second tab are always passed so the code below will add
+			// any default values that are needed
+			if ($old_field_type_id != $field_type_id)
+			{
+				ft_delete_extended_field_settings($field_id);
+			}
+		}
+	}
 
-  // if any of the database column names just changed we need to update any View filters that relied on them
-  if (!empty($db_col_name_changes))
-  {
-    foreach ($db_col_name_changes as $field_id)
-    {
-      ft_update_field_filters($field_id);
-    }
-  }
+	// if any of the database column names just changed we need to update any View filters that relied on them
+	if (!empty($db_col_name_changes))
+	{
+		foreach ($db_col_name_changes as $field_id)
+		{
+			ft_update_field_filters($field_id);
+		}
+	}
 
-  // TAB 2: update the custom field settings for this field type. tab2 can be any of these values:
-  //  1. a string "null": indicating that the user didn't change anything on the tab)
-  //  2. the empty string: indicating that things DID change, but nothing is being passed on. This can happen
-  //                      when the user checked the "Use Default Value" for all fields on the tab & the tab
-  //                      doesn't contain an option list or form field
-  //  3. an array of values
-  if (isset($tab_info["tab2"]) && $tab_info["tab2"] != "null")
-  {
-    $info = is_array($tab_info["tab2"]) ? $tab_info["tab2"] : array();
+	// TAB 2: update the custom field settings for this field type. tab2 can be any of these values:
+	//  1. a string "null": indicating that the user didn't change anything on the tab)
+	//  2. the empty string: indicating that things DID change, but nothing is being passed on. This can happen
+	//                      when the user checked the "Use Default Value" for all fields on the tab & the tab
+	//                      doesn't contain an option list or form field
+	//  3. an array of values
+	if (isset($tab_info["tab2"]) && $tab_info["tab2"] != "null")
+	{
+		$info = is_array($tab_info["tab2"]) ? $tab_info["tab2"] : array();
 
-    // since the second tab is being updated, we can rely on all the latest & greatest values being passed
-    // in the request, so clean out all old values
-    ft_delete_extended_field_settings($field_id);
+		// since the second tab is being updated, we can rely on all the latest & greatest values being passed
+		// in the request, so clean out all old values
+		ft_delete_extended_field_settings($field_id);
 
-    // convert the $info (which is an array of hashes) into a friendlier hash. This makes detecting for Option
-    // List fields much easier
-    $setting_hash = array();
-    for ($i=0; $i<count($info); $i++)
-    {
-      $setting_hash[$info[$i]["name"]] = $info[$i]["value"];
-    }
+		// convert the $info (which is an array of hashes) into a friendlier hash. This makes detecting for Option
+		// List fields much easier
+		$setting_hash = array();
+		for ($i=0; $i<count($info); $i++)
+		{
+			$setting_hash[$info[$i]["name"]] = $info[$i]["value"];
+		}
 
-    $new_settings = array();
-    while (list($setting_name, $setting_value) = each($setting_hash))
-    {
-      // ignore the additional field ID and field order rows that are custom to Option List / Form Field types. They'll
-      // be handled below
-      if (preg_match("/edit_field__setting_(\d)+_field_id/", $setting_name) || preg_match("/edit_field__setting_(\d)+_field_order/", $setting_name))
-        continue;
+		$new_settings = array();
+		while (list($setting_name, $setting_value) = each($setting_hash))
+		{
+			// ignore the additional field ID and field order rows that are custom to Option List / Form Field types. They'll
+			// be handled below
+			if (preg_match("/edit_field__setting_(\d)+_field_id/", $setting_name) || preg_match("/edit_field__setting_(\d)+_field_order/", $setting_name))
+				continue;
 
-      // TODO BUG. newlines aren't surviving this... why was it added? double quotes? single quotes?
-      $setting_value = ft_sanitize(stripslashes($setting_value));
-      $setting_id    = preg_replace("/edit_field__setting_/", "", $setting_name);
+			// TODO BUG. newlines aren't surviving this... why was it added? double quotes? single quotes?
+			$setting_value = ft_sanitize(stripslashes($setting_value));
+			$setting_id    = preg_replace("/edit_field__setting_/", "", $setting_name);
 
-      // if this field is being mapped to a form field, we serialize the form ID, field ID and order into a single var and
-      // give it a "form_field:" prefix, so we know exactly what the data contains & we can select the appropriate form ID
-      // and not Option List ID on re-editing. This keeps everything pretty simple, rather than spreading the data amongst
-      // multiple fields
-      if (preg_match("/^ft/", $setting_value))
-      {
-        $setting_value = preg_replace("/^ft/", "", $setting_value);
-        $setting_value = "form_field:$setting_value|" . $setting_hash["edit_field__setting_{$setting_id}_field_id"] . "|"
-          . $setting_hash["edit_field__setting_{$setting_id}_field_order"];
-      }
+			// if this field is being mapped to a form field, we serialize the form ID, field ID and order into a single var and
+			// give it a "form_field:" prefix, so we know exactly what the data contains & we can select the appropriate form ID
+			// and not Option List ID on re-editing. This keeps everything pretty simple, rather than spreading the data amongst
+			// multiple fields
+			if (preg_match("/^ft/", $setting_value))
+			{
+				$setting_value = preg_replace("/^ft/", "", $setting_value);
+				$setting_value = "form_field:$setting_value|" . $setting_hash["edit_field__setting_{$setting_id}_field_id"] . "|"
+					. $setting_hash["edit_field__setting_{$setting_id}_field_order"];
+			}
 
-      $new_settings[] = "($field_id, $setting_id, '$setting_value')";
-    }
+			$new_settings[] = "($field_id, $setting_id, '$setting_value')";
+		}
 
-    if (!empty($new_settings))
-    {
-      $new_settings_str = implode(",", $new_settings);
-      $query = "
+		if (!empty($new_settings))
+		{
+			$new_settings_str = implode(",", $new_settings);
+			$query = "
         INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
         VALUES $new_settings_str
       ";
 
-      $result = @mysql_query($query) or die($query . " - " . mysql_error());
-      if (!$result)
-      {
-        return array(false, $LANG["phrase_query_problem"] . $query . ", " . mysql_error());
-      }
-    }
-  }
+			$result = @mysql_query($query) or die($query . " - " . mysql_error());
+			if (!$result)
+			{
+				return array(false, $LANG["phrase_query_problem"] . $query . ", " . mysql_error());
+			}
+		}
+	}
 
-  if (isset($tab_info["tab3"]) && $tab_info["tab3"] != "null")
-  {
-    $validation = is_array($tab_info["tab3"]) ? $tab_info["tab3"] : array();
-    mysql_query("DELETE FROM {$g_table_prefix}field_validation WHERE field_id = $field_id");
-    $new_rules = array();
-    foreach ($validation as $rule_info)
-    {
-    	// ignore the checkboxes - we don't need 'em
-    	if (!preg_match("/^edit_field__v_(.*)_message$/", $rule_info["name"], $matches))
-    	  continue;
+	if (isset($tab_info["tab3"]) && $tab_info["tab3"] != "null")
+	{
+		$validation = is_array($tab_info["tab3"]) ? $tab_info["tab3"] : array();
+		mysql_query("DELETE FROM {$g_table_prefix}field_validation WHERE field_id = $field_id");
+		$new_rules = array();
+		foreach ($validation as $rule_info)
+		{
+			// ignore the checkboxes - we don't need 'em
+			if (!preg_match("/^edit_field__v_(.*)_message$/", $rule_info["name"], $matches))
+				continue;
 
-      $rule_id = $matches[1];
-      $error_message = ft_sanitize($rule_info["value"]);
+			$rule_id = $matches[1];
+			$error_message = ft_sanitize($rule_info["value"]);
 
-      mysql_query("
+			mysql_query("
         INSERT INTO {$g_table_prefix}field_validation (rule_id, field_id, error_message)
         VALUES ($rule_id, $field_id, '$error_message')
       ");
-    }
-  }
+		}
+	}
 
-  $success = true;
-  $message = $LANG["notify_form_field_options_updated"];
-  extract(ft_process_hook_calls("end", compact("field_id"), array("success", "message")), EXTR_OVERWRITE);
+	$success = true;
+	$message = $LANG["notify_form_field_options_updated"];
+	extract(ft_process_hook_calls("end", compact("field_id"), array("success", "message")), EXTR_OVERWRITE);
 
-  return array($success, $message);
+	return array($success, $message);
 }
 
 
@@ -1209,9 +1209,9 @@ function ft_update_field($form_id, $field_id, $tab_info)
  */
 function ft_get_uploaded_files($form_id, $field_ids)
 {
-  $uploaded_files = array();
-  extract(ft_process_hook_calls("start", compact("form_id", "field_ids"), array("uploaded_files")), EXTR_OVERWRITE);
-  return $uploaded_files;
+	$uploaded_files = array();
+	extract(ft_process_hook_calls("start", compact("form_id", "field_ids"), array("uploaded_files")), EXTR_OVERWRITE);
+	return $uploaded_files;
 }
 
 
@@ -1225,59 +1225,59 @@ function ft_get_uploaded_files($form_id, $field_ids)
  */
 function ft_update_field_filters($field_id)
 {
-  global $g_table_prefix, $g_debug, $LANG;
+	global $g_table_prefix, $g_debug, $LANG;
 
-  // get any filters that are associated with this field
-  $affected_filters = mysql_query("SELECT * FROM {$g_table_prefix}view_filters WHERE field_id = $field_id");
+	// get any filters that are associated with this field
+	$affected_filters = mysql_query("SELECT * FROM {$g_table_prefix}view_filters WHERE field_id = $field_id");
 
-  // get form field
-  $field_info = ft_get_form_field($field_id, array("include_field_type_info" => true));
-  $col_name      = $field_info["col_name"];
-  $field_type_id = $field_info["field_type_id"];
+	// get form field
+	$field_info = ft_get_form_field($field_id, array("include_field_type_info" => true));
+	$col_name      = $field_info["col_name"];
+	$field_type_id = $field_info["field_type_id"];
 
-  // loop through all of the affected filters & update the SQL
-  while ($filter_info = mysql_fetch_assoc($affected_filters))
-  {
-    $filter_id     = $filter_info["filter_id"];
-    $filter_values = $filter_info["filter_values"];
-    $operator      = $filter_info["operator"];
+	// loop through all of the affected filters & update the SQL
+	while ($filter_info = mysql_fetch_assoc($affected_filters))
+	{
+		$filter_id     = $filter_info["filter_id"];
+		$filter_values = $filter_info["filter_values"];
+		$operator      = $filter_info["operator"];
 
-    if ($field_info["is_date_field"] == "yes")
-    {
-      $sql_operator = ($operator == "after") ? ">" : "<";
-      $sql = "$col_name $sql_operator '$filter_values'";
-    }
-    else
-    {
-      $sql_operator = "";
-      switch ($operator)
-      {
-        case "equals":     $sql_operator = "LIKE ";    $join = " OR ";  break;
-        case "not_equals": $sql_operator = "NOT LIKE"; $join = " AND "; break;
-        case "like":       $sql_operator = "LIKE";     $join = " OR ";  break;
-        case "not_like":   $sql_operator = "NOT LIKE"; $join = " AND "; break;
-      }
-      $sql_statements_arr = array();
-      $values_arr = explode("|", $filter_values);
+		if ($field_info["is_date_field"] == "yes")
+		{
+			$sql_operator = ($operator == "after") ? ">" : "<";
+			$sql = "$col_name $sql_operator '$filter_values'";
+		}
+		else
+		{
+			$sql_operator = "";
+			switch ($operator)
+			{
+				case "equals":     $sql_operator = "LIKE ";    $join = " OR ";  break;
+				case "not_equals": $sql_operator = "NOT LIKE"; $join = " AND "; break;
+				case "like":       $sql_operator = "LIKE";     $join = " OR ";  break;
+				case "not_like":   $sql_operator = "NOT LIKE"; $join = " AND "; break;
+			}
+			$sql_statements_arr = array();
+			$values_arr = explode("|", $filter_values);
 
-      foreach ($values_arr as $value)
-      {
-        // if this is a LIKE operator (not_like, like), wrap the value in %..%
-        if ($operator == "like" || $operator == "not_like")
-          $value = "%$value%";
-        $sql_statements_arr[] = "$col_name $sql_operator '$value'";
-      }
+			foreach ($values_arr as $value)
+			{
+				// if this is a LIKE operator (not_like, like), wrap the value in %..%
+				if ($operator == "like" || $operator == "not_like")
+					$value = "%$value%";
+				$sql_statements_arr[] = "$col_name $sql_operator '$value'";
+			}
 
-      $sql = join($join, $sql_statements_arr);
-    }
-    $sql = "(" . addslashes($sql) . ")";
+			$sql = join($join, $sql_statements_arr);
+		}
+		$sql = "(" . addslashes($sql) . ")";
 
-    $query = mysql_query("
+		$query = mysql_query("
       UPDATE {$g_table_prefix}view_filters
       SET    filter_sql = '$sql'
       WHERE  filter_id = $filter_id
         ");
-  }
+	}
 }
 
 
@@ -1291,34 +1291,34 @@ function ft_update_field_filters($field_id)
  */
 function ft_change_field_type($form_id, $field_id, $new_field_type)
 {
-  global $g_table_prefix;
+	global $g_table_prefix;
 
-  $field_info = ft_get_form_field($field_id);
+	$field_info = ft_get_form_field($field_id);
 
-  // if the field just changes from one multi-select field to another (radio, checkboxes, select or multi-select)
-  // don't delete the field_option group: it's probable that they just wanted to switch the appearance.
-  $old_field_type = $field_info["field_type"];
-  $multi_select_types = array("select", "multi-select", "radio-buttons", "checkboxes");
+	// if the field just changes from one multi-select field to another (radio, checkboxes, select or multi-select)
+	// don't delete the field_option group: it's probable that they just wanted to switch the appearance.
+	$old_field_type = $field_info["field_type"];
+	$multi_select_types = array("select", "multi-select", "radio-buttons", "checkboxes");
 
-  $clauses = array("field_type = '$new_field_type'");
-  if (!in_array($old_field_type, $multi_select_types) || !in_array($new_field_type, $multi_select_types))
-    $clauses[] = "field_group_id = NULL";
-  if ($new_field_type == "file")
-    $clauses[] = "field_size = 'medium'";
+	$clauses = array("field_type = '$new_field_type'");
+	if (!in_array($old_field_type, $multi_select_types) || !in_array($new_field_type, $multi_select_types))
+		$clauses[] = "field_group_id = NULL";
+	if ($new_field_type == "file")
+		$clauses[] = "field_size = 'medium'";
 
-  $clauses_str = implode(",", $clauses);
+	$clauses_str = implode(",", $clauses);
 
-  mysql_query("DELETE FROM {$g_table_prefix}field_settings WHERE field_id = $field_id");
-  mysql_query("
+	mysql_query("DELETE FROM {$g_table_prefix}field_settings WHERE field_id = $field_id");
+	mysql_query("
     UPDATE {$g_table_prefix}form_fields
     SET    $clauses_str
     WHERE  field_id = $field_id
       ") or die(mysql_error());
 
-  // if the user just changed to a file type, ALWAYS set the database field size to "medium"
-  if ($old_field_type != $new_field_type && $new_field_type == "file")
-  {
-    _ft_alter_table_column("{$g_table_prefix}form_{$form_id}", $field_info["col_name"], $field_info["col_name"], "VARCHAR(255)");
-  }
+	// if the user just changed to a file type, ALWAYS set the database field size to "medium"
+	if ($old_field_type != $new_field_type && $new_field_type == "file")
+	{
+		_ft_alter_table_column("{$g_table_prefix}form_{$form_id}", $field_info["col_name"], $field_info["col_name"], "VARCHAR(255)");
+	}
 }
 

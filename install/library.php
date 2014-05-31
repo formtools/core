@@ -10,11 +10,11 @@ $g_ft_installation_folder = dirname(__FILE__);
 
 // all session information for the installation script is stored in the $_SESSION["ft_install"] key
 if (!isset($_SESSION["ft_install"]))
-  $_SESSION["ft_install"] = array();
+	$_SESSION["ft_install"] = array();
 
 // include the language file
 if (!isset($_SESSION["ft_install"]["lang_file"]))
-  $_SESSION["ft_install"]["lang_file"] = $g_default_language;
+	$_SESSION["ft_install"]["lang_file"] = $g_default_language;
 
 $g_defer_init_page = true;
 require_once("../global/library.php");

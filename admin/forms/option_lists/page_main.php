@@ -3,20 +3,20 @@
 $sortable_id = "option_list";
 if (isset($request["update_page"]))
 {
-  $request["sortable_id"] = $sortable_id;
-  list($g_success, $g_message) = ft_update_option_list($list_id, $request);
+	$request["sortable_id"] = $sortable_id;
+	list($g_success, $g_message) = ft_update_option_list($list_id, $request);
 }
 
 $list_info = ft_get_option_list($list_id);
 $total_options = 0;
 foreach ($list_info["options"] as $option_info)
 {
-  $total_options += count($option_info["options"]);
+	$total_options += count($option_info["options"]);
 }
 
 $placeholders = array(
-  "link1" => "edit.php?page=form_fields",
-  "link2" => "index.php?add_option_list=1&create_option_list_from_list_id={$list_info["list_id"]}"
+	"link1" => "edit.php?page=form_fields",
+	"link2" => "index.php?add_option_list=1&create_option_list_from_list_id={$list_info["list_id"]}"
 );
 
 // get a list of all existing Option Lists; this is used to ensure the uniqueness of the option list names
@@ -25,10 +25,10 @@ $lists = ft_get_option_lists("all");
 $list_names = array();
 foreach ($lists["results"] as $curr_list_info)
 {
-  if ($list_id == $curr_list_info["list_id"])
-    continue;
+	if ($list_id == $curr_list_info["list_id"])
+		continue;
 
-  $list_names[] = "\"" . htmlspecialchars($curr_list_info["option_list_name"]) . "\"";
+	$list_names[] = "\"" . htmlspecialchars($curr_list_info["option_list_name"]) . "\"";
 }
 
 $list_names = implode(",", $list_names);
@@ -48,11 +48,11 @@ $page_vars["num_fields_using_option_list"] = $num_fields;
 $page_vars["total_options"] = $total_options;
 $page_vars["sortable_id"] = $sortable_id;
 $page_vars["js_messages"] = array("word_delete", "validation_no_smart_fill_values", "validation_invalid_url",
-  "validation_smart_fill_no_field_found", "validation_smart_fill_cannot_fill", "validation_smart_fill_invalid_field_type",
-  "validation_smart_fill_upload_all_pages", "validation_upload_html_files_only", "validation_smart_fill_no_page",
-  "validation_no_option_list_name", "validation_option_list_name_taken", "validation_num_rows_to_add", "word_error",
-  "word_okay", "phrase_please_confirm", "word_yes", "word_no", "confirm_delete_group", "phrase_create_group", "word_cancel",
-  "notify_field_options_smart_filled"
+	"validation_smart_fill_no_field_found", "validation_smart_fill_cannot_fill", "validation_smart_fill_invalid_field_type",
+	"validation_smart_fill_upload_all_pages", "validation_upload_html_files_only", "validation_smart_fill_no_page",
+	"validation_no_option_list_name", "validation_option_list_name_taken", "validation_num_rows_to_add", "word_error",
+	"word_okay", "phrase_please_confirm", "word_yes", "word_no", "confirm_delete_group", "phrase_create_group", "word_cancel",
+	"notify_field_options_smart_filled"
 );
 $page_vars["head_string"] =<<< END
   <script src="$g_root_url/global/scripts/manage_option_lists.js"></script>

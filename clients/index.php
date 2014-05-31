@@ -8,16 +8,16 @@ $account_id = $_SESSION["ft"]["account"]["account_id"];
 
 if (isset($_GET["reset"]))
 {
-  $_SESSION["ft"]["form_sort_order"] = "";
-  $_SESSION["ft"]["form_search_keyword"] = "";
+	$_SESSION["ft"]["form_sort_order"] = "";
+	$_SESSION["ft"]["form_search_keyword"] = "";
 }
 $order   = ft_load_field("order", "form_sort_order", "form_name-ASC");
 $keyword = ft_load_field("keyword", "form_search_keyword", "");
 
 $search_criteria = array(
-  "order"   => $order,
-  "keyword" => $keyword
-    );
+	"order"   => $order,
+	"keyword" => $keyword
+);
 
 $num_client_forms = count(ft_get_client_forms($account_id));
 $forms            = ft_search_forms($account_id, false, $search_criteria);
