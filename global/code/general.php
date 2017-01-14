@@ -663,7 +663,7 @@ function ft_get_date($offset, $datetime, $format)
 		{
 			$eng_string = $eng_string_arr[$char_ind];
 
-			switch($char_ind)
+			switch ($char_map[$char_ind])
 			{
 				case "F":
 					$translated_str = $LANG["date_month_short_$eng_string"];
