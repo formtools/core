@@ -16,12 +16,10 @@
 
 
 // always include the core library functions
-$folder = dirname(__FILE__);
-require_once("$folder/global/library.php");
+require_once(__DIR__ . "/global/library.php");
 
 // if the API is supplied, include it as well
-$folder = dirname(__FILE__);
-@include_once("$folder/global/api/api.php");
+@include_once(__DIR__ . "/global/api/api.php");
 
 
 // check we're receiving something
@@ -113,8 +111,7 @@ function ft_process_form($form_data)
     $recaptcha_challenge_field = $form_data["recaptcha_challenge_field"];
     $recaptcha_response_field  = $form_data["recaptcha_response_field"];
 
-    $folder = dirname(__FILE__);
-    require_once("$folder/global/api/recaptchalib.php");
+    require_once(__DIR__ . "/global/api/recaptchalib.php");
 
     $resp = recaptcha_check_answer($g_api_recaptcha_private_key, $_SERVER["REMOTE_ADDR"], $recaptcha_challenge_field, $recaptcha_response_field);
 

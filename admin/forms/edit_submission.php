@@ -2,7 +2,7 @@
 
 require("../../global/session_start.php");
 ft_check_permission("admin");
-require(dirname(__FILE__) . "/edit_submission__code.php");
+require(__DIR__ . "/edit_submission__code.php");
 
 $request = array_merge($_GET, $_POST);
 $form_id = ft_load_field("form_id", "curr_form_id");

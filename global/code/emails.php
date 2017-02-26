@@ -604,8 +604,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
  */
 function ft_get_email_patterns($form_id)
 {
-	$curr_folder = dirname(__FILE__);
-	$pattern_folder = realpath("$curr_folder/../emails/patterns");
+	$pattern_folder = realpath(__DIR__ . "/../emails/patterns");
 	$email_template_patterns = parse_ini_file("$pattern_folder/patterns.ini", true);
 
 	$placeholders = array();

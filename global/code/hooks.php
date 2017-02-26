@@ -119,17 +119,18 @@ function ft_get_hook_calls($event, $hook_type, $function_name)
 	global $g_table_prefix;
 
 	$query = @mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}hook_calls
-    WHERE  hook_type = '$hook_type' AND
-           action_location = '$event' AND
-           function_name = '$function_name'
-    ORDER BY priority ASC
+		SELECT *
+		FROM   {$g_table_prefix}hook_calls
+		WHERE  hook_type = '$hook_type' AND
+			action_location = '$event' AND
+			function_name = '$function_name'
+		ORDER BY priority ASC
       ");
 
 	$results = array();
-	while ($row = @mysql_fetch_assoc($query))
+	while ($row = @mysql_fetch_assoc($query)) {
 		$results[] = $row;
+	}
 
 	return $results;
 }
@@ -191,13 +192,14 @@ function ft_process_hook_calls($event, $vars, $overridable_vars, $overridable_va
 
 	// extract the var passed from the calling function into the current scope
 	$return_vals = array();
-	foreach ($hooks as $hook_info)
-	{
+	foreach ($hooks as $hook_info) {
+
 		// this clause was added in 2.1 - it should have been included in 2.0.x, but it was missed. This prevents any hooks
 		// being processed for modules that are not enabled.
 		$module_folder = $hook_info["module_folder"];
-		if (!ft_check_module_enabled($module_folder))
+		if (!ft_check_module_enabled($module_folder)) {
 			continue;
+		}
 
 		// add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
 		// prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
@@ -205,25 +207,19 @@ function ft_process_hook_calls($event, $vars, $overridable_vars, $overridable_va
 		$updated_vars = ft_process_hook_call($hook_info["module_folder"], $hook_info["hook_function"], $vars, $overridable_vars, $calling_function);
 
 		// now return whatever values have been overwritten by the hooks
-		foreach ($overridable_vars as $var_name)
-		{
-			if (array_key_exists($var_name, $updated_vars))
-			{
-				if (in_array($var_name, $overridable_vars_to_be_concatenated))
-				{
-					if (!array_key_exists($var_name, $return_vals))
+		foreach ($overridable_vars as $var_name) {
+			if (array_key_exists($var_name, $updated_vars)) {
+				if (in_array($var_name, $overridable_vars_to_be_concatenated)) {
+					if (!array_key_exists($var_name, $return_vals)) {
 						$return_vals[$var_name] = array();
-
+					}
 					$return_vals[$var_name][] = $updated_vars[$var_name];
-				}
-				else
-				{
+				} else {
 					$return_vals[$var_name] = $updated_vars[$var_name];
 				}
 
 				// update $vars for any subsequent hook calls
-				if (array_key_exists($var_name, $vars))
-				{
+				if (array_key_exists($var_name, $vars)) {
 					$vars[$var_name] = $updated_vars[$var_name];
 				}
 			}
@@ -249,8 +245,7 @@ function ft_process_hook_call($module_folder, $hook_function, $vars, $overridabl
 	$vars["form_tools_overridable_vars"] = $overridable_vars;
 	$vars["form_tools_calling_function"] = $calling_function;
 
-	$folder = dirname(__FILE__);
-	@include_once(realpath("$folder/../../modules/$module_folder/library.php"));
+	@include_once(realpath(__DIR__ . "/../../modules/$module_folder/library.php"));
 
 	if (!function_exists($hook_function))
 		return $overridable_vars;
@@ -258,12 +253,11 @@ function ft_process_hook_call($module_folder, $hook_function, $vars, $overridabl
 	$result = @$hook_function($vars);
 
 	$updated_values = array();
-	if (!empty($result))
-	{
-		while (list($key, $value) = each($result))
-		{
-			if (in_array($key, $overridable_vars))
-				$updated_values[$key] = $value;
+	if (!empty($result)) {
+		while (list($key, $value) = each($result)) {
+			if (in_array($key, $overridable_vars)) {
+                $updated_values[$key] = $value;
+            }
 		}
 	}
 
@@ -360,7 +354,7 @@ function ft_update_available_hooks()
 {
 	global $g_table_prefix;
 
-	$ft_root = realpath(dirname(__FILE__) . "/../../");
+	$ft_root = realpath(__DIR__ . "/../../");
 	$hook_locations = array(
 
 		// code hooks

@@ -338,39 +338,39 @@ $g_ft_tables = array(
 
 // include all code libraries
 $config_file_exists = false;
-if (is_file(dirname(__FILE__) . "/config.php")) {
-  $config_file_exists = true;
-  include_once(dirname(__FILE__) . "/config.php");
+if (is_file(__DIR__ . "/config.php")) {
+    $config_file_exists = true;
+    include_once(__DIR__ . "/config.php");
 }
 
 // explicitly set the error reporting value
 error_reporting($g_default_error_reporting);
 
-require_once(dirname(__FILE__) . "/code/administrator.php");
-require_once(dirname(__FILE__) . "/code/accounts.php");
-require_once(dirname(__FILE__) . "/code/clients.php");
-require_once(dirname(__FILE__) . "/code/emails.php");
-require_once(dirname(__FILE__) . "/code/fields.php");
-require_once(dirname(__FILE__) . "/code/field_sizes.php");
-require_once(dirname(__FILE__) . "/code/field_types.php");
-require_once(dirname(__FILE__) . "/code/field_validation.php");
-require_once(dirname(__FILE__) . "/code/files.php");
-require_once(dirname(__FILE__) . "/code/forms.php");
-require_once(dirname(__FILE__) . "/code/general.php");
-require_once(dirname(__FILE__) . "/code/hooks.php");
-require_once(dirname(__FILE__) . "/code/languages.php");
-require_once(dirname(__FILE__) . "/code/list_groups.php");
-require_once(dirname(__FILE__) . "/code/menus.php");
-require_once(dirname(__FILE__) . "/code/modules.php");
-require_once(dirname(__FILE__) . "/code/option_lists.php");
-require_once(dirname(__FILE__) . "/code/sessions.php");
-require_once(dirname(__FILE__) . "/code/settings.php");
-require_once(dirname(__FILE__) . "/code/submissions.php");
-require_once(dirname(__FILE__) . "/code/themes.php");
-require_once(dirname(__FILE__) . "/code/upgrade.php");
-require_once(dirname(__FILE__) . "/code/validation.php");
-require_once(dirname(__FILE__) . "/code/views.php");
-//require_once(dirname(__FILE__) . "/smarty/Smarty.class.php");
+require_once(__DIR__ . "/code/administrator.php");
+require_once(__DIR__ . "/code/accounts.php");
+require_once(__DIR__ . "/code/clients.php");
+require_once(__DIR__ . "/code/emails.php");
+require_once(__DIR__ . "/code/fields.php");
+require_once(__DIR__ . "/code/field_sizes.php");
+require_once(__DIR__ . "/code/field_types.php");
+require_once(__DIR__ . "/code/field_validation.php");
+require_once(__DIR__ . "/code/files.php");
+require_once(__DIR__ . "/code/forms.php");
+require_once(__DIR__ . "/code/general.php");
+require_once(__DIR__ . "/code/hooks.php");
+require_once(__DIR__ . "/code/languages.php");
+require_once(__DIR__ . "/code/list_groups.php");
+require_once(__DIR__ . "/code/menus.php");
+require_once(__DIR__ . "/code/modules.php");
+require_once(__DIR__ . "/code/option_lists.php");
+require_once(__DIR__ . "/code/sessions.php");
+require_once(__DIR__ . "/code/settings.php");
+require_once(__DIR__ . "/code/submissions.php");
+require_once(__DIR__ . "/code/themes.php");
+require_once(__DIR__ . "/code/upgrade.php");
+require_once(__DIR__ . "/code/validation.php");
+require_once(__DIR__ . "/code/views.php");
+//require_once(__DIR__ . "/smarty/Smarty.class.php");
 
 
 if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page)) {
@@ -381,7 +381,7 @@ if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page)) 
 
   // load the appropriate language file
   $g_language = ft_get_ui_language();
-  require_once(dirname(__FILE__) . "/lang/{$g_language}.php");
+  require_once(__DIR__ . "/lang/{$g_language}.php");
 
   if (isset($_GET["logout"]))
     ft_logout_user();

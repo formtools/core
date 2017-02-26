@@ -20,10 +20,11 @@ function ft_install_display_page($template, $page_vars)
 	@chmod($cache_folder, 0777);
 
 	$version_string = $g_current_version;
-	if ($g_release_type == "alpha")
+	if ($g_release_type == "alpha") {
 		$version_string .= "-alpha-$g_release_date";
-	else if ($g_release_type == "beta")
+	} else if ($g_release_type == "beta") {
 		$version_string .= "-beta-$g_release_date";
+	}
 
 	// run a preliminary permissions check on the default theme's cache folder
 	if (!is_readable("$cache_folder/") || !is_writable("$cache_folder/"))
@@ -619,8 +620,7 @@ function ft_check_no_existing_tables($hostname, $db_name, $username, $password, 
  */
 function ft_install_check_module_available($module_folder)
 {
-	$folder = realpath(dirname(__FILE__) . "/../../modules/$module_folder");
-	return is_dir($folder);
+	return is_dir(realpath(__DIR__ . "/../../modules/$module_folder"));
 }
 
 
@@ -632,50 +632,7 @@ function ft_install_check_module_available($module_folder)
  */
 function ft_install_core_field_types($module_folder)
 {
-	require_once(realpath(dirname(__FILE__) . "/../../modules/$module_folder/library.php"));
+	require_once(realpath(__DIR__ . "/../../modules/$module_folder/library.php"));
 	return cft_install_module();
 }
 
-
-/**
- * Added to detect the presence of Premium module and to allow the user to install them (i.e. enter their license
- * keys during the installation step).
- */
-function ft_install_get_premium_modules()
-{
-	global $g_root_dir;
-
-	$modules_folder = realpath(dirname(__FILE__) . "/../../modules");
-
-	// loop through all modules in this folder and, if the module contains the appropriate files, add it to the database
-	$module_info = array();
-	$dh = opendir($modules_folder);
-
-	// if we couldn't open the modules folder, it doesn't exist or something went wrong
-	if (!$dh)
-		return array(false, $message);
-
-	$premium_modules = array();
-	while (($folder = readdir($dh)) !== false)
-	{
-		if (is_dir("$modules_folder/$folder") && $folder != "." && $folder != "..")
-		{
-			$info = ft_get_module_info_file_contents($folder);
-
-			if (empty($info))
-				continue;
-
-			if ($info["is_premium"] == "no")
-				continue;
-
-			$lang_file = "$modules_folder/$folder/lang/{$info["origin_language"]}.php";
-			$lang_info = _ft_get_module_lang_file_contents($lang_file);
-			$info["module_name"] = isset($lang_info["module_name"]) ? $lang_info["module_name"] : "";
-			$info["module_folder"] = $folder;
-
-			$premium_modules[] = $info;
-		}
-	}
-
-	return $premium_modules;
-}

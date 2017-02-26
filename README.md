@@ -44,4 +44,5 @@ module (see above).
 - Composer is great, but I still want to distribute Form Tools in _packages_ and not require users to have to do any 
 command-line nonsense to get the script running.  As such, I'm going to commit the _vendor/_ folder with all dependencies
 and omit the _composer.lock_ file.
-- Any way to add in PSR-2 checking for code quality...? Maybe too early... 
+- Any way to add in PSR-2 checking for code quality...? Maybe too early...? 
+- I think I'll start including all languages with 

@@ -805,31 +805,25 @@ function ft_strip_tags($input)
  */
 function ft_generate_js_messages($keys = "", $module_keys = "")
 {
-	global $g_root_url, $LANG, $L;
+	global $LANG, $L;
 
 	$theme = (isset($_SESSION["ft"]["account"]["theme"])) ? $_SESSION["ft"]["account"]["theme"] : "";
-	$rows = "";
 
 	$js_rows = array();
-	if (!empty($keys))
-	{
-		for ($i=0; $i<count($keys); $i++)
-		{
+	if (!empty($keys)) {
+		for ($i=0; $i<count($keys); $i++) {
 			$key = $keys[$i];
-			if (array_key_exists($key, $LANG))
-			{
+			if (array_key_exists($key, $LANG)) {
 				$str = preg_replace("/\"/", "\\\"", $LANG[$key]);
 				$js_rows[] = "g.messages[\"$key\"] = \"$str\";";
 			}
 		}
 	}
-	if (!empty($module_keys))
-	{
-		for ($i=0; $i<count($module_keys); $i++)
-		{
+
+	if (!empty($module_keys)) {
+		for ($i=0; $i<count($module_keys); $i++) {
 			$key = $module_keys[$i];
-			if (array_key_exists($key, $L))
-			{
+			if (array_key_exists($key, $L)) {
 				$str = preg_replace("/\"/", "\\\"", $L[$key]);
 				$js_rows[] = "g.messages[\"$key\"] = \"$str\";";
 			}
@@ -916,11 +910,8 @@ function ft_is_valid_datetime($datetime)
  */
 function ft_verify_form_tools_installed()
 {
-	global $LANG;
-
 	if (is_dir('install'))
 	{
-		$folder = dirname(__FILE__);
 		header("Location: install/");
 		exit;
 	}

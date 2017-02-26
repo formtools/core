@@ -2,7 +2,7 @@
 
 require("../../global/session_start.php");
 ft_check_permission("client");
-require(dirname(__FILE__) . "/edit_submission__code.php");
+require(__DIR__ . "/edit_submission__code.php");
 
 $account_id = $_SESSION["ft"]["account"]["account_id"];
 
