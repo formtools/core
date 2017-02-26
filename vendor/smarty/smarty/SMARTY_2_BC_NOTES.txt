@@ -106,4 +106,3 @@ Smarty::PHP_PASSTHRU
 Smarty::PHP_QUOTE
 Smarty::PHP_REMOVE
 Smarty::PHP_ALLOW
-

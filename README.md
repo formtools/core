@@ -1,4 +1,4 @@
-### Form Tools Core
+## Form Tools Core
 
 This repo contains the source code for the Form Tools Core. The goal of the Core is to provide the minimum application
 code to run Form Tools on your server. At this point (Feb 2017), this is not the case: it also requires you to include
