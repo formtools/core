@@ -1,1 +1,3 @@
 .idea*
+themes/default/cache/*
+.DS_Store

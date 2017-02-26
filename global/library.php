@@ -236,7 +236,7 @@ $g_max_ft_form_fields = "";
 /**
  * The current version of the Form Tools Core.
  */
-$g_current_version = "2.2.7";
+$g_current_version = "2.3.0-dev";
 
 /**
  * The release type: alpha, beta or main
@@ -246,12 +246,12 @@ $g_release_type = "main";
 /**
  * The release date: YYYYMMDD
  */
-$g_release_date = "20140214";
+$g_release_date = "20170225";
 
 /**
  * The minimum required PHP version needed to run Form Tools.
  */
-$g_required_php_version = "4.3";
+$g_required_php_version = "5.4";
 
 /**
  * The minimum required MySQL version needed to run Form Tools.
@@ -338,8 +338,7 @@ $g_ft_tables = array(
 
 // include all code libraries
 $config_file_exists = false;
-if (is_file(dirname(__FILE__) . "/config.php"))
-{
+if (is_file(dirname(__FILE__) . "/config.php")) {
   $config_file_exists = true;
   include_once(dirname(__FILE__) . "/config.php");
 }
@@ -371,11 +370,10 @@ require_once(dirname(__FILE__) . "/code/themes.php");
 require_once(dirname(__FILE__) . "/code/upgrade.php");
 require_once(dirname(__FILE__) . "/code/validation.php");
 require_once(dirname(__FILE__) . "/code/views.php");
-require_once(dirname(__FILE__) . "/smarty/Smarty.class.php");
+//require_once(dirname(__FILE__) . "/smarty/Smarty.class.php");
 
 
-if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page))
-{
+if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page)) {
   $g_link = ft_db_connect();
 
   // our Smarty instance, used for rendering the webpages
@@ -389,7 +387,6 @@ if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page))
     ft_logout_user();
 }
 
-if ($g_enable_benchmarking)
-{
+if ($g_enable_benchmarking) {
   $g_benchmark_start = ft_get_microtime_float();
 }
