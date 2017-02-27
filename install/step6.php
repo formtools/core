@@ -11,7 +11,7 @@ ft_update_module_list();
 ft_update_theme_list();
 
 // install the Core field types
-list($success, $message) = ft_install_core_field_types("core_field_types");
+list($success, $message) = Installation::installCodeFieldTypes("core_field_types");
 
 $modules = ft_get_modules();
 

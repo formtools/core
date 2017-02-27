@@ -865,18 +865,13 @@ function ft_load_field($field_name, $session_name, $default_value = "", $namespa
 {
 	$field = $default_value;
 
-	if (isset($_GET[$field_name]))
-	{
+	if (isset($_GET[$field_name])) {
 		$field = $_GET[$field_name];
 		$_SESSION[$namespace][$session_name] = $field;
-	}
-	else if (isset($_POST[$field_name]))
-	{
+	} else if (isset($_POST[$field_name])) {
 		$field = $_POST[$field_name];
 		$_SESSION[$namespace][$session_name] = $field;
-	}
-	else if (isset($_SESSION[$namespace][$session_name]))
-	{
+	} else if (isset($_SESSION[$namespace][$session_name])) {
 		$field = $_SESSION[$namespace][$session_name];
 	}
 

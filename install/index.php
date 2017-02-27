@@ -1,5 +1,9 @@
 <?php
 
+if (class_exists('FormTools\\Installation')) {
+    echo "!!!";
+}
+
 require("library.php");
 
 if (isset($_POST["next"])) {
@@ -9,11 +13,7 @@ if (isset($_POST["next"])) {
 
 $page_vars = array();
 $page_vars["step"] = 1;
-$page_vars["available_languages"] = ft_install_get_languages();
+$page_vars["available_languages"] = FormTools\Installation::getLanguages();
 $page_vars["lang_file"] = $lang_file;
 
-//ini_set('display_errors', 1);
-//ini_set('display_startup_errors', 1);
-//error_reporting(E_ALL);
-
-ft_install_display_page("templates/index.tpl", $page_vars);
+FormTools\Installation::displayPage("templates/index.tpl", $page_vars);
