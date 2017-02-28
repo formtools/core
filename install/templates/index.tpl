@@ -28,7 +28,6 @@
 	<p>
 		<input type="submit" name="next" value="{$LANG.word_continue_rightarrow}" />
 	</p>
-
 </form>
 
 {include file="../../install/templates/install_footer.tpl"}

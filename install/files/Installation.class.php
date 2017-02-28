@@ -346,288 +346,275 @@ EOF;
         return $existing_tables;
     }
 
+    /**
+     * This is sent at the very last step. It emails the administrator a short welcome email containing their
+     * login information, with a few links to resources on our site.
+     *
+     * Note: this is ALWAYS sent with mail(), since the Swift Mailer plugin won't have been configured yet.
+     *
+     * @param string $password the unencrypted password
+     */
+    public static function sendWelcomeEmail($email, $username, $password)
+    {
+        global $g_root_dir, $g_root_url;
+
+        // 1. build the email content
+        $placeholders = array(
+            "login_url" => $g_root_url,
+            "username" => $username,
+            "password" => $password
+        );
+        $smarty_template_email_content = file_get_contents("$g_root_dir/global/emails/installed.tpl");
+        $email_content = ft_eval_smarty_string($smarty_template_email_content, $placeholders);
+
+        // 2. build the email subject line
+        $smarty_template_email_subject = file_get_contents("$g_root_dir/global/emails/installed_subject.tpl");
+        $email_subject = trim(ft_eval_smarty_string($smarty_template_email_subject, array()));
+
+        // send email [note: the double quotes around the email recipient and content are intentional:
+        // some systems fail without it]
+        @mail("$email", $email_subject, $email_content);
+    }
+
+
+    /**
+     * This is called after the database is created and all the various settings (like root URL, etc) are
+     * determined. It updates the database to set the various default settings.
+     */
+    public static function ft_install_update_db_settings()
+    {
+        global $g_root_dir, $g_root_url;
+
+        // we add slashes since in PC paths like c:\www\whatever the \'s get lost en route
+        $core_settings = array(
+            "default_logout_url" => $g_root_url,
+            "file_upload_dir"    => addslashes($g_root_dir) . "/upload",
+            "file_upload_url"    => "$g_root_url/upload"
+        );
+        ft_set_settings($core_settings, "core");
+
+        // ??? no good!
+        $export_manager_settings = array(
+            "file_upload_dir" => addslashes($g_root_dir) . "/upload",
+            "file_upload_url" => "$g_root_url/upload"
+        );
+        ft_set_settings($export_manager_settings, "export_manager");
+    }
+
+
+    /**
+     * This function confirms the database settings entered by the user are correct.
+     *
+     * @param string $hostname
+     * @param string $db_name
+     * @param string $username
+     * @param string $password
+     * @return array
+     */
+    function checkDatabaseSettings($hostname, $db_name, $username, $password)
+    {
+        global $LANG;
+
+        $db_connection_error = "";
+        $db_select_error     = "";
+
+        $link = @mysql_connect($hostname, $username, $password) or $db_connection_error = mysql_error();
+
+        if ($db_connection_error) {
+            $placeholders = array("db_connection_error" => $db_connection_error);
+            $error = ft_install_eval_smarty_string($LANG["notify_install_invalid_db_info"], $placeholders, "default");
+            return array(false, $error);
+        } else {
+            @mysql_select_db($db_name)
+                or $db_select_error = mysql_error();
+
+            if ($db_select_error) {
+                $placeholders = array("db_select_error" => $db_select_error);
+                $error = ft_install_eval_smarty_string($LANG["notify_install_no_db_connection"], $placeholders, "default");
+                return array(false, $error);
+            } else {
+                @mysql_close($link);
+            }
+        }
+
+        return array(true, "");
+    }
+
+
+    /**
+     * This function creates the database tables.
+     *
+     * @param string $hostname
+     * @param string $db_name
+     * @param string $username
+     * @param string $password
+     * @return array returns an array with two indexes: [0] true/false, depending on whether the
+     *               operation was a success. [1] error message / empty string if success.
+     */
+    public static function createDatabase($hostname, $db_name, $username, $password, $table_prefix)
+    {
+        global $g_sql, $g_current_version, $g_release_type, $g_release_date, $g_db_table_charset;
+
+        // connect to the database
+        $link = @mysql_connect($hostname, $username, $password);
+        @mysql_select_db($db_name);
+
+        // suppress strict mode
+        @mysql_query("SET SQL_MODE=''", $link);
+
+        // check for the existence of Form Tools tables. It would be sad to accidentally delete/overwrite someone's
+        // older installation!
+        $errors = array();
+        foreach ($g_sql as $query) {
+            $query = preg_replace("/%PREFIX%/", $table_prefix, $query);
+            $query = preg_replace("/%FORMTOOLSVERSION%/", $g_current_version, $query);
+            $query = preg_replace("/%FORMTOOLSRELEASEDATE%/", $g_release_date, $query);
+            $query = preg_replace("/%FORMTOOLSRELEASETYPE%/", $g_release_type, $query);
+            $query = preg_replace("/%CHARSET%/", $g_db_table_charset, $query);
+
+            // execute the queries. If any error occurs, break out of the installation loop, delete any and
+            // all tables that have been created
+            $result = mysql_query($query)
+            or $errors[] = $query . " - <b>" . mysql_error() . "</b>";
+
+            // problem! delete any tables we just added
+            if (!$result) {
+                ft_install_delete_tables($hostname, $db_name, $username, $password, $table_prefix);
+                break;
+            }
+        }
+
+        $success = true;
+        $message = "";
+
+        if (!empty($errors)) {
+            $success = false;
+            array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
+            $message = join("<br />", $errors);
+        }
+
+        @mysql_close($link);
+
+        // if there was an error, return the error message
+        return array($success, $message);
+    }
+
+
+    /**
+     * Creates the administrator account. This is a bit of a misnomer, really, since the blank administrator account
+     * always exists with an account ID of 1. This function just updates it.
+     *
+     * @param array $info
+     * @return array
+     */
+    function ft_install_create_admin_account($info)
+    {
+        global $g_table_prefix, $g_root_url, $LANG;
+
+        $info = ft_install_sanitize_no_db($info);
+
+        $rules = array();
+        $rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
+        $rules[] = "required,last_name,{$LANG["validation_no_last_name"]}";
+        $rules[] = "required,email,{$LANG["validation_no_admin_email"]}";
+        $rules[] = "valid_email,email,Please enter a valid administrator email address.";
+        $rules[] = "required,username,{$LANG["validation_no_username"]}";
+        $rules[] = "required,password,{$LANG["validation_no_password"]}";
+        $rules[] = "required,password_2,{$LANG["validation_no_second_password"]}";
+        $rules[] = "same_as,password,password_2,{$LANG["validation_passwords_different"]}";
+        $errors = validate_fields($info, $rules);
+
+        if (!empty($errors)) {
+            $success = false;
+            array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
+            $message = join("<br />", $errors);
+            return array($success, $message);
+        }
+
+        $first_name = $info["first_name"];
+        $last_name  = $info["last_name"];
+        $email      = $info["email"];
+        $username   = $info["username"];
+        $password   = md5(md5($info["password"]));
+
+        $query = mysql_query("
+            UPDATE {$g_table_prefix}accounts
+            SET    first_name = '$first_name',
+                last_name = '$last_name',
+                email = '$email',
+                username = '$username',
+                password = '$password',
+                logout_url = '$g_root_url'
+            WHERE account_id = 1
+        ");
+
+        $success = true;
+        $message = "";
+        if (!$query) {
+            $success = false;
+            $message = mysql_error();
+        }
+
+        return array($success, $message);
+    }
+
+
+    /**
+     * This function generates the content of the config file and returns it.
+     */
+    public static function getConfigFileContents()
+    {
+        // try to fix REQUEST_URI for IIS
+        if (empty($_SERVER['REQUEST_URI'])) {
+            // IIS Mod-Rewrite
+            if (isset($_SERVER['HTTP_X_ORIGINAL_URL'])) {
+                $_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_ORIGINAL_URL'];
+            }
+
+            // IIS Isapi_Rewrite
+            else if (isset($_SERVER['HTTP_X_REWRITE_URL'])) {
+                $_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_REWRITE_URL'];
+            } else {
+                // some IIS + PHP configurations puts the script-name in the path-info (no need to append it twice)
+                if ( isset($_SERVER['PATH_INFO']) ) {
+                    if ($_SERVER['PATH_INFO'] == $_SERVER['SCRIPT_NAME']) {
+                        $_SERVER['REQUEST_URI'] = $_SERVER['PATH_INFO'];
+                    } else {
+                        $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'] . $_SERVER['PATH_INFO'];
+                    }
+                }
+
+                // append the query string if it exists and isn't null
+                if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])) {
+                    $_SERVER['REQUEST_URI'] .= '?' . $_SERVER['QUERY_STRING'];
+                }
+            }
+        }
+
+        $root_url = preg_replace("/\/install\/step4\.php$/", "", "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
+        $root_dir = preg_replace("/.install$/", "", INSTALLATION_FOLDER);
+        $root_dir = preg_replace("/\\\/", "\\\\\\", $root_dir);
+
+        $_SESSION["ft_install"]["g_root_dir"] = INSTALLATION_FOLDER;
+        $_SESSION["ft_install"]["g_root_url"] = $root_url;
+
+        $username = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_username"]);
+        $password = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_password"]);
+
+        $content = "<" . "?php\n\n"
+            . "// main program paths - no trailing slashes!\n"
+            . "\$g_root_url = \"$root_url\";\n"
+            . "\$g_root_dir = \"$root_dir\";\n\n"
+            . "// database settings\n"
+            . "\$g_db_hostname = \"{$_SESSION["ft_install"]["g_db_hostname"]}\";\n"
+            . "\$g_db_name = \"{$_SESSION["ft_install"]["g_db_name"]}\";\n"
+            . "\$g_db_username = \"{$username}\";\n"
+            . "\$g_db_password = \"{$password}\";\n"
+            . "\$g_table_prefix = \"{$_SESSION["ft_install"]["g_table_prefix"]}\";\n";
+
+        $content .= "\n?" . ">";
+
+        return $content;
+    }
 }
-
-
-
-///**
-// * This function generates the content of the config file and returns it.
-// */
-//function ft_install_get_config_file_contents()
-//{
-//	// try to fix REQUEST_URI for IIS
-//	if (empty($_SERVER['REQUEST_URI']))
-//	{
-//		// IIS Mod-Rewrite
-//		if (isset($_SERVER['HTTP_X_ORIGINAL_URL']))
-//			$_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_ORIGINAL_URL'];
-//
-//		// IIS Isapi_Rewrite
-//		else if (isset($_SERVER['HTTP_X_REWRITE_URL']))
-//			$_SERVER['REQUEST_URI'] = $_SERVER['HTTP_X_REWRITE_URL'];
-//
-//		else
-//		{
-//			// some IIS + PHP configurations puts the script-name in the path-info (no need to append it twice)
-//			if ( isset($_SERVER['PATH_INFO']) )
-//			{
-//				if ( $_SERVER['PATH_INFO'] == $_SERVER['SCRIPT_NAME'])
-//					$_SERVER['REQUEST_URI'] = $_SERVER['PATH_INFO'];
-//				else
-//					$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'] . $_SERVER['PATH_INFO'];
-//			}
-//
-//			// append the query string if it exists and isn't null
-//			if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING']))
-//				$_SERVER['REQUEST_URI'] .= '?' . $_SERVER['QUERY_STRING'];
-//		}
-//	}
-//
-//	$root_url = preg_replace("/\/install\/step4\.php$/", "", "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
-//	$root_dir = preg_replace("/.install$/", "", INSTALLATION_FOLDER);
-//	$root_dir = preg_replace("/\\\/", "\\\\\\", $root_dir);
-//
-//	$_SESSION["ft_install"]["g_root_dir"] = INSTALLATION_FOLDER;
-//	$_SESSION["ft_install"]["g_root_url"] = $root_url;
-//
-//	$username = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_username"]);
-//	$password = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_password"]);
-//
-//	$content = "<" . "?php\n\n"
-//		. "// main program paths - no trailing slashes!\n"
-//		. "\$g_root_url = \"$root_url\";\n"
-//		. "\$g_root_dir = \"$root_dir\";\n\n"
-//		. "// database settings\n"
-//		. "\$g_db_hostname = \"{$_SESSION["ft_install"]["g_db_hostname"]}\";\n"
-//		. "\$g_db_name = \"{$_SESSION["ft_install"]["g_db_name"]}\";\n"
-//		. "\$g_db_username = \"{$username}\";\n"
-//		. "\$g_db_password = \"{$password}\";\n"
-//		. "\$g_table_prefix = \"{$_SESSION["ft_install"]["g_table_prefix"]}\";\n";
-//
-//	$content .= "\n?" . ">";
-//
-//	return $content;
-//}
-//
-//
-///**
-// * This function creates the database tables.
-// *
-// * @param string $hostname
-// * @param string $db_name
-// * @param string $username
-// * @param string $password
-// * @return array returns an array with two indexes: [0] true/false, depending on whether the
-// *               operation was a success. [1] error message / empty string if success.
-// */
-//function ft_install_create_database($hostname, $db_name, $username, $password, $table_prefix)
-//{
-//	global $g_sql, $g_current_version, $g_release_type, $g_release_date, $g_db_table_charset;
-//
-//	// connect to the database
-//	$link = @mysql_connect($hostname, $username, $password);
-//	@mysql_select_db($db_name);
-//
-//	// suppress strict mode
-//	@mysql_query("SET SQL_MODE=''", $link);
-//
-//	// check for the existence of Form Tools tables. It would be sad to accidentally delete/overwrite someone's
-//	// older installation!
-//	$errors = array();
-//	foreach ($g_sql as $query)
-//	{
-//		$query = preg_replace("/%PREFIX%/", $table_prefix, $query);
-//		$query = preg_replace("/%FORMTOOLSVERSION%/", $g_current_version, $query);
-//		$query = preg_replace("/%FORMTOOLSRELEASEDATE%/", $g_release_date, $query);
-//		$query = preg_replace("/%FORMTOOLSRELEASETYPE%/", $g_release_type, $query);
-//		$query = preg_replace("/%CHARSET%/", $g_db_table_charset, $query);
-//
-//		// execute the queries. If any error occurs, break out of the installation loop, delete any and
-//		// all tables that have been created
-//		$result = mysql_query($query)
-//		or $errors[] = $query . " - <b>" . mysql_error() . "</b>";
-//
-//		// problem! delete any tables we just added
-//		if (!$result)
-//		{
-//			ft_install_delete_tables($hostname, $db_name, $username, $password, $table_prefix);
-//			break;
-//		}
-//	}
-//
-//	$success = true;
-//	$message = "";
-//
-//	if (!empty($errors))
-//	{
-//		$success = false;
-//		array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-//		$message = join("<br />", $errors);
-//	}
-//
-//	@mysql_close($link);
-//
-//	// if there was an error, return the error message
-//	return array($success, $message);
-//}
-//
-//
-///**
-// * This function confirms the database settings entered by the user are correct.
-// *
-// * @param string $hostname
-// * @param string $db_name
-// * @param string $username
-// * @param string $password
-// * @return array
-// */
-//function ft_install_check_db_settings($hostname, $db_name, $username, $password)
-//{
-//	global $LANG;
-//
-//	$db_connection_error = "";
-//	$db_select_error     = "";
-//
-//	$link = @mysql_connect($hostname, $username, $password) or $db_connection_error = mysql_error();
-//
-//	if ($db_connection_error) {
-//		$placeholders = array("db_connection_error" => $db_connection_error);
-//		$error = ft_install_eval_smarty_string($LANG["notify_install_invalid_db_info"], $placeholders, "default");
-//		return array(false, $error);
-//	} else {
-//		@mysql_select_db($db_name)
-//			or $db_select_error = mysql_error();
-//
-//		if ($db_select_error) {
-//			$placeholders = array("db_select_error" => $db_select_error);
-//			$error = ft_install_eval_smarty_string($LANG["notify_install_no_db_connection"], $placeholders, "default");
-//			return array(false, $error);
-//		} else {
-//			@mysql_close($link);
-//		}
-//	}
-//
-//	return array(true, "");
-//}
-//
-//
-///**
-// * Creates the administrator account. This is a bit of a misnomer, really, since the blank administrator account
-// * always exists with an account ID of 1. This function just updates it.
-// *
-// * @param array $info
-// * @return array
-// */
-//function ft_install_create_admin_account($info)
-//{
-//	global $g_table_prefix, $g_root_url, $LANG;
-//
-//	$info = ft_install_sanitize_no_db($info);
-//
-//	$rules = array();
-//	$rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
-//	$rules[] = "required,last_name,{$LANG["validation_no_last_name"]}";
-//	$rules[] = "required,email,{$LANG["validation_no_admin_email"]}";
-//	$rules[] = "valid_email,email,Please enter a valid administrator email address.";
-//	$rules[] = "required,username,{$LANG["validation_no_username"]}";
-//	$rules[] = "required,password,{$LANG["validation_no_password"]}";
-//	$rules[] = "required,password_2,{$LANG["validation_no_second_password"]}";
-//	$rules[] = "same_as,password,password_2,{$LANG["validation_passwords_different"]}";
-//	$errors = validate_fields($info, $rules);
-//
-//	if (!empty($errors))
-//	{
-//		$success = false;
-//		array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-//		$message = join("<br />", $errors);
-//		return array($success, $message);
-//	}
-//
-//	$first_name = $info["first_name"];
-//	$last_name  = $info["last_name"];
-//	$email      = $info["email"];
-//	$username   = $info["username"];
-//	$password   = md5(md5($info["password"]));
-//
-//	$query = mysql_query("
-//    UPDATE {$g_table_prefix}accounts
-//    SET    first_name = '$first_name',
-//           last_name = '$last_name',
-//           email = '$email',
-//           username = '$username',
-//           password = '$password',
-//           logout_url = '$g_root_url'
-//    WHERE account_id = 1
-//      ");
-//
-//	$success = "";
-//	$message = "";
-//	if ($query)
-//		$success = true;
-//	else
-//	{
-//		$success = false;
-//		$message = mysql_error();
-//	}
-//
-//	return array($success, $message);
-//}
-//
-//
-///**
-// * This is called after the database is created and all the various settings (like root URL, etc) are
-// * determined. It updates the database to set the various default settings.
-// */
-//function ft_install_update_db_settings()
-//{
-//	global $g_root_dir, $g_root_url;
-//
-//	// we add slashes since in PC paths like c:\www\whatever the \'s get lost en route
-//	$core_settings = array(
-//		"default_logout_url" => $g_root_url,
-//		"file_upload_dir"    => addslashes($g_root_dir) . "/upload",
-//		"file_upload_url"    => "$g_root_url/upload"
-//	);
-//	ft_set_settings($core_settings, "core");
-//
-//	// ??? no good!
-//	$export_manager_settings = array(
-//		"file_upload_dir" => addslashes($g_root_dir) . "/upload",
-//		"file_upload_url" => "$g_root_url/upload"
-//	);
-//	ft_set_settings($export_manager_settings, "export_manager");
-//}
-//
-//
-//
-///**
-// * This is sent at the very last step. It emails the administrator a short welcome email containing their
-// * login information, with a few links to resources on our site.
-// *
-// * Note: this is ALWAYS sent with mail(), since the Swift Mailer plugin won't have been configured yet.
-// *
-// * @param string $password the unencrypted password
-// */
-//function ft_install_send_welcome_email($email, $username, $password)
-//{
-//	global $g_root_dir, $g_root_url;
-//
-//	// 1. build the email content
-//	$placeholders = array(
-//		"login_url" => $g_root_url,
-//		"username"  => $username,
-//		"password"  => $password
-//	);
-//	$smarty_template_email_content = file_get_contents("$g_root_dir/global/emails/installed.tpl");
-//	$email_content = ft_eval_smarty_string($smarty_template_email_content, $placeholders);
-//
-//	// 2. build the email subject line
-//	$smarty_template_email_subject = file_get_contents("$g_root_dir/global/emails/installed_subject.tpl");
-//	$email_subject = trim(ft_eval_smarty_string($smarty_template_email_subject, array()));
-//
-//	// send email [note: the double quotes around the email recipient and content are intentional:
-//	// some systems fail without it]
-//	@mail("$email", $email_subject, $email_content);
-//}
-
 
