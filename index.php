@@ -4,20 +4,19 @@ require_once("global/session_start.php");
 ft_verify_form_tools_installed();
 $g_upgrade_info = ft_upgrade_form_tools();
 
+
 // only verify the core tables exist if there wasn't a problem upgrading
-if (!($g_upgrade_info["upgraded"] && !$g_upgrade_info["success"]))
-{
-  ft_verify_core_tables_exist();
+if (!($g_upgrade_info["upgraded"] && !$g_upgrade_info["success"])) {
+    ft_verify_core_tables_exist();
 }
 
 // if this user is already logged in, redirect them to their specified login page
 if (isset($_SESSION["ft"]["account"]) && isset($_SESSION["ft"]["account"]["is_logged_in"]) &&
-  isset($_SESSION["ft"]["account"]["login_page"]) && $_SESSION["ft"]["account"]["is_logged_in"] == 1)
-{
-  $login_page = $_SESSION["ft"]["account"]["login_page"];
-  $page = ft_construct_page_url($login_page);
-  header("location: {$g_root_url}$page");
-  exit;
+    isset($_SESSION["ft"]["account"]["login_page"]) && $_SESSION["ft"]["account"]["is_logged_in"] == 1) {
+    $login_page = $_SESSION["ft"]["account"]["login_page"];
+    $page = ft_construct_page_url($login_page);
+    header("location: {$g_root_url}$page");
+    exit;
 }
 
 // default settings
@@ -29,11 +28,9 @@ $g_swatch = $settings["default_client_swatch"];
 // interface, including logo and footer and even language
 $id = ft_load_field("id", "id", "");
 
-if (!empty($id))
-{
+if (!empty($id)) {
   $info = ft_get_account_info($id);
-  if (isset($info["account_id"]))
-  {
+  if (isset($info["account_id"])) {
     // just in case, boot up the appropriate language file (this overrides any language file already loaded)
     $g_theme  = $info["theme"];
     $language = $info["ui_language"];
@@ -41,6 +38,7 @@ if (!empty($id))
       include_once("global/lang/{$language}.php");
   }
 }
+
 
 $error = "";
 if (isset($_POST["username"]) && !empty($_POST["username"]))

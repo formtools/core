@@ -4,7 +4,7 @@ namespace FormTools;
 
 
 /**
- * Form Tools Installation class. Note
+ * Form Tools Installation class.
  */
 class Installation
 {
@@ -12,26 +12,26 @@ class Installation
     /**
      * Returns a list of available languages for the Form Tools script.
      */
-    public static function getLanguages ()
-    {
-        $language_folder_dir = realpath(INSTALLATION_FOLDER . "/../global/lang");
-
-        $available_language_info = array();
-        if ($handle = opendir($language_folder_dir)) {
-            while (false !== ($filename = readdir($handle))) {
-                if ($filename != '.' && $filename != '..' && $filename != "index.php" && preg_match("/.php$/", $filename)) {
-                    $language_name = Installation::getLanguageFileInfo("$language_folder_dir/$filename");
-                    $available_language_info[$filename] = $language_name;
-                }
-            }
-            closedir($handle);
-        }
-
-        // sort the languages alphabetically
-        ksort($available_language_info);
-
-        return $available_language_info;
-    }
+//    public static function getLanguages ()
+//    {
+//        $language_folder_dir = realpath(INSTALLATION_FOLDER . "/../global/lang");
+//
+//        $available_language_info = array();
+//        if ($handle = opendir($language_folder_dir)) {
+//            while (false !== ($filename = readdir($handle))) {
+//                if ($filename != '.' && $filename != '..' && $filename != "index.php" && preg_match("/.php$/", $filename)) {
+//                    $language_name = Installation::getLanguageFileInfo("$language_folder_dir/$filename");
+//                    $available_language_info[$filename] = $language_name;
+//                }
+//            }
+//            closedir($handle);
+//        }
+//
+//        // sort the languages alphabetically
+//        ksort($available_language_info);
+//
+//        return $available_language_info;
+//    }
 
     /**
      * Helper function which examines a particular language file and returns the language
@@ -45,12 +45,10 @@ class Installation
     {
         include_once($file);
         $defined_vars = get_defined_vars();
-        print_r($file);
 
         $language_name = $defined_vars["LANG"]["special_language_locale"];
         return $language_name;
     }
-
 
     /**
      * This function attempts to create the config file for the user.

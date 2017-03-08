@@ -15,24 +15,16 @@ list($success, $message) = Installation::installCodeFieldTypes("core_field_types
 
 $modules = ft_get_modules();
 
-foreach ($modules as $module_info)
-{
+foreach ($modules as $module_info) {
 	$module_id     = $module_info["module_id"];
 	$is_installed  = $module_info["is_installed"];
 	$module_folder = $module_info["module_folder"];
 
-	if ($is_installed == "yes")
-		continue;
+	if ($is_installed == "yes") {
+        continue;
+    }
 
 	$info = array("install" => $module_id);
-
-	// if this was a premium module, pass along the appropriate encrypted info to allow installation
-	if (isset($_SESSION["ft_install"]["premium_module_keys"]) && array_key_exists($module_folder, $_SESSION["ft_install"]["premium_module_keys"]))
-	{
-		$_POST["k"]  = $_SESSION["ft_install"]["premium_module_keys"][$module_folder]["k"];
-		$_POST["ek"] = $_SESSION["ft_install"]["premium_module_keys"][$module_folder]["ek"];
-		$info["k"]   = $_POST["k"];
-	}
 
 	// this will run the installation scripts for any module in the /modules folder. Note: the special "Core Field Types"
 	// module has a dummy installation function that gets called here. That ensures the module is marked as "enabled", etc.
@@ -41,8 +33,7 @@ foreach ($modules as $module_info)
 }
 
 // send "Welcome to Form Tools" email
-if (!isset($_SESSION["ft_install"]["email_notification_sent"]))
-{
+if (!isset($_SESSION["ft_install"]["email_notification_sent"])) {
 	$email    = $_SESSION["ft_install"]["email"];
 	$username = $_SESSION["ft_install"]["username"];
 	$password = $_SESSION["ft_install"]["password"];
@@ -56,4 +47,4 @@ $page_vars = array();
 $page_vars["step"] = 6;
 $page_vars["g_root_url"] = $g_root_url;
 
-ft_install_display_page("templates/step6.tpl", $page_vars);
+FormTools\Installation::displayPage("templates/step6.tpl", $page_vars);

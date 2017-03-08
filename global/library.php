@@ -296,44 +296,44 @@ $g_cache = array();
  * tables do in fact exist before letting the user log in.
  */
 $g_ft_tables = array(
-  "account_settings",
-  "accounts",
-  "client_forms",
-  "client_views",
-  "email_template_edit_submission_views",
-  "email_template_recipients",
-  "email_template_when_sent_views",
-  "email_templates",
-  "field_options",
-  "field_settings",
-  "field_type_setting_options",
-  "field_type_settings",
-  "field_types",
-  "field_type_validation_rules",
-  "field_validation",
-  "form_email_fields",
-  "form_fields",
-  "forms",
-  "hook_calls",
-  "hooks",
-  "list_groups",
-  "menu_items",
-  "menus",
-  "modules",
-  "module_menu_items",
-  "multi_page_form_urls",
-  "new_view_submission_defaults",
-  "option_lists",
-  "public_form_omit_list",
-  "public_view_omit_list",
-  "sessions",
-  "settings",
-  "themes",
-  "views",
-  "view_columns",
-  "view_fields",
-  "view_filters",
-  "view_tabs"
+    "account_settings",
+    "accounts",
+    "client_forms",
+    "client_views",
+    "email_template_edit_submission_views",
+    "email_template_recipients",
+    "email_template_when_sent_views",
+    "email_templates",
+    "field_options",
+    "field_settings",
+    "field_type_setting_options",
+    "field_type_settings",
+    "field_types",
+    "field_type_validation_rules",
+    "field_validation",
+    "form_email_fields",
+    "form_fields",
+    "forms",
+    "hook_calls",
+    "hooks",
+    "list_groups",
+    "menu_items",
+    "menus",
+    "modules",
+    "module_menu_items",
+    "multi_page_form_urls",
+    "new_view_submission_defaults",
+    "option_lists",
+    "public_form_omit_list",
+    "public_view_omit_list",
+    "sessions",
+    "settings",
+    "themes",
+    "views",
+    "view_columns",
+    "view_fields",
+    "view_filters",
+    "view_tabs"
 );
 
 // include all code libraries
@@ -370,23 +370,28 @@ require_once(__DIR__ . "/code/themes.php");
 require_once(__DIR__ . "/code/upgrade.php");
 require_once(__DIR__ . "/code/validation.php");
 require_once(__DIR__ . "/code/views.php");
-//require_once(__DIR__ . "/smarty/Smarty.class.php");
+
+// new code
+require_once(__DIR__ . "/code/Installation.class.php");
+require_once(__DIR__ . "/code/Translations.class.php");
+require_once(__DIR__ . "/../vendor/autoload.php");
 
 
 if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page)) {
-  $g_link = ft_db_connect();
+    $g_link = ft_db_connect();
 
-  // our Smarty instance, used for rendering the webpages
-  $g_smarty = new Smarty();
+    // our Smarty instance, used for rendering the webpages
+    $g_smarty = new Smarty();
 
-  // load the appropriate language file
-  $g_language = ft_get_ui_language();
-  require_once(__DIR__ . "/lang/{$g_language}.php");
+    // load the appropriate language file
+    $g_language = ft_get_ui_language();
+    require_once(__DIR__ . "/lang/{$g_language}.php");
 
-  if (isset($_GET["logout"]))
-    ft_logout_user();
+    if (isset($_GET["logout"])) {
+        ft_logout_user();
+    }
 }
 
 if ($g_enable_benchmarking) {
-  $g_benchmark_start = ft_get_microtime_float();
+    $g_benchmark_start = ft_get_microtime_float();
 }

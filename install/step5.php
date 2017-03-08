@@ -6,8 +6,7 @@ require_once("library.php");
 
 // if required, add the user account
 $account_created = false;
-if (isset($_POST["add_account"]))
-{
+if (isset($_POST["add_account"])) {
 	list($account_created, $g_message) = ft_install_create_admin_account($_POST);
 
 	// store the username and (unencrypted) password for later user
@@ -16,8 +15,7 @@ if (isset($_POST["add_account"]))
 	$_SESSION["ft_install"]["password"] = $_POST["password"];
 
 	// everything's done! Now just make a few minor updates to the database for this users configuration
-	if ($account_created)
-	{
+	if ($account_created) {
 		ft_install_update_db_settings();
 
 		// redirect to the final page, which provides a few links to the help doc etc.
@@ -46,4 +44,4 @@ rsv.displayType = "alert-all";
 rsv.errorTextIntro = "{$LANG["phrase_error_text_intro"]}";
 EOF;
 
-ft_install_display_page("templates/step5.tpl", $page_vars);
+FormTools\Installation::displayPage("templates/step5.tpl", $page_vars);

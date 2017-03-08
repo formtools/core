@@ -27,4 +27,4 @@ $page_vars["js_messages"] = array(
 	"word_close", "word_invalid", "word_verified", "word_continue"
 );
 
-ft_install_display_page("templates/step2.tpl", $page_vars);
+FormTools\Installation::displayPage("templates/step2.tpl", $page_vars);

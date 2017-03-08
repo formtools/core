@@ -9,7 +9,9 @@ if (is_file(__DIR__ . "/config.php")) {
 	include_once(__DIR__ . "/config.php");
 }
 
+
 if ($config_file_exists) {
+
 	// if the config file exists, we can assume the user isn't installed
 	$g_link = ft_db_connect();
 

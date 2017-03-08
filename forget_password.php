@@ -12,21 +12,20 @@ $admin_email = $admin_info["email"];
 // interface (including logo)
 $id = ft_load_field("id", "id", "");
 
-if (!empty($id))
-{
-  $info = ft_get_account_info($id);
+if (!empty($id)) {
+    $info = ft_get_account_info($id);
 
-  if (!empty($info))
-  {
-    $g_theme  = $info['theme'];
-    $language = $info["ui_language"];
-    include_once("global/lang/{$language}.php");
-  }
+    if (!empty($info)) {
+        $g_theme  = $info['theme'];
+        $language = $info["ui_language"];
+        include_once("global/lang/{$language}.php");
+    }
 }
 
 // if trying to send password
-if (isset($_POST) && !empty($_POST))
-  list($g_success, $g_message) = ft_send_password($_POST);
+if (isset($_POST) && !empty($_POST)) {
+    list($g_success, $g_message) = ft_send_password($_POST);
+}
 
 $username = (isset($_POST["username"]) && !empty($_POST["username"])) ? $_POST["username"] : "";
 $username = ft_strip_chars($username);

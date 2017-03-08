@@ -1,3 +1,4 @@
 .idea*
 themes/default/cache/*
 .DS_Store
+global/lang/*
