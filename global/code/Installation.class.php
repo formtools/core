@@ -187,7 +187,7 @@ class Installation
     {
         global $LANG;
 
-        $smarty = new Smarty();
+        $smarty = new \Smarty();
         $smarty->template_dir = INSTALLATION_FOLDER . "/../global/smarty/";
         $smarty->compile_dir  = INSTALLATION_FOLDER . "/../themes/$theme/cache/";
 
@@ -269,7 +269,7 @@ EOF;
             exit;
         }
 
-        $g_smarty = new Smarty();
+        $g_smarty = new \Smarty();
         $g_smarty->template_dir = $theme_folder;
         $g_smarty->compile_dir  = $cache_folder;
         $g_smarty->use_sub_dirs = false;
