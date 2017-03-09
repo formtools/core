@@ -222,7 +222,7 @@ function ft_eval_smarty_string($placeholder_str, $placeholders = array(), $theme
 	else
 		$theme = $g_default_theme;
 
-	$smarty = new Smarty();
+	$smarty = new \Smarty();
 	$smarty->template_dir = "$g_root_dir/global/smarty/";
 	$smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
 

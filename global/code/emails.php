@@ -417,7 +417,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 	$return_info["email_id"] = $email_id;
 	$return_info["attachments"] = array();
 
-	$smarty = new Smarty();
+	$smarty = new \Smarty();
 	$smarty->template_dir = "$g_root_dir/global/smarty/";
 	$smarty->compile_dir  = "$g_root_dir/themes/$g_default_theme/cache/";
 	$smarty->assign("LANG", $LANG);

@@ -381,7 +381,7 @@ if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page)) 
     $g_link = ft_db_connect();
 
     // our Smarty instance, used for rendering the webpages
-    $g_smarty = new Smarty();
+    $g_smarty = new \Smarty();
 
     // load the appropriate language file
     $g_language = ft_get_ui_language();

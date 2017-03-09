@@ -7,9 +7,10 @@ if (isset($_POST["next"])) {
 	exit;
 }
 
-$page_vars = array();
-$page_vars["step"] = 1;
-$page_vars["available_languages"] = FormTools\Translations::getList();
-$page_vars["lang_file"] = $lang_file;
+$page_vars = array(
+    "step" => 1,
+    "available_languages" => FormTools\Translations::getList(),
+    "lang_file" => $lang_file
+);
 
 FormTools\Installation::displayPage("templates/index.tpl", $page_vars);

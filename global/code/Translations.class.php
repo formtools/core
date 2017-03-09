@@ -11,7 +11,8 @@ class Translations
     // returns the list of available translations
     public static function getList() {
         $json = file_get_contents(__DIR__ . "/../lang/manifest.json");
-        return json_decode($json);
+        $translations = json_decode($json);
+        return $translations->languages;
     }
 
 }
