@@ -4,7 +4,6 @@ session_start();
 header("Cache-control: private");
 header("Content-Type: text/html; charset=utf-8");
 
-
 // constants used throughout the installation script
 define("DEFAULT_LANGUAGE", "en_us.php");
 define("INSTALLATION_FOLDER", __DIR__);
@@ -23,6 +22,9 @@ if (!isset($_SESSION["ft_install"]["lang_file"])) {
 $g_defer_init_page = true;
 require_once("../global/library.php");
 require_once("files/sql.php");
+
+// suppress any hook processing for the duration of the installation process
+$g_hooks_enabled = false;
 
 // autoload all composer dependencies
 require __DIR__ . '/../vendor/autoload.php';

@@ -14,8 +14,8 @@
 			<td width="100" class="label">{$LANG.word_language}</td>
 			<td>
 				<select name="lang_file" class="margin_right">
-					{foreach from=$available_languages key=k item=v}
-						<option value="{$k}" {if $lang_file == $k}selected{/if}>{$v}</option>
+					{foreach from=$available_languages item=row}
+						<option value="{$row->file}" {if $lang_file == $row->file}selected{/if}>{$row->lang}</option>
 					{/foreach}
 				</select>
 			</td>

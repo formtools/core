@@ -291,6 +291,13 @@ $g_benchmark_start     = "";
  */
 $g_cache = array();
 
+
+/**
+ * Added in 2.3.0 to prevent hooks being executed during in the installation process, prior to the database being
+ * ready. This was always an issue but the errors were swallowed up with earlier versions of PHP.
+ */
+$g_hooks_enabled = true;
+
 /**
  * Added in 2.1.0 to provide better error checking on the login page. This is used to confirm that all the Core
  * tables do in fact exist before letting the user log in.

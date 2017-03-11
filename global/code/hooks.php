@@ -1,9 +1,8 @@
 <?php
 
 /**
- * This page contains all code relating to Form Tools hooks. Hooks allow module developers to piggy-back
- * their own functionality on ALL Form Tools functions. Any module can log whatever hooks they require;
- * these are stored in the database in the "hooks" table.
+ * Hooks allow module developers to piggy-back their own functionality on ALL Form Tools functions. Any module can
+ * log whatever hooks they require; these are stored in the database in the "hooks" table.
  *
  * Hooks work like so:
  *
@@ -184,6 +183,12 @@ function ft_get_module_hook_calls($module_folder)
  */
 function ft_process_hook_calls($event, $vars, $overridable_vars, $overridable_vars_to_be_concatenated = array())
 {
+    global $g_hooks_enabled;
+
+    if (!$g_hooks_enabled) {
+        return array();
+    }
+
 	$backtrace = debug_backtrace();
 	$calling_function = $backtrace[1]["function"];
 
