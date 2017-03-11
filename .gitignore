@@ -2,3 +2,6 @@
 themes/default/cache/*
 .DS_Store
 global/lang/*
+
+# this ensures the lang folder appears
+!global/lang/empty.txt
