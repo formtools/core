@@ -20,9 +20,19 @@
 	</tr>
 	<tr>
 		<td valign="top">PDO available</td>
-		<td valign="top" class="bold">{$LANG.word_yes}</td>
+		<td valign="top" class="bold">
+            {if $pdo_available}
+				{$LANG.word_yes}
+			{else}
+                {$LANG.word_no}
+			{/if}
+		</td>
 		<td valign="top" align="center">
-			<span class="green">{$LANG.word_pass|upper}</span>
+            {if $pdo_available}
+				<span class="green">{$LANG.word_pass|upper}</span>
+            {else}
+				<span class="red">{$LANG.word_fail|upper}</span>
+            {/if}
 		</td>
 	</tr>
 	<tr>
