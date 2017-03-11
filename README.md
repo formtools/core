@@ -45,4 +45,4 @@ module (see above).
 command-line nonsense to get the script running.  As such, I'm going to commit the _vendor/_ folder with all dependencies
 and omit the _composer.lock_ file.
 - Any way to add in PSR-2 checking for code quality...? Maybe too early...? 
-- I think I'll start including all languages with 
+- I'm going to start including all language files with the bundles. There's really no value in NOT including them all. 
