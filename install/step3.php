@@ -20,7 +20,8 @@ $tables_already_exist = false;
 $existing_tables = array();
 
 if (isset($_POST["overwrite_tables"])) {
-    Installation::deleteTables($hostname, $db_name, $username, $password, $g_table_prefix);
+    $db = new Database($hostname, $db_name, $port, $username, $password);
+    Installation::deleteTables($db, $g_ft_tables, $g_table_prefix);
     $_POST["create_database"] = 1;
 }
 
@@ -34,10 +35,10 @@ if (isset($_POST["create_database"])) {
         $existing_tables = General::getExistingTables($db, $g_ft_tables, $table_prefix);
 		if (empty($existing_tables)) {
             list($success, $error) = Installation::createDatabase($db, $table_prefix);
-//			if ($success) {
-//				header("location: step4.php");
-//				exit;
-//			}
+			if ($success) {
+				header("location: step4.php");
+				exit;
+			}
 		} else {
 			$success = false;
 			$tables_already_exist = true;

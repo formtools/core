@@ -14,6 +14,8 @@
 
 namespace FormTools;
 
+use PDO;
+
 
 class General
 {
@@ -32,7 +34,7 @@ class General
      * Gets a list of known Form Tools tables in a database.
      * @return array
      */
-    public static function getExistingTables($db, $all_tables, $table_prefix)
+    public static function getExistingTables(Database $db, array $all_tables, $table_prefix)
     {
         $db->query("SHOW TABLES");
 

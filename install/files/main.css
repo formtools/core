@@ -192,7 +192,7 @@ h3 {
 }
 #existing_tables {
   border: 1px solid #cccccc;
-  height: 160px;
+  height: 250px;
   overflow-y: scroll;
 }
 #config_file_contents {

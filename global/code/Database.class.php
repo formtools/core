@@ -72,7 +72,7 @@ class Database
         return $this->dbh->commit();
     }
 
-    public function cancelTransaction() {
+    public function rollbackTransaction() {
         return $this->dbh->rollBack();
     }
 

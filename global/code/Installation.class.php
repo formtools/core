@@ -15,7 +15,7 @@
 namespace FormTools;
 
 
-use Smarty, PDO;
+use Smarty, PDOException;
 
 
 /**
@@ -23,22 +23,6 @@ use Smarty, PDO;
  */
 class Installation
 {
-    /**
-     * Helper function which examines a particular language file and returns the language
-     * filename (en_us, fr_ca, etc) and the display name ("English (US), French (CA), etc).
-     *
-     * @param string $file the full path of the language file
-     * @return array [0] the language file name<br />
-     *               [1] the language display name
-     */
-    public static function getLanguageFileInfo($file)
-    {
-        include_once($file);
-        $defined_vars = get_defined_vars();
-
-        $language_name = $defined_vars["LANG"]["special_language_locale"];
-        return $language_name;
-    }
 
     /**
      * This function attempts to create the config file for the user.
@@ -46,7 +30,7 @@ class Installation
      */
     public static function generateConfigFile()
     {
-        $config_file = $_SESSION["ft_install"]["config_file"];
+        $config_file = $_SESSION["ft_install"]["config_file"]; // move to param
 
         // try and write to the config.php file directly. This will probably fail, but in the off-chance
         // the permissions are set, it saves the user the hassle of manually creating the file. I changed this
@@ -112,7 +96,7 @@ class Installation
      * fresh installations. It's called separately prior to other module installation functions to ensure the field
      * type tables are populated prior to other custom field type modules.
      */
-    public static function installCodeFieldTypes($module_folder)
+    public static function installCoreFieldTypes($module_folder)
     {
         require_once(realpath(__DIR__ . "/../../modules/$module_folder/library.php"));
         return cft_install_module();
@@ -123,24 +107,21 @@ class Installation
      * This function is basically a hardcoded rollback mechanism to delete any and all database tables, called in the event
      * of something going wrong during database creation.
      *
-     * @param string $hostname
-     * @param string $db_name
-     * @param string $username
-     * @param string $password
+     * @param Database $db
      * @param string $table_prefix
      */
-    public static function deleteTables($hostname, $db_name, $username, $password, $table_prefix)
+    public static function deleteTables(Database $db, array $all_tables, $table_prefix)
     {
-        global $g_ft_tables;
-
-        $link = @mysql_connect($hostname, $username, $password);
-        @mysql_select_db($db_name);
-
-        foreach ($g_ft_tables as $table) {
-            mysql_query("DROP TABLE {$table_prefix}{$table}");
+        try {
+            $db->beginTransaction();
+            foreach ($all_tables as $table) {
+                $db->query("DROP TABLE IF EXISTS {$table_prefix}$table");
+                $db->execute();
+            }
+            $db->endTransaction();
+        } catch (PDOException $e) {
+            $db->rollbackTransaction();
         }
-
-        @mysql_close($link);
     }
 
 
@@ -346,7 +327,7 @@ EOF;
     }
 
     /**
-     * This function creates the database tables.
+     * This function creates the Form Tools database tables.
      *
      * @param string $hostname
      * @param string $db_name
@@ -355,43 +336,35 @@ EOF;
      * @return array returns an array with two indexes: [0] true/false, depending on whether the
      *               operation was a success. [1] error message / empty string if success.
      */
-    public static function createDatabase($db, $table_prefix)
+    public static function createDatabase(Database $db, $table_prefix)
     {
         global $g_sql, $g_current_version, $g_release_type, $g_release_date, $g_db_table_charset;
 
-        // suppress strict mode
-//        @mysql_query("SET SQL_MODE=''", $link);
+        try {
+            $db->beginTransaction();
 
-        $errors = array();
-        foreach ($g_sql as $query) {
-            $query = preg_replace("/%PREFIX%/", $table_prefix, $query);
-            $query = preg_replace("/%FORMTOOLSVERSION%/", $g_current_version, $query);
-            $query = preg_replace("/%FORMTOOLSRELEASEDATE%/", $g_release_date, $query);
-            $query = preg_replace("/%FORMTOOLSRELEASETYPE%/", $g_release_type, $query);
-            $query = preg_replace("/%CHARSET%/", $g_db_table_charset, $query);
+            // suppress strict mode
+            $db->query("SET SQL_MODE=''");
+            $db->execute();
 
-            // execute the queries. If any error occurs, break out of the installation loop, delete any and
-            // all tables that have been created
-            $result = mysql_query($query) or $errors[] = $query . " - <b>" . mysql_error() . "</b>";
+            foreach ($g_sql as $query) {
+                $query = preg_replace("/%PREFIX%/", $table_prefix, $query);
+                $query = preg_replace("/%FORMTOOLSVERSION%/", $g_current_version, $query);
+                $query = preg_replace("/%FORMTOOLSRELEASEDATE%/", $g_release_date, $query);
+                $query = preg_replace("/%FORMTOOLSRELEASETYPE%/", $g_release_type, $query);
+                $query = preg_replace("/%CHARSET%/", $g_db_table_charset, $query);
 
-//            // problem! delete any tables we just added
-//            if (!$result) {
-//                self::deleteTables($hostname, $db_name, $username, $password, $table_prefix);
-//                break;
-//            }
+                $db->query($query);
+                $db->execute();
+            }
+
+            $db->endTransaction();
+        } catch (PDOException $e) {
+            $db->rollbackTransaction();
+            return array(false, $e->getMessage());
         }
 
-        $success = true;
-        $message = "";
-
-        if (!empty($errors)) {
-            $success = false;
-            array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-            $message = join("<br />", $errors);
-        }
-
-        // if there was an error, return the error message
-        return array($success, $message);
+        return array(true, "");
     }
 
 
