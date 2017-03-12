@@ -1,6 +1,21 @@
 <?php
 
+/**
+ * The installation class. Added in 2.3.0.
+ *
+ * @copyright Benjamin Keen 2017
+ * @author Benjamin Keen <ben.keen@gmail.com>
+ * @package 2-3-x
+ * @subpackage Installation
+ */
+
+
+// -------------------------------------------------------------------------------------------------
+
 namespace FormTools;
+
+
+use Smarty, PDO;
 
 
 /**
@@ -8,31 +23,6 @@ namespace FormTools;
  */
 class Installation
 {
-
-    /**
-     * Returns a list of available languages for the Form Tools script.
-     */
-//    public static function getLanguages ()
-//    {
-//        $language_folder_dir = realpath(INSTALLATION_FOLDER . "/../global/lang");
-//
-//        $available_language_info = array();
-//        if ($handle = opendir($language_folder_dir)) {
-//            while (false !== ($filename = readdir($handle))) {
-//                if ($filename != '.' && $filename != '..' && $filename != "index.php" && preg_match("/.php$/", $filename)) {
-//                    $language_name = Installation::getLanguageFileInfo("$language_folder_dir/$filename");
-//                    $available_language_info[$filename] = $language_name;
-//                }
-//            }
-//            closedir($handle);
-//        }
-//
-//        // sort the languages alphabetically
-//        ksort($available_language_info);
-//
-//        return $available_language_info;
-//    }
-
     /**
      * Helper function which examines a particular language file and returns the language
      * filename (en_us, fr_ca, etc) and the display name ("English (US), French (CA), etc).
@@ -117,17 +107,6 @@ class Installation
 
 
     /**
-     * Helper function that's used on Step 2 to confirm that the Core Field Types module folder exists.
-     *
-     * @param string $module_folder
-     */
-    public static function checkModuleAvailable($module_folder)
-    {
-        return is_dir(realpath(__DIR__ . "/../../modules/$module_folder"));
-    }
-
-
-    /**
      * Added in 2.1.5, this is a wrapped for the Core Field Types module's installation function. It's called on the
      * final step of the installation script. The module is unique; it's installation function can only be called for
      * fresh installations. It's called separately prior to other module installation functions to ensure the field
@@ -150,7 +129,7 @@ class Installation
      * @param string $password
      * @param string $table_prefix
      */
-    public static function ft_install_delete_tables($hostname, $db_name, $username, $password, $table_prefix)
+    public static function deleteTables($hostname, $db_name, $username, $password, $table_prefix)
     {
         global $g_ft_tables;
 
@@ -183,11 +162,11 @@ class Installation
     }
 
 
-    public static function evalSmartyString($placeholder_str, $placeholders = array(), $theme)
+    public static function evalSmartyString($placeholder_str, $placeholders = array(), $theme = "default")
     {
         global $LANG;
 
-        $smarty = new \Smarty();
+        $smarty = new Smarty();
         $smarty->template_dir = INSTALLATION_FOLDER . "/../global/smarty/";
         $smarty->compile_dir  = INSTALLATION_FOLDER . "/../themes/$theme/cache/";
 
@@ -198,8 +177,7 @@ class Installation
             }
         }
         $smarty->assign("LANG", $LANG);
-
-        $output = $smarty->fetch("eval.tpl");
+        $output = $smarty->fetch(realpath(__DIR__ . "/../smarty_plugins/eval.tpl"));
 
         return $output;
     }
@@ -269,7 +247,7 @@ EOF;
             exit;
         }
 
-        $g_smarty = new \Smarty();
+        $g_smarty = new Smarty();
         $g_smarty->template_dir = $theme_folder;
         $g_smarty->compile_dir  = $cache_folder;
         $g_smarty->use_sub_dirs = false;
@@ -313,38 +291,6 @@ EOF;
 
 
     /**
-     * Helper function to check the database to confirm the user isn't about to delete/overwrite any old tables.
-     *
-     * @return array [0] true/false true: there are no existing tables, false: there are.
-     *               [1] an array of the tables that already existed.
-     */
-    public static function checkNoExistingTables($hostname, $db_name, $username, $password, $table_prefix)
-    {
-        global $g_ft_tables;
-
-        // connect to the database (since we know this works, having called
-        $link = @mysql_connect($hostname, $username, $password);
-        @mysql_select_db($db_name);
-
-        $query = mysql_query("SHOW TABLES");
-
-        $existing_tables = array();
-        while ($row = mysql_fetch_array($query)) {
-            $curr_table_name = $row[0];
-            foreach ($g_ft_tables as $table_without_prefix) {
-                if ($curr_table_name == "{$table_prefix}$table_without_prefix") {
-                    $existing_tables[] = $curr_table_name;
-                    break;
-                }
-            }
-        }
-
-        @mysql_close($link);
-
-        return $existing_tables;
-    }
-
-    /**
      * This is sent at the very last step. It emails the administrator a short welcome email containing their
      * login information, with a few links to resources on our site.
      *
@@ -379,7 +325,7 @@ EOF;
      * This is called after the database is created and all the various settings (like root URL, etc) are
      * determined. It updates the database to set the various default settings.
      */
-    public static function ft_install_update_db_settings()
+    public static function updateDatabaseSettings()
     {
         global $g_root_dir, $g_root_url;
 
@@ -399,46 +345,6 @@ EOF;
         ft_set_settings($export_manager_settings, "export_manager");
     }
 
-
-    /**
-     * This function confirms the database settings entered by the user are correct.
-     *
-     * @param string $hostname
-     * @param string $db_name
-     * @param string $username
-     * @param string $password
-     * @return array
-     */
-    function checkDatabaseSettings($hostname, $db_name, $username, $password)
-    {
-        global $LANG;
-
-        $db_connection_error = "";
-        $db_select_error     = "";
-
-        $link = @mysql_connect($hostname, $username, $password) or $db_connection_error = mysql_error();
-
-        if ($db_connection_error) {
-            $placeholders = array("db_connection_error" => $db_connection_error);
-            $error = ft_install_eval_smarty_string($LANG["notify_install_invalid_db_info"], $placeholders, "default");
-            return array(false, $error);
-        } else {
-            @mysql_select_db($db_name)
-                or $db_select_error = mysql_error();
-
-            if ($db_select_error) {
-                $placeholders = array("db_select_error" => $db_select_error);
-                $error = ft_install_eval_smarty_string($LANG["notify_install_no_db_connection"], $placeholders, "default");
-                return array(false, $error);
-            } else {
-                @mysql_close($link);
-            }
-        }
-
-        return array(true, "");
-    }
-
-
     /**
      * This function creates the database tables.
      *
@@ -449,19 +355,13 @@ EOF;
      * @return array returns an array with two indexes: [0] true/false, depending on whether the
      *               operation was a success. [1] error message / empty string if success.
      */
-    public static function createDatabase($hostname, $db_name, $username, $password, $table_prefix)
+    public static function createDatabase($db, $table_prefix)
     {
         global $g_sql, $g_current_version, $g_release_type, $g_release_date, $g_db_table_charset;
 
-        // connect to the database
-        $link = @mysql_connect($hostname, $username, $password);
-        @mysql_select_db($db_name);
-
         // suppress strict mode
-        @mysql_query("SET SQL_MODE=''", $link);
+//        @mysql_query("SET SQL_MODE=''", $link);
 
-        // check for the existence of Form Tools tables. It would be sad to accidentally delete/overwrite someone's
-        // older installation!
         $errors = array();
         foreach ($g_sql as $query) {
             $query = preg_replace("/%PREFIX%/", $table_prefix, $query);
@@ -472,14 +372,13 @@ EOF;
 
             // execute the queries. If any error occurs, break out of the installation loop, delete any and
             // all tables that have been created
-            $result = mysql_query($query)
-            or $errors[] = $query . " - <b>" . mysql_error() . "</b>";
+            $result = mysql_query($query) or $errors[] = $query . " - <b>" . mysql_error() . "</b>";
 
-            // problem! delete any tables we just added
-            if (!$result) {
-                ft_install_delete_tables($hostname, $db_name, $username, $password, $table_prefix);
-                break;
-            }
+//            // problem! delete any tables we just added
+//            if (!$result) {
+//                self::deleteTables($hostname, $db_name, $username, $password, $table_prefix);
+//                break;
+//            }
         }
 
         $success = true;
@@ -490,8 +389,6 @@ EOF;
             array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
             $message = join("<br />", $errors);
         }
-
-        @mysql_close($link);
 
         // if there was an error, return the error message
         return array($success, $message);
@@ -505,7 +402,7 @@ EOF;
      * @param array $info
      * @return array
      */
-    function ft_install_create_admin_account($info)
+    public static function createAdminAccount($info)
     {
         global $g_table_prefix, $g_root_url, $LANG;
 

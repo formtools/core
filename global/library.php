@@ -379,6 +379,8 @@ require_once(__DIR__ . "/code/validation.php");
 require_once(__DIR__ . "/code/views.php");
 
 // new code
+require_once(__DIR__ . "/code/Database.class.php");
+require_once(__DIR__ . "/code/General.class.php");
 require_once(__DIR__ . "/code/Installation.class.php");
 require_once(__DIR__ . "/code/Translations.class.php");
 require_once(__DIR__ . "/../vendor/autoload.php");

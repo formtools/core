@@ -73,6 +73,10 @@
 				<td><input type="text" size="20" name="g_db_name" value="{$g_db_name}" /></td>
 			</tr>
 			<tr>
+				<td class="label">{$LANG.word_port}</td>
+				<td><input type="text" size="20" name="g_db_port" value="{$g_db_port}" /></td>
+			</tr>
+			<tr>
 				<td class="label">{$LANG.phrase_database_username}</td>
 				<td><input type="text" size="20" name="g_db_username" value="{$g_db_username}" /></td>
 			</tr>

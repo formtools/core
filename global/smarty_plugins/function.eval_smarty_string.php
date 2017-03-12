@@ -17,17 +17,16 @@
  */
 function smarty_function_eval_smarty_string($params, &$smarty)
 {
-  global $LANG;
+    global $LANG;
 
-  if (empty($params["placeholder_str"]))
-  {
-	  $smarty->trigger_error("assign: missing 'placeholder_str' parameter.");
-    return;
-  }
+    if (empty($params["placeholder_str"])) {
+        $smarty->trigger_error("assign: missing 'placeholder_str' parameter.");
+        return;
+    }
 
-	$placeholders = $params;
-	unset($placeholders["placeholder_str"]);
-	$placeholder_str = $params["placeholder_str"];
+    $placeholders = $params;
+    unset($placeholders["placeholder_str"]);
+    $placeholder_str = $params["placeholder_str"];
 
-  return ft_eval_smarty_string($placeholder_str, $placeholders);
+    return ft_eval_smarty_string($placeholder_str, $placeholders);
 }
