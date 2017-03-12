@@ -46,7 +46,7 @@ if (isset($_POST["create_database"])) {
 	}
 }
 
-$page_vars = array(
+$page = array(
     "step" => 3,
     "error" => $error,
     "step_complete" => $step_complete,
@@ -60,7 +60,7 @@ $page_vars = array(
     "g_table_prefix" => $table_prefix
 );
 
-$page_vars["head_js"] =<<<EOF
+$page["head_js"] =<<<EOF
 var rules = [];
 rules.push("required,g_db_hostname,{$LANG["validation_no_db_hostname"]}");
 rules.push("required,g_db_name,{$LANG["validation_no_db_name"]}");
@@ -71,4 +71,4 @@ rsv.displayType = "alert-all";
 rsv.errorTextIntro = "{$LANG["phrase_error_text_intro"]}";
 EOF;
 
-Installation::displayPage("templates/step3.tpl", $page_vars);
+Installation::displayPage("templates/step3.tpl", $page);

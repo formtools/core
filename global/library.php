@@ -379,6 +379,7 @@ require_once(__DIR__ . "/code/validation.php");
 require_once(__DIR__ . "/code/views.php");
 
 // new code
+require_once(__DIR__ . "/code/Accounts.class.php");
 require_once(__DIR__ . "/code/Database.class.php");
 require_once(__DIR__ . "/code/General.class.php");
 require_once(__DIR__ . "/code/Installation.class.php");
@@ -387,7 +388,11 @@ require_once(__DIR__ . "/../vendor/autoload.php");
 
 
 if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page)) {
-    $g_link = ft_db_connect();
+
+    // backward compatibility
+    $port = (!isset($g_db_port)) ? 3306 : $g_db_port;
+
+    $db = new FormTools\Database($g_db_hostname, $g_db_name, $port, $g_db_username, $g_db_password);
 
     // our Smarty instance, used for rendering the webpages
     $g_smarty = new \Smarty();

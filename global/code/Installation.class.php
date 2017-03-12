@@ -28,10 +28,8 @@ class Installation
      * This function attempts to create the config file for the user.
      * @return bool
      */
-    public static function generateConfigFile()
+    public static function generateConfigFile($config_file)
     {
-        $config_file = $_SESSION["ft_install"]["config_file"]; // move to param
-
         // try and write to the config.php file directly. This will probably fail, but in the off-chance
         // the permissions are set, it saves the user the hassle of manually creating the file. I changed this
         // to use a relative path and realpath() in 2.1.0...
@@ -79,7 +77,7 @@ class Installation
      */
     public static function checkConfigFileExists()
     {
-        if (is_file("../global/config.php")) {
+        if (is_file(realpath(__DIR__ . "/../config.php"))) {
             return array(true, "");
         } else {
             return array(
@@ -365,65 +363,6 @@ EOF;
         }
 
         return array(true, "");
-    }
-
-
-    /**
-     * Creates the administrator account. This is a bit of a misnomer, really, since the blank administrator account
-     * always exists with an account ID of 1. This function just updates it.
-     *
-     * @param array $info
-     * @return array
-     */
-    public static function createAdminAccount($info)
-    {
-        global $g_table_prefix, $g_root_url, $LANG;
-
-        $info = ft_install_sanitize_no_db($info);
-
-        $rules = array();
-        $rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
-        $rules[] = "required,last_name,{$LANG["validation_no_last_name"]}";
-        $rules[] = "required,email,{$LANG["validation_no_admin_email"]}";
-        $rules[] = "valid_email,email,Please enter a valid administrator email address.";
-        $rules[] = "required,username,{$LANG["validation_no_username"]}";
-        $rules[] = "required,password,{$LANG["validation_no_password"]}";
-        $rules[] = "required,password_2,{$LANG["validation_no_second_password"]}";
-        $rules[] = "same_as,password,password_2,{$LANG["validation_passwords_different"]}";
-        $errors = validate_fields($info, $rules);
-
-        if (!empty($errors)) {
-            $success = false;
-            array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-            $message = join("<br />", $errors);
-            return array($success, $message);
-        }
-
-        $first_name = $info["first_name"];
-        $last_name  = $info["last_name"];
-        $email      = $info["email"];
-        $username   = $info["username"];
-        $password   = md5(md5($info["password"]));
-
-        $query = mysql_query("
-            UPDATE {$g_table_prefix}accounts
-            SET    first_name = '$first_name',
-                last_name = '$last_name',
-                email = '$email',
-                username = '$username',
-                password = '$password',
-                logout_url = '$g_root_url'
-            WHERE account_id = 1
-        ");
-
-        $success = true;
-        $message = "";
-        if (!$query) {
-            $success = false;
-            $message = mysql_error();
-        }
-
-        return array($success, $message);
     }
 
 

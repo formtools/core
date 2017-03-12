@@ -1,34 +1,44 @@
 <?php
 
-// bit weird, but deliberate. This first line will have $g_defer_init_page = false;
-require_once("../global/library.php");
-require_once("library.php");
+// at this point the DB and config file exists, so we include the main library
+$g_defer_init_page = true;
+require_once(realpath(__DIR__ . "/../global/library.php"));
+require_once(realpath(__DIR__ . "/../global/config.php"));
+
+use FormTools\Accounts;
+use FormTools\Database;
+use FormTools\General;
+use FormTools\Installation;
+
 
 // if required, add the user account
 $account_created = false;
 if (isset($_POST["add_account"])) {
-	list($account_created, $g_message) = ft_install_create_admin_account($_POST);
+    $db = new Database($g_db_hostname, $g_db_name, "3306", $g_db_username, $g_db_password);
+	list($account_created, $errors) = Accounts::setAdminAccount($_POST);
 
-	// store the username and (unencrypted) password for later user
+	// store for later use
 	$_SESSION["ft_install"]["email"] = $_POST["email"];
 	$_SESSION["ft_install"]["username"] = $_POST["username"];
 	$_SESSION["ft_install"]["password"] = $_POST["password"];
 
-	// everything's done! Now just make a few minor updates to the database for this users configuration
+	// everything's done! Now just make a few minor updates to the database for this user's configuration
 	if ($account_created) {
-		ft_install_update_db_settings();
-
-		// redirect to the final page, which provides a few links to the help doc etc.
-		header("location: step6.php");
+		Installation::updateDatabaseSettings();
+        header("location: step6.php");
 		exit;
-	}
+	} else {
+        $g_message = General::getErrorListHTML($errors);
+    }
 }
 
-$page_vars = array();
-$page_vars["step"] = 5;
-$page_vars["g_root_url"] = $g_root_url;
-$page_vars["account_created"] = $account_created;
-$page_vars["head_js"] =<<< EOF
+$page = array(
+    "step" => 5,
+    "g_root_url" => $g_root_url,
+    "account_created" => $account_created
+);
+
+$page["head_js"] =<<< EOF
 var rules = [];
 rules.push("required,first_name,{$LANG["validation_no_first_name"]}");
 rules.push("required,last_name,{$LANG["validation_no_last_name"]}");
@@ -44,4 +54,4 @@ rsv.displayType = "alert-all";
 rsv.errorTextIntro = "{$LANG["phrase_error_text_intro"]}";
 EOF;
 
-FormTools\Installation::displayPage("templates/step5.tpl", $page_vars);
+Installation::displayPage("templates/step5.tpl", $page);
