@@ -123,24 +123,6 @@ class Installation
     }
 
 
-    // deprecate this bad boy
-    public static function sanitize_no_db($input)
-    {
-        if (is_array($input)) {
-            $output = array();
-            foreach ($input as $k=>$i) {
-                $output[$k] = ft_install_sanitize_no_db($i);
-            }
-        } else {
-            if (get_magic_quotes_gpc()) {
-                $input = stripslashes($input);
-            }
-            $output = addslashes($input);
-        }
-        return $output;
-    }
-
-
     public static function evalSmartyString($placeholder_str, $placeholders = array(), $theme = "default")
     {
         global $LANG;
@@ -316,12 +298,13 @@ EOF;
         );
         ft_set_settings($core_settings, "core");
 
-        // ??? no good!
-        $export_manager_settings = array(
-            "file_upload_dir" => addslashes($g_root_dir) . "/upload",
-            "file_upload_url" => "$g_root_url/upload"
-        );
-        ft_set_settings($export_manager_settings, "export_manager");
+//
+//        // ??? no good!
+//        $export_manager_settings = array(
+//            "file_upload_dir" => addslashes($g_root_dir) . "/upload",
+//            "file_upload_url" => "$g_root_url/upload"
+//        );
+//        ft_set_settings($export_manager_settings, "export_manager");
     }
 
     /**

@@ -2,17 +2,14 @@
 
 /**
  * The Account class. Added in 2.3.0; will replace the old accounts.php file.
- *
- * @copyright Benjamin Keen 2017
- * @author Benjamin Keen <ben.keen@gmail.com>
- * @package 2-3-x
- * @subpackage Installation
  */
 
 
 // -------------------------------------------------------------------------------------------------
 
 namespace FormTools;
+
+use PDOException;
 
 
 /**
@@ -27,9 +24,7 @@ class Accounts {
      */
     public static function setAdminAccount(Database $db, array $info, $table_prefix)
     {
-        global $g_table_prefix, $g_root_url, $LANG;
-
-        $info = ft_install_sanitize_no_db($info);
+        global $g_root_url, $LANG;
 
         $rules = array();
         $rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
@@ -43,46 +38,35 @@ class Accounts {
         $errors = validate_fields($info, $rules);
 
         if (!empty($errors)) {
-            return array(false, $errors);
+            return array(false, General::getErrorListHTML($errors));
         }
-
-        $first_name = $info["first_name"];
-        $last_name  = $info["last_name"];
-        $email      = $info["email"];
-        $username   = $info["username"];
-        $password   = md5(md5($info["password"]));
 
         $db->query("
             UPDATE {$table_prefix}accounts
-            SET first_name = :fname,
-                last_name = :lname,
+            SET first_name = :first_name,
+                last_name = :last_name,
                 email = :email,
-                username = :username
+                username = :username,
+                password = :password,
                 logout_url = :logout_url
             WHERE account_id = :account_id
         ");
 
-//        $db->bind(":fname", );
-//
-//        $query = mysql_query("
-//            UPDATE {$g_table_prefix}accounts
-//            SET    first_name = '$first_name',
-//                last_name = '$last_name',
-//                email = '$email',
-//                username = '$username',
-//                password = '$password',
-//                logout_url = '$g_root_url'
-//            WHERE account_id = 1
-//        ");
-//
-        $success = true;
-        $message = "";
-        if (!$query) {
-            $success = false;
-            $message = mysql_error();
+        $db->bind(":first_name", $info["first_name"]);
+        $db->bind(":last_name", $info["last_name"]);
+        $db->bind(":email", $info["email"]);
+        $db->bind(":username", $info["username"]);
+        $db->bind(":password", md5(md5($info["password"])));
+        $db->bind(":logout_url", $g_root_url);
+        $db->bind(":account_id", 1); // the admin account is always ID 1
+
+        try {
+            $db->execute();
+        } catch (PDOException $e) {
+            return array(false, $e->getMessage());
         }
 
-        return array($success, $message);
+        return array(true, "");
     }
 
 

@@ -2,8 +2,11 @@
 
 require_once("library.php");
 
+use FormTools\Core;
 use FormTools\Installation;
 use FormTools\Translations;
+
+Core::init();
 
 
 if (isset($_POST["next"])) {

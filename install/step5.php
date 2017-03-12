@@ -1,13 +1,11 @@
 <?php
 
-// at this point the DB and config file exists, so we include the main library
-$g_defer_init_page = true;
-require_once(realpath(__DIR__ . "/../global/library.php"));
+// by at this point, the config file exists but the DB isn't fully set up yet
+require_once("library.php");
 require_once(realpath(__DIR__ . "/../global/config.php"));
 
 use FormTools\Accounts;
 use FormTools\Database;
-use FormTools\General;
 use FormTools\Installation;
 
 
@@ -15,7 +13,7 @@ use FormTools\Installation;
 $account_created = false;
 if (isset($_POST["add_account"])) {
     $db = new Database($g_db_hostname, $g_db_name, "3306", $g_db_username, $g_db_password);
-	list($account_created, $errors) = Accounts::setAdminAccount($_POST);
+	list($account_created, $g_message) = Accounts::setAdminAccount($db, $_POST, $g_table_prefix);
 
 	// store for later use
 	$_SESSION["ft_install"]["email"] = $_POST["email"];
@@ -27,9 +25,7 @@ if (isset($_POST["add_account"])) {
 		Installation::updateDatabaseSettings();
         header("location: step6.php");
 		exit;
-	} else {
-        $g_message = General::getErrorListHTML($errors);
-    }
+	}
 }
 
 $page = array(
