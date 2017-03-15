@@ -7,17 +7,16 @@ $submission_list_sortable_id = "submission_list";
 $view_id = ft_load_field("view_id", "form_{$form_id}_view_id");
 
 // this updates all four sections of the view at once (since all may have been modified)
-if (isset($request["update_view"]))
-{
+if (isset($request["update_view"])) {
 	$request["form_id"] = $form_id;
 	$request["view_fields_sortable_id"] = $view_fields_sortable_id;
 	$request["submission_list_sortable_id"] = $submission_list_sortable_id;
 	list($g_success, $g_message) = ft_update_view($view_id, $request);
 }
 
-$form_info     = ft_get_form($form_id);
-$form_fields   = ft_get_form_fields($form_id, array("include_field_type_info" => true));
-$view_info     = ft_get_view($view_id);
+$form_info   = ft_get_form($form_id);
+$form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true));
+$view_info   = ft_get_view($view_id);
 
 $form_database_column_info = ft_get_form_column_names($form_id);
 $view_clients  = ft_get_view_clients($view_id);
@@ -34,8 +33,7 @@ $num_standard_filters   = count($standard_filters);
 $num_client_map_filters = count($client_map_filters);
 
 $edit_view_tab = (isset($_SESSION["ft"]["inner_tabs"]["edit_view"])) ? $_SESSION["ft"]["inner_tabs"]["edit_view"] : 1;
-if (isset($request["edit_view_tab"]))
-{
+if (isset($request["edit_view_tab"])) {
 	$edit_view_tab = $request["edit_view_tab"];
 	$_SESSION["ft"]["inner_tabs"]["edit_view"] = $edit_view_tab;
 }
@@ -48,8 +46,7 @@ $num_clients_on_omit_list = count($view_omit_list);
 $js_string = "";
 $all_form_fields = array();
 $date_field_ids = array();
-foreach ($form_fields as $field)
-{
+foreach ($form_fields as $field) {
 	$display_name = htmlspecialchars($field["field_title"]);
 	$col_name     = $field["col_name"];
 	$field_id        = $field["field_id"];
@@ -61,16 +58,16 @@ foreach ($form_fields as $field)
 		. "col_name: \"$col_name\", is_system_field: $is_system_field, "
 		. "is_date_field: $is_date_field, field_type_id: $field_type_id }";
 
-	if ($is_date_field == "true")
-		$date_field_ids[] = $field_id;
+	if ($is_date_field == "true") {
+        $date_field_ids[] = $field_id;
+    }
 }
 $all_form_fields_js = "view_ns.all_form_fields = [" . implode(",\n", $all_form_fields) . "];";
 
-for ($i=1; $i<=count($view_tabs); $i++)
-{
-	if (empty($view_tabs["$i"]["tab_label"]))
-		continue;
-
+for ($i=1; $i<=count($view_tabs); $i++) {
+	if (empty($view_tabs["$i"]["tab_label"])) {
+        continue;
+    }
 	$tab_name = addslashes($view_tabs["$i"]["tab_label"]);
 	$js_string .= "view_ns.view_tabs.push([\"$i\", \"$tab_name\"]);\n";
 }
@@ -82,8 +79,7 @@ $js_string .= "view_ns.num_client_map_filter_rows = $num_client_map_filters;\n";
 // build the selected users <options>
 $selected_users_str = "";
 $selected_user_ids = array();
-for ($i=0; $i<count($view_clients); $i++)
-{
+for ($i=0; $i<count($view_clients); $i++) {
 	$client_id  = $view_clients[$i]["account_id"];
 	$first_name = $view_clients[$i]["first_name"];
 	$last_name  = $view_clients[$i]["last_name"];
@@ -95,10 +91,10 @@ for ($i=0; $i<count($view_clients); $i++)
 // build the available users <options>. This is used to populate the Available Clients section
 // of Private accessed forms
 $available_users_str = "";
-foreach ($form_info["client_info"] as $client)
-{
-	if (in_array($client["account_id"], $selected_user_ids))
-		continue;
+foreach ($form_info["client_info"] as $client) {
+	if (in_array($client["account_id"], $selected_user_ids)) {
+        continue;
+    }
 
 	$available_users_str .= "<option value=\"{$client['account_id']}\">{$client['first_name']} {$client['last_name']}</option>\n";
 }
@@ -111,18 +107,14 @@ $next_view_link = "<span class=\"light_grey\">{$LANG["phrase_next_view"]}</span>
 $num_views = count($ordered_view_ids);
 
 $same_page = ft_get_clean_php_self();
-for ($i=0; $i<$num_views; $i++)
-{
+for ($i=0; $i<$num_views; $i++) {
 	$curr_view_id = $ordered_view_ids[$i];
-	if ($curr_view_id == $view_id)
-	{
-		if ($i != 0)
-		{
+	if ($curr_view_id == $view_id) {
+		if ($i != 0) {
 			$previous_view_id = $ordered_view_ids[$i-1];
 			$previous_view_link = "<a href=\"{$same_page}?page=edit_view&form_id=$form_id&view_id=$previous_view_id\">{$LANG["phrase_previous_view"]}</a>";
 		}
-		if ($i != $num_views - 1)
-		{
+		if ($i != $num_views - 1) {
 			$next_view_id = $ordered_view_ids[$i+1];
 			$next_view_link = "<a href=\"{$same_page}?page=edit_view&form_id=$form_id&view_id=$next_view_id\">{$LANG["phrase_next_view"]}</a>";
 		}
@@ -169,7 +161,7 @@ $page_vars["head_string"] =<<< END
   <script src="$g_root_url/global/scripts/manage_views.js?v=4"></script>
 END;
 
-$replacements = array("user_doc_link" => "http://docs.formtools.org/userdoc2_1/index.php?page=view_filters");
+$replacements = array("user_doc_link" => "https://docs.formtools.org/userdoc/views/standard_filters/?page=view_filters");
 $page_vars["text_filters_tips"] = ft_eval_smarty_string($LANG["text_filters_tips"], $replacements);
 $replacements = array("number" => "<input type=\"text\" name=\"num_standard_filter_rows\" id=\"num_standard_filter_rows\" value=\"1\" size=\"2\" />");
 $page_vars["add_standard_filter_num_rows_input_field"] = ft_eval_smarty_string($LANG["phrase_add_num_rows"], $replacements);
@@ -184,8 +176,7 @@ $page_vars["js_messages"] = array("word_remove", "validation_no_tabs_defined", "
 	"phrase_add_fields", "phrase_create_group", "word_cancel", "word_yes", "word_no", "phrase_auto_size", "word_width_c");
 
 $field_type_map_lines = array();
-while(list($field_type_id, $field_type_name) = each($field_types))
-{
+while(list($field_type_id, $field_type_name) = each($field_types)) {
 	$field_type_map_lines[] = "  \"ft{$field_type_id}\": \"$field_type_name\"";
 }
 
