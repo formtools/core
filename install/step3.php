@@ -21,7 +21,7 @@ $existing_tables = array();
 
 if (isset($_POST["overwrite_tables"])) {
     $db = new Database($hostname, $db_name, $port, $username, $password);
-    Installation::deleteTables($db, $g_ft_tables, $g_table_prefix);
+    Installation::deleteTables($db, Core::getCoreTables(), Core::getDbTablePrefix());
     $_POST["create_database"] = 1;
 }
 

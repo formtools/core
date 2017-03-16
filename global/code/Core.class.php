@@ -246,7 +246,7 @@ class Core {
     /**
      * The minimum required PHP version needed to run Form Tools.
      */
-    private static $requiredPhpVersion = "5.3";
+    protected static $requiredPhpVersion = "5.3";
 
     /**
      * The minimum required MySQL version needed to run Form Tools.
@@ -347,8 +347,8 @@ class Core {
 //        if ($g_enable_benchmarking) {
 //            $g_benchmark_start = ft_get_microtime_float();
 //        }
-
     }
+
 
     /**
      * @access public
@@ -381,5 +381,16 @@ class Core {
 //        self::$dbTablePrefix = (isset($dbTablePrefix)) ? $dbTablePrefix : null;
     }
 
+    public static function isValidPHPVersion() {
+        return version_compare(phpversion(), self::$requiredPhpVersion, ">=");
+    }
+
+    public static function getCoreTables() {
+        return self::$coreTables;
+    }
+
+    public static function getDbTablePrefix() {
+        return self::$dbTablePrefix;
+    }
 
 }
