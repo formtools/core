@@ -42,6 +42,7 @@ class Accounts {
         }
 
         $table_prefix = Core::getDbTablePrefix();
+        $db = Core::$db;
         $db->query("
             UPDATE {$table_prefix}accounts
             SET first_name = :first_name,

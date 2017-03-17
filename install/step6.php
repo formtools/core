@@ -3,17 +3,22 @@
 require_once("../global/library.php");
 require_once("library.php");
 
+use FormTools\Hooks;
+use FormTools\Installation;
+use FormTools\Modules;
+
+
 // the home-stretch! populate the hooks table
-ft_update_available_hooks();
+Hooks::updateAvailableHooks();
 
 // add whatever themes and modules are in the modules and themes folders
-ft_update_module_list();
-ft_update_theme_list();
+//ft_update_module_list();
+//ft_update_theme_list();
 
 // install the Core field types
-list($success, $message) = Installation::installCodeFieldTypes("core_field_types");
+//list($success, $message) = Installation::installCoreFieldTypes("core_field_types");
 
-$modules = ft_get_modules();
+$modules = Modules::get();
 
 foreach ($modules as $module_info) {
 	$module_id     = $module_info["module_id"];
@@ -47,4 +52,4 @@ $page_vars = array();
 $page_vars["step"] = 6;
 $page_vars["g_root_url"] = $g_root_url;
 
-FormTools\Installation::displayPage("templates/step6.tpl", $page_vars);
+Installation::displayPage("templates/step6.tpl", $page_vars);

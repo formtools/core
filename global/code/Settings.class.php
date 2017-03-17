@@ -25,46 +25,50 @@ class Settings {
     public static function set(array $settings, $module = "")
     {
         $table_prefix = Core::getDbTablePrefix();
+        $db = Core::$db;
 
         $and_module_clause = (!empty($module)) ? "AND module = '$module'" : "";
 
         while (list($setting_name, $setting_value) = each($settings)) {
 
-            Core::$db->query("
+            $db->query("
                 SELECT count(*) as c
                 FROM   {$table_prefix}settings
                 WHERE  setting_name = :setting_name
                 $and_module_clause
             ");
-            Core::$db->bind(":settings_name", $setting_name);
+            $db->bind(":settings_name", $setting_name);
 
             try {
-                Core::$db->execute();
+                $db->execute();
             } catch (PDOException $e) {
                 return array(false, $e->getMessage());
             }
 
-            $info = Core::$db->fetch();
+            $info = $db->fetch();
 
             if ($info["c"] == 0) {
                 if (!empty($module)) {
-                    Core::$db->query("
+                    $db->query("
                       INSERT INTO {$table_prefix}settings (setting_name, setting_value, module)
                       VALUES (:setting_name, :setting_value, :module)
                     ");
+                    $db->execute();
                 } else {
-                    Core::$db->query("
+                    $db->query("
                       INSERT INTO {$table_prefix}settings (setting_name, setting_value)
                       VALUES (:setting_name, :setting_value)
                     ");
+                    $db->execute();
                 }
             } else {
-                Core::$db->query("
+                $db->query("
                     UPDATE {$table_prefix}settings
                     SET    setting_value = :setting_value
                     WHERE  setting_name  = :setting_name
                     $and_module_clause
                 ");
+                $db->execute();
             }
 
             // hmm... TODO. This looks suspiciously like a bug... [a module could overwrite a core var]
