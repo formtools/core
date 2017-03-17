@@ -1,19 +1,19 @@
 <?php
 
-// by at this point, the config file exists but the DB isn't fully set up yet
 require_once("library.php");
-require_once(realpath(__DIR__ . "/../global/config.php"));
 
 use FormTools\Accounts;
-use FormTools\Database;
+use FormTools\Core;
 use FormTools\Installation;
+
+// by at this point, the config file exists but the DB isn't fully set up yet. We can still
+Core::init();
 
 
 // if required, add the user account
 $account_created = false;
 if (isset($_POST["add_account"])) {
-    $db = new Database($g_db_hostname, $g_db_name, "3306", $g_db_username, $g_db_password);
-	list($account_created, $g_message) = Accounts::setAdminAccount($db, $_POST, $g_table_prefix);
+	list($account_created, $g_message) = Accounts::setAdminAccount($_POST);
 
 	// store for later use
 	$_SESSION["ft_install"]["email"] = $_POST["email"];
@@ -30,7 +30,7 @@ if (isset($_POST["add_account"])) {
 
 $page = array(
     "step" => 5,
-    "g_root_url" => $g_root_url,
+    "g_root_url" => Core::getRootURL(),
     "account_created" => $account_created
 );
 

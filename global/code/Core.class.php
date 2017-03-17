@@ -54,6 +54,11 @@ class Core {
     private static $dbName = "";
 
     /**
+     * The DB port.
+     */
+    private static $dbPort = "";
+
+    /**
      * The MySQL username. Note: this user account must have privileges for adding and deleting tables, and
      * adding and deleting records.
      */
@@ -340,9 +345,10 @@ class Core {
      */
     public static function init() {
         self::loadConfigFile();
+        self::initDatabase();
 
         // explicitly set the error reporting value
-        //error_reporting($g_default_error_reporting);
+        error_reporting(self::$defaultErrorReporting);
 
 //        if ($g_enable_benchmarking) {
 //            $g_benchmark_start = ft_get_microtime_float();
@@ -370,15 +376,31 @@ class Core {
         }
         require_once($configFilePath);
 
-//        self::$configFileExists = true;
-//        require_once($settingsFilePath);
-//
-//        self::$rootURL    = (isset($rootURL)) ? $dbHostname : null;
-//        self::$dbHostname = (isset($dbHostname)) ? $dbHostname : null;
-//        self::$dbName     = (isset($dbName)) ? $dbName : null;
-//        self::$dbUsername = (isset($dbUsername)) ? $dbUsername : null;
-//        self::$dbPassword = (isset($dbPassword)) ? $dbPassword : null;
-//        self::$dbTablePrefix = (isset($dbTablePrefix)) ? $dbTablePrefix : null;
+        self::$configFileExists = true;
+
+        self::$rootURL    = (isset($g_root_url)) ? $g_root_url : null;
+        self::$rootDir    = (isset($g_root_dir)) ? $g_root_dir : null;
+        self::$dbHostname = (isset($g_db_hostname)) ? $g_db_hostname : null;
+        self::$dbName     = (isset($g_db_name)) ? $g_db_name : null;
+        self::$dbPort     = (isset($g_db_port)) ? $g_db_port : null;
+        self::$dbUsername = (isset($g_db_username)) ? $g_db_username : null;
+        self::$dbPassword = (isset($g_db_password)) ? $g_db_password : null;
+        self::$dbTablePrefix = (isset($g_table_prefix)) ? $g_table_prefix : null;
+    }
+
+    /**
+     * Called automatically in Core::init(). This initializes a default database connection, accessible via Core::$db.
+     */
+    private static function initDatabase() {
+        self::$db = new Database(self::$dbHostname, self::$dbName, self::$dbPort, self::$dbUsername, self::$dbPassword);
+    }
+
+    public static function getRootURL() {
+        return self::$rootURL;
+    }
+
+    public static function getRootDir() {
+        return self::$rootDir;
     }
 
     public static function isValidPHPVersion() {
@@ -393,4 +415,19 @@ class Core {
         return self::$dbTablePrefix;
     }
 
+    public static function getCoreVersion() {
+        return self::$version;
+    }
+
+    public static function getReleaseDate() {
+        return self::$releaseDate;
+    }
+
+    public static function getReleaseType() {
+        return self::$releaseType;
+    }
+
+    public static function getDbTableCharset() {
+        return self::$dbTableCharset;
+    }
 }

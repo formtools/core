@@ -22,47 +22,49 @@ class Settings {
      * @param array $settings a hash of setting name => setting value
      * @param string $module the module name
      */
-    public static function set(Database $db, array $settings, $module = "")
+    public static function set(array $settings, $module = "")
     {
-        global $g_table_prefix;
+        $table_prefix = Core::getDbTablePrefix();
 
-//        $and_module_clause = (!empty($module)) ? "AND module = '$module'" : "";
+        $and_module_clause = (!empty($module)) ? "AND module = '$module'" : "";
 
         while (list($setting_name, $setting_value) = each($settings)) {
 
-            $result = mysql_query("
+            Core::$db->query("
                 SELECT count(*) as c
-                FROM   {$g_table_prefix}settings
-                WHERE  setting_name = '$setting_name'
+                FROM   {$table_prefix}settings
+                WHERE  setting_name = :setting_name
                 $and_module_clause
             ");
-            $info = mysql_fetch_assoc($result);
+            Core::$db->bind(":settings_name", $setting_name);
 
-if ($info["c"] == 0)
-            {
-                if (!empty($module))
-                {
-                    mysql_query("
-          INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module)
-          VALUES ('$setting_name', '$setting_value', '$module')
-            ");
-                }
-                else
-                {
-                    mysql_query("
-          INSERT INTO {$g_table_prefix}settings (setting_name, setting_value)
-          VALUES ('$setting_name', '$setting_value')
-            ");
-                }
+            try {
+                Core::$db->execute();
+            } catch (PDOException $e) {
+                return array(false, $e->getMessage());
             }
-            else
-            {
-                mysql_query("
-        UPDATE {$g_table_prefix}settings
-        SET    setting_value = '$setting_value'
-        WHERE  setting_name  = '$setting_name'
-        $and_module_clause
-          ");
+
+            $info = Core::$db->fetch();
+
+            if ($info["c"] == 0) {
+                if (!empty($module)) {
+                    Core::$db->query("
+                      INSERT INTO {$table_prefix}settings (setting_name, setting_value, module)
+                      VALUES (:setting_name, :setting_value, :module)
+                    ");
+                } else {
+                    Core::$db->query("
+                      INSERT INTO {$table_prefix}settings (setting_name, setting_value)
+                      VALUES (:setting_name, :setting_value)
+                    ");
+                }
+            } else {
+                Core::$db->query("
+                    UPDATE {$table_prefix}settings
+                    SET    setting_value = :setting_value
+                    WHERE  setting_name  = :setting_name
+                    $and_module_clause
+                ");
             }
 
             // hmm... TODO. This looks suspiciously like a bug... [a module could overwrite a core var]

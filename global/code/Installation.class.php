@@ -288,39 +288,30 @@ EOF;
      */
     public static function updateDatabaseSettings()
     {
-        global $g_root_dir, $g_root_url;
+        $rootURL = Core::getRootURL();
+        $rootDir = Core::getRootDir();
 
         // we add slashes since in PC paths like c:\www\whatever the \'s get lost en route
         $core_settings = array(
-            "default_logout_url" => $g_root_url,
-            "file_upload_dir"    => addslashes($g_root_dir) . "/upload",
-            "file_upload_url"    => "$g_root_url/upload"
+            "default_logout_url" => $rootURL,
+            "file_upload_dir"    => addslashes($rootDir) . "/upload",
+            "file_upload_url"    => "$rootURL/upload"
         );
-        ft_set_settings($core_settings, "core");
+        Settings::set($core_settings, "core");
 
-//
-//        // ??? no good!
-//        $export_manager_settings = array(
-//            "file_upload_dir" => addslashes($g_root_dir) . "/upload",
-//            "file_upload_url" => "$g_root_url/upload"
-//        );
-//        ft_set_settings($export_manager_settings, "export_manager");
+        // TODO
+        $export_manager_settings = array(
+            "file_upload_dir" => addslashes($rootDir) . "/upload",
+            "file_upload_url" => "$rootURL/upload"
+        );
+        Settings::set($export_manager_settings, "export_manager");
     }
 
     /**
      * This function creates the Form Tools database tables.
-     *
-     * @param string $hostname
-     * @param string $db_name
-     * @param string $username
-     * @param string $password
-     * @return array returns an array with two indexes: [0] true/false, depending on whether the
-     *               operation was a success. [1] error message / empty string if success.
      */
-    public static function createDatabase(Database $db, $table_prefix)
+    public static function createDatabase(Database $db, $table_prefix, $sql)
     {
-        global $g_sql, $g_current_version, $g_release_type, $g_release_date, $g_db_table_charset;
-
         try {
             $db->beginTransaction();
 
@@ -328,12 +319,12 @@ EOF;
             $db->query("SET SQL_MODE=''");
             $db->execute();
 
-            foreach ($g_sql as $query) {
+            foreach ($sql as $query) {
                 $query = preg_replace("/%PREFIX%/", $table_prefix, $query);
-                $query = preg_replace("/%FORMTOOLSVERSION%/", $g_current_version, $query);
-                $query = preg_replace("/%FORMTOOLSRELEASEDATE%/", $g_release_date, $query);
-                $query = preg_replace("/%FORMTOOLSRELEASETYPE%/", $g_release_type, $query);
-                $query = preg_replace("/%CHARSET%/", $g_db_table_charset, $query);
+                $query = preg_replace("/%FORMTOOLSVERSION%/", Core::getCoreVersion(), $query);
+                $query = preg_replace("/%FORMTOOLSRELEASEDATE%/", Core::getReleaseDate(), $query);
+                $query = preg_replace("/%FORMTOOLSRELEASETYPE%/", Core::getReleaseType(), $query);
+                $query = preg_replace("/%CHARSET%/", Core::getDbTableCharset(), $query);
 
                 $db->query($query);
                 $db->execute();
@@ -397,6 +388,7 @@ EOF;
             . "\$g_root_dir = \"$root_dir\";\n\n"
             . "// database settings\n"
             . "\$g_db_hostname = \"{$_SESSION["ft_install"]["g_db_hostname"]}\";\n"
+            . "\$g_db_port = \"{$_SESSION["ft_install"]["g_db_port"]}\";\n"
             . "\$g_db_name = \"{$_SESSION["ft_install"]["g_db_name"]}\";\n"
             . "\$g_db_username = \"{$username}\";\n"
             . "\$g_db_password = \"{$password}\";\n"

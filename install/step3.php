@@ -1,7 +1,9 @@
 <?php
 
 require_once("library.php");
+require_once("files/sql.php");
 
+use FormTools\Core;
 use FormTools\Database;
 use FormTools\General;
 use FormTools\Installation;
@@ -28,13 +30,13 @@ if (isset($_POST["overwrite_tables"])) {
 if (isset($_POST["create_database"])) {
     list($success, $error) = Database::checkConnection($hostname, $db_name, $port, $username, $password);
 
-	// all checks out! Now try to create the database tables
+	// all checks out! Now create the database tables
 	if ($success) {
         $db = new Database($hostname, $db_name, $port, $username, $password);
 
-        $existing_tables = General::getExistingTables($db, $g_ft_tables, $table_prefix);
+        $existing_tables = General::getExistingTables($db, Core::getCoreTables(), $table_prefix);
 		if (empty($existing_tables)) {
-            list($success, $error) = Installation::createDatabase($db, $table_prefix);
+            list($success, $error) = Installation::createDatabase($db, $table_prefix, $g_sql);
 			if ($success) {
 				header("location: step4.php");
 				exit;

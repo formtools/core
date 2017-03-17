@@ -22,9 +22,9 @@ class Accounts {
      * @param array $info
      * @return array
      */
-    public static function setAdminAccount(Database $db, array $info, $table_prefix)
+    public static function setAdminAccount(array $info)
     {
-        global $g_root_url, $LANG;
+        global $LANG;
 
         $rules = array();
         $rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
@@ -41,6 +41,7 @@ class Accounts {
             return array(false, General::getErrorListHTML($errors));
         }
 
+        $table_prefix = Core::getDbTablePrefix();
         $db->query("
             UPDATE {$table_prefix}accounts
             SET first_name = :first_name,
@@ -57,7 +58,7 @@ class Accounts {
         $db->bind(":email", $info["email"]);
         $db->bind(":username", $info["username"]);
         $db->bind(":password", md5(md5($info["password"])));
-        $db->bind(":logout_url", $g_root_url);
+        $db->bind(":logout_url", Core::getRootURL());
         $db->bind(":account_id", 1); // the admin account is always ID 1
 
         try {

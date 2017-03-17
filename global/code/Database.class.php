@@ -68,7 +68,7 @@ class Database
         return $this->dbh->beginTransaction();
     }
 
-    public function endTransaction() {
+    public function endTransaction() { // TODO rename
         return $this->dbh->commit();
     }
 

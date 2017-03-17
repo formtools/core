@@ -196,12 +196,11 @@ h3 {
   overflow-y: scroll;
 }
 #config_file_contents {
-  width:100%;
-  height:240px;
+  width: 100%;
+  height: 260px;
   background-color: #ffffff;
   color: #555555;
   line-height: 12pt;
-  height: 240px;
   padding: 5px;
   border: 1px solid #aaaaaa;
 }

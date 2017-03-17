@@ -20,7 +20,6 @@ if (!isset($_SESSION["ft_install"]["lang_file"])) {
 }
 
 require_once("../global/library.php");
-require_once("files/sql.php");
 
 // suppress any hook processing for the duration of the installation process
 $g_hooks_enabled = false;
