@@ -9,6 +9,8 @@
 
 namespace FormTools;
 
+use PDOException;
+
 
 class Hooks {
 
@@ -23,11 +25,8 @@ class Hooks {
      */
     public static function updateAvailableHooks()
     {
-        $table_prefix = Core::getDbTablePrefix();
         $ft_root = realpath(__DIR__ . "/../../");
-
         $hook_locations = array(
-
             // code hooks
             "process.php"        => "core",
             "global/code"        => "core",
@@ -42,35 +41,76 @@ class Hooks {
             "code_hooks"     => array(),
             "template_hooks" => array()
         );
+
         while (list($file_or_folder, $component) = each($hook_locations)) {
             _ft_find_hooks("$ft_root/$file_or_folder", $ft_root, $component, $results);
         }
 
-        // now update the database
-        mysql_query("TRUNCATE {$table_prefix}hooks");
-        foreach ($results["code_hooks"] as $hook_info)  {
-            $component       = $hook_info["component"];
-            $file            = $hook_info["file"];
-            $function_name   = $hook_info["function_name"];
-            $action_location = $hook_info["action_location"];
-            $params_str      = implode(",", $hook_info["params"]);
-            $overridable_str = implode(",", $hook_info["overridable"]);
 
-            mysql_query("
+        self::clearHooks();
+        self::addCodeHooks($results["code_hooks"]);
+        self::addTemplateHooks($results["template_hooks"]);
+    }
+
+    private static function clearHooks()
+    {
+        $table_prefix = Core::getDbTablePrefix();
+        Core::$db->query("TRUNCATE {$table_prefix}hooks");
+        Core::$db->execute();
+    }
+
+    private static function addCodeHooks($code_hooks)
+    {
+        $table_prefix = Core::getDbTablePrefix();
+        Core::$db->beginTransaction();
+        $db = Core::$db;
+
+        foreach ($code_hooks as $hook_info)  {
+            $db->query("
                 INSERT INTO {$table_prefix}hooks (hook_type, component, filepath, action_location, function_name, params, overridable)
-                VALUES ('code', '$component', '$file', '$action_location', '$function_name', '$params_str', '$overridable_str')
+                VALUES (:hook_type, :component, :file, :action_location, :function_name, :params, :overridable)
             ");
+            $db->bindAll(array(
+                ":hook_type" => "code",
+                ":component" => $hook_info["component"],
+                ":file" => $hook_info["file"],
+                ":action_location" => $hook_info["action_location"],
+                ":function_name" => $hook_info["function_name"],
+                ":params" => implode(",", $hook_info["params"]),
+                ":overridable" => implode(",", $hook_info["overridable"])
+            ));
+            $db->execute();
         }
 
-        foreach ($results["template_hooks"] as $hook_info) {
-            $component = $hook_info["component"];
-            $template  = $hook_info["template"];
-            $location  = $hook_info["location"];
+        try {
+            $db->processTransaction();
+        } catch (PDOException $e) {
+            print_r($e);
+            $db->rollbackTransaction();
+        }
+    }
 
-            mysql_query("
+    private static function addTemplateHooks($template_hooks)
+    {
+        $table_prefix = Core::getDbTablePrefix();
+        Core::$db->beginTransaction();
+        foreach ($template_hooks as $hook_info) {
+            Core::$db->query("
                 INSERT INTO {$table_prefix}hooks (hook_type, component, filepath, action_location, function_name, params, overridable)
-                VALUES ('template', '$component', '$template', '$location', '', '', '')
+                VALUES (:hook_type, :component, :template, :location, '', '', '')
             ");
+
+            Core::$db->bindAll(array(
+                ":hook_type" => "template",
+                ":component" => $hook_info["component"],
+                ":template" => $hook_info["template"],
+                ":location" => $hook_info["location"]
+            ));
+        }
+        try {
+            Core::$db->processTransaction();
+        } catch (PDOException $e) {
+            Core::$db->rollbackTransaction();
         }
     }
 

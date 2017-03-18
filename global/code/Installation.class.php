@@ -116,7 +116,7 @@ class Installation
                 $db->query("DROP TABLE IF EXISTS {$table_prefix}$table");
                 $db->execute();
             }
-            $db->endTransaction();
+            $db->processTransaction();
         } catch (PDOException $e) {
             $db->rollbackTransaction();
         }
@@ -330,7 +330,7 @@ EOF;
                 $db->execute();
             }
 
-            $db->endTransaction();
+            $db->processTransaction();
         } catch (PDOException $e) {
             $db->rollbackTransaction();
             return array(false, $e->getMessage());

@@ -8,7 +8,6 @@ use FormTools\Translations;
 
 Core::init();
 
-
 if (isset($_POST["next"])) {
 	header("location: step2.php");
 	exit;

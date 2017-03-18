@@ -64,11 +64,17 @@ class Database
         $this->statement->bindValue($param, $value, $type);
     }
 
+    public function bindAll(array $data) {
+        foreach ($data as $k => $v) {
+            $this->bind($k, $v);
+        }
+    }
+
     public function beginTransaction() {
         return $this->dbh->beginTransaction();
     }
 
-    public function endTransaction() { // TODO rename
+    public function processTransaction() {
         return $this->dbh->commit();
     }
 

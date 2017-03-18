@@ -54,13 +54,15 @@ class Accounts {
             WHERE account_id = :account_id
         ");
 
-        $db->bind(":first_name", $info["first_name"]);
-        $db->bind(":last_name", $info["last_name"]);
-        $db->bind(":email", $info["email"]);
-        $db->bind(":username", $info["username"]);
-        $db->bind(":password", md5(md5($info["password"])));
-        $db->bind(":logout_url", Core::getRootURL());
-        $db->bind(":account_id", 1); // the admin account is always ID 1
+        $db->bindAll(array(
+            ":first_name" => $info["first_name"],
+            ":last_name" => $info["last_name"],
+            ":email" => $info["email"],
+            ":username" => $info["username"],
+            ":password" => md5(md5($info["password"])),
+            ":logout_url" => Core::getRootURL(),
+            ":account_id" => 1 // the admin account is always ID 1
+        ));
 
         try {
             $db->execute();

@@ -10,6 +10,8 @@
  */
 
 
+use FormTools\Core;
+
 // -------------------------------------------------------------------------------------------------
 
 
@@ -349,11 +351,11 @@ function ft_search_modules($search_criteria)
 
 	// get form info
 	$module_query_result = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}modules
-    $where_clause
-    $order_clause
-           ");
+        SELECT *
+        FROM   {$g_table_prefix}modules
+        $where_clause
+        $order_clause
+   ");
 
 	// now retrieve the basic info (id, first and last name) about each client assigned to this form
 	$module_info = array();
@@ -361,27 +363,6 @@ function ft_search_modules($search_criteria)
 		$module_info[] = $module;
 
 	return $module_info;
-}
-
-
-/**
- * Retrieves the list of all modules currently in the database.
- *
- * @return array $module_info an ordered array of hashes, each hash being the module info
- */
-function ft_get_modules()
-{
-	global $g_table_prefix;
-
-	$query = mysql_query("SELECT * FROM {$g_table_prefix}modules ORDER BY module_name");
-
-	$modules_info = array();
-	while ($module = mysql_fetch_assoc($query))
-		$modules_info[] = $module;
-
-	extract(ft_process_hook_calls("start", compact("modules_info"), array("modules_info")), EXTR_OVERWRITE);
-
-	return $modules_info;
 }
 
 
@@ -502,119 +483,6 @@ function ft_update_enabled_modules($request)
 }
 
 
-/**
- * Updates the list of modules in the database by examining the contents of the /modules folder.
- */
-function ft_update_module_list()
-{
-	global $g_table_prefix, $g_root_dir, $LANG;
-
-	$modules_folder = "$g_root_dir/modules";
-
-	// loop through all modules in this folder and, if the module contains the appropriate files, add it to the database
-	$module_info = array();
-	$dh = opendir($modules_folder);
-
-	// if we couldn't open the modules folder, it doesn't exist or something went wrong
-	if (!$dh)
-		return array(false, $message);
-
-	// get the list of currently installed modules
-	$current_modules = ft_get_modules();
-	$current_module_folders = array();
-	foreach ($current_modules as $module_info)
-		$current_module_folders[] = $module_info["module_folder"];
-
-	while (($folder = readdir($dh)) !== false)
-	{
-		// if this module is already in the database, ignore it
-		if (in_array($folder, $current_module_folders))
-			continue;
-
-		if (is_dir("$modules_folder/$folder") && $folder != "." && $folder != "..")
-		{
-			$info = ft_get_module_info_file_contents($folder);
-
-			if (empty($info))
-				continue;
-
-			$info = ft_sanitize($info);
-
-			// check the required info file fields
-			$required_fields = array("author", "version", "date", "origin_language");
-			$all_found = true;
-			foreach ($required_fields as $field)
-			{
-				if (empty($info[$field]))
-					$all_found = false;
-			}
-			if (!$all_found)
-				continue;
-
-			// now check the language file contains the two required fields: module_name and module_description
-			$lang_file = "$modules_folder/$folder/lang/{$info["origin_language"]}.php";
-			$lang_info = _ft_get_module_lang_file_contents($lang_file);
-			$lang_info = ft_sanitize($lang_info);
-
-			// check the required language file fields
-			if ((!isset($lang_info["module_name"]) || empty($lang_info["module_name"])) ||
-				(!isset($lang_info["module_description"]) || empty($lang_info["module_description"])))
-				continue;
-
-			$author               = $info["author"];
-			$author_email         = $info["author_email"];
-			$author_link          = $info["author_link"];
-			$module_version       = $info["version"];
-			$module_date          = $info["date"];
-			$is_premium           = $info["is_premium"];
-			$origin_language      = $info["origin_language"];
-			$nav                  = $info["nav"];
-
-			$module_name          = $lang_info["module_name"];
-			$module_description   = $lang_info["module_description"];
-
-			// convert the date into a MySQL datetime
-			list($year, $month, $day) = explode("-", $module_date);
-			$timestamp = mktime(null, null, null, $month, $day, $year);
-			$module_datetime = ft_get_current_datetime($timestamp);
-
-			mysql_query("
-        INSERT INTO {$g_table_prefix}modules (is_installed, is_enabled, is_premium, origin_language, module_name,
-          module_folder, version, author, author_email, author_link, description, module_date)
-        VALUES ('no','no', '$is_premium', '$origin_language', '$module_name', '$folder', '$module_version',
-          '$author', '$author_email', '$author_link', '$module_description', '$module_datetime')
-          ") or die(mysql_error());
-			$module_id = mysql_insert_id();
-
-			// now add any navigation links for this module
-			if ($module_id)
-			{
-				$order = 1;
-				while (list($lang_file_key, $info) = each($nav))
-				{
-					$url        = $info[0];
-					$is_submenu = ($info[1]) ? "yes" : "no";
-					if (empty($lang_file_key) || empty($url))
-						continue;
-
-					$display_text = isset($lang_info[$lang_file_key]) ? $lang_info[$lang_file_key] : $LANG[$lang_file_key];
-
-					mysql_query("
-            INSERT INTO {$g_table_prefix}module_menu_items (module_id, display_text, url, is_submenu, list_order)
-            VALUES ($module_id, '$display_text', '$url', '$is_submenu', $order)
-            ") or die(mysql_error());
-
-					$order++;
-				}
-			}
-		}
-	}
-	closedir($dh);
-
-	return array(true, $LANG["notify_module_list_updated"]);
-}
-
-
 // -------------------------------------------------------------------------------------------------
 
 
@@ -627,18 +495,19 @@ function ft_update_module_list()
  */
 function ft_get_module_info_file_contents($module_folder)
 {
-	global $g_root_dir;
+    $root_dir = Core::getRootDir();
+	$file = "$root_dir/modules/$module_folder/module.php";
 
-	$file = "$g_root_dir/modules/$module_folder/module.php";
-
-	if (!is_file($file))
-		return array();
+	if (!is_file($file)) {
+        return array();
+    }
 
 	@include($file);
 	$v = get_defined_vars();
 
-	if (!isset($v["MODULE"]))
-		return array();
+	if (!isset($v["MODULE"])) {
+        return array();
+    }
 
 	$values = $v["MODULE"];
 	$info["author"] = isset($values["author"]) ? $values["author"] : "";

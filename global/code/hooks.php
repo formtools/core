@@ -356,39 +356,37 @@ function ft_delete_hook_call($hook_id)
  */
 function _ft_find_hooks($curr_folder, $root_folder, $component, &$results)
 {
-	if (is_file($curr_folder))
-	{
+	if (is_file($curr_folder)) {
 		$is_php_file = preg_match("/\.php$/", $curr_folder);
 		$is_tpl_file = preg_match("/\.tpl$/", $curr_folder);
-		if ($is_php_file)
-			$results["code_hooks"] = array_merge($results["code_hooks"], _ft_extract_code_hooks($curr_folder, $root_folder, $component));
-		if ($is_tpl_file)
-			$results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
-	}
-	else
-	{
+		if ($is_php_file) {
+            $results["code_hooks"] = array_merge($results["code_hooks"], _ft_extract_code_hooks($curr_folder, $root_folder, $component));
+        }
+        if ($is_tpl_file) {
+            $results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($curr_folder, $root_folder, $component));
+        }
+	} else {
 		$handle = @opendir($curr_folder);
-		if ($handle)
-		{
-			while (($file = readdir($handle)) !== false)
-			{
-				if ($file == '.' || $file == '..')
-					continue;
+		if ($handle) {
+			while (($file = readdir($handle)) !== false) {
+				if ($file == '.' || $file == '..') {
+                    continue;
+                }
 
 				$filepath = $curr_folder . '/' . $file;
-				if (is_link($filepath))
-					continue;
-				if (is_file($filepath))
-				{
+				if (is_link($filepath)) {
+                    continue;
+                }
+				if (is_file($filepath)) {
 					$is_php_file = preg_match("/\.php$/", $filepath);
 					$is_tpl_file = preg_match("/\.tpl$/", $filepath);
-					if ($is_php_file)
-						$results["code_hooks"]     = array_merge($results["code_hooks"], _ft_extract_code_hooks($filepath, $root_folder, $component));
-					if ($is_tpl_file)
-						$results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
-				}
-				else if (is_dir($filepath))
-				{
+					if ($is_php_file) {
+                        $results["code_hooks"] = array_merge($results["code_hooks"], _ft_extract_code_hooks($filepath, $root_folder, $component));
+                    }
+                    if ($is_tpl_file) {
+                        $results["template_hooks"] = array_merge($results["template_hooks"], _ft_extract_template_hooks($filepath, $root_folder, $component));
+                    }
+				} else if (is_dir($filepath)) {
 					_ft_find_hooks($filepath, $root_folder, $component, $results);
 				}
 			}
@@ -451,15 +449,12 @@ function _ft_extract_code_hooks($filepath, $root_folder, $component)
 function _ft_extract_template_hooks($filepath, $root_folder, $component)
 {
 	$lines = file($filepath);
-	$current_function = "";
 	$found_hooks = array();
 	$root_folder = preg_quote($root_folder);
 
-	foreach ($lines as $line)
-	{
+	foreach ($lines as $line) {
 		// this assumes that the hooks are always on a single line
-		if (preg_match("/\{template_hook\s+location\s*=\s*[\"']([^}\"]*)/", $line, $matches))
-		{
+		if (preg_match("/\{template_hook\s+location\s*=\s*[\"']([^}\"]*)/", $line, $matches)) {
 			$template = preg_replace("%" . $root_folder . "%", "", $filepath);
 			$found_hooks[] = array(
 				"template"  => $template,
