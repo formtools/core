@@ -126,7 +126,7 @@
             {if $module.is_installed == "no"}
               <input type="hidden" class="module_id" value="{$module.module_id}" />
               <input type="hidden" class="module_folder" value="{$module.module_folder}" />
-              <a href="{$same_page}?install={$module.module_id}"{if $module.is_premium == "yes"} class="is_premium"{/if}>{$LANG.word_install|upper}</a>
+              <a href="{$same_page}?install={$module.module_id}">{$LANG.word_install|upper}</a>
             {else}
               {if $module.module_folder != "core_field_types"}
                 <input type="checkbox" name="is_enabled[]" value="{$module.module_id}" {if $module.is_enabled == 'yes'}checked{/if} />

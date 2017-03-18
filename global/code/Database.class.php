@@ -97,6 +97,9 @@ class Database
         return $this->statement->fetchAll($fetch_style);
     }
 
+    public function getInsertId() {
+        return $this->dbh->lastInsertId();
+    }
 
     // ---------------------------------------------------------------------------------------------------
 

@@ -48,66 +48,71 @@ class Modules
     public static function updateModuleList()
     {
         $table_prefix = Core::getDbTablePrefix();
-        $root_dir = Core::getRootDir();
+        $db = Core::$db;
 
-        // $LANG;
+        // TODO
+        $LANG = array();
 
-        $modules = self::getUploadedModules();
+        $modules = self::getUninstalledModules();
 
-        foreach ($modules as $module) {
+        foreach ($modules as $module_folder => $row) {
+            $module_info = $row["module_info"];
+            $lang_info   = $row["lang_info"];
 
+            // convert the date into a MySQL datetime
+            list($year, $month, $day) = explode("-", $row["module_info"]["date"]);
+            $timestamp = mktime(null, null, null, $month, $day, $year);
+            $module_date = ft_get_current_datetime($timestamp);
+
+            $db->query("
+                INSERT INTO {$table_prefix}modules (is_installed, is_enabled, origin_language, module_name,
+                  module_folder, version, author, author_email, author_link, description, module_date)
+                VALUES (:is_installed, :is_enabled, :origin_language, :module_name, :folder, :module_version,
+                  :author, :author_email, :author_link, :module_description, :module_date)
+            ");
+            $db->bindAll(array(
+                "is_installed" => "no",
+                "is_enabled" => "no",
+                ":origin_language"    => $module_info["origin_language"],
+                ":module_name"        => $lang_info["module_name"],
+                ":folder"             => $module_folder,
+                ":module_version"     => $module_info["version"],
+                ":author"             => $module_info["author"],
+                ":author_email"       => $module_info["author_email"],
+                ":author_link"        => $module_info["author_link"],
+                ":module_description" => $lang_info["module_description"],
+                ":module_date"        => $module_date
+            ));
+            $db->execute();
+            $module_id = $db->getInsertId();
+
+            // now add any navigation links for this module
+            $order = 1;
+            while (list($lang_file_key, $info) = each($row["module_info"]["nav"])) {
+                $url        = $info[0];
+                $is_submenu = ($info[1]) ? "yes" : "no";
+                if (empty($lang_file_key) || empty($url)) {
+                    continue;
+                }
+
+                // odd this. Why not just store the lang string in the DB? That way it'll be translated for each user...
+                $display_text = isset($lang_info[$lang_file_key]) ? $lang_info[$lang_file_key] : $LANG[$lang_file_key];
+
+                $db->query("
+                    INSERT INTO {$table_prefix}module_menu_items (module_id, display_text, url, is_submenu, list_order)
+                    VALUES (:module_id, :display_text, :url, :is_submenu, :nav_order)
+                ");
+                $db->bindAll(array(
+                    ":module_id" => $module_id,
+                    ":display_text" => $display_text,
+                    ":url" => $url,
+                    ":is_submenu" => $is_submenu,
+                    ":nav_order" => $order
+                ));
+                $db->execute();
+                $order++;
+            }
         }
-
-//
-//                $author               = $info["author"];
-//                $author_email         = $info["author_email"];
-//                $author_link          = $info["author_link"];
-//                $module_version       = $info["version"];
-//                $module_date          = $info["date"];
-//                $is_premium           = $info["is_premium"];
-//                $origin_language      = $info["origin_language"];
-//                $nav                  = $info["nav"];
-//
-//                $module_name          = $lang_info["module_name"];
-//                $module_description   = $lang_info["module_description"];
-
-//                // convert the date into a MySQL datetime
-//                list($year, $month, $day) = explode("-", $module_date);
-//                $timestamp = mktime(null, null, null, $month, $day, $year);
-//                $module_datetime = ft_get_current_datetime($timestamp);
-//
-//                mysql_query("
-//    INSERT INTO {$table_prefix}modules (is_installed, is_enabled, is_premium, origin_language, module_name,
-//      module_folder, version, author, author_email, author_link, description, module_date)
-//    VALUES ('no','no', '$is_premium', '$origin_language', '$module_name', '$folder', '$module_version',
-//      '$author', '$author_email', '$author_link', '$module_description', '$module_datetime')
-//      ") or die(mysql_error());
-//                $module_id = mysql_insert_id();
-//
-//                // now add any navigation links for this module
-//                if ($module_id)
-//                {
-//                    $order = 1;
-//                    while (list($lang_file_key, $info) = each($nav))
-//                    {
-//                        $url        = $info[0];
-//                        $is_submenu = ($info[1]) ? "yes" : "no";
-//                        if (empty($lang_file_key) || empty($url))
-//                            continue;
-//
-//                        $display_text = isset($lang_info[$lang_file_key]) ? $lang_info[$lang_file_key] : $LANG[$lang_file_key];
-//
-//                        mysql_query("
-//        INSERT INTO {$table_prefix}module_menu_items (module_id, display_text, url, is_submenu, list_order)
-//        VALUES ($module_id, '$display_text', '$url', '$is_submenu', $order)
-//        ") or die(mysql_error());
-//
-//                        $order++;
-//                    }
-//                }
-//            }
-//        }
-//        closedir($dh);
 
         return array(true, $LANG["notify_module_list_updated"]);
     }
@@ -118,7 +123,7 @@ class Modules
      * valid uploaded modules.
      * @return array
      */
-    private static function getUploadedModules()
+    private static function getUninstalledModules()
     {
         $root_dir = Core::getRootDir();
 
@@ -136,7 +141,6 @@ class Modules
         foreach ($current_modules as $module_info) {
             $current_module_folders[] = $module_info["module_folder"];
         }
-
 
         $modules = array();
         while (($folder = readdir($dh)) !== false) {
@@ -176,11 +180,11 @@ class Modules
 
                 $modules[$folder] = array(
                     "module_info" => $info,
-                    "module_name" => $lang_info["module_name"],
-                    "module_description" => $lang_info["module_description"]
+                    "lang_info" => $lang_info
                 );
             }
         }
+        closedir($dh);
 
         return $modules;
     }

@@ -27,7 +27,7 @@
 				<tr>
 					<td><img src="../themes/default/images/account_section_left_green.jpg" border="0" /></td>
 					<td id="account_section">
-						<b>{$version_string}</b>
+						<b>{$version}</b>
 					</td>
 					<td><img src="../themes/default/images/account_section_right_green.jpg" border="0" /></td>
 				</tr>

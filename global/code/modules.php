@@ -515,7 +515,6 @@ function ft_get_module_info_file_contents($module_folder)
 	$info["author_link"] = isset($values["author_link"]) ? $values["author_link"] : "";
 	$info["version"] = isset($values["version"]) ? $values["version"] : "";
 	$info["date"] = isset($values["date"]) ? $values["date"] : "";
-	$info["is_premium"] = (isset($values["is_premium"]) && $values["is_premium"] == "yes") ? "yes" : "no";
 	$info["origin_language"] = isset($values["origin_language"]) ? $values["origin_language"] : "";
 	$info["nav"] = isset($values["nav"]) ? $values["nav"] : array();
 

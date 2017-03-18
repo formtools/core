@@ -151,7 +151,9 @@ class Installation
      */
     public static function displayPage($template, $page_vars)
     {
-        global $LANG, $g_smarty, $g_success, $g_message, $g_current_version, $g_release_type, $g_release_date;
+        global $LANG, $g_smarty, $g_success, $g_message, $g_release_type, $g_release_date;
+
+        $version = Core::getCoreVersion();
 
         clearstatcache();
         $theme_folder   = realpath(INSTALLATION_FOLDER . "/../themes/default/");
@@ -160,11 +162,10 @@ class Installation
         // always try to set the cache folder to 777
         @chmod($cache_folder, 0777);
 
-        $version_string = $g_current_version;
         if ($g_release_type == "alpha") {
-            $version_string .= "-alpha-$g_release_date";
+            $version .= "-alpha-$g_release_date";
         } else if ($g_release_type == "beta") {
-            $version_string .= "-beta-$g_release_date";
+            $version .= "-beta-$g_release_date";
         }
 
         if (!is_readable("$cache_folder/") || !is_writable("$cache_folder/")) {
@@ -183,7 +184,7 @@ class Installation
       <tr>
         <td><img src="images/account_section_left.jpg" border="0" /></td>
         <td id="account_section">
-          <b>{$version_string}</b>
+          <b>{$version}</b>
         </td>
         <td><img src="images/account_section_right.jpg" border="0" /></td>
       </tr>
@@ -219,7 +220,7 @@ EOF;
         $g_smarty->assign("g_success", $g_success);
         $g_smarty->assign("g_message", $g_message);
         $g_smarty->assign("g_default_theme", "default");
-        $g_smarty->assign("version_string", $version_string);
+        $g_smarty->assign("version", $version);
 
         // check the "required" vars are at least set so they don't produce warnings when smarty debug is enabled
         if (!isset($page_vars["head_string"])) $page_vars["head_string"] = "";

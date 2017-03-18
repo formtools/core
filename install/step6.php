@@ -21,23 +21,23 @@ Modules::updateModuleList();
 // install the Core field types
 //list($success, $message) = Installation::installCoreFieldTypes("core_field_types");
 
-$modules = Modules::get();
-foreach ($modules as $module_info) {
-	$module_id     = $module_info["module_id"];
-	$is_installed  = $module_info["is_installed"];
-	$module_folder = $module_info["module_folder"];
-
-	if ($is_installed == "yes") {
-        continue;
-    }
-
-	$info = array("install" => $module_id);
-
-	// this will run the installation scripts for any module in the /modules folder. Note: the special "Core Field Types"
-	// module has a dummy installation function that gets called here. That ensures the module is marked as "enabled", etc.
-	// even though we actually installed it above.
-	ft_install_module($info);
-}
+//$modules = Modules::get();
+//foreach ($modules as $module_info) {
+//	$module_id     = $module_info["module_id"];
+//	$is_installed  = $module_info["is_installed"];
+//	$module_folder = $module_info["module_folder"];
+//
+//	if ($is_installed == "yes") {
+//        continue;
+//    }
+//
+//	$info = array("install" => $module_id);
+//
+//	// this will run the installation scripts for any module in the /modules folder. Note: the special "Core Field Types"
+//	// module has a dummy installation function that gets called here. That ensures the module is marked as "enabled", etc.
+//	// even though we actually installed it above.
+//	ft_install_module($info);
+//}
 
 // send "Welcome to Form Tools" email
 //if (!isset($_SESSION["ft_install"]["email_notification_sent"])) {

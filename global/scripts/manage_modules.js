@@ -61,43 +61,6 @@ $(function() {
     });
     return button;
   }
-
-  $(".is_premium").bind("click", function() {
-    var module_folder = $(this).closest("td").find(".module_folder").val();
-    mm.curr_module_id = $(this).closest("td").find(".module_id").val();
-    ft.create_dialog({
-      dialog:     $("#premium_module_dialog"),
-      title:      g.messages["phrase_please_enter_license_key"],
-      popup_type: "info",
-      min_width:  520,
-      open: function() {
-        $("#key_section1").focus();
-        check_license_key_entered();
-      },
-      buttons: [{
-        text:     g.messages["word_verify"],
-        disabled: true,
-        click: function() {
-          mm.key = $("#key_section1").val() + "-" + $("#key_section2").val() + "-" + $("#key_section3").val();
-          ft.dialog_activity_icon($("#premium_module_dialog"), "show");
-          $.ajax({
-            url:  "http://modules.formtools.org/validate.php",
-            data: {
-              k: mm.key,
-              m: module_folder
-            },
-            dataType: "jsonp",
-            jsonp:    "callback"
-          });
-        }
-      },
-      {
-        text:  g.messages["word_close"],
-        click: function() { $(this).dialog("close"); }
-      }]
-    });
-    return false;
-  });
 });
 
 
