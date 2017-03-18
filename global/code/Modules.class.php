@@ -36,7 +36,7 @@ class Modules
             $modules_info[] = $row;
         }
 
-//        extract(ft_process_hook_calls("start", compact("modules_info"), array("modules_info")), EXTR_OVERWRITE);
+        extract(ft_process_hook_calls("start", compact("modules_info"), array("modules_info")), EXTR_OVERWRITE);
 
         return $modules_info;
     }
@@ -47,7 +47,6 @@ class Modules
      */
     public static function updateModuleList()
     {
-        $table_prefix = Core::getDbTablePrefix();
         $db = Core::$db;
 
         // TODO
@@ -65,7 +64,7 @@ class Modules
             $module_date = ft_get_current_datetime($timestamp);
 
             $db->query("
-                INSERT INTO {$table_prefix}modules (is_installed, is_enabled, origin_language, module_name,
+                INSERT INTO {PREFIX}modules (is_installed, is_enabled, origin_language, module_name,
                   module_folder, version, author, author_email, author_link, description, module_date)
                 VALUES (:is_installed, :is_enabled, :origin_language, :module_name, :folder, :module_version,
                   :author, :author_email, :author_link, :module_description, :module_date)
@@ -99,7 +98,7 @@ class Modules
                 $display_text = isset($lang_info[$lang_file_key]) ? $lang_info[$lang_file_key] : $LANG[$lang_file_key];
 
                 $db->query("
-                    INSERT INTO {$table_prefix}module_menu_items (module_id, display_text, url, is_submenu, list_order)
+                    INSERT INTO {PREFIX}module_menu_items (module_id, display_text, url, is_submenu, list_order)
                     VALUES (:module_id, :display_text, :url, :is_submenu, :nav_order)
                 ");
                 $db->bindAll(array(

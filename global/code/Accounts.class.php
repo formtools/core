@@ -41,10 +41,9 @@ class Accounts {
             return array(false, General::getErrorListHTML($errors));
         }
 
-        $table_prefix = Core::getDbTablePrefix();
         $db = Core::$db;
         $db->query("
-            UPDATE {$table_prefix}accounts
+            UPDATE {PREFIX}accounts
             SET first_name = :first_name,
                 last_name = :last_name,
                 email = :email,

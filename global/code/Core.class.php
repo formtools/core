@@ -392,7 +392,8 @@ class Core {
      * Called automatically in Core::init(). This initializes a default database connection, accessible via Core::$db.
      */
     private static function initDatabase() {
-        self::$db = new Database(self::$dbHostname, self::$dbName, self::$dbPort, self::$dbUsername, self::$dbPassword);
+        self::$db = new Database(self::$dbHostname, self::$dbName, self::$dbPort, self::$dbUsername, self::$dbPassword,
+            self::$dbTablePrefix);
     }
 
     public static function getRootURL() {

@@ -54,20 +54,18 @@ class Hooks {
 
     private static function clearHooks()
     {
-        $table_prefix = Core::getDbTablePrefix();
-        Core::$db->query("TRUNCATE {$table_prefix}hooks");
+        Core::$db->query("TRUNCATE {PREFIX}hooks");
         Core::$db->execute();
     }
 
     private static function addCodeHooks($code_hooks)
     {
-        $table_prefix = Core::getDbTablePrefix();
         Core::$db->beginTransaction();
         $db = Core::$db;
 
         foreach ($code_hooks as $hook_info)  {
             $db->query("
-                INSERT INTO {$table_prefix}hooks (hook_type, component, filepath, action_location, function_name, params, overridable)
+                INSERT INTO {PREFIX}hooks (hook_type, component, filepath, action_location, function_name, params, overridable)
                 VALUES (:hook_type, :component, :file, :action_location, :function_name, :params, :overridable)
             ");
             $db->bindAll(array(
@@ -92,11 +90,10 @@ class Hooks {
 
     private static function addTemplateHooks($template_hooks)
     {
-        $table_prefix = Core::getDbTablePrefix();
         Core::$db->beginTransaction();
         foreach ($template_hooks as $hook_info) {
             Core::$db->query("
-                INSERT INTO {$table_prefix}hooks (hook_type, component, filepath, action_location, function_name, params, overridable)
+                INSERT INTO {PREFIX}hooks (hook_type, component, filepath, action_location, function_name, params, overridable)
                 VALUES (:hook_type, :component, :template, :location, '', '', '')
             ");
 

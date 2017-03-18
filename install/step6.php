@@ -7,6 +7,7 @@ use FormTools\Core;
 use FormTools\Hooks;
 use FormTools\Installation;
 use FormTools\Modules;
+use FormTools\Themes;
 
 Core::init();
 
@@ -16,7 +17,7 @@ Hooks::updateAvailableHooks();
 
 // add whatever themes and modules are in the modules and themes folders
 Modules::updateModuleList();
-//ft_update_theme_list();
+Themes::updateThemeList();
 
 // install the Core field types
 //list($success, $message) = Installation::installCoreFieldTypes("core_field_types");

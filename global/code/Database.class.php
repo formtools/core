@@ -22,9 +22,10 @@ class Database
     private $dbh;
     private $error;
     private $statement;
+    private $table_prefix;
 
 
-    public function __construct($hostname, $db_name, $port, $username, $password) {
+    public function __construct($hostname, $db_name, $port, $username, $password, $table_prefix) {
         $options = array(
             PDO::ATTR_PERSISTENT => true,
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
@@ -37,11 +38,19 @@ class Database
             $this->error = $e->getMessage();
         }
 
+        $this->table_prefix = $table_prefix;
+
         // ??
         //@mysqli_query($this->link, "SET NAMES 'utf8'");
     }
 
+    /**
+     * This is a convenience wrapper for PDO's prepare method. It replaces {PREFIX} with the database
+     * table prefix so you don't have to include it everywhere.
+     * @param $query
+     */
     public function query($query) {
+        $query = str_replace('{PREFIX}', $this->table_prefix, $query);
         $this->statement = $this->dbh->prepare($query);
     }
 

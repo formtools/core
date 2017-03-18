@@ -108,12 +108,12 @@ class Installation
      * @param Database $db
      * @param string $table_prefix
      */
-    public static function deleteTables(Database $db, array $all_tables, $table_prefix)
+    public static function deleteTables(Database $db, array $all_tables)
     {
         try {
             $db->beginTransaction();
             foreach ($all_tables as $table) {
-                $db->query("DROP TABLE IF EXISTS {$table_prefix}$table");
+                $db->query("DROP TABLE IF EXISTS {PREFIX}$table");
                 $db->execute();
             }
             $db->processTransaction();
