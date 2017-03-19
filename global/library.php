@@ -1,6 +1,6 @@
 <?php
 
-// include all code files
+// old code files
 require_once(__DIR__ . "/code/administrator.php");
 require_once(__DIR__ . "/code/accounts.php");
 require_once(__DIR__ . "/code/clients.php");
@@ -18,7 +18,6 @@ require_once(__DIR__ . "/code/list_groups.php");
 require_once(__DIR__ . "/code/menus.php");
 require_once(__DIR__ . "/code/modules.php");
 require_once(__DIR__ . "/code/option_lists.php");
-require_once(__DIR__ . "/code/sessions.php");
 require_once(__DIR__ . "/code/settings.php");
 require_once(__DIR__ . "/code/submissions.php");
 require_once(__DIR__ . "/code/themes.php");
@@ -45,6 +44,7 @@ require_once(__DIR__ . "/code/Installation.class.php");
 require_once(__DIR__ . "/code/ListGroups.class.php");
 require_once(__DIR__ . "/code/Modules.class.php");
 require_once(__DIR__ . "/code/OptionLists.class.php");
+require_once(__DIR__ . "/code/Sessions.class.php");
 require_once(__DIR__ . "/code/Settings.class.php");
 require_once(__DIR__ . "/code/Submissions.class.php");
 require_once(__DIR__ . "/code/Themes.class.php");

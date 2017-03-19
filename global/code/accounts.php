@@ -268,7 +268,7 @@ function ft_login($infohash, $login_as_client = false)
  * Internally, a user can logout by passing a "?logout" query string to any page in Form Tools.
  *
  * @param string $message_flag if this value is set, it ALWAYS redirects to the login page, so that the
- *   message is displayed. If it isn't set, it redirects to the user's custom logout URL (if set).
+ *   message is displayed. If it isn't set, it redirects to the user's custom logout URL (if defined).
  */
 function ft_logout_user($message_flag = "")
 {

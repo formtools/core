@@ -105,7 +105,7 @@ class Core {
      * This is set to 1 by default (genuine errors only). Crank it up to 2047 to list every
      * last error/warning/notice that occurs.
      */
-    private static $defaultErrorReporting = 1;
+    private static $errorReporting = 1;
 
     /**
      * Various debug settings. As of 2.3.0 these are of varying degrees of being supported.
@@ -288,7 +288,6 @@ class Core {
      */
     private static $cache = array();
 
-
     /**
      * Added in 2.3.0 to prevent hooks being executed during in the installation process, prior to the database being
      * ready. This was always an issue but the errors were swallowed up with earlier versions of PHP.
@@ -348,13 +347,31 @@ class Core {
         self::initDatabase();
 
         // explicitly set the error reporting value
-        error_reporting(self::$defaultErrorReporting);
+        error_reporting(self::$errorReporting);
 
-//        if ($g_enable_benchmarking) {
-//            $g_benchmark_start = ft_get_microtime_float();
-//        }
+        // start sessions
+        self::startSessions();
+
+        // optionally enable benchmarking. This is really a dev feature to confirm pages aren't taking too long to load
+        if (self::$enableBenchmarking) {
+            self::$benchmarkStart = ft_get_microtime_float();
+        }
     }
 
+    public static function startSessions() {
+        if (self::$sessionType == "database") {
+            //$g_link = ft_db_connect();
+            new SessionManager();
+        }
+
+        if (!empty(self::$sessionSavePath)) {
+            session_save_path(self::$sessionSavePath);
+        }
+
+        session_start();
+        header("Cache-control: private");
+        header("Content-Type: text/html; charset=utf-8");
+    }
 
     /**
      * @access public
@@ -430,5 +447,11 @@ class Core {
 
     public static function getDbTableCharset() {
         return self::$dbTableCharset;
+    }
+
+    public static function enableDebugging() {
+        ini_set('display_errors', 1);
+        ini_set('display_startup_errors', 1);
+        error_reporting(E_ALL);;
     }
 }
