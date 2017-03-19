@@ -10,6 +10,7 @@
  * @subpackage FieldTypes
  */
 
+use FormTools\Core;
 
 // -------------------------------------------------------------------------------------------------
 
@@ -60,31 +61,37 @@ $g_default_datetime_format = "datetime:yy-mm-dd|h:mm TT|ampm`true";
  */
 function ft_get_field_types($return_settings = false, $field_type_ids = array())
 {
-	global $g_table_prefix;
+    $db = Core::$db;
 
-	$field_type_id_clause = "";
-	if (!empty($field_type_ids))
-	{
-		$field_type_id_clause = "AND ft.field_type_id IN (" . implode(",", $field_type_ids) . ")";
-	}
-
-	$query = mysql_query("
-		SELECT *, g.list_order as group_list_order, ft.list_order as field_type_list_order
-		FROM   {$g_table_prefix}field_types ft, {$g_table_prefix}list_groups g
-		WHERE  g.group_type = 'field_types' AND
-					 ft.group_id = g.group_id
-					 $field_type_id_clause
-		ORDER BY g.list_order, ft.list_order
-	");
+	if (!empty($field_type_ids)) {
+        $field_type_id_str = implode(",", $field_type_ids);
+        $db->query("
+            SELECT *, g.list_order as group_list_order, ft.list_order as field_type_list_order
+            FROM   {PREFIX}field_types ft, {PREFIX}list_groups g
+            WHERE  g.group_type = :field_types AND
+                   ft.group_id = g.group_id AND 
+                   ft.field_type_id IN ($field_type_id_str)
+            ORDER BY g.list_order, ft.list_order
+        ");
+	} else {
+        $db->query("
+            SELECT *, g.list_order as group_list_order, ft.list_order as field_type_list_order
+            FROM   {PREFIX}field_types ft, {PREFIX}list_groups g
+            WHERE  g.group_type = :field_types AND
+                   ft.group_id = g.group_id
+            ORDER BY g.list_order, ft.list_order
+		");
+    }
+	$db->bind(":field_types", "field_types");
+    $db->execute();
+    $results = $db->fetchAll();
 
 	$field_types = array();
-	while ($row = mysql_fetch_assoc($query))
-	{
+	foreach ($results as $row) {
 		if ($return_settings) {
 			$curr_field_type_id = $row["field_type_id"];
 			$row["settings"] = ft_get_field_type_settings($curr_field_type_id, false);
 		}
-
 		$field_types[] = $row;
 	}
 
@@ -252,18 +259,17 @@ function ft_get_field_type($field_type_id, $return_all_info = false)
 
 function ft_get_field_type_by_identifier($identifier)
 {
-	global $g_table_prefix;
-
-	$query = mysql_query("
+    $db = Core::$db;
+	$db->query("
 		SELECT *
-		FROM   {$g_table_prefix}field_types
-		WHERE  field_type_identifier = '$identifier'
+		FROM   {PREFIX}field_types
+		WHERE  field_type_identifier = :identifier
 	");
+	$db->bind(":identifier", $identifier);
+	$db->execute();
+	$info = $db->fetch();
 
-	$info = mysql_fetch_assoc($query);
-
-	if (!empty($info))
-	{
+	if (!empty($info)) {
 		$field_type_id = $info["field_type_id"];
 		$info["settings"] = ft_get_field_type_settings($field_type_id);
 	}
@@ -430,28 +436,30 @@ function ft_get_field_type_setting_id_by_identifier($field_type_id, $field_type_
  */
 function ft_get_field_type_settings($field_type_id_or_ids, $return_options = false)
 {
-	global $g_table_prefix;
+    $db = Core::$db;
 
-	if (empty($field_type_id_or_ids))
-		return array();
+	if (empty($field_type_id_or_ids)) {
+        return array();
+    }
 
-	if (is_array($field_type_id_or_ids))
-	{
+	if (is_array($field_type_id_or_ids)) {
 		$field_type_id_str = implode(",", $field_type_id_or_ids);
 		$return_one_field_type = false;
-	}
-	else
-	{
+	} else {
 		$field_type_id_str = $field_type_id_or_ids;
 		$return_one_field_type = true;
 	}
 
-	$query = mysql_query("
+	$db->query("
 		SELECT *
-		FROM   {$g_table_prefix}field_type_settings
+		FROM   {PREFIX}field_type_settings
 		WHERE  field_type_id IN ($field_type_id_str)
 		ORDER BY list_order
 	");
+	$db->execute();
+    $result = $db->fetch();
+    exit;
+
 
 	$info = array();
 	while ($row = mysql_fetch_assoc($query))

@@ -19,17 +19,11 @@ class Modules
      *
      * @return array $module_info an ordered array of hashes, each hash being the module info
      */
-    public static function get() {
+    public static function getList()
+    {
         $db = Core::$db;
-        $table_prefix = Core::getDbTablePrefix();
-
-        $db->query("
-            SELECT *
-            FROM {$table_prefix}modules
-            ORDER BY module_name
-        ");
+        $db->query("SELECT * FROM {PREFIX}modules ORDER BY module_name");
         $db->execute();
-
 
         $modules_info = array();
         foreach ($db->fetchAll(PDO::FETCH_ASSOC) as $row) {
@@ -135,7 +129,7 @@ class Modules
         }
 
         // get the list of currently installed modules
-        $current_modules = self::get();
+        $current_modules = self::getList();
         $current_module_folders = array();
         foreach ($current_modules as $module_info) {
             $current_module_folders[] = $module_info["module_folder"];
@@ -187,4 +181,26 @@ class Modules
 
         return $modules;
     }
+
+
+    public static function installModules()
+    {
+        $modules = self::getList();
+        foreach ($modules as $module_info) {
+            $module_id     = $module_info["module_id"];
+            $is_installed  = $module_info["is_installed"];
+
+            if ($is_installed == "yes") {
+                continue;
+            }
+
+            $info = array("install" => $module_id);
+
+            // this will run the installation scripts for any module in the /modules folder. Note: the special "Core Field Types"
+            // module has a dummy installation function that gets called here. That ensures the module is marked as "enabled", etc.
+            // even though we actually installed it above.
+            ft_install_module($info);
+        }
+    }
+
 }

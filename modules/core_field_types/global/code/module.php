@@ -1,5 +1,7 @@
 <?php
 
+use PDOException, FormTools\Core;
+
 
 /**
  * Our "mock" installation function. This doesn't actually do anything: it just pretends to install
@@ -92,7 +94,6 @@ function core_field_types__update($old_version_info, $new_version_info)
 			") or die(mysql_error());
 		}
 
-
 		$checkboxes_field_type_id = ft_get_field_type_id_by_identifier("checkboxes");
 		$field_info = ft_get_field_type($checkboxes_field_type_id, true);
 		$option_list_setting_id = "";
@@ -129,108 +130,109 @@ function core_field_types__update($old_version_info, $new_version_info)
  */
 function cft_install_module()
 {
-  global $g_table_prefix, $LANG, $cft_field_types;
+    $db = Core::$db;
 
 	$field_types = ft_get_field_types();
-	if (!empty($field_types))
-	{
+	if (count($field_types) > 0) {
 		return array(true, "");
 	}
 
+	$group_query = "
+        INSERT INTO {PREFIX}list_groups (group_type, group_name, custom_data, list_order)
+        VALUES (:group_type, :group_name, :custom_data, :list_order)
+	";
+
 	// first, insert the groups for the forthcoming field types
-	$query = mysql_query("
-	  INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
-	  VALUES ('field_types', '{\$LANG.phrase_standard_fields}', '', 1)
-	");
-  if (!$query)
-  {
-    return array(false, "Problem inserting list group item #1: " .mysql_error());
-  }
-  $group1_id = mysql_insert_id();
-
-  $query = mysql_query("
-    INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
-    VALUES ('field_types', '{\$LANG.phrase_special_fields}', '', 2)
-  ");
-  if (!$query)
-  {
-  	$error = mysql_error();
-  	cft_rollback_new_installation();
-    return array(false, "Problem inserting list group item #2: " . $error);
-  }
-  $group2_id = mysql_insert_id();
+	$db->query($group_query);
+	$db->bindAll(array(
+	    ":group_type" => "field_types",
+        ":group_name" => "{\$LANG.phrase_standard_fields}",
+        ":custom_data" => "",
+        ":list_order" => 1
+    ));
+    try {
+        $db->execute();
+    } catch (PDOException $e) {
+        return array(false, "Problem inserting list group item #1: " . $e->getMessage());
+    }
+    $group1_id = $db->getInsertId();
 
 
-	// install each field type one-by-one. If ANYTHING fails, return immediately and inform the user. This should
+    $db->query($group_query);
+    $db->bindAll(array(
+        ":group_type" => "field_types",
+        ":group_name" => "{\$LANG.phrase_special_fields}",
+        ":custom_data" => "",
+        ":list_order" => 2
+    ));
+
+    try {
+        $db->execute();
+    } catch (PDOException $e) {
+        cft_rollback_new_installation();
+        return array(false, "Problem inserting list group item #2: " . $e->getMessage());
+    }
+    $group2_id = $db->getInsertId();
+
+
+    // install each field type one-by-one. If anything fails, return immediately and inform the user. This should
 	// NEVER occur, because the only time this code is ever executed is when first installing the module
-
 	list($success, $error) = cft_install_field_type("textbox", $group1_id);
-  if (!$success)
-  {
-  	cft_rollback_new_installation();
-  	return array($success, $error);
-  }
-  list($success, $error) = cft_install_field_type("textarea", $group1_id);
-  if (!$success)
-  {
-  	cft_rollback_new_installation();
-  	return array($success, $error);
-  }
-  list($success, $error) = cft_install_field_type("password", $group1_id);
-  if (!$success)
-  {
-    cft_rollback_new_installation();
-    return array($success, $error);
-  }
-  list($success, $error) = cft_install_field_type("dropdown", $group1_id);
-  if (!$success)
-  {
-    cft_rollback_new_installation();
-    return array($success, $error);
-  }
-  list($success, $error) = cft_install_field_type("multi_select_dropdown", $group1_id);
-  if (!$success)
-  {
-    cft_rollback_new_installation();
-    return array($success, $error);
-  }
-  list($success, $error) = cft_install_field_type("radio_buttons", $group1_id);
-  if (!$success)
-  {
-    cft_rollback_new_installation();
-    return array($success, $error);
-  }
-  list($success, $error) = cft_install_field_type("checkboxes", $group1_id);
-  if (!$success)
-  {
-    cft_rollback_new_installation();
-    return array($success, $error);
-  }
-  list($success, $error) = cft_install_field_type("date", $group2_id);
-  if (!$success)
-  {
-    cft_rollback_new_installation();
-    return array($success, $error);
-  }
-  list($success, $error) = cft_install_field_type("time", $group2_id);
-  if (!$success)
-  {
-    cft_rollback_new_installation();
-    return array($success, $error);
-  }
-  list($success, $error) = cft_install_field_type("phone", $group2_id);
-  if (!$success)
-  {
-    cft_rollback_new_installation();
-    return array($success, $error);
-  }
-  list($success, $error) = cft_install_field_type("code_markup", $group2_id);
-  if (!$success)
-  {
-    cft_rollback_new_installation();
-    return array($success, $error);
-  }
+    if (!$success) {
+        cft_rollback_new_installation();
+        return array($success, $error);
+    }
+    list($success, $error) = cft_install_field_type("textarea", $group1_id);
+    if (!$success) {
+        cft_rollback_new_installation();
+        return array($success, $error);
+    }
+    list($success, $error) = cft_install_field_type("password", $group1_id);
+    if (!$success) {
+        cft_rollback_new_installation();
+        return array($success, $error);
+    }
+    list($success, $error) = cft_install_field_type("dropdown", $group1_id);
+    if (!$success) {
+        cft_rollback_new_installation();
+        return array($success, $error);
+    }
+    list($success, $error) = cft_install_field_type("multi_select_dropdown", $group1_id);
+    if (!$success) {
+        cft_rollback_new_installation();
+        return array($success, $error);
+    }
+    list($success, $error) = cft_install_field_type("radio_buttons", $group1_id);
+    if (!$success) {
+        cft_rollback_new_installation();
+        return array($success, $error);
+    }
+    list($success, $error) = cft_install_field_type("checkboxes", $group1_id);
+    if (!$success) {
+        cft_rollback_new_installation();
+        return array($success, $error);
+    }
+    list($success, $error) = cft_install_field_type("date", $group2_id);
+    if (!$success) {
+        cft_rollback_new_installation();
+        return array($success, $error);
+    }
+    list($success, $error) = cft_install_field_type("time", $group2_id);
+    if (!$success) {
+        cft_rollback_new_installation();
+        return array($success, $error);
+    }
+    list($success, $error) = cft_install_field_type("phone", $group2_id);
+    if (!$success) {
+        cft_rollback_new_installation();
+        return array($success, $error);
+    }
+    list($success, $error) = cft_install_field_type("code_markup", $group2_id);
+    if (!$success) {
+        cft_rollback_new_installation();
+        return array($success, $error);
+    }
 
-  return array(true, "");
+    return array(true, "");
 }
 
