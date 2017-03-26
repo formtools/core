@@ -245,10 +245,11 @@ function ft_get_module_menu_items($module_id, $module_folder)
  */
 function ft_get_module($module_id)
 {
-	global $g_table_prefix;
-
-	$query = mysql_query("SELECT * FROM {$g_table_prefix}modules WHERE module_id = $module_id");
-	$result = mysql_fetch_assoc($query);
+    $db = Core::$db;
+	$db->query("SELECT * FROM {PREFIX}modules WHERE module_id = :module_id");
+	$db->bind(":module_id", $module_id);
+    $db->execute();
+	$result = $db->fetch();
 
 	extract(ft_process_hook_calls("end", compact("module_id", "result"), array("result")), EXTR_OVERWRITE);
 
@@ -689,14 +690,15 @@ function ft_load_module_field($module_folder, $field_name, $session_name, $defau
  * @param integer $module_id
  * @return array [0] T/F, [1] error / success message.
  */
-function ft_install_module($info)
+function ft_install_module($module_id)
 {
-	global $LANG, $g_root_dir, $g_root_url, $g_table_prefix;
+	//global $LANG, $g_root_dir, $g_root_url, $g_table_prefix;
+    $module_info = ft_get_module($module_id);
 
-	$module_id = $info["install"];
-
-	$module_info = ft_get_module($module_id);
 	$module_folder = $module_info["module_folder"];
+
+	echo "!!!";
+	exit;
 
 	$success = true;
 	$message = ft_eval_smarty_string($LANG["notify_module_installed"], array("link" => "$g_root_url/modules/$module_folder"));

@@ -51,11 +51,11 @@ require_once(__DIR__ . "/code/Templates.class.php");
 require_once(__DIR__ . "/code/Themes.class.php");
 require_once(__DIR__ . "/code/Translations.class.php");
 require_once(__DIR__ . "/code/Upgrade.class.php");
+require_once(__DIR__ . "/code/User.class.php");
 require_once(__DIR__ . "/code/Views.class.php");
 
 // autoload dependencies
 require_once(__DIR__ . "/../vendor/autoload.php");
-
 
 //if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page)) {
 //

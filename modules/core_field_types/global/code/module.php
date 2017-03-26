@@ -132,6 +132,7 @@ function cft_install_module()
 {
     $db = Core::$db;
 
+    // Hmph. This ensures that the module contents only get installed once.
 	$field_types = ft_get_field_types();
 	if (count($field_types) > 0) {
 		return array(true, "");

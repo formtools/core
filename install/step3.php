@@ -22,17 +22,17 @@ $tables_already_exist = false;
 $existing_tables = array();
 
 if (isset($_POST["overwrite_tables"])) {
-    $db = new Database($hostname, $db_name, $port, $username, $password);
+    $db = new Database($hostname, $db_name, $port, $username, $password, $table_prefix);
     Installation::deleteTables($db, Core::getCoreTables());
     $_POST["create_database"] = 1;
 }
 
 if (isset($_POST["create_database"])) {
-    list($success, $error) = Database::checkConnection($hostname, $db_name, $port, $username, $password);
+    list($success, $error) = Installation::checkConnection($hostname, $db_name, $port, $username, $password);
 
 	// all checks out! Now create the database tables
 	if ($success) {
-        $db = new Database($hostname, $db_name, $port, $username, $password);
+        $db = new Database($hostname, $db_name, $port, $username, $password, $table_prefix);
 
         $existing_tables = General::getExistingTables($db, Core::getCoreTables(), $table_prefix);
 		if (empty($existing_tables)) {

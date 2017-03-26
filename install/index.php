@@ -1,10 +1,13 @@
 <?php
 
+/**
+ * Step 1: select the interface language.
+ */
+
 require_once("library.php");
 
 use FormTools\Core;
 use FormTools\Installation;
-use FormTools\Translations;
 
 Core::init();
 
@@ -15,8 +18,8 @@ if (isset($_POST["next"])) {
 
 $page = array(
     "step" => 1,
-    "available_languages" => Translations::getList(),
-    "lang_file" => $lang_file
+    "available_languages" => Core::$translations->getList(),
+    "lang" => Core::getCurrentLang()
 );
 
 Installation::displayPage("templates/index.tpl", $page);

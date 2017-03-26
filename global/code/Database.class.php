@@ -124,32 +124,4 @@ class Database
     public function getInsertId() {
         return $this->dbh->lastInsertId();
     }
-
-    // ---------------------------------------------------------------------------------------------------
-
-    /**
-     * Static helper method to checks a database connection.
-     *
-     * @param string $hostname
-     * @param string $db_name
-     * @param string $port
-     * @param string $username
-     * @param string $password
-     * @return array
-     */
-    public static function checkConnection($hostname, $db_name, $port, $username, $password)
-    {
-        global $LANG;
-
-        try {
-            $dsn = sprintf("mysql:host=%s;port=%s;dbname=%s;charset=utf8", $hostname, $port, $db_name);
-            new PDO($dsn, $username, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-        } catch (PDOException $e) {
-            $placeholders = array("db_connection_error" => $e->getMessage());
-            $error = Installation::evalSmartyString($LANG["notify_install_invalid_db_info"], $placeholders);
-            return array(false, $error);
-        }
-
-        return array(true, "");
-    }
 }

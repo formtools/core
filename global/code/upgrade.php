@@ -677,7 +677,7 @@ function ft_upgrade_form_tools()
 			if ($is_installed == "yes")
 				continue;
 
-			ft_install_module(array("install" => $module_id));
+			ft_install_module($module_id);
 		}
 
 		$query = @mysql_query("

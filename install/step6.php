@@ -9,7 +9,7 @@ use FormTools\Installation;
 use FormTools\Modules;
 use FormTools\Themes;
 
-Core::init();
+Core::init(array("omit_sessions"));
 
 // the home-stretch! populate the hooks table
 Hooks::updateAvailableHooks();
@@ -17,8 +17,12 @@ Hooks::updateAvailableHooks();
 // add whatever themes and modules are in the modules and themes folders
 Modules::updateModuleList();
 Themes::updateThemeList();
+
 Installation::installCoreFieldTypes("core_field_types");
+
+// now actually install
 Modules::installModules();
+
 
 // send "Welcome to Form Tools" email
 //if (!isset($_SESSION["ft_install"]["email_notification_sent"])) {

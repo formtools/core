@@ -7,20 +7,26 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License included in this zipfile for more details.
  *
- * The Core class added in 2.3.0. This replaces the old /global/library.php file. It's a singleton that's
+ * The Core class added in 3.0.0. This replaces the old /global/library.php file. It's a singleton that's
  * instantiated for all page loads and contains all the core functionality / objects / data etc. used
- * throughout the script. You continue to override the available settings in /global/config.php
+ * throughout the script. Basically it's a convenience static object that contains most of the stuff you need, e.g.:
+ *          - Core::$db (database connection)
+ *          - Core::$user (current user)
+ *          - Core::$L (language strings for current user)
  *
  * @copyright Benjamin Keen 2017
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @version 2.3.x
- * @package 2-3-x
+ * @version 3.0.x
+ * @package 3-0-x
  */
 
 
 // -------------------------------------------------------------------------------------------------
 
 namespace FormTools;
+
+use FormTools\Translations;
+use FormTools\User;
 
 
 class Core {
@@ -94,11 +100,12 @@ class Core {
     private static $unicode = true;
 
     /**
+     * TODO: make this an optional param to the init() method.
      * This setting should be enabled PRIOR to including this file in any external script (e.g. the API)
      * that doesn't require the person to be logged into Form Tools. This lets you leverage the Form Tools
      * functionality in the outside world without already being logged into Form Tools.
      */
-    private static $checkFTSessions = true;
+    //private static $checkFTSessions = true;
     //$g_check_ft_sessions = (isset($g_check_ft_sessions)) ? $g_check_ft_sessions : true;
 
     /**
@@ -229,6 +236,19 @@ class Core {
     public static $db;
 
     /**
+     * The translations object. Used to get the current UI language and translation strings (Core::$translations->getList())
+     */
+    public static $translations; // TODO need to expose?
+    public static $L;
+    private static $currLang;
+
+    /**
+     * User-related settings.
+     */
+    public static $isLoggedIn = false;
+    public static $user;
+
+    /**
      * Tracks whether the user's configuration file exists.
      */
     private static $configFileExists = false;
@@ -236,17 +256,17 @@ class Core {
     /**
      * The current version of the Form Tools Core.
      */
-    private static $version = "2.3.0-dev";
+    private static $version = "3.0.0-dev";
 
     /**
      * The release type: alpha, beta or main
      */
-    private static $releaseType = "main";
+    private static $releaseType = "beta";
 
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20170225";
+    private static $releaseDate = "20170326";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
@@ -259,9 +279,12 @@ class Core {
     private static $requiredMysqlVersion = "4.1.2";
 
     /**
-     * This is an if-all-else-fails value. It should NEVER be changed.
+     * Default values. These are use during installation when we have no idea what the user wants. For non-authenticated
+     * people visiting the login/forget password pages, they'll get whatever theme & lang has been configured in the
+     * database (I figure that's a bit more flexible putting it there than hardcoded in config file).
      */
     private static $defaultTheme = "default";
+    private static $defaultLang = "en_us";
 
     /**
      * This determines the value used in the database to separate multiple field values (checkboxes and
@@ -274,8 +297,8 @@ class Core {
      * Used throughout the script to store any and all temporary error / notification messages. Don't change
      * or remove - defining them here prevents unwanted PHP notices.
      */
-    private static $g_success = "";
-    private static $g_message = "";
+//    private static $g_success = "";
+//    private static $g_message = "";
 
     /**
      * Simple benchmarking code. When enabled, this outputs a page load time in the footer.
@@ -341,18 +364,38 @@ class Core {
 
     /**
      * Initializes the Core singleton for use throughout Form Tools.
+     *
+     * *** This contents of this method is still being determined ***
+     *
+     *   - sets up PDO database connection available through Core::$db
+     *   - starts sessions
+     *   - if a user is logged in, instantiates the User object and makes it available via Core::$user
+     *   - The language is user-specific, but lang strings available as a convenience here: Core::$L
      */
-    public static function init() {
+    public static function init($options = array()) {
+
         self::loadConfigFile();
-        self::initDatabase();
 
         // explicitly set the error reporting value
         error_reporting(self::$errorReporting);
 
-        // start sessions
-        self::startSessions();
+        if (self::$configFileExists) {
+            self::initDatabase();
+            self::initUser();
+        }
 
-        // optionally enable benchmarking. This is really a dev feature to confirm pages aren't taking too long to load
+        self::$translations = new Translations(self::$currLang);
+        self::$L = self::$translations->getStrings(); // convenience method
+
+        // for now.
+//        self::enableDebugging();
+
+        // start sessions
+        if (!isset($options["omit_sessions"])) {
+            self::startSessions();
+        }
+
+        // optionally enable benchmarking. Dev-only feature to confirm pages aren't taking too long to load
         if (self::$enableBenchmarking) {
             self::$benchmarkStart = ft_get_microtime_float();
         }
@@ -360,7 +403,6 @@ class Core {
 
     public static function startSessions() {
         if (self::$sessionType == "database") {
-            //$g_link = ft_db_connect();
             new SessionManager();
         }
 
@@ -395,24 +437,34 @@ class Core {
 
         self::$configFileExists = true;
 
-        self::$rootURL    = (isset($g_root_url)) ? $g_root_url : null;
-        self::$rootDir    = (isset($g_root_dir)) ? $g_root_dir : null;
-        self::$dbHostname = (isset($g_db_hostname)) ? $g_db_hostname : null;
-        self::$dbName     = (isset($g_db_name)) ? $g_db_name : null;
-        self::$dbPort     = (isset($g_db_port)) ? $g_db_port : null;
-        self::$dbUsername = (isset($g_db_username)) ? $g_db_username : null;
-        self::$dbPassword = (isset($g_db_password)) ? $g_db_password : null;
+        self::$rootURL     = (isset($g_root_url)) ? $g_root_url : null;
+        self::$rootDir     = (isset($g_root_dir)) ? $g_root_dir : null;
+        self::$dbHostname  = (isset($g_db_hostname)) ? $g_db_hostname : null;
+        self::$dbName      = (isset($g_db_name)) ? $g_db_name : null;
+        self::$dbPort      = (isset($g_db_port)) ? $g_db_port : null;
+        self::$dbUsername  = (isset($g_db_username)) ? $g_db_username : null;
+        self::$dbPassword  = (isset($g_db_password)) ? $g_db_password : null;
         self::$dbTablePrefix = (isset($g_table_prefix)) ? $g_table_prefix : null;
         self::$unicode    = (isset($g_unicode)) ? $g_unicode : null;
         self::$setSqlMode = (isset($g_set_sql_mode)) ? $g_set_sql_mode : null;
     }
 
     /**
-     * Called automatically in Core::init(). This initializes a default database connection, accessible via Core::$db.
+     * Called automatically in Core::init(). This initializes a default database connection, accessible via Core::$db
      */
     private static function initDatabase() {
         self::$db = new Database(self::$dbHostname, self::$dbName, self::$dbPort, self::$dbUsername, self::$dbPassword,
             self::$dbTablePrefix);
+    }
+
+    private static function initUser() {
+        if (User::isLoggedIn()) {
+            self::$user = new User();
+            self::$isLoggedIn = true;
+            self::$currLang = self::$user->getLang();
+        } else {
+            self::$currLang = self::$defaultLang;
+        }
     }
 
     public static function getRootURL() {
@@ -421,6 +473,10 @@ class Core {
 
     public static function getRootDir() {
         return self::$rootDir;
+    }
+
+    public static function getCurrentLang() {
+        return self::$currLang;
     }
 
     public static function isValidPHPVersion() {

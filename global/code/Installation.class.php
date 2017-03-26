@@ -1,11 +1,11 @@
 <?php
 
 /**
- * The installation class. Added in 2.3.0.
+ * The installation class. Added in 3.0.0.
  *
  * @copyright Benjamin Keen 2017
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @package 2-3-x
+ * @package 3-0-x
  * @subpackage Installation
  */
 
@@ -15,7 +15,7 @@
 namespace FormTools;
 
 
-use Smarty, PDOException;
+use Smarty, PDO, PDOException;
 
 
 /**
@@ -45,30 +45,6 @@ class Installation
         // no such luck! we couldn't create the file on the server. The user will need to do it manually
         return false;
     }
-
-
-    /**
-     * basic test to find out if the database has been set up (namely: includes the user_account,
-     * settings, forms and form_fields tables). Returns true/false.
-    public static function databaseIsSetup()
-    {
-        global $g_db_name, $g_table_prefix, $g_sql;
-
-        $is_setup = false;
-
-        $g_sql = mysql_query("SHOW TABLES FROM $g_db_name");
-
-        $table_names = array();
-        while ($table_info = mysql_fetch_array($sql, MYSQL_NUM))
-            $table_names[] = $table_info[0];
-
-        if (in_array("{$g_table_prefix}settings", $table_names) && in_array("{$g_table_prefix}forms", $table_names) &&
-        in_array("{$g_table_prefix}form_fields", $table_names) && in_array("{$g_table_prefix}accounts", $table_names))
-            $is_setup = true;
-
-        return $is_setup;
-    }
-    */
 
 
     /**
@@ -123,6 +99,33 @@ class Installation
     }
 
 
+    /**
+     * Static helper method to checks a database connection.
+     *
+     * @param string $hostname
+     * @param string $db_name
+     * @param string $port
+     * @param string $username
+     * @param string $password
+     * @return array
+     */
+    public static function checkConnection($hostname, $db_name, $port, $username, $password)
+    {
+        $LANG = Core::$L;
+
+        try {
+            $dsn = sprintf("mysql:host=%s;port=%s;dbname=%s;charset=utf8", $hostname, $port, $db_name);
+            new PDO($dsn, $username, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+        } catch (PDOException $e) {
+            $placeholders = array("db_connection_error" => $e->getMessage());
+            $error = self::evalSmartyString($LANG["notify_install_invalid_db_info"], $placeholders);
+            return array(false, $error);
+        }
+
+        return array(true, "");
+    }
+
+
     public static function evalSmartyString($placeholder_str, $placeholders = array(), $theme = "default")
     {
         global $LANG;
@@ -151,12 +154,13 @@ class Installation
      */
     public static function displayPage($template, $page_vars)
     {
-        global $LANG, $g_smarty, $g_success, $g_message, $g_release_type, $g_release_date;
+        global $g_smarty, $g_success, $g_message, $g_release_type, $g_release_date;
 
         $version = Core::getCoreVersion();
+        $LANG = Core::$L;
 
         clearstatcache();
-        $theme_folder   = realpath(INSTALLATION_FOLDER . "/../themes/default/");
+        $theme_folder   = realpath(__DIR__ . "/../../themes/default/");
         $cache_folder   = "$theme_folder/cache/";
 
         // always try to set the cache folder to 777
@@ -248,7 +252,7 @@ EOF;
             $g_smarty->assign($key, $value);
         }
 
-        $g_smarty->display(INSTALLATION_FOLDER . "/$template");
+        $g_smarty->display(realpath(__DIR__ . "/../../install/$template"));
     }
 
 
@@ -346,6 +350,8 @@ EOF;
      */
     public static function getConfigFileContents()
     {
+        $installationFolder = realpath(__DIR__ . "/../../install/");
+
         // try to fix REQUEST_URI for IIS
         if (empty($_SERVER['REQUEST_URI'])) {
             // IIS Mod-Rewrite
@@ -374,10 +380,10 @@ EOF;
         }
 
         $root_url = preg_replace("/\/install\/step4\.php$/", "", "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
-        $root_dir = preg_replace("/.install$/", "", INSTALLATION_FOLDER);
+        $root_dir = preg_replace("/.install$/", "", $installationFolder);
         $root_dir = preg_replace("/\\\/", "\\\\\\", $root_dir);
 
-        $_SESSION["ft_install"]["g_root_dir"] = INSTALLATION_FOLDER;
+        $_SESSION["ft_install"]["g_root_dir"] = $installationFolder;
         $_SESSION["ft_install"]["g_root_url"] = $root_url;
 
         $username = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_username"]);

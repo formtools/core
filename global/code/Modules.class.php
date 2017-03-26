@@ -185,21 +185,18 @@ class Modules
 
     public static function installModules()
     {
-        $modules = self::getList();
-        foreach ($modules as $module_info) {
-            $module_id     = $module_info["module_id"];
-            $is_installed  = $module_info["is_installed"];
+        // this will run the installation scripts for any module in the /modules folder. Note: the special "Core Field Types"
+        // module has a dummy installation function that gets called here. That ensures the module is marked as "enabled", etc.
+        // even though we actually installed it elsewhere.
 
-            if ($is_installed == "yes") {
+        $modules = self::getList();
+
+        foreach ($modules as $module_info) {
+            if ($module_info["is_installed"] == "yes") {
                 continue;
             }
 
-            $info = array("install" => $module_id);
-
-            // this will run the installation scripts for any module in the /modules folder. Note: the special "Core Field Types"
-            // module has a dummy installation function that gets called here. That ensures the module is marked as "enabled", etc.
-            // even though we actually installed it above.
-            ft_install_module($info);
+            ft_install_module($module_info["module_id"]);
         }
     }
 

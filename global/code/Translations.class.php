@@ -8,11 +8,32 @@ namespace FormTools;
  */
 class Translations
 {
-    // returns the list of available translations
-    public static function getList() {
+    private $list;
+    private $L;
+
+    function __construct($lang) {
         $json = file_get_contents(__DIR__ . "/../lang/manifest.json");
         $translations = json_decode($json);
-        return $translations->languages;
+
+        // store the full list of translations
+        $this->list = $translations->languages;
+
+        // now load the appropriate one. This may be better with an autoloader & converting the lang files to classes.
+        $lang_file = $lang . ".php";
+        include_once(realpath(__DIR__ . "/../lang/{$lang_file}"));
+
+        if (isset($LANG)) {
+            $this->L = $LANG;
+        }
+    }
+
+    // returns the list of available translations
+    public function getList() {
+        return $this->list;
+    }
+
+    public function getStrings() {
+        return $this->L;
     }
 
 }
