@@ -2,27 +2,22 @@
 
 $sortable_id = "edit_fields";
 
-if (isset($request["update_fields"]))
-{
+if (isset($request["update_fields"])) {
 	$request["sortable_id"] = $sortable_id;
 	list($g_success, $g_message) = ft_update_form_fields_tab($form_id, $request);
 }
 
 $form_info = ft_get_form($form_id);
-if (isset($request["num_fields_per_page"]))
-{
+if (isset($request["num_fields_per_page"])) {
 	$num_fields_per_page = $request["num_fields_per_page"];
 	ft_set_settings(array("admin_num_fields_per_page_{$form_id}" => $request["num_fields_per_page"]));
 	$_GET["fields_page"] = 1;
-}
-else
-{
+} else {
 	$saved_num_fields_per_page = ft_get_settings("admin_num_fields_per_page_{$form_id}");
 	$num_fields_per_page = (!empty($saved_num_fields_per_page)) ? $saved_num_fields_per_page : "all";
 }
 
-if (empty($num_fields_per_page))
-{
+if (empty($num_fields_per_page)) {
 	ft_set_settings("admin_num_fields_per_page_{$form_id}", "all");
 }
 
@@ -33,8 +28,7 @@ $total_form_fields = ft_get_num_form_fields($form_id);
 
 $reserved_words = ft_get_mysql_reserved_words();
 $escaped_words = array();
-foreach ($reserved_words as $word)
-{
+foreach ($reserved_words as $word) {
 	$escaped_words[] = "\"$word\"";
 }
 $reserved_words = implode(",", $escaped_words);
@@ -61,8 +55,7 @@ $page_vars["sortable_id"] = $sortable_id;
 $page_vars["limit_fields"] = (isset($g_max_ft_form_fields) && !empty($g_max_ft_form_fields)) ? true : false;
 
 
-if ($num_fields_per_page != "all")
-{
+if ($num_fields_per_page != "all") {
 	$page_vars["order_start_number"] = (($fields_page - 1) * $num_fields_per_page) + 1;
 	$page_vars["num_fields_per_page"] = $num_fields_per_page;
 	$pagination_settings = array(

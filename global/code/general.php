@@ -37,14 +37,14 @@ function ft_db_connect()
 
 	if (!$link)
 	{
-		ft_display_serious_error("<p>Form Tools was unable to make a connection to the database hostname. This usually means the host is temporarily down, it's no longer accessible with the hostname you're passing, or the username and password you're using isn't valid.</p><p>Please check your /global/config.php file to confirm the <b>\$g_db_hostname</b>, <b>\$g_db_username</b> and <b>\$g_db_password</b> settings.</p>");
+		General::displaySeriousError("<p>Form Tools was unable to make a connection to the database hostname. This usually means the host is temporarily down, it's no longer accessible with the hostname you're passing, or the username and password you're using isn't valid.</p><p>Please check your /global/config.php file to confirm the <b>\$g_db_hostname</b>, <b>\$g_db_username</b> and <b>\$g_db_password</b> settings.</p>");
 		exit;
 	}
 
 	$db_connection = mysql_select_db($g_db_name);
 	if (!$db_connection)
 	{
-		ft_display_serious_error("Form Tools was unable to make a connection to the database. This usually means the database is temporarily down, or that the database is no longer accessible. Please check your /global/config.php file to confirm the <b>\$g_db_name</b> setting.");
+		General:displaySeriousError("Form Tools was unable to make a connection to the database. This usually means the database is temporarily down, or that the database is no longer accessible. Please check your /global/config.php file to confirm the <b>\$g_db_name</b> setting.");
 		exit;
 	}
 
@@ -70,86 +70,6 @@ function ft_db_connect()
 function ft_db_disconnect($link)
 {
 	@mysql_close($link);
-}
-
-
-/**
- * A handy, generic function used throughout the site to output messages to the user - the content
- * of which are returned by the various functions. It can handle multiple messages (notifications
- * and/or errors) by passing in arrays for each of the two parameters.
- *
- * Ultimately, one of the goals is to move to complete consistency in the ways the various functions
- * handle their return values. Specifically, an array with the following indexes:<br/>
- *    [0] T/F (or an array of T/F values),<br/>
- *    [1] error/success message string (or an array of strings)<br/>
- *    [2] other information, e.g. new IDs (optional).
- *
- *
- * @param boolean $results This parameter can be EITHER a boolean or an array of booleans if you
- *          need to display multiple messages at once.
- * @param boolean $messages The message to output, or an array of messages. The indexes of each
- *          corresponds to the success/failure boolean in the $results parameter.
- */
-function ft_display_message($results, $messages)
-{
-	global $LANG;
-
-	// if there are no messages, just return
-	if (empty($messages))
-		return;
-
-	$notifications = array();
-	$errors        = array();
-
-	if (is_array($results))
-	{
-		for ($i=0; $i<=count($results); $i++)
-		{
-			if     ($results[$i])  $notifications[] = $messages[$i];
-			elseif (!$results[$i]) $errors[]        = $messages[$i];
-		}
-	}
-	else
-	{
-		if     ($results)  $notifications[] = $messages;
-		elseif (!$results) $errors[]        = $messages;
-	}
-
-
-	// display notifications
-	if (!empty($notifications))
-	{
-		if (count($notifications) > 1)
-		{
-			array_walk($notifications, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-			$display_str = join("<br />", $notifications);
-		}
-		else
-			$display_str = $notifications[0];
-
-		echo "<div class='notify'>$display_str</div>";
-	}
-
-	// display errors
-	if (!empty($errors))
-	{
-		// if there were notifications displayed, add a little padding to separate the two sections
-		if (!empty($notifications)) { echo "<br />"; }
-
-		if (count($errors) > 1)
-		{
-			array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-			$display_str = join("<br />", $errors);
-			$title_str = $LANG["word_errors"];
-		}
-		else
-		{
-			$display_str = $errors[0];
-			$title_str = $LANG["word_error"];
-		}
-
-		echo "<div class='error'><span>$title_str</span><br /><br />$display_str</div><br />";
-	}
 }
 
 
@@ -941,7 +861,7 @@ function ft_verify_core_tables_exist()
 	if (!$all_tables_found)
 	{
 		$missing_tables_str = "<blockquote><pre>" . implode("\n", $missing_tables) . "</pre></blockquote>";
-		ft_display_serious_error("Form Tools couldn't find all the database tables. Please check your /global/config.php file to confirm the <b>\$g_table_prefix</b> setting. The following tables are missing: {$missing_tables_str}");
+		General::displaySeriousError("Form Tools couldn't find all the database tables. Please check your /global/config.php file to confirm the <b>\$g_table_prefix</b> setting. The following tables are missing: {$missing_tables_str}");
 		exit;
 	}
 }
@@ -1612,54 +1532,6 @@ function ft_get_formtools_installed_components()
 	}
 
 	return $components;
-}
-
-
-/**
- * This is used for serious errors: when no database connection can be made. All it does is output
- * the error string with no other dependencies - not even language strings. This is always output in English.
- *
- * @param string $error
- */
-function ft_display_serious_error($error)
-{
-	echo <<< END
-<html>
-<head>
-  <title>Error</title>
-  <style type="text/css">
-  h1 {
-    margin: 0px 0px 16px 0px;
-  }
-  body {
-    background-color: #f9f9f9;
-    text-align: center;
-    font-family: verdana;
-    font-size: 11pt;
-    line-height: 22px;
-  }
-  div {
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    border-radius: 20px;
-    border: 1px solid #666666;
-    padding: 40px;
-    background-color: white;
-    width: 600px;
-    text-align: left;
-    margin: 30px auto;
-    word-wrap: break-word;
-  }
-  </style>
-</head>
-<body>
-<div class="error">
-  <h1>Uh-oh.</h1>
-  {$error}
-</div>
-</body>
-</html>
-END;
 }
 
 

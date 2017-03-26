@@ -31,6 +31,19 @@ class Database
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
         );
 
+        // if required, set all queries as UTF-8 (enabled by default)
+        $attrInitCommands = array();
+        if (Core::isUnicode()) {
+            $attrInitCommands[] = "Names utf8";
+        }
+        //
+        if (Core::shouldSetSqlMode()) {
+            $attrInitCommands[] = "SQL_MODE=''";
+        }
+        if (!empty($attrInitCommands)) {
+            $options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET " . implode(",", $attrInitCommands);
+        }
+
         try {
             $dsn = sprintf("mysql:host=%s;port=%s;dbname=%s;charset=utf8", $hostname, $port, $db_name);
             $this->dbh = new PDO($dsn, $username, $password, $options);
@@ -40,8 +53,10 @@ class Database
 
         $this->table_prefix = $table_prefix;
 
-        // ??
-        //@mysqli_query($this->link, "SET NAMES 'utf8'");
+
+        if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"])) {
+            ft_check_sessions_timeout();
+        }
     }
 
     /**

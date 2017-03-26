@@ -4,7 +4,7 @@ $g_defer_init_page = true;
 require_once(__DIR__ . "/library.php");
 
 if ($g_session_type == "database") {
-	$g_link = ft_db_connect();
+	//$g_link = ft_db_connect();
 	$sess = new SessionManager();
 }
 

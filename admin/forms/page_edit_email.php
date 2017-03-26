@@ -2,8 +2,9 @@
 
 $email_id = ft_load_field("email_id", "email_id", "");
 
-if (isset($request["update_email_template"]))
-	list($g_success, $g_message) = ft_update_email_template($email_id, $request);
+if (isset($request["update_email_template"])) {
+    list($g_success, $g_message) = ft_update_email_template($email_id, $request);
+}
 
 $form_info      = ft_get_form($form_id);
 $form_fields    = ft_get_form_fields($form_id);
@@ -33,19 +34,17 @@ $views = ft_get_views($form_id);
 $filtered_views = array();
 $selected_edit_submission_views = array();
 $selected_when_sent_views = array();
-foreach ($views["results"] as $view)
-{
-	if (!empty($view["filters"]))
-		$filtered_views[] = $view;
-
-	if (in_array($view["view_id"], $template_info["edit_submission_page_view_ids"]))
-		$selected_edit_submission_views[] = $view;
-
-	if (in_array($view["view_id"], $template_info["when_sent_view_ids"]))
-		$selected_when_sent_views[] = $view;
+foreach ($views["results"] as $view) {
+	if (!empty($view["filters"])) {
+        $filtered_views[] = $view;
+    }
+	if (in_array($view["view_id"], $template_info["edit_submission_page_view_ids"])) {
+        $selected_edit_submission_views[] = $view;
+    }
+	if (in_array($view["view_id"], $template_info["when_sent_view_ids"])) {
+        $selected_when_sent_views[] = $view;
+    }
 }
-
-// ------------------------------------------------------------------------------------------------
 
 // compile the template information
 $page_vars["page"]       = "edit_email";

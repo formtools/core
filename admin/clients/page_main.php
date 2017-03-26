@@ -1,24 +1,25 @@
 <?php
 
 // update this client
-if (isset($_POST["update_client"]))
-	list($g_success, $g_message) = ft_admin_update_client($request, 1);
+if (isset($_POST["update_client"])) {
+    list($g_success, $g_message) = ft_admin_update_client($request, 1);
+}
 
 $client_info = ft_get_account_info($client_id);
 $conditional_validation = array();
-if (!empty($client_info["settings"]["min_password_length"]))
-{
+if (!empty($client_info["settings"]["min_password_length"])) {
 	$rule = ft_eval_smarty_string($LANG["validation_client_password_too_short"], array("number" => $client_info["settings"]["min_password_length"]));
 	$conditional_validation[] = "rules.push(\"if:password!=,length>={$client_info["settings"]["min_password_length"]},password,$rule\");";
 }
 
 $required_password_chars = explode(",", $client_info["settings"]["required_password_chars"]);
-if (in_array("uppercase", $required_password_chars))
-	$conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[A-Z],{$LANG["validation_client_password_missing_uppercase"]}\")";
-if (in_array("number", $required_password_chars))
-	$conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[0-9],{$LANG["validation_client_password_missing_number"]}\")";
-if (in_array("special_char", $required_password_chars))
-{
+if (in_array("uppercase", $required_password_chars)) {
+    $conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[A-Z],{$LANG["validation_client_password_missing_uppercase"]}\")";
+}
+if (in_array("number", $required_password_chars)) {
+    $conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[0-9],{$LANG["validation_client_password_missing_number"]}\")";
+}
+if (in_array("special_char", $required_password_chars)) {
 	$error = ft_eval_smarty_string($LANG["validation_client_password_missing_special_char"], array("chars" => $g_password_special_chars));
 	$password_special_chars = preg_quote($g_password_special_chars);
 	$conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[$password_special_chars],$error\")";

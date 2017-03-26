@@ -1,12 +1,12 @@
 <?php
 
-if (isset($request["update_public_form_omit_list"]))
-	list($g_success, $g_message) = ft_update_public_form_omit_list($request, $form_id);
+if (isset($request["update_public_form_omit_list"])) {
+    list($g_success, $g_message) = ft_update_public_form_omit_list($request, $form_id);
+}
 
 $form_info = ft_get_form($form_id);
 $form_omit_list = ft_get_public_form_omit_list($form_id);
 
-// ------------------------------------------------------------------------------------------------
 
 // a little hacky, but not too bad. Override the form nav links so that it always links to the main tab, not this
 // (possibly non-relevant) omit list page

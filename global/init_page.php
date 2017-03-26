@@ -13,7 +13,7 @@ if (is_file(__DIR__ . "/config.php")) {
 if ($config_file_exists) {
 
 	// if the config file exists, we can assume the user isn't installed
-	$g_link = ft_db_connect();
+	//$g_link = ft_db_connect();
 
 	// load the appropriate language file
 	$g_language = ft_get_ui_language();

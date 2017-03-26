@@ -4,13 +4,11 @@ require("../../global/session_start.php");
 ft_check_permission("admin");
 
 // update the administrator's account
-if (isset($_POST) && !empty($_POST))
-{
+if (isset($_POST) && !empty($_POST)) {
 	list($g_success, $g_message) = ft_update_admin_account($_POST, $_SESSION["ft"]["account"]["account_id"]);
 
 	// if the user just changed their language file, reset the value in sessions and refresh the page
-	if ($g_success && ($_POST["old_ui_language"] != $_POST["ui_language"]))
-	{
+	if ($g_success && ($_POST["old_ui_language"] != $_POST["ui_language"])) {
 		$_SESSION["ft"]["ui_language"] = $_POST["ui_language"];
 		session_write_close();
 		header("location: index.php?updated");
@@ -18,8 +16,7 @@ if (isset($_POST) && !empty($_POST))
 }
 
 // here, the user has just changed their ui language
-if (isset($_GET["updated"]))
-{
+if (isset($_GET["updated"])) {
 	$g_success = true;
 	$g_message = $LANG["notify_account_updated"];
 }

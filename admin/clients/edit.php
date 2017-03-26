@@ -5,8 +5,7 @@ ft_check_permission("admin");
 
 $request = array_merge($_POST, $_GET);
 $client_id = ft_load_field("client_id", "curr_client_id", "");
-if (empty($client_id))
-{
+if (empty($client_id)) {
 	header("location: index.php");
 	exit;
 }
@@ -46,8 +45,7 @@ $page_vars["next_tabset_link"] = $next_tabset_link;
 $page_vars["prev_tabset_link_label"] = $LANG["phrase_prev_client"];
 $page_vars["next_tabset_link_label"] = $LANG["phrase_next_client"];
 
-switch ($page)
-{
+switch ($page) {
 	case "main":
 		include("page_main.php");
 		break;

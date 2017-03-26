@@ -403,6 +403,8 @@ class Core {
         self::$dbUsername = (isset($g_db_username)) ? $g_db_username : null;
         self::$dbPassword = (isset($g_db_password)) ? $g_db_password : null;
         self::$dbTablePrefix = (isset($g_table_prefix)) ? $g_table_prefix : null;
+        self::$unicode    = (isset($g_unicode)) ? $g_unicode : null;
+        self::$setSqlMode = (isset($g_set_sql_mode)) ? $g_set_sql_mode : null;
     }
 
     /**
@@ -453,5 +455,13 @@ class Core {
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
         error_reporting(E_ALL);;
+    }
+
+    public static function isUnicode() {
+        return self::$unicode;
+    }
+
+    public static function shouldSetSqlMode() {
+        return self::$setSqlMode;
     }
 }

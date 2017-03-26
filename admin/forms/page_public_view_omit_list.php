@@ -2,13 +2,13 @@
 
 $view_id = $request["view_id"];
 
-if (isset($request["update_public_view_omit_list"]))
-	list($g_success, $g_message) = ft_update_public_view_omit_list($request, $view_id);
+if (isset($request["update_public_view_omit_list"])) {
+    list($g_success, $g_message) = ft_update_public_view_omit_list($request, $view_id);
+}
 
 $form_info = ft_get_form($form_id);
 $view_omit_list = ft_get_public_view_omit_list($view_id);
 
-// ------------------------------------------------------------------------------------------------
 
 // override the form nav links so that it always links to the Views page
 $page_vars["prev_tabset_link"] = (!empty($links["prev_form_id"])) ? "edit.php?page=views&form_id={$links["prev_form_id"]}" : "";

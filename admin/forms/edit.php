@@ -6,19 +6,16 @@ ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
 $form_id = ft_load_field("form_id", "form_id", "");
 
-if (!ft_check_form_exists($form_id))
-{
+if (!ft_check_form_exists($form_id)) {
 	header("location: index.php");
 	exit;
 }
 
 // store the current selected tab in memory - except for pages which require additional
 // query string info. For those, use the parent page
-if (isset($request["page"]) && !empty($request["page"]))
-{
+if (isset($request["page"]) && !empty($request["page"])) {
 	$remember_page = $request["page"];
-	switch ($remember_page)
-	{
+	switch ($remember_page) {
 		case "field_options":
 		case "files":
 			$remember_page = "fields";
@@ -27,25 +24,20 @@ if (isset($request["page"]) && !empty($request["page"]))
 			$remember_page = "emails";
 			break;
 	}
-
 	$_SESSION["ft"]["form_{$form_id}_tab"] = $remember_page;
 	$page = $request["page"];
-}
-else
-{
+} else {
 	$page = ft_load_field("page", "form_{$form_id}_tab", "edit_form_main");
 }
 
-if (isset($request['edit_email_user_settings']))
-{
+if (isset($request['edit_email_user_settings'])) {
 	header("Location: edit.php?page=email_settings");
 	exit;
 }
 
 $view_submissions_link = "submissions.php?form_id={$form_id}";
 if (isset($_SESSION["ft"]["last_link_page_{$form_id}"]) && isset($_SESSION["ft"]["last_submission_id_{$form_id}"]) &&
-	$_SESSION["ft"]["last_link_page_{$form_id}"] == "edit")
-{
+	$_SESSION["ft"]["last_link_page_{$form_id}"] == "edit") {
 	$view_submissions_link = "edit_submission.php?form_id={$form_id}&submission_id={$_SESSION["ft"]["last_submission_id_{$form_id}"]}";
 }
 
@@ -107,8 +99,7 @@ $page_vars["next_tabset_link_label"] = $LANG["phrase_next_form"];
 
 
 // load the appropriate code page
-switch ($page)
-{
+switch ($page) {
 	case "main":
 		require("page_main.php");
 		break;

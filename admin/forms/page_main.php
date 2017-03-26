@@ -2,16 +2,18 @@
 
 $sortable_id = "multi_page_form_list";
 
-if (isset($request["update_main"]))
-	list($g_success, $g_message) = ft_update_form_main_tab($request, $form_id);
+if (isset($request["update_main"])) {
+    list($g_success, $g_message) = ft_update_form_main_tab($request, $form_id);
+}
 
 $form_info = ft_get_form($form_id);
 $form_omit_list = ft_get_public_form_omit_list($form_id);
 $num_clients_on_omit_list = count($form_omit_list);
 
 $selected_client_ids = array();
-foreach ($form_info["client_info"] as $client_info)
-	$selected_client_ids[] = $client_info["account_id"];
+foreach ($form_info["client_info"] as $client_info) {
+    $selected_client_ids[] = $client_info["account_id"];
+}
 
 $num_pages_in_multi_page_form = count($form_info["multi_page_form_urls"]) + 1;
 

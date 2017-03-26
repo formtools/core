@@ -5,38 +5,34 @@ ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
 
 $post_values = array();
-if (isset($_POST) && !empty($_POST['add_client']))
-{
+if (isset($_POST) && !empty($_POST['add_client'])) {
 	list($g_success, $g_message, $new_account_id) = ft_add_client($request);
 
 	// if added, redirect to the manage client page
-	if ($g_success)
-	{
+	if ($g_success) {
 		session_write_close();
 		header("Location: edit.php?page=main&client_id=$new_account_id");
 		exit;
-	}
-	else
-	{
+	} else {
 		$post_values = $_POST;
 	}
 }
 
 $settings = ft_get_settings();
 $conditional_validation = array();
-if (!empty($settings["min_password_length"]))
-{
+if (!empty($settings["min_password_length"])) {
 	$rule = ft_eval_smarty_string($LANG["validation_client_password_too_short"], array("number" => $settings["min_password_length"]));
 	$conditional_validation[] = "rules.push(\"if:password!=,length>={$settings["min_password_length"]},password,$rule\");";
 }
 
 $required_password_chars = explode(",", $settings["required_password_chars"]);
-if (in_array("uppercase", $required_password_chars))
-	$conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[A-Z],{$LANG["validation_client_password_missing_uppercase"]}\")";
-if (in_array("number", $required_password_chars))
-	$conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[0-9],{$LANG["validation_client_password_missing_number"]}\")";
-if (in_array("special_char", $required_password_chars))
-{
+if (in_array("uppercase", $required_password_chars)) {
+    $conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[A-Z],{$LANG["validation_client_password_missing_uppercase"]}\")";
+}
+if (in_array("number", $required_password_chars)) {
+    $conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[0-9],{$LANG["validation_client_password_missing_number"]}\")";
+}
+if (in_array("special_char", $required_password_chars)) {
 	$error = ft_eval_smarty_string($LANG["validation_client_password_missing_special_char"], array("chars" => $g_password_special_chars));
 	$password_special_chars = preg_quote($g_password_special_chars);
 	$conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[$password_special_chars],$error\")";

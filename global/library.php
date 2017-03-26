@@ -47,6 +47,7 @@ require_once(__DIR__ . "/code/OptionLists.class.php");
 require_once(__DIR__ . "/code/Sessions.class.php");
 require_once(__DIR__ . "/code/Settings.class.php");
 require_once(__DIR__ . "/code/Submissions.class.php");
+require_once(__DIR__ . "/code/Templates.class.php");
 require_once(__DIR__ . "/code/Themes.class.php");
 require_once(__DIR__ . "/code/Translations.class.php");
 require_once(__DIR__ . "/code/Upgrade.class.php");

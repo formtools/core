@@ -119,7 +119,7 @@ function ft_display_page($template, $page_vars, $theme = "", $swatch = "")
 	// check the compile directory has the write permissions
 	if (!is_writable($g_smarty->compile_dir))
 	{
-		ft_display_serious_error("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$g_smarty->compile_dir}</b> to have full read-write permissions (777 on unix).", "");
+		General::displaySeriousError("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$g_smarty->compile_dir}</b> to have full read-write permissions (777 on unix).", "");
 		exit;
 	}
 

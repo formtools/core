@@ -5,18 +5,17 @@ $form_info = ft_get_form($form_id);
 
 // this is called when the user clicks Update OR deletes a group. The delete group first updates the
 // view order to ensure that whatever group is being deleted actually has the View that the user expects
-if (isset($request["update_views"]) || isset($request["{$sortable_id}_sortable__delete_group"]))
-{
+if (isset($request["update_views"]) || isset($request["{$sortable_id}_sortable__delete_group"])) {
 	$request["sortable_id"] = $sortable_id;
 	list($g_success, $g_message) = ft_update_views($form_id, $request);
 
-	if (isset($request["{$sortable_id}_sortable__delete_group"]))
-		list($g_success, $g_message) = ft_delete_view_group($request["{$sortable_id}_sortable__delete_group"]);
+	if (isset($request["{$sortable_id}_sortable__delete_group"])) {
+        list($g_success, $g_message) = ft_delete_view_group($request["{$sortable_id}_sortable__delete_group"]);
+    }
 }
 
 // if the user deleted all their Views & View Groups, a special "add default view" option appears
-if (isset($request["recreate_initial_view"]))
-{
+if (isset($request["recreate_initial_view"])) {
 	list($g_success, $g_message) = ft_add_default_view($form_id);
 }
 
@@ -24,10 +23,9 @@ $grouped_views = ft_get_grouped_views($form_id, array("omit_empty_groups" => fal
 
 // figure out how many Views we're dealing with
 $num_views = 0;
-foreach ($grouped_views as $curr_group)
-	$num_views += count($curr_group["views"]);
-
-// ------------------------------------------------------------------------------------------------
+foreach ($grouped_views as $curr_group) {
+    $num_views += count($curr_group["views"]);
+}
 
 // compile the template information
 $page_vars["page"]       = "views";
