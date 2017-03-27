@@ -15,7 +15,7 @@ class User
 
     }
 
-    public function getLang () {
+    public function getLang() {
         return $this->lang;
     }
 
@@ -24,7 +24,7 @@ class User
     /**
      * Simple helper to find out if someone's currently logged in (i.e. sessions exist).
      */
-    public static function isLoggedIn () {
+    public static function isLoggedIn() {
         return isset($_SESSION["ft"]["account"]["is_logged_in"]) && $_SESSION["ft"]["account"]["is_logged_in"];
     }
 }

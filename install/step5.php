@@ -6,7 +6,7 @@ use FormTools\Accounts;
 use FormTools\Core;
 use FormTools\Installation;
 
-// by at this point, the config file exists but the DB isn't fully set up yet. We can still
+Core::setHooksEnabled(false);
 Core::init();
 
 

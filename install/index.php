@@ -4,12 +4,15 @@
  * Step 1: select the interface language.
  */
 
-require_once("library.php");
+require_once("../global/library.php");
 
 use FormTools\Core;
 use FormTools\Installation;
 
+Core::setHooksEnabled(false);
 Core::init();
+Core::setCurrLang(ft_load_field("lang_file", "lang_file", Core::getDefaultLang(), "ft_install"));
+
 
 if (isset($_POST["next"])) {
 	header("location: step2.php");

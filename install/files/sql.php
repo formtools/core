@@ -38,7 +38,9 @@ $g_sql[] = "CREATE TABLE %PREFIX%accounts (
   PRIMARY KEY (account_id)
 ) DEFAULT CHARSET=%CHARSET%";
 
-$g_sql[] = "INSERT INTO %PREFIX%accounts (account_id, account_type, account_status, timezone_offset, login_page, swatch, menu_id, username, password) VALUES (1, 'admin', 'active', '0', 'admin_forms', 'green', 1, '', '')";
+$g_sql[] = "INSERT INTO %PREFIX%accounts (account_id, account_type, account_status, timezone_offset, 
+  login_page, swatch, menu_id, username, password)
+  VALUES (1, 'admin', 'active', '0', 'admin_forms', 'green', 1, '', '')";
 
 $g_sql[] = "CREATE TABLE %PREFIX%client_forms (
   account_id mediumint(8) unsigned NOT NULL,

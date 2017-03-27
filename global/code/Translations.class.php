@@ -20,7 +20,7 @@ class Translations
 
         // now load the appropriate one. This may be better with an autoloader & converting the lang files to classes.
         $lang_file = $lang . ".php";
-        include_once(realpath(__DIR__ . "/../lang/{$lang_file}"));
+        include(realpath(__DIR__ . "/../lang/{$lang_file}"));
 
         if (isset($LANG)) {
             $this->L = $LANG;

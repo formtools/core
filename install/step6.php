@@ -9,7 +9,8 @@ use FormTools\Installation;
 use FormTools\Modules;
 use FormTools\Themes;
 
-Core::init(array("omit_sessions"));
+Core::setHooksEnabled(false);
+Core::init();
 
 // the home-stretch! populate the hooks table
 Hooks::updateAvailableHooks();

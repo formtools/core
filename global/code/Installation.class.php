@@ -131,8 +131,8 @@ class Installation
         global $LANG;
 
         $smarty = new Smarty();
-        $smarty->template_dir = INSTALLATION_FOLDER . "/../global/smarty/";
-        $smarty->compile_dir  = INSTALLATION_FOLDER . "/../themes/$theme/cache/";
+        $smarty->template_dir = "../global/smarty_plugins/";
+        $smarty->compile_dir  = "../../themes/$theme/cache/";
 
         $smarty->assign("eval_str", $placeholder_str);
         if (!empty($placeholders)) {
@@ -154,22 +154,22 @@ class Installation
      */
     public static function displayPage($template, $page_vars)
     {
-        global $g_smarty, $g_success, $g_message, $g_release_type, $g_release_date;
-
+        $release_type = Core::getReleaseType();
+        $release_date = Core::getReleaseDate();
         $version = Core::getCoreVersion();
         $LANG = Core::$L;
 
         clearstatcache();
-        $theme_folder   = realpath(__DIR__ . "/../../themes/default/");
-        $cache_folder   = "$theme_folder/cache/";
+        $theme_folder = realpath(__DIR__ . "/../../themes/default/");
+        $cache_folder = "$theme_folder/cache/";
 
         // always try to set the cache folder to 777
         @chmod($cache_folder, 0777);
 
-        if ($g_release_type == "alpha") {
-            $version .= "-alpha-$g_release_date";
-        } else if ($g_release_type == "beta") {
-            $version .= "-beta-$g_release_date";
+        if ($release_type == "alpha") {
+            $version .= "-alpha-$release_date";
+        } else if ($release_type == "beta") {
+            $version .= "-beta-$release_date";
         }
 
         if (!is_readable("$cache_folder/") || !is_writable("$cache_folder/")) {
@@ -213,18 +213,18 @@ EOF;
             exit;
         }
 
-        $g_smarty = new Smarty();
-        $g_smarty->template_dir = $theme_folder;
-        $g_smarty->compile_dir  = $cache_folder;
-        $g_smarty->use_sub_dirs = false;
-        $g_smarty->assign("LANG", $LANG);
-        $g_smarty->assign("SESSION", $_SESSION["ft_install"]);
-        $g_smarty->assign("same_page", $_SERVER["PHP_SELF"]);
-        $g_smarty->assign("dir", $LANG["special_text_direction"]);
-        $g_smarty->assign("g_success", $g_success);
-        $g_smarty->assign("g_message", $g_message);
-        $g_smarty->assign("g_default_theme", "default");
-        $g_smarty->assign("version", $version);
+        $smarty = new Smarty();
+        $smarty->template_dir = $theme_folder;
+        $smarty->compile_dir  = $cache_folder;
+        $smarty->use_sub_dirs = false;
+        $smarty->assign("LANG", $LANG);
+        $smarty->assign("SESSION", $_SESSION["ft_install"]);
+        $smarty->assign("same_page", $_SERVER["PHP_SELF"]);
+        $smarty->assign("dir", $LANG["special_text_direction"]);
+        $smarty->assign("g_success", ""); //$g_success);
+        $smarty->assign("g_message", ""); //$g_message);
+        $smarty->assign("g_default_theme", Core::getDefaultTheme());
+        $smarty->assign("version", $version);
 
         // check the "required" vars are at least set so they don't produce warnings when smarty debug is enabled
         if (!isset($page_vars["head_string"])) $page_vars["head_string"] = "";
@@ -249,10 +249,10 @@ EOF;
 
         // now add the custom variables for this template, as defined in $page_vars
         foreach ($page_vars as $key=>$value) {
-            $g_smarty->assign($key, $value);
+            $smarty->assign($key, $value);
         }
 
-        $g_smarty->display(realpath(__DIR__ . "/../../install/$template"));
+        $smarty->display(realpath(__DIR__ . "/../../install/$template"));
     }
 
 

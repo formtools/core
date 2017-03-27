@@ -15,12 +15,12 @@
 			<td>
 				<select name="lang_file" class="margin_right">
 					{foreach from=$available_languages item=row}
-						<option value="{$row->file}" {if $lang_file == $row->file}selected{/if}>{$row->lang}</option>
+						<option value="{$row->code}" {if $lang == $row->code}selected{/if}>{$row->lang}</option>
 					{/foreach}
 				</select>
 			</td>
 			<td>
-				<input type="submit" name="select_language" value="{$LANG.word_select}" />
+				<input type="submit" name="select_language"	 value="{$LANG.word_select}" />
 			</td>
 		</tr>
 	</table>

@@ -100,13 +100,11 @@ class Core {
     private static $unicode = true;
 
     /**
-     * TODO: make this an optional param to the init() method.
      * This setting should be enabled PRIOR to including this file in any external script (e.g. the API)
      * that doesn't require the person to be logged into Form Tools. This lets you leverage the Form Tools
      * functionality in the outside world without already being logged into Form Tools.
      */
-    //private static $checkFTSessions = true;
-    //$g_check_ft_sessions = (isset($g_check_ft_sessions)) ? $g_check_ft_sessions : true;
+    private static $checkFTSessions = true;
 
     /**
      * This is set to 1 by default (genuine errors only). Crank it up to 2047 to list every
@@ -384,16 +382,15 @@ class Core {
             self::initUser();
         }
 
-        self::$translations = new Translations(self::$currLang);
-        self::$L = self::$translations->getStrings(); // convenience method
-
-        // for now.
-//        self::enableDebugging();
-
         // start sessions
-        if (!isset($options["omit_sessions"])) {
-            self::startSessions();
+        self::startSessions();
+
+        if (isset($options["currLang"])) {
+            self::$currLang = $options["currLang"];
         }
+        self::setCurrLang(self::$currLang);
+
+        self::enableDebugging();
 
         // optionally enable benchmarking. Dev-only feature to confirm pages aren't taking too long to load
         if (self::$enableBenchmarking) {
@@ -475,10 +472,6 @@ class Core {
         return self::$rootDir;
     }
 
-    public static function getCurrentLang() {
-        return self::$currLang;
-    }
-
     public static function isValidPHPVersion() {
         return version_compare(phpversion(), self::$requiredPhpVersion, ">=");
     }
@@ -519,5 +512,31 @@ class Core {
 
     public static function shouldSetSqlMode() {
         return self::$setSqlMode;
+    }
+
+    public static function getDefaultLang() {
+        return self::$defaultLang;
+    }
+
+    public static function getDefaultTheme() {
+        return self::$defaultTheme;
+    }
+
+    public static function setHooksEnabled($status) {
+        self::$hooksEnabled = $status;
+    }
+
+    public static function setCurrLang($lang) {
+        self::$currLang = $lang;
+        self::$translations = new Translations(self::$currLang);
+        self::$L = self::$translations->getStrings();
+    }
+
+    public static function getCurrentLang() {
+        return self::$currLang;
+    }
+
+    public static function checkFTSessions() {
+        return self::$checkFTSessions;
     }
 }

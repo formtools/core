@@ -54,7 +54,7 @@ class Database
         $this->table_prefix = $table_prefix;
 
 
-        if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"])) {
+        if (Core::checkFTSessions() && User::isLoggedIn()) {
             ft_check_sessions_timeout();
         }
     }

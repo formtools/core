@@ -1,8 +1,11 @@
 <?php
 
-require_once("library.php");
+require_once("../global/library.php");
 
 use FormTools\Installation;
+
+Core::setHooksEnabled(false);
+Core::init();
 
 
 $config_file = Installation::getConfigFileContents();

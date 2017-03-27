@@ -12,6 +12,8 @@
 
 // -------------------------------------------------------------------------------------------------
 
+use FormTools\Core;
+
 
 /**
  * Open a database connection. This is called once for all page requests, and closed at the footer.
@@ -725,7 +727,7 @@ function ft_strip_tags($input)
  */
 function ft_generate_js_messages($keys = "", $module_keys = "")
 {
-	global $LANG, $L;
+	$LANG = Core::$L;
 
 	$theme = (isset($_SESSION["ft"]["account"]["theme"])) ? $_SESSION["ft"]["account"]["theme"] : "";
 

@@ -1,14 +1,18 @@
 <?php
 
-require_once("library.php");
+require_once("../global/library.php");
 
 use FormTools\Core;
 use FormTools\Installation;
 use FormTools\General;
 
+Core::setHooksEnabled(false);
+Core::init();
+Core::setCurrLang(ft_load_field("lang_file", "lang_file", Core::getDefaultLang(), "ft_install"));
+
 // folder permissions
-$upload_folder_writable           = is_writable(realpath(INSTALLATION_FOLDER . "/../upload"));
-$default_theme_cache_dir_writable = is_writable(realpath(INSTALLATION_FOLDER . "/../themes/default/cache"));
+$upload_folder_writable = is_writable(realpath("../upload"));
+$default_theme_cache_dir_writable = is_writable(realpath("../themes/default/cache"));
 
 $page = array(
     "step" => 2,

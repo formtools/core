@@ -113,6 +113,13 @@
 		{$LANG.text_install_form_tools_server_not_supported}
 	</p>
 
+{elseif !$upload_folder_writable || !$default_theme_cache_dir_writable}
+
+	<p class="error" style="padding: 6px">
+        Please ensure the required folders have write permissions. See the
+		<a href="https://docs.formtools.org/installation/step2/">help documentation</a> for further information.
+	</p>
+
 {else}
 
 	<form action="step3.php" method="post">
