@@ -35,8 +35,8 @@ class Settings {
     {
         $db = Core::$db;
 
-        $where_module_clause = (!empty($module)) ? "WHERE module = '$module'" : "";
-        $and_module_clause   = (!empty($module)) ? "AND module = '$module'" : "";
+        $where_module_clause = (!empty($module)) ? "WHERE module = :module" : "";
+        $and_module_clause   = (!empty($module)) ? "AND module = :module" : "";
 
         $result = "";
         if (empty($settings)) {
@@ -45,10 +45,13 @@ class Settings {
                 FROM   {PREFIX}settings
                 $where_module_clause
             ");
+            if (!empty($module)) {
+                $db->bind(":module", $module);
+            }
             $db->execute();
 
             $result = array();
-            while ($row = $db->fetchAll()) {
+            foreach ($db->fetchAll() as $row) {
                 $result[$row['setting_name']] = $row['setting_value'];
             }
 
@@ -59,6 +62,9 @@ class Settings {
                 WHERE  setting_name = '$settings'
                 $and_module_clause
             ");
+            if (!empty($module)) {
+                $db->bind(":module", $module);
+            }
             $db->execute();
             $info = $db->fetch();
             $result = $info["setting_value"];
@@ -72,6 +78,9 @@ class Settings {
                     WHERE  setting_name = '$setting'
                     $and_module_clause
                 ");
+                if (!empty($module)) {
+                    $db->bind(":module", $module);
+                }
                 $db->execute();
                 $info = $db->fetch();
                 $return_val[$setting] = $info["setting_value"];
