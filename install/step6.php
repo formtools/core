@@ -11,6 +11,8 @@ use FormTools\Themes;
 Core::setHooksEnabled(false);
 Core::init();
 
+/// -------------------------------------
+
 // the home-stretch! populate the hooks table
 Hooks::updateAvailableHooks();
 

@@ -108,7 +108,6 @@ class Database
 
     // method execution methods
     public function execute() {
-        //print_r($this->statement);
         return $this->statement->execute();
     }
 

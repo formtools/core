@@ -824,21 +824,6 @@ function ft_is_valid_datetime($datetime)
 
 
 /**
- * This function - called on the login page - checks that the /install folder has been removed.
- *
- * If the folder still exists, it redirects to the installation script with a unique GET flag to display an
- * appropriate error message.
- */
-function ft_verify_form_tools_installed()
-{
-	if (is_dir('install'))
-	{
-		header("Location: install/");
-		exit;
-	}
-}
-
-/**
  * Also called on the login page. This does a quick test to confirm the database tables exist as they should.
  * If not, it throws a serious error and prevents the user from logging in.
  */

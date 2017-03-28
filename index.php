@@ -1,26 +1,29 @@
 <?php
 
-require_once("global/session_start.php");
-ft_verify_form_tools_installed();
-$g_upgrade_info = ft_upgrade_form_tools();
+require_once("global/library.php");
 
+use FormTools\Core;
+use FormTools\Installation;
+use FormTools\Settings;
+use FormTools\User;
+
+Installation::checkInstalled();
+Core::init();
+
+//$g_upgrade_info = ft_upgrade_form_tools();
 
 // only verify the core tables exist if there wasn't a problem upgrading
-if (!($g_upgrade_info["upgraded"] && !$g_upgrade_info["success"])) {
-    ft_verify_core_tables_exist();
-}
+//if (!($g_upgrade_info["upgraded"] && !$g_upgrade_info["success"])) {
+//    ft_verify_core_tables_exist();
+//}
 
 // if this user is already logged in, redirect them to their specified login page
-if (isset($_SESSION["ft"]["account"]) && isset($_SESSION["ft"]["account"]["is_logged_in"]) &&
-    isset($_SESSION["ft"]["account"]["login_page"]) && $_SESSION["ft"]["account"]["is_logged_in"] == 1) {
-    $login_page = $_SESSION["ft"]["account"]["login_page"];
-    $page = ft_construct_page_url($login_page);
-    header("location: {$g_root_url}$page");
-    exit;
+if (User::isLoggedIn()) {
+    User::redirectToLoginPage();
 }
 
 // default settings
-$settings = ft_get_settings();
+$settings = Settings::getList();
 $g_theme  = $settings["default_theme"];
 $g_swatch = $settings["default_client_swatch"];
 

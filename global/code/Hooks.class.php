@@ -83,7 +83,6 @@ class Hooks {
         try {
             $db->processTransaction();
         } catch (PDOException $e) {
-            print_r($e);
             $db->rollbackTransaction();
         }
     }

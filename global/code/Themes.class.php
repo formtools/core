@@ -26,8 +26,6 @@ class Themes {
 
         $db->execute();
         $theme_info = $db->fetch();
-        print_r($theme_info);
-        exit;
 
 //        while ($theme = mysql_fetch_assoc($query))
 //            $theme_info[] = $theme;

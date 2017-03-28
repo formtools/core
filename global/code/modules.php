@@ -279,9 +279,9 @@ function ft_get_module($module_id)
  */
 function ft_get_module_settings($settings = "", $module_folder = "")
 {
-	if (empty($module_folder))
-		$module_folder = _ft_get_current_module_folder();
-
+	if (empty($module_folder)) {
+        $module_folder = _ft_get_current_module_folder();
+    }
 	return ft_get_settings($settings, $module_folder);
 }
 
@@ -293,10 +293,9 @@ function ft_get_module_settings($settings = "", $module_folder = "")
  */
 function ft_search_modules($search_criteria)
 {
-	global $g_table_prefix;
-
-	if (!isset($search_criteria["order"]))
-		$search_criteria["order"] = "module_name-DESC";
+	if (!isset($search_criteria["order"])) {
+        $search_criteria["order"] = "module_name-DESC";
+    }
 
 	extract(ft_process_hook_calls("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
 
@@ -325,8 +324,7 @@ function ft_search_modules($search_criteria)
 	$order_clause = "ORDER BY $order_clause";
 
 	$keyword_clause = "";
-	if (!empty($search_criteria["keyword"]))
-	{
+	if (!empty($search_criteria["keyword"])) {
 		$string = ft_sanitize($search_criteria["keyword"]);
 		$fields = array("module_name", "module_folder", "description");
 
@@ -736,7 +734,7 @@ function ft_install_module($module_id)
         Core::$db->query("
             UPDATE {PREFIX}modules
             SET    is_installed = :is_installed,
-                   is_enabled = :is_enabled,
+                   is_enabled = :is_enabled
             WHERE  module_id = :module_id
         ");
         Core::$db->bindAll(array(
@@ -744,11 +742,9 @@ function ft_install_module($module_id)
             ":is_enabled" => "yes",
             ":module_id" => $module_id
         ));
-
         try {
 		    Core::$db->execute();
         } catch (PDOException $e) {
-            echo $e->getMessage();
             return array(false, $e->getMessage());
         }
 	}

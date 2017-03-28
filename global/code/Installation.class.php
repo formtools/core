@@ -405,5 +405,25 @@ EOF;
 
         return $content;
     }
+
+
+
+    /**
+     * This function - called on the login page - checks that the /install folder has been removed.
+     *
+     * If the folder still exists, it redirects to the installation script with a unique GET flag to display an
+     * appropriate error message.
+     */
+    public static function checkInstalled()
+    {
+        return Core::checkConfigFileExists();
+
+        // TODO
+        if (is_dir('install')) {
+            header("Location: install/");
+            exit;
+        }
+    }
+
 }
 

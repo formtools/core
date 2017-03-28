@@ -54,6 +54,7 @@ class General
         return $existing_tables;
     }
 
+
     /**
      * Helper method to convert an array to rows of HTML in bullet points.
      * @return array
