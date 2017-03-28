@@ -1,7 +1,7 @@
 <?php
 
 
-use PDOException, FormTools\Core;
+use FormTools\Core;
 
 
 /**

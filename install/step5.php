@@ -1,6 +1,6 @@
 <?php
 
-require_once("library.php");
+require_once("../global/library.php");
 
 use FormTools\Accounts;
 use FormTools\Core;
@@ -27,6 +27,8 @@ if (isset($_POST["add_account"])) {
 		exit;
 	}
 }
+
+$LANG = Core::$L;
 
 $page = array(
     "step" => 5,

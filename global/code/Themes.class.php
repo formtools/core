@@ -43,9 +43,7 @@ class Themes {
     public static function updateThemeList()
     {
         $db = Core::$db;
-
-        // TODO
-        $LANG = array();
+        $LANG = Core::$L;
 
         // get the existing themes
 //        $current_themes = self::getList();

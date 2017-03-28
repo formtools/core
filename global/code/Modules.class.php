@@ -42,9 +42,7 @@ class Modules
     public static function updateModuleList()
     {
         $db = Core::$db;
-
-        // TODO
-        $LANG = array();
+        $LANG = Core::$L;
 
         $modules = self::getUninstalledModules();
 

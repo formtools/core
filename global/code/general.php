@@ -137,29 +137,33 @@ function ft_display_custom_page_message($flag)
  */
 function ft_eval_smarty_string($placeholder_str, $placeholders = array(), $theme = "", $plugin_dirs = array())
 {
-	global $g_root_dir, $g_default_theme, $LANG;
+	$LANG = Core::$L;
+	$rootDir = Core::getRootDir();
 
-	if (empty($theme) && isset($_SESSION["ft"]["account"]["theme"]))
-		$theme = $_SESSION["ft"]["account"]["theme"];
-	else
-		$theme = $g_default_theme;
+	// TODO no more sessions littered everywhere!
+	if (empty($theme) && isset($_SESSION["ft"]["account"]["theme"])) {
+        $theme = $_SESSION["ft"]["account"]["theme"];
+    } else {
+        $theme = Core::getDefaultTheme();
+    }
 
 	$smarty = new \Smarty();
-	$smarty->template_dir = "$g_root_dir/global/smarty/";
-	$smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
+	$smarty->template_dir = "$rootDir/global/smarty/";
+	$smarty->compile_dir  = "$rootDir/themes/$theme/cache/";
 
-	foreach ($plugin_dirs as $dir)
-		$smarty->plugins_dir[] = $dir;
+	foreach ($plugin_dirs as $dir) {
+        $smarty->plugins_dir[] = $dir;
+    }
 
 	$smarty->assign("eval_str", $placeholder_str);
-	if (!empty($placeholders))
-	{
-		while (list($key, $value) = each($placeholders))
-			$smarty->assign($key, $value);
+	if (!empty($placeholders)) {
+		while (list($key, $value) = each($placeholders)) {
+            $smarty->assign($key, $value);
+        }
 	}
 	$smarty->assign("LANG", $LANG);
 
-	$output = $smarty->fetch("eval.tpl");
+	$output = $smarty->fetch(realpath(__DIR__ . "/../smarty_plugins/eval.tpl"));
 
 	extract(ft_process_hook_calls("end", compact("output", "placeholder_str", "placeholders", "theme"), array("output")), EXTR_OVERWRITE);
 

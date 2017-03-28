@@ -1,7 +1,6 @@
 <?php
 
 require_once("../global/library.php");
-require_once("library.php");
 
 use FormTools\Core;
 use FormTools\Hooks;

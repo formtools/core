@@ -514,6 +514,10 @@ class Core {
         return self::$setSqlMode;
     }
 
+    public static function shouldDeleteFolderOnUninstallation() {
+        return self::$deleteModuleFolderOnUninstallation;
+    }
+
     public static function getDefaultLang() {
         return self::$defaultLang;
     }

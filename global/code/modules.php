@@ -3,9 +3,9 @@
 /**
  * This file defines all functions relating to Form Tools modules.
  *
- * @copyright Benjamin Keen 2014
+ * @copyright Benjamin Keen 2017
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @package 2-2-x
+ * @package 3-0-x
  * @subpackage Modules
  */
 
@@ -23,15 +23,16 @@ use FormTools\Core;
  */
 function ft_check_module_enabled($module_folder)
 {
-	global $g_table_prefix;
+    $db = Core::$db;
+	$db->query("
+        SELECT is_enabled
+        FROM   {PREFIX}modules
+        WHERE  module_folder = :module_folder
+    ");
+	$db->bind(":module_folder", $module_folder);
+	$db->execute();
+	$result = $db->fetch();
 
-	$query = mysql_query("
-    SELECT is_enabled
-    FROM   {$g_table_prefix}modules
-    WHERE  module_folder = '$module_folder'
-      ");
-
-	$result = mysql_fetch_assoc($query);
 	return (!empty($result) && $result["is_enabled"] == "yes");
 }
 
@@ -45,15 +46,16 @@ function ft_check_module_enabled($module_folder)
  */
 function ft_check_module_available($module_folder)
 {
-	global $g_table_prefix;
+    $db = Core::$db;
+	$db->query("
+        SELECT count(*) as c
+        FROM   {PREFIX}modules
+        WHERE  module_folder = :module_folder
+    ");
+	$db->bind(":module_folder", $module_folder);
+	$db->execute();
+	$result = $db->fetch();
 
-	$query = mysql_query("
-    SELECT count(*) as c
-    FROM   {$g_table_prefix}modules
-    WHERE  module_folder = '$module_folder'
-      ");
-
-	$result = mysql_fetch_assoc($query);
 	return $result["c"] == 1;
 }
 
@@ -65,13 +67,16 @@ function ft_check_module_available($module_folder)
  */
 function ft_uninstall_module($module_id)
 {
-	global $g_table_prefix, $LANG, $g_root_dir, $g_delete_module_folder_on_uninstallation;
+	$LANG = Core::$L;
+	$delete_module_folder_on_uninstallation = Core::shouldDeleteFolderOnUninstallation();
+	$rootDir = Core::getRootDir();
 
 	$module_info = ft_get_module($module_id);
 	$module_folder = $module_info["module_folder"];
 
-	if (empty($module_info))
-		return false;
+	if (empty($module_info)) {
+        return false;
+    }
 
 	$success = true;
 
@@ -163,15 +168,16 @@ function ft_uninstall_module($module_id)
  */
 function ft_get_module_id_from_module_folder($module_folder)
 {
-	global $g_table_prefix;
+	$db = Core::$db;
 
-	$result = mysql_query("
-    SELECT module_id
-    FROM   {$g_table_prefix}modules
-    WHERE  module_folder = '$module_folder'
-      ");
-
-	$info = mysql_fetch_assoc($result);
+	$db->query("
+        SELECT module_id
+        FROM   {PREFIX}modules
+        WHERE  module_folder = :module_folder
+    ");
+	$db->bind(":module_folder", $module_folder);
+    $db->execute();
+	$info = $db->fetch();
 
 	return (isset($info["module_id"])) ? $info["module_id"] : "";
 }
@@ -185,15 +191,16 @@ function ft_get_module_id_from_module_folder($module_folder)
  */
 function ft_get_module_folder_from_module_id($module_id)
 {
-	global $g_table_prefix;
+    $db = Core::$db;
 
-	$result = mysql_query("
-    SELECT module_folder
-    FROM   {$g_table_prefix}modules
-    WHERE  module_id = $module_id
-      ");
-
-	$info = mysql_fetch_assoc($result);
+    $db->query("
+        SELECT module_folder
+        FROM   {PREFIX}modules
+        WHERE  module_id = :module_id
+    ");
+    $db->bind(":module_id", $module_id);
+    $db->execute();
+    $info = $db->fetch();
 
 	return (isset($info["module_folder"])) ? $info["module_folder"] : "";
 }
@@ -212,22 +219,22 @@ function ft_get_module_folder_from_module_id($module_id)
  */
 function ft_get_module_menu_items($module_id, $module_folder)
 {
-	global $g_table_prefix, $g_root_url;
+    $db = Core::$db;
 
-	$result = mysql_query("
-    SELECT *
-    FROM {$g_table_prefix}module_menu_items
-    WHERE module_id = $module_id
-    ORDER BY list_order ASC
-      ");
+    $db->query("
+        SELECT *
+        FROM {PREFIX}module_menu_items
+        WHERE module_id = $module_id
+        ORDER BY list_order ASC
+    ");
 
-	$menu_items = array();
+    $rootURL = Core::getRootURL();
+	$placeholders = array(
+	    "module_dir" => "$rootURL/modules/$module_folder"
+    );
 
-	$placeholders = array();
-	$placeholders["module_dir"] = "$g_root_url/modules/$module_folder";
-
-	while ($row = mysql_fetch_assoc($result))
-	{
+    $menu_items = array();
+	while ($row = mysql_fetch_assoc($result)) {
 		$row["url"] = ft_eval_smarty_string($row["url"], $placeholders);
 		$menu_items[] = $row;
 	}
@@ -692,25 +699,22 @@ function ft_load_module_field($module_folder, $field_name, $session_name, $defau
  */
 function ft_install_module($module_id)
 {
-	//global $LANG, $g_root_dir, $g_root_url, $g_table_prefix;
+    $LANG = Core::$L;
+    $rootDir = Core::getRootDir();
+    $rootURL = Core::getRootURL();
+
     $module_info = ft_get_module($module_id);
-
-	$module_folder = $module_info["module_folder"];
-
-	echo "!!!";
-	exit;
+    $module_folder = $module_info["module_folder"];
 
 	$success = true;
-	$message = ft_eval_smarty_string($LANG["notify_module_installed"], array("link" => "$g_root_url/modules/$module_folder"));
+	$message = ft_eval_smarty_string($LANG["notify_module_installed"], array("link" => "$rootURL/modules/$module_folder"));
 
 	$has_custom_install_script = false;
 
-	if (is_file("$g_root_dir/modules/$module_folder/library.php"))
-	{
-		@include_once("$g_root_dir/modules/$module_folder/library.php");
+	if (is_file("$rootDir/modules/$module_folder/library.php")) {
+		@include_once("$rootDir/modules/$module_folder/library.php");
 		$install_function_name = "{$module_folder}__install";
-		if (function_exists($install_function_name))
-		{
+		if (function_exists($install_function_name)) {
 			$has_custom_install_script = true;
 
 			// get the module language file contents and store the info in the $LANG global for
@@ -720,27 +724,33 @@ function ft_install_module($module_id)
 
 			// if there was a custom message returned (error or notification), overwrite the default
 			// message
-			if (!empty($custom_message))
-				$message = $custom_message;
+			if (!empty($custom_message)) {
+                $message = $custom_message;
+            }
 		}
 	}
 
-	// if there wasn't a custom installation script, or there was and it was successfully run,
-	// update the record in the module table to mark it as both is_installed and is_enabled.
-	if (!$has_custom_install_script || ($has_custom_install_script && $success))
-	{
-		$module_key_clause = "";
-		if (isset($info["k"]))
-		{
-			$module_key_clause = ", module_key = '{$info["k"]}'";
-		}
-		mysql_query("
-      UPDATE {$g_table_prefix}modules
-      SET    is_installed = 'yes',
-             is_enabled = 'yes'
-             $module_key_clause
-      WHERE  module_id = $module_id
+	// if there wasn't a custom installation script, or there was and it was successfully run update the record in the
+    // module table to mark it as both is_installed and is_enabled
+	if (!$has_custom_install_script || ($has_custom_install_script && $success)) {
+        Core::$db->query("
+            UPDATE {PREFIX}modules
+            SET    is_installed = :is_installed,
+                   is_enabled = :is_enabled,
+            WHERE  module_id = :module_id
         ");
+        Core::$db->bindAll(array(
+            ":is_installed" => "yes",
+            ":is_enabled" => "yes",
+            ":module_id" => $module_id
+        ));
+
+        try {
+		    Core::$db->execute();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+            return array(false, $e->getMessage());
+        }
 	}
 
 	return array($success, $message);
