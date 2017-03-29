@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\FieldSizes;
+
+
 $sortable_id = "edit_fields";
 
 if (isset($request["update_fields"])) {
@@ -33,8 +36,8 @@ foreach ($reserved_words as $word) {
 }
 $reserved_words = implode(",", $escaped_words);
 
-$field_type_sizes_js = ft_generate_field_type_sizes_map_js();
-$field_sizes_js      = ft_generate_field_type_size_labels();
+$field_type_sizes_js = FieldSizes::generateFieldTypeSizesMapJs();
+$field_sizes_js      = FieldSizes::generateFieldTypeSizeLabels();
 $field_settings_js   = ft_generate_field_type_settings_js();
 $field_validation_js = ft_generate_field_type_validation_js();
 

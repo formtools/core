@@ -15,32 +15,6 @@
 
 
 /**
- * Returns all defined validation rules for a field.
- *
- * @param integer $field_id
- */
-function ft_get_field_validation($field_id)
-{
-	global $g_table_prefix;
-
-	$query = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}field_validation fv, {$g_table_prefix}field_type_validation_rules ftvr
-    WHERE  fv.field_id = $field_id AND
-           ftvr.rule_id = fv.rule_id
-  ");
-
-	$rules = array();
-	while ($row = mysql_fetch_assoc($query))
-	{
-		$rules[] = $row;
-	}
-
-	return $rules;
-}
-
-
-/**
  * Used on the Edit Submission pages, Form Builder - and anywhere that's actually displaying the fields for editing. This
  * generates the JS used for the RSV validation, according to whatever rules the user has specified.
  *
@@ -184,18 +158,6 @@ function ft_generate_field_type_validation_js($options = array())
 }
 
 
-/**
- * Deletes any validation defined for a particular field. This is called on the main Edit Form -> Fields tab, after a
- * field has it's field type changed.
- *
- * @param integer $field_id
- */
-function ft_delete_field_validation($field_id)
-{
-	global $g_table_prefix;
-	@mysql_query("DELETE FROM {$g_table_prefix}field_validation WHERE field_id = $field_id");
-}
-
 
 /**
  * This is the main server-side validation function, called whenever updating a submission. The current version (Core 2.1.9)
@@ -216,7 +178,7 @@ function ft_validate_submission($form_id, $editable_field_ids, $request)
 	$editable_field_ids_on_tab = explode(",", $request["field_ids"]);
 
 	// return all validation rules for items on tab, including those marked as editable == "no"
-	$rules = ft_get_php_field_validation_rules($editable_field_ids_on_tab);
+	$rules = FieldValidation::getPHPValidationRules($editable_field_ids_on_tab);
 
 	// gets all form fields in this View
 	$form_fields = ft_get_view_fields($request["view_id"]);
@@ -264,70 +226,4 @@ function ft_validate_submission($form_id, $editable_field_ids, $request)
 	return $errors;
 }
 
-
-function ft_get_php_field_validation_rules($field_ids)
-{
-	global $g_table_prefix;
-
-	if (empty($field_ids))
-		return array();
-
-	$field_id_str = implode(",", $field_ids);
-
-	$query = mysql_query("
-	  SELECT *
-	  FROM   {$g_table_prefix}field_validation fv, {$g_table_prefix}field_type_validation_rules ftvr
-	  WHERE  fv.field_id IN ($field_id_str) AND
-	         fv.rule_id = ftvr.rule_id AND
-	         ftvr.custom_function_required != 'yes'
-    ORDER BY fv.field_id, ftvr.list_order
-  ");
-
-	$rules = array();
-	while ($row = mysql_fetch_assoc($query))
-	{
-		$rules[] = $row;
-	}
-
-	return $rules;
-}
-
-
-/**
- * Called after a form submission is made, but it fails server-side validation. This merges the original content
- * with whatever is in the POST request.
- *
- * @param array $grouped_fields
- * @param array $request
- */
-function ft_merge_form_submission($grouped_fields, $request)
-{
-	global $g_multi_val_delimiter;
-
-	$updated_grouped_fields = array();
-	foreach ($grouped_fields as $group_info)
-	{
-		$group  = $group_info["group"];
-		$fields = $group_info["fields"];
-
-		$updated_fields = array();
-		foreach ($fields as $field_info)
-		{
-			if (array_key_exists($field_info["field_name"], $request))
-			{
-				// TODO! This won't work for phone_number fields, other fields
-				$value = (is_array($request[$field_info["field_name"]])) ? implode($g_multi_val_delimiter, $request[$field_info["field_name"]]) : $request[$field_info["field_name"]];
-				$field_info["submission_value"] = $value;
-			}
-			$updated_fields[] = $field_info;
-		}
-
-		$updated_grouped_fields[] = array(
-			"group"  => $group,
-			"fields" => $updated_fields
-		);
-	}
-
-	return $updated_grouped_fields;
-}
 

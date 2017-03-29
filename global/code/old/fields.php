@@ -15,6 +15,9 @@
 // -------------------------------------------------------------------------------------------------
 
 
+use FormTools\FieldSizes;
+
+
 /**
  * Adds new form field(s) to the database. This was totally re-written in 2.1.0, for the new Edit Fields
  * page.
@@ -27,7 +30,9 @@
  */
 function ft_add_form_fields($form_id, $fields)
 {
-	global $g_debug, $g_table_prefix, $LANG, $g_field_sizes;
+	global $g_debug, $g_table_prefix, $LANG;
+
+	$g_field_sizes = FieldSizes::get();
 
 	$success = true;
 	$message = "";

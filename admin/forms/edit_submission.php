@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\FieldValidation;
+
+
 require("../../global/session_start.php");
 ft_check_permission("admin");
 require(__DIR__ . "/edit_submission__code.php");
@@ -55,7 +58,7 @@ if ($has_tabs) {
 
 $grouped_fields = ft_get_grouped_view_fields($view_id, $tab_number, $form_id, $submission_id);
 if ($failed_validation) {
-	$grouped_fields = ft_merge_form_submission($grouped_fields, $_POST);
+	$grouped_fields = FieldValidation::mergeFormSubmission($grouped_fields, $_POST);
 }
 
 $page_field_ids      = array();

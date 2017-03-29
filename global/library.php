@@ -1,31 +1,5 @@
 <?php
 
-// old code files
-require_once(__DIR__ . "/code/administrator.php");
-require_once(__DIR__ . "/code/accounts.php");
-require_once(__DIR__ . "/code/clients.php");
-require_once(__DIR__ . "/code/emails.php");
-require_once(__DIR__ . "/code/fields.php");
-require_once(__DIR__ . "/code/field_sizes.php");
-require_once(__DIR__ . "/code/field_types.php");
-require_once(__DIR__ . "/code/field_validation.php");
-require_once(__DIR__ . "/code/files.php");
-require_once(__DIR__ . "/code/forms.php");
-require_once(__DIR__ . "/code/general.php");
-require_once(__DIR__ . "/code/hooks.php");
-require_once(__DIR__ . "/code/languages.php");
-require_once(__DIR__ . "/code/list_groups.php");
-require_once(__DIR__ . "/code/menus.php");
-require_once(__DIR__ . "/code/modules.php");
-require_once(__DIR__ . "/code/option_lists.php");
-require_once(__DIR__ . "/code/settings.php");
-require_once(__DIR__ . "/code/submissions.php");
-require_once(__DIR__ . "/code/themes.php");
-require_once(__DIR__ . "/code/upgrade.php");
-require_once(__DIR__ . "/code/validation.php");
-require_once(__DIR__ . "/code/views.php");
-
-// these will replace the above
 require_once(__DIR__ . "/code/Accounts.class.php");
 require_once(__DIR__ . "/code/Administrator.class.php");
 require_once(__DIR__ . "/code/Clients.class.php");

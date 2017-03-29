@@ -12,6 +12,7 @@
 
 // -------------------------------------------------------------------------------------------------
 
+use FormTools\FieldValidation;
 
 
 /**
@@ -1375,7 +1376,7 @@ function ft_update_form_fields_tab($form_id, $infohash)
 			$field_id = $changed_field_info["field_id"];
 			$shared_settings[] = ft_get_shared_field_setting_info($field_type_map, $field_type_settings_shared_characteristics, $field_id, $changed_field_info["field_type_id"], $changed_field_info["old_field_type_id"]);
 			ft_delete_extended_field_settings($field_id);
-			ft_delete_field_validation($field_id);
+			FieldValidation::delete($field_id);
 		}
 
 		foreach ($shared_settings as $setting)
