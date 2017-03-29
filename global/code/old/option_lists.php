@@ -13,6 +13,8 @@
 
 // -------------------------------------------------------------------------------------------------
 
+use FormTools\ListGroups;
+
 
 /**
  * Returns all list options in the database.
@@ -425,7 +427,7 @@ function ft_update_option_list($list_id, $info)
 
 	if ($is_grouped == "no")
 	{
-		$empty_group_info = ft_add_list_group("option_list_{$list_id}", "", 1);
+		$empty_group_info = ListGroups::addListGroup("option_list_{$list_id}", "", 1);
 		$empty_group_id = $empty_group_info["group_id"];
 	}
 
@@ -440,15 +442,12 @@ function ft_update_option_list($list_id, $info)
 
 		$ordered_row_ids = explode(",", $ordered_row_ids_str);
 
-		if ($is_grouped == "yes")
-		{
+		if ($is_grouped == "yes") {
 			$group_name = $info["group_name_{$curr_group_id}"];
-			$new_group_info = ft_add_list_group("option_list_{$list_id}", $group_name, $new_group_order);
+			$new_group_info = ListGroups::addListGroup("option_list_{$list_id}", $group_name, $new_group_order);
 			$curr_group_id = $new_group_info["group_id"];
 			$new_group_order++;
-		}
-		else
-		{
+		} else {
 			$curr_group_id = $empty_group_id;
 		}
 
@@ -554,7 +553,7 @@ function ft_duplicate_option_list($list_id = "", $field_ids = array())
 			$group_type = "option_list_{$new_list_id}";
 			$group_name = $group_info["group_name"];
 			$list_order = $group_info["list_order"];
-			$new_list_group_info = ft_add_list_group($group_type, $group_name, $list_order);
+			$new_list_group_info = ListGroups::addListGroup($group_type, $group_name, $list_order);
 			$new_list_group_id = $new_list_group_info["group_id"];
 
 			foreach ($options as $option_info)

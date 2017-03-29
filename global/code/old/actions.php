@@ -8,6 +8,7 @@
  */
 
 use FormTools\FieldValidation;
+use FormTools\ListGroups;
 
 
 // -------------------------------------------------------------------------------------------------
@@ -453,7 +454,7 @@ switch ($action)
 		$form_id    = $_SESSION["ft"]["form_id"];
 		$group_type = "form_{$form_id}_view_group";
 		$group_name = $request["group_name"];
-		$info = ft_add_list_group($group_type, $group_name);
+		$info = ListGroups::addListGroup($group_type, $group_name);
 		echo ft_convert_to_json($info);
 		break;
 
