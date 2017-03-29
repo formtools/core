@@ -57,8 +57,6 @@ function ft_process_form($form_data)
     $g_api_version, $g_api_recaptcha_private_key;
 
   // ensure the incoming values are escaped
-  $form_data = ft_sanitize($form_data);
-
   $form_id = $form_data["form_tools_form_id"];
   $form_info = ft_get_form($form_id);
 

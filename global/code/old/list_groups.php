@@ -22,8 +22,6 @@ function ft_add_list_group($group_type, $group_name, $next_order = "")
 {
 	global $g_table_prefix;
 
-	$group_name = ft_sanitize($group_name);
-
 	if (empty($next_order))
 	{
 		// get the next list_order for this group

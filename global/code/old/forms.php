@@ -87,7 +87,7 @@ function ft_create_internal_form($request)
 		return array(false, $message);
 	}
 
-	$info = ft_sanitize($request);
+	$info = $request;
 	$config = array(
 		"form_type"    => "internal",
 		"form_name"    => $info["form_name"],
@@ -119,7 +119,7 @@ function ft_create_internal_form($request)
 	// 1000. Any more will throw an error.
 	$field_size_clause = ($info["num_fields"] > 50) ? ", field_size = 'small'" : "";
 
-	$field_name_prefix = ft_sanitize($LANG["word_field"]);
+	$field_name_prefix = $LANG["word_field"];
 	foreach ($form_fields as $field_info)
 	{
 		if (preg_match("/field(\d+)/", $field_info["field_name"], $matches))
@@ -372,7 +372,6 @@ function ft_initialize_form($form_data)
 		$form_data["form_tools_display_notification_page"] : true;
 
 	// escape the incoming values
-	$form_data = ft_sanitize($form_data);
 	$form_id = $form_data["form_tools_form_id"];
 
 	// check the form ID is valid
@@ -563,8 +562,6 @@ function ft_initialize_form($form_data)
 function ft_get_form($form_id)
 {
 	global $g_table_prefix;
-
-	$form_id = ft_sanitize($form_id);
 
 	$query = @mysql_query("SELECT * FROM {$g_table_prefix}forms WHERE form_id = $form_id");
 	$form_info = @mysql_fetch_assoc($query);
@@ -825,8 +822,6 @@ function ft_setup_form($info)
 	$success = true;
 	$message = "";
 
-	$info = ft_sanitize($info);
-
 	// check required $info fields. This changes depending on the form type (external / internal). Validation
 	// for the internal forms is handled separately [inelegant!]
 	$rules = array();
@@ -854,7 +849,7 @@ function ft_setup_form($info)
 	$form_name       = trim($info["form_name"]);
 	$is_multi_page_form = isset($info["is_multi_page_form"]) ? $info["is_multi_page_form"] : "no";
 	$redirect_url       = isset($info["redirect_url"]) ? trim($info["redirect_url"]) : "";
-	$phrase_edit_submission = ft_sanitize($LANG["phrase_edit_submission"]);
+	$phrase_edit_submission = $LANG["phrase_edit_submission"];
 
 
 	if ($is_multi_page_form == "yes")
@@ -1020,7 +1015,6 @@ function ft_set_form_field_types($form_id, $info)
 	// is extremely excessive, but what the hey
 	@set_time_limit(600);
 
-	$info = ft_sanitize($info);
 	$form_fields = ft_get_form_fields($form_id);
 
 	// update the field types and sizes
@@ -1123,8 +1117,6 @@ function ft_uninitialize_form($form_id)
 function ft_update_form_main_tab($infohash, $form_id)
 {
 	global $g_table_prefix, $LANG;
-
-	$infohash = ft_sanitize($infohash);
 
 	extract(ft_process_hook_calls("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
 
@@ -1302,7 +1294,6 @@ function ft_update_form_fields_tab($form_id, $infohash)
 	$success = true;
 	$message = $LANG["notify_field_changes_saved"];
 
-	$infohash = ft_sanitize($infohash);
 	extract(ft_process_hook_calls("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
 
 	// stores the cleaned-up version of the POST content
@@ -1393,7 +1384,7 @@ function ft_update_form_fields_tab($form_id, $infohash)
 			{
 				$field_id      = $setting_info["field_id"];
 				$setting_id    = $setting_info["new_setting_id"];
-				$setting_value = ft_sanitize($setting_info["setting_value"]);
+				$setting_value = $setting_info["setting_value"];
 				mysql_query("
           INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
           VALUES ($field_id, $setting_id, '$setting_value')
@@ -1941,7 +1932,7 @@ function _ft_get_search_form_sql_clauses($search_criteria)
 	if (isset($search_criteria["keyword"]) && !empty($search_criteria["keyword"]))
 	{
 		$search_criteria["keyword"] = trim($search_criteria["keyword"]);
-		$string = ft_sanitize($search_criteria["keyword"]);
+		$string = $search_criteria["keyword"];
 		$fields = array("form_name", "form_url", "redirect_url", "form_id");
 
 		$clauses = array();

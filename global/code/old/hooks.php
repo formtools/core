@@ -56,10 +56,6 @@ function ft_register_hook($hook_type, $module_folder, $when, $function_name, $ho
 {
 	global $g_table_prefix;
 
-	$when          = ft_sanitize($when);
-	$function_name = ft_sanitize($function_name);
-	$hook_function = ft_sanitize($hook_function);
-
 	$may_proceed = true;
 	if ($force_unique)
 	{

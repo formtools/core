@@ -26,8 +26,6 @@ function ft_send_password($info)
 {
 	global $g_root_url, $g_root_dir, $g_table_prefix, $LANG;
 
-	$info = ft_sanitize($info);
-
 	extract(ft_process_hook_calls("start", compact("info"), array("info")), EXTR_OVERWRITE);
 
 	$success = true;

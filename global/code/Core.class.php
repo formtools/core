@@ -546,4 +546,8 @@ class Core {
     public static function getPasswordHistorySize() {
         return self::$passwordHistorySize;
     }
+
+    public static function getDbName() {
+        return self::$dbName;
+    }
 }

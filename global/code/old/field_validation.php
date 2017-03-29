@@ -258,8 +258,7 @@ function ft_validate_submission($form_id, $editable_field_ids, $request)
 	$errors = array();
 	if (!empty($validation))
 	{
-		$form_vals = ft_sanitize($request);
-		$errors = validate_fields($form_vals, $validation);
+		$errors = validate_fields($request, $validation);
 	}
 
 	return $errors;

@@ -237,8 +237,8 @@ function ft_create_unique_option_list($form_id, $option_list_info)
 		$has_same_option_fields = true;
 		for ($i=0; $i<count($curr_options); $i++)
 		{
-			$val = ft_sanitize($curr_options[$i]["option_value"]);
-			$txt = ft_sanitize($curr_options[$i]["option_name"]);
+			$val = $curr_options[$i]["option_value"];
+			$txt = $curr_options[$i]["option_name"];
 
 			$val2 = $option_list_info["options"][$i]["value"];
 			$txt2 = $option_list_info["options"][$i]["text"];
@@ -283,8 +283,8 @@ function ft_create_unique_option_list($form_id, $option_list_info)
 		$order = 1;
 		foreach ($option_list_info["options"] as $option)
 		{
-			$value = ft_sanitize($option["value"]);
-			$text  = ft_sanitize($option["text"]);
+			$value = $option["value"];
+			$text  = $option["text"];
 
 			$query = "
         INSERT INTO {$g_table_prefix}field_options (list_id, list_group_id, option_value, option_name, option_order)
@@ -399,8 +399,6 @@ function ft_get_fields_using_option_list($list_id, $custom_params = array())
 function ft_update_option_list($list_id, $info)
 {
 	global $g_table_prefix, $LANG;
-
-	$info = ft_sanitize($info);
 
 	$option_list_name = $info["option_list_name"];
 	$is_grouped       = isset($info["is_grouped"]) ? $info["is_grouped"] : "no";
@@ -561,7 +559,6 @@ function ft_duplicate_option_list($list_id = "", $field_ids = array())
 
 			foreach ($options as $option_info)
 			{
-				$option_info = ft_sanitize($option_info);
 				$order = $option_info["option_order"];
 				$value = $option_info["option_value"];
 				$name  = $option_info["option_name"];

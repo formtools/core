@@ -621,8 +621,8 @@ function ft_upgrade_form_tools()
         ) DEFAULT CHARSET=utf8
       ");
 
-			$standard_fields = ft_sanitize($LANG["phrase_standard_fields"]);
-			$special_fields  = ft_sanitize($LANG["phrase_special_fields"]);
+			$standard_fields = $LANG["phrase_standard_fields"];
+			$special_fields  = $LANG["phrase_special_fields"];
 			mysql_query("INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, list_order) VALUES ('field_types', '$standard_fields', 1)");
 			mysql_query("INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, list_order) VALUES ('field_types', '$special_fields', 2)");
 		}
@@ -732,7 +732,7 @@ function ft_upgrade_form_tools()
 		mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('edit_submission_shared_resources_js', '\$(function() {\r\n  \$(\".fancybox\").fancybox();\r\n});\r\n', 'core')");
 		mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('edit_submission_shared_resources_css', '/* used in the \"Highlight\" setting for most field types */\r\n.cf_colour_red { \r\n  background-color: #990000;\r\n  color: white;\r\n}\r\n.cf_colour_orange {\r\n  background-color: orange; \r\n}\r\n.cf_colour_yellow {\r\n  background-color: yellow; \r\n}\r\n.cf_colour_green {\r\n  background-color: green;\r\n  color: white; \r\n}\r\n.cf_colour_blue {\r\n  background-color: #336699; \r\n  color: white; \r\n}\r\n\r\n/* field comments */\r\n.cf_field_comments {\r\n  font-style: italic;\r\n  color: #999999;\r\n  clear: both;\r\n}\r\n\r\n/* column layouts for radios & checkboxes */\r\n.cf_option_list_group_label {\r\n  font-weight: bold;  \r\n  clear: both;\r\n  margin-left: 4px;\r\n}\r\n.cf_option_list_2cols, .cf_option_list_3cols, .cf_option_list_4cols {\r\n  clear: both; \r\n}\r\n.cf_option_list_2cols .column { \r\n  width: 50%;\r\n  float: left; \r\n}\r\n.cf_option_list_3cols .column { \r\n  width: 33%;\r\n  float: left;\r\n}\r\n.cf_option_list_4cols .column { \r\n  width: 25%;\r\n  float: left;\r\n}\r\n\r\n/* Used for the date and time pickers */\r\n.cf_date_group img {\r\n  margin-bottom: -4px;\r\n  padding: 1px;\r\n}\r\n\r\n', 'core')");
 		mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('edit_submission_onload_resources', '<script src=\"{\$g_root_url}/global/codemirror/js/codemirror.js\"></script>|<script src=\"{\$g_root_url}/global/scripts/jquery-ui-timepicker-addon.js\"></script>|<script src=\"{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.pack.js\"></script> |<link rel=\"stylesheet\" href=\"{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.css\" type=\"text/css\" media=\"screen\" />', 'core')");
-		$forms_page_default_message = ft_sanitize($LANG["text_client_welcome"]);
+		$forms_page_default_message = $LANG["text_client_welcome"];
 		mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('forms_page_default_message', '$forms_page_default_message', 'core')");
 
 		mysql_query("UPDATE {$g_table_prefix}settings SET setting_name = 'num_option_lists_per_page' WHERE setting_name = 'num_field_option_groups_per_page'");
@@ -768,7 +768,7 @@ function ft_upgrade_form_tools()
 			$display_text_clause = "";
 			if ($row["display_text"] == "Field Option Groups")
 			{
-				$display_text = ft_sanitize($LANG["phrase_option_lists"]);
+				$display_text = $LANG["phrase_option_lists"];
 				$display_text_clause = ", display_text = '{$display_text}'";
 			}
 			mysql_query("
@@ -791,7 +791,7 @@ function ft_upgrade_form_tools()
 
 		// all Views are now grouped. Add in a default group for each
 		$forms_query = mysql_query("SELECT form_id FROM {$g_table_prefix}forms WHERE is_complete = 'yes'");
-		$views_label = ft_sanitize($LANG["word_views"]);
+		$views_label = $LANG["word_views"];
 		while ($row = mysql_fetch_assoc($forms_query))
 		{
 			$form_id = $row["form_id"];

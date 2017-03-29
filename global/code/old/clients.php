@@ -28,7 +28,6 @@ function ft_update_client($account_id, $info)
 
 	$success = true;
 	$message = $LANG["notify_account_updated"];
-	$info = ft_sanitize($info);
 
 	extract(ft_process_hook_calls("start", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
 
@@ -247,8 +246,6 @@ function ft_disable_client($account_id)
 {
 	global $g_table_prefix;
 
-	$account_id = ft_sanitize($account_id);
-
 	if (empty($account_id) || !is_numeric($account_id))
 		return;
 
@@ -340,7 +337,7 @@ function ft_search_clients($search_criteria = array())
 	$keyword_clause = "";
 	if (isset($search_criteria["keyword"]) && !empty($search_criteria["keyword"]))
 	{
-		$string = ft_sanitize($search_criteria["keyword"]);
+		$string = $search_criteria["keyword"];
 		$fields = array("last_name", "first_name", "email", "account_id");
 
 		$clauses = array();
@@ -394,7 +391,7 @@ function ft_get_client_prev_next_links($account_id, $search_criteria = array())
 	$keyword_clause = "";
 	if (isset($search_criteria["keyword"]) && !empty($search_criteria["keyword"]))
 	{
-		$string = ft_sanitize($search_criteria["keyword"]);
+		$string = $search_criteria["keyword"];
 		$fields = array("last_name", "first_name", "email", "account_id");
 
 		$clauses = array();

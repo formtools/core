@@ -47,7 +47,7 @@ function ft_create_blank_submission($form_id, $view_id, $is_finalized = false)
 		$field_id_to_value_map = array();
 		foreach ($special_defaults as $curr_default_info)
 		{
-			$field_id_to_value_map[$curr_default_info["field_id"]] = ft_sanitize($curr_default_info["default_value"]);
+			$field_id_to_value_map[$curr_default_info["field_id"]] = $curr_default_info["default_value"];
 		}
 
 		$field_ids = array_keys($field_id_to_value_map);
@@ -534,7 +534,6 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 	$success = true;
 	$message = $LANG["notify_form_submission_updated"];
 
-	$infohash = ft_sanitize($infohash);
 	extract(ft_process_hook_calls("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
 	$field_ids = array();
@@ -901,7 +900,7 @@ function _ft_get_search_submissions_search_where_clause($form_id, $search_fields
 	$search_where_clause = "";
 	if (!empty($search_fields))
 	{
-		$clean_search_fields = ft_sanitize($search_fields);
+		$clean_search_fields = $search_fields;
 
 		$search_field   = $clean_search_fields["search_field"];
 		$search_date    = $clean_search_fields["search_date"];
@@ -1161,8 +1160,7 @@ function ft_check_submission_exists($form_id, $submission_id)
 function ft_process_form_field($vars)
 {
 	eval($vars["code"]);
-	$value = (isset($value)) ? $value : "";
-	return ft_sanitize($value);
+	return (isset($value)) ? $value : "";
 }
 
 

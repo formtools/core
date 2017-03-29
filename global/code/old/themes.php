@@ -247,7 +247,6 @@ function ft_reset_admin_theme($theme)
 {
 	global $g_table_prefix, $LANG;
 
-	$theme = ft_sanitize($theme);
 	$admin_id = $_SESSION["ft"]["account"]["account_id"];
 
 	mysql_query("

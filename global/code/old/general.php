@@ -439,31 +439,6 @@ function ft_check_permission($account_type, $auto_logout = true)
 
 
 /**
- * Checks to see if a database table exists. Handy for modules to check to see if they've been installed
- * or not.
- *
- * @return boolean
- */
-function ft_check_db_table_exists($table)
-{
-	global $g_table_prefix, $g_db_name;
-
-	$found = false;
-	$result = mysql_query("SHOW TABLES FROM $g_db_name");
-	while ($row = mysql_fetch_row($result))
-	{
-		if ($row[0] == $table)
-		{
-			$found = true;
-			break;
-		}
-	}
-
-	return $found;
-}
-
-
-/**
  * Checks that the currently logged in client is permitted to view a particular form View. This is called
  * on the form submissions and edit submission pages, to ensure the client isn't trying to look at something
  * they shouldn't. Any time it fails, it logs them out with a message informing them that they're not allowed
@@ -595,50 +570,6 @@ function ft_get_date($offset, $datetime, $format)
 	}
 
 	return $date_str;
-}
-
-
-/**
- * Helper function to convert a MySQL datetime to a unix timestamp.
- *
- * @param string $datetime
- * @return string
- */
-function ft_convert_datetime_to_timestamp($datetime)
-{
-	list($date, $time) = explode(" ", $datetime);
-	list($year, $month, $day) = explode("-", $date);
-	list($hours, $minutes, $seconds) = explode(":", $time);
-
-	return mktime($hours, $minutes, $seconds, $month, $day, $year);
-}
-
-
-/**
- * Helper function which should be used on all submitted data to properly escape user-inputted
- * values for inserting into a database. This replaces the former ft_clean_hash function and
- * can be used on any variable.
- *
- * @param mixed
- * @return array The "clean" (escaped) hash.
- */
-function ft_sanitize($input)
-{
-	if (is_array($input))
-	{
-		$output = array();
-		foreach ($input as $k=>$i)
-			$output[$k] = ft_sanitize($i);
-	}
-	else
-	{
-		if (get_magic_quotes_gpc())
-			$input = stripslashes($input);
-
-		$output = mysql_real_escape_string($input);
-	}
-
-	return $output;
 }
 
 

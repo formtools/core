@@ -82,6 +82,46 @@ class General
     }
 
 
+    /**
+     * Checks to see if a database table exists. Handy for modules to check to see if they've been installed
+     * or not.
+     *
+     * @return boolean
+     */
+    public static function checkDbTableExists($table)
+    {
+        $db = Core::$db;
+        $db_name = Core::getDbName();
+
+        $found = false;
+        $db->query("SHOW TABLES FROM :db_name");
+        $db->bind(":db_name", $db_name);
+        $db->execute();
+        foreach ($db->fetchAll() as $row) {
+            if ($row[0] == $table) {
+                $found = true;
+                break;
+            }
+        }
+        return $found;
+    }
+
+
+    /**
+     * Helper function to convert a MySQL datetime to a unix timestamp.
+     *
+     * @param string $datetime
+     * @return string
+     */
+    public static function convertDatetimeToTimestamp($datetime)
+    {
+        list($date, $time) = explode(" ", $datetime);
+        list($year, $month, $day) = explode("-", $date);
+        list($hours, $minutes, $seconds) = explode(":", $time);
+
+        return mktime($hours, $minutes, $seconds, $month, $day, $year);
+    }
+
 
     /**
      * This is used for major errors, especially when no database connection can be made. All it does is output

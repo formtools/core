@@ -325,7 +325,7 @@ function ft_search_modules($search_criteria)
 
 	$keyword_clause = "";
 	if (!empty($search_criteria["keyword"])) {
-		$string = ft_sanitize($search_criteria["keyword"]);
+		$string = $search_criteria["keyword"];
 		$fields = array("module_name", "module_folder", "description");
 
 		$clauses = array();
@@ -821,14 +821,12 @@ function ft_upgrade_module($module_id)
 	}
 
 	// now, update the main module record
-	$info = ft_sanitize($info);
 
 	// we're assuming the module developer hasn't removed any of the required fields...
 
 	// now check the language file contains the two required fields: module_name and module_description
 	$lang_file = "$g_root_dir/modules/$module_folder/lang/{$info["origin_language"]}.php";
 	$lang_info = _ft_get_module_lang_file_contents($lang_file);
-	$lang_info = ft_sanitize($lang_info);
 
 	// check the required language file fields
 	if ((!isset($lang_info["module_name"]) || empty($lang_info["module_name"])) ||

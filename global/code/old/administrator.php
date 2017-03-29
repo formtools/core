@@ -23,11 +23,9 @@
  *               [1]: message string
  *               [2]: the new user ID (if successful)
  */
-function ft_add_client($infohash)
+function ft_add_client($form_vals)
 {
 	global $g_table_prefix, $LANG, $g_password_special_chars;
-
-	$form_vals = ft_sanitize($infohash);
 
 	extract(ft_process_hook_calls("start", compact("form_vals"), array("form_vals")), EXTR_OVERWRITE);
 
@@ -165,7 +163,7 @@ function ft_admin_update_client($infohash, $tab_num)
 	$success = true;
 	$message = $LANG["notify_client_account_updated"];
 
-	$form_vals = ft_sanitize($infohash);
+	$form_vals = $infohash;
 	$account_id = $form_vals["client_id"];
 
 	switch ($tab_num)
@@ -546,11 +544,10 @@ function ft_logout_as_client()
  */
 function ft_update_admin_account($infohash, $account_id)
 {
-	global $g_table_prefix, $g_root_url, $LANG;
+	global $g_table_prefix, $LANG;
 
 	$success = true;
 	$message = $LANG["notify_account_updated"];
-	$infohash = ft_sanitize($infohash);
 
 	extract(ft_process_hook_calls("start", compact("infohash", "account_id"), array("infohash")), EXTR_OVERWRITE);
 

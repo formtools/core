@@ -31,7 +31,6 @@ function ft_add_form_fields($form_id, $fields)
 
 	$success = true;
 	$message = "";
-	$fields = ft_sanitize($fields);
 
 	foreach ($fields as $field_info)
 	{
@@ -206,9 +205,6 @@ function ft_get_field_col_by_field_name($form_id, $field_name_or_names)
 {
 	global $g_table_prefix;
 
-	$form_id             = ft_sanitize($form_id);
-	$field_name_or_names = ft_sanitize($field_name_or_names);
-
 	$return_info = "";
 
 	if (is_array($field_name_or_names))
@@ -256,9 +252,6 @@ function ft_get_field_col_by_field_name($form_id, $field_name_or_names)
 function ft_get_field_col_by_field_id($form_id, $field_id_or_ids)
 {
 	global $g_table_prefix;
-
-	$form_id         = ft_sanitize($form_id);
-	$field_id_or_ids = ft_sanitize($field_id_or_ids);
 
 	$field_id_str = "";
 	if (is_array($field_id_or_ids))
@@ -339,9 +332,6 @@ function ft_get_field_type_id_by_field_id($field_id)
 function ft_get_field_title_by_field_col($form_id, $col_name)
 {
 	global $g_table_prefix;
-
-	$form_id  = ft_sanitize($form_id);
-	$col_name = ft_sanitize($col_name);
 
 	$query = mysql_query("
     SELECT field_title
@@ -480,9 +470,6 @@ function ft_get_form_field_by_colname($form_id, $col_name, $params = array())
 function ft_get_form_field_id_by_field_name($field_name, $form_id)
 {
 	global $g_table_prefix;
-
-	$form_id    = ft_sanitize($form_id);
-	$field_name = ft_sanitize($field_name);
 
 	$query = mysql_query("
     SELECT field_id
@@ -901,8 +888,6 @@ function ft_update_form_fields($form_id, $infohash, $set_default_form_field_name
 {
 	global $g_table_prefix, $g_debug;
 
-	$infohash = ft_sanitize($infohash);
-
 	$sortable_id = $infohash["sortable_id"];
 	$sortable_rows       = explode(",", $infohash["{$sortable_id}_sortable__rows"]);
 	$sortable_new_groups = explode(",", $infohash["{$sortable_id}_sortable__new_groups"]);
@@ -995,7 +980,6 @@ function ft_update_field($form_id, $field_id, $tab_info)
 {
 	global $g_table_prefix, $g_field_sizes, $g_debug, $LANG;
 
-	$tab_info = ft_sanitize($tab_info);
 	$existing_form_field_info = ft_get_form_field($field_id);
 
 	// TAB 1: this tab contains the standard settings shared by all fields, regardless of type: display text,
@@ -1125,8 +1109,8 @@ function ft_update_field($form_id, $field_id, $tab_info)
 			if (preg_match("/edit_field__setting_(\d)+_field_id/", $setting_name) || preg_match("/edit_field__setting_(\d)+_field_order/", $setting_name))
 				continue;
 
-			// TODO BUG. newlines aren't surviving this... why was it added? double quotes? single quotes?
-			$setting_value = ft_sanitize(stripslashes($setting_value));
+			// TODO BUG. newlines aren't surviving this... why was it added? double quotes? single quotes? [3.0.0 - used to include ft_sanitize]
+			$setting_value = stripslashes($setting_value);
 			$setting_id    = preg_replace("/edit_field__setting_/", "", $setting_name);
 
 			// if this field is being mapped to a form field, we serialize the form ID, field ID and order into a single var and
@@ -1171,7 +1155,7 @@ function ft_update_field($form_id, $field_id, $tab_info)
 				continue;
 
 			$rule_id = $matches[1];
-			$error_message = ft_sanitize($rule_info["value"]);
+			$error_message = $rule_info["value"];
 
 			mysql_query("
         INSERT INTO {$g_table_prefix}field_validation (rule_id, field_id, error_message)

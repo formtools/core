@@ -27,12 +27,10 @@
  */
 function ft_update_main_settings($infohash)
 {
-	global $g_table_prefix, $g_root_url, $LANG;
+	global $LANG;
 
 	$success = true;
 	$message = $LANG["notify_setup_options_updated"];
-
-	$infohash = ft_sanitize($infohash);
 
 	$rules = array();
 	$rules[] = "required,program_name,{$LANG["validation_no_program_name"]}";
@@ -89,12 +87,10 @@ function ft_update_main_settings($infohash)
  */
 function ft_update_account_settings($infohash)
 {
-	global $g_table_prefix, $g_root_url, $LANG;
+	global $LANG;
 
 	$success = true;
 	$message = $LANG["notify_setup_options_updated"];
-
-	$infohash = ft_sanitize($infohash);
 
 	$rules = array();
 	$rules[] = "required,default_page_titles,{$LANG["validation_no_page_titles"]}";

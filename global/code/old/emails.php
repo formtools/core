@@ -54,8 +54,6 @@ function ft_create_blank_email_template($form_id, $create_email_from_email_id = 
 
 		foreach ($email_template_info["recipients"] as $recipient)
 		{
-			$recipient = ft_sanitize($recipient);
-
 			$recipient_user_type    = $recipient["recipient_user_type"];
 			$recipient_type         = $recipient["recipient_type"];
 			$account_id             = !empty($recipient["account_id"]) ? $recipient["account_id"] : "NULL";
@@ -782,7 +780,6 @@ function ft_update_email_template($email_id, $info)
 	// escaped for DB insertion & can't be trimmed out then
 	$info["text_template"] = trim($info["text_template"]);
 	$info["html_template"] = trim($info["html_template"]);
-	$info = ft_sanitize($info);
 
 	extract(ft_process_hook_calls("start", compact("email_id", "info"), array("info")), EXTR_OVERWRITE);
 

@@ -21,7 +21,7 @@ function core_field_types__update($old_version_info, $new_version_info)
 {
 	global $g_table_prefix;
 
-  $old_version_date = date("Ymd", ft_convert_datetime_to_timestamp($old_version_info["module_date"]));
+  $old_version_date = date("Ymd", General::convertDatetimeToTimestamp($old_version_info["module_date"]));
 
   // fix for MAJOR issue where the raw field types weren't mapped to Option List settings. This was an issue from Oct - Nov 2011, for all
   // 2.1.5 - 2.1.8 versions installed during that time.

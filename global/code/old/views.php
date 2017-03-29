@@ -289,7 +289,7 @@ function ft_create_new_view($form_id, $group_id, $view_name = "", $create_from_v
 	$count_hash = mysql_fetch_assoc($count_query);
 	$num_form_views = $count_hash["c"];
 	$next_order = $num_form_views + 1;
-	$view_name = (empty($view_name)) ? $LANG["phrase_new_view"] : ft_sanitize($view_name);
+	$view_name = (empty($view_name)) ? $LANG["phrase_new_view"] : $view_name;
 
 	if ($create_from_view_id == "blank_view_no_fields" || $create_from_view_id == "blank_view_all_fields")
 	{
@@ -316,7 +316,6 @@ function ft_create_new_view($form_id, $group_id, $view_name = "", $create_from_v
 	else
 	{
 		$view_info = ft_get_view($create_from_view_id);
-		$view_info = ft_sanitize($view_info);
 
 		// Main View Settings
 		$view_order = $view_info["view_order"];
@@ -426,7 +425,7 @@ function ft_create_new_view($form_id, $group_id, $view_name = "", $create_from_v
 		foreach ($submission_defaults as $row)
 		{
 			$field_id      = $row["field_id"];
-			$default_value = ft_sanitize($row["default_value"]);
+			$default_value = $row["default_value"];
 			$list_order    = $row["list_order"];
 
 			mysql_query("
@@ -1255,7 +1254,7 @@ function _ft_update_view_main_settings($view_id, $info)
 {
 	global $g_table_prefix;
 
-	$view_name = ft_sanitize($info["view_name"]);
+	$view_name = $info["view_name"];
 
 	$num_submissions_per_page = isset($info["num_submissions_per_page"]) ? $info["num_submissions_per_page"] : 10;
 	$default_sort_field       = $info["default_sort_field"];
@@ -1321,7 +1320,6 @@ function _ft_update_view_main_settings($view_id, $info)
 		$order = 1;
 		while (list($field_id, $value) = each($default_values))
 		{
-			$value = ft_sanitize($value);
 			$insert_statements[] = "($view_id, $field_id, '$value', $order)";
 			$order++;
 		}
@@ -1500,8 +1498,6 @@ function _ft_update_view_tab_settings($view_id, $info)
 {
 	global $g_table_prefix, $LANG;
 
-	$info = ft_sanitize($info);
-
 	@mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '{$info["tabs"][0]}' WHERE view_id = $view_id AND tab_number = 1");
 	@mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '{$info["tabs"][1]}' WHERE view_id = $view_id AND tab_number = 2");
 	@mysql_query("UPDATE {$g_table_prefix}view_tabs SET tab_label = '{$info["tabs"][2]}' WHERE view_id = $view_id AND tab_number = 3");
@@ -1523,7 +1519,6 @@ function _ft_update_view_filter_settings($view_id, $info)
 {
 	global $g_table_prefix, $g_debug, $LANG;
 
-	$info = ft_sanitize($info);
 	$form_id = $info["form_id"];
 
 	// delete all old filters for this View. The two update view filter functions that follow re-insert
@@ -1981,7 +1976,6 @@ function ft_duplicate_view_field_groups($source_view_id, $target_view_id)
 	$map = array();
 	while ($row = mysql_fetch_assoc($query))
 	{
-		$row = ft_sanitize($row);
 		$group_id    = $row["group_id"];
 		$group_type  = "view_fields_{$target_view_id}";
 		$group_name  = $row["group_name"];

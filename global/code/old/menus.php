@@ -12,6 +12,8 @@
 
 // -------------------------------------------------------------------------------------------------
 
+use FormTools\Pages;
+
 
 /**
  * This function creates a blank client menu with no menu items.
@@ -579,12 +581,12 @@ function ft_update_admin_menu($info)
 			continue;
 
 		$page_identifier = $info["page_identifier_$i"];
-		$display_text    = ft_sanitize($info["display_text_$i"]);
-		$custom_options  = isset($info["custom_options_$i"]) ? ft_sanitize($info["custom_options_$i"]) : "";
+		$display_text    = $info["display_text_$i"];
+		$custom_options  = isset($info["custom_options_$i"]) ? $info["custom_options_$i"] : "";
 		$is_submenu      = isset($info["submenu_$i"]) ? "yes" : "no";
 
 		// construct the URL for this menu item
-		$url = ft_construct_page_url($page_identifier, $custom_options);
+		$url = Pages::constructPageURL($page_identifier, $custom_options);
 
 		$menu_items[] = array(
 			"url"               => $url,
@@ -668,9 +670,8 @@ function ft_update_menu_order($menu_id)
  */
 function ft_update_client_menu($info)
 {
-	global $g_table_prefix, $g_pages, $g_root_url, $LANG;
+	global $g_table_prefix, $LANG;
 
-	$info = ft_sanitize($info);
 	$menu_id = $info["menu_id"];
 	$menu    = trim($info["menu"]);
 	$sortable_id = $info["sortable_id"];
@@ -692,8 +693,8 @@ function ft_update_client_menu($info)
 			continue;
 
 		$page_identifier = $info["page_identifier_$i"];
-		$display_text    = ft_sanitize($info["display_text_$i"]);
-		$custom_options  = isset($info["custom_options_$i"]) ? ft_sanitize($info["custom_options_$i"]) : "";
+		$display_text    = $info["display_text_$i"];
+		$custom_options  = isset($info["custom_options_$i"]) ? $info["custom_options_$i"] : "";
 		$is_submenu      = isset($info["submenu_$i"]) ? "yes" : "no";
 
 		// construct the URL for this menu item
