@@ -72,7 +72,7 @@ function ft_update_client($account_id, $info)
 			$errors = validate_fields($info, $rules);
 
 			// check to see if username is already taken
-			list($valid_username, $problem) = _ft_is_valid_username($username, $account_id);
+			list($valid_username, $problem) = Accounts::isValidUsername($username, $account_id);
 			if (!$valid_username)
 				$errors[] = $problem;
 
@@ -82,15 +82,16 @@ function ft_update_client($account_id, $info)
 				if (!empty($client_info["settings"]["num_password_history"]))
 				{
 					$encrypted_password = md5(md5($info["password"]));
-					if (ft_password_in_password_history($account_id, $encrypted_password, $client_info["settings"]["num_password_history"]))
-						$errors[] = ft_eval_smarty_string($LANG["validation_password_in_password_history"], array("history_size" => $client_info["settings"]["num_password_history"]));
-					else
-						ft_add_password_to_password_history($account_id, $encrypted_password);
+					if (ft_password_in_password_history($account_id, $encrypted_password, $client_info["settings"]["num_password_history"])) {
+                        $errors[] = ft_eval_smarty_string($LANG["validation_password_in_password_history"],
+                        array("history_size" => $client_info["settings"]["num_password_history"]));
+                    } else {
+                        Accounts::addPasswordToPasswordHistory($account_id, $encrypted_password);
+                    }
 				}
 			}
 
-			if (!empty($errors))
-			{
+			if (!empty($errors)) {
 				$success = false;
 				array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
 				$message = implode("<br />", $errors);

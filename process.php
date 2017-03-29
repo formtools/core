@@ -213,7 +213,7 @@ function ft_process_form($form_data)
     }
   }
 
-  $now = ft_get_current_datetime();
+  $now = General::getCurrentDatetime();
   $ip_address = $_SERVER["REMOTE_ADDR"];
 
   $col_names = array_keys($valid_form_fields);

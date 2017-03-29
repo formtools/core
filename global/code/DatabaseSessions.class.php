@@ -11,9 +11,9 @@
 namespace FormTools;
 
 
-class SessionManager
+class DatabaseSessions
 {
-	public function SessionManager()
+	public function DatabaseSessions()
 	{
 		// register the various session handler functions
 		session_set_save_handler(

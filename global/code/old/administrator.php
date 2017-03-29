@@ -68,12 +68,12 @@ function ft_add_client($infohash)
 	}
 
 	$errors = validate_fields($form_vals, $rules);
-	list($valid_username, $problem) = _ft_is_valid_username($form_vals["username"]);
-	if (!$valid_username)
-		$errors[] = $problem;
+	list($valid_username, $problem) = Accounts::isValidUsername($form_vals["username"]);
+	if (!$valid_username) {
+        $errors[] = $problem;
+    }
 
-	if (!empty($errors))
-	{
+	if (!empty($errors)) {
 		$success = false;
 		array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
 		$message = implode("<br />", $errors);
@@ -138,7 +138,7 @@ function ft_add_client($infohash)
 	ft_set_account_settings($new_user_id, $account_settings);
 
 	// store this password in the password history queue
-	ft_add_password_to_password_history($new_user_id, $password);
+    Accounts::addPasswordToPasswordHistory($new_user_id, $password);
 
 	extract(ft_process_hook_calls("end", compact("new_user_id", "account_settings"), array("success", "message")), EXTR_OVERWRITE);
 
@@ -207,7 +207,7 @@ function ft_admin_update_client($infohash, $tab_num)
 
 			// check the username isn't already taken
 			$username = $form_vals['username'];
-			list($valid_username, $problem) = _ft_is_valid_username($username, $account_id);
+			list($valid_username, $problem) = Accounts::isValidUsername($username, $account_id);
 			if (!$valid_username)
 				$errors[] = $problem;
 
@@ -220,7 +220,7 @@ function ft_admin_update_client($infohash, $tab_num)
 					if (ft_password_in_password_history($account_id, $encrypted_password, $account_settings["num_password_history"]))
 						$errors[] = ft_eval_smarty_string($LANG["validation_password_in_password_history"], array("history_size" => $account_settings["num_password_history"]));
 					else
-						ft_add_password_to_password_history($account_id, $encrypted_password);
+                        Accounts::addPasswordToPasswordHistory($account_id, $encrypted_password);
 				}
 			}
 
@@ -598,7 +598,7 @@ function ft_update_admin_account($infohash, $account_id)
 	$password_sql = (!empty($password)) ? "password = '" . md5(md5($password)) . "', " : "";
 
 	// check to see if username is already taken
-	list($valid_username, $problem) = _ft_is_valid_username($username, $account_id);
+	list($valid_username, $problem) = Accounts::isValidUsername($username, $account_id);
 	if (!$valid_username)
 		return array(false, $problem);
 

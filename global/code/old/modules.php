@@ -849,7 +849,7 @@ function ft_upgrade_module($module_id)
 	// convert the date into a MySQL datetime
 	list($year, $month, $day) = explode("-", $module_date);
 	$timestamp = mktime(null, null, null, $month, $day, $year);
-	$module_datetime = ft_get_current_datetime($timestamp);
+	$module_datetime = General::getCurrentDatetime($timestamp);
 
 	@mysql_query("
     UPDATE {$g_table_prefix}modules

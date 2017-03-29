@@ -427,12 +427,9 @@ function ft_check_permission($account_type, $auto_logout = true)
 		}
 	}
 
-	if ($boot_out_user && $auto_logout)
-	{
-		ft_logout_user($message_flag);
-	}
-	else
-	{
+	if ($boot_out_user && $auto_logout) {
+		Core::$user->logout($message_flag);
+	} else {
 		return array(
 			"has_permission" => !$boot_out_user, // we invert it because we want to return TRUE if they have permission
 			"message"        => $message_flag
@@ -489,29 +486,21 @@ function ft_check_db_table_exists($table)
  */
 function ft_check_client_may_view($client_id, $form_id, $view_id, $return_boolean = false)
 {
-	global $g_root_url;
-
 	$permissions = isset($_SESSION["ft"]["permissions"]) ? $_SESSION["ft"]["permissions"] : array();
 
 	extract(ft_process_hook_calls("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
 
 	$may_view = true;
-	if (!array_key_exists($form_id, $permissions))
-	{
+	if (!array_key_exists($form_id, $permissions)) {
 		$may_view = false;
-		if (!$return_boolean)
-		{
-			ft_logout_user("notify_invalid_permissions");
+		if (!$return_boolean) {
+            Core::$user->logout("notify_invalid_permissions");
 		}
-	}
-	else
-	{
-		if (!empty($view_id) && !in_array($view_id, $permissions[$form_id]))
-		{
+	} else {
+		if (!empty($view_id) && !in_array($view_id, $permissions[$form_id])) {
 			$may_view = false;
-			if (!$return_boolean)
-			{
-				ft_logout_user("notify_invalid_permissions");
+			if (!$return_boolean) {
+                Core::$user->logout("notify_invalid_permissions");
 			}
 		}
 	}
@@ -606,25 +595,6 @@ function ft_get_date($offset, $datetime, $format)
 	}
 
 	return $date_str;
-}
-
-
-/**
- * Returns a date in Y-m-d H:i:s format, generally used for inserting into a MySQL
- * datetime field.
- *
- * @param string $timestamp an optional Unix timestamp to convert to a datetime
- * @return string the current datetime in string format
- * */
-function ft_get_current_datetime($timestamp = "")
-{
-	$datetime = "";
-	if (!empty($timestamp))
-		$datetime = date("Y-m-d H:i:s", $timestamp);
-	else
-		$datetime = date("Y-m-d H:i:s");
-
-	return $datetime;
 }
 
 
@@ -1365,19 +1335,14 @@ function ft_check_sessions_timeout($auto_logout = true)
 	$sessions_valid = true;
 
 	// check to see if the session has timed-out
-	if (isset($_SESSION["ft"]["account"]["last_activity_unixtime"]) && isset($_SESSION["ft"]["account"]["sessions_timeout"]))
-	{
+	if (isset($_SESSION["ft"]["account"]["last_activity_unixtime"]) && isset($_SESSION["ft"]["account"]["sessions_timeout"])) {
 		$sessions_timeout_mins = $_SESSION["ft"]["account"]["sessions_timeout"];
 		$timeout_secs = $sessions_timeout_mins * 60;
 
-		if ($_SESSION["ft"]["account"]["last_activity_unixtime"] + $timeout_secs < $now)
-		{
-			if ($auto_logout)
-			{
-				ft_logout_user("notify_sessions_timeout");
-			}
-			else
-			{
+		if ($_SESSION["ft"]["account"]["last_activity_unixtime"] + $timeout_secs < $now) {
+			if ($auto_logout) {
+                Core::$user->logout("notify_sessions_timeout");
+			} else {
 				$sessions_valid = false;
 			}
 		}

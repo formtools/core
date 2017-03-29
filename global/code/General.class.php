@@ -64,6 +64,24 @@ class General
         return join("<br />", $errors);
     }
 
+    /**
+     * Returns a date in Y-m-d H:i:s format, generally used for inserting into a MySQL
+     * datetime field.
+     *
+     * @param string $timestamp an optional Unix timestamp to convert to a datetime
+     * @return string the current datetime in string format
+     * */
+    public static function getCurrentDatetime($timestamp = "")
+    {
+        if (!empty($timestamp)) {
+            $datetime = date("Y-m-d H:i:s", $timestamp);
+        } else {
+            $datetime = date("Y-m-d H:i:s");
+        }
+        return $datetime;
+    }
+
+
 
     /**
      * This is used for major errors, especially when no database connection can be made. All it does is output

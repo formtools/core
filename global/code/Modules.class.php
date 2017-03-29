@@ -53,7 +53,7 @@ class Modules
             // convert the date into a MySQL datetime
             list($year, $month, $day) = explode("-", $row["module_info"]["date"]);
             $timestamp = mktime(null, null, null, $month, $day, $year);
-            $module_date = ft_get_current_datetime($timestamp);
+            $module_date = General::getCurrentDatetime($timestamp);
 
             $db->query("
                 INSERT INTO {PREFIX}modules (is_installed, is_enabled, origin_language, module_name,

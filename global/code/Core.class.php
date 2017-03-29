@@ -243,7 +243,6 @@ class Core {
     /**
      * User-related settings.
      */
-    public static $isLoggedIn = false;
     public static $user;
 
     /**
@@ -379,8 +378,9 @@ class Core {
 
         if (self::$configFileExists) {
             self::initDatabase();
-            self::initUser();
         }
+
+        self::initUser();
 
         // start sessions
         self::startSessions();
@@ -457,7 +457,6 @@ class Core {
     private static function initUser() {
         if (User::isLoggedIn()) {
             self::$user = new User();
-            self::$isLoggedIn = true;
             self::$currLang = self::$user->getLang();
         } else {
             self::$currLang = self::$defaultLang;
@@ -542,5 +541,9 @@ class Core {
 
     public static function checkFTSessions() {
         return self::$checkFTSessions;
+    }
+
+    public static function getPasswordHistorySize() {
+        return self::$passwordHistorySize;
     }
 }

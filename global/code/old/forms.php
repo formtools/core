@@ -318,7 +318,7 @@ function ft_finalize_form($form_id)
 		);
 	}
 
-	$now = ft_get_current_datetime();
+	$now = General::getCurrentDatetime();
 
 	// now the form is complete. Update it as is_complete and enabled
 	$query = "
@@ -865,7 +865,7 @@ function ft_setup_form($info)
 		$form_url = isset($info["form_url"]) ? $info["form_url"] : "";
 	}
 
-	$now = ft_get_current_datetime();
+	$now = General::getCurrentDatetime();
 	$query = "
     INSERT INTO {$g_table_prefix}forms (form_type, access_type, submission_type, date_created, is_active, is_complete,
       is_multi_page_form, form_name, form_url, redirect_url, edit_submission_page_label)

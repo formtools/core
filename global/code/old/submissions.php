@@ -29,7 +29,7 @@ function ft_create_blank_submission($form_id, $view_id, $is_finalized = false)
 	if (!ft_check_form_exists($form_id))
 		return "";
 
-	$now = ft_get_current_datetime();
+	$now = General::getCurrentDatetime();
 	$ip  = $_SERVER["REMOTE_ADDR"];
 
 	// if the administrator has specified any default values for submissions created through this View
@@ -560,7 +560,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 	$field_settings = ft_get_form_field_field_type_settings($field_ids, $form_fields);
 
 	$db_column_names = array();
-	$now = ft_get_current_datetime();
+	$now = General::getCurrentDatetime();
 	$query = array();
 	$query[] = "last_modified_date = '$now'";
 
@@ -570,18 +570,19 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 		$field_id = $row["field_id"];
 
 		// if the field ID isn't in the page's tab, ignore it
-		if (!in_array($field_id, $field_ids))
-			continue;
+		if (!in_array($field_id, $field_ids)) {
+            continue;
+        }
 
 		// if the field ID isn't editable, the person's being BAD and trying to hack a field value. Ignore it.
-		if (!in_array($field_id, $infohash["editable_field_ids"]))
-			continue;
+		if (!in_array($field_id, $infohash["editable_field_ids"])) {
+            continue;
+        }
 
 		// if this is a FILE field that doesn't have any overridden PHP processing code, just store the info
 		// about the field. Presumably, the module / field type has registered the appropriate hooks for
 		// processing the file. Without it, the module wouldn't work. We pass that field + file into to the hook.
-		if ($field_types_processing_info[$row["field_type_id"]]["is_file_field"] == "yes")
-		{
+		if ($field_types_processing_info[$row["field_type_id"]]["is_file_field"] == "yes") {
 			$file_data = array(
 				"field_id"   => $field_id,
 				"field_info" => $row,
@@ -590,27 +591,23 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 				"settings"   => $field_settings[$field_id]
 			);
 
-			if (empty($field_types_processing_info[$row["field_type_id"]]["php_processing"]))
-			{
+			if (empty($field_types_processing_info[$row["field_type_id"]]["php_processing"])) {
 				$file_fields[] = $file_data;
 				continue;
-			}
-			else
-			{
+			} else {
 				$value = ft_process_form_field($file_data);
 				$query[] = $row["col_name"] . " = '$value'";
 			}
 		}
 
-		if ($row["field_name"] == "core__submission_date" || $row["col_name"] == "core__last_modified")
-		{
-			if (!isset($infohash[$row["field_name"]]) || empty($infohash[$row["field_name"]]))
-				continue;
+		if ($row["field_name"] == "core__submission_date" || $row["col_name"] == "core__last_modified") {
+			if (!isset($infohash[$row["field_name"]]) || empty($infohash[$row["field_name"]])) {
+                continue;
+            }
 		}
 
 		// see if this field type has any special PHP processing to do
-		if (!empty($field_types_processing_info[$row["field_type_id"]]["php_processing"]))
-		{
+		if (!empty($field_types_processing_info[$row["field_type_id"]]["php_processing"])) {
 			$data = array(
 				"field_info"   => $row,
 				"data"         => $infohash,
@@ -620,9 +617,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 			);
 			$value = ft_process_form_field($data);
 			$query[] = $row["col_name"] . " = '$value'";
-		}
-		else
-		{
+		} else {
 			if (isset($infohash[$row["field_name"]]))
 			{
 				if (is_array($infohash[$row["field_name"]]))

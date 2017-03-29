@@ -20,6 +20,6 @@ if ($config_file_exists) {
 	require_once(__DIR__ . "/lang/{$g_language}.php");
 
 	if (isset($_GET["logout"])) {
-        ft_logout_user();
+        Core::$user->logout();
     }
 }

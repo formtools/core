@@ -183,10 +183,12 @@ class Themes {
             $swatch = $settings["default_client_swatch"];
         }
 
-        if (!isset($_SESSION["ft"]["account"]["is_logged_in"]))
+        if (!isset($_SESSION["ft"]["account"]["is_logged_in"])) {
             $_SESSION["ft"]["account"]["is_logged_in"] = false;
-        if (!isset($_SESSION["ft"]["account"]["account_type"]))
+        }
+        if (!isset($_SESSION["ft"]["account"]["account_type"])) {
             $_SESSION["ft"]["account"]["account_type"] = "";
+        }
 
         // common variables. These are sent to EVERY templates
         $g_smarty->template_dir = "$g_root_dir/themes/$theme";
