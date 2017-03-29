@@ -12,6 +12,8 @@
 
 // -------------------------------------------------------------------------------------------------
 
+use FormTools\FieldValidation;
+
 
 /**
  * Creates a new blank submission in the database and returns the unique submission ID. If the
@@ -541,7 +543,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 		$field_ids = explode(",", $infohash["field_ids"]);
 
 	// perform any server-side validation
-	$errors = ft_validate_submission($form_id, $infohash["editable_field_ids"], $infohash);
+	$errors = FieldValidation::validateSubmission($infohash["editable_field_ids"], $infohash);
 
 	// if there are any problems, return right away
 	if (!empty($errors))

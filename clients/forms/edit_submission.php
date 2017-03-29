@@ -72,14 +72,14 @@ foreach ($view_info["tabs"] as $tab_info)
 		break;
 	}
 }
-if ($has_tabs)
-	$tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
-else
-	$tab_number = "";
+if ($has_tabs) {
+    $tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
+} else {
+    $tab_number = "";
+}
 
 $grouped_fields = ft_get_grouped_view_fields($view_id, $tab_number, $form_id, $submission_id);
-if ($failed_validation)
-{
+if ($failed_validation) {
 	$grouped_fields = FieldValidation::mergeFormSubmission($grouped_fields, $_POST);
 }
 
@@ -138,12 +138,11 @@ $settings = ft_get_settings("", "core");
 $shared_resources_list = $settings["edit_submission_onload_resources"];
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
-foreach ($shared_resources_array as $resource)
-{
+foreach ($shared_resources_array as $resource) {
 	$shared_resources .= ft_eval_smarty_string($resource, array("g_root_url" => $g_root_url)) . "\n";
 }
 
-$validation_js = ft_generate_submission_js_validation($grouped_fields);
+$validation_js = FieldValidation::generateSubmissionJsValidation($grouped_fields);
 
 // ------------------------------------------------------------------------------------------------
 

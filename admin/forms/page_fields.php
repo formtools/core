@@ -39,7 +39,7 @@ $reserved_words = implode(",", $escaped_words);
 $field_type_sizes_js = FieldSizes::generateFieldTypeSizesMapJs();
 $field_sizes_js      = FieldSizes::generateFieldTypeSizeLabels();
 $field_settings_js   = ft_generate_field_type_settings_js();
-$field_validation_js = ft_generate_field_type_validation_js();
+$field_validation_js = FieldValidation::generateFieldTypeValidationJs();
 
 $php_self = ft_get_clean_php_self();
 $shared_characteristics_js = ft_get_field_type_setting_shared_characteristics_js();
