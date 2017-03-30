@@ -11,6 +11,8 @@
  */
 
 use FormTools\Core;
+use FormTools\Settings;
+
 
 // -------------------------------------------------------------------------------------------------
 
@@ -730,7 +732,7 @@ function ft_get_field_type_resources($resource_type)
 		$db_column    = "resources_js";
 	}
 
-	$str = ft_get_settings($setting_name);
+	$str = Settings::get($setting_name);
 	$query = mysql_query("
 		SELECT $db_column
 		FROM   {$g_table_prefix}field_types
@@ -847,7 +849,7 @@ function ft_get_form_field_field_type_settings($field_ids = array(), $form_field
 					$value = "";
 				else
 				{
-					$value = ft_get_settings($parts[0], $parts[1]);
+					$value = Settings::get($parts[0], $parts[1]);
 				}
 			}
 
@@ -1111,7 +1113,7 @@ function ft_generate_viewable_field($params)
 						$value = $g_cache["dynamic_settings"][$dynamic_setting_str];
 					else
 					{
-						$value = ft_get_settings($parts[0], $parts[1]);
+						$value = Settings::get($parts[0], $parts[1]);
 						$g_cache["dynamic_settings"][$dynamic_setting_str] = $value;
 					}
 				}
@@ -1496,7 +1498,7 @@ function ft_get_shared_field_setting_info($field_type_map, $field_type_settings_
  */
 function ft_get_field_type_setting_shared_characteristics_js()
 {
-	$field_type_settings_shared_characteristics = ft_get_settings("field_type_settings_shared_characteristics");
+	$field_type_settings_shared_characteristics = Settings::get("field_type_settings_shared_characteristics");
 	$info = ft_get_field_type_and_setting_info();
 	$field_type_id_to_identifier = $info["field_type_id_to_identifier"];
 	$field_identifier_to_id = array_flip($field_type_id_to_identifier);

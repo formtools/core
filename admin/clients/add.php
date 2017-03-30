@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Settings;
+
+
 require("../../global/session_start.php");
 ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
@@ -18,7 +21,7 @@ if (isset($_POST) && !empty($_POST['add_client'])) {
 	}
 }
 
-$settings = ft_get_settings();
+$settings = Settings::get();
 $conditional_validation = array();
 if (!empty($settings["min_password_length"])) {
 	$rule = ft_eval_smarty_string($LANG["validation_client_password_too_short"], array("number" => $settings["min_password_length"]));

@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\FieldSizes;
+use FormTools\Settings;
 
 
 $sortable_id = "edit_fields";
@@ -16,7 +17,7 @@ if (isset($request["num_fields_per_page"])) {
 	ft_set_settings(array("admin_num_fields_per_page_{$form_id}" => $request["num_fields_per_page"]));
 	$_GET["fields_page"] = 1;
 } else {
-	$saved_num_fields_per_page = ft_get_settings("admin_num_fields_per_page_{$form_id}");
+	$saved_num_fields_per_page = Settings::get("admin_num_fields_per_page_{$form_id}");
 	$num_fields_per_page = (!empty($saved_num_fields_per_page)) ? $saved_num_fields_per_page : "all";
 }
 

@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\FieldValidation;
+use FormTools\Settings;
 
 
 require("../../global/session_start.php");
@@ -116,7 +117,7 @@ $validation_js = FieldValidation::generateSubmissionJsValidation($grouped_fields
 
 
 // get all the shared resources
-$settings = ft_get_settings("", "core");
+$settings = Settings::get("", "core");
 $shared_resources_list = $settings["edit_submission_onload_resources"];
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";

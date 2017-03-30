@@ -16,6 +16,7 @@
 
 
 use FormTools\FieldSizes;
+use FormTools\Settings;
 
 
 /**
@@ -570,7 +571,7 @@ function ft_get_form_field_settings($field_id, $evaluate_dynamic_fields = false)
 			$parts = explode(",", $row["setting_value"]);
 			if (count($parts) == 2)
 			{
-				$settings[$row["setting_id"]] = ft_get_settings($parts[0], $parts[1]);
+				$settings[$row["setting_id"]] = Settings::get($parts[0], $parts[1]);
 			}
 		}
 		else
@@ -763,7 +764,7 @@ function ft_get_extended_field_settings($field_id, $setting_id = "", $convert_dy
 		{
 			$parts = explode(",", $setting_value);
 			if (count($parts) == 2)
-				$setting_value = ft_get_settings($parts[0], $parts[1]);
+				$setting_value = Settings::get($parts[0], $parts[1]);
 		}
 
 		$settings[] = array(
@@ -834,7 +835,7 @@ function ft_get_field_settings($field_id)
 			if (count($parts) != 2)
 				$value = "";
 			else
-				$value = ft_get_settings($parts[0], $parts[1]);
+				$value = Settings::get($parts[0], $parts[1]);
 		}
 
 		// if the field has been overwritten use that instead!

@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Settings;
+
+
 require("../../global/session_start.php");
 ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
@@ -252,14 +255,14 @@ foreach ($view_info["fields"] as $field_info) {
 	}
 }
 
-$settings = ft_get_settings("", "core");
+$settings = Settings::get("", "core");
 
 $date_picker_info = ft_get_default_date_field_search_value($settings["default_date_field_search_value"]);
 $default_date_field_search_value = $date_picker_info["default_date_field_search_value"];
 $date_field_search_js_format     = $date_picker_info["date_field_search_js_format"];
 
 // get all the shared resources
-$shared_resources_list = ft_get_settings("edit_submission_onload_resources");
+$shared_resources_list = Settings::get("edit_submission_onload_resources");
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
 foreach ($shared_resources_array as $resource) {

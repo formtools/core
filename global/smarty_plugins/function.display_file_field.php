@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\General;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -32,7 +35,7 @@ function smarty_function_display_file_field($params, &$smarty)
 
   $file_upload_url             = $field_settings["file_upload_url"];
 //  $display_files_with_lightbox = $field_settings["display_files_with_lightbox"];
-  $filename_label              = ft_trim_string($filename, 80); // trim the filename to prevent it being too long
+  $filename_label = General::trimString($filename, 80); // trim the filename to prevent it being too long
 
   $html = "<a href=\"$file_upload_url/$filename\"";
 

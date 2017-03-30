@@ -252,10 +252,9 @@ class User
 
         // first, if $_SESSION["ft"]["admin"] is set, it is an administrator logging out, so just redirect them
         // back to the admin pages
-        if (isset($_SESSION["ft"]) && array_key_exists("admin", $_SESSION["ft"]))
-            ft_logout_as_client();
-        else
-        {
+        if (isset($_SESSION["ft"]) && array_key_exists("admin", $_SESSION["ft"])) {
+            Administrator::logoutAsClient();
+        } else {
             if (!empty($message_flag))
             {
                 // empty sessions, but be nice about it. Only delete the Form Tools namespaced sessions - any other

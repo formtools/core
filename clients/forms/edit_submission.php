@@ -1,6 +1,8 @@
 <?php
 
 use FormTools\FieldValidation;
+use FormTools\General;
+use FormTools\Settings;
 
 
 require("../../global/session_start.php");
@@ -24,7 +26,7 @@ $tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
 $grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
 
 // check the current client is permitted to view this information!
-ft_check_client_may_view($account_id, $form_id, $view_id);
+General::checkClientMayView($account_id, $form_id, $view_id);
 if (!ft_check_view_contains_submission($form_id, $view_id, $submission_id))
 {
 	header("location: index.php");
@@ -134,7 +136,7 @@ $submission_placeholders = ft_get_submission_placeholders($form_id, $submission_
 $edit_submission_page_label = ft_eval_smarty_string($form_info["edit_submission_page_label"], $submission_placeholders);
 
 // get all the shared resources
-$settings = ft_get_settings("", "core");
+$settings = Settings::get("", "core");
 $shared_resources_list = $settings["edit_submission_onload_resources"];
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";

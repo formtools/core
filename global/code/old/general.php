@@ -14,6 +14,7 @@
 
 use FormTools\Administrator;
 use FormTools\Core;
+use FormTools\Settings;
 
 
 /**
@@ -169,35 +170,6 @@ function ft_eval_smarty_string($placeholder_str, $placeholders = array(), $theme
 	extract(ft_process_hook_calls("end", compact("output", "placeholder_str", "placeholders", "theme"), array("output")), EXTR_OVERWRITE);
 
 	return $output;
-}
-
-
-/**
- * Handy function to help manage long strings by adding either an ellipsis or inserts a inserts a
- * <br /> at the position specified, and returns the result.
- *
- * @param string $str The string to manipulate.
- * @param string $length The max length of the string / place to insert <br />
- * @param string $flag "ellipsis" / "page_break"
- * @return string The modified string.
- */
-function ft_trim_string($str, $length, $flag = "ellipsis")
-{
-	$new_string = "";
-	if (mb_strlen($str) < $length)
-		$new_string = $str;
-	else
-	{
-		if ($flag == "ellipsis")
-			$new_string = mb_substr($str, 0, $length) . "...";
-		else
-		{
-			$parts = mb_str_split($str, $length);
-			$new_string = join("<br />", $parts);
-		}
-	}
-
-	return $new_string;
 }
 
 
@@ -436,52 +408,6 @@ function ft_check_permission($account_type, $auto_logout = true)
 			"message"        => $message_flag
 		);
 	}
-}
-
-
-/**
- * Checks that the currently logged in client is permitted to view a particular form View. This is called
- * on the form submissions and edit submission pages, to ensure the client isn't trying to look at something
- * they shouldn't. Any time it fails, it logs them out with a message informing them that they're not allowed
- * to access that page. (FYI, it's possible that this scenario could happen honestly: e.g. if the administrator
- * creates a client menu containing links to particular forms; then accidentally assigning a client to the menu
- * that doesn't have permission to view the form).
- *
- * This relies on the $_SESSION["ft"]["permissions"] key being set by the login function: it contains the form
- * and View IDs that this.
- *
- * Because of this, any time the administrator changes the permissions for a client, they'll need te re-login to
- * access that new information.
- *
- * Very daft this function doesn't return a boolean, but oh well. The fourth param was added to get around that.
- *
- * @param integer $form_id The unique form ID
- * @param integer $client_id The unique client ID
- * @param integer $view_id
- * @param boolean
- */
-function ft_check_client_may_view($client_id, $form_id, $view_id, $return_boolean = false)
-{
-	$permissions = isset($_SESSION["ft"]["permissions"]) ? $_SESSION["ft"]["permissions"] : array();
-
-	extract(ft_process_hook_calls("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
-
-	$may_view = true;
-	if (!array_key_exists($form_id, $permissions)) {
-		$may_view = false;
-		if (!$return_boolean) {
-            Core::$user->logout("notify_invalid_permissions");
-		}
-	} else {
-		if (!empty($view_id) && !in_array($view_id, $permissions[$form_id])) {
-			$may_view = false;
-			if (!$return_boolean) {
-                Core::$user->logout("notify_invalid_permissions");
-			}
-		}
-	}
-
-	return $may_view;
 }
 
 
@@ -1367,7 +1293,7 @@ function ft_get_formtools_installed_components()
 {
 	global $g_current_version, $g_release_type, $g_release_date;
 
-	$settings = ft_get_settings();
+	$settings = Settings::get();
 
 	// a hash storing the installed component info
 	$components = array();
@@ -1451,7 +1377,7 @@ function ft_get_submission_placeholders($form_id, $submission_id, $client_info =
 
 	$placeholders = array();
 
-	$settings        = ft_get_settings();
+	$settings        = Settings::get();
 	$form_info       = ft_get_form($form_id);
 	$submission_info = ft_get_submission($form_id, $submission_id);
 	$admin_info      = Administrator::getAdminInfo();

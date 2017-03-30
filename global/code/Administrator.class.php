@@ -66,23 +66,24 @@ class Administrator {
      * Used by the administrator to logout from a client account. Resets appropriate
      * sessions values and redirects back to admin pages.
      */
-    function ft_logout_as_client()
+    public static function logoutAsClient()
     {
-        global $g_root_url;
+        $root_url = Core::getRootURL();
 
         // empty old sessions and reload admin settings
         $admin_values = $_SESSION["ft"]["admin"];
         $client_id    = $_SESSION["ft"]["account"]["account_id"];
         $_SESSION["ft"] = array();
 
-        foreach ($admin_values as $key => $value)
+        foreach ($admin_values as $key => $value) {
             $_SESSION["ft"][$key] = $value;
+        }
 
         unset($_SESSION["ft"]["admin"]);
 
         // redirect them back to the edit client page
         session_write_close();
-        header("location: $g_root_url/admin/clients/edit.php?client_id=$client_id");
+        header("location: $root_url/admin/clients/edit.php?client_id=$client_id");
         exit;
     }
 

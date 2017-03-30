@@ -13,6 +13,7 @@
 // -------------------------------------------------------------------------------------------------
 
 use FormTools\FieldValidation;
+use FormTools\Settings;
 
 
 /**
@@ -1367,7 +1368,7 @@ function ft_update_form_fields_tab($form_id, $infohash)
 
 	if (!empty($changed_fields))
 	{
-		$field_type_settings_shared_characteristics = ft_get_settings("field_type_settings_shared_characteristics");
+		$field_type_settings_shared_characteristics = Settings::get("field_type_settings_shared_characteristics");
 		$field_type_map = ft_get_field_type_id_to_identifier();
 
 		$shared_settings = array();

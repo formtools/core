@@ -416,7 +416,7 @@ class Accounts {
 
         // 2. build the email subject line
         $placeholders = array(
-        "program_name" => ft_get_settings("program_name")
+        "program_name" => Settings::get("program_name")
         );
         $smarty_template_email_subject = file_get_contents("$g_root_dir/global/emails/forget_password_subject.tpl");
         $email_subject = trim(ft_eval_smarty_string($smarty_template_email_subject, $placeholders));

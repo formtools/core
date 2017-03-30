@@ -31,7 +31,7 @@ class Settings {
      * @param string $module the name of the module to which these settings belong
      * @return array a hash of all settings.
      */
-    public static function getList($settings = "", $module = "")
+    public static function get($settings = "", $module = "")
     {
         $db = Core::$db;
 

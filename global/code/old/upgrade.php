@@ -12,6 +12,7 @@
 // -------------------------------------------------------------------------------------------------
 
 use FormTools\Accounts;
+use FormTools\Settings;
 
 
 /**
@@ -1702,7 +1703,7 @@ function ft_upgrade_form_tools()
 	{
 		$upgrade_attempted = true;
 
-		$upgrade_track = ft_get_settings("core_version_upgrade_track");
+		$upgrade_track = Settings::get("core_version_upgrade_track");
 		$upgrade_track .= ",{$g_current_version}-{$g_release_type}-{$g_release_date}";
 
 		$new_settings = array(
@@ -1747,7 +1748,7 @@ function ft_upgrade_form_tools()
  */
 function ft_get_core_version_info()
 {
-	$settings = ft_get_settings();
+	$settings = Settings::get();
 
 	$program_version = $settings["program_version"];
 

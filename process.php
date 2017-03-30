@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Settings;
+
+
 /**
  * File: process.php
  *
@@ -264,12 +267,12 @@ function ft_process_form($form_data)
         $redirect_query_params[] = "submission_id=$submission_id";
         break;
       case "submission_date":
-        $settings = ft_get_settings();
+        $settings = Settings::get();
         $submission_date_formatted = ft_get_date($settings["default_timezone_offset"], $now, $settings["default_date_format"]);
         $redirect_query_params[] = "submission_date=" . rawurlencode($submission_date_formatted);
         break;
       case "last_modified_date":
-        $settings = ft_get_settings();
+        $settings = Settings::get();
         $submission_date_formatted = ft_get_date($settings["default_timezone_offset"], $now, $settings["default_date_format"]);
         $redirect_query_params[] = "last_modified_date=" . rawurlencode($submission_date_formatted);
         break;

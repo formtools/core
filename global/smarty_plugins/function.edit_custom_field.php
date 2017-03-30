@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Settings;
+
+
 /**
  * Smarty plugin
  * -------------------------------------------------------------
@@ -121,7 +124,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
       $parts = explode(",", $value);
       if (count($parts) == 2)
       {
-        $value = ft_get_settings($parts[0], $parts[1]);
+        $value = Settings::get($parts[0], $parts[1]);
       }
     }
 

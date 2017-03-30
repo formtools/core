@@ -14,6 +14,8 @@
 
 // -------------------------------------------------------------------------------------------------
 
+use FormTools\Settings;
+
 
 
 /**
@@ -386,7 +388,7 @@ function ft_update_theme_settings($infohash)
 	}
 
 	// reset the settings in sessions
-	$_SESSION["ft"]["settings"] = ft_get_settings();
+	$_SESSION["ft"]["settings"] = Settings::get();
 
 	$success = true;
 	$message = $LANG["notify_themes_settings_updated"];
@@ -410,7 +412,7 @@ function ft_get_current_timezone_offset()
 	if (isset($_SESSION["ft"]["account"]["timezone_offset"]))
 		$timezone_offset = $_SESSION["ft"]["account"]["timezone_offset"];
 	else
-		$timezone_offset = ft_get_settings("timezone_offset");
+		$timezone_offset = Settings::get("timezone_offset");
 
 	return $timezone_offset;
 }

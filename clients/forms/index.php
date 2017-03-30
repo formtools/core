@@ -1,5 +1,10 @@
 <?php
 
+use FormTools\General;
+use FormTools\Settings;
+use FormTools\Themes;
+
+
 require("../../global/session_start.php");
 ft_check_permission("client");
 
@@ -18,21 +23,17 @@ if (empty($form_id))
 $view_id = ft_load_field("view_id", "form_{$form_id}_view_id");
 
 // check the current client is permitted to view this information!
-ft_check_client_may_view($account_id, $form_id, $view_id);
+General::checkClientMayView($account_id, $form_id, $view_id);
 
 // this returns all and ONLY the Views accessible by this client
 $grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
 
-if (empty($view_id) || !ft_check_view_exists($view_id, true))
-{
-	if (count($grouped_views[0]["views"]) == 0)
-	{
+if (empty($view_id) || !ft_check_view_exists($view_id, true)) {
+	if (count($grouped_views[0]["views"]) == 0) {
 		// no Views defined for this client
 		ft_handle_error($LANG["notify_no_views_assigned_to_client_form"], "", "notify");
 		exit;
-	}
-	else
-	{
+	} else {
 		$view_id = $grouped_views[0]["views"][0]["view_id"];
 	}
 }
@@ -41,8 +42,7 @@ $_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
 $form_info = ft_get_form($form_id);
 $view_info = ft_get_view($view_id);
 
-if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes")
-{
+if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes") {
 	$submission_id = ft_create_blank_submission($form_id, $view_id, true);
 	header("location: edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id");
 	exit;
@@ -50,8 +50,7 @@ if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes"
 
 // if the View just changed (i.e. it was just selected by the user), deselect any items in
 // this form
-if (isset($request["view_id"]))
-{
+if (isset($request["view_id"])) {
 	$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
 	$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
 	$_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
@@ -61,16 +60,14 @@ if (isset($request["view_id"]))
 $has_search_info_for_other_form = (isset($_SESSION["ft"]["current_search"]) && $_SESSION["ft"]["current_search"]["form_id"] != $form_id);
 $is_resetting_search            = (isset($_GET["reset"]) && $_GET["reset"] == "1");
 
-if ($is_resetting_search || $has_search_info_for_other_form)
-{
+if ($is_resetting_search || $has_search_info_for_other_form) {
 	unset($_SESSION["ft"]["search_field"]);
 	unset($_SESSION["ft"]["search_keyword"]);
 	unset($_SESSION["ft"]["search_date"]);
 	unset($_SESSION["ft"]["current_search"]);
 
 	// only empty the memory of selected submission ID info if the user just reset the search
-	if ($is_resetting_search)
-	{
+	if ($is_resetting_search) {
 		$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
 		$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
 		$_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
@@ -83,23 +80,18 @@ $search_fields = array(
 	"search_keyword" => ft_load_field("search_keyword", "search_keyword", "")
 );
 
-if (isset($_GET["delete"]))
-{
+if (isset($_GET["delete"])) {
 	// if delete actually a value, it's being fed a submission ID from the edit submission page
 	// in order to delete it
-	if (!empty($_GET["delete"]))
-	{
+	if (!empty($_GET["delete"])) {
 		$ids = explode(",", $_GET["delete"]);
 		foreach ($ids as $id)
 			list($g_success, $g_message) = ft_delete_submission($form_id, $view_id, $id, true);
-	}
-	else
-	{
+	} else {
 		$delete_all = (isset($_SESSION["ft"]["form_{$form_id}_select_all_submissions"]) && $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] == 1) ? true : false;
 		$submissions_to_delete = $_SESSION["ft"]["form_{$form_id}_selected_submissions"];
 		$omit_list = array();
-		if ($delete_all)
-		{
+		if ($delete_all) {
 			$submissions_to_delete = "all";
 			$omit_list = $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"];
 		}
@@ -110,8 +102,9 @@ if (isset($_GET["delete"]))
 
 // figure out the current page
 $current_page = ft_load_field("page", "view_{$view_id}_page", 1);
-if (isset($_POST["search"]))
-	$current_page = 1;
+if (isset($_POST["search"])) {
+    $current_page = 1;
+}
 
 $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true, "include_field_settings" => true));
 
@@ -120,56 +113,49 @@ $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => t
 // all the fields in the View
 $all_view_field_columns = array();
 $searchable_columns  = array();
-foreach ($view_info["fields"] as $field_info)
-{
+foreach ($view_info["fields"] as $field_info) {
 	$all_view_field_columns[$field_info["field_id"]] = $field_info["col_name"];
-	if ($field_info["is_searchable"] == "yes")
-		$searchable_columns[] = $field_info["col_name"];
+	if ($field_info["is_searchable"] == "yes") {
+        $searchable_columns[] = $field_info["col_name"];
+    }
 }
 $db_columns = array_values($all_view_field_columns); // used for the search query
 
 // with 2.1.0, users can now assign fields to be columns on the Submission Listing page but not actually
 // include them in the list of fields to appear in the View. This section tacks on those columns so
 // that they're included in the Almighty Search Query
-foreach ($view_info["columns"] as $column_info)
-{
+foreach ($view_info["columns"] as $column_info) {
 	$curr_field_id = $column_info["field_id"];
 	$curr_col_name = "";
-	foreach ($form_fields as $field_info)
-	{
-		if ($field_info["field_id"] == $curr_field_id)
-		{
+	foreach ($form_fields as $field_info) {
+		if ($field_info["field_id"] == $curr_field_id) {
 			$curr_col_name = $field_info["col_name"];
 			break;
 		}
 	}
 
-	if (!array_key_exists($curr_col_name, $db_columns))
-	{
+	if (!array_key_exists($curr_col_name, $db_columns)) {
 		$db_columns[] = $curr_col_name;
 	}
 }
 
 // display_fields contains ALL the information we need for the fields in the template
 $display_fields = array();
-foreach ($view_info["columns"] as $col_info)
-{
+foreach ($view_info["columns"] as $col_info) {
 	$curr_field_id = $col_info["field_id"];
 	$data_to_merge = $col_info;
 
-	foreach ($view_info["fields"] as $view_field_info)
-	{
-		if ($view_field_info["field_id"] != $curr_field_id)
-			continue;
-
+	foreach ($view_info["fields"] as $view_field_info) {
+		if ($view_field_info["field_id"] != $curr_field_id) {
+            continue;
+        }
 		$data_to_merge = array_merge($view_field_info, $data_to_merge);
 	}
 
-	foreach ($form_fields as $form_field_info)
-	{
-		if ($form_field_info["field_id"] != $curr_field_id)
+	foreach ($form_fields as $form_field_info) {
+		if ($form_field_info["field_id"] != $curr_field_id) {
 			continue;
-
+        }
 		$data_to_merge = array_merge($form_field_info, $data_to_merge);
 	}
 
@@ -178,17 +164,15 @@ foreach ($view_info["columns"] as $col_info)
 
 
 // determine the sort order
-if (isset($_GET["order"]))
-{
+if (isset($_GET["order"])) {
 	$_SESSION["ft"]["view_{$view_id}_sort_order"] = $_GET["order"];
 	$order = $_GET["order"];
-}
-else
-{
-	if (isset($_SESSION["ft"]["view_{$view_id}_sort_order"]))
-		$order = $_SESSION["ft"]["view_{$view_id}_sort_order"];
-	else
-		$order = "{$view_info['default_sort_field']}-{$view_info['default_sort_field_order']}";
+} else {
+	if (isset($_SESSION["ft"]["view_{$view_id}_sort_order"])) {
+        $order = $_SESSION["ft"]["view_{$view_id}_sort_order"];
+    } else {
+        $order = "{$view_info['default_sort_field']}-{$view_info['default_sort_field_order']}";
+    }
 }
 
 $results_per_page = $view_info["num_submissions_per_page"];
@@ -217,8 +201,7 @@ $_SESSION["ft"]["current_search"] = array(
 // is no longer a second page. So for this fringe case, we update the session and refresh the page to
 // load the appropriate page
 $total_pages = ceil($search_num_results / $results_per_page);
-if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$view_id}_page"] > $total_pages)
-{
+if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$view_id}_page"] > $total_pages) {
 	$_SESSION["ft"]["view_{$view_id}_page"] = $total_pages;
 	header("location: index.php");
 }
@@ -228,13 +211,15 @@ if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$vi
 _ft_cache_form_stats($form_id);
 _ft_cache_view_stats($form_id, $view_id);
 
-if (!isset($_SESSION["ft"]["form_{$form_id}_select_all_submissions"]))
-	$_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
+if (!isset($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {
+    $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
+}
 
 // get a list of all submission IDs in this page
 $submission_ids = array();
-for ($i=0; $i<count($search_rows); $i++)
-	$submission_ids[] = $search_rows[$i]["submission_id"];
+for ($i=0; $i<count($search_rows); $i++) {
+    $submission_ids[] = $search_rows[$i]["submission_id"];
+}
 
 $submission_id_str = implode(",", $submission_ids);
 
@@ -245,43 +230,39 @@ $select_all_submissions_returned = ($_SESSION["ft"]["form_{$form_id}_select_all_
 // figure out which submissions should be selected on page load
 $preselected_subids = array();
 $all_submissions_selected_omit_list_str = "";
-if ($select_all_submissions_returned == "true")
-{
+if ($select_all_submissions_returned == "true") {
 	$all_submissions_selected_omit_list = isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]) ?
 		$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] : array();
 
 	$all_submissions_selected_omit_list_str = implode(",", $all_submissions_selected_omit_list);
 	$preselected_subids = array_diff($submission_ids, $all_submissions_selected_omit_list);
+} else {
+    $preselected_subids = isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) ? $_SESSION["ft"]["form_{$form_id}_selected_submissions"] : array();
 }
-else
-	$preselected_subids = isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) ? $_SESSION["ft"]["form_{$form_id}_selected_submissions"] : array();
 
 $preselected_subids_str = implode(",", $preselected_subids);
 
 $field_types = ft_get_field_types(true);
 
 $has_searchable_field = false;
-foreach ($view_info["fields"] as $field_info)
-{
-	if ($field_info["is_searchable"] == "yes")
-	{
+foreach ($view_info["fields"] as $field_info) {
+	if ($field_info["is_searchable"] == "yes") {
 		$has_searchable_field = true;
 		break;
 	}
 }
 
-$settings = ft_get_settings("", "core");
+$settings = Settings::getList("", "core");
 
 $date_picker_info = ft_get_default_date_field_search_value($settings["default_date_field_search_value"]);
 $default_date_field_search_value = $date_picker_info["default_date_field_search_value"];
 $date_field_search_js_format     = $date_picker_info["date_field_search_js_format"];
 
 // get all the shared resources
-$shared_resources_list = ft_get_settings("edit_submission_onload_resources");
+$shared_resources_list = Settings::getList("edit_submission_onload_resources");
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
-foreach ($shared_resources_array as $resource)
-{
+foreach ($shared_resources_array as $resource) {
 	$shared_resources .= ft_eval_smarty_string($resource, array("g_root_url" => $g_root_url)) . "\n";
 }
 
@@ -374,4 +355,4 @@ $(function() {
 });
 END;
 
-ft_display_page("clients/forms/index.tpl", $page_vars);
+Themes::displayPage("clients/forms/index.tpl", $page_vars);

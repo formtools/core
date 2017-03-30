@@ -14,6 +14,7 @@
 // -------------------------------------------------------------------------------------------------
 
 use FormTools\Accounts;
+use FormTools\Settings;
 
 
 /**
@@ -45,7 +46,7 @@ function ft_add_client($form_vals)
 	$rules[] = "required,password,{$LANG["validation_no_client_password"]}";
 	$rules[] = "same_as,password,password_2,{$LANG["validation_passwords_different"]}";
 
-	$settings = ft_get_settings();
+	$settings = Settings::get();
 
 	if (!empty($form_vals["password"]))
 	{
@@ -547,7 +548,7 @@ function ft_update_admin_account($infohash, $account_id)
 	or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
 
 	// update the settings
-	$_SESSION["ft"]["settings"] = ft_get_settings();
+	$_SESSION["ft"]["settings"] = Settings::get();
 	$_SESSION["ft"]["account"] = Accounts::getAccountInfo($account_id);
 	$_SESSION["ft"]["account"]["is_logged_in"] = true;
 

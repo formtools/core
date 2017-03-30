@@ -101,7 +101,7 @@ class Pages
      * @param string $custom_options again used by Form Tools
      * @param array $args an arbitrary hash of key-value pairs to be passed in the query string
      */
-    public static function constructPageURL($pageIdentifier, $customOptions = "", $args = array())
+    public static function constructPageURL($page_identifier, $custom_options = "", $args = array())
     {
         $url = "";
         extract(ft_process_hook_calls("start", compact("url", "pageIdentifier", "customOptions", "args"), array("url")), EXTR_OVERWRITE);
@@ -112,9 +112,9 @@ class Pages
 
         $pages = self::$pageList;
 
-        switch ($pageIdentifier) {
+        switch ($page_identifier) {
             case "custom_url":
-                $url = $customOptions;
+                $url = $custom_options;
                 break;
 
             case "client_form_submissions":
@@ -124,20 +124,20 @@ class Pages
             case "edit_form_fields":
             case "edit_form_views":
             case "edit_form_emails":
-                $joiner = (strpos($pages[$pageIdentifier], "?")) ? "&" : "?";
-                $url = $pages[$pageIdentifier] . $joiner . "form_id=" . $customOptions;
+                $joiner = (strpos($pages[$page_identifier], "?")) ? "&" : "?";
+                $url = $pages[$page_identifier] . $joiner . "form_id=" . $custom_options;
                 break;
 
             case "edit_client":
             case "edit_client_main":
             case "edit_client_permissions":
-                $joiner = (strpos($pages[$pageIdentifier], "?")) ? "&" : "?";
-                $url = $pages[$pageIdentifier] . $joiner . "client_id=" . $customOptions;
+                $joiner = (strpos($pages[$page_identifier], "?")) ? "&" : "?";
+                $url = $pages[$page_identifier] . $joiner . "client_id=" . $custom_options;
                 break;
 
             default:
                 // modules
-                if (preg_match("/^module_(\d+)/", $pageIdentifier, $matches)) {
+                if (preg_match("/^module_(\d+)/", $page_identifier, $matches)) {
                     $moduleId = $matches[1];
                     $moduleInfo = ft_get_module($moduleId);
                     if (!empty($moduleInfo)) {
@@ -146,11 +146,11 @@ class Pages
                     }
 
                 // pages (from the Pages module). This should be removed from the Core, and make it use the hook defined above
-                } else if (preg_match("/^page_(\d+)/", $pageIdentifier, $matches)) {
+                } else if (preg_match("/^page_(\d+)/", $page_identifier, $matches)) {
                     $pageId = $matches[1];
                     $url = "/modules/pages/page.php?id=$pageId";
                 } else {
-                    $url = $pages[$pageIdentifier];
+                    $url = $pages[$page_identifier];
                 }
                 break;
         }

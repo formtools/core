@@ -11,6 +11,8 @@
 
 
 use FormTools\Core;
+use FormTools\Settings;
+
 
 // -------------------------------------------------------------------------------------------------
 
@@ -282,7 +284,7 @@ function ft_get_module_settings($settings = "", $module_folder = "")
 	if (empty($module_folder)) {
         $module_folder = _ft_get_current_module_folder();
     }
-	return ft_get_settings($settings, $module_folder);
+	return Settings::get($settings, $module_folder);
 }
 
 

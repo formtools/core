@@ -9,6 +9,7 @@
 
 use FormTools\FieldValidation;
 use FormTools\ListGroups;
+use FormTools\Settings;
 
 
 // -------------------------------------------------------------------------------------------------
@@ -283,7 +284,7 @@ switch ($action)
 	// That information is then used by the JS to load and process the page content
 	case "upload_scraped_pages_for_smart_fill":
 		$num_pages = $request["num_pages"];
-		$settings = ft_get_settings(array("file_upload_dir", "file_upload_url"), "core");
+		$settings = Settings::get(array("file_upload_dir", "file_upload_url"), "core");
 		$file_upload_dir = $settings["file_upload_dir"];
 		$file_upload_url = $settings["file_upload_url"];
 		$upload_tmp_file_prefix = "ft_sf_tmp_";
@@ -335,7 +336,7 @@ switch ($action)
 	// used on Edit Field Options pages. It uploads the files to the /upload folder and returns the filenames (renamed
 	// & stored in sessions). That information is then used by the JS to load and process the page content
 	case "upload_scraped_page_for_smart_fill":
-		$settings = ft_get_settings(array("file_upload_dir", "file_upload_url"), "core");
+		$settings = Settings::get(array("file_upload_dir", "file_upload_url"), "core");
 		$file_upload_dir = $settings["file_upload_dir"];
 		$file_upload_url = $settings["file_upload_url"];
 		$upload_tmp_file_prefix = "ft_sf_tmp_";

@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Settings;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -35,7 +38,7 @@ function smarty_function_languages_dropdown($params, &$smarty)
   }
 
 
-  $available_language_info = ft_get_settings("available_languages");
+  $available_language_info = Settings::get("available_languages");
 	$available_language_arr = explode("|", $available_language_info);
 
 	$html = "<select $attribute_str>

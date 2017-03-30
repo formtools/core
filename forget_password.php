@@ -1,11 +1,12 @@
 <?php
 
 use FormTools\Administrator;
+use FormTools\Settings;
 
 
 require("global/session_start.php");
 
-$settings = ft_get_settings();
+$settings = Settings::get();
 $g_title = $settings['program_name'];
 $g_theme = $settings['default_theme'];
 $admin_info = Administrator::getAdminInfo();

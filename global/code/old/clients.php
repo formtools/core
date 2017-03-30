@@ -14,6 +14,8 @@
 // -------------------------------------------------------------------------------------------------
 
 use FormTools\Accounts;
+use FormTools\Settings;
+
 
 
 /**
@@ -202,7 +204,7 @@ function ft_update_client($account_id, $info)
 	extract(ft_process_hook_calls("end", compact("account_id", "info"), array("success", "message")), EXTR_OVERWRITE);
 
 	// update sessions
-	$_SESSION["ft"]["settings"] = ft_get_settings();
+	$_SESSION["ft"]["settings"] = Settings::get();
 	$_SESSION["ft"]["account"]  = Accounts::getAccountInfo($account_id);
 	$_SESSION["ft"]["account"]["is_logged_in"] = true;
 

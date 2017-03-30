@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Settings;
+
+
 /**
  * This file defines all functions relating to Form Tools themes. Note: the Theme setting tab/page
  * is updated via ft_update_theme_settings, found in the settings.php file.
@@ -129,7 +132,7 @@ function ft_display_module_page($template, $page_vars = array(), $theme = "", $s
 	}
 	elseif (empty($theme))
 	{
-		$settings = ft_get_settings(array("default_theme", "default_client_swatch"));
+		$settings = Settings::get(array("default_theme", "default_client_swatch"));
 		$theme  = $settings["default_theme"];
 		$swatch = $settings["default_client_swatch"];
 	}
