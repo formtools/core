@@ -178,7 +178,7 @@ class Themes {
             $theme  = $_SESSION["ft"]["account"]["theme"];
             $swatch = isset($_SESSION["ft"]["account"]["swatch"]) ? $_SESSION["ft"]["account"]["swatch"] : "";
         } elseif (empty($theme)) {
-            $settings = Settings::getList(array("default_theme", "default_client_swatch"));
+            $settings = Settings::get(array("default_theme", "default_client_swatch"));
             $theme  = $settings["default_theme"];
             $swatch = $settings["default_client_swatch"];
         }

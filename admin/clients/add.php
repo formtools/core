@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\Administrator;
 use FormTools\Settings;
 
 
@@ -9,7 +10,7 @@ $request = array_merge($_POST, $_GET);
 
 $post_values = array();
 if (isset($_POST) && !empty($_POST['add_client'])) {
-	list($g_success, $g_message, $new_account_id) = ft_add_client($request);
+	list($g_success, $g_message, $new_account_id) = Administrator::addClient($request);
 
 	// if added, redirect to the manage client page
 	if ($g_success) {

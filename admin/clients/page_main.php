@@ -1,11 +1,12 @@
 <?php
 
 use FormTools\Accounts;
+use FormTools\Administrator;
 
 
 // update this client
 if (isset($_POST["update_client"])) {
-    list($g_success, $g_message) = ft_admin_update_client($request, 1);
+    list($g_success, $g_message) = Administrator::adminUpdateClient($request, 1);
 }
 
 $client_info = Accounts::getAccountInfo($client_id);

@@ -24,7 +24,7 @@ if (User::isLoggedIn()) {
 }
 
 // default settings
-$settings = Settings::getList();
+$settings = Settings::get();
 $theme  = $settings["default_theme"];
 $swatch = $settings["default_client_swatch"];
 

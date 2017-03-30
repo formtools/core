@@ -49,7 +49,7 @@ class User
     {
         $LANG = Core::$db;
 
-        $settings = Settings::getList("", "core");
+        $settings = Settings::get("", "core");
 
         $username = $info["username"];
 

@@ -185,7 +185,7 @@ class Core {
     /**
      * Special chars, required in password (optional setting through interface).
      */
-    private static $passwordSpecialChars = "~!@#$%^&";
+    private static $requiredPasswordSpecialChars = "~!@#$%^&";
 
     /**
      * The size of the password_history setting in the settings table. Form Tools keeps track of the last 10
@@ -549,5 +549,9 @@ class Core {
 
     public static function getDbName() {
         return self::$dbName;
+    }
+
+    public static function getRequiredPasswordSpecialChars() {
+        return self::$requiredPasswordSpecialChars;
     }
 }

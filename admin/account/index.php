@@ -8,7 +8,7 @@ ft_check_permission("admin");
 
 // update the administrator's account
 if (isset($_POST) && !empty($_POST)) {
-	list($g_success, $g_message) = ft_update_admin_account($_POST, $_SESSION["ft"]["account"]["account_id"]);
+	list($g_success, $g_message) = Administrator::updateAdminAccount($_POST, $_SESSION["ft"]["account"]["account_id"]);
 
 	// if the user just changed their language file, reset the value in sessions and refresh the page
 	if ($g_success && ($_POST["old_ui_language"] != $_POST["ui_language"])) {
