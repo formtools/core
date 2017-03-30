@@ -1,11 +1,14 @@
 <?php
 
+use FormTools\Accounts;
+
+
 // update this client
 if (isset($_POST["update_client"])) {
     list($g_success, $g_message) = ft_admin_update_client($request, 1);
 }
 
-$client_info = ft_get_account_info($client_id);
+$client_info = Accounts::getAccountInfo($client_id);
 $conditional_validation = array();
 if (!empty($client_info["settings"]["min_password_length"])) {
 	$rule = ft_eval_smarty_string($LANG["validation_client_password_too_short"], array("number" => $client_info["settings"]["min_password_length"]));

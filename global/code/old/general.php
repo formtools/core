@@ -12,6 +12,7 @@
 
 // -------------------------------------------------------------------------------------------------
 
+use FormTools\Administrator;
 use FormTools\Core;
 
 
@@ -1453,7 +1454,7 @@ function ft_get_submission_placeholders($form_id, $submission_id, $client_info =
 	$settings        = ft_get_settings();
 	$form_info       = ft_get_form($form_id);
 	$submission_info = ft_get_submission($form_id, $submission_id);
-	$admin_info      = ft_get_admin_info();
+	$admin_info      = Administrator::getAdminInfo();
 	$file_field_type_ids = ft_get_file_field_type_ids();
 	$field_types     = ft_get_field_types(true);
 

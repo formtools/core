@@ -1,13 +1,15 @@
 <?php
 
-if (isset($request["update_account_settings"]))
-{
+use FormTools\Accounts;
+
+
+if (isset($request["update_account_settings"])) {
 	$account_id = $_SESSION["ft"]["account"]["account_id"];
 	$request["page"] = "settings";
 	list($g_success, $g_message) = ft_update_client($account_id, $request);
 }
 
-$client_info = ft_get_account_info($account_id);
+$client_info = Accounts::getAccountInfo($account_id);
 
 // compile header information
 $page_vars = array();

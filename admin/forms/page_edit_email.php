@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Administrator;
+
+
 $email_id = ft_load_field("email_id", "email_id", "");
 
 if (isset($request["update_email_template"])) {
@@ -13,7 +16,7 @@ $template_info  = ft_get_email_template($email_id);
 $event_trigger_arr =  explode(",", $template_info["email_event_trigger"]);
 $template_info["email_event_trigger"] = $event_trigger_arr;
 $clients         = $form_info["client_info"];
-$admin_info      = ft_get_admin_info();
+$admin_info      = Administrator::getAdminInfo();
 
 $edit_email_tab = (isset($_SESSION["ft"]["inner_tabs"]["edit_email_template"])) ? $_SESSION["ft"]["inner_tabs"]["edit_email_template"] : 1;
 if (isset($request["edit_email_template"]))

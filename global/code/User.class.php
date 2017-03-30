@@ -98,10 +98,10 @@ class User
 
                     if ($num_failed_login_attempts >= $max_failed_login_attempts) {
                         ft_disable_client($account_info["account_id"]);
-                        ft_set_account_settings($account_info["account_id"], array("num_failed_login_attempts" => 0));
+                        Accounts::setAccountSettings($account_info["account_id"], array("num_failed_login_attempts" => 0));
                         return $LANG["validation_account_disabled"];
                     } else {
-                        ft_set_account_settings($account_info["account_id"], array("num_failed_login_attempts" => $num_failed_login_attempts));
+                        Accounts::setAccountSettings($account_info["account_id"], array("num_failed_login_attempts" => $num_failed_login_attempts));
                     }
                 }
                 return $LANG["validation_wrong_password"];
@@ -112,7 +112,7 @@ class User
 
         // all checks out. Log them in, after populating sessions
         $_SESSION["ft"]["settings"] = $settings;
-        $_SESSION["ft"]["account"]  = ft_get_account_info($account_info["account_id"]);
+        $_SESSION["ft"]["account"]  = Accounts::getAccountInfo($account_info["account_id"]);
         $_SESSION["ft"]["account"]["is_logged_in"] = true;
 
         // this is deliberate
@@ -121,13 +121,10 @@ class User
         ft_cache_account_menu($account_info["account_id"]);
 
         // if this is an administrator, ensure the API version is up to date
-        if ($account_info["account_type"] == "admin")
-        {
+        if ($account_info["account_type"] == "admin") {
             ft_update_api_version();
-        }
-        else
-        {
-            ft_set_account_settings($account_info["account_id"], array("num_failed_login_attempts" => 0));
+        } else {
+            Accounts::setAccountSettings($account_info["account_id"], array("num_failed_login_attempts" => 0));
         }
 
         // for clients, store the forms & form Views that they are allowed to access
@@ -138,13 +135,12 @@ class User
         // if the user just logged in with a temporary password, append some args to pass to the login page
         // so that they will be prompted to changing it upon login
         $reset_password_args = array();
-        if ((md5(md5($password)) == $account_info["temp_reset_password"]))
-        {
+        if ((md5(md5($password)) == $account_info["temp_reset_password"])) {
             $reset_password_args["message"] = "change_temp_password";
         }
 
         // redirect the user to whatever login page they specified in their settings
-        $login_url = ft_construct_page_url($account_info["login_page"], "", $reset_password_args);
+        $login_url = Pages::constructPageURL($account_info["login_page"], "", $reset_password_args);
         $login_url = "$g_root_url{$login_url}";
 
         if (!$login_as_client) {
@@ -192,7 +188,7 @@ class User
 //        if (empty($account_id))
 //            return false;
 //
-//        $account_info = ft_get_account_info($account_id);
+//        $account_info = Accounts::getAccountInfo($account_id);
 //        if (empty($account_info) || $account_info["account_type"] != "admin")
 //            return false;
 //

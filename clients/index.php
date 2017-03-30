@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Accounts;
+
+
 require_once("../global/session_start.php");
 ft_check_permission("client");
 _ft_cache_form_stats();
@@ -21,7 +24,7 @@ $search_criteria = array(
 
 $num_client_forms = count(ft_get_client_forms($account_id));
 $forms            = ft_search_forms($account_id, false, $search_criteria);
-$client_info      = ft_get_account_info($account_id);
+$client_info      = Accounts::getAccountInfo($account_id);
 $forms_page_default_message = ft_eval_smarty_string($client_info["settings"]["forms_page_default_message"]);
 
 // ------------------------------------------------------------------------------------------

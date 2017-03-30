@@ -1,5 +1,7 @@
 <?php
 
+use FormTools\Accounts;
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -16,7 +18,7 @@ function smarty_function_display_account_name($params, &$smarty)
   if (empty($account_id))
     return;
 
-  $account_info = ft_get_account_info($account_id);
+  $account_info = Accounts::getAccountInfo($account_id);
 
   if ($format == "first_last")
     $html = "{$account_info["first_name"]} {$account_info["last_name"]}";

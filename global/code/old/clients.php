@@ -13,6 +13,8 @@
 
 // -------------------------------------------------------------------------------------------------
 
+use FormTools\Accounts;
+
 
 /**
  * Updates a client account. Used for whomever is currently logged in.
@@ -31,7 +33,7 @@ function ft_update_client($account_id, $info)
 
 	extract(ft_process_hook_calls("start", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
 
-	$client_info = ft_get_account_info($account_id);
+	$client_info = Accounts::getAccountInfo($account_id);
 
 	$page = $info["page"];
 	switch ($page)
@@ -191,9 +193,8 @@ function ft_update_client($account_id, $info)
 			if (isset($info["max_failed_login_attempts"]))
 				$settings["max_failed_login_attempts"] = $info["max_failed_login_attempts"];
 
-			if (!empty($settings))
-			{
-				ft_set_account_settings($account_id, $settings);
+			if (!empty($settings)) {
+                Accounts::setAccountSettings($account_id, $settings);
 			}
 			break;
 	}
@@ -202,7 +203,7 @@ function ft_update_client($account_id, $info)
 
 	// update sessions
 	$_SESSION["ft"]["settings"] = ft_get_settings();
-	$_SESSION["ft"]["account"]  = ft_get_account_info($account_id);
+	$_SESSION["ft"]["account"]  = Accounts::getAccountInfo($account_id);
 	$_SESSION["ft"]["account"]["is_logged_in"] = true;
 
 	return array($success, $message);

@@ -11,6 +11,8 @@
 
 // -------------------------------------------------------------------------------------------------
 
+use FormTools\Accounts;
+
 
 /**
  * This function upgrades the Form Tools Core. As of 2.0.3, it works very simply: this gets called
@@ -353,7 +355,7 @@ function ft_upgrade_form_tools()
 		{
 			// add the current password to the password history queue
 			$client_settings["password_history"] = $client_info["password"];
-			ft_set_account_settings($client_info["account_id"], $client_settings);
+            Accounts::setAccountSettings($client_info["account_id"], $client_settings);
 		}
 	}
 

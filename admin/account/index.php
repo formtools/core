@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Administrator;
+
+
 require("../../global/session_start.php");
 ft_check_permission("admin");
 
@@ -21,7 +24,7 @@ if (isset($_GET["updated"])) {
 	$g_message = $LANG["notify_account_updated"];
 }
 
-$admin_info = ft_get_admin_info();
+$admin_info = Administrator::getAdminInfo();
 
 $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>');
 

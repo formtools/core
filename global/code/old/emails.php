@@ -12,6 +12,9 @@
 
 // -------------------------------------------------------------------------------------------------
 
+use FormTools\Accounts;
+use FormTools\Administrator;
+
 
 /**
  * This function is called whenever the user clicks the "Create Email" button on the main email list page.
@@ -374,7 +377,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 
 	// retrieve the placeholders and their substitutes
 	$submission_placeholders = ft_get_submission_placeholders($form_id, $submission_id);
-	$admin_info = ft_get_admin_info();
+	$admin_info = Administrator::getAdminInfo()();
 
 	$file_info = array();
 	$updated_fields_for_email_template = array();
@@ -512,7 +515,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 			break;
 
 		case "client":
-			$client_info = ft_get_account_info($email_template["email_from_account_id"]);
+			$client_info = Accounts::getAccountInfo($email_template["email_from_account_id"]);
 			$return_info["from"] = array(
 				"recipient_line" => "{$client_info["first_name"]} {$client_info["last_name"]} &lt;{$client_info["email"]}&gt;",
 				"name"           => "{$client_info["first_name"]} {$client_info["last_name"]}",
@@ -554,7 +557,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 			break;
 
 		case "client":
-			$client_info = ft_get_account_info($email_template["email_reply_to_account_id"]);
+			$client_info = Accounts::getAccountInfo($email_template["email_reply_to_account_id"]);
 			$return_info["reply_to"] = array(
 				"recipient_line" => "{$client_info["first_name"]} {$client_info["last_name"]} &lt;{$client_info["email"]}&gt;",
 				"name"           => "{$client_info["first_name"]} {$client_info["last_name"]}",
@@ -987,14 +990,14 @@ function ft_get_email_template_recipients($form_id, $email_id)
 		switch ($recipient_info["recipient_user_type"])
 		{
 			case "admin":
-				$admin_info = ft_get_admin_info();
+				$admin_info = Administrator::getAdminInfo();
 				$recipient_info["final_name"] = "{$admin_info["first_name"]} {$admin_info["last_name"]}";
 				$recipient_info["final_email"] = $admin_info["email"];
 				$recipient_info["final_recipient"] = "{$recipient_info["final_name"]} &lt;{$recipient_info["final_email"]}&gt;";
 				break;
 
 			case "client":
-				$client_info = ft_get_account_info($recipient_info["account_id"]);
+				$client_info = Accounts::getAccountInfo($recipient_info["account_id"]);
 				$recipient_info["final_name"] = "{$client_info["first_name"]} {$client_info["last_name"]}";
 				$recipient_info["final_email"] = $client_info["email"];
 				$recipient_info["final_recipient"] = "{$recipient_info["final_name"]} &lt;{$recipient_info["final_email"]}&gt;";

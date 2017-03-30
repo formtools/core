@@ -1,15 +1,15 @@
 <?php
 
-if (isset($request["update"]))
-{
+use FormTools\Accounts;
+
+if (isset($request["update"])) {
 	$request["page"] = "main";
 	list($g_success, $g_message) = ft_update_client($account_id, $request);
 }
-$client_info = ft_get_account_info($account_id);
+$client_info = Accounts::getAccountInfo($account_id);
 
 $conditional_validation = array();
-if (!empty($client_info["settings"]["min_password_length"]))
-{
+if (!empty($client_info["settings"]["min_password_length"])) {
 	$rule = ft_eval_smarty_string($LANG["validation_client_password_too_short"], array("number" => $client_info["settings"]["min_password_length"]));
 	$conditional_validation[] = "rules.push(\"if:password!=,length>={$client_info["settings"]["min_password_length"]},password,$rule\");";
 }

@@ -2,6 +2,7 @@
 
 require_once("global/library.php");
 
+use FormTools\Accounts;
 use FormTools\Core;
 use FormTools\Installation;
 use FormTools\Settings;
@@ -33,7 +34,7 @@ $swatch = $settings["default_client_swatch"];
 //$id = ft_load_field("id", "id", "");
 
 //if (!empty($id)) {
-//  $info = ft_get_account_info($id);
+//  $info = Accounts::getAccountInfo($id);
 //  if (isset($info["account_id"])) {
 //    // just in case, boot up the appropriate language file (this overrides any language file already loaded)
 //    $theme  = $info["theme"];

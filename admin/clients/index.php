@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Administrator;
+
+
 require("../../global/session_start.php");
 ft_check_permission("admin");
 
@@ -7,7 +10,7 @@ if (isset($_GET['delete']) && !empty($_GET['client_id'])) {
     list($g_success, $g_message) = ft_delete_client($_GET['client_id']);
 }
 if (isset($_GET['login'])) {
-    list($g_success, $g_message) = ft_login_as_client($_GET['login']);
+    list($g_success, $g_message) = Administrator::loginAsClient($_GET['login']);
 }
 
 

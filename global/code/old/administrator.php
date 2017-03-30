@@ -13,6 +13,8 @@
 
 // -------------------------------------------------------------------------------------------------
 
+use FormTools\Accounts;
+
 
 /**
  * Creates a new client based on first and last name, and returns the new account id.
@@ -133,7 +135,7 @@ function ft_add_client($form_vals)
 		"forms_page_default_message" => $settings["forms_page_default_message"]
 	);
 
-	ft_set_account_settings($new_user_id, $account_settings);
+	Accounts::setAccountSettings($new_user_id, $account_settings);
 
 	// store this password in the password history queue
     Accounts::addPasswordToPasswordHistory($new_user_id, $password);
@@ -263,7 +265,7 @@ function ft_admin_update_client($infohash, $tab_num)
 				"client_notes" => $form_vals["client_notes"],
 				"company_name" => $form_vals["company_name"]
 			);
-			ft_set_account_settings($account_id, $new_account_settings);
+            Accounts::setAccountSettings($account_id, $new_account_settings);
 			break;
 
 		// SETTINGS tab
@@ -359,7 +361,7 @@ function ft_admin_update_client($infohash, $tab_num)
 				"num_password_history" => $num_password_history,
 				"forms_page_default_message" => $forms_page_default_message
 			);
-			ft_set_account_settings($account_id, $settings);
+            Accounts::setAccountSettings($account_id, $settings);
 			break;
 
 		// FORMS tab
@@ -447,82 +449,6 @@ function ft_admin_update_client($infohash, $tab_num)
 	extract(ft_process_hook_calls("end", compact("infohash", "tab_num"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
-}
-
-
-/**
- * Returns information about the administrator account.
- *
- * @return array a hash of account information
- */
-function ft_get_admin_info()
-{
-	global $g_table_prefix;
-
-	$query = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}accounts
-    WHERE  account_type = 'admin'
-    LIMIT  1
-      ");
-
-	$admin_info = mysql_fetch_assoc($query);
-
-	extract(ft_process_hook_calls("main", compact("admin_info"), array("admin_info")), EXTR_OVERWRITE);
-
-	return $admin_info;
-}
-
-
-/**
- * Used by administrators to login as a client. This function moves the administrator's sessions to a
- * temporary "admin" session key, and logs the administrator in under the client account. When logging out
- * as a client, the logout function detects if it's really an administrator and erases the old client
- * sessions, replacing them with the old administrator sessions, to enable a smooth transition
- * from one account to the next.
- *
- * @param integer $client_id the client ID
- */
-function ft_login_as_client($client_id)
-{
-	// extract the user's login info
-	$client_info = ft_get_account_info($client_id);
-	$info = array();
-	$info["username"] = $client_info["username"];
-
-	// move the session values to separate $_SESSION["ft"]["admin"] values, so that
-	// once the administrator logs out we can reset the sessions appropriately
-	$current_values = $_SESSION["ft"];
-	$_SESSION["ft"] = array();
-	$_SESSION["ft"]["admin"] = $current_values;
-
-	// now log in
-	ft_login($info, true);
-}
-
-
-/**
- * Used by the administrator to logout from a client account. Resets appropriate
- * sessions values and redirects back to admin pages.
- */
-function ft_logout_as_client()
-{
-	global $g_root_url;
-
-	// empty old sessions and reload admin settings
-	$admin_values = $_SESSION["ft"]["admin"];
-	$client_id    = $_SESSION["ft"]["account"]["account_id"];
-	$_SESSION["ft"] = array();
-
-	foreach ($admin_values as $key => $value)
-		$_SESSION["ft"][$key] = $value;
-
-	unset($_SESSION["ft"]["admin"]);
-
-	// redirect them back to the edit client page
-	session_write_close();
-	header("location: $g_root_url/admin/clients/edit.php?client_id=$client_id");
-	exit;
 }
 
 
@@ -622,14 +548,14 @@ function ft_update_admin_account($infohash, $account_id)
 
 	// update the settings
 	$_SESSION["ft"]["settings"] = ft_get_settings();
-	$_SESSION["ft"]["account"] = ft_get_account_info($account_id);
+	$_SESSION["ft"]["account"] = Accounts::getAccountInfo($account_id);
 	$_SESSION["ft"]["account"]["is_logged_in"] = true;
 
 	// if the password just changed, update sessions and empty any temporary password that happens to have been
 	// stored
 	if (!empty($password))
 	{
-		$_SESSION["ft"]["account"]  = ft_get_account_info($account_id);
+		$_SESSION["ft"]["account"]  = Accounts::getAccountInfo($account_id);
 		$_SESSION["ft"]["account"]["is_logged_in"] = true;
 		$_SESSION["ft"]["account"]["password"] = md5(md5($password));
 

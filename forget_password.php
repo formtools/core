@@ -1,11 +1,14 @@
 <?php
 
+use FormTools\Administrator;
+
+
 require("global/session_start.php");
 
 $settings = ft_get_settings();
 $g_title = $settings['program_name'];
 $g_theme = $settings['default_theme'];
-$admin_info = ft_get_admin_info();
+$admin_info = Administrator::getAdminInfo();
 $admin_email = $admin_info["email"];
 
 // if a user id is included in the query string, use it to determine the appearance of the
@@ -13,7 +16,7 @@ $admin_email = $admin_info["email"];
 $id = ft_load_field("id", "id", "");
 
 if (!empty($id)) {
-    $info = ft_get_account_info($id);
+    $info = Accounts::getAccountInfo($id);
 
     if (!empty($info)) {
         $g_theme  = $info['theme'];
