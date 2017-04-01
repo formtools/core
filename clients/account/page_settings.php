@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Accounts;
+use FormTools\Themes;
 
 
 if (isset($request["update_account_settings"])) {
@@ -55,4 +56,4 @@ END;
 $page_vars["head_js"] = implode(";\n", $js);
 
 
-ft_display_page("clients/account/index.tpl", $page_vars);
+Themes::displayPage("clients/account/index.tpl", $page_vars);

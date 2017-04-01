@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 $menu_page = ft_load_field("menu_page", "menu_page", 1);
 
 // if required, delete the menu. If any clients were assigned to this menu, the success response will
@@ -49,4 +52,4 @@ page_ns.delete_menu = function(menu_id) {
 }
 END;
 
-ft_display_page("admin/settings/index.tpl", $page_vars);
+Themes::displayPage("admin/settings/index.tpl", $page_vars);

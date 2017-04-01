@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 if (isset($request["update_accounts"]))
 	list($g_success, $g_message) = ft_update_account_settings($request);
 
@@ -43,4 +46,4 @@ function validate_swatch() {
 
 END;
 
-ft_display_page("admin/settings/index.tpl", $page_vars);
+Themes::displayPage("admin/settings/index.tpl", $page_vars);

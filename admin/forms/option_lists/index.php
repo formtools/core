@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 require("../../../global/session_start.php");
 ft_check_permission("admin");
 $option_list_page = ft_load_field("page", "option_list_page", 1);
@@ -80,4 +83,4 @@ $page_vars["head_string"] =<<< END
 <script src="$g_root_url/global/scripts/manage_option_lists.js"></script>
 END;
 
-ft_display_page("admin/forms/option_lists/index.tpl", $page_vars);
+Themes::displayPage("admin/forms/option_lists/index.tpl", $page_vars);

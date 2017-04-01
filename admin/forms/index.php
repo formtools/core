@@ -1,5 +1,9 @@
 <?php
 
+use FormTools\Clients;
+use FormTools\Themes;
+
+
 require("../../global/session_start.php");
 ft_check_permission("admin");
 
@@ -22,9 +26,9 @@ $search_criteria = array(
 	"client_id" => $client_id
 );
 
-$num_forms = ft_get_form_count();
+$num_forms = Clients::getFormCount();
 $forms     = ft_search_forms($client_id, true, $search_criteria);
-$clients   = ft_get_client_list();
+$clients   = Clients::getList();
 
 
 // compile template info
@@ -51,4 +55,4 @@ $(function() {
 });
 END;
 
-ft_display_page("admin/forms/index.tpl", $page_vars);
+Themes::displayPage("admin/forms/index.tpl", $page_vars);

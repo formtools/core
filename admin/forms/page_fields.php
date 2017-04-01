@@ -2,6 +2,7 @@
 
 use FormTools\FieldSizes;
 use FormTools\Settings;
+use FormTools\Themes;
 
 
 $sortable_id = "edit_fields";
@@ -124,4 +125,4 @@ $(function() {
 });
 END;
 
-ft_display_page("admin/forms/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit.tpl", $page_vars);

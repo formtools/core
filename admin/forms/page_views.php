@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 $sortable_id = "view_list";
 $form_info = ft_get_form($form_id);
 
@@ -43,4 +46,4 @@ $page_vars["head_string"] =<<< END
 <script src="$g_root_url/global/scripts/manage_views.js?v=4"></script>
 END;
 
-ft_display_page("admin/forms/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit.tpl", $page_vars);

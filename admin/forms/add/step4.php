@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 require("../../../global/session_start.php");
 ft_check_permission("admin");
 
@@ -137,4 +140,4 @@ END;
 
 $page_vars["js_messages"] = array("phrase_delete_row");
 
-ft_display_page("admin/forms/add/step4.tpl", $page_vars);
+Themes::displayPage("admin/forms/add/step4.tpl", $page_vars);

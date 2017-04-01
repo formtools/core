@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 require("../../../global/session_start.php");
 ft_check_permission("admin");
 
@@ -95,4 +98,4 @@ page_ns.show_section = function(section) {
 rsv.onCompleteHandler = function() { ft.select_all('selected_user_ids[]'); return true; }
 END;
 
-ft_display_page("admin/forms/add/step3.tpl", $page_vars);
+Themes::displayPage("admin/forms/add/step3.tpl", $page_vars);

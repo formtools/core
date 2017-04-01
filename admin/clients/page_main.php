@@ -2,6 +2,7 @@
 
 use FormTools\Accounts;
 use FormTools\Administrator;
+use FormTools\Themes;
 
 
 // update this client
@@ -67,4 +68,4 @@ function validate_username() {
 $(function() { $("#add_client :input:visible:enabled:first").focus(); });
 END;
 
-ft_display_page("admin/clients/edit.tpl", $page_vars);
+Themes::displayPage("admin/clients/edit.tpl", $page_vars);

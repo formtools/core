@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 $sortable_id = "multi_page_form_list";
 
 if (isset($request["update_main"])) {
@@ -97,4 +100,4 @@ $(function() {
 });
 END;
 
-ft_display_page("admin/forms/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit.tpl", $page_vars);

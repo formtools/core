@@ -213,91 +213,6 @@ function ft_update_client($account_id, $info)
 
 
 /**
- * Completely removes a client account from the database, including any email-related stuff that requires
- * their user account.
- *
- * @param integer $account_id the unique account ID
- * @return array [0]: true/false (success / failure)
- *               [1]: message string
- */
-function ft_delete_client($account_id)
-{
-	global $g_table_prefix, $LANG;
-
-	mysql_query("DELETE FROM {$g_table_prefix}accounts WHERE account_id = $account_id");
-	mysql_query("DELETE FROM {$g_table_prefix}account_settings WHERE account_id = $account_id");
-	mysql_query("DELETE FROM {$g_table_prefix}client_forms WHERE account_id = $account_id");
-	mysql_query("DELETE FROM {$g_table_prefix}email_template_recipients WHERE account_id = $account_id");
-	mysql_query("DELETE FROM {$g_table_prefix}email_templates WHERE email_from account_id = $account_id OR email_to_account_id = $account_id");
-	mysql_query("DELETE FROM {$g_table_prefix}public_form_omit_list WHERE account_id = $account_id");
-	mysql_query("DELETE FROM {$g_table_prefix}public_view_omit_list WHERE account_id = $account_id");
-
-	$success = true;
-	$message = $LANG["notify_account_deleted"];
-	extract(ft_process_hook_calls("end", compact("account_id"), array("success", "message")), EXTR_OVERWRITE);
-
-	return array($success, $message);
-}
-
-
-/**
- * Simple helper function to disable a client account.
- *
- * @param integer $account_id
- */
-function ft_disable_client($account_id)
-{
-	global $g_table_prefix;
-
-	if (empty($account_id) || !is_numeric($account_id))
-		return;
-
-	mysql_query("UPDATE {$g_table_prefix}accounts SET account_status = 'disabled' WHERE account_id = $account_id");
-
-	extract(ft_process_hook_calls("end", compact("account_id"), array()), EXTR_OVERWRITE);
-}
-
-
-/**
- * Retrieves a list of all clients in the database ordered by last name. N.B. As of 2.0.0, this function
- * no longer returns a MySQL resource.
- *
- * @return array $clients an array of hashes. Each hash is the client info.
- */
-function ft_get_client_list()
-{
-	global $g_table_prefix;
-
-	$query = "SELECT * FROM {$g_table_prefix}accounts WHERE account_type = 'client' ORDER BY last_name";
-
-	$result = mysql_query($query)
-	or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
-
-	$clients = array();
-	while ($client = mysql_fetch_assoc($result))
-		$clients[] = $client;
-
-	return $clients;
-}
-
-
-/**
- * Returns the total number of clients in the database.
- *
- * @return int the number of clients
- */
-function ft_get_client_count()
-{
-	global $g_table_prefix;
-
-	$query = mysql_query("SELECT count(*) as c FROM {$g_table_prefix}accounts WHERE account_type = 'client'");
-	$result = mysql_fetch_assoc($query);
-
-	return $result["c"];
-}
-
-
-/**
  * Performs a simple search of the client list, returning ALL results (not in pages).
  *
  * @param array $search_criteria optional search / sort criteria. Keys are:
@@ -446,45 +361,6 @@ function ft_get_client_prev_next_links($account_id, $search_criteria = array())
 	}
 
 	return $return_info;
-}
-
-
-/**
- * Basically a wrapper function for ft_search_forms.
- *
- * @return array
- */
-function ft_get_client_forms($account_id)
-{
-	return ft_search_forms($account_id, true);
-}
-
-
-/**
- * This returns all forms and form Views that a client account may access.
- *
- * @param array $account_id
- */
-function ft_get_client_form_views($account_id)
-{
-	$client_forms = ft_search_forms($account_id);
-
-	$info = array();
-	foreach ($client_forms as $form_info)
-	{
-		$form_id = $form_info["form_id"];
-		$views = ft_get_form_views($form_id, $account_id);
-
-		$view_ids = array();
-		foreach ($views as $view_info)
-			$view_ids[] = $view_info["view_id"];
-
-		$info[$form_id] = $view_ids;
-	}
-
-	extract(ft_process_hook_calls("end", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
-
-	return $info;
 }
 
 

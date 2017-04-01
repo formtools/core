@@ -12,6 +12,7 @@
 
 // -------------------------------------------------------------------------------------------------
 
+use FormTools\Clients;
 use FormTools\FieldValidation;
 use FormTools\Settings;
 
@@ -708,7 +709,7 @@ function ft_get_form_clients($form_id)
 	if ($access_type == "public")
 	{
 		$client_omit_list = ft_get_public_form_omit_list($form_id);
-		$all_clients = ft_get_client_list();
+		$all_clients = Clients::getList();
 
 		foreach ($all_clients as $client_info)
 		{
@@ -733,22 +734,6 @@ function ft_get_form_clients($form_id)
 	extract(ft_process_hook_calls("end", compact("form_id", "accounts"), array("accounts")), EXTR_OVERWRITE);
 
 	return $accounts;
-}
-
-
-/**
- * Simple function to find out how many forms are in the database, regardless of status or anything else.
- *
- * @return integer the number of forms.
- */
-function ft_get_form_count()
-{
-	global $g_table_prefix;
-
-	$query = mysql_query("SELECT count(*) as c FROM {$g_table_prefix}forms");
-	$result = mysql_fetch_assoc($query);
-
-	return $result["c"];
 }
 
 

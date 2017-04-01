@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 $sortable_id = "edit_admin_menu";
 if (isset($request["update_admin_menu"]))
 {
@@ -27,4 +30,4 @@ $page_vars["js_messages"] = array("word_remove", "word_na", "notify_required_adm
 	"word_url_c", "word_forms", "word_clients", "word_settings", "phrase_your_account", "word_modules", "word_logout",
 	"phrase_delete_row", "phrase_connect_rows", "phrase_disconnect_rows");
 
-ft_display_page("admin/settings/index.tpl", $page_vars);
+Themes::displayPage("admin/settings/index.tpl", $page_vars);

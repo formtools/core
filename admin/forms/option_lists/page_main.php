@@ -1,16 +1,17 @@
 <?php
 
+use FormTools\Themes;
+
+
 $sortable_id = "option_list";
-if (isset($request["update_page"]))
-{
+if (isset($request["update_page"])) {
 	$request["sortable_id"] = $sortable_id;
 	list($g_success, $g_message) = ft_update_option_list($list_id, $request);
 }
 
 $list_info = ft_get_option_list($list_id);
 $total_options = 0;
-foreach ($list_info["options"] as $option_info)
-{
+foreach ($list_info["options"] as $option_info) {
 	$total_options += count($option_info["options"]);
 }
 
@@ -23,10 +24,10 @@ $placeholders = array(
 // (necessary only from a user point of view)
 $lists = ft_get_option_lists("all");
 $list_names = array();
-foreach ($lists["results"] as $curr_list_info)
-{
-	if ($list_id == $curr_list_info["list_id"])
-		continue;
+foreach ($lists["results"] as $curr_list_info) {
+	if ($list_id == $curr_list_info["list_id"]) {
+        continue;
+    }
 
 	$list_names[] = "\"" . htmlspecialchars($curr_list_info["option_list_name"]) . "\"";
 }
@@ -34,8 +35,6 @@ foreach ($lists["results"] as $curr_list_info)
 $list_names = implode(",", $list_names);
 
 $existing_option_list_names_js = "page_ns.option_list_names = [$list_names];";
-
-// ------------------------------------------------------------------------------------------------
 
 
 // compile template info
@@ -135,4 +134,4 @@ $(function() {
 END;
 
 
-ft_display_page("admin/forms/option_lists/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/option_lists/edit.tpl", $page_vars);

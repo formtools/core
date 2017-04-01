@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Clients;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -55,7 +58,7 @@ function smarty_function_clients_dropdown($params, &$smarty)
         }
     }
 
-    $all_clients = ft_get_client_list();
+    $all_clients = Clients::getList();
     $rows = array();
 
     foreach ($all_clients as $client) {

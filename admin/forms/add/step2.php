@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 require("../../../global/session_start.php");
 ft_check_permission("admin");
 
@@ -198,4 +201,4 @@ $(function() {
 
 END;
 
-ft_display_page("admin/forms/add/step2.tpl", $page_vars);
+Themes::displayPage("admin/forms/add/step2.tpl", $page_vars);

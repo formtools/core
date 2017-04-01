@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 if (isset($request["update_email_settings"])) {
     list($g_success, $g_message) = ft_set_field_as_email_field($form_id, $request);
 }
@@ -44,4 +47,4 @@ g.rules = [];
 g.rules.push("required,email_field_id,{$LANG["validation_no_email_config_field"]}");
 END;
 
-ft_display_page("admin/forms/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit.tpl", $page_vars);

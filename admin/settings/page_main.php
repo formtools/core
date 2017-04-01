@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 if (isset($request["update_main"]))
 	list($g_success, $g_message) = ft_update_main_settings($_POST);
 
@@ -27,4 +30,4 @@ $page_vars["head_js"] =<<<END
   rules.push("digits_only,num_modules_per_page,{$LANG["validation_invalid_num_modules_per_page"]}");
 END;
 
-ft_display_page("admin/settings/index.tpl", $page_vars);
+Themes::displayPage("admin/settings/index.tpl", $page_vars);

@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 if (isset($request["update_public_form_omit_list"])) {
     list($g_success, $g_message) = ft_update_public_form_omit_list($request, $form_id);
 }
@@ -26,4 +29,4 @@ page_ns.clear_omit_list = function() 	{
 }
 EOF;
 
-ft_display_page("admin/forms/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit.tpl", $page_vars);

@@ -1,6 +1,8 @@
 <?php
 
 use FormTools\Accounts;
+use FormTools\Themes;
+
 
 if (isset($request["update"])) {
 	$request["page"] = "main";
@@ -53,6 +55,4 @@ rules.push("if:password!=,same_as,password,password_2,{$LANG["validation_passwor
 $conditional_rules
 END;
 
-ft_display_page("clients/account/index.tpl", $page_vars);
-
-
+Themes::displayPage("clients/account/index.tpl", $page_vars);

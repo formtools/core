@@ -12,6 +12,7 @@
 // -------------------------------------------------------------------------------------------------
 
 use FormTools\Accounts;
+use FormTools\Clients;
 use FormTools\Settings;
 
 
@@ -351,7 +352,7 @@ function ft_upgrade_form_tools()
 			"may_edit_max_failed_login_attempts" => ""
 		);
 
-		$clients = ft_get_client_list();
+		$clients = Clients::getList();
 		foreach ($clients as $client_info)
 		{
 			// add the current password to the password history queue

@@ -1,26 +1,26 @@
 <?php
 
+use FormTools\Clients;
+use FormTools\Themes;
+
+
 require("../../../global/session_start.php");
 ft_check_permission("admin");
 
 $request = array_merge($_POST, $_GET);
-if (isset($request["external"]))
-{
+if (isset($request["external"])) {
 	header("location: step1.php");
 	exit;
-}
-else if (isset($request["internal"]))
-{
+} else if (isset($request["internal"])) {
 	header("location: internal.php");
 	exit;
 }
 
-if (isset($request["new_form"]))
-{
+if (isset($request["new_form"])) {
 	$_SESSION["ft"]["add_form_form_id"] = "";
 }
 
-$num_forms = ft_get_form_count();
+$num_forms = Clients::getFormCount();
 
 // ------------------------------------------------------------------------------------------------
 
@@ -61,4 +61,4 @@ $(function() {
 
 END;
 
-ft_display_page("admin/forms/add/index.tpl", $page_vars);
+Themes::displayPage("admin/forms/add/index.tpl", $page_vars);

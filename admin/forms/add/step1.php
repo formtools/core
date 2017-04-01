@@ -1,18 +1,20 @@
 <?php
 
+use FormTools\Clients;
+use FormTools\Themes;
+
+
 require("../../../global/session_start.php");
 ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
 
-$num_forms = ft_get_form_count();
-if (!empty($g_max_ft_forms) && $num_forms > $g_max_ft_forms) // note it's not >=
-{
+$num_forms = Clients::getFormCount();
+if (!empty($g_max_ft_forms) && $num_forms > $g_max_ft_forms) { // note it's not >=
 	header("location: ../index.php");
 	exit;
 }
 
-if (isset($request["code"]) || isset($request["direct"]))
-{
+if (isset($request["code"]) || isset($request["direct"])) {
 	$type = isset($request["code"]) ? "code" : "direct";
 	header("location: step2.php?submission_type=$type");
 	exit;
@@ -21,10 +23,9 @@ if (isset($request["code"]) || isset($request["direct"]))
 $form_id = ft_load_field("form_id", "add_form_form_id", "");
 
 $form_info = array();
-if (!empty($form_id))
-	$form_info = ft_get_form($form_id);
-
-// ------------------------------------------------------------------------------------------------
+if (!empty($form_id)) {
+    $form_info = ft_get_form($form_id);
+}
 
 // compile the header information
 $page_values = array();
@@ -48,4 +49,4 @@ page_ns.show_section = function(section) {
 }
 END;
 
-ft_display_page("admin/forms/add/step1.tpl", $page_vars);
+Themes::displayPage("admin/forms/add/step1.tpl", $page_vars);

@@ -2,6 +2,7 @@
 
 use FormTools\FieldValidation;
 use FormTools\Settings;
+use FormTools\Themes;
 
 
 require("../../global/session_start.php");
@@ -163,4 +164,4 @@ $validation_js
 END;
 
 
-ft_display_page("admin/forms/edit_submission.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit_submission.tpl", $page_vars);

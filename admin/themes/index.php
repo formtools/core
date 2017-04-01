@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 require("../../global/session_start.php");
 ft_check_permission("admin");
 
@@ -82,4 +85,4 @@ $page_vars["head_string"] =<<< EOF
 <link rel="stylesheet" href="$g_root_url/global/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
 EOF;
 
-ft_display_page("admin/themes/index.tpl", $page_vars);
+Themes::displayPage("admin/themes/index.tpl", $page_vars);

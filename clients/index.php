@@ -1,6 +1,8 @@
 <?php
 
 use FormTools\Accounts;
+use FormTools\Clients;
+use FormTools\Themes;
 
 
 require_once("../global/session_start.php");
@@ -22,7 +24,7 @@ $search_criteria = array(
 	"keyword" => $keyword
 );
 
-$num_client_forms = count(ft_get_client_forms($account_id));
+$num_client_forms = count(Clients::getClientForms($account_id));
 $forms            = ft_search_forms($account_id, false, $search_criteria);
 $client_info      = Accounts::getAccountInfo($account_id);
 $forms_page_default_message = ft_eval_smarty_string($client_info["settings"]["forms_page_default_message"]);
@@ -43,4 +45,4 @@ $page_vars["head_js"] =<<< END
 $(function() { ft.init_show_form_links(); });
 END;
 
-ft_display_page("clients/index.tpl", $page_vars);
+Themes::displayPage("clients/index.tpl", $page_vars);

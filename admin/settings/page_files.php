@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 if (isset($request["update_files"]))
 	list($g_success, $g_message) = ft_update_file_settings($request);
 
@@ -34,4 +37,4 @@ $page_vars["head_js"] = "
   var rules = [];
   ";
 
-ft_display_page("admin/settings/index.tpl", $page_vars);
+Themes::displayPage("admin/settings/index.tpl", $page_vars);

@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 require("../../../global/session_start.php");
 ft_check_permission("admin");
 
@@ -26,4 +29,4 @@ $page_vars["text_add_form_step_5_para_4"] = ft_eval_smarty_string($LANG["text_ad
 $page_vars["uploading_files"] = $_SESSION["ft"]["uploading_files"];
 $page_vars["head_css"] = "";
 
-ft_display_page("admin/forms/add/step6.tpl", $page_vars);
+Themes::displayPage("admin/forms/add/step6.tpl", $page_vars);

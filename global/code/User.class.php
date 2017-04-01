@@ -97,7 +97,7 @@ class User
                     $num_failed_login_attempts++;
 
                     if ($num_failed_login_attempts >= $max_failed_login_attempts) {
-                        ft_disable_client($account_info["account_id"]);
+                        Clients::disableClient($account_info["account_id"]);
                         Accounts::setAccountSettings($account_info["account_id"], array("num_failed_login_attempts" => 0));
                         return $LANG["validation_account_disabled"];
                     } else {

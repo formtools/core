@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Settings;
+use FormTools\Themes;
 
 
 require("../../global/session_start.php");
@@ -359,4 +360,4 @@ $(function() {
 END;
 
 
-ft_display_page("admin/forms/submissions.tpl", $page_vars);
+Themes::displayPage("admin/forms/submissions.tpl", $page_vars);

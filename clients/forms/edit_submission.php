@@ -3,6 +3,7 @@
 use FormTools\FieldValidation;
 use FormTools\General;
 use FormTools\Settings;
+use FormTools\Themes;
 
 
 require("../../global/session_start.php");
@@ -185,4 +186,4 @@ $page_vars["head_js"] =<<< END
 $validation_js
 END;
 
-ft_display_page("clients/forms/edit_submission.tpl", $page_vars);
+Themes::displayPage("clients/forms/edit_submission.tpl", $page_vars);

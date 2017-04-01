@@ -1,13 +1,14 @@
 <?php
 
 use FormTools\Administrator;
+use FormTools\Clients;
 
 
 require("../../global/session_start.php");
 ft_check_permission("admin");
 
 if (isset($_GET['delete']) && !empty($_GET['client_id'])) {
-    list($g_success, $g_message) = ft_delete_client($_GET['client_id']);
+    list($g_success, $g_message) = Clients::deleteClient($_GET['client_id']);
 }
 if (isset($_GET['login'])) {
     list($g_success, $g_message) = Administrator::loginAsClient($_GET['login']);
@@ -28,7 +29,7 @@ $search_criteria = array(
 	"keyword"   => $keyword,
 	"status"    => $status
 );
-$num_clients = ft_get_client_count();
+$num_clients = Clients::getNumClients();
 
 // retrieve all client information
 $clients = ft_search_clients($search_criteria);

@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 if (isset($request["add_email"])) {
 	$create_email_from_email_id = (isset($request["create_email_from_email_id"])) ? $request["create_email_from_email_id"] : "";
 	$email_id = ft_create_blank_email_template($form_id, $create_email_from_email_id);
@@ -67,4 +70,4 @@ page_ns.delete_email = function(email_id) {
 }
 END;
 
-ft_display_page("admin/forms/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit.tpl", $page_vars);

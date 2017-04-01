@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 require("../../../global/session_start.php");
 ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
@@ -45,4 +48,4 @@ $(function() {
 });
 END;
 
-ft_display_page("admin/forms/add/internal.tpl", $page_vars);
+Themes::displayPage("admin/forms/add/internal.tpl", $page_vars);

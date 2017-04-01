@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Administrator;
+use FormTools\Themes;
 
 
 $email_id = ft_load_field("email_id", "email_id", "");
@@ -134,4 +135,4 @@ $(function() {
 });
 END;
 
-ft_display_page("admin/forms/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit.tpl", $page_vars);

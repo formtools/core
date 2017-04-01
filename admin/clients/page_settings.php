@@ -54,4 +54,4 @@ function validate_swatch() {
 $(function() { $("#settings_form :input:visible:enabled:first").focus(); });
 END;
 
-ft_display_page("admin/clients/edit.tpl", $page_vars);
+Themes::displayPage("admin/clients/edit.tpl", $page_vars);

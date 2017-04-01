@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 $view_id = $request["view_id"];
 
 if (isset($request["update_public_view_omit_list"])) {
@@ -28,4 +31,4 @@ page_ns.clear_omit_list = function() {
 }
 EOF;
 
-ft_display_page("admin/forms/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit.tpl", $page_vars);

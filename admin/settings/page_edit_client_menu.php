@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 $is_new_menu = false;
 $sortable_id = "edit_client_menu";
 
@@ -69,4 +72,4 @@ $page_vars["js_messages"] = array("word_remove", "word_na", "word_form_c", "word
 	"validation_menu_name_taken", "phrase_delete_row", "phrase_connect_rows", "phrase_disconnect_rows");
 $page_vars["head_js"] = $js;
 
-ft_display_page("admin/settings/index.tpl", $page_vars);
+Themes::displayPage("admin/settings/index.tpl", $page_vars);

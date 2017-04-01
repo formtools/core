@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 $view_fields_sortable_id = "view_fields";
 $submission_list_sortable_id = "submission_list";
 
@@ -284,4 +287,4 @@ var page_ns = {
 }
 END;
 
-ft_display_page("admin/forms/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit.tpl", $page_vars);

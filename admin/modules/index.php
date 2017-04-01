@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 require("../../global/session_start.php");
 ft_check_permission("admin");
 
@@ -92,4 +95,4 @@ $page_vars["head_string"] =<<< END
 <script src="../../global/scripts/manage_modules.js"></script>
 END;
 
-ft_display_page("admin/modules/index.tpl", $page_vars);
+Themes::displayPage("admin/modules/index.tpl", $page_vars);

@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Administrator;
+use FormTools\Themes;
 
 
 require("../../global/session_start.php");
@@ -73,4 +74,4 @@ $page_vars["head_js"] =<<<END
   $(function() { document.login_info.first_name.focus(); });
 END;
 
-ft_display_page("admin/account/index.tpl", $page_vars);
+Themes::displayPage("admin/account/index.tpl", $page_vars);

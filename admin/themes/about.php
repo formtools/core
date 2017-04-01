@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Themes;
+
+
 require("../../global/session_start.php");
 ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
@@ -25,4 +28,4 @@ $page_vars["page_url"]   = ft_get_page_url("themes_about");
 $page_vars["head_title"] = "{$LANG["word_themes"]} - {$LANG["word_about"]}";
 $page_vars["theme_info"] = $theme_info;
 
-ft_display_page("admin/themes/about.tpl", $page_vars);
+Themes::displayPage("admin/themes/about.tpl", $page_vars);

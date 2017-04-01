@@ -2,6 +2,7 @@
 
 use FormTools\Administrator;
 use FormTools\Settings;
+use FormTools\Themes;
 
 
 require("../../global/session_start.php");
@@ -79,4 +80,4 @@ function validate_username() {
 $(function() { $("#first_name").focus(); });
 END;
 
-ft_display_page("admin/clients/add.tpl", $page_vars);
+Themes::displayPage("admin/clients/add.tpl", $page_vars);
