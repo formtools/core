@@ -26,31 +26,31 @@ class Clients {
         $db->beginTransaction();
 
         $db->query("DELETE FROM {PREFIX}accounts WHERE account_id = :account_id");
-        $db->bind(":account_id", $account_id):
+        $db->bind(":account_id", $account_id);
         $db->execute();
 
         $db->query("DELETE FROM {PREFIX}account_settings WHERE account_id = :account_id");
-        $db->bind(":account_id", $account_id):
+        $db->bind(":account_id", $account_id);
         $db->execute();
 
         $db->query("DELETE FROM {PREFIX}client_forms WHERE account_id = :account_id");
-        $db->bind(":account_id", $account_id):
+        $db->bind(":account_id", $account_id);
         $db->execute();
 
         $db->query("DELETE FROM {PREFIX}email_template_recipients WHERE account_id = :account_id");
-        $db->bind(":account_id", $account_id):
+        $db->bind(":account_id", $account_id);
         $db->execute();
 
         $db->query("DELETE FROM {PREFIX}email_templates WHERE email_from account_id = :account_id OR email_to_account_id = :account_id");
-        $db->bind(":account_id", $account_id):
+        $db->bind(":account_id", $account_id);
         $db->execute();
 
         $db->query("DELETE FROM {PREFIX}public_form_omit_list WHERE account_id = :account_id");
-        $db->bind(":account_id", $account_id):
+        $db->bind(":account_id", $account_id);
         $db->execute();
 
         $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE account_id = :account_id");
-        $db->bind(":account_id", $account_id):
+        $db->bind(":account_id", $account_id);
         $db->execute();
 
         $db->processTransaction();
@@ -161,20 +161,19 @@ class Clients {
      *
      * @param array $account_id
      */
-    function ft_get_client_form_views($account_id)
+    public static function getClientFormViews($account_id)
     {
         $client_forms = ft_search_forms($account_id);
 
         $info = array();
-        foreach ($client_forms as $form_info)
-        {
+        foreach ($client_forms as $form_info) {
             $form_id = $form_info["form_id"];
             $views = ft_get_form_views($form_id, $account_id);
 
             $view_ids = array();
-            foreach ($views as $view_info)
+            foreach ($views as $view_info) {
                 $view_ids[] = $view_info["view_id"];
-
+            }
             $info[$form_id] = $view_ids;
         }
 
@@ -182,5 +181,41 @@ class Clients {
 
         return $info;
     }
+
+    /**
+     * This function updates the default theme for multiple accounts simultaneously. It's called when
+     * an administrator disables a theme that's current used by some client accounts. They're presented with
+     * the option of setting the theme ID for all the clients.
+     *
+     * There's very little error checking done here...
+     *
+     * @param string $account_id_str a comma delimited list of account IDs
+     * @param integer $theme_id the theme ID
+     */
+    public static function updateClientThemes($account_ids, $theme_id)
+    {
+        global $LANG, $g_table_prefix;
+
+        if (empty($account_ids) || empty($theme_id)) {
+            return;
+        }
+
+        $client_ids = explode(",", $account_ids);
+
+        $theme_info = Themes::getTheme($theme_id);
+        $theme_name = $theme_info["theme_name"];
+        $theme_folder = $theme_info["theme_folder"];
+
+        foreach ($client_ids as $client_id) {
+            mysql_query("UPDATE {$g_table_prefix}accounts SET theme='$theme_folder' WHERE account_id = $client_id");
+        }
+
+        $placeholders = array("theme" => $theme_name);
+        $message = ft_eval_smarty_string($LANG["notify_client_account_themes_updated"], $placeholders);
+        $success = true;
+
+        return array($success, $message);
+    }
+
 
 }

@@ -1,6 +1,9 @@
 <?php
 
-/*
+use FormTools\Themes;
+
+
+/**
  * Smarty plugin
  * -------------------------------------------------------------
  * File:     function.ft_include
@@ -14,19 +17,18 @@
  */
 function smarty_function_ft_include($params, &$smarty)
 {
-	global $LANG, $g_default_theme, $g_root_dir, $g_smarty;
+    global $g_default_theme, $g_smarty;
 
-	if (empty($params["file"]))
-  {
-	  $smarty->trigger_error("assign: missing 'file' parameter. This is required.");
-    return;
-  }
+    if (empty($params["file"])) {
+        $smarty->trigger_error("assign: missing 'file' parameter. This is required.");
+        return;
+    }
 
-  // the template ("file") should be an absolute path relative to the
-  $template = $params["file"];
-  $theme = (isset($_SESSION["ft"]["account"]["theme"])) ? $_SESSION["ft"]["account"]["theme"] : $g_default_theme;
-	$html = $g_smarty->fetch(ft_get_smarty_template_with_fallback($theme, $template));
+    // the template ("file") should be an absolute path relative to the
+    $template = $params["file"];
+    $theme = (isset($_SESSION["ft"]["account"]["theme"])) ? $_SESSION["ft"]["account"]["theme"] : $g_default_theme;
+    $html = $g_smarty->fetch(Themes::getSmartyTemplateWithFallback($theme, $template));
 
-  return $html;
+    return $html;
 }
 

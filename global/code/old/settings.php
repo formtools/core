@@ -15,6 +15,7 @@
 // -------------------------------------------------------------------------------------------------
 
 use FormTools\Settings;
+use FormTools\Themes;
 
 
 
@@ -290,7 +291,7 @@ function ft_update_theme_settings($infohash)
 		$message = $LANG["notify_disabled_theme_already_assigned"];
 		$placeholder_str = $LANG["phrase_assign_all_listed_client_accounts_to_theme"];
 
-		$themes = ft_get_themes(true);
+		$themes = Themes::getList(true);
 		$dd = "<select id=\"mass_update_client_theme\">";
 
 		foreach ($themes as $theme)

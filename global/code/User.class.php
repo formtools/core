@@ -129,7 +129,7 @@ class User
 
         // for clients, store the forms & form Views that they are allowed to access
         if ($account_info["account_type"] == "client")
-            $_SESSION["ft"]["permissions"] = ft_get_client_form_views($account_info["account_id"]);
+            $_SESSION["ft"]["permissions"] = Clients::getClientFormViews($account_info["account_id"]);
 
 
         // if the user just logged in with a temporary password, append some args to pass to the login page

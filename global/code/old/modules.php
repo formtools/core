@@ -209,7 +209,7 @@ function ft_get_module_folder_from_module_id($module_id)
 
 
 /**
- * This is called implicitly by the ft_display_module_page function (only!). That function is used
+ * This is called implicitly by the Themes::displayModulePage function (only!). That function is used
  * to display any module page; it automatically calls this function to load any custom navigation
  * menu items for a particular module. Then, the theme's modules_header.tpl template uses this
  * information to render the module nav in an appropriate style.

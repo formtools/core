@@ -15,6 +15,7 @@
 use FormTools\Administrator;
 use FormTools\Core;
 use FormTools\Settings;
+use FormTools\Themes;
 
 
 /**
@@ -259,7 +260,7 @@ function ft_get_page_nav($num_results, $num_per_page, $current_page = 1, $pass_a
 
 
 	// now process the template and return the HTML
-	return $smarty->fetch(ft_get_smarty_template_with_fallback($theme, "pagination.tpl"));
+	return $smarty->fetch(Themes::getSmartyTemplateWithFallback($theme, "pagination.tpl"));
 }
 
 
@@ -322,7 +323,7 @@ function ft_get_dhtml_page_nav($num_results, $num_per_page, $current_page = 1)
 	$smarty->assign("total_pages", ceil($num_results / $num_per_page));
 
 	// now process the template and return the HTML
-	return $smarty->fetch(ft_get_smarty_template_with_fallback($theme, "dhtml_pagination.tpl"));
+	return $smarty->fetch(Themes::getSmartyTemplateWithFallback($theme, "dhtml_pagination.tpl"));
 }
 
 
@@ -1326,10 +1327,9 @@ function ft_get_formtools_installed_components()
 	}
 
 	// get the theme info
-	$themes = ft_get_themes();
+	$themes = Themes::getList();
 	$count = 1;
-	foreach ($themes as $theme_info)
-	{
+	foreach ($themes as $theme_info) {
 		$components["t{$count}"]  = $theme_info["theme_folder"];
 		$components["tv{$count}"] = $theme_info["theme_version"];
 		$count++;

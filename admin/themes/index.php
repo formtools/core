@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\Clients;
 use FormTools\Themes;
 
 
@@ -9,31 +10,30 @@ ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
 
 // provides means to manually override admin theme in case of disaster
-if (isset($request["theme_override"]))
-	list($g_success, $g_message) = ft_reset_admin_theme($request["theme_override"]);
+if (isset($request["theme_override"])) {
+    list($g_success, $g_message) = Themes::resetAdminTheme($request["theme_override"]);
+}
+if (isset($request["update"])) {
+    list($g_success, $g_message) = ft_update_theme_settings($_POST);
+}
+if (isset($_POST["refresh_theme_list"])) {
+    list($g_success, $g_message) = ft_update_theme_list();
+}
+if (isset($_GET["mass_assign"])) {
+    list($g_success, $g_message) = Clients::updateClientThemes($_GET["accounts"], $_GET["theme_id"]);
+}
 
-if (isset($request["update"]))
-	list($g_success, $g_message) = ft_update_theme_settings($_POST);
-
-if (isset($_POST["refresh_theme_list"]))
-	list($g_success, $g_message) = ft_update_theme_list();
-
-if (isset($_GET["mass_assign"]))
-	list($g_success, $g_message) = ft_update_client_themes($_GET["accounts"], $_GET["theme_id"]);
-
-$themes = ft_get_themes();
+$themes = Themes::getList();
 
 // check permissions on all the themes
 $updated_themes = array();
-foreach ($themes as $theme_info)
-{
+foreach ($themes as $theme_info) {
 	$cache_folder = "$g_root_dir/themes/{$theme_info["theme_folder"]}/cache";
 	$theme_info["cache_folder_writable"] = is_writable($cache_folder);
 
 	// if this theme uses swatches, generate a list
-	if ($theme_info["uses_swatches"] == "yes")
-	{
-		$theme_info["available_swatches"] = ft_get_theme_swatch_list($theme_info["swatches"]);
+	if ($theme_info["uses_swatches"] == "yes") {
+		$theme_info["available_swatches"] = Themes::getThemeSwatchList($theme_info["swatches"]);
 	}
 
 	$updated_themes[] = $theme_info;

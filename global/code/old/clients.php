@@ -365,40 +365,6 @@ function ft_get_client_prev_next_links($account_id, $search_criteria = array())
 
 
 /**
- * This function updates the default theme for multiple accounts simultaneously. It's called when
- * an administrator disables a theme that's current used by some client accounts. They're presented with
- * the option of setting the theme ID for all the clients.
- *
- * There's very little error checking done here...
- *
- * @param string $account_id_str a comma delimited list of account IDs
- * @param integer $theme_id the theme ID
- */
-function ft_update_client_themes($account_ids, $theme_id)
-{
-	global $LANG, $g_table_prefix;
-
-	if (empty($account_ids) || empty($theme_id))
-		return;
-
-	$client_ids = explode(",", $account_ids);
-
-	$theme_info = ft_get_theme($theme_id);
-	$theme_name = $theme_info["theme_name"];
-	$theme_folder = $theme_info["theme_folder"];
-
-	foreach ($client_ids as $client_id)
-		mysql_query("UPDATE {$g_table_prefix}accounts SET theme='$theme_folder' WHERE account_id = $client_id");
-
-	$placeholders = array("theme" => $theme_name);
-	$message = ft_eval_smarty_string($LANG["notify_client_account_themes_updated"], $placeholders);
-	$success = true;
-
-	return array($success, $message);
-}
-
-
-/**
  * Used in a couple of places, so I stuck it here. (Refactor this hideousness!)
  *
  * @param string $order
