@@ -1,12 +1,15 @@
 <?php
 
+use FormTools\General;
+
+
 require_once("../../global/session_start.php");
 ft_check_permission("client");
 $request = array_merge($_POST, $_GET);
 $account_id = $_SESSION["ft"]["account"]["account_id"];
 
 // store the current selected tab in memory
-$page = ft_load_field("page", "account_page", "main");
+$page = General::loadField("page", "account_page", "main");
 
 $same_page = ft_get_clean_php_self();
 $tabs = array(

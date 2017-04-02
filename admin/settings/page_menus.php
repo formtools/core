@@ -1,9 +1,10 @@
 <?php
 
+use FormTools\General;
 use FormTools\Themes;
 
 
-$menu_page = ft_load_field("menu_page", "menu_page", 1);
+$menu_page = General::loadField("menu_page", "menu_page", 1);
 
 // if required, delete the menu. If any clients were assigned to this menu, the success response will
 // include their names

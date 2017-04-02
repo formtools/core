@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\General;
 use FormTools\Themes;
 
 
@@ -7,7 +8,7 @@ $view_fields_sortable_id = "view_fields";
 $submission_list_sortable_id = "submission_list";
 
 // a form ID & view ID should always be set when visiting this page
-$view_id = ft_load_field("view_id", "form_{$form_id}_view_id");
+$view_id = General::loadField("view_id", "form_{$form_id}_view_id");
 
 // this updates all four sections of the view at once (since all may have been modified)
 if (isset($request["update_view"])) {

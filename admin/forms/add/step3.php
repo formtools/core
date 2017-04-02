@@ -1,12 +1,13 @@
 <?php
 
+use FormTools\General;
 use FormTools\Themes;
 
 
 require("../../../global/session_start.php");
 ft_check_permission("admin");
 
-$form_id = ft_load_field("form_id", "add_form_form_id", "");
+$form_id = General::loadField("form_id", "add_form_form_id", "");
 
 if (isset($_POST["submission_type"]))
 	@mysql_query("UPDATE {$g_table_prefix}forms SET submission_type = '{$_POST["submission_type"]}' WHERE form_id=$form_id");

@@ -648,7 +648,7 @@ function ft_include_module($module_folder)
 
 
 /**
- * This if the module counterpart function of the ft_load_field function. It works exactly the same
+ * This if the module counterpart function of the General::loadField function. It works exactly the same
  * way, except that it namespaces the variables in a $_SESSION["ft"][$module_folder] key.
  *
  * It assumes that a variable name can be found in GET, POST or SESSIONS (or all three). What this

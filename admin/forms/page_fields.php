@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\FieldSizes;
+use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
 
@@ -26,7 +27,7 @@ if (empty($num_fields_per_page)) {
 	ft_set_settings("admin_num_fields_per_page_{$form_id}", "all");
 }
 
-$fields_page = ft_load_field("fields_page", "fields_page", 1);
+$fields_page = General::loadField("fields_page", "fields_page", 1);
 
 $form_fields = ft_get_form_fields($form_id, array("page" => $fields_page, "num_fields_per_page" => $num_fields_per_page));
 $total_form_fields = ft_get_num_form_fields($form_id);

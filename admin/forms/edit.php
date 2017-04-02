@@ -1,10 +1,13 @@
 <?php
 
+use FormTools\General;
+
+
 require("../../global/session_start.php");
 ft_check_permission("admin");
 
 $request = array_merge($_POST, $_GET);
-$form_id = ft_load_field("form_id", "form_id", "");
+$form_id = General::loadField("form_id", "form_id", "");
 
 if (!ft_check_form_exists($form_id)) {
 	header("location: index.php");
@@ -27,7 +30,7 @@ if (isset($request["page"]) && !empty($request["page"])) {
 	$_SESSION["ft"]["form_{$form_id}_tab"] = $remember_page;
 	$page = $request["page"];
 } else {
-	$page = ft_load_field("page", "form_{$form_id}_tab", "edit_form_main");
+	$page = General::loadField("page", "form_{$form_id}_tab", "edit_form_main");
 }
 
 if (isset($request['edit_email_user_settings'])) {
@@ -67,10 +70,10 @@ $tabs = array(
 
 $tabs = ft_module_override_data("admin_edit_form_tabs", $tabs);
 
-$order     = ft_load_field("order", "form_sort_order", "form_name-ASC");
-$keyword   = ft_load_field("keyword", "form_search_keyword", "");
-$status    = ft_load_field("status", "form_search_status", "");
-$client_id = ft_load_field("client_id", "form_search_client_id", "");
+$order     = General::loadField("order", "form_sort_order", "form_name-ASC");
+$keyword   = General::loadField("keyword", "form_search_keyword", "");
+$status    = General::loadField("status", "form_search_status", "");
+$client_id = General::loadField("client_id", "form_search_client_id", "");
 $search_criteria = array(
 	"order"     => $order,
 	"keyword"   => $keyword,

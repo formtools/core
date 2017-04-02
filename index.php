@@ -4,6 +4,7 @@ require_once("global/library.php");
 
 use FormTools\Accounts;
 use FormTools\Core;
+use FormTools\General;
 use FormTools\Installation;
 use FormTools\Settings;
 use FormTools\User;
@@ -31,7 +32,7 @@ $swatch = $settings["default_client_swatch"];
 
 // if an account id is included in the query string, use it to determine the appearance of the
 // interface, including logo and footer and even language
-//$id = ft_load_field("id", "id", "");
+//$id = General::loadField("id", "id", "");
 
 //if (!empty($id)) {
 //  $info = Accounts::getAccountInfo($id);

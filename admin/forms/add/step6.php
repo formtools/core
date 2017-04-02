@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\General;
 use FormTools\Themes;
 
 
@@ -14,7 +15,7 @@ if (isset($_SESSION["ft"]["smart_fill_tmp_uploaded_files"]) && !empty($_SESSION[
 }
 
 $_SESSION["ft"]["method"] = "";
-$form_id = ft_load_field("form_id", "add_form_form_id", "");
+$form_id = General::loadField("form_id", "add_form_form_id", "");
 unset($_SESSION["ft"]["add_form_form_id"]);
 
 // ------------------------------------------------------------------------------------------------

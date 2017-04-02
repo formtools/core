@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\FieldValidation;
+use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
 
@@ -10,7 +11,7 @@ ft_check_permission("admin");
 require(__DIR__ . "/edit_submission__code.php");
 
 $request = array_merge($_GET, $_POST);
-$form_id = ft_load_field("form_id", "curr_form_id");
+$form_id = General::loadField("form_id", "curr_form_id");
 $view_id = _ft_code_get_view($request, $form_id);
 
 $submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";
@@ -53,7 +54,7 @@ foreach ($view_info["tabs"] as $tab_info) {
 	}
 }
 if ($has_tabs) {
-    $tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
+    $tab_number = General::loadField("tab", "view_{$view_id}_current_tab", 1);
 } else {
     $tab_number = "";
 }

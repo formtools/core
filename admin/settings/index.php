@@ -1,10 +1,13 @@
 <?php
 
+use FormTools\General;
+
+
 require("../../global/session_start.php");
 ft_check_permission("admin");
 
 $request = array_merge($_POST, $_GET);
-$page    = ft_load_field("page", "settings_page", "main");
+$page    = General::loadField("page", "settings_page", "main");
 
 // store the current selected tab in memory - except for pages which require additional
 // query string info. For those, use the "parent" page
@@ -23,7 +26,7 @@ if (isset($request["page"]) && !empty($request["page"]))
 	$page = $request["page"];
 }
 else
-	$page = ft_load_field("page", "settings_tab", "main");
+	$page = General::loadField("page", "settings_tab", "main");
 
 $same_page = ft_get_clean_php_self();
 $tabs = array(

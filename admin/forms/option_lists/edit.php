@@ -1,11 +1,14 @@
 <?php
 
+use FormTools\General;
+
+
 require("../../../global/session_start.php");
 ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
-$list_id = ft_load_field("list_id", "option_list_id", "");
-$page    = ft_load_field("page", "field_option_groups_tab", "main");
-$order   = ft_load_field("order", "option_list_order");
+$list_id = General::loadField("list_id", "option_list_id", "");
+$page    = General::loadField("page", "field_option_groups_tab", "main");
+$order   = General::loadField("order", "option_list_order");
 
 // used to display the total count of fields using this option list on the Form Fields tab.
 $num_fields = ft_get_num_fields_using_option_list($list_id);

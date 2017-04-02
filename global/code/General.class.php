@@ -242,4 +242,36 @@ END;
     }
 
 
+    /**
+     * This invaluable little function is used for storing and overwriting the contents of a single
+     * form field in sessions based on a sequence of priorities.
+     *
+     * It assumes that a variable name can be found in GET, POST or SESSIONS (or all three). What this
+     * function does is return the value stored in the most important variable (GET first, POST second,
+     * SESSIONS third), and update sessions at the same time. This is extremely helpful in situations
+     * where you don't want to keep having to submit the same information from page to page.
+     * The third parameter is included as a way to set a default value.
+     *
+     * @param string $field_name the field name
+     * @param string $session_name the session key for this field name
+     * @param string $default_value the default value for the field
+     * @return string the field value
+     */
+    public static function loadField($field_name, $session_name, $default_value = "")
+    {
+        $field = $default_value;
+
+        if (isset($_GET[$field_name])) {
+            $field = $_GET[$field_name];
+            Sessions::set($session_name, $field);
+        } else if (isset($_POST[$field_name])) {
+            $field = $_POST[$field_name];
+            Sessions::set($session_name, $field);
+        } else if (Sessions::exists($session_name)) {
+            $field = Sessions::get($session_name);
+        }
+
+        return $field;
+    }
+
 }

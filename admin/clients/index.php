@@ -2,6 +2,7 @@
 
 use FormTools\Administrator;
 use FormTools\Clients;
+use FormTools\General;
 
 
 require("../../global/session_start.php");
@@ -20,9 +21,9 @@ if (isset($_GET["reset"])) {
 	$_SESSION["ft"]["client_search_keyword"] = "";
 	$_SESSION["ft"]["client_search_status"] = "";
 }
-$order   = ft_load_field("order", "client_sort_order", "last_name-ASC");
-$keyword = ft_load_field("keyword", "client_search_keyword", "");
-$status  = ft_load_field("status", "client_search_status", "");
+$order   = General::loadField("order", "client_sort_order", "last_name-ASC");
+$keyword = General::loadField("keyword", "client_search_keyword", "");
+$status  = General::loadField("status", "client_search_status", "");
 
 $search_criteria = array(
 	"order"     => $order,

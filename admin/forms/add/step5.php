@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\General;
 use FormTools\Themes;
 
 
@@ -7,7 +8,7 @@ require("../../../global/session_start.php");
 ft_check_permission("admin");
 
 $sortable_id = "review_field_options";
-$form_id = ft_load_field("form_id", "add_form_form_id", "");
+$form_id = General::loadField("form_id", "add_form_form_id", "");
 $form_info   = ft_get_form($form_id);
 $form_fields = ft_get_form_fields($form_id);
 

@@ -234,6 +234,11 @@ class Core {
     public static $db;
 
     /**
+     * @var
+     */
+    public static $smarty;
+
+    /**
      * The translations object. Used to get the current UI language and translation strings (Core::$translations->getList())
      */
     public static $translations; // TODO need to expose?
@@ -379,6 +384,8 @@ class Core {
         if (self::$configFileExists) {
             self::initDatabase();
         }
+
+        self::$smarty = new \Smarty();
 
         self::startSessions();
 

@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
 
@@ -9,7 +10,7 @@ ft_check_permission("admin");
 $request = array_merge($_POST, $_GET);
 
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
-$form_id = ft_load_field("form_id", "curr_form_id");
+$form_id = General::loadField("form_id", "curr_form_id");
 if (empty($form_id) || !is_numeric($form_id)) {
 	session_write_close();
 	header("location: index.php");
@@ -26,7 +27,7 @@ if (!ft_check_form_exists($form_id)) {
 // (ordered) list of Views for this form. If THAT doesn't exist, the user has deleted all Views (doh!), so
 // there's nothing to show. In that case, just redirect them to the Views tab, where an error / warning message
 // will appear in the page
-$view_id       = ft_load_field("view_id", "form_{$form_id}_view_id");
+$view_id       = General::loadField("view_id", "form_{$form_id}_view_id");
 $grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true));
 
 if (empty($view_id) || !ft_check_view_exists($view_id, true)) {
@@ -78,9 +79,9 @@ if ($is_resetting_search || $has_search_info_for_other_form) {
 	}
 }
 $search_fields = array(
-	"search_field"   => ft_load_field("search_field", "search_field", ""),
-	"search_date"    => ft_load_field("search_date", "search_date", ""),
-	"search_keyword" => ft_load_field("search_keyword", "search_keyword", "")
+	"search_field"   => General::loadField("search_field", "search_field", ""),
+	"search_date"    => General::loadField("search_date", "search_date", ""),
+	"search_keyword" => General::loadField("search_keyword", "search_keyword", "")
 );
 
 if (isset($_GET["delete"])) {
@@ -104,7 +105,7 @@ if (isset($_GET["delete"])) {
 }
 
 // figure out the current page
-$current_page = ft_load_field("page", "view_{$view_id}_page", 1);
+$current_page = General::loadField("page", "view_{$view_id}_page", 1);
 if (isset($_POST["search"])) {
     $current_page = 1;
 }

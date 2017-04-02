@@ -1,22 +1,25 @@
 <?php
 
+use FormTools\General;
+
+
 require("../../global/session_start.php");
 ft_check_permission("admin");
 
 $request = array_merge($_POST, $_GET);
-$client_id = ft_load_field("client_id", "curr_client_id", "");
+$client_id = General::loadField("client_id", "curr_client_id", "");
 if (empty($client_id)) {
 	header("location: index.php");
 	exit;
 }
 
 // figure out the "<< prev" and "next >>" links
-$order   = ft_load_field("order", "client_sort_order", "last_name-ASC");
-$keyword = ft_load_field("keyword", "client_search_keyword", "");
-$status  = ft_load_field("status", "client_search_status", "");
+$order   = General::loadField("order", "client_sort_order", "last_name-ASC");
+$keyword = General::loadField("keyword", "client_search_keyword", "");
+$status  = General::loadField("status", "client_search_status", "");
 
 // store the current selected tab in memory
-$page = ft_load_field("page", "client_{$client_id}_page", "main");
+$page = General::loadField("page", "client_{$client_id}_page", "main");
 
 $search_criteria = array(
 	"order"     => $order,

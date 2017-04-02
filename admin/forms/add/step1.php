@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Clients;
+use FormTools\General;
 use FormTools\Themes;
 
 
@@ -20,7 +21,7 @@ if (isset($request["code"]) || isset($request["direct"])) {
 	exit;
 }
 
-$form_id = ft_load_field("form_id", "add_form_form_id", "");
+$form_id = General::loadField("form_id", "add_form_form_id", "");
 
 $form_info = array();
 if (!empty($form_id)) {

@@ -1,12 +1,13 @@
 <?php
 
+use FormTools\General;
 use FormTools\Themes;
 
 
 require("../../../global/session_start.php");
 ft_check_permission("admin");
 
-$form_id = ft_load_field("form_id", "add_form_form_id", "");
+$form_id = General::loadField("form_id", "add_form_form_id", "");
 $sortable_id = "add_form_step4";
 
 // go to next page

@@ -12,7 +12,7 @@ $request = array_merge($_POST, $_GET);
 $account_id = $_SESSION["ft"]["account"]["account_id"];
 
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
-$form_id = ft_load_field("form_id", "curr_form_id");
+$form_id = General::loadField("form_id", "curr_form_id");
 if (empty($form_id))
 {
 	session_write_close();
@@ -20,7 +20,7 @@ if (empty($form_id))
 	exit;
 }
 
-$view_id = ft_load_field("view_id", "form_{$form_id}_view_id");
+$view_id = General::loadField("view_id", "form_{$form_id}_view_id");
 
 // check the current client is permitted to view this information!
 General::checkClientMayView($account_id, $form_id, $view_id);
@@ -75,9 +75,9 @@ if ($is_resetting_search || $has_search_info_for_other_form) {
 }
 
 $search_fields = array(
-	"search_field"   => ft_load_field("search_field", "search_field", ""),
-	"search_date"    => ft_load_field("search_date", "search_date", ""),
-	"search_keyword" => ft_load_field("search_keyword", "search_keyword", "")
+	"search_field"   => General::loadField("search_field", "search_field", ""),
+	"search_date"    => General::loadField("search_date", "search_date", ""),
+	"search_keyword" => General::loadField("search_keyword", "search_keyword", "")
 );
 
 if (isset($_GET["delete"])) {
@@ -101,7 +101,7 @@ if (isset($_GET["delete"])) {
 }
 
 // figure out the current page
-$current_page = ft_load_field("page", "view_{$view_id}_page", 1);
+$current_page = General::loadField("page", "view_{$view_id}_page", 1);
 if (isset($_POST["search"])) {
     $current_page = 1;
 }

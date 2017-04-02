@@ -14,8 +14,8 @@ $account_id = $_SESSION["ft"]["account"]["account_id"];
 
 // blur the GET and POST variables into a single variable for easy reference
 $request = array_merge($_GET, $_POST);
-$form_id = ft_load_field("form_id", "curr_form_id");
-$view_id = ft_load_field("view_id", "form_{$form_id}_view_id");
+$form_id = General::loadField("form_id", "curr_form_id");
+$view_id = General::loadField("view_id", "form_{$form_id}_view_id");
 $submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";
 if (empty($submission_id))
 {
@@ -23,7 +23,7 @@ if (empty($submission_id))
 	exit;
 }
 
-$tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
+$tab_number = General::loadField("tab", "view_{$view_id}_current_tab", 1);
 $grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
 
 // check the current client is permitted to view this information!
@@ -76,7 +76,7 @@ foreach ($view_info["tabs"] as $tab_info)
 	}
 }
 if ($has_tabs) {
-    $tab_number = ft_load_field("tab", "view_{$view_id}_current_tab", 1);
+    $tab_number = General::loadField("tab", "view_{$view_id}_current_tab", 1);
 } else {
     $tab_number = "";
 }

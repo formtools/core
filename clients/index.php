@@ -2,6 +2,7 @@
 
 use FormTools\Accounts;
 use FormTools\Clients;
+use FormTools\General;
 use FormTools\Themes;
 
 
@@ -11,13 +12,12 @@ _ft_cache_form_stats();
 
 $account_id = $_SESSION["ft"]["account"]["account_id"];
 
-if (isset($_GET["reset"]))
-{
+if (isset($_GET["reset"])) {
 	$_SESSION["ft"]["form_sort_order"] = "";
 	$_SESSION["ft"]["form_search_keyword"] = "";
 }
-$order   = ft_load_field("order", "form_sort_order", "form_name-ASC");
-$keyword = ft_load_field("keyword", "form_search_keyword", "");
+$order   = General::loadField("order", "form_sort_order", "form_name-ASC");
+$keyword = General::loadField("keyword", "form_search_keyword", "");
 
 $search_criteria = array(
 	"order"   => $order,

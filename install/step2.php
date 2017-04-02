@@ -3,12 +3,13 @@
 require_once("../global/library.php");
 
 use FormTools\Core;
-use FormTools\Installation;
 use FormTools\General;
+use FormTools\Installation;
+
 
 Core::setHooksEnabled(false);
 Core::init();
-Core::setCurrLang(ft_load_field("lang_file", "lang_file", Core::getDefaultLang(), "ft_install"));
+Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang(), "ft_install"));
 
 // folder permissions
 $upload_folder_writable = is_writable(realpath("../upload"));

@@ -1,10 +1,11 @@
 <?php
 
 use FormTools\Administrator;
+use FormTools\General;
 use FormTools\Themes;
 
 
-$email_id = ft_load_field("email_id", "email_id", "");
+$email_id = General::loadField("email_id", "email_id", "");
 
 if (isset($request["update_email_template"])) {
     list($g_success, $g_message) = ft_update_email_template($email_id, $request);
@@ -28,10 +29,10 @@ $file_field_text = ($form_has_file_upload_field) ? $LANG["text_file_field_placeh
 
 // values for the test email subpage
 $num_submissions = ft_get_submission_count($form_id);
-$test_email_format = ft_load_field("test_email_format", "test_email_format");
-$test_email_recipient = ft_load_field("test_email_recipient", "test_email_recipient", $admin_info["email"]);
-$test_email_data_source = ft_load_field("test_email_data_source", "test_email_data_source", "random_submission");
-$test_email_submission_id = ft_load_field("test_email_submission_id", "test_email_submission_id", "");
+$test_email_format = General::loadField("test_email_format", "test_email_format");
+$test_email_recipient = General::loadField("test_email_recipient", "test_email_recipient", $admin_info["email"]);
+$test_email_data_source = General::loadField("test_email_data_source", "test_email_data_source", "random_submission");
+$test_email_submission_id = General::loadField("test_email_submission_id", "test_email_submission_id", "");
 
 $views = ft_get_views($form_id);
 

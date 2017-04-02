@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\General;
 use FormTools\Themes;
 
 
@@ -30,9 +31,9 @@ if (isset($_GET["reset"]))
 	$_SESSION["ft"]["module_search_status"] = array("enabled", "disabled");
 }
 
-$order       = ft_load_field("order", "module_sort_order", "");
-$keyword     = ft_load_field("keyword", "module_search_keyword", "");
-$status      = ft_load_field("status", "module_search_status", array("enabled", "disabled"));
+$order   = General::loadField("order", "module_sort_order", "");
+$keyword = General::loadField("keyword", "module_search_keyword", "");
+$status  = General::loadField("status", "module_search_status", array("enabled", "disabled"));
 
 $search_criteria = array(
 	"order"   => $order,

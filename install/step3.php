@@ -8,16 +8,17 @@ use FormTools\Database;
 use FormTools\General;
 use FormTools\Installation;
 
+
 Core::setHooksEnabled(false);
 Core::init();
-Core::setCurrLang(ft_load_field("lang_file", "lang_file", Core::getDefaultLang(), "ft_install"));
+Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang(), "ft_install"));
 
-$hostname = ft_load_field("g_db_hostname", "g_db_hostname", "localhost", "ft_install");
-$db_name  = ft_load_field("g_db_name", "g_db_name", "", "ft_install");
-$port     = ft_load_field("g_db_port", "g_db_port", "3306", "ft_install");
-$username = ft_load_field("g_db_username", "g_db_username", "", "ft_install");
-$password = ft_load_field("g_db_password", "g_db_password", "", "ft_install");
-$table_prefix = ft_load_field("g_table_prefix", "g_table_prefix", "ft_", "ft_install");
+$hostname = General::loadField("g_db_hostname", "g_db_hostname", "localhost", "ft_install");
+$db_name  = General::loadField("g_db_name", "g_db_name", "", "ft_install");
+$port     = General::loadField("g_db_port", "g_db_port", "3306", "ft_install");
+$username = General::loadField("g_db_username", "g_db_username", "", "ft_install");
+$password = General::loadField("g_db_password", "g_db_password", "", "ft_install");
+$table_prefix = General::loadField("g_table_prefix", "g_table_prefix", "ft_", "ft_install");
 
 $step_complete = false;
 $error = "";

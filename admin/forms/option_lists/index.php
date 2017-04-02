@@ -1,16 +1,17 @@
 <?php
 
+use FormTools\General;
 use FormTools\OptionLists;
 use FormTools\Themes;
 
 
 require("../../../global/session_start.php");
 ft_check_permission("admin");
-$option_list_page = ft_load_field("page", "option_list_page", 1);
+$option_list_page = General::loadField("page", "option_list_page", 1);
 $request = array_merge($_POST, $_GET);
 $num_option_lists_per_page = $_SESSION["ft"]["settings"]["num_option_lists_per_page"];
 
-$order = ft_load_field("order", "option_list_order");
+$order = General::loadField("order", "option_list_order");
 
 if (isset($_GET["delete"]))
 	list($g_success, $g_message) = ft_delete_option_list($_GET["delete"]);

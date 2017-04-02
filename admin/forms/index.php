@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Clients;
+use FormTools\General;
 use FormTools\Themes;
 
 
@@ -14,10 +15,10 @@ if (isset($_GET["reset"])) {
 	$_SESSION["ft"]["form_search_status"] = "";
 	$_SESSION["ft"]["form_search_client_id"] = "";
 }
-$order     = ft_load_field("order", "form_sort_order", "form_id-DESC");
-$keyword   = ft_load_field("keyword", "form_search_keyword", "");
-$status    = ft_load_field("status", "form_search_status", "");
-$client_id = ft_load_field("client_id", "form_search_client_id", "");
+$order     = General::loadField("order", "form_sort_order", "form_id-DESC");
+$keyword   = General::loadField("keyword", "form_search_keyword", "");
+$status    = General::loadField("status", "form_search_status", "");
+$client_id = General::loadField("client_id", "form_search_client_id", "");
 
 $search_criteria = array(
 	"order"     => $order,

@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\General;
 use FormTools\Themes;
 
 
@@ -8,9 +9,9 @@ ft_check_permission("admin");
 
 $sortable_id = "multi_page_form_list";
 
-$form_id = ft_load_field("form_id", "add_form_form_id", "");
+$form_id = General::loadField("form_id", "add_form_form_id", "");
 $request = array_merge($_POST, $_GET);
-$submission_type = ft_load_field("submission_type", "submission_type");
+$submission_type = General::loadField("submission_type", "submission_type");
 
 // bit weird, but if a user's coming back to this page to complete setting up their form, update
 // the submission_type

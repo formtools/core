@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\General;
 use FormTools\Themes;
 
 
@@ -16,7 +17,7 @@ if (isset($request["delete"])) {
 }
 
 $form_info = ft_get_form($form_id);
-$emails_page = ft_load_field("emails_page", "form_{$form_id}_emails_page", 1);
+$emails_page = General::loadField("emails_page", "form_{$form_id}_emails_page", 1);
 $form_email_info  = ft_get_email_templates($form_id, $emails_page);
 $form_emails      = $form_email_info["results"];
 $num_form_emails  = $form_email_info["num_results"];
