@@ -29,6 +29,7 @@ require_once(__DIR__ . "/code/Translations.class.php");
 require_once(__DIR__ . "/code/Upgrade.class.php");
 require_once(__DIR__ . "/code/User.class.php");
 require_once(__DIR__ . "/code/Views.class.php");
+require_once(__DIR__ . "/code/validation.php");
 
 // autoload dependencies
 require_once(__DIR__ . "/../vendor/autoload.php");

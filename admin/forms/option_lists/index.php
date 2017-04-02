@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\OptionLists;
 use FormTools\Themes;
 
 
@@ -41,7 +42,7 @@ $total_pages = ceil($total_num_option_lists / $num_option_lists_per_page);
 if ($option_list_page > $total_pages)
 	$option_list_page = $total_pages;
 
-$list_info = ft_get_option_lists($option_list_page, $order);
+$list_info = OptionLists::getList($option_list_page, $order);
 $num_option_lists = $list_info["num_results"];
 $option_lists     = $list_info["results"];
 
@@ -62,7 +63,7 @@ foreach ($option_lists as $option_list)
 	$updated_option_lists[] = $option_list;
 }
 
-$all_option_lists = ft_get_option_lists("all");
+$all_option_lists = OptionLists::getList("all");
 
 // ------------------------------------------------------------------------------------------------
 

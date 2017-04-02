@@ -15,19 +15,26 @@ class User
     private $accountId;
     private $username;
     private $email;
-    private $theme;
-    private $swatch;
+    private $theme; // default from DB
+    private $swatch; // default from DB
 
 
     /**
-     * The singleton user object is instantiated automatically in Core::init() and available via Core::$user. A user
-     * object is always instantiated, even if the user isn't logged in.
+     * This class is instantiated on every page load through Core::init() and available via Core::$user. A user
+     * object is always instantiated, even if the user isn't logged in. This provides a consistent interface to
+     * find out things like what theme, language etc. should be used.
+     *
+     * How should this work? We need to store details about the user in sessions (e.g. their ID) but we don't
+     * want to query the database for the user on each and every page load. So the constructor here
      */
     public function __construct() {
+        $account_id = Sessions::get("account_id");
+
+        // if the user isn't logged in, set the defaults
         if (empty($account_id)) {
-
+            //$this->theme =
         } else {
-
+            $this->isLoggedIn = true;
         }
     }
 
@@ -160,23 +167,20 @@ class User
         return $this->theme;
     }
 
-    /**
-     * Helper to find out if someone's currently logged in (i.e. sessions exist).
-     */
     public function isLoggedIn() {
         return $this->isLoggedIn;
     }
 
+    public function getAccountId() {
+        return $this->accountId;
+    }
 
-    /**
-     * Returns the account ID of the currently logged in user - or returns the empty string if there's no user account.
-     *
-     * @return integer the account ID
-     */
-    function getAccountId() // ft_get_current_account_id
-    {
-//        $account_id = isset($_SESSION["ft"]["account"]["account_id"]) ? $_SESSION["ft"]["account"]["account_id"] : "";
-//        return $account_id;
+    public function getUsername() {
+        return $this->username;
+    }
+
+    public function getEmail() {
+        return $this->email;
     }
 
     /**
@@ -208,8 +212,8 @@ class User
             WHERE  account_id = :account_id
         ");
         $db->bindAll(array(
-            ":now" => General::getCurrentDatetime(),
-            ":account_id" => $this->accountId
+            "now" => General::getCurrentDatetime(),
+            "account_id" => $this->accountId
         ));
         $db->execute();
     }
@@ -224,7 +228,6 @@ class User
         $page = Pages::constructPageURL($loginPage);
         header("location: {$rootURL}$page");
     }
-
 
 
     /**
@@ -246,9 +249,10 @@ class User
         extract(ft_process_hook_calls("main", array(), array()));
 
         // this ensures sessions are started
-        if ($g_session_type == "database")
-            $sess = new SessionManager();
-        @session_start();
+//        if ($g_session_type == "database") {
+//            $sess = new SessionManager();
+//        }
+//        @session_start();
 
         // first, if $_SESSION["ft"]["admin"] is set, it is an administrator logging out, so just redirect them
         // back to the admin pages

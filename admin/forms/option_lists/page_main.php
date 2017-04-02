@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\OptionLists;
 use FormTools\Themes;
 
 
@@ -22,13 +23,12 @@ $placeholders = array(
 
 // get a list of all existing Option Lists; this is used to ensure the uniqueness of the option list names
 // (necessary only from a user point of view)
-$lists = ft_get_option_lists("all");
+$lists = OptionLists::getList("all");
 $list_names = array();
 foreach ($lists["results"] as $curr_list_info) {
 	if ($list_id == $curr_list_info["list_id"]) {
         continue;
     }
-
 	$list_names[] = "\"" . htmlspecialchars($curr_list_info["option_list_name"]) . "\"";
 }
 

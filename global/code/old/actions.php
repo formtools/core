@@ -9,6 +9,7 @@
 
 use FormTools\FieldValidation;
 use FormTools\ListGroups;
+use FormTools\OptionLists;
 use FormTools\Settings;
 
 
@@ -392,7 +393,7 @@ switch ($action)
 		break;
 
 	case "get_option_lists":
-		$option_lists = ft_get_option_lists("all");
+		$option_lists = OptionLists::getList("all");
 		$option_list_info = array();
 		foreach ($option_lists["results"] as $option_list) {
 			$option_list_info[$option_list["list_id"]] = $option_list["option_list_name"];

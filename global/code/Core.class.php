@@ -380,10 +380,14 @@ class Core {
             self::initDatabase();
         }
 
-        self::initUser();
-
-        // start sessions
         self::startSessions();
+
+        self::$user = new User();
+        self::$currLang = self::$user->getLang(); // TODO
+
+//        if (self::checkFTSessions() && self::$user->isLoggedIn()) {
+//            ft_check_sessions_timeout();
+//        }
 
         if (isset($options["currLang"])) {
             self::$currLang = $options["currLang"];
@@ -452,15 +456,6 @@ class Core {
     private static function initDatabase() {
         self::$db = new Database(self::$dbHostname, self::$dbName, self::$dbPort, self::$dbUsername, self::$dbPassword,
             self::$dbTablePrefix);
-    }
-
-    private static function initUser() {
-        if (User::isLoggedIn()) {
-            self::$user = new User();
-            self::$currLang = self::$user->getLang();
-        } else {
-            self::$currLang = self::$defaultLang;
-        }
     }
 
     public static function getRootURL() {

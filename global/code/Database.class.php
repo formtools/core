@@ -28,15 +28,16 @@ class Database
     public function __construct($hostname, $db_name, $port, $username, $password, $table_prefix) {
         $options = array(
             PDO::ATTR_PERSISTENT => true,
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_EMULATE_PREPARES => false
         );
 
-        // if required, set all queries as UTF-8 (enabled by default)
+        // if required, set all queries as UTF-8 (enabled by default). N.B. we're supporting 5.3.0 so passing charset
+        // in the DSN isn't sufficient, as described here: https://phpdelusions.net/pdo
         $attrInitCommands = array();
-        if (Core::isUnicode()) {
+        if (version_compare(PHP_VERSION, '5.3.6', '<')) {
             $attrInitCommands[] = "Names utf8";
         }
-        //
         if (Core::shouldSetSqlMode()) {
             $attrInitCommands[] = "SQL_MODE=''";
         }
@@ -52,11 +53,6 @@ class Database
         }
 
         $this->table_prefix = $table_prefix;
-
-
-        if (Core::checkFTSessions() && User::isLoggedIn()) {
-            ft_check_sessions_timeout();
-        }
     }
 
     /**
@@ -114,6 +110,11 @@ class Database
     public function fetch($fetch_style = PDO::FETCH_ASSOC) {
         $this->execute();
         return $this->statement->fetch($fetch_style);
+    }
+
+    public function fetchOne() {
+        $this->execute();
+        return $this->statement->fetchColumn($fetch_style);
     }
 
     public function fetchAll($fetch_style = PDO::FETCH_ASSOC) {

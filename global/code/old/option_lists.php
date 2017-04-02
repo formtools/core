@@ -14,60 +14,7 @@
 // -------------------------------------------------------------------------------------------------
 
 use FormTools\ListGroups;
-
-
-/**
- * Returns all list options in the database.
- *
- * @param $page_num the current page number, or "all" for all results.
- * @return array ["results"] an array of option group information
- *               ["num_results"] the total number of option groups in the database.
- */
-function ft_get_option_lists($page_num = 1, $order = "option_list_name-ASC")
-{
-	global $g_table_prefix;
-
-	if ($page_num == "all")
-		$limit_clause = "";
-	else
-	{
-		$num_option_lists_per_page = isset($_SESSION["ft"]["settings"]["num_option_lists_per_page"]) ?
-			$_SESSION["ft"]["settings"]["num_option_lists_per_page"] : 10;
-
-		// determine the LIMIT clause
-		$limit_clause = "";
-		if (empty($page_num))
-			$page_num = 1;
-		$first_item = ($page_num - 1) * $num_option_lists_per_page;
-		$limit_clause = "LIMIT $first_item, $num_option_lists_per_page";
-	}
-
-	$order_clause = _ft_get_option_list_order_clause($order);
-
-	$result = mysql_query("
-    SELECT *
-    FROM 	 {$g_table_prefix}option_lists
-    $order_clause
-    $limit_clause
-      ");
-	$count_result = mysql_query("
-    SELECT count(*) as c
-    FROM 	 {$g_table_prefix}option_lists
-         ");
-	$count_hash = mysql_fetch_assoc($count_result);
-
-	$option_lists = array();
-	while ($row = mysql_fetch_assoc($result))
-		$option_lists[] = $row;
-
-	$return_hash = array();
-	$return_hash["results"] = $option_lists;
-	$return_hash["num_results"]  = $count_hash["c"];
-
-	extract(ft_process_hook_calls("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
-
-	return $return_hash;
-}
+use FormTools\OptionLists;
 
 
 /**
@@ -209,7 +156,7 @@ function ft_create_unique_option_list($form_id, $option_list_info)
 {
 	global $g_table_prefix;
 
-	$existing_option_lists = ft_get_option_lists("all");
+	$existing_option_lists = OptionLists::getList("all");
 
 	$already_exists = false;
 	$list_id = "";
@@ -497,7 +444,7 @@ function ft_duplicate_option_list($list_id = "", $field_ids = array())
 
 	// to ensure that all new field option groups have unique names, query the database and find the next free
 	// group name of the form "New Option List (X)" (where "New Option List" is in the language of the current user)
-	$lists = ft_get_option_lists("all");
+	$lists = OptionLists::getList("all");
 	$list_names = array();
 	foreach ($lists["results"] as $list_info)
 		$list_names[] = $list_info["option_list_name"];
@@ -721,33 +668,3 @@ function ft_get_option_list_prev_next_links($list_id, $order = "")
 	return $return_info;
 }
 
-
-/**
- * Used in a couple of places, so I moved it here.
- *
- * @param string $order
- */
-function _ft_get_option_list_order_clause($order)
-{
-	switch ($order)
-	{
-		case "list_id-DESC":
-			$order_clause = "list_id DESC";
-			break;
-		case "list_id-ASC":
-			$order_clause = "list_id ASC";
-			break;
-		case "option_list_name-ASC":
-			$order_clause = "option_list_name ASC";
-			break;
-		case "option_list_name-DESC":
-			$order_clause = "option_list_name DESC";
-			break;
-
-		default:
-			$order_clause = "option_list_name ASC";
-			break;
-	}
-
-	return "ORDER BY $order_clause";
-}
