@@ -115,7 +115,7 @@ class User
             }
         }
 
-        extract(ft_process_hook_calls("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
 
         // all checks out. Log them in, after populating sessions
         $_SESSION["ft"]["settings"] = $settings;
@@ -246,7 +246,7 @@ class User
     {
         global $g_root_url, $g_session_type;
 
-        extract(ft_process_hook_calls("main", array(), array()));
+        extract(Hooks::processHookCalls("main", array(), array()));
 
         // this ensures sessions are started
 //        if ($g_session_type == "database") {

@@ -114,7 +114,7 @@ class Accounts {
             $hash[$row['setting_name']] = $row["setting_value"];
         }
 
-        extract(ft_process_hook_calls("main", compact("account_id", "hash"), array("hash")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("main", compact("account_id", "hash"), array("hash")), EXTR_OVERWRITE);
 
         return $hash;
     }
@@ -131,7 +131,7 @@ class Accounts {
     {
         $db = Core::$db;
 
-        extract(ft_process_hook_calls("start", compact("account_id", "settings"), array("settings")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("start", compact("account_id", "settings"), array("settings")), EXTR_OVERWRITE);
 
         while (list($setting_name, $setting_value) = each($settings)) {
 
@@ -171,7 +171,7 @@ class Accounts {
             $db->execute();
         }
 
-        extract(ft_process_hook_calls("end", compact("account_id", "settings"), array()), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("account_id", "settings"), array()), EXTR_OVERWRITE);
     }
 
 
@@ -239,7 +239,7 @@ class Accounts {
         }
         $account_info["settings"] = $settings;
 
-        extract(ft_process_hook_calls("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
 
         return $account_info;
     }
@@ -349,7 +349,7 @@ class Accounts {
     {
         global $g_root_url, $g_root_dir, $g_table_prefix, $LANG;
 
-        extract(ft_process_hook_calls("start", compact("info"), array("info")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("start", compact("info"), array("info")), EXTR_OVERWRITE);
 
         $success = true;
         $message = $LANG["notify_login_info_emailed"];
@@ -471,7 +471,7 @@ class Accounts {
             }
         }
 
-        extract(ft_process_hook_calls("end", compact("success", "message", "info"), array("success", "message")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("success", "message", "info"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);
     }

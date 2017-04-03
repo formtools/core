@@ -419,7 +419,7 @@ function ft_update_option_list($list_id, $info)
 
 	$success = true;
 	$message = $LANG["notify_option_list_updated"];
-	extract(ft_process_hook_calls("end", compact("list_id", "info"), array("success", "message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("list_id", "info"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
 }
@@ -608,7 +608,7 @@ function ft_delete_option_list($list_id)
 
 	$success = true;
 	$message = $LANG["notify_option_list_deleted"];
-	extract(ft_process_hook_calls("end", compact("list_id"), array("success", "message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("list_id"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array(true, $message);
 }

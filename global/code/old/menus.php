@@ -147,7 +147,7 @@ function ft_get_menus($page_num = 1)
 	$return_hash["results"] = $info;
 	$return_hash["num_results"]  = $count_hash["c"];
 
-	extract(ft_process_hook_calls("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
 	return $return_hash;
 }
@@ -172,7 +172,7 @@ function ft_get_menu_list()
 	while ($row = mysql_fetch_assoc($query))
 		$menus[] = $row;
 
-	extract(ft_process_hook_calls("end", compact("menus"), array("menus")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("menus"), array("menus")), EXTR_OVERWRITE);
 
 	return $menus;
 }
@@ -210,7 +210,7 @@ function ft_get_admin_menu()
 
 	$menu_info["menu_items"] = $menu_items;
 
-	extract(ft_process_hook_calls("end", compact("menu_info"), array("menu_info")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("menu_info"), array("menu_info")), EXTR_OVERWRITE);
 
 	return $menu_info;
 }
@@ -249,7 +249,7 @@ function ft_get_client_menu($menu_id)
 
 	$menu_info["clients"] = $menu_clients;
 
-	extract(ft_process_hook_calls("end", compact("menu_info"), array("menu_info")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("menu_info"), array("menu_info")), EXTR_OVERWRITE);
 
 	return $menu_info;
 }
@@ -277,7 +277,7 @@ function ft_get_menu_items($menu_id)
 	while ($item = mysql_fetch_assoc($menu_item_query))
 		$menu_items[] = $item;
 
-	extract(ft_process_hook_calls("end", compact("menu_items", "menu_id"), array("menu_items")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("menu_items", "menu_id"), array("menu_items")), EXTR_OVERWRITE);
 
 	return $menu_items;
 }
@@ -404,7 +404,7 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
 		$select_lines[] = array("type" => "optgroup_close");
 	}
 
-	extract(ft_process_hook_calls("middle", compact("select_lines"), array("select_lines")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("middle", compact("select_lines"), array("select_lines")), EXTR_OVERWRITE);
 
 	$select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_other"]);
 	$select_lines[] = array("type" => "option", "k" => "your_account", "v" => $LANG["phrase_your_account"]);
@@ -520,7 +520,7 @@ function ft_get_client_menu_pages_dropdown($selected, $attributes, $omit_pages =
 		}
 	}
 
-	extract(ft_process_hook_calls("middle", compact("select_lines"), array("select_lines")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("middle", compact("select_lines"), array("select_lines")), EXTR_OVERWRITE);
 
 	$select_lines[] = array("type" => "select_close");
 
@@ -624,7 +624,7 @@ function ft_update_admin_menu($info)
 
 	$success = true;
 	$message = $LANG["notify_admin_menu_updated"];
-	extract(ft_process_hook_calls("end", compact("success", "message", "info"), array("success", "message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("success", "message", "info"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
 }
@@ -659,7 +659,7 @@ function ft_update_menu_order($menu_id)
 		$order++;
 	}
 
-	extract(ft_process_hook_calls("end", compact("menu_id"), array()), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("menu_id"), array()), EXTR_OVERWRITE);
 }
 
 
@@ -734,7 +734,7 @@ function ft_update_client_menu($info)
 
 	$success = true;
 	$message = $LANG["notify_client_menu_updated"];
-	extract(ft_process_hook_calls("end", compact("info"), array("success", "message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("info"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
 }
@@ -803,7 +803,7 @@ function ft_get_page_url($page_identifier, $params = array())
 			$full_url .= "?{$query_str}";
 	}
 
-	extract(ft_process_hook_calls("end", compact("page_identifier", "params", "full_url"), array("full_url")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("page_identifier", "params", "full_url"), array("full_url")), EXTR_OVERWRITE);
 
 	return $full_url;
 }
@@ -881,7 +881,7 @@ function ft_delete_client_menu($menu_id)
 {
 	global $g_table_prefix, $g_root_url, $LANG;
 
-	extract(ft_process_hook_calls("start", compact("menu_id"), array()), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("start", compact("menu_id"), array()), EXTR_OVERWRITE);
 
 	// confirm that there are no client accounts that currently use this menu
 	$query = mysql_query("

@@ -35,7 +35,7 @@ class Themes {
             $theme_info[] = $theme;
         }
 
-        extract(ft_process_hook_calls("end", compact("theme_info"), array("theme_info")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("theme_info"), array("theme_info")), EXTR_OVERWRITE);
 
         return $theme_info;
     }
@@ -54,7 +54,7 @@ class Themes {
         $db->execute();
         $theme_info = $db->fetch();
 
-        extract(ft_process_hook_calls("end", compact("theme_id", "theme_info"), array("theme_info")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("theme_id", "theme_info"), array("theme_info")), EXTR_OVERWRITE);
 
         return $theme_info;
     }
@@ -74,7 +74,7 @@ class Themes {
         $db->execute();
         $theme_info = $db->fetch();
 
-        extract(ft_process_hook_calls("end", compact("theme_folder", "theme_info"), array("theme_info")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("theme_folder", "theme_info"), array("theme_info")), EXTR_OVERWRITE);
 
         return $theme_info;
     }
@@ -124,7 +124,7 @@ class Themes {
             return array(false, $e->getMessage());
         }
 
-        extract(ft_process_hook_calls("end", array(), array("success", "message")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", array(), array("success", "message")), EXTR_OVERWRITE);
 
         return array(true, $LANG["notify_theme_list_updated"]);
     }
@@ -281,9 +281,9 @@ class Themes {
         if (!isset($page_vars["page"]))        $page_vars["page"] = "";
 
         // if we need to include custom JS messages in the page, add it to the generated JS. Note: even if the js_messages
-        // key is defined but still empty, the ft_generate_js_messages function is called, returning the "base" JS - like
+        // key is defined but still empty, the General::generateJsMessages function is called, returning the "base" JS - like
         // the JS version of g_root_url. Only if it is not defined will that info not be included.
-        $js_messages = (isset($page_vars["js_messages"])) ? ft_generate_js_messages($page_vars["js_messages"]) : "";
+        $js_messages = (isset($page_vars["js_messages"])) ? General::generateJsMessages($page_vars["js_messages"]) : "";
 
         if (!empty($page_vars["head_js"]) || !empty($js_messages)) {
             $page_vars["head_js"] = "<script>\n//<![CDATA[\n{$page_vars["head_js"]}\n$js_messages\n//]]>\n</script>";
@@ -308,7 +308,7 @@ class Themes {
         if ($g_smarty_debug)
             $g_smarty->debugging = true;
 
-        extract(ft_process_hook_calls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
 
         // if the page or hook actually defined some CSS for inclusion in the page, wrap it in the appropriate style tag. This
         // was safely moved here in 2.2.0, because nothing used it (!)
@@ -403,14 +403,14 @@ class Themes {
         if (!isset($page_vars["page"]))        $page_vars["page"] = "";
 
         // if we need to include custom JS messages in the page, add it to the generated JS. Note: even if the js_messages
-        // key is defined but still empty, the ft_generate_js_messages function is called, returning the "base" JS - like
+        // key is defined but still empty, the General::generateJsMessages function is called, returning the "base" JS - like
         // the JS version of g_root_url. Only if it is not defined will that info not be included. This feature was hacked
         // in 2.1 to support js_messages from a single module file
         $js_messages = "";
         if (isset($page_vars["js_messages"]) || isset($page_vars["module_js_messages"])) {
             $core_js_messages   = isset($page_vars["js_messages"]) ? $page_vars["js_messages"] : "";
             $module_js_messages = isset($page_vars["module_js_messages"]) ? $page_vars["module_js_messages"] : "";
-            $js_messages = ft_generate_js_messages($core_js_messages, $module_js_messages);
+            $js_messages = General::generateJsMessages($core_js_messages, $module_js_messages);
         }
 
         if (!empty($page_vars["head_js"]) || !empty($js_messages)) {
@@ -443,7 +443,7 @@ class Themes {
             $g_smarty->debugging = true;
         }
 
-        extract(ft_process_hook_calls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
 
         $g_smarty->display("$g_root_dir/modules/$module_folder/$template");
 

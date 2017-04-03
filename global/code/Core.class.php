@@ -531,6 +531,10 @@ class Core {
         self::$hooksEnabled = $status;
     }
 
+    public static function areHooksEnabled() {
+        return self::$hooksEnabled;
+    }
+
     public static function setCurrLang($lang) {
         self::$currLang = $lang;
         self::$translations = new Translations(self::$currLang);

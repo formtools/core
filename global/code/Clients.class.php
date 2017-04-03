@@ -57,7 +57,7 @@ class Clients {
 
         $success = true;
         $message = Core::$L["notify_account_deleted"];
-        extract(ft_process_hook_calls("end", compact("account_id"), array("success", "message")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("account_id"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);
     }
@@ -83,7 +83,7 @@ class Clients {
         $db->bind(":account_id", $account_id);
         $db->execute();
 
-        extract(ft_process_hook_calls("end", compact("account_id"), array()), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("account_id"), array()), EXTR_OVERWRITE);
     }
 
     /**
@@ -177,7 +177,7 @@ class Clients {
             $info[$form_id] = $view_ids;
         }
 
-        extract(ft_process_hook_calls("end", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
 
         return $info;
     }

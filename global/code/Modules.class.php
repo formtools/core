@@ -30,7 +30,7 @@ class Modules
             $modules_info[] = $row;
         }
 
-        extract(ft_process_hook_calls("start", compact("modules_info"), array("modules_info")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("start", compact("modules_info"), array("modules_info")), EXTR_OVERWRITE);
 
         return $modules_info;
     }

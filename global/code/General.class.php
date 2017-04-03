@@ -221,7 +221,7 @@ END;
     {
         $permissions = isset($_SESSION["ft"]["permissions"]) ? $_SESSION["ft"]["permissions"] : array();
 
-        extract(ft_process_hook_calls("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
 
         $may_view = true;
         if (!array_key_exists($form_id, $permissions)) {
@@ -274,4 +274,57 @@ END;
         return $field;
     }
 
+
+    /**
+     * Used to convert language file strings into their JS-compatible counterparts, all within an
+     * "g" namespace.
+     *
+     * @param array keys The $LANG keys
+     * @param array keys The $L keys
+     * @return string $js the javascript string (WITHOUT the <script> tags)
+     */
+    public static function generateJsMessages($keys = array(), $module_keys = array())
+    {
+        $LANG = Core::$L;
+
+        // TODO
+        $theme = (isset($_SESSION["ft"]["account"]["theme"])) ? $_SESSION["ft"]["account"]["theme"] : "";
+
+        $js_rows = array();
+        if (!empty($keys)) {
+            for ($i=0; $i<count($keys); $i++) {
+                $key = $keys[$i];
+                if (array_key_exists($key, $LANG)) {
+                    $str = preg_replace("/\"/", "\\\"", $LANG[$key]);
+                    $js_rows[] = "g.messages[\"$key\"] = \"$str\";";
+                }
+            }
+        }
+
+        if (!empty($module_keys)) {
+            for ($i=0; $i<count($module_keys); $i++) {
+                $key = $module_keys[$i];
+                if (array_key_exists($key, $L)) {
+                    $str = preg_replace("/\"/", "\\\"", $L[$key]);
+                    $js_rows[] = "g.messages[\"$key\"] = \"$str\";";
+                }
+            }
+        }
+        $rows = join("\n", $js_rows);
+
+        $js =<<< END
+if (typeof g == "undefined") {
+  g = {};
 }
+g.theme_folder = "$theme";
+g.messages     = [];
+$rows
+END;
+
+        extract(Hooks::processHookCalls("end", compact("js"), array("js")), EXTR_OVERWRITE);
+
+        return $js;
+    }
+
+}
+

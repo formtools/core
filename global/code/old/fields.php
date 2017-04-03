@@ -89,7 +89,7 @@ function ft_add_form_fields($form_id, $fields)
 		}
 	}
 
-	extract(ft_process_hook_calls("end", compact("infohash", "form_id"), array("success", "message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("infohash", "form_id"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
 }
@@ -193,7 +193,7 @@ function ft_delete_form_fields($form_id, $field_ids)
 	else
 		$message = $LANG["notify_form_field_removed"];
 
-	extract(ft_process_hook_calls("end", compact("deleted_field_info", "form_id", "field_ids", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("deleted_field_info", "form_id", "field_ids", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
 }
@@ -384,7 +384,7 @@ function ft_get_field_options($field_id)
 	while ($row = mysql_fetch_assoc($option_query))
 		$options[] = $row;
 
-	extract(ft_process_hook_calls("end", compact("field_id", "options"), array("options")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("field_id", "options"), array("options")), EXTR_OVERWRITE);
 
 	return $options;
 }
@@ -430,7 +430,7 @@ function ft_get_form_field($field_id, $custom_params = array())
 		$info["settings"] = ft_get_form_field_settings($field_id, $params["evaluate_dynamic_settings"]);
 	}
 
-	extract(ft_process_hook_calls("end", compact("field_id", "info"), array("info")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("field_id", "info"), array("info")), EXTR_OVERWRITE);
 
 	return $info;
 }
@@ -580,7 +580,7 @@ function ft_get_form_field_settings($field_id, $evaluate_dynamic_fields = false)
 		}
 	}
 
-	extract(ft_process_hook_calls("end", compact("field_id", "settings"), array("settings")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("field_id", "settings"), array("settings")), EXTR_OVERWRITE);
 
 	return $settings;
 }
@@ -650,7 +650,7 @@ function ft_get_form_fields($form_id, $custom_params = array())
 		$infohash[] = $row;
 	}
 
-	extract(ft_process_hook_calls("end", compact("form_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("form_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
 	return $infohash;
 }
@@ -774,7 +774,7 @@ function ft_get_extended_field_settings($field_id, $setting_id = "", $convert_dy
 		);
 	}
 
-	extract(ft_process_hook_calls("end", compact("field_id", "setting_name"), array("settings")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("field_id", "setting_name"), array("settings")), EXTR_OVERWRITE);
 
 	return $settings;
 }
@@ -879,7 +879,7 @@ function ft_delete_extended_field_settings($field_id)
 
 	mysql_query("DELETE FROM {$g_table_prefix}field_settings WHERE field_id = $field_id");
 
-	extract(ft_process_hook_calls("end", compact("field_id"), array()), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("field_id"), array()), EXTR_OVERWRITE);
 }
 
 
@@ -898,7 +898,7 @@ function ft_update_form_fields($form_id, $infohash, $set_default_form_field_name
 	$sortable_rows       = explode(",", $infohash["{$sortable_id}_sortable__rows"]);
 	$sortable_new_groups = explode(",", $infohash["{$sortable_id}_sortable__new_groups"]);
 
-	extract(ft_process_hook_calls("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
 
 	// get a list of the system fields so we don't overwrite anything special
 	$existing_form_field_info = ft_get_form_fields($form_id);
@@ -1172,7 +1172,7 @@ function ft_update_field($form_id, $field_id, $tab_info)
 
 	$success = true;
 	$message = $LANG["notify_form_field_options_updated"];
-	extract(ft_process_hook_calls("end", compact("field_id"), array("success", "message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("field_id"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
 }
@@ -1200,7 +1200,7 @@ function ft_update_field($form_id, $field_id, $tab_info)
 function ft_get_uploaded_files($form_id, $field_ids)
 {
 	$uploaded_files = array();
-	extract(ft_process_hook_calls("start", compact("form_id", "field_ids"), array("uploaded_files")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("start", compact("form_id", "field_ids"), array("uploaded_files")), EXTR_OVERWRITE);
 	return $uploaded_files;
 }
 

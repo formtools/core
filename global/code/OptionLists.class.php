@@ -59,7 +59,7 @@ class OptionLists {
         $return_hash["results"] = $option_lists;
         $return_hash["num_results"]  = $count_hash["c"];
 
-        extract(ft_process_hook_calls("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
         return $return_hash;
     }

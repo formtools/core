@@ -33,7 +33,7 @@ function ft_db_connect()
 	global $g_db_hostname, $g_db_username, $g_db_password, $g_db_name, $g_unicode, $g_db_ssl,
 		   $g_check_ft_sessions, $g_set_sql_mode;
 
-	extract(ft_process_hook_calls("start", array(), array()), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("start", array(), array()), EXTR_OVERWRITE);
 
 	if ($g_db_ssl)
 		$link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true, MYSQL_CLIENT_SSL);
@@ -121,7 +121,7 @@ function ft_display_custom_page_message($flag)
 			break;
 	}
 
-	extract(ft_process_hook_calls("end", compact("flag"), array("g_success", "g_message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("flag"), array("g_success", "g_message")), EXTR_OVERWRITE);
 
 	return array($g_success, $g_message);
 }
@@ -168,7 +168,7 @@ function ft_eval_smarty_string($placeholder_str, $placeholders = array(), $theme
 
 	$output = $smarty->fetch(realpath(__DIR__ . "/../smarty_plugins/eval.tpl"));
 
-	extract(ft_process_hook_calls("end", compact("output", "placeholder_str", "placeholders", "theme"), array("output")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("output", "placeholder_str", "placeholders", "theme"), array("output")), EXTR_OVERWRITE);
 
 	return $output;
 }
@@ -351,7 +351,7 @@ function ft_check_permission($account_type, $auto_logout = true)
 	$boot_out_user = false;
 	$message_flag = "";
 
-	extract(ft_process_hook_calls("end", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
 
 	// some VERY complex logic here. The "user" account permission type is included so that people logged in
 	// via the Submission Accounts can still view certain pages, e.g. pages with the Pages module. This checks that
@@ -547,57 +547,6 @@ function ft_strip_tags($input)
 	}
 
 	return $output;
-}
-
-
-/**
- * Used to convert language file strings into their JS-compatible counterparts, all within an
- * "g" namespace.
- *
- * @param array keys The $LANG keys
- * @param array keys The $L keys
- * @return string $js the javascript string (WITHOUT the <script> tags)
- */
-function ft_generate_js_messages($keys = "", $module_keys = "")
-{
-	$LANG = Core::$L;
-
-	$theme = (isset($_SESSION["ft"]["account"]["theme"])) ? $_SESSION["ft"]["account"]["theme"] : "";
-
-	$js_rows = array();
-	if (!empty($keys)) {
-		for ($i=0; $i<count($keys); $i++) {
-			$key = $keys[$i];
-			if (array_key_exists($key, $LANG)) {
-				$str = preg_replace("/\"/", "\\\"", $LANG[$key]);
-				$js_rows[] = "g.messages[\"$key\"] = \"$str\";";
-			}
-		}
-	}
-
-	if (!empty($module_keys)) {
-		for ($i=0; $i<count($module_keys); $i++) {
-			$key = $module_keys[$i];
-			if (array_key_exists($key, $L)) {
-				$str = preg_replace("/\"/", "\\\"", $L[$key]);
-				$js_rows[] = "g.messages[\"$key\"] = \"$str\";";
-			}
-		}
-	}
-	$rows = join("\n", $js_rows);
-
-	$js =<<< END
-if (typeof g == "undefined") {
-  g = {};
-}
-g.theme_folder = "$theme";
-g.messages     = [];
-$rows
-END;
-
-	extract(ft_process_hook_calls("end", compact("js"), array("js")), EXTR_OVERWRITE);
-
-	return $js;
 }
 
 
@@ -1425,7 +1374,7 @@ function ft_get_submission_placeholders($form_id, $submission_id, $client_info =
 		$placeholders["COMPANYNAME"] = $client_info["company_name"];
 	}
 
-	extract(ft_process_hook_calls("end", compact("placeholders"), array("placeholders")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("placeholders"), array("placeholders")), EXTR_OVERWRITE);
 
 	return $placeholders;
 }

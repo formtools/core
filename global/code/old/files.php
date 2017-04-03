@@ -59,7 +59,7 @@ function ft_get_unique_filename($folder, $filename)
 		}
 	}
 
-	extract(ft_process_hook_calls("end", compact("return_filename"), array("return_filename")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("return_filename"), array("return_filename")), EXTR_OVERWRITE);
 
 	// return the appropriate filename
 	return $return_filename;
@@ -475,7 +475,7 @@ function ft_delete_submission_files($form_id, $file_field_info, $context = "")
 	$success = true;
 	$problems = array();
 
-	extract(ft_process_hook_calls("start", compact("form_id", "file_field_info"), array("success", "problems")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("start", compact("form_id", "file_field_info"), array("success", "problems")), EXTR_OVERWRITE);
 
 	return array($success, $problems);
 }

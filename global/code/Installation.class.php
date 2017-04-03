@@ -218,7 +218,7 @@ EOF;
         $smarty->compile_dir  = $cache_folder;
         $smarty->use_sub_dirs = false;
         $smarty->assign("LANG", $LANG);
-        $smarty->assign("SESSION", $_SESSION["ft_install"]);
+        //$smarty->assign("SESSION", $_SESSION["ft_install"]);
         $smarty->assign("same_page", $_SERVER["PHP_SELF"]);
         $smarty->assign("dir", $LANG["special_text_direction"]);
         $smarty->assign("g_success", ""); //$g_success);
@@ -233,9 +233,9 @@ EOF;
         if (!isset($page_vars["page"]))        $page_vars["page"] = "";
 
         // if we need to include custom JS messages in the page, add it to the generated JS. Note: even if the js_messages
-        // key is defined but still empty, the ft_generate_js_messages function is called, returning the "base" JS - like
+        // key is defined but still empty, the General::generateJsMessages function is called, returning the "base" JS - like
         // the JS version of g_root_url. Only if it is not defined will that info not be included.
-        $js_messages = (isset($page_vars["js_messages"])) ? ft_generate_js_messages($page_vars["js_messages"]) : "";
+        $js_messages = (isset($page_vars["js_messages"])) ? General::generateJsMessages($page_vars["js_messages"]) : "";
 
         if (!empty($page_vars["head_js"]) || !empty($js_messages)) {
             $page_vars["head_js"] = "<script type=\"text/javascript\">\n//<![CDATA[\n{$page_vars["head_js"]}\n$js_messages\n//]]>\n</script>";

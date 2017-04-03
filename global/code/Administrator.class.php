@@ -34,7 +34,7 @@ class Administrator {
 
         $admin_info = $db->fetch();
 
-        extract(ft_process_hook_calls("main", compact("admin_info"), array("admin_info")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("main", compact("admin_info"), array("admin_info")), EXTR_OVERWRITE);
 
         return $admin_info;
     }
@@ -54,7 +54,7 @@ class Administrator {
         $db = Core::$db;
         $LANG = Core::$L;
 
-        extract(ft_process_hook_calls("start", compact("form_vals"), array("form_vals")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("start", compact("form_vals"), array("form_vals")), EXTR_OVERWRITE);
 
         $success = true;
         $message = "";
@@ -168,7 +168,7 @@ class Administrator {
         // store this password in the password history queue
         Accounts::addPasswordToPasswordHistory($new_user_id, $password);
 
-        extract(ft_process_hook_calls("end", compact("new_user_id", "account_settings"), array("success", "message")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("new_user_id", "account_settings"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message, $new_user_id);
     }
@@ -252,7 +252,7 @@ class Administrator {
         $success = true;
         $message = $LANG["notify_account_updated"];
 
-        extract(ft_process_hook_calls("start", compact("infohash", "account_id"), array("infohash")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("start", compact("infohash", "account_id"), array("infohash")), EXTR_OVERWRITE);
 
         $rules = array();
         $rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
@@ -352,7 +352,7 @@ class Administrator {
             $db->execute();
         }
 
-        extract(ft_process_hook_calls("end", compact("infohash", "account_id"), array("success", "message")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("infohash", "account_id"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);
     }
@@ -374,7 +374,7 @@ class Administrator {
     {
         global $g_debug, $LANG, $g_password_special_chars;
 
-        extract(ft_process_hook_calls("start", compact("infohash", "tab_num"), array("infohash", "tab_num")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("start", compact("infohash", "tab_num"), array("infohash", "tab_num")), EXTR_OVERWRITE);
 
         $success = true;
         $message = $LANG["notify_client_account_updated"];
@@ -663,7 +663,7 @@ class Administrator {
                 break;
         }
 
-        extract(ft_process_hook_calls("end", compact("infohash", "tab_num"), array("success", "message")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("infohash", "tab_num"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);
     }

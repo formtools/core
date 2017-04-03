@@ -33,7 +33,7 @@ function ft_update_client($account_id, $info)
 	$success = true;
 	$message = $LANG["notify_account_updated"];
 
-	extract(ft_process_hook_calls("start", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("start", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);
 
 	$client_info = Accounts::getAccountInfo($account_id);
 
@@ -201,7 +201,7 @@ function ft_update_client($account_id, $info)
 			break;
 	}
 
-	extract(ft_process_hook_calls("end", compact("account_id", "info"), array("success", "message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("account_id", "info"), array("success", "message")), EXTR_OVERWRITE);
 
 	// update sessions
 	$_SESSION["ft"]["settings"] = Settings::get();
@@ -225,7 +225,7 @@ function ft_search_clients($search_criteria = array())
 {
 	global $g_table_prefix;
 
-	extract(ft_process_hook_calls("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
 
 	if (!isset($search_criteria["order"]))
 		$search_criteria["order"] = "client_id-DESC";
@@ -284,7 +284,7 @@ function ft_search_clients($search_criteria = array())
 	while ($client = mysql_fetch_assoc($client_query_result))
 		$clients[] = $client;
 
-	extract(ft_process_hook_calls("end", compact("search_criteria", "clients"), array("clients")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("search_criteria", "clients"), array("clients")), EXTR_OVERWRITE);
 
 	return $clients;
 }

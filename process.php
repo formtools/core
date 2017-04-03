@@ -71,7 +71,7 @@ function ft_process_form($form_data)
     exit;
   }
 
-  extract(ft_process_hook_calls("start", compact("form_info", "form_id", "form_data"), array("form_data")), EXTR_OVERWRITE);
+  extract(Hooks::processHookCalls("start", compact("form_info", "form_id", "form_data"), array("form_data")), EXTR_OVERWRITE);
 
   // check to see if this form has been completely set up
   if ($form_info["is_complete"] == "no")
@@ -249,7 +249,7 @@ function ft_process_form($form_data)
     }
 
     $submission_id = mysql_insert_id();
-    extract(ft_process_hook_calls("end", compact("form_id", "submission_id"), array()), EXTR_OVERWRITE);
+    extract(Hooks::processHookCalls("end", compact("form_id", "submission_id"), array()), EXTR_OVERWRITE);
   }
 
 
@@ -303,7 +303,7 @@ function ft_process_form($form_data)
   {
     // now process any file fields. This is placed after the redirect query param code block above to allow whatever file upload
     // module to append the filename to the query string, if needed
-    extract(ft_process_hook_calls("manage_files", compact("form_id", "submission_id", "file_fields", "redirect_query_params"), array("success", "message", "redirect_query_params")), EXTR_OVERWRITE);
+    extract(Hooks::processHookCalls("manage_files", compact("form_id", "submission_id", "file_fields", "redirect_query_params"), array("success", "message", "redirect_query_params")), EXTR_OVERWRITE);
 
     // send any emails
     ft_send_emails("on_submission", $form_id, $submission_id);

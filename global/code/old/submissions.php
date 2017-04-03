@@ -70,7 +70,7 @@ function ft_create_blank_submission($form_id, $view_id, $is_finalized = false)
       ");
 
 	$new_submission_id = mysql_insert_id();
-	extract(ft_process_hook_calls("end", compact("form_id", "now", "ip", "new_submission_id"), array()), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("form_id", "now", "ip", "new_submission_id"), array()), EXTR_OVERWRITE);
 
 	return $new_submission_id;
 }
@@ -89,7 +89,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 {
 	global $g_table_prefix, $LANG;
 
-	extract(ft_process_hook_calls("start", compact("form_id", "view_id", "submission_id", "is_admin"), array()), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("start", compact("form_id", "view_id", "submission_id", "is_admin"), array()), EXTR_OVERWRITE);
 
 	$form_info = ft_get_form($form_id);
 	$form_fields = ft_get_form_fields($form_id);
@@ -168,7 +168,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 	_ft_cache_form_stats($form_id);
 	_ft_cache_view_stats($view_id);
 
-	extract(ft_process_hook_calls("end", compact("form_id", "view_id", "submission_id", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("form_id", "view_id", "submission_id", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
 
 	// update sessions
 	if (isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) && in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]))
@@ -214,7 +214,7 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 	}
 
 	$submissions_to_delete = $submission_ids;
-	extract(ft_process_hook_calls("start", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("submission_ids")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("start", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("submission_ids")), EXTR_OVERWRITE);
 
 	$form_info = ft_get_form($form_id);
 	$form_fields = ft_get_form_fields($form_id);
@@ -315,7 +315,7 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 		ft_send_emails("on_delete", $form_id, $submission_id);
 
 	$submissions_to_delete = $submission_ids;
-	extract(ft_process_hook_calls("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
 }
@@ -402,7 +402,7 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
 		$return_arr = $ordered_return_arr;
 	}
 
-	extract(ft_process_hook_calls("end", compact("form_id", "submission_id", "view_id", "return_arr"), array("return_arr")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("form_id", "submission_id", "view_id", "return_arr"), array("return_arr")), EXTR_OVERWRITE);
 
 	return $return_arr;
 }
@@ -429,7 +429,7 @@ function ft_get_submission_info($form_id, $submission_id)
 
 	$submission = mysql_fetch_assoc($submission_info);
 
-	extract(ft_process_hook_calls("end", compact("form_id", "submission_id", "submission"), array("submission")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("form_id", "submission_id", "submission"), array("submission")), EXTR_OVERWRITE);
 
 	return $submission;
 }
@@ -536,7 +536,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 	$success = true;
 	$message = $LANG["notify_form_submission_updated"];
 
-	extract(ft_process_hook_calls("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
 	$field_ids = array();
 	if (!empty($infohash["field_ids"]))
@@ -646,12 +646,12 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 		return array(false, $LANG["notify_submission_not_updated"]);
 
 	// now process any file fields
-	extract(ft_process_hook_calls("manage_files", compact("form_id", "submission_id", "file_fields"), array("success", "message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("manage_files", compact("form_id", "submission_id", "file_fields"), array("success", "message")), EXTR_OVERWRITE);
 
 	// send any emails
 	ft_send_emails("on_edit", $form_id, $submission_id);
 
-	extract(ft_process_hook_calls("end", compact("form_id", "submission_id", "infohash"), array("success", "message")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("form_id", "submission_id", "infohash"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
 }
@@ -784,7 +784,7 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
 	$return_hash["search_num_results"] = $search_num_results;
 	$return_hash["view_num_results"]   = $view_num_results;
 
-	extract(ft_process_hook_calls("end", compact("form_id", "submission_id", "view_id", "results_per_page", "page_num", "order", "columns", "search_fields", "submission_ids", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("end", compact("form_id", "submission_id", "view_id", "results_per_page", "page_num", "order", "columns", "search_fields", "submission_ids", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
 	return $return_hash;
 }
@@ -1236,7 +1236,7 @@ function ft_display_submission_listing_quicklinks($context, $page_data)
 	global $g_root_url;
 
 	$quicklinks = array();
-	extract(ft_process_hook_calls("main", compact("context"), array("quicklinks"), array("quicklinks")), EXTR_OVERWRITE);
+	extract(Hooks::processHookCalls("main", compact("context"), array("quicklinks"), array("quicklinks")), EXTR_OVERWRITE);
 
 	if (empty($quicklinks))
 		return "";
