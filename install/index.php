@@ -13,7 +13,7 @@ use FormTools\Installation;
 
 Core::setHooksEnabled(false);
 Core::init();
-Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang(), "ft_install"));
+Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));
 
 
 if (isset($_POST["next"])) {

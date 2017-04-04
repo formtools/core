@@ -1,11 +1,12 @@
 <?php
 
+use FormTools\Core;
 use FormTools\General;
 use FormTools\Themes;
 
+Core::init();
+Core::$user->checkAuth("admin");
 
-require("../../../global/session_start.php");
-ft_check_permission("admin");
 
 $sortable_id = "review_field_options";
 $form_id = General::loadField("form_id", "add_form_form_id", "");

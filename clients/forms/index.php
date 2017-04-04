@@ -1,12 +1,13 @@
 <?php
 
+use FormTools\Core;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
 
+Core::init();
+Core::$user->checkAuth("client");
 
-require("../../global/session_start.php");
-ft_check_permission("client");
 
 $request = array_merge($_POST, $_GET);
 $account_id = $_SESSION["ft"]["account"]["account_id"];

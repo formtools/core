@@ -250,7 +250,7 @@ END;
      * function does is return the value stored in the most important variable (GET first, POST second,
      * SESSIONS third), and update sessions at the same time. This is extremely helpful in situations
      * where you don't want to keep having to submit the same information from page to page.
-     * The third parameter is included as a way to set a default value.
+     * The third parameter sets a default value.
      *
      * @param string $field_name the field name
      * @param string $session_name the session key for this field name

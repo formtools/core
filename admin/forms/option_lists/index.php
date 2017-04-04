@@ -1,12 +1,14 @@
 <?php
 
+use FormTools\Core;
 use FormTools\General;
 use FormTools\OptionLists;
 use FormTools\Themes;
 
+Core::init();
+Core::$user->checkAuth("admin");
 
-require("../../../global/session_start.php");
-ft_check_permission("admin");
+
 $option_list_page = General::loadField("page", "option_list_page", 1);
 $request = array_merge($_POST, $_GET);
 $num_option_lists_per_page = $_SESSION["ft"]["settings"]["num_option_lists_per_page"];

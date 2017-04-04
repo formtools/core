@@ -1,9 +1,12 @@
 <?php
 
+use FormTools\Core;
 use FormTools\Themes;
 
-require("../../global/session_start.php");
-ft_check_permission("admin");
+Core::init();
+
+//require("../../global/session_start.php");
+Core::$user->checkAuth("admin");
 
 $request = array_merge($_GET, $_POST);
 $form_id = $request["form_id"];

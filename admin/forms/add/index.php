@@ -1,11 +1,12 @@
 <?php
 
 use FormTools\Clients;
+use FormTools\Core;
 use FormTools\Themes;
 
+Core::init();
+Core::$user->checkAuth("client");
 
-require("../../../global/session_start.php");
-ft_check_permission("admin");
 
 $request = array_merge($_POST, $_GET);
 if (isset($request["external"])) {

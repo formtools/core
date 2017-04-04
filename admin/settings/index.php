@@ -1,10 +1,12 @@
 <?php
 
+use FormTools\Core;
 use FormTools\General;
 
 
-require("../../global/session_start.php");
-ft_check_permission("admin");
+Core::init();
+Core::$user->checkAuth("admin");
+
 
 $request = array_merge($_POST, $_GET);
 $page    = General::loadField("page", "settings_page", "main");

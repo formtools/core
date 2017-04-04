@@ -25,6 +25,7 @@ Installation::installCoreFieldTypes("core_field_types");
 // now actually install
 Modules::installModules();
 
+// clear sessions. Don't like the fact that the password is stored there.
 
 // send "Welcome to Form Tools" email
 //if (!isset($_SESSION["ft_install"]["email_notification_sent"])) {

@@ -1,13 +1,16 @@
 <?php
 
+use FormTools\Core;
 use FormTools\FieldValidation;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
 
 
-require("../../global/session_start.php");
-ft_check_permission("client");
+Core::init();
+Core::$user->checkAuth("client");
+
+
 require(__DIR__ . "/edit_submission__code.php");
 
 $account_id = $_SESSION["ft"]["account"]["account_id"];

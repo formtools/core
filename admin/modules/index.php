@@ -1,31 +1,34 @@
 <?php
 
+use FormTools\Core;
 use FormTools\General;
+use FormTools\Modules;
 use FormTools\Themes;
 
+Core::init();
 
-require("../../global/session_start.php");
-ft_check_permission("admin");
+//require("../../global/session_start.php");
+Core::$user->checkAuth("admin");
+
 
 $request = array_merge($_POST, $_GET);
 
-if (isset($request["install"]))
-	list($g_success, $g_message) = ft_install_module($request);
-
-if (isset($request["enable_modules"]))
-	list($g_success, $g_message) = ft_update_enabled_modules($request);
-
-if (isset($request["refresh_module_list"]))
-	list($g_success, $g_message) = ft_update_module_list();
-
-if (isset($request["uninstall"]))
-	list($g_success, $g_message) = ft_uninstall_module($request["uninstall"]);
-
-if (isset($request["upgrade"]))
-	list($g_success, $g_message) = ft_upgrade_module($request["upgrade"]);
-
-if (isset($_GET["reset"]))
-{
+if (isset($request["install"])) {
+    list($g_success, $g_message) = Modules::installModule($request);
+}
+if (isset($request["enable_modules"])) {
+    list($g_success, $g_message) = Modules::updateEnabledModules($request);
+}
+if (isset($request["refresh_module_list"])) {
+    list($g_success, $g_message) = Modules::updateModuleList();
+}
+if (isset($request["uninstall"])) {
+    list($g_success, $g_message) = Modules::uninstallModule($request["uninstall"]);
+}
+if (isset($request["upgrade"])) {
+    list($g_success, $g_message) = Modules::upgradeModule($request["upgrade"]);
+}
+if (isset($_GET["reset"])) {
 	$_SESSION["ft"]["module_sort_order"] = "";
 	$_SESSION["ft"]["module_search_keyword"] = "";
 	$_SESSION["ft"]["module_search_status"] = array("enabled", "disabled");

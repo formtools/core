@@ -1,20 +1,23 @@
 <?php
 
+use FormTools\Core;
 use FormTools\General;
 use FormTools\Themes;
 
+Core::init();
+Core::$user->checkAuth("admin");
 
-require("../../../global/session_start.php");
-ft_check_permission("admin");
 
 $form_id = General::loadField("form_id", "add_form_form_id", "");
 
-if (isset($_POST["submission_type"]))
-	@mysql_query("UPDATE {$g_table_prefix}forms SET submission_type = '{$_POST["submission_type"]}' WHERE form_id=$form_id");
+if (isset($_POST["submission_type"])) {
+    @mysql_query("UPDATE {$g_table_prefix}forms SET submission_type = '{$_POST["submission_type"]}' WHERE form_id=$form_id");
+}
 
 // if returning from a later stage and the user wants to resubmit the test submission, update the form
-if (isset($_GET['uninitialize']) && $_GET['uninitialize'] == 1)
-	ft_uninitialize_form($form_id);
+if (isset($_GET['uninitialize']) && $_GET['uninitialize'] == 1) {
+    ft_uninitialize_form($form_id);
+}
 
 // retrieve the form info
 $form_info = ft_get_form($form_id);

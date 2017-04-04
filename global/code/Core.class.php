@@ -230,11 +230,12 @@ class Core {
     /**
      * The database instance automatically instantiated by Core::init(). This allows any code to just
      * reference Core::$db for any database interaction.
+     * @var Database
      */
     public static $db;
 
     /**
-     * @var
+     * @var \Smarty
      */
     public static $smarty;
 
@@ -247,6 +248,7 @@ class Core {
 
     /**
      * User-related settings.
+     * @var User
      */
     public static $user;
 
@@ -258,7 +260,7 @@ class Core {
     /**
      * The current version of the Form Tools Core.
      */
-    private static $version = "3.0.0-dev";
+    private static $version = "3.0.0";
 
     /**
      * The release type: alpha, beta or main
@@ -268,7 +270,7 @@ class Core {
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20170326";
+    private static $releaseDate = "20170403";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
@@ -387,7 +389,9 @@ class Core {
 
         self::$smarty = new \Smarty();
 
-        self::startSessions();
+        if ($options["check_sessions"] == false) {
+            self::startSessions();
+        }
 
         self::$user = new User();
         self::$currLang = self::$user->getLang(); // TODO
@@ -396,6 +400,8 @@ class Core {
 //            ft_check_sessions_timeout();
 //        }
 
+
+        // OVERRIDES
         if (isset($options["currLang"])) {
             self::$currLang = $options["currLang"];
         }

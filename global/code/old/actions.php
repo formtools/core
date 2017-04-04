@@ -7,6 +7,7 @@
  * in JSON format to be handled by JS.
  */
 
+use FormTools\Core;
 use FormTools\FieldValidation;
 use FormTools\ListGroups;
 use FormTools\OptionLists;
@@ -16,16 +17,17 @@ use FormTools\Settings;
 // -------------------------------------------------------------------------------------------------
 
 // this var prevents the default behaviour of auto-logging the user out
-$g_check_ft_sessions = false;
-require_once("../session_start.php");
+//$g_check_ft_sessions = false;
+////require_once("../session_start.php");
+
+Core::init(array("check_sessions" => false)); // TODO
 
 // check the permissions
-$permission_check = ft_check_permission("user", false);
+$permission_check = Core::$user->checkAuth("user", false);
 
 // check the sessions haven't timeoutted
 $sessions_still_valid = ft_check_sessions_timeout(false);
-if (!$sessions_still_valid)
-{
+if (!$sessions_still_valid) {
 	@session_destroy();
 	$_SESSION["ft"] = array();
 

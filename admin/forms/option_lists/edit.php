@@ -1,10 +1,12 @@
 <?php
 
+use FormTools\Core;
 use FormTools\General;
 
+Core::init();
+Core::$user->checkAuth("admin");
 
-require("../../../global/session_start.php");
-ft_check_permission("admin");
+
 $request = array_merge($_POST, $_GET);
 $list_id = General::loadField("list_id", "option_list_id", "");
 $page    = General::loadField("page", "field_option_groups_tab", "main");

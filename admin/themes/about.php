@@ -1,10 +1,13 @@
 <?php
 
+use FormTools\Core;
 use FormTools\Themes;
 
+Core::init();
 
 require("../../global/session_start.php");
-ft_check_permission("admin");
+Core::$user->checkAuth("admin");
+
 $request = array_merge($_POST, $_GET);
 $theme_id = isset($request["theme_id"]) ? $request["theme_id"] : "";
 

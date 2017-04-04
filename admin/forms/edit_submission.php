@@ -1,13 +1,15 @@
 <?php
 
+use FormTools\Core;
 use FormTools\FieldValidation;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
 
 
-require("../../global/session_start.php");
-ft_check_permission("admin");
+Core::init();
+Core::$user->checkAuth("admin");
+
 require(__DIR__ . "/edit_submission__code.php");
 
 $request = array_merge($_GET, $_POST);

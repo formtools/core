@@ -1,12 +1,14 @@
 <?php
 
+use FormTools\Core;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
 
 
-require("../../global/session_start.php");
-ft_check_permission("admin");
+Core::init();
+Core::$user->checkAuth("admin");
+
 $request = array_merge($_POST, $_GET);
 
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id

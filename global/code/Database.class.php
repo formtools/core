@@ -108,17 +108,14 @@ class Database
     }
 
     public function fetch($fetch_style = PDO::FETCH_ASSOC) {
-        $this->execute();
         return $this->statement->fetch($fetch_style);
     }
 
-    public function fetchOne() {
-        $this->execute();
+    public function fetchColumn($fetch_style = PDO::FETCH_ASSOC) {
         return $this->statement->fetchColumn($fetch_style);
     }
 
     public function fetchAll($fetch_style = PDO::FETCH_ASSOC) {
-        $this->execute();
         return $this->statement->fetchAll($fetch_style);
     }
 

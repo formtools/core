@@ -1,11 +1,12 @@
 <?php
 
 use FormTools\Administrator;
+use FormTools\Core;
 use FormTools\Themes;
 
+Core::init();
+Core::$user->checkAuth("client");
 
-require("../../global/session_start.php");
-ft_check_permission("admin");
 
 // update the administrator's account
 if (isset($_POST) && !empty($_POST)) {

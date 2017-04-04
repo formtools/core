@@ -1,11 +1,12 @@
 <?php
 
+use FormTools\Core;
 use FormTools\General;
 use FormTools\Themes;
 
+Core::init();
+Core::$user->checkAuth("admin");
 
-require("../../../global/session_start.php");
-ft_check_permission("admin");
 
 $sortable_id = "multi_page_form_list";
 
@@ -15,8 +16,7 @@ $submission_type = General::loadField("submission_type", "submission_type");
 
 // bit weird, but if a user's coming back to this page to complete setting up their form, update
 // the submission_type
-if (!empty($form_id) && !empty($submission_type))
-{
+if (!empty($form_id) && !empty($submission_type)) {
 	mysql_query("UPDATE {$g_table_prefix}forms SET submission_type = '$submission_type' WHERE form_id = $form_id");
 }
 

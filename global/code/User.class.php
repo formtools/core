@@ -10,7 +10,7 @@ namespace FormTools;
 class User
 {
     private $lang;
-    private $isLoggedIn = false;
+    private $isLoggedIn;
     private $accountType;
     private $accountId;
     private $username;
@@ -25,19 +25,25 @@ class User
      * find out things like what theme, language etc. should be used.
      *
      * How should this work? We need to store details about the user in sessions (e.g. their ID) but we don't
-     * want to query the database for the user on each and every page load. So the constructor here
+     * want to query the database for the user on each and every page load. So the constructor here relies on checking
+     * sessions to instantiate the user.
      */
     public function __construct() {
         $account_id = Sessions::get("account_id");
 
         // if the user isn't logged in, set the defaults
         if (empty($account_id)) {
-            //$this->theme =
+            $this->isLoggedIn = false;
+
+            // the installation process tracks the UI lang
+            $lang = Sessions::get("ui_language");
+            $this->lang = ($lang) ? $lang : Core::getDefaultLang();
+
+            $this->theme = Core::getDefaultTheme();
         } else {
             $this->isLoggedIn = true;
         }
     }
-
 
     /**
      * The login procedure for both administrators and clients in. If successful, redirects them to the
@@ -293,5 +299,79 @@ class User
             }
         }
     }
+
+
+    /**
+     * Provides basic permission checking for accessing the pages.
+     *
+     * Verifies the user has permission to view the current page. It is used by feeding the minimum account type to
+     * view the page - "client", will let administrators and clients view it, but "admin" will only let administrators.
+     * If the person doesn't have permission to view the page they are logged out.
+     *
+     * Should be called on ALL Form Tools pages - including modules.
+     *
+     * @param string $account_type The account type - "admin" / "client" / "user" (for Submission Accounts module)
+     * @param boolean $auto_logout either automatically log the user out if they don't have permission to view the page (or
+     *     sessions have expired), or - if set to false, just return the result as a boolean (true = has permission,
+     *     false = doesn't have permission)
+     * @return array (if $auto_logout is set to false)
+     */
+    public function checkAuth($account_type, $auto_logout = true)
+    {
+        global $g_root_url, $g_table_prefix;
+
+        $boot_out_user = false;
+        $message_flag = "";
+
+        extract(Hooks::processHookCalls("end", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
+
+        // some VERY complex logic here. The "user" account permission type is included so that people logged in
+        // via the Submission Accounts can still view certain pages, e.g. pages with the Pages module. This checks that
+        // IF the minimum account type of the page is a "user", it EITHER has the user account info set (i.e. the submission ID)
+        // or it's a regular client or admin account with the account_id set. Crumby, but it'll have to suffice for now.
+        if ($this->accountType == "user") {
+            if ((!isset($_SESSION["ft"]["account"]["submission_id"]) || empty($_SESSION["ft"]["account"]["submission_id"])) &&
+                empty($_SESSION["ft"]["account"]["account_id"])) {
+                if ($auto_logout) {
+                    header("location: $g_root_url/modules/submission_accounts/logout.php");
+                    exit;
+                } else {
+                    $boot_out_user = true;
+                    $message_flag = "notify_no_account_id_in_sessions";
+                }
+            }
+        }
+        // check the user ID is in sessions
+        else if (!isset($_SESSION["ft"]["account"]["account_id"]) || empty($_SESSION["ft"]["account"]["account_id"])) {
+            $boot_out_user = true;
+            $message_flag = "notify_no_account_id_in_sessions";
+        }
+        else if (!isset($_SESSION["ft"]["account"]["account_type"]) || ($_SESSION["ft"]["account"]["account_type"] == "client" && $account_type == "admin")) {
+            $boot_out_user = true;
+            $message_flag = "notify_invalid_permissions";
+        } else {
+            $query = mysql_query("
+      SELECT count(*)
+      FROM   {$g_table_prefix}accounts
+      WHERE account_id = {$_SESSION["ft"]["account"]["account_id"]}
+      AND   password = '{$_SESSION["ft"]["account"]["password"]}'
+        ");
+
+            if (mysql_num_rows($query) != 1) {
+                $boot_out_user = true;
+                $message_flag = "notify_invalid_account_information_in_sessions";
+            }
+        }
+
+        if ($boot_out_user && $auto_logout) {
+            $this->logout($message_flag);
+        } else {
+            return array(
+                "has_permission" => !$boot_out_user, // we invert it because we want to return TRUE if they have permission
+                "message"        => $message_flag
+            );
+        }
+    }
+
 
 }

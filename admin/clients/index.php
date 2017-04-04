@@ -2,11 +2,13 @@
 
 use FormTools\Administrator;
 use FormTools\Clients;
+use FormTools\Core;
 use FormTools\General;
 
 
-require("../../global/session_start.php");
-ft_check_permission("admin");
+Core::init();
+Core::$user->checkAuth("admin");
+
 
 if (isset($_GET['delete']) && !empty($_GET['client_id'])) {
     list($g_success, $g_message) = Clients::deleteClient($_GET['client_id']);

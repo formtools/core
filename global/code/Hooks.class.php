@@ -43,7 +43,7 @@ class Hooks {
         );
 
         while (list($file_or_folder, $component) = each($hook_locations)) {
-            _ft_find_hooks("$ft_root/$file_or_folder", $ft_root, $component, $results);
+            self::findHooks("$ft_root/$file_or_folder", $ft_root, $component, $results);
         }
 
 
@@ -127,6 +127,58 @@ class Hooks {
     }
 
 
+    /**
+     * Parses the codebase to locate all template and code hooks.
+     *
+     * @param string $curr_folder
+     * @param string $root_folder
+     * @param string $component "core", "module" or "api"
+     * @param array $results
+     */
+    public static function findHooks($curr_folder, $root_folder, $component, &$results)
+    {
+        if (is_file($curr_folder)) {
+            $is_php_file = preg_match("/\.php$/", $curr_folder);
+            $is_tpl_file = preg_match("/\.tpl$/", $curr_folder);
+            if ($is_php_file) {
+                $results["code_hooks"] = array_merge($results["code_hooks"], self::extractCodeHooks($curr_folder, $root_folder, $component));
+            }
+            if ($is_tpl_file) {
+                $results["template_hooks"] = array_merge($results["template_hooks"], self::extractTemplateHooks($curr_folder, $root_folder, $component));
+            }
+        } else {
+            $handle = @opendir($curr_folder);
+            if (!$handle) {
+                return;
+            }
+
+            while (($file = readdir($handle)) !== false) {
+                if ($file == '.' || $file == '..') {
+                    continue;
+                }
+
+                $filepath = $curr_folder . '/' . $file;
+                if (is_link($filepath)) {
+                    continue;
+                }
+                if (is_file($filepath)) {
+                    $is_php_file = preg_match("/\.php$/", $filepath);
+                    $is_tpl_file = preg_match("/\.tpl$/", $filepath);
+                    if ($is_php_file) {
+                        $results["code_hooks"] = array_merge($results["code_hooks"], self::extractCodeHooks($filepath, $root_folder, $component));
+                    }
+                    if ($is_tpl_file) {
+                        $results["template_hooks"] = array_merge($results["template_hooks"], self::extractTemplateHooks($filepath, $root_folder, $component));
+                    }
+                } else if (is_dir($filepath)) {
+                    self::findHooks($filepath, $root_folder, $component, $results);
+                }
+            }
+            closedir($handle);
+        }
+    }
+
+
     // --------------------------------------------------------------------------------------------
 
     private static function clearHooks()
@@ -186,5 +238,74 @@ class Hooks {
             Core::$db->rollbackTransaction();
         }
     }
+
+
+    private static function extractCodeHooks($filepath, $root_folder, $component)
+    {
+        $lines = file($filepath);
+        $current_function = "";
+        $found_hooks = array();
+        $root_folder = preg_quote($root_folder);
+
+        foreach ($lines as $line) {
+            if (preg_match("/^function\s([^(]*)/", $line, $matches)) {
+                $current_function = $matches[1];
+                continue;
+            }
+
+            // this assumes that the hooks are always on a single line
+            if (preg_match("/extract\(\s*Hooks::processHookCalls\(\s*[\"']([^\"']*)[\"']\s*,\s*compact\(([^)]*)\)\s*,\s*array\(([^)]*)\)/", $line, $matches)) {
+                $action_location = $matches[1];
+                $params          = $matches[2];
+                $overridable     = $matches[3];
+
+                // all params should be variables. No whitespace, no double-quotes, no single-quotes
+                $params = str_replace("\"", "", $params);
+                $params = str_replace(" ", "", $params);
+                $params = str_replace("'", "", $params);
+                $params = explode(",", $params);
+
+                // same as overridable vars!
+                $overridable = str_replace("\"", "", $overridable);
+                $overridable = str_replace(" ", "", $overridable);
+                $overridable = str_replace("'", "", $overridable);
+                $overridable = explode(",", $overridable);
+                $file = preg_replace("%" . $root_folder . "%", "", $filepath);
+
+                $found_hooks[] = array(
+                    "file"            => $file,
+                    "function_name"   => $current_function,
+                    "action_location" => $action_location,
+                    "params"          => $params,
+                    "overridable"     => $overridable,
+                    "component"       => $component
+                );
+            }
+        }
+
+        return $found_hooks;
+    }
+
+
+    private static function extractTemplateHooks($filepath, $root_folder, $component) {
+        $lines = file($filepath);
+        $found_hooks = array();
+        $root_folder = preg_quote($root_folder);
+
+        foreach ($lines as $line) {
+            // this assumes that the hooks are always on a single line
+            if (preg_match("/\{template_hook\s+location\s*=\s*[\"']([^}\"]*)/", $line, $matches)) {
+                $template = preg_replace("%" . $root_folder . "%", "", $filepath);
+                $found_hooks[] = array(
+                    "template"  => $template,
+                    "location"  => $matches[1],
+                    "component" => $component
+                );
+            }
+        }
+
+        return $found_hooks;
+    }
+
 
 }

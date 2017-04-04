@@ -9,7 +9,7 @@ use FormTools\Installation;
 
 Core::setHooksEnabled(false);
 Core::init();
-Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang(), "ft_install"));
+Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));
 
 // folder permissions
 $upload_folder_writable = is_writable(realpath("../upload"));

@@ -218,7 +218,6 @@ EOF;
         $smarty->compile_dir  = $cache_folder;
         $smarty->use_sub_dirs = false;
         $smarty->assign("LANG", $LANG);
-        //$smarty->assign("SESSION", $_SESSION["ft_install"]);
         $smarty->assign("same_page", $_SERVER["PHP_SELF"]);
         $smarty->assign("dir", $LANG["special_text_direction"]);
         $smarty->assign("g_success", ""); //$g_success);
@@ -386,20 +385,24 @@ EOF;
         $_SESSION["ft_install"]["g_root_dir"] = $installationFolder;
         $_SESSION["ft_install"]["g_root_url"] = $root_url;
 
-        $username = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_username"]);
-        $password = preg_replace('/\$/', '\\\$', $_SESSION["ft_install"]["g_db_password"]);
+        $username = preg_replace('/\$/', '\\\$', Sessions::get("g_db_username"));
+        $password = preg_replace('/\$/', '\\\$', Sessions::get("g_db_password"));
+        $hostname = Sessions::get("g_db_hostname");
+        $port     = Sessions::get("g_db_port");
+        $db_name  = Sessions::get("g_db_name");
+        $table_prefix = Sessions::get("g_table_prefix");
 
         $content = "<" . "?php\n\n"
             . "// main program paths - no trailing slashes!\n"
             . "\$g_root_url = \"$root_url\";\n"
             . "\$g_root_dir = \"$root_dir\";\n\n"
             . "// database settings\n"
-            . "\$g_db_hostname = \"{$_SESSION["ft_install"]["g_db_hostname"]}\";\n"
-            . "\$g_db_port = \"{$_SESSION["ft_install"]["g_db_port"]}\";\n"
-            . "\$g_db_name = \"{$_SESSION["ft_install"]["g_db_name"]}\";\n"
-            . "\$g_db_username = \"{$username}\";\n"
-            . "\$g_db_password = \"{$password}\";\n"
-            . "\$g_table_prefix = \"{$_SESSION["ft_install"]["g_table_prefix"]}\";\n";
+            . "\$g_db_hostname = \"$hostname\";\n"
+            . "\$g_db_port = \"$port\";\n"
+            . "\$g_db_name = \"$db_name\";\n"
+            . "\$g_db_username = \"$username\";\n"
+            . "\$g_db_password = \"$password\";\n"
+            . "\$g_table_prefix = \"$table_prefix\";\n";
 
         $content .= "\n?" . ">";
 

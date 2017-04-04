@@ -1,10 +1,14 @@
 <?php
 
+use FormTools\Core;
 use FormTools\General;
 
 
-require("../../global/session_start.php");
-ft_check_permission("admin");
+Core::init();
+
+//require("../../global/session_start.php");
+Core::$user->checkAuth("admin");
+
 
 $request = array_merge($_POST, $_GET);
 $client_id = General::loadField("client_id", "curr_client_id", "");

@@ -1,12 +1,13 @@
 <?php
 
 use FormTools\Clients;
+use FormTools\Core;
 use FormTools\General;
 use FormTools\Themes;
 
 
-require("../../global/session_start.php");
-ft_check_permission("admin");
+Core::init();
+Core::$user->checkAuth("admin");
 
 _ft_cache_form_stats();
 if (isset($_GET["reset"])) {

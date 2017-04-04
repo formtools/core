@@ -1,12 +1,14 @@
 <?php
 
 use FormTools\Clients;
+use FormTools\Core;
 use FormTools\General;
 use FormTools\Themes;
 
+Core::init();
+Core::$user->checkAuth("admin");
 
-require("../../../global/session_start.php");
-ft_check_permission("admin");
+
 $request = array_merge($_POST, $_GET);
 
 $num_forms = Clients::getFormCount();

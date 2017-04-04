@@ -101,7 +101,7 @@ class Settings {
     {
         $db = Core::$db;
 
-        $and_module_clause = (!empty($module)) ? "AND module = '$module'" : "";
+        $and_module_clause = (!empty($module)) ? "AND module = :module" : "";
 
         while (list($setting_name, $setting_value) = each($settings)) {
 
@@ -111,7 +111,10 @@ class Settings {
                 WHERE  setting_name = :setting_name
                 $and_module_clause
             ");
-            $db->bind(":settings_name", $setting_name);
+            $db->bind(":setting_name", $setting_name);
+            if (!empty($module)) {
+                $db->bind(":module", $module);
+            }
 
             try {
                 $db->execute();
@@ -120,32 +123,25 @@ class Settings {
             }
 
             $info = $db->fetch();
-
             if ($info["c"] == 0) {
                 if (!empty($module)) {
-                    $db->query("
-                      INSERT INTO {PREFIX}settings (setting_name, setting_value, module)
-                      VALUES (:setting_name, :setting_value, :module)
-                    ");
-                    $db->execute();
+                    $query = "INSERT INTO {PREFIX}settings (setting_name, setting_value, module) VALUES (:setting_name, :setting_value, :module)";
                 } else {
-                    $db->query("
-                      INSERT INTO {PREFIX}settings (setting_name, setting_value)
-                      VALUES (:setting_name, :setting_value)
-                    ");
-                    $db->execute();
+                    $query = "INSERT INTO {PREFIX}settings (setting_name, setting_value) VALUES (:setting_name, :setting_value)";
                 }
             } else {
-                $db->query("
-                    UPDATE {PREFIX}settings
-                    SET    setting_value = :setting_value
-                    WHERE  setting_name  = :setting_name
-                    $and_module_clause
-                ");
-                $db->execute();
+                $query = "UPDATE {PREFIX}settings SET setting_value = :setting_value WHERE setting_name  = :setting_name $and_module_clause";
             }
 
-            // hmm... TODO. This looks suspiciously like a bug... [a module could overwrite a core var]
+            $db->query($query);
+            if (!empty($module)) {
+                $db->bind(":module", $module);
+            }
+            $db->bind(":setting_value", $setting_value);
+            $db->bind(":setting_name", $setting_name);
+            $db->execute();
+
+            // TODO. This looks suspiciously like a bug... [a module could overwrite a core var]
             $_SESSION["ft"]["settings"][$setting_name] = $setting_value;
         }
     }

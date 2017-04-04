@@ -1,12 +1,15 @@
 <?php
 
 use FormTools\Administrator;
+use FormTools\Core;
 use FormTools\Settings;
 use FormTools\Themes;
 
+Core::init();
 
-require("../../global/session_start.php");
-ft_check_permission("admin");
+//require("../../global/session_start.php");
+Core::$user->checkAuth("admin");
+
 $request = array_merge($_POST, $_GET);
 
 $post_values = array();
