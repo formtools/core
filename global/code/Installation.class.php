@@ -274,11 +274,11 @@ EOF;
             "password" => $password
         );
         $smarty_template_email_content = file_get_contents("$g_root_dir/global/emails/installed.tpl");
-        $email_content = ft_eval_smarty_string($smarty_template_email_content, $placeholders);
+        $email_content = General::evalSmartyString($smarty_template_email_content, $placeholders);
 
         // 2. build the email subject line
         $smarty_template_email_subject = file_get_contents("$g_root_dir/global/emails/installed_subject.tpl");
-        $email_subject = trim(ft_eval_smarty_string($smarty_template_email_subject, array()));
+        $email_subject = trim(General::evalSmartyString($smarty_template_email_subject, array()));
 
         // send email [note: the double quotes around the email recipient and content are intentional:
         // some systems fail without it]
@@ -292,7 +292,7 @@ EOF;
      */
     public static function updateDatabaseSettings()
     {
-        $rootURL = Core::getRootURL();
+        $rootURL = Core::getRootUrl();
         $rootDir = Core::getRootDir();
 
         // we add slashes since in PC paths like c:\www\whatever the \'s get lost en route

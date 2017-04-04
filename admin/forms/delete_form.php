@@ -54,7 +54,7 @@ if (isset($_POST["delete_form"]) && $_POST["delete_form"] == "yes") {
 $page_vars = array();
 $page_vars["head_title"] = $LANG["phrase_delete_form"];
 $page_vars["page"]       = "delete_form";
-$page_vars["page_url"]   = ft_get_page_url("delete_form");
+$page_vars["page_url"]   = Pages::getPageUrl("delete_form");
 $page_vars["form_id"]    = $form_id;
 $page_vars["form_info"]  = $form_info;
 $page_vars["uploaded_files"] = $uploaded_files;

@@ -215,63 +215,56 @@ class Themes {
      */
     public static function displayPage($template, $page_vars, $theme = "", $swatch = "")
     {
-        global $g_root_dir, $g_root_url, $g_success, $g_message, $g_smarty_debug, $g_debug, $LANG,
-               $g_smarty, $g_smarty_use_sub_dirs, $g_js_debug, $g_benchmark_start, $g_enable_benchmarking,
+        global $g_success, $g_message, $g_debug, $g_js_debug, $g_enable_benchmarking,
                $g_upgrade_info, $g_hide_upgrade_link;
 
-        if (empty($theme) && (isset($_SESSION["ft"]["account"]["theme"]))) {
-            $theme  = $_SESSION["ft"]["account"]["theme"];
-            $swatch = isset($_SESSION["ft"]["account"]["swatch"]) ? $_SESSION["ft"]["account"]["swatch"] : "";
-        } elseif (empty($theme)) {
-            $settings = Settings::get(array("default_theme", "default_client_swatch"));
-            $theme  = $settings["default_theme"];
-            $swatch = $settings["default_client_swatch"];
-        }
+        $theme = Core::$user->getTheme();
+        $swatch = Core::$user->getSwatch();
 
-        if (!isset($_SESSION["ft"]["account"]["is_logged_in"])) {
-            $_SESSION["ft"]["account"]["is_logged_in"] = false;
-        }
-        if (!isset($_SESSION["ft"]["account"]["account_type"])) {
-            $_SESSION["ft"]["account"]["account_type"] = "";
-        }
+        $root_dir = Core::getRootDir();
+        $root_url = Core::getRootUrl();
+        $LANG = Core::$L;
+        $smarty = Core::$smarty;
 
         // common variables. These are sent to EVERY templates
-        $g_smarty->template_dir = "$g_root_dir/themes/$theme";
-        $g_smarty->compile_dir  = "$g_root_dir/themes/$theme/cache";
+        $smarty->template_dir = "$root_dir/themes/$theme";
+        $smarty->compile_dir  = "$root_dir/themes/$theme/cache";
 
         // check the compile directory has the write permissions
-        if (!is_writable($g_smarty->compile_dir)) {
-            General::displaySeriousError("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$g_smarty->compile_dir}</b> to have full read-write permissions (777 on unix).", "");
+        if (!is_writable($smarty->compile_dir)) {
+            General::displaySeriousError("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$smarty->compile_dir}</b> to have full read-write permissions (777 on unix).", "");
             exit;
         }
 
-        $g_smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
-        $g_smarty->assign("LANG", $LANG);
-        $g_smarty->assign("SESSION", $_SESSION["ft"]);
+        $smarty->use_sub_dirs = Core::shouldUseSmartySubDirs();
+        $smarty->assign("LANG", $LANG);
+        $smarty->assign("SESSION", $_SESSION["ft"]);
+
         $settings = isset($_SESSION["ft"]["settings"]) ? $_SESSION["ft"]["settings"] : array();
-        $g_smarty->assign("settings", $settings);
-        $g_smarty->assign("account", $_SESSION["ft"]["account"]);
-        $g_smarty->assign("g_root_dir", $g_root_dir);
-        $g_smarty->assign("g_root_url", $g_root_url);
-        $g_smarty->assign("g_debug", $g_debug);
-        $g_smarty->assign("g_js_debug", ($g_js_debug) ? "true" : "false");
-        $g_smarty->assign("g_hide_upgrade_link", $g_hide_upgrade_link);
-        $g_smarty->assign("same_page", ft_get_clean_php_self());
-        $g_smarty->assign("query_string", $_SERVER["QUERY_STRING"]);
-        $g_smarty->assign("dir", $LANG["special_text_direction"]);
-        $g_smarty->assign("g_enable_benchmarking", $g_enable_benchmarking);
-        $g_smarty->assign("swatch", $swatch);
+        $smarty->assign("settings", $settings);
+        //$smarty->assign("account", Session::get("account"));
+        $smarty->assign("g_root_dir", $root_dir);
+        $smarty->assign("g_root_url", $root_url);
+        $smarty->assign("g_debug", $g_debug);
+        $smarty->assign("g_js_debug", ($g_js_debug) ? "true" : "false");
+        $smarty->assign("g_hide_upgrade_link", $g_hide_upgrade_link);
+        $smarty->assign("same_page", General::getCleanPhpSelf());
+        $smarty->assign("query_string", $_SERVER["QUERY_STRING"]);
+        $smarty->assign("dir", $LANG["special_text_direction"]);
+        $smarty->assign("g_enable_benchmarking", $g_enable_benchmarking);
+        $smarty->assign("swatch", $swatch);
 
         // if this page has been told to dislay a custom message, override g_success and g_message
         if ((!isset($g_upgrade_info["message"]) || empty($g_upgrade_info["message"])) && isset($_GET["message"])) {
-            list($g_success, $g_message) = ft_display_custom_page_message($_GET["message"]);
+            list($g_success, $g_message) = General::displayCustomPageMessage($_GET["message"]);
         }
-        $g_smarty->assign("g_success", $g_success);
-        $g_smarty->assign("g_message", $g_message);
+
+        $smarty->assign("g_success", $g_success);
+        $smarty->assign("g_message", $g_message);
 
         if (isset($page_vars["page_url"])) {
-            $parent_page_url = ft_get_parent_page_url($page_vars["page_url"]);
-            $g_smarty->assign("nav_parent_page_url", $parent_page_url);
+            $parent_page_url = Menus::getParentPageUrl($page_vars["page_url"]);
+            $smarty->assign("nav_parent_page_url", $parent_page_url);
         }
 
         // check the "required" vars are at least set so they don't produce warnings when smarty debug is enabled
@@ -293,30 +286,33 @@ class Themes {
             $page_vars["head_css"] = "";
         }
 
-        $g_smarty->assign("modules_dir", "$g_root_url/modules");
+        $smarty->assign("modules_dir", "$root_url/modules");
 
         // theme-specific vars
-        $g_smarty->assign("images_url", "$g_root_url/themes/$theme/images");
-        $g_smarty->assign("theme_url", "$g_root_url/themes/$theme");
-        $g_smarty->assign("theme_dir", "$g_root_dir/themes/$theme");
+        $smarty->assign("images_url", "$root_url/themes/$theme/images");
+        $smarty->assign("theme_url", "$root_url/themes/$theme");
+        $smarty->assign("theme_dir", "$root_dir/themes/$theme");
 
         // now add the custom variables for this template, as defined in $page_vars
-        foreach ($page_vars as $key=>$value)
-            $g_smarty->assign($key, $value);
+        foreach ($page_vars as $key=>$value) {
+            $smarty->assign($key, $value);
+        }
 
         // if smarty debug is on, enable Smarty debugging
-        if ($g_smarty_debug)
-            $g_smarty->debugging = true;
+        if (Core::isSmartyDebugEnabled()) {
+            $smarty->debugging = true;
+        }
 
-        extract(Hooks::processHookCalls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
+        // TODO g_smarty renamed to smarty
+        extract(Hooks::processHookCalls("main", compact("smarty", "template", "page_vars"), array("smarty")), EXTR_OVERWRITE);
 
         // if the page or hook actually defined some CSS for inclusion in the page, wrap it in the appropriate style tag. This
         // was safely moved here in 2.2.0, because nothing used it (!)
-        if (!empty($g_smarty->_tpl_vars["head_css"])) {
-            $g_smarty->assign("head_css", "<style type=\"text/css\">\n{$g_smarty->_tpl_vars["head_css"]}\n</style>");
+        if (!empty($smarty->_tpl_vars["head_css"])) {
+            $smarty->assign("head_css", "<style type=\"text/css\">\n{$smarty->_tpl_vars["head_css"]}\n</style>");
         }
 
-        $g_smarty->display(self::getSmartyTemplateWithFallback($theme, $template));
+        $smarty->display(self::getSmartyTemplateWithFallback($theme, $template));
     }
 
 
@@ -372,7 +368,7 @@ class Themes {
         $g_smarty->assign("g_root_url", $g_root_url);
         $g_smarty->assign("g_js_debug", ($g_js_debug) ? "true" : "false");
         $g_smarty->assign("g_hide_upgrade_link", $g_hide_upgrade_link);
-        $g_smarty->assign("same_page", ft_get_clean_php_self());
+        $g_smarty->assign("same_page", General::getCleanPhpSelf());
         $g_smarty->assign("query_string", $_SERVER["QUERY_STRING"]); // TODO FIX
         $g_smarty->assign("dir", $LANG["special_text_direction"]);
         $g_smarty->assign("g_enable_benchmarking", $g_enable_benchmarking);
@@ -380,20 +376,20 @@ class Themes {
 
         // if this page has been told to dislay a custom message, override g_success and g_message
         if (isset($_GET["message"])) {
-            list($g_success, $g_message) = ft_display_custom_page_message($_GET["message"]);
+            list($g_success, $g_message) = General::displayCustomPageMessage($_GET["message"]);
         }
         $g_smarty->assign("g_success", $g_success);
         $g_smarty->assign("g_message", $g_message);
 
 
-        $module_id = ft_get_module_id_from_module_folder($module_folder);
+        $module_id = Modules::getModuleIdFromModuleFolder($module_folder);
         $module_nav = ft_get_module_menu_items($module_id, $module_folder);
         $g_smarty->assign("module_nav", $module_nav);
 
         // if there's no module title, display the module name. TODO not compatible with languages...
         if (!isset($page_vars["head_title"])) {
-            $module_id = ft_get_module_id_from_module_folder($module_folder);
-            $module_info = ft_get_module($module_id);
+            $module_id = Modules::getModuleIdFromModuleFolder($module_folder);
+            $module_info = Modules::getModule($module_id);
             $page_vars["head_title"] = $module_info["module_name"];
         }
 
@@ -528,7 +524,7 @@ class Themes {
         $pairs = explode("|", $str);
         foreach ($pairs as $pair)  {
             list($swatch, $swatch_label) = explode(",", $pair);
-            $swatch_list[] = ft_eval_smarty_string($swatch_label);
+            $swatch_list[] = General::evalSmartyString($swatch_label);
         }
         $swatch_list_str = implode(", ", $swatch_list);
 

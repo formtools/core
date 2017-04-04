@@ -30,7 +30,7 @@ if (isset($request["page"]) && !empty($request["page"]))
 else
 	$page = General::loadField("page", "settings_tab", "main");
 
-$same_page = ft_get_clean_php_self();
+$same_page = General::getCleanPhpSelf();
 $tabs = array(
 	"main" => array(
 		"tab_label" => $LANG["word_main"],

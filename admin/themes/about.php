@@ -25,7 +25,7 @@ if ($theme_info["uses_swatches"] == "yes") {
 // compile header information
 $page_vars = array();
 $page_vars["page"]       = "themes_about";
-$page_vars["page_url"]   = ft_get_page_url("themes_about");
+$page_vars["page_url"]   = Pages::getPageUrl("themes_about");
 $page_vars["head_title"] = "{$LANG["word_themes"]} - {$LANG["word_about"]}";
 $page_vars["theme_info"] = $theme_info;
 

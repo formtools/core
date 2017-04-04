@@ -30,7 +30,7 @@ function smarty_function_display_field_type_settings_dropdown($params, &$smarty)
   foreach ($field_type_settings as $setting_info)
   {
   	$field_setting_identifier = $setting_info["field_setting_identifier"];
-    $field_setting_label = htmlspecialchars(ft_eval_smarty_string($setting_info["field_label"]));
+    $field_setting_label = htmlspecialchars(General::evalSmartyString($setting_info["field_label"]));
     $selected = ($default_value == $field_setting_identifier) ? " selected" : "";
     $rows[] = "<option value=\"{$field_setting_identifier}\"{$selected}>$field_setting_label</option>";
   }

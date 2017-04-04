@@ -326,5 +326,120 @@ END;
         return $js;
     }
 
+
+    /**
+     * Added in 2.1.0. The idea behind this is that every now and then, we need to display a custom message
+     * in a page - e.g. after redirecting somewhere, or some unusual case. These situations are handled by passing
+     * a ?message=XXX query string parameter. This function is called in the ft_display_page function directly
+     * so it all happens "automatically" with no additional configuration needed on each page.
+     *
+     * Caveats:
+     * - it will override $g_success and $g_message to always output it in the page. This is good! But keep it in mind.
+     * - the messages should be very simple and not contain relative links. Bear in mind the user can hack it and paste
+     *   those flags onto any page.
+     *
+     * @param $flag
+     */
+    public static function displayCustomPageMessage($flag)
+    {
+        global $LANG;
+
+        $g_success = "";
+        $g_message = "";
+        switch ($flag)
+        {
+            case "no_views":
+                $g_success = false;
+                $g_message = $LANG["notify_no_views"];
+                break;
+            case "notify_internal_form_created":
+                $g_success = true;
+                $g_message = $LANG["notify_internal_form_created"];
+                break;
+            case "change_temp_password":
+                $g_success = true;
+                $g_message = $LANG["notify_change_temp_password"];
+                break;
+            case "new_submission":
+                $g_success = true;
+                $g_message = $LANG["notify_new_submission_created"];
+                break;
+            case "notify_sessions_timeout":
+                $g_success = true;
+                $g_message = $LANG["notify_sessions_timeout"];
+                break;
+        }
+
+        extract(Hooks::processHookCalls("end", compact("flag"), array("g_success", "g_message")), EXTR_OVERWRITE);
+
+        return array($g_success, $g_message);
+    }
+
+
+    /**
+     * This function evaluates any string that contains Smarty content. It parses the email templates, filename
+     * strings and other such functionality. It uses on the eval.tpl template, found in /global/smarty.
+     *
+     * @param string $placeholder_str the string containing the placeholders / Smarty logic
+     * @param array $placeholders a hash of values to pass to the template. The contents of the
+     *    current language file is ALWAYS sent.
+     * @param string $theme
+     * @return string a string containing the output of the eval()'d smarty template
+     */
+    public static function evalSmartyString($placeholder_str, $placeholders = array(), $theme = "", $plugin_dirs = array())
+    {
+        $LANG = Core::$L;
+        $rootDir = Core::getRootDir();
+
+        $theme = Core::$user->getTheme();
+        $smarty = new \Smarty();
+        $smarty->template_dir = "$rootDir/global/smarty/";
+        $smarty->compile_dir  = "$rootDir/themes/$theme/cache/";
+
+        foreach ($plugin_dirs as $dir) {
+            $smarty->plugins_dir[] = $dir;
+        }
+
+        $smarty->assign("eval_str", $placeholder_str);
+        if (!empty($placeholders)) {
+            while (list($key, $value) = each($placeholders)) {
+                $smarty->assign($key, $value);
+            }
+        }
+        $smarty->assign("LANG", $LANG);
+
+        $output = $smarty->fetch(realpath(__DIR__ . "/../smarty_plugins/eval.tpl"));
+
+        extract(Hooks::processHookCalls("end", compact("output", "placeholder_str", "placeholders", "theme"), array("output")), EXTR_OVERWRITE);
+
+        return $output;
+    }
+
+
+    /**
+     * Helper function to remove all but those chars specified in the section param.
+     *
+     * @param string string to examine
+     * @param string string of acceptable chars
+     * @return string the cleaned string
+     */
+    public static function stripChars($str, $whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+    {
+	    $valid_chars = preg_quote($whitelist);
+	    return preg_replace("/[^$valid_chars]/", "", $str);
+    }
+
+
+    /**
+     * Another security-related function. This returns a clean version of PHP_SELF for use in the templates. This wards
+     * against URI Cross-site scripting attacks.
+     *
+     * @return string the cleaned $_SERVER["PHP_SELF"]
+     */
+    public static function getCleanPhpSelf()
+    {
+        return htmlspecialchars(strip_tags($_SERVER['PHP_SELF']), ENT_QUOTES);
+    }
+
 }
 

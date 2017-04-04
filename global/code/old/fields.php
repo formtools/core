@@ -83,7 +83,7 @@ function ft_add_form_fields($form_id, $fields)
 			}
 			$success = false;
 			$replacement_info = array("fieldname" => $field_name);
-			$message = ft_eval_smarty_string($LANG["notify_form_field_not_added"], $replacement_info);
+			$message = General::evalSmartyString($LANG["notify_form_field_not_added"], $replacement_info);
 			if ($g_debug) $message .= " <i>\"$err_message\"</i>";
 			return array($success, $message);
 		}

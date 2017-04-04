@@ -16,16 +16,38 @@ namespace FormTools;
 
 class Sessions
 {
-    public static function get($key) {
-        return $_SESSION["ft"][$key];
+    public static function get($key, $group = null) {
+        if ($group == null) {
+            return $_SESSION["ft"][$key];
+        } else {
+            return $_SESSION["ft"][$group][$key];
+        }
     }
 
-    public static function set($key, $value) {
-        $_SESSION["ft"][$key] = $value;
+    /**
+     * Stores data in sessions. The third parameter is for grouping settings, e.g. settings for a specific module
+     * or area (menus, general settings etc).
+     * @param $key
+     * @param $value
+     * @param $group
+     */
+    public static function set($key, $value, $group = null) {
+        if (!isset($_SESSION["ft"])) {
+            $_SESSION["ft"] = array();
+        }
+        if ($group == null) {
+            $_SESSION["ft"][$key] = $value;
+        } else {
+            $_SESSION["ft"][$group][$key] = $value;
+        }
     }
 
-    public static function exists($key) {
-        return isset($_SESSION["ft"][$key]);
+    public static function exists($key, $group = null) {
+        if ($group == null) {
+            return isset($_SESSION["ft"][$key]);
+        } else {
+            return isset($_SESSION["ft"][$group][$key]);
+        }
     }
 
     public static function clear($key) {

@@ -33,13 +33,13 @@ function smarty_function_display_field_types_dropdown($params, &$smarty)
   $rows = array();
   foreach ($grouped_field_types as $grouped_field_type)
   {
-    $group_name = ft_eval_smarty_string($grouped_field_type["group"]["group_name"]);
+    $group_name = General::evalSmartyString($grouped_field_type["group"]["group_name"]);
     $rows[] = "<optgroup label=\"" . htmlspecialchars($group_name) . "\">";
     foreach ($grouped_field_type["field_types"] as $field_type_info)
     {
       $field_type_id         = $field_type_info["field_type_id"];
       $field_type_identifier = $field_type_info["field_type_identifier"];
-      $field_type_name = htmlspecialchars(ft_eval_smarty_string($field_type_info["field_type_name"]));
+      $field_type_name = htmlspecialchars(General::evalSmartyString($field_type_info["field_type_name"]));
 
       if ($value_type == "field_type_id")
       {

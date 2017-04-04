@@ -47,7 +47,7 @@ if (isset($_SESSION["ft"]["last_link_page_{$form_id}"]) && isset($_SESSION["ft"]
 	$view_submissions_link = "edit_submission.php?form_id={$form_id}&submission_id={$_SESSION["ft"]["last_submission_id_{$form_id}"]}";
 }
 
-$same_page = ft_get_clean_php_self();
+$same_page = General::getCleanPhpSelf();
 $tabs = array(
 	"main" => array(
 		"tab_label" => $LANG["word_main"],

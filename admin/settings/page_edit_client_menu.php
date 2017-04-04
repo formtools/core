@@ -57,7 +57,7 @@ if ($num_menu_items == 0)
 // compile the header information
 $page_vars = array();
 $page_vars["page"] = "edit_client_menu";
-$page_vars["page_url"] = ft_get_page_url("edit_client_menu");
+$page_vars["page_url"] = Pages::getPageUrl("edit_client_menu");
 $page_vars["tabs"] = $tabs;
 $page_vars["head_title"] = "{$_SESSION["ft"]["settings"]["program_name"]} - {$LANG["phrase_setup_options"]} - {$LANG["word_menus"]}";
 $page_vars["menu"] = $menu_info;

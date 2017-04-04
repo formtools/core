@@ -2,6 +2,8 @@
 
 use FormTools\Administrator;
 use FormTools\Core;
+use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 
 Core::init();
@@ -35,10 +37,10 @@ $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/man
 // compile the theme variables
 $page_vars = array();
 $page_vars["page"] = "your_account";
-$page_vars["page_url"] = ft_get_page_url("your_account");
+$page_vars["page_url"] = Pages::getPageUrl("your_account");
 $page_vars["head_title"] = $LANG["phrase_your_account"];
 $page_vars["admin_info"] = $admin_info;
-$page_vars["text_date_formatting_link"] = ft_eval_smarty_string($LANG["text_date_formatting_link"], $replacement_info);
+$page_vars["text_date_formatting_link"] = General::evalSmartyString($LANG["text_date_formatting_link"], $replacement_info);
 $page_vars["head_js"] =<<<END
   var rules = [];
   rules.push("required,first_name,{$LANG["validation_no_first_name"]}");

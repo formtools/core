@@ -36,7 +36,7 @@ $links = ft_get_client_prev_next_links($client_id, $search_criteria);
 $prev_tabset_link = (!empty($links["prev_account_id"])) ? "edit.php?page=$page&client_id={$links["prev_account_id"]}" : "";
 $next_tabset_link = (!empty($links["next_account_id"])) ? "edit.php?page=$page&client_id={$links["next_account_id"]}" : "";
 
-$same_page = ft_get_clean_php_self();
+$same_page = General::getCleanPhpSelf();
 $tabs = array(
 	"main"     => array("tab_label" => $LANG["word_main"], "tab_link" => "{$same_page}?page=main&client_id={$client_id}"),
 	"settings" => array("tab_label" => $LANG["word_settings"], "tab_link" => "{$same_page}?page=settings&client_id={$client_id}"),

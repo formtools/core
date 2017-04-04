@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Core;
+use FormTools\FieldTypes;
 use FormTools\FieldValidation;
 use FormTools\General;
 use FormTools\Settings;
@@ -9,6 +10,7 @@ use FormTools\Themes;
 
 Core::init();
 Core::$user->checkAuth("admin");
+
 
 require(__DIR__ . "/edit_submission__code.php");
 
@@ -80,13 +82,13 @@ foreach ($grouped_fields as $group) {
         }
 	}
 }
-$page_field_types = ft_get_field_types(true, $page_field_type_ids);
+$page_field_types = FieldTypes::get(true, $page_field_type_ids);
 
 
 // construct the tab list
 $view_tabs = ft_get_view_tabs($view_id, true);
 $tabs      = array();
-$same_page = ft_get_clean_php_self();
+$same_page = General::getCleanPhpSelf();
 while (list($key, $value) = each($view_tabs)) {
 	$tabs[$key] = array(
 		"tab_label" => $value["tab_label"],
@@ -115,7 +117,7 @@ list($prev_link_html, $search_results_link_html, $next_link_html) = _ft_code_get
 
 // construct the page label
 $submission_placeholders = ft_get_submission_placeholders($form_id, $submission_id);
-$edit_submission_page_label = ft_eval_smarty_string($form_info["edit_submission_page_label"], $submission_placeholders);
+$edit_submission_page_label = General::evalSmartyString($form_info["edit_submission_page_label"], $submission_placeholders);
 
 $validation_js = FieldValidation::generateSubmissionJsValidation($grouped_fields);
 
@@ -126,7 +128,7 @@ $shared_resources_list = $settings["edit_submission_onload_resources"];
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
 foreach ($shared_resources_array as $resource) {
-	$shared_resources .= ft_eval_smarty_string($resource, array("g_root_url" => $g_root_url)) . "\n";
+	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $g_root_url)) . "\n";
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -134,7 +136,7 @@ foreach ($shared_resources_array as $resource) {
 // compile the header information
 $page_vars = array();
 $page_vars["page"]   = "admin_edit_submission";
-$page_vars["page_url"] = ft_get_page_url("admin_edit_submission");
+$page_vars["page_url"] = Pages::getPageUrl("admin_edit_submission");
 $page_vars["head_title"] = $edit_submission_page_label;
 $page_vars["form_info"] = $form_info;
 $page_vars["form_id"] = $form_id;

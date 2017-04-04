@@ -32,7 +32,7 @@ foreach ($grouped_views as $curr_group) {
 
 // compile the template information
 $page_vars["page"]       = "views";
-$page_vars["page_url"]   = ft_get_page_url("edit_form_views", array("form_id" => $form_id));
+$page_vars["page_url"]   = Pages::getPageUrl("edit_form_views", array("form_id" => $form_id));
 $page_vars["grouped_views"] = $grouped_views;
 $page_vars["head_title"] = "{$LANG["phrase_edit_form"]} - {$LANG["word_views"]}";
 $page_vars["form_info"]  = $form_info;

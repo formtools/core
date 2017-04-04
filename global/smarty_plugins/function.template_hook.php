@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Hooks;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -12,11 +15,10 @@
  */
 function smarty_function_template_hook($params, &$smarty)
 {
-  if (empty($params["location"]))
-  {
-    $smarty->trigger_error("assign: missing 'location' parameter.");
-    return;
-  }
+    if (empty($params["location"])) {
+        $smarty->trigger_error("assign: missing 'location' parameter.");
+        return;
+    }
 
-  echo ft_process_template_hook_calls($params["location"], $smarty->_tpl_vars, $params);
+    echo Hooks::processTemplateHookCalls($params["location"], $smarty->_tpl_vars, $params);
 }

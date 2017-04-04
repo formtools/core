@@ -21,13 +21,13 @@ $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/man
 
 // compile header information
 $page_vars["page"] = "settings";
-$page_vars["page_url"] = ft_get_page_url("edit_client_settings", array("client_id" => $client_id));
+$page_vars["page_url"] = Pages::getPageUrl("edit_client_settings", array("client_id" => $client_id));
 $page_vars["head_title"]  = "{$LANG["phrase_edit_client"]} - {$LANG["word_settings"]}";
-$page_vars["phrase_one_special_char"] = ft_eval_smarty_string($LANG["phrase_one_special_char"], array("chars" => $g_password_special_chars));
+$page_vars["phrase_one_special_char"] = General::evalSmartyString($LANG["phrase_one_special_char"], array("chars" => $g_password_special_chars));
 $page_vars["client_info"] = $client_info;
 $page_vars["forms"]       = $forms;
 $page_vars["client_id"]   = $client_id;
-$page_vars["text_date_formatting_link"] = ft_eval_smarty_string($LANG["text_date_formatting_link"], $replacement_info);
+$page_vars["text_date_formatting_link"] = General::evalSmartyString($LANG["text_date_formatting_link"], $replacement_info);
 
 $page_vars["head_js"] =<<< END
 var rules = [];

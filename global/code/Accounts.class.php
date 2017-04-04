@@ -59,7 +59,7 @@ class Accounts {
             ":email" => $info["email"],
             ":username" => $info["username"],
             ":password" => md5(md5($info["password"])),
-            ":logout_url" => Core::getRootURL(),
+            ":logout_url" => Core::getRootUrl(),
             ":account_id" => 1 // the admin account is always ID 1
         ));
 
@@ -412,14 +412,14 @@ class Accounts {
         "new_password" => $new_password
         );
         $smarty_template_email_content = file_get_contents("$g_root_dir/global/emails/forget_password.tpl");
-        $email_content = ft_eval_smarty_string($smarty_template_email_content, $placeholders);
+        $email_content = General::evalSmartyString($smarty_template_email_content, $placeholders);
 
         // 2. build the email subject line
         $placeholders = array(
         "program_name" => Settings::get("program_name")
         );
         $smarty_template_email_subject = file_get_contents("$g_root_dir/global/emails/forget_password_subject.tpl");
-        $email_subject = trim(ft_eval_smarty_string($smarty_template_email_subject, $placeholders));
+        $email_subject = trim(General::evalSmartyString($smarty_template_email_subject, $placeholders));
 
         // if Swift Mailer is enabled, send the emails with that. In case there's a problem sending the message with
         // Swift, it falls back the default mail() function.

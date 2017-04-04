@@ -24,7 +24,7 @@ function _ft_code_get_link_html($form_id, $view_id, $submission_id, $results_per
 
 	if (isset($_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"]) && !empty($_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"]))
 	{
-		$php_self = ft_get_clean_php_self();
+		$php_self = General::getCleanPhpSelf();
 		$submission_ids = $_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"];
 		$current_sub_id_index = array_search($submission_id, $submission_ids);
 

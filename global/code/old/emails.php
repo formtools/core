@@ -588,7 +588,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 			break;
 	}
 
-	$return_info["subject"] = ft_eval_smarty_string($email_template["subject"], $submission_placeholders);
+	$return_info["subject"] = General::evalSmartyString($email_template["subject"], $submission_placeholders);
 
 	return array(true, $return_info);
 }
@@ -619,13 +619,13 @@ function ft_get_email_patterns($form_id)
 		if (!isset($email_template_patterns["html_patterns"]["pattern{$count}_name"]))
 			break;
 
-		$name     = ft_eval_smarty_string($email_template_patterns["html_patterns"]["pattern{$count}_name"]);
-		$optgroup = ft_eval_smarty_string($email_template_patterns["html_patterns"]["pattern{$count}_optgroup"]);
+		$name     = General::evalSmartyString($email_template_patterns["html_patterns"]["pattern{$count}_name"]);
+		$optgroup = General::evalSmartyString($email_template_patterns["html_patterns"]["pattern{$count}_optgroup"]);
 		$filename = $email_template_patterns["html_patterns"]["pattern{$count}_file"];
 		$content  = "";
 
 		if (is_readable("$pattern_folder/$filename") && is_file("$pattern_folder/$filename"))
-			$content = ft_eval_smarty_string(file_get_contents("$pattern_folder/$filename"), $placeholders);
+			$content = General::evalSmartyString(file_get_contents("$pattern_folder/$filename"), $placeholders);
 
 		// if this has both a name and some email content, log it
 		if (!empty($name) && !empty($content))
@@ -647,13 +647,13 @@ function ft_get_email_patterns($form_id)
 		if (!isset($email_template_patterns["text_patterns"]["pattern{$count}_name"]))
 			break;
 
-		$name     = ft_eval_smarty_string($email_template_patterns["text_patterns"]["pattern{$count}_name"]);
-		$optgroup = ft_eval_smarty_string($email_template_patterns["text_patterns"]["pattern{$count}_optgroup"]);
+		$name     = General::evalSmartyString($email_template_patterns["text_patterns"]["pattern{$count}_name"]);
+		$optgroup = General::evalSmartyString($email_template_patterns["text_patterns"]["pattern{$count}_optgroup"]);
 		$filename = $email_template_patterns["text_patterns"]["pattern{$count}_file"];
 		$content  = "";
 
 		if (is_readable("$pattern_folder/$filename") && is_file("$pattern_folder/$filename"))
-			$content = ft_eval_smarty_string(file_get_contents("$pattern_folder/$filename"), $placeholders);
+			$content = General::evalSmartyString(file_get_contents("$pattern_folder/$filename"), $placeholders);
 
 		// if this has both a name and some email content, log it
 		if (!empty($name) && !empty($content))
@@ -1504,7 +1504,7 @@ function _ft_extract_email_attachment_info($template_str, $form_id, $submission_
 	{
 		foreach ($matches[2] as $file_and_relative_path)
 		{
-			$file_and_relative_path = ft_eval_smarty_string("{\$" . $file_and_relative_path . "}", $submission_placeholders);
+			$file_and_relative_path = General::evalSmartyString("{\$" . $file_and_relative_path . "}", $submission_placeholders);
 			if (is_file("$g_root_dir/$file_and_relative_path"))
 			{
 				$pathinfo = pathinfo($file_and_relative_path);

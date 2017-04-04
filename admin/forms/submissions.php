@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Core;
+use FormTools\FieldTypes;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
@@ -249,7 +250,7 @@ if ($select_all_submissions_returned == "true") {
 $preselected_subids_str = implode(",", $preselected_subids);
 
 // to pass to the smarty template
-$field_types = ft_get_field_types(true);
+$field_types = FieldTypes::get(true);
 
 $has_searchable_field = false;
 foreach ($view_info["fields"] as $field_info) {
@@ -270,7 +271,7 @@ $shared_resources_list = Settings::get("edit_submission_onload_resources");
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
 foreach ($shared_resources_array as $resource) {
-	$shared_resources .= ft_eval_smarty_string($resource, array("g_root_url" => $g_root_url)) . "\n";
+	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $g_root_url)) . "\n";
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -278,7 +279,7 @@ foreach ($shared_resources_array as $resource) {
 // compile the header information
 $page_vars = array();
 $page_vars["page"]    = "admin_forms";
-$page_vars["page_url"] = ft_get_page_url("form_submissions", array("form_id" => $form_id));
+$page_vars["page_url"] = Pages::getPageUrl("form_submissions", array("form_id" => $form_id));
 $page_vars["head_title"]  = $LANG["word_submissions"];
 $page_vars["form_info"]   = $form_info;
 $page_vars["form_id"]     = $form_id;
@@ -298,7 +299,7 @@ $page_vars["page_submission_ids"] = $submission_id_str;
 $page_vars["order"] = $order;
 $page_vars["field_types"] = $field_types;
 $page_vars["has_searchable_field"] = $has_searchable_field;
-$page_vars["notify_view_missing_columns_admin_fix"] = ft_eval_smarty_string($LANG["notify_view_missing_columns_admin_fix"], array("LINK" => "edit.php?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2"));
+$page_vars["notify_view_missing_columns_admin_fix"] = General::evalSmartyString($LANG["notify_view_missing_columns_admin_fix"], array("LINK" => "edit.php?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2"));
 $page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
 $page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download",

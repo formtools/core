@@ -26,12 +26,12 @@ $num_registered_form_emails = count($registered_form_emails);
 
 // a little irksome, but we also need to retrieve ALL emails, for the "Create Email From Existing Email" dropdown
 $all_form_emails = ft_get_email_template_list($form_id);
-$php_self = ft_get_clean_php_self();
+$php_self = General::getCleanPhpSelf();
 
 
 // compile the templates information
 $page_vars["page"]        = "emails";
-$page_vars["page_url"]    = ft_get_page_url("edit_form_emails", array("form_id" => $form_id));
+$page_vars["page_url"]    = Pages::getPageUrl("edit_form_emails", array("form_id" => $form_id));
 $page_vars["form_emails"] = $form_emails;
 $page_vars["all_form_emails"] = $all_form_emails;
 $page_vars["num_form_emails"] = $num_form_emails;

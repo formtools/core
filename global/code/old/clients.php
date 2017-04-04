@@ -57,13 +57,13 @@ function ft_update_client($account_id, $info)
 					$rules[] = "reg_exp,password,[0-9],{$LANG["validation_client_password_missing_number"]}";
 				if (in_array("special_char", $required_password_chars))
 				{
-					$error = ft_eval_smarty_string($LANG["validation_client_password_missing_special_char"], array("chars" => $g_password_special_chars));
+					$error = General::evalSmartyString($LANG["validation_client_password_missing_special_char"], array("chars" => $g_password_special_chars));
 					$password_special_chars = preg_quote($g_password_special_chars);
 					$rules[] = "reg_exp,password,[$password_special_chars],$error";
 				}
 				if (!empty($client_info["settings"]["min_password_length"]))
 				{
-					$rule = ft_eval_smarty_string($LANG["validation_client_password_too_short"], array("number" => $client_info["settings"]["min_password_length"]));
+					$rule = General::evalSmartyString($LANG["validation_client_password_too_short"], array("number" => $client_info["settings"]["min_password_length"]));
 					$rules[] = "length>={$client_info["settings"]["min_password_length"]},password,$rule";
 				}
 
@@ -86,7 +86,7 @@ function ft_update_client($account_id, $info)
 				{
 					$encrypted_password = md5(md5($info["password"]));
 					if (ft_password_in_password_history($account_id, $encrypted_password, $client_info["settings"]["num_password_history"])) {
-                        $errors[] = ft_eval_smarty_string($LANG["validation_password_in_password_history"],
+                        $errors[] = General::evalSmartyString($LANG["validation_password_in_password_history"],
                         array("history_size" => $client_info["settings"]["num_password_history"]));
                     } else {
                         Accounts::addPasswordToPasswordHistory($account_id, $encrypted_password);

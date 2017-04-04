@@ -471,7 +471,7 @@ class Core {
             self::$dbTablePrefix);
     }
 
-    public static function getRootURL() {
+    public static function getRootUrl() {
         return self::$rootURL;
     }
 
@@ -566,4 +566,13 @@ class Core {
     public static function getRequiredPasswordSpecialChars() {
         return self::$requiredPasswordSpecialChars;
     }
+
+    public static function isSmartyDebugEnabled() {
+        return self::$smartyDebug;
+    }
+
+    public static function shouldUseSmartySubDirs() {
+        return self::$smartyUseSubDirs;
+    }
+
 }

@@ -24,7 +24,7 @@ $num_pages_in_multi_page_form = count($form_info["multi_page_form_urls"]) + 1;
 
 // compile the templates information
 $page_vars["page"]       = "main";
-$page_vars["page_url"]   = ft_get_page_url("edit_form_main", array("form_id" => $form_id));
+$page_vars["page_url"]   = Pages::getPageUrl("edit_form_main", array("form_id" => $form_id));
 $page_vars["head_title"] = "{$LANG["phrase_edit_form"]} - {$LANG["word_main"]}";
 $page_vars["form_info"]  = $form_info;
 $page_vars["selected_client_ids"] = $selected_client_ids;

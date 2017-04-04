@@ -13,6 +13,7 @@
 // -------------------------------------------------------------------------------------------------
 
 use FormTools\Clients;
+use FormTools\FieldTypes;
 use FormTools\FieldValidation;
 use FormTools\Settings;
 
@@ -1053,7 +1054,7 @@ function ft_set_form_field_types($form_id, $info)
 	// finally, if there were any Option List defined for any of the form field, add the info!
 	if (!empty($option_lists))
 	{
-		$field_types = ft_get_field_types();
+		$field_types = FieldTypes::get();
 		$field_type_id_to_option_list_map = array();
 		foreach ($field_types as $field_type_info)
 		{

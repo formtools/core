@@ -14,6 +14,7 @@
 
 use FormTools\Administrator;
 use FormTools\Core;
+use FormTools\FieldTypes;
 use FormTools\Settings;
 use FormTools\Themes;
 
@@ -27,7 +28,6 @@ use FormTools\Themes;
  * connection without worrying about being - incorrectly - logged out.
  *
  * @return resource returns a reference to the open connection.
- */
 function ft_db_connect()
 {
 	global $g_db_hostname, $g_db_username, $g_db_password, $g_db_name, $g_unicode, $g_db_ssl,
@@ -65,113 +65,19 @@ function ft_db_connect()
 
 	return $link;
 }
+ */
 
 
 /**
  * Closes a database connection.
  *
  * @param resource Closes the connection included in this parameter.
- */
 function ft_db_disconnect($link)
 {
 	@mysql_close($link);
 }
+*/
 
-
-/**
- * Added in 2.1.0. The idea behind this is that every now and then, we need to display a custom message
- * in a page - e.g. after redirecting somewhere, or some unusual case. These situations are handled by passing
- * a ?message=XXX query string parameter. This function is called in the ft_display_page function directly
- * so it all happens "automatically" with no additional configuration needed on each page.
- *
- * Caveats:
- * - it will override $g_success and $g_message to always output it in the page. This is good! But keep it in mind.
- * - the messages should be very simple and not contain relative links. Bear in mind the user can hack it and paste
- *   those flags onto any page.
- *
- * @param $flag
- */
-function ft_display_custom_page_message($flag)
-{
-	global $LANG;
-
-	$g_success = "";
-	$g_message = "";
-	switch ($flag)
-	{
-		case "no_views":
-			$g_success = false;
-			$g_message = $LANG["notify_no_views"];
-			break;
-		case "notify_internal_form_created":
-			$g_success = true;
-			$g_message = $LANG["notify_internal_form_created"];
-			break;
-		case "change_temp_password":
-			$g_success = true;
-			$g_message = $LANG["notify_change_temp_password"];
-			break;
-		case "new_submission":
-			$g_success = true;
-			$g_message = $LANG["notify_new_submission_created"];
-			break;
-		case "notify_sessions_timeout":
-			$g_success = true;
-			$g_message = $LANG["notify_sessions_timeout"];
-			break;
-	}
-
-	extract(Hooks::processHookCalls("end", compact("flag"), array("g_success", "g_message")), EXTR_OVERWRITE);
-
-	return array($g_success, $g_message);
-}
-
-
-/**
- * This function evaluates any string that contains Smarty logic / variables. It handles
- * parsing the email templates, filename strings and other such functionality. It uses on the
- * eval.tpl template, found in /global/smarty.
- *
- * @param string $placeholder_str the string containing the placeholders / Smarty logic
- * @param array $placeholders a hash of values to pass to the template. The contents of the
- *    current language file is ALWAYS sent.
- * @param string $theme
- * @return string a string containing the output of the eval()'d smarty template
- */
-function ft_eval_smarty_string($placeholder_str, $placeholders = array(), $theme = "", $plugin_dirs = array())
-{
-	$LANG = Core::$L;
-	$rootDir = Core::getRootDir();
-
-	// TODO no more sessions littered everywhere!
-	if (empty($theme) && isset($_SESSION["ft"]["account"]["theme"])) {
-        $theme = $_SESSION["ft"]["account"]["theme"];
-    } else {
-        $theme = Core::getDefaultTheme();
-    }
-
-	$smarty = new \Smarty();
-	$smarty->template_dir = "$rootDir/global/smarty/";
-	$smarty->compile_dir  = "$rootDir/themes/$theme/cache/";
-
-	foreach ($plugin_dirs as $dir) {
-        $smarty->plugins_dir[] = $dir;
-    }
-
-	$smarty->assign("eval_str", $placeholder_str);
-	if (!empty($placeholders)) {
-		while (list($key, $value) = each($placeholders)) {
-            $smarty->assign($key, $value);
-        }
-	}
-	$smarty->assign("LANG", $LANG);
-
-	$output = $smarty->fetch(realpath(__DIR__ . "/../smarty_plugins/eval.tpl"));
-
-	extract(Hooks::processHookCalls("end", compact("output", "placeholder_str", "placeholders", "theme"), array("output")), EXTR_OVERWRITE);
-
-	return $output;
-}
 
 
 /**
@@ -213,7 +119,7 @@ function ft_get_page_nav($num_results, $num_per_page, $current_page = 1, $pass_a
 
 	$smarty->assign("g_root_dir", $g_root_dir);
 	$smarty->assign("g_root_url", $g_root_url);
-	$smarty->assign("samepage", ft_get_clean_php_self());
+	$smarty->assign("samepage", General::getCleanPhpSelf());
 	$smarty->assign("num_results", $num_results);
 	$smarty->assign("num_per_page", $num_per_page);
 	$smarty->assign("current_page", $current_page);
@@ -237,7 +143,7 @@ function ft_get_page_nav($num_results, $num_per_page, $current_page = 1, $pass_a
 			"startnum" => "<span id='nav_viewing_num_start'>$range_start</span>",
 			"endnum"   => "<span id='nav_viewing_num_end'>$range_end</span>"
 		);
-		$viewing_range = ft_eval_smarty_string($LANG["phrase_viewing_range"], $replacement_info);
+		$viewing_range = General::evalSmartyString($LANG["phrase_viewing_range"], $replacement_info);
 	}
 	$total_pages = ceil($num_results / $num_per_page);
 	$smarty->assign("viewing_range", $viewing_range);
@@ -297,7 +203,7 @@ function ft_get_dhtml_page_nav($num_results, $num_per_page, $current_page = 1)
 	$smarty->assign("SESSION", $_SESSION["ft"]);
 	$smarty->assign("g_root_dir", $g_root_dir);
 	$smarty->assign("g_root_url", $g_root_url);
-	$smarty->assign("samepage", ft_get_clean_php_self());
+	$smarty->assign("samepage", General::getCleanPhpSelf());
 	$smarty->assign("num_results", $num_results);
 	$smarty->assign("num_per_page", $num_per_page);
 	$smarty->assign("current_page", $current_page);
@@ -317,7 +223,7 @@ function ft_get_dhtml_page_nav($num_results, $num_per_page, $current_page = 1)
 			"startnum" => "<span id='nav_viewing_num_start'>$range_start</span>",
 			"endnum"   => "<span id='nav_viewing_num_end'>$range_end</span>"
 		);
-		$viewing_range = ft_eval_smarty_string($LANG["phrase_viewing_range"], $replacement_info);
+		$viewing_range = General::evalSmartyString($LANG["phrase_viewing_range"], $replacement_info);
 	}
 	$smarty->assign("viewing_range", $viewing_range);
 	$smarty->assign("total_pages", ceil($num_results / $num_per_page));
@@ -1092,32 +998,6 @@ function _ft_extract_array_val($array, $name)
 
 
 /**
- * Helper function to remove all but those chars specified in the section param.
- *
- * @param string the string to examine
- * @param string a string of acceptable chars
- * @return string the cleaned string
- */
-function ft_strip_chars($str, $whitelist = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
-{
-	$valid_chars = preg_quote($whitelist);
-	return preg_replace("/[^$valid_chars]/", "", $str);
-}
-
-
-/**
- * Another security-related function. This returns a clean version of PHP_SELF for use in the templates. This wards
- * against URI Cross-site scripting attacks.
- *
- * @return the cleaned $_SERVER["PHP_SELF"]
- */
-function ft_get_clean_php_self()
-{
-	return htmlspecialchars(strip_tags($_SERVER['PHP_SELF']), ENT_QUOTES);
-}
-
-
-/**
  * This was added in 2.1.0. and replaces ft_build_and_cache_upgrade_info() which really wasn't necessary.
  * It returns a hash of information to pass in a hidden form when the user clicks "Update".
  */
@@ -1213,7 +1093,7 @@ function ft_get_submission_placeholders($form_id, $submission_id, $client_info =
 	$submission_info = ft_get_submission($form_id, $submission_id);
 	$admin_info      = Administrator::getAdminInfo();
 	$file_field_type_ids = ft_get_file_field_type_ids();
-	$field_types     = ft_get_field_types(true);
+	$field_types     = FieldTypes::get(true);
 
 	// now loop through the info stored for this particular submission and for this particular field,
 	// add the custom submission responses to the placeholder hash

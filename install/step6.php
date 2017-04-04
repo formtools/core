@@ -39,7 +39,7 @@ Modules::installModules();
 
 $page = array(
     "step" => 6,
-    "g_root_url" => Core::getRootURL()
+    "g_root_url" => Core::getRootUrl()
 );
 
 Installation::displayPage("templates/step6.tpl", $page);

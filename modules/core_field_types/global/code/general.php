@@ -2,6 +2,7 @@
 
 
 use FormTools\Core;
+use FormTools\FieldTypes;
 
 
 /**
@@ -15,7 +16,7 @@ function cft_install_field_type($field_type_identifier, $group_id)
 {
     $db = Core::$db;
 
-    $field_type_info = ft_get_field_type_by_identifier($field_type_identifier);
+    $field_type_info = FieldTypes::getFieldTypeByIdentifier($field_type_identifier);
     if (!empty($field_type_info)) {
         return array(false, "The database has already been populated with the $field_type_identifier field type.");
     }

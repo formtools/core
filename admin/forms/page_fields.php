@@ -44,13 +44,13 @@ $field_sizes_js      = FieldSizes::generateFieldTypeSizeLabels();
 $field_settings_js   = ft_generate_field_type_settings_js();
 $field_validation_js = FieldValidation::generateFieldTypeValidationJs();
 
-$php_self = ft_get_clean_php_self();
+$php_self = General::getCleanPhpSelf();
 $shared_characteristics_js = ft_get_field_type_setting_shared_characteristics_js();
 
 
 // compile the template fields
 $page_vars["page"]         = "fields";
-$page_vars["page_url"]     = ft_get_page_url("edit_form_fields", array("form_id" => $form_id));
+$page_vars["page_url"]     = Pages::getPageUrl("edit_form_fields", array("form_id" => $form_id));
 $page_vars["head_title"]   = "{$LANG["phrase_edit_form"]} - {$LANG["word_fields"]}";
 $page_vars["form_info"]    = $form_info;
 $page_vars["form_fields"]  = $form_fields;
@@ -78,7 +78,7 @@ $page_vars["head_string"] =<<< END
 END;
 
 $replacement_info = array("views_tab_link" => "$php_self?page=views&form_id=$form_id");
-$page_vars["text_fields_tab_summary"] = ft_eval_smarty_string($LANG["text_fields_tab_summary"], $replacement_info);
+$page_vars["text_fields_tab_summary"] = General::evalSmartyString($LANG["text_fields_tab_summary"], $replacement_info);
 $page_vars["js_messages"] = array("validation_no_form_field_name", "validation_invalid_form_field_names", "word_okay",
 	"word_error", "validation_num_rows_to_add", "word_row", "phrase_please_confirm", "confirm_smart_fill_db_column_fields",
 	"confirm_smart_fill_db_column_fields_desc", "word_cancel", "phrase_smart_fill", "validation_no_display_text",

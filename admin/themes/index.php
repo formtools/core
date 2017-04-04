@@ -43,7 +43,7 @@ foreach ($themes as $theme_info) {
 // compile the header information
 $page_vars = array();
 $page_vars["page"] = "themes";
-$page_vars["page_url"] = ft_get_page_url("settings_themes");
+$page_vars["page_url"] = Pages::getPageUrl("settings_themes");
 $page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_themes"]}";
 $page_vars["nav_page"] = "program_settings";
 $page_vars["themes"] = $updated_themes;

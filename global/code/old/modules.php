@@ -73,7 +73,7 @@ function ft_uninstall_module($module_id)
 	$delete_module_folder_on_uninstallation = Core::shouldDeleteFolderOnUninstallation();
 	$rootDir = Core::getRootDir();
 
-	$module_info = ft_get_module($module_id);
+	$module_info = self::getModule($module_id);
 	$module_folder = $module_info["module_folder"];
 
 	if (empty($module_info)) {
@@ -93,7 +93,7 @@ function ft_uninstall_module($module_id)
 
 			// get the module language file contents and store the info in the $LANG global for
 			// so it can be accessed by the uninstallation script
-			$LANG[$module_folder] = ft_get_module_lang_file_contents($module_folder);
+			$LANG[$module_folder] = self::getModuleLangFile($module_folder, Core::$user->getLang());
 			list($success, $custom_message) = $uninstall_function_name($module_id);
 
 			// if there was a custom message returned (error or notification), overwrite the default
@@ -168,29 +168,6 @@ function ft_uninstall_module($module_id)
  *
  * @param string $module_folder
  */
-function ft_get_module_id_from_module_folder($module_folder)
-{
-	$db = Core::$db;
-
-	$db->query("
-        SELECT module_id
-        FROM   {PREFIX}modules
-        WHERE  module_folder = :module_folder
-    ");
-	$db->bind(":module_folder", $module_folder);
-    $db->execute();
-	$info = $db->fetch();
-
-	return (isset($info["module_id"])) ? $info["module_id"] : "";
-}
-
-
-/**
- * Since it's often more convenient to identify modules by its unique folder name, this function is
- * provided to find the module ID. If not found, returns the empty string.
- *
- * @param string $module_folder
- */
 function ft_get_module_folder_from_module_id($module_id)
 {
     $db = Core::$db;
@@ -230,39 +207,20 @@ function ft_get_module_menu_items($module_id, $module_folder)
         ORDER BY list_order ASC
     ");
 
-    $rootURL = Core::getRootURL();
+    $rootURL = Core::getRootUrl();
 	$placeholders = array(
 	    "module_dir" => "$rootURL/modules/$module_folder"
     );
 
     $menu_items = array();
 	while ($row = mysql_fetch_assoc($result)) {
-		$row["url"] = ft_eval_smarty_string($row["url"], $placeholders);
+		$row["url"] = General::evalSmartyString($row["url"], $placeholders);
 		$menu_items[] = $row;
 	}
 
 	extract(Hooks::processHookCalls("end", compact("menu_items", "module_id", "module_folder"), array("menu_items")), EXTR_OVERWRITE);
 
 	return $menu_items;
-}
-
-
-/**
- * Retrieves all information about a particular module.
- *
- * @return array
- */
-function ft_get_module($module_id)
-{
-    $db = Core::$db;
-	$db->query("SELECT * FROM {PREFIX}modules WHERE module_id = :module_id");
-	$db->bind(":module_id", $module_id);
-    $db->execute();
-	$result = $db->fetch();
-
-	extract(Hooks::processHookCalls("end", compact("module_id", "result"), array("result")), EXTR_OVERWRITE);
-
-	return $result;
 }
 
 
@@ -433,7 +391,7 @@ function ft_init_module_page($account_type = "admin")
 		include_once("$g_root_dir/modules/$module_folder/library.php");
 
 	// get the language file content
-	$content = ft_get_module_lang_file_contents($module_folder);
+	$content = self::getModuleLangFile($module_folder, Core::$user-getLang());
 	$LANG[$module_folder] = $content;
 	$GLOBALS["L"] = $content;
 
@@ -549,7 +507,7 @@ function ft_include_module($module_folder)
 		$g_smarty->plugins_dir[] = "$g_root_dir/modules/$module_folder/smarty";
 
 	// load the language file into the $LANG var, under
-	$content = ft_get_module_lang_file_contents($module_folder);
+	$content = self::getModuleLangFile($module_folder, Core::$user-getLang());
 	$LANG[$module_folder] = $content;
 
 	extract(Hooks::processHookCalls("end", compact("module_folder"), array()), EXTR_OVERWRITE);
@@ -597,81 +555,3 @@ function ft_load_module_field($module_folder, $field_name, $session_name, $defau
 	return $field;
 }
 
-
-/**
- * Called automatically on installation, or when the administrator clicks on the "Install" link for a module
- * This function runs the module's installation script (if it exists) and returns the appropriate success
- * or error message.
- *
- * @param integer $module_id
- * @return array [0] T/F, [1] error / success message.
- */
-function ft_install_module($module_id)
-{
-    $LANG = Core::$L;
-    $rootDir = Core::getRootDir();
-    $rootURL = Core::getRootURL();
-
-    $module_info = ft_get_module($module_id);
-    $module_folder = $module_info["module_folder"];
-
-	$success = true;
-	$message = ft_eval_smarty_string($LANG["notify_module_installed"], array("link" => "$rootURL/modules/$module_folder"));
-
-	$has_custom_install_script = false;
-
-	if (is_file("$rootDir/modules/$module_folder/library.php")) {
-		@include_once("$rootDir/modules/$module_folder/library.php");
-		$install_function_name = "{$module_folder}__install";
-		if (function_exists($install_function_name)) {
-			$has_custom_install_script = true;
-
-			// get the module language file contents and store the info in the $LANG global for
-			// so it can be accessed by the installation script
-			$LANG[$module_folder] = ft_get_module_lang_file_contents($module_folder);
-			list($success, $custom_message) = $install_function_name($module_id);
-
-			// if there was a custom message returned (error or notification), overwrite the default
-			// message
-			if (!empty($custom_message)) {
-                $message = $custom_message;
-            }
-		}
-	}
-
-	// if there wasn't a custom installation script, or there was and it was successfully run update the record in the
-    // module table to mark it as both is_installed and is_enabled
-	if (!$has_custom_install_script || ($has_custom_install_script && $success)) {
-        Core::$db->query("
-            UPDATE {PREFIX}modules
-            SET    is_installed = :is_installed,
-                   is_enabled = :is_enabled
-            WHERE  module_id = :module_id
-        ");
-        Core::$db->bindAll(array(
-            ":is_installed" => "yes",
-            ":is_enabled" => "yes",
-            ":module_id" => $module_id
-        ));
-        try {
-		    Core::$db->execute();
-        } catch (PDOException $e) {
-            return array(false, $e->getMessage());
-        }
-	}
-
-	return array($success, $message);
-}
-
-
-/**
- * Added in 2.1.6, to allow for simple "inline" hook overriding from within the PHP pages.
- *
- * @param string $location
- * @param mixed $data
- */
-function ft_module_override_data($location, $data)
-{
-	extract(Hooks::processHookCalls("start", compact("location", "data"), array("data")), EXTR_OVERWRITE);
-	return $data;
-}

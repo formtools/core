@@ -144,5 +144,5 @@ function smarty_function_edit_custom_field($params, &$smarty)
     $placeholders[$identifier] = $value;
   }
 
-  echo ft_eval_smarty_string($markup_with_placeholders, $placeholders);
+  echo General::evalSmartyString($markup_with_placeholders, $placeholders);
 }

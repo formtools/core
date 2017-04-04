@@ -84,7 +84,7 @@ $modules = array_merge($sorted_modules, $installed_modules);
 // compile header information
 $page_vars = array();
 $page_vars["page"]        = "modules";
-$page_vars["page_url"]    = ft_get_page_url("modules");
+$page_vars["page_url"]    = Pages::getPageUrl("modules");
 $page_vars["head_title"]  = $LANG["word_modules"];
 $page_vars["modules"]     = $modules;
 $page_vars["num_modules"] = $num_modules;

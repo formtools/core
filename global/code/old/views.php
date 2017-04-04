@@ -1041,7 +1041,7 @@ function ft_get_view_filter_sql($view_id)
 			// if this is a client account, evaluate the Client Map placeholders
 			if ($is_client_account)
 			{
-				$infohash[] = ft_eval_smarty_string($filter["filter_sql"], $placeholders);
+				$infohash[] = General::evalSmartyString($filter["filter_sql"], $placeholders);
 			}
 		}
 	}

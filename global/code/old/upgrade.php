@@ -13,6 +13,7 @@
 
 use FormTools\Accounts;
 use FormTools\Clients;
+use FormTools\FieldTypes;
 use FormTools\Settings;
 
 
@@ -681,7 +682,7 @@ function ft_upgrade_form_tools()
 			if ($is_installed == "yes")
 				continue;
 
-			ft_install_module($module_id);
+			Modules::installModule($module_id);
 		}
 
 		$query = @mysql_query("
@@ -897,10 +898,9 @@ function ft_upgrade_form_tools()
 		mysql_query("ALTER TABLE {$g_table_prefix}form_fields CHANGE field_type field_type_id SMALLINT NOT NULL DEFAULT '1'");
 		mysql_query("ALTER TABLE {$g_table_prefix}form_fields ADD is_system_field ENUM('yes','no') NOT NULL DEFAULT 'no' AFTER field_type_id");
 
-		$field_types = ft_get_field_types();
+		$field_types = FieldTypes::get();
 		$field_type_map = array();
-		foreach ($field_types as $row)
-		{
+		foreach ($field_types as $row) {
 			$field_type_map[$row["field_type_identifier"]] = $row["field_type_id"];
 		}
 
@@ -1472,7 +1472,7 @@ function ft_upgrade_form_tools()
 
 	if ($old_version_info["release_date"] < 20110716)
 	{
-		$field_type_info = ft_get_field_type_by_identifier("code_markup");
+		$field_type_info = FieldTypes::getFieldTypeByIdentifier("code_markup");
 		foreach ($field_type_info["settings"] as $curr_field_type_info)
 		{
 			if ($curr_field_type_info["field_setting_identifier"] != "height")
@@ -1486,7 +1486,7 @@ function ft_upgrade_form_tools()
 	// update the Date field type for additional custom date formats
 	if ($old_version_info["release_date"] < 20110811)
 	{
-		$field_type_info = ft_get_field_type_by_identifier("date");
+		$field_type_info = FieldTypes::getFieldTypeByIdentifier("date");
 		$field_type_id = $field_type_info["field_type_id"];
 		$custom_date_format_info = ft_get_field_type_setting_by_identifier($field_type_id, "display_format");
 
@@ -1559,8 +1559,8 @@ function ft_upgrade_form_tools()
 				$success      = false;
 				$mysql_error  = "<i>$query></i> [" . mysql_error() . "]";
 
-				$error_message = ft_eval_smarty_string($LANG["notify_problem_upgrading"], array("version" => $g_current_version));
-				$link_text     = ft_eval_smarty_string($LANG["phrase_upgrade_problem_link"], array("link" => "http://docs.formtools.org/upgrading/?page=problems_upgrading"));
+				$error_message = General::evalSmartyString($LANG["notify_problem_upgrading"], array("version" => $g_current_version));
+				$link_text     = General::evalSmartyString($LANG["phrase_upgrade_problem_link"], array("link" => "http://docs.formtools.org/upgrading/?page=problems_upgrading"));
 				$message = $error_message . " " . $mysql_error . "<br />" . $_LANG["phrase_upgrade_problem_link"] . " " . $link_text;
 				break;
 			}
@@ -1648,8 +1648,8 @@ function ft_upgrade_form_tools()
 				$has_problems = true;
 				$success      = false;
 				$mysql_error  = "<i>$query></i> [" . mysql_error() . "]";
-				$error_message = ft_eval_smarty_string($LANG["notify_problem_upgrading"], array("version" => $g_current_version));
-				$link_text     = ft_eval_smarty_string($LANG["phrase_upgrade_problem_link"], array("link" => "http://docs.formtools.org/upgrading/?page=problems_upgrading"));
+				$error_message = General::evalSmartyString($LANG["notify_problem_upgrading"], array("version" => $g_current_version));
+				$link_text     = General::evalSmartyString($LANG["phrase_upgrade_problem_link"], array("link" => "http://docs.formtools.org/upgrading/?page=problems_upgrading"));
 				$message = $error_message . " " . $mysql_error . "<br />" . $_LANG["phrase_upgrade_problem_link"] . " " . $link_text;
 				break;
 			}
@@ -1688,8 +1688,8 @@ function ft_upgrade_form_tools()
 				$has_problems = true;
 				$success      = false;
 				$mysql_error  = "<i>$query></i> [" . mysql_error() . "]";
-				$error_message = ft_eval_smarty_string($LANG["notify_problem_upgrading"], array("version" => $g_current_version));
-				$link_text     = ft_eval_smarty_string($LANG["phrase_upgrade_problem_link"], array("link" => "http://docs.formtools.org/upgrading/?page=problems_upgrading"));
+				$error_message = General::evalSmartyString($LANG["notify_problem_upgrading"], array("version" => $g_current_version));
+				$link_text     = General::evalSmartyString($LANG["phrase_upgrade_problem_link"], array("link" => "http://docs.formtools.org/upgrading/?page=problems_upgrading"));
 				$message = $error_message . " " . $mysql_error . "<br />" . $_LANG["phrase_upgrade_problem_link"] . " " . $link_text;
 				break;
 			}

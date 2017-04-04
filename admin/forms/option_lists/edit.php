@@ -15,8 +15,7 @@ $order   = General::loadField("order", "option_list_order");
 // used to display the total count of fields using this option list on the Form Fields tab.
 $num_fields = ft_get_num_fields_using_option_list($list_id);
 
-if (empty($list_id))
-{
+if (empty($list_id)) {
 	header("location: index.php");
 	exit;
 }
@@ -26,7 +25,7 @@ $prev_tabset_link = (!empty($links["prev_option_list_id"])) ? "edit.php?page=$pa
 $next_tabset_link = (!empty($links["next_option_list_id"])) ? "edit.php?page=$page&list_id={$links["next_option_list_id"]}" : "";
 
 
-$same_page = ft_get_clean_php_self();
+$same_page = General::getCleanPhpSelf();
 $tabs = array(
 	"main" => array(
 		"tab_label" => $LANG["word_main"],
@@ -47,8 +46,7 @@ $page_vars["show_tabset_nav_links"] = true;
 $page_vars["prev_tabset_link"] = $prev_tabset_link;
 $page_vars["next_tabset_link"] = $next_tabset_link;
 
-switch ($page)
-{
+switch ($page) {
 	case "main":
 		require("page_main.php");
 		break;

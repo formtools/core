@@ -8,11 +8,11 @@ if (isset($request["update_main"]))
 
 $page_vars = array();
 $page_vars["page"] = "main";
-$page_vars["page_url"] = ft_get_page_url("settings_main");
+$page_vars["page_url"] = Pages::getPageUrl("settings_main");
 $page_vars["tabs"] = $tabs;
 $page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_main"]}";
 $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>');
-$page_vars["text_date_formatting_link"] = ft_eval_smarty_string($LANG["text_date_formatting_link"], $replacement_info);
+$page_vars["text_date_formatting_link"] = General::evalSmartyString($LANG["text_date_formatting_link"], $replacement_info);
 $page_vars["head_js"] =<<<END
   var rules = [];
   rules.push("required,program_name,{$LANG["validation_no_program_name"]}");

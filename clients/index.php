@@ -30,15 +30,15 @@ $search_criteria = array(
 $num_client_forms = count(Clients::getClientForms($account_id));
 $forms            = ft_search_forms($account_id, false, $search_criteria);
 $client_info      = Accounts::getAccountInfo($account_id);
-$forms_page_default_message = ft_eval_smarty_string($client_info["settings"]["forms_page_default_message"]);
+$forms_page_default_message = General::evalSmartyString($client_info["settings"]["forms_page_default_message"]);
 
 // ------------------------------------------------------------------------------------------
 
 // compile header information
 $page_vars = array();
-$page_vars["head_title"] = ft_eval_smarty_string($_SESSION["ft"]["account"]["settings"]["page_titles"], array("page" => $LANG["word_forms"]));
+$page_vars["head_title"] = General::evalSmartyString($_SESSION["ft"]["account"]["settings"]["page_titles"], array("page" => $LANG["word_forms"]));
 $page_vars["page"]     = "client_forms";
-$page_vars["page_url"] = ft_get_page_url("client_forms");
+$page_vars["page_url"] = Pages::getPageUrl("client_forms");
 $page_vars["num_client_forms"] = $num_client_forms;
 $page_vars["forms"] = $forms;
 $page_vars["forms_page_default_message"] = $forms_page_default_message;

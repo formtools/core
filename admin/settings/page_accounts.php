@@ -17,11 +17,11 @@ $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/man
 // compile the theme vars
 $page_vars = array();
 $page_vars["page"] = "accounts";
-$page_vars["page_url"] = ft_get_page_url("settings_accounts");
+$page_vars["page_url"] = Pages::getPageUrl("settings_accounts");
 $page_vars["tabs"] = $tabs;
 $page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_accounts"]}";
-$page_vars["text_date_formatting_link"] = ft_eval_smarty_string($LANG["text_date_formatting_link"], $replacement_info);
-$page_vars["phrase_one_special_char"] = ft_eval_smarty_string($LANG["phrase_one_special_char"], array("chars" => $g_password_special_chars));
+$page_vars["text_date_formatting_link"] = General::evalSmartyString($LANG["text_date_formatting_link"], $replacement_info);
+$page_vars["phrase_one_special_char"] = General::evalSmartyString($LANG["phrase_one_special_char"], array("chars" => $g_password_special_chars));
 $page_vars["head_js"] =<<< END
 var rules = [];
 rules.push("required,default_page_titles,{$LANG["validation_no_page_titles"]}");

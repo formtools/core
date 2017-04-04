@@ -73,8 +73,8 @@ $all_option_lists = OptionLists::getList("all");
 // compile template info
 $page_vars = array();
 $page_vars["page"] = "option_lists";
-$page_vars["text_option_list_page"] = ft_eval_smarty_string($LANG["text_option_list_page"], array("link" => "../add/step1.php"));
-$page_vars["page_url"] = ft_get_page_url("option_lists");
+$page_vars["text_option_list_page"] = General::evalSmartyString($LANG["text_option_list_page"], array("link" => "../add/step1.php"));
+$page_vars["page_url"] = Pages::getPageUrl("option_lists");
 $page_vars["head_title"] = $LANG["phrase_option_lists"];
 $page_vars["option_lists"] = $updated_option_lists;
 $page_vars["num_option_lists"] = $num_option_lists;

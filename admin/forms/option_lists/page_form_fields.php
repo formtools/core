@@ -22,7 +22,7 @@ foreach ($forms as $form_info) {
 // ------------------------------------------------------------------------------------------------
 
 $page_vars["list_info"] = $list_info;
-$page_vars["page_url"] = ft_get_page_url("edit_option_list");
+$page_vars["page_url"] = Pages::getPageUrl("edit_option_list");
 $page_vars["head_title"] = $LANG["phrase_edit_option_list"];
 $page_vars["num_fields_using_option_list"] = $num_fields;
 $page_vars["incomplete_forms"] = $incomplete_forms;

@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\Core;
 use FormTools\Themes;
 
 
@@ -17,17 +18,15 @@ use FormTools\Themes;
  */
 function smarty_function_ft_include($params, &$smarty)
 {
-    global $g_default_theme, $g_smarty;
-
     if (empty($params["file"])) {
         $smarty->trigger_error("assign: missing 'file' parameter. This is required.");
         return;
     }
 
-    // the template ("file") should be an absolute path relative to the
+    // the template ("file") should be an absolute path relative to the root
     $template = $params["file"];
-    $theme = (isset($_SESSION["ft"]["account"]["theme"])) ? $_SESSION["ft"]["account"]["theme"] : $g_default_theme;
-    $html = $g_smarty->fetch(Themes::getSmartyTemplateWithFallback($theme, $template));
+    $theme = Core::$user->getTheme();
+    $html = Core::$smarty->fetch(Themes::getSmartyTemplateWithFallback($theme, $template)); // TODO correct?
 
     return $html;
 }

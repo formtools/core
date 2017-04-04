@@ -40,7 +40,7 @@ $clients = ft_search_clients($search_criteria);
 // compile the header information
 $page_vars = array();
 $page_vars["page"] = "clients";
-$page_vars["page_url"] = ft_get_page_url("clients");
+$page_vars["page_url"] = Pages::getPageUrl("clients");
 $page_vars["head_title"] = $LANG["word_clients"];
 $page_vars["num_clients"] = $num_clients;
 $page_vars["clients"]  = $clients;

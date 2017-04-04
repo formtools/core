@@ -64,7 +64,7 @@ foreach ($client_forms as $form_info) {
 
 // compile header information
 $page_vars["page"] = "forms";
-$page_vars["page_url"] = ft_get_page_url("edit_client_forms", array("client_id" => $client_id));
+$page_vars["page_url"] = Pages::getPageUrl("edit_client_forms", array("client_id" => $client_id));
 $page_vars["head_title"]   = "{$LANG["phrase_edit_client"]} - {$LANG["word_forms"]}";
 $page_vars["client_info"]    = $client_info;
 $page_vars["forms"]          = $forms;

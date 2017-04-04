@@ -14,7 +14,7 @@ $account_id = $_SESSION["ft"]["account"]["account_id"];
 // store the current selected tab in memory
 $page = General::loadField("page", "account_page", "main");
 
-$same_page = ft_get_clean_php_self();
+$same_page = General::getCleanPhpSelf();
 $tabs = array(
 	"main"     => array("tab_label" => $LANG["word_main"], "tab_link" => "{$same_page}?page=main"),
 	"settings" => array("tab_label" => $LANG["word_settings"], "tab_link" => "{$same_page}?page=settings")

@@ -18,7 +18,7 @@ $page_vars["prev_tabset_link"] = (!empty($links["prev_form_id"])) ? "edit.php?pa
 $page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "edit.php?page=views&form_id={$links["next_form_id"]}" : "";
 
 $page_vars["page"]       = "public_view_omit_list";
-$page_vars["page_url"]   = ft_get_page_url("edit_form_public_view_omit_list", array("form_id" => $form_id, "view_id" => $view_id));
+$page_vars["page_url"]   = Pages::getPageUrl("edit_form_public_view_omit_list", array("form_id" => $form_id, "view_id" => $view_id));
 $page_vars["view_id"]    = $view_id;
 $page_vars["head_title"] = $LANG["phrase_public_view_omit_list"];
 $page_vars["form_info"]  = $form_info;

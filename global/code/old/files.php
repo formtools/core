@@ -159,7 +159,7 @@ function ft_check_upload_folder($folder)
 		if (!is_dir($upload_tmp_dir))
 		{
 			$replacement_info = array("upload_folder" => $upload_tmp_dir);
-			$message = ft_eval_smarty_string($LANG["validation_invalid_upload_folder"], $replacement_info);
+			$message = General::evalSmartyString($LANG["validation_invalid_upload_folder"], $replacement_info);
 			return array(false, );
 		}
 

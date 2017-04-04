@@ -53,7 +53,7 @@ foreach ($views["results"] as $view) {
 
 // compile the template information
 $page_vars["page"]       = "edit_email";
-$page_vars["page_url"]   = ft_get_page_url("edit_form_email_settings", array("form_id" => $form_id));
+$page_vars["page_url"]   = Pages::getPageUrl("edit_form_email_settings", array("form_id" => $form_id));
 $page_vars["email_id"]   = $email_id;
 $page_vars["head_title"] = "{$LANG["phrase_edit_form"]} - {$LANG["phrase_edit_email_template"]}";
 $page_vars["form_info"]  = $form_info;

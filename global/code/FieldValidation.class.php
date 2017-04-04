@@ -169,7 +169,7 @@ class FieldValidation {
                 "field"      => $field_title,
                 "field_name" => $field_name
             );
-            $error_message = ft_eval_smarty_string($error_message, $placeholders);
+            $error_message = General::evalSmartyString($error_message, $placeholders);
 
             $validation[] = "$rule,$field_name,$error_message";
         }
@@ -219,8 +219,8 @@ class FieldValidation {
 
             $grouped_rules[$field_type_id][] = array(
                 "rule_id"    => $row["rule_id"],
-                "rule_label" => ft_eval_smarty_string($row["rule_label"]),
-                "default_error_message" => ft_eval_smarty_string($row["default_error_message"])
+                "rule_label" => General::evalSmartyString($row["rule_label"]),
+                "default_error_message" => General::evalSmartyString($row["default_error_message"])
             );
         }
 
@@ -275,7 +275,7 @@ class FieldValidation {
                     "field"      => $field_title,
                     "field_name" => $field_name
                     );
-                    $message = ft_eval_smarty_string($rule_info["error_message"], $placeholders);
+                    $message = General::evalSmartyString($rule_info["error_message"], $placeholders);
 
                     if ($rsv_rule == "function") {
                         $custom_function = $rule_info["custom_function"];
@@ -285,7 +285,7 @@ class FieldValidation {
                         }
                         $custom_func_errors[] = "{field:\"$field_name\",field_id:$field_id,func:\"$custom_function\",err:\"$message\"}";
                     } else {
-                        $rsv_field_name = ft_eval_smarty_string($rule_info["rsv_field_name"], $placeholders);
+                        $rsv_field_name = General::evalSmartyString($rule_info["rsv_field_name"], $placeholders);
                         $js_lines[] = "rules.push(\"$rsv_rule,$rsv_field_name,$message\")";
                     }
                 }

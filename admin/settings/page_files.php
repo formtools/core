@@ -25,7 +25,7 @@ $max_filesize = ft_get_upload_max_filesize();
 // compile the list of vars to pass to the page
 $page_vars = array();
 $page_vars["page"] = "files";
-$page_vars["page_url"] = ft_get_page_url("settings_files");
+$page_vars["page_url"] = Pages::getPageUrl("settings_files");
 $page_vars["tabs"] = $tabs;
 $page_vars["js_messages"] = "";
 $page_vars["max_filesize"] = $max_filesize;

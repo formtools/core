@@ -139,7 +139,7 @@ class Pages
                 // modules
                 if (preg_match("/^module_(\d+)/", $page_identifier, $matches)) {
                     $moduleId = $matches[1];
-                    $moduleInfo = ft_get_module($moduleId);
+                    $moduleInfo = Modules::getModule($moduleId);
                     if (!empty($moduleInfo)) {
                         $moduleFolder = $moduleInfo["module_folder"];
                         $url = "/modules/$moduleFolder/";
@@ -170,5 +170,43 @@ class Pages
 
         return $url;
     }
+
+
+    /**
+     * Used on every page within Form Tools, this function builds the URL for a page *as it should be*, e.g. if they're
+     * editing a submission, the URL would contain a submission ID and form ID, BUT the user may have added something
+     * extra. This function builds the "proper" URL for use by the custom menus; it lets the script know what parent
+     * menu to show for any given page.
+     *
+     * @param string $page_identifier
+     * @param array $params
+     * @return string
+     */
+    public static function getPageUrl($page_identifier, $params = array())
+    {
+        $url = self::$pageList[$page_identifier];
+
+        $query_pairs = array();
+        while (list($key, $value) = each($params)) {
+            $query_pairs[] = "$key=$value";
+        }
+
+        $query_str = join("&", $query_pairs);
+
+        // only include the ? if it's not already there
+        $full_url = $url;
+        if (!empty($query_str)) {
+            if (strpos($url, "?")) {
+                $full_url .= "&{$query_str}";
+            } else {
+                $full_url .= "?{$query_str}";
+            }
+        }
+
+        extract(Hooks::processHookCalls("end", compact("page_identifier", "params", "full_url"), array("full_url")), EXTR_OVERWRITE);
+
+        return $full_url;
+    }
+
 
 }

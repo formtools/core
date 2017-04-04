@@ -32,7 +32,7 @@ foreach ($form_fields as $field_info) {
 
 // compile the templates information
 $page_vars["page"]       = "email_settings";
-$page_vars["page_url"]   = ft_get_page_url("edit_form_email_settings", array("form_id" => $form_id));
+$page_vars["page_url"]   = Pages::getPageUrl("edit_form_email_settings", array("form_id" => $form_id));
 $page_vars["head_title"] = "{$LANG["phrase_edit_form"]} - {$LANG["phrase_email_settings"]}";
 $page_vars["form_info"]  = $form_info;
 $page_vars["columns"]    = $trimmed_cols;

@@ -70,8 +70,8 @@ class Hooks {
      *
      * @param string $event the name of the event in the function calling the hook (e.g. "start", "end",
      *     "manage_files" etc.)
-     * @param $vars whatever vars are being passed to the hooks from the context of the calling function
-     * @param $overridable_vars whatever variables may be overridden by the hook
+     * @param $vars mixed vars are being passed to the hooks from the context of the calling function
+     * @param $overridable_vars mixed variables may be overridden by the hook
      * @param $overridable_vars_to_be_concatenated
      */
     public static function processHookCalls($event, $vars, $overridable_vars, $overridable_vars_to_be_concatenated = array())
@@ -85,7 +85,7 @@ class Hooks {
         $calling_function = $backtrace[1]["function"];
 
         // get the hooks associated with this core function and event
-        $hooks = ft_get_hook_calls($event, "code", $calling_function);
+        $hooks = self::getHookCalls($event, "code", $calling_function);
 
         // extract the var passed from the calling function into the current scope
         $return_vals = array();
@@ -177,6 +177,74 @@ class Hooks {
             closedir($handle);
         }
     }
+
+
+    /**
+     * Returns all hooks associated with a particular function event, ordered by priority.
+     *
+     * @param string $event
+     * @param string $function_name
+     * @return array a hash of hook information
+     */
+    public static function getHookCalls($event, $hook_type, $function_name)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}hook_calls
+            WHERE  hook_type = :hook_type AND
+                   action_location = :action_location AND
+                   function_name = :function_name
+            ORDER BY priority ASC
+        ");
+        $db->bindAll(array(
+            "hook_type" => $hook_type,
+            "action_location" => $event,
+            "function_name" => $function_name
+        ));
+        $db->execute();
+
+        $results = array();
+        foreach ($db->fetchAll() as $row) {
+            $results[] = $row;
+        }
+
+        return $results;
+    }
+
+
+
+    /**
+     * This processes all template hooks for a particular template location (e.g. edit client page, at the top).
+     * It works similarly to the ft_process_hooks function, except there are no options to override values in the
+     * template. This is used purely to insert content into the templates.
+     *
+     * @param string $location
+     * @param array an array of all variables currently in the template
+     * @param array in most cases, template hooks just contain the single "location" parameter which identifies
+     *     where the hook is from. But hooks may also contain any additional rbitrary attribute names. This
+     *     param contains all of them.
+     */
+    public static function processTemplateHookCalls($location, $template_vars, $all_params = array())
+    {
+        $hooks = self::getHookCalls($location, "template", "");
+
+        // extract the var passed from the calling function into the current scope
+        foreach ($hooks as $hook_info) {
+            $module_folder = $hook_info["module_folder"];
+            if (!ft_check_module_enabled($module_folder)) {
+                continue;
+            }
+
+            // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
+            // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
+            $template_vars["form_tools_hook_info"] = $hook_info;
+
+            self::processTemplateHookCall($hook_info["module_folder"], $hook_info["hook_function"], $location, $template_vars, $all_params);
+        }
+    }
+
 
 
     // --------------------------------------------------------------------------------------------
@@ -307,5 +375,35 @@ class Hooks {
         return $found_hooks;
     }
 
+
+    /**
+     * This function called the template hooks and returns the generated HTML.
+     *
+     * @param string $module_folder
+     * @param string $hook_function
+     * @param string $hook_function
+     * @return string
+     */
+    private static function processTemplateHookCall($module_folder, $hook_function, $location, $template_vars, $all_template_hook_params = array())
+    {
+        $root_dir = Core::getRootDir();
+        @include_once("$root_dir/modules/$module_folder/library.php");
+
+        // this is very unfortunate, but has to be done for backward compatibility. Up until July 2011, template hooks only ever
+        // needed the single "location" attribute + the template var information. But with the Data Visualization module, it needs to be more
+        // flexible. The generated hooks for each visualization can be used in pages generated in the Pages module, and we need to add a
+        // "height" and "width" attributes to the hook to permit the user to tinker around with the size (hardcoding the size of the
+        // visualization makes no sense, because it can be used in different contexts). But... to get that information to the template hook
+        // calls functions we CAN'T pass in an additional param, because it would break all hook call functions. So instead, we add the
+        // information into the $template_vars info for use by the hook call function. Boo!
+        $template_vars["form_tools_all_template_hook_params"] = $all_template_hook_params;
+
+        $html = "";
+        if (function_exists($hook_function)) {
+            $html = @$hook_function($location, $template_vars);
+        }
+
+        return $html;
+    }
 
 }

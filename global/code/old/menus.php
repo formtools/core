@@ -772,100 +772,6 @@ function ft_cache_account_menu($account_id)
 
 
 /**
- * Used on every page within Form Tools, this function builds the URL for a page *as it should be*,
- * e.g. if they're editing a submission, the URL would contain a submission ID and form ID, BUT
- * the user may have added something extra. This function builds the "proper" URL for use by the
- * custom menus; it lets the script know what parent menu to show for any given page.
- *
- * @param string $page_identifier
- * @param array $params
- * @return string
- */
-function ft_get_page_url($page_identifier, $params = array())
-{
-	global $g_pages;
-
-	$url = $g_pages[$page_identifier];
-	$query_pairs = array();
-	while (list($key, $value) = each($params))
-		$query_pairs[] = "$key=$value";
-
-	$query_str = join("&", $query_pairs);
-
-	// only include the ? if it's not already there
-	$full_url = $url;
-
-	if (!empty($query_str))
-	{
-		if (strpos($url, "?"))
-			$full_url .= "&{$query_str}";
-		else
-			$full_url .= "?{$query_str}";
-	}
-
-	extract(Hooks::processHookCalls("end", compact("page_identifier", "params", "full_url"), array("full_url")), EXTR_OVERWRITE);
-
-	return $full_url;
-}
-
-
-/**
- * Used for the hide/show submenu mechanism. Menu pages can set up one-level hierarchies in
- * which one page is considered a child of another. This function find the URL of the parent of a particular
- * menu item. A few conditions:
- *   - if the page doesn't have a parent, it either returns the LAST parent page URL in memory,
- *     (if it's there) or empty string.
- *   - if the page IS a parent, it returns its own page URL
- *   - if the page has more than one parent, it returns the FIRST one only
- *
- * @param string $page_identifier
- * @return string $parent_page_identifier
- */
-function ft_get_parent_page_url($page_url)
-{
-	global $g_root_url;
-
-	$page_found = false;
-	$last_parent_page_url = "";
-
-	// if there's no menu in memory, the person isn't logged in. Just return the empty string
-	if (!isset($_SESSION["ft"]["menu"]))
-		return "";
-
-	$menu_items = $_SESSION["ft"]["menu"]["menu_items"];
-
-	for ($i=0; $i<count($menu_items); $i++)
-	{
-		$curr_page_url = $menu_items[$i]["url"];
-		if ($menu_items[$i]["is_submenu"] == "no")
-			$last_parent_page_url = $curr_page_url;
-
-		if ($curr_page_url == $g_root_url . $page_url)
-		{
-			$page_found = true;
-			break;
-		}
-	}
-
-	$found_page = "";
-	if (!$page_found)
-	{
-		if (isset($_SESSION["ft"]["menu"]["last_parent_url"]))
-			$found_page = $_SESSION["ft"]["menu"]["last_parent_url"];
-		else
-			$found_page = "";
-	}
-	else
-	{
-		$found_page = $last_parent_page_url;
-		$_SESSION["ft"]["menu"]["last_parent_url"] = $found_page;
-	}
-
-	return $found_page;
-}
-
-
-/**
  * Deletes a client menu. Since it's possible for one or more clients to already be associated with the
  * menu, those clients will be orphaned by this action. In this situation, it refuses to delete the
  * menu, and lists all clients that will be affected (each a link to their account). It also provides
@@ -944,7 +850,7 @@ function ft_delete_client_menu($menu_id)
 			"submit_button" => $submit_button
 		);
 
-		$mass_assign_html = "<div class=\"margin_top_large margin_bottom_large\">" . ft_eval_smarty_string($placeholder_str, $placeholders) . "</div>";
+		$mass_assign_html = "<div class=\"margin_top_large margin_bottom_large\">" . General::evalSmartyString($placeholder_str, $placeholders) . "</div>";
 		$html = $message . $mass_assign_html . $client_links_table;
 
 		return array(false, $html);
@@ -1021,6 +927,6 @@ function ft_update_client_menus($account_ids, $menu_id)
 		mysql_query("UPDATE {$g_table_prefix}accounts SET menu_id=$menu_id WHERE account_id = $client_id");
 
 	$placeholders = array("menu_name" => $menu_name);
-	$message = ft_eval_smarty_string($LANG["notify_client_account_menus_updated"], $placeholders);
+	$message = General::evalSmartyString($LANG["notify_client_account_menus_updated"], $placeholders);
 	return array(true, $message);
 }

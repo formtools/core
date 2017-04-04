@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Core;
+use FormTools\FieldTypes;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
@@ -243,7 +244,7 @@ if ($select_all_submissions_returned == "true") {
 
 $preselected_subids_str = implode(",", $preselected_subids);
 
-$field_types = ft_get_field_types(true);
+$field_types = FieldTypes::get(true);
 
 $has_searchable_field = false;
 foreach ($view_info["fields"] as $field_info) {
@@ -264,7 +265,7 @@ $shared_resources_list = Settings::get("edit_submission_onload_resources");
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
 foreach ($shared_resources_array as $resource) {
-	$shared_resources .= ft_eval_smarty_string($resource, array("g_root_url" => $g_root_url)) . "\n";
+	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $g_root_url)) . "\n";
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -272,7 +273,7 @@ foreach ($shared_resources_array as $resource) {
 // compile the header information
 $page_vars = array();
 $page_vars["page"]    = "client_forms";
-$page_vars["page_url"] = ft_get_page_url("client_form_submissions", array("form_id" => $form_id));
+$page_vars["page_url"] = Pages::getPageUrl("client_form_submissions", array("form_id" => $form_id));
 $page_vars["head_title"]  = $LANG["word_submissions"];
 $page_vars["form_info"]   = $form_info;
 $page_vars["form_id"]     = $form_id;

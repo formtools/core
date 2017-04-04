@@ -33,14 +33,14 @@ if ($_SESSION["ft"]["uploading_files"] == "yes")
 $form_tag .= '>';
 
 $replacement_info = array("linktoform" => "{$form_info['form_url']}");
-$direct_form_para_2 = ft_eval_smarty_string($LANG["text_add_form_step_2_para_3"], $replacement_info);
+$direct_form_para_2 = General::evalSmartyString($LANG["text_add_form_step_2_para_3"], $replacement_info);
 
 $replacement_info = array(
 	"varname" => "<b>\$submission_hash</b>",
 	"postvar" => "\$_POST",
 	"sessionvar" => "\$_SESSION"
 );
-$code_form_para_2 = ft_eval_smarty_string($LANG["text_add_form_step_2_para_6"], $replacement_info);
+$code_form_para_2 = General::evalSmartyString($LANG["text_add_form_step_2_para_6"], $replacement_info);
 
 
 if (isset($_POST["refresh"]) && $form_info["is_initialized"] == "no")
@@ -53,7 +53,7 @@ if (isset($_POST["refresh"]) && $form_info["is_initialized"] == "no")
 
 // compile the header information
 $page_vars["page"]     = "add_form3";
-$page_vars["page_url"] = ft_get_page_url("add_form3");
+$page_vars["page_url"] = Pages::getPageUrl("add_form3");
 $page_vars["head_title"] = "{$LANG['phrase_add_form']} - {$LANG["phrase_step_3"]}";
 $page_vars["form_id"] = $form_id;
 $page_vars["form_tag"] = $form_tag;

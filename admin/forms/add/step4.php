@@ -52,7 +52,7 @@ $field_id_str = implode(",", $field_ids);
 
 // compile the header information
 $page_vars["page"] = "add_form4";
-$page_vars["page_url"] = ft_get_page_url("add_form4");
+$page_vars["page_url"] = Pages::getPageUrl("add_form4");
 $page_vars["sortable_id"] = $sortable_id;
 $page_vars["form_id"] = $form_id;
 $page_vars["form_fields"] = $form_fields;

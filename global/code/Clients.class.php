@@ -211,7 +211,7 @@ class Clients {
         }
 
         $placeholders = array("theme" => $theme_name);
-        $message = ft_eval_smarty_string($LANG["notify_client_account_themes_updated"], $placeholders);
+        $message = General::evalSmartyString($LANG["notify_client_account_themes_updated"], $placeholders);
         $success = true;
 
         return array($success, $message);

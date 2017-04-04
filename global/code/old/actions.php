@@ -509,7 +509,7 @@ switch ($action)
 	case "get_form_field_placeholders":
 		$form_id = $request["form_id"];
 
-		$text_reference_tab_info = ft_eval_smarty_string($LANG["text_reference_tab_info"], array("g_root_url" => $g_root_url));
+		$text_reference_tab_info = General::evalSmartyString($LANG["text_reference_tab_info"], array("g_root_url" => $g_root_url));
 
 		$page_vars = array();
 		$page_vars["form_id"] = $form_id;

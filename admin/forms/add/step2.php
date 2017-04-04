@@ -153,7 +153,7 @@ $num_pages_in_multi_page_form = count($page_values["multi_page_form_urls"]) + 1;
 
 // compile the header information
 $page_vars["page"]     = "add_form1";
-$page_vars["page_url"] = ft_get_page_url("add_form2");
+$page_vars["page_url"] = Pages::getPageUrl("add_form2");
 $page_vars["head_title"] = "{$LANG['phrase_add_form']} - {$LANG["phrase_step_2"]}";
 $page_vars["page_values"] = $page_values;
 $page_vars["form_id"] = $form_id;

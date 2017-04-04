@@ -11,6 +11,7 @@
  */
 
 use FormTools\Core;
+use FormTools\FieldTypes;
 use FormTools\Settings;
 
 
@@ -53,55 +54,6 @@ $g_default_datetime_format = "datetime:yy-mm-dd|h:mm TT|ampm`true";
 
 
 /**
- * Return information about the field types in the database. To provide a little re-usability, the two
- * params let you choose whether or not to return the field types AND their settings or just
- * the field types, and whether or not you want to limit the results to specific field type IDs.
- *
- * @param array $return_settings
- * @param array $field_type_ids
- * @return array
- */
-function ft_get_field_types($return_settings = false, $field_type_ids = array())
-{
-    $db = Core::$db;
-
-	if (!empty($field_type_ids)) {
-        $field_type_id_str = implode(",", $field_type_ids);
-        $db->query("
-            SELECT *, g.list_order as group_list_order, ft.list_order as field_type_list_order
-            FROM   {PREFIX}field_types ft, {PREFIX}list_groups g
-            WHERE  g.group_type = :field_types AND
-                   ft.group_id = g.group_id AND 
-                   ft.field_type_id IN ($field_type_id_str)
-            ORDER BY g.list_order, ft.list_order
-        ");
-	} else {
-        $db->query("
-            SELECT *, g.list_order as group_list_order, ft.list_order as field_type_list_order
-            FROM   {PREFIX}field_types ft, {PREFIX}list_groups g
-            WHERE  g.group_type = :field_types AND
-                   ft.group_id = g.group_id
-            ORDER BY g.list_order, ft.list_order
-		");
-    }
-	$db->bind(":field_types", "field_types");
-    $db->execute();
-    $results = $db->fetchAll();
-
-	$field_types = array();
-	foreach ($results as $row) {
-		if ($return_settings) {
-			$curr_field_type_id = $row["field_type_id"];
-			$row["settings"] = ft_get_field_type_settings($curr_field_type_id, false);
-		}
-		$field_types[] = $row;
-	}
-
-	return $field_types;
-}
-
-
-/**
  * Simple function to return a hash of field_type_id => field type name. Used for display purposes.
  *
  * @return array
@@ -118,7 +70,7 @@ function ft_get_field_type_names()
 	$info = array();
 	while ($row = mysql_fetch_assoc($query))
 	{
-		$info[$row["field_type_id"]] = ft_eval_smarty_string($row["field_type_name"]);
+		$info[$row["field_type_id"]] = General::evalSmartyString($row["field_type_name"]);
 	}
 
 	return $info;
@@ -253,27 +205,6 @@ function ft_get_field_type($field_type_id, $return_all_info = false)
 	{
 		$info["settings"]   = ft_get_field_type_settings($field_type_id, true);
 		$info["validation"] = ft_get_field_type_validation_rules($field_type_id);
-	}
-
-	return $info;
-}
-
-
-function ft_get_field_type_by_identifier($identifier)
-{
-    $db = Core::$db;
-	$db->query("
-		SELECT *
-		FROM   {PREFIX}field_types
-		WHERE  field_type_identifier = :identifier
-	");
-	$db->bind(":identifier", $identifier);
-	$db->execute();
-	$info = $db->fetch();
-
-	if (!empty($info)) {
-		$field_type_id = $info["field_type_id"];
-		$info["settings"] = ft_get_field_type_settings($field_type_id);
 	}
 
 	return $info;
@@ -567,7 +498,7 @@ function ft_generate_field_type_settings_js($options = array())
 		while ($settings_row = mysql_fetch_assoc($settings_query))
 		{
 			$setting_id = $settings_row["setting_id"];
-			$field_label = ft_eval_smarty_string($settings_row["field_label"]);
+			$field_label = General::evalSmartyString($settings_row["field_label"]);
 			$field_setting_identifier = $settings_row["field_setting_identifier"];
 			$field_type = $settings_row["field_type"];
 			$default_value = $settings_row["default_value"];
@@ -584,7 +515,7 @@ function ft_generate_field_type_settings_js($options = array())
 			while ($options_row = mysql_fetch_assoc($options_query))
 			{
 				$value = $options_row["option_value"];
-				$text  = ft_eval_smarty_string($options_row["option_text"]);
+				$text  = General::evalSmartyString($options_row["option_text"]);
 				$options[] = "{ value: \"$value\", text: \"$text\" }";
 			}
 			$options_js = implode(",$delimiter", $options);
@@ -675,7 +606,7 @@ function ft_get_raw_field_types_js($namespace = "page_ns")
 {
 	global $g_table_prefix, $g_raw_field_types;
 
-	$field_types = ft_get_field_types();
+	$field_types = FieldTypes::get();
 
 	$mapped = array();
 	while (list($raw_field_type, $field_type_label) = each($g_raw_field_types))
@@ -694,7 +625,7 @@ function ft_get_raw_field_types_js($namespace = "page_ns")
 
 			$curr_mapped_field_types[] = array(
 				"field_type_id"   => $field_type_info["field_type_id"],
-				"field_type_name" => ft_eval_smarty_string($field_type_info["field_type_name"]),
+				"field_type_name" => General::evalSmartyString($field_type_info["field_type_name"]),
 				"compatible_field_sizes" => $field_type_info["compatible_field_sizes"],
 				"raw_field_type_map_multi_select_id" => $field_type_info["raw_field_type_map_multi_select_id"]
 			);
@@ -984,10 +915,9 @@ function ft_get_date_field_type_ids()
  */
 function ft_get_field_type_id_to_identifier()
 {
-	$field_types = ft_get_field_types();
+	$field_types = FieldTypes::get();
 	$map = array();
-	foreach ($field_types as $field_type_info)
-	{
+	foreach ($field_types as $field_type_info) {
 		$map[$field_type_info["field_type_id"]] = $field_type_info["field_type_identifier"];
 	}
 
@@ -1164,7 +1094,7 @@ function ft_generate_viewable_field($params)
 		}
 		else
 		{
-			$output = ft_eval_smarty_string($markup_with_placeholders, $placeholders);
+			$output = General::evalSmartyString($markup_with_placeholders, $placeholders);
 		}
 	}
 

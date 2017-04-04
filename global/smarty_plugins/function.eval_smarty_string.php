@@ -28,5 +28,5 @@ function smarty_function_eval_smarty_string($params, &$smarty)
     unset($placeholders["placeholder_str"]);
     $placeholder_str = $params["placeholder_str"];
 
-    return ft_eval_smarty_string($placeholder_str, $placeholders);
+    return General::evalSmartyString($placeholder_str, $placeholders);
 }

@@ -50,7 +50,7 @@ function smarty_function_display_edit_submission_view_dropdown($params, &$smarty
   // add it to the dropdown list
   if (count($views) > 1)
   {
-  	$same_page = ft_get_clean_php_self();
+  	$same_page = General::getCleanPhpSelf();
 	  $html = "<select onchange=\"window.location='{$same_page}?form_id=$form_id&submission_id=$submission_id&view_id=' + this.value\">
 	    <optgroup label=\"Views\">\n";
 	  foreach ($views as $view_info)

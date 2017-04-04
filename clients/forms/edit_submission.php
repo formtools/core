@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Core;
+use FormTools\FieldTypes;
 use FormTools\FieldValidation;
 use FormTools\General;
 use FormTools\Settings;
@@ -20,8 +21,7 @@ $request = array_merge($_GET, $_POST);
 $form_id = General::loadField("form_id", "curr_form_id");
 $view_id = General::loadField("view_id", "form_{$form_id}_view_id");
 $submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";
-if (empty($submission_id))
-{
+if (empty($submission_id)) {
 	header("location: index.php");
 	exit;
 }
@@ -31,8 +31,7 @@ $grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => tru
 
 // check the current client is permitted to view this information!
 General::checkClientMayView($account_id, $form_id, $view_id);
-if (!ft_check_view_contains_submission($form_id, $view_id, $submission_id))
-{
+if (!ft_check_view_contains_submission($form_id, $view_id, $submission_id)) {
 	header("location: index.php");
 	exit;
 }
@@ -46,8 +45,7 @@ $editable_field_ids = _ft_get_editable_view_fields($view_id);
 
 // handle POST requests
 $failed_validation = false;
-if (isset($_POST) && !empty($_POST))
-{
+if (isset($_POST) && !empty($_POST)) {
 	// add the view ID to the request hash, for use by the ft_update_submission function
 	$request["view_id"] = $view_id;
 	$request["editable_field_ids"] = $editable_field_ids;
@@ -55,8 +53,7 @@ if (isset($_POST) && !empty($_POST))
 
 	// if there was any problem udpating this submission, make a special note of it: we'll use that info to merge the current POST request
 	// info with the original field values to ensure the page contains the latest data (i.e. for cases where they fail server-side validation)
-	if (!$g_success)
-	{
+	if (!$g_success) {
 		$failed_validation = true;
 	}
 
@@ -70,10 +67,8 @@ $view_info = ft_get_view($view_id);
 
 // this is crumby
 $has_tabs = false;
-foreach ($view_info["tabs"] as $tab_info)
-{
-	if (!empty($tab_info["tab_label"]))
-	{
+foreach ($view_info["tabs"] as $tab_info) {
+	if (!empty($tab_info["tab_label"])) {
 		$has_tabs = true;
 		break;
 	}
@@ -91,24 +86,22 @@ if ($failed_validation) {
 
 $page_field_ids      = array();
 $page_field_type_ids = array();
-foreach ($grouped_fields as $group)
-{
-	foreach ($group["fields"] as $field_info)
-	{
+foreach ($grouped_fields as $group) {
+	foreach ($group["fields"] as $field_info) {
 		$page_field_ids[] = $field_info["field_id"];
-		if (!in_array($field_info["field_type_id"], $page_field_type_ids))
-			$page_field_type_ids[] = $field_info["field_type_id"];
+		if (!in_array($field_info["field_type_id"], $page_field_type_ids)) {
+            $page_field_type_ids[] = $field_info["field_type_id"];
+        }
 	}
 }
-$page_field_types = ft_get_field_types(true, $page_field_type_ids);
+$page_field_types = FieldTypes::get(true, $page_field_type_ids);
 
 
 // construct the tab list
 $view_tabs = ft_get_view_tabs($view_id, true);
-$same_page = ft_get_clean_php_self();
+$same_page = General::getCleanPhpSelf();
 $tabs      = array();
-while (list($key, $value) = each($view_tabs))
-{
+while (list($key, $value) = each($view_tabs)) {
 	$tabs[$key] = array(
 		"tab_label" => $value["tab_label"],
 		"tab_link"  => "{$same_page}?tab=$key&form_id=$form_id&submission_id=$submission_id"
@@ -122,8 +115,7 @@ $search = isset($_SESSION["ft"]["current_search"]) ? $_SESSION["ft"]["current_se
 
 // if we're just coming here from the search results page, get a fresh list of every submission ID in this
 // search result set. This is used to build the internal "<< previous   next >>" nav on this details page
-if (isset($_SESSION["ft"]["new_search"]) && $_SESSION["ft"]["new_search"] == "yes")
-{
+if (isset($_SESSION["ft"]["new_search"]) && $_SESSION["ft"]["new_search"] == "yes") {
 	// extract the original search settings and get the list of IDs
 	$searchable_columns = ft_get_view_searchable_fields("", $view_info["fields"]);
 	$submission_ids = ft_get_search_submission_ids($form_id, $view_id, $search["results_per_page"], $search["order"],
@@ -137,7 +129,7 @@ list($prev_link_html, $search_results_link_html, $next_link_html) = _ft_code_get
 
 // construct the page label
 $submission_placeholders = ft_get_submission_placeholders($form_id, $submission_id);
-$edit_submission_page_label = ft_eval_smarty_string($form_info["edit_submission_page_label"], $submission_placeholders);
+$edit_submission_page_label = General::evalSmartyString($form_info["edit_submission_page_label"], $submission_placeholders);
 
 // get all the shared resources
 $settings = Settings::get("", "core");
@@ -145,7 +137,7 @@ $shared_resources_list = $settings["edit_submission_onload_resources"];
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
 foreach ($shared_resources_array as $resource) {
-	$shared_resources .= ft_eval_smarty_string($resource, array("g_root_url" => $g_root_url)) . "\n";
+	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $g_root_url)) . "\n";
 }
 
 $validation_js = FieldValidation::generateSubmissionJsValidation($grouped_fields);
@@ -155,7 +147,7 @@ $validation_js = FieldValidation::generateSubmissionJsValidation($grouped_fields
 // compile the header information
 $page_vars = array();
 $page_vars["page"]   = "client_edit_submission";
-$page_vars["page_url"] = ft_get_page_url("client_edit_submission");
+$page_vars["page_url"] = Pages::getPageUrl("client_edit_submission");
 $page_vars["tabs"] = $tabs;
 $page_vars["form_info"]   = $form_info;
 $page_vars["grouped_views"] = $grouped_views;

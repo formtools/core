@@ -24,7 +24,7 @@ if (isset($request["add_form"]))
 // compile the header information
 $page_values = array();
 $page_vars["page"]     = "add_form_internal";
-$page_vars["page_url"] = ft_get_page_url("add_form_internal");
+$page_vars["page_url"] = Pages::getPageUrl("add_form_internal");
 $page_vars["head_title"] = "{$LANG['phrase_add_form']}";
 $page_vars["head_js"] =<<< END
 ft.click([

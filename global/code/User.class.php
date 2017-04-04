@@ -39,7 +39,11 @@ class User
             $lang = Sessions::get("ui_language");
             $this->lang = ($lang) ? $lang : Core::getDefaultLang();
 
-            $this->theme = Core::getDefaultTheme();
+            // TODO. Memoize these by stashin' em in sessions
+            $settings = Settings::get(array("default_theme", "default_client_swatch"));
+            $this->theme  = $settings["default_theme"];
+            $this->swatch = $settings["default_client_swatch"];
+
         } else {
             $this->isLoggedIn = true;
         }
@@ -173,6 +177,10 @@ class User
         return $this->theme;
     }
 
+    public function getSwatch() {
+        return $this->swatch;
+    }
+
     public function isLoggedIn() {
         return $this->isLoggedIn;
     }
@@ -226,13 +234,13 @@ class User
 
 
     /**
-     * Redirects a logged in user to their login page. Make this non-static.
+     * Redirects a logged in user to their login page.
      */
-    public static function redirectToLoginPage() {
-        $rootURL = Core::getRootURL();
-        $loginPage = $_SESSION["ft"]["account"]["login_page"];
-        $page = Pages::constructPageURL($loginPage);
-        header("location: {$rootURL}$page");
+    public function redirectToLoginPage() {
+        $root_url = Core::getRootUrl();
+        $login_page = Sessions::get("login_page"); //$_SESSION["ft"]["account"]["login_page"];
+        $page = Pages::constructPageURL($login_page);
+        header("location: {$root_url}$page");
     }
 
 

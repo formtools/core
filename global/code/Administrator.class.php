@@ -83,12 +83,12 @@ class Administrator {
                 $rules[] = "reg_exp,password,[0-9],{$LANG["validation_client_password_missing_number"]}";
             }
             if (in_array("special_char", $required_password_chars)) {
-                $error = ft_eval_smarty_string($LANG["validation_client_password_missing_special_char"], array("chars" => $password_special_chars));
+                $error = General::evalSmartyString($LANG["validation_client_password_missing_special_char"], array("chars" => $password_special_chars));
                 $password_special_chars = preg_quote($password_special_chars);
                 $rules[] = "reg_exp,password,[$password_special_chars],$error";
             }
             if (!empty($settings["min_password_length"])) {
-                $rule = ft_eval_smarty_string($LANG["validation_client_password_too_short"], array("number" => $settings["min_password_length"]));
+                $rule = General::evalSmartyString($LANG["validation_client_password_too_short"], array("number" => $settings["min_password_length"]));
                 $rules[] = "length>={$settings["min_password_length"]},password,$rule";
             }
         }
@@ -206,7 +206,7 @@ class Administrator {
      */
     public static function logoutAsClient()
     {
-        $root_url = Core::getRootURL();
+        $root_url = Core::getRootUrl();
 
         // empty old sessions and reload admin settings
         $admin_values = $_SESSION["ft"]["admin"];
@@ -397,7 +397,7 @@ class Administrator {
 
                 $account_settings = ft_get_account_settings($account_id);
                 if ($account_settings["min_password_length"] != "" && !empty($form_vals["password"])) {
-                    $rule = ft_eval_smarty_string($LANG["validation_client_password_too_short"], array("number" => $account_settings["min_password_length"]));
+                    $rule = General::evalSmartyString($LANG["validation_client_password_too_short"], array("number" => $account_settings["min_password_length"]));
                     $rules[] = "length>={$account_settings["min_password_length"]},password,$rule";
                 }
 
@@ -410,7 +410,7 @@ class Administrator {
                         $rules[] = "reg_exp,password,[0-9],{$LANG["validation_client_password_missing_number"]}";
                     }
                     if (in_array("special_char", $required_password_chars)) {
-                        $error = ft_eval_smarty_string($LANG["validation_client_password_missing_special_char"], array("chars" => $g_password_special_chars));
+                        $error = General::evalSmartyString($LANG["validation_client_password_missing_special_char"], array("chars" => $g_password_special_chars));
                         $password_special_chars = preg_quote($g_password_special_chars);
                         $rules[] = "reg_exp,password,[$password_special_chars],$error";
                     }
@@ -430,7 +430,7 @@ class Administrator {
                     if (!empty($account_settings["num_password_history"])) {
                         $encrypted_password = md5(md5($form_vals["password"]));
                         if (ft_password_in_password_history($account_id, $encrypted_password, $account_settings["num_password_history"])) {
-                            $errors[] = ft_eval_smarty_string($LANG["validation_password_in_password_history"],
+                            $errors[] = General::evalSmartyString($LANG["validation_password_in_password_history"],
                             array("history_size" => $account_settings["num_password_history"]));
                         } else {
                             Accounts::addPasswordToPasswordHistory($account_id, $encrypted_password);

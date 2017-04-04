@@ -36,13 +36,13 @@ $clients   = Clients::getList();
 // compile template info
 $page_vars = array(
     "page" => "admin_forms",
-    "page_url" => ft_get_page_url("admin_forms"),
+    "page_url" => Pages::getPageUrl("admin_forms"),
     "head_title" => $LANG["word_forms"],
     "has_client" => (count($clients) > 0) ? true : false,
     "num_forms" => $num_forms,
     "max_forms_reached" => (!empty($g_max_ft_forms) && $num_forms >= $g_max_ft_forms) ? true : false,
     "max_forms" => $g_max_ft_forms,
-    "notify_max_forms_reached" => ft_eval_smarty_string($LANG["notify_max_forms_reached"], array("max_forms" => $g_max_ft_forms)),
+    "notify_max_forms_reached" => General::evalSmartyString($LANG["notify_max_forms_reached"], array("max_forms" => $g_max_ft_forms)),
     "forms" => $forms,
     "order" => $order,
     "clients" => $clients,

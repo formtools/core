@@ -110,7 +110,7 @@ $previous_view_link = "<span class=\"light_grey\">{$LANG["phrase_previous_view"]
 $next_view_link = "<span class=\"light_grey\">{$LANG["phrase_next_view"]}</span>";
 $num_views = count($ordered_view_ids);
 
-$same_page = ft_get_clean_php_self();
+$same_page = General::getCleanPhpSelf();
 for ($i=0; $i<$num_views; $i++) {
 	$curr_view_id = $ordered_view_ids[$i];
 	if ($curr_view_id == $view_id) {
@@ -133,7 +133,7 @@ $page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "edit.php?pa
 
 // compile the templates information
 $page_vars["page"]       = "edit_view";
-$page_vars["page_url"]   = ft_get_page_url("edit_view");
+$page_vars["page_url"]   = Pages::getPageUrl("edit_view");
 $page_vars["view_id"]    = $view_id;
 $page_vars["grouped_fields"] = $grouped_fields;
 $page_vars["new_view_submission_defaults"] = $new_view_submission_defaults;
@@ -166,11 +166,11 @@ $page_vars["head_string"] =<<< END
 END;
 
 $replacements = array("user_doc_link" => "https://docs.formtools.org/userdoc/views/standard_filters/?page=view_filters");
-$page_vars["text_filters_tips"] = ft_eval_smarty_string($LANG["text_filters_tips"], $replacements);
+$page_vars["text_filters_tips"] = General::evalSmartyString($LANG["text_filters_tips"], $replacements);
 $replacements = array("number" => "<input type=\"text\" name=\"num_standard_filter_rows\" id=\"num_standard_filter_rows\" value=\"1\" size=\"2\" />");
-$page_vars["add_standard_filter_num_rows_input_field"] = ft_eval_smarty_string($LANG["phrase_add_num_rows"], $replacements);
+$page_vars["add_standard_filter_num_rows_input_field"] = General::evalSmartyString($LANG["phrase_add_num_rows"], $replacements);
 $replacements = array("number" => "<input type=\"text\" name=\"num_client_map_filter_rows\" id=\"num_client_map_filter_rows\" value=\"1\" size=\"2\" />");
-$page_vars["add_client_map_filter_num_rows_input_field"] = ft_eval_smarty_string($LANG["phrase_add_num_rows"], $replacements);
+$page_vars["add_client_map_filter_num_rows_input_field"] = General::evalSmartyString($LANG["phrase_add_num_rows"], $replacements);
 $page_vars["js_messages"] = array("word_remove", "validation_no_tabs_defined", "phrase_all_fields_displayed",
 	"validation_invalid_tab_assign_values", "validation_num_rows_to_add", "phrase_please_select", "word_before",
 	"word_after", "word_equals", "phrase_not_equal", "word_like", "phrase_not_like", "validation_no_view_name",

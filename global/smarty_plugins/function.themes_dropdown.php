@@ -81,7 +81,7 @@ function smarty_function_themes_dropdown($params, &$smarty)
                 $selected = "selected";
             }
 
-            $swatch_label = ft_eval_smarty_string($swatch_label);
+            $swatch_label = General::evalSmartyString($swatch_label);
             $html .= "<option value=\"{$swatch}\" {$selected}>{$swatch_label}</option>";
         }
 

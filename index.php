@@ -6,8 +6,10 @@ use FormTools\Accounts;
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Installation;
+use FormTools\Pages;
 use FormTools\Settings;
-use FormTools\User;
+use FormTools\Themes;
+
 
 Installation::checkInstalled();
 Core::init();
@@ -20,8 +22,8 @@ Core::init();
 //}
 
 // if this user is already logged in, redirect them to their specified login page
-if (User::isLoggedIn()) {
-    User::redirectToLoginPage();
+if (Core::$user->isLoggedIn()) {
+    Core::$user->redirectToLoginPage();
 }
 
 // default settings
@@ -51,7 +53,8 @@ if (isset($_POST["username"]) && !empty($_POST["username"]))
   $error = ft_login($_POST);
 
 $username = (isset($_POST["username"]) && !empty($_POST["username"])) ? $_POST["username"] : "";
-$username = ft_strip_chars($username);
+$username = General::stripChars($username);
+
 
 // -------------------------------------------------------------------------------------------
 
@@ -66,17 +69,16 @@ $replacements = array(
 // compile the variables for use in the templates
 $page = array(
     "page" => "login",
-    "page_url" => ft_get_page_url("login"),
+    "page_url" => Pages::getPageUrl("login"),
     "head_title" => $LANG["phrase_admin_panel"],
     "error" => $error,
-    "text_login" => ft_eval_smarty_string($LANG["text_login"], $replacements, $theme),
+    "text_login" => General::evalSmartyString($LANG["text_login"], $replacements, $theme),
     "program_name" => $settings["program_name"],
     "login_heading" => sprintf("%s %s", $settings['program_name'], $LANG["word_administration"]),
     "username" => $username,
     "is_logged_in" => false,
     "head_js" => "$(function() { document.login.username.focus(); });",
     "head_string" => "<noscript><style type=\"text/css\">.login_outer_table { display: none; }</style></noscript>"
-
 );
 
 
@@ -91,7 +93,7 @@ $page = array(
 //      $new_version = "{$settings['program_version']}-beta-{$settings['release_date']}";
 //
 //    $replacements = array("version" => $new_version);
-//    $page_vars["upgrade_notification"] = ft_eval_smarty_string($LANG["text_upgraded"], $replacements, $g_theme);
+//    $page_vars["upgrade_notification"] = General::evalSmartyString($LANG["text_upgraded"], $replacements, $g_theme);
 //  }
 //  else
 //  {

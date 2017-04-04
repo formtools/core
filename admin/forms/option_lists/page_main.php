@@ -39,9 +39,9 @@ $existing_option_list_names_js = "page_ns.option_list_names = [$list_names];";
 
 // compile template info
 $page_vars["list_info"] = $list_info;
-$page_vars["text_option_list_used_by_fields"] = ft_eval_smarty_string($LANG["text_option_list_used_by_fields"], $placeholders);
+$page_vars["text_option_list_used_by_fields"] = General::evalSmartyString($LANG["text_option_list_used_by_fields"], $placeholders);
 $page_vars["tabs"] = $tabs;
-$page_vars["page_url"] = ft_get_page_url("edit_option_list");
+$page_vars["page_url"] = Pages::getPageUrl("edit_option_list");
 $page_vars["head_title"] = $LANG["phrase_edit_option_list"];
 $page_vars["num_fields_using_option_list"] = $num_fields;
 $page_vars["total_options"] = $total_options;

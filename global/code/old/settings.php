@@ -331,7 +331,7 @@ function ft_update_theme_settings($infohash)
 			"submit_button" => $submit_button
 		);
 
-		$mass_assign_html = "<div class=\"margin_top_large margin_bottom_large\">" . ft_eval_smarty_string($placeholder_str, $placeholders) . "</div>";
+		$mass_assign_html = "<div class=\"margin_top_large margin_bottom_large\">" . General::evalSmartyString($placeholder_str, $placeholders) . "</div>";
 		$html = $message . $mass_assign_html . $client_links_table;
 
 		return array(false, $html);

@@ -32,7 +32,7 @@ $LANG = Core::$L;
 
 $page = array(
     "step" => 5,
-    "g_root_url" => Core::getRootURL(),
+    "g_root_url" => Core::getRootUrl(),
     "account_created" => $account_created
 );
 
