@@ -11,6 +11,7 @@
 
 
 use FormTools\Core;
+use FormTools\Menus;
 use FormTools\Settings;
 
 
@@ -138,7 +139,7 @@ function ft_uninstall_module($module_id)
 			// if rows were deleted, re-cache the admin menu and update the ordering of the admin account.
 			// ASSUMPTION: only administrator accounts can have modules as items (will need to update at some
 			// point soon, no doubt).
-			ft_cache_account_menu($_SESSION["ft"]["account"]["account_id"]);
+			Menus::cacheAccountMenu($_SESSION["ft"]["account"]["account_id"]);
 			ft_update_menu_order($_SESSION["ft"]["account"]["menu_id"]);
 		}
 

@@ -56,4 +56,68 @@ class Menus
         return $found_page;
     }
 
+
+    /**
+     * This function is called whenever an administrator or client logs in. It determines the exact
+     * content of a menu and caches it in the "menu" session key.
+     *
+     * @param integer $account_id
+     */
+    public static function cacheAccountMenu($account_id)
+    {
+        $root_url = Core::getRootUrl();
+        $menu_info = self::getMenuByAccountId($account_id);
+
+        $menu_template_info = array();
+        for ($i=0; $i<count($menu_info["menu_items"]); $i++) {
+            $curr_item = $menu_info["menu_items"][$i];
+            $url = (preg_match("/^http/", $curr_item["url"])) ? $curr_item["url"] : $root_url . $curr_item["url"];
+
+            $menu_template_info[] = array(
+                "url"             => $url,
+                "display_text"    => $curr_item["display_text"],
+                "page_identifier" => $curr_item["page_identifier"],
+                "is_submenu"      => $curr_item["is_submenu"]
+            );
+        }
+
+        Sessions::set("menu_items", $menu_template_info, "menu");
+    }
+
+
+    /**
+     * Returns everything about a user's menu.
+     *
+     * @param integer $account_id
+     */
+    public static function getMenuByAccountId($account_id)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT *
+            FROM {PREFIX}menus m, {PREFIX}accounts a
+            WHERE a.account_id = :account_id AND
+                  m.menu_id = a.menu_id
+        ");
+        $db->bind("account_id", $account_id);
+        $db->execute();
+        $menu_info = $db->fetch();
+        $menu_id = $menu_info["menu_id"];
+
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}menu_items
+            WHERE  menu_id = :menu_id
+            ORDER BY list_order
+        ");
+        $db->bind("menu_id", $menu_id);
+        $db->execute();
+        $info = $db->getResultsArray();
+
+        $menu_info["menu_items"] = $info;
+
+        return $menu_info;
+    }
+
 }

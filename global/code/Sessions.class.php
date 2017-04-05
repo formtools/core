@@ -41,6 +41,9 @@ class Sessions
         if ($group == null) {
             $_SESSION["ft"][$key] = $value;
         } else {
+            if (!isset($_SESSION["ft"][$group])) {
+                $_SESSION["ft"][$group] = array();
+            }
             $_SESSION["ft"][$group][$key] = $value;
         }
     }

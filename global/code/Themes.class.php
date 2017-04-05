@@ -214,7 +214,7 @@ class Themes {
      */
     public static function displayPage($template, $page_vars, $theme = "", $swatch = "")
     {
-        global $g_success, $g_message, $g_js_debug, $g_upgrade_info;
+        global $g_success, $g_message, $g_upgrade_info;
 
         $theme = (empty($theme)) ? Core::$user->getTheme() : $theme;
         $swatch = (empty($swatch)) ? Core::$user->getSwatch() : $swatch;
@@ -237,7 +237,6 @@ class Themes {
 
         // require the user to be logged in
         if (Core::$user->isLoggedIn()) {
-//            $smarty->assign("SESSION", $_SESSION["ft"]);
             $smarty->assign("settings", Sessions::get("settings"));
             $smarty->assign("account", Sessions::get("account"));
         }
@@ -246,7 +245,7 @@ class Themes {
         $smarty->assign("g_root_dir", $root_dir);
         $smarty->assign("g_root_url", $root_url);
         //$smarty->assign("g_debug", $g_debug);
-        //$smarty->assign("g_js_debug", ($g_js_debug) ? "true" : "false");
+        $smarty->assign("g_js_debug", Core::isJsDebugEnabled() ? "true" : "false");
         $smarty->assign("g_hide_upgrade_link", Core::shouldHideUpgradeLink());
         $smarty->assign("same_page", General::getCleanPhpSelf());
         $smarty->assign("query_string", $_SERVER["QUERY_STRING"]);
@@ -332,7 +331,7 @@ class Themes {
     function displayModulePage($template, $page_vars = array(), $theme = "", $swatch = "")
     {
         global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_language, $LANG,
-               $g_smarty, $L, $g_smarty_use_sub_dirs, $g_js_debug, $g_enable_benchmarking,
+               $g_smarty, $L, $g_smarty_use_sub_dirs, $g_enable_benchmarking,
                $g_hide_upgrade_link;
 
         $module_folder = _ft_get_current_module_folder();
@@ -369,7 +368,7 @@ class Themes {
         $g_smarty->assign("account", $_SESSION["ft"]["account"]);
         $g_smarty->assign("g_root_dir", $g_root_dir);
         $g_smarty->assign("g_root_url", $g_root_url);
-        $g_smarty->assign("g_js_debug", ($g_js_debug) ? "true" : "false");
+        $g_smarty->assign("g_js_debug", Core::isJsDebugEnabled() ? "true" : "false");
         $g_smarty->assign("g_hide_upgrade_link", $g_hide_upgrade_link);
         $g_smarty->assign("same_page", General::getCleanPhpSelf());
         $g_smarty->assign("query_string", $_SERVER["QUERY_STRING"]); // TODO FIX

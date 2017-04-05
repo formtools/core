@@ -740,30 +740,6 @@ function ft_get_js_webpage_parse_method($form_url)
 }
 
 
-/**
- * This updates the version of the API in the database. It's called on installation and whenever someone logs in.
- * It's used to keep the API version up to date in the database so that whenever the user clicks their UPGRADE
- * button, the correct API version is passed to the upgrade script to let it know if it needs to be upgraded or
- * not.
- */
-function ft_update_api_version()
-{
-	global $g_root_dir;
-
-	$api_file = "$g_root_dir/global/api/api.php";
-	if (is_file($api_file))
-	{
-		include_once($api_file);
-
-		if (!isset($g_api_version) || empty($g_api_version))
-			return;
-
-		$settings = array("api_version" => $g_api_version);
-		ft_set_settings($settings);
-	}
-}
-
-
 // ------------------------------------------------------------------------------------------------
 
 

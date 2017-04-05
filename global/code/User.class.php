@@ -53,9 +53,8 @@ class User
      * The login procedure for both administrators and clients in. If successful, redirects them to the
      * appropriate page, otherwise returns an error.
      *
-     * @param array   $infohash This parameter should be a hash (e.g. $_POST or $_GET) containing both
-     *                "username" and "password" keys, containing that information for the user trying
-     *                to log in.
+     * @param array   $info $_POST or $_GET containing both "username" and "password" keys, containing that information
+     *                for the user trying to log in.
      * @param boolean $login_as_client [optional] This optional parameter is used by administrators
      *                to log in as a particular client, allowing them to view how the account looks,
      *                even if it is disabled.
@@ -64,10 +63,10 @@ class User
      */
     public function login($info, $login_as_client = false)
     {
-        $LANG = Core::$db;
+        $LANG = Core::$L;
+        $root_url = Core::getRootUrl();
 
         $settings = Settings::get("", "core");
-
         $username = $info["username"];
 
         // administrators can log into client accounts to see what they see. They don't require the client's password
@@ -91,8 +90,8 @@ class User
                 return $LANG["validation_account_not_recognized"];
             }
 
-            $password_correct      = (md5(md5($password)) == $account_info["password"]);
-            $temp_password_correct = (md5(md5($password)) == $account_info["temp_reset_password"]);
+            $password_correct      = (General::encode($password) == $account_info["password"]);
+            $temp_password_correct = (General::encode($password) == $account_info["temp_reset_password"]);
 
 
             if (!$password_correct && !$temp_password_correct) {
@@ -129,36 +128,34 @@ class User
 
         // all checks out. Log them in, after populating sessions
         //Sessions::set("settings", $settings);
-        //$_SESSION["ft"]["account"]  = Accounts::getAccountInfo($account_info["account_id"]);
-        $_SESSION["ft"]["account"]["is_logged_in"] = true;
+        Sessions::set("account", $account_info);
+        Sessions::set("is_logged_in", true, "account");
+        Sessions::set("password", General::encode($password), "account"); // this is deliberate [TODO...!]
 
-        // this is deliberate
-        $_SESSION["ft"]["account"]["password"] = md5(md5($password));
-
-        ft_cache_account_menu($account_info["account_id"]);
+        Menus::cacheAccountMenu($account_info["account_id"]);
 
         // if this is an administrator, ensure the API version is up to date
         if ($account_info["account_type"] == "admin") {
-            ft_update_api_version();
+            General::updateApiVersion();
         } else {
             Accounts::setAccountSettings($account_info["account_id"], array("num_failed_login_attempts" => 0));
         }
 
         // for clients, store the forms & form Views that they are allowed to access
-        if ($account_info["account_type"] == "client")
+        if ($account_info["account_type"] == "client") {
             $_SESSION["ft"]["permissions"] = Clients::getClientFormViews($account_info["account_id"]);
-
+        }
 
         // if the user just logged in with a temporary password, append some args to pass to the login page
         // so that they will be prompted to changing it upon login
         $reset_password_args = array();
-        if ((md5(md5($password)) == $account_info["temp_reset_password"])) {
+        if (General::encode($password) == $account_info["temp_reset_password"]) {
             $reset_password_args["message"] = "change_temp_password";
         }
 
         // redirect the user to whatever login page they specified in their settings
         $login_url = Pages::constructPageURL($account_info["login_page"], "", $reset_password_args);
-        $login_url = "$g_root_url{$login_url}";
+        $login_url = "$root_url{$login_url}";
 
         if (!$login_as_client) {
             $this->updateLastLoggedIn();
@@ -224,7 +221,7 @@ class User
     private function updateLastLoggedIn()
     {
         $db = Core::$db;
-        $db-query("
+        $db->query("
             UPDATE {PREFIX}accounts
             SET    last_logged_in = :now
             WHERE  account_id = :account_id

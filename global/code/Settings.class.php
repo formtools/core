@@ -100,8 +100,7 @@ class Settings {
     public static function set(array $settings, $module = "")
     {
         $db = Core::$db;
-
-        $and_module_clause = (!empty($module)) ? "AND module = :module" : "";
+        $and_module_clause = (!empty($module)) ? "AND module = module" : "";
 
         while (list($setting_name, $setting_value) = each($settings)) {
 
@@ -111,7 +110,7 @@ class Settings {
                 WHERE  setting_name = :setting_name
                 $and_module_clause
             ");
-            $db->bind(":setting_name", $setting_name);
+            $db->bind("setting_name", $setting_name);
             if (!empty($module)) {
                 $db->bind(":module", $module);
             }
@@ -135,14 +134,14 @@ class Settings {
 
             $db->query($query);
             if (!empty($module)) {
-                $db->bind(":module", $module);
+                $db->bind("module", $module);
             }
-            $db->bind(":setting_value", $setting_value);
-            $db->bind(":setting_name", $setting_name);
+            $db->bind("setting_value", $setting_value);
+            $db->bind("setting_name", $setting_name);
             $db->execute();
 
             // TODO. This looks suspiciously like a bug... [a module could overwrite a core var]
-            $_SESSION["ft"]["settings"][$setting_name] = $setting_value;
+            Sessions::set($setting_name, $setting_value, "settings");
         }
     }
 

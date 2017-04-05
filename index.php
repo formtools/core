@@ -31,7 +31,6 @@ $settings = Settings::get();
 $theme  = $settings["default_theme"];
 $swatch = $settings["default_client_swatch"];
 
-
 // if an account id is included in the query string, use it to determine the appearance of the
 // interface, including logo and footer and even language
 //$id = General::loadField("id", "id", "");
@@ -50,17 +49,15 @@ $swatch = $settings["default_client_swatch"];
 
 $error = "";
 if (isset($_POST["username"]) && !empty($_POST["username"])) {
-    $error = ft_login($_POST);
+    $error = Core::$user->login($_POST);
 }
 
 $username = (isset($_POST["username"]) && !empty($_POST["username"])) ? $_POST["username"] : "";
 $username = General::stripChars($username);
 
-
 // -------------------------------------------------------------------------------------------
 
 $LANG = Core::$L;
-
 
 $replacements = array(
     "program_name"         => $settings["program_name"],

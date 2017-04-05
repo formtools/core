@@ -10,7 +10,7 @@
     {$text_login}
   </div>
 
-  <form name="login" action="{$same_page}{$query_params}" method="post">
+  <form name="login" action="{$same_page}" method="post">
 
     {if $upgrade_notification}
       <div class="notify" id="upgrade_notification">

@@ -441,5 +441,36 @@ END;
         return htmlspecialchars(strip_tags($_SERVER['PHP_SELF']), ENT_QUOTES);
     }
 
+
+    /**
+     * Currently used for encoding passwords. This will be updated in future versions for proper encryption.
+     * @param $password
+     */
+    public static function encode($string) {
+        return md5(md5($string));
+    }
+
+
+    /**
+     * This updates the version of the API in the database. It's called on installation and whenever someone logs in.
+     * It's used to keep the API version up to date in the database so that whenever the user clicks their UPGRADE
+     * button, the correct API version is passed to the upgrade script to let it know if it needs to be upgraded or
+     * not.
+     */
+    public static function updateApiVersion()
+    {
+        $root_dir = Core::getRootDir();
+
+        $api_file = "$root_dir/global/api/api.php";
+        if (is_file($api_file)) {
+            include_once($api_file);
+
+            if (!isset($g_api_version) || empty($g_api_version)) {
+                return;
+            }
+            Settings::set(array("api_version" => $g_api_version));
+        }
+    }
+
 }
 

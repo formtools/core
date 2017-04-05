@@ -118,7 +118,7 @@ class Core {
      */
     private static $debug = true;
     private static $smartyDebug = false;
-    private static $jsDebug = false;
+    private static $jsDebugEnabled;
     private static $apiDebug = true;
 
     /**
@@ -464,6 +464,7 @@ class Core {
         self::$setSqlMode = (isset($g_set_sql_mode)) ? $g_set_sql_mode : null;
         self::$hideUpgradeLink = (isset($g_hide_upgrade_link)) ? $g_hide_upgrade_link : false;
         self::$enableBenchmarking = (isset($g_enable_benchmarking)) ? $g_enable_benchmarking : false;
+        self::$jsDebugEnabled = isset($g_js_debug) ? $g_js_debug : false;
     }
 
     /**
@@ -574,6 +575,10 @@ class Core {
         return self::$smartyDebug;
     }
 
+    public static function isJsDebugEnabled() {
+        return self::$jsDebugEnabled;
+    }
+
     public static function shouldUseSmartySubDirs() {
         return self::$smartyUseSubDirs;
     }
@@ -589,5 +594,4 @@ class Core {
     public static function getBenchmarkStart() {
         return self::$benchmarkStart;
     }
-
 }

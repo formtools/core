@@ -56,43 +56,6 @@ function ft_create_blank_client_menu()
 	return $menu_id;
 }
 
-
-/**
- * Returns everything about a user's menu.
- *
- * @param integer $account_id
- */
-function ft_get_menu_by_account_id($account_id)
-{
-	global $g_table_prefix;
-
-	$query = mysql_query("
-    SELECT *
-    FROM {$g_table_prefix}menus m, {$g_table_prefix}accounts a
-    WHERE a.account_id = $account_id AND
-          m.menu_id = a.menu_id
-      ") or die(mysql_error());
-
-	$menu_info = mysql_fetch_assoc($query);
-	$menu_id = $menu_info["menu_id"];
-
-	$menu_item_query = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}menu_items
-    WHERE  menu_id = $menu_id
-    ORDER BY list_order
-      ");
-
-	$info = array();
-	while ($row = mysql_fetch_assoc($menu_item_query))
-		$info[] = $row;
-
-	$menu_info["menu_items"] = $info;
-
-	return $menu_info;
-}
-
-
 /**
  * Retrieves a list of all menus. Note, this is only called by administrators
  * and relies on the number of menus per page being set in Sessions.
@@ -737,37 +700,6 @@ function ft_update_client_menu($info)
 	extract(Hooks::processHookCalls("end", compact("info"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
-}
-
-
-/**
- * This function is called whenever an administrator or client logs in. It determines the exact
- * content of a menu and caches it in the "menu" session key.
- *
- * @param integer $account_id
- */
-function ft_cache_account_menu($account_id)
-{
-	global $g_root_url;
-
-	$menu_info = ft_get_menu_by_account_id($account_id);
-
-	$menu_template_info = array();
-	for ($i=0; $i<count($menu_info["menu_items"]); $i++)
-	{
-		$curr_item = $menu_info["menu_items"][$i];
-
-		$url = (preg_match("/^http/", $curr_item["url"])) ? $curr_item["url"] : $g_root_url . $curr_item["url"];
-
-		$menu_template_info[] = array(
-			"url"             => $url,
-			"display_text"    => $curr_item["display_text"],
-			"page_identifier" => $curr_item["page_identifier"],
-			"is_submenu"      => $curr_item["is_submenu"]
-		);
-	}
-
-	$_SESSION["ft"]["menu"]["menu_items"] = $menu_template_info;
 }
 
 
