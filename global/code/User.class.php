@@ -259,7 +259,9 @@ class User
      */
     public function logout($message_flag = "")
     {
-        global $g_root_url, $g_session_type;
+        $root_url = Core::getRootUrl();
+
+        // $g_session_type;
 
         extract(Hooks::processHookCalls("main", array(), array()));
 
@@ -274,8 +276,7 @@ class User
         if (isset($_SESSION["ft"]) && array_key_exists("admin", $_SESSION["ft"])) {
             Administrator::logoutAsClient();
         } else {
-            if (!empty($message_flag))
-            {
+            if (!empty($message_flag)) {
                 // empty sessions, but be nice about it. Only delete the Form Tools namespaced sessions - any other
                 // PHP scripts the user's running right now should be unaffected
                 @session_start();
@@ -283,13 +284,11 @@ class User
                 $_SESSION["ft"] = array();
 
                 // redirect to the login page, passing along the appropriate message flag so the page knows what to display
-                $logout_url = ft_construct_url("$g_root_url/", "message=$message_flag");
+                $logout_url = General::constructUrl($root_url, "message=$message_flag");
                 session_write_close();
                 header("location: $logout_url");
                 exit;
-            }
-            else
-            {
+            } else {
                 $logout_url = isset($_SESSION["ft"]["account"]["logout_url"]) ? $_SESSION["ft"]["account"]["logout_url"] : "";
 
                 // empty sessions, but be nice about it. Only delete the Form Tools namespaced sessions - any other
@@ -298,8 +297,9 @@ class User
                 @session_destroy();
                 $_SESSION["ft"] = array();
 
-                if (empty($logout_url))
-                    $logout_url = $g_root_url;
+                if (empty($logout_url)) {
+                    $logout_url = $root_url;
+                }
 
                 // redirect to login page
                 session_write_close();
@@ -325,14 +325,18 @@ class User
      *     false = doesn't have permission)
      * @return array (if $auto_logout is set to false)
      */
-    public function checkAuth($account_type, $auto_logout = true)
+    public function checkAuth($required_account_type, $auto_logout = true)
     {
-        global $g_root_url, $g_table_prefix;
+        $db = Core::$db;
+        $root_url = Core::getRootUrl();
 
         $boot_out_user = false;
         $message_flag = "";
 
         extract(Hooks::processHookCalls("end", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
+
+        $account_id   = Sessions::exists("account_id", "account") ? Sessions::get("account_id", "account") : "";
+        $account_type = Sessions::exists("account_type", "account") ? Sessions::get("account_type", "account") : "";
 
         // some VERY complex logic here. The "user" account permission type is included so that people logged in
         // via the Submission Accounts can still view certain pages, e.g. pages with the Pages module. This checks that
@@ -342,7 +346,7 @@ class User
             if ((!isset($_SESSION["ft"]["account"]["submission_id"]) || empty($_SESSION["ft"]["account"]["submission_id"])) &&
                 empty($_SESSION["ft"]["account"]["account_id"])) {
                 if ($auto_logout) {
-                    header("location: $g_root_url/modules/submission_accounts/logout.php");
+                    header("location: $root_url/modules/submission_accounts/logout.php");
                     exit;
                 } else {
                     $boot_out_user = true;
@@ -350,23 +354,28 @@ class User
                 }
             }
         }
+
         // check the user ID is in sessions
-        else if (!isset($_SESSION["ft"]["account"]["account_id"]) || empty($_SESSION["ft"]["account"]["account_id"])) {
+        else if (!$account_id || !$account_type) {
             $boot_out_user = true;
             $message_flag = "notify_no_account_id_in_sessions";
-        }
-        else if (!isset($_SESSION["ft"]["account"]["account_type"]) || ($_SESSION["ft"]["account"]["account_type"] == "client" && $account_type == "admin")) {
+        } else if ($account_type == "client" && $required_account_type == "admin") {
             $boot_out_user = true;
             $message_flag = "notify_invalid_permissions";
         } else {
-            $query = mysql_query("
-      SELECT count(*)
-      FROM   {$g_table_prefix}accounts
-      WHERE account_id = {$_SESSION["ft"]["account"]["account_id"]}
-      AND   password = '{$_SESSION["ft"]["account"]["password"]}'
-        ");
+            $db->query("
+                SELECT count(*) as c
+                FROM {PREFIX}accounts
+                WHERE account_id = :account_id AND password = :password
+            ");
+            $db->bindAll(array(
+                "account_id" => $account_id,
+                "password" => Sessions::get("password", "account")
+            ));
+            $db->execute();
+            $info = $db->fetch();
 
-            if (mysql_num_rows($query) != 1) {
+            if ($info["c"] != 1) {
                 $boot_out_user = true;
                 $message_flag = "notify_invalid_account_information_in_sessions";
             }
@@ -381,6 +390,5 @@ class User
             );
         }
     }
-
 
 }

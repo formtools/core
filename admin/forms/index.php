@@ -1,15 +1,19 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Clients;
 use FormTools\Core;
+use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
-
 
 Core::init();
 Core::$user->checkAuth("admin");
 
-_ft_cache_form_stats();
+Forms::cacheFormStats();
+
 if (isset($_GET["reset"])) {
 	$_SESSION["ft"]["form_sort_order"] = "";
 	$_SESSION["ft"]["form_search_keyword"] = "";
@@ -28,9 +32,9 @@ $search_criteria = array(
 	"client_id" => $client_id
 );
 
-$num_forms = Clients::getFormCount();
-$forms     = ft_search_forms($client_id, true, $search_criteria);
 $clients   = Clients::getList();
+$num_forms = Clients::getFormCount();
+$forms     = Forms::searchForms($client_id, true, $search_criteria);
 
 
 // compile template info

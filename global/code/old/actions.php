@@ -234,7 +234,7 @@ switch ($action)
 		switch ($scrape_method)
 		{
 			case "file_get_contents":
-				$url = ft_construct_url($url, "ft_sessions_url_override=1");
+				$url = General::constructUrl($url, "ft_sessions_url_override=1");
 				$html = file_get_contents($url);
 				header("Cache-Control: no-cache, must-revalidate");
 				header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
@@ -242,7 +242,7 @@ switch ($action)
 				break;
 
 			case "curl":
-				$url = ft_construct_url($url, "ft_sessions_url_override=1");
+				$url = General::constructUrl($url, "ft_sessions_url_override=1");
 				$c = curl_init();
 				curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
 				curl_setopt($c, CURLOPT_URL, $url);

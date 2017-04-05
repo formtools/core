@@ -3,6 +3,7 @@
 use FormTools\Accounts;
 use FormTools\Clients;
 use FormTools\Core;
+use FormTools\Forms;
 use FormTools\General;
 use FormTools\Themes;
 
@@ -11,7 +12,7 @@ Core::init();
 Core::$user->checkAuth("client");
 
 
-_ft_cache_form_stats();
+Forms::cacheFormStats();
 
 $account_id = $_SESSION["ft"]["account"]["account_id"];
 

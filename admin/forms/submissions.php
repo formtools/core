@@ -2,6 +2,7 @@
 
 use FormTools\Core;
 use FormTools\FieldTypes;
+use FormTools\Forms;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
@@ -216,7 +217,7 @@ if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$vi
 
 // this sets the total number of submissions that the admin can see in this form and View in the form_X_num_submissions
 // and view_X_num_submissions keys
-_ft_cache_form_stats($form_id);
+Forms::cacheFormStats($form_id);
 _ft_cache_view_stats($form_id, $view_id);
 
 if (!isset($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {

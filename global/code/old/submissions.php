@@ -13,6 +13,7 @@
 // -------------------------------------------------------------------------------------------------
 
 use FormTools\FieldValidation;
+use FormTools\Forms;
 
 
 /**
@@ -165,7 +166,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 	}
 
 	// update sessions to ensure the first submission date and num submissions for this form View are correct
-	_ft_cache_form_stats($form_id);
+	Forms::cacheFormStats($form_id);
 	_ft_cache_view_stats($view_id);
 
 	extract(Hooks::processHookCalls("end", compact("form_id", "view_id", "submission_id", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
@@ -302,7 +303,7 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 	}
 
 	// TODO update sessions to ensure the first submission date and num submissions for this form View are correct
-	_ft_cache_form_stats($form_id);
+	Forms::cacheFormStats($form_id);
 	_ft_cache_view_stats($form_id, $view_id);
 
 	$_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";

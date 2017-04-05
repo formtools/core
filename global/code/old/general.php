@@ -478,29 +478,6 @@ function mb_str_split($string, $split_length = 1)
 
 
 /**
- * Helper function to construct a valid URL. This will probably be improved and renamed in future.
- *
- * @param string $base_url
- * @param string $query_string
- */
-function ft_construct_url($url, $query_str = "")
-{
-	$valid_url = $url;
-
-	if (!empty($query_str))
-	{
-		// only include the ? if it's not already there
-		if (strpos($url, "?"))
-			$valid_url .= "&{$query_str}";
-		else
-			$valid_url .= "?{$query_str}";
-	}
-
-	return $valid_url;
-}
-
-
-/**
  * Helper function that's called as a wrapper to the PHP json_encode function. If it doesn't exist,
  * it manually encodes the value as a JSON object.
  *
