@@ -20,5 +20,5 @@ function smarty_function_template_hook($params, &$smarty)
         return;
     }
 
-    echo Hooks::processTemplateHookCalls($params["location"], $smarty->_tpl_vars, $params);
+//    echo Hooks::processTemplateHookCalls($params["location"], $smarty->_tpl_vars, $params);
 }

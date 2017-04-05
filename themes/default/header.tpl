@@ -32,7 +32,7 @@
 <body>
 <div id="container">
   <div id="header">
-    {if $SESSION.account.is_logged_in && !$g_omit_top_bar}
+    {if $is_logged_in && !$g_omit_top_bar}
       <div style="float:right">
         <table cellspacing="0" cellpadding="0" height="25">
         <tr>
@@ -45,7 +45,7 @@
             {else}
               <b>{$settings.program_version}</b>
             {/if}
-            {if $SESSION.account.account_type == "admin" && !$g_hide_upgrade_link}
+            {if $account_type == "admin" && !$g_hide_upgrade_link}
               |
               <a href="#" onclick="return ft.check_updates()" class="update_link">{$LANG.word_update}</a>
             {/if}

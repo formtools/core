@@ -27,6 +27,7 @@ namespace FormTools;
 
 use FormTools\Translations;
 use FormTools\User;
+use Smarty;
 
 
 class Core {
@@ -209,7 +210,7 @@ class Core {
     /**
      * This hides the upgrade link in the administrator's UI.
      */
-    private static $hideUpgradeLink = false;
+    private static $hideUpgradeLink;
 
     /**
      * Limits the number of forms that can be stored in the database.
@@ -235,7 +236,7 @@ class Core {
     public static $db;
 
     /**
-     * @var \Smarty
+     * @var Smarty
      */
     public static $smarty;
 
@@ -307,7 +308,7 @@ class Core {
     /**
      * Simple benchmarking code. When enabled, this outputs a page load time in the footer.
      */
-    private static $enableBenchmarking = false;
+    private static $enableBenchmarking;
     private static $benchmarkStart     = "";
 
     /**
@@ -387,11 +388,11 @@ class Core {
             self::initDatabase();
         }
 
-        self::$smarty = new \Smarty();
+        self::$smarty = new Smarty();
 
-        if ($options["check_sessions"] == false) {
-            self::startSessions();
-        }
+//        if ($options["check_sessions"] == false) {
+        self::startSessions();
+  //      }
 
         self::$user = new User();
         self::$currLang = self::$user->getLang(); // TODO
@@ -401,12 +402,12 @@ class Core {
 //        }
 
 
-        // OVERRIDES
+        // OVERRIDES - TODO interface
         if (isset($options["currLang"])) {
             self::$currLang = $options["currLang"];
         }
-        self::setCurrLang(self::$currLang);
 
+        self::setCurrLang(self::$currLang);
         self::enableDebugging();
 
         // optionally enable benchmarking. Dev-only feature to confirm pages aren't taking too long to load
@@ -461,6 +462,8 @@ class Core {
         self::$dbTablePrefix = (isset($g_table_prefix)) ? $g_table_prefix : null;
         self::$unicode    = (isset($g_unicode)) ? $g_unicode : null;
         self::$setSqlMode = (isset($g_set_sql_mode)) ? $g_set_sql_mode : null;
+        self::$hideUpgradeLink = (isset($g_hide_upgrade_link)) ? $g_hide_upgrade_link : false;
+        self::$enableBenchmarking = (isset($g_enable_benchmarking)) ? $g_enable_benchmarking : false;
     }
 
     /**
@@ -573,6 +576,18 @@ class Core {
 
     public static function shouldUseSmartySubDirs() {
         return self::$smartyUseSubDirs;
+    }
+
+    public static function shouldHideUpgradeLink() {
+        return self::$hideUpgradeLink;
+    }
+
+    public static function isBenchmarkingEnabled() {
+        return self::$enableBenchmarking;
+    }
+
+    public static function getBenchmarkStart() {
+        return self::$benchmarkStart;
     }
 
 }

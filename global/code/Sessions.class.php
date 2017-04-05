@@ -16,7 +16,10 @@ namespace FormTools;
 
 class Sessions
 {
-    public static function get($key, $group = null) {
+    public static function get($key = "", $group = null) {
+        if (empty($key)) {
+            return $_SESSION;
+        }
         if ($group == null) {
             return $_SESSION["ft"][$key];
         } else {

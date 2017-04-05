@@ -49,8 +49,9 @@ $swatch = $settings["default_client_swatch"];
 
 
 $error = "";
-if (isset($_POST["username"]) && !empty($_POST["username"]))
-  $error = ft_login($_POST);
+if (isset($_POST["username"]) && !empty($_POST["username"])) {
+    $error = ft_login($_POST);
+}
 
 $username = (isset($_POST["username"]) && !empty($_POST["username"])) ? $_POST["username"] : "";
 $username = General::stripChars($username);
@@ -70,6 +71,7 @@ $replacements = array(
 $page = array(
     "page" => "login",
     "page_url" => Pages::getPageUrl("login"),
+    "settings" => Settings::get(),
     "head_title" => $LANG["phrase_admin_panel"],
     "error" => $error,
     "text_login" => General::evalSmartyString($LANG["text_login"], $replacements, $theme),
@@ -78,7 +80,8 @@ $page = array(
     "username" => $username,
     "is_logged_in" => false,
     "head_js" => "$(function() { document.login.username.focus(); });",
-    "head_string" => "<noscript><style type=\"text/css\">.login_outer_table { display: none; }</style></noscript>"
+    "head_string" => "<noscript><style type=\"text/css\">.login_outer_table { display: none; }</style></noscript>",
+    "upgrade_notification" => ""
 );
 
 

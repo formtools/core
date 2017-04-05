@@ -128,8 +128,8 @@ class User
         extract(Hooks::processHookCalls("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
 
         // all checks out. Log them in, after populating sessions
-        $_SESSION["ft"]["settings"] = $settings;
-        $_SESSION["ft"]["account"]  = Accounts::getAccountInfo($account_info["account_id"]);
+        //Sessions::set("settings", $settings);
+        //$_SESSION["ft"]["account"]  = Accounts::getAccountInfo($account_info["account_id"]);
         $_SESSION["ft"]["account"]["is_logged_in"] = true;
 
         // this is deliberate
@@ -187,6 +187,10 @@ class User
 
     public function getAccountId() {
         return $this->accountId;
+    }
+
+    public function getAccountType() {
+        return $this->accountType;
     }
 
     public function getUsername() {

@@ -23,10 +23,10 @@ class Themes {
         $enabled_only_clause = ($enabled_only) ? "WHERE is_enabled = 'yes'" : "";
 
         $db->query("
-          SELECT * 
-          FROM {PREFIX}themes
-          $enabled_only_clause
-          ORDER BY theme_name
+            SELECT * 
+            FROM {PREFIX}themes
+            $enabled_only_clause
+            ORDER BY theme_name
         ");
 
         $db->execute();
@@ -36,7 +36,6 @@ class Themes {
         }
 
         extract(Hooks::processHookCalls("end", compact("theme_info"), array("theme_info")), EXTR_OVERWRITE);
-
         return $theme_info;
     }
 
@@ -70,7 +69,8 @@ class Themes {
     {
         $db = Core::$db;
 
-        $db->query("SELECT * FROM {PREFIX}themes WHERE theme_folder = '$theme_folder'");
+        $db->query("SELECT * FROM {PREFIX}themes WHERE theme_folder = :theme_folder");
+        $db->bind("theme_folder", $theme_folder);
         $db->execute();
         $theme_info = $db->fetch();
 
@@ -105,15 +105,15 @@ class Themes {
                   :theme_description, :cache_folder_writable, :theme_version)
             ");
             $db->bindAll(array(
-                ":folder" => $theme_info["theme_folder"],
-                ":theme_name" => $theme_info["theme_name"],
-                ":theme_uses_swatches" => $theme_info["theme_uses_swatches"],
-                ":swatches" => $theme_info["swatches"],
-                ":theme_author" => $theme_info["theme_author"],
-                ":theme_link" => $theme_info["theme_link"],
-                ":theme_description" => $theme_info["theme_description"],
-                ":cache_folder_writable" => $theme_info["cache_folder_writable"],
-                ":theme_version" => $theme_info["theme_version"]
+                "folder" => $theme_info["theme_folder"],
+                "theme_name" => $theme_info["theme_name"],
+                "theme_uses_swatches" => $theme_info["theme_uses_swatches"],
+                "swatches" => $theme_info["swatches"],
+                "theme_author" => $theme_info["theme_author"],
+                "theme_link" => $theme_info["theme_link"],
+                "theme_description" => $theme_info["theme_description"],
+                "cache_folder_writable" => $theme_info["cache_folder_writable"],
+                "theme_version" => $theme_info["theme_version"]
             ));
             $db->execute();
         }
@@ -200,65 +200,68 @@ class Themes {
 
 
     /**
-     * Loads a theme opening page - as stored in the "theme" session key. This is loaded for every
-     * page in the Form Tools UI.
+     * Used by every page in the Form Tools UI to render a page.
      *
-     * Note: if the page isn't found in the current theme, it defaults to the
-     * "default" theme. This is important (and handy!): it means that only the default theme
-     * needs to contain every file. Other themes can just define whatever pages they want to override
-     * and omit the others.
+     * Note: if the page isn't found in the current theme, it defaults to the "default" theme. This is important (and
+     * handy!): it means that only the default theme needs to contain every file. Other themes can just define whatever
+     * pages they want to override and omit the others.
+     *
      *
      * @param string $template the location of the template file, relative to the theme folder
      * @param array $page_vars a hash of information to provide to the template
-     * @param string $g_theme an optional parameter, letting you override the default theme
-     * @param string $g_theme an optional parameter, letting you override the default swatch
+     * @param string $theme an optional parameter, letting you override the default theme
+     * @param string $theme an optional parameter, letting you override the default swatch
      */
     public static function displayPage($template, $page_vars, $theme = "", $swatch = "")
     {
-        global $g_success, $g_message, $g_debug, $g_js_debug, $g_enable_benchmarking,
-               $g_upgrade_info, $g_hide_upgrade_link;
+        global $g_success, $g_message, $g_js_debug, $g_upgrade_info;
 
-        $theme = Core::$user->getTheme();
-        $swatch = Core::$user->getSwatch();
+        $theme = (empty($theme)) ? Core::$user->getTheme() : $theme;
+        $swatch = (empty($swatch)) ? Core::$user->getSwatch() : $swatch;
 
         $root_dir = Core::getRootDir();
         $root_url = Core::getRootUrl();
         $LANG = Core::$L;
         $smarty = Core::$smarty;
 
-        // common variables. These are sent to EVERY templates
-        $smarty->template_dir = "$root_dir/themes/$theme";
-        $smarty->compile_dir  = "$root_dir/themes/$theme/cache";
+        $smarty->addTemplateDir("$root_dir/themes/$theme");
+        $smarty->addPluginsDir(array("$root_dir/global/smarty_plugins"));
+        $smarty->setCompileDir("$root_dir/themes/$theme/cache");
+        $smarty->setUseSubDirs(Core::shouldUseSmartySubDirs());
 
         // check the compile directory has the write permissions
-        if (!is_writable($smarty->compile_dir)) {
+        if (!is_writable($smarty->getCompileDir())) {
             General::displaySeriousError("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$smarty->compile_dir}</b> to have full read-write permissions (777 on unix).", "");
             exit;
         }
 
-        $smarty->use_sub_dirs = Core::shouldUseSmartySubDirs();
-        $smarty->assign("LANG", $LANG);
-        $smarty->assign("SESSION", $_SESSION["ft"]);
+        // require the user to be logged in
+        if (Core::$user->isLoggedIn()) {
+//            $smarty->assign("SESSION", $_SESSION["ft"]);
+            $smarty->assign("settings", Sessions::get("settings"));
+            $smarty->assign("account", Sessions::get("account"));
+        }
 
-        $settings = isset($_SESSION["ft"]["settings"]) ? $_SESSION["ft"]["settings"] : array();
-        $smarty->assign("settings", $settings);
-        //$smarty->assign("account", Session::get("account"));
+        $smarty->assign("LANG", $LANG);
         $smarty->assign("g_root_dir", $root_dir);
         $smarty->assign("g_root_url", $root_url);
-        $smarty->assign("g_debug", $g_debug);
-        $smarty->assign("g_js_debug", ($g_js_debug) ? "true" : "false");
-        $smarty->assign("g_hide_upgrade_link", $g_hide_upgrade_link);
+        //$smarty->assign("g_debug", $g_debug);
+        //$smarty->assign("g_js_debug", ($g_js_debug) ? "true" : "false");
+        $smarty->assign("g_hide_upgrade_link", Core::shouldHideUpgradeLink());
         $smarty->assign("same_page", General::getCleanPhpSelf());
         $smarty->assign("query_string", $_SERVER["QUERY_STRING"]);
         $smarty->assign("dir", $LANG["special_text_direction"]);
-        $smarty->assign("g_enable_benchmarking", $g_enable_benchmarking);
+        $smarty->assign("g_enable_benchmarking", Core::isBenchmarkingEnabled());
         $smarty->assign("swatch", $swatch);
+        $smarty->assign("is_logged_in", Core::$user->isLoggedIn());
+        $smarty->assign("account_type", Core::$user->getAccountType());
 
-        // if this page has been told to dislay a custom message, override g_success and g_message
+        // if this page has been told to display a custom message, override g_success and g_message
         if ((!isset($g_upgrade_info["message"]) || empty($g_upgrade_info["message"])) && isset($_GET["message"])) {
             list($g_success, $g_message) = General::displayCustomPageMessage($_GET["message"]);
         }
 
+        // ...
         $smarty->assign("g_success", $g_success);
         $smarty->assign("g_message", $g_message);
 
@@ -287,8 +290,6 @@ class Themes {
         }
 
         $smarty->assign("modules_dir", "$root_url/modules");
-
-        // theme-specific vars
         $smarty->assign("images_url", "$root_url/themes/$theme/images");
         $smarty->assign("theme_url", "$root_url/themes/$theme");
         $smarty->assign("theme_dir", "$root_dir/themes/$theme");
@@ -308,9 +309,11 @@ class Themes {
 
         // if the page or hook actually defined some CSS for inclusion in the page, wrap it in the appropriate style tag. This
         // was safely moved here in 2.2.0, because nothing used it (!)
-        if (!empty($smarty->_tpl_vars["head_css"])) {
-            $smarty->assign("head_css", "<style type=\"text/css\">\n{$smarty->_tpl_vars["head_css"]}\n</style>");
-        }
+//        if (!empty($smarty->_tpl_vars["head_css"])) {
+//            $smarty->set
+//
+//            ("head_css", "<style type=\"text/css\">\n{$smarty->_tpl_vars["head_css"]}\n</style>");
+//        }
 
         $smarty->display(self::getSmartyTemplateWithFallback($theme, $template));
     }
