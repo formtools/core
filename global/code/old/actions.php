@@ -264,7 +264,7 @@ switch ($action)
 		ft_set_form_field_types($form_id, $request);
 
 		// finalize the form and redirect to step 6
-		$form_info = ft_get_form($form_id);
+		$form_info = Forms::getForm($form_id);
 		if ($form_info["is_complete"] != 'yes')
 		{
 			$response = ft_finalize_form($form_id);

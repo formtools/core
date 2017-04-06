@@ -3,6 +3,7 @@
 use FormTools\Core;
 use FormTools\FieldTypes;
 use FormTools\FieldValidation;
+use FormTools\Forms;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
@@ -62,7 +63,7 @@ if (isset($_POST) && !empty($_POST)) {
 	$_SESSION["ft"]["new_search"] = "yes";
 }
 
-$form_info = ft_get_form($form_id);
+$form_info = Forms::getForm($form_id);
 $view_info = ft_get_view($view_id);
 
 // this is crumby

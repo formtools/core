@@ -22,7 +22,7 @@ class Forms {
 
         // ensure the incoming values are escaped
         $form_id = $form_data["form_tools_form_id"];
-        $form_info = ft_get_form($form_id);
+        $form_info = Forms::getForm($form_id);
 
         // do we have a form for this id?
         if (!ft_check_form_exists($form_id)) {
@@ -341,6 +341,8 @@ class Forms {
      */
     public static function searchForms($account_id = "", $is_admin = false, $search_criteria = array())
     {
+        $db = Core::$db;
+
         extract(Hooks::processHookCalls("start", compact("account_id", "is_admin", "search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
 
         $search_criteria["account_id"] = $account_id;
@@ -348,32 +350,146 @@ class Forms {
         $results = self::getSearchFormSqlClauses($search_criteria);
 
         // get the form IDs. All info about the forms will be retrieved in a separate query
-        $form_query = mysql_query("
+        $db->query("
             SELECT form_id
             FROM   {PREFIX}forms
             {$results["where_clause"]}
             {$results["order_clause"]}
         ");
+        $db->execute();
 
         // now retrieve the basic info (id, first and last name) about each client assigned to this form. This
         // takes into account whether it's a public form or not and if so, what clients are in the omit list
-        $client_omitted_from_public_forms = $results["client_omitted_from_public_forms"];
+        $omitted_forms = $results["omitted_forms"];
         $form_info = array();
-        while ($row = mysql_fetch_assoc($form_query))
-        {
+        foreach ($db->fetchAll() as $row) {
             $form_id = $row["form_id"];
 
             // if this was a search for a single client, filter out those public forms which include their account ID
             // on the form omit list
-            if (!empty($client_omitted_from_public_forms) && in_array($form_id, $client_omitted_from_public_forms))
+            if (!empty($omitted_forms) && in_array($form_id, $omitted_forms)) {
                 continue;
-
-            $form_info[] = ft_get_form($form_id);
+            }
+            $form_info[] = Forms::getForm($form_id);
         }
 
         extract(Hooks::processHookCalls("end", compact("account_id", "is_admin", "search_criteria", "form_info"), array("form_info")), EXTR_OVERWRITE);
 
         return $form_info;
+    }
+
+
+    /**
+     * Retrieves all information about single form; all associated client information is stored in the client_info key,
+     * as an array of hashes. Note: this function returns information about any form - complete or incomplete.
+     *
+     * @param integer $form_id the unique form ID
+     * @return array a hash of form information. If the form isn't found, it returns an empty array
+     */
+    public static function getForm($form_id)
+    {
+        $db = Core::$db;
+
+        $db->query("SELECT * FROM {PREFIX}forms WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+        $form_info = $db->fetch();
+
+        if (empty($form_info)) {
+            return array();
+        }
+
+        $form_info["client_info"] = Forms::getFormClients($form_id);
+        $form_info["client_omit_list"] = ($form_info["access_type"] == "public") ? self::getPublicFormOmitList($form_id) : array();
+
+        $db->query("SELECT * FROM {PREFIX}multi_page_form_urls WHERE form_id = :form_id ORDER BY page_num");
+        $form_info["multi_page_form_urls"] = array();
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        foreach ($db->fetchAll() as $row) {
+            $form_info["multi_page_form_urls"][] = $row;
+        }
+
+        extract(Hooks::processHookCalls("end", compact("form_id", "form_info"), array("form_info")), EXTR_OVERWRITE);
+
+        return $form_info;
+    }
+
+
+    /**
+     * Returns an array of account information of all clients associated with a particular form. This
+     * function is smart enough to return the complete list, depending on whether the form has public access
+     * or not. If it's a public access form, it takes into account those clients on the form omit list.
+     *
+     * @param integer $form
+     * @return array
+     */
+    public static function getFormClients($form_id)
+    {
+        $db = Core::$db;
+
+        $db->query("SELECT access_type FROM {PREFIX}forms WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $access_type_info = $db->fetch();
+        $access_type = $access_type_info["access_type"];
+
+        $accounts = array();
+        if ($access_type == "public") {
+            $client_omit_list = self::getPublicFormOmitList($form_id);
+            $all_clients = Clients::getList();
+
+            foreach ($all_clients as $client_info) {
+                $client_id = $client_info["account_id"];
+                if (!in_array($client_id, $client_omit_list)) {
+                    $accounts[] = $client_info;
+                }
+            }
+        } else  {
+            $account_query = mysql_query("
+                SELECT *
+                FROM   {PREFIX}client_forms cf, {PREFIX}accounts a
+                WHERE  cf.form_id = $form_id AND
+                cf.account_id = a.account_id
+            ");
+            while ($row = mysql_fetch_assoc($account_query)) {
+                $accounts[] = $row;
+            }
+        }
+
+        extract(Hooks::processHookCalls("end", compact("form_id", "accounts"), array("accounts")), EXTR_OVERWRITE);
+
+        return $accounts;
+    }
+
+
+    /**
+     * Returns an array of account IDs of those clients in the omit list for this public form.
+     *
+     * @param integer $form_id
+     * @return array
+     */
+    public static function getPublicFormOmitList($form_id)
+    {
+        $db = Core::$db;
+        $db->query("
+            SELECT account_id
+            FROM   {PREFIX}public_form_omit_list
+            WHERE form_id = :form_id
+        ");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $client_ids = array();
+        foreach ($db->fetchAll() as $row) {
+            $client_ids[] = $row["account_id"];
+        }
+
+        extract(Hooks::processHookCalls("end", compact("clients_id", "form_id"), array("client_ids")), EXTR_OVERWRITE);
+
+        return $client_ids;
     }
 
 
@@ -392,69 +508,35 @@ class Forms {
         $order_clause = self::getOrderClause($search_criteria["order"]);
         $status_clause = self::getStatusClause($search_criteria["status"]);
         $keyword_clause = self::getKeywordClause($search_criteria["keyword"]);
-
-        // if a user ID has been specified, find out which forms have been assigned to this client
-        // so we can limit our query
-        $form_clause = "";
-
-        // this var is populated ONLY for searches on a particular client account. It stores those public forms on
-        // which the client is on the Omit List. This value is used at the end of this function to trim the results
-        // returned to NOT include those forms
-        $client_omitted_from_public_forms = array();
-
-        if (!empty($search_criteria["account_id"]))
-        {
-            $account_id = $search_criteria["account_id"];
-            // a bit weird, but necessary. This adds a special clause to the query so that when it searches for a
-            // particular account, it also (a) returns all public forms and (b) only returns those forms that are
-            // completed. This is because incomplete forms are still set to access_type = "public".
-            // Note: this does NOT take into account the public_form_omit_list - that's handled afterwards, to
-            // keep the SQL as simple as possible
-            $is_public_clause = "(access_type = 'public')";
-            $is_setup_clause = "is_complete = 'yes' AND is_initialized = 'yes'";
-
-            // first, grab all those forms that are explicitly associated with this client
-            $query = mysql_query("
-                SELECT *
-                FROM   {PREFIX}client_forms
-                WHERE  account_id = $account_id
-            ");
-
-            $form_clauses = array();
-            while ($result = mysql_fetch_assoc($query))
-                $form_clauses[] = "form_id = {$result['form_id']}";
-
-            if (count($form_clauses) > 1)
-                $form_clause = "(((" . join(" OR ", $form_clauses) . ") OR $is_public_clause) AND ($is_setup_clause))";
-            else
-                $form_clause = isset($form_clauses[0]) ? "(({$form_clauses[0]} OR $is_public_clause) AND ($is_setup_clause))" :
-                "($is_public_clause AND ($is_setup_clause))";
-
-            // see if this client account has been omitted from any public forms. If it is, this will be used to
-            // filter the results
-            $query = mysql_query("SELECT form_id FROM {$g_table_prefix}public_form_omit_list WHERE account_id = $account_id");
-            while ($row = mysql_fetch_assoc($query))
-                $client_omitted_from_public_forms[] = $row["form_id"];
-        }
-
+        $form_clause = self::getFormClause($search_criteria["account_id"]);
+        $omitted_forms = self::getFormOmitList($search_criteria["account_id"]);
         $admin_clause = (!$search_criteria["is_admin"]) ? "is_complete = 'yes' AND is_initialized = 'yes'" : "";
 
         // add up the where clauses
         $where_clauses = array();
-        if (!empty($status_clause))  $where_clauses[] = $status_clause;
-        if (!empty($keyword_clause)) $where_clauses[] = "($keyword_clause)";
-        if (!empty($form_clause))    $where_clauses[] = $form_clause;
-        if (!empty($admin_clause))   $where_clauses[] = $admin_clause;
+        if (!empty($status_clause)) {
+            $where_clauses[] = $status_clause;
+        }
+        if (!empty($keyword_clause)) {
+            $where_clauses[] = "($keyword_clause)";
+        }
+        if (!empty($form_clause)) {
+            $where_clauses[] = $form_clause;
+        }
+        if (!empty($admin_clause)) {
+            $where_clauses[] = $admin_clause;
+        }
 
-        if (!empty($where_clauses))
+        if (!empty($where_clauses)) {
             $where_clause = "WHERE " . join(" AND ", $where_clauses);
-        else
+        } else {
             $where_clause = "";
+        }
 
         return array(
             "order_clause" => $order_clause,
             "where_clause" => $where_clause,
-            "client_omitted_from_public_forms" => $client_omitted_from_public_forms
+            "omitted_forms" => $omitted_forms
         );
     }
 
@@ -526,5 +608,82 @@ class Forms {
             $keyword_clause = join(" OR ", $clauses);
         }
         return $keyword_clause;
+    }
+
+
+    /**
+     * Used in the search query to ensure the search limits the results to whatever forms the current account may view.
+     * @param $account_id
+     * @return string
+     */
+    private static function getFormClause($account_id)
+    {
+        if (empty($account_id)) {
+            return "";
+        }
+
+        $db = Core::$db;
+
+        $clause = "";
+        if (!empty($account_id)) {
+
+            // a bit weird, but necessary. This adds a special clause to the query so that when it searches for a
+            // particular account, it also (a) returns all public forms and (b) only returns those forms that are
+            // completed. This is because incomplete forms are still set to access_type = "public". Note: this does NOT
+            // take into account the public_form_omit_list - that's handled by self::getFormOmitList
+            $is_public_clause = "(access_type = 'public')";
+            $is_setup_clause = "is_complete = 'yes' AND is_initialized = 'yes'";
+
+            // first, grab all those forms that are explicitly associated with this client
+            $db->query("
+                SELECT *
+                FROM   {PREFIX}client_forms
+                WHERE  account_id = :account_id
+            ");
+            $db->bind("account_id", $account_id);
+            $db->execute();
+
+            $form_clauses = array();
+            foreach ($db->fetchAll() as $row) {
+                $form_clauses[] = "form_id = {$row['form_id']}";
+            }
+
+            if (count($form_clauses) > 1) {
+                $clause = "(((" . join(" OR ", $form_clauses) . ") OR $is_public_clause) AND ($is_setup_clause))";
+            } else {
+                $clause = isset($form_clauses[0]) ? "(({$form_clauses[0]} OR $is_public_clause) AND ($is_setup_clause))" :
+                "($is_public_clause AND ($is_setup_clause))";
+            }
+        }
+
+        return $clause;
+    }
+
+
+    private static function getFormOmitList($account_id) {
+        if (empty($account_id)) {
+            return array();
+        }
+
+        $db = Core::$db;
+
+        // this var is populated ONLY for searches on a particular client account. It stores those public forms on
+        // which the client is on the Omit List. This value is used at the end of this function to trim the results
+        // returned to NOT include those forms
+        $omitted_forms = array();
+
+        // see if this client account has been omitted from any public forms. If it is, this will be used to
+        // filter the results
+        $db->query("
+            SELECT form_id
+            FROM {PREFIX}public_form_omit_list
+            WHERE account_id = :account_id
+        ");
+        $db->bind("account_id", $account_id);
+        foreach ($db->fetchAll() as $row) {
+            $omitted_forms[] = $row["form_id"];
+        }
+
+        return $omitted_forms;
     }
 }

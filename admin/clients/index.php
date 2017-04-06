@@ -4,7 +4,7 @@ use FormTools\Administrator;
 use FormTools\Clients;
 use FormTools\Core;
 use FormTools\General;
-
+use FormTools\Pages;
 
 Core::init();
 Core::$user->checkAuth("admin");
@@ -16,7 +16,6 @@ if (isset($_GET['delete']) && !empty($_GET['client_id'])) {
 if (isset($_GET['login'])) {
     list($g_success, $g_message) = Administrator::loginAsClient($_GET['login']);
 }
-
 
 if (isset($_GET["reset"])) {
 	$_SESSION["ft"]["client_sort_order"] = "";
@@ -46,7 +45,7 @@ $page_vars["num_clients"] = $num_clients;
 $page_vars["clients"]  = $clients;
 $page_vars["order"] = $order;
 $page_vars["search_criteria"] = $search_criteria;
-$page_vars["pagination"] = ft_get_dhtml_page_nav(count($clients), $_SESSION["ft"]["settings"]["num_clients_per_page"], 1);
+$page_vars["pagination"] = General::getJsPageNav(count($clients), $_SESSION["ft"]["settings"]["num_clients_per_page"], 1);
 $page_vars["js_messages"] = array("phrase_delete_row");
 
 $page_vars["head_js"] =<<< END

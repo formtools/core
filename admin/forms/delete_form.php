@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Core;
+use FormTools\Forms;
 use FormTools\Themes;
 
 Core::init();
@@ -16,7 +17,7 @@ if (!isset($form_id)) {
 	exit;
 }
 
-$form_info = ft_get_form($form_id);
+$form_info = Forms::getForm($form_id);
 if (empty($form_info)) {
 	session_write_close();
 	header("location: $g_root_url/admin/forms/");

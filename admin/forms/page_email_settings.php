@@ -10,7 +10,7 @@ if (isset($request["delete_form_email_id"])) {
     list($g_success, $g_message) = ft_unset_field_as_email_field($request["delete_form_email_id"]);
 }
 
-$form_info = ft_get_form($form_id);
+$form_info = Forms::getForm($form_id);
 $form_fields = ft_get_form_fields($form_id);
 
 $registered_form_emails = ft_get_email_fields($form_id);

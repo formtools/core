@@ -15,7 +15,7 @@ function smarty_function_display_form_name($params, &$smarty)
   if (empty($form_id))
     return;
 
-  $form_info = ft_get_form($form_id);
+  $form_info = Forms::getForm($form_id);
 
   return $form_info["form_name"];
 }

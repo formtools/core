@@ -494,6 +494,70 @@ END;
     }
 
 
+    /**
+     * Displays basic << 1 2 3 >> navigation for lists, each linking to the current page.
+     *
+     * This function has exactly the same purpose as display_page_nav, except that the pages are
+     * hidden/shown with DHTML instead of separate server-side calls per page. This technique is better
+     * for lists that contain a smaller number of items, e.g. the client and forms listing pages.
+     *
+     * ASSUMPTION: the JS counterpart function with the same function is defined in the calling page.
+     * That function does all the work of hiding/showing pages, updating the "viewing X-Y"
+     * text, enabling disabling the << and >> arrows, and storing the current page in sessions. This
+     * function merely sets up the base HTML + JS.
+     *
+     * This function uses a dhtml_pagination.tpl Smarty template file, found in the current theme's root
+     * folder.
+     *
+     * @param integer $num_results The total number of results found.
+     * @param integer $num_per_page The max number of results to list per page.
+     * @param integer $current_page The current page number being examined (defaults to 1).
+     */
+    public static function getJsPageNav($num_results, $num_per_page, $current_page = 1)
+    {
+        $theme = Core::$user->getTheme();
+        $root_dir = Core::getRootDir();
+        $root_url = Core::getRootUrl();
+        $LANG = Core::$L;
+
+        $smarty = Core::$smarty;
+        $smarty->setTemplateDir("$root_dir/themes/$theme");
+        $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
+        $smarty->setUseSubDirs(Core::shouldUseSmartySubDirs());
+        $smarty->assign("LANG", $LANG);
+        //$smarty->assign("SESSION", $_SESSION["ft"]);
+        $smarty->assign("g_root_dir", $root_dir);
+        $smarty->assign("g_root_url", $root_url);
+        $smarty->assign("samepage", General::getCleanPhpSelf());
+        $smarty->assign("num_results", $num_results);
+        $smarty->assign("num_per_page", $num_per_page);
+        $smarty->assign("current_page", $current_page);
+
+        // find the range that's being displayed (e.g 11 to 20)
+        $range_start = ($current_page - 1) * $num_per_page + 1;
+        $range_end   = $range_start + $num_per_page - 1;
+        $range_end   = ($range_end > $num_results) ? $num_results : $range_end;
+
+        $smarty->assign("range_start", $range_start);
+        $smarty->assign("range_end", $range_end);
+
+        $viewing_range = "";
+        if ($num_results > $num_per_page) {
+            $replacement_info = array(
+                "startnum" => "<span id='nav_viewing_num_start'>$range_start</span>",
+                "endnum"   => "<span id='nav_viewing_num_end'>$range_end</span>"
+            );
+            $viewing_range = General::evalSmartyString($LANG["phrase_viewing_range"], $replacement_info);
+        }
+        $smarty->assign("viewing_range", $viewing_range);
+        $smarty->assign("total_pages", ceil($num_results / $num_per_page));
+
+        // now process the template and return the HTML
+        return $smarty->fetch(Themes::getSmartyTemplateWithFallback($theme, "dhtml_pagination.tpl"));
+    }
+
+
+
 
 }
 

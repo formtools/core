@@ -92,7 +92,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 
 	extract(Hooks::processHookCalls("start", compact("form_id", "view_id", "submission_id", "is_admin"), array()), EXTR_OVERWRITE);
 
-	$form_info = ft_get_form($form_id);
+	$form_info = Forms::getForm($form_id);
 	$form_fields = ft_get_form_fields($form_id);
 	$auto_delete_submission_files = $form_info["auto_delete_submission_files"];
 
@@ -217,7 +217,7 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 	$submissions_to_delete = $submission_ids;
 	extract(Hooks::processHookCalls("start", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("submission_ids")), EXTR_OVERWRITE);
 
-	$form_info = ft_get_form($form_id);
+	$form_info = Forms::getForm($form_id);
 	$form_fields = ft_get_form_fields($form_id);
 	$auto_delete_submission_files = $form_info["auto_delete_submission_files"];
 

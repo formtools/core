@@ -4,7 +4,7 @@ use FormTools\Themes;
 
 
 $sortable_id = "view_list";
-$form_info = ft_get_form($form_id);
+$form_info = Forms::getForm($form_id);
 
 // this is called when the user clicks Update OR deletes a group. The delete group first updates the
 // view order to ensure that whatever group is being deleted actually has the View that the user expects

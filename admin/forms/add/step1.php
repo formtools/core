@@ -27,7 +27,7 @@ $form_id = General::loadField("form_id", "add_form_form_id", "");
 
 $form_info = array();
 if (!empty($form_id)) {
-    $form_info = ft_get_form($form_id);
+    $form_info = Forms::getForm($form_id);
 }
 
 // compile the header information

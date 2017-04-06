@@ -20,7 +20,7 @@ if (isset($_GET['uninitialize']) && $_GET['uninitialize'] == 1) {
 }
 
 // retrieve the form info
-$form_info = ft_get_form($form_id);
+$form_info = Forms::getForm($form_id);
 
 // determine the input field values for cutting & pasting
 $hidden_fields = '<input type="hidden" name="form_tools_initialize_form" value="1" />' . "\n"

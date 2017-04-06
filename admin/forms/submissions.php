@@ -48,7 +48,7 @@ if (empty($view_id) || !ft_check_view_exists($view_id, true)) {
 $_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
 $_SESSION["ft"]["last_link_page_{$form_id}"] = "submissions";
 
-$form_info   = ft_get_form($form_id);
+$form_info   = Forms::getForm($form_id);
 $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true, "include_field_settings" => true));
 $view_info   = ft_get_view($view_id);
 

@@ -42,7 +42,7 @@ if (empty($view_id) || !ft_check_view_exists($view_id, true)) {
 }
 $_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
 
-$form_info = ft_get_form($form_id);
+$form_info = Forms::getForm($form_id);
 $view_info = ft_get_view($view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes") {

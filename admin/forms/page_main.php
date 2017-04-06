@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\Forms;
 use FormTools\Themes;
 
 
@@ -9,8 +10,8 @@ if (isset($request["update_main"])) {
     list($g_success, $g_message) = ft_update_form_main_tab($request, $form_id);
 }
 
-$form_info = ft_get_form($form_id);
-$form_omit_list = ft_get_public_form_omit_list($form_id);
+$form_info = Forms::getForm($form_id);
+$form_omit_list = Forms::getPublicFormOmitList($form_id);
 $num_clients_on_omit_list = count($form_omit_list);
 
 $selected_client_ids = array();

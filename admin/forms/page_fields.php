@@ -13,7 +13,7 @@ if (isset($request["update_fields"])) {
 	list($g_success, $g_message) = ft_update_form_fields_tab($form_id, $request);
 }
 
-$form_info = ft_get_form($form_id);
+$form_info = Forms::getForm($form_id);
 if (isset($request["num_fields_per_page"])) {
 	$num_fields_per_page = $request["num_fields_per_page"];
 	ft_set_settings(array("admin_num_fields_per_page_{$form_id}" => $request["num_fields_per_page"]));

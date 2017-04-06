@@ -29,7 +29,7 @@ function ft_add_default_view($form_id)
 	global $g_table_prefix, $LANG;
 
 	// 1. create the new View
-	$form_info = ft_get_form($form_id);
+	$form_info = Forms::getForm($form_id);
 	$num_submissions_per_page = isset($_SESSION["ft"]["settings"]["num_submissions_per_page"]) ? $_SESSION["ft"]["settings"]["num_submissions_per_page"] : 10;
 
 	mysql_query("

@@ -16,7 +16,7 @@ if (isset($request["delete"])) {
 	list($g_success, $g_message) = ft_delete_email_template($request["delete"]);
 }
 
-$form_info = ft_get_form($form_id);
+$form_info = Forms::getForm($form_id);
 $emails_page = General::loadField("emails_page", "form_{$form_id}_emails_page", 1);
 $form_email_info  = ft_get_email_templates($form_id, $emails_page);
 $form_emails      = $form_email_info["results"];

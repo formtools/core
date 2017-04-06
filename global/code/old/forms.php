@@ -386,7 +386,7 @@ function ft_initialize_form($form_data)
 		exit;
 	}
 
-	$form_info = ft_get_form($form_id, true);
+	$form_info = Forms::getForm($form_id, true);
 
 	// if this form has already been completed, exit with an error message
 	if ($form_info["is_complete"] == "yes")
@@ -556,38 +556,6 @@ function ft_initialize_form($form_data)
 
 
 /**
- * Retrieves all information about single form; all associated client information is stored in the
- * client_info key, as an array of hashes. Note: this function returns information about any form - complete or
- * incomplete.
- *
- * @param integer $form_id the unique form ID
- * @return array a hash of form information. If the form isn't found, it returns an empty array
- */
-function ft_get_form($form_id)
-{
-	global $g_table_prefix;
-
-	$query = @mysql_query("SELECT * FROM {$g_table_prefix}forms WHERE form_id = $form_id");
-	$form_info = @mysql_fetch_assoc($query);
-
-	if (empty($form_info))
-		return array();
-
-	$form_info["client_info"] = ft_get_form_clients($form_id);
-	$form_info["client_omit_list"] = ($form_info["access_type"] == "public") ? ft_get_public_form_omit_list($form_id) : array();
-
-	$query = mysql_query("SELECT * FROM {$g_table_prefix}multi_page_form_urls WHERE form_id = $form_id ORDER BY page_num");
-	$form_info["multi_page_form_urls"] = array();
-	while ($row = mysql_fetch_assoc($query))
-		$form_info["multi_page_form_urls"][] = $row;
-
-	extract(Hooks::processHookCalls("end", compact("form_id", "form_info"), array("form_info")), EXTR_OVERWRITE);
-
-	return $form_info;
-}
-
-
-/**
  * A simple function to return a list of (completed, finalized) forms, ordered by form name.
  *
  * @return array
@@ -687,54 +655,6 @@ function ft_get_form_name($form_id)
 	$result = mysql_fetch_assoc($query);
 
 	return $result["form_name"];
-}
-
-
-/**
- * Returns an array of account information of all clients associated with a particular form. This
- * function is smart enough to return the complete list, depending on whether the form has public access
- * or not. If it's a public access form, it takes into account those clients on the form omit list.
- *
- * @param integer $form
- * @return array
- */
-function ft_get_form_clients($form_id)
-{
-	global $g_table_prefix;
-
-	$access_type_query = mysql_query("SELECT access_type FROM {$g_table_prefix}forms WHERE form_id = $form_id");
-	$access_type_info = mysql_fetch_assoc($access_type_query);
-	$access_type = $access_type_info["access_type"];
-
-	$accounts = array();
-	if ($access_type == "public")
-	{
-		$client_omit_list = ft_get_public_form_omit_list($form_id);
-		$all_clients = Clients::getList();
-
-		foreach ($all_clients as $client_info)
-		{
-			$client_id = $client_info["account_id"];
-			if (!in_array($client_id, $client_omit_list))
-				$accounts[] = $client_info;
-		}
-	}
-	else
-	{
-		$account_query = mysql_query("
-      SELECT *
-      FROM   {$g_table_prefix}client_forms cf, {$g_table_prefix}accounts a
-      WHERE  cf.form_id = $form_id AND
-            cf.account_id = a.account_id
-            ");
-
-		while ($row = mysql_fetch_assoc($account_query))
-			$accounts[] = $row;
-	}
-
-	extract(Hooks::processHookCalls("end", compact("form_id", "accounts"), array("accounts")), EXTR_OVERWRITE);
-
-	return $accounts;
 }
 
 
@@ -1645,32 +1565,6 @@ function _ft_alter_table_column($table, $old_col_name, $new_col_name, $col_type)
 	extract(Hooks::processHookCalls("end", compact("table", "old_col_name", "new_col_name", "col_type"), array()), EXTR_OVERWRITE);
 
 	return array($success, $message);
-}
-
-
-/**
- * Returns an array of account IDs of those clients in the omit list for this public form.
- *
- * @param integer $form_id
- * @return array
- */
-function ft_get_public_form_omit_list($form_id)
-{
-	global $g_table_prefix;
-
-	$query = mysql_query("
-    SELECT account_id
-    FROM   {$g_table_prefix}public_form_omit_list
-    WHERE form_id = $form_id
-      ");
-
-	$client_ids = array();
-	while ($row = mysql_fetch_assoc($query))
-		$client_ids[] = $row["account_id"];
-
-	extract(Hooks::processHookCalls("end", compact("clients_id", "form_id"), array("client_ids")), EXTR_OVERWRITE);
-
-	return $client_ids;
 }
 
 

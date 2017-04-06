@@ -66,15 +66,15 @@ foreach ($modules as $module_info)
 // now re-sort the list based on in_installed = no, needs_upgrading = yes, the rest
 $sorted_modules = array();
 $installed_modules = array();
-foreach ($updated_modules as $module_info)
-{
+foreach ($updated_modules as $module_info) {
 	// we can rely on these guys being returned first
-	if ($module_info["is_installed"] == "no")
-		$sorted_modules[] = $module_info;
-	else if ($module_info["needs_upgrading"])
-		$sorted_modules[] = $module_info;
-	else
-		$installed_modules[] = $module_info;
+	if ($module_info["is_installed"] == "no") {
+        $sorted_modules[] = $module_info;
+    } else if ($module_info["needs_upgrading"]) {
+        $sorted_modules[] = $module_info;
+    } else {
+        $installed_modules[] = $module_info;
+    }
 }
 
 $modules = array_merge($sorted_modules, $installed_modules);
@@ -91,7 +91,7 @@ $page_vars["num_modules"] = $num_modules;
 $page_vars["order"]       = $order;
 $page_vars["search_criteria"] = $search_criteria;
 $page_vars["module_ids_in_page"] = $module_ids_in_page;
-$page_vars["pagination"]  = ft_get_dhtml_page_nav(count($modules), $_SESSION["ft"]["settings"]["num_modules_per_page"], 1);
+$page_vars["pagination"]  = General::getJsPageNav(count($modules), $_SESSION["ft"]["settings"]["num_modules_per_page"], 1);
 $page_vars["js_messages"] = array("validation_modules_search_no_status", "phrase_please_enter_license_key", "word_yes", "word_no",
 	"phrase_please_confirm", "confirm_uninstall_module", "word_close", "word_verify", "notify_invalid_license_key",
 	"notify_license_key_no_longer_valid", "notify_unknown_error");

@@ -16,6 +16,7 @@
 
 
 use FormTools\FieldSizes;
+use FormTools\Forms;
 use FormTools\Settings;
 
 
@@ -118,7 +119,7 @@ function ft_delete_form_fields($form_id, $field_ids)
 	$message = "";
 
 	// find out if the form exists and is complete
-	$form_info = ft_get_form($form_id);
+	$form_info = Forms::getForm($form_id);
 	$form_table_exists = ($form_info["is_complete"] == "yes") ? true : false;
 
 	// stores the Views IDs of any View that is affected by deleting one of the form field, regardless of the field or form

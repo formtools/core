@@ -27,7 +27,7 @@ if (!empty($_POST) && isset($_POST["next_step"]))
 }
 
 $form_fields = ft_get_form_fields($form_id);
-$form_setup  = ft_get_form($form_id);
+$form_setup  = Forms::getForm($form_id);
 
 // build the best guesses and list of field IDs
 $best_guesses = array();

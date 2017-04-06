@@ -122,7 +122,7 @@ function ft_preload_values($source, $form_id = "")
 			if (empty($form_id))
 				return;
 
-			$form_info = ft_get_form($form_id);
+			$form_info = Forms::getForm($form_id);
 			$submission_type = $form_info["submission_type"];
 
 			$page_values["form_name"]    = $form_info["form_name"];

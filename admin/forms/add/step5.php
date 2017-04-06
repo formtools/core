@@ -10,7 +10,7 @@ Core::$user->checkAuth("admin");
 
 $sortable_id = "review_field_options";
 $form_id = General::loadField("form_id", "add_form_form_id", "");
-$form_info   = ft_get_form($form_id);
+$form_info   = Forms::getForm($form_id);
 $form_fields = ft_get_form_fields($form_id);
 
 $form_urls = array();

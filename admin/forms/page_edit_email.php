@@ -11,7 +11,7 @@ if (isset($request["update_email_template"])) {
     list($g_success, $g_message) = ft_update_email_template($email_id, $request);
 }
 
-$form_info      = ft_get_form($form_id);
+$form_info      = Forms::getForm($form_id);
 $form_fields    = ft_get_form_fields($form_id);
 $columns        = ft_get_form_column_names($form_id);
 $template_info  = ft_get_email_template($email_id);
