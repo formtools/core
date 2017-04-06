@@ -213,7 +213,7 @@ class Core {
     private static $hideUpgradeLink;
 
     /**
-     * Limits the number of forms that can be stored in the database.
+     * Limits the number of forms that can be stored in the database. If left blank there are no limits.
      */
     private static $maxForms = "";
 
@@ -465,6 +465,7 @@ class Core {
         self::$hideUpgradeLink = (isset($g_hide_upgrade_link)) ? $g_hide_upgrade_link : false;
         self::$enableBenchmarking = (isset($g_enable_benchmarking)) ? $g_enable_benchmarking : false;
         self::$jsDebugEnabled = isset($g_js_debug) ? $g_js_debug : false;
+        self::$maxForms = isset($g_max_forms) ? $g_max_forms : "";
     }
 
     /**
@@ -593,5 +594,9 @@ class Core {
 
     public static function getBenchmarkStart() {
         return self::$benchmarkStart;
+    }
+
+    public static function getMaxForms() {
+        return self::$maxForms;
     }
 }

@@ -389,78 +389,9 @@ class Forms {
      */
     private static function getSearchFormSqlClauses($search_criteria)
     {
-        if (!isset($search_criteria["order"])) {
-            $search_criteria["order"] = "form_id-DESC";
-        }
-
-        // verbose, but at least it prevents any invalid sorting...
-        $order_clause = "";
-        switch ($search_criteria["order"])
-        {
-            case "form_id-DESC":
-                $order_clause = "form_id DESC";
-                break;
-            case "form_id-ASC":
-                $order_clause = "form_id ASC";
-                break;
-            case "form_name-ASC":
-                $order_clause = "form_name ASC";
-                break;
-            case "form_name-DESC":
-                $order_clause = "form_name DESC";
-                break;
-            case "form_type-ASC":
-                $order_clause = "form_type ASC";
-                break;
-            case "form_type-DESC":
-                $order_clause = "form_type DESC";
-                break;
-            case "status-DESC":
-                $order_clause = "(is_initialized = 'no' AND is_complete = 'no'), is_active = 'no', is_active = 'yes'";
-                break;
-            case "status-ASC":
-                $order_clause = "is_active = 'yes', is_active = 'no', (is_initialized = 'no' AND is_complete = 'no')";
-                break;
-
-            default:
-                $order_clause = "form_id DESC";
-                break;
-        }
-        $order_clause = "ORDER BY $order_clause";
-
-        $status_clause = "";
-        if (isset($search_criteria["status"]))
-        {
-            switch ($search_criteria["status"])
-            {
-                case "online":
-                    $status_clause = "is_active = 'yes' ";
-                    break;
-                case "offline":
-                    $status_clause = "(is_active = 'no' AND is_complete = 'yes')";
-                    break;
-                case "incomplete":
-                    $status_clause = "(is_initialized = 'no' OR is_complete = 'no')";
-                    break;
-                default:
-                    $status_clause = "";
-                    break;
-            }
-        }
-
-        $keyword_clause = "";
-        if (isset($search_criteria["keyword"]) && !empty($search_criteria["keyword"]))
-        {
-            $search_criteria["keyword"] = trim($search_criteria["keyword"]);
-            $string = $search_criteria["keyword"];
-            $fields = array("form_name", "form_url", "redirect_url", "form_id");
-
-            $clauses = array();
-            foreach ($fields as $field)
-                $clauses[] = "$field LIKE '%$string%'";
-
-            $keyword_clause = join(" OR ", $clauses);
-        }
+        $order_clause = self::getOrderClause($search_criteria["order"]);
+        $status_clause = self::getStatusClause($search_criteria["status"]);
+        $keyword_clause = self::getKeywordClause($search_criteria["keyword"]);
 
         // if a user ID has been specified, find out which forms have been assigned to this client
         // so we can limit our query
@@ -484,10 +415,10 @@ class Forms {
 
             // first, grab all those forms that are explicitly associated with this client
             $query = mysql_query("
-      SELECT *
-      FROM   {$g_table_prefix}client_forms
-      WHERE  account_id = $account_id
-        ");
+                SELECT *
+                FROM   {PREFIX}client_forms
+                WHERE  account_id = $account_id
+            ");
 
             $form_clauses = array();
             while ($result = mysql_fetch_assoc($query))
@@ -521,10 +452,79 @@ class Forms {
             $where_clause = "";
 
         return array(
-        "order_clause" => $order_clause,
-        "where_clause" => $where_clause,
-        "client_omitted_from_public_forms" => $client_omitted_from_public_forms
+            "order_clause" => $order_clause,
+            "where_clause" => $where_clause,
+            "client_omitted_from_public_forms" => $client_omitted_from_public_forms
         );
     }
 
+
+    private static function getOrderClause ($order)
+    {
+        if (!isset($order) || empty($order)) {
+            $search_criteria["order"] = "form_id-DESC";
+        }
+
+        $order_map = array(
+            "form_id-ASC" => "form_id ASC",
+            "form_id-DESC" => "form_id DESC",
+            "form_name-ASC" => "form_name ASC",
+            "form_name-DESC" => "form_name DESC",
+            "form_type-ASC" => "form_type ASC",
+            "form_type-DESC" => "form_type DESC",
+            "status-ASC" => "is_active = 'yes', is_active = 'no', (is_initialized = 'no' AND is_complete = 'no')",
+            "status-DESC" => "(is_initialized = 'no' AND is_complete = 'no'), is_active = 'no', is_active = 'yes'",
+        );
+
+        if (isset($order_map[$order])) {
+            $order_clause = $order_map[$order];
+        } else {
+            $order_clause = "form_id DESC";
+        }
+        return "ORDER BY $order_clause";
+    }
+
+
+    private static function getStatusClause($status)
+    {
+        if (!isset($status) || empty($status)) {
+            return "";
+        }
+
+        switch ($status) {
+            case "online":
+                $status_clause = "is_active = 'yes' ";
+                break;
+            case "offline":
+                $status_clause = "(is_active = 'no' AND is_complete = 'yes')";
+                break;
+            case "incomplete":
+                $status_clause = "(is_initialized = 'no' OR is_complete = 'no')";
+                break;
+            default:
+                $status_clause = "";
+                break;
+        }
+        return $status_clause;
+    }
+
+
+    // TODO
+    private static function getKeywordClause($keyword)
+    {
+        $keyword_clause = "";
+        if (isset($keyword) && !empty($keyword)) {
+            $search_criteria["keyword"] = trim($keyword);
+            $string = $search_criteria["keyword"];
+            $fields = array("form_name", "form_url", "redirect_url", "form_id");
+
+            $clauses = array();
+            foreach ($fields as $field) {
+                $clauses[] = "$field LIKE '%$string%'";
+            }
+
+            $keyword_clause = join(" OR ", $clauses);
+        }
+        return $keyword_clause;
+    }
 }
