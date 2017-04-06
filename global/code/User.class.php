@@ -29,7 +29,7 @@ class User
      * sessions to instantiate the user.
      */
     public function __construct() {
-        $account_id = Sessions::get("account_id");
+        $account_id = Sessions::get("account_id", "account");
 
         // if the user isn't logged in, set the defaults
         if (empty($account_id)) {
@@ -39,19 +39,21 @@ class User
             $lang = Sessions::get("ui_language");
             $this->lang = ($lang) ? $lang : Core::getDefaultLang();
 
-            // TODO. Memoize these by stashin' em in sessions
             $settings = Settings::get(array("default_theme", "default_client_swatch"));
             $this->theme  = $settings["default_theme"];
             $this->swatch = $settings["default_client_swatch"];
 
         } else {
             $this->isLoggedIn = true;
+            $this->theme = Sessions::get("theme", "account");
+            $this->swatch = Sessions::get("swatch", "account");
+            $this->lang = Sessions::get("ui_language", "account");
         }
     }
 
     /**
-     * The login procedure for both administrators and clients in. If successful, redirects them to the
-     * appropriate page, otherwise returns an error.
+     * Logs in administrators and clients. If successful, redirects them to the appropriate page, otherwise returns an
+     * error.
      *
      * @param array   $info $_POST or $_GET containing both "username" and "password" keys, containing that information
      *                for the user trying to log in.
@@ -74,6 +76,7 @@ class User
 
         // extract info about this user's account
         $account_info = Accounts::getAccountByUsername($username);
+        $account_settings = Accounts::getAccountSettings($account_info["account_id"]);
 
         // error check user login info
         if (!$login_as_client) {
@@ -94,11 +97,9 @@ class User
             $temp_password_correct = (General::encode($password) == $account_info["temp_reset_password"]);
 
 
+            // if this is a client account and the administrator has enabled the maximum failed login attempts feature,
+            // keep track of the count
             if (!$password_correct && !$temp_password_correct) {
-
-                // if this is a client account and the administrator has enabled the maximum failed login attempts feature,
-                // keep track of the count
-                $account_settings = Accounts::getAccountSettings($account_info["account_id"]);
 
                 // stores the MAXIMUM number of failed attempts permitted, before the account gets disabled. If the value
                 // is empty in either the user account or for the default value, that means the administrator doesn't want
@@ -126,8 +127,10 @@ class User
 
         extract(Hooks::processHookCalls("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
 
+        $account_info["settings"] = $account_settings;
+
         // all checks out. Log them in, after populating sessions
-        //Sessions::set("settings", $settings);
+        Sessions::set("settings", $settings);
         Sessions::set("account", $account_info);
         Sessions::set("is_logged_in", true, "account");
         Sessions::set("password", General::encode($password), "account"); // this is deliberate [TODO...!]
@@ -143,7 +146,7 @@ class User
 
         // for clients, store the forms & form Views that they are allowed to access
         if ($account_info["account_type"] == "client") {
-            $_SESSION["ft"]["permissions"] = Clients::getClientFormViews($account_info["account_id"]);
+            Sessions::set("permissions", Clients::getClientFormViews($account_info["account_id"]));
         }
 
         // if the user just logged in with a temporary password, append some args to pass to the login page
@@ -160,6 +163,11 @@ class User
         if (!$login_as_client) {
             $this->updateLastLoggedIn();
         }
+
+        // hmm...
+//        $this->username = $username;
+//        $this->theme = $account_info["theme"];
+//        $this->swatch = $account_info["swatch"];
 
         session_write_close();
         header("Location: $login_url");
@@ -239,7 +247,7 @@ class User
      */
     public function redirectToLoginPage() {
         $root_url = Core::getRootUrl();
-        $login_page = Sessions::get("login_page"); //$_SESSION["ft"]["account"]["login_page"];
+        $login_page = Sessions::get("login_page", "account");
         $page = Pages::constructPageURL($login_page);
         header("location: {$root_url}$page");
     }

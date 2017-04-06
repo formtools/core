@@ -32,7 +32,7 @@
 <body>
 <div id="container">
   <div id="header">
-    {if $is_logged_in && !$g_omit_top_bar}
+    {if $is_logged_in}
       <div style="float:right">
         <table cellspacing="0" cellpadding="0" height="25">
         <tr>

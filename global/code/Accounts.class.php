@@ -24,7 +24,7 @@ class Accounts {
      */
     public static function setAdminAccount(array $info)
     {
-        global $LANG;
+        $LANG = Core::$L;
 
         $rules = array();
         $rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
@@ -54,13 +54,13 @@ class Accounts {
         ");
 
         $db->bindAll(array(
-            ":first_name" => $info["first_name"],
-            ":last_name" => $info["last_name"],
-            ":email" => $info["email"],
-            ":username" => $info["username"],
-            ":password" => md5(md5($info["password"])),
-            ":logout_url" => Core::getRootUrl(),
-            ":account_id" => 1 // the admin account is always ID 1
+            "first_name" => $info["first_name"],
+            "last_name" => $info["last_name"],
+            "email" => $info["email"],
+            "username" => $info["username"],
+            "password" => md5(md5($info["password"])),
+            "logout_url" => Core::getRootUrl(),
+            "account_id" => 1 // the admin account is always ID 1
         ));
 
         try {
@@ -76,7 +76,8 @@ class Accounts {
     public static function getAccountByUsername($username) {
         $db = Core::$db;
         $db->query("
-            SELECT account_id, account_type, account_status, password, temp_reset_password, login_page
+            SELECT account_id, account_type, account_status, password, temp_reset_password, login_page, theme, swatch,
+                   ui_language
             FROM   {PREFIX}accounts
             WHERE  username = :username
         ");

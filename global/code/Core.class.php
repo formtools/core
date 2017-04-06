@@ -25,8 +25,6 @@
 
 namespace FormTools;
 
-use FormTools\Translations;
-use FormTools\User;
 use Smarty;
 
 
@@ -395,12 +393,11 @@ class Core {
   //      }
 
         self::$user = new User();
-        self::$currLang = self::$user->getLang(); // TODO
+        self::$currLang = self::$user->getLang();
 
 //        if (self::checkFTSessions() && self::$user->isLoggedIn()) {
 //            ft_check_sessions_timeout();
 //        }
-
 
         // OVERRIDES - TODO interface
         if (isset($options["currLang"])) {
@@ -413,6 +410,11 @@ class Core {
         // optionally enable benchmarking. Dev-only feature to confirm pages aren't taking too long to load
         if (self::$enableBenchmarking) {
             self::$benchmarkStart = ft_get_microtime_float();
+        }
+
+        // not thrilled with this, but it needs to be handled on all pages, and this is a convenient spot
+        if (Core::checkConfigFileExists() && isset($_GET["logout"])) {
+            Core::$user->logout();
         }
     }
 

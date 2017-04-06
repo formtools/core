@@ -1,7 +1,7 @@
 <?php
 
-//use FormTools\Core;
-//use FormTools\Themes;
+use FormTools\Core;
+use FormTools\Themes;
 
 
 /**
@@ -18,16 +18,15 @@
  */
 function smarty_function_ft_include($params, &$smarty)
 {
-//    if (empty($params["file"])) {
-//        $smarty->trigger_error("assign: missing 'file' parameter. This is required.");
-//        return;
-//    }
-//
-//    // the template ("file") should be an absolute path relative to the root
-//    $template = $params["file"];
-//    $theme = Core::$user->getTheme();
-//    $html = Core::$smarty->fetch(Themes::getSmartyTemplateWithFallback($theme, $template)); // TODO correct?
-//
-//    return $html;
+    if (empty($params["file"])) {
+        $smarty->trigger_error("assign: missing 'file' parameter. This is required.");
+        return;
+    }
+
+    // the template ("file") should be an absolute path relative to the root
+    $template = $params["file"];
+    $theme = Core::$user->getTheme();
+
+    return Core::$smarty->fetch(Themes::getSmartyTemplateWithFallback($theme, $template));
 }
 

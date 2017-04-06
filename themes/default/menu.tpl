@@ -5,11 +5,10 @@
   This page is used to render the navigation menu for all accounts - administrator and clients.
 *}
 
-
   {assign var=is_current_parent_menu value=false}
 
   <div class="menu_items">
-  {foreach from=$SESSION.menu.menu_items key=k item=i}
+  {foreach from=$menu_items key=k item=i}
 
     {assign var=link_id value=""}
 

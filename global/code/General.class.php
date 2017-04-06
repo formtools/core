@@ -286,9 +286,7 @@ END;
     public static function generateJsMessages($keys = array(), $module_keys = array())
     {
         $LANG = Core::$L;
-
-        // TODO
-        $theme = (isset($_SESSION["ft"]["account"]["theme"])) ? $_SESSION["ft"]["account"]["theme"] : "";
+        $theme = Core::$user->getTheme();
 
         $js_rows = array();
         if (!empty($keys)) {
@@ -346,8 +344,7 @@ END;
 
         $g_success = "";
         $g_message = "";
-        switch ($flag)
-        {
+        switch ($flag) {
             case "no_views":
                 $g_success = false;
                 $g_message = $LANG["notify_no_views"];

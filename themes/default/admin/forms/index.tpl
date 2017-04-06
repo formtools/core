@@ -235,8 +235,8 @@
             <td {if $form_info.is_complete == "no"}align="center"{/if}>
               {if $form_info.is_complete == "yes"}
                 <div class="form_info_link">
-                {assign var='num_form_submissions' value=form_`$form_id`_num_submissions}
-                <a href="submissions.php?form_id={$form_id}">{$LANG.word_view|upper}<span class="num_submissions_box">{$SESSION[$num_form_submissions]}</span></a>
+                  {assign var='num_form_submissions' value="form_`$form_id`_num_submissions"}
+                  <a href="submissions.php?form_id={$form_id}">{$LANG.word_view|upper}<span class="num_submissions_box">{$SESSION[$num_form_submissions]}</span></a>
                 </div>
               {/if}
 

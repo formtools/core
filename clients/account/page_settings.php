@@ -1,13 +1,14 @@
 <?php
 
 use FormTools\Accounts;
+use FormTools\Clients;
 use FormTools\Themes;
 
 
 if (isset($request["update_account_settings"])) {
 	$account_id = $_SESSION["ft"]["account"]["account_id"];
 	$request["page"] = "settings";
-	list($g_success, $g_message) = ft_update_client($account_id, $request);
+	list($g_success, $g_message) = Clients::updateClient($account_id, $request);
 }
 
 $client_info = Accounts::getAccountInfo($account_id);

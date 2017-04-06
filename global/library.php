@@ -34,9 +34,3 @@ require_once(__DIR__ . "/code/validation.php");
 
 // autoload dependencies
 require_once(__DIR__ . "/../vendor/autoload.php");
-
-//if ($config_file_exists && (!isset($g_defer_init_page) || !$g_defer_init_page)) {
-//    if (isset($_GET["logout"])) {
-//        Core::$user->logout();
-//    }
-//}
