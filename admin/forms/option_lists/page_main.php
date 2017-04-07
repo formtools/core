@@ -23,7 +23,7 @@ $placeholders = array(
 
 // get a list of all existing Option Lists; this is used to ensure the uniqueness of the option list names
 // (necessary only from a user point of view)
-$lists = OptionLists::getList("all");
+$lists = OptionLists::getList();
 $list_names = array();
 foreach ($lists["results"] as $curr_list_info) {
 	if ($list_id == $curr_list_info["list_id"]) {

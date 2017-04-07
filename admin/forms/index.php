@@ -52,7 +52,7 @@ $page = array(
     "order" => $order,
     "clients" => $clients,
     "search_criteria" => $search_criteria,
-    "pagination" => General::getJsPageNav(count($forms), Sessions::get("num_forms_per_page", "settings"), 1),
+    "pagination" => General::getJsPageNav(count($forms), Sessions::get("settings.num_forms_per_page"), 1),
     "js_messages" => array("word_remove", "word_edit", "phrase_open_form_in_new_tab_or_win", "word_close", "phrase_show_form"),
     "head_js" => "$(function() { ft.init_show_form_links(); });"
 );

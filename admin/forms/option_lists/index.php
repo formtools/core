@@ -5,6 +5,7 @@ require_once("../../../global/library.php");
 use FormTools\Core;
 use FormTools\General;
 use FormTools\OptionLists;
+use FormTools\Sessions;
 use FormTools\Themes;
 
 Core::init();
@@ -14,7 +15,7 @@ Core::$user->checkAuth("admin");
 $option_list_page = General::loadField("page", "option_list_page", 1);
 
 $request = array_merge($_POST, $_GET);
-$num_option_lists_per_page = $_SESSION["ft"]["settings"]["num_option_lists_per_page"];
+$num_option_lists_per_page = Sessions::get("settings.num_option_lists_per_page");
 
 $order = General::loadField("order", "option_list_order");
 
@@ -48,7 +49,12 @@ if ($option_list_page > $total_pages) {
     $option_list_page = $total_pages;
 }
 
-$list_info = OptionLists::getList($option_list_page, $order);
+$list_info = OptionLists::getList(array(
+    "page" => $option_list_page,
+    "order" => $order,
+    "per_page" => Sessions::get("settings.num_option_lists_per_page")
+));
+
 $num_option_lists = $list_info["num_results"];
 $option_lists     = $list_info["results"];
 
@@ -68,7 +74,7 @@ foreach ($option_lists as $option_list) {
 	$updated_option_lists[] = $option_list;
 }
 
-$all_option_lists = OptionLists::getList("all");
+$all_option_lists = OptionLists::getList();
 $root_url = Core::getRootUrl();
 
 $page = array(

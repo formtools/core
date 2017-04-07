@@ -39,7 +39,7 @@ function smarty_function_option_list_dropdown($params, &$smarty)
         }
     }
 
-    $groups = OptionLists::getList("all");
+    $groups = OptionLists::getList();
 
     $rows = array();
     $rows[] = "<option value=\"\">{$LANG["phrase_please_select"]}</option>";

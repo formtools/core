@@ -141,7 +141,7 @@ class Settings {
             $db->execute();
 
             // TODO. This looks suspiciously like a bug... [a module could overwrite a core var]
-            Sessions::set($setting_name, $setting_value, "settings");
+            Sessions::set("settings.{$setting_name}", $setting_value);
         }
     }
 

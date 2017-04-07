@@ -160,7 +160,6 @@ class Pages
             while (list($key, $value) = each($args)) {
                 $params[] = "$key=$value";
             }
-
             if (strpos("?", $url) === false) {
                 $url .= "?" . implode("&", $params);
             } else {

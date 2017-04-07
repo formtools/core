@@ -239,7 +239,7 @@ class Themes {
         if (Core::$user->isLoggedIn()) {
             $smarty->assign("settings", Sessions::get("settings"));
             $smarty->assign("account", Sessions::get("account"));
-            $smarty->assign("menu_items", Sessions::get("menu_items", "menu"));
+            $smarty->assign("menu_items", Sessions::get("menu.menu_items"));
         } else {
             $smarty->assign("menu_items", array());
         }

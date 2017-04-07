@@ -29,14 +29,14 @@ class User
      * sessions to instantiate the user.
      */
     public function __construct() {
-        $account_id = Sessions::get("account_id", "account");
+        $account_id = Sessions::get("account.account_id");
 
         // if the user isn't logged in, set the defaults
         if (empty($account_id)) {
             $this->isLoggedIn = false;
 
             // the installation process tracks the UI lang
-            $lang = Sessions::get("ui_language");
+            $lang = Sessions::get("ui_language"); // this is set at the top level of sessions (change?)
             $this->lang = ($lang) ? $lang : Core::getDefaultLang();
 
             $settings = Settings::get(array("default_theme", "default_client_swatch"));
@@ -45,9 +45,9 @@ class User
 
         } else {
             $this->isLoggedIn = true;
-            $this->theme = Sessions::get("theme", "account");
-            $this->swatch = Sessions::get("swatch", "account");
-            $this->lang = Sessions::get("ui_language", "account");
+            $this->theme = Sessions::get("account.theme");
+            $this->swatch = Sessions::get("account.swatch");
+            $this->lang = Sessions::get("account.ui_language");
         }
     }
 
@@ -132,8 +132,7 @@ class User
         // all checks out. Log them in, after populating sessions
         Sessions::set("settings", $settings);
         Sessions::set("account", $account_info);
-        Sessions::set("is_logged_in", true, "account");
-        Sessions::set("password", General::encode($password), "account"); // this is deliberate [TODO...!]
+        Sessions::set("account.password", General::encode($password)); // this is deliberate [yuck, TODO...!]
 
         Menus::cacheAccountMenu($account_info["account_id"]);
 
@@ -247,7 +246,7 @@ class User
      */
     public function redirectToLoginPage() {
         $root_url = Core::getRootUrl();
-        $login_page = Sessions::get("login_page", "account");
+        $login_page = Sessions::get("account.login_page");
         $page = Pages::constructPageURL($login_page);
         header("location: {$root_url}$page");
     }
@@ -343,8 +342,8 @@ class User
 
         extract(Hooks::processHookCalls("end", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
 
-        $account_id   = Sessions::exists("account_id", "account") ? Sessions::get("account_id", "account") : "";
-        $account_type = Sessions::exists("account_type", "account") ? Sessions::get("account_type", "account") : "";
+        $account_id   = Sessions::exists("account.account_id") ? Sessions::get("account.account_id") : "";
+        $account_type = Sessions::exists("account.account_type") ? Sessions::get("account.account_type") : "";
 
         // some VERY complex logic here. The "user" account permission type is included so that people logged in
         // via the Submission Accounts can still view certain pages, e.g. pages with the Pages module. This checks that
@@ -378,7 +377,7 @@ class User
             ");
             $db->bindAll(array(
                 "account_id" => $account_id,
-                "password" => Sessions::get("password", "account")
+                "password" => Sessions::get("account.password")
             ));
             $db->execute();
             $info = $db->fetch();

@@ -16,46 +16,61 @@ namespace FormTools;
 
 class Sessions
 {
-    public static function get($key = "", $group = null) {
+    public static function get($key = "") {
         if (empty($key)) {
-            return $_SESSION;
+            return $_SESSION["ft"];
         }
-        if ($group == null) {
-            return $_SESSION["ft"][$key];
-        } else {
-            return $_SESSION["ft"][$group][$key];
+
+        $parts = mb_split("\.", $key);
+        $ref = &$_SESSION["ft"];
+        foreach ($parts as $section) {
+            $ref = &$ref[$section];
         }
+
+        return $ref;
     }
 
+
     /**
-     * Stores data in sessions. The third parameter is for grouping settings, e.g. settings for a specific module
-     * or area (menus, general settings etc).
-     * @param $key
-     * @param $value
-     * @param $group
+     * Stores data in sessions.
+     * @param $key string dot-delimited e.g. settings.num_per_page
      */
-    public static function set($key, $value, $group = null) {
+    public static function set($key, $value) {
+        $parts = mb_split("\.", $key);
         if (!isset($_SESSION["ft"])) {
             $_SESSION["ft"] = array();
         }
-        if ($group == null) {
-            $_SESSION["ft"][$key] = $value;
-        } else {
-            if (!isset($_SESSION["ft"][$group])) {
-                $_SESSION["ft"][$group] = array();
+        $ref = &$_SESSION["ft"];
+        foreach ($parts as $section) {
+            $ref = &$ref[$section];
+        }
+        $ref = $value;
+    }
+
+
+    public static function exists($key) {
+        if (!isset($_SESSION["ft"])) {
+            return false;
+        }
+
+        $parts = mb_split("\.", $key);
+        $exists = false;
+        $temp = &$_SESSION["ft"];
+        foreach ($parts as $section) {
+            if (isset($temp[$section])) {
+                $exists = true;
             }
-            $_SESSION["ft"][$group][$key] = $value;
+            $temp = &$temp[$section];
         }
+
+        return $exists;
     }
 
-    public static function exists($key, $group = null) {
-        if ($group == null) {
-            return isset($_SESSION["ft"][$key]);
-        } else {
-            return isset($_SESSION["ft"][$group][$key]);
-        }
-    }
 
+    /**
+     * Clears a top-level key.
+     * @param $key
+     */
     public static function clear($key) {
         unset($_SESSION["ft"][$key]);
     }

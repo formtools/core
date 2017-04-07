@@ -29,7 +29,7 @@ class Menus
             return "";
         }
 
-        $menu_items = Sessions::get("menu_items", "menu");
+        $menu_items = Sessions::get("menu.menu_items");
 
         for ($i=0; $i<count($menu_items); $i++) {
             $curr_page_url = $menu_items[$i]["url"];
@@ -43,14 +43,14 @@ class Menus
         }
 
         if (!$page_found) {
-            if (Sessions::exists("last_parent_url", "menu")) {
-                $found_page = Sessions::get("last_parent_url", "menu");
+            if (Sessions::exists("menu.last_parent_url")) {
+                $found_page = Sessions::get("menu.last_parent_url");
             } else {
                 $found_page = "";
             }
         } else {
             $found_page = $last_parent_page_url;
-            Sessions::set("last_parent_url", $found_page, "menu");
+            Sessions::set("menu.last_parent_url", $found_page);
         }
 
         return $found_page;
@@ -81,7 +81,7 @@ class Menus
             );
         }
 
-        Sessions::set("menu_items", $menu_template_info, "menu");
+        Sessions::set("menu_items", $menu_template_info);
     }
 
 
