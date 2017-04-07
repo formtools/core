@@ -14,8 +14,9 @@
 
 namespace FormTools;
 
-
-use Smarty, PDO, PDOException;
+use Smarty;
+use PDO;
+use PDOException;
 
 
 /**
@@ -311,6 +312,7 @@ EOF;
         Settings::set($export_manager_settings, "export_manager");
     }
 
+
     /**
      * This function creates the Form Tools database tables.
      */
@@ -410,20 +412,14 @@ EOF;
     }
 
 
-
     /**
-     * This function - called on the login page - checks that the /install folder has been removed.
-     *
-     * If the folder still exists, it redirects to the installation script with a unique GET flag to display an
-     * appropriate error message.
+     * This function - called on all Form Tools page confirms the script has been installed. If it hasn't, it redirects
+     * the user to the installation script. As of 3.0 the user no longer needs to remove the /inntall folder.
      */
     public static function checkInstalled()
     {
-        return Core::checkConfigFileExists();
-
-        // TODO
-        if (is_dir('install')) {
-            header("Location: install/");
+        if (!Core::checkConfigFileExists() && is_dir('../../install')) {
+            header("Location: ../../install/");
             exit;
         }
     }

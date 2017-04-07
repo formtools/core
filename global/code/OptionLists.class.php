@@ -14,7 +14,7 @@ class OptionLists {
     /**
      * Returns all list options in the database.
      *
-     * @param $page_num current page number, or "all" for all results.
+     * @param $page_num number the current page number, or "all" for all results.
      * @return array ["results"] an array of option group information
      *               ["num_results"] the total number of option groups in the database.
      */
@@ -28,6 +28,7 @@ class OptionLists {
             $num_option_lists_per_page = isset($_SESSION["ft"]["settings"]["num_option_lists_per_page"]) ?
             $_SESSION["ft"]["settings"]["num_option_lists_per_page"] : 10;
 
+            
             // determine the LIMIT clause
             if (empty($page_num)) {
                 $page_num = 1;
@@ -62,6 +63,21 @@ class OptionLists {
         extract(Hooks::processHookCalls("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
         return $return_hash;
+    }
+
+
+    /**
+     * Returns the total number of option lists in the database.
+     *
+     * @return integer
+     */
+    public static function getNumOptionLists()
+    {
+        $db = Core::$db;
+        $db->query("SELECT count(*) as c FROM {PREFIX}option_lists");
+        $db->execute();
+        $result = $db->fetch();
+        return $result["c"];
     }
 
 

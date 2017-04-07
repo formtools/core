@@ -100,7 +100,7 @@ class Settings {
     public static function set(array $settings, $module = "")
     {
         $db = Core::$db;
-        $and_module_clause = (!empty($module)) ? "AND module = module" : "";
+        $and_module_clause = (!empty($module)) ? "AND module = :module" : "";
 
         while (list($setting_name, $setting_value) = each($settings)) {
 
@@ -112,7 +112,7 @@ class Settings {
             ");
             $db->bind("setting_name", $setting_name);
             if (!empty($module)) {
-                $db->bind(":module", $module);
+                $db->bind("module", $module);
             }
 
             try {

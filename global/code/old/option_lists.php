@@ -127,22 +127,6 @@ function ft_get_option_list($list_id)
 }
 
 
-
-/**
- * Returns the total number of option lists in the database.
- *
- * @return integer
- */
-function ft_get_num_option_lists()
-{
-	global $g_table_prefix;
-
-	$query = mysql_query("SELECT count(*) as c FROM {$g_table_prefix}option_lists");
-	$result = mysql_fetch_assoc($query);
-	return $result["c"];
-}
-
-
 /**
  * This function is called whenever the user adds an option list through the Add External form process. It checks
  * all existing option lists to see if an identical set already exists. If it does, it returns the existing

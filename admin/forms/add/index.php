@@ -1,8 +1,12 @@
 <?php
 
+require_once("../../../global/library.php");
+
 use FormTools\Clients;
 use FormTools\Core;
+use FormTools\General;
 use FormTools\Themes;
+use FormTools\Pages;
 
 Core::init();
 Core::$user->checkAuth("client");
@@ -21,45 +25,44 @@ if (isset($request["new_form"])) {
 	$_SESSION["ft"]["add_form_form_id"] = "";
 }
 
+$LANG = Core::$L;
 $num_forms = Clients::getFormCount();
+$max_forms = Core::getMaxForms();
 
-// ------------------------------------------------------------------------------------------------
-
-// compile the header information
-$page_values = array();
-$page_vars["page"]     = "add_form_choose_type";
-$page_vars["page_url"] = Pages::getPageUrl("add_form_choose_type");
-$page_vars["head_title"] = "{$LANG['phrase_add_form']}";
-$page_vars["max_forms_reached"] = (!empty($g_max_ft_forms) && $num_forms >= $g_max_ft_forms) ? true : false;
-$page_vars["max_forms"] = $g_max_ft_forms;
-$page_vars["notify_max_forms_reached"] = General::evalSmartyString($LANG["notify_max_forms_reached"], array("max_forms" => $g_max_ft_forms));
-
-$page_vars["head_js"] =<<< END
-
+$head_js =<<< END
 $(function() {
-  $("#select_external").bind("click", function() {
-    var continue_decoded = $("<div />").html("{$LANG["word_continue_rightarrow"]}").text();
-    ft.create_dialog({
-      dialog:     $("#add_external_form_dialog"),
-      title:      "{$LANG["word_checklist"]}",
-      popup_type: "info",
-      min_width:  600,
-      buttons: [{
-        text: continue_decoded,
-        click: function() {
-          window.location = "step1.php";
-        }
-      },
-      {
-        text: "{$LANG["word_cancel"]}",
-        click: function() {
-          $(this).dialog("close");
-        }
-      }]
+    $("#select_external").bind("click", function() {
+        var continue_decoded = $("<div />").html("{$LANG["word_continue_rightarrow"]}").text();
+        ft.create_dialog({
+            dialog:     $("#add_external_form_dialog"),
+            title:      "{$LANG["word_checklist"]}",
+            popup_type: "info",
+            min_width:  600,
+            buttons: [{
+                text: continue_decoded,
+                click: function() {
+                    window.location = "step1.php";
+                }
+            },
+            {
+                text: "{$LANG["word_cancel"]}",
+                click: function() {
+                    $(this).dialog("close");
+                }
+            }]
+        });
     });
-  });
 });
-
 END;
 
-Themes::displayPage("admin/forms/add/index.tpl", $page_vars);
+$page = array(
+    "page"     => "add_form_choose_type",
+    "page_url" => Pages::getPageUrl("add_form_choose_type"),
+    "head_title" => "{$LANG['phrase_add_form']}",
+    "max_forms_reached" => !empty($max_forms) && $num_forms >= $max_forms,
+    "max_forms" => $max_forms,
+    "notify_max_forms_reached" => General::evalSmartyString($LANG["notify_max_forms_reached"], array("max_forms" => $max_forms)),
+    "head_js" => $head_js
+);
+
+Themes::displayPage("admin/forms/add/index.tpl", $page);

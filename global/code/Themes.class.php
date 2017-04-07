@@ -244,7 +244,7 @@ class Themes {
             $smarty->assign("menu_items", array());
         }
 
-        print_r(Sessions::get());
+//        print_r(Sessions::get());
 
         $smarty->assign("LANG", $LANG);
         $smarty->assign("g_root_dir", $root_dir);

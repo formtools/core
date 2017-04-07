@@ -386,6 +386,9 @@ class Core {
             self::initDatabase();
         }
 
+        // ensure the application has been installed. This redirects the
+        Installation::checkInstalled();
+
         self::$smarty = new Smarty();
 
 //        if ($options["check_sessions"] == false) {
@@ -413,8 +416,10 @@ class Core {
         }
 
         // not thrilled with this, but it needs to be handled on all pages, and this is a convenient spot
-        if (Core::checkConfigFileExists() && isset($_GET["logout"])) {
-            Core::$user->logout();
+        if (Core::checkConfigFileExists()) {
+            if (isset($_GET["logout"])) {
+                Core::$user->logout();
+            }
         }
     }
 
