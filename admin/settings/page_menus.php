@@ -24,7 +24,7 @@ $page_vars["tabs"] = $tabs;
 $page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_menus"]}";
 $page_vars["menus"] = $menus["results"];
 $page_vars["total_num_menus"] = $menus["num_results"];
-$page_vars["pagination"] = ft_get_page_nav($menus["num_results"], $_SESSION["ft"]["settings"]["num_menus_per_page"], $menu_page, "page=menus", "menu_page");
+$page_vars["pagination"] = General::getPageNav($menus["num_results"], $_SESSION["ft"]["settings"]["num_menus_per_page"], $menu_page, "page=menus", "menu_page");
 $page_vars["js_messages"] = array("word_remove");
 
 $page_vars["head_js"] =<<< END

@@ -140,7 +140,9 @@ function ft_create_unique_option_list($form_id, $option_list_info)
 {
 	global $g_table_prefix;
 
-	$existing_option_lists = OptionLists::getList();
+	$existing_option_lists = OptionLists::getList(array(
+        "per_page" => Sessions::get("settings.num_option_lists_per_page")
+    ));
 
 	$already_exists = false;
 	$list_id = "";
@@ -428,7 +430,9 @@ function ft_duplicate_option_list($list_id = "", $field_ids = array())
 
 	// to ensure that all new field option groups have unique names, query the database and find the next free
 	// group name of the form "New Option List (X)" (where "New Option List" is in the language of the current user)
-	$lists = OptionLists::getList();
+	$lists = OptionLists::getList(array(
+        "per_page" => Sessions::get("settings.num_option_lists_per_page")
+    ));
 	$list_names = array();
 	foreach ($lists["results"] as $list_info)
 		$list_names[] = $list_info["option_list_name"];

@@ -554,6 +554,100 @@ END;
     }
 
 
+    /**
+     * Displays basic &lt;&lt; 1 2 3 >> navigation for lists, each linking to the current page.
+     *
+     * This uses the pagination.tpl template, found in the theme's root folder.
+     *
+     * *** This function kind of sucks now... I just kept adding params and over time it's become totally daft. This
+     * should be refactored to do a JS-like extend() option on the various permitted settings ***
+     *
+     * @param integer $num_results The total number of results found.
+     * @param integer $num_per_page The max number of results to list per page.
+     * @param integer $current_page The current page number being examined (defaults to 1).
+     * @param string $pass_along_str The string to include in nav links.
+     * @param string $page_str The string used in building the page nav to indicate the page number
+     * @param string $theme the theme name
+     * @param array $settings a hash with the following settings:
+     *                   "show_total_results" => true/false (default: true)
+     *                   "show_page_label"    => true/false (default: true)
+     */
+    public static function getPageNav($num_results, $num_per_page, $current_page = 1, $pass_along_str = "",
+        $page_str = "page", $theme = "", $settings = array())
+    {
+        //global $g_max_nav_pages, $g_smarty_debug, $g_smarty, $g_smarty_use_sub_dirs;
+        $LANG = Core::$L;
+        $root_dir = Core::getRootDir();
+        $root_url = Core::getRootUrl();
+
+        $current_page = ($current_page < 1) ? 1 : $current_page;
+
+        if (empty($theme)) {
+            $theme = Sessions::get("account.theme");
+        }
+
+        // TODO enough of this! Move to helper for all instances
+
+        $smarty = Core::$smarty;
+        $smarty->setTemplateDir("$root_dir/themes/$theme");
+        $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
+        $smarty->setUseSubDirs(Core::shouldUseSmartySubDirs());
+        $smarty->assign("LANG", $LANG);
+
+//        if (isset($_SESSION["ft"])) {}
+//            $smarty->assign("SESSION", $_SESSION["ft"]);
+
+        $smarty->assign("g_root_dir", $root_dir);
+        $smarty->assign("g_root_url", $root_url);
+        $smarty->assign("samepage", General::getCleanPhpSelf());
+        $smarty->assign("num_results", $num_results);
+        $smarty->assign("num_per_page", $num_per_page);
+        $smarty->assign("current_page", $current_page);
+        $smarty->assign("page_str", $page_str);
+        $smarty->assign("show_total_results", (isset($settings["show_total_results"])) ? $settings["show_total_results"] : true);
+        $smarty->assign("show_page_label", (isset($settings["show_page_label"])) ? $settings["show_page_label"] : true);
+
+
+        // display the total number of results found
+        $range_start = ($current_page - 1) * $num_per_page + 1;
+        $range_end   = $range_start + $num_per_page - 1;
+        $range_end   = ($range_end > $num_results) ? $num_results : $range_end;
+
+        $smarty->assign("range_start", $range_start);
+        $smarty->assign("range_end", $range_end);
+
+        $viewing_range = "";
+        if ($num_results > $num_per_page) {
+            $replacement_info = array(
+            "startnum" => "<span id='nav_viewing_num_start'>$range_start</span>",
+            "endnum"   => "<span id='nav_viewing_num_end'>$range_end</span>"
+            );
+            $viewing_range = General::evalSmartyString($LANG["phrase_viewing_range"], $replacement_info);
+        }
+        $total_pages = ceil($num_results / $num_per_page);
+        $smarty->assign("viewing_range", $viewing_range);
+        $smarty->assign("total_pages", $total_pages);
+
+        // piece together additional query string values
+        if (!empty($pass_along_str)) {
+            $smarty->assign("query_str", "&{$pass_along_str}");
+        }
+
+        // determine the first and last pages to show page nav links for
+        $half_total_nav_pages  = floor(Core::getMaxNavPages() / 2);
+        $first_page = ($current_page > $half_total_nav_pages) ? $current_page - $half_total_nav_pages : 1;
+        $last_page  = (($current_page + $half_total_nav_pages) < $total_pages) ? $current_page + $half_total_nav_pages : $total_pages;
+
+        $smarty->assign("first_page", $first_page);
+        $smarty->assign("last_page", $last_page);
+
+        $smarty->assign("include_first_page_direct_link", (($first_page != 1) ? true : false));
+        $smarty->assign("include_last_page_direct_link", (($first_page != $total_pages) ? true : false));
+
+
+        // now process the template and return the HTML
+        return $smarty->fetch(Themes::getSmartyTemplateWithFallback($theme, "pagination.tpl"));
+    }
 
 
 }

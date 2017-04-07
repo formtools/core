@@ -81,7 +81,7 @@ class Menus
             );
         }
 
-        Sessions::set("menu_items", $menu_template_info);
+        Sessions::set("menu.menu_items", $menu_template_info);
     }
 
 

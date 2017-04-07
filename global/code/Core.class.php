@@ -90,7 +90,7 @@ class Core {
      * This controls the maximum number of pagination links that appear in the Form Tools UI (e.g. for
      * viewing the submission listings page).
      */
-    private static $maxNavPages = 16;
+    private static $maxNavPages;
 
     /**
      * This offers support for unicode. All form submissions will be sent as UTF-8. This is enabled for all
@@ -473,6 +473,7 @@ class Core {
         self::$enableBenchmarking = (isset($g_enable_benchmarking)) ? $g_enable_benchmarking : false;
         self::$jsDebugEnabled = isset($g_js_debug) ? $g_js_debug : false;
         self::$maxForms = isset($g_max_forms) ? $g_max_forms : "";
+        self::$maxNavPages = isset($g_max_nav_pages) ? $g_max_nav_pages : 16;
     }
 
     /**
@@ -605,5 +606,9 @@ class Core {
 
     public static function getMaxForms() {
         return self::$maxForms;
+    }
+
+    public static function getMaxNavPages() {
+        return self::$maxNavPages;
     }
 }

@@ -302,7 +302,7 @@ $page_vars["field_types"] = $field_types;
 $page_vars["has_searchable_field"] = $has_searchable_field;
 $page_vars["notify_view_missing_columns_admin_fix"] = General::evalSmartyString($LANG["notify_view_missing_columns_admin_fix"], array("LINK" => "edit.php?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2"));
 $page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
-$page_vars["pagination"]  = ft_get_page_nav($search_num_results, $results_per_page, $current_page, "");
+$page_vars["pagination"]  = General::getPageNav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download",
 	"validation_select_submissions_to_delete", "confirm_delete_submission", "confirm_delete_submissions",
 	"phrase_select_all_X_results", "phrase_select_all_on_page", "phrase_all_X_results_selected",

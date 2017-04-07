@@ -68,7 +68,7 @@ if ($num_fields_per_page != "all") {
 		"show_total_results" => false,
 		"show_page_label"    => false
 	);
-	$page_vars["pagination"] = ft_get_page_nav($total_form_fields, $num_fields_per_page, $fields_page, "", "fields_page", "",
+	$page_vars["pagination"] = General::getPageNav($total_form_fields, $num_fields_per_page, $fields_page, "", "fields_page", "",
 		$pagination_settings);
 }
 

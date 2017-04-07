@@ -5,6 +5,7 @@ require_once("../../../global/library.php");
 use FormTools\Core;
 use FormTools\General;
 use FormTools\OptionLists;
+use FormTools\Pages;
 use FormTools\Sessions;
 use FormTools\Themes;
 
@@ -74,8 +75,11 @@ foreach ($option_lists as $option_list) {
 	$updated_option_lists[] = $option_list;
 }
 
-$all_option_lists = OptionLists::getList();
+$all_option_lists = OptionLists::getList(array(
+    "per_page" => Sessions::get("settings.num_option_lists_per_page")
+));
 $root_url = Core::getRootUrl();
+$LANG = Core::$L;
 
 $page = array(
     "page" => "option_lists",
@@ -90,8 +94,8 @@ $page = array(
         "validation_delete_non_empty_option_list", "confirm_delete_option_list", "phrase_please_confirm",
         "word_yes", "word_no", "word_edit", "word_remove"
     ),
-    "pagination" => ft_get_page_nav($num_option_lists, $num_option_lists_per_page, $option_list_page),
+    "pagination" => General::getPageNav($num_option_lists, $num_option_lists_per_page, $option_list_page),
     "head_string" => "<script src=\"$root_url/global/scripts/manage_option_lists.js\"></script>"
 );
 
-Themes::displayPage("admin/forms/option_lists/index.tpl", $page_vars);
+Themes::displayPage("admin/forms/option_lists/index.tpl", $page);
