@@ -1,5 +1,7 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Administrator;
 use FormTools\Core;
 use FormTools\General;
@@ -30,8 +32,7 @@ if (isset($_GET["updated"])) {
 $admin_info = Administrator::getAdminInfo();
 
 $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>');
-
-// ------------------------------------------------------------------------------------------------
+$LANG = Core::$L;
 
 // compile the theme variables
 $page_vars = array();

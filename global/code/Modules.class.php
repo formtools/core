@@ -589,6 +589,29 @@ class Modules
     }
 
 
+
+    /**
+     * Finds out if a module is enabled or not. If it's not even installed, just returns false.
+     *
+     * @param string $module_folder
+     * @return boolean
+     */
+    public static function checkModuleEnabled($module_folder)
+    {
+        $db = Core::$db;
+        $db->query("
+            SELECT is_enabled
+            FROM   {PREFIX}modules
+            WHERE  module_folder = :module_folder
+        ");
+        $db->bind(":module_folder", $module_folder);
+        $db->execute();
+        $result = $db->fetch();
+
+        return (!empty($result) && $result["is_enabled"] == "yes");
+    }
+
+
 // --------------------------------------------------------------------------------------------
 
 

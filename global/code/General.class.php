@@ -659,5 +659,20 @@ END;
         header("Location: $page");
         exit;
     }
+
+    /**
+     * Returns the maximum size of a file allowed to be uploaded according to this server's php.ini file.
+     *
+     * @return integer the max file size in bytes
+     */
+    public static function getUploadMaxFilesize()
+    {
+        $max_filesize_str = ini_get("upload_max_filesize");
+        $max_filesize_mb = (int)preg_replace("/\D+/", "", $max_filesize_str);
+        $max_filesize_bytes = $max_filesize_mb * 1000;
+
+        return $max_filesize_bytes;
+    }
+
 }
 

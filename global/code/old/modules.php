@@ -19,28 +19,6 @@ use FormTools\Settings;
 
 
 /**
- * Finds out if a module is enabled or not. If it's not even installed, just returns false.
- *
- * @param string $module_folder
- * @return boolean
- */
-function ft_check_module_enabled($module_folder)
-{
-    $db = Core::$db;
-	$db->query("
-        SELECT is_enabled
-        FROM   {PREFIX}modules
-        WHERE  module_folder = :module_folder
-    ");
-	$db->bind(":module_folder", $module_folder);
-	$db->execute();
-	$result = $db->fetch();
-
-	return (!empty($result) && $result["is_enabled"] == "yes");
-}
-
-
-/**
  * Finds out if a module is available. By "available", we mean: has the files uploaded to the modules
  * folder and has a corresponding record in the modules table. It may not be installed/enabled.
  *

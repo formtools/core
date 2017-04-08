@@ -255,12 +255,10 @@ function ft_send_test_email($info)
 
 	// if Swift Mailer is enabled, send the emails with that
 	$continue = true;
-	if (ft_check_module_enabled("swift_mailer"))
-	{
+	if (Modules::checkModuleEnabled("swift_mailer")) {
 		$sm_settings = ft_get_module_settings("", "swift_mailer");
 
-		if ($sm_settings["swiftmailer_enabled"] == "yes")
-		{
+		if ($sm_settings["swiftmailer_enabled"] == "yes") {
 			ft_include_module("swift_mailer");
 
 			// we deliberately ignore anything other than the specified recipient
@@ -1162,19 +1160,18 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
 {
 	list($success, $email_components) = ft_get_email_components($form_id, $submission_id, $email_id);
 
-	if (!$success)
-		return array(false, "Email components not returned properly (ft_get_email_components).");
+	if (!$success) {
+        return array(false, "Email components not returned properly (ft_get_email_components).");
+    }
 
 	extract(Hooks::processHookCalls("start", compact("form_id", "submission_id", "email_id", "email_components"), array("email_components")), EXTR_OVERWRITE);
 
 	// if Swift Mailer is enabled, send the emails with that
 	$continue = true;
-	if (ft_check_module_enabled("swift_mailer"))
-	{
+	if (Modules::checkModuleEnabled("swift_mailer")) {
 		$sm_settings = ft_get_module_settings("", "swift_mailer");
 
-		if (isset($sm_settings["swiftmailer_enabled"]) && $sm_settings["swiftmailer_enabled"] == "yes")
-		{
+		if (isset($sm_settings["swiftmailer_enabled"]) && $sm_settings["swiftmailer_enabled"] == "yes") {
 			ft_include_module("swift_mailer");
 			list($success, $message) = swift_send_email($email_components);
 			$continue = false;
@@ -1182,8 +1179,9 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
 	}
 
 	// if it was sent (or was attempted to have been sent) by the Swift Mailer module, stop here
-	if (!$continue)
-		return array($success, $message);
+	if (!$continue) {
+        return array($success, $message);
+    }
 
 	$eol = _ft_get_email_eol_char();
 
@@ -1199,30 +1197,28 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
 
 	$headers = "MIME-Version: 1.0$eol";
 
-	if (!empty($email_components["from"]))
-	{
+	if (!empty($email_components["from"])) {
 		$from = htmlspecialchars_decode($email_components["from"]["recipient_line"]);
 		$headers .= "From: {$from}$eol";
 	}
-	if (!empty($email_components["reply_to"]))
-	{
+	if (!empty($email_components["reply_to"])) {
 		$reply_to = htmlspecialchars_decode($email_components["reply_to"]["recipient_line"]);
 		$headers .= "Reply-to: {$reply_to}$eol";
 	}
-	if (!empty($email_components["cc"]))
-	{
+	if (!empty($email_components["cc"])) {
 		$cc_list = array();
-		foreach ($email_components["cc"] as $cc_info)
-			$cc_list[] = $cc_info["recipient_line"];
+		foreach ($email_components["cc"] as $cc_info) {
+            $cc_list[] = $cc_info["recipient_line"];
+        }
 		$cc = join(", ", $cc_list);
 		$cc = htmlspecialchars_decode($cc);
 		$headers .= "Cc: {$cc}$eol";
 	}
-	if (!empty($email_components["bcc"]))
-	{
+	if (!empty($email_components["bcc"])) {
 		$bcc_list = array();
-		foreach ($email_components["bcc"] as $bcc_info)
-			$bcc_list[] = $bcc_info["recipient_line"];
+		foreach ($email_components["bcc"] as $bcc_info) {
+            $bcc_list[] = $bcc_info["recipient_line"];
+        }
 		$bcc = join(", ", $bcc_list);
 		$bcc = htmlspecialchars_decode($bcc);
 		$headers .= "Bcc: {$bcc}$eol";
@@ -1235,18 +1231,15 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
 	$text_content = trim($text_content);
 
 	// if there's no TO line or there's no email content for either types, we can't send the email
-	if (empty($html_content) && empty($text_content))
-		return array(false, "No text or HTML email content specified");
-
-	if (!empty($html_content) && !empty($text_content))
-		$headers .= _ft_get_multipart_message($html_content, $text_content, $eol);
-	else if (!empty($html_content))
-	{
+	if (empty($html_content) && empty($text_content)) {
+        return array(false, "No text or HTML email content specified");
+    }
+	if (!empty($html_content) && !empty($text_content)) {
+        $headers .= _ft_get_multipart_message($html_content, $text_content, $eol);
+    } else if (!empty($html_content)) {
 		$message = $html_content;
 		$headers .= "Content-type: text/html; charset=UTF-8";
-	}
-	else if (!empty($text_content))
-	{
+	} else if (!empty($text_content)) {
 		$message = $text_content;
 		$headers .= "Content-type: text/plain; charset=UTF-8";
 	}
@@ -1255,10 +1248,11 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
 
 	// send the email
 	$email_sent = @mail("$to", $subject, $message, $headers);
-	if ($email_sent)
-		return array(true, "");
-	else
-		return array(false, "The mail() function failed to send the email.");
+	if ($email_sent) {
+        return array(true, "");
+    } else {
+        return array(false, "The mail() function failed to send the email.");
+    }
 }
 
 
@@ -1298,11 +1292,11 @@ function _ft_get_multipart_message($HTML_content, $text_content, $eol)
 function _ft_get_email_eol_char()
 {
 	$eol = "\n";
-	if (strtoupper(substr(PHP_OS, 0, 3) == 'WIN'))
-		$eol = "\r\n";
-	else if (strtoupper(substr(PHP_OS, 0, 3) == 'MAC'))
-		$eol = "\r";
-
+	if (strtoupper(substr(PHP_OS, 0, 3) == 'WIN')) {
+        $eol = "\r\n";
+    } else if (strtoupper(substr(PHP_OS, 0, 3) == 'MAC')) {
+        $eol = "\r";
+    }
 	return $eol;
 }
 
@@ -1328,42 +1322,47 @@ function _ft_get_form_email_field_headers($form_email_id, $submission_info)
 	$submission_last_name  = "";
 	$submission_email      = "";
 
-	foreach ($submission_info as $row)
-	{
-		if (!empty($first_name_field_id))
-		{
-			if ($row["field_id"] == $first_name_field_id)
-				$submission_first_name = trim($row["content"]);
+	foreach ($submission_info as $row) {
+		if (!empty($first_name_field_id)) {
+			if ($row["field_id"] == $first_name_field_id) {
+                $submission_first_name = trim($row["content"]);
+            }
 		}
-		if (!empty($last_name_field_id))
-		{
-			if ($row["field_id"] == $last_name_field_id)
-				$submission_last_name = trim($row["content"]);
+		if (!empty($last_name_field_id)) {
+			if ($row["field_id"] == $last_name_field_id) {
+                $submission_last_name = trim($row["content"]);
+            }
 		}
 		// email
-		if ($row["field_id"] == $email_field_id)
-			$submission_email = trim($row["content"]);
+		if ($row["field_id"] == $email_field_id) {
+            $submission_email = trim($row["content"]);
+        }
 	}
 
 	// now build the header string
 	$name = array();
-	if (!empty($submission_first_name))
-		$name[] = $submission_first_name;
-	if (!empty($submission_last_name))
-		$name[] = $submission_last_name;
+	if (!empty($submission_first_name)) {
+        $name[] = $submission_first_name;
+    }
+	if (!empty($submission_last_name)) {
+        $name[] = $submission_last_name;
+    }
 
 	$recipient_line = join(" ", $name);
 
-	if (empty($recipient_line) && !empty($submission_email))
-		$recipient_line = $submission_email;
-	else if (!empty($submission_email))
-		$recipient_line .= " &lt;$submission_email&gt;";
+	if (empty($recipient_line) && !empty($submission_email)) {
+        $recipient_line = $submission_email;
+    } else if (!empty($submission_email)) {
+        $recipient_line .= " &lt;$submission_email&gt;";
+    }
 
 	// return EVERYTHING
-	return array("recipient_line" => $recipient_line,
+	return array(
+	    "recipient_line" => $recipient_line,
 		"first_name" => $submission_first_name,
 		"last_name" => $submission_last_name,
-		"email" => $submission_email);
+		"email" => $submission_email
+    );
 }
 
 

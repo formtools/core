@@ -56,65 +56,6 @@ function ft_create_blank_client_menu()
 	return $menu_id;
 }
 
-/**
- * Retrieves a list of all menus. Note, this is only called by administrators
- * and relies on the number of menus per page being set in Sessions.
- *
- * @return array a hash of view information
- */
-function ft_get_menus($page_num = 1)
-{
-	global $g_table_prefix;
-
-	$num_menus_per_page = $_SESSION["ft"]["settings"]["num_menus_per_page"];
-
-	// determine the LIMIT clause
-	$limit_clause = "";
-	if (empty($page_num))
-		$page_num = 1;
-	$first_item = ($page_num - 1) * $num_menus_per_page;
-	$limit_clause = "LIMIT $first_item, $num_menus_per_page";
-
-	$result = mysql_query("
-    SELECT *
-    FROM 	 {$g_table_prefix}menus
-    ORDER BY menu
-     $limit_clause
-      ");
-	$count_result = mysql_query("
-    SELECT count(*) as c
-    FROM 	 {$g_table_prefix}menus
-      ");
-	$count_hash = mysql_fetch_assoc($count_result);
-
-	// select all account associated with this menu
-	$info = array();
-	while ($row = mysql_fetch_assoc($result))
-	{
-		$menu_id = $row["menu_id"];
-
-		$account_query = mysql_query("
-      SELECT account_id, first_name, last_name, account_type
-      FROM   {$g_table_prefix}accounts a
-      WHERE  menu_id = $menu_id
-        ");
-
-		$accounts = array();
-		while ($account_row = mysql_fetch_assoc($account_query))
-			$accounts[] = $account_row;
-
-		$row["account_info"] = $accounts;
-		$info[] = $row;
-	}
-
-	$return_hash["results"] = $info;
-	$return_hash["num_results"]  = $count_hash["c"];
-
-	extract(Hooks::processHookCalls("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
-
-	return $return_hash;
-}
-
 
 /**
  * Returns the one (and only) administration menu, and all associated menu items.
@@ -325,8 +266,7 @@ function ft_get_admin_menu_pages_dropdown($selected, $attributes, $is_building_m
 
 	// if the Pages module is enabled, display any custom pages that have been defined. Note: this would be better handled
 	// in the hook added below
-	if (ft_check_module_enabled("pages"))
-	{
+	if (Modules::checkModuleEnabled("pages")) {
 		ft_include_module("pages");
 		$pages_info = pg_get_pages("all");
 		$pages = $pages_info["results"];

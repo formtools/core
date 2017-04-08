@@ -163,11 +163,10 @@ class Menus
         $select_lines   = array();
         $select_lines[] = array("type" => "select_open");
 
-        if (!in_array("", $omit_pages))
-            $select_lines[] = array("type" => "option", "v" => $LANG["phrase_please_select"]);
-
-        if (!in_array("custom_url", $omit_pages))
-        {
+        if (!in_array("", $omit_pages)) {
+            $select_lines[] = array("type" => "option", "k" => "", "v" => $LANG["phrase_please_select"]);
+        }
+        if (!in_array("custom_url", $omit_pages)) {
             $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_custom"]);
             $select_lines[] = array("type" => "option", "k" => "custom_url", "v" => $LANG["phrase_custom_url"]);
             $select_lines[] = array("type" => "optgroup_close");
@@ -175,34 +174,45 @@ class Menus
 
         $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_main"]);
 
-        if (!in_array("client_forms", $omit_pages))
+        if (!in_array("client_forms", $omit_pages)) {
             $select_lines[] = array("type" => "option", "k" => "client_forms", "v" => $LANG["word_forms"]);
-        if (!in_array("client_form_submissions", $omit_pages))
-            $select_lines[] = array("type" => "option", "k" => "client_form_submissions", "v" => $LANG["phrase_form_submissions"]);
-        if (!in_array("client_account", $omit_pages))
+        }
+        if (!in_array("client_form_submissions", $omit_pages)) {
+            $select_lines[] = array(
+                "type" => "option",
+                "k" => "client_form_submissions",
+                "v" => $LANG["phrase_form_submissions"]
+            );
+        }
+        if (!in_array("client_account", $omit_pages)) {
             $select_lines[] = array("type" => "option", "k" => "client_account", "v" => $LANG["word_account"]);
-        if (!in_array("client_account_login", $omit_pages))
+        }
+        if (!in_array("client_account_login", $omit_pages)) {
             $select_lines[] = array("type" => "option", "k" => "client_account_login", "v" => $LANG["phrase_login_info"]);
-        if (!in_array("client_account_settings", $omit_pages))
-            $select_lines[] = array("type" => "option", "k" => "client_account_settings", "v" => $LANG["phrase_account_settings"]);
-        if (!in_array("logout", $omit_pages))
+        }
+        if (!in_array("client_account_settings", $omit_pages)) {
+            $select_lines[] = array(
+                "type" => "option",
+                "k" => "client_account_settings",
+                "v" => $LANG["phrase_account_settings"]
+            );
+        }
+        if (!in_array("logout", $omit_pages)) {
             $select_lines[] = array("type" => "option", "k" => "logout", "v" => $LANG["word_logout"]);
+        }
 
         $select_lines[] = array("type" => "optgroup_close");
 
         // if the Pages module is enabled, display any custom pages that have been defined. Only show the optgroup
         // if there's at least ONE page defined
-        if (ft_check_module_enabled("pages"))
-        {
+        if (Modules::checkModuleEnabled("pages")) {
             ft_include_module("pages");
             $pages_info = pg_get_pages("all");
             $pages = $pages_info["results"];
 
-            if (count($pages) > 0)
-            {
+            if (count($pages) > 0) {
                 $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["phrase_pages_module"]);
-                foreach ($pages as $page)
-                {
+                foreach ($pages as $page) {
                     $page_id = $page["page_id"];
                     $page_name = $page["page_name"];
                     $select_lines[] = array("type" => "option", "k" => "page_{$page_id}", "v" => $page_name);
@@ -217,10 +227,8 @@ class Menus
 
         // now build the HTML
         $dd = "";
-        foreach ($select_lines as $line)
-        {
-            switch ($line["type"])
-            {
+        foreach ($select_lines as $line) {
+            switch ($line["type"]) {
                 case "select_open":
                     $attribute_str = "";
                     while (list($key, $value) = each($attributes))
@@ -247,4 +255,85 @@ class Menus
         return $dd;
     }
 
+
+    /**
+     * Retrieves a list of all menus.
+     * @return array a hash of view information
+     */
+    public static function getList($page_num = 1, $per_page = 10)
+    {
+        $db = Core::$db;
+
+        // determine the LIMIT clause
+        if (empty($page_num)) {
+            $page_num = 1;
+        }
+        $first_item = ($page_num - 1) * $per_page;
+        $limit_clause = "LIMIT $first_item, $per_page";
+
+        $db->query("
+            SELECT *
+            FROM 	 {PREFIX}menus
+            ORDER BY menu
+            $limit_clause
+        ");
+        $db->execute();
+        $results = $db->fetchAll();
+
+        $db->query("SELECT count(*) as c FROM {PREFIX}menus");
+        $db->execute();
+        $count = $db->fetch();
+
+        // select all account associated with this menu
+        $info = array();
+        foreach ($results as $row) {
+            $db->query("
+                SELECT account_id, first_name, last_name, account_type
+                FROM   {PREFIX}accounts a 
+                WHERE  menu_id = :menu_id
+            ");
+            $db->bind("menu_id", $row["menu_id"]);
+            $db->execute();
+
+            $accounts = array();
+            foreach ($db->fetchAll() as $account_row) {
+                $accounts[] = $account_row;
+            }
+            $row["account_info"] = $accounts;
+            $info[] = $row;
+        }
+
+        $return_hash["results"] = $info;
+        $return_hash["num_results"] = $count["c"];
+
+        extract(Hooks::processHookCalls("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);
+
+        return $return_hash;
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

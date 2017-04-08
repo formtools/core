@@ -457,21 +457,6 @@ function ft_in_array_case_insensitive($value, $array)
 
 
 /**
- * Returns the maximum size of a file allowed to be uploaded according to this server's php.ini file.
- *
- * @return integer the max file size in bytes
- */
-function ft_get_upload_max_filesize()
-{
-	$max_filesize_str = ini_get("upload_max_filesize");
-	$max_filesize_mb = (int)preg_replace("/\D+/", "", $max_filesize_str);
-	$max_filesize_bytes = $max_filesize_mb * 1000;
-
-	return $max_filesize_bytes;
-}
-
-
-/**
  * A simple helper function to convert any string to a "slug" - an alphanumeric, "_" and/or "-" string
  * for use in (e.g.) generating filenames.
  *

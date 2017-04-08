@@ -1,6 +1,10 @@
 <?php
 
+use FormTools\Core;
 use FormTools\General;
+use FormTools\Menus;
+use FormTools\Pages;
+use FormTools\Sessions;
 use FormTools\Themes;
 
 
@@ -8,26 +12,17 @@ $menu_page = General::loadField("menu_page", "menu_page", 1);
 
 // if required, delete the menu. If any clients were assigned to this menu, the success response will
 // include their names
-if (isset($request["delete"]))
-	list($g_success, $g_message) = ft_delete_client_menu($request["delete"]);
+if (isset($request["delete"])) {
+    list($g_success, $g_message) = ft_delete_client_menu($request["delete"]);
+}
+if (isset($_GET["mass_assign"])) {
+    list($g_success, $g_message) = ft_update_client_menus($_GET["accounts"], $_GET["menu_id"]);
+}
 
-if (isset($_GET["mass_assign"]))
-	list($g_success, $g_message) = ft_update_client_menus($_GET["accounts"], $_GET["menu_id"]);
+$menus = Menus::getList($menu_page, Sessions::get("settings.num_menus_per_page"));
+$LANG = Core::$L;
 
-$menus = ft_get_menus($menu_page);
-
-// compile the header information
-$page_vars = array();
-$page_vars["page"] = "menus";
-$page_vars["page_url"] = Pages::getPageUrl("settings_menus");
-$page_vars["tabs"] = $tabs;
-$page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_menus"]}";
-$page_vars["menus"] = $menus["results"];
-$page_vars["total_num_menus"] = $menus["num_results"];
-$page_vars["pagination"] = General::getPageNav($menus["num_results"], $_SESSION["ft"]["settings"]["num_menus_per_page"], $menu_page, "page=menus", "menu_page");
-$page_vars["js_messages"] = array("word_remove");
-
-$page_vars["head_js"] =<<< END
+$head_js =<<< END
 var page_ns = {
   delete_menu_dialog: $("<div></div>")
 }
@@ -52,5 +47,18 @@ page_ns.delete_menu = function(menu_id) {
   return false;
 }
 END;
+
+
+$page_vars = array(
+    "page" => "menus",
+    "page_url" => Pages::getPageUrl("settings_menus"),
+    "tabs" => $tabs,
+    "head_title" => "{$LANG["word_settings"]} - {$LANG["word_menus"]}",
+    "menus" => $menus["results"],
+    "total_num_menus" => $menus["num_results"],
+    "pagination" => General::getPageNav($menus["num_results"], Sessions::get("settings.num_menus_per_page"), $menu_page, "page=menus", "menu_page"),
+    "js_messages" => array("word_remove"),
+    "head_js" => $head_js
+);
 
 Themes::displayPage("admin/settings/index.tpl", $page_vars);

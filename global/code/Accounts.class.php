@@ -425,7 +425,7 @@ class Accounts {
         // if Swift Mailer is enabled, send the emails with that. In case there's a problem sending the message with
         // Swift, it falls back the default mail() function.
         $swift_mail_error = false;
-        $swift_mail_enabled = ft_check_module_enabled("swift_mailer");
+        $swift_mail_enabled = Modules::checkModuleEnabled("swift_mailer");
         if ($swift_mail_enabled)
         {
             $sm_settings = ft_get_module_settings("", "swift_mailer");
