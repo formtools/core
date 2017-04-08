@@ -37,9 +37,7 @@ if (isset($request["add_option_list"])) {
     }
 	$list_id = ft_duplicate_option_list($duplicate_list_id, $field_ids);
 
-	session_write_close();
-	header("Location: edit.php?page=main&list_id=$list_id");
-	exit;
+    General::redirect("edit.php?page=main&list_id=$list_id");
 }
 
 // one additional check. If a user was on page 2 and just deleted (say) option list #11 and there are 10 per page, the

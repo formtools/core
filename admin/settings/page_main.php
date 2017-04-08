@@ -1,19 +1,21 @@
 <?php
 
+use FormTools\Core;
+use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 
+$LANG = Core::$L;
 
-if (isset($request["update_main"]))
-	list($g_success, $g_message) = ft_update_main_settings($_POST);
+if (isset($request["update_main"])) {
+    list($g_success, $g_message) = ft_update_main_settings($_POST);
+}
 
-$page_vars = array();
-$page_vars["page"] = "main";
-$page_vars["page_url"] = Pages::getPageUrl("settings_main");
-$page_vars["tabs"] = $tabs;
-$page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_main"]}";
-$replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>');
-$page_vars["text_date_formatting_link"] = General::evalSmartyString($LANG["text_date_formatting_link"], $replacement_info);
-$page_vars["head_js"] =<<<END
+$text_date_formatting_link = General::evalSmartyString($LANG["text_date_formatting_link"], array(
+    "datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>'
+));
+
+$head_js =<<<END
   var rules = [];
   rules.push("required,program_name,{$LANG["validation_no_program_name"]}");
   rules.push("required,num_clients_per_page,{$LANG["validation_no_num_clients_per_page"]}");
@@ -29,5 +31,14 @@ $page_vars["head_js"] =<<<END
   rules.push("required,num_modules_per_page,{$LANG["validation_no_num_modules_per_page"]}");
   rules.push("digits_only,num_modules_per_page,{$LANG["validation_invalid_num_modules_per_page"]}");
 END;
+
+$page_vars = array(
+    "page" => "main",
+    "page_url" => Pages::getPageUrl("settings_main"),
+    "tabs" => $tabs,
+    "head_title" => "{$LANG["word_settings"]} - {$LANG["word_main"]}",
+    "text_date_formatting_link" => $text_date_formatting_link,
+    "head_js" => $head_js
+);
 
 Themes::displayPage("admin/settings/index.tpl", $page_vars);

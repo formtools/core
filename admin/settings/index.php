@@ -1,35 +1,35 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Core;
 use FormTools\General;
-
+use FormTools\Sessions;
 
 Core::init();
 Core::$user->checkAuth("admin");
 
 
 $request = array_merge($_POST, $_GET);
-$page    = General::loadField("page", "settings_page", "main");
+$page = General::loadField("page", "settings_page", "main");
 
 // store the current selected tab in memory - except for pages which require additional
 // query string info. For those, use the "parent" page
-if (isset($request["page"]) && !empty($request["page"]))
-{
+if (isset($request["page"]) && !empty($request["page"])) {
 	$remember_page = $request["page"];
-	switch ($remember_page)
-	{
+	switch ($remember_page) {
 		case "edit_admin_menu":
 		case "edit_client_menu":
 			$remember_page = "menus";
 			break;
 	}
-
-	$_SESSION["ft"]["settings_tab"] = $remember_page;
+	Sessions::set("settings_tab", $remember_page);
 	$page = $request["page"];
+} else {
+    $page = General::loadField("page", "settings_tab", "main");
 }
-else
-	$page = General::loadField("page", "settings_tab", "main");
 
+$LANG = Core::$L;
 $same_page = General::getCleanPhpSelf();
 $tabs = array(
 	"main" => array(
@@ -52,8 +52,7 @@ $tabs = array(
 );
 
 
-switch ($page)
-{
+switch ($page) {
 	case "main":
 		require("page_main.php");
 		break;

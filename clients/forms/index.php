@@ -16,11 +16,8 @@ $account_id = $_SESSION["ft"]["account"]["account_id"];
 
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
 $form_id = General::loadField("form_id", "curr_form_id");
-if (empty($form_id))
-{
-	session_write_close();
-	header("location: index.php");
-	exit;
+if (empty($form_id)) {
+    General::redirect("index.php");
 }
 
 $view_id = General::loadField("view_id", "form_{$form_id}_view_id");
@@ -47,8 +44,7 @@ $view_info = ft_get_view($view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes") {
 	$submission_id = ft_create_blank_submission($form_id, $view_id, true);
-	header("location: edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id");
-	exit;
+    General::redirect("edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id");
 }
 
 // if the View just changed (i.e. it was just selected by the user), deselect any items in
@@ -206,7 +202,7 @@ $_SESSION["ft"]["current_search"] = array(
 $total_pages = ceil($search_num_results / $results_per_page);
 if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$view_id}_page"] > $total_pages) {
 	$_SESSION["ft"]["view_{$view_id}_page"] = $total_pages;
-	header("location: index.php");
+    General::redirect("index.php");
 }
 
 // this sets the total number of submissions that the admin can see in this form and View in the form_X_num_submissions

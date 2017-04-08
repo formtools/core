@@ -7,9 +7,7 @@ use FormTools\Themes;
 if (isset($request["add_email"])) {
 	$create_email_from_email_id = (isset($request["create_email_from_email_id"])) ? $request["create_email_from_email_id"] : "";
 	$email_id = ft_create_blank_email_template($form_id, $create_email_from_email_id);
-	session_write_close();
-	header("Location: edit.php?page=edit_email&form_id=$form_id&email_id=$email_id");
-	exit;
+    General::redirect("edit.php?page=edit_email&form_id=$form_id&email_id=$email_id");
 }
 
 if (isset($request["delete"])) {

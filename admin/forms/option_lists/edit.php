@@ -16,8 +16,8 @@ $order   = General::loadField("order", "option_list_order");
 $num_fields = ft_get_num_fields_using_option_list($list_id);
 
 if (empty($list_id)) {
-	header("location: index.php");
-	exit;
+    General::redirect("index.php");
+    exit;
 }
 
 $links = ft_get_option_list_prev_next_links($list_id, $order);

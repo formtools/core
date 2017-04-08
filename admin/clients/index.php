@@ -1,10 +1,14 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Administrator;
 use FormTools\Clients;
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Pages;
+use FormTools\Sessions;
+use FormTools\Themes;
 
 Core::init();
 Core::$user->checkAuth("admin");
@@ -18,9 +22,9 @@ if (isset($_GET['login'])) {
 }
 
 if (isset($_GET["reset"])) {
-	$_SESSION["ft"]["client_sort_order"] = "";
-	$_SESSION["ft"]["client_search_keyword"] = "";
-	$_SESSION["ft"]["client_search_status"] = "";
+    Sessions::set("client_sort_order", "");
+    Sessions::set("client_search_keyword", "");
+    Sessions::set("client_search_status", "");
 }
 $order   = General::loadField("order", "client_sort_order", "last_name-ASC");
 $keyword = General::loadField("keyword", "client_search_keyword", "");
@@ -34,21 +38,11 @@ $search_criteria = array(
 $num_clients = Clients::getNumClients();
 
 // retrieve all client information
-$clients = ft_search_clients($search_criteria);
+$clients = Clients::searchClients($search_criteria);
+$LANG = Core::$L;
 
-// compile the header information
-$page_vars = array();
-$page_vars["page"] = "clients";
-$page_vars["page_url"] = Pages::getPageUrl("clients");
-$page_vars["head_title"] = $LANG["word_clients"];
-$page_vars["num_clients"] = $num_clients;
-$page_vars["clients"]  = $clients;
-$page_vars["order"] = $order;
-$page_vars["search_criteria"] = $search_criteria;
-$page_vars["pagination"] = General::getJsPageNav(count($clients), $_SESSION["ft"]["settings"]["num_clients_per_page"], 1);
-$page_vars["js_messages"] = array("phrase_delete_row");
 
-$page_vars["head_js"] =<<< END
+$head_js =<<< END
   var page_ns = {};
   page_ns.dialog = $("<div></div>");
   page_ns.delete_client = function(account_id) {
@@ -76,4 +70,17 @@ $page_vars["head_js"] =<<< END
   }
 END;
 
-ft_display_page("admin/clients/index.tpl", $page_vars);
+$page = array(
+    "page" => "clients",
+    "page_url" => Pages::getPageUrl("clients"),
+    "head_title" => $LANG["word_clients"],
+    "num_clients" => $num_clients,
+    "clients" => $clients,
+    "order" => $order,
+    "search_criteria" => $search_criteria,
+    "pagination" => General::getJsPageNav(count($clients), Sessions::get("settings.num_clients_per_page"), 1),
+    "js_messages" => array("phrase_delete_row"),
+    "head_js" => $head_js
+);
+
+Themes::displayPage("admin/clients/index.tpl", $page);

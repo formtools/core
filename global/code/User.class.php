@@ -168,9 +168,7 @@ class User
 //        $this->theme = $account_info["theme"];
 //        $this->swatch = $account_info["swatch"];
 
-        session_write_close();
-        header("Location: $login_url");
-        exit;
+        General::redirect($login_url);
     }
 
     public function getLang() {
@@ -248,7 +246,7 @@ class User
         $root_url = Core::getRootUrl();
         $login_page = Sessions::get("account.login_page");
         $page = Pages::constructPageURL($login_page);
-        header("location: {$root_url}$page");
+        General::redirect("{$root_url}$page");
     }
 
 
@@ -292,9 +290,7 @@ class User
 
                 // redirect to the login page, passing along the appropriate message flag so the page knows what to display
                 $logout_url = General::constructUrl($root_url, "message=$message_flag");
-                session_write_close();
-                header("location: $logout_url");
-                exit;
+                General::redirect($logout_url);
             } else {
                 $logout_url = isset($_SESSION["ft"]["account"]["logout_url"]) ? $_SESSION["ft"]["account"]["logout_url"] : "";
 
@@ -309,9 +305,7 @@ class User
                 }
 
                 // redirect to login page
-                session_write_close();
-                header("location: $logout_url");
-                exit;
+                General::redirect($logout_url);
             }
         }
     }
@@ -353,8 +347,7 @@ class User
             if ((!isset($_SESSION["ft"]["account"]["submission_id"]) || empty($_SESSION["ft"]["account"]["submission_id"])) &&
                 empty($_SESSION["ft"]["account"]["account_id"])) {
                 if ($auto_logout) {
-                    header("location: $root_url/modules/submission_accounts/logout.php");
-                    exit;
+                    General::redirect("$root_url/modules/submission_accounts/logout.php");
                 } else {
                     $boot_out_user = true;
                     $message_flag = "notify_no_account_id_in_sessions";

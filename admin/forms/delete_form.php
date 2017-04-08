@@ -2,26 +2,23 @@
 
 use FormTools\Core;
 use FormTools\Forms;
+use FormTools\General;
 use FormTools\Themes;
 
 Core::init();
-
-//require("../../global/session_start.php");
 Core::$user->checkAuth("admin");
 
 $request = array_merge($_GET, $_POST);
 $form_id = $request["form_id"];
 if (!isset($form_id)) {
-	session_write_close();
-	header("location: $g_root_url/admin/forms/");
+    General::redirect("$root_url/admin/forms/");
 	exit;
 }
 
 $form_info = Forms::getForm($form_id);
 if (empty($form_info)) {
-	session_write_close();
-	header("location: $g_root_url/admin/forms/");
-	exit;
+    General::redirect("$root_url/admin/forms/");
+    exit;
 }
 $form_name = $form_info["form_name"];
 $auto_delete_submission_files = $form_info["auto_delete_submission_files"];
@@ -45,7 +42,7 @@ if (isset($_POST["delete_form"]) && $_POST["delete_form"] == "yes") {
 	list($g_success, $g_message) = ft_delete_form($form_id, $delete_files);
 
 	// redirect back to the form list page
-	header("location: $g_root_url/admin/forms/");
+    General::redirect("$root_url/admin/forms/");
 	exit;
 }
 

@@ -1,22 +1,20 @@
 <?php
 
+use FormTools\Menus;
 use FormTools\Themes;
 
 
 $is_new_menu = false;
 $sortable_id = "edit_client_menu";
 
-if (isset($request["create_new_menu"]))
-{
+if (isset($request["create_new_menu"])) {
 	$menu_id = ft_create_blank_client_menu();
 	$is_new_menu = true;
+} else {
+    $menu_id = $request["menu_id"];
 }
-else
-	$menu_id = $request["menu_id"];
 
-
-if (isset($request["update_client_menu"]))
-{
+if (isset($request["update_client_menu"])) {
 	$info = $_POST;
 	$info["sortable_id"] = $sortable_id;
 	list($g_success, $g_message) = ft_update_client_menu($info);
@@ -25,18 +23,18 @@ if (isset($request["update_client_menu"]))
 $menu_info = ft_get_client_menu($menu_id);
 $num_menu_items = count($menu_info["menu_items"]);
 $selected_client_ids = array();
-foreach ($menu_info["clients"] as $client_info)
-	$selected_client_ids[] = $client_info["account_id"];
+foreach ($menu_info["clients"] as $client_info) {
+    $selected_client_ids[] = $client_info["account_id"];
+}
 
 // get a list of all menus names; this is used to ensure the uniqueness of the menu names to ward
 // against confusion
-$menus = ft_get_menu_list();
+$menus = Menus::getMenuList();
 $menu_names = array();
-foreach ($menus as $curr_menu_info)
-{
-	if ($menu_id == $curr_menu_info["menu_id"])
-		continue;
-
+foreach ($menus as $curr_menu_info) {
+	if ($menu_id == $curr_menu_info["menu_id"]) {
+        continue;
+    }
 	$menu_names[] = "\"" . htmlspecialchars($curr_menu_info["menu"]) . "\"";
 }
 
@@ -47,8 +45,7 @@ page_ns.menu_names = [$menu_list];
 mm.num_rows = $num_menu_items;
 ";
 
-if ($num_menu_items == 0)
-{
+if ($num_menu_items == 0) {
 	$js .= "$(function() { mm.add_menu_item_row(); });";
 }
 

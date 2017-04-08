@@ -15,7 +15,7 @@ $config_file_generated = "";
 if (isset($_POST["generate_file"])) {
 	$config_file_generated = Installation::generateConfigFile($config_file);
 	if ($config_file_generated) {
-		header("location: step5.php");
+        General::redirect("step5.php");
 		exit;
 	}
 }

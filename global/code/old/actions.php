@@ -12,6 +12,7 @@ use FormTools\FieldValidation;
 use FormTools\ListGroups;
 use FormTools\OptionLists;
 use FormTools\Settings;
+use FormTools\Themes;
 
 
 // -------------------------------------------------------------------------------------------------
@@ -518,7 +519,7 @@ switch ($action)
 		$page_vars["form_fields"] = ft_get_form_fields($form_id, array("include_field_type_info" => true));
 		$page_vars["text_reference_tab_info"] = $text_reference_tab_info;
 
-		ft_display_page("admin/forms/form_placeholders.tpl", $page_vars);
+		Themes::displayPage("admin/forms/form_placeholders.tpl", $page_vars);
 		break;
 }
 

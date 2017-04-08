@@ -17,8 +17,7 @@ if (isset($_POST) && !empty($_POST)) {
 	// if the user just changed their language file, reset the value in sessions and refresh the page
 	if ($g_success && ($_POST["old_ui_language"] != $_POST["ui_language"])) {
 		$_SESSION["ft"]["ui_language"] = $_POST["ui_language"];
-		session_write_close();
-		header("location: index.php?updated");
+        General::redirect("index.php?updated");
 	}
 }
 

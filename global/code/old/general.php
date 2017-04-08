@@ -295,9 +295,7 @@ function ft_handle_error($error_message, $debug_details, $error_type = "error")
 	$_SESSION["ft"]["last_error_debug"] = $debug_details;
 	$_SESSION["ft"]["last_error_type"]  = $error_type;
 
-	session_write_close();
-	header("Location: {$g_root_url}error.php");
-	exit;
+    General::redirect("{$g_root_url}/error.php");
 }
 
 

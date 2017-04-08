@@ -13,14 +13,12 @@ $request = array_merge($_POST, $_GET);
 
 $num_forms = Clients::getFormCount();
 if (!empty($g_max_ft_forms) && $num_forms > $g_max_ft_forms) { // note it's not >=
-	header("location: ../index.php");
-	exit;
+    General::redirect("../");
 }
 
 if (isset($request["code"]) || isset($request["direct"])) {
 	$type = isset($request["code"]) ? "code" : "direct";
-	header("location: step2.php?submission_type=$type");
-	exit;
+    General::redirect("step2.php?submission_type=$type");
 }
 
 $form_id = General::loadField("form_id", "add_form_form_id", "");

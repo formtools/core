@@ -1,18 +1,23 @@
 <?php
 
+use FormTools\Core;
+use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 
 
-if (isset($request["update_accounts"]))
-	list($g_success, $g_message) = ft_update_account_settings($request);
+if (isset($request["update_accounts"])) {
+    list($g_success, $g_message) = ft_update_account_settings($request);
+}
 
 // if required, update the list of available languages
-if (isset($_GET["refresh_lang_list"]))
-	list($g_success, $g_message) = ft_refresh_language_list();
-
+if (isset($_GET["refresh_lang_list"])) {
+    list($g_success, $g_message) = ft_refresh_language_list();
+}
 $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>');
 
-// ------------------------------------------------------------------------------------------------
+$LANG = Core::$L;
+$password_special_chars = Core::getRequiredPasswordSpecialChars();
 
 // compile the theme vars
 $page_vars = array();
@@ -21,7 +26,7 @@ $page_vars["page_url"] = Pages::getPageUrl("settings_accounts");
 $page_vars["tabs"] = $tabs;
 $page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_accounts"]}";
 $page_vars["text_date_formatting_link"] = General::evalSmartyString($LANG["text_date_formatting_link"], $replacement_info);
-$page_vars["phrase_one_special_char"] = General::evalSmartyString($LANG["phrase_one_special_char"], array("chars" => $g_password_special_chars));
+$page_vars["phrase_one_special_char"] = General::evalSmartyString($LANG["phrase_one_special_char"], array("chars" => $password_special_chars));
 $page_vars["head_js"] =<<< END
 var rules = [];
 rules.push("required,default_page_titles,{$LANG["validation_no_page_titles"]}");
@@ -43,7 +48,6 @@ function validate_swatch() {
   }
   return true;
 }
-
 END;
 
 Themes::displayPage("admin/settings/index.tpl", $page_vars);

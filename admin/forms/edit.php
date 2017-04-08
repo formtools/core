@@ -13,8 +13,8 @@ $request = array_merge($_POST, $_GET);
 $form_id = General::loadField("form_id", "form_id", "");
 
 if (!ft_check_form_exists($form_id)) {
-	header("location: index.php");
-	exit;
+    General::redirect("index.php");
+    exit;
 }
 
 // store the current selected tab in memory - except for pages which require additional
@@ -37,8 +37,8 @@ if (isset($request["page"]) && !empty($request["page"])) {
 }
 
 if (isset($request['edit_email_user_settings'])) {
-	header("Location: edit.php?page=email_settings");
-	exit;
+    General::redirect("edit.php?page=email_settings");
+    exit;
 }
 
 $view_submissions_link = "submissions.php?form_id={$form_id}";

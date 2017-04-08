@@ -220,8 +220,7 @@ class Administrator {
         unset($_SESSION["ft"]["admin"]);
 
         // redirect them back to the edit client page
-        session_write_close();
-        header("location: $root_url/admin/clients/edit.php?client_id=$client_id");
+        General::redirect("$root_url/admin/clients/edit.php?client_id=$client_id");
         exit;
     }
 

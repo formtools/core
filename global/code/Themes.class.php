@@ -325,7 +325,7 @@ class Themes {
      * TODO. Combine as much of this with the prev method.
      *
      * Loads a theme opening page for a module. This should be used loaded for every page in a
-     * module. It serves the same function as ft_display_page, except that it sets the appropriate root
+     * module. It serves the same function as Themes::displayPage, except that it sets the appropriate root
      * folder for the module and loads the
      *
      * @param array $page_vars a hash of information to display / provide to the template.

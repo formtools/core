@@ -9,4 +9,4 @@ $page_vars["message_type"]  = isset($_SESSION["ft"]["last_error_type"])  ? $_SES
 $page_vars["message"]       = isset($_SESSION["ft"]["last_error"])       ? $_SESSION["ft"]["last_error"] : "";
 $page_vars["error_debug"]   = isset($_SESSION["ft"]["last_error_debug"]) ? $_SESSION["ft"]["last_error_debug"] : "";
 
-ft_display_page("error.tpl", $page_vars);
+Themes::displayPage("error.tpl", $page_vars);

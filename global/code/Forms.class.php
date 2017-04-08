@@ -268,8 +268,7 @@ class Forms {
                 }
             }
 
-            header("Location: " . $redirect_url);
-            exit;
+            General::redirect($redirect_url);
         }
 
         // the user should never get here! This means that the no redirect URL has been specified

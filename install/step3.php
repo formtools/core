@@ -44,8 +44,7 @@ if (isset($_POST["create_database"])) {
 		if (empty($existing_tables)) {
             list($success, $error) = Installation::createDatabase($db, $table_prefix, $g_sql);
 			if ($success) {
-				header("location: step4.php");
-				exit;
+                General::redirect("step4.php");
 			}
 		} else {
 			$success = false;

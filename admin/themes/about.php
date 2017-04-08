@@ -1,19 +1,17 @@
 <?php
 
 use FormTools\Core;
+use FormTools\General;
 use FormTools\Themes;
 
 Core::init();
-
-require("../../global/session_start.php");
 Core::$user->checkAuth("admin");
 
 $request = array_merge($_POST, $_GET);
 $theme_id = isset($request["theme_id"]) ? $request["theme_id"] : "";
 
 if (empty($theme_id)) {
-	header("location: index.php");
-	exit;
+    General::redirect("index.php");
 }
 $theme_info = Themes::getTheme($theme_id);
 

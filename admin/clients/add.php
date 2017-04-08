@@ -1,31 +1,33 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Administrator;
 use FormTools\Core;
+use FormTools\General;
+use FormTools\Pages;
 use FormTools\Settings;
 use FormTools\Themes;
 
 Core::init();
-
-//require("../../global/session_start.php");
 Core::$user->checkAuth("admin");
 
-$request = array_merge($_POST, $_GET);
 
+$request = array_merge($_POST, $_GET);
 $post_values = array();
 if (isset($_POST) && !empty($_POST['add_client'])) {
 	list($g_success, $g_message, $new_account_id) = Administrator::addClient($request);
 
 	// if added, redirect to the manage client page
 	if ($g_success) {
-		session_write_close();
-		header("Location: edit.php?page=main&client_id=$new_account_id");
+	    General::redirect("edit.php?page=main&client_id=$new_account_id");
 		exit;
 	} else {
 		$post_values = $_POST;
 	}
 }
 
+$LANG = Core::$L;
 $settings = Settings::get();
 $conditional_validation = array();
 if (!empty($settings["min_password_length"])) {
@@ -46,21 +48,10 @@ if (in_array("special_char", $required_password_chars)) {
 	$conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[$password_special_chars],$error\")";
 }
 $conditional_rules = implode("\n", $conditional_validation);
+$core_password_special_chars = Core::getRequiredPasswordSpecialChars();
 
-// compile the header information
-$page_vars = array();
-$page_vars["page"] = "add_client";
-$page_vars["page_url"] = Pages::getPageUrl("add_client");
-$page_vars["head_title"] = $LANG["phrase_add_client"];
-$page_vars["required_password_chars"] = $required_password_chars;
-$page_vars["password_special_chars"] = $g_password_special_chars;
-$page_vars["has_extra_password_requirements"] = (!empty($settings["required_password_chars"]) || !empty($settings["min_password_length"]));
-$page_vars["has_min_password_length"] = !empty($settings["min_password_length"]);
-$page_vars["password_special_char"] = General::evalSmartyString($LANG["phrase_password_special_char"], array("chars" => $g_password_special_chars));
-$page_vars["phrase_password_min"] = General::evalSmartyString($LANG["phrase_password_min"], array("length" => $settings["min_password_length"]));
-$page_vars["vals"] = $post_values;
 
-$page_vars["head_js"] =<<<END
+$head_js =<<<END
 var rules = [];
 rules.push("required,first_name,{$LANG['validation_no_client_first_name']}");
 rules.push("required,last_name,{$LANG['validation_no_client_first_name']}");
@@ -73,14 +64,28 @@ rules.push("same_as,password,password_2,{$LANG['validation_passwords_different']
 $conditional_rules
 
 function validate_username() {
-  var username = $("input[name=username]").val();
-  if (username.match(/[^\.@a-zA-Z0-9_]/)) {
-    return [[$("input[name=username]")[0], "{$LANG['validation_invalid_client_username']}"]];
-  }
-  return true;
+    var username = $("input[name=username]").val();
+    if (username.match(/[^\.@a-zA-Z0-9_]/)) {
+        return [[$("input[name=username]")[0], "{$LANG['validation_invalid_client_username']}"]];
+    }
+    return true;
 }
-
 $(function() { $("#first_name").focus(); });
 END;
+
+// compile the header information
+$page_vars = array(
+    "page" => "add_client",
+    "page_url" => Pages::getPageUrl("add_client"),
+    "head_title" => $LANG["phrase_add_client"],
+    "required_password_chars" => $required_password_chars,
+    "password_special_chars" => $core_password_special_chars,
+    "has_extra_password_requirements" => (!empty($settings["required_password_chars"]) || !empty($settings["min_password_length"])),
+    "has_min_password_length" => !empty($settings["min_password_length"]),
+    "password_special_char" => General::evalSmartyString($LANG["phrase_password_special_char"], array("chars" => $core_password_special_chars)),
+    "phrase_password_min" => General::evalSmartyString($LANG["phrase_password_min"], array("length" => $settings["min_password_length"])),
+    "vals" => $post_values,
+    "head_js" => $head_js
+);
 
 Themes::displayPage("admin/clients/add.tpl", $page_vars);

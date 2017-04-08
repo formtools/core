@@ -46,8 +46,9 @@ function smarty_function_pages_dropdown($params, &$smarty)
   if ($menu_type == "admin")
     $dropdown_str = ft_get_admin_menu_pages_dropdown($default_value, $attributes, $is_building_menu, $omit_pages);
 
-  if ($menu_type == "client")
-    $dropdown_str = ft_get_client_menu_pages_dropdown($default_value, $attributes, $omit_pages);
+    if ($menu_type == "client") {
+        $dropdown_str = Menus::getClientMenuPagesDropdown($default_value, $attributes, $omit_pages);
+    }
 
   return $dropdown_str;
 }

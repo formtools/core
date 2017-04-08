@@ -328,7 +328,7 @@ END;
     /**
      * Added in 2.1.0. The idea behind this is that every now and then, we need to display a custom message
      * in a page - e.g. after redirecting somewhere, or some unusual case. These situations are handled by passing
-     * a ?message=XXX query string parameter. This function is called in the ft_display_page function directly
+     * a ?message=XXX query string parameter. This function is called in the Themes::displayPage() function directly
      * so it all happens "automatically" with no additional configuration needed on each page.
      *
      * Caveats:
@@ -650,5 +650,14 @@ END;
     }
 
 
+    /**
+     * For handling all server-side redirects.
+     * @param $pageS
+     */
+    public static function redirect($page) {
+        session_write_close();
+        header("Location: $page");
+        exit;
+    }
 }
 

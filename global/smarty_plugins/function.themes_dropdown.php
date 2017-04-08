@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\General;
 use FormTools\Themes;
 
 
@@ -41,7 +42,7 @@ function smarty_function_themes_dropdown($params, &$smarty)
         }
     }
 
-    $themes = ft_get_themes();
+    $themes = Themes::getList();
 
     $html = "<select $attribute_str><option value=\"\">{$LANG["phrase_please_select"]}</option>";
 

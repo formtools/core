@@ -21,8 +21,7 @@ $view_id = _ft_code_get_view($request, $form_id);
 
 $submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";
 if (empty($submission_id)) {
-	header("location: submissions.php");
-	exit;
+    General::redirect("submissions.php");
 }
 $_SESSION["ft"]["last_submission_id"] = $submission_id;
 $_SESSION["ft"]["last_submission_id_{$form_id}"] = $submission_id;

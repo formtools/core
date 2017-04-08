@@ -16,9 +16,7 @@ $request = array_merge($_POST, $_GET);
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
 $form_id = General::loadField("form_id", "curr_form_id");
 if (empty($form_id) || !is_numeric($form_id)) {
-	session_write_close();
-	header("location: index.php");
-	exit;
+    General::redirect("./");
 }
 
 // check this is a valid form
@@ -38,8 +36,7 @@ if (empty($view_id) || !ft_check_view_exists($view_id, true)) {
 	// here, we know that the first View group has at least one item. [hmm...]
 	if (count($grouped_views[0]["views"]) == 0) {
 		// no Views defined for this form! redirect to the Views page and display a message
-		header("location: edit.php?page=views&form_id=$form_id&message=no_views");
-		exit;
+        General::redirect("edit.php?page=views&form_id=$form_id&message=no_views");
 	} else {
 		$view_id = $grouped_views[0]["views"][0]["view_id"];
 	}
@@ -54,8 +51,7 @@ $view_info   = ft_get_view($view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes") {
 	$submission_id = ft_create_blank_submission($form_id, $view_id, true);
-	header("location: edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id&message=new_submission");
-	exit;
+    General::redirect("edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id&message=new_submission");
 }
 
 // if the View just changed (i.e. it was just selected by the user), deselect any form rows
@@ -212,7 +208,7 @@ $_SESSION["ft"]["current_search"] = array(
 $total_pages = ceil($search_num_results / $results_per_page);
 if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$view_id}_page"] > $total_pages) {
 	$_SESSION["ft"]["view_{$view_id}_page"] = $total_pages;
-	header("location: submissions.php");
+    General::redirect("submissions.php");
 }
 
 // this sets the total number of submissions that the admin can see in this form and View in the form_X_num_submissions

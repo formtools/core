@@ -120,4 +120,131 @@ class Menus
         return $menu_info;
     }
 
+
+    /**
+     * Returns an array of menu hashes for all menus in the database. Ordered by menu name.
+     *
+     * @return array
+     */
+    public static function getMenuList()
+    {
+        $db = Core::$db;
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}menus
+            ORDER BY menu
+        ");
+        $db->execute();
+
+        $menus = array();
+        foreach ($db->fetchAll() as $row) {
+            $menus[] = $row;
+        }
+
+        extract(Hooks::processHookCalls("end", compact("menus"), array("menus")), EXTR_OVERWRITE);
+
+        return $menus;
+    }
+
+
+    /**
+     * Builds a dropdown of available pages for a client. This is used by the administrator
+     * to display the list of pages available for the clients menus, etc.
+     *
+     * @param string $selected
+     * @param array $attributes
+     * @param array $omit_pages
+     */
+    public static function getClientMenuPagesDropdown($selected, $attributes, $omit_pages = array())
+    {
+        global $LANG;
+
+        // stores the non-option lines of the select box: <select>, </select> and the optgroups
+        $select_lines   = array();
+        $select_lines[] = array("type" => "select_open");
+
+        if (!in_array("", $omit_pages))
+            $select_lines[] = array("type" => "option", "v" => $LANG["phrase_please_select"]);
+
+        if (!in_array("custom_url", $omit_pages))
+        {
+            $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_custom"]);
+            $select_lines[] = array("type" => "option", "k" => "custom_url", "v" => $LANG["phrase_custom_url"]);
+            $select_lines[] = array("type" => "optgroup_close");
+        }
+
+        $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_main"]);
+
+        if (!in_array("client_forms", $omit_pages))
+            $select_lines[] = array("type" => "option", "k" => "client_forms", "v" => $LANG["word_forms"]);
+        if (!in_array("client_form_submissions", $omit_pages))
+            $select_lines[] = array("type" => "option", "k" => "client_form_submissions", "v" => $LANG["phrase_form_submissions"]);
+        if (!in_array("client_account", $omit_pages))
+            $select_lines[] = array("type" => "option", "k" => "client_account", "v" => $LANG["word_account"]);
+        if (!in_array("client_account_login", $omit_pages))
+            $select_lines[] = array("type" => "option", "k" => "client_account_login", "v" => $LANG["phrase_login_info"]);
+        if (!in_array("client_account_settings", $omit_pages))
+            $select_lines[] = array("type" => "option", "k" => "client_account_settings", "v" => $LANG["phrase_account_settings"]);
+        if (!in_array("logout", $omit_pages))
+            $select_lines[] = array("type" => "option", "k" => "logout", "v" => $LANG["word_logout"]);
+
+        $select_lines[] = array("type" => "optgroup_close");
+
+        // if the Pages module is enabled, display any custom pages that have been defined. Only show the optgroup
+        // if there's at least ONE page defined
+        if (ft_check_module_enabled("pages"))
+        {
+            ft_include_module("pages");
+            $pages_info = pg_get_pages("all");
+            $pages = $pages_info["results"];
+
+            if (count($pages) > 0)
+            {
+                $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["phrase_pages_module"]);
+                foreach ($pages as $page)
+                {
+                    $page_id = $page["page_id"];
+                    $page_name = $page["page_name"];
+                    $select_lines[] = array("type" => "option", "k" => "page_{$page_id}", "v" => $page_name);
+                }
+                $select_lines[] = array("type" => "optgroup_close");
+            }
+        }
+
+        extract(Hooks::processHookCalls("middle", compact("select_lines"), array("select_lines")), EXTR_OVERWRITE);
+
+        $select_lines[] = array("type" => "select_close");
+
+        // now build the HTML
+        $dd = "";
+        foreach ($select_lines as $line)
+        {
+            switch ($line["type"])
+            {
+                case "select_open":
+                    $attribute_str = "";
+                    while (list($key, $value) = each($attributes))
+                        $attribute_str .= " $key=\"$value\"";
+                    $dd .= "<select $attribute_str>";
+                    break;
+                case "select_close":
+                    $dd .= "</select>";
+                    break;
+                case "optgroup_open":
+                    $dd .= "<optgroup label=\"{$line["label"]}\">";
+                    break;
+                case "optgroup_close":
+                    $dd .= "</optgroup>";
+                    break;
+                case "option":
+                    $key   = $line["k"];
+                    $value = $line["v"];
+                    $dd .= "<option value=\"{$key}\"" . (($selected == $key) ? " selected" : "") . ">$value</option>\n";
+                    break;
+            }
+        }
+
+        return $dd;
+    }
+
 }

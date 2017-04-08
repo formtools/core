@@ -1,20 +1,19 @@
 <?php
 
+require_once("../../global/library.php");
+
+use FormTools\Clients;
 use FormTools\Core;
 use FormTools\General;
 
-
 Core::init();
-
-//require("../../global/session_start.php");
 Core::$user->checkAuth("admin");
 
 
 $request = array_merge($_POST, $_GET);
 $client_id = General::loadField("client_id", "curr_client_id", "");
 if (empty($client_id)) {
-	header("location: index.php");
-	exit;
+    General::redirect("index.php");
 }
 
 // figure out the "<< prev" and "next >>" links
@@ -31,7 +30,7 @@ $search_criteria = array(
 	"status"    => $status
 );
 
-$links = ft_get_client_prev_next_links($client_id, $search_criteria);
+$links = Clients::getClientPrevNextLinks($client_id, $search_criteria);
 
 $prev_tabset_link = (!empty($links["prev_account_id"])) ? "edit.php?page=$page&client_id={$links["prev_account_id"]}" : "";
 $next_tabset_link = (!empty($links["next_account_id"])) ? "edit.php?page=$page&client_id={$links["next_account_id"]}" : "";

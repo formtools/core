@@ -419,8 +419,7 @@ EOF;
     public static function checkInstalled()
     {
         if (!Core::checkConfigFileExists() && is_dir('../../install')) {
-            header("Location: ../../install/");
-            exit;
+            General::redirect("../../install/");
         }
     }
 

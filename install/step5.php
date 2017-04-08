@@ -23,8 +23,7 @@ if (isset($_POST["add_account"])) {
 	// everything's done! Now just make a few minor updates to the database for this user's configuration
 	if ($account_created) {
 		Installation::updateDatabaseSettings();
-        header("location: step6.php");
-		exit;
+        General::redirect("step6.php");
 	}
 }
 

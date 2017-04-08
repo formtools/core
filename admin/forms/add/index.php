@@ -14,11 +14,9 @@ Core::$user->checkAuth("client");
 
 $request = array_merge($_POST, $_GET);
 if (isset($request["external"])) {
-	header("location: step1.php");
-	exit;
+    General::redirect("step1.php");
 } else if (isset($request["internal"])) {
-	header("location: internal.php");
-	exit;
+    General::redirect("internal.php");
 }
 
 if (isset($request["new_form"])) {

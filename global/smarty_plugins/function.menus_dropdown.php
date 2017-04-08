@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Menus;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -33,7 +36,7 @@ function smarty_function_menus_dropdown($params, &$smarty)
   	  $attribute_str .= " $key=\"$value\"";
   }
 
-  $menus = ft_get_menu_list();
+  $menus = Menus::getMenuList();
   $rows = array("<option value=\"\">{$LANG["phrase_please_select"]}</option>");
   foreach ($menus as $menu_info)
   {

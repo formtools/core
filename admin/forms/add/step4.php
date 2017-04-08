@@ -21,9 +21,7 @@ if (!empty($_POST) && isset($_POST["next_step"]))
 	$deleted_rows = explode(",", $_POST["{$sortable_id}_sortable__deleted_rows"]);
 	ft_delete_form_fields($form_id, $deleted_rows);
 
-	session_write_close();
-	header("location: step5.php?form_id=$form_id");
-	exit;
+    General::redirect("step5.php?form_id=$form_id");
 }
 
 $form_fields = ft_get_form_fields($form_id);

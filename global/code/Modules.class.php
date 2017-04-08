@@ -205,7 +205,7 @@ class Modules
      *
      * @param integer $module_id
      */
-    public static function ft_module_needs_upgrading($module_id)
+    public static function moduleNeedsUpgrading($module_id)
     {
         $module_info = self::getModule($module_id);
         $module_folder = $module_info["module_folder"];
@@ -487,6 +487,106 @@ class Modules
         return (isset($info["module_id"])) ? $info["module_id"] : "";
     }
 
+
+    /**
+     * Returns the total number of modules in the database (regardless of whether they're enabled or not).
+     * @return integer the number of modules
+     */
+    public static function getModuleCount()
+    {
+        $db = Core::$db;
+        $db->query("SELECT count(*) as c FROM {PREFIX}modules");
+        $db->execute();
+        $info = $db->fetch();
+        return $info["c"];
+    }
+
+
+    /**
+     * This is used on the administrator Modules page. It allows for a simple search/sort mechanism.
+     * @param array $search_criteria
+     */
+    public static function searchModules($search_criteria)
+    {
+        $db = Core::$db;
+
+        if (!isset($search_criteria["order"])) {
+            $search_criteria["order"] = "module_name-DESC";
+        }
+
+        extract(Hooks::processHookCalls("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
+
+        // verbose, but at least it prevents any invalid sorting. We always return modules that aren't installed first
+        // so they show up on the first page of results. The calling page then sorts the ones that require upgrading next
+        $order_clause = "is_installed DESC";
+        switch ($search_criteria["order"]) {
+            case "module_name-DESC":
+                $order_clause .= ", module_name DESC";
+                break;
+            case "module_name-ASC":
+                $order_clause .= ", module_name ASC";
+                break;
+            case "is_enabled-DESC":
+                $order_clause .= ", is_enabled DESC";
+                break;
+            case "is_enabled-ASC":
+                $order_clause .= ", is_enabled ASC";
+                break;
+            default:
+                $order_clause .= ", module_name";
+                break;
+        }
+        $order_clause = "ORDER BY $order_clause";
+
+        $keyword_clause = "";
+        if (!empty($search_criteria["keyword"])) {
+            $string = $search_criteria["keyword"];
+            $fields = array("module_name", "module_folder", "description");
+
+            $clauses = array();
+            foreach ($fields as $field) {
+                $clauses[] = "$field LIKE '%$string%'";
+            }
+            $keyword_clause = join(" OR ", $clauses);
+        }
+
+        // status ("enabled"/"disabled") clause
+        $status_clause = "";
+        if (count($search_criteria["status"]) < 2) {
+            if (in_array("enabled", $search_criteria["status"])) {
+                $status_clause = "is_enabled = 'yes'";
+            } else {
+                $status_clause = "is_enabled = 'no'";
+            }
+        }
+
+        // add up the where clauses
+        $where_clauses = array();
+        if (!empty($keyword_clause)) $where_clauses[] = "($keyword_clause)";
+        if (!empty($status_clause))  $where_clauses[] = "($status_clause)";
+        if (!empty($where_clauses)) {
+            $where_clause = "WHERE " . join(" AND ", $where_clauses);
+        } else {
+            $where_clause = "";
+        }
+
+        // get form info
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}modules
+            $where_clause
+            $order_clause
+       ");
+        $db->execute();
+
+        // now retrieve the basic info (id, first and last name) about each client assigned to this form
+        $module_info = array();
+        foreach ($db->fetchAll() as $row) {
+            $module_info[] = $row;
+        }
+
+        return $module_info;
+    }
 
 
 // --------------------------------------------------------------------------------------------

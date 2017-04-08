@@ -1,13 +1,15 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Modules;
+use FormTools\Pages;
+use FormTools\Sessions;
 use FormTools\Themes;
 
 Core::init();
-
-//require("../../global/session_start.php");
 Core::$user->checkAuth("admin");
 
 
@@ -43,23 +45,21 @@ $search_criteria = array(
 	"keyword" => $keyword,
 	"status"  => $status
 );
-$num_modules = ft_get_module_count();
-$modules     = ft_search_modules($search_criteria);
+$num_modules = Modules::getModuleCount();
+$modules     = Modules::searchModules($search_criteria);
 
 $module_ids = array();
-foreach ($modules as $module_info)
-{
+foreach ($modules as $module_info) {
 	$module_ids[] = $module_info["module_id"];
 }
 $module_ids_in_page = implode(",", $module_ids);
 
 // find out if any of the modules have been upgraded
 $updated_modules = array();
-foreach ($modules as $module_info)
-{
+foreach ($modules as $module_info) {
 	$module_id = $module_info["module_id"];
 	$curr_module = $module_info;
-	$curr_module["needs_upgrading"] = ft_module_needs_upgrading($module_id);
+	$curr_module["needs_upgrading"] = Modules::moduleNeedsUpgrading($module_id);
 	$updated_modules[] = $curr_module;
 }
 
@@ -78,25 +78,22 @@ foreach ($updated_modules as $module_info) {
 }
 
 $modules = array_merge($sorted_modules, $installed_modules);
+$LANG = Core::$L;
 
-// ------------------------------------------------------------------------------------------
-
-// compile header information
-$page_vars = array();
-$page_vars["page"]        = "modules";
-$page_vars["page_url"]    = Pages::getPageUrl("modules");
-$page_vars["head_title"]  = $LANG["word_modules"];
-$page_vars["modules"]     = $modules;
-$page_vars["num_modules"] = $num_modules;
-$page_vars["order"]       = $order;
-$page_vars["search_criteria"] = $search_criteria;
-$page_vars["module_ids_in_page"] = $module_ids_in_page;
-$page_vars["pagination"]  = General::getJsPageNav(count($modules), $_SESSION["ft"]["settings"]["num_modules_per_page"], 1);
-$page_vars["js_messages"] = array("validation_modules_search_no_status", "phrase_please_enter_license_key", "word_yes", "word_no",
+$page_vars = array(
+    "page"        => "modules",
+    "page_url"    => Pages::getPageUrl("modules"),
+    "head_title"  => $LANG["word_modules"],
+    "modules"     => $modules,
+    "num_modules" => $num_modules,
+    "order"       => $order,
+    "search_criteria" => $search_criteria,
+    "module_ids_in_page" => $module_ids_in_page,
+    "pagination" => General::getJsPageNav(count($modules), Sessions::get("settings.num_modules_per_page"), 1),
+    "js_messages" => array("validation_modules_search_no_status", "phrase_please_enter_license_key", "word_yes", "word_no",
 	"phrase_please_confirm", "confirm_uninstall_module", "word_close", "word_verify", "notify_invalid_license_key",
-	"notify_license_key_no_longer_valid", "notify_unknown_error");
-$page_vars["head_string"] =<<< END
-<script src="../../global/scripts/manage_modules.js"></script>
-END;
+	"notify_license_key_no_longer_valid", "notify_unknown_error"),
+    "head_string" => "<script src=\"../../global/scripts/manage_modules.js\"></script>"
+);
 
 Themes::displayPage("admin/modules/index.tpl", $page_vars);

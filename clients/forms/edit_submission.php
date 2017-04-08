@@ -23,8 +23,7 @@ $form_id = General::loadField("form_id", "curr_form_id");
 $view_id = General::loadField("view_id", "form_{$form_id}_view_id");
 $submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";
 if (empty($submission_id)) {
-	header("location: index.php");
-	exit;
+    General::redirect("index.php");
 }
 
 $tab_number = General::loadField("tab", "view_{$view_id}_current_tab", 1);
@@ -33,8 +32,7 @@ $grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => tru
 // check the current client is permitted to view this information!
 General::checkClientMayView($account_id, $form_id, $view_id);
 if (!ft_check_view_contains_submission($form_id, $view_id, $submission_id)) {
-	header("location: index.php");
-	exit;
+    General::redirect("index.php");
 }
 
 // store this submission ID

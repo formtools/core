@@ -34,17 +34,13 @@ if (isset($request["add_form"]))
 	$_SESSION["ft"]["uploading_files"] = isset($request['uploading_files']) ? $request['uploading_files'] : "no";
 
 	// form successfully added. Continue to step 2.
-	if ($g_success)
-	{
-		session_write_close();
-		header("location: step3.php?form_id=$form_id");
-		exit;
+	if ($g_success) {
+        General::redirect("step3.php?form_id=$form_id");
 	}
 
 	// error. reload the page with the already entered form values, and display
 	// the appropriate error message.
-	else
-	{
+	else {
 		$page_values = ft_preload_values("post");
 	}
 }
@@ -56,24 +52,20 @@ else if (isset($request['update_form']))
 	$_SESSION["ft"]["uploading_files"] = isset($request["uploading_files"]) ? $request["uploading_files"] : "no";
 	$request["submission_type"] = $submission_type;
 	list($g_success, $g_message) = ft_set_form_main_settings($request);
-	if ($g_success)
-	{
-		header("location: step3.php?form_id=$form_id");
-		exit;
-	}
-	else
-		$page_values = ft_preload_values("post", $form_id);
+	if ($g_success) {
+        General::redirect("step3.php?form_id=$form_id");
+	} else {
+        $page_values = ft_preload_values("post", $form_id);
+    }
 }
 
 // edit existing form (used for cases where user fails to complete form building process, then returns
 // later to finish the job)
-else if (!empty($form_id))
-{
+else if (!empty($form_id)) {
 	$page_values = ft_preload_values("database", $form_id);
 }
 // otherwise, the user is coming to this page for the first time. init the default values
-else
-{
+else {
 	$page_values = ft_preload_values("new_form");
 }
 
