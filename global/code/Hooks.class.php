@@ -14,6 +14,72 @@ use PDOException;
 
 class Hooks {
 
+
+    /**
+     * Called by module installation files, and/or whenever needed. This function logs new hooks in the
+     * database. This function is called by the module designers WITHIN their own modules.
+     *
+     * @param string $hook_type "code" or "template"
+     * @param string $when when in the functions the hooks should be processed. For code hooks, these are
+     *    either "start" or "end"; for template hooks, this is the location attribute of the {template_hook ...}
+     *    tag.
+     * @param string $function_name the name of the function to which this hook is to be attached
+     * @param string $hook_function the name of the hook function, found in the modules library.php file
+     * @param integer $priority 1-100 (100 lowest, 1 highest). Optional setting that determines the order
+     *    in which this hook gets processed, in relation to OTHER hooks attached to the same event.
+     * @param boolean $force_unique if set to true, this will only register hooks that haven't been set
+     *    with this module, location, hook and core function.
+     */
+    public static function registerHook($hook_type, $module_folder, $when, $function_name, $hook_function,
+        $priority = 50, $force_unique = false)
+    {
+        $db = Core::$db;
+
+        // hmm! This whole $force_unique/$may_proceed thing wasn't fully implemented in 2.x - leaving be for now.
+        //$may_proceed = true;
+        if ($force_unique) {
+//            $db->query("
+//                SELECT count(*) as c
+//                FROM   {PREFIX}hook_calls
+//                WHERE  hook_type = :hook_type AND
+//                action_location = :action_location AND
+//                module_folder = :module_folder AND
+//                function_name = :function_name AND
+//                hook_function = :hook_function
+//            ");
+            $db->bindAll(array(
+                "hook_type" => $hook_type,
+                "action_location" => $when,
+                "module_folder" => $module_folder,
+                "function_name" => $function_name,
+                "hook_function" => $hook_function
+            ));
+//            $db->execute();
+        }
+
+        $db->query("
+            INSERT INTO {PREFIX}hook_calls (hook_type, action_location, module_folder, function_name, hook_function, priority)
+            VALUES (:hook_type, :when, :module_folder, :function_name, :hook_function, :priority)
+        ");
+        $db->bindAll(array(
+            "hook_type" => $hook_type,
+            "action_location" => $when,
+            "module_folder" => $module_folder,
+            "function_name" => $function_name,
+            "hook_function" => $hook_function,
+            "priority" => $priority
+        ));
+
+        try {
+            $db->execute();
+        } catch (PDOException $e) {
+            return array(false, $e->getMessage());
+        }
+
+        return array(true, $db->getInsertId());
+    }
+
+
     /**
      * Called automatically after upgrading the Core, theme or module. This parses the entire Form Tools code base -
      * including any installed modules - and updates the list of available hooks. As of 2.1.0, the available hooks
@@ -54,7 +120,7 @@ class Hooks {
 
 
     /**
-     * Our main process hooks function. This finds and calls ft_process_hook_call for each hook defined for
+     * Our main process hooks function. This finds and calls processHookCall for each hook defined for
      * this event & calling function. It processes each one sequentially in order of priority.
      *
      * I changed the logic of this functionality in 2.1.0 - now I think it will work more intuitively.
@@ -101,7 +167,7 @@ class Hooks {
             // add the hook info to the $template_vars for access by the hooked function. N.B. the "form_tools_"
             // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
             $vars["form_tools_hook_info"] = $hook_info;
-            $updated_vars = ft_process_hook_call($hook_info["module_folder"], $hook_info["hook_function"], $vars, $overridable_vars, $calling_function);
+            $updated_vars = Hooks::processHookCall($hook_info["module_folder"], $hook_info["hook_function"], $vars, $overridable_vars, $calling_function);
 
             // now return whatever values have been overwritten by the hooks
             foreach ($overridable_vars as $var_name) {
@@ -405,5 +471,96 @@ class Hooks {
 
         return $html;
     }
+
+
+    /**
+     * Deletes a hook by hook ID.
+     * @param integer $hook_id
+     */
+    public static function deleteHookCall($hook_id)
+    {
+        $db = Core::$db;
+        $db->query("DELETE FROM {PREFIX}hook_calls WHERE hook_id = :hook_id");
+        $db->bind("hook_id", $hook_id);
+        $db->execute();
+    }
+
+
+    /**
+     * Called internally. This is called when a user uninstalls a module; it removes all hooks relating to
+     * that module from the database.
+     *
+     * @param integer $module_id
+     */
+    public static function unregisterModuleHooks($module_folder)
+    {
+        $db = Core::$db;
+        $db->query("DELETE FROM {PREFIX}hook_calls WHERE module_folder = :module_folder");
+        $db->bind("module_folder", $module_folder);
+        $db->execute();
+    }
+
+    /**
+     * Returns all modules associated with a particular module ordered by priority.
+     *
+     * @param string $module_folder
+     * @return array
+     */
+    public static function getModuleHookCalls($module_folder)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}hook_calls
+            WHERE  module_folder = :module_folder
+            ORDER BY priority ASC
+        ");
+        $db->bind("module_folder", $module_folder);
+        $db->execute();
+
+        $results = array();
+        foreach ($db->fetchAll() as $row) {
+            $results[] = $row;
+        }
+
+        return $results;
+    }
+
+
+    /**
+     * Processes an actual hook and returns the value. This requires all hook functions to return either NOTHING,
+     * or a hash of values to be overridden.
+     *
+     * @param string $module_folder
+     * @param string $hook_function
+     * @param array $vars
+     */
+    public static function processHookCall($module_folder, $hook_function, $vars, $overridable_vars, $calling_function)
+    {
+        // add the overridable variable list and calling function in special hash keys, to provide a little
+        // info to the developer with regard to the context in which it's being called and what can be overridden
+        $vars["form_tools_overridable_vars"] = $overridable_vars;
+        $vars["form_tools_calling_function"] = $calling_function;
+
+        @include_once(realpath(__DIR__ . "/../../modules/$module_folder/library.php"));
+
+        if (!function_exists($hook_function)) {
+            return $overridable_vars;
+        }
+
+        $result = @$hook_function($vars);
+        $updated_values = array();
+        if (!empty($result)) {
+            while (list($key, $value) = each($result)) {
+                if (in_array($key, $overridable_vars)) {
+                    $updated_values[$key] = $value;
+                }
+            }
+        }
+
+        return $updated_values;
+    }
+
 
 }

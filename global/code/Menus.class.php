@@ -311,29 +311,176 @@ class Menus
         return $return_hash;
     }
 
+
+    /**
+     * This function builds the dropdown menu that lists all available pages for an administrator account.
+     *
+     * @param string $default_value
+     * @param array $attributes a hash of attributes, e.g. "name" => "row1", "onchange" => "myfunc()"
+     * @param boolean $omit_pages this determines which fields should be OMITTED from the generated
+     *   HTML; it's an array whose values correspond to the page names found at the top of this file.
+     * @return string
+     */
+    public static function getAdminMenuPagesDropdown($selected, $attributes, $is_building_menu, $omit_pages = array())
+    {
+        $LANG = Core::$L;
+
+        // stores the non-option lines of the select box: <select>, </select> and the optgroups
+        $select_lines   = array();
+        $select_lines[] = array("type" => "select_open");
+
+        if (!in_array("", $omit_pages)) {
+            $select_lines[] = array("type" => "option", "k" => "", "v" => $LANG["phrase_please_select"]);
+        }
+
+        if (!in_array("custom_url", $omit_pages)) {
+            $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_custom"]);
+            $select_lines[] = array("type" => "option", "k" => "custom_url", "v" => $LANG["phrase_custom_url"]);
+            $select_lines[] = array("type" => "optgroup_close");
+        }
+
+        $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_forms"]);
+
+        if (!in_array("admin_forms", $omit_pages)) {
+            $select_lines[] = array("type" => "option", "k" => "admin_forms", "v" => $LANG["word_forms"]);
+        }
+        if (!in_array("option_lists", $omit_pages)) {
+            $select_lines[] = array("type" => "option", "k" => "option_lists", "v" => $LANG["phrase_option_lists"]);
+        }
+        if (!in_array("add_form", $omit_pages)) {
+            $select_lines[] = array("type" => "option", "k" => "add_form_choose_type", "v" => $LANG["phrase_add_form"]);
+        }
+        if (!in_array("add_form_internal", $omit_pages)) {
+            $select_lines[] = array("type" => "option", "k" => "add_form_internal", "v" => $LANG["phrase_add_form_internal"]);
+        }
+        if (!in_array("add_form1", $omit_pages)) {
+            $select_lines[] = array("type" => "option", "k" => "add_form1", "v" => $LANG["phrase_add_form_external"]);
+        }
+
+        if ($is_building_menu) {
+            if (!in_array("form_submissions", $omit_pages)) {
+                $select_lines[] = array(
+                "type" => "option",
+                "k" => "form_submissions",
+                "v" => $LANG["phrase_form_submissions"]
+                );
+            }
+            if (!in_array("edit_form", $omit_pages)) {
+                $select_lines[] = array("type" => "option", "k" => "edit_form", "v" => $LANG["phrase_edit_form"]);
+            }
+            if (!in_array("edit_form_main", $omit_pages)) {
+                $select_lines[] = array("type" => "option", "k" => "edit_form_main", "v" => "{$LANG["phrase_edit_form"]} - {$LANG["word_main"]}");
+            }
+
+            if (!in_array("edit_form_fields", $omit_pages)) {
+                $select_lines[] = array("type" => "option", "k" => "edit_form_fields", "v" => "{$LANG["phrase_edit_form"]} - {$LANG["word_fields"]}");
+            }
+            if (!in_array("edit_form_views", $omit_pages)) {
+                $select_lines[] = array("type" => "option", "k" => "edit_form_views", "v" => "{$LANG["phrase_edit_form"]} - {$LANG["word_views"]}");
+            }
+            if (!in_array("edit_form_emails", $omit_pages)) {
+                $select_lines[] = array("type" => "option", "k" => "edit_form_emails", "v" => "{$LANG["phrase_edit_form"]} - {$LANG["word_emails"]}");
+            }
+        }
+
+        $select_lines[] = array("type" => "optgroup_close");
+
+        $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_clients"]);
+        if (!in_array("clients", $omit_pages)) {
+            $select_lines[] = array("type" => "option", "k" => "clients", "v" => $LANG["word_clients"]);
+        }
+        if (!in_array("add_client", $omit_pages)) {
+            $select_lines[] = array("type" => "option", "k" => "add_client", "v" => $LANG["phrase_add_client"]);
+        }
+
+        if ($is_building_menu) {
+            if (!in_array("edit_client", $omit_pages)) {
+                $select_lines[] = array("type" => "option", "k" => "edit_client", "v" => $LANG["phrase_edit_client"]);
+            }
+            if (!in_array("edit_client_main", $omit_pages)) {
+                $select_lines[] = array("type" => "option", "k" => "edit_client_main", "v" => $LANG["word_main"]);
+            }
+            if (!in_array("edit_client_permissions", $omit_pages)) {
+                $select_lines[] = array("type" => "option", "k" => "edit_client_permissions", "v" => $LANG["word_permissions"]);
+            }
+        }
+
+        $select_lines[] = array("type" => "optgroup_close");
+        $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_modules"]);
+        if (!in_array("modules", $omit_pages)) {
+            $select_lines[] = array("type" => "option", "k" => "modules", "v" => $LANG["word_modules"]);
+        }
+
+        $modules = Modules::getList();
+        for ($i=0; $i<count($modules); $i++) {
+            $module_id = $modules[$i]["module_id"];
+            $module    = $modules[$i]["module_name"];
+            $select_lines[] = array("type" => "option", "k" => "module_{$module_id}", "v" => $module);
+        }
+        $select_lines[] = array("type" => "optgroup_close");
+
+        // if the Pages module is enabled, display any custom pages that have been defined. Note: this would be better handled
+        // in the hook added below
+        if (Modules::checkModuleEnabled("pages")) {
+            Modules::includeModule("pages");
+            $pages_info = pg_get_pages("all");
+            $pages = $pages_info["results"];
+
+            $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["phrase_pages_module"]);
+            for ($i=0; $i<count($pages); $i++) {
+                $page_id = $pages[$i]["page_id"];
+                $page_name = $pages[$i]["page_name"];
+                $select_lines[] = array("type" => "option", "k" => "page_{$page_id}", "v" => $page_name);
+            }
+
+            $select_lines[] = array("type" => "optgroup_close");
+        }
+
+        extract(Hooks::processHookCalls("middle", compact("select_lines"), array("select_lines")), EXTR_OVERWRITE);
+
+        $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["word_other"]);
+        $select_lines[] = array("type" => "option", "k" => "your_account", "v" => $LANG["phrase_your_account"]);
+        $select_lines[] = array("type" => "option", "k" => "settings_themes", "v" => "{$LANG["word_themes"]}");
+        $select_lines[] = array("type" => "option", "k" => "settings", "v" => $LANG["word_settings"]);
+        $select_lines[] = array("type" => "option", "k" => "settings_main", "v" => "{$LANG["word_settings"]} - {$LANG["word_main"]}");
+        $select_lines[] = array("type" => "option", "k" => "settings_accounts", "v" => "{$LANG["word_settings"]} - {$LANG["word_accounts"]}");
+        $select_lines[] = array("type" => "option", "k" => "settings_files", "v" => "{$LANG["word_settings"]} - {$LANG["word_files"]}");
+        $select_lines[] = array("type" => "option", "k" => "settings_menus", "v" => "{$LANG["word_settings"]} - {$LANG["word_menus"]}");
+        if (!in_array("logout", $omit_pages)) {
+            $select_lines[] = array("type" => "option", "k" => "logout", "v" => $LANG["word_logout"]);
+        }
+        $select_lines[] = array("type" => "optgroup_close");
+        $select_lines[] = array("type" => "select_close");
+
+
+        // now build the HTML
+        $dd = "";
+        foreach ($select_lines as $line) {
+            switch ($line["type"]) {
+                case "select_open":
+                    $attribute_str = "";
+                    while (list($key, $value) = each($attributes))
+                        $attribute_str .= " $key=\"$value\"";
+                    $dd .= "<select $attribute_str>";
+                    break;
+                case "select_close":
+                    $dd .= "</select>";
+                    break;
+                case "optgroup_open":
+                    $dd .= "<optgroup label=\"{$line["label"]}\">";
+                    break;
+                case "optgroup_close":
+                    $dd .= "</optgroup>";
+                    break;
+                case "option":
+                    $key   = $line["k"];
+                    $value = $line["v"];
+                    $dd .= "<option value=\"{$key}\"" . (($selected == $key) ? " selected" : "") . ">$value</option>\n";
+                    break;
+            }
+        }
+
+        return $dd;
+    }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

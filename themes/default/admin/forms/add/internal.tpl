@@ -60,7 +60,7 @@
         </tr>
         </table>
 
-        <div id="custom_clients" {if $form_info.access_type != 'private'}style="display:none"{/if} class="margin_top">
+        <div id="custom_clients" style="display:none" class="margin_top">
           <table cellpadding="0" cellspacing="0" class="subpanel">
           <tr>
             <td class="medium_grey">{$LANG.phrase_available_clients}</td>
@@ -70,7 +70,7 @@
           <tr>
             <td>
               {clients_dropdown name_id="available_client_ids[]" multiple="true" multiple_action="hide"
-                clients=$selected_client_ids size="4" style="width: 205px"}
+                clients=[] size="4" style="width: 205px"}
             </td>
             <td align="center" valign="middle" width="100">
               <input type="button" value="{$LANG.word_add_uc_rightarrow}"
@@ -80,7 +80,7 @@
             </td>
             <td>
               {clients_dropdown name_id="selected_client_ids[]" multiple="true" multiple_action="show"
-                clients=$selected_client_ids size="4" style="width: 205px"}
+                clients=[] size="4" style="width: 205px"}
             </td>
           </tr>
           </table>

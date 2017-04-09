@@ -685,4 +685,95 @@ class Forms {
 
         return $omitted_forms;
     }
+
+
+    /**
+     * Added in 2.1.0, this creates an Internal form with a handful of custom settings.
+     *
+     * @param $info the POST request containing the form name, number of fields and access type.
+     */
+    public static function createInternalForm($request)
+    {
+        $LANG = Core::$L;
+
+        $rules = array();
+        $rules[] = "required,form_name,{$LANG["validation_no_form_name"]}";
+        $rules[] = "required,num_fields,{$LANG["validation_no_num_form_fields"]}";
+        $rules[] = "digits_only,num_fields,{$LANG["validation_invalid_num_form_fields"]}";
+        $rules[] = "required,access_type,{$LANG["validation_no_access_type"]}";
+
+        $errors = validate_fields($request, $rules);
+        if (!empty($errors)) {
+            array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
+            $message = join("<br />", $errors);
+            return array(false, $message);
+        }
+
+        $info = $request;
+        $config = array(
+            "form_type"    => "internal",
+            "form_name"    => $info["form_name"],
+            "access_type"  => $info["access_type"]
+        );
+
+        // set up the entry for the form
+        list($success, $message, $new_form_id) = ft_setup_form($config);
+
+        $form_data = array(
+            "form_tools_form_id" => $new_form_id,
+            "form_tools_display_notification_page" => false
+        );
+
+        for ($i=1; $i<=$info["num_fields"]; $i++) {
+            $form_data["field{$i}"] = $i;
+        }
+        ft_initialize_form($form_data);
+
+        $infohash = array();
+        $form_fields = ft_get_form_fields($new_form_id);
+
+        $order = 1;
+
+        // if the user just added a form with a lot of fields (over 50), the database row size will be too
+        // great. Varchar fields (which with utf-8 equates to 1220 bytes) in a table can have a combined row
+        // size of 65,535 bytes, so 53 is the max. The client-side validation limits the number of fields to
+        // 1000. Any more will throw an error.
+        $field_size_clause = ($info["num_fields"] > 50) ? ", field_size = 'small'" : "";
+
+        $field_name_prefix = $LANG["word_field"];
+        foreach ($form_fields as $field_info) {
+            if (preg_match("/field(\d+)/", $field_info["field_name"], $matches)) {
+                $field_id  = $field_info["field_id"];
+                mysql_query("
+                    UPDATE {PREFIX}form_fields
+                    SET    field_title = '$field_name_prefix $order',
+                    col_name = 'col_$order'
+                    $field_size_clause
+                    WHERE  field_id = $field_id
+                ");
+                $order++;
+            }
+        }
+
+        ft_finalize_form($new_form_id);
+
+        // if the form has an access type of "private" add whatever client accounts the user selected
+        if ($info["access_type"] == "private") {
+            $selected_client_ids = $info["selected_client_ids"];
+            $queries = array();
+            foreach ($selected_client_ids as $client_id) {
+                $queries[] = "($client_id, $new_form_id)";
+            }
+
+            if (!empty($queries)) {
+                $insert_values = implode(",", $queries);
+                mysql_query("
+                    INSERT INTO {PREFIX}client_forms (account_id, form_id)
+                    VALUES $insert_values
+                ");
+            }
+        }
+
+        return array(true, $LANG["notify_internal_form_created"], $new_form_id);
+    }
 }

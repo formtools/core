@@ -1,6 +1,10 @@
 <?php
 
+require_once("../../../global/library.php");
+
 use FormTools\Core;
+use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 
 Core::init();
@@ -16,14 +20,9 @@ if (isset($request["add_form"])) {
 	}
 }
 
-// ------------------------------------------------------------------------------------------------
+$LANG = Core::$L;
 
-// compile the header information
-$page_values = array();
-$page_vars["page"]     = "add_form_internal";
-$page_vars["page_url"] = Pages::getPageUrl("add_form_internal");
-$page_vars["head_title"] = "{$LANG['phrase_add_form']}";
-$page_vars["head_js"] =<<< END
+$head_js =<<< END
 ft.click([
   { el: "at1", targets: [{ el: "custom_clients", action: "hide" }] },
   { el: "at2", targets: [{ el: "custom_clients", action: "hide" }] },
@@ -47,4 +46,12 @@ $(function() {
 });
 END;
 
-Themes::displayPage("admin/forms/add/internal.tpl", $page_vars);
+// compile the header information
+$page = array(
+    "page"     => "add_form_internal",
+    "page_url" => Pages::getPageUrl("add_form_internal"),
+    "head_title" => $LANG["phrase_add_form"],
+    "head_js" => $head_js
+);
+
+Themes::displayPage("admin/forms/add/internal.tpl", $page);

@@ -122,7 +122,7 @@ function ft_uninstall_module($module_id)
 		}
 
 		// delete any hooks registered by this module
-		ft_unregister_module_hooks($module_folder);
+		Hooks::unregisterModuleHooks($module_folder);
 	}
 
 	// now delete the entire module folder
