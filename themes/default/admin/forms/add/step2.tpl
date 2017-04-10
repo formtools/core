@@ -212,9 +212,9 @@
       {if $submission_type == "direct"}
         <p>
           {$LANG.text_form_contains_file_fields}
-          <input type="radio" name="uploading_files" id="uploading_files1" value="yes" {if $SESSION.uploading_files == "yes"}checked{/if} />
+          <input type="radio" name="uploading_files" id="uploading_files1" value="yes" {if $uploading_files == "yes"}checked{/if} />
             <label for="uploading_files1">{$LANG.word_yes}</label>
-          <input type="radio" name="uploading_files" id="uploading_files2" value="no" {if $SESSION.uploading_files == "no"}checked{/if} />
+          <input type="radio" name="uploading_files" id="uploading_files2" value="no" {if $uploading_files == "no"}checked{/if} />
             <label for="uploading_files2">{$LANG.word_no}</label>
         </p>
       {/if}

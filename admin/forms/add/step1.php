@@ -1,8 +1,12 @@
 <?php
 
+require_once("../../../global/library.php");
+
 use FormTools\Clients;
 use FormTools\Core;
+use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 
 Core::init();
@@ -12,7 +16,8 @@ Core::$user->checkAuth("admin");
 $request = array_merge($_POST, $_GET);
 
 $num_forms = Clients::getFormCount();
-if (!empty($g_max_ft_forms) && $num_forms > $g_max_ft_forms) { // note it's not >=
+$max_forms = Core::getMaxForms();
+if (!empty($max_forms) && $num_forms > $max_forms) { // note it's not >=
     General::redirect("../");
 }
 
@@ -27,14 +32,9 @@ $form_info = array();
 if (!empty($form_id)) {
     $form_info = Forms::getForm($form_id);
 }
+$LANG = Core::$L;
 
-// compile the header information
-$page_values = array();
-$page_vars["page"]     = "add_form1";
-$page_vars["page_url"] = Pages::getPageUrl("add_form1");
-$page_vars["head_title"] = "{$LANG['phrase_add_form']} - {$LANG["phrase_step_1"]}";
-$page_vars["form_info"] = $form_info;
-$page_vars["head_js"] =<<< END
+$head_js =<<< END
 var rules = [];
 var page_ns = {};
 page_ns.current_section = null;
@@ -50,4 +50,12 @@ page_ns.show_section = function(section) {
 }
 END;
 
-Themes::displayPage("admin/forms/add/step1.tpl", $page_vars);
+$page = array(
+    "page" => "add_form1",
+    "page_url" => Pages::getPageUrl("add_form1"),
+    "head_title" => "{$LANG['phrase_add_form']} - {$LANG["phrase_step_1"]}",
+    "form_info" => $form_info,
+    "head_js" => $head_js
+);
+
+Themes::displayPage("admin/forms/add/step1.tpl", $page);

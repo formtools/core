@@ -1,17 +1,23 @@
 <?php
 
+require_once("../../../global/library.php");
+
 use FormTools\Core;
+use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 
 Core::init();
 Core::$user->checkAuth("admin");
 
+$root_url = Core::getRootUrl();
+$LANG = Core::$L;
 
 $form_id = General::loadField("form_id", "add_form_form_id", "");
 
 if (isset($_POST["submission_type"])) {
-    @mysql_query("UPDATE {$g_table_prefix}forms SET submission_type = '{$_POST["submission_type"]}' WHERE form_id=$form_id");
+    Forms::setSubmissionType($form_id, $_POST["submission_type"]);
 }
 
 // if returning from a later stage and the user wants to resubmit the test submission, update the form
@@ -25,10 +31,11 @@ $form_info = Forms::getForm($form_id);
 // determine the input field values for cutting & pasting
 $hidden_fields = '<input type="hidden" name="form_tools_initialize_form" value="1" />' . "\n"
 	. '<input type="hidden" name="form_tools_form_id" value="' . $form_id . '" />';
-$form_tag = '<form action="' . $g_root_url . '/process.php" method="post"';
+$form_tag = '<form action="' . $root_url . '/process.php" method="post"';
 
-if ($_SESSION["ft"]["uploading_files"] == "yes")
-	$form_tag .= ' enctype="multipart/form-data"';
+if ($_SESSION["ft"]["uploading_files"] == "yes") {
+    $form_tag .= ' enctype="multipart/form-data"';
+}
 
 $form_tag .= '>';
 
@@ -43,13 +50,11 @@ $replacement_info = array(
 $code_form_para_2 = General::evalSmartyString($LANG["text_add_form_step_2_para_6"], $replacement_info);
 
 
-if (isset($_POST["refresh"]) && $form_info["is_initialized"] == "no")
-{
+if (isset($_POST["refresh"]) && $form_info["is_initialized"] == "no") {
 	$g_success = false;
 	$g_message = $LANG["notify_no_test_submission"];
 }
 
-// ------------------------------------------------------------------------------------------------
 
 // compile the header information
 $page_vars["page"]     = "add_form3";

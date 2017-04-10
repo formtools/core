@@ -447,13 +447,16 @@ class Forms {
                 }
             }
         } else  {
-            $account_query = mysql_query("
+            $db->query("
                 SELECT *
                 FROM   {PREFIX}client_forms cf, {PREFIX}accounts a
                 WHERE  cf.form_id = $form_id AND
-                cf.account_id = a.account_id
+                       cf.account_id = a.account_id
             ");
-            while ($row = mysql_fetch_assoc($account_query)) {
+            $db->bind("form_id", $form_id);
+            $db->execute();
+
+            foreach ($db->fetchAll() as $row) {
                 $accounts[] = $row;
             }
         }
@@ -776,4 +779,221 @@ class Forms {
 
         return array(true, $LANG["notify_internal_form_created"], $new_form_id);
     }
+
+
+    public static function setSubmissionType($form_id, $submission_type) {
+        if (empty($form_id) || empty($submission_type)) {
+            return;
+        }
+        $db = Core::$db;
+        $db->query("
+            UPDATE {PREFIX}forms 
+            SET submission_type = :submission_type 
+            WHERE form_id = :form_id
+        ");
+        $db->bindAll(array(
+            "form_id" => $form_id,
+            "submission_type" => $submission_type
+        ));
+        $db->execute();
+    }
+
+
+    /**
+     * Used on the Add External form process. Returns appropriate values to show in step 2 based on whether the user
+     * just arrived, just updated the values or is returning to finish configuring a new form from earlier.
+     */
+    public static function addFormGetExternalFormValues($source, $form_id = "", $post = array()) {
+        $page_values = array();
+        $page_values["client_info"] = array();
+
+        switch ($source) {
+            case "new_form":
+                $page_values["form_name"] = "";
+                $page_values["form_url"] = "";
+                $page_values["is_multi_page_form"] = "no";
+                $page_values["multi_page_form_urls"] = array();
+                $page_values["redirect_url"] = "";
+                $page_values["access_type"]  = "admin";
+                $page_values["hidden_fields"] = "<input type=\"hidden\" name=\"add_form\" value=\"1\" />";
+                break;
+
+            case "post":
+                $page_values["form_name"]    = $post["form_name"];
+                $page_values["form_url"]     = $post["form_url"];
+                $page_values["is_multi_page_form"] = isset($post["is_multi_page_form"]) ? "yes" : "no";
+                $page_values["redirect_url"] = $post["redirect_url"];
+                $page_values["access_type"]  = $post["access_type"];
+
+                if (!empty($form_id)) {
+                    $page_values["hidden_fields"] = "
+          <input type=\"hidden\" name=\"update_form\" value=\"1\" />
+          <input type=\"hidden\" name=\"form_id\" value=\"$form_id\" />";
+                } else {
+                    $page_values["hidden_fields"] = "<input type=\"hidden\" name=\"add_form\" value=\"1\" />";
+                }
+                break;
+
+            case "database":
+                if (empty($form_id)) {
+                    return array();
+                }
+
+                $form_info = Forms::getForm($form_id);
+                $page_values["form_name"]    = $form_info["form_name"];
+                $page_values["form_url"]     = $form_info["form_url"];
+                $page_values["is_multi_page_form"] = $form_info["is_multi_page_form"];
+                $page_values["multi_page_form_urls"]  = $form_info["multi_page_form_urls"];
+                $page_values["redirect_url"] = $form_info["redirect_url"];
+                $page_values["access_type"]  = $form_info["access_type"];
+                $page_values["client_info"]  = $form_info["client_info"];
+
+                $page_values["hidden_fields"] = "
+        <input type=\"hidden\" name=\"update_form\" value=\"1\" />
+        <input type=\"hidden\" name=\"form_id\" value=\"$form_id\" />";
+                break;
+        }
+
+        return $page_values;
+    }
+
+
+    /**
+     * This function sets up the main form values in preparation for a test submission by the actual form. It is
+     * called from step 2 of the form creation page for totally new forms.
+     *
+     * @param array $info this parameter should be a hash (e.g. $_POST or $_GET) containing the various fields from
+     *                the step 1 add form page.
+     * @return array Returns array with indexes:<br/>
+     *               [0]: true/false (success / failure)<br/>
+     *               [1]: message string<br/>
+     *               [2]: new form ID (success only)
+     */
+    public static function setupForm($info)
+    {
+        $db = Core::$db;
+        $LANG = Core::$L;
+
+        $success = true;
+        $message = "";
+
+        // check required $info fields. This changes depending on the form type (external / internal). Validation
+        // for the internal forms is handled separately [inelegant!]
+        $rules = array();
+        if ($info["form_type"] == "external") {
+            $rules[] = "required,form_name,{$LANG["validation_no_form_name"]}";
+            $rules[] = "required,access_type,{$LANG["validation_no_access_type"]}";
+        }
+        $errors = validate_fields($info, $rules);
+
+        // if there are errors, piece together an error message string and return it
+        if (!empty($errors)) {
+            $success = false;
+            array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
+            $message = join("<br />", $errors);
+            return array($success, $message, "");
+        }
+
+        // extract values
+        $form_type       = $info["form_type"];
+        $access_type     = $info["access_type"];
+        $submission_type = (isset($info["submission_type"])) ? "'{$info["submission_type"]}'" : "NULL";
+        $user_ids        = isset($info["selected_client_ids"]) ? $info["selected_client_ids"] : array();
+        $form_name       = trim($info["form_name"]);
+        $is_multi_page_form = isset($info["is_multi_page_form"]) ? $info["is_multi_page_form"] : "no";
+        $redirect_url       = isset($info["redirect_url"]) ? trim($info["redirect_url"]) : "";
+        $phrase_edit_submission = $LANG["phrase_edit_submission"];
+
+        if ($is_multi_page_form == "yes") {
+            $form_url = $info["multi_page_urls"][0];
+        } else {
+            // this won't be defined for Internal forms
+            $form_url = isset($info["form_url"]) ? $info["form_url"] : "";
+        }
+
+        $now = General::getCurrentDatetime();
+
+        $db->query("
+            INSERT INTO {PREFIX}forms (form_type, access_type, submission_type, date_created, is_active, is_complete,
+              is_multi_page_form, form_name, form_url, redirect_url, edit_submission_page_label)
+            VALUES (:form_type, :access_type, :submission_type, :now, :is_active, :is_complete, :is_multi_page_form,
+              :form_name, :form_url, :redirect_url, :phrase_edit_submission)
+        ");
+        $db->bindAll(array(
+            "form_type" => $form_type,
+            "access_type" => $access_type,
+            "submission_type" => $submission_type,
+            "now" => $now,
+            "is_active" => "no",
+            "is_complete" => "no",
+            "is_multi_page_form" => $is_multi_page_form,
+            "form_name" => $form_name,
+            "form_url" => $form_url,
+            "redirect_url" => $redirect_url,
+            "phrase_edit_submission" => $phrase_edit_submission
+        ));
+        $db->execute();
+
+        $new_form_id = $db->getInsertId();
+
+        // store which clients are assigned to this form
+        self::setFormClients($new_form_id, $user_ids);
+
+        // if this is a multi-page form, add the list of pages in the form
+        self::setMultiPageUrls($new_form_id, $is_multi_page_form === "yes" ? $info["multi_page_urls"] : array());
+
+        return array($success, $message, $new_form_id);
+    }
+
+
+    public static function setFormClients($form_id, $client_ids)
+    {
+        $db = Core::$db;
+
+        // remove any old mappings
+        $db->query("DELETE FROM {PREFIX}client_forms WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        // add the new clients (assuming there are any)
+        foreach ($client_ids as $client_id) {
+            $db->query("
+                INSERT INTO {PREFIX}client_forms (account_id, form_id)
+                VALUES (:client_id, :form_id)
+            ");
+            $db->bindAll(array(
+                "account_id" => $client_id,
+                "form_id" => $form_id
+            ));
+            $db->execute();
+        }
+    }
+
+    public static function setMultiPageUrls($form_id, $urls)
+    {
+        $db = Core::$db;
+        $db->query("DELETE FROM {PREFIX}multi_page_form_urls WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $db->beginTransaction();
+        $page_num = 1;
+        foreach ($urls as $url) {
+            if (empty($url)) {
+                continue;
+            }
+            $db->query("
+                INSERT INTO {PREFIX}multi_page_form_urls (form_id, form_url, page_num)
+                VALUES (:form_id, :url, :page_num)
+            ");
+            $db->bindAll(array(
+                "form_id" => $form_id,
+                "url" => $url,
+                "page_num" => $page_num
+            ));
+            $page_num++;
+        }
+        $db->processTransaction();
+    }
+
 }
