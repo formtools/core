@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\OptionLists;
 use FormTools\Settings;
 
 
@@ -137,7 +138,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
       }
       else
       {
-        $value = ft_get_option_list($value);
+        $value = OptionLists::getOptionList($value);
       }
     }
 

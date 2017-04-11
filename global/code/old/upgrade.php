@@ -14,6 +14,7 @@
 use FormTools\Accounts;
 use FormTools\Clients;
 use FormTools\FieldTypes;
+use FormTools\Forms;
 use FormTools\Settings;
 
 
@@ -127,9 +128,8 @@ function ft_upgrade_form_tools()
 		// for upgrades, for maximum language compatibility set all the form Edit Submission Labels to
 		// $LANG.phrase_edit_submission. They can always change it to English or whatever language they
 		// want. New installations will have that value set to the administrator's language
-		$forms = ft_get_forms();
-		foreach ($forms as $form_info)
-		{
+		$forms = Forms::getForms();
+		foreach ($forms as $form_info) {
 			$form_id = $form_info["form_id"];
 			@mysql_query("
         UPDATE {$g_table_prefix}forms
@@ -153,9 +153,8 @@ function ft_upgrade_form_tools()
 		if (!$has_edit_submission_page_label_field)
 		{
 			@mysql_query("ALTER TABLE {$g_table_prefix}forms ADD edit_submission_page_label TEXT NULL");
-			$forms = ft_get_forms();
-			foreach ($forms as $form_info)
-			{
+			$forms = Forms::getForms();
+			foreach ($forms as $form_info) {
 				$form_id = $form_info["form_id"];
 				@mysql_query("
           UPDATE {$g_table_prefix}forms
@@ -380,9 +379,8 @@ function ft_upgrade_form_tools()
 		}
 
 		// convert all the custom tables to MyISAM as well
-		$forms = ft_get_forms();
-		foreach ($forms as $form_info)
-		{
+		$forms = Forms::getForms();
+		foreach ($forms as $form_info) {
 			$form_id = $form_info["form_id"];
 			@mysql_query("ALTER TABLE {$g_table_prefix}form_{$form_id} TYPE=MyISAM");
 			@mysql_query("ALTER TABLE {$g_table_prefix}form_{$form_id} ENGINE=MyISAM");
@@ -829,7 +827,7 @@ function ft_upgrade_form_tools()
 		}
 
 		// field types are now field type IDs. This has significant impact.
-		$forms = ft_get_forms();
+		$forms = Forms::getForms();
 		$form_changes = array();
 		$date_system_field_ids = array();
 		$fields_with_option_lists = array();

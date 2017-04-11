@@ -1,26 +1,31 @@
 <?php
 
+require_once("../../../global/library.php");
+
 use FormTools\Core;
 use FormTools\General;
+use FormTools\OptionLists;
 
 Core::init();
 Core::$user->checkAuth("admin");
 
 
 $request = array_merge($_POST, $_GET);
+$LANG = Core::$L;
+
 $list_id = General::loadField("list_id", "option_list_id", "");
 $page    = General::loadField("page", "field_option_groups_tab", "main");
 $order   = General::loadField("order", "option_list_order");
 
 // used to display the total count of fields using this option list on the Form Fields tab.
-$num_fields = ft_get_num_fields_using_option_list($list_id);
+$num_fields = OptionLists::getNumFieldsUsingOptionList($list_id);
 
 if (empty($list_id)) {
     General::redirect("index.php");
     exit;
 }
 
-$links = ft_get_option_list_prev_next_links($list_id, $order);
+$links = OptionLists::getOptionListPrevNextLinks($list_id, $order);
 $prev_tabset_link = (!empty($links["prev_option_list_id"])) ? "edit.php?page=$page&list_id={$links["prev_option_list_id"]}" : "";
 $next_tabset_link = (!empty($links["next_option_list_id"])) ? "edit.php?page=$page&list_id={$links["next_option_list_id"]}" : "";
 
@@ -37,7 +42,6 @@ $tabs = array(
 	)
 );
 
-// start compiling the info here
 $page_vars = array();
 $page_vars["page"] = $page;
 $page_vars["unique_page_id"] = "edit_option_list_main_tab";

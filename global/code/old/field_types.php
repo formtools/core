@@ -1067,7 +1067,7 @@ function ft_generate_viewable_field($params)
 						$value = $g_cache["option_lists"][$option_list_id];
 					else
 					{
-						$value = ft_get_option_list($option_list_id);
+						$value = OptionLists::getOptionList($option_list_id);
 						$g_cache["option_lists"][$option_list_id] = $value;
 					}
 				}

@@ -21,7 +21,7 @@ $num_option_lists_per_page = Sessions::get("settings.num_option_lists_per_page")
 $order = General::loadField("order", "option_list_order");
 
 if (isset($_GET["delete"])) {
-    list($g_success, $g_message) = ft_delete_option_list($_GET["delete"]);
+    list($g_success, $g_message) = OptionLists::deleteOptionList($_GET["delete"]);
 }
 if (!is_numeric($option_list_page)) {
     $option_list_page = 1;
@@ -35,7 +35,7 @@ if (isset($request["add_option_list"])) {
 	if (isset($request["field_id"])) {
         $field_ids[] = $request["field_id"];
     }
-	$list_id = ft_duplicate_option_list($duplicate_list_id, $field_ids);
+	$list_id = OptionLists::duplicateOptionList($duplicate_list_id, $field_ids);
 
     General::redirect("edit.php?page=main&list_id=$list_id");
 }
@@ -63,13 +63,13 @@ foreach ($option_lists as $option_list) {
 	$list_id = $option_list["list_id"];
 
 	// add the number of fields that use this option group
-	$option_list["num_fields"] = ft_get_num_fields_using_option_list($list_id);
+	$option_list["num_fields"] = OptionLists::getNumFieldsUsingOptionList($list_id);
 	if ($option_list["num_fields"] > 0) {
-		$option_list["fields"] = ft_get_fields_using_option_list($list_id, array("group_by_form" => true));
+		$option_list["fields"] = OptionLists::getFieldsUsingOptionList($list_id, array("group_by_form" => true));
 	}
 
 	// add the total number of options in this group
-	$option_list["num_option_list_options"] = ft_get_num_options_in_option_list($list_id);
+	$option_list["num_option_list_options"] = OptionLists::getNumOptionsInOptionList($list_id);
 	$updated_option_lists[] = $option_list;
 }
 

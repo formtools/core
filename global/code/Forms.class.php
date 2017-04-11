@@ -13,6 +13,16 @@ class Forms {
 
 
     /**
+     * Returns all forms.
+     * @return array
+     */
+    public static function getForms()
+    {
+        return self::searchForms($account_id = "", true);
+    }
+
+
+    /**
      * This function processes the form submissions, after the form has been set up in the database.
      */
     public static function processForm($form_data)
@@ -450,7 +460,7 @@ class Forms {
             $db->query("
                 SELECT *
                 FROM   {PREFIX}client_forms cf, {PREFIX}accounts a
-                WHERE  cf.form_id = $form_id AND
+                WHERE  cf.form_id = :form_id AND
                        cf.account_id = a.account_id
             ");
             $db->bind("form_id", $form_id);

@@ -2,6 +2,7 @@
 
 use FormTools\Accounts;
 use FormTools\Administrator;
+use FormTools\Forms;
 use FormTools\Themes;
 
 
@@ -11,7 +12,7 @@ if (isset($_POST["update_client"])) {
 }
 
 $client_info = Accounts::getAccountInfo($client_id);
-$forms = ft_get_forms(); // all forms in the database, regardless of permission type
+$forms = Forms::getForms(); // all forms in the database, regardless of permission type
 
 $forms_js_rows = array();
 $forms_js_rows[] = "var page_ns = {}";

@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\OptionLists;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -17,7 +20,7 @@ function smarty_function_display_option_list($params, &$smarty)
   $format = $params["format"];
   $name   = (isset($params["name"])) ? $params["name"] : "";
   $default_value = (isset($params["default_value"])) ? $params["default_value"] : "";
-  $option_list_info = ft_get_option_list($option_list_id);
+  $option_list_info = OptionLists::getOptionList($option_list_id);
 
   switch ($format)
   {

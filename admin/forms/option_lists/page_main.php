@@ -1,17 +1,23 @@
 <?php
 
+use FormTools\Core;
+use FormTools\General;
 use FormTools\OptionLists;
+use FormTools\Pages;
 use FormTools\Sessions;
 use FormTools\Themes;
 
 
+$root_url = Core::getRootUrl();
+$LANG = Core::$L;
+
 $sortable_id = "option_list";
 if (isset($request["update_page"])) {
 	$request["sortable_id"] = $sortable_id;
-	list($g_success, $g_message) = ft_update_option_list($list_id, $request);
+	list($g_success, $g_message) = OptionLists::updateOptionLIst($list_id, $request);
 }
 
-$list_info = ft_get_option_list($list_id);
+$list_info = OptionLists::getOptionList($list_id);
 $total_options = 0;
 foreach ($list_info["options"] as $option_info) {
 	$total_options += count($option_info["options"]);
@@ -57,8 +63,8 @@ $page_vars["js_messages"] = array("word_delete", "validation_no_smart_fill_value
 	"notify_field_options_smart_filled"
 );
 $page_vars["head_string"] =<<< END
-  <script src="$g_root_url/global/scripts/manage_option_lists.js"></script>
-  <script src="$g_root_url/global/scripts/sortable.js?v=2"></script>
+  <script src="$root_url/global/scripts/manage_option_lists.js"></script>
+  <script src="$root_url/global/scripts/sortable.js?v=2"></script>
 END;
 
 $page_vars["head_js"] =<<< END

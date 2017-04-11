@@ -68,4 +68,26 @@ class ListGroups {
         Core::$db->execute();
     }
 
+
+    public static function deleteByGroupType($group_type)
+    {
+        Core::$db->query("DELETE FROM {PREFIX}list_groups WHERE group_type = :group_type");
+        Core::$db->bind(":group_type", $group_type);
+        Core::$db->execute();
+    }
+
+
+    public static function getByGroupType($group_type)
+    {
+        Core::$db->query("
+            SELECT *
+            FROM   {PREFIX}list_groups
+            WHERE  group_type = :group_type
+            ORDER BY list_order
+        ");
+        Core::$db->bind("group_type", $group_type);
+        Core::$db->execute();
+
+        return Core::$db->fetchAll();
+    }
 }

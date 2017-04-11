@@ -535,18 +535,6 @@ function ft_get_form_view_list()
 
 
 /**
- * Basically a wrapper function for ft_search_forms, which returns ALL forms, regardless of
- * what client it belongs to.
- *
- * @return array
- */
-function ft_get_forms()
-{
-	return ft_search_forms($account_id = "", true);
-}
-
-
-/**
  * Returns the name of a form. Generally used in presentation situations.
  *
  * @param integer $form_id

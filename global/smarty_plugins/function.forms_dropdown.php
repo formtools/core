@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Forms;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -52,7 +55,7 @@ function smarty_function_forms_dropdown($params, &$smarty)
   // rather than in a dropdown. Only compatible with the non-multiple dropdown list
   $display_single_form_as_text = (isset($params["display_single_form_as_text"])) ? $params["display_single_form_as_text"] : false;
 
-  $forms = ft_get_forms();
+  $forms = Forms::getForms();
   $rows = array();
 
   foreach ($forms as $form_info)
