@@ -576,7 +576,7 @@ class OptionLists {
             SELECT f.*, ff.*
             FROM   {PREFIX}form_fields ff, {PREFIX}forms f
             WHERE  field_id IN ($field_id_str) AND
-            f.form_id = ff.form_id
+                   f.form_id = ff.form_id
             ORDER BY f.form_name, ff.field_title
         ");
 
@@ -584,22 +584,18 @@ class OptionLists {
         while ($row = mysql_fetch_assoc($query))
             $results[] = $row;
 
-        if ($params["group_by_form"])
-        {
+        if ($params["group_by_form"]) {
             $grouped_results = array();
-            foreach ($results as $row)
-            {
-                if (!array_key_exists($row["form_id"], $grouped_results))
-                {
+            foreach ($results as $row) {
+                if (!array_key_exists($row["form_id"], $grouped_results)) {
                     $grouped_results[$row["form_id"]] = array(
-                    "form_name" => $row["form_name"],
-                    "form_id"   => $row["form_id"],
-                    "fields"    => array()
+                        "form_name" => $row["form_name"],
+                        "form_id"   => $row["form_id"],
+                        "fields"    => array()
                     );
                 }
                 $grouped_results[$row["form_id"]]["fields"][] = $row;
             }
-
             $results = $grouped_results;
         }
 
@@ -607,12 +603,125 @@ class OptionLists {
     }
 
 
+    /**
+     * This function is called whenever the user adds an option list through the Add External form process. It checks
+     * all existing option lists to see if an identical set already exists. If it does, it returns the existing
+     * option list ID and if not, creates a new one and returns that ID.
+     *
+     * @param integer $form_id
+     * @param array $option_list_info
+     * @return integer $list_id the new or existing option list ID
+     */
+    public static function createUniqueOptionList($form_id, $option_list_info)
+    {
+        $db = Core::$db;
+
+        $existing_option_lists = OptionLists::getList();
+
+        $already_exists = false;
+        $list_id = "";
+        foreach ($existing_option_lists["results"] as $existing_option_list) {
+            $curr_list_id = $existing_option_list["list_id"];
+
+            // when comparing field groups, just compare the actual field options. The option list name & original
+            // form aren't considered. This may lead to a little head-shaking in the UI when they see an inappropriate
+            // option list name, but it's easily changed
+            $grouped_option_list_info = self::getOptionListOptions($curr_list_id);
+
+            // $curr_options contains an array of hashes. Each hash contains information about the group & info about
+            // the options in that group. Since we're just comparing a brand new list, we know that it only has one group:
+            // hence, rule out those option lists with more than one group
+            if (count($grouped_option_list_info) > 1) {
+                continue;
+            }
+
+            // fringe case. Technically, a user may have created an Option List then deleted all options & groups.
+            if (count($grouped_option_list_info) == 0) {
+                continue;
+            }
+
+            $curr_options = $grouped_option_list_info[0]["options"];
+            if (count($curr_options) != count($option_list_info["options"])) {
+                continue;
+            }
+
+            $has_same_option_fields = true;
+            for ($i=0; $i<count($curr_options); $i++) {
+                $val = $curr_options[$i]["option_value"];
+                $txt = $curr_options[$i]["option_name"];
+
+                $val2 = $option_list_info["options"][$i]["value"];
+                $txt2 = $option_list_info["options"][$i]["text"];
+
+                if ($val != $val2 || $txt != $txt2) {
+                    $has_same_option_fields = false;
+                    break;
+                }
+            }
+
+            if (!$has_same_option_fields) {
+                continue;
+            }
+
+            $already_exists = true;
+            $list_id = $curr_list_id;
+            break;
+        }
+
+        // if this group didn't already exist, add it!
+        if (!$already_exists) {
+            $option_list_name = $option_list_info["option_list_name"];
+
+            $db->query("
+                INSERT INTO {PREFIX}option_lists (option_list_name, is_grouped, original_form_id)
+                VALUES ('$option_list_name', 'no', $form_id)
+            ");
+            $db->bindAll(array(
+                "option_list_name" => $option_list_name,
+                "original_form_id" => $form_id
+            ));
+            $db->execute();
+            $list_id = $db->getInsertId();
+
+            // now add the list group entry
+            $db->query("
+                INSERT INTO {PREFIX}list_groups (group_type, list_order)
+                VALUES (:group_type, 1)
+            ");
+            $db->bind("group_type", "option_list_{$list_id}");
+            $db->execute();
+            $list_group_id = $db->getInsertId();
+
+            // add the options
+            $order = 1;
+            foreach ($option_list_info["options"] as $option) {
+                $value = $option["value"];
+                $text  = $option["text"];
+
+                $db->query("
+                    INSERT INTO {PREFIX}field_options (list_id, list_group_id, option_value, option_name, option_order)
+                    VALUES (:list_id, :list_group_id, :option_value, :option_name, :option_order)
+                ");
+                $db->bindAll(array(
+                    "list_id" => $list_id,
+                    "list_group_id" => $list_group_id,
+                    "option_value" => $value,
+                    "option_name" => $text,
+                    "option_order" => $order
+                ));
+                $db->execute();
+                $order++;
+            }
+        }
+
+        return $list_id;
+    }
+
 
     // --------------------------------------------------------------------------------------------
 
     /**
      * Used in a couple of places, so I moved it here.
-     *
      * @param string $order
      */
     private static function getOptionListOrderClause($order)

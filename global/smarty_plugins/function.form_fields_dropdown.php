@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Forms;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -48,7 +51,7 @@ function smarty_function_form_fields_dropdown($params, &$smarty)
   }
 
 
-  $column_info = ft_get_form_column_names($params["form_id"]);
+  $column_info = Forms::getFormColumnNames($params["form_id"]);
   $rows = array();
 
 

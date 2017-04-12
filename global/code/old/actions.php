@@ -408,7 +408,7 @@ switch ($action)
 
 	// used on the Edit Form -> Fields tab
 	case "get_form_list":
-		$form_list = ft_get_form_list();
+		$form_list = Forms::getFormList();
 		$forms = array();
 		foreach ($form_list as $form_info) {
 			$forms[$form_info["form_id"]] = $form_info["form_name"];

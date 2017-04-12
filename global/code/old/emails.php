@@ -354,7 +354,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 	$fields_for_email_template = array();
 	if (!empty($email_template["limit_email_content_to_fields_in_view"]))
 	{
-		$view_fields = ft_get_view_fields($email_template["limit_email_content_to_fields_in_view"]);
+		$view_fields = Views::getViewFields($email_template["limit_email_content_to_fields_in_view"]);
 
 		// here, $view_fields just contains the info from the view_fields table. We need the info from the form_fields
 		// table instead - since it contains presentation information likely to be needed in the email templates

@@ -283,8 +283,7 @@ function ft_initialize_form($form_data)
 	$form_id = $form_data["form_tools_form_id"];
 
 	// check the form ID is valid
-	if (!ft_check_form_exists($form_id, true))
-	{
+	if (!self::checkFormExists($form_id, true)) {
 		$page_vars = array("message_type" => "error", "error_code" => 100);
         Themes::displayPage("error.tpl", $page_vars);
 		exit;
@@ -460,33 +459,6 @@ function ft_initialize_form($form_data)
 
 
 /**
- * A simple function to return a list of (completed, finalized) forms, ordered by form name.
- *
- * @return array
- */
-function ft_get_form_list()
-{
-	global $g_table_prefix;
-
-	$query = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}forms
-    WHERE  is_complete = 'yes' AND
-           is_initialized = 'yes'
-    ORDER BY form_name ASC
-  ");
-
-	$results = array();
-	while ($row = mysql_fetch_assoc($query))
-	{
-		$results[] = $row;
-	}
-
-	return $results;
-}
-
-
-/**
  * Returns a list of (completed, finalized) forms, ordered by form name, and all views, ordered
  * by view_order. This is handy for any time you need to just output the list of forms & their Views.
  *
@@ -531,75 +503,6 @@ function ft_get_form_view_list()
 	}
 
 	return $results;
-}
-
-
-/**
- * Returns the name of a form. Generally used in presentation situations.
- *
- * @param integer $form_id
- */
-function ft_get_form_name($form_id)
-{
-	global $g_table_prefix;
-
-	$query = mysql_query("SELECT form_name FROM {$g_table_prefix}forms WHERE form_id = $form_id");
-	$result = mysql_fetch_assoc($query);
-
-	return $result["form_name"];
-}
-
-
-/**
- * Returns all the column names for a particular form. The optional $view_id field lets you return
- * only those columns that are associated with a particular View. The second optional setting
- * lets you only return custom form fields (everything excep submission ID, submission date,
- * last modified date, IP address and is_finalized)
- *
- * N.B. Updated in 2.0.0 to query the form_fields table instead of the actual form table and extract
- * the form column names from that. This should be quicker & allows us to return the columns in the
- * appropriate list_order.
- *
- * @param integer $form_id the unique form ID
- * @param integer $view_id (optional) if supplied, returns only those columns that appear in a
- *     particular View
- * @param boolean $omit_system_fields
- * @return array A hash of form: [DB column name] => [column display name]. If the database
- *     column doesn't have a display name (like with submission_id) the value is set to the same
- *     as the key.
- */
-function ft_get_form_column_names($form_id, $view_id = "", $omit_system_fields = false)
-{
-	global $g_table_prefix;
-
-	$result = mysql_query("
-    SELECT col_name, field_title, is_system_field
-    FROM {$g_table_prefix}form_fields
-    WHERE form_id = $form_id
-    ORDER BY list_order
-      ");
-
-	$view_col_names = array();
-	if (!empty($view_id))
-	{
-		$view_fields = ft_get_view_fields($view_id);
-		foreach ($view_fields as $field_info)
-			$view_col_names[] = $field_info["col_name"];
-	}
-
-	$col_names = array();
-	while ($col_info = mysql_fetch_assoc($result))
-	{
-		if ($col_info["is_system_field"] == "yes" && $omit_system_fields)
-			continue;
-
-		if (!empty($view_id) && !in_array($col_info["col_name"], $view_col_names))
-			continue;
-
-		$col_names[$col_info["col_name"]] = $col_info["field_title"];
-	}
-
-	return $col_names;
 }
 
 
@@ -777,7 +680,7 @@ function ft_set_form_field_types($form_id, $info)
 
 		while (list($field_id, $option_list_info) = each($option_lists))
 		{
-			$list_id = ft_create_unique_option_list($form_id, $option_list_info);
+			$list_id = OptionLists::createUniqueOptionList($form_id, $option_list_info);
 			$raw_field_type_map_multi_select_id = $field_type_id_to_option_list_map[$option_list_info["field_type_id"]];
 			if (is_numeric($list_id))
 			{
@@ -788,23 +691,6 @@ function ft_set_form_field_types($form_id, $info)
 			}
 		}
 	}
-}
-
-
-/**
- * "Uninitializes" a form, letting the user to resend the test submission.
- *
- * @param integer $form_id The unique form ID
- */
-function ft_uninitialize_form($form_id)
-{
-	global $g_table_prefix;
-
-	mysql_query("
-    UPDATE  {$g_table_prefix}forms
-    SET     is_initialized = 'no'
-    WHERE   form_id = $form_id
-      ");
 }
 
 
@@ -1114,7 +1000,7 @@ function ft_update_form_fields_tab($form_id, $infohash)
 		$new_field_size = $curr_field_info["field_size"];
 		$new_field_size_sql = $g_field_sizes[$new_field_size]["sql"];
 
-		list($is_success, $err_message) = _ft_alter_table_column($table_name, $old_col_name, $new_col_name, $new_field_size_sql);
+		list($is_success, $err_message) = General::alterTableColumn($table_name, $old_col_name, $new_col_name, $new_field_size_sql);
 		if ($is_success)
 		{
 			$db_col_changes[$field_id] = array(
@@ -1242,57 +1128,6 @@ function ft_update_form_fields_tab($form_id, $infohash)
 }
 
 
-/**
- * Simple helper function to examine a form and see if it contains a file upload field.
- *
- * @param integer $form_id
- * @return boolean
- */
-function ft_check_form_has_file_upload_field($form_id)
-{
-	global $g_table_prefix;
-
-	$query = mysql_query("
-    SELECT count(*) as c
-    FROM   {$g_table_prefix}form_fields ff, {$g_table_prefix}field_types fft
-    WHERE  ff.form_id = $form_id AND
-           ff.field_type_id = fft.field_type_id AND
-           fft.is_file_field = 'yes'
-      ");
-
-	$result = mysql_fetch_assoc($query);
-	$count = $result["c"];
-
-	return $count > 0;
-}
-
-
-/**
- * This checks to see the a form exists in the database. It's just used to confirm a form ID is valid.
- *
- * @param integer $form_id
- * @param boolean $allow_incompleted_forms an optional value to still return TRUE for incomplete forms
- * @return boolean
- */
-function ft_check_form_exists($form_id, $allow_incompleted_forms = false)
-{
-	global $g_table_prefix;
-
-	$query = mysql_query("SELECT * FROM {$g_table_prefix}forms WHERE form_id = $form_id");
-
-	$is_valid_form_id = false;
-	if ($query && mysql_num_rows($query) > 0)
-	{
-		$info = mysql_fetch_assoc($query);
-
-		if ((!empty($info) && $allow_incompleted_forms) ||
-			($info["is_initialized"] == "yes" && $info["is_complete"] == "yes"))
-			$is_valid_form_id = true;
-	}
-
-	return $is_valid_form_id;
-}
-
 
 // ---------------------------------------- helpers -----------------------------------------------
 
@@ -1327,110 +1162,4 @@ function _ft_add_table_column($table, $col_name, $col_type)
 }
 
 
-/**
- * Helper function to change the name and type of an existing MySQL table.
- *
- * @param string $table The name of the table to alter.
- * @param string $old_col_name The old column name.
- * @param string $new_col_name The new column name.
- * @param string $col_type The new column data type.
- * @return array Array with indexes:<br/>
- *               [0]: true/false (success / failure)<br/>
- *               [1]: message string<br/>
- */
-function _ft_alter_table_column($table, $old_col_name, $new_col_name, $col_type)
-{
-	global $g_table_prefix;
 
-	$success = true;
-	$message = "";
-
-	$result = mysql_query("
-    ALTER TABLE $table
-    CHANGE      $old_col_name $new_col_name $col_type
-          ");
-
-	if (!$result)
-	{
-		$success = false;
-		$message = mysql_error();
-	}
-
-	extract(Hooks::processHookCalls("end", compact("table", "old_col_name", "new_col_name", "col_type"), array()), EXTR_OVERWRITE);
-
-	return array($success, $message);
-}
-
-
-/**
- * Called by the administrator only. Updates the list of clients on a public form's omit list.
- *
- * @param array $info
- * @param integer $form_id
- * @return array [0] T/F, [1] message
- */
-function ft_update_public_form_omit_list($info, $form_id)
-{
-	global $g_table_prefix, $LANG;
-
-	mysql_query("DELETE FROM {$g_table_prefix}public_form_omit_list WHERE form_id = $form_id");
-
-	$client_ids = (isset($info["selected_client_ids"])) ? $info["selected_client_ids"] : array();
-	foreach ($client_ids as $account_id)
-		mysql_query("INSERT INTO {$g_table_prefix}public_form_omit_list (form_id, account_id) VALUES ($form_id, $account_id)");
-
-	return array(true, $LANG["notify_public_form_omit_list_updated"]);
-}
-
-
-/**
- * This returns the IDs of the previous and next forms, as determined by the administrators current
- * search and sort.
- *
- * Not happy with this function! Getting this info is surprisingly tricky, once you throw in the sort clause.
- * Still, the number of client accounts are liable to be quite small, so it's not such a sin.
- *
- * @param integer $form_id
- * @param array $search_criteria
- * @return hash prev_form_id => the previous account ID (or empty string)
- *              next_form_id => the next account ID (or empty string)
- */
-function ft_get_form_prev_next_links($form_id, $search_criteria = array())
-{
-	global $g_table_prefix;
-
-	$results = self::getSearchFormSqlClauses($search_criteria);
-
-	$query = mysql_query("
-    SELECT form_id
-    FROM   {$g_table_prefix}forms
-    {$results["where_clause"]}
-    {$results["order_clause"]}
-  ");
-
-	$sorted_form_ids = array();
-	while ($row = mysql_fetch_assoc($query))
-	{
-		$sorted_form_ids[] = $row["form_id"];
-	}
-	$current_index = array_search($form_id, $sorted_form_ids);
-
-	$return_info = array("prev_form_id" => "", "next_form_id" => "");
-	if ($current_index === 0)
-	{
-		if (count($sorted_form_ids) > 1)
-			$return_info["next_form_id"] = $sorted_form_ids[$current_index+1];
-	}
-	else if ($current_index === count($sorted_form_ids)-1)
-	{
-		if (count($sorted_form_ids) > 1)
-			$return_info["prev_form_id"] = $sorted_form_ids[$current_index-1];
-	}
-	else
-	{
-		$return_info["prev_form_id"] = $sorted_form_ids[$current_index-1];
-		$return_info["next_form_id"] = $sorted_form_ids[$current_index+1];
-	}
-
-	return $return_info;
-}

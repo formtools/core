@@ -145,4 +145,24 @@ class Settings {
         }
     }
 
+
+
+    /**
+     * A helper function to return Form Tool's best guess at the timezone offset. First it checks
+     * sessions to see if a person's logged in; if so it uses that. If NOT, it pulls the default
+     * timezone offset value from settings.
+     *
+     * @return string $timezone_offset
+     */
+//    public static function ft_get_current_timezone_offset()
+//    {
+//        $timezone_offset = "";
+//        if (isset($_SESSION["ft"]["account"]["timezone_offset"]))
+//            $timezone_offset = $_SESSION["ft"]["account"]["timezone_offset"];
+//        else
+//            $timezone_offset = Settings::get("timezone_offset");
+//
+//        return $timezone_offset;
+//    }
+
 }

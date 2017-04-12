@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Views;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -62,7 +65,7 @@ function smarty_function_form_view_fields_dropdown($params, &$smarty)
       $attribute_str .= " $key=\"$value\"";
   }
 
-  $view_fields = ft_get_view_fields($view_id);
+  $view_fields = Views::getViewFields($view_id);
   $rows = array();
 
   // find out which field type IDs are date fields

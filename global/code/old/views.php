@@ -123,7 +123,7 @@ function ft_get_view($view_id, $custom_params = array())
 	$view_info = mysql_fetch_assoc($result);
 	$view_info["client_info"] = ft_get_view_clients($view_id);
 	$view_info["columns"]     = ft_get_view_columns($view_id);
-	$view_info["fields"]      = ft_get_view_fields($view_id, $params);
+	$view_info["fields"]      = Views::getViewFields($view_id, $params);
 	$view_info["filters"]     = ft_get_view_filters($view_id);
 	$view_info["tabs"]        = ft_get_view_tabs($view_id);
 	$view_info["client_omit_list"] = (isset($view_info["access_type"]) && $view_info["access_type"] == "public") ?
@@ -452,41 +452,6 @@ function ft_create_new_view($form_id, $group_id, $view_name = "", $create_from_v
 
 
 /**
- * Returns the View field values from the view_fields table, as well as a few values
- * from the corresponding form_fields table.
- *
- * @param integer $view_id the unique View ID
- * @param integer $field_id the unique field ID
- * @return array a hash containing the various view field values
- */
-function ft_get_view_field($view_id, $field_id, $custom_params = array())
-{
-	global $g_table_prefix;
-
-	$params = array(
-		"include_field_settings" => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false
-	);
-
-	$query = mysql_query("
-    SELECT vf.*, ft.field_title, ft.col_name, ft.field_type_id, ft.field_name
-    FROM   {$g_table_prefix}view_fields vf, {$g_table_prefix}form_fields ft
-    WHERE  view_id = $view_id AND
-           vf.field_id = ft.field_id AND
-           vf.field_id = $field_id
-      ");
-
-	$result = mysql_fetch_assoc($query);
-
-	if ($params["include_field_settings"])
-	{
-		$result["field_settings"] = ft_get_form_field_settings($field_id);
-	}
-
-	return $result;
-}
-
-
-/**
  * Returns all information about a View columns.
  *
  * @param integer $view_id
@@ -507,39 +472,6 @@ function ft_get_view_columns($view_id)
 		$info[] = $row;
 
 	return $info;
-}
-
-
-/**
- * Returns all fields in a View.
- *
- * @param integer $view_id the unique View ID
- * @return array $info an array of hashes containing the various view field values.
- */
-function ft_get_view_fields($view_id, $custom_params = array())
-{
-	global $g_table_prefix;
-
-	$params = array(
-		"include_field_settings" => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false
-	);
-
-	$result = mysql_query("
-    SELECT vf.field_id
-    FROM   {$g_table_prefix}list_groups lg, {$g_table_prefix}view_fields vf
-    WHERE  lg.group_type = 'view_fields_$view_id' AND
-           lg.group_id = vf.group_id
-    ORDER BY lg.list_order ASC, vf.list_order ASC
-  ");
-
-	$fields_info = array();
-	while ($field_info = mysql_fetch_assoc($result))
-	{
-		$field_id = $field_info["field_id"];
-		$fields_info[] = ft_get_view_field($view_id, $field_id, $params);
-	}
-
-	return $fields_info;
 }
 
 
@@ -829,7 +761,7 @@ function ft_auto_update_view_field_order($view_id)
 	global $g_table_prefix;
 
 	// we rely on this function returning the field by list_order
-	$view_fields = ft_get_view_fields($view_id);
+	$view_fields = Views::getViewFields($view_id);
 
 	$count = 1;
 	foreach ($view_fields as $field_info)
@@ -1194,7 +1126,7 @@ function ft_get_grouped_views($form_id, $custom_params = array())
 			}
 
 			$view_info["columns"] = ft_get_view_columns($view_id);
-			$view_info["fields"]  = ft_get_view_fields($view_id);
+			$view_info["fields"]  = Views::getViewFields($view_id);
 			$view_info["tabs"]    = ft_get_view_tabs($view_id, true);
 			$view_info["filters"] = ft_get_view_filters($view_id, "all");
 			$views[] = $view_info;

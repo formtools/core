@@ -35,7 +35,7 @@ class Forms {
         $form_info = Forms::getForm($form_id);
 
         // do we have a form for this id?
-        if (!ft_check_form_exists($form_id)) {
+        if (!self::checkFormExists($form_id)) {
             $page_vars = array("message_type" => "error", "message" => $LANG["processing_invalid_form_id"]);
             Themes::displayPage("error.tpl", $page_vars);
             exit;
@@ -62,7 +62,7 @@ class Forms {
         }
 
         // do we have a form for this id?
-        if (!ft_check_form_exists($form_id)) {
+        if (!self::checkFormExists($form_id)) {
             $page_vars = array("message_type" => "error", "message" => $LANG["processing_invalid_form_id"]);
             Themes::displayPage("error.tpl", $page_vars);
             exit;
@@ -505,201 +505,6 @@ class Forms {
     }
 
 
-    // --------------------------------------------------------------------------------------------
-
-    /**
-     * Used in ft_search_forms and ft_get_form_prev_next_links, this function looks at the current search and figures
-     * out the WHERE and ORDER BY clauses so that the calling function can retrieve the appropriate form results in
-     * the appropriate order.
-     *
-     * @param array $search_criteria
-     * @return array $clauses
-     */
-    private static function getSearchFormSqlClauses($search_criteria)
-    {
-        $order_clause = self::getOrderClause($search_criteria["order"]);
-        $status_clause = self::getStatusClause($search_criteria["status"]);
-        $keyword_clause = self::getKeywordClause($search_criteria["keyword"]);
-        $form_clause = self::getFormClause($search_criteria["account_id"]);
-        $omitted_forms = self::getFormOmitList($search_criteria["account_id"]);
-        $admin_clause = (!$search_criteria["is_admin"]) ? "is_complete = 'yes' AND is_initialized = 'yes'" : "";
-
-        // add up the where clauses
-        $where_clauses = array();
-        if (!empty($status_clause)) {
-            $where_clauses[] = $status_clause;
-        }
-        if (!empty($keyword_clause)) {
-            $where_clauses[] = "($keyword_clause)";
-        }
-        if (!empty($form_clause)) {
-            $where_clauses[] = $form_clause;
-        }
-        if (!empty($admin_clause)) {
-            $where_clauses[] = $admin_clause;
-        }
-
-        if (!empty($where_clauses)) {
-            $where_clause = "WHERE " . join(" AND ", $where_clauses);
-        } else {
-            $where_clause = "";
-        }
-
-        return array(
-            "order_clause" => $order_clause,
-            "where_clause" => $where_clause,
-            "omitted_forms" => $omitted_forms
-        );
-    }
-
-
-    private static function getOrderClause ($order)
-    {
-        if (!isset($order) || empty($order)) {
-            $search_criteria["order"] = "form_id-DESC";
-        }
-
-        $order_map = array(
-            "form_id-ASC" => "form_id ASC",
-            "form_id-DESC" => "form_id DESC",
-            "form_name-ASC" => "form_name ASC",
-            "form_name-DESC" => "form_name DESC",
-            "form_type-ASC" => "form_type ASC",
-            "form_type-DESC" => "form_type DESC",
-            "status-ASC" => "is_active = 'yes', is_active = 'no', (is_initialized = 'no' AND is_complete = 'no')",
-            "status-DESC" => "(is_initialized = 'no' AND is_complete = 'no'), is_active = 'no', is_active = 'yes'",
-        );
-
-        if (isset($order_map[$order])) {
-            $order_clause = $order_map[$order];
-        } else {
-            $order_clause = "form_id DESC";
-        }
-        return "ORDER BY $order_clause";
-    }
-
-
-    private static function getStatusClause($status)
-    {
-        if (!isset($status) || empty($status)) {
-            return "";
-        }
-
-        switch ($status) {
-            case "online":
-                $status_clause = "is_active = 'yes' ";
-                break;
-            case "offline":
-                $status_clause = "(is_active = 'no' AND is_complete = 'yes')";
-                break;
-            case "incomplete":
-                $status_clause = "(is_initialized = 'no' OR is_complete = 'no')";
-                break;
-            default:
-                $status_clause = "";
-                break;
-        }
-        return $status_clause;
-    }
-
-
-    // TODO
-    private static function getKeywordClause($keyword)
-    {
-        $keyword_clause = "";
-        if (isset($keyword) && !empty($keyword)) {
-            $search_criteria["keyword"] = trim($keyword);
-            $string = $search_criteria["keyword"];
-            $fields = array("form_name", "form_url", "redirect_url", "form_id");
-
-            $clauses = array();
-            foreach ($fields as $field) {
-                $clauses[] = "$field LIKE '%$string%'";
-            }
-
-            $keyword_clause = join(" OR ", $clauses);
-        }
-        return $keyword_clause;
-    }
-
-
-    /**
-     * Used in the search query to ensure the search limits the results to whatever forms the current account may view.
-     * @param $account_id
-     * @return string
-     */
-    private static function getFormClause($account_id)
-    {
-        if (empty($account_id)) {
-            return "";
-        }
-
-        $db = Core::$db;
-
-        $clause = "";
-        if (!empty($account_id)) {
-
-            // a bit weird, but necessary. This adds a special clause to the query so that when it searches for a
-            // particular account, it also (a) returns all public forms and (b) only returns those forms that are
-            // completed. This is because incomplete forms are still set to access_type = "public". Note: this does NOT
-            // take into account the public_form_omit_list - that's handled by self::getFormOmitList
-            $is_public_clause = "(access_type = 'public')";
-            $is_setup_clause = "is_complete = 'yes' AND is_initialized = 'yes'";
-
-            // first, grab all those forms that are explicitly associated with this client
-            $db->query("
-                SELECT *
-                FROM   {PREFIX}client_forms
-                WHERE  account_id = :account_id
-            ");
-            $db->bind("account_id", $account_id);
-            $db->execute();
-
-            $form_clauses = array();
-            foreach ($db->fetchAll() as $row) {
-                $form_clauses[] = "form_id = {$row['form_id']}";
-            }
-
-            if (count($form_clauses) > 1) {
-                $clause = "(((" . join(" OR ", $form_clauses) . ") OR $is_public_clause) AND ($is_setup_clause))";
-            } else {
-                $clause = isset($form_clauses[0]) ? "(({$form_clauses[0]} OR $is_public_clause) AND ($is_setup_clause))" :
-                "($is_public_clause AND ($is_setup_clause))";
-            }
-        }
-
-        return $clause;
-    }
-
-
-    private static function getFormOmitList($account_id) {
-        if (empty($account_id)) {
-            return array();
-        }
-
-        $db = Core::$db;
-
-        // this var is populated ONLY for searches on a particular client account. It stores those public forms on
-        // which the client is on the Omit List. This value is used at the end of this function to trim the results
-        // returned to NOT include those forms
-        $omitted_forms = array();
-
-        // see if this client account has been omitted from any public forms. If it is, this will be used to
-        // filter the results
-        $db->query("
-            SELECT form_id
-            FROM {PREFIX}public_form_omit_list
-            WHERE account_id = :account_id
-        ");
-        $db->bind("account_id", $account_id);
-        foreach ($db->fetchAll() as $row) {
-            $omitted_forms[] = $row["form_id"];
-        }
-
-        return $omitted_forms;
-    }
-
-
     /**
      * Added in 2.1.0, this creates an Internal form with a handful of custom settings.
      *
@@ -1004,6 +809,444 @@ class Forms {
             $page_num++;
         }
         $db->processTransaction();
+    }
+
+
+    /**
+     * "Uninitializes" a form, letting the user to resend the test submission.
+     * @param integer $form_id The unique form ID
+     */
+    public static function uninitializeForm($form_id)
+    {
+        Core::$db->query("
+            UPDATE  {PREFIX}forms
+            SET     is_initialized = 'no'
+            WHERE   form_id = :form_id
+        ");
+        Core::$db->bind("form_id", $form_id);
+        Core::$db->execute();
+    }
+
+
+    /**
+     * Examines a form to see if it contains a file upload field.
+     * @param integer $form_id
+     * @return boolean
+     */
+    public static function getNumFileUploadFields($form_id)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT count(*) as c
+            FROM   {PREFIX}form_fields ff, {PREFIX}field_types fft
+            WHERE  ff.form_id = :form_id AND
+                   ff.field_type_id = fft.field_type_id AND
+                   fft.is_file_field = 'yes'
+        ");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $result = $db->fetch();
+        $count = $result["c"];
+
+        return $count > 0;
+    }
+
+
+    /**
+     * This checks to see the a form exists in the database. It's just used to confirm a form ID is valid.
+     * @param integer $form_id
+     * @param boolean $allow_incompleted_forms an optional value to still return TRUE for incomplete forms
+     * @return boolean
+     */
+    public static function checkFormExists($form_id, $allow_incompleted_forms = false)
+    {
+        $db = Core::$db;
+
+        $db->query("SELECT * FROM {PREFIX}forms WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+        $form = $db->fetch();
+
+        $is_valid_form_id = false;
+        if (($form && $allow_incompleted_forms) || ($form["is_initialized"] == "yes" && $form["is_complete"] == "yes")) {
+            $is_valid_form_id = true;
+        }
+
+        return $is_valid_form_id;
+    }
+
+
+    /**
+     * Called by the administrator only. Updates the list of clients on a public form's omit list.
+     *
+     * @param array $info
+     * @param integer $form_id
+     * @return array [0] T/F, [1] message
+     */
+    public static function updatePublicFormOmitList($info, $form_id)
+    {
+        $db = Core::$db;
+        $LANG = Core::$L;
+
+        $db->query("DELETE FROM {PREFIX}public_form_omit_list WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $client_ids = (isset($info["selected_client_ids"])) ? $info["selected_client_ids"] : array();
+        foreach ($client_ids as $account_id) {
+            $db->query("
+                INSERT INTO {PREFIX}public_form_omit_list (form_id, account_id)
+                VALUES (:form_id, :account_id)
+            ");
+            $db->bindAll(array(
+                "form_id" => $form_id,
+                "account_id" => $account_id
+            ));
+            $db->execute();
+        }
+
+        return array(true, $LANG["notify_public_form_omit_list_updated"]);
+    }
+
+
+    /**
+     * This returns the IDs of the previous and next forms, as determined by the administrators current
+     * search and sort.
+     *
+     * Not happy with this function! Getting this info is surprisingly tricky, once you throw in the sort clause.
+     * Still, the number of client accounts are liable to be quite small, so it's not such a sin.
+     *
+     * @param integer $form_id
+     * @param array $search_criteria
+     * @return array prev_form_id => the previous account ID (or empty string)
+     *               next_form_id => the next account ID (or empty string)
+     */
+    public static function getFormPrevNextLinks($form_id, $search_criteria = array())
+    {
+        $db = Core::$db;
+
+        $results = self::getSearchFormSqlClauses($search_criteria);
+
+        $db->query("
+            SELECT form_id
+            FROM   {PREFIX}forms
+            {$results["where_clause"]}
+            {$results["order_clause"]}
+        ");
+        $db->execute();
+
+        $sorted_form_ids = array();
+        foreach ($db->fetchAll() as $row) {
+            $sorted_form_ids[] = $row["form_id"];
+        }
+        $current_index = array_search($form_id, $sorted_form_ids);
+
+        $return_info = array("prev_form_id" => "", "next_form_id" => "");
+        if ($current_index === 0) {
+            if (count($sorted_form_ids) > 1) {
+                $return_info["next_form_id"] = $sorted_form_ids[$current_index + 1];
+            }
+        } else if ($current_index === count($sorted_form_ids)-1) {
+            if (count($sorted_form_ids) > 1) {
+                $return_info["prev_form_id"] = $sorted_form_ids[$current_index - 1];
+            }
+        } else {
+            $return_info["prev_form_id"] = $sorted_form_ids[$current_index-1];
+            $return_info["next_form_id"] = $sorted_form_ids[$current_index+1];
+        }
+
+        return $return_info;
+    }
+
+
+    /**
+     * Returns a list of (completed, finalized) forms, ordered by form name.
+     * @return array
+     */
+    public static function getFormList()
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}forms
+            WHERE  is_complete = 'yes' AND
+                   is_initialized = 'yes'
+            ORDER BY form_name ASC
+        ");
+        $db->execute();
+
+        return $db->fetchAll();
+    }
+
+
+    /**
+     * Returns the name of a form. Generally used in presentation situations.
+     * @param integer $form_id
+     */
+    public static function getFormName($form_id)
+    {
+        $db = Core::$db;
+
+        $db->query("SELECT form_name FROM {PREFIX}forms WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+        $result = $db->fetch();
+
+        return $result["form_name"];
+    }
+
+
+    /**
+     * Returns all the column names for a particular form. The optional $view_id field lets you return
+     * only those columns that are associated with a particular View. The second optional setting
+     * lets you only return custom form fields (everything excep submission ID, submission date,
+     * last modified date, IP address and is_finalized)
+     *
+     * N.B. Updated in 2.0.0 to query the form_fields table instead of the actual form table and extract
+     * the form column names from that. This should be quicker & allows us to return the columns in the
+     * appropriate list_order.
+     *
+     * @param integer $form_id the unique form ID
+     * @param integer $view_id (optional) if supplied, returns only those columns that appear in a
+     *     particular View
+     * @param boolean $omit_system_fields
+     * @return array A hash of form: [DB column name] => [column display name]. If the database
+     *     column doesn't have a display name (like with submission_id) the value is set to the same
+     *     as the key.
+     */
+    public static function getFormColumnNames($form_id, $view_id = "", $omit_system_fields = false)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT col_name, field_title, is_system_field
+            FROM {PREFIX}form_fields
+            WHERE form_id = :form_id
+            ORDER BY list_order
+        ");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $view_col_names = array();
+        if (!empty($view_id)) {
+            $view_fields = Views::getViewFields($view_id);
+            foreach ($view_fields as $field_info) {
+                $view_col_names[] = $field_info["col_name"];
+            }
+        }
+
+        $col_names = array();
+        foreach ($db->fetchAll() as $col_info) {
+            if ($col_info["is_system_field"] == "yes" && $omit_system_fields) {
+                continue;
+            }
+            if (!empty($view_id) && !in_array($col_info["col_name"], $view_col_names)) {
+                continue;
+            }
+            $col_names[$col_info["col_name"]] = $col_info["field_title"];
+        }
+
+        return $col_names;
+    }
+
+
+
+    // --------------------------------------------------------------------------------------------
+
+
+    /**
+     * Used in ft_search_forms and ft_get_form_prev_next_links, this function looks at the current search and figures
+     * out the WHERE and ORDER BY clauses so that the calling function can retrieve the appropriate form results in
+     * the appropriate order.
+     *
+     * @param array $search_criteria
+     * @return array $clauses
+     */
+    private static function getSearchFormSqlClauses($search_criteria)
+    {
+        $order_clause = self::getOrderClause($search_criteria["order"]);
+        $status_clause = self::getStatusClause($search_criteria["status"]);
+        $keyword_clause = self::getKeywordClause($search_criteria["keyword"]);
+        $form_clause = self::getFormClause($search_criteria["account_id"]);
+        $omitted_forms = self::getFormOmitList($search_criteria["account_id"]);
+        $admin_clause = (!$search_criteria["is_admin"]) ? "is_complete = 'yes' AND is_initialized = 'yes'" : "";
+
+        // add up the where clauses
+        $where_clauses = array();
+        if (!empty($status_clause)) {
+            $where_clauses[] = $status_clause;
+        }
+        if (!empty($keyword_clause)) {
+            $where_clauses[] = "($keyword_clause)";
+        }
+        if (!empty($form_clause)) {
+            $where_clauses[] = $form_clause;
+        }
+        if (!empty($admin_clause)) {
+            $where_clauses[] = $admin_clause;
+        }
+
+        if (!empty($where_clauses)) {
+            $where_clause = "WHERE " . join(" AND ", $where_clauses);
+        } else {
+            $where_clause = "";
+        }
+
+        return array(
+        "order_clause" => $order_clause,
+        "where_clause" => $where_clause,
+        "omitted_forms" => $omitted_forms
+        );
+    }
+
+
+    private static function getOrderClause ($order)
+    {
+        if (!isset($order) || empty($order)) {
+            $search_criteria["order"] = "form_id-DESC";
+        }
+
+        $order_map = array(
+        "form_id-ASC" => "form_id ASC",
+        "form_id-DESC" => "form_id DESC",
+        "form_name-ASC" => "form_name ASC",
+        "form_name-DESC" => "form_name DESC",
+        "form_type-ASC" => "form_type ASC",
+        "form_type-DESC" => "form_type DESC",
+        "status-ASC" => "is_active = 'yes', is_active = 'no', (is_initialized = 'no' AND is_complete = 'no')",
+        "status-DESC" => "(is_initialized = 'no' AND is_complete = 'no'), is_active = 'no', is_active = 'yes'",
+        );
+
+        if (isset($order_map[$order])) {
+            $order_clause = $order_map[$order];
+        } else {
+            $order_clause = "form_id DESC";
+        }
+        return "ORDER BY $order_clause";
+    }
+
+
+    private static function getStatusClause($status)
+    {
+        if (!isset($status) || empty($status)) {
+            return "";
+        }
+
+        switch ($status) {
+            case "online":
+                $status_clause = "is_active = 'yes' ";
+                break;
+            case "offline":
+                $status_clause = "(is_active = 'no' AND is_complete = 'yes')";
+                break;
+            case "incomplete":
+                $status_clause = "(is_initialized = 'no' OR is_complete = 'no')";
+                break;
+            default:
+                $status_clause = "";
+                break;
+        }
+        return $status_clause;
+    }
+
+
+    // TODO
+    private static function getKeywordClause($keyword)
+    {
+        $keyword_clause = "";
+        if (isset($keyword) && !empty($keyword)) {
+            $search_criteria["keyword"] = trim($keyword);
+            $string = $search_criteria["keyword"];
+            $fields = array("form_name", "form_url", "redirect_url", "form_id");
+
+            $clauses = array();
+            foreach ($fields as $field) {
+                $clauses[] = "$field LIKE '%$string%'";
+            }
+
+            $keyword_clause = join(" OR ", $clauses);
+        }
+        return $keyword_clause;
+    }
+
+
+    /**
+     * Used in the search query to ensure the search limits the results to whatever forms the current account may view.
+     * @param $account_id
+     * @return string
+     */
+    private static function getFormClause($account_id)
+    {
+        if (empty($account_id)) {
+            return "";
+        }
+
+        $db = Core::$db;
+
+        $clause = "";
+        if (!empty($account_id)) {
+
+            // a bit weird, but necessary. This adds a special clause to the query so that when it searches for a
+            // particular account, it also (a) returns all public forms and (b) only returns those forms that are
+            // completed. This is because incomplete forms are still set to access_type = "public". Note: this does NOT
+            // take into account the public_form_omit_list - that's handled by self::getFormOmitList
+            $is_public_clause = "(access_type = 'public')";
+            $is_setup_clause = "is_complete = 'yes' AND is_initialized = 'yes'";
+
+            // first, grab all those forms that are explicitly associated with this client
+            $db->query("
+                SELECT *
+                FROM   {PREFIX}client_forms
+                WHERE  account_id = :account_id
+            ");
+            $db->bind("account_id", $account_id);
+            $db->execute();
+
+            $form_clauses = array();
+            foreach ($db->fetchAll() as $row) {
+                $form_clauses[] = "form_id = {$row['form_id']}";
+            }
+
+            if (count($form_clauses) > 1) {
+                $clause = "(((" . join(" OR ", $form_clauses) . ") OR $is_public_clause) AND ($is_setup_clause))";
+            } else {
+                $clause = isset($form_clauses[0]) ? "(({$form_clauses[0]} OR $is_public_clause) AND ($is_setup_clause))" :
+                "($is_public_clause AND ($is_setup_clause))";
+            }
+        }
+
+        return $clause;
+    }
+
+
+    private static function getFormOmitList($account_id) {
+        if (empty($account_id)) {
+            return array();
+        }
+
+        $db = Core::$db;
+
+        // this var is populated ONLY for searches on a particular client account. It stores those public forms on
+        // which the client is on the Omit List. This value is used at the end of this function to trim the results
+        // returned to NOT include those forms
+        $omitted_forms = array();
+
+        // see if this client account has been omitted from any public forms. If it is, this will be used to
+        // filter the results
+        $db->query("
+            SELECT form_id
+            FROM {PREFIX}public_form_omit_list
+            WHERE account_id = :account_id
+        ");
+        $db->bind("account_id", $account_id);
+        foreach ($db->fetchAll() as $row) {
+            $omitted_forms[] = $row["form_id"];
+        }
+
+        return $omitted_forms;
     }
 
 }

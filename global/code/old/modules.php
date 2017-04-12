@@ -109,16 +109,15 @@ function ft_uninstall_module($module_id)
           ");
 
 			// now update the orders of all affected menus
-			foreach ($affected_menu_ids as $menu_id)
-			{
-				ft_update_menu_order($menu_id);
+			foreach ($affected_menu_ids as $menu_id) {
+				Menus::updateMenuOrder($menu_id);
 			}
 
 			// if rows were deleted, re-cache the admin menu and update the ordering of the admin account.
 			// ASSUMPTION: only administrator accounts can have modules as items (will need to update at some
 			// point soon, no doubt).
 			Menus::cacheAccountMenu($_SESSION["ft"]["account"]["account_id"]);
-			ft_update_menu_order($_SESSION["ft"]["account"]["menu_id"]);
+			Menus::updateMenuOrder($_SESSION["ft"]["account"]["menu_id"]);
 		}
 
 		// delete any hooks registered by this module

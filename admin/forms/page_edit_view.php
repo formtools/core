@@ -22,7 +22,7 @@ $form_info   = Forms::getForm($form_id);
 $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true));
 $view_info   = ft_get_view($view_id);
 
-$form_database_column_info = ft_get_form_column_names($form_id);
+$form_database_column_info = Forms::getFormColumnNames($form_id);
 $view_clients  = ft_get_view_clients($view_id);
 $view_tabs     = ft_get_view_tabs($view_id);
 $grouped_fields = ft_get_grouped_view_fields($view_id);

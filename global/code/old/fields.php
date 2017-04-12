@@ -428,7 +428,7 @@ function ft_get_form_field($field_id, $custom_params = array())
 
 	if ($params["include_field_settings"])
 	{
-		$info["settings"] = ft_get_form_field_settings($field_id, $params["evaluate_dynamic_settings"]);
+		$info["settings"] = Fields::getFormFieldSettings($field_id, $params["evaluate_dynamic_settings"]);
 	}
 
 	extract(Hooks::processHookCalls("end", compact("field_id", "info"), array("info")), EXTR_OVERWRITE);
@@ -536,62 +536,10 @@ function ft_get_form_field_name_by_field_id($field_id_or_ids)
 
 
 /**
- * Retrieves all custom settings for an individual form field from the field_settings table.
- *
- * @param integer $field_id the unique field ID
- * @return array an array of hashes
- */
-function ft_get_form_field_settings($field_id, $evaluate_dynamic_fields = false)
-{
-	global $g_table_prefix;
-
-	if ($evaluate_dynamic_fields)
-	{
-		$query = mysql_query("
-      SELECT *
-      FROM   {$g_table_prefix}field_settings fs, {$g_table_prefix}field_type_settings fts
-      WHERE  fs.setting_id = fts.setting_id AND
-             field_id = $field_id
-    ");
-	}
-	else
-	{
-		$query = mysql_query("
-      SELECT *
-      FROM   {$g_table_prefix}field_settings
-      WHERE  field_id = $field_id
-    ");
-	}
-
-	$settings = array();
-	while ($row = mysql_fetch_assoc($query))
-	{
-		if ($evaluate_dynamic_fields && $row["default_value_type"] == "dynamic")
-		{
-			$settings[$row["setting_id"]] = "";
-			$parts = explode(",", $row["setting_value"]);
-			if (count($parts) == 2)
-			{
-				$settings[$row["setting_id"]] = Settings::get($parts[0], $parts[1]);
-			}
-		}
-		else
-		{
-			$settings[$row["setting_id"]] = $row["setting_value"];
-		}
-	}
-
-	extract(Hooks::processHookCalls("end", compact("field_id", "settings"), array("settings")), EXTR_OVERWRITE);
-
-	return $settings;
-}
-
-
-/**
  * Retrieves all field information about a form, ordered by list_order. The 2nd and 3rd optional
  * parameters let you return a subset of the fields for a particular page. This function is purely
  * concerned with the raw fields themselves: not how they are arbitrarily grouped in a View. To
- * retrieve the grouped fields list for a View, use ft_get_view_fields().
+ * retrieve the grouped fields list for a View, use Views::getViewFields().
  *
  * @param integer $form_id the unique form ID
  * @param array $custom_settings optional settings
@@ -646,7 +594,7 @@ function ft_get_form_fields($form_id, $custom_params = array())
 	{
 		if ($params["include_field_settings"])
 		{
-			$row["settings"] = ft_get_form_field_settings($row["field_id"], $params["evaluate_dynamic_settings"]);
+			$row["settings"] = Fields::getFormFieldSettings($row["field_id"], $params["evaluate_dynamic_settings"]);
 		}
 		$infohash[] = $row;
 	}
@@ -740,7 +688,7 @@ function ft_get_field_order_info_by_colname($form_id, $col_name)
 function ft_get_extended_field_settings($field_id, $setting_id = "", $convert_dynamic_values = false)
 {
 	// get whatever custom settings are defined for this field
-	$custom_settings = ft_get_form_field_settings($field_id);
+	$custom_settings = Fields::getFormFieldSettings($field_id);
 
 	// now get a list of all available settings for this field type
 	$field_type_id = ft_get_field_type_id($field_id);
@@ -1048,7 +996,7 @@ function ft_update_field($form_id, $field_id, $tab_info)
 				$new_field_size_sql = $g_field_sizes[$field_size]["sql"];
 				$table_name = "{$g_table_prefix}form_{$form_id}";
 
-				list($is_success, $err_message) = _ft_alter_table_column($table_name, $old_col_name, $col_name, $new_field_size_sql);
+				list($is_success, $err_message) = General::alterTableColumn($table_name, $old_col_name, $col_name, $new_field_size_sql);
 				if ($is_success)
 				{
 					if ($old_col_name != $col_name)
@@ -1307,9 +1255,8 @@ function ft_change_field_type($form_id, $field_id, $new_field_type)
       ") or die(mysql_error());
 
 	// if the user just changed to a file type, ALWAYS set the database field size to "medium"
-	if ($old_field_type != $new_field_type && $new_field_type == "file")
-	{
-		_ft_alter_table_column("{$g_table_prefix}form_{$form_id}", $field_info["col_name"], $field_info["col_name"], "VARCHAR(255)");
+	if ($old_field_type != $new_field_type && $new_field_type == "file") {
+		General::alterTableColumn("{$g_table_prefix}form_{$form_id}", $field_info["col_name"], $field_info["col_name"], "VARCHAR(255)");
 	}
 }
 

@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Administrator;
+use FormTools\Forms;
 use FormTools\General;
 use FormTools\Themes;
 
@@ -13,7 +14,7 @@ if (isset($request["update_email_template"])) {
 
 $form_info      = Forms::getForm($form_id);
 $form_fields    = ft_get_form_fields($form_id);
-$columns        = ft_get_form_column_names($form_id);
+$columns        = Forms::getFormColumnNames($form_id);
 $template_info  = ft_get_email_template($email_id);
 $event_trigger_arr =  explode(",", $template_info["email_event_trigger"]);
 $template_info["email_event_trigger"] = $event_trigger_arr;
@@ -24,7 +25,7 @@ $edit_email_tab = (isset($_SESSION["ft"]["inner_tabs"]["edit_email_template"])) 
 if (isset($request["edit_email_template"]))
 	$edit_email_tab = $request["edit_email_template"];
 
-$form_has_file_upload_field = ft_check_form_has_file_upload_field($form_id);
+$form_has_file_upload_field = Forms::getNumFileUploadFields($form_id) > 0;
 $file_field_text = ($form_has_file_upload_field) ? $LANG["text_file_field_placeholders_info"] : "";
 
 // values for the test email subpage

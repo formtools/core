@@ -1,5 +1,7 @@
 <?php
 
+use FormTools\Views;
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -48,7 +50,7 @@ function smarty_function_view_fields($params, &$smarty)
       $attribute_str .= " $key=\"$value\"";
   }
 
-  $view_fields = ft_get_view_fields($view_id);
+  $view_fields = Views::getViewFields($view_id);
   $rows = array();
 
   if (!empty($blank_option))

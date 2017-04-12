@@ -20,7 +20,7 @@ if (empty($form_id) || !is_numeric($form_id)) {
 }
 
 // check this is a valid form
-if (!ft_check_form_exists($form_id)) {
+if (!Forms::checkFormExists($form_id)) {
 	ft_handle_error($LANG["notify_form_does_not_exist"]);
 	exit;
 }

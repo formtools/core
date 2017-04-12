@@ -8,7 +8,7 @@ $is_new_menu = false;
 $sortable_id = "edit_client_menu";
 
 if (isset($request["create_new_menu"])) {
-	$menu_id = ft_create_blank_client_menu();
+	$menu_id = Menus::createBlankClientMenu();
 	$is_new_menu = true;
 } else {
     $menu_id = $request["menu_id"];
@@ -20,7 +20,7 @@ if (isset($request["update_client_menu"])) {
 	list($g_success, $g_message) = ft_update_client_menu($info);
 }
 
-$menu_info = ft_get_client_menu($menu_id);
+$menu_info = Menus::getClientMenu($menu_id);
 $num_menu_items = count($menu_info["menu_items"]);
 $selected_client_ids = array();
 foreach ($menu_info["clients"] as $client_info) {

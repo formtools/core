@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Core;
+use FormTools\Forms;
 use FormTools\General;
 
 Core::init();
@@ -12,7 +13,7 @@ Core::$user->checkAuth("admin");
 $request = array_merge($_POST, $_GET);
 $form_id = General::loadField("form_id", "form_id", "");
 
-if (!ft_check_form_exists($form_id)) {
+if (!Forms::checkFormExists($form_id)) {
     General::redirect("index.php");
     exit;
 }
@@ -88,7 +89,7 @@ $search_criteria = array(
 	"is_admin"  => false
 );
 
-$links = ft_get_form_prev_next_links($form_id, $search_criteria);
+$links = Forms::getFormPrevNextLinks($form_id, $search_criteria);
 $prev_tabset_link = (!empty($links["prev_form_id"])) ? "edit.php?page=$page&form_id={$links["prev_form_id"]}" : "";
 $next_tabset_link = (!empty($links["next_form_id"])) ? "edit.php?page=$page&form_id={$links["next_form_id"]}" : "";
 

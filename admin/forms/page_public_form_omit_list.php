@@ -5,7 +5,7 @@ use FormTools\Themes;
 
 
 if (isset($request["update_public_form_omit_list"])) {
-    list($g_success, $g_message) = ft_update_public_form_omit_list($request, $form_id);
+    list($g_success, $g_message) = Forms::updatePublicFormOmitList($request, $form_id);
 }
 
 $form_info = Forms::getForm($form_id);

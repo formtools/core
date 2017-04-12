@@ -483,4 +483,253 @@ class Menus
         return $dd;
     }
 
+
+    /**
+     * This function creates a blank client menu with no menu items.
+     *
+     * @return integer $menu_id
+     */
+    public static function createBlankClientMenu()
+    {
+        $db = Core::$db;
+        $LANG = Core::$L;
+
+        // to ensure that even new blank menus have unique names, query the database and find
+        // the next free menu name of the form "Client Menu (X)" (where "Client Menu" is in the language
+        // of the current user)
+        $menus = Menus::getMenuList();
+        $menu_names = array();
+        foreach ($menus as $menu_info) {
+            $menu_names[] = $menu_info["menu"];
+        }
+
+        $base_client_menu_name = $LANG["phrase_client_menu"];
+        $new_menu_name = $base_client_menu_name;
+
+        if (in_array($new_menu_name, $menu_names)) {
+            $count = 1;
+            $new_menu_name = "$base_client_menu_name ($count)";
+
+            while (in_array($new_menu_name, $menu_names)) {
+                $count++;
+                $new_menu_name = "$base_client_menu_name ($count)";
+            }
+        }
+
+        $db->query("
+            INSERT INTO {PREFIX}menus (menu, menu_type)
+            VALUES (:menu, 'client')
+        ");
+        $db->bind("menu", $new_menu_name);
+        $db->execute();
+        $menu_id = $db->getInsertId();
+
+        return $menu_id;
+    }
+
+
+    /**
+    * Returns the one (and only) administration menu, and all associated menu items.
+    *
+    * @return array
+    */
+    public static function getAdminMenu()
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}menus
+            WHERE  menu_type = 'admin'
+        ");
+        $db->execute();
+
+        $menu_info = $db->fetch();
+        $menu_id = $menu_info["menu_id"];
+
+        // now get all the menu items and stash them in a "menu_items" key in $menu_info
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}menu_items
+            WHERE  menu_id = :menu_id
+            ORDER BY list_order
+        ");
+        $db->bind("menu_id", $menu_id);
+        $db->execute();
+
+        $menu_items = array();
+        foreach ($db->fetchAll() as $item) {
+            $menu_items[] = $item;
+        }
+
+        $menu_info["menu_items"] = $menu_items;
+
+        extract(Hooks::processHookCalls("end", compact("menu_info"), array("menu_info")), EXTR_OVERWRITE);
+
+        return $menu_info;
+    }
+
+    /**
+     * A wrapper function for ft_get_client_menu (and getAdminMenu). Returns all info
+     * about a menu, regardless of type. If it's an admin menu, it'll be returned with an empty "clients"
+     * hash key.
+     *
+     * @param integer $menu_id
+     * @return
+     */
+    public static function getMenu($menu_id)
+    {
+        return self::getClientMenu($menu_id);
+    }
+
+    /**
+     * Returns everything about a client menu. Bit of a misnomer, since it also returns the admin menu.
+     *
+     * @param integer $menu_id
+     * @return array
+     */
+    public static function getClientMenu($menu_id)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}menus
+            WHERE  menu_id = :menu_id
+        ");
+        $db->bind("menu_id", $menu_id);
+        $db->execute();
+
+        $menu_info = $db->fetch();
+        $menu_info["menu_items"] = self::getMenuItems($menu_id);
+
+        // get all associated client accounts
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}accounts
+            WHERE  menu_id = :menu_id
+            ORDER BY first_name
+        ");
+        $db->bind("menu_id", $menu_id);
+        $db->execute();
+
+        $menu_clients = array();
+        foreach ($db->fetchAll() as $client) {
+            $menu_clients[] = $client;
+        }
+        $menu_info["clients"] = $menu_clients;
+
+        extract(Hooks::processHookCalls("end", compact("menu_info"), array("menu_info")), EXTR_OVERWRITE);
+
+        return $menu_info;
+    }
+
+
+    /**
+     * Returns all menu items for a particular menu.
+     * @param integer $menu_id
+     * @return array an array of menu hashes
+     */
+    public static function getMenuItems($menu_id)
+    {
+        $db = Core::$db;
+
+        // get all the menu items and stash them in a "menu_items" key in $menu_info
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}menu_items
+            WHERE  menu_id = :menu_id
+            ORDER BY list_order
+        ");
+        $db->bind("menu_id", $menu_id);
+        $db->execute();
+
+        $menu_items = array();
+        foreach ($db->fetchAll() as $item) {
+            $menu_items[] = $item;
+        }
+
+        extract(Hooks::processHookCalls("end", compact("menu_items", "menu_id"), array("menu_items")), EXTR_OVERWRITE);
+
+        return $menu_items;
+    }
+
+
+    /**
+     * Called whenever an item is removed from a menu - OUTSIDE of the main administrator update menu
+     * pages (client & admin). This updates the order to ensure its consistent (i.e. no gaps). Note:
+     * this doesn't update the cached menu. If that's needed, you need to call the ft_cache_account_menu
+     * function separately
+     *
+     * @param integer $menu_id
+     */
+    public static function updateMenuOrder($menu_id)
+    {
+        $db = Core::$db;
+
+        // this returns the menu items ordered by list order
+        $menu_items = self::getMenuItems($menu_id);
+
+        // now update the list orders to ensure no gaps
+        $order = 1;
+        foreach ($menu_items as $menu_item) {
+            $db->query("
+                UPDATE {PREFIX}menu_items
+                SET    list_order = :list_order
+                WHERE  menu_item_id = :menu_item_id
+            ");
+            $db->bindAll(array(
+                "list_order" => $order,
+                "menu_item_id" => $menu_item["menu_item_id"]
+            ));
+            $order++;
+        }
+
+        extract(Hooks::processHookCalls("end", compact("menu_id"), array()), EXTR_OVERWRITE);
+    }
+
+
+    /**
+     * This function updates the default menu for multiple accounts simultaneously. It's called when
+     * an administrator tries to delete a menu that's current used by some client accounts. They're presented
+     * with the option of setting the menu ID for all the clients.
+     *
+     * There's very little error checking done here...
+     *
+     * @param string $account_id_str a comma delimited list of account IDs
+     * @param integer $theme_id the theme ID
+     */
+    public static function updateClientMenus($account_ids, $menu_id)
+    {
+        $db = Core::$db;
+        $LANG = Core::$L;
+
+        if (empty($account_ids) || empty($menu_id)) {
+            return array();
+        }
+
+        $client_ids = explode(",", $account_ids);
+        $menu_info = self::getMenu($menu_id);
+        $menu_name = $menu_info["menu"];
+
+        foreach ($client_ids as $client_id) {
+            $db->query("
+                UPDATE {PREFIX}accounts
+                SET menu_id = :menu_id
+                WHERE account_id = :client_id
+            ");
+            $db->bindAll(array(
+                "menu_id" => $menu_id,
+                "account_id" => $client_id
+            ));
+            $db->execute();
+        }
+
+        $placeholders = array("menu_name" => $menu_name);
+        $message = General::evalSmartyString($LANG["notify_client_account_menus_updated"], $placeholders);
+
+        return array(true, $message);
+    }
+
+
 }

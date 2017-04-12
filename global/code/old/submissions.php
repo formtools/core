@@ -29,8 +29,9 @@ function ft_create_blank_submission($form_id, $view_id, $is_finalized = false)
 {
 	global $g_table_prefix;
 
-	if (!ft_check_form_exists($form_id))
-		return "";
+	if (!Forms::checkFormExists($form_id)) {
+        return "";
+    }
 
 	$now = General::getCurrentDatetime();
 	$ip  = $_SERVER["REMOTE_ADDR"];
@@ -342,7 +343,7 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
 	$form_fields = ft_get_form_fields($form_id);
 	$submission  = ft_get_submission_info($form_id, $submission_id);
 
-	$view_fields = (!empty($view_id)) ? ft_get_view_fields($view_id) : array();
+	$view_fields = (!empty($view_id)) ? Views::getViewFields($view_id) : array();
 
 	if (empty($submission))
 		return array();
@@ -369,7 +370,7 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
 		// if a view ID is specified, return the view-specific field info as well
 		if (!empty($view_id))
 		{
-			$field_view_info = ft_get_view_field($view_id, $field_id);
+			$field_view_info = Views::getViewField($view_id, $field_id);
 
 			if (!empty($field_view_info))
 			{
@@ -671,14 +672,15 @@ function ft_finalize_submission($form_id, $submission_id)
 	global $g_table_prefix;
 
 	// check the form_id is valid
-	if (!ft_check_form_exists($form_id))
-		return false;
+	if (!Forms::checkFormExists($form_id)) {
+        return false;
+    }
 
 	$query = "
-    UPDATE {$g_table_prefix}form_$form_id
-    SET    is_finalized = 'yes'
-    WHERE  submission_id = $submission_id
-           ";
+        UPDATE {$g_table_prefix}form_$form_id
+        SET    is_finalized = 'yes'
+        WHERE  submission_id = $submission_id
+    ";
 	$result = mysql_query($query);
 
 	ft_send_emails("on_submission", $form_id, $submission_id);
@@ -920,7 +922,7 @@ function _ft_get_search_submissions_search_where_clause($form_id, $search_fields
 				$clauses = array();
 				if (!is_array($searchable_columns) && $searchable_columns == "all")
 				{
-					$col_info = ft_get_form_column_names($form_id);
+					$col_info = Forms::getFormColumnNames($form_id);
 					$col_names = array_keys($col_info);
 					unset($col_names["is_finalized"]);
 					unset($col_names["submission_date"]);
@@ -1040,7 +1042,7 @@ function _ft_get_search_submissions_submission_id_clause($submission_ids)
  * about a particular field from the view_fields table with the form_fields and field_options table,
  * providing ALL information about a field in a single variable.
  *
- * It accepts the result of the ft_get_view_fields() function as the first parameter and an optional
+ * It accepts the result of the Views::getViewFields() function as the first parameter and an optional
  * boolean to let it know whether to return ALL results or not.
  *
  * TODO maybe deprecate? Only used mass_edit

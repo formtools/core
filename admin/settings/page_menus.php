@@ -16,7 +16,7 @@ if (isset($request["delete"])) {
     list($g_success, $g_message) = ft_delete_client_menu($request["delete"]);
 }
 if (isset($_GET["mass_assign"])) {
-    list($g_success, $g_message) = ft_update_client_menus($_GET["accounts"], $_GET["menu_id"]);
+    list($g_success, $g_message) = Menus::updateClientMenus($_GET["accounts"], $_GET["menu_id"]);
 }
 
 $menus = Menus::getList($menu_page, Sessions::get("settings.num_menus_per_page"));

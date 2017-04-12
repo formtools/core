@@ -15,6 +15,7 @@
 namespace FormTools;
 
 use PDO;
+use PDOException;
 
 
 class General
@@ -672,6 +673,41 @@ END;
         $max_filesize_bytes = $max_filesize_mb * 1000;
 
         return $max_filesize_bytes;
+    }
+
+    /**
+     * Helper function to change the name and type of an existing MySQL table.
+     *
+     * @param string $table The name of the table to alter.
+     * @param string $old_col_name The old column name.
+     * @param string $new_col_name The new column name.
+     * @param string $col_type The new column data type.
+     * @return array Array with indexes:<br/>
+     *               [0]: true/false (success / failure)<br/>
+     *               [1]: message string<br/>
+     */
+    public static function alterTableColumn($table, $old_col_name, $new_col_name, $col_type)
+    {
+        $db = Core::$db;
+
+        $success = true;
+        $message = "";
+
+        $db->query("
+            ALTER TABLE $table
+            CHANGE $old_col_name $new_col_name $col_type
+        ");
+
+        try {
+            $db->execute();
+        } catch (PDOException $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        extract(Hooks::processHookCalls("end", compact("table", "old_col_name", "new_col_name", "col_type"), array()), EXTR_OVERWRITE);
+
+        return array($success, $message);
     }
 
 }

@@ -22,7 +22,7 @@ if (isset($_POST["submission_type"])) {
 
 // if returning from a later stage and the user wants to resubmit the test submission, update the form
 if (isset($_GET['uninitialize']) && $_GET['uninitialize'] == 1) {
-    ft_uninitialize_form($form_id);
+    Forms::uninitializeForm($form_id);
 }
 
 // retrieve the form info

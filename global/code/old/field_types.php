@@ -581,7 +581,7 @@ function ft_get_field_type_usage($field_type_id)
 
 		$info[] = array(
 			"form_id"    => $form_id,
-			"form_name"  => ft_get_form_name($form_id),
+			"form_name"  => Forms::getFormName($form_id),
 			"num_fields" => $result["c"]
 		);
 	}
