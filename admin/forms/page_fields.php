@@ -1,6 +1,8 @@
 <?php
 
+use FormTools\Fields;
 use FormTools\FieldSizes;
+use FormTools\FieldValidation;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
@@ -29,7 +31,7 @@ if (empty($num_fields_per_page)) {
 
 $fields_page = General::loadField("fields_page", "fields_page", 1);
 
-$form_fields = ft_get_form_fields($form_id, array("page" => $fields_page, "num_fields_per_page" => $num_fields_per_page));
+$form_fields = Fields::getFormFields($form_id, array("page" => $fields_page, "num_fields_per_page" => $num_fields_per_page));
 $total_form_fields = ft_get_num_form_fields($form_id);
 
 $reserved_words = ft_get_mysql_reserved_words();

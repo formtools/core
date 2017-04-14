@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Core;
+use FormTools\Fields;
 use FormTools\General;
 use FormTools\Themes;
 
@@ -24,7 +25,7 @@ if (!empty($_POST) && isset($_POST["next_step"]))
     General::redirect("step5.php?form_id=$form_id");
 }
 
-$form_fields = ft_get_form_fields($form_id);
+$form_fields = Fields::getFormFields($form_id);
 $form_setup  = Forms::getForm($form_id);
 
 // build the best guesses and list of field IDs

@@ -363,7 +363,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 			$fields_for_email_template[] = ft_get_form_field($view_field_info["field_id"], array("include_field_type_info" => true));
 	}
 	else
-		$fields_for_email_template = ft_get_form_fields($form_id, array("include_field_type_info" => true));
+		$fields_for_email_template = Fields::getFormFields($form_id, array("include_field_type_info" => true));
 
 
 	// this returns a hash with three keys: html_content, text_content and submission_id
@@ -607,7 +607,7 @@ function ft_get_email_patterns($form_id)
 	$email_template_patterns = parse_ini_file("$pattern_folder/patterns.ini", true);
 
 	$placeholders = array();
-	$placeholders["fields"] = ft_get_form_fields($form_id, array("include_field_type_info" => true));
+	$placeholders["fields"] = Fields::getFormFields($form_id, array("include_field_type_info" => true));
 
 	// get the HTML email patterns
 	$html_patterns = array();

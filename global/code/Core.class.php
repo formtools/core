@@ -412,7 +412,7 @@ class Core {
 
         // optionally enable benchmarking. Dev-only feature to confirm pages aren't taking too long to load
         if (self::$enableBenchmarking) {
-            self::$benchmarkStart = ft_get_microtime_float();
+            self::$benchmarkStart = General::getMicrotimeFloat();
         }
 
         // not thrilled with this, but it needs to be handled on all pages, and this is a convenient spot

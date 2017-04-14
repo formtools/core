@@ -734,28 +734,6 @@ function ft_check_sessions_timeout($auto_logout = true)
 
 
 /**
- * Figures out an SQL LIMIT clause, based on page number & num per page.
- *
- * @param integer $page_num
- * @param integer $results_per_page a number or "all"
- * @return string
- */
-function _ft_get_limit_clause($page_num, $results_per_page)
-{
-	$limit_clause = "";
-	if ($results_per_page != "all")
-	{
-		if (empty($page_num) || !is_numeric($page_num))
-			$page_num = 1;
-
-		$first_item = ($page_num - 1) * $results_per_page;
-		$limit_clause = "LIMIT $first_item, $results_per_page";
-	}
-
-	return $limit_clause;
-}
-
-/**
  * Helper function to locate the value key in the request info. This is used in the ft_update_field
  * function. It can be used any time we use the jQuery serializeArray() function. The javascript
  * version of this is called ft._extract_array_val
@@ -842,15 +820,6 @@ function ft_get_formtools_installed_components()
 }
 
 
-/**
- * Used for determining page load time.
- */
-function ft_get_microtime_float()
-{
-	list($usec, $sec) = explode(" ", microtime());
-	return ((float)$usec + (float)$sec);
-}
-
 
 /**
  * Generates the placeholders for a particular form submission. This is used in the email templates, and here and there
@@ -885,7 +854,7 @@ function ft_get_submission_placeholders($form_id, $submission_id, $client_info =
 		"include_field_settings"    => true,
 		"evaluate_dynamic_settings" => true
 	);
-	$form_fields = ft_get_form_fields($form_id, $form_field_params);
+	$form_fields = Fields::getFormFields($form_id, $form_field_params);
 
 	foreach ($submission_info as $field_info)
 	{

@@ -834,7 +834,7 @@ function ft_upgrade_form_tools()
 		foreach ($forms as $form_info)
 		{
 			$form_id = $form_info["form_id"];
-			$fields  = ft_get_form_fields($form_id);
+			$fields  = Fields::getFormFields($form_id);
 			$field_types = array();  // stores field IDs grouped by field type (key == old field type name string)
 			$field_col_to_id_map = array();
 			$field_id_to_option_list_id = array();

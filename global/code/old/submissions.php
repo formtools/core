@@ -94,7 +94,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 	extract(Hooks::processHookCalls("start", compact("form_id", "view_id", "submission_id", "is_admin"), array()), EXTR_OVERWRITE);
 
 	$form_info = Forms::getForm($form_id);
-	$form_fields = ft_get_form_fields($form_id);
+	$form_fields = Fields::getFormFields($form_id);
 	$auto_delete_submission_files = $form_info["auto_delete_submission_files"];
 
 	// send any emails
@@ -219,7 +219,7 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 	extract(Hooks::processHookCalls("start", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("submission_ids")), EXTR_OVERWRITE);
 
 	$form_info = Forms::getForm($form_id);
-	$form_fields = ft_get_form_fields($form_id);
+	$form_fields = Fields::getFormFields($form_id);
 	$auto_delete_submission_files = $form_info["auto_delete_submission_files"];
 
 	$submission_ids_qry = array();
@@ -340,7 +340,7 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
 
 	$return_arr = array();
 
-	$form_fields = ft_get_form_fields($form_id);
+	$form_fields = Fields::getFormFields($form_id);
 	$submission  = ft_get_submission_info($form_id, $submission_id);
 
 	$view_fields = (!empty($view_id)) ? Views::getViewFields($view_id) : array();
@@ -496,7 +496,7 @@ function ft_get_search_submission_ids($form_id, $view_id, $results_per_page, $or
 
 	// determine the various SQL clauses
 	$order_by            = _ft_get_search_submissions_order_by_clause($form_id, $order);
-	$limit_clause        = _ft_get_limit_clause(1, $results_per_page);
+	$limit_clause        = General::getQueryPageLimitClause(1, $results_per_page);
 	$filter_clause       = _ft_get_search_submissions_view_filter_clause($view_id);
 	$search_where_clause = _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $search_columns);
 
@@ -556,7 +556,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 		return array($success, $message);
 	}
 
-	$form_fields = ft_get_form_fields($form_id);
+	$form_fields = Fields::getFormFields($form_id);
 	$field_types_processing_info = ft_get_field_type_processing_info();
 
 	// this gets all settings for the fields, taking into account whatever has been overridden
@@ -735,7 +735,7 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
 
 	// determine the various SQL clauses for the searches
 	$order_by             = _ft_get_search_submissions_order_by_clause($form_id, $order);
-	$limit_clause         = _ft_get_limit_clause($page_num, $results_per_page);
+	$limit_clause         = General::getQueryPageLimitClause($page_num, $results_per_page);
 	$select_clause        = _ft_get_search_submissions_select_clause($columns_to_return);
 	$filter_clause        = _ft_get_search_submissions_view_filter_clause($view_id);
 	$submission_id_clause = _ft_get_search_submissions_submission_id_clause($submission_ids);

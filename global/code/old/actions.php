@@ -421,7 +421,7 @@ switch ($action)
 		$form_id     = $request["form_id"];
 		$field_id    = $request["field_id"];
 		$field_order = $request["field_order"];
-		$form_fields = ft_get_form_fields($form_id); // array("evaluate_dynamic_settings" => true)
+		$form_fields = Fields::getFormFields($form_id); // array("evaluate_dynamic_settings" => true)
 		$fields = array();
 		foreach ($form_fields as $field_info)
 		{
@@ -516,7 +516,7 @@ switch ($action)
 
 		$page_vars = array();
 		$page_vars["form_id"] = $form_id;
-		$page_vars["form_fields"] = ft_get_form_fields($form_id, array("include_field_type_info" => true));
+		$page_vars["form_fields"] = Fields::getFormFields($form_id, array("include_field_type_info" => true));
 		$page_vars["text_reference_tab_info"] = $text_reference_tab_info;
 
 		Themes::displayPage("admin/forms/form_placeholders.tpl", $page_vars);

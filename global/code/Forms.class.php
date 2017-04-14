@@ -107,9 +107,8 @@ class Forms {
             }
         }
 
-
         // get a list of the custom form fields (i.e. non-system) for this form
-        $form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true));
+        $form_fields = Fields::getFormFields($form_id, array("include_field_type_info" => true));
 
         $custom_form_fields = array();
         $file_fields = array();
@@ -548,7 +547,7 @@ class Forms {
         ft_initialize_form($form_data);
 
         $infohash = array();
-        $form_fields = ft_get_form_fields($new_form_id);
+        $form_fields = Fields::getFormFields($new_form_id);
 
         $order = 1;
 

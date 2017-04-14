@@ -85,7 +85,7 @@ function ft_delete_form($form_id, $remove_associated_files = false)
 	global $g_table_prefix;
 
 	extract(Hooks::processHookCalls("start", compact("form_id"), array()), EXTR_OVERWRITE);
-	$form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true));
+	$form_fields = Fields::getFormFields($form_id, array("include_field_type_info" => true));
 
 	$success = true;
 	$message = "";
@@ -194,7 +194,7 @@ function ft_finalize_form($form_id)
 {
 	global $g_table_prefix, $g_field_sizes, $g_db_table_charset, $LANG;
 
-	$form_fields = ft_get_form_fields($form_id);
+	$form_fields = Fields::getFormFields($form_id);
 	$query = "
     CREATE TABLE {$g_table_prefix}form_$form_id (
       submission_id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -620,7 +620,7 @@ function ft_set_form_field_types($form_id, $info)
 	// is extremely excessive, but what the hey
 	@set_time_limit(600);
 
-	$form_fields = ft_get_form_fields($form_id);
+	$form_fields = Fields::getFormFields($form_id);
 
 	// update the field types and sizes
 	$option_lists = array();

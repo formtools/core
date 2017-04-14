@@ -181,8 +181,9 @@ function ft_delete_form_fields($form_id, $field_ids)
 	}
 
 	// update the list_order of this form's fields
-	if ($form_table_exists)
-		ft_auto_update_form_field_order($form_id);
+	if ($form_table_exists) {
+        Fields::autoUpdateFormFieldOrder($form_id);
+    }
 
 	// update the order of any Views that referenced this field
 	foreach ($affected_views as $view_id)
@@ -536,76 +537,6 @@ function ft_get_form_field_name_by_field_id($field_id_or_ids)
 
 
 /**
- * Retrieves all field information about a form, ordered by list_order. The 2nd and 3rd optional
- * parameters let you return a subset of the fields for a particular page. This function is purely
- * concerned with the raw fields themselves: not how they are arbitrarily grouped in a View. To
- * retrieve the grouped fields list for a View, use Views::getViewFields().
- *
- * @param integer $form_id the unique form ID
- * @param array $custom_settings optional settings
- * @return array an array of hash information
- */
-function ft_get_form_fields($form_id, $custom_params = array())
-{
-	global $g_table_prefix;
-
-	$params = array(
-		"page"                      => (isset($custom_params["page"])) ? $custom_params["page"] : 1,
-		"num_fields_per_page"       => (isset($custom_params["num_fields_per_page"])) ? $custom_params["num_fields_per_page"] : "all",
-		"include_field_type_info"   => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false,
-		"include_field_settings"    => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false,
-		"evaluate_dynamic_settings" => (isset($custom_params["evaluate_dynamic_settings"])) ? $custom_params["evaluate_dynamic_settings"] : false,
-		"field_ids"                 => (isset($custom_params["field_ids"])) ? $custom_params["field_ids"] : "all"
-	);
-
-	$limit_clause = _ft_get_limit_clause($params["page"], $params["num_fields_per_page"]);
-
-	if ($params["include_field_type_info"])
-	{
-		$query = mysql_query("
-      SELECT ff.*, ft.field_type_name, ft.is_file_field, ft.is_date_field
-      FROM   {$g_table_prefix}form_fields ff, {$g_table_prefix}field_types ft
-      WHERE  ff.form_id = $form_id AND
-             ff.field_type_id = ft.field_type_id
-      ORDER BY ff.list_order
-      $limit_clause
-    ");
-	}
-	else
-	{
-		$field_id_clause = "";
-		if ($params["field_ids"] != "all")
-		{
-			$field_id_clause = "AND field_id IN (" . implode(",", $params["field_ids"]) . ")";
-		}
-
-		$query = mysql_query("
-      SELECT *
-      FROM   {$g_table_prefix}form_fields
-      WHERE  form_id = $form_id
-             $field_id_clause
-      ORDER BY list_order
-      $limit_clause
-    ");
-	}
-
-	$infohash = array();
-	while ($row = mysql_fetch_assoc($query))
-	{
-		if ($params["include_field_settings"])
-		{
-			$row["settings"] = Fields::getFormFieldSettings($row["field_id"], $params["evaluate_dynamic_settings"]);
-		}
-		$infohash[] = $row;
-	}
-
-	extract(Hooks::processHookCalls("end", compact("form_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
-
-	return $infohash;
-}
-
-
-/**
  * Returns the total number of form fields in a form.
  *
  * @param integer $form_id
@@ -850,7 +781,7 @@ function ft_update_form_fields($form_id, $infohash, $set_default_form_field_name
 	extract(Hooks::processHookCalls("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
 
 	// get a list of the system fields so we don't overwrite anything special
-	$existing_form_field_info = ft_get_form_fields($form_id);
+	$existing_form_field_info = Fields::getFormFields($form_id);
 	$system_field_ids = array();
 	foreach ($existing_form_field_info as $form_field)
 	{
@@ -887,36 +818,6 @@ function ft_update_form_fields($form_id, $infohash, $set_default_form_field_name
              form_id = $form_id
                 ");
 		$order++;
-	}
-}
-
-
-/**
- * This can be called at any junction for any form. It re-orders the form field list_orders based
- * on the current order. Basically, it's used whenever a form field is deleted to ensure that there
- * are no gaps in the list_order.
- *
- * @param integer $form_id
- */
-function ft_auto_update_form_field_order($form_id)
-{
-	global $g_table_prefix;
-
-	// we rely on this function returning the field by list_order
-	$form_fields = ft_get_form_fields($form_id);
-
-	$count = 1;
-	foreach ($form_fields as $field_info)
-	{
-		$field_id = $field_info["field_id"];
-
-		mysql_query("
-      UPDATE {$g_table_prefix}form_fields
-      SET    list_order = $count
-      WHERE  form_id = $form_id AND
-             field_id = $field_id
-        ");
-		$count++;
 	}
 }
 
@@ -1124,33 +1025,6 @@ function ft_update_field($form_id, $field_id, $tab_info)
 	extract(Hooks::processHookCalls("end", compact("field_id"), array("success", "message")), EXTR_OVERWRITE);
 
 	return array($success, $message);
-}
-
-
-/**
- * Returns all files associated with a particular form field or fields. Different field types may store the
- * files differently, so EVERY file upload module needs to add a hook to this function to return the
- * appropriate information.
- *
- * The module functions should return an array of hashes with the following structure:
- *    array(
- *      "submission_id" =>
- *      "field_id"      =>
- *      "field_type_id" =>
- *      "folder_path"   =>
- *      "folder_url"    =>
- *      "filename"      =>
- *    ),
- *    ...
- *
- * @param integer $form_id the unique form ID
- * @param array $field_ids an array of field IDs
- */
-function ft_get_uploaded_files($form_id, $field_ids)
-{
-	$uploaded_files = array();
-	extract(Hooks::processHookCalls("start", compact("form_id", "field_ids"), array("uploaded_files")), EXTR_OVERWRITE);
-	return $uploaded_files;
 }
 
 

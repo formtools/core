@@ -1458,7 +1458,7 @@ function _ft_update_view_filter_settings($view_id, $info)
 	mysql_query("DELETE FROM {$g_table_prefix}view_filters WHERE view_id = $view_id");
 
 	// get a hash of field_id => col name for use in building the SQL statements
-	$form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true));
+	$form_fields = Fields::getFormFields($form_id, array("include_field_type_info" => true));
 	$field_columns = array();
 	for ($i=0; $i<count($form_fields); $i++)
 	{
@@ -1944,7 +1944,7 @@ function _ft_populate_new_view_fields($form_id, $view_id)
 
 	$count = 1;
 	$num_custom_fields_added = 0;
-	$form_fields = ft_get_form_fields($form_id);
+	$form_fields = Fields::getFormFields($form_id);
 
 	$form_field_view_inserts = array();
 	$view_column_inserts     = array();

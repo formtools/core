@@ -710,5 +710,38 @@ END;
         return array($success, $message);
     }
 
+
+    /**
+     * Figures out an SQL LIMIT clause, based on page number & num per page.
+     *
+     * @param integer $page_num
+     * @param integer $results_per_page a number or "all"
+     * @return string
+     */
+    public static function getQueryPageLimitClause($page_num, $results_per_page)
+    {
+        $limit_clause = "";
+        if ($results_per_page != "all")
+        {
+            if (empty($page_num) || !is_numeric($page_num))
+                $page_num = 1;
+
+            $first_item = ($page_num - 1) * $results_per_page;
+            $limit_clause = "LIMIT $first_item, $results_per_page";
+        }
+
+        return $limit_clause;
+    }
+
+
+    /**
+     * Used for determining page load time.
+     */
+    public static function getMicrotimeFloat()
+    {
+        list($usec, $sec) = explode(" ", microtime());
+        return ((float)$usec + (float)$sec);
+    }
+
 }
 

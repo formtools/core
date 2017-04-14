@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Administrator;
+use FormTools\Fields;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\Themes;
@@ -13,7 +14,7 @@ if (isset($request["update_email_template"])) {
 }
 
 $form_info      = Forms::getForm($form_id);
-$form_fields    = ft_get_form_fields($form_id);
+$form_fields    = Fields::getFormFields($form_id);
 $columns        = Forms::getFormColumnNames($form_id);
 $template_info  = ft_get_email_template($email_id);
 $event_trigger_arr =  explode(",", $template_info["email_event_trigger"]);

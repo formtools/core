@@ -105,7 +105,7 @@ if (isset($_POST["search"])) {
     $current_page = 1;
 }
 
-$form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true, "include_field_settings" => true));
+$form_fields = Fields::getFormFields($form_id, array("include_field_type_info" => true, "include_field_settings" => true));
 
 // make a map of field_id => col_name for use in determining the search cols ad
 // make a map of field_id => col_name for use in determining the search cols. This contains

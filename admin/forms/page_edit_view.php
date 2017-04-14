@@ -1,5 +1,7 @@
 <?php
 
+use FormTools\Fields;
+use FormTools\Forms;
 use FormTools\General;
 use FormTools\Themes;
 
@@ -19,7 +21,7 @@ if (isset($request["update_view"])) {
 }
 
 $form_info   = Forms::getForm($form_id);
-$form_fields = ft_get_form_fields($form_id, array("include_field_type_info" => true));
+$form_fields = Fields::getFormFields($form_id, array("include_field_type_info" => true));
 $view_info   = ft_get_view($view_id);
 
 $form_database_column_info = Forms::getFormColumnNames($form_id);

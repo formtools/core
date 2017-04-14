@@ -1,5 +1,7 @@
 <?php
 
+use FormTools\Fields;
+use FormTools\Forms;
 use FormTools\Themes;
 
 
@@ -11,7 +13,7 @@ if (isset($request["delete_form_email_id"])) {
 }
 
 $form_info = Forms::getForm($form_id);
-$form_fields = ft_get_form_fields($form_id);
+$form_fields = Fields::getFormFields($form_id);
 
 $registered_form_emails = ft_get_email_fields($form_id);
 
