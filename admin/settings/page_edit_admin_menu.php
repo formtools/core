@@ -15,7 +15,7 @@ if (isset($request["update_admin_menu"])) {
 	$info = $_POST;
 	$info["sortable_id"] = $sortable_id;
 	$info["account_id"] = $_SESSION["ft"]["account"]["account_id"];
-	list($g_success, $g_message) = ft_update_admin_menu($info);
+	list($g_success, $g_message) = Menus::updateAdminMenu($info);
 }
 
 $menu = Menus::getAdminMenu();

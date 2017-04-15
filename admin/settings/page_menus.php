@@ -13,7 +13,7 @@ $menu_page = General::loadField("menu_page", "menu_page", 1);
 // if required, delete the menu. If any clients were assigned to this menu, the success response will
 // include their names
 if (isset($request["delete"])) {
-    list($g_success, $g_message) = ft_delete_client_menu($request["delete"]);
+    list($g_success, $g_message) = Menus::deleteClientMenu($request["delete"]);
 }
 if (isset($_GET["mass_assign"])) {
     list($g_success, $g_message) = Menus::updateClientMenus($_GET["accounts"], $_GET["menu_id"]);

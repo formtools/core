@@ -732,4 +732,305 @@ class Menus
     }
 
 
+    /**
+     * Updates the (single) administration menu.
+     *
+     * @param array $info
+     */
+    public static function updateAdminMenu($info)
+    {
+        $LANG = Core::$L;
+        $db = Core::$db;
+
+        $menu_id     = $info["menu_id"];
+        $account_id  = $info["account_id"];
+        $sortable_id = $info["sortable_id"];
+
+        $sortable_rows       = explode(",", $info["{$sortable_id}_sortable__rows"]);
+        $sortable_new_groups = explode(",", $info["{$sortable_id}_sortable__new_groups"]);
+
+        $menu_items = array();
+        foreach ($sortable_rows as $i) {
+            // if this row doesn't have a page identifier, just ignore it
+            if (!isset($info["page_identifier_$i"]) || empty($info["page_identifier_$i"])) {
+                continue;
+            }
+            $page_identifier = $info["page_identifier_$i"];
+            $display_text    = $info["display_text_$i"];
+            $custom_options  = isset($info["custom_options_$i"]) ? $info["custom_options_$i"] : "";
+            $is_submenu      = isset($info["submenu_$i"]) ? "yes" : "no";
+
+            // construct the URL for this menu item
+            $url = Pages::constructPageURL($page_identifier, $custom_options);
+
+            $menu_items[] = array(
+                "url"               => $url,
+                "page_identifier"   => $page_identifier,
+                "display_text"      => $display_text,
+                "custom_options"    => $custom_options,
+                "is_submenu"        => $is_submenu,
+                "is_new_sort_group" => (in_array($i, $sortable_new_groups)) ? "yes" : "no"
+            );
+        }
+
+        self::clearMenuItems($menu_id);
+        self::addMenuItems($menu_id, $menu_items);
+
+        // update the administrator's cache, so the menu automatically updates
+        self::cacheAccountMenu($account_id);
+
+        $success = true;
+        $message = $LANG["notify_admin_menu_updated"];
+        extract(Hooks::processHookCalls("end", compact("success", "message", "info"), array("success", "message")), EXTR_OVERWRITE);
+
+        return array($success, $message);
+    }
+
+
+    /**
+     * Updates a client menu.
+     *
+     * @param array $info
+     */
+    public static function updateClientMenu($info)
+    {
+        $LANG = Core::$L;
+        $db = Core::$db;
+
+        $menu_id = $info["menu_id"];
+        $menu    = trim($info["menu"]);
+        $sortable_id = $info["sortable_id"];
+
+        $db->query("
+            UPDATE {PREFIX}menus
+            SET    menu    = :menu
+            WHERE  menu_id = :menu_id
+        ");
+        $db->bindAll(array(
+            "menu" => $menu,
+            "menu_id" => $menu_id
+        ));
+        $db->execute();
+
+        $sortable_rows       = explode(",", $info["{$sortable_id}_sortable__rows"]);
+        $sortable_new_groups = explode(",", $info["{$sortable_id}_sortable__new_groups"]);
+
+        $menu_items = array();
+        foreach ($sortable_rows as $i) {
+
+            // if this row doesn't have a page identifier, just ignore it
+            if (!isset($info["page_identifier_$i"]) || empty($info["page_identifier_$i"])) {
+                continue;
+            }
+            $page_identifier = $info["page_identifier_$i"];
+            $display_text    = $info["display_text_$i"];
+            $custom_options  = isset($info["custom_options_$i"]) ? $info["custom_options_$i"] : "";
+            $is_submenu      = isset($info["submenu_$i"]) ? "yes" : "no";
+
+            // construct the URL for this menu item
+            $url = Pages::constructPageURL($page_identifier, $custom_options);
+
+            $menu_items[] = array(
+                "url" => $url,
+                "page_identifier"   => $page_identifier,
+                "display_text"      => $display_text,
+                "custom_options"    => $custom_options,
+                "is_submenu"        => $is_submenu,
+                "is_new_sort_group" => (in_array($i, $sortable_new_groups)) ? "yes" : "no"
+            );
+        }
+
+        ksort($menu_items);
+        self::clearMenuItems($menu_id);
+        self::addMenuItems($menu_id, $menu_items);
+
+        $success = true;
+        $message = $LANG["notify_client_menu_updated"];
+        extract(Hooks::processHookCalls("end", compact("info"), array("success", "message")), EXTR_OVERWRITE);
+
+        return array($success, $message);
+    }
+
+
+    public static function clearMenuItems($menu_id)
+    {
+        $db = Core::$db;
+
+        $db->query("DELETE FROM {PREFIX}menu_items WHERE menu_id = :menu_id");
+        $db->bind("menu_id", $menu_id);
+        $db->execute();
+    }
+
+
+    public static function addMenuItems($menu_id, $menu_items)
+    {
+        $db = Core::$db;
+
+        $order = 1;
+        foreach ($menu_items as $hash) {
+            $db->query("
+                INSERT INTO {PREFIX}menu_items (menu_id, display_text, page_identifier, custom_options, url,
+                    is_submenu, list_order, is_new_sort_group)
+                VALUES (:menu_id, :display_text, :page_identifier, :custom_options, :url, :is_submenu,
+                    :list_order, :is_new_sort_group)
+            ");
+            $db->bindAll(array(
+                "menu_id" => $menu_id,
+                "display_text" => $hash["display_text"],
+                "page_identifier" => $hash["page_identifier"],
+                "custom_options" => $hash["custom_options"],
+                "url" => $hash["url"],
+                "is_submenu" => $hash["is_submenu"],
+                "list_order" => $order,
+                "is_new_sort_group" => $hash["is_new_sort_group"]
+            ));
+            $db->execute();
+            $order++;
+        }
+    }
+
+
+    /**
+     * Deletes a client menu. Since it's possible for one or more clients to already be associated with the
+     * menu, those clients will be orphaned by this action. In this situation, it refuses to delete the
+     * menu, and lists all clients that will be affected (each a link to their account). It also provides
+     * an option to bulk assign them to another menu.
+     *
+     * In all likelihood, however, the administrator will already be aware of this, having seen their names
+     * listed in the table where they chose to delete the menu.
+     *
+     * @param integer $menu_id
+     * @return array [0] T/F, [1] message
+     */
+    public static function deleteClientMenu($menu_id)
+    {
+        $LANG = Core::$L;
+        $db = Core::$db;
+        $root_url = Core::getRootUrl();
+
+        extract(Hooks::processHookCalls("start", compact("menu_id"), array()), EXTR_OVERWRITE);
+
+        // confirm that there are no client accounts that currently use this menu
+        $db->query("
+            SELECT account_id, first_name, last_name
+            FROM   {PREFIX}accounts
+            WHERE  menu_id = :menu_id
+        ");
+        $db->bind("menu_id", $menu_id);
+        $db->execute();
+
+        $client_info = $db->fetchAll();
+
+        // move this!
+        if (!empty($client_info)) {
+            $message = $LANG["notify_deleted_menu_already_assigned"];
+            $placeholder_str = $LANG["phrase_assign_all_listed_client_accounts_to_menu"];
+
+            $menus = self::getMenuList();
+            $dd = "<select id=\"mass_update_client_menu\">";
+            foreach ($menus as $menu_info) {
+                if ($menu_info["menu_type"] == "admin") {
+                    continue;
+                }
+                $dd .= "<option value=\"{$menu_info["menu_id"]}\">{$menu_info["menu"]}</option>";
+            }
+
+            $dd .= "</select>";
+
+            // a bit bad (hardcoded HTML!), but organize the account list in 3 columns
+            $client_links_table = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n<tr>";
+            $num_affected_clients = count($client_info);
+            for ($i=0; $i<$num_affected_clients; $i++) {
+                $account_info = $client_info[$i];
+                $client_id  = $account_info["account_id"];
+                $first_name = $account_info["first_name"];
+                $last_name  = $account_info["last_name"];
+                $client_ids[] = $client_id;
+
+                if ($i != 0 && $i % 3 == 0) {
+                    $client_links_table .= "</tr>\n<tr>";
+                }
+
+                $client_links_table .= "<td width=\"33%\">&bull;&nbsp;<a href=\"$root_url/admin/clients/edit.php?page=settings&client_id=$client_id\" target=\"_blank\">$first_name $last_name</a></td>\n";
+            }
+            $client_id_str = join(",", $client_ids);
+
+            // close the table
+            if ($num_affected_clients % 3 == 1)
+                $client_links_table .= "<td colspan=\"2\" width=\"66%\"> </td>";
+            else if ($num_affected_clients % 3 == 2)
+                $client_links_table .= "<td width=\"33%\"> </td>";
+
+            $client_links_table .= "</tr></table>";
+
+            $submit_button = "<input type=\"button\" value=\"{$LANG["phrase_update_accounts"]}\" onclick=\"window.location='index.php?page=menus&mass_assign=1&accounts=$client_id_str&menu_id=' + $('#mass_update_client_menu').val()\" />";
+
+            $placeholders = array(
+                "menu_dropdown" => $dd,
+                "submit_button" => $submit_button
+            );
+
+            $mass_assign_html = "<div class=\"margin_top_large margin_bottom_large\">" . General::evalSmartyString($placeholder_str, $placeholders) . "</div>";
+            $html = $message . $mass_assign_html . $client_links_table;
+
+            return array(false, $html);
+        }
+
+        // ------------------------------------------------------------
+
+        $db->query("
+            SELECT account_id, first_name, last_name
+            FROM   {PREFIX}accounts
+            WHERE  menu_id = :menu_id
+        ");
+        $db->bind("menu_id", $menu_id);
+        $db->execute();
+
+        $client_accounts = $db->fetchAll();
+
+        // delete the menu
+        self::deleteMenu($menu_id);
+
+        // construct the message to return to the administrator
+        if (empty($client_accounts)) {
+            $success = true;
+            $message = $LANG["notify_client_menu_deleted"];
+        } else {
+            $success = false;
+            $message = $LANG["notify_client_menu_deleted_orphaned_accounts"];
+
+            $accounts_str = "<br />";
+            foreach ($client_accounts as $account_info) {
+                $client_id  = $account_info["account_id"];
+                $first_name = $account_info["first_name"];
+                $last_name  = $account_info["last_name"];
+                $accounts_str .= "&bull;&nbsp;<a href=\"$root_url/admin/clients/edit.php?client_id=$client_id\" target=\"_blank\">$first_name $last_name</a><br />\n";
+            }
+
+            $message .= $accounts_str;
+        }
+
+        return array($success, $message);
+    }
+
+
+    public static function deleteMenu($menu_id)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            DELETE FROM {PREFIX}menus
+            WHERE menu_id = $menu_id
+        ");
+        $db->bind("menu_id", $menu_id);
+        $db->execute();
+
+        $db->query("
+            DELETE FROM {PREFIX}menu_items
+            WHERE menu_id = $menu_id
+        ");
+        $db->bind("menu_id", $menu_id);
+        $db->execute();
+    }
+
 }

@@ -17,7 +17,7 @@ if (isset($request["create_new_menu"])) {
 if (isset($request["update_client_menu"])) {
 	$info = $_POST;
 	$info["sortable_id"] = $sortable_id;
-	list($g_success, $g_message) = ft_update_client_menu($info);
+	list($g_success, $g_message) = Menus::updateClientMenu($info);
 }
 
 $menu_info = Menus::getClientMenu($menu_id);
