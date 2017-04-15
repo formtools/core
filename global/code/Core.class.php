@@ -240,8 +240,10 @@ class Core {
 
     /**
      * The translations object. Used to get the current UI language and translation strings (Core::$translations->getList())
+     * @var Translations
      */
-    public static $translations; // TODO need to expose?
+    public static $translations;
+
     public static $L;
     private static $currLang;
 

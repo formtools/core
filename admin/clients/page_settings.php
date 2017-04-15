@@ -2,6 +2,8 @@
 
 use FormTools\Accounts;
 use FormTools\Administrator;
+use FormTools\Core;
+
 
 if (isset($_POST['update_client'])) {
     list($g_success, $g_message) = Administrator::adminUpdateClient($request, 2);
@@ -9,7 +11,7 @@ if (isset($_POST['update_client'])) {
 
 // if required, update the list of available languages
 if (isset($_GET["refresh_lang_list"])) {
-    list($g_success, $g_message) = ft_refresh_language_list();
+    list($g_success, $g_message) = Core::$translations->refreshLanguageList();
 }
 
 $client_info = Accounts::getAccountInfo($client_id);

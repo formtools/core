@@ -36,4 +36,79 @@ class Translations
         return $this->L;
     }
 
+    /**
+     * Refreshes the list of available language files found in the /global/lang folder. This
+     * function parses the folder and stores the language info in the "available_languages"
+     * settings in the settings table.
+     *
+     * @return array [0]: true/false (success / failure)
+     *               [1]: message string
+     */
+    public function refreshLanguageList()
+    {
+        global $g_root_dir, $g_table_prefix, $LANG;
+
+        $language_folder_dir = "$g_root_dir/global/lang";
+
+        $available_language_info = array();
+        if ($handle = opendir($language_folder_dir))
+        {
+            while (false !== ($filename = readdir($handle)))
+            {
+                if ($filename != '.' && $filename != '..' && $filename != "index.php" &&
+                ft_get_filename_extension($filename, true) == "php")
+                {
+                    list($lang_file, $lang_display) = $this->getLanguageFileInfo("$language_folder_dir/$filename");
+                    $available_language_info[$lang_file] = $lang_display;
+                }
+            }
+            closedir($handle);
+        }
+
+        // sort the languages alphabetically
+        ksort($available_language_info);
+
+        // now piece everything together in a single string for storing in the database
+        $available_languages = array();
+        while (list($key,$val) = each($available_language_info))
+            $available_languages[] = "$key,$val";
+        $available_language_str = join("|", $available_languages);
+
+        mysql_query("
+    UPDATE {$g_table_prefix}settings
+    SET    setting_value = '$available_language_str'
+    WHERE  setting_name = 'available_languages'
+      ");
+
+        // update the values in sessions
+        $_SESSION["ft"]["settings"]["available_languages"] = $available_language_str;
+
+        return array(true, $LANG["notify_lang_list_updated"]);
+    }
+
+
+    /**
+     * Helper function which examines a particular language file and returns the language
+     * filename (en_us, fr_ca, etc) and the display name ("English (US), French (CA), etc).
+     *
+     * @param string $file the full path of the language file
+     * @return array [0] the language file name<br />
+     *               [1] the language display name
+     */
+    private function getLanguageFileInfo($file)
+    {
+        @include($file);
+
+        $defined_vars = get_defined_vars();
+        $language_display = $defined_vars["LANG"]["special_language_locale"];
+
+        // now return the filename component, minus the .php
+        $pathinfo = pathinfo($file);
+        $lang_file = preg_replace("/\.php$/", "", $pathinfo["basename"]);
+
+        return array($lang_file, $language_display);
+    }
+
+
+
 }
