@@ -2,6 +2,7 @@
 
 use FormTools\Core;
 use FormTools\Fields;
+use FormTools\FieldTypes;
 use FormTools\General;
 use FormTools\Themes;
 
@@ -52,7 +53,7 @@ $custom_field_id_str = implode(",", $custom_field_ids);
 // this chunk of code determines what method should be used to make the form web page(s) available to
 // the javascript, to let it parse and Smart Fill the field types and options
 $scrape_method = ft_get_js_webpage_parse_method($form_info["form_url"]);
-$raw_field_types_js = ft_get_raw_field_types_js();
+$raw_field_types_js = FieldTypes::getRawFieldTypesJs();
 $field_size_labels_js = ft_generate_field_type_size_labels();
 
 // ------------------------------------------------------------------------------------------------

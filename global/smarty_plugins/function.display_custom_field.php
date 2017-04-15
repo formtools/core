@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\FieldTypes;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -23,5 +26,5 @@ function smarty_function_display_custom_field($params, &$smarty)
     }
   }
 
-  echo ft_generate_viewable_field($params);
+  echo FieldTypes::generateViewableField($params);
 }

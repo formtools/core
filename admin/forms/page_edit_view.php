@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Fields;
+use FormTools\FieldTypes;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\Themes;
@@ -28,7 +29,7 @@ $form_database_column_info = Forms::getFormColumnNames($form_id);
 $view_clients  = ft_get_view_clients($view_id);
 $view_tabs     = ft_get_view_tabs($view_id);
 $grouped_fields = ft_get_grouped_view_fields($view_id);
-$field_types = ft_get_field_type_names();
+$field_types = FieldTypes::getFieldTypeNames();
 
 $new_view_submission_defaults = ft_get_new_view_submission_defaults($view_id);
 

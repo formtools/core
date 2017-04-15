@@ -106,7 +106,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 	$file_fields_to_delete = array();
 	if ($auto_delete_submission_files == "yes")
 	{
-		$file_field_type_ids = ft_get_file_field_type_ids();
+		$file_field_type_ids = FieldTypes::getFileFieldTypeIds();
 		foreach ($form_fields as $field_info)
 		{
 			$field_type_id = $field_info["field_type_id"];
@@ -235,7 +235,7 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 	$form_has_file_field = false;
 	if ($auto_delete_submission_files == "yes")
 	{
-		$file_field_type_ids = ft_get_file_field_type_ids();
+		$file_field_type_ids = FieldTypes::getFileFieldTypeIds();
 		$file_fields_to_delete = array();
 		foreach ($submissions_to_delete as $submission_id)
 		{
@@ -557,10 +557,10 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 	}
 
 	$form_fields = Fields::getFormFields($form_id);
-	$field_types_processing_info = ft_get_field_type_processing_info();
+	$field_types_processing_info = FieldTypes::getFieldTypeProcessingInfo();
 
 	// this gets all settings for the fields, taking into account whatever has been overridden
-	$field_settings = ft_get_form_field_field_type_settings($field_ids, $form_fields);
+	$field_settings = FieldTypes::getFormFieldFieldTypeSettings($field_ids, $form_fields);
 
 	$db_column_names = array();
 	$now = General::getCurrentDatetime();

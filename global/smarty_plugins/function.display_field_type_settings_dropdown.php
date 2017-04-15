@@ -25,7 +25,7 @@ function smarty_function_display_field_type_settings_dropdown($params, &$smarty)
   }
   $attribute_str = implode(" ", $attributes);
 
-  $field_type_settings = ft_get_field_type_settings($field_type_id);
+  $field_type_settings = FieldTypes::getFieldTypeSettings($field_type_id);
   $rows = array();
   foreach ($field_type_settings as $setting_info)
   {

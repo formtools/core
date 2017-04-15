@@ -1,5 +1,9 @@
 <?php
 
+use FormTools\FieldTypes;
+use FormTools\General;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -10,11 +14,12 @@
  */
 function smarty_function_display_field_type_name($params, &$smarty)
 {
-  $field_type_id = (isset($params["field_type_id"])) ? $params["field_type_id"] : "";
-  if (empty($field_type_id))
-    return;
+    $field_type_id = (isset($params["field_type_id"])) ? $params["field_type_id"] : "";
+    if (empty($field_type_id)) {
+        return;
+    }
 
-  $field_type_info = ft_get_field_type($field_type_id);
+    $field_type_info = FieldTypes::getFieldType($field_type_id);
 
-  echo General::evalSmartyString($field_type_info["field_type_name"]);
+    echo General::evalSmartyString($field_type_info["field_type_name"]);
 }

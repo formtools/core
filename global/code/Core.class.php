@@ -197,7 +197,7 @@ class Core {
      * values: d/m/y or m/d/y. This is because this value is used by both the daterangepicker element and
      * on the server. I don't want to fuss around with too many formats; it's confusing enough!
      */
-    private static $searchFormDateFieldFormat = "d/m/y";
+    private static $searchFormDateFieldFormat;
 
     /**
      * Added in 2.1.0 and enabled by default. This overrides the default SQL mode for any query, to prevent
@@ -474,6 +474,7 @@ class Core {
         self::$jsDebugEnabled = isset($g_js_debug) ? $g_js_debug : false;
         self::$maxForms = isset($g_max_forms) ? $g_max_forms : "";
         self::$maxNavPages = isset($g_max_nav_pages) ? $g_max_nav_pages : 16;
+        self::$searchFormDateFieldFormat = isset($g_search_form_date_field_format) ? $g_search_form_date_field_format : "d/m/y";
     }
 
     /**
@@ -610,5 +611,9 @@ class Core {
 
     public static function getMaxNavPages() {
         return self::$maxNavPages;
+    }
+
+    public static function getSearchFormDateFieldFormat() {
+        return self::$searchFormDateFieldFormat;
     }
 }

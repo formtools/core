@@ -1,5 +1,9 @@
 <?php
 
+use FormTools\FieldTypes;
+use FormTools\General;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -13,25 +17,25 @@
  */
 function smarty_function_display_field_types_dropdown($params, &$smarty)
 {
-  global $LANG;
+    $LANG = Core::$L;
 
-  $default_value = (isset($params["default"])) ? $params["default"] : "";
+    $default_value = (isset($params["default"])) ? $params["default"] : "";
 
-  // this option controls whether the option values are field_type_ids or identifiers
-  $value_type = (isset($params["value_type"])) ? $params["value_type"] : "field_type_id";
+    // this option controls whether the option values are field_type_ids or identifiers
+    $value_type = (isset($params["value_type"])) ? $params["value_type"] : "field_type_id";
 
-  $attribute_whitelist = array("name", "id", "onchange", "onkeyup", "onfocus", "tabindex", "class");
-  $attributes = array();
-  foreach ($attribute_whitelist as $attribute_name)
-  {
-    if (isset($params[$attribute_name]) && !empty($params[$attribute_name]))
-      $attributes[] = "$attribute_name=\"{$params[$attribute_name]}\"";
-  }
-  $attribute_str = implode(" ", $attributes);
+    $attribute_whitelist = array("name", "id", "onchange", "onkeyup", "onfocus", "tabindex", "class");
+    $attributes = array();
+    foreach ($attribute_whitelist as $attribute_name) {
+        if (isset($params[$attribute_name]) && !empty($params[$attribute_name])) {
+            $attributes[] = "$attribute_name=\"{$params[$attribute_name]}\"";
+        }
+    }
+    $attribute_str = implode(" ", $attributes);
 
-  $grouped_field_types = ft_get_grouped_field_types();
-  $rows = array();
-  foreach ($grouped_field_types as $grouped_field_type)
+    $grouped_field_types = FieldTypes::getGroupedFieldTypes();
+    $rows = array();
+    foreach ($grouped_field_types as $grouped_field_type)
   {
     $group_name = General::evalSmartyString($grouped_field_type["group"]["group_name"]);
     $rows[] = "<optgroup label=\"" . htmlspecialchars($group_name) . "\">";

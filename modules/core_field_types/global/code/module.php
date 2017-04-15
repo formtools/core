@@ -29,7 +29,7 @@ function core_field_types__update($old_version_info, $new_version_info)
   if ($old_version_date < 20111122)
   {
   	// dropdowns
-		$select_field_type_id = ft_get_field_type_id_by_identifier("dropdown");
+		$select_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("dropdown");
 		$field_info = ft_get_field_type($select_field_type_id, true);
 		$option_list_setting_id = "";
 		foreach ($field_info["settings"] as $setting_info)
@@ -51,7 +51,7 @@ function core_field_types__update($old_version_info, $new_version_info)
 			") or die(mysql_error());
 		}
 
-		$multi_select_field_type_id = ft_get_field_type_id_by_identifier("multi_select_dropdown");
+		$multi_select_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("multi_select_dropdown");
 		$field_info = ft_get_field_type($multi_select_field_type_id, true);
 		$option_list_setting_id = "";
 		foreach ($field_info["settings"] as $setting_info)
@@ -74,7 +74,7 @@ function core_field_types__update($old_version_info, $new_version_info)
 		}
 
 
-		$radios_field_type_id = ft_get_field_type_id_by_identifier("radio_buttons");
+		$radios_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("radio_buttons");
 		$field_info = ft_get_field_type($radios_field_type_id, true);
 		$option_list_setting_id = "";
 		foreach ($field_info["settings"] as $setting_info)
@@ -96,7 +96,7 @@ function core_field_types__update($old_version_info, $new_version_info)
 			") or die(mysql_error());
 		}
 
-		$checkboxes_field_type_id = ft_get_field_type_id_by_identifier("checkboxes");
+		$checkboxes_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("checkboxes");
 		$field_info = ft_get_field_type($checkboxes_field_type_id, true);
 		$option_list_setting_id = "";
 		foreach ($field_info["settings"] as $setting_info)

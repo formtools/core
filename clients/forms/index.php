@@ -253,7 +253,7 @@ foreach ($view_info["fields"] as $field_info) {
 
 $settings = Settings::get("", "core");
 
-$date_picker_info = ft_get_default_date_field_search_value($settings["default_date_field_search_value"]);
+$date_picker_info = FieldTypes::getDefaultDateFieldSearchValue($settings["default_date_field_search_value"]);
 $default_date_field_search_value = $date_picker_info["default_date_field_search_value"];
 $date_field_search_js_format     = $date_picker_info["date_field_search_js_format"];
 

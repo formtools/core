@@ -36,9 +36,11 @@ use FormTools\Settings;
  */
 function ft_upgrade_form_tools()
 {
-	global $g_table_prefix, $g_current_version, $g_release_type, $g_release_date, $LANG, $g_default_datetime_format;
+	global $g_table_prefix, $g_current_version, $g_release_type, $g_release_date, $LANG;
 
-	$upgrade_attempted = false;
+    $g_default_datetime_format = FieldTypes::$defaultDatetimeFormat;
+
+    $upgrade_attempted = false;
 	$success     = "";
 	$message     = "";
 	$old_version_info = ft_get_core_version_info();
@@ -903,8 +905,8 @@ function ft_upgrade_form_tools()
 		}
 
 		// existing ENUM key => new field type identifier
-		$textbox_field_type_id = ft_get_field_type_id_by_identifier("textbox");
-		$date_field_type_id    = ft_get_field_type_id_by_identifier("date");
+		$textbox_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("textbox");
+		$date_field_type_id    = FieldTypes::getFieldTypeIdByIdentifier("date");
 		$map = array(
 			"textbox"       => $field_type_map["textbox"],
 			"textarea"      => $field_type_map["textarea"],
@@ -1124,7 +1126,7 @@ function ft_upgrade_form_tools()
 		mysql_query("ALTER TABLE {$g_table_prefix}field_settings DROP module"); // this field wasn't ever used
 		mysql_query("ALTER TABLE {$g_table_prefix}field_settings CHANGE setting_name setting_id MEDIUMINT NOT NULL");
 
-		$file_field_type_id = ft_get_field_type_id_by_identifier("file");
+		$file_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("file");
 		$field_setting_name_to_id_map = array(
 			"file_upload_dir"       => ft_get_field_type_setting_by_identifier($file_field_type_id, "folder_path"),
 			"file_upload_url"       => ft_get_field_type_setting_by_identifier($file_field_type_id, "folder_url"),
@@ -1153,7 +1155,7 @@ function ft_upgrade_form_tools()
       WHERE  is_system_field = 'yes' AND
              (field_name = 'core__submission_date' OR field_name = 'core__last_modified')
     ");
-		$date_field_type_datetime_setting_id = ft_get_field_type_setting_id_by_identifier($date_field_type_id, "display_format");
+		$date_field_type_datetime_setting_id = FieldTypes::getFieldTypeSettingIdByIdentifier($date_field_type_id, "display_format");
 		while ($row = mysql_fetch_assoc($query))
 		{
 			$field_id = $row["field_id"];
@@ -1226,7 +1228,7 @@ function ft_upgrade_form_tools()
 			{
 				// slow and crappy!
 				$field_type_id = ft_get_field_type_id_by_field_id($field_id);
-				$setting_id    = ft_get_field_type_setting_id_by_identifier($field_type_id, "formatting");
+				$setting_id    = FieldTypes::getFieldTypeSettingIdByIdentifier($field_type_id, "formatting");
 
 				// for checkbox & radios fields that were assigned to an option list with a "n/a" orientation, don't
 				// worry about it: they'll inherit the default value
@@ -1360,7 +1362,7 @@ function ft_upgrade_form_tools()
       UPDATE {$g_table_prefix}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
-             view_field_php_function = 'ft_display_field_type_dropdown',
+             view_field_php_function = 'FieldTypes::displayFieldTypeDropdown',
              view_field_smarty_markup = '{strip}{if \$contents != \"\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$VALUE == \$option.option_value}{\$option.option_name}{/if}\r\n    {/foreach}\r\n  {/foreach}\r\n{/if}{/strip}',
              edit_field_smarty_markup = '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">{\$LANG.phrase_not_assigned_to_option_list}</div>\r\n{else}\r\n  <select name=\"{\$NAME}\">\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {if \$group_info.group_name}\r\n      <optgroup label=\"{\$group_info.group_name|escape}\">\r\n    {/if}\r\n    {foreach from=\$options item=option name=row}\r\n      <option value=\"{\$option.option_value}\"\r\n        {if \$VALUE == \$option.option_value}selected{/if}>{\$option.option_name}</option>\r\n    {/foreach}\r\n    {if \$group_info.group_name}\r\n      </optgroup>\r\n    {/if}\r\n  {/foreach}\r\n  </select>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}'
       WHERE  field_type_identifier = 'dropdown'
@@ -1371,7 +1373,7 @@ function ft_upgrade_form_tools()
       UPDATE {$g_table_prefix}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
-             view_field_php_function = 'ft_display_field_type_multi_select_dropdown',
+             view_field_php_function = 'FieldTypes::displayFieldTypeMultiSelectDropdown',
              view_field_smarty_markup = '{if \$contents != \"\"}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_first value=true}\r\n  {strip}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$option.option_value|in_array:\$vals}\r\n        {if \$is_first == false}, {/if}\r\n        {\$option.option_name}\r\n        {assign var=is_first value=false}\r\n      {/if}\r\n    {/foreach}\r\n  {/foreach}\r\n  {/strip}\r\n{/if}',
              edit_field_smarty_markup = '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">{\$LANG.phrase_not_assigned_to_option_list}</div>\r\n{else}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  <select name=\"{\$NAME}[]\" multiple size=\"{if \$num_rows}{\$num_rows}{else}5{/if}\">\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {if \$group_info.group_name}\r\n      <optgroup label=\"{\$group_info.group_name|escape}\">\r\n    {/if}\r\n    {foreach from=\$options item=option name=row}\r\n      <option value=\"{\$option.option_value}\"\r\n        {if \$option.option_value|in_array:\$vals}selected{/if}>{\$option.option_name}</option>\r\n    {/foreach}\r\n    {if \$group_info.group_name}\r\n      </optgroup>\r\n    {/if}\r\n  {/foreach}\r\n  </select>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}',
       WHERE  field_type_identifier = 'multi_select_dropdown'
@@ -1382,7 +1384,7 @@ function ft_upgrade_form_tools()
       UPDATE {$g_table_prefix}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
-             view_field_php_function = 'ft_display_field_type_radios',
+             view_field_php_function = 'FieldTypes::displayFieldTypeRadios',
              view_field_smarty_markup = '{strip}{if \$contents != \"\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$VALUE == \$option.option_value}{\$option.option_name}{/if}\r\n    {/foreach}\r\n  {/foreach}\r\n{/if}{/strip}',
              edit_field_smarty_markup = '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">{\$LANG.phrase_not_assigned_to_option_list}</div>\r\n{else}\r\n  {assign var=is_in_columns value=false}\r\n  {if \$formatting == \"cf_option_list_2cols\" || \r\n      \$formatting == \"cf_option_list_3cols\" || \r\n      \$formatting == \"cf_option_list_4cols\"}\r\n    {assign var=is_in_columns value=true}\r\n  {/if}\r\n\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n\r\n    {if \$group_info.group_name}\r\n      <div class=\"cf_option_list_group_label\">{\$group_info.group_name}</div>\r\n    {/if}\r\n\r\n    {if \$is_in_columns}<div class=\"{\$formatting}\">{/if}\r\n\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$is_in_columns}<div class=\"column\">{/if}\r\n        <input type=\"radio\" name=\"{\$NAME}\" id=\"{\$NAME}_{\$counter}\" \r\n          value=\"{\$option.option_value}\"\r\n          {if \$VALUE == \$option.option_value}checked{/if} />\r\n          <label for=\"{\$NAME}_{\$counter}\">{\$option.option_name}</label>\r\n      {if \$is_in_columns}</div>{/if}\r\n      {if \$formatting == \"vertical\"}<br />{/if}\r\n      {assign var=counter value=\$counter+1}\r\n    {/foreach}\r\n\r\n    {if \$is_in_columns}</div>{/if}\r\n  {/foreach}\r\n\r\n  {if \$comments}<div class=\"cf_field_comments\">{\$comments}</div>{/if}\r\n{/if}'
       WHERE  field_type_identifier = 'radio_buttons'
@@ -1393,7 +1395,7 @@ function ft_upgrade_form_tools()
       UPDATE {$g_table_prefix}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
-             view_field_php_function = 'ft_display_field_type_checkboxes',
+             view_field_php_function = 'FieldTypes::displayFieldTypeCheckboxes',
              view_field_smarty_markup = '{strip}{if \$contents != \"\"}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_first value=true}\r\n  {strip}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$option.option_value|in_array:\$vals}\r\n        {if \$is_first == false}, {/if}\r\n        {\$option.option_name}\r\n        {assign var=is_first value=false}\r\n      {/if}\r\n    {/foreach}\r\n  {/foreach}\r\n  {/strip}\r\n{/if}{/strip}',
              edit_field_smarty_markup = '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">{\$LANG.phrase_not_assigned_to_option_list}</div>\r\n{else}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_in_columns value=false}\r\n  {if \$formatting == \"cf_option_list_2cols\" || \r\n      \$formatting == \"cf_option_list_3cols\" || \r\n      \$formatting == \"cf_option_list_4cols\"}\r\n    {assign var=is_in_columns value=true}\r\n  {/if}\r\n\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n\r\n    {if \$group_info.group_name}\r\n      <div class=\"cf_option_list_group_label\">{\$group_info.group_name}</div>\r\n    {/if}\r\n\r\n    {if \$is_in_columns}<div class=\"{\$formatting}\">{/if}\r\n\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$is_in_columns}<div class=\"column\">{/if}\r\n        <input type=\"checkbox\" name=\"{\$NAME}[]\" id=\"{\$NAME}_{\$counter}\" \r\n          value=\"{\$option.option_value|escape}\" \r\n          {if \$option.option_value|in_array:\$vals}checked{/if} />\r\n          <label for=\"{\$NAME}_{\$counter}\">{\$option.option_name}</label>\r\n      {if \$is_in_columns}</div>{/if}\r\n      {if \$formatting == \"vertical\"}<br />{/if}\r\n      {assign var=counter value=\$counter+1}\r\n    {/foreach}\r\n\r\n    {if \$is_in_columns}</div>{/if}\r\n  {/foreach}\r\n\r\n  {if {\$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div> \r\n  {/if}\r\n{/if}'
       WHERE  field_type_identifier = 'checkboxes'
@@ -1404,7 +1406,7 @@ function ft_upgrade_form_tools()
       UPDATE {$g_table_prefix}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
-             view_field_php_function = 'ft_display_field_type_date'
+             view_field_php_function = 'FieldTypes::displayFieldTypeDate'
       WHERE  field_type_identifier = 'date'
     ");
 
@@ -1420,7 +1422,7 @@ function ft_upgrade_form_tools()
       UPDATE {$g_table_prefix}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
-             view_field_php_function = 'ft_display_field_type_phone_number'
+             view_field_php_function = 'FieldTypes::displayFieldTypePhoneNumber'
       WHERE  field_type_identifier = 'phone'
     ");
 
@@ -1429,7 +1431,7 @@ function ft_upgrade_form_tools()
       UPDATE {$g_table_prefix}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
-             view_field_php_function = 'ft_display_field_type_code_markup'
+             view_field_php_function = 'FieldTypes::displayFieldTypeCodeMarkup'
       WHERE  field_type_identifier = 'code_markup'
     ");
 	}

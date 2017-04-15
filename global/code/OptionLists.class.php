@@ -140,7 +140,7 @@ class OptionLists {
         if (!empty($field_ids)) {
             foreach ($field_ids as $field_id) {
                 $field_type_id = ft_get_field_type_id_by_field_id($field_id);
-                $field_settings = ft_get_field_type_settings($field_type_id);
+                $field_settings = FieldTypes::getFieldTypeSettings($field_type_id);
 
                 $option_list_setting_id = "";
                 foreach ($field_settings as $field_setting_info) {
@@ -499,7 +499,7 @@ class OptionLists {
         foreach ($fields as $field_info) {
             $field_id      = $field_info["field_id"];
             $field_type_id = $field_info["field_type_id"];
-            $settings = ft_get_field_type_settings($field_type_id);
+            $settings = FieldTypes::getFieldTypeSettings($field_type_id);
 
             $setting_ids = array();
             foreach ($settings as $setting_info)

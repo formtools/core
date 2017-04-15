@@ -7,4 +7,4 @@ header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 $g_check_ft_sessions = false;
 require_once("../library.php");
 
-echo ft_get_field_type_resources("js");
+echo FieldTypes::getFieldTypeResources("js");

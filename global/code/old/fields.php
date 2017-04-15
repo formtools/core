@@ -15,7 +15,9 @@
 // -------------------------------------------------------------------------------------------------
 
 
+use FormTools\Fields;
 use FormTools\FieldSizes;
+use FormTools\FieldTypes;
 use FormTools\Forms;
 use FormTools\Settings;
 
@@ -622,8 +624,8 @@ function ft_get_extended_field_settings($field_id, $setting_id = "", $convert_dy
 	$custom_settings = Fields::getFormFieldSettings($field_id);
 
 	// now get a list of all available settings for this field type
-	$field_type_id = ft_get_field_type_id($field_id);
-	$field_type_settings = ft_get_field_type_settings($field_type_id);
+	$field_type_id = FieldTypes::getFieldTypeId($field_id);
+	$field_type_settings = FieldTypes::getFieldTypeSettings($field_type_id);
 	$settings = array();
 	foreach ($field_type_settings as $curr_setting)
 	{
@@ -662,7 +664,7 @@ function ft_get_extended_field_settings($field_id, $setting_id = "", $convert_dy
 
 /**
  * ft_get_extended_field_settings() doesn't quite do what I need, so I added this secondary function. It's
- * similar to ft_get_form_field_field_type_settings(), except for a single field.
+ * similar to FieldTypes::getFormFieldFieldTypeSettings(), except for a single field.
  *
  * All it does is return all settings for a form field TAKING INTO ACCOUNT what's been overridden.
  *
@@ -696,7 +698,7 @@ function ft_get_field_settings($field_id)
 	}
 
 	$field_type_id = ft_get_field_type_id_by_field_id($field_id);
-	$default_field_type_settings = ft_get_field_type_settings($field_type_id);
+	$default_field_type_settings = FieldTypes::getFieldTypeSettings($field_type_id);
 
 	// now overlay the two and return all field settings for all fields
 	$complete_settings = array();

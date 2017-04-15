@@ -3,6 +3,8 @@
 use FormTools\Fields;
 use FormTools\FieldSizes;
 use FormTools\FieldValidation;
+use FormTools\FieldTypes;
+use FormTools\Forms;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
@@ -43,11 +45,11 @@ $reserved_words = implode(",", $escaped_words);
 
 $field_type_sizes_js = FieldSizes::generateFieldTypeSizesMapJs();
 $field_sizes_js      = FieldSizes::generateFieldTypeSizeLabels();
-$field_settings_js   = ft_generate_field_type_settings_js();
+$field_settings_js   = FieldTypes::generateFieldTypeSettingsJs();
 $field_validation_js = FieldValidation::generateFieldTypeValidationJs();
 
 $php_self = General::getCleanPhpSelf();
-$shared_characteristics_js = ft_get_field_type_setting_shared_characteristics_js();
+$shared_characteristics_js = FieldTypes::getFieldTypeSettingSharedCharacteristicsJs();
 
 
 // compile the template fields

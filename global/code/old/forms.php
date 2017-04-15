@@ -269,12 +269,14 @@ function ft_finalize_form($form_id)
  */
 function ft_initialize_form($form_data)
 {
-	global $g_table_prefix, $g_root_dir, $g_multi_val_delimiter, $LANG, $g_default_datetime_format;
+	global $g_table_prefix, $g_root_dir, $g_multi_val_delimiter, $LANG;
 
-	$textbox_field_type_id = ft_get_field_type_id_by_identifier("textbox");
-	$date_field_type_id    = ft_get_field_type_id_by_identifier("date");
-	$date_field_type_datetime_setting_id = ft_get_field_type_setting_id_by_identifier($date_field_type_id, "display_format");
-	$date_field_type_timezone_setting_id = ft_get_field_type_setting_id_by_identifier($date_field_type_id, "apply_timezone_offset");
+	$g_default_datetime_format = FieldTypes::$defaultDatetimeFormat;
+
+	$textbox_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("textbox");
+	$date_field_type_id    = FieldTypes::getFieldTypeIdByIdentifier("date");
+	$date_field_type_datetime_setting_id = FieldTypes::getFieldTypeSettingIdByIdentifier($date_field_type_id, "display_format");
+	$date_field_type_timezone_setting_id = FieldTypes::getFieldTypeSettingIdByIdentifier($date_field_type_id, "apply_timezone_offset");
 
 	$display_notification_page = isset($form_data["form_tools_display_notification_page"]) ?
 		$form_data["form_tools_display_notification_page"] : true;
@@ -614,7 +616,7 @@ function ft_set_form_field_types($form_id, $info)
 
 	extract(Hooks::processHookCalls("start", compact("info", "form_id"), array("info")), EXTR_OVERWRITE);
 
-	$textbox_field_type_id = ft_get_field_type_id_by_identifier("textbox");
+	$textbox_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("textbox");
 
 	// set a 10 minute maximum execution time for this request. For long forms it can take a long time. 10 minutes
 	// is extremely excessive, but what the hey
@@ -955,13 +957,13 @@ function ft_update_form_fields_tab($form_id, $infohash)
 	if (!empty($changed_fields))
 	{
 		$field_type_settings_shared_characteristics = Settings::get("field_type_settings_shared_characteristics");
-		$field_type_map = ft_get_field_type_id_to_identifier();
+		$field_type_map = FieldTypes::getFieldTypeIdToIdentifierMap();
 
 		$shared_settings = array();
 		foreach ($changed_fields as $changed_field_info)
 		{
 			$field_id = $changed_field_info["field_id"];
-			$shared_settings[] = ft_get_shared_field_setting_info($field_type_map, $field_type_settings_shared_characteristics, $field_id, $changed_field_info["field_type_id"], $changed_field_info["old_field_type_id"]);
+			$shared_settings[] = FieldTypes::getSharedFieldSettingInfo($field_type_map, $field_type_settings_shared_characteristics, $field_id, $changed_field_info["field_type_id"], $changed_field_info["old_field_type_id"]);
 			ft_delete_extended_field_settings($field_id);
 			FieldValidation::delete($field_id);
 		}

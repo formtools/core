@@ -820,7 +820,6 @@ function ft_get_formtools_installed_components()
 }
 
 
-
 /**
  * Generates the placeholders for a particular form submission. This is used in the email templates, and here and there
  * for providing placeholder functionality to fields (like the "Edit Submission Label" textfield for a form, where they can
@@ -843,7 +842,7 @@ function ft_get_submission_placeholders($form_id, $submission_id, $client_info =
 	$form_info       = Forms::getForm($form_id);
 	$submission_info = ft_get_submission($form_id, $submission_id);
 	$admin_info      = Administrator::getAdminInfo();
-	$file_field_type_ids = ft_get_file_field_type_ids();
+	$file_field_type_ids = FieldTypes::getFileFieldTypeIds();
 	$field_types     = FieldTypes::get(true);
 
 	// now loop through the info stored for this particular submission and for this particular field,
@@ -892,7 +891,7 @@ function ft_get_submission_placeholders($form_id, $submission_id, $client_info =
 				"settings"      => $settings,
 				"context"       => "email_template"
 			);
-			$value = ft_generate_viewable_field($params);
+			$value = FieldTypes::generateViewableField($params);
 			$placeholders["ANSWER_$field_name"] = $value;
 
 			// for backward compatibility

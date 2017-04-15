@@ -145,7 +145,7 @@ foreach ($view_info["columns"] as $column_info) {
 // of the view column, view field and form field information. For this page it only contains fields marked
 // as columns. The submissions.tpl template also needs a bunch of other stuff, but for passing to the
 // {display_custom_field} smarty function, actually very field keys are needed (see description in
-// ft_generate_viewable_field)
+// FieldTypes::generateViewableField)
 $display_fields = array();
 foreach ($view_info["columns"] as $col_info) {
 	$curr_field_id = $col_info["field_id"];
@@ -259,7 +259,7 @@ foreach ($view_info["fields"] as $field_info) {
 
 $settings = Settings::get("", "core");
 
-$date_picker_info = ft_get_default_date_field_search_value($settings["default_date_field_search_value"]);
+$date_picker_info = FieldTypes::getDefaultDateFieldSearchValue($settings["default_date_field_search_value"]);
 $default_date_field_search_value = $date_picker_info["default_date_field_search_value"];
 $date_field_search_js_format     = $date_picker_info["date_field_search_js_format"];
 

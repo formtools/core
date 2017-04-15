@@ -2,6 +2,7 @@
 
 use FormTools\Core;
 use FormTools\Fields;
+use FormTools\FieldTypes;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\Themes;
@@ -26,7 +27,7 @@ $auto_delete_submission_files = $form_info["auto_delete_submission_files"];
 
 // get the names and URLs of all uploaded files. These are displayed in the page for the user
 // so there's no doubt about exactly what they're deleting
-$file_field_type_ids = ft_get_file_field_type_ids();
+$file_field_type_ids = FieldTypes::getFileFieldTypeIds();
 $form_fields = Fields::getFormFields($form_id);
 $file_field_ids = array();
 foreach ($form_fields as $field) {
