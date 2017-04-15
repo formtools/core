@@ -1067,7 +1067,7 @@ END;
 
                 // if this is a module, include the module's library.php file so we have access to the function
                 if ($field_type_info["view_field_php_function_source"] != "core" && is_numeric($field_type_info["view_field_php_function_source"])) {
-                    $module_folder = ft_get_module_folder_from_module_id($field_type_info["view_field_php_function_source"]);
+                    $module_folder = Modules::getModuleFolderFromModuleId($field_type_info["view_field_php_function_source"]);
                     @include_once("$g_root_dir/modules/$module_folder/library.php");
                 }
 

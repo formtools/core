@@ -1,8 +1,13 @@
 <?php
 
+use FormTools\Core;
+use FormTools\Modules;
 use FormTools\Themes;
 
 require_once("../../global/library.php");
-ft_init_module_page();
+
+Core::init();
+
+Modules::initModulePage();
 
 Themes::displayModulePage("templates/index.tpl");

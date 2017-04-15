@@ -331,13 +331,13 @@ class Themes {
      * @param array $page_vars a hash of information to display / provide to the template.
      * @param string $theme
      */
-    function displayModulePage($template, $page_vars = array(), $theme = "", $swatch = "")
+    public static function displayModulePage($template, $page_vars = array(), $theme = "", $swatch = "")
     {
         global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_language, $LANG,
                $g_smarty, $L, $g_smarty_use_sub_dirs, $g_enable_benchmarking,
                $g_hide_upgrade_link;
 
-        $module_folder = _ft_get_current_module_folder();
+        $module_folder = Modules::getCurrentModuleFolder();
 
         if (empty($theme) && (isset($_SESSION["ft"]["account"]["theme"]))) {
             $theme  = $_SESSION["ft"]["account"]["theme"];
@@ -388,7 +388,7 @@ class Themes {
 
 
         $module_id = Modules::getModuleIdFromModuleFolder($module_folder);
-        $module_nav = ft_get_module_menu_items($module_id, $module_folder);
+        $module_nav = Modules::getModuleMenuItems($module_id, $module_folder);
         $g_smarty->assign("module_nav", $module_nav);
 
         // if there's no module title, display the module name. TODO not compatible with languages...

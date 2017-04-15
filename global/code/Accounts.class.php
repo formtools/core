@@ -428,10 +428,10 @@ class Accounts {
         $swift_mail_enabled = Modules::checkModuleEnabled("swift_mailer");
         if ($swift_mail_enabled)
         {
-            $sm_settings = ft_get_module_settings("", "swift_mailer");
+            $sm_settings = Modules::getModuleSettings("", "swift_mailer");
             if ($sm_settings["swiftmailer_enabled"] == "yes")
             {
-                ft_include_module("swift_mailer");
+                Modules::includeModule("swift_mailer");
 
                 // get the admin info. We'll use that info for the "from" and "reply-to" values. Note
                 // that we DON'T use that info for the regular mail() function. This is because retrieving

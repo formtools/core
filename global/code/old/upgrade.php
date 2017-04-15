@@ -651,7 +651,7 @@ function ft_upgrade_form_tools()
 		ft_update_module_list();
 
 		// not installed? Return an error. Note: the above code will NOT be re-inser
-		if (!ft_check_module_available("field_type_file"))
+		if (!Modules::checkModuleAvailable("field_type_file"))
 		{
 			return array(
 				"upgraded" => true,
@@ -659,7 +659,7 @@ function ft_upgrade_form_tools()
 				"message"  => "Sorry, the <b>File Upload module</b> isn't installed. In order to upgrade to 2.1.0 or later, you must upload that module to your /modules folder, then refresh this page."
 			);
 		}
-		if (!ft_check_module_available("field_type_tinymce"))
+		if (!Modules::checkModuleAvailable("field_type_tinymce"))
 		{
 			return array(
 				"upgraded" => true,

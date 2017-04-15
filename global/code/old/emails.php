@@ -256,10 +256,10 @@ function ft_send_test_email($info)
 	// if Swift Mailer is enabled, send the emails with that
 	$continue = true;
 	if (Modules::checkModuleEnabled("swift_mailer")) {
-		$sm_settings = ft_get_module_settings("", "swift_mailer");
+		$sm_settings = Modules::getModuleSettings("", "swift_mailer");
 
 		if ($sm_settings["swiftmailer_enabled"] == "yes") {
-			ft_include_module("swift_mailer");
+			Modules::includeModule("swift_mailer");
 
 			// we deliberately ignore anything other than the specified recipient
 			$email_info["cc"]  = array();
@@ -1169,10 +1169,10 @@ function ft_process_email_template($form_id, $submission_id, $email_id)
 	// if Swift Mailer is enabled, send the emails with that
 	$continue = true;
 	if (Modules::checkModuleEnabled("swift_mailer")) {
-		$sm_settings = ft_get_module_settings("", "swift_mailer");
+		$sm_settings = Modules::getModuleSettings("", "swift_mailer");
 
 		if (isset($sm_settings["swiftmailer_enabled"]) && $sm_settings["swiftmailer_enabled"] == "yes") {
-			ft_include_module("swift_mailer");
+			Modules::includeModule("swift_mailer");
 			list($success, $message) = swift_send_email($email_components);
 			$continue = false;
 		}

@@ -206,7 +206,7 @@ class Menus
         // if the Pages module is enabled, display any custom pages that have been defined. Only show the optgroup
         // if there's at least ONE page defined
         if (Modules::checkModuleEnabled("pages")) {
-            ft_include_module("pages");
+            Modules::includeModule("pages");
             $pages_info = pg_get_pages("all");
             $pages = $pages_info["results"];
 
