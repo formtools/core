@@ -3,11 +3,12 @@
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Pages;
+use FormTools\Settings;
 use FormTools\Themes;
 
 
 if (isset($request["update_accounts"])) {
-    list($g_success, $g_message) = ft_update_account_settings($request);
+    list($g_success, $g_message) = Settings::updateAccountSettings($request);
 }
 
 // if required, update the list of available languages

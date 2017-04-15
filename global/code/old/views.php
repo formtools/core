@@ -1480,8 +1480,7 @@ function _ft_update_view_filter_settings($view_id, $info)
 
 		$errors = array_merge($standard_filter_errors, $client_map_filter_errors);
 
-		if ($g_debug)
-		{
+		if ($g_debug) {
 			array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
 			$message .= "<br /><br />" . join("<br />", $errors);
 		}

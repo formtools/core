@@ -122,7 +122,7 @@ class Accounts {
 
 
     /**
-     * Updates any number of settings for a particular user account. As with the similar ft_set_settings
+     * Updates any number of settings for a particular user account. As with the similar Settings::set()
      * function, it creates the record if it doesn't already exist.
      *
      * @param integer $account_id

@@ -283,7 +283,7 @@ function ft_init_module_page($account_type = "admin")
 function ft_set_module_settings($settings)
 {
 	$module_folder = _ft_get_current_module_folder();
-	ft_set_settings($settings, $module_folder);
+    Settings::set($settings, $module_folder);
 }
 
 

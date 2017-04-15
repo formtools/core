@@ -3,12 +3,13 @@
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Pages;
+use FormTools\Settings;
 use FormTools\Themes;
 
 $LANG = Core::$L;
 
 if (isset($request["update_main"])) {
-    list($g_success, $g_message) = ft_update_main_settings($_POST);
+    list($g_success, $g_message) = Settings::updateMainSettings($_POST);
 }
 
 $text_date_formatting_link = General::evalSmartyString($LANG["text_date_formatting_link"], array(
@@ -16,20 +17,20 @@ $text_date_formatting_link = General::evalSmartyString($LANG["text_date_formatti
 ));
 
 $head_js =<<<END
-  var rules = [];
-  rules.push("required,program_name,{$LANG["validation_no_program_name"]}");
-  rules.push("required,num_clients_per_page,{$LANG["validation_no_num_clients_per_page"]}");
-  rules.push("digits_only,num_clients_per_page,{$LANG["validation_invalid_num_clients_per_page"]}");
-  rules.push("required,num_emails_per_page,{$LANG["validation_no_num_emails_per_page"]}");
-  rules.push("digits_only,num_emails_per_page,{$LANG["validation_invalid_num_emails_per_page"]}");
-  rules.push("required,num_forms_per_page,{$LANG["validation_no_num_forms_per_page"]}");
-  rules.push("digits_only,num_forms_per_page,{$LANG["validation_invalid_num_forms_per_page"]}");
-  rules.push("required,num_option_lists_per_page,{$LANG["validation_no_num_option_lists_per_page"]}");
-  rules.push("digits_only,num_option_lists_per_page,{$LANG["validation_invalid_num_option_lists_per_page"]}");
-  rules.push("required,num_menus_per_page,{$LANG["validation_no_num_menus_per_page"]}");
-  rules.push("digits_only,num_menus_per_page,{$LANG["validation_invalid_num_menus_per_page"]}");
-  rules.push("required,num_modules_per_page,{$LANG["validation_no_num_modules_per_page"]}");
-  rules.push("digits_only,num_modules_per_page,{$LANG["validation_invalid_num_modules_per_page"]}");
+    var rules = [];
+    rules.push("required,program_name,{$LANG["validation_no_program_name"]}");
+    rules.push("required,num_clients_per_page,{$LANG["validation_no_num_clients_per_page"]}");
+    rules.push("digits_only,num_clients_per_page,{$LANG["validation_invalid_num_clients_per_page"]}");
+    rules.push("required,num_emails_per_page,{$LANG["validation_no_num_emails_per_page"]}");
+    rules.push("digits_only,num_emails_per_page,{$LANG["validation_invalid_num_emails_per_page"]}");
+    rules.push("required,num_forms_per_page,{$LANG["validation_no_num_forms_per_page"]}");
+    rules.push("digits_only,num_forms_per_page,{$LANG["validation_invalid_num_forms_per_page"]}");
+    rules.push("required,num_option_lists_per_page,{$LANG["validation_no_num_option_lists_per_page"]}");
+    rules.push("digits_only,num_option_lists_per_page,{$LANG["validation_invalid_num_option_lists_per_page"]}");
+    rules.push("required,num_menus_per_page,{$LANG["validation_no_num_menus_per_page"]}");
+    rules.push("digits_only,num_menus_per_page,{$LANG["validation_invalid_num_menus_per_page"]}");
+    rules.push("required,num_modules_per_page,{$LANG["validation_no_num_modules_per_page"]}");
+    rules.push("digits_only,num_modules_per_page,{$LANG["validation_invalid_num_modules_per_page"]}");
 END;
 
 $page_vars = array(

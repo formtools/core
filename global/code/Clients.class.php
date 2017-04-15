@@ -88,10 +88,7 @@ class Clients {
                 }
 
                 if (!empty($errors)) {
-                    $success = false;
-                    array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-                    $message = implode("<br />", $errors);
-                    return array($success, $message);
+                    return array(false, General::getErrorListHTML($errors));
                 }
 
                 $query = "
@@ -136,12 +133,8 @@ class Clients {
 
                 $errors = validate_fields($info, $rules);
 
-                if (!empty($errors))
-                {
-                    $success = false;
-                    array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-                    $message = implode("<br />", $errors);
-                    return array($success, $message);
+                if (!empty($errors)) {
+                    return array(false, General::getErrorListHTML($errors));
                 }
 
                 // update the main accounts table. Only update those settings they're ALLOWED to

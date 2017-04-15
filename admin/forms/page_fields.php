@@ -20,7 +20,7 @@ if (isset($request["update_fields"])) {
 $form_info = Forms::getForm($form_id);
 if (isset($request["num_fields_per_page"])) {
 	$num_fields_per_page = $request["num_fields_per_page"];
-	ft_set_settings(array("admin_num_fields_per_page_{$form_id}" => $request["num_fields_per_page"]));
+    Settings::set(array("admin_num_fields_per_page_{$form_id}" => $request["num_fields_per_page"]));
 	$_GET["fields_page"] = 1;
 } else {
 	$saved_num_fields_per_page = Settings::get("admin_num_fields_per_page_{$form_id}");
@@ -28,7 +28,7 @@ if (isset($request["num_fields_per_page"])) {
 }
 
 if (empty($num_fields_per_page)) {
-	ft_set_settings("admin_num_fields_per_page_{$form_id}", "all");
+    Settings::set("admin_num_fields_per_page_{$form_id}", "all");
 }
 
 $fields_page = General::loadField("fields_page", "fields_page", 1);

@@ -89,7 +89,7 @@ function ft_check_folder_url_match($folder, $url)
 	$folder = rtrim(trim($folder), "/\\");
 	$url    = rtrim(trim($url), "/\\");
 
-	list($success, $message) = ft_check_upload_folder($folder);
+	list($success, $message) = Files::checkUploadFolder($folder);
 	if (!$success)
 		return array(false, $LANG["validation_folder_invalid_permissions"]);
 
@@ -136,45 +136,6 @@ function ft_check_folder_url_match($folder, $url)
 
 		return array(false, $LANG["notify_folder_url_unknown_error"]);
 	}
-}
-
-
-/**
- * Examines a folder to check (a) it exists and (b) it has correct permissions.
- *
- * @param string $folder The full path to the folder
- * @return array Returns array with indexes:<br/>
- *               [0]: true/false (success / failure)<br/>
- *               [1]: message string<br/>
- */
-function ft_check_upload_folder($folder)
-{
-	global $LANG;
-
-	// first, check server's temporary file upload folder
-	$upload_tmp_dir = ini_get("upload_tmp_dir");
-
-	if (!empty($upload_tmp_dir))
-	{
-		if (!is_dir($upload_tmp_dir))
-		{
-			$replacement_info = array("upload_folder" => $upload_tmp_dir);
-			$message = General::evalSmartyString($LANG["validation_invalid_upload_folder"], $replacement_info);
-			return array(false, );
-		}
-
-		if (!is_writable($upload_tmp_dir))
-			return array(false, $LANG["validation_upload_folder_not_writable"]);
-	}
-
-	// now check the folder is really a folder
-	if (!is_dir($folder))
-		return array(false, $LANG["validation_invalid_folder"]);
-
-	if (!is_writable($folder))
-		return array(false, $LANG["validation_folder_not_writable"]);
-
-	return array(true, $LANG["notify_folder_correct_permissions"]);
 }
 
 

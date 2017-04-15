@@ -521,9 +521,7 @@ class Forms {
 
         $errors = validate_fields($request, $rules);
         if (!empty($errors)) {
-            array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-            $message = join("<br />", $errors);
-            return array(false, $message);
+            return array(false, General::getErrorListHTML($errors));
         }
 
         $info = $request;
@@ -702,10 +700,7 @@ class Forms {
 
         // if there are errors, piece together an error message string and return it
         if (!empty($errors)) {
-            $success = false;
-            array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-            $message = join("<br />", $errors);
-            return array($success, $message, "");
+            return array(false, General::getErrorListHTML($errors));
         }
 
         // extract values

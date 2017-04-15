@@ -341,7 +341,7 @@ function ft_upgrade_form_tools()
 			"num_password_history"              => "",
 			"clients_may_edit_max_failed_login_attempts" => ""
 		);
-		ft_set_settings($settings);
+        Settings::set($settings);
 
 		// now set the default values for all clients. This sucks, obviously - but eventually the
 		// whole inheritance model for client account settings will be overhauled and replaced with a
@@ -1549,7 +1549,7 @@ function ft_upgrade_form_tools()
 			$queries[] = "INSERT INTO {$g_table_prefix}email_template_when_sent_views (email_id, view_id) VALUES ($email_id, $view_id)";
 		}
 
-		ft_set_settings(array("default_client_swatch" => "green"));
+        Settings::set(array("default_client_swatch" => "green"));
 		foreach ($queries as $query)
 		{
 			$result = @mysql_query($query);
@@ -1671,7 +1671,7 @@ function ft_upgrade_form_tools()
 		$upgrade_attempted = true;
 
 		$setting = array("core_version_upgrade_track" => "unknown");
-		ft_set_settings($setting);
+        Settings::set($setting);
 
 		$queries = array();
 		$queries[] = "
@@ -1713,7 +1713,7 @@ function ft_upgrade_form_tools()
 			"release_type"    => $g_release_type,
 			"core_version_upgrade_track" => $upgrade_track
 		);
-		ft_set_settings($new_settings);
+        Settings::set($new_settings);
 
 		// any time the Core version changes, we need to update the list of hooks found in the source files
 		ft_update_available_hooks();

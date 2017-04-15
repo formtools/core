@@ -4,10 +4,11 @@ use FormTools\Core;
 use FormTools\General;
 use FormTools\Pages;
 use FormTools\Sessions;
+use FormTools\Settings;
 use FormTools\Themes;
 
 if (isset($request["update_files"])) {
-    list($g_success, $g_message) = ft_update_file_settings($request);
+    list($g_success, $g_message) = Settings::updateFileSettings($request);
 }
 $all_preset_types = array(
     "bmp","gif","jpg","jpeg","png","avi","mp3","mp4","css","js","htm","html","doc","rtf",

@@ -80,7 +80,7 @@ if (!$permission_check["has_permission"])
 switch ($action)
 {
 	case "test_folder_permissions":
-		list($success, $message) = ft_check_upload_folder($request["file_upload_dir"]);
+		list($success, $message) = Files::checkUploadFolder($request["file_upload_dir"]);
 		$success = ($success) ? 1 : 0;
 		echo "{ \"success\": \"$success\", \"message\": \"$message\"{$return_val_str} }";
 		break;

@@ -532,12 +532,8 @@ function ft_set_form_main_settings($infohash)
 //  $rules[] = "required,form_url,{$LANG["validation_no_form_url"]}";
 	$errors = validate_fields($infohash, $rules);
 
-	if (!empty($errors))
-	{
-		$success = false;
-		array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-		$message = join("<br />", $errors);
-		return array ($success, $message, "");
+	if (!empty($errors)) {
+        return array(false, General::getErrorListHTML($errors), "");
 	}
 
 	// extract values
@@ -720,12 +716,8 @@ function ft_update_form_main_tab($infohash, $form_id)
 
 	$errors = validate_fields($infohash, $rules);
 
-	if (!empty($errors))
-	{
-		$success = false;
-		array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-		$message = join("<br />", $errors);
-		return array ($success, $message, "");
+	if (!empty($errors)) {
+        return array(false, General::getErrorListHTML($errors), "");
 	}
 
 	$is_active = "";

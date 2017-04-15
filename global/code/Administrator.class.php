@@ -100,10 +100,7 @@ class Administrator {
         }
 
         if (!empty($errors)) {
-            $success = false;
-            array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-            $message = implode("<br />", $errors);
-            return array($success, $message, "");
+            return array(false, General::getErrorListHTML($errors));
         }
 
         $password = md5(md5($form_vals["password"]));
@@ -269,10 +266,7 @@ class Administrator {
         $errors = validate_fields($infohash, $rules);
 
         if (!empty($errors)) {
-            $success = false;
-            array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-            $message = implode("<br />", $errors);
-            return array($success, $message);
+            return array(false, General::getErrorListHTML($errors));
         }
 
         $theme    = $infohash["theme"];
@@ -438,10 +432,7 @@ class Administrator {
                 }
 
                 if (!empty($errors)) {
-                    $success = false;
-                    array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-                    $message = implode("<br />", $errors);
-                    return array($success, $message);
+                    return array(false, General::getErrorListHTML($errors));
                 }
 
                 $account_status  = $form_vals['account_status'];
@@ -496,10 +487,7 @@ class Administrator {
                 $errors = validate_fields($form_vals, $rules);
 
                 if (!empty($errors)) {
-                    $success = false;
-                    array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-                    $message = implode("<br />", $errors);
-                    return array($success, $message);
+                    return array(false, General::getErrorListHTML($errors));
                 }
 
                 // update the main accounts table

@@ -548,12 +548,8 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 	$errors = FieldValidation::validateSubmission($infohash["editable_field_ids"], $infohash);
 
 	// if there are any problems, return right away
-	if (!empty($errors))
-	{
-		$success = false;
-		array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-		$message = implode("<br />", $errors);
-		return array($success, $message);
+	if (!empty($errors)) {
+        return array(false, General::getErrorListHTML($errors));
 	}
 
 	$form_fields = Fields::getFormFields($form_id);

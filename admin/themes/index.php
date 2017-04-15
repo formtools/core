@@ -6,6 +6,7 @@ use FormTools\Clients;
 use FormTools\Core;
 use FormTools\Pages;
 use FormTools\Sessions;
+use FormTools\Settings;
 use FormTools\Themes;
 
 Core::init();
@@ -19,7 +20,7 @@ if (isset($request["theme_override"])) {
     list($g_success, $g_message) = Themes::resetAdminTheme($request["theme_override"]);
 }
 if (isset($request["update"])) {
-    list($g_success, $g_message) = ft_update_theme_settings($_POST);
+    list($g_success, $g_message) = Settings::updateThemeSettings($_POST);
 }
 if (isset($_POST["refresh_theme_list"])) {
     list($g_success, $g_message) = ft_update_theme_list();
