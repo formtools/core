@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Administrator;
+use FormTools\Emails;
 use FormTools\Fields;
 use FormTools\Forms;
 use FormTools\General;
@@ -16,7 +17,7 @@ if (isset($request["update_email_template"])) {
 $form_info      = Forms::getForm($form_id);
 $form_fields    = Fields::getFormFields($form_id);
 $columns        = Forms::getFormColumnNames($form_id);
-$template_info  = ft_get_email_template($email_id);
+$template_info  = Emails::getEmailTemplate($email_id);
 $event_trigger_arr =  explode(",", $template_info["email_event_trigger"]);
 $template_info["email_event_trigger"] = $event_trigger_arr;
 $clients         = $form_info["client_info"];
@@ -88,7 +89,7 @@ $page_vars["test_email_format"] = $test_email_format;
 $page_vars["test_email_recipient"] = $test_email_recipient;
 $page_vars["test_email_data_source"] = $test_email_data_source;
 $page_vars["test_email_submission_id"] = $test_email_submission_id;
-$page_vars["registered_form_emails"] = ft_get_email_fields($form_id);
+$page_vars["registered_form_emails"] = Emails::getEmailFields($form_id);
 $page_vars["head_string"] =<<< END
 <script src="$g_root_url/global/scripts/manage_email_templates.js?v=3"></script>
 <script src="$g_root_url/global/codemirror/js/codemirror.js"></script>

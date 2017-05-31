@@ -1513,22 +1513,42 @@ class Forms {
         $db->execute();
 
         // remove any reference to the form in form_fields
-        $db->query("DELETE FROM {PREFIX}form_fields WHERE form_id = $form_id")
-        or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
+        $db->query("DELETE FROM {PREFIX}form_fields WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
 
         // remove any reference to the form in forms table
-        mysql_query("DELETE FROM {PREFIX}forms WHERE form_id = $form_id");
-        mysql_query("DELETE FROM {PREFIX}client_forms WHERE form_id = $form_id");
-        mysql_query("DELETE FROM {PREFIX}form_export_templates WHERE form_id = $form_id");
-        mysql_query("DELETE FROM {PREFIX}form_email_fields WHERE form_id = $form_id");
-        mysql_query("DELETE FROM {PREFIX}public_form_omit_list WHERE form_id = $form_id");
-        mysql_query("DELETE FROM {PREFIX}multi_page_form_urls WHERE form_id = $form_id");
-        mysql_query("DELETE FROM {PREFIX}list_groups WHERE group_type = 'form_{$form_id}_view_group'");
+        $db->query("DELETE FROM {PREFIX}forms WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}client_forms WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}form_export_templates WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}form_email_fields WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}public_form_omit_list WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}multi_page_form_urls WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}list_groups WHERE group_type = :group_type");
+        $db->bind("group_type", "form_{$form_id}_view_group");
+        $db->execute();
 
         // delete all email templates for the form
-        $email_templates = ft_get_email_template_list($form_id);
-        foreach ($email_templates as $email_template_info) {
-            ft_delete_email_template($email_template_info["email_id"]);
+        foreach (Emails::getEmailTemplateList($form_id) as $email_template_info) {
+            Emails::deleteEmailTemplate($email_template_info["email_id"]);
         }
 
         // delete all form Views

@@ -10,6 +10,7 @@
 require_once("../library.php");
 
 use FormTools\Core;
+use FormTools\Emails;
 use FormTools\Fields;
 use FormTools\FieldValidation;
 use FormTools\Files;
@@ -194,7 +195,7 @@ switch ($action) {
 		break;
 
 	case "send_test_email":
-		list($success, $message) = ft_send_test_email($request);
+		list($success, $message) = Emails::sendTestEmail($request);
 		$success = ($success) ? 1 : 0;
 		echo "{ \"success\": \"$success\", \"message\": \"$message\" }";
 		break;
@@ -202,7 +203,7 @@ switch ($action) {
 	case "display_test_email":
 		$form_id  = $_SESSION["ft"]["form_id"];
 		$email_id = $_SESSION["ft"]["email_id"];
-		$info = ft_get_email_components($form_id, "", $email_id, true, $request);
+		$info = Emails::getEmailComponents($form_id, "", $email_id, true, $request);
 		echo json_encode($info);
 		break;
 

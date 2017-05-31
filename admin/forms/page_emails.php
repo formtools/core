@@ -1,6 +1,10 @@
 <?php
 
+use FormTools\Core;
+use FormTools\Emails;
+use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 
 
@@ -11,21 +15,25 @@ if (isset($request["add_email"])) {
 }
 
 if (isset($request["delete"])) {
-	list($g_success, $g_message) = ft_delete_email_template($request["delete"]);
+	list($g_success, $g_message) = Emails::deleteEmailTemplate($request["delete"]);
 }
 
 $form_info = Forms::getForm($form_id);
 $emails_page = General::loadField("emails_page", "form_{$form_id}_emails_page", 1);
-$form_email_info  = ft_get_email_templates($form_id, $emails_page);
+$form_email_info  = Emails::getEmailTemplates($form_id, $emails_page);
 $form_emails      = $form_email_info["results"];
 $num_form_emails  = $form_email_info["num_results"];
-$registered_form_emails = ft_get_email_fields($form_id);
+$registered_form_emails = Emails::getEmailFields($form_id);
 $num_registered_form_emails = count($registered_form_emails);
 
 // a little irksome, but we also need to retrieve ALL emails, for the "Create Email From Existing Email" dropdown
-$all_form_emails = ft_get_email_template_list($form_id);
+$all_form_emails = Emails::getEmailTemplateList($form_id);
 $php_self = General::getCleanPhpSelf();
 
+
+// ------------------------------------------------------------------------------------------------
+
+$LANG = Core::$L;
 
 // compile the templates information
 $page_vars["page"]        = "emails";
