@@ -1,6 +1,8 @@
 <?php
 
+use FormTools\Forms;
 use FormTools\Themes;
+use FormTools\Views;
 
 
 $sortable_id = "view_list";
@@ -19,7 +21,7 @@ if (isset($request["update_views"]) || isset($request["{$sortable_id}_sortable__
 
 // if the user deleted all their Views & View Groups, a special "add default view" option appears
 if (isset($request["recreate_initial_view"])) {
-	list($g_success, $g_message) = ft_add_default_view($form_id);
+	list($g_success, $g_message) = Views::addDefaultView($form_id);
 }
 
 $grouped_views = ft_get_grouped_views($form_id, array("omit_empty_groups" => false, "include_clients" => true));

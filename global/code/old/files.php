@@ -412,32 +412,3 @@ function ft_delete_folder($directory)
 	  */
 }
 
-
-/**
- * This is called by the ft_delete_submission and ft_delete_submissions function. It's passed all relevant
- * information about the submission & file fields that need to be deleted. The function is just a stub to
- * allow file upload modules to add their hooks to.
- *
- * Modules that extend this function should return $problems. That should be an array of hashes. Each hash
- * having keys "filename" and "error". Since the calling functions will blithely delete the submissions even
- * if the file deletion fails, no other info is worth returning.
- *
- * @param integer $form_id
- * @param array $file_info an array of hashes. Each hash has the following keys (all self-explanatory):
- *                    submission_id -
- *                    field_id -
- *                    filename -
- *                    field_type_id -
- * @param string $context. Just used to pass a little more info to the hook. This is the context in which this
- *                    function is being called; i.e. the function name / action.
- */
-function ft_delete_submission_files($form_id, $file_field_info, $context = "")
-{
-	$success = true;
-	$problems = array();
-
-	extract(Hooks::processHookCalls("start", compact("form_id", "file_field_info"), array("success", "problems")), EXTR_OVERWRITE);
-
-	return array($success, $problems);
-}
-

@@ -132,9 +132,8 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 			);
 		}
 
-		if (!empty($file_fields_to_delete))
-		{
-			list($success, $file_delete_problems) = ft_delete_submission_files($form_id, $file_fields_to_delete, "ft_delete_submission");
+		if (!empty($file_fields_to_delete)) {
+			list($success, $file_delete_problems) = Files::deleteSubmissionFiles($form_id, $file_fields_to_delete, "ft_delete_submission");
 		}
 	}
 
@@ -262,9 +261,8 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 			}
 		}
 
-		if (!empty($file_fields_to_delete))
-		{
-			list($success, $file_delete_problems) = ft_delete_submission_files($form_id, $file_fields_to_delete, "ft_delete_submissions");
+		if (!empty($file_fields_to_delete)) {
+			list($success, $file_delete_problems) = Files::deleteSubmissionFiles($form_id, $file_fields_to_delete, "ft_delete_submissions");
 		}
 	}
 

@@ -12,6 +12,7 @@ require_once("../library.php");
 use FormTools\Core;
 use FormTools\Fields;
 use FormTools\FieldValidation;
+use FormTools\Files;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\ListGroups;
@@ -259,12 +260,12 @@ switch ($action) {
 
 	case "process_smart_fill_contents":
 		$form_id = $_SESSION["ft"]["add_form_form_id"];
-		ft_set_form_field_types($form_id, $request);
+		Forms::setFormFieldTypes($form_id, $request);
 
 		// finalize the form and redirect to step 6
 		$form_info = Forms::getForm($form_id);
 		if ($form_info["is_complete"] != 'yes') {
-			$response = ft_finalize_form($form_id);
+			$response = Forms::finalizeForm($form_id);
 			echo json_encode($response);
 		} else {
 			echo "{ \"success\": \"1\", \"message\": \"\" }";

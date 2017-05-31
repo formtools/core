@@ -22,7 +22,7 @@ var sf_ns = {
   log_files_as_uploaded_page_loaded: false,
   manual_file_upload_attempted:      false,
   refresh_page_dialog: $("<div></div>")
-}
+};
 
 
 /**
@@ -1203,9 +1203,9 @@ sf_ns.is_option_list_field = function(field_type_id) {
         continue;
       }
 
-      if (info[i].raw_field_type_map_multi_select_id != "") {
-      is_option_list_field = true;
-      return false;
+      if (info[i].raw_field_type_map_multi_select_id !== null) {
+        is_option_list_field = true;
+        return false;
       }
     }
   });
@@ -1231,6 +1231,8 @@ sf_ns.submit_form = function() {
     params["field_" + field_id + "_size"] = $("#field_" + field_id + "_size").val();
 
     if (sf_ns.is_option_list_field(field_type_id)) {
+      console.log(sf_ns);
+
       var num_options = field_info.option_list.length;
       params["field_" + field_id + "_num_options"] = num_options;
       for (var j=0; j<num_options; j++) {

@@ -15,35 +15,40 @@
      errors / notifications
   4. Spacing: It ALWAYS has a space of 10px at the bottom. This is nice since you don't have to worry
      about making sure the surrounding elements will be spaced right with or without some messages being
-     displayed. [hardcoded inline styles? Jeez...]
+     displayed.
 *}
 
+{assign var="class_name" value=""}
+{if $g_success}
+    {assign var="class_name" value="notify"}
+{else}
+    {assign var="class_name" value="error"}
+{/if}
+
 {if $g_message}
+    {assign var="class_name" value=""}
+    {if $g_success}
+        <script>{literal}$(function() { $("#ft_message_inner").effect("highlight", {color: "#" + g.notify_colours[1] }, 1200); });{/literal}</script>
+    {else}
+        <script>{literal}$(function() { $("#ft_message_inner").effect("highlight", {color: "#" + g.error_colours[1] }, 1200); });{/literal}</script>
+    {/if}
 
-  {if $g_success}
-    {assign var=class value="notify"}
-    <script>{literal}$(function() { $("#ft_message_inner").effect("highlight", {color: "#" + g.notify_colours[1] }, 1200); });{/literal}</script>
-  {else}
-    {assign var=class value="error"}
-    <script>{literal}$(function() { $("#ft_message_inner").effect("highlight", {color: "#" + g.error_colours[1] }, 1200); });{/literal}</script>
-  {/if}
-
-  <div id="ft_message">
-    <div style="height: 8px;"> </div>
-    <div class="{$class}" id="ft_message_inner">
-      <div style="padding:8px">
-        <span style="float: right; padding-left: 5px;"><a href="#" onclick="return ft.hide_message('ft_message')">X</a></span>
-        {$g_message}
-      </div>
+    <div id="ft_message">
+        <div style="height: 8px;"> </div>
+        <div class="{$class_name}" id="ft_message_inner">
+            <div style="padding:8px">
+                <span style="float: right; padding-left: 5px;"><a href="#" onclick="return ft.hide_message('ft_message')">X</a></span>
+                {$g_message}
+            </div>
+        </div>
     </div>
-  </div>
 
 {else}
 
-  <div id="ft_message" style="width: 100%; display:none">
-    <div style="height: 8px;"> </div>
-    <div class="{$class}" id="ft_message_inner"></div>
-  </div>
+    <div id="ft_message" style="width: 100%; display:none">
+        <div style="height: 8px;"> </div>
+        <div class="{$class_name}" id="ft_message_inner"></div>
+    </div>
 
 {/if}
 

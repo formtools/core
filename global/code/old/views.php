@@ -14,70 +14,6 @@
 
 
 /**
- * This function is called after creating a new form (ft_finalize_form), and creates a default
- * View - one containing all fields and assigned to all clients that are assigned to the form.
- *
- * Notes: I'm not terribly happy about the relationship between the list_groups table and whatever
- * they're grouping - here, Views. The issue is that to make the entries in the list_groups table
- * have additional meaning, I customize the group_type value to something like "form_X_view_group"
- * where "X" is the form name. ...
- *
- * @param integer $form_id
- */
-function ft_add_default_view($form_id)
-{
-	global $g_table_prefix, $LANG;
-
-	// 1. create the new View
-	$form_info = Forms::getForm($form_id);
-	$num_submissions_per_page = isset($_SESSION["ft"]["settings"]["num_submissions_per_page"]) ? $_SESSION["ft"]["settings"]["num_submissions_per_page"] : 10;
-
-	mysql_query("
-    INSERT INTO {$g_table_prefix}views (form_id, view_name, view_order, num_submissions_per_page,
-      default_sort_field, default_sort_field_order)
-    VALUES ($form_id, '{$LANG["phrase_all_submissions"]}', '1', $num_submissions_per_page, 'submission_date', 'desc')
-      ");
-	$view_id = mysql_insert_id();
-
-	// 2. create the View group and update the view record we just created (blurgh!)
-	mysql_query("
-    INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, list_order)
-    VALUES ('form_{$form_id}_view_group', '{$LANG["word_views"]}', 1)
-  ");
-	$group_id = mysql_insert_id();
-	mysql_query("UPDATE {$g_table_prefix}views SET group_id = $group_id WHERE view_id = $view_id");
-
-	// 3. add the default tabs [N.B. this table should eventually be dropped altogether and data moved to list_groups]
-	$view_tab_inserts = array(
-		"($view_id, 1, '{$LANG["phrase_default_tab_label"]}')",
-		"($view_id, 2, '')",
-		"($view_id, 3, '')",
-		"($view_id, 4, '')",
-		"($view_id, 5, '')",
-		"($view_id, 6, '')"
-	);
-	$view_tab_insert_str = implode(",\n", $view_tab_inserts);
-	mysql_query("INSERT INTO {$g_table_prefix}view_tabs VALUES $view_tab_insert_str");
-
-	// now populate the new View fields and the View columns
-	_ft_populate_new_view_fields($form_id, $view_id);
-
-	// assign the View to all clients attached to this form
-	$client_info = $form_info["client_info"];
-	foreach ($client_info as $user)
-	{
-		$account_id = $user["account_id"];
-		mysql_query("
-      INSERT INTO {$g_table_prefix}client_views (account_id, view_id)
-      VALUES ($account_id, $view_id)
-        ");
-	}
-
-	return array(true, $LANG["notify_new_default_view_created"]);
-}
-
-
-/**
  * This checks to see if a View exists in the database.
  *
  * @param integer $view_id
@@ -308,9 +244,8 @@ function ft_create_new_view($form_id, $group_id, $view_name = "", $create_from_v
 		mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 5, '')");
 		mysql_query("INSERT INTO {$g_table_prefix}view_tabs (view_id, tab_number, tab_label) VALUES ($view_id, 6, '')");
 
-		if ($create_from_view_id == "blank_view_all_fields")
-		{
-			_ft_populate_new_view_fields($form_id, $view_id);
+		if ($create_from_view_id == "blank_view_all_fields") {
+			self::populateNewViewFields($form_id, $view_id);
 		}
 	}
 	else
@@ -1923,95 +1858,3 @@ function ft_duplicate_view_field_groups($source_view_id, $target_view_id)
 	return $map;
 }
 
-
-/**
- * Helper function that's called when creating new Views. It populates the View fields and View column
- * with ALL form fields and 5 columns (Submission ID, Submission Date + 3 others).
- *
- * @param integer $form_id
- * @param integer $view_id
- */
-function _ft_populate_new_view_fields($form_id, $view_id)
-{
-	global $g_table_prefix, $LANG;
-
-	mysql_query("
-    INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
-    VALUES ('view_fields_$view_id', '{$LANG["phrase_default_tab_label"]}', 1, 1)
-  ");
-	$view_fields_group_id = mysql_insert_id();
-
-	$count = 1;
-	$num_custom_fields_added = 0;
-	$form_fields = Fields::getFormFields($form_id);
-
-	$form_field_view_inserts = array();
-	$view_column_inserts     = array();
-	$view_column_order = 1;
-	foreach ($form_fields as $field)
-	{
-		$field_id = $field["field_id"];
-
-		// make the submission ID, submission date and the 1st 3 columns visible by default
-		$is_column   = "no";
-		$is_sortable = "no";
-		if ($field["col_name"] == "submission_id" || $field["col_name"] == "submission_date")
-		{
-			$is_column   = "yes";
-			$is_sortable = "yes";
-		}
-		else
-		{
-			if ($num_custom_fields_added < 3)
-			{
-				$is_column   = "yes";
-				$is_sortable = "yes";
-				$num_custom_fields_added++;
-			}
-		}
-
-		// by default, make every field editable except the system fields
-		$is_editable = ($field["is_system_field"] == "yes") ? "no" : "yes";
-		$is_new_sort_group = $field["is_new_sort_group"];
-
-		$form_field_view_inserts[] = "($view_id, $field_id, $view_fields_group_id, '$is_editable', $count, '$is_new_sort_group')";
-		$count++;
-
-		// if this is a column field, add the view_columns record
-		if ($is_column == "yes")
-		{
-			$auto_size = "yes";
-			$custom_width = "";
-			if ($field["col_name"] == "submission_id")
-			{
-				$auto_size    = "no";
-				$custom_width = 50;
-			}
-			else if ($field["col_name"] == "submission_date")
-			{
-				$auto_size    = "no";
-				$custom_width = 160;
-			}
-			$view_column_inserts[] = "($view_id, $field_id, $view_column_order, 'yes', '$auto_size', '$custom_width', 'truncate')";
-			$view_column_order++;
-		}
-	}
-
-	// should NEVER be empty, but check anyway
-	if (!empty($form_field_view_inserts))
-	{
-		$form_field_view_insert_str = implode(",\n", $form_field_view_inserts);
-		mysql_query("
-      INSERT INTO {$g_table_prefix}view_fields (view_id, field_id, group_id, is_editable, list_order, is_new_sort_group)
-      VALUES $form_field_view_insert_str
-    ");
-	}
-	if (!empty($view_column_inserts))
-	{
-		$view_columns_insert_str = implode(",\n", $view_column_inserts);
-		mysql_query("
-      INSERT INTO {$g_table_prefix}view_columns (view_id, field_id, list_order, is_sortable, auto_size, custom_width, truncate)
-      VALUES $view_columns_insert_str
-    ");
-	}
-}

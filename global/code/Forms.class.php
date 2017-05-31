@@ -321,14 +321,18 @@ class Forms {
         foreach ($db->fetchAll() as $form_info) {
             $form_id = $form_info["form_id"];
 
-            $db->query("
-                SELECT count(*) as c
-                FROM   {PREFIX}form_$form_id
-                WHERE  is_finalized = 'yes'
-            ");
-            $db->execute();
-            $info = $db->fetch();
-            Sessions::set("form_{$form_id}_num_submissions", $info["c"]);
+            try {
+                $db->query("
+                    SELECT count(*) as c
+                    FROM   {PREFIX}form_$form_id
+                    WHERE  is_finalized = 'yes'
+                ");
+                $db->execute();
+                $info = $db->fetch();
+                Sessions::set("form_{$form_id}_num_submissions", $info["c"]);
+            } catch (PDOException $e) {
+
+            }
         }
     }
 
@@ -573,7 +577,7 @@ class Forms {
             }
         }
 
-        ft_finalize_form($new_form_id);
+        Forms::finalizeForm($new_form_id);
 
         // if the form has an access type of "private" add whatever client accounts the user selected
         if ($info["access_type"] == "private") {
@@ -1258,6 +1262,295 @@ class Forms {
         }
     }
 
+
+    /**
+     * This function "finalizes" the form, i.e. marks it as completed and ready to go.
+     *
+     * This is where the excitement happens. This function is called when the user has completed step
+     * 4 of the Add Form process, after the user is satisfied that the data that is stored is correct.
+     * This function does the following:
+     * <ul>
+     * <li>Adds a new record to the <b>form_admin_fields</b> table listing which of the database fields are
+     * to be visible in the admin interface panel for this form.</li>
+     * <li>Creates a new form table with the column information specified in infohash.</li>
+     * </ul>
+     *
+     * @param array $infohash This parameter should be a hash (e.g. $_POST or $_GET) containing the
+     *             various fields from the Step 4 Add Form page.
+     */
+    public static function finalizeForm($form_id)
+    {
+        $LANG = Core::$L;
+        $db = Core::$db;
+        $db_table_charset = Core::getDbTableCharset();
+        $field_sizes = FieldSizes::get();
+
+        $form_fields = Fields::getFormFields($form_id);
+        $query = "
+            CREATE TABLE {PREFIX}form_$form_id (
+            submission_id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+            PRIMARY KEY(submission_id),\n";
+
+        foreach ($form_fields as $field) {
+            // don't add system fields (submission ID, Date, Last Modified & IP address)
+            if ($field["is_system_field"] == "yes") {
+                continue;
+            }
+
+            $sql_size = $field_sizes[$field["field_size"]]["sql"];
+            $query .= "{$field['col_name']} $sql_size,\n";
+        }
+
+        $query .= "submission_date DATETIME NOT NULL,
+            last_modified_date DATETIME NOT NULL,
+            ip_address VARCHAR(15),
+            is_finalized ENUM('yes','no') default 'yes')
+            DEFAULT CHARSET=$db_table_charset";
+
+        try {
+            $db->query($query);
+        } catch (PDOException $e) {
+            return array(
+                "success" => "0",
+                "message" => $LANG["notify_create_form_failure"],
+                "sql_error" => $e->getMessage()
+            );
+        }
+
+        // now the form is complete. Update it as is_complete and enabled
+        $db->query("
+            UPDATE {PREFIX}forms
+            SET    is_initialized = 'yes',
+                   is_complete = 'yes',
+                   is_active = 'yes',
+                   date_created = :now
+            WHERE  form_id = :form_id
+        ");
+        $db->bindAll(array(
+            "now" => General::getCurrentDatetime(),
+            "form_id" => $form_id
+        ));
+
+        try {
+            $db->execute();
+        } catch (PDOException $e) {
+            return array(
+                "success"   => "0",
+                "sql_error" => $e->getMessage()
+            );
+        }
+
+        // finally, add the default View
+        Views::addDefaultView($form_id);
+
+        extract(Hooks::processHookCalls("end", compact("form_id"), array()), EXTR_OVERWRITE);
+
+        return array(
+            "success" => 1,
+            "message" => ""
+        );
+    }
+
+
+    /**
+     * Called on step 5 of the Add Form process. It processes the Mass Smart Filled field values, add / updates the
+     * appropriate field types, field sizes and option lists.
+     */
+    public static function setFormFieldTypes($form_id, $info)
+    {
+        $db = Core::$db;
+
+        extract(Hooks::processHookCalls("start", compact("info", "form_id"), array("info")), EXTR_OVERWRITE);
+
+        $textbox_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("textbox");
+
+        // set a 10 minute maximum execution time for this request. For long forms it can take a long time. 10 minutes
+        // is extremely excessive, but what the hey
+        @set_time_limit(600);
+
+        $form_fields = Fields::getFormFields($form_id);
+
+        // update the field types and sizes
+        $option_lists = array();
+        foreach ($form_fields as $field_info) {
+            if ($field_info["is_system_field"] == "yes") {
+                continue;
+            }
+            $field_id = $field_info["field_id"];
+
+            // update all the field types
+            $field_type_id = $textbox_field_type_id;
+            if (isset($info["field_{$field_id}_type"])) {
+                $field_type_id = $info["field_{$field_id}_type"];
+            }
+            $field_size = "medium";
+            if (isset($info["field_{$field_id}_size"])) {
+                $field_size = $info["field_{$field_id}_size"];
+            }
+
+            $db->query("
+                UPDATE {PREFIX}form_fields
+                SET    field_type_id = :field_type_id,
+                       field_size = :field_size
+                WHERE  field_id = :field_id
+            ");
+            $db->bindAll(array(
+                "field_type_id" => $field_type_id,
+                "field_size" => $field_size,
+                "field_id" => $field_id
+            ));
+            $db->execute();
+
+            // if this field is an Option List field, store all the option list info. We'll add them at the end
+            if (isset($info["field_{$field_id}_num_options"]) && is_numeric($info["field_{$field_id}_num_options"])) {
+                $num_options = $info["field_{$field_id}_num_options"];
+                $options = array();
+                for ($i=1; $i<=$num_options; $i++) {
+                    $options[] = array(
+                        "value" => $info["field_{$field_id}_opt{$i}_val"],
+                        "text" => $info["field_{$field_id}_opt{$i}_txt"]
+                    );
+                }
+                $option_lists[$field_id] = array(
+                    "field_type_id"    => $field_type_id,
+                    "option_list_name" => $field_info["field_title"],
+                    "options"          => $options
+                );
+            }
+        }
+
+        // finally, if there were any Option List defined for any of the form field, add the info!
+        if (!empty($option_lists)) {
+            $field_types = FieldTypes::get();
+            $field_type_id_to_option_list_map = array();
+            foreach ($field_types as $field_type_info) {
+                $field_type_id_to_option_list_map[$field_type_info["field_type_id"]] = $field_type_info["raw_field_type_map_multi_select_id"];
+            }
+
+            while (list($field_id, $option_list_info) = each($option_lists)) {
+                $list_id = OptionLists::createUniqueOptionList($form_id, $option_list_info);
+                $raw_field_type_map_multi_select_id = $field_type_id_to_option_list_map[$option_list_info["field_type_id"]];
+                if (is_numeric($list_id)) {
+                    $db->query("
+                        INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
+                        VALUES (:field_id, :setting_id, :setting_value)
+                    ");
+                    $db->bindAll(array(
+                        "field_id" => $field_id,
+                        "setting_id" => $raw_field_type_map_multi_select_id,
+                        "setting_value" => $list_id
+                    ));
+                    $db->execute();
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Completely removes a form from the database. This includes deleting all form fields, emails, Views,
+     * View fields, View tabs, View filters, client-form, client-view and public omit list (form & View),
+     * and anything else!
+     *
+     * It also includes an optional parameter to remove all files that were uploaded through file fields in the
+     * form; defaulted to FALSE.
+     *
+     * @param integer $form_id the unique form ID
+     * @param boolean $remove_associated_files A boolean indicating whether or not all files that were
+     *              uploaded via file fields in this form should be removed as well.
+     */
+    public static function deleteForm($form_id, $remove_associated_files = false)
+    {
+        $db = Core::$db;
+
+        extract(Hooks::processHookCalls("start", compact("form_id"), array()), EXTR_OVERWRITE);
+        $form_fields = Fields::getFormFields($form_id, array("include_field_type_info" => true));
+
+        $success = true;
+        $message = "";
+
+        $file_delete_problems = array();
+        if ($remove_associated_files) {
+            $submission_id_query = $db->query("SELECT submission_id FROM {PREFIX}form_{$form_id}");
+            $file_fields_to_delete = array();
+
+            while ($row = mysql_fetch_assoc($submission_id_query)) {
+                $submission_id = $row["submission_id"];
+
+                foreach ($form_fields as $form_field_info) {
+                    if ($form_field_info["is_file_field"] == "no") {
+                        continue;
+                    }
+
+                    // I really don't like this... what should be done is do a SINGLE query after this loop is complete
+                    // to return a map of field_id to values. That would then update $file_fields_to_delete
+                    // with a fraction of the cost
+                    $submission_info = ft_get_submission_info($form_id, $submission_id);
+                    $filename = $submission_info[$form_field_info["col_name"]];
+
+                    // if no filename was stored, it was empty - just continue
+                    if (empty($filename)) {
+                        continue;
+                    }
+
+                    $file_fields_to_delete[] = array(
+                        "submission_id" => $submission_id,
+                        "field_id"      => $form_field_info["field_id"],
+                        "field_type_id" => $form_field_info["field_type_id"],
+                        "filename"      => $filename
+                    );
+                }
+            }
+
+            if (!empty($file_fields_to_delete)) {
+                list($success, $file_delete_problems) = Files::deleteSubmissionFiles($form_id, $file_fields_to_delete,
+                    "ft_delete_form");
+            }
+        }
+
+        // remove the table
+        $db->query("DROP TABLE IF EXISTS {PREFIX}form_$form_id");
+        $db->execute();
+
+        // remove any reference to the form in form_fields
+        $db->query("DELETE FROM {PREFIX}form_fields WHERE form_id = $form_id")
+        or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
+
+        // remove any reference to the form in forms table
+        mysql_query("DELETE FROM {PREFIX}forms WHERE form_id = $form_id");
+        mysql_query("DELETE FROM {PREFIX}client_forms WHERE form_id = $form_id");
+        mysql_query("DELETE FROM {PREFIX}form_export_templates WHERE form_id = $form_id");
+        mysql_query("DELETE FROM {PREFIX}form_email_fields WHERE form_id = $form_id");
+        mysql_query("DELETE FROM {PREFIX}public_form_omit_list WHERE form_id = $form_id");
+        mysql_query("DELETE FROM {PREFIX}multi_page_form_urls WHERE form_id = $form_id");
+        mysql_query("DELETE FROM {PREFIX}list_groups WHERE group_type = 'form_{$form_id}_view_group'");
+
+        // delete all email templates for the form
+        $email_templates = ft_get_email_template_list($form_id);
+        foreach ($email_templates as $email_template_info) {
+            ft_delete_email_template($email_template_info["email_id"]);
+        }
+
+        // delete all form Views
+        $views_result = mysql_query("SELECT view_id FROM {PREFIX}views WHERE form_id = $form_id");
+        while ($info = mysql_fetch_assoc($views_result)) {
+            ft_delete_view($info["view_id"]);
+        }
+
+        // remove any field settings
+        foreach ($form_fields as $field_info) {
+            $field_id = $field_info["field_id"];
+            mysql_query("DELETE FROM {PREFIX}field_settings WHERE field_id = $field_id");
+        }
+
+        // as with many things in the script, potentially we need to return a vast range of information from this last function. But
+        // we'l limit
+        if (!$success) {
+            $message = $file_delete_problems;
+        }
+
+        return array($success, $message);
+    }
 
     // --------------------------------------------------------------------------------------------
 

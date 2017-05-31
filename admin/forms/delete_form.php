@@ -1,14 +1,20 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Core;
 use FormTools\Fields;
 use FormTools\FieldTypes;
 use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 
 Core::init();
 Core::$user->checkAuth("admin");
+
+$LANG = Core::$L;
+$root_url = Core::getRootUrl();
 
 $request = array_merge($_GET, $_POST);
 $form_id = $request["form_id"];
@@ -41,7 +47,7 @@ $uploaded_files = Fields::getUploadedFiles($form_id, $file_field_ids);
 // delete the form
 if (isset($_POST["delete_form"]) && $_POST["delete_form"] == "yes") {
 	$delete_files = (isset($_POST['delete_files']) && $_POST['delete_files'] == "yes") ? true : false;
-	list($g_success, $g_message) = ft_delete_form($form_id, $delete_files);
+	list($g_success, $g_message) = Forms::deleteForm($form_id, $delete_files);
 
 	// redirect back to the form list page
     General::redirect("$root_url/admin/forms/");
@@ -51,13 +57,15 @@ if (isset($_POST["delete_form"]) && $_POST["delete_form"] == "yes") {
 // ------------------------------------------------------------------------------------------------
 
 // compile the header information
-$page_vars = array();
-$page_vars["head_title"] = $LANG["phrase_delete_form"];
-$page_vars["page"]       = "delete_form";
-$page_vars["page_url"]   = Pages::getPageUrl("delete_form");
-$page_vars["form_id"]    = $form_id;
-$page_vars["form_info"]  = $form_info;
-$page_vars["uploaded_files"] = $uploaded_files;
+$page_vars = array(
+    "head_title" => $LANG["phrase_delete_form"],
+    "page"       => "delete_form",
+    "page_url"   => Pages::getPageUrl("delete_form"),
+    "form_id"    => $form_id,
+    "form_info"  => $form_info,
+    "uploaded_files" => $uploaded_files
+);
+
 $page_vars["head_js"] =<<< END
 var page_ns = {};
 page_ns.show_uploaded_files = function(){
