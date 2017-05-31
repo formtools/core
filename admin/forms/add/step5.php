@@ -1,9 +1,14 @@
 <?php
 
+require_once("../../../global/library.php");
+
 use FormTools\Core;
 use FormTools\Fields;
+use FormTools\FieldSizes;
 use FormTools\FieldTypes;
+use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 
 Core::init();
@@ -12,24 +17,21 @@ Core::$user->checkAuth("admin");
 
 $sortable_id = "review_field_options";
 $form_id = General::loadField("form_id", "add_form_form_id", "");
-$form_info   = Forms::getForm($form_id);
+$form_info = Forms::getForm($form_id);
 $form_fields = Fields::getFormFields($form_id);
 
 $form_urls = array();
-if ($form_info["is_multi_page_form"] == "yes")
-{
-	foreach ($form_info["multi_page_form_urls"] as $page_info)
-		$form_urls[] = $page_info["form_url"];
-}
-else
-{
+if ($form_info["is_multi_page_form"] == "yes") {
+	foreach ($form_info["multi_page_form_urls"] as $page_info) {
+        $form_urls[] = $page_info["form_url"];
+    }
+} else {
 	$form_urls[] = $form_info["form_url"];
 }
 
 $iframe_loaded_js_rows = array();
 reset($form_urls);
-for ($i=1; $i<=count($form_urls); $i++)
-{
+for ($i=1; $i<=count($form_urls); $i++) {
 	$iframe_loaded_js_rows[] = "page_ns.form_{$i}_url = \"{$form_urls[$i-1]}\";";
 	$iframe_loaded_js_rows[] = "page_ns.form_{$i}_loaded = false;";
 }
@@ -39,11 +41,10 @@ $num_pages = count($form_urls);
 
 // get the list of (non-system) field IDs
 $custom_field_ids = array();
-foreach ($form_fields as $field_info)
-{
-	if ($field_info["is_system_field"] == "yes")
-		continue;
-
+foreach ($form_fields as $field_info) {
+	if ($field_info["is_system_field"] == "yes") {
+        continue;
+    }
 	$custom_field_ids[] = $field_info["field_id"];
 }
 
@@ -52,23 +53,31 @@ $custom_field_id_str = implode(",", $custom_field_ids);
 
 // this chunk of code determines what method should be used to make the form web page(s) available to
 // the javascript, to let it parse and Smart Fill the field types and options
-$scrape_method = ft_get_js_webpage_parse_method($form_info["form_url"]);
+$scrape_method = General::getJsWebpageParseMethod($form_info["form_url"]);
 $raw_field_types_js = FieldTypes::getRawFieldTypesJs();
-$field_size_labels_js = ft_generate_field_type_size_labels();
+$field_size_labels_js = FieldSizes::generateFieldTypeSizeLabels();
+
 
 // ------------------------------------------------------------------------------------------------
 
+$LANG = Core::$L;
+$root_url = Core::getRootUrl();
+
 // compile the header information
-$page_vars["page"] = "add_form5";
-$page_vars["page_url"] = Pages::getPageUrl("add_form5");
-$page_vars["head_title"] = "{$LANG['phrase_add_form']} - {$LANG["phrase_step_5"]}";
-$page_vars["form_id"] = $form_id;
-$page_vars["form_info"] = $form_info;
-$page_vars["form_fields"] = $form_fields;
-$page_vars["form_urls"] = $form_urls;
-$page_vars["scrape_method"] = $scrape_method;
+$page_vars = array(
+    "page" => "add_form5",
+    "page_url" => Pages::getPageUrl("add_form5"),
+    "head_title" => "{$LANG['phrase_add_form']} - {$LANG["phrase_step_5"]}",
+    "form_id" => $form_id,
+    "form_info" => $form_info,
+    "form_fields" => $form_fields,
+    "form_urls" => $form_urls,
+    "scrape_method" => $scrape_method,
+    "sortable_id" => $sortable_id,
+    "head_css" => ""
+);
+
 $page_vars["text_add_form_field_types_multiple_fields_found8"] = General::evalSmartyString($LANG["text_add_form_field_types_multiple_fields_found8"], array("ONCLICK" => "ft.display_message('ft_message', 1, $('#upload_files_text').html())"));
-$page_vars["sortable_id"] = $sortable_id;
 $page_vars["js_messages"] = array("word_na", "word_found", "word_delete", "word_none", "notify_smart_fill_submitted",
 	"phrase_not_found", "word_options", "phrase_multiple_fields_found", "notify_multiple_fields_found",
 	"phrase_field_type", "phrase_form_page", "word_options", "word_select", "word_textbox", "word_password", "word_file",
@@ -80,11 +89,10 @@ $page_vars["js_messages"] = array("word_na", "word_found", "word_delete", "word_
 	"notify_smart_fill_files_uploaded_successfully", "validation_upload_html_files_only", "word_okay", "word_error",
 	"word_yes", "word_no", "phrase_please_confirm", "confirm_refresh_page"
 );
-$page_vars["head_css"] = "";
 $page_vars["head_string"] =<<< END
-<script src="$g_root_url/global/scripts/sortable.js?v=2"></script>
-<script src="$g_root_url/global/scripts/manage_forms.js?v=2"></script>
-<script src="$g_root_url/global/scripts/external_form_smart_fill.js"></script>
+<script src="$root_url/global/scripts/sortable.js?v=2"></script>
+<script src="$root_url/global/scripts/manage_forms.js?v=2"></script>
+<script src="$root_url/global/scripts/external_form_smart_fill.js"></script>
 END;
 
 $page_vars["head_js"] =<<< END

@@ -99,111 +99,6 @@ function ft_add_form_fields($form_id, $fields)
 
 
 /**
- * Deletes unwanted form fields. Called by administrator when creating an external form and when
- * editing a form.
- *
- * Note: field types that require additional functionality when deleting a field type (e.g.
- * file fields which need to delete uploaded files), they need to define the appropriate hook.
- * Generally this means the "delete_fields" hook in the ft_update_form_fields_tab() function.
- *
- * @param integer $form_id
- * @param array an array of field IDs to delete
- * @return array Returns array with indexes:<br/>
- *               [0]: true/false (success / failure)<br/>
- *               [1]: message string<br/>
- */
-function ft_delete_form_fields($form_id, $field_ids)
-{
-	global $g_table_prefix, $LANG;
-
-	// default return values
-	$success = true;
-	$message = "";
-
-	// find out if the form exists and is complete
-	$form_info = Forms::getForm($form_id);
-	$form_table_exists = ($form_info["is_complete"] == "yes") ? true : false;
-
-	// stores the Views IDs of any View that is affected by deleting one of the form field, regardless of the field or form
-	$affected_views = array();
-	$removed_field_ids = array();
-
-	$deleted_field_info = array();
-	foreach ($field_ids as $field_id)
-	{
-		$field_id = trim($field_id);
-		if (empty($field_id))
-			continue;
-
-		// ignore brand new fields - nothing to delete!
-		if (preg_match("/^NEW/", $field_id))
-			continue;
-
-		$old_field_info = ft_get_form_field($field_id);
-		$deleted_field_info[] = $old_field_info;
-
-		@mysql_query("DELETE FROM {$g_table_prefix}form_fields WHERE field_id = $field_id");
-		if (!$form_table_exists)
-			continue;
-
-		mysql_query("DELETE FROM {$g_table_prefix}new_view_submission_defaults WHERE field_id = $field_id");
-
-		// see if this field had been flagged as an email field (either as the email field, first or last name).
-		// if it's the email field, delete the whole row. If it's either the first or last name, just empty the value
-		$query = mysql_query("SELECT form_email_id FROM {$g_table_prefix}form_email_fields WHERE email_field_id = $field_id");
-		while ($row = mysql_fetch_assoc($query))
-		{
-			ft_unset_field_as_email_field($row["email_form_id"]);
-		}
-		mysql_query("UPDATE {$g_table_prefix}form_email_fields SET first_name_field_id = '' WHERE first_name_field_id = $field_id");
-		mysql_query("UPDATE {$g_table_prefix}form_email_fields SET last_name_field_id = '' WHERE last_name_field_id = $field_id");
-
-		// get a list of any Views that referenced this form field
-		$view_query = mysql_query("SELECT view_id FROM {$g_table_prefix}view_fields WHERE field_id = $field_id");
-		while ($row = mysql_fetch_assoc($view_query))
-		{
-			$affected_views[] = $row["view_id"];
-			ft_delete_view_field($row["view_id"], $field_id);
-		}
-
-		$drop_column = $old_field_info["col_name"];
-		mysql_query("ALTER TABLE {$g_table_prefix}form_$form_id DROP $drop_column");
-
-		// if any Views had this field as the default sort order, reset them to having the submission_date
-		// field as the default sort order
-		mysql_query("
-      UPDATE {$g_table_prefix}views
-      SET     default_sort_field = 'submission_date',
-              default_sort_field_order = 'desc'
-      WHERE   default_sort_field = '$drop_column' AND
-              form_id = $form_id
-                ");
-
-		$removed_field_ids[] = $field_id;
-	}
-
-	// update the list_order of this form's fields
-	if ($form_table_exists) {
-        Fields::autoUpdateFormFieldOrder($form_id);
-    }
-
-	// update the order of any Views that referenced this field
-	foreach ($affected_views as $view_id)
-		ft_auto_update_view_field_order($view_id);
-
-	// determine the return message
-	if (count($removed_field_ids) > 1)
-		$message = $LANG["notify_form_fields_removed"];
-	else
-		$message = $LANG["notify_form_field_removed"];
-
-	extract(Hooks::processHookCalls("end", compact("deleted_field_info", "form_id", "field_ids", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
-
-	return array($success, $message);
-}
-
-
-/**
  * Helper function to return a field's database column name, based on its form field name.
  *
  * @param integer $form_id
@@ -395,52 +290,6 @@ function ft_get_field_options($field_id)
 
 
 /**
- * Retrieves all information about a specific form template field.
- *
- * @param integer $field_id the unique field ID
- * @return array A hash of information about this field.
- */
-function ft_get_form_field($field_id, $custom_params = array())
-{
-	global $g_table_prefix;
-
-	$params = array(
-		"include_field_type_info"   => (isset($custom_params["include_field_type_info"])) ? $custom_params["include_field_type_info"] : false,
-		"include_field_settings"    => (isset($custom_params["include_field_settings"])) ? $custom_params["include_field_settings"] : false,
-		"evaluate_dynamic_settings" => (isset($custom_params["evaluate_dynamic_settings"])) ? $custom_params["evaluate_dynamic_settings"] : false
-	);
-
-	if ($params["include_field_type_info"])
-	{
-		$query = mysql_query("
-      SELECT *
-      FROM   {$g_table_prefix}form_fields ff, {$g_table_prefix}field_types ft
-      WHERE  ff.field_id = $field_id AND
-             ff.field_type_id = ft.field_type_id
-    ");
-	}
-	else
-	{
-		$query = mysql_query("
-      SELECT *
-      FROM   {$g_table_prefix}form_fields
-      WHERE  field_id = $field_id
-    ");
-	}
-	$info = mysql_fetch_assoc($query);
-
-	if ($params["include_field_settings"])
-	{
-		$info["settings"] = Fields::getFormFieldSettings($field_id, $params["evaluate_dynamic_settings"]);
-	}
-
-	extract(Hooks::processHookCalls("end", compact("field_id", "info"), array("info")), EXTR_OVERWRITE);
-
-	return $info;
-}
-
-
-/**
  * A getter function to retrieve everything about a form field from the database column name. This
  * is just a wrapper for ft_get_form_field().
  *
@@ -466,7 +315,7 @@ function ft_get_form_field_by_colname($form_id, $col_name, $params = array())
 		return array();
 
 	$field_id = $info["field_id"];
-	return ft_get_form_field($field_id, $params);
+	return Fields::getFormField($field_id, $params);
 }
 
 
@@ -766,65 +615,6 @@ function ft_delete_extended_field_settings($field_id)
 
 
 /**
- * Called on the Add External Form Step 4 page. It reorders the form fields and their groupings.
- *
- * @param integer $form_id
- * @param integer $infohash the POST data from the form
- * @param boolean $set_default_form_field_names if true, this tell the function to rename the columns
- */
-function ft_update_form_fields($form_id, $infohash, $set_default_form_field_names = false)
-{
-	global $g_table_prefix, $g_debug;
-
-	$sortable_id = $infohash["sortable_id"];
-	$sortable_rows       = explode(",", $infohash["{$sortable_id}_sortable__rows"]);
-	$sortable_new_groups = explode(",", $infohash["{$sortable_id}_sortable__new_groups"]);
-
-	extract(Hooks::processHookCalls("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
-
-	// get a list of the system fields so we don't overwrite anything special
-	$existing_form_field_info = Fields::getFormFields($form_id);
-	$system_field_ids = array();
-	foreach ($existing_form_field_info as $form_field)
-	{
-		if ($form_field["is_system_field"] == "yes")
-			$system_field_ids[] = $form_field["field_id"];
-	}
-
-	$order = 1;
-	$custom_col_num = 1;
-	foreach ($sortable_rows as $field_id)
-	{
-		$set_clauses = array("list_order = $order");
-		if ($set_default_form_field_names && !in_array($field_id, $system_field_ids))
-		{
-			$set_clauses[] = "col_name = 'col_$custom_col_num'";
-			$custom_col_num++;
-		}
-
-		if (isset($infohash["field_{$field_id}_display_name"]))
-			$set_clauses[] = "field_title = '" . $infohash["field_{$field_id}_display_name"] . "'";
-
-		if (isset($infohash["field_{$field_id}_size"]))
-			$set_clauses[] = "field_size = '" . $infohash["field_{$field_id}_size"] . "'";
-
-		$is_new_sort_group = (in_array($field_id, $sortable_new_groups)) ? "yes" : "no";
-		$set_clauses[] = "is_new_sort_group = '$is_new_sort_group'";
-
-		$set_clauses_str = implode(",\n", $set_clauses);
-
-		mysql_query("
-      UPDATE {$g_table_prefix}form_fields
-      SET    $set_clauses_str
-      WHERE  field_id = $field_id AND
-             form_id = $form_id
-                ");
-		$order++;
-	}
-}
-
-
-/**
  * Adds/updates all options for a given field. This is called when the user edits fields from the dialog
  * window on the Fields tab. It updates all information about a field: including the custom settings.
  *
@@ -838,7 +628,7 @@ function ft_update_field($form_id, $field_id, $tab_info)
 {
 	global $g_table_prefix, $g_field_sizes, $g_debug, $LANG;
 
-	$existing_form_field_info = ft_get_form_field($field_id);
+	$existing_form_field_info = Fields::getFormField($field_id);
 
 	// TAB 1: this tab contains the standard settings shared by all fields, regardless of type: display text,
 	// form field name, field type, pass on, field size, data type and database col name
@@ -1046,7 +836,7 @@ function ft_update_field_filters($field_id)
 	$affected_filters = mysql_query("SELECT * FROM {$g_table_prefix}view_filters WHERE field_id = $field_id");
 
 	// get form field
-	$field_info = ft_get_form_field($field_id, array("include_field_type_info" => true));
+	$field_info = Fields::getFormField($field_id, array("include_field_type_info" => true));
 	$col_name      = $field_info["col_name"];
 	$field_type_id = $field_info["field_type_id"];
 
@@ -1108,7 +898,7 @@ function ft_change_field_type($form_id, $field_id, $new_field_type)
 {
 	global $g_table_prefix;
 
-	$field_info = ft_get_form_field($field_id);
+	$field_info = Fields::getFormField($field_id);
 
 	// if the field just changes from one multi-select field to another (radio, checkboxes, select or multi-select)
 	// don't delete the field_option group: it's probable that they just wanted to switch the appearance.

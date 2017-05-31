@@ -24,7 +24,6 @@ class Database
     private $statement;
     private $table_prefix;
 
-
     public function __construct($hostname, $db_name, $port, $username, $password, $table_prefix) {
         $options = array(
             PDO::ATTR_PERSISTENT => true,

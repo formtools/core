@@ -360,7 +360,7 @@ function ft_get_email_components($form_id, $submission_id = "", $email_id, $is_t
 		// table instead - since it contains presentation information likely to be needed in the email templates
 		$fields_for_email_template = array();
 		foreach ($view_fields as $view_field_info)
-			$fields_for_email_template[] = ft_get_form_field($view_field_info["field_id"], array("include_field_type_info" => true));
+			$fields_for_email_template[] = Fields::getFormField($view_field_info["field_id"], array("include_field_type_info" => true));
 	}
 	else
 		$fields_for_email_template = Fields::getFormFields($form_id, array("include_field_type_info" => true));

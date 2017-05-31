@@ -172,7 +172,7 @@ function ft_move_field_files($field_id, $source_folder, $target_folder, $image_t
 	if ($source_folder == $target_folder)
 		return;
 
-	$field_info = ft_get_form_field($field_id);
+	$field_info = Fields::getFormField($field_id);
 	$col_name   = $field_info["col_name"];
 	$field_type = $field_info["field_type"];
 	$form_id    = $field_info["form_id"];

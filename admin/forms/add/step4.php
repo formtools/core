@@ -1,8 +1,12 @@
 <?php
 
+require_once("../../../global/library.php");
+
 use FormTools\Core;
 use FormTools\Fields;
+use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 
 Core::init();
@@ -13,14 +17,13 @@ $form_id = General::loadField("form_id", "add_form_form_id", "");
 $sortable_id = "add_form_step4";
 
 // go to next page
-if (!empty($_POST) && isset($_POST["next_step"]))
-{
+if (!empty($_POST) && isset($_POST["next_step"])) {
 	// reorder fields and rename their column names, as per their new order
 	$_POST["sortable_id"] = $sortable_id;
-	ft_update_form_fields($form_id, $_POST, true);
+	Fields::updateFormFields($form_id, $_POST, true);
 
 	$deleted_rows = explode(",", $_POST["{$sortable_id}_sortable__deleted_rows"]);
-	ft_delete_form_fields($form_id, $deleted_rows);
+	Fields::deleteFormFields($form_id, $deleted_rows);
 
     General::redirect("step5.php?form_id=$form_id");
 }
@@ -31,34 +34,39 @@ $form_setup  = Forms::getForm($form_id);
 // build the best guesses and list of field IDs
 $best_guesses = array();
 $field_ids    = array();
-foreach ($form_fields as $field)
-{
+foreach ($form_fields as $field) {
 	$field_ids[] = $field["field_id"];
 
-	if ($field["is_system_field"] == "yes")
-		continue;
+	if ($field["is_system_field"] == "yes") {
+        continue;
+    }
 
 	// best guess at generating an appropriate Display Name
 	$temp = preg_replace("/_/", " ", $field["field_name"]);
 	$display_name_guess = ucwords($temp);
-
 	$best_guesses[] = "\"{$field['field_id']}\": \"$display_name_guess\"";
 }
+
 $best_guesses_js = implode(",\n", $best_guesses);
 $field_id_str = implode(",", $field_ids);
 
+
 // ------------------------------------------------------------------------------------------------
 
-// compile the header information
-$page_vars["page"] = "add_form4";
-$page_vars["page_url"] = Pages::getPageUrl("add_form4");
-$page_vars["sortable_id"] = $sortable_id;
-$page_vars["form_id"] = $form_id;
-$page_vars["form_fields"] = $form_fields;
-$page_vars["head_title"] = "{$LANG['phrase_add_form']} - {$LANG["phrase_step_4"]}";
-$page_vars["head_string"] =<<< END
-  <script src="{$g_root_url}/global/scripts/sortable.js?v=2"></script>
-END;
+$root_url = Core::getRootUrl();
+$LANG = Core::$L;
+
+$page_vars = array(
+    "page" => "add_form4",
+    "page_url" => Pages::getPageUrl("add_form4"),
+    "sortable_id" => $sortable_id,
+    "form_id" => $form_id,
+    "form_fields" => $form_fields,
+    "head_title" => "{$LANG['phrase_add_form']} - {$LANG["phrase_step_4"]}",
+    "head_string" => "<script src=\"{$root_url}/global/scripts/sortable.js?v=2\"></script>",
+    "js_messages" => array("phrase_delete_row")
+);
+
 $page_vars["head_js"] =<<< END
   var page_ns = {};
   page_ns.field_ids = [$field_id_str];
@@ -138,7 +146,5 @@ $page_vars["head_js"] =<<< END
     return true;
   }
 END;
-
-$page_vars["js_messages"] = array("phrase_delete_row");
 
 Themes::displayPage("admin/forms/add/step4.tpl", $page_vars);

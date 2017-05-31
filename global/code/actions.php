@@ -7,8 +7,13 @@
  * in JSON format to be handled by JS.
  */
 
+require_once("../library.php");
+
 use FormTools\Core;
+use FormTools\Fields;
 use FormTools\FieldValidation;
+use FormTools\Forms;
+use FormTools\General;
 use FormTools\ListGroups;
 use FormTools\OptionLists;
 use FormTools\Settings;
@@ -27,7 +32,7 @@ Core::init(array("check_sessions" => false)); // TODO
 $permission_check = Core::$user->checkAuth("user", false);
 
 // check the sessions haven't timeoutted
-$sessions_still_valid = ft_check_sessions_timeout(false);
+$sessions_still_valid = General::checkSessionsTimeout(false);
 if (!$sessions_still_valid) {
 	@session_destroy();
 	$_SESSION["ft"] = array();
@@ -47,11 +52,9 @@ $action  = $request["action"];
 // between the Ajax submit function and the Ajax return function. Usage:
 //   "return_vals[]=question1:answer1&return_vals[]=question2:answer2&..."
 $return_val_str = "";
-if (isset($request["return_vals"]))
-{
+if (isset($request["return_vals"])) {
 	$vals = array();
-	foreach ($request["return_vals"] as $pair)
-	{
+	foreach ($request["return_vals"] as $pair) {
 		list($key, $value) = split(":", $pair);
 		$vals[] = "\"$key\": \"$value\"";
 	}
@@ -60,25 +63,21 @@ if (isset($request["return_vals"]))
 
 // new method (see comment above). Doesn't allow double quotes in the key or value [Note: return_vars vs return_vals !]
 $return_str = "";
-if (isset($request["return_vars"]))
-{
+if (isset($request["return_vars"])) {
 	$vals = array();
-	while (list($key, $value) = each($request["return_vars"]))
-	{
+	while (list($key, $value) = each($request["return_vars"])) {
 		$vals[] = "\"$key\": \"$value\"";
 	}
 	$return_str = ", " . implode(", ", $vals);
 }
 
-if (!$permission_check["has_permission"])
-{
+if (!$permission_check["has_permission"]) {
 	$message = $permission_check["message"];
 	echo "{ \"success\": \"0\", \"ft_logout\": \"1\", \"message\": \"$message\"{$return_val_str} }";
 	exit;
 }
 
-switch ($action)
-{
+switch ($action) {
 	case "test_folder_permissions":
 		list($success, $message) = Files::checkUploadFolder($request["file_upload_dir"]);
 		$success = ($success) ? 1 : 0;
@@ -96,9 +95,9 @@ switch ($action)
 		$tabset = strip_tags($request["tabset"]);
 		$tab    = strip_tags($request["tab"]);
 
-		if (!array_key_exists("inner_tabs", $_SESSION["ft"]))
-			$_SESSION["ft"]["inner_tabs"] = array();
-
+		if (!array_key_exists("inner_tabs", $_SESSION["ft"])) {
+            $_SESSION["ft"]["inner_tabs"] = array();
+        }
 		$_SESSION["ft"]["inner_tabs"][$tabset] = $tab;
 		break;
 
@@ -106,18 +105,19 @@ switch ($action)
 		$form_id = $request["form_id"];
 		$submission_id = $request["submission_id"];
 
-		if (empty($_SESSION["ft"]["form_{$form_id}_select_all_submissions"]))
-		{
-			if (!isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]))
-				$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-			if (!in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]))
-				$_SESSION["ft"]["form_{$form_id}_selected_submissions"][] = $submission_id;
-		}
-		else
-		{
+		if (empty($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {
+			if (!isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
+                $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
+            }
+			if (!in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
+                $_SESSION["ft"]["form_{$form_id}_selected_submissions"][] = $submission_id;
+            }
+		} else {
 			// if it's in the omit list, remove it
-			if (in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]))
-				array_splice($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"], array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]), 1);
+			if (in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
+                array_splice($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"],
+                array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]), 1);
+            }
 		}
 		break;
 
@@ -128,20 +128,21 @@ switch ($action)
 		$form_id = $request["form_id"];
 		$submission_id = $request["submission_id"];
 
-		if (empty($_SESSION["ft"]["form_{$form_id}_select_all_submissions"]))
-		{
-			if (!isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]))
-				$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-			if (in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]))
-				array_splice($_SESSION["ft"]["form_{$form_id}_selected_submissions"], array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]), 1);
-		}
-		else
-		{
-			if (!isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]))
-				$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
-
-			if (!in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]))
-				$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"][] = $submission_id;
+		if (empty($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {
+			if (!isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
+                $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
+            }
+            if (in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
+                array_splice($_SESSION["ft"]["form_{$form_id}_selected_submissions"],
+                array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]), 1);
+            }
+		} else {
+			if (!isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
+                $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
+            }
+			if (!in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
+                $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"][] = $submission_id;
+            }
 		}
 		break;
 
@@ -150,28 +151,28 @@ switch ($action)
 		$submission_ids = split(",", $request["submission_ids"]);
 
 		// user HASN'T selected all submissions
-		if (empty($_SESSION["ft"]["form_{$form_id}_select_all_submissions"]))
-		{
-			if (!isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]))
-				$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-
-			foreach ($submission_ids as $submission_id)
-			{
-				if (!in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]))
-					$_SESSION["ft"]["form_{$form_id}_selected_submissions"][] = $submission_id;
+		if (empty($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {
+			if (!isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
+                $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
+            }
+			foreach ($submission_ids as $submission_id) {
+				if (!in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
+                    $_SESSION["ft"]["form_{$form_id}_selected_submissions"][] = $submission_id;
+                }
 			}
-		}
-		// user has already selected all submissions. Here, we actually REMOVE the newly selected submissions from
-		// the form submission omit list
-		else
-		{
-			if (!isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]))
-				$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
 
-			foreach ($submission_ids as $submission_id)
-			{
-				if (in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]))
-					array_splice($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"], array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]), 1);
+        // user has already selected all submissions. Here, we actually REMOVE the newly selected submissions from
+        // the form submission omit list
+		} else {
+			if (!isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
+                $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
+            }
+			foreach ($submission_ids as $submission_id) {
+				if (in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
+                    array_splice($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"],
+                    array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]),
+                    1);
+                }
 			}
 		}
 		break;
@@ -201,7 +202,7 @@ switch ($action)
 		$form_id  = $_SESSION["ft"]["form_id"];
 		$email_id = $_SESSION["ft"]["email_id"];
 		$info = ft_get_email_components($form_id, "", $email_id, true, $request);
-		echo ft_convert_to_json($info);
+		echo json_encode($info);
 		break;
 
 	case "edit_submission_send_email":
@@ -210,13 +211,10 @@ switch ($action)
 		$email_id      = $request["email_id"];
 
 		list($success, $message) = ft_process_email_template($form_id, $submission_id, $email_id);
-		if ($success)
-		{
+		if ($success) {
 			$success = 1;
 			$message = $LANG["notify_email_sent"];
-		}
-		else
-		{
+		} else {
 			$edit_email_template_link = "[<a href=\"{$g_root_url}/admin/forms/edit.php?form_id=$form_id&email_id=$email_id&page=edit_email\">edit email template</a>]";
 			$success = 0;
 			$message = $LANG["notify_email_not_sent_c"] . mb_strtolower($message) . " " . $edit_email_template_link;
@@ -232,8 +230,7 @@ switch ($action)
 	case "smart_fill":
 		$scrape_method = $request["scrape_method"];
 		$url           = $request["url"];
-		switch ($scrape_method)
-		{
+		switch ($scrape_method) {
 			case "file_get_contents":
 				$url = General::constructUrl($url, "ft_sessions_url_override=1");
 				$html = file_get_contents($url);
@@ -266,20 +263,17 @@ switch ($action)
 
 		// finalize the form and redirect to step 6
 		$form_info = Forms::getForm($form_id);
-		if ($form_info["is_complete"] != 'yes')
-		{
+		if ($form_info["is_complete"] != 'yes') {
 			$response = ft_finalize_form($form_id);
-			echo ft_convert_to_json($response);
-		}
-		else
-		{
+			echo json_encode($response);
+		} else {
 			echo "{ \"success\": \"1\", \"message\": \"\" }";
 		}
 		break;
 
 	case "get_js_webpage_parse_method":
 		$url = $request["url"];
-		$method = ft_get_js_webpage_parse_method($url);
+		$method = General::getJsWebpageParseMethod($url);
 		echo "{ \"scrape_method\": \"$method\" }";
 		break;
 
@@ -392,7 +386,7 @@ switch ($action)
 			"settings"      => $settings,
 			"validation"    => $validation
 		);
-		echo ft_convert_to_json($info);
+		echo json_encode($info);
 		break;
 
 	case "get_option_lists":
@@ -403,7 +397,7 @@ switch ($action)
 		foreach ($option_lists["results"] as $option_list) {
 			$option_list_info[$option_list["list_id"]] = $option_list["option_list_name"];
 		}
-		echo ft_convert_to_json($option_list_info);
+		echo json_encode($option_list_info);
 		break;
 
 	// used on the Edit Form -> Fields tab
@@ -413,7 +407,7 @@ switch ($action)
 		foreach ($form_list as $form_info) {
 			$forms[$form_info["form_id"]] = $form_info["form_name"];
 		}
-		echo ft_convert_to_json($forms);
+		echo json_encode($forms);
 		break;
 
 	// used for the Edit Form -> fields tab. Note that any dynamic settings ARE evaluated.
@@ -433,7 +427,7 @@ switch ($action)
 			"field_order" => $field_order,
 			"fields"      => $fields
 		);
-		echo ft_convert_to_json($return_info);
+		echo json_encode($return_info);
 		break;
 
 	case "create_new_view":
@@ -462,7 +456,7 @@ switch ($action)
 		$group_type = "form_{$form_id}_view_group";
 		$group_name = $request["group_name"];
 		$info = ListGroups::addListGroup($group_type, $group_name);
-		echo ft_convert_to_json($info);
+		echo json_encode($info);
 		break;
 
 	case "delete_view":
@@ -499,7 +493,7 @@ switch ($action)
 		}
 		if (!empty($problems))
 		{
-			$problems_json = ft_convert_to_json($problems);
+			$problems_json = json_encode($problems);
 			echo "{ \"success\": \"0\", \"problems\": $problems_json{$return_str} }";
 		}
 		else

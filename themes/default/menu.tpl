@@ -16,7 +16,7 @@
     {if $i.is_submenu == "no"}
 
       {* if this parent menu contains the page that is currently being viewed, show the submenu options *}
-      {if $i.url == $nav_parent_page_url}
+      {if isset($nav_parent_page_url) && $i.url == $nav_parent_page_url}
         {assign var=is_current_parent_menu value=true}
       {else}
         {assign var=is_current_parent_menu value=false}

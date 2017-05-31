@@ -63,12 +63,17 @@
               <div class="clear"></div>
             </li>
             {/if}
+
             <li class="sortable_row{if $smarty.foreach.row.last} rowN{/if}">
-              {assign var=next_item_is_new_sort_group value=$form_fields[$smarty.foreach.row.iteration].is_new_sort_group}
+              {if $smarty.foreach.row.last}
+                {assign var=next_item_is_new_sort_group value="yes"}
+              {else}
+                {assign var=next_item_is_new_sort_group value=$form_fields[$smarty.foreach.row.iteration].is_new_sort_group}
+              {/if}
               <div class="row_content{if $next_item_is_new_sort_group == 'no'} grouped_row{/if}">
           {/if}
 
-          {assign var=previous_item value=$i}
+          {assign var=previous_item value=$field_id}
 
             <div class="row_group{if $field.is_system_field == "yes"} system_field{/if}{if $smarty.foreach.row.last} rowN{/if}">
               <input type="hidden" class="sr_order" value="{$field_id}" />

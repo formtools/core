@@ -1056,7 +1056,7 @@ function ft_get_submission_field_info($view_fields)
 			"field_title" => $field["field_title"],
 			"col_name"    => $field["col_name"],
 			"list_order"  => $field["list_order"]);
-		$field_info = ft_get_form_field($field_id);
+		$field_info = Fields::getFormField($field_id);
 		$curr_field_info["field_info"] = $field_info;
 		$display_fields[] = $curr_field_info;
 	}

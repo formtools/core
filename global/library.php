@@ -3,6 +3,7 @@
 require_once(__DIR__ . "/code/Accounts.class.php");
 require_once(__DIR__ . "/code/Administrator.class.php");
 require_once(__DIR__ . "/code/Clients.class.php");
+require_once(__DIR__ . "/code/Constants.class.php");
 require_once(__DIR__ . "/code/Core.class.php");
 require_once(__DIR__ . "/code/Database.class.php");
 require_once(__DIR__ . "/code/DatabaseSessions.class.php");

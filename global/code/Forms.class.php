@@ -9,6 +9,9 @@
 namespace FormTools;
 
 
+use PDOException;
+
+
 class Forms {
 
 
@@ -507,7 +510,7 @@ class Forms {
     /**
      * Added in 2.1.0, this creates an Internal form with a handful of custom settings.
      *
-     * @param $info the POST request containing the form name, number of fields and access type.
+     * @param $request array the POST request containing the form name, number of fields and access type.
      */
     public static function createInternalForm($request)
     {
@@ -542,7 +545,7 @@ class Forms {
         for ($i=1; $i<=$info["num_fields"]; $i++) {
             $form_data["field{$i}"] = $i;
         }
-        ft_initialize_form($form_data);
+        self::initializeForm($form_data);
 
         $infohash = array();
         $form_fields = Fields::getFormFields($new_form_id);
@@ -1046,6 +1049,214 @@ class Forms {
         return $col_names;
     }
 
+
+    /**
+     * This function updates the main form values in preparation for a test submission by the actual
+     * form. It is called from step 2 of the form creation page when UPDATING an existing, incomplete
+     * form.
+     *
+     * @param array $infohash This parameter should be a hash (e.g. $_POST or $_GET) containing the
+     *             various fields from the step 2 add form page.
+     * @return array Returns array with indexes:<br/>
+     *               [0]: true/false (success / failure)<br/>
+     *               [1]: message string<br/>
+     */
+    public static function setFormMainSettings($infohash)
+    {
+        $db = Core::$db;
+        $LANG = Core::$L;
+
+        $success = true;
+        $message = "";
+
+        // check required infohash fields
+        $rules = array();
+        $rules[] = "required,form_name,{$LANG["validation_no_form_name"]}";
+        $errors = validate_fields($infohash, $rules);
+
+        if (!empty($errors)) {
+            return array(false, General::getErrorListHTML($errors), "");
+        }
+
+        // extract values
+        $access_type  = isset($infohash['access_type']) ? $infohash['access_type'] : "public";
+        $client_ids   = isset($infohash['selected_client_ids']) ? $infohash['selected_client_ids'] : array();
+        $form_id      = $infohash["form_id"];
+        $form_name    = trim($infohash['form_name']);
+        $is_multi_page_form   = isset($infohash["is_multi_page_form"]) ? $infohash["is_multi_page_form"] : "no";
+        $redirect_url = isset($infohash['redirect_url']) ? trim($infohash['redirect_url']) : "";
+
+        if ($is_multi_page_form == "yes")
+            $form_url = $infohash["multi_page_urls"][0];
+        else
+            $form_url = $infohash["form_url"];
+
+
+        // all checks out, so update the new form
+        $db->query("
+            UPDATE {PREFIX}forms
+            SET    access_type = :access_type,
+                   is_active = 'no',
+                   is_complete = 'no',
+                   is_multi_page_form = :is_multi_page_form,
+                   form_name = :form_name,
+                   form_url = :form_url,
+                   redirect_url = :redirect_url
+            WHERE  form_id = :form_id
+        ");
+        $db->bindAll(array(
+            "access_type" => $access_type,
+            "is_multi_page_form" => $is_multi_page_form,
+            "form_name" => $form_name,
+            "form_url" => $form_url,
+            "redirect_url" => $redirect_url,
+            "form_id" => $form_id
+        ));
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}client_forms WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        foreach ($client_ids as $client_id) {
+            $db->query("INSERT INTO {PREFIX}client_forms (account_id, form_id) VALUES (:client_id, :form_id)");
+            $db->bindAll(array("client_id" => $client_id, "form_id" => $form_id));
+            $db->execute();
+        }
+
+        // set the multi-page form URLs
+        $db->query("DELETE FROM {PREFIX}multi_page_form_urls WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        if ($is_multi_page_form == "yes") {
+            $page_num = 1;
+            foreach ($infohash["multi_page_urls"] as $url) {
+                if (empty($url)) {
+                    continue;
+                }
+                $db->query("INSERT INTO {PREFIX}multi_page_form_urls (form_id, form_url, page_num) VALUES (:form_id, :url, :page_num)");
+                $db->bindAll(array(
+                "form_id" => $form_id,
+                "url" => $url,
+                "page_num" => $page_num
+                ));
+                $db->execute();
+                $page_num++;
+            }
+        }
+
+        extract(Hooks::processHookCalls("end", compact("infohash", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
+
+        return array($success, $message);
+    }
+
+
+    /**
+     * Called by test form submission during form setup procedure. This stores a complete form submission in the database
+     * for examination and pruning by the administrator. Error / notification messages are displayed in the language of
+     * the currently logged in administrator.
+     *
+     * It works with both submissions sent through process.php and the API.
+     *
+     * @param array $form_data a hash of the COMPLETE form data (i.e. all fields)
+     */
+    public static function initializeForm($form_data)
+    {
+        $LANG = Core::$L;
+        $db = Core::$db;
+
+        $textbox_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("textbox");
+
+        $display_notification_page = isset($form_data["form_tools_display_notification_page"]) ?
+            $form_data["form_tools_display_notification_page"] : true;
+
+        $form_id = $form_data["form_tools_form_id"];
+
+        // check the form ID is valid
+        if (!self::checkFormExists($form_id, true)) {
+            Themes::displayPage("error.tpl", array(
+                "message_type" => "error",
+                "error_code" => Constants::$ERROR_CODES["100"]
+            ));
+            exit;
+        }
+
+        $form_info = self::getForm($form_id);
+
+        // if this form has already been completed, exit with an error message
+        if ($form_info["is_complete"] == "yes") {
+            Themes::displayPage("error.tpl", array(
+                "message_type" => "error",
+                "error_code" => Constants::$ERROR_CODES["101"]
+            ));
+            exit;
+        }
+
+        // since this form is still incomplete, remove any old records from form_fields concerning this form
+        Fields::clearFormFields($form_id);
+
+        // remove irrelevant key-values
+        unset($form_data["form_tools_initialize_form"]);
+        unset($form_data["form_tools_submission_id"]);
+        unset($form_data["form_tools_form_id"]);
+        unset($form_data["form_tools_display_notification_page"]);
+
+        $db->beginTransaction();
+
+        try {
+            Fields::addSubmissionIdSystemField($form_id, $textbox_field_type_id);
+            $order = Fields::addFormFields($form_id, $form_data, 2); // 2 = the second field (we just added submission ID)
+            $order = Fields::addFormFileFields($form_id, $_FILES, $order);
+            Fields::addSystemFields($form_id, $textbox_field_type_id, $order);
+
+            $db->processTransaction();
+
+        } catch (PDOException $e) {
+            $db->rollbackTransaction();
+            Themes::displayPage("error.tpl", array(
+                "message_type" => "error",
+                "error_code" => Constants::$ERROR_CODES["103"],
+                "error_type" => "system",
+                "debugging" => $e->getMessage()
+            ));
+            exit;
+        }
+
+        // finally, set this form's "is_initialized" value to "yes", so the administrator can proceed to
+        // the next step of the Add Form process.
+        self::setFormInitialized($form_id);
+
+        // alert a "test submission complete" message. The only time this wouldn't be outputted would be
+        // if this function is being called programmatically, like with the blank_form module
+        if ($display_notification_page) {
+            $page_vars = array(
+                "message" => $LANG["processing_init_complete"],
+                "message_type" => "notify",
+                "title" => $LANG["phrase_test_submission_received"]
+            );
+            Themes::displayPage("error.tpl", $page_vars);
+            exit;
+        }
+    }
+
+
+    public static function setFormInitialized($form_id)
+    {
+        Core::$db->query("
+            UPDATE  {PREFIX}forms
+            SET     is_initialized = 'yes'
+            WHERE   form_id = :form_id
+        ");
+        Core::$db->bind("form_id", $form_id);
+
+        try {
+            Core::$db->execute();
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 
 
     // --------------------------------------------------------------------------------------------

@@ -886,8 +886,9 @@ class Modules
         header("Content-Type: text/html; charset=utf-8");
         ft_check_permission($account_type);
 
-        if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"]))
-            ft_check_sessions_timeout();
+        if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"])) {
+            General::checkSessionsTimeout();
+        }
 
         $module_folder = self::getCurrentModuleFolder();
 

@@ -296,7 +296,7 @@ class Core {
      * multi-select boxes) and image filenames (main image, main thumb, search results thumb). It's strongly
      * recommended to leave this value alone.
      */
-    private static $multiValDelimiter = ", ";
+    private static $multiFieldValDelimiter;
 
     /**
      * Used throughout the script to store any and all temporary error / notification messages. Don't change
@@ -477,6 +477,7 @@ class Core {
         self::$maxForms = isset($g_max_forms) ? $g_max_forms : "";
         self::$maxNavPages = isset($g_max_nav_pages) ? $g_max_nav_pages : 16;
         self::$searchFormDateFieldFormat = isset($g_search_form_date_field_format) ? $g_search_form_date_field_format : "d/m/y";
+        self::$multiFieldValDelimiter = isset($g_multi_val_delimiter) ? $g_multi_val_delimiter : ", ";
     }
 
     /**
@@ -617,5 +618,9 @@ class Core {
 
     public static function getSearchFormDateFieldFormat() {
         return self::$searchFormDateFieldFormat;
+    }
+
+    public static function getMultiFieldValDelimiter() {
+        return self::$multiFieldValDelimiter;
     }
 }

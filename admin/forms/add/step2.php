@@ -51,7 +51,7 @@ else if (isset($request['update_form'])) {
     Sessions::set("uploading_files", isset($request["uploading_files"]) ? $request["uploading_files"] : "no");
 	$request["submission_type"] = $submission_type;
 
-	list($g_success, $g_message) = ft_set_form_main_settings($request);
+	list($g_success, $g_message) = Forms::setFormMainSettings($request);
 	if ($g_success) {
         General::redirect("step3.php?form_id=$form_id");
 	} else {

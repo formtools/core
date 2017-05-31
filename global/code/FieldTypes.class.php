@@ -640,7 +640,7 @@ END;
         }
         reset(self::$rawFieldTypes);
 
-        $js = $namespace . ".raw_field_types = " . ft_convert_to_json($mapped);
+        $js = $namespace . ".raw_field_types = " . json_encode($mapped);
         return $js;
     }
 

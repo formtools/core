@@ -322,86 +322,6 @@ function mb_str_split($string, $split_length = 1)
 
 
 /**
- * Helper function that's called as a wrapper to the PHP json_encode function. If it doesn't exist,
- * it manually encodes the value as a JSON object.
- *
- * I didn't just make this function override json_encore for those servers that support it (PHP 5.2+)
- * because I couldn't locate a 100% guaranteed identical plain vanilla PHP equivalent. Hence this custom
- * function.
- *
- * @param mixed $arr
- * @return string the JSON object (as a PHP string)
- */
-function ft_convert_to_json($arr)
-{
-	$parts = array();
-	$is_list = false;
-
-	// find out if the given array is a numerical array
-	$keys = array_keys($arr);
-	$max_length = count($arr)-1;
-
-	// see if the first key is 0 and last key is length - 1
-	if (isset($keys[0]) && ($keys[0] == 0) && ($keys[$max_length] == $max_length))
-	{
-		$is_list = true;
-
-		// see if each key corresponds to its position
-		for ($i=0; $i<count($keys); $i++)
-		{
-			// a key fails at position check: it's a hash
-			if ($i != $keys[$i])
-			{
-				$is_list = false;
-				break;
-			}
-		}
-	}
-
-	foreach ($arr as $key=>$value)
-	{
-		// custom handling for arrays
-		if (is_array($value))
-		{
-			if ($is_list)
-				$parts[] = ft_convert_to_json($value);
-			else
-				$parts[] = '"' . $key . '":' . ft_convert_to_json($value);
-		}
-		else
-		{
-			$str = '';
-			if (!$is_list)
-				$str = '"' . $key . '":';
-
-			// custom handling for multiple data types
-			if (is_numeric($value))
-				$str .= $value;
-			elseif ($value === false)
-				$str .= 'false';
-			elseif ($value === true)
-				$str .= 'true';
-			else
-			{
-				$json_replacements = array(array('\\', '/', "\n", "\t", "\r", "\b", "\f", '"'), array('\\\\', '\\/', '\\n', '\\t', '\\r', '\\b', '\\f', '\"'));
-				$value = str_replace($json_replacements[0], $json_replacements[1], $value);
-				$str .= '"' . $value . '"';
-			}
-
-			$parts[] = $str;
-		}
-	}
-
-	$json = implode(',', $parts);
-
-	if ($is_list)
-		return '[' . $json . ']';
-
-	return '{' . $json . '}';
-}
-
-
-/**
  * Extracted from validate_fields. Simple function to test if a string is an email or not.
  *
  * @param string $str
@@ -500,49 +420,6 @@ function ft_generate_password($length = 8)
 	}
 
 	return $password;
-}
-
-
-/**
- * This function is used by the Smart Fill functionality. In order for the JS to be allowed to parse
- * the pages, they need to be on the same domain. This function figured out the method by which those
- * pages can be acquired for this particular server. It returns a string representing the method to
- * use, found in this order:
- *   1. "file_get_contents"
- *   2. "curl"
- *   3. "redirect" - this means that the form webpage is already on the same site, so it can be accessed
- *      directly
- *   4. "" - the empty string gets returned if none of the above methods apply. In this case, the user will
- *      have to manually upload copies of the files which are then created locally for parsing.
- *
- * TODO. There's a potentially bug with this function, which I haven't been able to solve for both PHP 4 & 5:
- * if the URL is invalid, file_get_contents can timeout with a fatal error. To reduce the likelihood of this
- * occurring, Step 2 of the Add Form process requires the user to have confirmed each of the form URLs.
- * Nevertheless, this needs to be addressed at some point.
- */
-function ft_get_js_webpage_parse_method($form_url)
-{
-	// set a 1 minute maximum execution time for this request
-	@set_time_limit(60);
-	$scrape_method = "";
-
-	// we buffer the file_get_contents call in case the URL is invalid and a fatal error is generated
-	// when the function time-outs
-	if (@file_get_contents($form_url))
-		$scrape_method = "file_get_contents";
-	if (function_exists("curl_init") && function_exists("curl_exec"))
-		$scrape_method = "curl";
-	else
-	{
-		$current_url = $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"];
-		$current_url_info = parse_url($current_url);
-		$form_url_info = parse_url($form_url);
-
-		if (($current_url_info["host"] == $form_url_info["host"]) && ($current_url_info["port"] == $form_url_info["port"]))
-			$scrape_method = "redirect";
-	}
-
-	return $scrape_method;
 }
 
 
@@ -700,36 +577,6 @@ if (!function_exists('mime_content_type'))
 			return 'application/octet-stream';
 		}
 	}
-}
-
-
-/**
- * This is called on all page loads. It checks to ensure that the person's sessions haven't timed out. If not,
- * it updates the last_activity_unixtime in the user's sessions - otherwise they're logged out.
- */
-function ft_check_sessions_timeout($auto_logout = true)
-{
-	$now = date("U");
-	$sessions_valid = true;
-
-	// check to see if the session has timed-out
-	if (isset($_SESSION["ft"]["account"]["last_activity_unixtime"]) && isset($_SESSION["ft"]["account"]["sessions_timeout"])) {
-		$sessions_timeout_mins = $_SESSION["ft"]["account"]["sessions_timeout"];
-		$timeout_secs = $sessions_timeout_mins * 60;
-
-		if ($_SESSION["ft"]["account"]["last_activity_unixtime"] + $timeout_secs < $now) {
-			if ($auto_logout) {
-                Core::$user->logout("notify_sessions_timeout");
-			} else {
-				$sessions_valid = false;
-			}
-		}
-	}
-
-	// log this unixtime for checking the sessions timeout
-	$_SESSION["ft"]["account"]["last_activity_unixtime"] = $now;
-
-	return $sessions_valid;
 }
 
 

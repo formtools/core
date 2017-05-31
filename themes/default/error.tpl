@@ -5,7 +5,7 @@
 *}
 {include file="header.tpl"}
 
-  {if $context == "error_page"}
+  {if isset($context) && $context == "error_page"}
 
     {if $message_type == "error"}
       <div class="error" style="padding: 8px">
@@ -43,7 +43,7 @@
         <span class="blue bold">
           {if $title}
             {$title|upper}
-          {else
+          {else}
             {$LANG.word_notification|upper}
           {/if}
         </span>
