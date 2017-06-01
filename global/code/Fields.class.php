@@ -474,10 +474,11 @@ class Fields {
      *
      * Note: field types that require additional functionality when deleting a field type (e.g. file fields which
      * need to delete uploaded files), they need to define the appropriate hook. Generally this means the
-     * "delete_fields" hook in the ft_update_form_fields_tab() function.
+     * "delete_fields" hook in the updateFormFieldsTab() function.
      */
     public static function deleteFormFields($form_id, $field_ids)
     {
+        $db = Core::$db;
         $LANG = Core::$L;
 
         // default return values
@@ -506,41 +507,62 @@ class Fields {
             $old_field_info = self::getFormField($field_id);
             $deleted_field_info[] = $old_field_info;
 
-            @mysql_query("DELETE FROM {PREFIX}form_fields WHERE field_id = $field_id");
+            $db->query("DELETE FROM {PREFIX}form_fields WHERE field_id = :field_id");
+            $db->bind("field_id", $field_id);
+            $db->execute();
+
             if (!$form_table_exists) {
                 continue;
             }
 
-            mysql_query("DELETE FROM {PREFIX}new_view_submission_defaults WHERE field_id = $field_id");
+            $db->query("DELETE FROM {PREFIX}new_view_submission_defaults WHERE field_id = :field_id");
+            $db->bind("field_id", $field_id);
+            $db->execute();
 
             // see if this field had been flagged as an email field (either as the email field, first or last name).
             // if it's the email field, delete the whole row. If it's either the first or last name, just empty the value
-            $query = mysql_query("SELECT form_email_id FROM {PREFIX}form_email_fields WHERE email_field_id = $field_id");
-            while ($row = mysql_fetch_assoc($query)) {
-                ft_unset_field_as_email_field($row["email_form_id"]);
+            $db->query("SELECT form_email_id FROM {PREFIX}form_email_fields WHERE email_field_id = :field_id");
+            $db->bind("field_id", $field_id);
+            $db->execute();
+
+            foreach ($db->fetchAll() as $row) {
+                Emails::unsetFieldAsEmailField($row["email_form_id"]);
             }
-            mysql_query("UPDATE {PREFIX}form_email_fields SET first_name_field_id = '' WHERE first_name_field_id = $field_id");
-            mysql_query("UPDATE {PREFIX}form_email_fields SET last_name_field_id = '' WHERE last_name_field_id = $field_id");
+            $db->query("UPDATE {PREFIX}form_email_fields SET first_name_field_id = '' WHERE first_name_field_id = :field_id");
+            $db->bind("field_id", $field_id);
+            $db->execute();
+
+            $db->query("UPDATE {PREFIX}form_email_fields SET last_name_field_id = '' WHERE last_name_field_id = :field_id");
+            $db->bind("field_id", $field_id);
+            $db->execute();
 
             // get a list of any Views that referenced this form field
-            $view_query = mysql_query("SELECT view_id FROM {PREFIX}view_fields WHERE field_id = $field_id");
-            while ($row = mysql_fetch_assoc($view_query)) {
+            $db->query("SELECT view_id FROM {PREFIX}view_fields WHERE field_id = :field_id");
+            $db->bind("field_id", $field_id);
+            $db->execute();
+
+            foreach ($db->fetchAll() as $row) {
                 $affected_views[] = $row["view_id"];
-                ft_delete_view_field($row["view_id"], $field_id);
+                Views::deleteViewField($row["view_id"], $field_id);
             }
 
             $drop_column = $old_field_info["col_name"];
-            mysql_query("ALTER TABLE {PREFIX}form_$form_id DROP $drop_column");
+            $db->query("ALTER TABLE {PREFIX}form_$form_id DROP $drop_column");
+            $db->execute();
 
             // if any Views had this field as the default sort order, reset them to having the submission_date
             // field as the default sort order
-            mysql_query("
-              UPDATE {PREFIX}views
-              SET     default_sort_field = 'submission_date',
-                      default_sort_field_order = 'desc'
-              WHERE   default_sort_field = '$drop_column' AND
-                      form_id = $form_id
+            $db->query("
+                UPDATE {PREFIX}views
+                SET     default_sort_field = 'submission_date',
+                        default_sort_field_order = 'desc'
+                WHERE   default_sort_field = :drop_column AND
+                        form_id = :form_id
             ");
+            $db->bindAll(array(
+                "default_sort_field" => $drop_column,
+                "form_id" => $form_id
+            ));
 
             $removed_field_ids[] = $field_id;
         }
@@ -552,7 +574,7 @@ class Fields {
 
         // update the order of any Views that referenced this field
         foreach ($affected_views as $view_id) {
-            ft_auto_update_view_field_order($view_id);
+            Views::autoUpdateViewFieldOrder($view_id);
         }
 
         // determine the return message

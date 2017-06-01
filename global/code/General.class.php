@@ -861,5 +861,121 @@ END;
     }
 
 
+    /**
+     * This function was added in 1.4.7 to handle serious, show-stopper errors instead of the former
+     * hardcoded die() function calls. This stores the error in sessions and redirects to error.php, which
+     * decides how the error is displayed based on the error_type ("notify": for "softer"
+     * errors like the install folder hasn't been deleted; "error" for more serious problems) and on
+     * whether or not the global $g_debug option is enabled. If it is, the error.php page displays
+     * the nitty-gritty errors returned by the server / database.
+     *
+     * @param string $error_message the user-friendly version of the error.
+     * @param string $debug_details the error message returned by the server / database.
+     * @param string $error_type either "error" or "notify"
+     */
+    public static function handleError($error_message, $debug_details, $error_type = "error")
+    {
+        $root_url = Core::getRootUrl();
+
+        // this is for NEW installations. For new installations the $g_root_url isn't set, so we want to
+        // redirect to the error page in the current form tools folder
+        if (!empty($root_url)) {
+            $root_url = "$root_url/";
+        }
+
+        $_SESSION["ft"]["last_error"]       = $error_message;
+        $_SESSION["ft"]["last_error_debug"] = $debug_details;
+        $_SESSION["ft"]["last_error_type"]  = $error_type;
+
+        General::redirect("{$root_url}/error.php");
+    }
+
+
+    /**
+     * Return a date string from a MySQL datetime according based on an offset and a display format.
+     * As of version 1.5.0, this function is language localized. The following php date() flags are
+     * translated:
+     * 			D    - Mon through Sun
+     *      l    - Sunday through Saturday
+     *      F    - January through December
+     *      M    - Jan through Dec
+     *      a    - am or pm
+     *      A    - AM or PM
+     *
+     * Note that some flags (S for "st","rd", "nd" etc. and T for timezone, EST, MDT etc) are NOT
+     * translated. This is. Also, this function only uses the standard Gregorian calendar. Nothing
+     * fancy! My Unicode 5 book in on route, so I'll look into that in a later version. ;-)
+     *
+     * @param integer $offset the number of hours offset from GMT (- or +)
+     * @param string $datetime the mysql datetime to format
+     * @param string $format the date format to use (PHP's date() function).
+     * @return string the date/time as a fully localized string
+     */
+    public static function getDate($offset, $datetime, $format)
+    {
+        global $LANG;
+
+        if (strlen($datetime) != 19) {
+            return "";
+        }
+
+        $year = substr($datetime, 0, 4);
+        $mon  = substr($datetime, 5, 2);
+        $day  = substr($datetime, 8, 2);
+        $hour = substr($datetime, 11, 2);
+        $min  = substr($datetime, 14, 2);
+        $sec  = substr($datetime, 17, 2);
+
+        $timestamp = mktime($hour + $offset, $min, $sec, $mon, $day, $year);
+
+        // if this is an English language (British, US English, English Canadian, etc), just
+        // use the standard date() functionality (this is faster)
+        if ($LANG["special_language"] == "English") {
+            $date_str = date($format, $timestamp);
+        } else {
+            // here's how this works. We replace the special chars in the date formatting
+            // string with a single "@" character - which has no special meaning for either date()
+            // or in regular expressions - and keep track of the order in which they appear. Then,
+            // we call date() to convert all other characters and then replace the @'s with their
+            // translated versions.
+            $special_chars = array("D", "l", "F", "M", "a", "A"); // M: short month, F: long month
+            $char_map = array();
+            $new_format = "";
+            for ($char_ind=0; $char_ind<strlen($format); $char_ind++) {
+                if (in_array($format[$char_ind], $special_chars)) {
+                    $char_map[] = $format[$char_ind];
+                    $format[$char_ind] = "@";
+                }
+                $new_format .= $format[$char_ind];
+            }
+            $date_str = date($new_format, $timestamp);
+
+            // now replace the @'s with their translated equivalents
+            $eng_strings = date(join(",", $char_map), $timestamp);
+            $eng_string_arr = explode(",", $eng_strings);
+            for ($char_ind=0; $char_ind<count($char_map); $char_ind++) {
+                $eng_string = $eng_string_arr[$char_ind];
+
+                switch ($char_map[$char_ind]) {
+                    case "F":
+                        $translated_str = $LANG["date_month_short_$eng_string"];
+                        break;
+                    case "M":
+                        $translated_str = $LANG["date_month_$eng_string"];
+                        break;
+                    default:
+                        $translated_str = $LANG["date_$eng_string"];
+                        break;
+                }
+                $date_str = preg_replace("/@/", $translated_str, $date_str, 1);
+            }
+        }
+
+        return $date_str;
+    }
+
+
+
+
 }
 

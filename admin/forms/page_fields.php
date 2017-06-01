@@ -14,7 +14,7 @@ $sortable_id = "edit_fields";
 
 if (isset($request["update_fields"])) {
 	$request["sortable_id"] = $sortable_id;
-	list($g_success, $g_message) = ft_update_form_fields_tab($form_id, $request);
+	list($g_success, $g_message) = Forms::updateFormFieldsTab($form_id, $request);
 }
 
 $form_info = Forms::getForm($form_id);

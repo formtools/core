@@ -54,6 +54,56 @@ class Database
         $this->table_prefix = $table_prefix;
     }
 
+
+    /**
+     * Open a database connection. This is called once for all page requests, and closed at the footer.
+     * Depending on the $g_check_ft_sessions global (true by default), it also logs the time of each
+     * request, to perform the sessions timeout check. This parameter is enabled for the main script
+     * so that all users are subject to being booted out if there's been no activity. But for external
+     * scripts (such as the API) this setting can be disabled, giving them unfettered use of the database
+     * connection without worrying about being - incorrectly - logged out.
+     *
+     * @return resource returns a reference to the open connection.
+    function ft_db_connect()
+    {
+    global $g_db_hostname, $g_db_username, $g_db_password, $g_db_name, $g_unicode, $g_db_ssl,
+    $g_check_ft_sessions, $g_set_sql_mode;
+
+    extract(Hooks::processHookCalls("start", array(), array()), EXTR_OVERWRITE);
+
+    if ($g_db_ssl)
+    $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true, MYSQL_CLIENT_SSL);
+    else
+    $link = @mysql_connect($g_db_hostname, $g_db_username, $g_db_password, true);
+
+    if (!$link)
+    {
+    General::displaySeriousError("<p>Form Tools was unable to make a connection to the database hostname. This usually means the host is temporarily down, it's no longer accessible with the hostname you're passing, or the username and password you're using isn't valid.</p><p>Please check your /global/config.php file to confirm the <b>\$g_db_hostname</b>, <b>\$g_db_username</b> and <b>\$g_db_password</b> settings.</p>");
+    exit;
+    }
+
+    $db_connection = mysql_select_db($g_db_name);
+    if (!$db_connection)
+    {
+    General::displaySeriousError("Form Tools was unable to make a connection to the database. This usually means the database is temporarily down, or that the database is no longer accessible. Please check your /global/config.php file to confirm the <b>\$g_db_name</b> setting.");
+    exit;
+    }
+
+    // if required, set all queries as UTF-8 (enabled by default)
+    if ($g_unicode)
+    @mysql_query("SET NAMES 'utf8'", $link);
+
+    if ($g_set_sql_mode)
+    @mysql_query("SET SQL_MODE=''", $link);
+
+    if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"]))
+    ft_check_sessions_timeout();
+
+    return $link;
+    }
+     */
+
+
     /**
      * This is a convenience wrapper for PDO's prepare method. It replaces {PREFIX} with the database
      * table prefix so you don't have to include it everywhere.

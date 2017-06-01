@@ -681,7 +681,7 @@ function ft_delete_view_field($view_id, $field_id)
 	mysql_query("DELETE FROM {$g_table_prefix}view_filters WHERE view_id = $view_id AND field_id = $field_id");
 
 	// now update the view field order to ensure there are no gaps
-	ft_auto_update_view_field_order($view_id);
+    Views::autoUpdateViewFieldOrder($view_id);
 }
 
 
@@ -691,7 +691,7 @@ function ft_delete_view_field($view_id, $field_id)
  *
  * @param integer $view_id
  */
-function ft_auto_update_view_field_order($view_id)
+function autoUpdateViewFieldOrder($view_id)
 {
 	global $g_table_prefix;
 

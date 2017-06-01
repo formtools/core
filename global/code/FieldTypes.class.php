@@ -1143,7 +1143,7 @@ END;
                 break;
         }
 
-        return ft_get_date($tzo, $placeholders["VALUE"], $php_format);
+        return General::getDate($tzo, $placeholders["VALUE"], $php_format);
     }
 
 

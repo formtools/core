@@ -7,7 +7,7 @@ use FormTools\Themes;
 $sortable_id = "multi_page_form_list";
 
 if (isset($request["update_main"])) {
-    list($g_success, $g_message) = ft_update_form_main_tab($request, $form_id);
+    list($g_success, $g_message) = Forms::updateFormMainTab($request, $form_id);
 }
 
 $form_info = Forms::getForm($form_id);
