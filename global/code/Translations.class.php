@@ -56,7 +56,7 @@ class Translations
             while (false !== ($filename = readdir($handle)))
             {
                 if ($filename != '.' && $filename != '..' && $filename != "index.php" &&
-                ft_get_filename_extension($filename, true) == "php")
+                Files::getFilenameExtension($filename, true) == "php")
                 {
                     list($lang_file, $lang_display) = $this->getLanguageFileInfo("$language_folder_dir/$filename");
                     $available_language_info[$lang_file] = $lang_display;

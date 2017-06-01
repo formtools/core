@@ -87,7 +87,7 @@ switch ($action) {
 		break;
 
 	case "test_folder_url_match":
-		list($success, $message) = ft_check_folder_url_match($request["file_upload_dir"], $request["file_upload_url"]);
+		list($success, $message) = Files::checkFolderUrlMatch($request["file_upload_dir"], $request["file_upload_url"]);
 		$success = ($success) ? 1 : 0;
 		echo "{ \"success\": \"$success\", \"message\": \"$message\"{$return_val_str} }";
 		break;
@@ -302,7 +302,7 @@ switch ($action) {
 			$filename     = $upload_tmp_file_prefix . $_FILES["form_page_{$i}"]["name"];
 			$tmp_location = $_FILES["form_page_{$i}"]["tmp_name"];
 
-			list($g_success, $g_message, $final_filename) = ft_upload_file($file_upload_dir, $filename, $tmp_location);
+			list($g_success, $g_message, $final_filename) = Files::uploadFile($file_upload_dir, $filename, $tmp_location);
 			if ($g_success)
 			{
 				$uploaded_file_info[] = "$file_upload_url/$final_filename";
@@ -353,7 +353,7 @@ switch ($action) {
 		$filename        = $upload_tmp_file_prefix . $_FILES["form_page_1"]["name"];
 		$tmp_location    = $_FILES["form_page_1"]["tmp_name"];
 
-		list($g_success, $g_message, $final_filename) = ft_upload_file($file_upload_dir, $filename, $tmp_location);
+		list($g_success, $g_message, $final_filename) = Files::uploadFile($file_upload_dir, $filename, $tmp_location);
 		if ($g_success)
 		{
 			$_SESSION["ft"]["smart_fill_tmp_uploaded_files"][] = "$file_upload_dir/$final_filename";

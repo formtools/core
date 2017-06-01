@@ -1545,7 +1545,7 @@ class Fields {
      * @param integer $field_id
      * @param string $new_field_type
      */
-    public static function ft_change_field_type($form_id, $field_id, $new_field_type)
+    public static function changeFieldType($form_id, $field_id, $new_field_type)
     {
         $db = Core::$db;
 

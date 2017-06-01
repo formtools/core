@@ -109,14 +109,14 @@ class Core {
      * This is set to 1 by default (genuine errors only). Crank it up to 2047 to list every
      * last error/warning/notice that occurs.
      */
-    private static $errorReporting = 1;
+    private static $errorReporting;
 
     /**
      * Various debug settings. As of 2.3.0 these are of varying degrees of being supported.
      */
-    private static $debug = true;
-    private static $smartyDebug = false;
+    private static $debugEnabled;
     private static $jsDebugEnabled;
+    private static $smartyDebug = false;
     private static $apiDebug = true;
 
     /**
@@ -478,6 +478,8 @@ class Core {
         self::$maxNavPages = isset($g_max_nav_pages) ? $g_max_nav_pages : 16;
         self::$searchFormDateFieldFormat = isset($g_search_form_date_field_format) ? $g_search_form_date_field_format : "d/m/y";
         self::$multiFieldValDelimiter = isset($g_multi_val_delimiter) ? $g_multi_val_delimiter : ", ";
+        self::$errorReporting = isset($g_default_error_reporting) ? $g_default_error_reporting : 1;
+        self::$debugEnabled = isset($g_debug) ? $g_debug : false;
     }
 
     /**
@@ -622,5 +624,9 @@ class Core {
 
     public static function getMultiFieldValDelimiter() {
         return self::$multiFieldValDelimiter;
+    }
+
+    public static function isDebugEnabled() {
+        return self::$debugEnabled;
     }
 }

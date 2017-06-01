@@ -734,7 +734,7 @@ class Modules
         // now delete the entire module folder
         $deleted = false;
         if ($delete_module_folder_on_uninstallation) {
-            $deleted = ft_delete_folder("$root_dir/modules/$module_folder");
+            $deleted = Files::deleteFolder("$root_dir/modules/$module_folder");
         }
         if ($deleted) {
             $message = $LANG["notify_module_uninstalled"];
