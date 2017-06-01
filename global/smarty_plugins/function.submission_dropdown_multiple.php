@@ -1,5 +1,7 @@
 <?php
 
+use FormTools\Fields;
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -31,7 +33,7 @@ function smarty_function_submission_dropdown_multiple($params, &$smarty)
   $selected_vals = (isset($params["selected"])) ? explode("$g_multi_val_delimiter", $params["selected"]) : array();	
 	
 
-	$option_info = ft_get_field_options($field_id);
+	$option_info = Fields::getFieldOptions($field_id);
 
 	$dd_str = "<select name=\"{$name}[]\" multiple size=\"4\">";
 	foreach ($option_info as $option)

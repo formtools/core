@@ -581,30 +581,6 @@ if (!function_exists('mime_content_type'))
 
 
 /**
- * Helper function to locate the value key in the request info. This is used in the ft_update_field
- * function. It can be used any time we use the jQuery serializeArray() function. The javascript
- * version of this is called ft._extract_array_val
- *
- * @param array $array each index is a hash with two keys: name and value
- * @param string $name
- */
-function _ft_extract_array_val($array, $name)
-{
-	$value = "";
-	for ($i=0; $i<count($array); $i++)
-	{
-		if ($array[$i]["name"] == $name)
-		{
-			$value = $array[$i]["value"];
-			break;
-		}
-	}
-
-	return $value;
-}
-
-
-/**
  * This was added in 2.1.0. and replaces ft_build_and_cache_upgrade_info() which really wasn't necessary.
  * It returns a hash of information to pass in a hidden form when the user clicks "Update".
  */
@@ -713,7 +689,7 @@ function ft_get_submission_placeholders($form_id, $submission_id, $client_info =
 
 		if (in_array($field_type_id, $file_field_type_ids))
 		{
-			$field_settings = ft_get_field_settings($field_id);
+			$field_settings = Fields::getFieldSettings($field_id);
 			$placeholders["FILENAME_$field_name"] = $field_info["content"];
 			$placeholders["FILEURL_$field_name"]  = "{$field_settings["folder_url"]}/{$field_info["content"]}";
 		}

@@ -255,7 +255,7 @@ class Forms {
             extract(Hooks::processHookCalls("manage_files", compact("form_id", "submission_id", "file_fields", "redirect_query_params"), array("success", "message", "redirect_query_params")), EXTR_OVERWRITE);
 
             // send any emails
-            ft_send_emails("on_submission", $form_id, $submission_id);
+            Emails::sendEmails("on_submission", $form_id, $submission_id);
         }
 
         // if the redirect URL has been specified either in the database or as part of the form
@@ -1571,6 +1571,7 @@ class Forms {
 
         return array($success, $message);
     }
+
 
     // --------------------------------------------------------------------------------------------
 

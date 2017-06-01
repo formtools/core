@@ -55,7 +55,7 @@ function ft_create_blank_submission($form_id, $view_id, $is_finalized = false)
 		}
 
 		$field_ids = array_keys($field_id_to_value_map);
-		$field_id_to_column_name_map = ft_get_field_col_by_field_id($form_id, $field_ids);
+		$field_id_to_column_name_map = Fields::getFieldColByFieldId($form_id, $field_ids);
 
 		while (list($field_id, $col_name) = each($field_id_to_column_name_map))
 		{
@@ -98,7 +98,7 @@ function ft_delete_submission($form_id, $view_id, $submission_id, $is_admin = fa
 	$auto_delete_submission_files = $form_info["auto_delete_submission_files"];
 
 	// send any emails
-	ft_send_emails("on_delete", $form_id, $submission_id);
+	Emails::sendEmails("on_delete", $form_id, $submission_id);
 
 	// loop the form templates to find out if there are any file fields. If there are - and the user
 	// configured it - delete any associated files
@@ -311,8 +311,9 @@ function ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit
 
 	// loop through all submissions deleted and send any emails
 	reset($submission_ids);
-	foreach ($submission_ids as $submission_id)
-		ft_send_emails("on_delete", $form_id, $submission_id);
+	foreach ($submission_ids as $submission_id) {
+        Emails::sendEmails("on_delete", $form_id, $submission_id);
+    }
 
 	$submissions_to_delete = $submission_ids;
 	extract(Hooks::processHookCalls("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
@@ -645,7 +646,7 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 	extract(Hooks::processHookCalls("manage_files", compact("form_id", "submission_id", "file_fields"), array("success", "message")), EXTR_OVERWRITE);
 
 	// send any emails
-	ft_send_emails("on_edit", $form_id, $submission_id);
+    Emails::sendEmails("on_edit", $form_id, $submission_id);
 
 	extract(Hooks::processHookCalls("end", compact("form_id", "submission_id", "infohash"), array("success", "message")), EXTR_OVERWRITE);
 
@@ -677,7 +678,7 @@ function ft_finalize_submission($form_id, $submission_id)
     ";
 	$result = mysql_query($query);
 
-	ft_send_emails("on_submission", $form_id, $submission_id);
+    Emails::sendEmails("on_submission", $form_id, $submission_id);
 
 	return true;
 }
@@ -801,7 +802,7 @@ function _ft_get_search_submissions_order_by_clause($form_id, $order)
 	{
 		// sorting by column, format: col_x-desc / col_y-asc
 		list($column, $direction) = explode("-", $order);
-		$field_info = ft_get_field_order_info_by_colname($form_id, $column);
+		$field_info = Fields::getFieldOrderInfoByColname($form_id, $column);
 
 		// no field can be found if the administrator just changed the DB field contents and
 		// then went back to the submissions page where they'd already done a sort (and had it cached)
@@ -1182,7 +1183,7 @@ function ft_get_mapped_form_field_data($setting_value)
 	list($form_id, $field_id, $order) = explode("|", $trimmed);
 	if (!empty($form_id) && !empty($field_id) && !empty($order))
 	{
-		$map = ft_get_field_col_by_field_id($form_id, $field_id);
+		$map = Fields::getFieldColByFieldId($form_id, $field_id);
 		$col_name = $map[$field_id];
 		$query = @mysql_query("
       SELECT submission_id, $col_name

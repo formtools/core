@@ -34,7 +34,7 @@ if (empty($num_fields_per_page)) {
 $fields_page = General::loadField("fields_page", "fields_page", 1);
 
 $form_fields = Fields::getFormFields($form_id, array("page" => $fields_page, "num_fields_per_page" => $num_fields_per_page));
-$total_form_fields = ft_get_num_form_fields($form_id);
+$total_form_fields = Fields::getNumFormFields($form_id);
 
 $reserved_words = ft_get_mysql_reserved_words();
 $escaped_words = array();

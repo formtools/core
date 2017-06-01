@@ -11,7 +11,7 @@ use FormTools\Themes;
 $email_id = General::loadField("email_id", "email_id", "");
 
 if (isset($request["update_email_template"])) {
-    list($g_success, $g_message) = ft_update_email_template($email_id, $request);
+    list($g_success, $g_message) = Emails::updateEmailTemplate($email_id, $request);
 }
 
 $form_info      = Forms::getForm($form_id);

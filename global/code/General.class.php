@@ -815,5 +815,51 @@ END;
         return $sessions_valid;
     }
 
+    /**
+     * Helper function to add a new data column the end of a table.
+     *
+     * @param string $table The name of the table to alter.
+     * @param string $col_name The new column name.
+     * @param string $col_type The new column data type.
+     * @return array Array with indexes:<br/>
+     *               [0]: true/false (success / failure)<br/>
+     *               [1]: message string<br/>
+     */
+    public static function addTableColumn($table, $col_name, $col_type)
+    {
+        $db = Core::$db;
+
+        $db->query("ALTER TABLE $table ADD $col_name $col_type");
+
+        try {
+            $db->execute();
+            return array(true, "");
+        } catch (PDOException $e) {
+            return array(false, $e->getMessage());
+        }
+    }
+
+
+    /**
+     * Helper function to locate the value key in the request info. This is used in Fields::updateField(). It can be used
+     * any time we use the jQuery serializeArray() function. The javascript version of this is called ft._extract_array_val
+     *
+     * @param array $array each index is a hash with two keys: name and value
+     * @param string $name
+     */
+    public static function extractArrayVal($array, $name)
+    {
+        $value = "";
+        for ($i=0; $i<count($array); $i++) {
+            if ($array[$i]["name"] == $name) {
+                $value = $array[$i]["value"];
+                break;
+            }
+        }
+
+        return $value;
+    }
+
+
 }
 

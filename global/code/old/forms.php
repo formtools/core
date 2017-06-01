@@ -380,7 +380,7 @@ function ft_update_form_fields_tab($form_id, $infohash)
 		{
 			$field_id = $changed_field_info["field_id"];
 			$shared_settings[] = FieldTypes::getSharedFieldSettingInfo($field_type_map, $field_type_settings_shared_characteristics, $field_id, $changed_field_info["field_type_id"], $changed_field_info["old_field_type_id"]);
-			ft_delete_extended_field_settings($field_id);
+			Fields::deleteExtendedFieldSettings($field_id);
 			FieldValidation::delete($field_id);
 		}
 
@@ -502,11 +502,9 @@ function ft_update_form_fields_tab($form_id, $infohash)
 	}
 
 	// if any of the database column names just changed we need to update any View filters that relied on them
-	if (!empty($db_col_changes))
-	{
-		while (list($field_id, $changes) = each($db_col_changes))
-		{
-			ft_update_field_filters($field_id);
+	if (!empty($db_col_changes)) {
+		while (list($field_id, $changes) = each($db_col_changes)) {
+			Fields::updateFieldFilters($field_id);
 		}
 	}
 
@@ -548,36 +546,6 @@ function ft_update_form_fields_tab($form_id, $infohash)
 
 
 // ---------------------------------------- helpers -----------------------------------------------
-
-
-/**
- * Helper function to add a new data column the end of a table.
- *
- * @param string $table The name of the table to alter.
- * @param string $col_name The new column name.
- * @param string $col_type The new column data type.
- * @return array Array with indexes:<br/>
- *               [0]: true/false (success / failure)<br/>
- *               [1]: message string<br/>
- */
-function _ft_add_table_column($table, $col_name, $col_type)
-{
-	$success = true;
-	$message = "";
-
-	$result = mysql_query("
-    ALTER TABLE $table
-    ADD         $col_name $col_type
-          ");
-
-	if (!$result)
-	{
-		$success = false;
-		$message = mysql_error();
-	}
-
-	return array($success, $message);
-}
 
 
 

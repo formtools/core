@@ -7,10 +7,10 @@ use FormTools\Themes;
 
 
 if (isset($request["update_email_settings"])) {
-    list($g_success, $g_message) = ft_set_field_as_email_field($form_id, $request);
+    list($g_success, $g_message) = Emails::setFieldAsEmailField($form_id, $request);
 }
 if (isset($request["delete_form_email_id"])) {
-    list($g_success, $g_message) = ft_unset_field_as_email_field($request["delete_form_email_id"]);
+    list($g_success, $g_message) = Emails::unsetFieldAsEmailField($request["delete_form_email_id"]);
 }
 
 $form_info = Forms::getForm($form_id);

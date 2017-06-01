@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\Fields;
 use FormTools\General;
 
 
@@ -15,41 +16,34 @@ use FormTools\General;
  */
 function smarty_function_display_file_field($params, &$smarty)
 {
-	global $LANG;
+	if (empty($params["field_id"])) {
+        $smarty->trigger_error("assign: missing 'field_id' parameter.");
+        return;
+    }
+	if (empty($params["filename"])) {
+        $smarty->trigger_error("assign: missing 'filename' parameter.");
+        return;
+    }
 
-	if (empty($params["field_id"]))
-  {
-	  $smarty->trigger_error("assign: missing 'field_id' parameter.");
-    return;
-  }
-	if (empty($params["filename"]))
-  {
-	  $smarty->trigger_error("assign: missing 'filename' parameter.");
-    return;
-  }
+    $field_id = (isset($params["field_id"])) ? $params["field_id"] : "";
+    $filename = (isset($params["filename"])) ? $params["filename"] : "";
 
-  $field_id = (isset($params["field_id"])) ? $params["field_id"] : "";
-  $filename = (isset($params["filename"])) ? $params["filename"] : "";
+    $field_settings = Fields::getExtendedFieldSettings($field_id);
 
-  $field_settings = ft_get_extended_field_settings($field_id);
+    $file_upload_url = $field_settings["file_upload_url"];
+    $filename_label = General::trimString($filename, 80); // trim the filename to prevent it being too long
 
-  $file_upload_url             = $field_settings["file_upload_url"];
-//  $display_files_with_lightbox = $field_settings["display_files_with_lightbox"];
-  $filename_label = General::trimString($filename, 80); // trim the filename to prevent it being too long
+    $html = "<a href=\"$file_upload_url/$filename\"";
 
-  $html = "<a href=\"$file_upload_url/$filename\"";
+    if (isset($params["show_in_new_window"])) {
+        if ($params["show_in_new_window"] === true) {
+            $html .= " target=\"_blank\"";
+        }
+    } else {
+        $html .= " target=\"_blank\"";
+    }
 
-  if (isset($params["show_in_new_window"]))
-  {
-  	if ($params["show_in_new_window"] === true)
-  	  $html .= " target=\"_blank\"";
-  }
-//  else if ($display_files_with_lightbox == "yes")
-//    $html .= " rel=\"lightbox\" title=\"$filename\"";
-  else
-    $html .= " target=\"_blank\"";
+    $html .= ">$filename_label</a>";
 
-  $html .= ">$filename_label</a>";
-
-  return $html;
+    return $html;
 }

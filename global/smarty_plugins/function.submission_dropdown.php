@@ -1,5 +1,7 @@
 <?php
 
+use FormTools\Fields;
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -28,7 +30,7 @@ function smarty_function_submission_dropdown($params, &$smarty)
   $selected    = (isset($params["selected"])) ? $params["selected"] : "";
 	$is_editable = (isset($params["is_editable"])) ? $params["is_editable"] : "yes";
 
-	$option_info = ft_get_field_options($field_id);
+	$option_info = Fields::getFieldOptions($field_id);
 
 	$selected_value = "";
 	$dd_str = "<select name=\"$name\">";

@@ -380,7 +380,7 @@ switch ($action) {
 	case "get_extended_field_settings":
 		$field_id      = $request["field_id"];
 		$field_type_id = $request["field_type_id"];
-		$settings      = ft_get_extended_field_settings($field_id, "", true);
+		$settings      = Fields::getExtendedFieldSettings($field_id, "", true);
 		$validation    = FieldValidation::get($field_id);
 		$info = array(
 			"field_id"      => $field_id,
@@ -487,7 +487,7 @@ switch ($action) {
 			if (preg_match("/^NEW/", $field_id))
 				continue;
 
-			list($success, $message) = ft_update_field($form_id, $field_id, $request["data"]["field_$field_id"]);
+			list($success, $message) = Fields::updateField($form_id, $field_id, $request["data"]["field_$field_id"]);
 			if (!$success)
 			{
 				$problems[] = array("field_id" => $field_id, "error" => $message);

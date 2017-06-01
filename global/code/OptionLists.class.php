@@ -139,7 +139,7 @@ class OptionLists {
         // by the setting list order)
         if (!empty($field_ids)) {
             foreach ($field_ids as $field_id) {
-                $field_type_id = ft_get_field_type_id_by_field_id($field_id);
+                $field_type_id = Fields::getFieldTypeIdByFieldId($field_id);
                 $field_settings = FieldTypes::getFieldTypeSettings($field_type_id);
 
                 $option_list_setting_id = "";

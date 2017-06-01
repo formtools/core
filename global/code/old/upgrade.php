@@ -1227,7 +1227,7 @@ function ft_upgrade_form_tools()
 			foreach ($option_list_id_to_field_ids[$curr_option_list_id] as $field_id)
 			{
 				// slow and crappy!
-				$field_type_id = ft_get_field_type_id_by_field_id($field_id);
+				$field_type_id = Fields::getFieldTypeIdByFieldId($field_id);
 				$setting_id    = FieldTypes::getFieldTypeSettingIdByIdentifier($field_type_id, "formatting");
 
 				// for checkbox & radios fields that were assigned to an option list with a "n/a" orientation, don't
