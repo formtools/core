@@ -8,6 +8,7 @@ require_once(__DIR__ . "/code/Core.class.php");
 require_once(__DIR__ . "/code/Database.class.php");
 require_once(__DIR__ . "/code/DatabaseSessions.class.php");
 require_once(__DIR__ . "/code/Emails.class.php");
+require_once(__DIR__ . "/code/Errors.class.php");
 require_once(__DIR__ . "/code/Fields.class.php");
 require_once(__DIR__ . "/code/FieldOptions.class.php");
 require_once(__DIR__ . "/code/FieldSizes.class.php");

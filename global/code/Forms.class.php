@@ -1031,7 +1031,7 @@ class Forms {
 
         $view_col_names = array();
         if (!empty($view_id)) {
-            $view_fields = Views::getViewFields($view_id);
+            $view_fields = ViewFields::getViewFields($view_id);
             foreach ($view_fields as $field_info) {
                 $view_col_names[] = $field_info["col_name"];
             }

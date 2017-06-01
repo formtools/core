@@ -12,8 +12,9 @@
 
 // -------------------------------------------------------------------------------------------------
 
-
 namespace FormTools;
+
+use PDOException;
 
 
 class ViewFields
@@ -96,17 +97,34 @@ class ViewFields
      * @param integer $view_id
      * @param integer $field_id
      */
-    function ft_delete_view_field($view_id, $field_id)
+    public static function deleteViewField($view_id, $field_id)
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
-        mysql_query("DELETE FROM {$g_table_prefix}view_columns WHERE view_id = $view_id AND field_id = $field_id");
-        mysql_query("DELETE FROM {$g_table_prefix}view_fields WHERE view_id = $view_id AND field_id = $field_id");
-        mysql_query("DELETE FROM {$g_table_prefix}view_filters WHERE view_id = $view_id AND field_id = $field_id");
+        $db->query("DELETE FROM {PREFIX}view_columns WHERE view_id = :view_id AND field_id = :field_id");
+        $db->bindAll(array(
+            "view_id" => $view_id,
+            "field_id" => $field_id
+        ));
+        $db->execute();
+        $db->query("DELETE FROM {PREFIX}view_fields WHERE view_id = :view_id AND field_id = :field_id");
+        $db->bindAll(array(
+            "view_id" => $view_id,
+            "field_id" => $field_id
+        ));
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}view_filters WHERE view_id = :view_id AND field_id = :field_id");
+        $db->bindAll(array(
+            "view_id" => $view_id,
+            "field_id" => $field_id
+        ));
+        $db->execute();
 
         // now update the view field order to ensure there are no gaps
         ViewFields::autoUpdateViewFieldOrder($view_id);
     }
+
 
     /**
      * This function is called any time a form field is deleted, or unassigned to the View. It ensures
@@ -114,28 +132,33 @@ class ViewFields
      *
      * @param integer $view_id
      */
-    function autoUpdateViewFieldOrder($view_id)
+    public static function autoUpdateViewFieldOrder($view_id)
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
         // we rely on this function returning the field by list_order
         $view_fields = ViewFields::getViewFields($view_id);
 
         $count = 1;
-        foreach ($view_fields as $field_info)
-        {
+        foreach ($view_fields as $field_info) {
             $field_id = $field_info["field_id"];
 
-            mysql_query("
-                UPDATE {$g_table_prefix}view_fields
-                SET    list_order = $count
-                WHERE  view_id = $view_id AND
-                     field_id = $field_id
+            $db->query("
+                UPDATE {PREFIX}view_fields
+                SET    list_order = :list_order
+                WHERE  view_id = :view_id AND
+                       field_id = :field_id
             ");
+            $db->bindAll(array(
+                "list_order" => $count,
+                "view_id" => $view_id,
+                "field_id" => $field_id
+            ));
+            $db->execute();
+
             $count++;
         }
     }
-
 
 
     /**
@@ -145,37 +168,38 @@ class ViewFields
      * @param integer $view_id
      * @param array $info
      */
-    function _ft_update_view_field_settings($view_id, $info)
+    public static function updateViewFieldSettings($view_id, $info)
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
         $sortable_id  = $info["view_fields_sortable_id"];
         $grouped_info = explode("~", $info["{$sortable_id}_sortable__rows"]);
         $new_groups   = explode(",", $info["{$sortable_id}_sortable__new_groups"]);
 
         // empty the old View fields; we're about to update them
-        mysql_query("DELETE FROM {$g_table_prefix}view_fields WHERE view_id = $view_id");
+        $db->query("DELETE FROM {PREFIX}view_fields WHERE view_id = :view_id");
+        $db->bind("view_id", $view_id);
+        $db->execute();
 
         // if there are any deleted groups, delete 'em! (N.B. we're not interested in deleted groups
         // that were just created in the page
-        if (isset($info["deleted_groups"]) && !empty($info["deleted_groups"]))
-        {
+        if (isset($info["deleted_groups"]) && !empty($info["deleted_groups"])) {
             $deleted_group_ids = explode(",", $info["deleted_groups"]);
-            foreach ($deleted_group_ids as $group_id)
-            {
-                if (preg_match("/^NEW/", $group_id))
+            foreach ($deleted_group_ids as $group_id) {
+                if (preg_match("/^NEW/", $group_id)) {
                     continue;
-
-                mysql_query("DELETE FROM {$g_table_prefix}list_groups WHERE group_id = $group_id");
+                }
+                $db->query("DELETE FROM {PREFIX}list_groups WHERE group_id = :group_id");
+                $db->bind("group_id", $group_id);
+                $db->execute();
             }
         }
 
-        $ordered_group_ids = array();
         $new_group_order = 1;
-        foreach ($grouped_info as $curr_grouped_info)
-        {
-            if (empty($curr_grouped_info))
+        foreach ($grouped_info as $curr_grouped_info) {
+            if (empty($curr_grouped_info)) {
                 continue;
+            }
 
             list($curr_group_id, $ordered_field_ids_str) = explode("|", $curr_grouped_info);
             $ordered_field_ids = explode(",", $ordered_field_ids_str);
@@ -184,23 +208,34 @@ class ViewFields
             $group_tab  = (isset($info["group_tab_{$curr_group_id}"]) && !empty($info["group_tab_{$curr_group_id}"])) ?
             $info["group_tab_{$curr_group_id}"] : "";
 
-            if (preg_match("/^NEW/", $curr_group_id))
-            {
-                @mysql_query("
-        INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
-        VALUES ('view_fields_{$view_id}', '$group_name', '$group_tab', $new_group_order)
-          ");
-                $curr_group_id = mysql_insert_id();
-            }
-            else
-            {
-                @mysql_query("
-        UPDATE {$g_table_prefix}list_groups
-        SET    group_name  = '$group_name',
-               custom_data = '$group_tab',
-               list_order  = $new_group_order
-        WHERE  group_id = $curr_group_id
-          ");
+            if (preg_match("/^NEW/", $curr_group_id)) {
+                $db->query("
+                    INSERT INTO {PREFIX}list_groups (group_type, group_name, custom_data, list_order)
+                    VALUES (:group_type, :group_name, :custom_data, :list_order)
+                ");
+                $db->bindAll(array(
+                    "group_type" => "view_fields_{$view_id}",
+                    "group_name" => $group_name,
+                    "custom_data" => $group_tab,
+                    "list_order" => $new_group_order
+                ));
+                $db->execute();
+                $curr_group_id = $db->getInsertId();
+            } else {
+                $db->query("
+                    UPDATE {PREFIX}list_groups
+                    SET    group_name  = :group_name,
+                           custom_data = :custom_data,
+                           list_order  = :list_order
+                    WHERE  group_id = :group_id
+                ");
+                $db->bindAll(array(
+                    "group_name" => $group_name,
+                    "custom_data" => $group_tab,
+                    "list_order" => $new_group_order,
+                    "group_id" => $curr_group_id
+                ));
+                $db->execute();
             }
             $new_group_order++;
 
@@ -209,21 +244,31 @@ class ViewFields
             $searchable_fields = (isset($info["searchable_fields"])) ? $info["searchable_fields"] : array();
 
             $field_order = 1;
-            foreach ($ordered_field_ids as $field_id)
-            {
-                if (empty($field_id) || !is_numeric($field_id))
+            foreach ($ordered_field_ids as $field_id) {
+                if (empty($field_id) || !is_numeric($field_id)) {
                     continue;
-
+                }
                 $is_editable   = (in_array($field_id, $editable_fields)) ? "yes" : "no";
                 $is_searchable = (in_array($field_id, $searchable_fields)) ? "yes" : "no";
                 $is_new_sort_group = (in_array($field_id, $new_groups)) ? "yes" : "no";
 
-                $query = mysql_query("
-        INSERT INTO {$g_table_prefix}view_fields (view_id, field_id, group_id, is_editable,
-          is_searchable, list_order, is_new_sort_group)
-        VALUES ($view_id, $field_id, $curr_group_id, '$is_editable', '$is_searchable',
-          $field_order, '$is_new_sort_group')
-          ");
+                $db->query("
+                    INSERT INTO {PREFIX}view_fields (view_id, field_id, group_id, is_editable,
+                        is_searchable, list_order, is_new_sort_group)
+                    VALUES (:view_id, :field_id, :group_id, :is_editable, :is_searchable,
+                        :list_order, :is_new_sort_group)
+                ");
+                $db->bindAll(array(
+                    "view_id" => $view_id,
+                    "field_id" => $field_id,
+                    "group_id" => $curr_group_id,
+                    "is_editable" => $is_editable,
+                    "is_searchable" => $is_searchable,
+                    "list_order" => $field_order,
+                    "is_new_sort_group" => $is_new_sort_group
+                ));
+                $db->execute();
+
                 $field_order++;
             }
         }
@@ -239,31 +284,41 @@ class ViewFields
      * @param integer $target_view_id
      * @return array
      */
-    function ft_duplicate_view_field_groups($source_view_id, $target_view_id)
+    public static function duplicateViewFieldGroups($source_view_id, $target_view_id)
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
-        $query = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}list_groups
-    WHERE group_type = 'view_fields_{$source_view_id}'
-    ORDER BY list_order
-  ");
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}list_groups
+            WHERE group_type = :group_type
+            ORDER BY list_order
+        ");
+        $db->bind("group_type", "view_fields_{$source_view_id}");
+        $db->execute();
 
         $map = array();
-        while ($row = mysql_fetch_assoc($query))
-        {
+        foreach ($db->fetchAll() as $row) {
             $group_id    = $row["group_id"];
-            $group_type  = "view_fields_{$target_view_id}";
-            $group_name  = $row["group_name"];
-            $custom_data = $row["custom_data"];
-            $list_order  = $row["list_order"];
 
-            mysql_query("
-      INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
-      VALUES ('$group_type', '$group_name', '$custom_data', $list_order)
-    ") or die(mysql_error());
-            $map[$group_id] = mysql_insert_id();
+            try {
+                $db->query("
+                    INSERT INTO {PREFIX}list_groups (group_type, group_name, custom_data, list_order)
+                    VALUES (:group_type, :group_name, :custom_data, :list_order)
+                ");
+                $db->bindAll(array(
+                    "group_type" => "view_fields_{$target_view_id}",
+                    "group_name" => $row["group_name"],
+                    "custom_data" => $row["custom_data"],
+                    "list_order" => $row["list_order"]
+                ));
+                $db->execute();
+            } catch (PDOException $e) {
+                Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+                exit;
+            }
+
+            $map[$group_id] = $db->getInsertId();
         }
 
         return $map;
@@ -280,70 +335,68 @@ class ViewFields
      * @param integer $submission_id
      * @return array
      */
-    function ft_get_grouped_view_fields($view_id, $tab_number = "", $form_id = "", $submission_id = "")
+    public static function getGroupedViewFields($view_id, $tab_number = "", $form_id = "", $submission_id = "")
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
         $tab_clause = (!empty($tab_number)) ? "AND custom_data = $tab_number" : "";
 
-        $group_query = mysql_query("
-    SELECT *
-    FROM  {$g_table_prefix}list_groups
-    WHERE  group_type = 'view_fields_{$view_id}'
-           $tab_clause
-    ORDER BY list_order
-      ");
+        $db->query("
+            SELECT *
+            FROM  {PREFIX}list_groups
+            WHERE  group_type = :group_type
+                   $tab_clause
+            ORDER BY list_order
+        ");
+        $db->bind("group_type", "view_fields_{$view_id}");
+        $db->execute();
 
-        if (!empty($submission_id))
-        {
-            $submission_info = ft_get_submission_info($form_id, $submission_id);
+        if (!empty($submission_id)) {
+            $submission_info = Submissions::getSubmissionInfo($form_id, $submission_id);
         }
 
         $grouped_info = array();
-        while ($group_info = mysql_fetch_assoc($group_query))
-        {
+        foreach ($db->fetchAll() as $group_info) {
             $group_id = $group_info["group_id"];
 
-            $field_query = mysql_query("
-      SELECT *, vf.list_order as list_order, vf.is_new_sort_group as view_field_is_new_sort_group
-      FROM   {$g_table_prefix}view_fields vf, {$g_table_prefix}form_fields ff
-      WHERE  group_id = $group_id AND
-             vf.field_id = ff.field_id
-      ORDER BY vf.list_order
-    ");
+            $db->query("
+                SELECT *, vf.list_order as list_order, vf.is_new_sort_group as view_field_is_new_sort_group
+                FROM   {PREFIX}view_fields vf, {PREFIX}form_fields ff
+                WHERE  group_id = :group_id AND
+                     vf.field_id = ff.field_id
+                ORDER BY vf.list_order
+            ");
+            $db->bind("group_id", $group_id);
+            $db->execute();
 
             $fields_info = array();
             $field_ids   = array();
-            while ($row = mysql_fetch_assoc($field_query))
-            {
+            foreach ($db->fetchAll() as $row) {
                 $field_ids[]   = $row["field_id"];
                 $fields_info[] = $row;
             }
 
             // for efficiency reasons, we just do a single query to find all validation rules for the all relevant fields
-            if (!empty($field_ids))
-            {
+            $rules_by_field_id = array();
+            if (!empty($field_ids)) {
                 $field_ids_str = implode(",", $field_ids);
-                $validation_query = mysql_query("
-        SELECT *
-        FROM   {$g_table_prefix}field_validation fv, {$g_table_prefix}field_type_validation_rules ftvr
-        WHERE  fv.field_id IN ($field_ids_str) AND
-               fv.rule_id = ftvr.rule_id
-      ");
+                $db->query("
+                    SELECT *
+                    FROM   {PREFIX}field_validation fv, {PREFIX}field_type_validation_rules ftvr
+                    WHERE  fv.field_id IN ($field_ids_str) AND
+                           fv.rule_id = ftvr.rule_id
+                ");
+                $db->execute();
 
-                $rules_by_field_id = array();
-                while ($rule_info = mysql_fetch_assoc($validation_query))
-                {
+                foreach ($db->fetchAll() as $rule_info) {
                     $field_id = $rule_info["field_id"];
-                    if (!array_key_exists($field_id, $rules_by_field_id))
-                    {
+                    if (!array_key_exists($field_id, $rules_by_field_id)) {
                         $rules_by_field_id[$field_id]["is_required"] = false;
                         $rules_by_field_id[$field_id]["rules"] = array();
                     }
 
                     $rules_by_field_id[$field_id]["rules"][] = $rule_info;
-                    if ($rule_info["rsv_rule"] == "required" || ($rule_info["rsv_rule"] == "function" && $rule_info["custom_function_required"] == "yes"))
-                    {
+                    if ($rule_info["rsv_rule"] == "required" || ($rule_info["rsv_rule"] == "function" && $rule_info["custom_function_required"] == "yes")) {
                         $rules_by_field_id[$field_id]["is_required"] = true;
                     }
                 }
@@ -353,8 +406,7 @@ class ViewFields
             // used to determine whether or not an asterix should appear next to the field. As such, we pass along a
             // custom "is_required" key
             $updated_field_info = array();
-            foreach ($fields_info as $field_info)
-            {
+            foreach ($fields_info as $field_info) {
                 $curr_field_id = $field_info["field_id"];
                 $field_info["validation"] = array_key_exists($curr_field_id, $rules_by_field_id) ? $rules_by_field_id[$curr_field_id]["rules"] : array();
                 $field_info["is_required"] = array_key_exists($curr_field_id, $rules_by_field_id) ? $rules_by_field_id[$curr_field_id]["is_required"] : false;
@@ -363,45 +415,43 @@ class ViewFields
             $fields_info = $updated_field_info;
 
             // now, if the submission ID is set it returns an additional submission_value key
-            if (!empty($field_ids))
-            {
+            if (!empty($field_ids)) {
                 // do a single query to get a list of ALL settings for any of the field IDs we're dealing with
                 $field_id_str = implode(",", $field_ids);
-                $field_settings_query = mysql_query("
-        SELECT *
-        FROM   {$g_table_prefix}field_settings
-        WHERE  field_id IN ($field_id_str)
-      ");
+                $db->query("
+                    SELECT *
+                    FROM   {PREFIX}field_settings
+                    WHERE  field_id IN ($field_id_str)
+                ");
+                $db->execute();
 
                 $field_settings = array();
-                while ($row = mysql_fetch_assoc($field_settings_query))
-                {
+                foreach ($db->fetchAll() as $row) {
                     $field_id = $row["field_id"];
-                    if (!array_key_exists($field_id, $field_settings))
+                    if (!array_key_exists($field_id, $field_settings)) {
                         $field_settings[$field_id] = array();
-
+                    }
                     $field_settings[$field_id][] = array($row["setting_id"] => $row["setting_value"]);
                 }
 
                 // now append the submission info to the field info that we already have stored
                 $updated_fields_info = array();
-                foreach ($fields_info as $curr_field_info)
-                {
+                foreach ($fields_info as $curr_field_info) {
                     $curr_col_name = $curr_field_info["col_name"];
                     $curr_field_id = $curr_field_info["field_id"];
                     $curr_field_info["field_settings"] = (array_key_exists($curr_field_id, $field_settings)) ? $field_settings[$curr_field_id] : array();
 
-                    if (!empty($submission_id))
+                    if (!empty($submission_id)) {
                         $curr_field_info["submission_value"] = $submission_info[$curr_col_name];
-
+                    }
                     $updated_fields_info[] = $curr_field_info;
                 }
                 $fields_info = $updated_fields_info;
             }
 
             $grouped_info[] = array(
-            "group"  => $group_info,
-            "fields" => $fields_info
+                "group"  => $group_info,
+                "fields" => $fields_info
             );
         }
 

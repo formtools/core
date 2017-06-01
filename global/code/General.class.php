@@ -125,53 +125,6 @@ class General
 
 
     /**
-     * This is used for major errors, especially when no database connection can be made. All it does is output
-     * the error string with no other dependencies - not even language strings. This is always output in English.
-     *
-     * @param string $error
-     */
-    public static function displaySeriousError($error) {
-        echo <<< END
-<!DOCTYPE>
-<html>
-<head>
-  <title>Error</title>
-  <style type="text/css">
-  h1 {
-    margin: 0px 0px 16px 0px;
-  }
-  body {
-    background-color: #f9f9f9;
-    text-align: center;
-    font-family: verdana;
-    font-size: 11pt;
-    line-height: 22px;
-  }
-  div {
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    border-radius: 20px;
-    border: 1px solid #666666;
-    padding: 40px;
-    background-color: white;
-    width: 600px;
-    text-align: left;
-    margin: 30px auto;
-    word-wrap: break-word;
-  }
-  </style>
-</head>
-<body>
-<div class="error">
-  <h1>Uh-oh.</h1>
-  {$error}
-</div>
-</body>
-</html>
-END;
-    }
-
-    /**
      * Helps manage long strings by adding either an ellipsis or inserts a inserts a <br /> at the position specified,
      * and returns the result.
      *
@@ -1067,7 +1020,7 @@ END;
 
         if (!$all_tables_found) {
             $missing_tables_str = "<blockquote><pre>" . implode("\n", $missing_tables) . "</pre></blockquote>";
-            General::displaySeriousError("Form Tools couldn't find all the database tables. Please check your /global/config.php file to confirm the <b>\$g_table_prefix</b> setting. The following tables are missing: {$missing_tables_str}");
+            Errors::displaySeriousError("Form Tools couldn't find all the database tables. Please check your /global/config.php file to confirm the <b>\$g_table_prefix</b> setting. The following tables are missing: {$missing_tables_str}");
             exit;
         }
     }

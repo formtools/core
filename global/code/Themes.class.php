@@ -223,6 +223,7 @@ class Themes {
         $root_url = Core::getRootUrl();
         $LANG = Core::$L;
         $smarty = Core::$smarty;
+        $debug_enabled = Core::isDebugEnabled();
 
         $smarty->addTemplateDir("$root_dir/themes/$theme");
         $smarty->addPluginsDir(array("$root_dir/global/smarty_plugins"));
@@ -231,7 +232,7 @@ class Themes {
 
         // check the compile directory has the write permissions
         if (!is_writable($smarty->getCompileDir())) {
-            General::displaySeriousError("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$smarty->compile_dir}</b> to have full read-write permissions (777 on unix).", "");
+            Errors::displaySeriousError("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$smarty->compile_dir}</b> to have full read-write permissions (777 on unix).", "");
             exit;
         }
 
@@ -247,7 +248,7 @@ class Themes {
         $smarty->assign("LANG", $LANG);
         $smarty->assign("g_root_dir", $root_dir);
         $smarty->assign("g_root_url", $root_url);
-        //$smarty->assign("g_debug", $g_debug);
+        $smarty->assign("g_debug", $debug_enabled);
         $smarty->assign("g_js_debug", Core::isJsDebugEnabled() ? "true" : "false");
         $smarty->assign("g_hide_upgrade_link", Core::shouldHideUpgradeLink());
         $smarty->assign("same_page", General::getCleanPhpSelf());

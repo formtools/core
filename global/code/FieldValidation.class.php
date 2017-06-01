@@ -139,7 +139,7 @@ class FieldValidation {
         $rules = FieldValidation::getPHPValidationRules($editable_field_ids_on_tab);
 
         // gets all form fields in this View
-        $form_fields = Views::getViewFields($request["view_id"]);
+        $form_fields = ViewFields::getViewFields($request["view_id"]);
 
         // reorganize $form_fields to be a hash of field_id => array(form_name => "", field_field => "")
         $field_info = array();

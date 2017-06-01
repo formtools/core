@@ -29,7 +29,7 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
 	$form_fields = Fields::getFormFields($form_id);
 	$submission  = ft_get_submission_info($form_id, $submission_id);
 
-	$view_fields = (!empty($view_id)) ? Views::getViewFields($view_id) : array();
+	$view_fields = (!empty($view_id)) ? ViewFields::getViewFields($view_id) : array();
 
 	if (empty($submission))
 		return array();
@@ -56,7 +56,7 @@ function ft_get_submission($form_id, $submission_id, $view_id = "")
 		// if a view ID is specified, return the view-specific field info as well
 		if (!empty($view_id))
 		{
-			$field_view_info = Views::getViewField($view_id, $field_id);
+			$field_view_info = ViewFields::getViewField($view_id, $field_id);
 
 			if (!empty($field_view_info))
 			{

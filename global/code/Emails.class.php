@@ -391,7 +391,7 @@ class Emails {
         // if the administrator limited the email content to fields in a particular View, pass those fields to the
         // template - NOT all of the form fields (which is the default)
         if (!empty($email_template["limit_email_content_to_fields_in_view"])) {
-            $view_fields = Views::getViewFields($email_template["limit_email_content_to_fields_in_view"]);
+            $view_fields = ViewFields::getViewFields($email_template["limit_email_content_to_fields_in_view"]);
 
             // here, $view_fields just contains the info from the view_fields table. We need the info from the form_fields
             // table instead - since it contains presentation information likely to be needed in the email templates

@@ -63,7 +63,7 @@ if ($has_tabs) {
     $tab_number = "";
 }
 
-$grouped_fields = ft_get_grouped_view_fields($view_id, $tab_number, $form_id, $submission_id);
+$grouped_fields = ViewFields::getGroupedViewFields($view_id, $tab_number, $form_id, $submission_id);
 if ($failed_validation) {
 	$grouped_fields = FieldValidation::mergeFormSubmission($grouped_fields, $_POST);
 }

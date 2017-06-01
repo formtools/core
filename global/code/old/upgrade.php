@@ -1006,7 +1006,7 @@ function ft_upgrade_form_tools()
 
 			foreach ($view_ids as $view_id)
 			{
-				// we can't use Views::getViewFields here because the Core code references DB changes
+				// we can't use ViewFields::getViewFields here because the Core code references DB changes
 				// that can't be made yet
 				$view_fields_query = mysql_query("
           SELECT field_id, tab_number, is_column, is_sortable

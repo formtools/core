@@ -125,7 +125,7 @@ class Fields {
      * Retrieves all field information about a form, ordered by list_order. The 2nd and 3rd optional
      * parameters let you return a subset of the fields for a particular page. This function is purely
      * concerned with the raw fields themselves: not how they are arbitrarily grouped in a View. To
-     * retrieve the grouped fields list for a View, use Views::getViewFields().
+     * retrieve the grouped fields list for a View, use ViewsFields::getViewFields().
      *
      * @param integer $form_id the unique form ID
      * @param array $custom_settings optional settings
@@ -574,7 +574,7 @@ class Fields {
 
         // update the order of any Views that referenced this field
         foreach ($affected_views as $view_id) {
-            Views::autoUpdateViewFieldOrder($view_id);
+            ViewFields::autoUpdateViewFieldOrder($view_id);
         }
 
         // determine the return message

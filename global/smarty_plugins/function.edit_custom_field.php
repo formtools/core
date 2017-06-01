@@ -13,13 +13,13 @@ use FormTools\Settings;
  * Purpose:  This is used on the Edit Submission pages. It does all the clever stuff needed to generate the
  *           actual markup for a single field, with whatever user-defined settings have been employed.
  *
- *           It's strongly coupled to the ft_get_grouped_view_fields function (when called with the form ID &
+ *           It's strongly coupled to the ViewFields::getGroupedViewFields function (when called with the form ID &
  *           submission ID params) to ensure that all data is efficiently returned for use by this function.
  * -------------------------------------------------------------
  */
 function smarty_function_edit_custom_field($params, &$smarty)
 {
-  global $LANG, $g_root_url, $g_root_dir, $g_multi_val_delimiter, $g_table_prefix;
+  global $LANG, $g_root_url, $g_root_dir, $g_multi_val_delimiter;
 
   if (empty($params["form_id"]))
   {

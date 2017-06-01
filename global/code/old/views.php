@@ -60,7 +60,7 @@ function ft_get_view($view_id, $custom_params = array())
 	$view_info = mysql_fetch_assoc($result);
 	$view_info["client_info"] = ft_get_view_clients($view_id);
 	$view_info["columns"]     = ft_get_view_columns($view_id);
-	$view_info["fields"]      = Views::getViewFields($view_id, $params);
+	$view_info["fields"]      = ViewFields::getViewFields($view_id, $params);
 	$view_info["filters"]     = ft_get_view_filters($view_id);
 	$view_info["tabs"]        = ft_get_view_tabs($view_id);
 	$view_info["client_omit_list"] = (isset($view_info["access_type"]) && $view_info["access_type"] == "public") ?
@@ -269,7 +269,7 @@ function ft_create_new_view($form_id, $group_id, $view_name = "", $create_from_v
 
 
 		// with 2.1.0, all View fields are now grouped. We need to duplicate all the groups as well as the fields
-		$group_id_map = ft_duplicate_view_field_groups($create_from_view_id, $view_id);
+		$group_id_map = ViewFields::duplicateViewFieldGroups($create_from_view_id, $view_id);
 
 		$field_view_inserts = array();
 		foreach ($view_info["fields"] as $field_info)
@@ -597,7 +597,7 @@ function ft_update_view($view_id, $info)
 	// update each of the tabs. Be nice to only update the changed ones...
 	_ft_update_view_main_settings($view_id, $info);
 	_ft_update_view_columns_settings($view_id, $info);
-	_ft_update_view_field_settings($view_id, $info);
+	ViewFields::updateViewFieldSettings($view_id, $info);
 	_ft_update_view_tab_settings($view_id, $info);
 	_ft_update_view_filter_settings($view_id, $info);
 
@@ -753,7 +753,7 @@ function ft_get_grouped_views($form_id, $custom_params = array())
 			}
 
 			$view_info["columns"] = ft_get_view_columns($view_id);
-			$view_info["fields"]  = Views::getViewFields($view_id);
+			$view_info["fields"]  = ViewFields::getViewFields($view_id);
 			$view_info["tabs"]    = ft_get_view_tabs($view_id, true);
 			$view_info["filters"] = ft_get_view_filters($view_id, "all");
 			$views[] = $view_info;
