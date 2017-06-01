@@ -100,7 +100,7 @@ if (isset($_GET["delete"])) {
 			$submissions_to_delete = "all";
 			$omit_list = $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"];
 		}
-		list($g_success, $g_message) = ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, true);
+		list($g_success, $g_message) = Submissions::delete_submissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, true);
 	}
 }
 

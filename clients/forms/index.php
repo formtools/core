@@ -85,7 +85,7 @@ if (isset($_GET["delete"])) {
 	if (!empty($_GET["delete"])) {
 		$ids = explode(",", $_GET["delete"]);
 		foreach ($ids as $id)
-			list($g_success, $g_message) = ft_delete_submission($form_id, $view_id, $id, true);
+			list($g_success, $g_message) = Submissions::deleteSubmission($form_id, $view_id, $id, true);
 	} else {
 		$delete_all = (isset($_SESSION["ft"]["form_{$form_id}_select_all_submissions"]) && $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] == 1) ? true : false;
 		$submissions_to_delete = $_SESSION["ft"]["form_{$form_id}_selected_submissions"];
@@ -95,7 +95,7 @@ if (isset($_GET["delete"])) {
 			$omit_list = $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"];
 		}
 
-		list($g_success, $g_message) = ft_delete_submissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, true);
+		list($g_success, $g_message) = Submissions::deleteSubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, true);
 	}
 }
 
@@ -208,7 +208,7 @@ if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$vi
 // this sets the total number of submissions that the admin can see in this form and View in the form_X_num_submissions
 // and view_X_num_submissions keys. It's used to generate the list of searchable dates
 Forms::cacheFormStats($form_id);
-_ft_cache_view_stats($form_id, $view_id);
+Views::cacheViewStats($form_id, $view_id);
 
 if (!isset($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {
     $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";

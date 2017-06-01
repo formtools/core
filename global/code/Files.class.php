@@ -48,9 +48,9 @@ class Files {
     }
 
     /**
-     * This is called by the ft_delete_submission and ft_delete_submissions function. It's passed all relevant
-     * information about the submission & file fields that need to be deleted. The function is just a stub to
-     * allow file upload modules to add their hooks to.
+     * This is called by the Submissions::deleteSubmission() and Submissions::deleteSubmissions() function. It's passed
+     * all relevant information about the submission & file fields that need to be deleted. The function is just a stub
+     * to allow file upload modules to add their hooks to.
      *
      * Modules that extend this function should return $problems. That should be an array of hashes. Each hash
      * having keys "filename" and "error". Since the calling functions will blithely delete the submissions even

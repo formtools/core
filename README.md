@@ -12,17 +12,17 @@ will be moved to the Core. It's fine that it's a separate component, but it belo
 - check out the release sections for earlier, stable releases. 
 
 
-### Where we're at (April, 2017)
+### Where we're at (June, 2017)
 
-I'm returning to work on Form Tools after a long (4 year!) break. There have been a lot of changes made to PHP and
-the various code that Form Tools relies on. The goal for the 3.0.0 rewrite is:
+Earlier this year I returned to work on Form Tools after a long (4 year!) break. There have been a lot of changes made 
+to PHP and the various code dependencies that Form Tools relies on. The goal for the 3.0.0 rewrite is:
 
 - *Run on PHP 7*.
 - Upgrade Smarty (necessary for PHP 7 compatibility)
+- Convert the codebase to object oriented. 
+- move database interaction to use *PDO*.
 - include Composer (just the basics right now, but all modules, themes etc. may end up as composer
 components... not sure yet)
-- move database interaction to use *PDO*.
-- Convert the codebase to object oriented. 
  
 
 ### PHP version compatibility
