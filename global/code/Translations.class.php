@@ -74,8 +74,8 @@ class Translations
             $available_languages[] = "$key,$val";
         $available_language_str = join("|", $available_languages);
 
-        mysql_query("
-    UPDATE {$g_table_prefix}settings
+        $db->query("
+    UPDATE {PREFIX}settings
     SET    setting_value = '$available_language_str'
     WHERE  setting_name = 'available_languages'
       ");

@@ -110,7 +110,7 @@ class Emails {
             $email_template_info = self::getEmailTemplate($create_email_from_email_id);
 
             // WISHLIST: to have a generic "copy_table_row" function...
-            $query = mysql_query("
+            $query = $db->query("
               INSERT INTO {PREFIX}email_templates (form_id, email_template_name, email_status,
                 view_mapping_type, limit_email_content_to_fields_in_view, email_event_trigger,
                 include_on_edit_submission_page, subject, email_from, email_from_account_id, custom_from_name,
@@ -134,8 +134,8 @@ class Emails {
                 $custom_recipient_name  = $recipient["custom_recipient_name"];
                 $custom_recipient_email = $recipient["custom_recipient_email"];
 
-                mysql_query("
-        INSERT INTO {$g_table_prefix}email_template_recipients (email_template_id, recipient_user_type,
+                $db->query("
+        INSERT INTO {PREFIX}email_template_recipients (email_template_id, recipient_user_type,
           recipient_type, account_id, form_email_id, custom_recipient_name, custom_recipient_email)
         VALUES ($email_id, '$recipient_user_type', '$recipient_type', $account_id, $form_email_id,
         '$custom_recipient_name', '$custom_recipient_email')
@@ -144,16 +144,16 @@ class Emails {
 
             foreach ($email_template_info["edit_submission_page_view_ids"] as $view_id)
             {
-                mysql_query("
-        INSERT INTO {$g_table_prefix}email_template_edit_submission_views (email_id, view_id)
+                $db->query("
+        INSERT INTO {PREFIX}email_template_edit_submission_views (email_id, view_id)
         VALUES ($email_id, $view_id)
           ");
             }
 
             foreach ($email_template_info["when_sent_view_ids"] as $view_id)
             {
-                mysql_query("
-        INSERT INTO {$g_table_prefix}email_template_when_sent_views (email_id, view_id)
+                $db->query("
+        INSERT INTO {PREFIX}email_template_when_sent_views (email_id, view_id)
         VALUES ($email_id, $view_id)
           ");
             }

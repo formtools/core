@@ -109,9 +109,9 @@ function ft_get_submission_info($form_id, $submission_id)
 	global $g_table_prefix;
 
 	// get the form submission info
-	$submission_info = mysql_query("
+	$submission_info = $db->query("
      SELECT *
-     FROM   {$g_table_prefix}form_{$form_id}
+     FROM   {PREFIX}form_{$form_id}
      WHERE  submission_id = $submission_id
               ");
 
@@ -143,9 +143,9 @@ function ft_get_submission_count($form_id, $view_id = "")
 	}
 
 	// get the form submission info
-	$query = mysql_query("
+	$query = $db->query("
      SELECT count(*)
-     FROM   {$g_table_prefix}form_{$form_id}
+     FROM   {PREFIX}form_{$form_id}
      WHERE  is_finalized = 'yes'
             $filter_sql_clause
               ");
@@ -188,14 +188,14 @@ function ft_get_search_submission_ids($form_id, $view_id, $results_per_page, $or
 	// now build our query
 	$full_query = "
       SELECT submission_id
-      FROM   {$g_table_prefix}form_{$form_id}
+      FROM   {PREFIX}form_{$form_id}
       WHERE  is_finalized = 'yes'
              $search_where_clause
              $filter_clause
       ORDER BY $order_by
                 ";
 
-	$search_query = mysql_query($full_query)
+	$search_query = $db->query($full_query)
 	or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$full_query</i>", mysql_error());
 
 	$submission_ids = array();
@@ -317,12 +317,12 @@ function ft_update_submission($form_id, $submission_id, $infohash)
 	$set_query = join(",\n", $query);
 
 	$query = "
-    UPDATE {$g_table_prefix}form_{$form_id}
+    UPDATE {PREFIX}form_{$form_id}
     SET    $set_query
     WHERE  submission_id = $submission_id
            ";
 
-	$result = mysql_query($query);
+	$result = $db->query($query);
 
 	// if there was a problem updating the submission, don't even bother calling the file upload hook. Just exit right away
 	if (!$result)
@@ -358,11 +358,11 @@ function ft_finalize_submission($form_id, $submission_id)
     }
 
 	$query = "
-        UPDATE {$g_table_prefix}form_$form_id
+        UPDATE {PREFIX}form_$form_id
         SET    is_finalized = 'yes'
         WHERE  submission_id = $submission_id
     ";
-	$result = mysql_query($query);
+	$result = $db->query($query);
 
     Emails::sendEmails("on_submission", $form_id, $submission_id);
 
@@ -425,7 +425,7 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
 	// (1) our main search query that returns a PAGE of submission info
 	$search_query = "
       SELECT $select_clause
-      FROM   {$g_table_prefix}form_{$form_id}
+      FROM   {PREFIX}form_{$form_id}
       WHERE  is_finalized = 'yes'
              $search_where_clause
              $filter_clause
@@ -433,7 +433,7 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
       ORDER BY $order_by
              $limit_clause
   ";
-	$search_result = mysql_query($search_query)
+	$search_result = $db->query($search_query)
 	or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>; Query: $search_query; Error: ", mysql_error());
 
 	$search_result_rows = array();
@@ -441,9 +441,9 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
 		$search_result_rows[] = $row;
 
 	// (2) find out how many results there are in this current search
-	$search_results_count_query = mysql_query("
+	$search_results_count_query = $db->query("
       SELECT count(*) as c
-      FROM   {$g_table_prefix}form_{$form_id}
+      FROM   {PREFIX}form_{$form_id}
       WHERE  is_finalized = 'yes'
              $search_where_clause
              $filter_clause
@@ -454,9 +454,9 @@ function ft_search_submissions($form_id, $view_id, $results_per_page, $page_num,
 	$search_num_results = $search_num_results_info["c"];
 
 	// (3) find out how many results should appear in the View, regardless of the current search criteria
-	$view_results_count_query = mysql_query("
+	$view_results_count_query = $db->query("
       SELECT count(*) as c
-      FROM   {$g_table_prefix}form_{$form_id}
+      FROM   {PREFIX}form_{$form_id}
       WHERE  is_finalized = 'yes'
              $filter_clause
                  ")
@@ -770,9 +770,9 @@ function ft_check_view_contains_submission($form_id, $view_id, $submission_id)
 
 	$filter_sql_clause = join(" AND ", $filter_sql);
 
-	$query = @mysql_query("
+	$query = @$db->query("
     SELECT count(*) as c
-    FROM   {$g_table_prefix}form_{$form_id}
+    FROM   {PREFIX}form_{$form_id}
     WHERE  submission_id = $submission_id AND
            ($filter_sql_clause)
       ");
@@ -796,9 +796,9 @@ function ft_check_submission_finalized($form_id, $submission_id)
 {
 	global $g_table_prefix;
 
-	$query = mysql_query("
+	$query = $db->query("
     SELECT is_finalized
-    FROM   {$g_table_prefix}form_$form_id
+    FROM   {PREFIX}form_$form_id
     WHERE  submission_id = $submission_id
            ");
 
@@ -821,9 +821,9 @@ function ft_check_submission_exists($form_id, $submission_id)
 {
 	global $g_table_prefix;
 
-	$query = @mysql_query("
+	$query = @$db->query("
     SELECT submission_id
-    FROM   {$g_table_prefix}form_$form_id
+    FROM   {PREFIX}form_$form_id
     WHERE  submission_id = $submission_id
            ");
 
@@ -871,9 +871,9 @@ function ft_get_mapped_form_field_data($setting_value)
 	{
 		$map = Fields::getFieldColByFieldId($form_id, $field_id);
 		$col_name = $map[$field_id];
-		$query = @mysql_query("
+		$query = @$db->query("
       SELECT submission_id, $col_name
-      FROM   {$g_table_prefix}form_{$form_id}
+      FROM   {PREFIX}form_{$form_id}
       ORDER BY $col_name $order
     ");
 		if ($query)

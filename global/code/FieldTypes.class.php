@@ -162,7 +162,7 @@ class FieldTypes {
 //        $info = array();
 //        while ($row = mysql_fetch_assoc($query)) {
 //            $group_id = $row["group_id"];
-//            $count_query = mysql_query("SELECT count(*) as c FROM {$g_table_prefix}field_types WHERE group_id = $group_id");
+//            $count_query = $db->query("SELECT count(*) as c FROM {PREFIX}field_types WHERE group_id = $group_id");
 //            $result = mysql_fetch_assoc($count_query);
 //            $row["num_field_types"] = $result["c"];
 //            $info[] = $row;
@@ -251,15 +251,15 @@ class FieldTypes {
 //    {
 //        $db = Core::$db;
 //
-//        $query = mysql_query("
+//        $query = $db->query("
 //		SELECT *
-//		FROM   {$g_table_prefix}field_type_settings
+//		FROM   {PREFIX}field_type_settings
 //		WHERE  setting_id = $setting_id
 //	");
 //
-//        $options_query = mysql_query("
+//        $options_query = $db->query("
 //		SELECT *
-//		FROM   {$g_table_prefix}field_type_setting_options
+//		FROM   {PREFIX}field_type_setting_options
 //		WHERE  setting_id = $setting_id
 //		ORDER BY option_order
 //	");
@@ -571,16 +571,16 @@ END;
 //        global $g_table_prefix;
 //
 //        // grr! This should be a single query as the next
-//        $query = mysql_query("SELECT DISTINCT form_id FROM {$g_table_prefix}form_fields WHERE field_type_id = $field_type_id");
+//        $query = $db->query("SELECT DISTINCT form_id FROM {PREFIX}form_fields WHERE field_type_id = $field_type_id");
 //
 //        $info = array();
 //        while ($row = mysql_fetch_assoc($query))
 //        {
 //            $form_id = $row["form_id"];
 //
-//            $field_type_query = mysql_query("
+//            $field_type_query = $db->query("
 //			SELECT count(*) as c
-//			FROM {$g_table_prefix}form_fields
+//			FROM {PREFIX}form_fields
 //			WHERE form_id = $form_id AND
 //						field_type_id = $field_type_id
 //		");
@@ -917,7 +917,7 @@ END;
 //    {
 //        global $g_table_prefix;
 //
-//        $query = mysql_query("SELECT field_type_id FROM {$g_table_prefix}field_types WHERE is_date_field = 'yes'");
+//        $query = $db->query("SELECT field_type_id FROM {PREFIX}field_types WHERE is_date_field = 'yes'");
 //        $field_type_ids = array();
 //        while ($row = mysql_fetch_assoc($query))
 //        {

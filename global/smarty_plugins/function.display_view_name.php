@@ -1,6 +1,8 @@
 <?php
 
-/*
+use FormTools\Views;
+
+/**
  * Smarty plugin
  * -------------------------------------------------------------
  * File:     function.display_view_name
@@ -10,11 +12,12 @@
  */
 function smarty_function_display_view_name($params, &$smarty)
 {
-  $view_id = (isset($params["view_id"])) ? $params["view_id"] : "";
+    $view_id = (isset($params["view_id"])) ? $params["view_id"] : "";
 
-  if (empty($view_id))
-    return;
+    if (empty($view_id)) {
+        return "";
+    }
 
-  $view_info = ft_get_view($view_id);
-  return $view_info["view_name"];
+    $view_info = Views::getView($view_id);
+    return $view_info["view_name"];
 }

@@ -7,6 +7,7 @@ use FormTools\Forms;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
+use FormTools\Views;
 use FormTools\ViewFields;
 
 Core::init();
@@ -62,7 +63,7 @@ if (isset($_POST) && !empty($_POST)) {
 }
 
 $form_info = Forms::getForm($form_id);
-$view_info = ft_get_view($view_id);
+$view_info = Views::getView($view_id);
 
 // this is crumby
 $has_tabs = false;
@@ -97,7 +98,7 @@ $page_field_types = FieldTypes::get(true, $page_field_type_ids);
 
 
 // construct the tab list
-$view_tabs = ft_get_view_tabs($view_id, true);
+$view_tabs = ViewTabs::getViewTabs($view_id, true);
 $same_page = General::getCleanPhpSelf();
 $tabs      = array();
 while (list($key, $value) = each($view_tabs)) {

@@ -92,7 +92,7 @@ class Clients {
                 }
 
                 $query = "
-          UPDATE  {$g_table_prefix}accounts
+          UPDATE  {PREFIX}accounts
           SET     $password_clause
                   first_name = '$first_name',
                   last_name = '$last_name',
@@ -100,11 +100,11 @@ class Clients {
                   email = '$email'
           WHERE   account_id = $account_id
                ";
-                if (mysql_query($query))
+                if ($db->query($query))
                 {
                     // if the password wasn't empty, reset the temporary password, in case it was set
                     if (!empty($info["password"]))
-                        mysql_query("UPDATE {$g_table_prefix}accounts SET temp_reset_password = NULL where account_id = $account_id");
+                        $db->query("UPDATE {PREFIX}accounts SET temp_reset_password = NULL where account_id = $account_id");
                 }
                 else {
                     ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
@@ -165,11 +165,11 @@ class Clients {
 
                     $sql = implode(",\n", $sql_rows);
                     $query = "
-            UPDATE  {$g_table_prefix}accounts
+            UPDATE  {PREFIX}accounts
             SET     $sql
             WHERE   account_id = $account_id
                  ";
-                    mysql_query($query)
+                    $db->query($query)
                     or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
                 }
 
@@ -394,7 +394,7 @@ class Clients {
         $theme_folder = $theme_info["theme_folder"];
 
         foreach ($client_ids as $client_id) {
-            mysql_query("UPDATE {$g_table_prefix}accounts SET theme='$theme_folder' WHERE account_id = $client_id");
+            $db->query("UPDATE {PREFIX}accounts SET theme='$theme_folder' WHERE account_id = $client_id");
         }
 
         $placeholders = array("theme" => $theme_name);
@@ -526,9 +526,9 @@ class Clients {
         $order_clause = self::getClientOrderClause($search_criteria["order"]);
 
         // get the clients
-        $client_query_result = mysql_query("
+        $client_query_result = $db->query("
     SELECT account_id
-    FROM   {$g_table_prefix}accounts
+    FROM   {PREFIX}accounts
     $where_clause
     $order_clause
            ");

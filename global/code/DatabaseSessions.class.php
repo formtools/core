@@ -80,7 +80,7 @@ class DatabaseSessions
 		$newdata = mysql_real_escape_string($data, $this->db_link);
 
 		$sql = "REPLACE {PREFIX}sessions (session_id, session_data, expires) VALUES('$newid', '$newdata', $time)";
-		mysql_query($sql, $this->db_link);
+		$db->query($sql, $this->db_link);
 
 		return true;
 	}
@@ -90,7 +90,7 @@ class DatabaseSessions
 		$newid = mysql_real_escape_string($id);
 		$sql = "DELETE FROM {PREFIX}sessions WHERE session_id = '$newid'";
 
-		mysql_query($sql, $this->db_link);
+		$db->query($sql, $this->db_link);
 		return true;
 	}
 
@@ -98,7 +98,7 @@ class DatabaseSessions
 	{
 		// delete all records who have passed the expiration time
 		$sql = "DELETE FROM {PREFIX}sessions WHERE expires < UNIX_TIMESTAMP()";
-		mysql_query($sql);
+		$db->query($sql);
 		return true;
 	}
 }

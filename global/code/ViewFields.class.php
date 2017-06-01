@@ -465,7 +465,7 @@ class ViewFields
      *
      * @param integer $view_id optional, but if not supplied, the second $fields parameter is require
      * @param array $fields optional, but if not supplied, the first $view_id param is required. This should
-     *   be the $view_info["fields"] key, returned from $view_info = ft_get_view($view_id), which contains all
+     *   be the $view_info["fields"] key, returned from $view_info = Views::getView($view_id), which contains all
      *   View field info
      *
      * @return array an array of searchable database column names

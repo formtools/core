@@ -86,7 +86,7 @@
 			</tr>
 			<tr>
 				<td class="label">{$LANG.phrase_database_table_prefix}</td>
-				<td><input type="text" size="20" maxlength="10" name="g_table_prefix" value="{$g_table_prefix}" /></td>
+				<td><input type="text" size="20" maxlength="10" name="g_table_prefix" value="{PREFIX}" /></td>
 			</tr>
 		</table>
 

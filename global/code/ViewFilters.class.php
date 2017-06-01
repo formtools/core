@@ -394,5 +394,4 @@ class ViewFilters
         return $errors;
     }
 
-
 }

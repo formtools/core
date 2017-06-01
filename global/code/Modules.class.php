@@ -290,8 +290,8 @@ class Modules
         $timestamp = mktime(null, null, null, $month, $day, $year);
         $module_datetime = General::getCurrentDatetime($timestamp);
 
-        @mysql_query("
-    UPDATE {$g_table_prefix}modules
+        @$db->query("
+    UPDATE {PREFIX}modules
     SET    origin_language = '$origin_language',
            module_name = '$module_name',
            version = '$module_version',
@@ -304,7 +304,7 @@ class Modules
       ") or die(mysql_error());
 
         // remove and update the navigation links for this module
-        @mysql_query("DELETE FROM {$g_table_prefix}module_menu_items WHERE module_id = $module_id");
+        @$db->query("DELETE FROM {PREFIX}module_menu_items WHERE module_id = $module_id");
         $order = 1;
         while (list($lang_file_key, $info) = each($nav)) {
             $url        = $info[0];
@@ -314,8 +314,8 @@ class Modules
 
             $display_text = isset($lang_info[$lang_file_key]) ? $lang_info[$lang_file_key] : $LANG[$lang_file_key];
 
-            mysql_query("
-      INSERT INTO {$g_table_prefix}module_menu_items (module_id, display_text, url, is_submenu, list_order)
+            $db->query("
+      INSERT INTO {PREFIX}module_menu_items (module_id, display_text, url, is_submenu, list_order)
       VALUES ($module_id, '$display_text', '$url', '$is_submenu', $order)
         ") or die(mysql_error());
 

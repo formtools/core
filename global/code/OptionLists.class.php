@@ -124,7 +124,7 @@ class OptionLists {
                     $name  = $option_info["option_name"];
                     $is_new_sort_group = $option_info["is_new_sort_group"];
 
-                    mysql_query("
+                    $db->query("
           INSERT INTO {PREFIX}field_options (list_id, list_group_id, option_order,
             option_value, option_name, is_new_sort_group)
           VALUES ($new_list_id, $new_list_group_id, '$order', '$value', '$name', '$is_new_sort_group')
@@ -152,9 +152,9 @@ class OptionLists {
 
                 // this should ALWAYS have found a setting, but just in case...
                 if (!empty($option_list_setting_id)) {
-                    mysql_query("DELETE FROM {$g_table_prefix}field_settings WHERE field_id = $field_id AND setting_id = $option_list_setting_id");
-                    @mysql_query("
-          INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
+                    $db->query("DELETE FROM {PREFIX}field_settings WHERE field_id = $field_id AND setting_id = $option_list_setting_id");
+                    @$db->query("
+          INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
           VALUES ($field_id, $option_list_setting_id, $new_list_id)
            ");
                 }
@@ -463,7 +463,7 @@ class OptionLists {
                 $text  = $info["field_option_text_{$i}"];
                 $is_new_sort_group = (in_array($i, $new_groups)) ? "yes" : "no";
 
-                mysql_query("
+                $db->query("
                     INSERT INTO {PREFIX}field_options (list_id, option_order, option_value, option_name,
                       is_new_sort_group, list_group_id)
                     VALUES ($list_id, $order, '$value', '$text', '$is_new_sort_group', $curr_group_id)
@@ -516,17 +516,17 @@ class OptionLists {
 
             // now we delete any entries in the field_settings table with field_id, setting_id and a NUMERIC value for the
             // setting_value column. That column is also
-            mysql_query("
-      DELETE FROM {$g_table_prefix}field_settings
+            $db->query("
+      DELETE FROM {PREFIX}field_settings
       WHERE field_id = $field_id AND
             setting_id IN ($setting_id_str) AND
             setting_value NOT LIKE 'form_field%'
     ");
         }
 
-        mysql_query("DELETE FROM {$g_table_prefix}field_options WHERE list_id = $list_id");
-        mysql_query("DELETE FROM {$g_table_prefix}option_lists WHERE list_id = $list_id");
-        mysql_query("DELETE FROM {$g_table_prefix}list_groups WHERE group_type = 'option_list_{$list_id}'");
+        $db->query("DELETE FROM {PREFIX}field_options WHERE list_id = $list_id");
+        $db->query("DELETE FROM {PREFIX}option_lists WHERE list_id = $list_id");
+        $db->query("DELETE FROM {PREFIX}list_groups WHERE group_type = 'option_list_{$list_id}'");
 
         $success = true;
         $message = $LANG["notify_option_list_deleted"];
@@ -572,7 +572,7 @@ class OptionLists {
         }
 
         $field_id_str = implode(",", $field_ids);
-        $query = mysql_query("
+        $query = $db->query("
             SELECT f.*, ff.*
             FROM   {PREFIX}form_fields ff, {PREFIX}forms f
             WHERE  field_id IN ($field_id_str) AND

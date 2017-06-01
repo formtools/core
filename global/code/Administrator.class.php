@@ -456,7 +456,7 @@ class Administrator {
                 ";
 
                 // execute the query
-                $result = @mysql_query($query);
+                $result = @$db->query($query);
                 if (!$result) {
                     $success = false;
                     $message = $LANG["notify_client_account_not_updated"];
@@ -519,7 +519,7 @@ class Administrator {
                     WHERE   account_id = $account_id
                 ";
 
-                $result = @mysql_query($query);
+                $result = @$db->query($query);
                 if (!$result) {
                     $success = false;
                     $message = $LANG["notify_client_account_not_updated"];
@@ -566,10 +566,10 @@ class Administrator {
             // FORMS tab
             case "3":
                 // clear out the old mappings for the client-forms and client-Views. This section re-inserts everything
-                mysql_query("DELETE FROM {PREFIX}client_forms WHERE account_id = $account_id");
-                mysql_query("DELETE FROM {PREFIX}client_views WHERE account_id = $account_id");
-                mysql_query("DELETE FROM {PREFIX}public_form_omit_list WHERE account_id = $account_id");
-                mysql_query("DELETE FROM {PREFIX}public_view_omit_list WHERE account_id = $account_id");
+                $db->query("DELETE FROM {PREFIX}client_forms WHERE account_id = $account_id");
+                $db->query("DELETE FROM {PREFIX}client_views WHERE account_id = $account_id");
+                $db->query("DELETE FROM {PREFIX}public_form_omit_list WHERE account_id = $account_id");
+                $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE account_id = $account_id");
 
                 $num_form_rows = $infohash["num_forms"];
                 $client_forms      = array(); // stores the form IDs of all forms this client has been added to
@@ -588,17 +588,17 @@ class Administrator {
 
                     // find out a little info about this form. If it's a public form, the user is already (implicitly) assigned
                     // to it, so don't bother inserting a redundant record into the client_forms table
-                    $form_info_query = mysql_query("SELECT access_type FROM {PREFIX}forms WHERE form_id = $form_id");
+                    $form_info_query = $db->query("SELECT access_type FROM {PREFIX}forms WHERE form_id = $form_id");
                     $form_info = mysql_fetch_assoc($form_info_query);
 
                     if ($form_info["access_type"] != "public") {
-                        mysql_query("INSERT INTO {PREFIX}client_forms (account_id, form_id) VALUES ($account_id, $form_id)");
+                        $db->query("INSERT INTO {PREFIX}client_forms (account_id, form_id) VALUES ($account_id, $form_id)");
                     }
 
                     // if this form was previously an "admin" type, it no longer is! By adding this client to the form, it's now
                     // changed to a "private" access type
                     if ($form_info["access_type"] == "admin") {
-                        mysql_query("UPDATE {PREFIX}forms SET access_type = 'private' WHERE form_id = $form_id");
+                        $db->query("UPDATE {PREFIX}forms SET access_type = 'private' WHERE form_id = $form_id");
                     }
 
                     // now loop through selected Views. Get View info
@@ -608,41 +608,41 @@ class Administrator {
 
                     $client_form_views[$form_id] = $infohash["row_{$i}_selected_views"];
                     foreach ($infohash["row_{$i}_selected_views"] as $view_id) {
-                        $view_info_query = mysql_query("SELECT access_type FROM {$g_table_prefix}views WHERE view_id = $view_id");
+                        $view_info_query = $db->query("SELECT access_type FROM {PREFIX}views WHERE view_id = $view_id");
                         $view_info = mysql_fetch_assoc($view_info_query);
 
                         if ($view_info["access_type"] != "public") {
-                            mysql_query("INSERT INTO {$g_table_prefix}client_views (account_id, view_id) VALUES ($account_id, $view_id)");
+                            $db->query("INSERT INTO {PREFIX}client_views (account_id, view_id) VALUES ($account_id, $view_id)");
                         }
 
                         // if this View was previously an "admin" type, it no longer is! By adding this client to the View, it's now
                         // changed to a "private" access type
                         if ($view_info["access_type"] == "admin") {
-                            mysql_query("UPDATE {$g_table_prefix}views SET access_type = 'private' WHERE view_id = $view_id");
+                            $db->query("UPDATE {PREFIX}views SET access_type = 'private' WHERE view_id = $view_id");
                         }
                     }
                 }
 
                 // now all the ADDING the forms/Views is done, we look at all other public forms in the database and if this
                 // update request didn't include that form, add this client to its omit list. Same goes for the form Views
-                $public_form_query = mysql_query("SELECT form_id, access_type FROM {$g_table_prefix}forms");
+                $public_form_query = $db->query("SELECT form_id, access_type FROM {PREFIX}forms");
                 while ($form_info = mysql_fetch_assoc($public_form_query)) {
                     $form_id        = $form_info["form_id"];
                     $form_is_public = ($form_info["access_type"] == "public") ? true : false;
 
                     if ($form_is_public && !in_array($form_id, $client_forms)) {
-                        mysql_query("INSERT INTO {$g_table_prefix}public_form_omit_list (account_id, form_id) VALUES ($account_id, $form_id)");
+                        $db->query("INSERT INTO {PREFIX}public_form_omit_list (account_id, form_id) VALUES ($account_id, $form_id)");
                     }
 
                     if (in_array($form_id, $client_forms)) {
-                        $public_view_query = mysql_query("SELECT view_id, access_type FROM {$g_table_prefix}views WHERE form_id = $form_id");
+                        $public_view_query = $db->query("SELECT view_id, access_type FROM {PREFIX}views WHERE form_id = $form_id");
 
                         while ($view_info = mysql_fetch_assoc($public_view_query)) {
                             $view_id        = $view_info["view_id"];
                             $view_is_public = ($view_info["access_type"] == "public") ? true : false;
 
                             if ($view_is_public && !in_array($view_id, $client_form_views[$form_id])) {
-                                mysql_query("INSERT INTO {$g_table_prefix}public_view_omit_list (account_id, view_id) VALUES ($account_id, $view_id)");
+                                $db->query("INSERT INTO {PREFIX}public_view_omit_list (account_id, view_id) VALUES ($account_id, $view_id)");
                             }
                         }
                     }

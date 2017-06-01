@@ -20,6 +20,7 @@ use FormTools\ListGroups;
 use FormTools\OptionLists;
 use FormTools\Settings;
 use FormTools\Themes;
+use FormTools\Views;
 
 
 // -------------------------------------------------------------------------------------------------
@@ -446,7 +447,7 @@ switch ($action) {
 			$duplicate_view_id = $request["create_view_from_view_id"];
 		}
 
-		$view_id = ft_create_new_view($form_id, $group_id, $view_name, $duplicate_view_id);
+		$view_id = Views::createNewView($form_id, $group_id, $view_name, $duplicate_view_id);
 
 		// always set the default Edit View tab to the first one
 		$_SESSION["ft"]["edit_view_tab"] = 1;

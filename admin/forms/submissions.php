@@ -6,10 +6,11 @@ use FormTools\Forms;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
-
+use FormTools\Views;
 
 Core::init();
 Core::$user->checkAuth("admin");
+
 
 $request = array_merge($_POST, $_GET);
 
@@ -32,7 +33,7 @@ if (!Forms::checkFormExists($form_id)) {
 $view_id       = General::loadField("view_id", "form_{$form_id}_view_id");
 $grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true));
 
-if (empty($view_id) || !ft_check_view_exists($view_id, true)) {
+if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
 	// here, we know that the first View group has at least one item. [hmm...]
 	if (count($grouped_views[0]["views"]) == 0) {
 		// no Views defined for this form! redirect to the Views page and display a message
@@ -47,7 +48,7 @@ $_SESSION["ft"]["last_link_page_{$form_id}"] = "submissions";
 
 $form_info   = Forms::getForm($form_id);
 $form_fields = Fields::getFormFields($form_id, array("include_field_type_info" => true, "include_field_settings" => true));
-$view_info   = ft_get_view($view_id);
+$view_info   = Views::getView($view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes") {
 	$submission_id = ft_create_blank_submission($form_id, $view_id, true);

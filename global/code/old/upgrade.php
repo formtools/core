@@ -55,8 +55,8 @@ function ft_upgrade_form_tools()
 	if ($old_version_info["release_date"] < 20090113)
 	{
 		// add the Hooks table
-		@mysql_query("
-      CREATE TABLE {$g_table_prefix}hooks (
+		$db->query("
+      CREATE TABLE {PREFIX}hooks (
         hook_id mediumint(8) unsigned NOT NULL auto_increment,
         action_location enum('start','end') NOT NULL,
         module_folder varchar(255) NOT NULL,
@@ -70,8 +70,8 @@ function ft_upgrade_form_tools()
 
 	if ($old_version_info["release_date"] < 20090301)
 	{
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}email_templates
+		$db->query("
+      ALTER TABLE {PREFIX}email_templates
       CHANGE email_reply_to email_reply_to
       ENUM('none', 'admin', 'client', 'user', 'custom')
       CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
@@ -80,32 +80,32 @@ function ft_upgrade_form_tools()
 
 	if ($old_version_info["release_date"] < 20090317)
 	{
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}views
+		$db->query("
+      ALTER TABLE {PREFIX}views
       ADD may_add_submissions ENUM('yes', 'no') NOT NULL DEFAULT 'no'
         ");
 	}
 
 	if ($old_version_info["release_date"] < 20090402)
 	{
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}hooks
+		$db->query("
+      ALTER TABLE {PREFIX}hooks
       ADD hook_type ENUM('code', 'template') NOT NULL DEFAULT 'code' AFTER hook_id
         ");
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}hooks
+		$db->query("
+      ALTER TABLE {PREFIX}hooks
       CHANGE action_location action_location VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
         ");
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}account_settings
+		$db->query("
+      ALTER TABLE {PREFIX}account_settings
       CHANGE setting_value setting_value MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
         ");
 	}
 
 	if ($old_version_info["release_date"] < 20090510)
 	{
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}view_fields
+		$db->query("
+      ALTER TABLE {PREFIX}view_fields
       ADD is_searchable ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER is_editable
         ");
 	}
@@ -113,8 +113,8 @@ function ft_upgrade_form_tools()
 	// bug #117
 	if ($old_version_info["release_date"] < 20090627)
 	{
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}view_filters
+		$db->query("
+      ALTER TABLE {PREFIX}view_filters
       CHANGE operator operator ENUM('equals', 'not_equals', 'like', 'not_like', 'before', 'after')
       CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'equals'
         ");
@@ -122,8 +122,8 @@ function ft_upgrade_form_tools()
 
 	if ($old_version_info["release_date"] < 20090815)
 	{
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}forms
+		$db->query("
+      ALTER TABLE {PREFIX}forms
       ADD edit_submission_page_label TEXT NULL
         ");
 
@@ -133,8 +133,8 @@ function ft_upgrade_form_tools()
 		$forms = Forms::getForms();
 		foreach ($forms as $form_info) {
 			$form_id = $form_info["form_id"];
-			@mysql_query("
-        UPDATE {$g_table_prefix}forms
+			$db->query("
+        UPDATE {PREFIX}forms
         SET    edit_submission_page_label = '{\$LANG.phrase_edit_submission|upper}'
         WHERE  form_id = $form_id
           ");
@@ -144,7 +144,7 @@ function ft_upgrade_form_tools()
 	if ($old_version_info["release_date"] < 20090826)
 	{
 		// bug fix for previous version which had a syntax error
-		$query = mysql_query("SHOW COLUMNS FROM {$g_table_prefix}forms");
+		$query = $db->query("SHOW COLUMNS FROM {PREFIX}forms");
 		$has_edit_submission_page_label_field = false;
 		while ($row = mysql_fetch_assoc($query))
 		{
@@ -154,12 +154,12 @@ function ft_upgrade_form_tools()
 
 		if (!$has_edit_submission_page_label_field)
 		{
-			@mysql_query("ALTER TABLE {$g_table_prefix}forms ADD edit_submission_page_label TEXT NULL");
+			$db->query("ALTER TABLE {PREFIX}forms ADD edit_submission_page_label TEXT NULL");
 			$forms = Forms::getForms();
 			foreach ($forms as $form_info) {
 				$form_id = $form_info["form_id"];
-				@mysql_query("
-          UPDATE {$g_table_prefix}forms
+				$db->query("
+          UPDATE {PREFIX}forms
           SET    edit_submission_page_label = '{\$LANG.phrase_edit_submission|upper}'
           WHERE  form_id = $form_id
             ");
@@ -169,16 +169,16 @@ function ft_upgrade_form_tools()
 
 	if ($old_version_info["release_date"] < 20091113)
 	{
-		@mysql_query("ALTER TABLE {$g_table_prefix}view_filters ADD filter_type ENUM('standard', 'client_map') NOT NULL DEFAULT 'standard' AFTER view_id");
-		@mysql_query("ALTER TABLE {$g_table_prefix}views ADD has_standard_filter ENUM('yes', 'no') NOT NULL DEFAULT 'no'");
-		@mysql_query("ALTER TABLE {$g_table_prefix}views ADD has_client_map_filter ENUM('yes', 'no') NOT NULL DEFAULT 'no'");
+		$db->query("ALTER TABLE {PREFIX}view_filters ADD filter_type ENUM('standard', 'client_map') NOT NULL DEFAULT 'standard' AFTER view_id");
+		$db->query("ALTER TABLE {PREFIX}views ADD has_standard_filter ENUM('yes', 'no') NOT NULL DEFAULT 'no'");
+		$db->query("ALTER TABLE {PREFIX}views ADD has_client_map_filter ENUM('yes', 'no') NOT NULL DEFAULT 'no'");
 
 		// set the has_standard_filter value to "yes" for any Views that have a filter defined
-		$query = @mysql_query("SELECT view_id FROM {$g_table_prefix}view_filters GROUP BY view_id");
+		$query = $db->query("SELECT view_id FROM {PREFIX}view_filters GROUP BY view_id");
 		while ($row = mysql_fetch_assoc($query))
 		{
 			$view_id = $row["view_id"];
-			@mysql_query("UPDATE {$g_table_prefix}views SET has_standard_filter = 'yes' WHERE view_id = $view_id");
+			$db->query("UPDATE {PREFIX}views SET has_standard_filter = 'yes' WHERE view_id = $view_id");
 		}
 	}
 
@@ -187,60 +187,60 @@ function ft_upgrade_form_tools()
 	if ($old_version_info["release_date"] < 20100118)
 	{
 		// [1] misc DB column updates
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}email_templates
+		$db->query("
+      ALTER TABLE {PREFIX}email_templates
       ADD email_from_form_email_id MEDIUMINT UNSIGNED NULL AFTER email_from_account_id
         ");
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}email_templates
+		$db->query("
+      ALTER TABLE {PREFIX}email_templates
       ADD email_reply_to_form_email_id MEDIUMINT UNSIGNED NULL AFTER email_reply_to_account_id
         ");
 
 		// [2] email_from DB field update
-		$email_from_query = mysql_query("
+		$email_from_query = $db->query("
       SELECT email_id
-      FROM   {$g_table_prefix}email_templates
+      FROM   {PREFIX}email_templates
       WHERE  email_from = 'user'
         ");
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}email_templates
+		$db->query("
+      ALTER TABLE {PREFIX}email_templates
       CHANGE email_from email_from ENUM('admin', 'client', 'form_email_field', 'custom', 'none')
       CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
         ");
 		while ($row = mysql_fetch_assoc($email_from_query))
 		{
 			$email_id = $row["email_id"];
-			mysql_query("
-        UPDATE {$g_table_prefix}email_templates
+			$db->query("
+        UPDATE {PREFIX}email_templates
         SET    email_from = 'form_email_field'
         WHERE  email_id = $email_id
           ");
 		}
 
 		// [3] email_reply_to DB field update
-		$email_reply_to_query = mysql_query("
+		$email_reply_to_query = $db->query("
       SELECT email_id
-      FROM   {$g_table_prefix}email_templates
+      FROM   {PREFIX}email_templates
       WHERE  email_reply_to = 'user'
         ");
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}email_templates
+		$db->query("
+      ALTER TABLE {PREFIX}email_templates
       CHANGE email_reply_to email_reply_to ENUM('admin', 'client', 'form_email_field', 'custom', 'none')
       CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
         ");
 		while ($row = mysql_fetch_assoc($email_reply_to_query))
 		{
 			$email_id = $row["email_id"];
-			mysql_query("
-        UPDATE {$g_table_prefix}email_templates
+			$db->query("
+        UPDATE {PREFIX}email_templates
         SET    email_reply_to = 'form_email_field'
         WHERE  email_id = $email_id
           ");
 		}
 
 		// [4] create our new form_email_fields table
-		@mysql_query("
-      CREATE TABLE {$g_table_prefix}form_email_fields (
+		$db->query("
+      CREATE TABLE {PREFIX}form_email_fields (
         form_email_id MEDIUMINT unsigned NOT NULL auto_increment,
         form_id MEDIUMINT UNSIGNED NOT NULL,
         email_field VARCHAR( 255 ) NOT NULL,
@@ -252,18 +252,18 @@ function ft_upgrade_form_tools()
 
 		// [5] rename the "recipient_user_type" enum options to call the "user" option "form_email_field" instead,
 		// but first, store all the recipient_ids so we can update them after the DB change
-		$recipients_id_query = @mysql_query("
+		$recipients_id_query = $db->query("
       SELECT recipient_id
-      FROM   {$g_table_prefix}email_template_recipients
+      FROM   {PREFIX}email_template_recipients
       WHERE  recipient_user_type = 'user'
         ");
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}email_template_recipients
+		$db->query("
+      ALTER TABLE {PREFIX}email_template_recipients
       CHANGE recipient_user_type recipient_user_type ENUM('admin', 'client', 'form_email_field', 'custom')
       CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL
         ");
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}email_template_recipients
+		$db->query("
+      ALTER TABLE {PREFIX}email_template_recipients
       ADD form_email_id MEDIUMINT UNSIGNED NULL AFTER account_id
         ");
 		while ($row = mysql_fetch_assoc($recipients_id_query))
@@ -271,8 +271,8 @@ function ft_upgrade_form_tools()
 			// we can safely set the form_email_id to 1 for these because after upgrading they will
 			// have one and only one form email ID
 			$recipient_id = $row["recipient_id"];
-			mysql_query("
-        UPDATE {$g_table_prefix}email_template_recipients
+			$db->query("
+        UPDATE {PREFIX}email_template_recipients
         SET    recipient_user_type = 'form_email_field',
                form_email_id = 1
         WHERE  recipient_id = $recipient_id
@@ -281,7 +281,7 @@ function ft_upgrade_form_tools()
 
 		// [6] now update the old "user" email field data to the new "form email field" table
 		// and update the corresponding DB tables
-		$forms_query = @mysql_query("SELECT form_id, user_email_field, user_first_name_field, user_last_name_field FROM {$g_table_prefix}forms");
+		$forms_query = $db->query("SELECT form_id, user_email_field, user_first_name_field, user_last_name_field FROM {PREFIX}forms");
 		while ($form_info = mysql_fetch_assoc($forms_query))
 		{
 			$form_id = $form_info["form_id"];
@@ -292,29 +292,29 @@ function ft_upgrade_form_tools()
 			if (!empty($user_email_field))
 			{
 				// create the new email field
-				@mysql_query("
-          INSERT INTO {$g_table_prefix}form_email_fields (form_id, email_field, first_name_field, last_name_field)
+				$db->query("
+          INSERT INTO {PREFIX}form_email_fields (form_id, email_field, first_name_field, last_name_field)
           VALUES ($form_id, '$user_email_field', '$user_first_name_field', '$user_last_name_field')
             ");
 				$form_email_id = mysql_insert_id();
 
 				// "from"
-				@mysql_query("
-          UPDATE {$g_table_prefix}email_templates
+				$db->query("
+          UPDATE {PREFIX}email_templates
           SET    email_from_form_email_id = $form_email_id
           WHERE  form_id = $form_id AND
                  email_from = 'form_email_field'
             ");
 				// "reply-to"
-				@mysql_query("
-          UPDATE {$g_table_prefix}email_templates
+				$db->query("
+          UPDATE {PREFIX}email_templates
           SET    email_reply_to_form_email_id = $form_email_id
           WHERE  form_id = $form_id AND
                  email_reply_to = 'form_email_field'
               ");
 				// "to"
-				@mysql_query("
-          UPDATE {$g_table_prefix}email_template_recipients
+				$db->query("
+          UPDATE {PREFIX}email_template_recipients
           SET    form_email_id = $form_email_id
           WHERE  form_id = $form_id AND
                  recipient_user_type = 'form_email_field'
@@ -323,9 +323,9 @@ function ft_upgrade_form_tools()
 		}
 
 		// delete the old fields in the forms table. They're not needed any more
-		@mysql_query("ALTER TABLE {$g_table_prefix}forms DROP COLUMN user_email_field");
-		@mysql_query("ALTER TABLE {$g_table_prefix}forms DROP COLUMN user_first_name_field");
-		@mysql_query("ALTER TABLE {$g_table_prefix}forms DROP COLUMN user_last_name_field");
+		$db->query("ALTER TABLE {PREFIX}forms DROP COLUMN user_email_field");
+		$db->query("ALTER TABLE {PREFIX}forms DROP COLUMN user_first_name_field");
+		$db->query("ALTER TABLE {PREFIX}forms DROP COLUMN user_last_name_field");
 	}
 
 	// ----------------------------------------------------------------------------------------------
@@ -376,16 +376,16 @@ function ft_upgrade_form_tools()
 		);
 		foreach ($core_tables as $table)
 		{
-			@mysql_query("ALTER TABLE {$g_table_prefix}$table TYPE=MyISAM");
-			@mysql_query("ALTER TABLE {$g_table_prefix}$table ENGINE=MyISAM");
+			$db->query("ALTER TABLE {PREFIX}$table TYPE=MyISAM");
+			$db->query("ALTER TABLE {PREFIX}$table ENGINE=MyISAM");
 		}
 
 		// convert all the custom tables to MyISAM as well
 		$forms = Forms::getForms();
 		foreach ($forms as $form_info) {
 			$form_id = $form_info["form_id"];
-			@mysql_query("ALTER TABLE {$g_table_prefix}form_{$form_id} TYPE=MyISAM");
-			@mysql_query("ALTER TABLE {$g_table_prefix}form_{$form_id} ENGINE=MyISAM");
+			$db->query("ALTER TABLE {PREFIX}form_{$form_id} TYPE=MyISAM");
+			$db->query("ALTER TABLE {PREFIX}form_{$form_id} ENGINE=MyISAM");
 		}
 	}
 
@@ -395,17 +395,17 @@ function ft_upgrade_form_tools()
 	if ($old_version_info["release_date"] < 20110509)
 	{
 		// create the new 2.1.0 tables (this is only ever done once!)
-		$check_tables_query = mysql_query("SHOW TABLES");
+		$check_tables_query = $db->query("SHOW TABLES");
 		$existing_tables = array();
 		while ($row = mysql_fetch_array($check_tables_query))
 		{
 			$existing_tables[] = $row[0];
 		}
 
-		if (!in_array("{$g_table_prefix}field_type_setting_options", $existing_tables))
+		if (!in_array("{PREFIX}field_type_setting_options", $existing_tables))
 		{
-			$query = mysql_query("
-        CREATE TABLE {$g_table_prefix}field_type_setting_options (
+			$query = $db->query("
+        CREATE TABLE {PREFIX}field_type_setting_options (
           setting_id mediumint(9) NOT NULL,
           option_text varchar(255) default NULL,
           option_value varchar(255) default NULL,
@@ -416,89 +416,89 @@ function ft_upgrade_form_tools()
       ");
 
 			// textbox - size
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (1, 'Tiny', 'cf_size_tiny', 1, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (1, 'Small', 'cf_size_small', 2, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (1, 'Medium', 'cf_size_medium', 3, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (1, 'Large', 'cf_size_large', 4, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (1, 'Full Width', 'cf_size_full_width', 5, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (1, 'Tiny', 'cf_size_tiny', 1, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (1, 'Small', 'cf_size_small', 2, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (1, 'Medium', 'cf_size_medium', 3, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (1, 'Large', 'cf_size_large', 4, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (1, 'Full Width', 'cf_size_full_width', 5, 'yes')");
 
 			// textbox - highlight
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (3, 'Orange', 'cf_colour_orange', 3, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (3, 'Yellow', 'cf_colour_yellow', 4, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (3, 'Red', 'cf_colour_red', 2, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (3, 'None', '', 1, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (3, 'Green', 'cf_colour_green', 5, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (3, 'Blue', 'cf_colour_blue', 6, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (3, 'Orange', 'cf_colour_orange', 3, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (3, 'Yellow', 'cf_colour_yellow', 4, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (3, 'Red', 'cf_colour_red', 2, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (3, 'None', '', 1, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (3, 'Green', 'cf_colour_green', 5, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (3, 'Blue', 'cf_colour_blue', 6, 'yes')");
 
 			// textarea - height
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (5, 'Tiny (30px)', 'cf_size_tiny', 1, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (5, 'Small (80px)', 'cf_size_small', 2, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (5, 'Medium (150px)', 'cf_size_medium', 3, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (5, 'Large (300px)', 'cf_size_large', 4, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (5, 'Tiny (30px)', 'cf_size_tiny', 1, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (5, 'Small (80px)', 'cf_size_small', 2, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (5, 'Medium (150px)', 'cf_size_medium', 3, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (5, 'Large (300px)', 'cf_size_large', 4, 'yes')");
 
 			// textarea - highlight
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (6, 'None', '', 1, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (6, 'Red', 'cf_colour_red', 2, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (6, 'Orange', 'cf_colour_orange', 3, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (6, 'Yellow', 'cf_colour_yellow', 4, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (6, 'Green', 'cf_colour_green', 5, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (6, 'Blue', 'cf_colour_blue', 6, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (6, 'None', '', 1, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (6, 'Red', 'cf_colour_red', 2, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (6, 'Orange', 'cf_colour_orange', 3, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (6, 'Yellow', 'cf_colour_yellow', 4, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (6, 'Green', 'cf_colour_green', 5, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (6, 'Blue', 'cf_colour_blue', 6, 'yes')");
 
 			// textarea - input length
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (7, 'No Limit', '', 1, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (7, 'Words', 'words', 2, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (7, 'Characters', 'chars', 3, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (7, 'No Limit', '', 1, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (7, 'Words', 'words', 2, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (7, 'Characters', 'chars', 3, 'yes')");
 
 			// radios
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (17, 'Horizontal', 'horizontal', 1, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (17, 'Vertical', 'vertical', 2, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (17, '2 Columns', 'cf_option_list_2cols', 3, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (17, '3 Columns', 'cf_option_list_3cols', 4, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (17, '4 Columns', 'cf_option_list_4cols', 5, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (17, 'Horizontal', 'horizontal', 1, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (17, 'Vertical', 'vertical', 2, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (17, '2 Columns', 'cf_option_list_2cols', 3, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (17, '3 Columns', 'cf_option_list_3cols', 4, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (17, '4 Columns', 'cf_option_list_4cols', 5, 'yes')");
 
 			// checkboxes
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (20, 'Horizontal', 'horizontal', 1, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (20, 'Vertical', 'vertical', 2, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (20, '2 Columns', 'cf_option_list_2cols', 3, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (20, '3 Columns', 'cf_option_list_3cols', 4, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (20, '4 Columns', 'cf_option_list_4cols', 5, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (20, 'Horizontal', 'horizontal', 1, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (20, 'Vertical', 'vertical', 2, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (20, '2 Columns', 'cf_option_list_2cols', 3, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (20, '3 Columns', 'cf_option_list_3cols', 4, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (20, '4 Columns', 'cf_option_list_4cols', 5, 'yes')");
 
 			// date
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '2011-11-30', 'yy-mm-dd', 1, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '30/11/2011 (dd/mm/yyyy)', 'dd/mm/yy', 2, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '11/30/2011 (mm/dd/yyyy)', 'mm/dd/yy', 3, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, 'Nov 30, 2011', 'M d, yy', 4, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, 'November 30, 2011', 'MM d, yy', 5, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, 'Wed Nov 30, 2011 ', 'D M d, yy', 6, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, 'Wednesday, November 30, 2011', 'DD, MM d, yy', 7, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '30. 08. 2011.', 'dd. mm. yy.', 8, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '30/11/2011 8:00 PM', 'datetime:dd/mm/yy|h:mm TT|ampm`true', 9, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '11/30/2011 8:00 PM', 'datetime:mm/dd/yy|h:mm TT|ampm`true', 10, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '2011-11-30 8:00 PM', 'datetime:yy-mm-dd|h:mm TT|ampm`true', 11, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '2011-11-30 20:00', 'datetime:yy-mm-dd|hh:mm', 12, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '2011-11-30 20:00:00', 'datetime:yy-mm-dd|hh:mm:ss|showSecond`true', 13, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (22, '30. 08. 2011. 20:00', 'datetime:dd. mm. yy.|hh:mm', 14, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, '2011-11-30', 'yy-mm-dd', 1, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, '30/11/2011 (dd/mm/yyyy)', 'dd/mm/yy', 2, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, '11/30/2011 (mm/dd/yyyy)', 'mm/dd/yy', 3, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, 'Nov 30, 2011', 'M d, yy', 4, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, 'November 30, 2011', 'MM d, yy', 5, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, 'Wed Nov 30, 2011 ', 'D M d, yy', 6, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, 'Wednesday, November 30, 2011', 'DD, MM d, yy', 7, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, '30. 08. 2011.', 'dd. mm. yy.', 8, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, '30/11/2011 8:00 PM', 'datetime:dd/mm/yy|h:mm TT|ampm`true', 9, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, '11/30/2011 8:00 PM', 'datetime:mm/dd/yy|h:mm TT|ampm`true', 10, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, '2011-11-30 8:00 PM', 'datetime:yy-mm-dd|h:mm TT|ampm`true', 11, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, '2011-11-30 20:00', 'datetime:yy-mm-dd|hh:mm', 12, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, '2011-11-30 20:00:00', 'datetime:yy-mm-dd|hh:mm:ss|showSecond`true', 13, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (22, '30. 08. 2011. 20:00', 'datetime:dd. mm. yy.|hh:mm', 14, 'yes')");
 
 			// time
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (24, '8:00 AM', 'h:mm TT|ampm`true', 1, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (24, '16:00', 'hh:mm|ampm`false', 2, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (24, '16:00:00', 'hh:mm:ss|showSecond`true|ampm`false', 3, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (24, '8:00 AM', 'h:mm TT|ampm`true', 1, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (24, '16:00', 'hh:mm|ampm`false', 2, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (24, '16:00:00', 'hh:mm:ss|showSecond`true|ampm`false', 3, 'yes')");
 
 			// code / markup
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (28, 'CSS', 'CSS', 1, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (28, 'HTML', 'HTML', 2, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (28, 'JavaScript', 'JavaScript', 3, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (28, 'XML', 'XML', 4, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (29, 'Tiny (50px)', '50', 1, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (29, 'Small (100px)', '100', 2, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (29, 'Medium (200px)', '200', 3, 'yes')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES (29, 'Large (400px)', '400', 4, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (28, 'CSS', 'CSS', 1, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (28, 'HTML', 'HTML', 2, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (28, 'JavaScript', 'JavaScript', 3, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (28, 'XML', 'XML', 4, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (29, 'Tiny (50px)', '50', 1, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (29, 'Small (100px)', '100', 2, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (29, 'Medium (200px)', '200', 3, 'yes')");
+			$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES (29, 'Large (400px)', '400', 4, 'yes')");
 		}
 
-		if (!in_array("{$g_table_prefix}field_type_settings", $existing_tables))
+		if (!in_array("{PREFIX}field_type_settings", $existing_tables))
 		{
-			$query = mysql_query("
-        CREATE TABLE {$g_table_prefix}field_type_settings (
+			$query = $db->query("
+        CREATE TABLE {PREFIX}field_type_settings (
           setting_id mediumint(8) unsigned NOT NULL auto_increment,
           field_type_id mediumint(8) unsigned NOT NULL,
           field_label varchar(255) NOT NULL,
@@ -513,62 +513,62 @@ function ft_upgrade_form_tools()
       ");
 
 			// textbox
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (1, 1, 'Size', 'size', 'select', 'na', 'static', 'cf_size_medium', 1)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (2, 1, 'Max Length', 'maxlength', 'textbox', 'na', 'static', '', 2)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (3, 1, 'Highlight', 'highlight', 'select', 'na', 'static', '', 4)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (4, 1, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 3)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (1, 1, 'Size', 'size', 'select', 'na', 'static', 'cf_size_medium', 1)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (2, 1, 'Max Length', 'maxlength', 'textbox', 'na', 'static', '', 2)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (3, 1, 'Highlight', 'highlight', 'select', 'na', 'static', '', 4)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (4, 1, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 3)");
 
 			// textarea
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (5, 2, 'Height', 'height', 'select', 'na', 'static', 'cf_size_small', 1)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (6, 2, 'Highlight Colour', 'highlight_colour', 'select', 'na', 'static', '', 3)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (7, 2, 'Input length limit', 'input_length', 'radios', 'horizontal', 'static', '', 4)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (8, 2, '- Max length (words/chars)', 'maxlength', 'textbox', 'na', 'static', '', 5)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (9, 2, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 2)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (5, 2, 'Height', 'height', 'select', 'na', 'static', 'cf_size_small', 1)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (6, 2, 'Highlight Colour', 'highlight_colour', 'select', 'na', 'static', '', 3)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (7, 2, 'Input length limit', 'input_length', 'radios', 'horizontal', 'static', '', 4)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (8, 2, '- Max length (words/chars)', 'maxlength', 'textbox', 'na', 'static', '', 5)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (9, 2, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 2)");
 
 			// password
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (10, 3, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 1)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (10, 3, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 1)");
 
 			// dropdown
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (11, 4, 'Option List / Contents', 'contents', 'option_list_or_form_field', 'na', 'static', '', 1)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (12, 4, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 2)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (11, 4, 'Option List / Contents', 'contents', 'option_list_or_form_field', 'na', 'static', '', 1)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (12, 4, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 2)");
 
 			// multi-select dropdown
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (13, 5, 'Option List / Contents', 'contents', 'option_list_or_form_field', 'na', 'static', '', 1)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (14, 5, 'Num Rows', 'num_rows', 'textbox', 'na', 'static', '5', 2)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (15, 5, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 3)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (13, 5, 'Option List / Contents', 'contents', 'option_list_or_form_field', 'na', 'static', '', 1)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (14, 5, 'Num Rows', 'num_rows', 'textbox', 'na', 'static', '5', 2)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (15, 5, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 3)");
 
 			// radios
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (16, 6, 'Option List / Contents', 'contents', 'option_list_or_form_field', 'na', 'static', '', 1)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (17, 6, 'Formatting', 'formatting', 'select', 'na', 'static', 'horizontal', 2)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (18, 6, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 3)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (16, 6, 'Option List / Contents', 'contents', 'option_list_or_form_field', 'na', 'static', '', 1)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (17, 6, 'Formatting', 'formatting', 'select', 'na', 'static', 'horizontal', 2)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (18, 6, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 3)");
 
 			// checkboxes
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (19, 7, 'Option List / Contents', 'contents', 'option_list_or_form_field', 'na', 'static', '', 1)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (20, 7, 'Formatting', 'formatting', 'select', 'na', 'static', 'horizontal', 2)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (21, 7, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 3)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (19, 7, 'Option List / Contents', 'contents', 'option_list_or_form_field', 'na', 'static', '', 1)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (20, 7, 'Formatting', 'formatting', 'select', 'na', 'static', 'horizontal', 2)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (21, 7, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 3)");
 
 			// date
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (22, 8, 'Custom Display Format', 'display_format', 'select', 'na', 'static', 'yy-mm-dd', 1)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (23, 8, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 2)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (22, 8, 'Custom Display Format', 'display_format', 'select', 'na', 'static', 'yy-mm-dd', 1)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (23, 8, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 2)");
 
 			// time
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (24, 9, 'Custom Display Format', 'display_format', 'select', 'na', 'static', 'h:mm TT|ampm`true', 1)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (25, 9, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 2)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (24, 9, 'Custom Display Format', 'display_format', 'select', 'na', 'static', 'h:mm TT|ampm`true', 1)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (25, 9, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 2)");
 
 			// phone number
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (26, 10, 'Phone Number Format', 'phone_number_format', 'textbox', 'na', 'static', '(xxx) xxx-xxxx', 1)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (27, 10, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 2)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (26, 10, 'Phone Number Format', 'phone_number_format', 'textbox', 'na', 'static', '(xxx) xxx-xxxx', 1)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (27, 10, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 2)");
 
 			// code / markup
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (28, 11, 'Code / Markup Type', 'code_markup', 'select', 'na', 'static', 'HTML', 1)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (29, 11, 'Height', 'height', 'select', 'na', 'static', '200', 2)");
-			mysql_query("INSERT INTO {$g_table_prefix}field_type_settings VALUES (30, 11, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 3)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (28, 11, 'Code / Markup Type', 'code_markup', 'select', 'na', 'static', 'HTML', 1)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (29, 11, 'Height', 'height', 'select', 'na', 'static', '200', 2)");
+			$db->query("INSERT INTO {PREFIX}field_type_settings VALUES (30, 11, 'Field Comments', 'comments', 'textarea', 'na', 'static', '', 3)");
 		}
 
-		if (!in_array("{$g_table_prefix}field_types", $existing_tables))
+		if (!in_array("{PREFIX}field_types", $existing_tables))
 		{
-			$query = mysql_query("
-        CREATE TABLE {$g_table_prefix}field_types (
+			$query = $db->query("
+        CREATE TABLE {PREFIX}field_types (
           field_type_id mediumint(8) unsigned NOT NULL auto_increment,
           is_editable enum('yes','no') NOT NULL,
           non_editable_info mediumtext,
@@ -591,16 +591,16 @@ function ft_upgrade_form_tools()
         ) DEFAULT CHARSET=utf8
       ");
 
-			mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (1, 'no', '{\$LANG.text_non_deletable_fields}', NULL, '{\$LANG.word_textbox}', 'textbox', 1, 'no', 'no', 'textbox', NULL, 1, '1char,2chars,tiny,small,medium,large,very_large', '\r\n', '<input type=\"text\" name=\"{\$NAME}\" value=\"{\$VALUE|escape}\" \r\n  class=\"{\$size}{if \$highlight} {\$highlight}{/if}\" \r\n  {if \$maxlength}maxlength=\"{\$maxlength}\"{/if} />\r\n \r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '\r\n', 'input.cf_size_tiny {\r\n  width: 30px; \r\n}\r\ninput.cf_size_small {\r\n  width: 80px; \r\n}\r\ninput.cf_size_medium {\r\n  width: 150px; \r\n}\r\ninput.cf_size_large {\r\n  width: 250px;\r\n}\r\ninput.cf_size_full_width {\r\n  width: 99%; \r\n}\r\n\r\n', '')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (2, 'yes', NULL, NULL, '{\$LANG.word_textarea}', 'textarea', 1, 'no', 'no', 'textarea', NULL, 2, 'medium,large,very_large', '{\$VALUE|nl2br}', '{* figure out all the classes *}\r\n{assign var=classes value=\$height}\r\n{if \$highlight_colour}\r\n  {assign var=classes value=\"`\$classes` `\$highlight_colour`\"}\r\n{/if}\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_wordcounter max`\$maxlength`\"}\r\n{else if \$input_length == \"chars\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_textcounter max`\$maxlength`\"}\r\n{/if}\r\n\r\n<textarea name=\"{\$NAME}\" id=\"{\$NAME}_id\" class=\"{\$classes}\">{\$VALUE}</textarea>\r\n\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} word limit. <span></span> remaining words\r\n  </div>\r\n{elseif \$input_length == \"chars\" && \$max_length != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} characters limit. <span></span> remaining characters\r\n  </div>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments|nl2br}</div>\r\n{/if}\r\n', '', '.cf_counter span {\r\n  font-weight: bold; \r\n}\r\ntextarea {\r\n  width: 99%;\r\n}\r\ntextarea.cf_size_tiny {\r\n  height: 30px;\r\n}\r\ntextarea.cf_size_small {\r\n  height: 80px;  \r\n}\r\ntextarea.cf_size_medium {\r\n  height: 150px;  \r\n}\r\ntextarea.cf_size_large {\r\n  height: 300px;\r\n}\r\n', '/**\r\n * The following code provides a simple text/word counter option for any  \r\n * textarea. It either just keeps counting up, or limits the results to a\r\n * certain number - all depending on what the user has selected via the\r\n * field type settings.\r\n */\r\nvar cf_counter = {};\r\ncf_counter.get_max_count = function(el) {\r\n  var classes = \$(el).attr(''class'').split(\" \").slice(-1);\r\n  var max = null;\r\n  for (var i=0; i<classes.length; i++) {\r\n    var result = classes[i].match(/max(\\\d+)/);\r\n    if (result != null) {\r\n      max = result[1];\r\n      break;\r\n    }\r\n  }\r\n  return max;\r\n}\r\n\r\n\$(function() {\r\n  \$(\"textarea[class~=''cf_wordcounter'']\").each(function() {\r\n    var max = cf_counter.get_max_count(this);\r\n    if (max == null) {\r\n      return;\r\n    }\r\n    \$(this).bind(\"keydown\", function() {\r\n      var val = \$(this).val();\r\n      var len        = val.split(/[\\\s]+/);\r\n      var field_name = \$(this).attr(\"name\");\r\n      var num_words  = len.length - 1;\r\n      if (num_words > max) {\r\n        var allowed_words = val.split(/[\\\s]+/, max);\r\n        truncated_str = allowed_words.join(\" \");\r\n        \$(this).val(truncated_str);\r\n      } else {\r\n        \$(\"#\" + field_name + \"_counter\").find(\"span\").html(parseInt(max) - parseInt(num_words));\r\n      }\r\n    });     \r\n    \$(this).trigger(\"keydown\");\r\n  });\r\n\r\n  \$(\"textarea[class~=''cf_textcounter'']\").each(function() {\r\n    var max = cf_counter.get_max_count(this);\r\n    if (max == null) {\r\n      return;\r\n    }\r\n    \$(this).bind(\"keydown\", function() {    \r\n      var field_name = \$(this).attr(\"name\");      \r\n      if (this.value.length > max) {\r\n        this.value = this.value.substring(0, max);\r\n      } else {\r\n        \$(\"#\" + field_name + \"_counter\").find(\"span\").html(max - this.value.length);\r\n      }\r\n    });\r\n    \$(this).trigger(\"keydown\");\r\n  }); \r\n});\r\n\r\n')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (3, 'yes', NULL, NULL, '{\$LANG.word_password}', 'password', 1, 'no', 'no', 'password', NULL, 3, '1char,2chars,tiny,small,medium', '\r\n', '<input type=\"password\" name=\"{\$NAME}\" value=\"{\$VALUE|escape}\" \r\n  class=\"cf_password\" />\r\n \r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '', 'input.cf_password {\r\n  width: 120px;\r\n}\r\n', '')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (4, 'yes', NULL, NULL, '{\$LANG.word_dropdown}', 'dropdown', 1, 'no', 'no', 'select', 11, 6, '1char,2chars,tiny,small,medium,large', '{if \$contents != \"\"}\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$VALUE == \$option.option_value}{\$option.option_name}{/if}\r\n    {/foreach}\r\n  {/foreach}\r\n{/if}', '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">\r\n    This field isn''t assigned to an Option List. \r\n  </div>\r\n{else}\r\n  <select name=\"{\$NAME}\">\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {if \$group_info.group_name}\r\n      <optgroup label=\"{\$group_info.group_name|escape}\">\r\n    {/if}\r\n    {foreach from=\$options item=option name=row}\r\n      <option value=\"{\$option.option_value}\"\r\n        {if \$VALUE == \$option.option_value}selected{/if}>{\$option.option_name}</option>\r\n    {/foreach}\r\n    {if \$group_info.group_name}\r\n      </optgroup>\r\n    {/if}\r\n  {/foreach}\r\n  </select>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n\r\n', '', '', '')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (5, 'yes', NULL, NULL, '{\$LANG.phrase_multi_select_dropdown}', 'multi_select_dropdown', 1, 'no', 'no', 'multi-select', 13, 7, '1char,2chars,tiny,small,medium,large', '{if \$contents != \"\"}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_first value=true}\r\n  {strip}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$option.option_value|in_array:\$vals}\r\n        {if \$is_first == false}, {/if}\r\n        {\$option.option_name}\r\n        {assign var=is_first value=false}\r\n      {/if}\r\n    {/foreach}\r\n  {/foreach}\r\n  {/strip}\r\n{/if}', '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">\r\n    This field isn''t assigned to an Option List. \r\n  </div>\r\n{else}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  <select name=\"{\$NAME}[]\" multiple size=\"{if \$num_rows}{\$num_rows}{else}5{/if}\">\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {if \$group_info.group_name}\r\n      <optgroup label=\"{\$group_info.group_name|escape}\">\r\n    {/if}\r\n    {foreach from=\$options item=option name=row}\r\n      <option value=\"{\$option.option_value}\"\r\n        {if \$option.option_value|in_array:\$vals}selected{/if}>{\$option.option_name}</option>\r\n    {/foreach}\r\n    {if \$group_info.group_name}\r\n      </optgroup>\r\n    {/if}\r\n  {/foreach}\r\n  </select>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '', '', '')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (6, 'yes', NULL, NULL, '{\$LANG.phrase_radio_buttons}', 'radio_buttons', 1, 'no', 'no', 'radio-buttons', 16, 4, '1char,2chars,tiny,small,medium,large', '{if \$contents != \"\"}\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$VALUE == \$option.option_value}{\$option.option_name}{/if}\r\n    {/foreach}\r\n  {/foreach}\r\n{/if}\r\n', '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">\r\n    This field isn''t assigned to an Option List. \r\n  </div>\r\n{else}\r\n  {assign var=is_in_columns value=false}\r\n  {if \$formatting == \"cf_option_list_2cols\" || \r\n      \$formatting == \"cf_option_list_3cols\" || \r\n      \$formatting == \"cf_option_list_4cols\"}\r\n    {assign var=is_in_columns value=true}\r\n  {/if}\r\n\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n\r\n    {if \$group_info.group_name}\r\n      <div class=\"cf_option_list_group_label\">{\$group_info.group_name}</div>\r\n    {/if}\r\n\r\n    {if \$is_in_columns}<div class=\"{\$formatting}\">{/if}\r\n\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$is_in_columns}<div class=\"column\">{/if}\r\n        <input type=\"radio\" name=\"{\$NAME}\" id=\"{\$NAME}_{\$counter}\" \r\n          value=\"{\$option.option_value}\"\r\n          {if \$VALUE == \$option.option_value}checked{/if} />\r\n          <label for=\"{\$NAME}_{\$counter}\">{\$option.option_name}</label>\r\n      {if \$is_in_columns}</div>{/if}\r\n      {if \$formatting == \"vertical\"}<br />{/if}\r\n      {assign var=counter value=\$counter+1}\r\n    {/foreach}\r\n\r\n    {if \$is_in_columns}</div>{/if}\r\n  {/foreach}\r\n\r\n  {if \$comments}<div class=\"cf_field_comments\">{\$comments}</div>{/if}\r\n{/if}\r\n', '', '/* All CSS styles for this field type are found in Shared Resources */\r\n', '')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (7, 'yes', NULL, NULL, '{\$LANG.word_checkboxes}', 'checkboxes', 1, 'no', 'no', 'checkboxes', 19, 5, '1char,2chars,tiny,small,medium,large', '{if \$contents != \"\"}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_first value=true}\r\n  {strip}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$option.option_value|in_array:\$vals}\r\n        {if \$is_first == false}, {/if}\r\n        {\$option.option_name}\r\n        {assign var=is_first value=false}\r\n      {/if}\r\n    {/foreach}\r\n  {/foreach}\r\n  {/strip}\r\n{/if}', '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">\r\n    This field isn''t assigned to an Option List. \r\n  </div>\r\n{else}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_in_columns value=false}\r\n  {if \$formatting == \"cf_option_list_2cols\" || \r\n      \$formatting == \"cf_option_list_3cols\" || \r\n      \$formatting == \"cf_option_list_4cols\"}\r\n    {assign var=is_in_columns value=true}\r\n  {/if}\r\n\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n\r\n    {if \$group_info.group_name}\r\n      <div class=\"cf_option_list_group_label\">{\$group_info.group_name}</div>\r\n    {/if}\r\n\r\n    {if \$is_in_columns}<div class=\"{\$formatting}\">{/if}\r\n\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$is_in_columns}<div class=\"column\">{/if}\r\n        <input type=\"checkbox\" name=\"{\$NAME}[]\" id=\"{\$NAME}_{\$counter}\" \r\n          value=\"{\$option.option_value|escape}\" \r\n          {if \$option.option_value|in_array:\$vals}checked{/if} />\r\n          <label for=\"{\$NAME}_{\$counter}\">{\$option.option_name}</label>\r\n      {if \$is_in_columns}</div>{/if}\r\n      {if \$formatting == \"vertical\"}<br />{/if}\r\n      {assign var=counter value=\$counter+1}\r\n    {/foreach}\r\n\r\n    {if \$is_in_columns}</div>{/if}\r\n  {/foreach}\r\n\r\n  {if {\$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div> \r\n  {/if}\r\n{/if}\r\n', '', '/* all CSS is found in Shared Resources */\r\n', '')");
+			$db->query("INSERT INTO {PREFIX}field_types VALUES (1, 'no', '{\$LANG.text_non_deletable_fields}', NULL, '{\$LANG.word_textbox}', 'textbox', 1, 'no', 'no', 'textbox', NULL, 1, '1char,2chars,tiny,small,medium,large,very_large', '\r\n', '<input type=\"text\" name=\"{\$NAME}\" value=\"{\$VALUE|escape}\" \r\n  class=\"{\$size}{if \$highlight} {\$highlight}{/if}\" \r\n  {if \$maxlength}maxlength=\"{\$maxlength}\"{/if} />\r\n \r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '\r\n', 'input.cf_size_tiny {\r\n  width: 30px; \r\n}\r\ninput.cf_size_small {\r\n  width: 80px; \r\n}\r\ninput.cf_size_medium {\r\n  width: 150px; \r\n}\r\ninput.cf_size_large {\r\n  width: 250px;\r\n}\r\ninput.cf_size_full_width {\r\n  width: 99%; \r\n}\r\n\r\n', '')");
+			$db->query("INSERT INTO {PREFIX}field_types VALUES (2, 'yes', NULL, NULL, '{\$LANG.word_textarea}', 'textarea', 1, 'no', 'no', 'textarea', NULL, 2, 'medium,large,very_large', '{\$VALUE|nl2br}', '{* figure out all the classes *}\r\n{assign var=classes value=\$height}\r\n{if \$highlight_colour}\r\n  {assign var=classes value=\"`\$classes` `\$highlight_colour`\"}\r\n{/if}\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_wordcounter max`\$maxlength`\"}\r\n{else if \$input_length == \"chars\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_textcounter max`\$maxlength`\"}\r\n{/if}\r\n\r\n<textarea name=\"{\$NAME}\" id=\"{\$NAME}_id\" class=\"{\$classes}\">{\$VALUE}</textarea>\r\n\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} word limit. <span></span> remaining words\r\n  </div>\r\n{elseif \$input_length == \"chars\" && \$max_length != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} characters limit. <span></span> remaining characters\r\n  </div>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments|nl2br}</div>\r\n{/if}\r\n', '', '.cf_counter span {\r\n  font-weight: bold; \r\n}\r\ntextarea {\r\n  width: 99%;\r\n}\r\ntextarea.cf_size_tiny {\r\n  height: 30px;\r\n}\r\ntextarea.cf_size_small {\r\n  height: 80px;  \r\n}\r\ntextarea.cf_size_medium {\r\n  height: 150px;  \r\n}\r\ntextarea.cf_size_large {\r\n  height: 300px;\r\n}\r\n', '/**\r\n * The following code provides a simple text/word counter option for any  \r\n * textarea. It either just keeps counting up, or limits the results to a\r\n * certain number - all depending on what the user has selected via the\r\n * field type settings.\r\n */\r\nvar cf_counter = {};\r\ncf_counter.get_max_count = function(el) {\r\n  var classes = \$(el).attr(''class'').split(\" \").slice(-1);\r\n  var max = null;\r\n  for (var i=0; i<classes.length; i++) {\r\n    var result = classes[i].match(/max(\\\d+)/);\r\n    if (result != null) {\r\n      max = result[1];\r\n      break;\r\n    }\r\n  }\r\n  return max;\r\n}\r\n\r\n\$(function() {\r\n  \$(\"textarea[class~=''cf_wordcounter'']\").each(function() {\r\n    var max = cf_counter.get_max_count(this);\r\n    if (max == null) {\r\n      return;\r\n    }\r\n    \$(this).bind(\"keydown\", function() {\r\n      var val = \$(this).val();\r\n      var len        = val.split(/[\\\s]+/);\r\n      var field_name = \$(this).attr(\"name\");\r\n      var num_words  = len.length - 1;\r\n      if (num_words > max) {\r\n        var allowed_words = val.split(/[\\\s]+/, max);\r\n        truncated_str = allowed_words.join(\" \");\r\n        \$(this).val(truncated_str);\r\n      } else {\r\n        \$(\"#\" + field_name + \"_counter\").find(\"span\").html(parseInt(max) - parseInt(num_words));\r\n      }\r\n    });     \r\n    \$(this).trigger(\"keydown\");\r\n  });\r\n\r\n  \$(\"textarea[class~=''cf_textcounter'']\").each(function() {\r\n    var max = cf_counter.get_max_count(this);\r\n    if (max == null) {\r\n      return;\r\n    }\r\n    \$(this).bind(\"keydown\", function() {    \r\n      var field_name = \$(this).attr(\"name\");      \r\n      if (this.value.length > max) {\r\n        this.value = this.value.substring(0, max);\r\n      } else {\r\n        \$(\"#\" + field_name + \"_counter\").find(\"span\").html(max - this.value.length);\r\n      }\r\n    });\r\n    \$(this).trigger(\"keydown\");\r\n  }); \r\n});\r\n\r\n')");
+			$db->query("INSERT INTO {PREFIX}field_types VALUES (3, 'yes', NULL, NULL, '{\$LANG.word_password}', 'password', 1, 'no', 'no', 'password', NULL, 3, '1char,2chars,tiny,small,medium', '\r\n', '<input type=\"password\" name=\"{\$NAME}\" value=\"{\$VALUE|escape}\" \r\n  class=\"cf_password\" />\r\n \r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '', 'input.cf_password {\r\n  width: 120px;\r\n}\r\n', '')");
+			$db->query("INSERT INTO {PREFIX}field_types VALUES (4, 'yes', NULL, NULL, '{\$LANG.word_dropdown}', 'dropdown', 1, 'no', 'no', 'select', 11, 6, '1char,2chars,tiny,small,medium,large', '{if \$contents != \"\"}\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$VALUE == \$option.option_value}{\$option.option_name}{/if}\r\n    {/foreach}\r\n  {/foreach}\r\n{/if}', '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">\r\n    This field isn''t assigned to an Option List. \r\n  </div>\r\n{else}\r\n  <select name=\"{\$NAME}\">\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {if \$group_info.group_name}\r\n      <optgroup label=\"{\$group_info.group_name|escape}\">\r\n    {/if}\r\n    {foreach from=\$options item=option name=row}\r\n      <option value=\"{\$option.option_value}\"\r\n        {if \$VALUE == \$option.option_value}selected{/if}>{\$option.option_name}</option>\r\n    {/foreach}\r\n    {if \$group_info.group_name}\r\n      </optgroup>\r\n    {/if}\r\n  {/foreach}\r\n  </select>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n\r\n', '', '', '')");
+			$db->query("INSERT INTO {PREFIX}field_types VALUES (5, 'yes', NULL, NULL, '{\$LANG.phrase_multi_select_dropdown}', 'multi_select_dropdown', 1, 'no', 'no', 'multi-select', 13, 7, '1char,2chars,tiny,small,medium,large', '{if \$contents != \"\"}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_first value=true}\r\n  {strip}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$option.option_value|in_array:\$vals}\r\n        {if \$is_first == false}, {/if}\r\n        {\$option.option_name}\r\n        {assign var=is_first value=false}\r\n      {/if}\r\n    {/foreach}\r\n  {/foreach}\r\n  {/strip}\r\n{/if}', '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">\r\n    This field isn''t assigned to an Option List. \r\n  </div>\r\n{else}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  <select name=\"{\$NAME}[]\" multiple size=\"{if \$num_rows}{\$num_rows}{else}5{/if}\">\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {if \$group_info.group_name}\r\n      <optgroup label=\"{\$group_info.group_name|escape}\">\r\n    {/if}\r\n    {foreach from=\$options item=option name=row}\r\n      <option value=\"{\$option.option_value}\"\r\n        {if \$option.option_value|in_array:\$vals}selected{/if}>{\$option.option_name}</option>\r\n    {/foreach}\r\n    {if \$group_info.group_name}\r\n      </optgroup>\r\n    {/if}\r\n  {/foreach}\r\n  </select>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '', '', '')");
+			$db->query("INSERT INTO {PREFIX}field_types VALUES (6, 'yes', NULL, NULL, '{\$LANG.phrase_radio_buttons}', 'radio_buttons', 1, 'no', 'no', 'radio-buttons', 16, 4, '1char,2chars,tiny,small,medium,large', '{if \$contents != \"\"}\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$VALUE == \$option.option_value}{\$option.option_name}{/if}\r\n    {/foreach}\r\n  {/foreach}\r\n{/if}\r\n', '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">\r\n    This field isn''t assigned to an Option List. \r\n  </div>\r\n{else}\r\n  {assign var=is_in_columns value=false}\r\n  {if \$formatting == \"cf_option_list_2cols\" || \r\n      \$formatting == \"cf_option_list_3cols\" || \r\n      \$formatting == \"cf_option_list_4cols\"}\r\n    {assign var=is_in_columns value=true}\r\n  {/if}\r\n\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n\r\n    {if \$group_info.group_name}\r\n      <div class=\"cf_option_list_group_label\">{\$group_info.group_name}</div>\r\n    {/if}\r\n\r\n    {if \$is_in_columns}<div class=\"{\$formatting}\">{/if}\r\n\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$is_in_columns}<div class=\"column\">{/if}\r\n        <input type=\"radio\" name=\"{\$NAME}\" id=\"{\$NAME}_{\$counter}\" \r\n          value=\"{\$option.option_value}\"\r\n          {if \$VALUE == \$option.option_value}checked{/if} />\r\n          <label for=\"{\$NAME}_{\$counter}\">{\$option.option_name}</label>\r\n      {if \$is_in_columns}</div>{/if}\r\n      {if \$formatting == \"vertical\"}<br />{/if}\r\n      {assign var=counter value=\$counter+1}\r\n    {/foreach}\r\n\r\n    {if \$is_in_columns}</div>{/if}\r\n  {/foreach}\r\n\r\n  {if \$comments}<div class=\"cf_field_comments\">{\$comments}</div>{/if}\r\n{/if}\r\n', '', '/* All CSS styles for this field type are found in Shared Resources */\r\n', '')");
+			$db->query("INSERT INTO {PREFIX}field_types VALUES (7, 'yes', NULL, NULL, '{\$LANG.word_checkboxes}', 'checkboxes', 1, 'no', 'no', 'checkboxes', 19, 5, '1char,2chars,tiny,small,medium,large', '{if \$contents != \"\"}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_first value=true}\r\n  {strip}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=options value=\$curr_group_info.options}\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$option.option_value|in_array:\$vals}\r\n        {if \$is_first == false}, {/if}\r\n        {\$option.option_name}\r\n        {assign var=is_first value=false}\r\n      {/if}\r\n    {/foreach}\r\n  {/foreach}\r\n  {/strip}\r\n{/if}', '{if \$contents == \"\"}\r\n  <div class=\"cf_field_comments\">\r\n    This field isn''t assigned to an Option List. \r\n  </div>\r\n{else}\r\n  {assign var=vals value=\"`\$g_multi_val_delimiter`\"|explode:\$VALUE}\r\n  {assign var=is_in_columns value=false}\r\n  {if \$formatting == \"cf_option_list_2cols\" || \r\n      \$formatting == \"cf_option_list_3cols\" || \r\n      \$formatting == \"cf_option_list_4cols\"}\r\n    {assign var=is_in_columns value=true}\r\n  {/if}\r\n\r\n  {assign var=counter value=\"1\"}\r\n  {foreach from=\$contents.options item=curr_group_info name=group}\r\n    {assign var=group_info value=\$curr_group_info.group_info}\r\n    {assign var=options value=\$curr_group_info.options}\r\n\r\n    {if \$group_info.group_name}\r\n      <div class=\"cf_option_list_group_label\">{\$group_info.group_name}</div>\r\n    {/if}\r\n\r\n    {if \$is_in_columns}<div class=\"{\$formatting}\">{/if}\r\n\r\n    {foreach from=\$options item=option name=row}\r\n      {if \$is_in_columns}<div class=\"column\">{/if}\r\n        <input type=\"checkbox\" name=\"{\$NAME}[]\" id=\"{\$NAME}_{\$counter}\" \r\n          value=\"{\$option.option_value|escape}\" \r\n          {if \$option.option_value|in_array:\$vals}checked{/if} />\r\n          <label for=\"{\$NAME}_{\$counter}\">{\$option.option_name}</label>\r\n      {if \$is_in_columns}</div>{/if}\r\n      {if \$formatting == \"vertical\"}<br />{/if}\r\n      {assign var=counter value=\$counter+1}\r\n    {/foreach}\r\n\r\n    {if \$is_in_columns}</div>{/if}\r\n  {/foreach}\r\n\r\n  {if {\$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div> \r\n  {/if}\r\n{/if}\r\n', '', '/* all CSS is found in Shared Resources */\r\n', '')");
 
-			mysql_query("
-        INSERT INTO {$g_table_prefix}field_types (field_type_id, is_editable, non_editable_info, managed_by_module_id, field_type_name,
+			$db->query("
+        INSERT INTO {PREFIX}field_types (field_type_id, is_editable, non_editable_info, managed_by_module_id, field_type_name,
           field_type_identifier, group_id, is_file_field, is_date_field, raw_field_type_map, raw_field_type_map_multi_select_id,
           list_order, compatible_field_sizes, view_field_smarty_markup, edit_field_smarty_markup, php_processing,
           resources_css, resources_js)
@@ -608,15 +608,15 @@ function ft_upgrade_form_tools()
             '.cf_datepicker {\r\n  width: 160px; \r\n}\r\n.cf_datetimepicker {\r\n  width: 160px; \r\n}\r\n.ui-datepicker-trigger {\r\n  cursor: pointer; \r\n}\r\n',
             '\$(function() {\r\n  // the datetimepicker has a bug that prevents the icon from appearing. So\r\n  // instead, we add the image manually into the page and assign the open event\r\n  // handler to the image\r\n  var default_settings = {\r\n    changeYear: true,\r\n    changeMonth: true   \r\n  }\r\n\r\n  \$(\".cf_datepicker\").each(function() {\r\n    var field_name = \$(this).attr(\"name\");\r\n    var settings = default_settings;\r\n    if (\$(\"#\" + field_name + \"_id\").length) {\r\n      settings.dateFormat = \$(\"#\" + field_name + \"_format\").val();\r\n    }\r\n    \$(this).datepicker(settings);\r\n    \$(\"#\" + field_name + \"_icon_id\").bind(\"click\",\r\n      { field_id: \"#\" + field_name + \"_id\" }, function(e) {      \r\n      \$.datepicker._showDatepicker(\$(e.data.field_id)[0]);\r\n    });\r\n  });\r\n    \r\n  \$(\".cf_datetimepicker\").each(function() {\r\n    var field_name = \$(this).attr(\"name\");\r\n    var settings = default_settings;\r\n    if (\$(\"#\" + field_name + \"_id\").length) {\r\n      var settings_str = \$(\"#\" + field_name + \"_format\").val();\r\n      settings_str = settings_str.replace(/datetime:/, \"\");\r\n      var settings_list = settings_str.split(\"|\");\r\n      var settings = {};\r\n      settings.dateFormat = settings_list[0];\r\n      settings.timeFormat = settings_list[1];      \r\n      for (var i=2; i<settings_list.length; i++) {\r\n        var parts = settings_list[i].split(\"`\");\r\n        if (parts[1] === \"true\") {\r\n          parts[1] = true;\r\n        }\r\n        settings[parts[0]] = parts[1];\r\n      }\r\n    }\r\n    \$(this).datetimepicker(settings);\r\n    \$(\"#\" + field_name + \"_icon_id\").bind(\"click\",\r\n      { field_id: \"#\" + field_name + \"_id\" }, function(e) {      \r\n      \$.datepicker._showDatepicker(\$(e.data.field_id)[0]);\r\n    });\r\n  });  \r\n});')");
 
-			mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (9, 'yes', NULL, NULL, '{\$LANG.word_time}', 'time', 2, 'no', 'no', '', NULL, 2, 'small', '', '<div class=\"cf_date_group\">\r\n  <input type=\"input\" name=\"{\$NAME}\" value=\"{\$VALUE}\" class=\"cf_datefield cf_timepicker\" />\r\n  <input type=\"hidden\" id=\"{\$NAME}_id\" value=\"{\$display_format}\" />\r\n  \r\n  {if \$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div>\r\n  {/if}\r\n</div>\r\n', '\r\n', '.cf_timepicker {\r\n  width: 60px; \r\n}\r\n.ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }\r\n.ui-timepicker-div dl{ text-align: left; }\r\n.ui-timepicker-div dl dt{ height: 25px; }\r\n.ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }\r\n.ui-timepicker-div td { font-size: 90%; }\r\n\r\n', '\$(function() {  \r\n  var default_settings = {\r\n    buttonImage:     g.root_url + \"/global/images/clock.png\",      \r\n    showOn:          \"both\",\r\n    buttonImageOnly: true\r\n  }\r\n  \$(\".cf_timepicker\").each(function() {\r\n    var field_name = \$(this).attr(\"name\");\r\n    var settings = default_settings;\r\n    if (\$(\"#\" + field_name + \"_id\").length) {\r\n      var settings_list = \$(\"#\" + field_name + \"_id\").val().split(\"|\");      \r\n      if (settings_list.length > 0) {\r\n        settings.timeFormat = settings_list[0];\r\n        for (var i=1; i<settings_list.length; i++) {\r\n          var parts = settings_list[i].split(\"`\");\r\n          if (parts[1] === \"true\") {\r\n            parts[1] = true;\r\n          } else if (parts[1] === \"false\") {\r\n            parts[1] = false;\r\n          }\r\n          settings[parts[0]] = parts[1];\r\n        }\r\n      }\r\n    }\r\n    \$(this).timepicker(settings);\r\n  });\r\n});\r\n\r\n')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (10, 'yes', NULL, NULL, '{\$LANG.phrase_phone_number}', 'phone', 2, 'no', 'no', '', NULL, 3, 'small,medium', '{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\n\$output = \"\";\r\n\$has_content = false;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (empty(\$piece))\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {    \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$output .= \$value;\r\n    if (!empty(\$value))\r\n    {\r\n      \$has_content = true;\r\n    }\r\n    \$counter++;\r\n  } else {\r\n    \$output .= \$piece;\r\n  }\r\n}\r\n\r\nif (!empty(\$output) && \$has_content)\r\n  echo \$output;\r\n{/php}', '{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$name   = \$this->get_template_vars(\"NAME\");\r\n\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (strlen(\$piece) == 0)\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {\r\n    \$size = strlen(\$piece); \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$value = htmlspecialchars(\$value);\r\n    echo \"<input type=\\\\\"text\\\\\" name=\\\\\"{\$name}_\$counter\\\\\" value=\\\\\"\$value\\\\\"\r\n            size=\\\\\"\$size\\\\\" maxlength=\\\\\"\$size\\\\\" />\";\r\n    \$counter++;\r\n  } else {\r\n    echo \$piece;\r\n  }\r\n}\r\n{/php}\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '\$field_name = \$vars[\"field_info\"][\"field_name\"];\r\n\$joiner = \"|\";\r\n\r\n\$count = 1;\r\n\$parts = array();\r\nwhile (isset(\$vars[\"data\"][\"{\$field_name}_\$count\"]))\r\n{\r\n  \$parts[] = \$vars[\"data\"][\"{\$field_name}_\$count\"];\r\n  \$count++;\r\n}\r\n\$value = implode(\"|\", \$parts);\r\n\r\n\r\n', '', '')");
-			mysql_query("INSERT INTO {$g_table_prefix}field_types VALUES (11, 'yes', NULL, NULL, '{\$LANG.phrase_code_markup_field}', 'code_markup', 2, 'no', 'no', 'textarea', NULL, 4, 'large,very_large', '{if \$CONTEXTPAGE == \"edit_submission\"}\r\n  <textarea id=\"{\$NAME}_id\" name=\"{\$NAME}\">{\$VALUE}</textarea>\r\n  <script>\r\n  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(\"{\$NAME}_id\", \r\n  {literal}{{/literal}\r\n    height: \"{\$SIZE_PX}px\",\r\n    path:   \"{\$g_root_url}/global/codemirror/js/\",\r\n    readOnly: true,\r\n    {if \$code_markup == \"HTML\" || \$code_markup == \"XML\"}\r\n      parserfile: [\"parsexml.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/xmlcolors.css\"\r\n    {elseif \$code_markup == \"CSS\"}\r\n      parserfile: [\"parsecss.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/csscolors.css\"\r\n    {elseif \$code_markup == \"JavaScript\"}  \r\n      parserfile: [\"tokenizejavascript.js\", \"parsejavascript.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/jscolors.css\"\r\n    {/if}\r\n  {literal}});{/literal}\r\n  </script>\r\n{else}\r\n  {\$VALUE|strip_tags}\r\n{/if}\r\n', '<div class=\"editor\">\r\n  <textarea id=\"{\$NAME}_id\" name=\"{\$NAME}\">{\$VALUE}</textarea>\r\n</div>\r\n<script>\r\n  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(\"{\$NAME}_id\", \r\n  {literal}{{/literal}\r\n    height: \"{\$SIZE_PX}px\",\r\n    path:   \"{\$g_root_url}/global/codemirror/js/\",\r\n    {if \$code_markup == \"HTML\" || \$code_markup == \"XML\"}\r\n      parserfile: [\"parsexml.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/xmlcolors.css\"\r\n    {elseif \$code_markup == \"CSS\"}\r\n      parserfile: [\"parsecss.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/csscolors.css\"\r\n    {elseif \$code_markup == \"JavaScript\"}  \r\n      parserfile: [\"tokenizejavascript.js\", \"parsejavascript.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/jscolors.css\"\r\n    {/if}\r\n  {literal}});{/literal}\r\n</script>\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '', '.cf_view_markup_field {\r\n  margin: 0px; \r\n}\r\n', '')");
+			$db->query("INSERT INTO {PREFIX}field_types VALUES (9, 'yes', NULL, NULL, '{\$LANG.word_time}', 'time', 2, 'no', 'no', '', NULL, 2, 'small', '', '<div class=\"cf_date_group\">\r\n  <input type=\"input\" name=\"{\$NAME}\" value=\"{\$VALUE}\" class=\"cf_datefield cf_timepicker\" />\r\n  <input type=\"hidden\" id=\"{\$NAME}_id\" value=\"{\$display_format}\" />\r\n  \r\n  {if \$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div>\r\n  {/if}\r\n</div>\r\n', '\r\n', '.cf_timepicker {\r\n  width: 60px; \r\n}\r\n.ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }\r\n.ui-timepicker-div dl{ text-align: left; }\r\n.ui-timepicker-div dl dt{ height: 25px; }\r\n.ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }\r\n.ui-timepicker-div td { font-size: 90%; }\r\n\r\n', '\$(function() {  \r\n  var default_settings = {\r\n    buttonImage:     g.root_url + \"/global/images/clock.png\",      \r\n    showOn:          \"both\",\r\n    buttonImageOnly: true\r\n  }\r\n  \$(\".cf_timepicker\").each(function() {\r\n    var field_name = \$(this).attr(\"name\");\r\n    var settings = default_settings;\r\n    if (\$(\"#\" + field_name + \"_id\").length) {\r\n      var settings_list = \$(\"#\" + field_name + \"_id\").val().split(\"|\");      \r\n      if (settings_list.length > 0) {\r\n        settings.timeFormat = settings_list[0];\r\n        for (var i=1; i<settings_list.length; i++) {\r\n          var parts = settings_list[i].split(\"`\");\r\n          if (parts[1] === \"true\") {\r\n            parts[1] = true;\r\n          } else if (parts[1] === \"false\") {\r\n            parts[1] = false;\r\n          }\r\n          settings[parts[0]] = parts[1];\r\n        }\r\n      }\r\n    }\r\n    \$(this).timepicker(settings);\r\n  });\r\n});\r\n\r\n')");
+			$db->query("INSERT INTO {PREFIX}field_types VALUES (10, 'yes', NULL, NULL, '{\$LANG.phrase_phone_number}', 'phone', 2, 'no', 'no', '', NULL, 3, 'small,medium', '{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\n\$output = \"\";\r\n\$has_content = false;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (empty(\$piece))\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {    \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$output .= \$value;\r\n    if (!empty(\$value))\r\n    {\r\n      \$has_content = true;\r\n    }\r\n    \$counter++;\r\n  } else {\r\n    \$output .= \$piece;\r\n  }\r\n}\r\n\r\nif (!empty(\$output) && \$has_content)\r\n  echo \$output;\r\n{/php}', '{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$name   = \$this->get_template_vars(\"NAME\");\r\n\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (strlen(\$piece) == 0)\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {\r\n    \$size = strlen(\$piece); \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$value = htmlspecialchars(\$value);\r\n    echo \"<input type=\\\\\"text\\\\\" name=\\\\\"{\$name}_\$counter\\\\\" value=\\\\\"\$value\\\\\"\r\n            size=\\\\\"\$size\\\\\" maxlength=\\\\\"\$size\\\\\" />\";\r\n    \$counter++;\r\n  } else {\r\n    echo \$piece;\r\n  }\r\n}\r\n{/php}\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '\$field_name = \$vars[\"field_info\"][\"field_name\"];\r\n\$joiner = \"|\";\r\n\r\n\$count = 1;\r\n\$parts = array();\r\nwhile (isset(\$vars[\"data\"][\"{\$field_name}_\$count\"]))\r\n{\r\n  \$parts[] = \$vars[\"data\"][\"{\$field_name}_\$count\"];\r\n  \$count++;\r\n}\r\n\$value = implode(\"|\", \$parts);\r\n\r\n\r\n', '', '')");
+			$db->query("INSERT INTO {PREFIX}field_types VALUES (11, 'yes', NULL, NULL, '{\$LANG.phrase_code_markup_field}', 'code_markup', 2, 'no', 'no', 'textarea', NULL, 4, 'large,very_large', '{if \$CONTEXTPAGE == \"edit_submission\"}\r\n  <textarea id=\"{\$NAME}_id\" name=\"{\$NAME}\">{\$VALUE}</textarea>\r\n  <script>\r\n  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(\"{\$NAME}_id\", \r\n  {literal}{{/literal}\r\n    height: \"{\$SIZE_PX}px\",\r\n    path:   \"{\$g_root_url}/global/codemirror/js/\",\r\n    readOnly: true,\r\n    {if \$code_markup == \"HTML\" || \$code_markup == \"XML\"}\r\n      parserfile: [\"parsexml.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/xmlcolors.css\"\r\n    {elseif \$code_markup == \"CSS\"}\r\n      parserfile: [\"parsecss.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/csscolors.css\"\r\n    {elseif \$code_markup == \"JavaScript\"}  \r\n      parserfile: [\"tokenizejavascript.js\", \"parsejavascript.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/jscolors.css\"\r\n    {/if}\r\n  {literal}});{/literal}\r\n  </script>\r\n{else}\r\n  {\$VALUE|strip_tags}\r\n{/if}\r\n', '<div class=\"editor\">\r\n  <textarea id=\"{\$NAME}_id\" name=\"{\$NAME}\">{\$VALUE}</textarea>\r\n</div>\r\n<script>\r\n  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(\"{\$NAME}_id\", \r\n  {literal}{{/literal}\r\n    height: \"{\$SIZE_PX}px\",\r\n    path:   \"{\$g_root_url}/global/codemirror/js/\",\r\n    {if \$code_markup == \"HTML\" || \$code_markup == \"XML\"}\r\n      parserfile: [\"parsexml.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/xmlcolors.css\"\r\n    {elseif \$code_markup == \"CSS\"}\r\n      parserfile: [\"parsecss.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/csscolors.css\"\r\n    {elseif \$code_markup == \"JavaScript\"}  \r\n      parserfile: [\"tokenizejavascript.js\", \"parsejavascript.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/jscolors.css\"\r\n    {/if}\r\n  {literal}});{/literal}\r\n</script>\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}\r\n', '', '.cf_view_markup_field {\r\n  margin: 0px; \r\n}\r\n', '')");
 		}
 
-		if (!in_array("{$g_table_prefix}field_types", $existing_tables))
+		if (!in_array("{PREFIX}field_types", $existing_tables))
 		{
-			$query = mysql_query("
-        CREATE TABLE {$g_table_prefix}list_groups (
+			$query = $db->query("
+        CREATE TABLE {PREFIX}list_groups (
           group_id mediumint(8) unsigned NOT NULL auto_increment,
           group_type varchar(50) NOT NULL,
           group_name varchar(255) NOT NULL,
@@ -628,23 +628,23 @@ function ft_upgrade_form_tools()
 
 			$standard_fields = $LANG["phrase_standard_fields"];
 			$special_fields  = $LANG["phrase_special_fields"];
-			mysql_query("INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, list_order) VALUES ('field_types', '$standard_fields', 1)");
-			mysql_query("INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, list_order) VALUES ('field_types', '$special_fields', 2)");
+			$db->query("INSERT INTO {PREFIX}list_groups (group_type, group_name, list_order) VALUES ('field_types', '$standard_fields', 1)");
+			$db->query("INSERT INTO {PREFIX}list_groups (group_type, group_name, list_order) VALUES ('field_types', '$special_fields', 2)");
 		}
 
 		// this will automatically fail if the fields already exist
-		@mysql_query("
-      ALTER TABLE {$g_table_prefix}modules
+		$db->query("
+      ALTER TABLE {PREFIX}modules
       ADD is_premium ENUM('yes', 'no') NOT NULL DEFAULT 'no' AFTER is_enabled,
       ADD module_key VARCHAR(15) NULL AFTER is_premium
     ");
 
-		@mysql_query("ALTER TABLE {$g_table_prefix}field_types ADD view_field_rendering_type ENUM('none', 'php', 'smarty') NOT NULL DEFAULT 'none' AFTER compatible_field_sizes");
-		@mysql_query("ALTER TABLE {$g_table_prefix}field_types ADD view_field_php_function VARCHAR(255) NULL AFTER view_field_rendering_type");
-		@mysql_query("ALTER TABLE {$g_table_prefix}field_types ADD view_field_php_function_source VARCHAR(255) NULL AFTER view_field_rendering_type");
+		$db->query("ALTER TABLE {PREFIX}field_types ADD view_field_rendering_type ENUM('none', 'php', 'smarty') NOT NULL DEFAULT 'none' AFTER compatible_field_sizes");
+		$db->query("ALTER TABLE {PREFIX}field_types ADD view_field_php_function VARCHAR(255) NULL AFTER view_field_rendering_type");
+		$db->query("ALTER TABLE {PREFIX}field_types ADD view_field_php_function_source VARCHAR(255) NULL AFTER view_field_rendering_type");
 
-		mysql_query("ALTER TABLE {$g_table_prefix}hooks RENAME {$g_table_prefix}hook_calls");
-		mysql_query("ALTER TABLE {$g_table_prefix}hook_calls CHANGE core_function function_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
+		$db->query("ALTER TABLE {PREFIX}hooks RENAME {PREFIX}hook_calls");
+		$db->query("ALTER TABLE {PREFIX}hook_calls CHANGE core_function function_name VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
 
 		// okay! At this point, we've created the new tables for the field types & can safely add the new file and tinyMCE field
 		// types. In order to upgrade to 2.1.0, the user MUST have installed the WYSIWYG and file upload modules
@@ -685,8 +685,8 @@ function ft_upgrade_form_tools()
 			Modules::installModule($module_id);
 		}
 
-		$query = @mysql_query("
-      CREATE TABLE {$g_table_prefix}new_view_submission_defaults (
+		$query = $db->query("
+      CREATE TABLE {PREFIX}new_view_submission_defaults (
         view_id mediumint(9) NOT NULL,
         field_id mediumint(9) NOT NULL,
         default_value text NOT NULL,
@@ -695,8 +695,8 @@ function ft_upgrade_form_tools()
       ) DEFAULT CHARSET=utf8
     ");
 
-		$query = @mysql_query("
-      CREATE TABLE {$g_table_prefix}view_columns (
+		$query = $db->query("
+      CREATE TABLE {PREFIX}view_columns (
         view_id mediumint(9) NOT NULL,
         field_id mediumint(9) NOT NULL,
         list_order smallint(6) NOT NULL,
@@ -711,60 +711,60 @@ function ft_upgrade_form_tools()
 
 
 		// changed Tables: simple changes that don't require any data manipulation
-		mysql_query("ALTER TABLE {$g_table_prefix}accounts ADD last_logged_in DATETIME NULL AFTER account_status");
-		mysql_query("ALTER TABLE {$g_table_prefix}accounts CHANGE username username VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
-		mysql_query("ALTER TABLE {$g_table_prefix}accounts CHANGE password password VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
+		$db->query("ALTER TABLE {PREFIX}accounts ADD last_logged_in DATETIME NULL AFTER account_status");
+		$db->query("ALTER TABLE {PREFIX}accounts CHANGE username username VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
+		$db->query("ALTER TABLE {PREFIX}accounts CHANGE password password VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
 
-		mysql_query("ALTER TABLE {$g_table_prefix}menu_items ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER is_submenu");
-		mysql_query("ALTER TABLE {$g_table_prefix}field_options ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes'");
-		mysql_query("ALTER TABLE {$g_table_prefix}field_options CHANGE field_group_id list_id MEDIUMINT(8) UNSIGNED NOT NULL");
+		$db->query("ALTER TABLE {PREFIX}menu_items ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER is_submenu");
+		$db->query("ALTER TABLE {PREFIX}field_options ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes'");
+		$db->query("ALTER TABLE {PREFIX}field_options CHANGE field_group_id list_id MEDIUMINT(8) UNSIGNED NOT NULL");
 
-		mysql_query("ALTER TABLE {$g_table_prefix}form_fields ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER list_order");
-		mysql_query("ALTER TABLE {$g_table_prefix}form_fields CHANGE field_size field_size VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'medium'");
+		$db->query("ALTER TABLE {PREFIX}form_fields ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER list_order");
+		$db->query("ALTER TABLE {PREFIX}form_fields CHANGE field_size field_size VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'medium'");
 
-		mysql_query("ALTER TABLE {$g_table_prefix}field_settings CHANGE setting_value setting_value MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''");
+		$db->query("ALTER TABLE {PREFIX}field_settings CHANGE setting_value setting_value MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT ''");
 
-		mysql_query("ALTER TABLE {$g_table_prefix}view_fields ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes'");
+		$db->query("ALTER TABLE {PREFIX}view_fields ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes'");
 
-		mysql_query("ALTER TABLE {$g_table_prefix}views ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER view_order");
-		mysql_query("ALTER TABLE {$g_table_prefix}views ADD group_id SMALLINT NULL AFTER is_new_sort_group");
+		$db->query("ALTER TABLE {PREFIX}views ADD is_new_sort_group ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER view_order");
+		$db->query("ALTER TABLE {PREFIX}views ADD group_id SMALLINT NULL AFTER is_new_sort_group");
 
-		mysql_query("ALTER TABLE {$g_table_prefix}forms DROP default_view_id");
-		mysql_query("ALTER TABLE {$g_table_prefix}forms ADD form_type ENUM('internal','external') NOT NULL DEFAULT 'external' AFTER form_id");
-		mysql_query("ALTER TABLE {$g_table_prefix}forms ADD add_submission_button_label VARCHAR(255) NULL DEFAULT '{$LANG["word_add_rightarrow"]}'");
-		mysql_query("ALTER TABLE {$g_table_prefix}forms CHANGE form_url form_url VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL");
+		$db->query("ALTER TABLE {PREFIX}forms DROP default_view_id");
+		$db->query("ALTER TABLE {PREFIX}forms ADD form_type ENUM('internal','external') NOT NULL DEFAULT 'external' AFTER form_id");
+		$db->query("ALTER TABLE {PREFIX}forms ADD add_submission_button_label VARCHAR(255) NULL DEFAULT '{$LANG["word_add_rightarrow"]}'");
+		$db->query("ALTER TABLE {PREFIX}forms CHANGE form_url form_url VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL");
 
-		mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('edit_submission_shared_resources_js', '\$(function() {\r\n  \$(\".fancybox\").fancybox();\r\n});\r\n', 'core')");
-		mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('edit_submission_shared_resources_css', '/* used in the \"Highlight\" setting for most field types */\r\n.cf_colour_red { \r\n  background-color: #990000;\r\n  color: white;\r\n}\r\n.cf_colour_orange {\r\n  background-color: orange; \r\n}\r\n.cf_colour_yellow {\r\n  background-color: yellow; \r\n}\r\n.cf_colour_green {\r\n  background-color: green;\r\n  color: white; \r\n}\r\n.cf_colour_blue {\r\n  background-color: #336699; \r\n  color: white; \r\n}\r\n\r\n/* field comments */\r\n.cf_field_comments {\r\n  font-style: italic;\r\n  color: #999999;\r\n  clear: both;\r\n}\r\n\r\n/* column layouts for radios & checkboxes */\r\n.cf_option_list_group_label {\r\n  font-weight: bold;  \r\n  clear: both;\r\n  margin-left: 4px;\r\n}\r\n.cf_option_list_2cols, .cf_option_list_3cols, .cf_option_list_4cols {\r\n  clear: both; \r\n}\r\n.cf_option_list_2cols .column { \r\n  width: 50%;\r\n  float: left; \r\n}\r\n.cf_option_list_3cols .column { \r\n  width: 33%;\r\n  float: left;\r\n}\r\n.cf_option_list_4cols .column { \r\n  width: 25%;\r\n  float: left;\r\n}\r\n\r\n/* Used for the date and time pickers */\r\n.cf_date_group img {\r\n  margin-bottom: -4px;\r\n  padding: 1px;\r\n}\r\n\r\n', 'core')");
-		mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('edit_submission_onload_resources', '<script src=\"{\$g_root_url}/global/codemirror/js/codemirror.js\"></script>|<script src=\"{\$g_root_url}/global/scripts/jquery-ui-timepicker-addon.js\"></script>|<script src=\"{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.pack.js\"></script> |<link rel=\"stylesheet\" href=\"{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.css\" type=\"text/css\" media=\"screen\" />', 'core')");
+		$db->query("INSERT INTO {PREFIX}settings (setting_name, setting_value, module) VALUES ('edit_submission_shared_resources_js', '\$(function() {\r\n  \$(\".fancybox\").fancybox();\r\n});\r\n', 'core')");
+		$db->query("INSERT INTO {PREFIX}settings (setting_name, setting_value, module) VALUES ('edit_submission_shared_resources_css', '/* used in the \"Highlight\" setting for most field types */\r\n.cf_colour_red { \r\n  background-color: #990000;\r\n  color: white;\r\n}\r\n.cf_colour_orange {\r\n  background-color: orange; \r\n}\r\n.cf_colour_yellow {\r\n  background-color: yellow; \r\n}\r\n.cf_colour_green {\r\n  background-color: green;\r\n  color: white; \r\n}\r\n.cf_colour_blue {\r\n  background-color: #336699; \r\n  color: white; \r\n}\r\n\r\n/* field comments */\r\n.cf_field_comments {\r\n  font-style: italic;\r\n  color: #999999;\r\n  clear: both;\r\n}\r\n\r\n/* column layouts for radios & checkboxes */\r\n.cf_option_list_group_label {\r\n  font-weight: bold;  \r\n  clear: both;\r\n  margin-left: 4px;\r\n}\r\n.cf_option_list_2cols, .cf_option_list_3cols, .cf_option_list_4cols {\r\n  clear: both; \r\n}\r\n.cf_option_list_2cols .column { \r\n  width: 50%;\r\n  float: left; \r\n}\r\n.cf_option_list_3cols .column { \r\n  width: 33%;\r\n  float: left;\r\n}\r\n.cf_option_list_4cols .column { \r\n  width: 25%;\r\n  float: left;\r\n}\r\n\r\n/* Used for the date and time pickers */\r\n.cf_date_group img {\r\n  margin-bottom: -4px;\r\n  padding: 1px;\r\n}\r\n\r\n', 'core')");
+		$db->query("INSERT INTO {PREFIX}settings (setting_name, setting_value, module) VALUES ('edit_submission_onload_resources', '<script src=\"{\$g_root_url}/global/codemirror/js/codemirror.js\"></script>|<script src=\"{\$g_root_url}/global/scripts/jquery-ui-timepicker-addon.js\"></script>|<script src=\"{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.pack.js\"></script> |<link rel=\"stylesheet\" href=\"{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.css\" type=\"text/css\" media=\"screen\" />', 'core')");
 		$forms_page_default_message = $LANG["text_client_welcome"];
-		mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('forms_page_default_message', '$forms_page_default_message', 'core')");
+		$db->query("INSERT INTO {PREFIX}settings (setting_name, setting_value, module) VALUES ('forms_page_default_message', '$forms_page_default_message', 'core')");
 
-		mysql_query("UPDATE {$g_table_prefix}settings SET setting_name = 'num_option_lists_per_page' WHERE setting_name = 'num_field_option_groups_per_page'");
+		$db->query("UPDATE {PREFIX}settings SET setting_name = 'num_option_lists_per_page' WHERE setting_name = 'num_field_option_groups_per_page'");
 
 		// Field Option Groups are now called Option Lists
-		mysql_query("ALTER TABLE {$g_table_prefix}field_option_groups RENAME {$g_table_prefix}option_lists");
-		mysql_query("ALTER TABLE {$g_table_prefix}option_lists CHANGE group_id list_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT");
-		mysql_query("ALTER TABLE {$g_table_prefix}option_lists CHANGE group_name option_list_name VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
-		mysql_query("ALTER TABLE {$g_table_prefix}option_lists ADD is_grouped ENUM('yes', 'no') NOT NULL DEFAULT 'no' AFTER option_list_name");
+		$db->query("ALTER TABLE {PREFIX}field_option_groups RENAME {PREFIX}option_lists");
+		$db->query("ALTER TABLE {PREFIX}option_lists CHANGE group_id list_id MEDIUMINT(8) UNSIGNED NOT NULL AUTO_INCREMENT");
+		$db->query("ALTER TABLE {PREFIX}option_lists CHANGE group_name option_list_name VARCHAR(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL");
+		$db->query("ALTER TABLE {PREFIX}option_lists ADD is_grouped ENUM('yes', 'no') NOT NULL DEFAULT 'no' AFTER option_list_name");
 
 		// may not be necessary, but just to make sure
-		mysql_query("
-      ALTER TABLE {$g_table_prefix}view_filters
+		$db->query("
+      ALTER TABLE {PREFIX}view_filters
       CHANGE operator operator ENUM('equals', 'not_equals', 'like', 'not_like', 'before', 'after')
       CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'equals'
     ");
 
 		// not used anymore! Dependency tracking is entirely handled by formtools.org
-		mysql_query("ALTER TABLE {$g_table_prefix}themes DROP supports_ft_versions");
-		mysql_query("ALTER TABLE {$g_table_prefix}modules DROP supports_ft_versions");
+		$db->query("ALTER TABLE {PREFIX}themes DROP supports_ft_versions");
+		$db->query("ALTER TABLE {PREFIX}modules DROP supports_ft_versions");
 
 
 		// next, we need up update menus to change field_option_groups to option_lists. Since the user may have tweaked the
 		// menu label to say whatever they want, only update the actual label if it was the original English "Field Option Groups"
-		$menu_items_query = mysql_query("
+		$menu_items_query = $db->query("
       SELECT *
-      FROM   {$g_table_prefix}menu_items
+      FROM   {PREFIX}menu_items
       WHERE  page_identifier = 'field_option_groups'
         ");
 		while ($row = mysql_fetch_assoc($menu_items_query))
@@ -776,18 +776,18 @@ function ft_upgrade_form_tools()
 				$display_text = $LANG["phrase_option_lists"];
 				$display_text_clause = ", display_text = '{$display_text}'";
 			}
-			mysql_query("
-        UPDATE {$g_table_prefix}menu_items
+			$db->query("
+        UPDATE {PREFIX}menu_items
         SET    page_identifier = 'option_lists',
                url = '/admin/forms/option_lists/'
                $display_text_clause
         WHERE  menu_item_id = $menu_item_id
       ");
 		}
-		mysql_query("DELETE FROM {$g_table_prefix}menu_items WHERE page_identifier = 'settings_wysiwyg'");
+		$db->query("DELETE FROM {PREFIX}menu_items WHERE page_identifier = 'settings_wysiwyg'");
 
-		mysql_query("
-      UPDATE {$g_table_prefix}menu_items
+		$db->query("
+      UPDATE {PREFIX}menu_items
       SET    page_identifier = 'add_form_choose_type',
              url = '/admin/forms/add/'
       WHERE  page_identifier = 'add_form1'
@@ -795,19 +795,19 @@ function ft_upgrade_form_tools()
 
 
 		// all Views are now grouped. Add in a default group for each
-		$forms_query = mysql_query("SELECT form_id FROM {$g_table_prefix}forms WHERE is_complete = 'yes'");
+		$forms_query = $db->query("SELECT form_id FROM {PREFIX}forms WHERE is_complete = 'yes'");
 		$views_label = $LANG["word_views"];
 		while ($row = mysql_fetch_assoc($forms_query))
 		{
 			$form_id = $row["form_id"];
-			mysql_query("
-        INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
+			$db->query("
+        INSERT INTO {PREFIX}list_groups (group_type, group_name, custom_data, list_order)
         VALUES ('form_{$form_id}_view_group', '$views_label', '', 1)
       ");
 			$new_group_id = mysql_insert_id();
 
-			mysql_query("
-        UPDATE {$g_table_prefix}views
+			$db->query("
+        UPDATE {PREFIX}views
         SET    group_id = $new_group_id
         WHERE  form_id = $form_id
       ");
@@ -815,17 +815,17 @@ function ft_upgrade_form_tools()
 
 		// the field options table now groups the options. What we need to do here is create a group for all items in each
 		// Option List
-		mysql_query("ALTER TABLE {$g_table_prefix}field_options ADD list_group_id MEDIUMINT NOT NULL AFTER list_id");
-		$field_options = mysql_query("SELECT DISTINCT list_id FROM {$g_table_prefix}field_options");
+		$db->query("ALTER TABLE {PREFIX}field_options ADD list_group_id MEDIUMINT NOT NULL AFTER list_id");
+		$field_options = $db->query("SELECT DISTINCT list_id FROM {PREFIX}field_options");
 		while ($row = mysql_fetch_assoc($field_options))
 		{
 			$list_id = $row["list_id"];
-			mysql_query("
-        INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
+			$db->query("
+        INSERT INTO {PREFIX}list_groups (group_type, group_name, custom_data, list_order)
         VALUES ('option_list_{$list_id}', '', '', 1)
       ");
 			$new_group_id = mysql_insert_id();
-			mysql_query("UPDATE {$g_table_prefix}field_options SET list_group_id = $new_group_id WHERE list_id = $list_id");
+			$db->query("UPDATE {PREFIX}field_options SET list_group_id = $new_group_id WHERE list_id = $list_id");
 		}
 
 		// field types are now field type IDs. This has significant impact.
@@ -869,34 +869,34 @@ function ft_upgrade_form_tools()
 			if ($form_info["is_complete"] == "no")
 				continue;
 
-			mysql_query("
-        UPDATE {$g_table_prefix}form_fields
+			$db->query("
+        UPDATE {PREFIX}form_fields
         SET    field_name = 'core__submission_id'
         WHERE  col_name = 'submission_id' AND
                field_type = 'system'
       ");
-			mysql_query("
-        UPDATE {$g_table_prefix}form_fields
+			$db->query("
+        UPDATE {PREFIX}form_fields
         SET    field_name = 'core__last_modified'
         WHERE  col_name = 'last_modified_date' AND
                field_type = 'system'
       ");
-			mysql_query("
-        UPDATE {$g_table_prefix}form_fields
+			$db->query("
+        UPDATE {PREFIX}form_fields
         SET    field_name = 'core__submission_date'
         WHERE  col_name = 'submission_date' AND
                field_type = 'system'
       ");
-			mysql_query("
-        UPDATE {$g_table_prefix}form_fields
+			$db->query("
+        UPDATE {PREFIX}form_fields
         SET    field_name = 'core__ip_address'
         WHERE  col_name = 'ip_address' AND
                field_type = 'system'
        ");
 		}
 
-		mysql_query("ALTER TABLE {$g_table_prefix}form_fields CHANGE field_type field_type_id SMALLINT NOT NULL DEFAULT '1'");
-		mysql_query("ALTER TABLE {$g_table_prefix}form_fields ADD is_system_field ENUM('yes','no') NOT NULL DEFAULT 'no' AFTER field_type_id");
+		$db->query("ALTER TABLE {PREFIX}form_fields CHANGE field_type field_type_id SMALLINT NOT NULL DEFAULT '1'");
+		$db->query("ALTER TABLE {PREFIX}form_fields ADD is_system_field ENUM('yes','no') NOT NULL DEFAULT 'no' AFTER field_type_id");
 
 		$field_types = FieldTypes::get();
 		$field_type_map = array();
@@ -936,8 +936,8 @@ function ft_upgrade_form_tools()
 						$field_type_id = $date_field_type_id;
 
 					$is_system_field = ($field_label == "system") ? "yes" : "no";
-					mysql_query("
-            UPDATE {$g_table_prefix}form_fields
+					$db->query("
+            UPDATE {PREFIX}form_fields
             SET    field_type_id = $field_type_id,
                    is_system_field = '$is_system_field'
             WHERE  field_id = $field_id
@@ -952,9 +952,9 @@ function ft_upgrade_form_tools()
 		foreach ($forms as $form_info)
 		{
 			$form_id = $form_info["form_id"];
-			$email_field_query = mysql_query("
+			$email_field_query = $db->query("
         SELECT *
-        FROM   {$g_table_prefix}form_email_fields
+        FROM   {PREFIX}form_email_fields
         WHERE  form_id = $form_id
       ");
 			$email_fields = array();
@@ -970,9 +970,9 @@ function ft_upgrade_form_tools()
 			$email_updates[$form_id] = $email_fields;
 		}
 
-		mysql_query("ALTER TABLE {$g_table_prefix}form_email_fields CHANGE email_field email_field_id MEDIUMINT(9) NOT NULL");
-		mysql_query("ALTER TABLE {$g_table_prefix}form_email_fields CHANGE first_name_field first_name_field_id MEDIUMINT(9) NULL DEFAULT NULL");
-		mysql_query("ALTER TABLE {$g_table_prefix}form_email_fields CHANGE last_name_field last_name_field_id MEDIUMINT(9) NULL DEFAULT NULL");
+		$db->query("ALTER TABLE {PREFIX}form_email_fields CHANGE email_field email_field_id MEDIUMINT(9) NOT NULL");
+		$db->query("ALTER TABLE {PREFIX}form_email_fields CHANGE first_name_field first_name_field_id MEDIUMINT(9) NULL DEFAULT NULL");
+		$db->query("ALTER TABLE {PREFIX}form_email_fields CHANGE last_name_field last_name_field_id MEDIUMINT(9) NULL DEFAULT NULL");
 
 		while (list($form_id, $changes) = each($email_updates))
 		{
@@ -984,8 +984,8 @@ function ft_upgrade_form_tools()
 					continue;
 				$first_name_field_id = !empty($email_change_info["first_name_field_id"]) ? "'{$email_change_info["first_name_field_id"]}'" : "NULL";
 				$last_name_field_id  = !empty($email_change_info["last_name_field_id"]) ? "'{$email_change_info["last_name_field_id"]}'" : "NULL";
-				mysql_query("
-          UPDATE {$g_table_prefix}form_email_fields
+				$db->query("
+          UPDATE {PREFIX}form_email_fields
           SET    email_field_id      = $email_field_id,
                  first_name_field_id = $first_name_field_id,
                  last_name_field_id  = $last_name_field_id
@@ -999,7 +999,7 @@ function ft_upgrade_form_tools()
 		foreach ($forms as $form_info)
 		{
 			$form_id = $form_info["form_id"];
-			$view_query = mysql_query("SELECT view_id FROM {$g_table_prefix}views WHERE form_id = $form_id");
+			$view_query = $db->query("SELECT view_id FROM {PREFIX}views WHERE form_id = $form_id");
 			$view_ids = array();
 			while ($view_info = mysql_fetch_assoc($view_query))
 				$view_ids[] = $view_info["view_id"];
@@ -1008,9 +1008,9 @@ function ft_upgrade_form_tools()
 			{
 				// we can't use ViewFields::getViewFields here because the Core code references DB changes
 				// that can't be made yet
-				$view_fields_query = mysql_query("
+				$view_fields_query = $db->query("
           SELECT field_id, tab_number, is_column, is_sortable
-          FROM   {$g_table_prefix}view_fields
+          FROM   {PREFIX}view_fields
           WHERE  view_id = $view_id
         ");
 
@@ -1040,32 +1040,32 @@ function ft_upgrade_form_tools()
 			{
 				$field_id    = $col_info["field_id"];
 				$is_sortable = $col_info["is_sortable"];
-				mysql_query("
-          INSERT INTO {$g_table_prefix}view_columns (view_id, field_id, list_order, is_sortable, auto_size, custom_width, truncate)
+				$db->query("
+          INSERT INTO {PREFIX}view_columns (view_id, field_id, list_order, is_sortable, auto_size, custom_width, truncate)
           VALUES ($view_id, $field_id, $order, 'yes', 'yes', '', 'truncate')
         ");
 				$order++;
 			}
 		}
 
-		mysql_query("ALTER TABLE {$g_table_prefix}view_fields DROP is_column, DROP is_sortable");
-		mysql_query("ALTER TABLE {$g_table_prefix}view_fields ADD group_id MEDIUMINT(9) NOT NULL AFTER field_id");
+		$db->query("ALTER TABLE {PREFIX}view_fields DROP is_column, DROP is_sortable");
+		$db->query("ALTER TABLE {PREFIX}view_fields ADD group_id MEDIUMINT(9) NOT NULL AFTER field_id");
 
 
 		// all View fields are now grouped. Formerly, view fields could be mapped to tabs individually, now they're mapped
 		// to the View field group. So what we do here is: look at each View, and those fields within it.
-		$forms_query = mysql_query("SELECT form_id FROM {$g_table_prefix}forms WHERE is_complete = 'yes'");
+		$forms_query = $db->query("SELECT form_id FROM {PREFIX}forms WHERE is_complete = 'yes'");
 		while ($row = mysql_fetch_assoc($forms_query))
 		{
 			$form_id = $row["form_id"];
-			$views_query = mysql_query("SELECT view_id FROM {$g_table_prefix}views WHERE form_id = $form_id");
+			$views_query = $db->query("SELECT view_id FROM {PREFIX}views WHERE form_id = $form_id");
 			while ($view_info = mysql_fetch_assoc($views_query))
 			{
 				$view_id = $view_info["view_id"];
 
-				$tab_num_query = mysql_query("
+				$tab_num_query = $db->query("
           SELECT DISTINCT tab_number
-          FROM   {$g_table_prefix}view_fields
+          FROM   {PREFIX}view_fields
           WHERE  view_id = $view_id AND
                  tab_number IS NOT NULL
         ");
@@ -1079,13 +1079,13 @@ function ft_upgrade_form_tools()
 				// if none of the fields were mapped to a tab, cool! Just map all View fields to a single list group
 				if (empty($tab_numbers))
 				{
-					mysql_query("
-            INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
+					$db->query("
+            INSERT INTO {PREFIX}list_groups (group_type, group_name, custom_data, list_order)
             VALUES ('view_fields_{$view_id}', '', '', 1)
           ");
 					$new_group_id = mysql_insert_id();
-					mysql_query("
-            UPDATE {$g_table_prefix}view_fields
+					$db->query("
+            UPDATE {PREFIX}view_fields
             SET    group_id = $new_group_id
             WHERE  view_id = $view_id
           ");
@@ -1095,15 +1095,15 @@ function ft_upgrade_form_tools()
 					$order = 1;
 					foreach ($tab_numbers as $tab_number)
 					{
-						mysql_query("
-              INSERT INTO {$g_table_prefix}list_groups (group_type, group_name, custom_data, list_order)
+						$db->query("
+              INSERT INTO {PREFIX}list_groups (group_type, group_name, custom_data, list_order)
               VALUES ('view_fields_{$view_id}', '', '$tab_number', $order)
             ");
 						$new_group_id = mysql_insert_id();
 						$order++;
 
-						mysql_query("
-              UPDATE {$g_table_prefix}view_fields
+						$db->query("
+              UPDATE {PREFIX}view_fields
               SET    group_id = $new_group_id
               WHERE  view_id = $view_id AND
                      tab_number = $tab_number
@@ -1112,19 +1112,19 @@ function ft_upgrade_form_tools()
 				}
 			}
 		}
-		mysql_query("ALTER TABLE {$g_table_prefix}view_fields DROP tab_number");
+		$db->query("ALTER TABLE {PREFIX}view_fields DROP tab_number");
 
 
 		// FIELD_SETTINGS table  -----------------
 		$old_field_settings = array();
-		$field_settings_query = mysql_query("SELECT * FROM {$g_table_prefix}field_settings");
+		$field_settings_query = $db->query("SELECT * FROM {PREFIX}field_settings");
 		while ($row = mysql_fetch_assoc($field_settings_query))
 		{
 			$old_field_settings[] = $row;
 		}
-		mysql_query("TRUNCATE {$g_table_prefix}field_settings");
-		mysql_query("ALTER TABLE {$g_table_prefix}field_settings DROP module"); // this field wasn't ever used
-		mysql_query("ALTER TABLE {$g_table_prefix}field_settings CHANGE setting_name setting_id MEDIUMINT NOT NULL");
+		$db->query("TRUNCATE {PREFIX}field_settings");
+		$db->query("ALTER TABLE {PREFIX}field_settings DROP module"); // this field wasn't ever used
+		$db->query("ALTER TABLE {PREFIX}field_settings CHANGE setting_name setting_id MEDIUMINT NOT NULL");
 
 		$file_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("file");
 		$field_setting_name_to_id_map = array(
@@ -1145,13 +1145,13 @@ function ft_upgrade_form_tools()
 			if (empty($setting_id))
 				continue;
 
-			mysql_query("INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value) VALUES ($field_id, $setting_id, '$setting_value')");
+			$db->query("INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value) VALUES ($field_id, $setting_id, '$setting_value')");
 		}
 
 		// now the field_settings table is up to date, a few Core fields need new entries in the table
-		$query = mysql_query("
+		$query = $db->query("
       SELECT field_id
-      FROM   {$g_table_prefix}form_fields
+      FROM   {PREFIX}form_fields
       WHERE  is_system_field = 'yes' AND
              (field_name = 'core__submission_date' OR field_name = 'core__last_modified')
     ");
@@ -1159,8 +1159,8 @@ function ft_upgrade_form_tools()
 		while ($row = mysql_fetch_assoc($query))
 		{
 			$field_id = $row["field_id"];
-			mysql_query("
-        INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
+			$db->query("
+        INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
         VALUES ($field_id, $date_field_type_datetime_setting_id, '$g_default_datetime_format')
       ");
 		}
@@ -1179,9 +1179,9 @@ function ft_upgrade_form_tools()
 		}
 
 		// next, loop through each field that has an old field_option_group field and add the new field_setting
-		$query = mysql_query("
+		$query = $db->query("
       SELECT field_id, field_type_id, field_group_id
-      FROM   {$g_table_prefix}form_fields
+      FROM   {PREFIX}form_fields
       WHERE  field_group_id IS NOT NULL AND field_group_id != ''
     ");
 
@@ -1195,8 +1195,8 @@ function ft_upgrade_form_tools()
 			$field_group_id = $row["field_group_id"];
 			$setting_id = array_key_exists($field_type_id, $field_type_option_list_setting_id_map) ? $field_type_option_list_setting_id_map[$field_type_id] : "";
 
-			mysql_query("
-        INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
+			$db->query("
+        INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
         VALUES ($field_id, $setting_id, $field_group_id)
       ");
 
@@ -1204,14 +1204,14 @@ function ft_upgrade_form_tools()
 				$option_list_id_to_field_ids[$field_group_id] = array();
 			$option_list_id_to_field_ids[$field_group_id][] = $field_id;
 		}
-		mysql_query("ALTER TABLE {$g_table_prefix}form_fields DROP field_group_id");
+		$db->query("ALTER TABLE {PREFIX}form_fields DROP field_group_id");
 
 		// for this one, we need to locate every field that uses the Option List and add a custom setting to ensure the
 		// orientation isn't lost. At this juncture, we have the luxury of knowing that the default field type settings &
 		// options haven't been modified by the user
-		$orientation_query = mysql_query("
+		$orientation_query = $db->query("
       SELECT list_id, field_orientation
-      FROM   {$g_table_prefix}option_lists
+      FROM   {PREFIX}option_lists
       WHERE  field_orientation = 'vertical' OR field_orientation = 'horizontal'
     ");
 		while ($row = mysql_fetch_assoc($orientation_query))
@@ -1235,25 +1235,25 @@ function ft_upgrade_form_tools()
 				if (empty($setting_id))
 					continue;
 
-				mysql_query("
-          INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
+				$db->query("
+          INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
           VALUES ($field_id, $setting_id, '$orientation')
         ");
 			}
 		}
 
-		mysql_query("ALTER TABLE {$g_table_prefix}option_lists DROP field_orientation");
+		$db->query("ALTER TABLE {PREFIX}option_lists DROP field_orientation");
 	}
 
 	if ($old_version_info["release_date"] < 20110521)
 	{
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_smarty_markup = '{\$VALUE|htmlspecialchars}'
       WHERE  field_type_identifier = 'textbox'
     ");
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_smarty_markup = '{if \$CONTEXTPAGE == \"edit_submission\"}\t\n  {\$VALUE|nl2br}\r\n{else}\r\n  {\$VALUE}\r\n{/if}'
       WHERE  field_type_identifier = 'textarea'
     ");
@@ -1261,14 +1261,14 @@ function ft_upgrade_form_tools()
 
 	if ($old_version_info["release_date"] < 20110527)
 	{
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    raw_field_type_map_multi_select_id = 16
       WHERE  field_type_identifier = 'radio_buttons'
     ");
 
-		mysql_query("
-      CREATE TABLE {$g_table_prefix}hooks (
+		$db->query("
+      CREATE TABLE {PREFIX}hooks (
         id mediumint(8) unsigned NOT NULL auto_increment,
         hook_type enum('code','template') NOT NULL,
         component enum('core','api','module') NOT NULL,
@@ -1285,24 +1285,24 @@ function ft_upgrade_form_tools()
 	if ($old_version_info["release_date"] < 20110528)
 	{
 		// assorted updates to the Date field type
-		mysql_query("
-      INSERT INTO {$g_table_prefix}field_type_settings (field_type_id, field_label, field_setting_identifier, field_type,
+		$db->query("
+      INSERT INTO {PREFIX}field_type_settings (field_type_id, field_label, field_setting_identifier, field_type,
         field_orientation, default_value_type, default_value, list_order)
       VALUES (8, 'Apply Timezone Offset', 'apply_timezone_offset', 'radios', 'horizontal', 'static', 'no', 2)
     ");
 		$new_setting_id = mysql_insert_id();
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($new_setting_id, 'Yes', 'yes', 1, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($new_setting_id, 'No', 'no', 2, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($new_setting_id, 'Yes', 'yes', 1, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($new_setting_id, 'No', 'no', 2, 'yes')");
 
-		mysql_query("
-     UPDATE {$g_table_prefix}field_type_settings
+		$db->query("
+     UPDATE {PREFIX}field_type_settings
      SET    list_order = 3
      WHERE  field_type_id = 8 AND
             field_setting_identifier = 'comments'
     ");
 
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_smarty_markup = '{strip}\r\n  {if \$VALUE}\r\n    {assign var=tzo value=\"\"}\r\n    {if \$apply_timezone_offset == \"yes\"}\r\n      {assign var=tzo value=\$ACCOUNT_INFO.timezone_offset}\r\n    {/if}\r\n    {if \$display_format == \"yy-mm-dd\" || !\$display_format}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d\"}\r\n    {elseif \$display_format == \"dd/mm/yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d/m/Y\"}\r\n    {elseif \$display_format == \"mm/dd/yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"m/d/Y\"}\r\n    {elseif \$display_format == \"M d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"M j, Y\"}\r\n    {elseif \$display_format == \"MM d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"F j, Y\"}\r\n    {elseif \$display_format == \"D M d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"D M j, Y\"}\r\n    {elseif \$display_format == \"DD, MM d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"l M j, Y\"}\r\n    {elseif \$display_format == \"datetime:dd/mm/yy|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d/m/Y g:i A\"}\r\n    {elseif \$display_format == \"datetime:mm/dd/yy|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"m/d/Y g:i A\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d g:i A\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm:ss|showSecond`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i:s\"}\r\n    {/if}\r\n{/if}{/strip}\r\n',
              edit_field_smarty_markup = '{assign var=class value=\"cf_datepicker\"}\r\n{if \$display_format|strpos:\"datetime\" === 0}\r\n  {assign var=class value=\"cf_datetimepicker\"}\r\n{/if}\r\n\r\n{assign var=\"val\" value=\"\"}\r\n{if \$VALUE}\r\n  {assign var=tzo value=\"\"}\r\n  {if \$apply_timezone_offset == \"yes\"}\r\n    {assign var=tzo value=\$ACCOUNT_INFO.timezone_offset}\r\n  {/if}\r\n  {if \$display_format == \"yy-mm-dd\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d\"}\r\n  {elseif \$display_format == \"dd/mm/yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d/m/Y\"}\r\n  {elseif \$display_format == \"mm/dd/yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"m/d/Y\"}\r\n  {elseif \$display_format == \"M d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"M j, Y\"}\r\n  {elseif \$display_format == \"MM d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"F j, Y\"}\r\n  {elseif \$display_format == \"D M d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"D M j, Y\"}\r\n  {elseif \$display_format == \"DD, MM d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"l M j, Y\"}\r\n  {elseif \$display_format == \"datetime:dd/mm/yy|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d/m/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:mm/dd/yy|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"m/d/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm:ss|showSecond`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i:s\"}\r\n  {/if}\r\n{/if}\r\n\r\n<div class=\"cf_date_group\">\r\n  <input type=\"input\" name=\"{\$NAME}\" id=\"{\$NAME}_id\" \r\n    class=\"cf_datefield {\$class}\" value=\"{\$val}\" /><img class=\"ui-datepicker-trigger\" src=\"{\$g_root_url}/global/images/calendar.png\" id=\"{\$NAME}_icon_id\" />\r\n  <input type=\"hidden\" id=\"{\$NAME}_format\" value=\"{\$display_format}\" />\r\n  {if \$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div>\r\n  {/if}\r\n</div>\r\n',
              php_processing = '\$field_name     = \$vars[\"field_info\"][\"field_name\"];\r\n\$date           = \$vars[\"data\"][\$field_name];\r\n\$display_format = \$vars[\"settings\"][\"display_format\"];\r\n\$atzo           = \$vars[\"settings\"][\"apply_timezone_offset\"];\r\n\$account_info   = isset(\$vars[\"account_info\"]) ? \$vars[\"account_info\"] : array();\r\n\r\nif (empty(\$date))\r\n{\r\n  \$value = \"\";\r\n}\r\nelse\r\n{\r\n  if (strpos(\$display_format, \"datetime:\") === 0)\r\n  {\r\n    \$parts = explode(\" \", \$date);\r\n    switch (\$display_format)\r\n    {\r\n      case \"datetime:dd/mm/yy|h:mm TT|ampm`true\":\r\n        \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n          substr(\$date, 6);        \r\n        break;\r\n    }\r\n  }\r\n  else\r\n  {\r\n    if (\$display_format == \"dd/mm/yy\")\r\n    {\r\n      \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n        substr(\$date, 6);\r\n    }\r\n  }\r\n  \$time = strtotime(\$date);\r\n  \r\n  // lastly, if this field has a timezone offset being applied to it, do the\r\n  // appropriate math on the date\r\n  if (\$atzo == \"yes\" && !isset(\$account_info[\"timezone_offset\"]))\r\n  {\r\n    \$seconds_offset = \$account_info[\"timezone_offset\"] * 60 * 60;\r\n    \$time += \$seconds_offset;\r\n  }\r\n\r\n  \$value = date(\"Y-m-d H:i:s\", \$time);\r\n}\r\n\r\n\r\n'
@@ -1312,27 +1312,27 @@ function ft_upgrade_form_tools()
 
 	if ($old_version_info["release_date"] < 20110530)
 	{
-		mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value) VALUES ('default_date_field_search_value', 'none')");
+		$db->query("INSERT INTO {PREFIX}settings (setting_name, setting_value) VALUES ('default_date_field_search_value', 'none')");
 	}
 
 	if ($old_version_info["release_date"] < 20110612)
 	{
-		@mysql_query("ALTER TABLE {$g_table_prefix}accounts ADD temp_reset_password VARCHAR(50) NULL");
+		$db->query("ALTER TABLE {PREFIX}accounts ADD temp_reset_password VARCHAR(50) NULL");
 	}
 
 	if ($old_version_info["release_date"] < 20110622)
 	{
-		@mysql_query("UPDATE {$g_table_prefix}field_types SET view_field_php_function_source = 'core'");
+		$db->query("UPDATE {PREFIX}field_types SET view_field_php_function_source = 'core'");
 
 		// for compatibility with existing field type modules
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET     view_field_rendering_type = 'smarty'
     ");
 
 		// textbox
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_rendering_type = 'smarty',
              view_field_php_function_source = 'core',
              view_field_php_function = ''
@@ -1340,8 +1340,8 @@ function ft_upgrade_form_tools()
     ");
 
 		// textarea
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_rendering_type = 'smarty',
              view_field_php_function_source = 'core',
              view_field_php_function = '',
@@ -1351,15 +1351,15 @@ function ft_upgrade_form_tools()
     ");
 
 		// password
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET     view_field_rendering_type = 'none'
       WHERE   field_type_identifier = 'password'
     ");
 
 		// dropdown
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
              view_field_php_function = 'FieldTypes::displayFieldTypeDropdown',
@@ -1369,8 +1369,8 @@ function ft_upgrade_form_tools()
     ");
 
 		// multi-select dropdown
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
              view_field_php_function = 'FieldTypes::displayFieldTypeMultiSelectDropdown',
@@ -1380,8 +1380,8 @@ function ft_upgrade_form_tools()
     ");
 
 		// radio buttons
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
              view_field_php_function = 'FieldTypes::displayFieldTypeRadios',
@@ -1391,8 +1391,8 @@ function ft_upgrade_form_tools()
     ");
 
 		// checkboxes
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
              view_field_php_function = 'FieldTypes::displayFieldTypeCheckboxes',
@@ -1402,8 +1402,8 @@ function ft_upgrade_form_tools()
     ");
 
 		// date
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
              view_field_php_function = 'FieldTypes::displayFieldTypeDate'
@@ -1411,15 +1411,15 @@ function ft_upgrade_form_tools()
     ");
 
 		// time
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_rendering_type = 'none'
       WHERE  field_type_identifier = 'time'
     ");
 
 		// phone
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
              view_field_php_function = 'FieldTypes::displayFieldTypePhoneNumber'
@@ -1427,8 +1427,8 @@ function ft_upgrade_form_tools()
     ");
 
 		// code / markup
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_rendering_type = 'php',
              view_field_php_function_source = 'core',
              view_field_php_function = 'FieldTypes::displayFieldTypeCodeMarkup'
@@ -1438,33 +1438,33 @@ function ft_upgrade_form_tools()
 
 	if ($old_version_info["release_date"] < 20110630)
 	{
-		mysql_query("INSERT INTO {$g_table_prefix}settings (setting_name, setting_value, module) VALUES ('field_type_settings_shared_characteristics', 'field_comments:textbox,comments`textarea,comments`password,comments`dropdown,comments`multi_select_dropdown,comments`radio_buttons,comments`checkboxes,comments`date,comments`time,comments`phone,comments`code_markup,comments`file,comments`google_maps_field,comments`tinymce,comments|data_source:dropdown,contents`multi_select_dropdown,contents`radio_buttons,contents`checkboxes,contents|column_formatting:checkboxes,formatting`radio_buttons,formatting|maxlength_attr:textbox,maxlength|colour_highlight:textbox,highlight|folder_path:file,folder_path|folder_url:file,folder_url|permitted_file_types:file,folder_url|max_file_size:file,max_file_size|date_display_format:date,display_format|apply_timezone_offset:date,apply_timezone_offset', 'core')");
+		$db->query("INSERT INTO {PREFIX}settings (setting_name, setting_value, module) VALUES ('field_type_settings_shared_characteristics', 'field_comments:textbox,comments`textarea,comments`password,comments`dropdown,comments`multi_select_dropdown,comments`radio_buttons,comments`checkboxes,comments`date,comments`time,comments`phone,comments`code_markup,comments`file,comments`google_maps_field,comments`tinymce,comments|data_source:dropdown,contents`multi_select_dropdown,contents`radio_buttons,contents`checkboxes,contents|column_formatting:checkboxes,formatting`radio_buttons,formatting|maxlength_attr:textbox,maxlength|colour_highlight:textbox,highlight|folder_path:file,folder_path|folder_url:file,folder_url|permitted_file_types:file,folder_url|max_file_size:file,max_file_size|date_display_format:date,display_format|apply_timezone_offset:date,apply_timezone_offset', 'core')");
 	}
 
 	// yet more field type updates
 	if ($old_version_info["release_date"] < 20110702)
 	{
-		mysql_query("UPDATE {$g_table_prefix}field_types SET field_type_name = '{\$LANG.word_time}' WHERE field_type_identifier = 'time'");
-		mysql_query("UPDATE {$g_table_prefix}field_types SET field_type_name = '{\$LANG.word_date}' WHERE field_type_identifier = 'date'");
-		mysql_query("UPDATE {$g_table_prefix}field_types SET field_type_name = '{\$LANG.phrase_phone_number}' WHERE field_type_identifier = 'phone'");
-		mysql_query("UPDATE {$g_table_prefix}field_types SET field_type_name = '{\$LANG.phrase_code_markup_field}' WHERE field_type_identifier = 'code_markup'");
+		$db->query("UPDATE {PREFIX}field_types SET field_type_name = '{\$LANG.word_time}' WHERE field_type_identifier = 'time'");
+		$db->query("UPDATE {PREFIX}field_types SET field_type_name = '{\$LANG.word_date}' WHERE field_type_identifier = 'date'");
+		$db->query("UPDATE {PREFIX}field_types SET field_type_name = '{\$LANG.phrase_phone_number}' WHERE field_type_identifier = 'phone'");
+		$db->query("UPDATE {PREFIX}field_types SET field_type_name = '{\$LANG.phrase_code_markup_field}' WHERE field_type_identifier = 'code_markup'");
 
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    edit_field_smarty_markup = '{* figure out all the classes *}\r\n{assign var=classes value=\$height}\r\n{if \$highlight_colour}\r\n  {assign var=classes value=\"`\$classes` `\$highlight_colour`\"}\r\n{/if}\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_wordcounter max`\$maxlength`\"}\r\n{elseif \$input_length == \"chars\" && \$maxlength != \"\"}\r\n  {assign var=classes value=\"`\$classes` cf_textcounter max`\$maxlength`\"}\r\n{/if}\r\n\r\n<textarea name=\"{\$NAME}\" id=\"{\$NAME}_id\" class=\"{\$classes}\">{\$VALUE}</textarea>\r\n\r\n{if \$input_length == \"words\" && \$maxlength != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} {\$LANG.phrase_word_limit_p} <span></span> {\$LANG.phrase_remaining_words}\r\n  </div>\r\n{elseif \$input_length == \"chars\" && \$maxlength != \"\"}\r\n  <div class=\"cf_counter\" id=\"{\$NAME}_counter\">\r\n    {\$maxlength} {\$LANG.phrase_characters_limit_p} <span></span> {\$LANG.phrase_remaining_characters}\r\n  </div>\r\n{/if}\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments|nl2br}</div>\r\n{/if}',
              resources_js = '/**\r\n * The following code provides a simple text/word counter option for any  \r\n * textarea. It either just keeps counting up, or limits the results to a\r\n * certain number - all depending on what the user has selected via the\r\n * field type settings.\r\n */\r\nvar cf_counter = {};\r\ncf_counter.get_max_count = function(el) {\r\n  var classes = \$(el).attr(''class'').split(\" \").slice(-1);\r\n  var max = null;\r\n  for (var i=0; i<classes.length; i++) {\r\n    var result = classes[i].match(/max(\\\\d+)/);\r\n    if (result != null) {\r\n      max = result[1];\r\n      break;\r\n    }\r\n  }\r\n  return max;\r\n}\r\n\r\n\$(function() {\r\n  \$(\"textarea[class~=''cf_wordcounter'']\").each(function() {\r\n    var max = cf_counter.get_max_count(this);\r\n    if (max == null) {\r\n      return;\r\n    }\r\n    \$(this).bind(\"keydown\", function() {\r\n      var val = \$(this).val();\r\n      var len        = val.split(/[\\\\s]+/);\r\n      var field_name = \$(this).attr(\"name\");\r\n      var num_words  = len.length - 1;\r\n      if (num_words > max) {\r\n        var allowed_words = val.split(/[\\\\s]+/, max);\r\n        truncated_str = allowed_words.join(\" \");\r\n        \$(this).val(truncated_str);\r\n      } else {\r\n        \$(\"#\" + field_name + \"_counter\").find(\"span\").html(parseInt(max) - parseInt(num_words));\r\n      }\r\n    });     \r\n    \$(this).trigger(\"keydown\");\r\n  });\r\n\r\n  \$(\"textarea[class~=''cf_textcounter'']\").each(function() {\r\n    var max = cf_counter.get_max_count(this);\r\n    if (max == null) {\r\n      return;\r\n    }\r\n    \$(this).bind(\"keydown\", function() {    \r\n      var field_name = \$(this).attr(\"name\");      \r\n      if (this.value.length > max) {\r\n        this.value = this.value.substring(0, max);\r\n      } else {\r\n        \$(\"#\" + field_name + \"_counter\").find(\"span\").html(max - this.value.length);\r\n      }\r\n    });\r\n    \$(this).trigger(\"keydown\");\r\n  }); \r\n});'
       WHERE  field_type_identifier = 'textarea'
     ");
 
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_smarty_markup = '{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\n\$output = \"\";\r\n\$has_content = false;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (empty(\$piece))\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {    \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$output .= \$value;\r\n    if (!empty(\$value))\r\n    {\r\n      \$has_content = true;\r\n    }\r\n    \$counter++;\r\n  } else {\r\n    \$output .= \$piece;\r\n  }\r\n}\r\n\r\nif (!empty(\$output) && \$has_content)\r\n  echo \$output;\r\n{/php}',
              edit_field_smarty_markup = '{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$name   = \$this->get_template_vars(\"NAME\");\r\n\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (strlen(\$piece) == 0)\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {\r\n    \$size = strlen(\$piece); \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$value = htmlspecialchars(\$value);\r\n    echo \"<input type=\\\\\"text\\\\\" name=\\\\\"{\$name}_\$counter\\\\\" value=\\\\\"\$value\\\\\"\r\n            size=\\\\\"\$size\\\\\" maxlength=\\\\\"\$size\\\\\" />\";\r\n    \$counter++;\r\n  } else {\r\n    echo \$piece;\r\n  }\r\n}\r\n{/php}\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}'
       WHERE  field_type_identifier = 'phone'
     ");
 
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    edit_field_smarty_markup = '<div class=\"editor\">\r\n  <textarea id=\"{\$NAME}_id\" name=\"{\$NAME}\">{\$VALUE}</textarea>\r\n</div>\r\n<script>\r\n  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(\"{\$NAME}_id\", \r\n  {literal}{{/literal}\r\n    height: \"{\$height}px\",\r\n    path:   \"{\$g_root_url}/global/codemirror/js/\",\r\n    {if \$code_markup == \"HTML\" || \$code_markup == \"XML\"}\r\n      parserfile: [\"parsexml.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/xmlcolors.css\"\r\n    {elseif \$code_markup == \"CSS\"}\r\n      parserfile: [\"parsecss.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/csscolors.css\"\r\n    {elseif \$code_markup == \"JavaScript\"}  \r\n      parserfile: [\"tokenizejavascript.js\", \"parsejavascript.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/jscolors.css\"\r\n    {/if}\r\n  {literal}});{/literal}\r\n</script>\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}'
       WHERE  field_type_identifier = 'code_markup'
     ");
@@ -1479,7 +1479,7 @@ function ft_upgrade_form_tools()
 				continue;
 
 			$setting_id = $curr_field_type_info["setting_id"];
-			mysql_query("UPDATE {$g_table_prefix}field_type_settings SET default_value = '200' WHERE setting_id = $setting_id") or die(mysql_error());
+			$db->query("UPDATE {PREFIX}field_type_settings SET default_value = '200' WHERE setting_id = $setting_id") or die(mysql_error());
 		}
 	}
 
@@ -1491,25 +1491,25 @@ function ft_upgrade_form_tools()
 		$custom_date_format_info = ft_get_field_type_setting_by_identifier($field_type_id, "display_format");
 
 		$setting_id = $custom_date_format_info["setting_id"];
-		mysql_query("DELETE FROM {$g_table_prefix}field_type_setting_options WHERE setting_id = $setting_id");
+		$db->query("DELETE FROM {PREFIX}field_type_setting_options WHERE setting_id = $setting_id");
 
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '2011-11-30', 'yy-mm-dd', 1, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '30/11/2011 (dd/mm/yyyy)', 'dd/mm/yy', 2, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '11/30/2011 (mm/dd/yyyy)', 'mm/dd/yy', 3, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, 'Nov 30, 2011', 'M d, yy', 4, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, 'November 30, 2011', 'MM d, yy', 5, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, 'Wed Nov 30, 2011 ', 'D M d, yy', 6, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, 'Wednesday, November 30, 2011', 'DD, MM d, yy', 7, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '30. 08. 2011.', 'dd. mm. yy.', 8, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '30/11/2011 8:00 PM', 'datetime:dd/mm/yy|h:mm TT|ampm`true', 9, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '11/30/2011 8:00 PM', 'datetime:mm/dd/yy|h:mm TT|ampm`true', 10, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '2011-11-30 8:00 PM', 'datetime:yy-mm-dd|h:mm TT|ampm`true', 11, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '2011-11-30 20:00', 'datetime:yy-mm-dd|hh:mm', 12, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '2011-11-30 20:00:00', 'datetime:yy-mm-dd|hh:mm:ss|showSecond`true', 13, 'yes')");
-		mysql_query("INSERT INTO {$g_table_prefix}field_type_setting_options VALUES ($setting_id, '30. 08. 2011. 20:00', 'datetime:dd. mm. yy.|hh:mm', 14, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, '2011-11-30', 'yy-mm-dd', 1, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, '30/11/2011 (dd/mm/yyyy)', 'dd/mm/yy', 2, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, '11/30/2011 (mm/dd/yyyy)', 'mm/dd/yy', 3, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, 'Nov 30, 2011', 'M d, yy', 4, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, 'November 30, 2011', 'MM d, yy', 5, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, 'Wed Nov 30, 2011 ', 'D M d, yy', 6, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, 'Wednesday, November 30, 2011', 'DD, MM d, yy', 7, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, '30. 08. 2011.', 'dd. mm. yy.', 8, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, '30/11/2011 8:00 PM', 'datetime:dd/mm/yy|h:mm TT|ampm`true', 9, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, '11/30/2011 8:00 PM', 'datetime:mm/dd/yy|h:mm TT|ampm`true', 10, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, '2011-11-30 8:00 PM', 'datetime:yy-mm-dd|h:mm TT|ampm`true', 11, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, '2011-11-30 20:00', 'datetime:yy-mm-dd|hh:mm', 12, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, '2011-11-30 20:00:00', 'datetime:yy-mm-dd|hh:mm:ss|showSecond`true', 13, 'yes')");
+		$db->query("INSERT INTO {PREFIX}field_type_setting_options VALUES ($setting_id, '30. 08. 2011. 20:00', 'datetime:dd. mm. yy.|hh:mm', 14, 'yes')");
 
-		mysql_query("
-      UPDATE {$g_table_prefix}field_types
+		$db->query("
+      UPDATE {PREFIX}field_types
       SET    view_field_smarty_markup = '{strip}\r\n  {if \$VALUE}\r\n    {assign var=tzo value=\"\"}\r\n    {if \$apply_timezone_offset == \"yes\"}\r\n      {assign var=tzo value=\$ACCOUNT_INFO.timezone_offset}\r\n    {/if}\r\n    {if \$display_format == \"yy-mm-dd\" || !\$display_format}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d\"}\r\n    {elseif \$display_format == \"dd/mm/yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d/m/Y\"}\r\n    {elseif \$display_format == \"mm/dd/yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"m/d/Y\"}\r\n    {elseif \$display_format == \"M d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"M j, Y\"}\r\n    {elseif \$display_format == \"MM d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"F j, Y\"}\r\n    {elseif \$display_format == \"D M d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"D M j, Y\"}\r\n    {elseif \$display_format == \"DD, MM d, yy\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"l M j, Y\"}\r\n    {elseif \$display_format == \"dd. mm. yy.\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d. m. Y.\"}\r\n    {elseif \$display_format == \"datetime:dd/mm/yy|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d/m/Y g:i A\"}\r\n    {elseif \$display_format == \"datetime:mm/dd/yy|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"m/d/Y g:i A\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|h:mm TT|ampm`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d g:i A\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i\"}\r\n    {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm:ss|showSecond`true\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i:s\"}\r\n    {elseif \$display_format == \"datetime:dd. mm. yy.|hh:mm\"}\r\n      {\$VALUE|custom_format_date:\$tzo:\"d. m. Y. H:i\"}\r\n    {/if}\r\n{/if}{/strip}',
              edit_field_smarty_markup = '{assign var=class value=\"cf_datepicker\"}\r\n{if \$display_format|strpos:\"datetime\" === 0}\r\n  {assign var=class value=\"cf_datetimepicker\"}\r\n{/if}\r\n\r\n{assign var=\"val\" value=\"\"}\r\n{if \$VALUE}\r\n  {assign var=tzo value=\"\"}\r\n  {if \$apply_timezone_offset == \"yes\"}\r\n    {assign var=tzo value=\$ACCOUNT_INFO.timezone_offset}\r\n  {/if}\r\n  {if \$display_format == \"yy-mm-dd\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d\"}\r\n  {elseif \$display_format == \"dd/mm/yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d/m/Y\"}\r\n  {elseif \$display_format == \"mm/dd/yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"m/d/Y\"}\r\n  {elseif \$display_format == \"M d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"M j, Y\"}\r\n  {elseif \$display_format == \"MM d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"F j, Y\"}\r\n  {elseif \$display_format == \"D M d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"D M j, Y\"}\r\n  {elseif \$display_format == \"DD, MM d, yy\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"l M j, Y\"}\r\n  {elseif \$display_format == \"dd. mm. yy.\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d. m. Y.\"}\r\n  {elseif \$display_format == \"datetime:dd/mm/yy|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d/m/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:mm/dd/yy|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"m/d/Y g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|h:mm TT|ampm`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d g:i A\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i\"}\r\n  {elseif \$display_format == \"datetime:yy-mm-dd|hh:mm:ss|showSecond`true\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"Y-m-d H:i:s\"}\r\n  {elseif \$display_format == \"datetime:dd. mm. yy.|hh:mm\"}\r\n    {assign var=val value=\$VALUE|custom_format_date:\$tzo:\"d. m. Y. H:i\"}\r\n  {/if}\r\n{/if}\r\n\r\n<div class=\"cf_date_group\">\r\n  <input type=\"input\" name=\"{\$NAME}\" id=\"{\$NAME}_id\" \r\n    class=\"cf_datefield {\$class}\" value=\"{\$val}\" /><img class=\"ui-datepicker-trigger\" src=\"{\$g_root_url}/global/images/calendar.png\" id=\"{\$NAME}_icon_id\" />\r\n  <input type=\"hidden\" id=\"{\$NAME}_format\" value=\"{\$display_format}\" />\r\n  {if \$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div>\r\n  {/if}\r\n</div>',
              php_processing = '\$field_name     = \$vars[\"field_info\"][\"field_name\"];\r\n\$date           = \$vars[\"data\"][\$field_name];\r\n\$display_format = \$vars[\"settings\"][\"display_format\"];\r\n\$atzo           = \$vars[\"settings\"][\"apply_timezone_offset\"];\r\n\$account_info   = isset(\$vars[\"account_info\"]) ? \$vars[\"account_info\"] : array();\r\n\r\nif (empty(\$date))\r\n{\r\n  \$value = \"\";\r\n}\r\nelse\r\n{\r\n  if (strpos(\$display_format, \"datetime:\") === 0)\r\n  {\r\n    \$parts = explode(\" \", \$date);\r\n    switch (\$display_format)\r\n    {\r\n      case \"datetime:dd/mm/yy|h:mm TT|ampm`true\":\r\n        \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n          substr(\$date, 6);\r\n        break;\r\n      case \"datetime:dd. mm. yy.|hh:mm\":\r\n        \$date = substr(\$date, 4, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n          substr(\$date, 8, 4) . \" \" . substr(\$date, 14);\r\n        break;\r\n    }\r\n  }\r\n  else\r\n  {\r\n    if (\$display_format == \"dd/mm/yy\")\r\n    {\r\n      \$date = substr(\$date, 3, 2) . \"/\" . substr(\$date, 0, 2) . \"/\" . \r\n        substr(\$date, 6);\r\n    } \r\n    else if (\$display_format == \"dd. mm. yy.\")\r\n    {\r\n      \$parts = explode(\" \", \$date);\r\n      \$date = trim(\$parts[1], \".\") . \"/\" . trim(\$parts[0], \".\") . \"/\" . trim(\$parts[2], \".\");\r\n    }\r\n  }\r\n\r\n  \$time = strtotime(\$date);\r\n  \r\n  // lastly, if this field has a timezone offset being applied to it, do the\r\n  // appropriate math on the date\r\n  if (\$atzo == \"yes\" && !isset(\$account_info[\"timezone_offset\"]))\r\n  {\r\n    \$seconds_offset = \$account_info[\"timezone_offset\"] * 60 * 60;\r\n    \$time += \$seconds_offset;\r\n  }\r\n\r\n  \$value = date(\"Y-m-d H:i:s\", \$time);\r\n}\r\n\r\n'
@@ -1525,34 +1525,34 @@ function ft_upgrade_form_tools()
 		$upgrade_attempted = true;
 		$queries = array();
 		$queries[] = "
-  	  ALTER TABLE {$g_table_prefix}themes
+  	  ALTER TABLE {PREFIX}themes
   	    ADD uses_swatches ENUM('yes', 'no') NOT NULL DEFAULT 'no' AFTER theme_name,
         ADD swatches MEDIUMTEXT NULL AFTER uses_swatches
   	";
-		$queries[] = "ALTER TABLE {$g_table_prefix}accounts ADD swatch VARCHAR(255) NOT NULL AFTER theme";
-		$queries[] = "UPDATE {$g_table_prefix}accounts SET swatch = 'green' WHERE theme = 'default'";
+		$queries[] = "ALTER TABLE {PREFIX}accounts ADD swatch VARCHAR(255) NOT NULL AFTER theme";
+		$queries[] = "UPDATE {PREFIX}accounts SET swatch = 'green' WHERE theme = 'default'";
 		$queries[] = "
-      CREATE TABLE {$g_table_prefix}email_template_when_sent_views (
+      CREATE TABLE {PREFIX}email_template_when_sent_views (
         email_id MEDIUMINT NOT NULL,
         view_id MEDIUMINT NOT NULL
       ) DEFAULT CHARSET=utf8
     ";
-		$find_query = mysql_query("
+		$find_query = $db->query("
       SELECT email_id, view_mapping_view_id
-      FROM   {$g_table_prefix}email_templates
+      FROM   {PREFIX}email_templates
       WHERE  view_mapping_view_id != '' AND view_mapping_view_id IS NOT NULL
     ");
 		while ($row = mysql_fetch_assoc($find_query))
 		{
 			$email_id = $row["email_id"];
 			$view_id  = $row["view_mapping_view_id"];
-			$queries[] = "INSERT INTO {$g_table_prefix}email_template_when_sent_views (email_id, view_id) VALUES ($email_id, $view_id)";
+			$queries[] = "INSERT INTO {PREFIX}email_template_when_sent_views (email_id, view_id) VALUES ($email_id, $view_id)";
 		}
 
         Settings::set(array("default_client_swatch" => "green"));
 		foreach ($queries as $query)
 		{
-			$result = @mysql_query($query);
+			$result = $db->query($query);
 			if (!$result)
 			{
 				$has_problems = true;
@@ -1569,16 +1569,16 @@ function ft_upgrade_form_tools()
 		// if there were ANY problems, undo all the changes we just did
 		if ($has_problems)
 		{
-			@mysql_query("ALTER TABLE {$g_table_prefix}themes DROP uses_swatches");
-			@mysql_query("ALTER TABLE {$g_table_prefix}themes DROP swatches");
-			@mysql_query("ALTER TABLE {$g_table_prefix}accounts DROP swatch");
-			@mysql_query("DROP TABLE {$g_table_prefix}email_template_when_sent_views");
-			@mysql_query("DELETE FROM {$g_table_prefix}settings WHERE setting_name='default_client_swatch' AND module='core'");
+			$db->query("ALTER TABLE {PREFIX}themes DROP uses_swatches");
+			$db->query("ALTER TABLE {PREFIX}themes DROP swatches");
+			$db->query("ALTER TABLE {PREFIX}accounts DROP swatch");
+			$db->query("DROP TABLE {PREFIX}email_template_when_sent_views");
+			$db->query("DELETE FROM {PREFIX}settings WHERE setting_name='default_client_swatch' AND module='core'");
 		}
 		else
 		{
 			// delete the old view_mapping_view_id column from the email_templates table
-			@mysql_query("ALTER TABLE {$g_table_prefix}email_templates DROP view_mapping_view_id");
+			$db->query("ALTER TABLE {PREFIX}email_templates DROP view_mapping_view_id");
 
 			// refresh the theme list. This updates Form Tools to recognize the new swatches for the default theme, saving
 			// the administrator from having to click the "Refresh Theme List" button
@@ -1592,12 +1592,12 @@ function ft_upgrade_form_tools()
 	if ($old_version_info["release_date"] < 20111007)
 	{
 		$upgrade_attempted = true;
-		@mysql_query("ALTER TABLE {$g_table_prefix}form_fields DROP option_list_id");
-		@mysql_query("ALTER TABLE {$g_table_prefix}modules CHANGE module_key module_key VARCHAR(15)");
+		$db->query("ALTER TABLE {PREFIX}form_fields DROP option_list_id");
+		$db->query("ALTER TABLE {PREFIX}modules CHANGE module_key module_key VARCHAR(15)");
 
 		$queries = array();
 		$queries[] = "
-      CREATE TABLE {$g_table_prefix}field_type_validation_rules (
+      CREATE TABLE {PREFIX}field_type_validation_rules (
         rule_id mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
         field_type_id mediumint(9) NOT NULL,
         rsv_rule varchar(50) NOT NULL,
@@ -1611,24 +1611,24 @@ function ft_upgrade_form_tools()
       ) DEFAULT CHARSET=utf8
     ";
 
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(1, 1, 'required', '{\$LANG.word_required}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_required}', 1)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(2, 1, 'valid_email', '{\$LANG.phrase_valid_email}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_valid_email}', 2)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(3, 1, 'digits_only', '{\$LANG.phrase_numbers_only}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_numbers_only}', 3)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(4, 1, 'letters_only', '{\$LANG.phrase_letters_only}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_letters_only}', 4)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(5, 1, 'is_alpha', '{\$LANG.phrase_alphanumeric}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_alpha}', 5)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(6, 2, 'required', '{\$LANG.word_required}', '{\$field_name}', '', '', '{\$LANG.validation_default_rule_required}', 1)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(7, 3, 'required', '{\$LANG.word_required}', '{\$field_name}', '', '', '{\$LANG.validation_default_rule_required}', 1)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(8, 4, 'required', '{\$LANG.word_required}', '{\$field_name}', '', '', '{\$LANG.validation_default_rule_required}', 1)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(9, 5, 'required', '{\$LANG.word_required}', '{\$field_name}[]', '', 'no', '{\$LANG.validation_default_rule_required}', 1)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(10, 6, 'required', '{\$LANG.word_required}', '{\$field_name}', '', '', '{\$LANG.validation_default_rule_required}', 1)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(11, 7, 'required', '{\$LANG.word_required}', '{\$field_name}[]', '', '', '{\$LANG.validation_default_rule_required}', 1)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(12, 8, 'required', '{\$LANG.word_required}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_required}', 1)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(13, 9, 'required', '{\$LANG.word_required}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_required}', 1)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(14, 10, 'function', '{\$LANG.word_required}', '', 'cf_phone.check_required', 'yes', '{\$LANG.validation_default_phone_num_required}', 1)";
-		$queries[] = "INSERT INTO {$g_table_prefix}field_type_validation_rules VALUES(15, 11, 'function', '{\$LANG.word_required}', '', 'cf_code.check_required', 'yes', '{\$LANG.validation_default_rule_required}', 1)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(1, 1, 'required', '{\$LANG.word_required}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_required}', 1)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(2, 1, 'valid_email', '{\$LANG.phrase_valid_email}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_valid_email}', 2)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(3, 1, 'digits_only', '{\$LANG.phrase_numbers_only}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_numbers_only}', 3)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(4, 1, 'letters_only', '{\$LANG.phrase_letters_only}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_letters_only}', 4)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(5, 1, 'is_alpha', '{\$LANG.phrase_alphanumeric}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_alpha}', 5)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(6, 2, 'required', '{\$LANG.word_required}', '{\$field_name}', '', '', '{\$LANG.validation_default_rule_required}', 1)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(7, 3, 'required', '{\$LANG.word_required}', '{\$field_name}', '', '', '{\$LANG.validation_default_rule_required}', 1)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(8, 4, 'required', '{\$LANG.word_required}', '{\$field_name}', '', '', '{\$LANG.validation_default_rule_required}', 1)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(9, 5, 'required', '{\$LANG.word_required}', '{\$field_name}[]', '', 'no', '{\$LANG.validation_default_rule_required}', 1)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(10, 6, 'required', '{\$LANG.word_required}', '{\$field_name}', '', '', '{\$LANG.validation_default_rule_required}', 1)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(11, 7, 'required', '{\$LANG.word_required}', '{\$field_name}[]', '', '', '{\$LANG.validation_default_rule_required}', 1)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(12, 8, 'required', '{\$LANG.word_required}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_required}', 1)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(13, 9, 'required', '{\$LANG.word_required}', '{\$field_name}', '', 'no', '{\$LANG.validation_default_rule_required}', 1)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(14, 10, 'function', '{\$LANG.word_required}', '', 'cf_phone.check_required', 'yes', '{\$LANG.validation_default_phone_num_required}', 1)";
+		$queries[] = "INSERT INTO {PREFIX}field_type_validation_rules VALUES(15, 11, 'function', '{\$LANG.word_required}', '', 'cf_code.check_required', 'yes', '{\$LANG.validation_default_rule_required}', 1)";
 
 		$queries[] = "
-      CREATE TABLE {$g_table_prefix}field_validation (
+      CREATE TABLE {PREFIX}field_validation (
         rule_id mediumint(8) unsigned NOT NULL,
         field_id mediumint(9) NOT NULL,
         error_message mediumtext NOT NULL,
@@ -1637,12 +1637,12 @@ function ft_upgrade_form_tools()
     ";
 
 		// now update the field types that have changed: phone & code/markup
-		$queries[] = "UPDATE {$g_table_prefix}field_types SET resources_js = 'var cf_phone = {};\r\ncf_phone.check_required = function() {\r\n  var errors = [];\r\n  for (var i=0; i<rsv_custom_func_errors.length; i++) {\r\n    if (rsv_custom_func_errors[i].func != \"cf_phone.check_required\") {\r\n      continue;\r\n    }\r\n    var field_name = rsv_custom_func_errors[i].field;\r\n    var fields = $(\"input[name^=\\\\\"\" + field_name + \"_\\\\\"]\");\r\n    fields.each(function() {\r\n      if (!this.name.match(/_(\\\\d+)$/)) {\r\n        return;\r\n      }\r\n      var req_len = $(this).attr(\"maxlength\");\r\n      var actual_len = this.value.length;\r\n      if (req_len != actual_len || this.value.match(/\\\\D/)) {\r\n        var el = document.edit_submission_form[field_name];\r\n        errors.push([el, rsv_custom_func_errors[i].err]);\r\n        return false;\r\n      }\r\n    });\r\n  }\r\n\r\n  if (errors.length) {\r\n    return errors;\r\n  }\r\n\r\n  return true;\r\n  \r\n}' WHERE field_type_identifier = 'phone'";
-		$queries[] = "UPDATE {$g_table_prefix}field_types SET resources_js = 'var cf_code = {};\r\ncf_code.check_required = function() {\r\n  var errors = [];\r\n  for (var i=0; i<rsv_custom_func_errors.length; i++) {\r\n    if (rsv_custom_func_errors[i].func != \"cf_code.check_required\") {\r\n      continue;\r\n    }\r\n    var field_name = rsv_custom_func_errors[i].field;\r\n    var val = \$.trim(window[\"code_mirror_\" + field_name].getCode());\r\n    if (!val) {\r\n      var el = document.edit_submission_form[field_name];\r\n      errors.push([el, rsv_custom_func_errors[i].err]);\r\n    }\r\n  }\r\n  if (errors.length) {\r\n    return errors;\r\n  }\r\n  return true;  \r\n}\r\n' WHERE field_type_identifier = 'code_markup'";
+		$queries[] = "UPDATE {PREFIX}field_types SET resources_js = 'var cf_phone = {};\r\ncf_phone.check_required = function() {\r\n  var errors = [];\r\n  for (var i=0; i<rsv_custom_func_errors.length; i++) {\r\n    if (rsv_custom_func_errors[i].func != \"cf_phone.check_required\") {\r\n      continue;\r\n    }\r\n    var field_name = rsv_custom_func_errors[i].field;\r\n    var fields = $(\"input[name^=\\\\\"\" + field_name + \"_\\\\\"]\");\r\n    fields.each(function() {\r\n      if (!this.name.match(/_(\\\\d+)$/)) {\r\n        return;\r\n      }\r\n      var req_len = $(this).attr(\"maxlength\");\r\n      var actual_len = this.value.length;\r\n      if (req_len != actual_len || this.value.match(/\\\\D/)) {\r\n        var el = document.edit_submission_form[field_name];\r\n        errors.push([el, rsv_custom_func_errors[i].err]);\r\n        return false;\r\n      }\r\n    });\r\n  }\r\n\r\n  if (errors.length) {\r\n    return errors;\r\n  }\r\n\r\n  return true;\r\n  \r\n}' WHERE field_type_identifier = 'phone'";
+		$queries[] = "UPDATE {PREFIX}field_types SET resources_js = 'var cf_code = {};\r\ncf_code.check_required = function() {\r\n  var errors = [];\r\n  for (var i=0; i<rsv_custom_func_errors.length; i++) {\r\n    if (rsv_custom_func_errors[i].func != \"cf_code.check_required\") {\r\n      continue;\r\n    }\r\n    var field_name = rsv_custom_func_errors[i].field;\r\n    var val = \$.trim(window[\"code_mirror_\" + field_name].getCode());\r\n    if (!val) {\r\n      var el = document.edit_submission_form[field_name];\r\n      errors.push([el, rsv_custom_func_errors[i].err]);\r\n    }\r\n  }\r\n  if (errors.length) {\r\n    return errors;\r\n  }\r\n  return true;  \r\n}\r\n' WHERE field_type_identifier = 'code_markup'";
 
 		foreach ($queries as $query)
 		{
-			$result = @mysql_query($query);
+			$result = $db->query($query);
 			if (!$result)
 			{
 				$has_problems = true;
@@ -1658,8 +1658,8 @@ function ft_upgrade_form_tools()
 		// if there were ANY problems, undo all the changes we just did
 		if ($has_problems)
 		{
-			@mysql_query("DROP TABLE {$g_table_prefix}field_type_validation_rules");
-			@mysql_query("DROP TABLE {$g_table_prefix}field_validation");
+			$db->query("DROP TABLE {PREFIX}field_type_validation_rules");
+			$db->query("DROP TABLE {PREFIX}field_validation");
 			// the changes to the field types don't need to be undone; they just added functions
 		}
 	}
@@ -1675,14 +1675,14 @@ function ft_upgrade_form_tools()
 
 		$queries = array();
 		$queries[] = "
-      ALTER TABLE {$g_table_prefix}forms
+      ALTER TABLE {PREFIX}forms
       CHANGE form_type form_type ENUM('internal', 'external', 'form_builder')
       CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'external'
     ";
 
 		foreach ($queries as $query)
 		{
-			$result = @mysql_query($query);
+			$result = $db->query($query);
 			if (!$result)
 			{
 				$has_problems = true;

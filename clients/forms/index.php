@@ -6,6 +6,7 @@ use FormTools\Forms;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
+use FormTools\Views;
 
 Core::init();
 Core::$user->checkAuth("client");
@@ -28,7 +29,7 @@ General::checkClientMayView($account_id, $form_id, $view_id);
 // this returns all and ONLY the Views accessible by this client
 $grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
 
-if (empty($view_id) || !ft_check_view_exists($view_id, true)) {
+if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
 	if (count($grouped_views[0]["views"]) == 0) {
 		// no Views defined for this client
 		ft_handle_error($LANG["notify_no_views_assigned_to_client_form"], "", "notify");
@@ -40,7 +41,7 @@ if (empty($view_id) || !ft_check_view_exists($view_id, true)) {
 $_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
 
 $form_info = Forms::getForm($form_id);
-$view_info = ft_get_view($view_id);
+$view_info = Views::getView($view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes") {
 	$submission_id = ft_create_blank_submission($form_id, $view_id, true);

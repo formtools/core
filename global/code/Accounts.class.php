@@ -363,9 +363,9 @@ class Accounts {
         }
         $username = $info["username"];
 
-        $query = mysql_query("
+        $query = $db->query("
      SELECT *
-     FROM   {$g_table_prefix}accounts
+     FROM   {PREFIX}accounts
      WHERE  username = '$username'
           ");
 
@@ -397,8 +397,8 @@ class Accounts {
         // temporary generated password, leaving the original password intact. This prevents a situation arising when
         // someone other than the admin / client uses the "Forget Password" feature and invalidates a valid, known password.
         // Any time the user successfully logs in,
-        mysql_query("
-    UPDATE {$g_table_prefix}accounts
+        $db->query("
+    UPDATE {PREFIX}accounts
     SET    temp_reset_password = '$encrypted_password'
     WHERE  account_id = $account_id
       ");

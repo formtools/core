@@ -5,6 +5,10 @@ use FormTools\FieldTypes;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\Themes;
+use FormTools\Views;
+use FormTools\ViewFields;
+use FormTools\ViewFilters;
+use FormTools\ViewTabs;
 
 
 $view_fields_sortable_id = "view_fields";
@@ -23,11 +27,11 @@ if (isset($request["update_view"])) {
 
 $form_info   = Forms::getForm($form_id);
 $form_fields = Fields::getFormFields($form_id, array("include_field_type_info" => true));
-$view_info   = ft_get_view($view_id);
+$view_info   = Views::getView($view_id);
 
 $form_database_column_info = Forms::getFormColumnNames($form_id);
 $view_clients  = ft_get_view_clients($view_id);
-$view_tabs     = ft_get_view_tabs($view_id);
+$view_tabs     = ViewTabs::getViewTabs($view_id);
 $grouped_fields = ViewFields::getGroupedViewFields($view_id);
 $field_types = FieldTypes::getFieldTypeNames();
 
@@ -108,7 +112,7 @@ foreach ($form_info["client_info"] as $client) {
 
 // get the ID of the previous and next field options. We should probably cache this, but until I'm sure
 // it's slowing things down, we'll keep it simple
-$ordered_view_ids = ft_get_view_ids($form_id, true);
+$ordered_view_ids = Views::getViewIds($form_id, true);
 $previous_view_link = "<span class=\"light_grey\">{$LANG["phrase_previous_view"]}</span>";
 $next_view_link = "<span class=\"light_grey\">{$LANG["phrase_next_view"]}</span>";
 $num_views = count($ordered_view_ids);

@@ -42,8 +42,8 @@ function core_field_types__update($old_version_info, $new_version_info)
 		}
 		if (!empty($option_list_setting_id))
 		{
-			mysql_query("
-			  UPDATE {$g_table_prefix}field_types
+			$db->query("
+			  UPDATE {PREFIX}field_types
 			  SET    raw_field_type_map_multi_select_id = $option_list_setting_id
 			  WHERE  field_type_id = $select_field_type_id AND
 			         raw_field_type_map_multi_select_id IS NULL
@@ -64,8 +64,8 @@ function core_field_types__update($old_version_info, $new_version_info)
 		}
 		if (!empty($option_list_setting_id))
 		{
-			mysql_query("
-			  UPDATE {$g_table_prefix}field_types
+			$db->query("
+			  UPDATE {PREFIX}field_types
 			  SET    raw_field_type_map_multi_select_id = $option_list_setting_id
 			  WHERE  field_type_id = $multi_select_field_type_id AND
 			         raw_field_type_map_multi_select_id IS NULL
@@ -87,8 +87,8 @@ function core_field_types__update($old_version_info, $new_version_info)
 		}
 		if (!empty($option_list_setting_id))
 		{
-			mysql_query("
-			  UPDATE {$g_table_prefix}field_types
+			$db->query("
+			  UPDATE {PREFIX}field_types
 			  SET    raw_field_type_map_multi_select_id = $option_list_setting_id
 			  WHERE  field_type_id = $radios_field_type_id AND
 			         raw_field_type_map_multi_select_id IS NULL
@@ -109,8 +109,8 @@ function core_field_types__update($old_version_info, $new_version_info)
 		}
 		if (!empty($option_list_setting_id))
 		{
-			mysql_query("
-			  UPDATE {$g_table_prefix}field_types
+			$db->query("
+			  UPDATE {PREFIX}field_types
 			  SET    raw_field_type_map_multi_select_id = $option_list_setting_id
 			  WHERE  field_type_id = $checkboxes_field_type_id AND
 			         raw_field_type_map_multi_select_id IS NULL

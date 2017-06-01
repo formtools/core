@@ -184,14 +184,14 @@ class Forms {
 
         // build our query
         $query = "
-            INSERT INTO {$g_table_prefix}form_$form_id ($col_names_str submission_date, last_modified_date, ip_address, is_finalized)
+            INSERT INTO {PREFIX}form_$form_id ($col_names_str submission_date, last_modified_date, ip_address, is_finalized)
             VALUES ($col_values_str '$now', '$now', '$ip_address', 'yes')
         ";
 
         // add the submission to the database (if form_tools_ignore_submission key isn't set by either the form or a module)
         $submission_id = "";
         if (!isset($form_data["form_tools_ignore_submission"])) {
-            $result = mysql_query($query);
+            $result = $db->query($query);
 
             if (!$result) {
                 $page_vars = array("message_type" => "error", "error_code" => 304, "error_type" => "system",
@@ -566,7 +566,7 @@ class Forms {
         foreach ($form_fields as $field_info) {
             if (preg_match("/field(\d+)/", $field_info["field_name"], $matches)) {
                 $field_id  = $field_info["field_id"];
-                mysql_query("
+                $db->query("
                     UPDATE {PREFIX}form_fields
                     SET    field_title = '$field_name_prefix $order',
                     col_name = 'col_$order'
@@ -589,7 +589,7 @@ class Forms {
 
             if (!empty($queries)) {
                 $insert_values = implode(",", $queries);
-                mysql_query("
+                $db->query("
                     INSERT INTO {PREFIX}client_forms (account_id, form_id)
                     VALUES $insert_values
                 ");
@@ -1550,7 +1550,7 @@ class Forms {
         }
 
         // delete all form Views
-        $views_result = mysql_query("SELECT view_id FROM {PREFIX}views WHERE form_id = $form_id");
+        $views_result = $db->query("SELECT view_id FROM {PREFIX}views WHERE form_id = $form_id");
         while ($info = mysql_fetch_assoc($views_result)) {
             ft_delete_view($info["view_id"]);
         }
@@ -1558,7 +1558,7 @@ class Forms {
         // remove any field settings
         foreach ($form_fields as $field_info) {
             $field_id = $field_info["field_id"];
-            mysql_query("DELETE FROM {PREFIX}field_settings WHERE field_id = $field_id");
+            $db->query("DELETE FROM {PREFIX}field_settings WHERE field_id = $field_id");
         }
 
         // as with many things in the script, potentially we need to return a vast range of information from this last function. But
@@ -1800,7 +1800,7 @@ class Forms {
                 $db->bind("form_id", $form_id);
                 $db->execute();
 
-                $view_ids = ft_get_view_ids($form_id);
+                $view_ids = Views::getViewIds($form_id);
                 foreach ($view_ids as $view_id) {
                     $db->query("DELETE FROM {PREFIX}client_views WHERE view_id = :view_id");
                     $db->bind("view_id", $view_id);
@@ -1832,7 +1832,7 @@ class Forms {
                     $db->execute();
 
                     // also delete any orphaned records in the View omit list
-                    $view_ids = ft_get_view_ids($form_id);
+                    $view_ids = Views::getViewIds($form_id);
                     foreach ($view_ids as $view_id) {
                         $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE view_id = :view_id AND $client_id_clause");
                         $db->bind("view_id", $view_id);
@@ -1842,7 +1842,7 @@ class Forms {
                 // for some reason, the administrator has assigned NO clients to this private form. So, delete all clients
                 // associated with the Views
                 } else {
-                    $view_ids = ft_get_view_ids($form_id);
+                    $view_ids = Views::getViewIds($form_id);
                     foreach ($view_ids as $view_id) {
                         $db->query("DELETE FROM {PREFIX}client_views WHERE view_id = :view_id");
                         $db->bind("view_id", $view_id);
@@ -2000,8 +2000,8 @@ class Forms {
                     $field_id      = $setting_info["field_id"];
                     $setting_id    = $setting_info["new_setting_id"];
                     $setting_value = $setting_info["setting_value"];
-                    mysql_query("
-          INSERT INTO {$g_table_prefix}field_settings (field_id, setting_id, setting_value)
+                    $db->query("
+          INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
           VALUES ($field_id, $setting_id, '$setting_value')
         ");
                 }
@@ -2012,7 +2012,7 @@ class Forms {
         // of those changed, we need to update the database
         $db_col_changes     = array();
         $db_col_change_hash = array(); // added later. Could use refactoring...
-        $table_name = "{$g_table_prefix}form_{$form_id}";
+        $table_name = "{PREFIX}form_{$form_id}";
         foreach ($field_info as $curr_field_info)
         {
             if ($curr_field_info["col_name_changed"] == "no" && $curr_field_info["field_size_changed"] == "no")
@@ -2048,8 +2048,8 @@ class Forms {
                         $col_name   = $changes["col_name"];
                         $field_size = $changes["field_size"];
 
-                        @mysql_query("
-            UPDATE {$g_table_prefix}form_fields
+                        @$db->query("
+            UPDATE {PREFIX}form_fields
             SET    col_name   = '$col_name',
                    field_size = '$field_size'
             WHERE  field_id = $field_id
@@ -2082,7 +2082,7 @@ class Forms {
             if ($is_system_field == "yes")
             {
                 $query = "
-        UPDATE {$g_table_prefix}form_fields
+        UPDATE {PREFIX}form_fields
         SET    field_title = '$display_name',
                include_on_redirect = '$include_on_redirect',
                list_order = $list_order,
@@ -2093,7 +2093,7 @@ class Forms {
             else
             {
                 $query = "
-        UPDATE {$g_table_prefix}form_fields
+        UPDATE {PREFIX}form_fields
         SET    field_name = '$field_name',
                field_title = '$display_name',
                field_size = '$field_size',
@@ -2106,7 +2106,7 @@ class Forms {
                   ";
             }
 
-            mysql_query($query)
+            $db->query($query)
             or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
         }
 

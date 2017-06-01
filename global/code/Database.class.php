@@ -91,10 +91,10 @@ class Database
 
     // if required, set all queries as UTF-8 (enabled by default)
     if ($g_unicode)
-    @mysql_query("SET NAMES 'utf8'", $link);
+    @$db->query("SET NAMES 'utf8'", $link);
 
     if ($g_set_sql_mode)
-    @mysql_query("SET SQL_MODE=''", $link);
+    @$db->query("SET SQL_MODE=''", $link);
 
     if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"]))
     ft_check_sessions_timeout();

@@ -35,8 +35,10 @@ require_once(__DIR__ . "/code/Upgrade.class.php");
 require_once(__DIR__ . "/code/User.class.php");
 require_once(__DIR__ . "/code/validation.php");
 require_once(__DIR__ . "/code/Views.class.php");
+require_once(__DIR__ . "/code/ViewColumns.class.php");
 require_once(__DIR__ . "/code/ViewFields.class.php");
 require_once(__DIR__ . "/code/ViewFilters.class.php");
+require_once(__DIR__ . "/code/ViewTabs.class.php");
 
 
 // autoload dependencies
