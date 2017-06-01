@@ -857,7 +857,7 @@ function _ft_get_search_submissions_select_clause($columns)
 
 		// just in case. This prevents empty column names (which shouldn't get here, but do if something
 		// goes wrong) getting into the column list
-		$columns = ft_array_remove_empty_els($columns);
+		$columns = General::arrayRemoveEmptyEls($columns);
 
 		$select_clause = join(", ", $columns);
 	}

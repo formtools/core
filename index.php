@@ -18,7 +18,7 @@ Core::init();
 
 // only verify the core tables exist if there wasn't a problem upgrading
 //if (!($g_upgrade_info["upgraded"] && !$g_upgrade_info["success"])) {
-//    ft_verify_core_tables_exist();
+//    General::verifyCoreTablesExist();
 //}
 
 // if this user is already logged in, redirect them to their specified login page

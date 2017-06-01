@@ -36,7 +36,7 @@ $fields_page = General::loadField("fields_page", "fields_page", 1);
 $form_fields = Fields::getFormFields($form_id, array("page" => $fields_page, "num_fields_per_page" => $num_fields_per_page));
 $total_form_fields = Fields::getNumFormFields($form_id);
 
-$reserved_words = ft_get_mysql_reserved_words();
+$reserved_words = General::getMysqlReservedWords();
 $escaped_words = array();
 foreach ($reserved_words as $word) {
 	$escaped_words[] = "\"$word\"";

@@ -368,7 +368,7 @@ switch ($action) {
 		break;
 
 	case "get_upgrade_form_html":
-		$components = ft_get_formtools_installed_components();
+		$components = General::getFormtoolsInstalledComponents();
 		echo "<form action=\"http://www.formtools.org/upgrade.php\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
 		while (list($key, $value) = each($components))
 		{

@@ -116,7 +116,7 @@ if (isset($_SESSION["ft"]["new_search"]) && $_SESSION["ft"]["new_search"] == "ye
 list($prev_link_html, $search_results_link_html, $next_link_html) = _ft_code_get_link_html($form_id, $view_id, $submission_id, $search["results_per_page"]);
 
 // construct the page label
-$submission_placeholders = ft_get_submission_placeholders($form_id, $submission_id);
+$submission_placeholders = General::getSubmissionPlaceholders($form_id, $submission_id);
 $edit_submission_page_label = General::evalSmartyString($form_info["edit_submission_page_label"], $submission_placeholders);
 
 $validation_js = FieldValidation::generateSubmissionJsValidation($grouped_fields);

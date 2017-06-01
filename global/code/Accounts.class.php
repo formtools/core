@@ -381,7 +381,7 @@ class Accounts {
         $email        = $account_info["email"];
 
         // one final check: confirm the email is defined & valid
-        if (empty($email) || !ft_is_valid_email($email))
+        if (empty($email) || !General::isValidEmail($email))
         {
             $success = false;
             $message = $LANG["validation_email_not_found_or_invalid"];
@@ -390,7 +390,7 @@ class Accounts {
 
         $account_id   = $account_info["account_id"];
         $username     = $account_info["username"];
-        $new_password = ft_generate_password();
+        $new_password = General::generatePassword();
         $encrypted_password = md5(md5($new_password));
 
         // update the database with the new password (encrypted). As of 2.1.0 there's a second field to store the

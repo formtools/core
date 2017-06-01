@@ -188,7 +188,7 @@ END;
             if ($flag == "ellipsis") {
                 $new_string = mb_substr($str, 0, $length) . "...";
             } else {
-                $parts = mb_str_split($str, $length);
+                $parts = General::mbStrSplit($str, $length);
                 $new_string = join("<br />", $parts);
             }
         }
@@ -975,7 +975,416 @@ END;
     }
 
 
+    /**
+     * Undoes the "helpfulness" of Magic Quotes.
+     *
+     * @param mixed $input
+     * @return mixed
+     */
+    public static function ft_undo_magic_quotes($input)
+    {
+        if (!get_magic_quotes_gpc()) {
+            return $input;
+        }
+
+        if (is_array($input)) {
+            $output = array();
+            foreach ($input as $k=>$i) {
+                $output[$k] = General::undoMagicQuotes($i);
+            }
+        } else {
+            $output = stripslashes($input);
+        }
+
+        return $output;
+    }
 
 
+    /**
+     * Recursively strips tags from an array / string.
+     *
+     * @param mixed $input an array or string
+     * @return mixes
+     */
+    public static function stripTags($input)
+    {
+        if (is_array($input)) {
+            $output = array();
+            foreach ($input as $k=>$i) {
+                $output[$k] = General::stripTags($i);
+            }
+        } else {
+            $output = strip_tags($input);
+        }
+
+        return $output;
+    }
+
+
+    /**
+     * Checks a user-defined string is a valid MySQL datetime.
+     *
+     * @param string $datetime
+     * @return boolean
+     */
+    public static function isValidDatetime($datetime)
+    {
+        if (preg_match("/^(\d{4})-(\d{2})-(\d{2}) ([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/", $datetime, $matches)) {
+            if (checkdate($matches[2], $matches[3], $matches[1])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * Also called on the login page. This does a quick test to confirm the database tables exist as they should.
+     * If not, it throws a serious error and prevents the user from logging in.
+     */
+    public static function verifyCoreTablesExist()
+    {
+        $db = Core::$db;
+        $core_tables = Core::getCoreTables();
+        $db_name = General::getCleanDbEntity(Core::getDbName());
+
+        $db->query("SHOW TABLES FROM $db_name");
+        $db->execute();
+
+        $found_tables = array();
+        foreach ($db->fetchAll() as $row) {
+            $found_tables[] = $row[0];
+        }
+
+        $all_tables_found = true;
+        $missing_tables = array();
+        foreach ($core_tables as $table_name) {
+            if (!in_array("{PREFIX}$table_name", $found_tables)) {
+                $all_tables_found = false;
+                $missing_tables[] = "{PREFIX}$table_name";
+            }
+        }
+
+        if (!$all_tables_found) {
+            $missing_tables_str = "<blockquote><pre>" . implode("\n", $missing_tables) . "</pre></blockquote>";
+            General::displaySeriousError("Form Tools couldn't find all the database tables. Please check your /global/config.php file to confirm the <b>\$g_table_prefix</b> setting. The following tables are missing: {$missing_tables_str}");
+            exit;
+        }
+    }
+
+
+    /**
+     * Added in 2.1.0, to get around a problem with database names having hyphens in them. I named the function
+     * generically because it may come in handy for escaping other db aspects, like col names etc.
+     *
+     * @param string $str
+     * @param string
+     */
+    public static function getCleanDbEntity($str)
+    {
+        if (strpos($str, "-") !== false) {
+            $str = "`$str`";
+        }
+        return $str;
+    }
+
+
+    /**
+     * Helper function to remove all empty strings from an array.
+     *
+     * @param array $array
+     * @return array
+     */
+    public static function arrayRemoveEmptyEls($array)
+    {
+        $updated_array = array();
+        foreach ($array as $el) {
+            if (!empty($el)) {
+                $updated_array[] = $el;
+            }
+        }
+        return $updated_array;
+    }
+
+
+    /**
+     * A multibyte version of str_split. Splits a string into chunks and returns the pieces in
+     * an array.
+     *
+     * @param string $string The string to manipulate.
+     * @param integer $split_length The number of characters in each chunk.
+     * @return array an array of chunks, each of size $split_length. The last index contains the leftovers.
+     *      If <b>$split_length</b> is less than 1, return false.
+     */
+    public static function mbStrSplit($string, $split_length = 1)
+    {
+        if ($split_length < 1) {
+            return false;
+        }
+
+        $result = array();
+        for ($i=0; $i<mb_strlen($string); $i+=$split_length) {
+            $result[] = mb_substr($string, $i, $split_length);
+        }
+
+        return $result;
+    }
+
+
+    /**
+     * Extracted from validate_fields. Simple function to test if a string is an email or not.
+     *
+     * @param string $str
+     * @return boolean
+     */
+    public static function isValidEmail($str)
+    {
+        $regexp = "/^[a-z0-9]+([_\\.-][a-z0-9]+)*@([a-z0-9]+([\.-][a-z0-9]+)*)+\\.[a-z]{2,}$/i";
+        return preg_match($regexp, $str);
+    }
+
+
+    /**
+     * Returns a list of MySQL reserved words, to prevent the user accidentally entering a database field name
+     * that has a special meaning for MySQL.
+     */
+    public static function getMysqlReservedWords()
+    {
+        $root_dir = Core::getRootDir();
+
+        $words = @file("$root_dir/global/misc/mysql_reserved_words.txt");
+
+        $clean_words = array();
+        foreach ($words as $word) {
+            $word = trim($word);
+            if (!empty($word) && !in_array($word, $clean_words)) {
+                $clean_words[] = $word;
+            }
+        }
+
+        return $clean_words;
+    }
+
+
+    /**
+     * A case insensitive version of in_array.
+     */
+    public static function inArrayCaseInsensitive($value, $array)
+    {
+        foreach ($array as $item) {
+            if (is_array($item)) {
+                $return = General::inArrayCaseInsensitive($value, $item);
+            } else {
+                $return = strtolower($item) == strtolower($value);
+            }
+
+            if ($return) {
+                return $return;
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * A simple helper function to convert any string to a "slug" - an alphanumeric, "_" and/or "-" string
+     * for use in (e.g.) generating filenames.
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function createSlug($string)
+    {
+        $str = trim($string);
+        $str = preg_replace('/[^a-zA-Z0-9]/', '_', $str);
+        $str = preg_replace('/_{2,}/', "_", $str);
+
+        return $str;
+    }
+
+
+    /**
+     * Generates a random password of a certain length.
+     *
+     * @param integer $length the number of characters in the password
+     * @return string the password
+     */
+    public static function generatePassword($length = 8)
+    {
+        $password = "";
+        $possible = "0123456789abcdfghjkmnpqrstvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_-";
+        $i = 0;
+
+        // add random characters to $password until $length is reached
+        while ($i < $length) {
+            // pick a random character from the possible ones
+            $char = substr($possible, mt_rand(0, strlen($possible)-1), 1);
+
+            // we don't want this character if it's already in the password
+            if (!strstr($password, $char)) {
+                $password .= $char;
+                $i++;
+            }
+        }
+
+        return $password;
+    }
+
+
+    /**
+     * This was added in 2.1.0. and replaces ft_build_and_cache_upgrade_info() which really wasn't necessary.
+     * It returns a hash of information to pass in a hidden form when the user clicks "Update".
+     */
+    public static function getFormtoolsInstalledComponents()
+    {
+        $core_version = Core::getCoreVersion();
+        $release_date = Core::getReleaseDate();
+        $release_type = Core::getReleaseType();
+
+        $settings = Settings::get();
+
+        // a hash storing the installed component info
+        $components = array();
+
+        $version = $core_version;
+        if ($release_type == "alpha") {
+            $version = "{$core_version}-alpha-{$release_date}";
+        } else if ($release_type == "beta") {
+            $version = "{$core_version}-beta-{$release_date}";
+        }
+
+        $components["m"]   = $version;
+        $components["rt"]  = $release_type;
+        $components["rd"]  = $release_date;
+        $components["api"] = $settings["api_version"];
+
+        // not sure about this, but I've added it for backward compatibility, just in case...
+        if ($release_type == "beta") {
+            $components["beta"] = "yes";
+            $components["bv"] = $version;
+        }
+
+        // get the theme info
+        $themes = Themes::getList();
+        $count = 1;
+        foreach ($themes as $theme_info) {
+            $components["t{$count}"]  = $theme_info["theme_folder"];
+            $components["tv{$count}"] = $theme_info["theme_version"];
+            $count++;
+        }
+
+        // get the module info
+        $modules = Modules::getList();
+        $count = 1;
+        foreach ($modules as $module_info) {
+            $components["m{$count}"]  = $module_info["module_folder"];
+            $components["mv{$count}"] = $module_info["version"];
+            $count++;
+        }
+
+        return $components;
+    }
+
+
+    /**
+     * Generates the placeholders for a particular form submission. This is used in the email templates, and here and there
+     * for providing placeholder functionality to fields (like the "Edit Submission Label" textfield for a form, where they can
+     * enter placeholders populated here).
+     *
+     * This returns ALL available placeholders for a form, regardless of View.
+     *
+     * @param integer $form_id
+     * @param integer $submission_id
+     * @param array $client_info a hash of information about the appropriate user (optional)
+     * @return array a hash of placeholders and their replacement values (e.g. $arr["FORMURL"] => 17)
+     */
+    public static function getSubmissionPlaceholders($form_id, $submission_id, $client_info = "")
+    {
+        $root_url = Core::getRootUrl();
+
+        $placeholders = array();
+
+        $settings        = Settings::get();
+        $form_info       = Forms::getForm($form_id);
+        $submission_info = Submissions::getSubmission($form_id, $submission_id);
+        $admin_info      = Administrator::getAdminInfo();
+        $file_field_type_ids = FieldTypes::getFileFieldTypeIds();
+        $field_types     = FieldTypes::get(true);
+
+        // now loop through the info stored for this particular submission and for this particular field,
+        // add the custom submission responses to the placeholder hash
+
+        $form_field_params = array(
+            "include_field_type_info"   => true,
+            "include_field_settings"    => true,
+            "evaluate_dynamic_settings" => true
+        );
+        $form_fields = Fields::getFormFields($form_id, $form_field_params);
+
+        foreach ($submission_info as $field_info) {
+            $field_id      = $field_info["field_id"];
+            $field_name    = $field_info["field_name"];
+            $field_type_id = $field_info["field_type_id"];
+
+            if ($field_info["is_system_field"] == "no") {
+                $placeholders["QUESTION_$field_name"] = $field_info["field_title"];
+            }
+
+            if (in_array($field_type_id, $file_field_type_ids)) {
+                $field_settings = Fields::getFieldSettings($field_id);
+                $placeholders["FILENAME_$field_name"] = $field_info["content"];
+                $placeholders["FILEURL_$field_name"]  = "{$field_settings["folder_url"]}/{$field_info["content"]}";
+            } else {
+                $detailed_field_info = array();
+                foreach ($form_fields as $curr_field_info) {
+                    if ($curr_field_info["field_id"] != $field_id) {
+                        continue;
+                    }
+                    $detailed_field_info = $curr_field_info;
+                    break;
+                }
+
+                $params = array(
+                    "form_id"       => $form_id,
+                    "submission_id" => $submission_id,
+                    "value"         => $field_info["content"],
+                    "field_info"    => $detailed_field_info,
+                    "field_types"   => $field_types,
+                    "settings"      => $settings,
+                    "context"       => "email_template"
+                );
+                $value = FieldTypes::generateViewableField($params);
+                $placeholders["ANSWER_$field_name"] = $value;
+
+                // for backward compatibility
+                if ($field_name == "core__submission_date") {
+                    $placeholders["SUBMISSIONDATE"] = $value;
+                } else if ($field_name == "core__last_modified") {
+                    $placeholders["LASTMODIFIEDDATE"] = $value;
+                } else if ($field_name == "core__ip_address") {
+                    $placeholders["IPADDRESS"] = $value;
+                }
+            }
+        }
+
+        // other misc placeholders
+        $placeholders["ADMINEMAIL"]   = $admin_info["email"];
+        $placeholders["FORMNAME"]     = $form_info["form_name"];
+        $placeholders["FORMURL"]      = $form_info["form_url"];
+        $placeholders["SUBMISSIONID"] = $submission_id;
+        $placeholders["LOGINURL"]     = $root_url . "/index.php";
+
+        if (!empty($client_info)) {
+            $placeholders["EMAIL"]       = $client_info["email"];
+            $placeholders["FIRSTNAME"]   = $client_info["first_name"];
+            $placeholders["LASTNAME"]    = $client_info["last_name"];
+            $placeholders["COMPANYNAME"] = $client_info["company_name"];
+        }
+
+        extract(Hooks::processHookCalls("end", compact("placeholders"), array("placeholders")), EXTR_OVERWRITE);
+
+        return $placeholders;
+    }
 }
 

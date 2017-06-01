@@ -23,6 +23,7 @@ require_once(__DIR__ . "/code/Menus.class.php");
 require_once(__DIR__ . "/code/Modules.class.php");
 require_once(__DIR__ . "/code/OptionLists.class.php");
 require_once(__DIR__ . "/code/Pages.class.php");
+require_once(__DIR__ . "/code/polyfills.php");
 require_once(__DIR__ . "/code/Sessions.class.php");
 require_once(__DIR__ . "/code/Settings.class.php");
 require_once(__DIR__ . "/code/Submissions.class.php");
@@ -31,8 +32,8 @@ require_once(__DIR__ . "/code/Themes.class.php");
 require_once(__DIR__ . "/code/Translations.class.php");
 require_once(__DIR__ . "/code/Upgrade.class.php");
 require_once(__DIR__ . "/code/User.class.php");
-require_once(__DIR__ . "/code/Views.class.php");
 require_once(__DIR__ . "/code/validation.php");
+require_once(__DIR__ . "/code/Views.class.php");
 
 // autoload dependencies
 require_once(__DIR__ . "/../vendor/autoload.php");
