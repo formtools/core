@@ -363,7 +363,7 @@ class ViewFields
                 SELECT *, vf.list_order as list_order, vf.is_new_sort_group as view_field_is_new_sort_group
                 FROM   {PREFIX}view_fields vf, {PREFIX}form_fields ff
                 WHERE  group_id = :group_id AND
-                     vf.field_id = ff.field_id
+                       vf.field_id = ff.field_id
                 ORDER BY vf.list_order
             ");
             $db->bind("group_id", $group_id);
@@ -470,20 +470,18 @@ class ViewFields
      *
      * @return array an array of searchable database column names
      */
-    function ft_get_view_searchable_fields($view_id = "", $fields = array())
+    public static function getViewSearchableFields($view_id = "", $fields = array())
     {
-        if (!empty($view_id) && is_numeric($view_id))
-        {
-            $view_info = ft_get_view($view_id);
-            $fields    = $view_info["fields"];
+        if (!empty($view_id) && is_numeric($view_id)) {
+            $view_info = Views::getView($view_id);
+            $fields = $view_info["fields"];
         }
         $searchable_columns = array();
-        foreach ($fields as $field_info)
-        {
-            if ($field_info["is_searchable"] == "yes")
+        foreach ($fields as $field_info) {
+            if ($field_info["is_searchable"] == "yes") {
                 $searchable_columns[] = $field_info["col_name"];
+            }
         }
-
         return $searchable_columns;
     }
 
@@ -496,23 +494,20 @@ class ViewFields
      * @param integer $view_id
      * @return array a list of field IDs
      */
-    function _ft_get_editable_view_fields($view_id)
+    public static function getEditableViewFields($view_id)
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
-        $query = mysql_query("
+        $db->query("
             SELECT field_id
-            FROM   {$g_table_prefix}view_fields
+            FROM   {PREFIX}view_fields
             WHERE  is_editable = 'yes' AND
-                   view_id = $view_id
+                   view_id = :view_id
         ");
+        $db->bind("view_id", $view_id);
+        $db->execute();
 
-        $field_ids = array();
-        while ($row = mysql_fetch_assoc($query)) {
-            $field_ids[] = $row["field_id"];
-        }
-
-        return $field_ids;
+        return $db->fetchAll();
     }
 
 }

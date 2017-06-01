@@ -61,7 +61,7 @@ function ft_get_view($view_id, $custom_params = array())
 	$view_info["client_info"] = ft_get_view_clients($view_id);
 	$view_info["columns"]     = ft_get_view_columns($view_id);
 	$view_info["fields"]      = ViewFields::getViewFields($view_id, $params);
-	$view_info["filters"]     = ft_get_view_filters($view_id);
+	$view_info["filters"]     = ViewFilters::getViewFilters($view_id);
 	$view_info["tabs"]        = ft_get_view_tabs($view_id);
 	$view_info["client_omit_list"] = (isset($view_info["access_type"]) && $view_info["access_type"] == "public") ?
 		ft_get_public_view_omit_list($view_id) : array();
@@ -594,12 +594,12 @@ function ft_update_view($view_id, $info)
 {
 	global $LANG;
 
-	// update each of the tabs. Be nice to only update the changed ones...
+	// update each of the tabs
 	_ft_update_view_main_settings($view_id, $info);
 	_ft_update_view_columns_settings($view_id, $info);
 	ViewFields::updateViewFieldSettings($view_id, $info);
 	_ft_update_view_tab_settings($view_id, $info);
-	_ft_update_view_filter_settings($view_id, $info);
+	ViewFilters::updateViewFilterSettings($view_id, $info);
 
 	$success = true;
 	$message = $LANG["notify_view_updated"];
@@ -755,7 +755,7 @@ function ft_get_grouped_views($form_id, $custom_params = array())
 			$view_info["columns"] = ft_get_view_columns($view_id);
 			$view_info["fields"]  = ViewFields::getViewFields($view_id);
 			$view_info["tabs"]    = ft_get_view_tabs($view_id, true);
-			$view_info["filters"] = ft_get_view_filters($view_id, "all");
+			$view_info["filters"] = ViewFilters::getViewFilters($view_id);
 			$views[] = $view_info;
 		}
 
@@ -1016,7 +1016,7 @@ function _ft_cache_view_stats($form_id, $view_id = "")
 
 	foreach ($view_ids as $view_id)
 	{
-		$filters = ft_get_view_filter_sql($view_id);
+		$filters = ViewFilters::getViewFilterSql($view_id);
 
 		// if there aren't any filters, just set the submission count & first submission date to the same
 		// as the parent form

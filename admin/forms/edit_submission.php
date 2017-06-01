@@ -7,7 +7,7 @@ use FormTools\Forms;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
-
+use FormTools\ViewFields;
 
 Core::init();
 Core::$user->checkAuth("admin");
@@ -29,7 +29,7 @@ $_SESSION["ft"]["last_link_page_{$form_id}"] = "edit";
 
 // get a list of all editable fields in the View. This is used for security purposes for the update function and to
 // determine whether the page contains any editable fields
-$editable_field_ids = _ft_get_editable_view_fields($view_id);
+$editable_field_ids = ViewFields::getEditableViewFields($view_id);
 
 // update the submission
 $failed_validation = false;
@@ -104,7 +104,7 @@ $editable_tab_fields = array_intersect($page_field_ids, $editable_field_ids);
 // They need to exactly correspond to the ordering of the search results or they don't make sense
 $search = isset($_SESSION["ft"]["current_search"]) ? $_SESSION["ft"]["current_search"] : array();
 if (isset($_SESSION["ft"]["new_search"]) && $_SESSION["ft"]["new_search"] == "yes") {
-	$searchable_columns = ft_get_view_searchable_fields("", $view_info["fields"]);
+	$searchable_columns = ViewFields::getViewSearchableFields("", $view_info["fields"]);
 
 	// extract the original search settings and get the list of IDs
 	$submission_ids = ft_get_search_submission_ids($form_id, $view_id, $search["results_per_page"], $search["order"],

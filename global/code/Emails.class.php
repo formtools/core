@@ -1609,7 +1609,7 @@ class Emails {
                     // find a submission that fits into the first in the list
                     $where_clause = "";
                     if (!empty($email_template["when_sent_view_ids"])) {
-                        $sql_clauses = ft_get_view_filter_sql($email_template["when_sent_view_ids"][0]);
+                        $sql_clauses = ViewFilters::getViewFilterSql($email_template["when_sent_view_ids"][0]);
                         if (!empty($sql_clauses)) {
                             $where_clause = "WHERE (" . join(" AND ", $sql_clauses) . ") ";
                         }

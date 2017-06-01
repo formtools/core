@@ -7,7 +7,7 @@ use FormTools\Forms;
 use FormTools\General;
 use FormTools\Settings;
 use FormTools\Themes;
-
+use FormTools\ViewFields;
 
 Core::init();
 Core::$user->checkAuth("client");
@@ -40,7 +40,7 @@ $_SESSION["ft"]["last_submission_id"] = $submission_id;
 
 // get a list of all editable fields in the View. This is used both for security purposes
 // for the update function and to determine whether the page contains any editable fields
-$editable_field_ids = _ft_get_editable_view_fields($view_id);
+$editable_field_ids = ViewFields::getEditableViewFields($view_id);
 
 // handle POST requests
 $failed_validation = false;
@@ -116,7 +116,7 @@ $search = isset($_SESSION["ft"]["current_search"]) ? $_SESSION["ft"]["current_se
 // search result set. This is used to build the internal "<< previous   next >>" nav on this details page
 if (isset($_SESSION["ft"]["new_search"]) && $_SESSION["ft"]["new_search"] == "yes") {
 	// extract the original search settings and get the list of IDs
-	$searchable_columns = ft_get_view_searchable_fields("", $view_info["fields"]);
+	$searchable_columns = ViewFields::getViewSearchableFields("", $view_info["fields"]);
 	$submission_ids = ft_get_search_submission_ids($form_id, $view_id, $search["results_per_page"], $search["order"],
 		$search["search_fields"], $searchable_columns);
 

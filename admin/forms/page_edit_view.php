@@ -34,8 +34,8 @@ $field_types = FieldTypes::getFieldTypeNames();
 $new_view_submission_defaults = ft_get_new_view_submission_defaults($view_id);
 
 // this returns ALL filters: standard and client map
-$standard_filters   = ft_get_view_filters($view_id, "standard");
-$client_map_filters = ft_get_view_filters($view_id, "client_map");
+$standard_filters   = ViewFilters::getViewFilters($view_id, "standard");
+$client_map_filters = ViewFilters::getViewFilters($view_id, "client_map");
 $num_standard_filters   = count($standard_filters);
 $num_client_map_filters = count($client_map_filters);
 

@@ -10,10 +10,12 @@
  */
 
 
-// -------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 
 namespace FormTools;
+
+use PDOException;
 
 
 class ViewFilters
@@ -30,29 +32,28 @@ class ViewFilters
      * @return array This function returns an array of multi-dimensional arrays of hashes.
      *      Each index of the main array contains the filters for
      */
-    function ft_get_view_filters($view_id, $filter_type = "all")
+    public static function getViewFilters($view_id, $filter_type = "all")
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
         $filter_type_clause = "";
-        if ($filter_type == "standard")
+        if ($filter_type == "standard") {
             $filter_type_clause = "AND filter_type = 'standard'";
-        else if ($filter_type == "client_map")
+        } else if ($filter_type == "client_map") {
             $filter_type_clause = "AND filter_type = 'client_map'";
+        }
 
-        $result = mysql_query("
-    SELECT *
-    FROM   {$g_table_prefix}view_filters
-    WHERE  view_id = $view_id
-           $filter_type_clause
-    ORDER BY filter_id
-      ");
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}view_filters
+            WHERE  view_id = :view_id
+                   $filter_type_clause
+            ORDER BY filter_id
+        ");
+        $db->bind("view_id", $view_id);
+        $db->execute();
 
-        $infohash = array();
-        while ($filter = mysql_fetch_assoc($result))
-            $infohash[] = $filter;
-
-        return $infohash;
+        return $db->fetchAll();
     }
 
 
@@ -62,46 +63,44 @@ class ViewFilters
      * @param integer $view_id
      * @return array
      */
-    function ft_get_view_filter_sql($view_id)
+    public static function getViewFilterSql($view_id)
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
         $is_client_account = (isset($_SESSION["ft"]["account"]["account_type"]) &&
-        $_SESSION["ft"]["account"]["account_type"] == "client") ? true : false;
+            $_SESSION["ft"]["account"]["account_type"] == "client") ? true : false;
 
         $placeholders = array();
-        if ($is_client_account)
-        {
+        if ($is_client_account) {
             $account_info = $_SESSION["ft"]["account"];
 
             $placeholders = array(
-            "account_id"   => $account_info["account_id"],
-            "first_name"   => $account_info["first_name"],
-            "last_name"    => $account_info["last_name"],
-            "email"        => $account_info["email"],
-            "settings__company_name" => $account_info["settings"]["company_name"]
+                "account_id"   => $account_info["account_id"],
+                "first_name"   => $account_info["first_name"],
+                "last_name"    => $account_info["last_name"],
+                "email"        => $account_info["email"],
+                "settings__company_name" => $account_info["settings"]["company_name"]
             );
         }
 
         extract(Hooks::processHookCalls("start", compact("placeholders", "is_client_account"), array("placeholders", "is_client_account")), EXTR_OVERWRITE);
 
-        $result = mysql_query("
-    SELECT filter_type, filter_sql
-    FROM   {$g_table_prefix}view_filters
-    WHERE  view_id = $view_id
-    ORDER BY filter_id
-      ");
+        $db->query("
+            SELECT filter_type, filter_sql
+            FROM   {PREFIX}view_filters
+            WHERE  view_id = :view_id
+            ORDER BY filter_id
+        ");
+        $db->bind("view_id", $view_id);
+        $db->execute();
 
         $infohash = array();
-        while ($filter = mysql_fetch_assoc($result))
-        {
-            if ($filter["filter_type"] == "standard")
+        foreach ($db->fetchAll() as $filter) {
+            if ($filter["filter_type"] == "standard") { // TODO move to constants
                 $infohash[] = $filter["filter_sql"];
-            else
-            {
+            } else {
                 // if this is a client account, evaluate the Client Map placeholders
-                if ($is_client_account)
-                {
+                if ($is_client_account) {
                     $infohash[] = General::evalSmartyString($filter["filter_sql"], $placeholders);
                 }
             }
@@ -117,55 +116,53 @@ class ViewFilters
      * @param integer $view_id
      * @param array $info
      */
-    function _ft_update_view_filter_settings($view_id, $info)
+    public static function updateViewFilterSettings($view_id, $info)
     {
-        global $g_table_prefix, $g_debug, $LANG;
+        $db = Core::$db;
+        $LANG = Core::$L;
+        $debug_enabled = Core::isDebugEnabled();
 
+        // hmm... weird.
         $form_id = $info["form_id"];
 
         // delete all old filters for this View. The two update view filter functions that follow re-insert
         // the most recent View info
-        mysql_query("DELETE FROM {$g_table_prefix}view_filters WHERE view_id = $view_id");
+        $db->query("DELETE FROM {PREFIX}view_filters WHERE view_id = :view_id");
+        $db->bind("view_id", $view_id);
+        $db->execute();
 
         // get a hash of field_id => col name for use in building the SQL statements
         $form_fields = Fields::getFormFields($form_id, array("include_field_type_info" => true));
         $field_columns = array();
-        for ($i=0; $i<count($form_fields); $i++)
-        {
+        for ($i=0; $i<count($form_fields); $i++) {
             $field_columns[$form_fields[$i]["field_id"]] = array(
-            "col_name"      => $form_fields[$i]["col_name"],
-            "is_date_field" => $form_fields[$i]["is_date_field"]
+                "col_name"      => $form_fields[$i]["col_name"],
+                "is_date_field" => $form_fields[$i]["is_date_field"]
             );
         }
 
-        $standard_filter_errors   = _ft_update_view_standard_filters($view_id, $info, $field_columns);
-        $client_map_filter_errors = _ft_update_view_client_map_filters($view_id, $info, $field_columns);
+        $standard_filter_errors   = ViewFilters::updateViewStandardFilters($view_id, $info, $field_columns);
+        $client_map_filter_errors = ViewFilters::updateViewClientMapFilters($view_id, $info, $field_columns);
 
-        if (empty($standard_filter_errors) && empty($client_map_filter_errors))
+        if (empty($standard_filter_errors) && empty($client_map_filter_errors)) {
             return array(true, $LANG["notify_filters_updated"]);
-        else
-        {
+        } else {
             $success = false;
             $message = $LANG["notify_filters_not_updated"];
 
             $errors = array_merge($standard_filter_errors, $client_map_filter_errors);
-
-            if ($g_debug) {
+            if ($debug_enabled) {
                 array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
                 $message .= "<br /><br />" . join("<br />", $errors);
             }
-
             return array($success, $message);
         }
     }
 
 
-    /**
-     * A helper function, called by _ft_update_view_filter_settings. This updates the standard filters for a View.
-     */
-    function _ft_update_view_standard_filters($view_id, $info, $field_columns)
+    public static function updateViewStandardFilters($view_id, $info, $field_columns)
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
         // note that we call this MAX_standard_filters, not num_standard_filters. This is because
         // the value passed from the page may not be accurate. The JS doesn't reorder everything when
@@ -178,35 +175,31 @@ class ViewFilters
         $num_standard_filters = 0;
 
         // loop through all standard filters and add each to the database
-        for ($i=1; $i<=$max_standard_filters; $i++)
-        {
+        for ($i=1; $i<=$max_standard_filters; $i++) {
+
             // if this filter doesn't have a field specified, just ignore the row
-            if (!isset($info["standard_filter_{$i}_field_id"]) || empty($info["standard_filter_{$i}_field_id"]))
+            if (!isset($info["standard_filter_{$i}_field_id"]) || empty($info["standard_filter_{$i}_field_id"])) {
                 continue;
+            }
 
             $field_id = $info["standard_filter_{$i}_field_id"];
             $col_name = $field_columns[$field_id]["col_name"];
-            $values   = "";
 
             // date field
-            if ($field_columns[$field_id]["is_date_field"] == "yes")
-            {
+            if ($field_columns[$field_id]["is_date_field"] == "yes") {
                 $values   = $info["standard_filter_{$i}_filter_date_values"];
                 $operator = $info["standard_filter_{$i}_operator_date"];
 
                 // build the SQL statement
                 $sql_operator = ($operator == "after") ? ">" : "<";
                 $sql = "$col_name $sql_operator '$values'";
-            }
-            else
-            {
+            } else {
                 $values   = $info["standard_filter_{$i}_filter_values"];
                 $operator = $info["standard_filter_{$i}_operator"];
 
                 // build the SQL statement(s)
                 $sql_operator = "";
-                switch ($operator)
-                {
+                switch ($operator) {
                     case "equals":
                         $sql_operator = "=";
                         $null_test = "IS NULL";
@@ -231,33 +224,34 @@ class ViewFilters
 
                 $sql_statements_arr = array();
                 $values_arr = explode("|", $values);
-                foreach ($values_arr as $value)
-                {
+
+                foreach ($values_arr as $value) {
+
                     // if this is a LIKE operator (not_like, like), wrap the value in %..%
                     $escaped_value = $value;
-                    if ($operator == "like" || $operator == "not_like")
+                    if ($operator == "like" || $operator == "not_like") {
                         $escaped_value = "%$value%";
+                    }
 
                     $trimmed_value = trim($value);
 
                     // NOT LIKE and != need to be handled separately. By default, Form Tools sets new blank field values to NULL.
                     // But SQL queries that test for != "Yes" or NOT LIKE "Yes" should intuitively return ALL results without
                     // "Yes" - and that includes NULL values. So, we need to add an additional check to also return null values
-                    if ($operator == "not_like" || $operator == "not_equals")
-                    {
+                    if ($operator == "not_like" || $operator == "not_equals") {
                         // empty string being searched AGAINST; i.e. checking the field is NOT empty or LIKE empty
-                        if (empty($trimmed_value))
+                        if (empty($trimmed_value)) {
                             $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' AND $col_name IS NOT NULL";
-                        else
+                        } else {
                             $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name IS NULL";
-                    }
-                    else
-                    {
+                        }
+                    } else {
                         // if the value is EMPTY, we need to add an additional IS NULL / IS NOT NULL check
-                        if (empty($trimmed_value))
+                        if (empty($trimmed_value)) {
                             $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name $null_test";
-                        else
+                        } else {
                             $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value'";
+                        }
                     }
                 }
 
@@ -265,31 +259,48 @@ class ViewFilters
             }
             $sql = "(" . addslashes($sql) . ")";
 
-            $query = mysql_query("
-      INSERT INTO {$g_table_prefix}view_filters (view_id, filter_type, field_id, operator, filter_values, filter_sql)
-      VALUES      ($view_id, 'standard', $field_id, '$operator', '$values', '$sql')
-        ");
+            try {
+                $db->query("
+                    INSERT INTO {PREFIX}view_filters (view_id, filter_type, field_id, operator, filter_values, filter_sql)
+                    VALUES      ($view_id, 'standard', $field_id, '$operator', '$values', '$sql')
+                ");
+                $db->bindAll(array(
+                    "view_id" => $view_id,
+                    "field_id" => $field_id,
+                    "operator" => $operator,
+                    "filter_values" => $values,
+                    "filter_sql" => $sql
+                ));
+                $db->execute();
 
-            if (!$query)
-                $errors[] = mysql_error();
-            else
+                // assumption... this doesn't run if an exception is thrown in the block above
                 $num_standard_filters++;
+
+            } catch (PDOException $e) {
+                $errors[] = $e->getMessage();
+            }
         }
 
         // keep track of whether this View has a standard filter or not
         $has_standard_filter = "no";
-        if ($num_standard_filters > 0)
+        if ($num_standard_filters > 0) {
             $has_standard_filter = "yes";
+        }
 
-        @mysql_query("UPDATE {$g_table_prefix}views SET has_standard_filter = '$has_standard_filter' WHERE view_id = $view_id");
+        $db->query("UPDATE {PREFIX}views SET has_standard_filter = :has_standard_filter WHERE view_id = :view_id");
+        $db->bindAll(array(
+            "has_standard_filter" => $has_standard_filter,
+            "view_id" => $view_id
+        ));
+        $db->execute();
 
         return $errors;
     }
 
 
-    function _ft_update_view_client_map_filters($view_id, $info, $field_columns)
+    public static function updateViewClientMapFilters($view_id, $info, $field_columns)
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
         // note that we call this MAX_client_map_filters, not num_client_map_filters. This is because
         // the value passed from the page may not be accurate. The JS doesn't reorder everything when
@@ -302,12 +313,13 @@ class ViewFilters
         $num_client_map_filters = 0;
 
         // loop through all client map filters and add each to the database
-        for ($i=1; $i<=$max_client_map_filters; $i++)
-        {
+        for ($i=1; $i<=$max_client_map_filters; $i++) {
+
             // if this filter doesn't have a field or a client field specified,
             if (!isset($info["client_map_filter_{$i}_field_id"]) || empty($info["client_map_filter_{$i}_field_id"]) ||
-            !isset($info["client_map_filter_{$i}_client_field"]) || empty($info["client_map_filter_{$i}_client_field"]))
+                !isset($info["client_map_filter_{$i}_client_field"]) || empty($info["client_map_filter_{$i}_client_field"])) {
                 continue;
+            }
 
             $field_id     = $info["client_map_filter_{$i}_field_id"];
             $operator     = $info["client_map_filter_{$i}_operator"];
@@ -315,27 +327,18 @@ class ViewFilters
 
             // build the SQL statement(s)
             $sql_operator = "";
-            switch ($operator)
-            {
+            switch ($operator) {
                 case "equals":
                     $sql_operator = "=";
-                    $null_test = "IS NULL";
-                    $join = " OR ";
                     break;
                 case "not_equals":
                     $sql_operator = "!=";
-                    $null_test = "IS NOT NULL";
-                    $join = " AND ";
                     break;
                 case "like":
                     $sql_operator = "LIKE";
-                    $null_test = "IS NULL";
-                    $join = " OR ";
                     break;
                 case "not_like":
                     $sql_operator = "NOT LIKE";
-                    $null_test = "IS NOT NULL";
-                    $join = " AND ";
                     break;
             }
 
@@ -347,28 +350,46 @@ class ViewFilters
             $sql_client_field = "{\$$client_field}";
 
             // second, if this is a LIKE operator (not_like, like), wrap the value even further with a %...%
-            if ($operator == "like" || $operator == "not_like")
+            if ($operator == "like" || $operator == "not_like") {
                 $sql_client_field = "%$sql_client_field%";
+            }
 
             $sql = addslashes("($col_name $sql_operator '$sql_client_field')");
 
-            $query = mysql_query("
-      INSERT INTO {$g_table_prefix}view_filters (view_id, filter_type, field_id, operator, filter_values, filter_sql)
-      VALUES      ($view_id, 'client_map', $field_id, '$operator', '$original_client_field', '$sql')
-        ");
+            try {
+                $db->query("
+                    INSERT INTO {PREFIX}view_filters (view_id, filter_type, field_id, operator, filter_values, filter_sql)
+                    VALUES      (:view_id, 'client_map', :field_id, :operator, :original_client_field, :sql)
+                ");
 
-            if (!$query)
-                $errors[] = mysql_error();
-            else
+                $db->bindAll(array(
+                    "view_id" => $view_id,
+                    "field_id" => $field_id,
+                    "operator" => $operator,
+                    "filter_values" => $original_client_field,
+                    "filter_sql" => $sql
+                ));
+                $db->execute();
+
+                // assumption doesn't execute if exception above
                 $num_client_map_filters++;
+            } catch (PDOException $e) {
+                $errors[] = $e->getMessage();
+            }
         }
 
         // keep track of whether this View has a client map filter or not
         $has_client_map_filter = "no";
-        if ($num_client_map_filters > 0)
+        if ($num_client_map_filters > 0) {
             $has_client_map_filter = "yes";
+        }
 
-        @mysql_query("UPDATE {$g_table_prefix}views SET has_client_map_filter = '$has_client_map_filter' WHERE view_id = $view_id");
+        $db->query("UPDATE {PREFIX}views SET has_client_map_filter = :has_client_map_filter WHERE view_id = :view_id");
+        $db->bindAll(array(
+            "has_client_map_filter" => $has_client_map_filter,
+            "view_id" => $view_id
+        ));
+        $db->execute();
 
         return $errors;
     }

@@ -135,12 +135,11 @@ function ft_get_submission_count($form_id, $view_id = "")
 	global $g_table_prefix;
 
 	$filter_sql_clause = "";
-	if (!empty($view_id))
-	{
-		$filter_sql = ft_get_view_filter_sql($view_id);
-
-		if (!empty($filter_sql))
-			$filter_sql_clause = "AND" . join(" AND ", $filter_sql);
+	if (!empty($view_id)) {
+		$filter_sql = ViewFilters::getViewFilterSql($view_id);
+		if (!empty($filter_sql)) {
+            $filter_sql_clause = "AND" . join(" AND ", $filter_sql);
+        }
 	}
 
 	// get the form submission info
@@ -561,7 +560,7 @@ function _ft_get_search_submissions_select_clause($columns)
  */
 function _ft_get_search_submissions_view_filter_clause($view_id)
 {
-	$view_filters = ft_get_view_filter_sql($view_id);
+	$view_filters = ViewFilters::getViewFilterSql($view_id);
 	$filter_clause = "";
 	if (!empty($view_filters))
 		$filter_clause = "AND " . join(" AND ", $view_filters);
@@ -764,7 +763,7 @@ function ft_check_view_contains_submission($form_id, $view_id, $submission_id)
 {
 	global $g_table_prefix;
 
-	$filter_sql = ft_get_view_filter_sql($view_id);
+	$filter_sql = ViewFilters::getViewFilterSql($view_id);
 
 	if (empty($filter_sql))
 		return true;
