@@ -41,6 +41,14 @@ class ViewTabs
     }
 
 
+    public static function deleteViewTabs($view_id) {
+        $db = Core::$db;
+        $db->query("DELETE FROM {PREFIX}view_tabs WHERE view_id = :view_id");
+        $db->bind("view_id", $view_id);
+        $db->execute();
+    }
+
+
     /**
      * Verbose name, but this function returns a hash of group_id => tab number for a particular View. In
      * other words, it looks at the View field groups to find out which tab each one belongs to.

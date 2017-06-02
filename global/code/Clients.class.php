@@ -355,7 +355,7 @@ class Clients {
         $info = array();
         foreach ($client_forms as $form_info) {
             $form_id = $form_info["form_id"];
-            $views = ft_get_form_views($form_id, $account_id);
+            $views = Views::getFormViews($form_id, $account_id);
 
             $view_ids = array();
             foreach ($views as $view_info) {

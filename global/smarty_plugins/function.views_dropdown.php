@@ -1,5 +1,7 @@
 <?php
 
+use FormTools\Views;
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -36,7 +38,7 @@ function smarty_function_views_dropdown($params, &$smarty)
 
   // if the calling page has the view information already calculated, it can pass it to this function to
   // reduce the amount of work it needs to do. Otherwise, it will just do a separate request for the data
-  $grouped_views = (isset($params["grouped_views"])) ? $params["grouped_views"] : ft_get_grouped_views($form_id, array("omit_hidden_views" => $omit_hidden_views));
+  $grouped_views = (isset($params["grouped_views"])) ? $params["grouped_views"] : Views::getGroupedViews($form_id, array("omit_hidden_views" => $omit_hidden_views));
 
   $attributes = array(
     "id"       => $name_id,

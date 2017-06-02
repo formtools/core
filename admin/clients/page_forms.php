@@ -50,14 +50,14 @@ $form_views_js = implode(";\n", $form_views_js_info);
 $all_form_views = array();
 foreach ($forms as $form_info) {
 	$form_id = $form_info["form_id"];
-	$all_form_views[$form_id] = ft_get_form_views($form_id);
+	$all_form_views[$form_id] = Views::getFormViews($form_id);
 }
 
-$client_forms = ft_search_forms($client_id, true);
+$client_forms = Forms::searchForms($client_id, true);
 $updated_client_forms = array();
 foreach ($client_forms as $form_info) {
 	$form_id = $form_info["form_id"];
-	$form_info["views"] = ft_get_form_views($form_id, $client_id);
+	$form_info["views"] = Views::getFormViews($form_id, $client_id);
 	$updated_client_forms[] = $form_info;
 }
 

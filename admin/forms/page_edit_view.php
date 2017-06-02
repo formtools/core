@@ -30,7 +30,7 @@ $form_fields = Fields::getFormFields($form_id, array("include_field_type_info" =
 $view_info   = Views::getView($view_id);
 
 $form_database_column_info = Forms::getFormColumnNames($form_id);
-$view_clients  = ft_get_view_clients($view_id);
+$view_clients  = Views::getViewClients($view_id);
 $view_tabs     = ViewTabs::getViewTabs($view_id);
 $grouped_fields = ViewFields::getGroupedViewFields($view_id);
 $field_types = FieldTypes::getFieldTypeNames();

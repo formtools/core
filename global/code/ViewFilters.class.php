@@ -57,6 +57,14 @@ class ViewFilters
     }
 
 
+    public static function deleteViewFilters($view_id) {
+        $db = Core::$db;
+        $db->query("DELETE FROM {PREFIX}view_filters WHERE view_id = :view_id");
+        $db->bind("view_id", $view_id);
+        $db->execute();
+    }
+
+
     /**
      * Returns an array of SQL filters for a View.
      *

@@ -31,7 +31,7 @@ if (!Forms::checkFormExists($form_id)) {
 // there's nothing to show. In that case, just redirect them to the Views tab, where an error / warning message
 // will appear in the page
 $view_id       = General::loadField("view_id", "form_{$form_id}_view_id");
-$grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true));
+$grouped_views = Views::getGroupedViews($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true));
 
 if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
 	// here, we know that the first View group has at least one item. [hmm...]

@@ -1,6 +1,8 @@
 <?php
 
+use FormTools\Core;
 use FormTools\Forms;
+use FormTools\Pages;
 use FormTools\Themes;
 use FormTools\Views;
 
@@ -12,10 +14,10 @@ $form_info = Forms::getForm($form_id);
 // view order to ensure that whatever group is being deleted actually has the View that the user expects
 if (isset($request["update_views"]) || isset($request["{$sortable_id}_sortable__delete_group"])) {
 	$request["sortable_id"] = $sortable_id;
-	list($g_success, $g_message) = ft_update_views($form_id, $request);
+	list($g_success, $g_message) = Views::updateViews($request);
 
 	if (isset($request["{$sortable_id}_sortable__delete_group"])) {
-        list($g_success, $g_message) = ft_delete_view_group($request["{$sortable_id}_sortable__delete_group"]);
+        list($g_success, $g_message) = Views::deleteViewGroup($request["{$sortable_id}_sortable__delete_group"]);
     }
 }
 
@@ -24,13 +26,16 @@ if (isset($request["recreate_initial_view"])) {
 	list($g_success, $g_message) = Views::addDefaultView($form_id);
 }
 
-$grouped_views = ft_get_grouped_views($form_id, array("omit_empty_groups" => false, "include_clients" => true));
+$grouped_views = Views::getGroupedViews($form_id, array("omit_empty_groups" => false, "include_clients" => true));
 
 // figure out how many Views we're dealing with
 $num_views = 0;
 foreach ($grouped_views as $curr_group) {
     $num_views += count($curr_group["views"]);
 }
+
+
+$LANG = Core::$L;
 
 // compile the template information
 $page_vars["page"]       = "views";

@@ -92,7 +92,7 @@ class ViewFields
 
 
     /**
-     * Deletes an individual View field. Called when a field is deleted.
+     * Deletes an specific View field. Called when a field is deleted.
      *
      * @param integer $view_id
      * @param integer $field_id
@@ -107,12 +107,6 @@ class ViewFields
             "field_id" => $field_id
         ));
         $db->execute();
-        $db->query("DELETE FROM {PREFIX}view_fields WHERE view_id = :view_id AND field_id = :field_id");
-        $db->bindAll(array(
-            "view_id" => $view_id,
-            "field_id" => $field_id
-        ));
-        $db->execute();
 
         $db->query("DELETE FROM {PREFIX}view_filters WHERE view_id = :view_id AND field_id = :field_id");
         $db->bindAll(array(
@@ -121,8 +115,35 @@ class ViewFields
         ));
         $db->execute();
 
+        $db->query("DELETE FROM {PREFIX}view_fields WHERE view_id = :view_id AND field_id = :field_id");
+        $db->bindAll(array(
+            "view_id" => $view_id,
+            "field_id" => $field_id
+        ));
+        $db->execute();
+
         // now update the view field order to ensure there are no gaps
         ViewFields::autoUpdateViewFieldOrder($view_id);
+    }
+
+
+    /**
+     * Deletes all fields in a View.
+     * @param $view_id
+     */
+    public static function deleteViewFields($view_id) {
+        $db = Core::$db;
+
+        $db->query("DELETE FROM {PREFIX}view_columns WHERE view_id = :view_id");
+        $db->bind("view_id", $view_id);
+        $db->execute();
+
+        ViewFilters::deleteViewFilters($view_id);
+
+        $db->query("DELETE FROM {PREFIX}view_fields WHERE view_id = :view_id");
+        $db->bind("view_id", $view_id);
+        $db->execute();
+
     }
 
 
@@ -177,9 +198,7 @@ class ViewFields
         $new_groups   = explode(",", $info["{$sortable_id}_sortable__new_groups"]);
 
         // empty the old View fields; we're about to update them
-        $db->query("DELETE FROM {PREFIX}view_fields WHERE view_id = :view_id");
-        $db->bind("view_id", $view_id);
-        $db->execute();
+        ViewFields::deleteViewFields($view_id);
 
         // if there are any deleted groups, delete 'em! (N.B. we're not interested in deleted groups
         // that were just created in the page
@@ -189,9 +208,7 @@ class ViewFields
                 if (preg_match("/^NEW/", $group_id)) {
                     continue;
                 }
-                $db->query("DELETE FROM {PREFIX}list_groups WHERE group_id = :group_id");
-                $db->bind("group_id", $group_id);
-                $db->execute();
+                ListGroups::deleteListGroup($group_id);
             }
         }
 

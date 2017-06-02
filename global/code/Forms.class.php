@@ -1806,10 +1806,7 @@ class Forms {
                     $db->bind("view_id", $view_id);
                     $db->execute();
 
-                    $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE view_id = :view_id");
-                    $db->bind("view_id", $view_id);
-                    $db->execute();
-                }
+                    Views::deletePublicViewOmitList($view_id);                }
                 break;
 
             // remove any records from the client_view and public_view_omit_list tables concerned clients NOT associated
@@ -1848,9 +1845,7 @@ class Forms {
                         $db->bind("view_id", $view_id);
                         $db->execute();
 
-                        $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE view_id = :view_id");
-                        $db->bind("view_id", $view_id);
-                        $db->execute();
+                        Views::deletePublicViewOmitList($view_id);
                     }
                 }
                 break;

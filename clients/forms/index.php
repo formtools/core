@@ -27,7 +27,7 @@ $view_id = General::loadField("view_id", "form_{$form_id}_view_id");
 General::checkClientMayView($account_id, $form_id, $view_id);
 
 // this returns all and ONLY the Views accessible by this client
-$grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
+$grouped_views = Views::getGroupedViews($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
 
 if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
 	if (count($grouped_views[0]["views"]) == 0) {
