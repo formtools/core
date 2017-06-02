@@ -1,5 +1,7 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Core;
 use FormTools\Forms;
 use FormTools\General;
@@ -47,6 +49,8 @@ if (isset($_SESSION["ft"]["last_link_page_{$form_id}"]) && isset($_SESSION["ft"]
 	$_SESSION["ft"]["last_link_page_{$form_id}"] == "edit") {
 	$view_submissions_link = "edit_submission.php?form_id={$form_id}&submission_id={$_SESSION["ft"]["last_submission_id_{$form_id}"]}";
 }
+
+$LANG = Core::$L;
 
 $same_page = General::getCleanPhpSelf();
 $tabs = array(

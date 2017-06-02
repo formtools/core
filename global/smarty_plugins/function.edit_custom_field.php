@@ -4,6 +4,7 @@ use FormTools\General;
 use FormTools\OptionLists;
 use FormTools\Settings;
 use FormTools\Submissions;
+use FormTools\Templates;
 
 
 /**
@@ -21,35 +22,18 @@ use FormTools\Submissions;
  */
 function smarty_function_edit_custom_field($params, &$smarty)
 {
-  global $LANG, $g_root_url, $g_root_dir, $g_multi_val_delimiter;
+    global $g_root_url, $g_root_dir, $g_multi_val_delimiter;
 
-  if (empty($params["form_id"]))
-  {
-    $smarty->trigger_error("assign: missing 'form_id' parameter.");
-    return;
-  }
-  if (empty($params["field_info"]))
-  {
-    $smarty->trigger_error("assign: missing 'field_info' parameter.");
-    return;
-  }
-  if (empty($params["field_types"]))
-  {
-    $smarty->trigger_error("assign: missing 'field_types' parameter.");
-    return;
-  }
-  if (empty($params["settings"]))
-  {
-    $smarty->trigger_error("assign: missing 'settings' parameter.");
-    return;
-  }
+    if (!Templates::hasRequiredParams($smarty, $params, array("form_id", "field_info", "field_types", "settings"))) {
+        return;
+    }
 
-  $form_id     = $params["form_id"];
-  $field_info  = $params["field_info"];
-  $field_types = $params["field_types"];
-  $settings    = $params["settings"];
+    $form_id     = $params["form_id"];
+    $field_info  = $params["field_info"];
+    $field_types = $params["field_types"];
+    $settings    = $params["settings"];
 
-  $submission_id = isset($params["submission_id"]) ? $params["submission_id"] : "";
+    $submission_id = isset($params["submission_id"]) ? $params["submission_id"] : "";
 
 
   // loop through the field types and store the one we're interested in in $field_type_info

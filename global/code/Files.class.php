@@ -48,9 +48,8 @@ class Files {
     }
 
     /**
-     * This is called by the Submissions::deleteSubmission() and Submissions::deleteSubmissions() function. It's passed
-     * all relevant information about the submission & file fields that need to be deleted. The function is just a stub
-     * to allow file upload modules to add their hooks to.
+     * This is passed all necessary information about the submission & file fields that need to be deleted. Modules
+     * then tie into this method via hooks to handle deletion of the actual files.
      *
      * Modules that extend this function should return $problems. That should be an array of hashes. Each hash
      * having keys "filename" and "error". Since the calling functions will blithely delete the submissions even
@@ -64,7 +63,7 @@ class Files {
      * @param string $context. Just used to pass a little more info to the hook. This is the context in which this
      *                    function is being called; i.e. the function name / action.
      */
-    public static function deleteSubmissionFiles($form_id, $file_field_info, $context = "")
+    public static function deleteSubmissionFiles($form_id, $file_field_info)
     {
         $success = true;
         $problems = array();
@@ -435,4 +434,59 @@ class Files {
         return true;
     }
 
+
+    /**
+     * Deletes all files associated with any submission in the form.
+     */
+    public static function removeFormFiles($form_id, $form_fields)
+    {
+        $db = Core::$db;
+
+        try {
+            $db->query("SELECT submission_id FROM {PREFIX}form_{$form_id}");
+            $db->execute();
+        } catch (PDOException $e) {
+            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            exit;
+        }
+
+        $file_fields_to_delete = array();
+
+        foreach ($db->fetchAll() as $row) {
+            $submission_id = $row["submission_id"];
+
+            foreach ($form_fields as $form_field_info) {
+                if ($form_field_info["is_file_field"] == "no") {
+                    continue;
+                }
+
+                // I really don't like this... what should be done is do a SINGLE query after this loop is complete
+                // to return a map of field_id to values. That would then update $file_fields_to_delete
+                // with a fraction of the cost
+                $submission_info = Submissions::getSubmissionInfo($form_id, $submission_id);
+                $filename = $submission_info[$form_field_info["col_name"]];
+
+                // if no filename was stored, it was empty - just continue
+                if (empty($filename)) {
+                    continue;
+                }
+
+                $file_fields_to_delete[] = array(
+                    "submission_id" => $submission_id,
+                    "field_id"      => $form_field_info["field_id"],
+                    "field_type_id" => $form_field_info["field_type_id"],
+                    "filename"      => $filename
+                );
+            }
+        }
+
+        $file_delete_problems = array();
+        if (!empty($file_fields_to_delete)) {
+            list($success, $file_delete_problems) = Files::deleteSubmissionFiles($form_id, $file_fields_to_delete);
+        }
+
+        return $file_delete_problems;
+    }
 }
+
+

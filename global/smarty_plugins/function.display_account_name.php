@@ -12,18 +12,20 @@ use FormTools\Accounts;
  */
 function smarty_function_display_account_name($params, &$smarty)
 {
-  $account_id = (isset($params["account_id"])) ? $params["account_id"] : "";
-  $format     = (isset($params["format"])) ? $params["format"] : "first_last"; // first_last, or last_first
+    $account_id = (isset($params["account_id"])) ? $params["account_id"] : "";
+    $format     = (isset($params["format"])) ? $params["format"] : "first_last"; // first_last, or last_first
 
-  if (empty($account_id))
-    return;
+    if (empty($account_id)) {
+        return "";
+    }
 
-  $account_info = Accounts::getAccountInfo($account_id);
+    $account_info = Accounts::getAccountInfo($account_id);
 
-  if ($format == "first_last")
-    $html = "{$account_info["first_name"]} {$account_info["last_name"]}";
-  else
-    $html = "{$account_info["last_name"]}, {$account_info["first_name"]}";
+    if ($format == "first_last") {
+        $html = "{$account_info["first_name"]} {$account_info["last_name"]}";
+    } else {
+        $html = "{$account_info["last_name"]}, {$account_info["first_name"]}";
+    }
 
-  return $html;
+    return $html;
 }

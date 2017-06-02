@@ -1,9 +1,11 @@
-## Form Tools Core
+# Form Tools Core
 
-This repo contains the source code for the Form Tools Core. The Core provides the minimum application
-code to run Form Tools on your server. At this point (April 2017), this is not the case: it also requires you to include
-the [Core Field Types](https://github.com/formtools/module-core_field_types) module. This will change: that module 
-will be moved to the Core. It's fine that it's a separate component, but it belongs in this repo.
+This repo contains the source code for the Form Tools Core. The Core provides the basic code needed to run Form Tools
+on your server, with the exception of the [Core Field Types](https://github.com/formtools/module-core_field_types)
+module. That will need to be uploaded you your `/modules` folder.
+
+The other modules, themes and API all just expand on the core functionality to provide additional, optional features
+should you need them.
 
 
 ### Repo
@@ -27,8 +29,8 @@ components... not sure yet)
 
 ### PHP version compatibility
 
-- Everything up to *Form Tools Core 2.2.7* supported PHP 4.3 - 5.x.
-- *Form Tools Core 3.0.0* requires PHP 5.3 or later.
+- Everything up to *Form Tools Core 2.2.7* supports PHP 4.3 - 5.x.
+- *Form Tools Core 3.0.0* supports PHP 5.3 and later.
 
 
 ### Installation

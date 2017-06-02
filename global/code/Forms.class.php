@@ -332,6 +332,9 @@ class Forms {
                 Sessions::set("form_{$form_id}_num_submissions", $info["c"]);
             } catch (PDOException $e) {
 
+                // need a softer error here. If the form table doesn't exist, we need to log the issue.
+//                Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+//                exit;
             }
         }
     }
@@ -518,6 +521,7 @@ class Forms {
      */
     public static function createInternalForm($request)
     {
+        $db = Core::$db;
         $LANG = Core::$L;
 
         $rules = array();
@@ -539,7 +543,7 @@ class Forms {
         );
 
         // set up the entry for the form
-        list($success, $message, $new_form_id) = ft_setup_form($config);
+        list($success, $message, $new_form_id) = Forms::setupForm($config);
 
         $form_data = array(
             "form_tools_form_id" => $new_form_id,
@@ -551,7 +555,6 @@ class Forms {
         }
         self::initializeForm($form_data);
 
-        $infohash = array();
         $form_fields = Fields::getFormFields($new_form_id);
 
         $order = 1;
@@ -568,11 +571,16 @@ class Forms {
                 $field_id  = $field_info["field_id"];
                 $db->query("
                     UPDATE {PREFIX}form_fields
-                    SET    field_title = '$field_name_prefix $order',
-                    col_name = 'col_$order'
-                    $field_size_clause
+                    SET    field_title = :field_title,
+                           col_name = :col_name
+                           $field_size_clause
                     WHERE  field_id = $field_id
                 ");
+                $db->bindAll(array(
+                    "field_title" => "$field_name_prefix $order",
+                    "col_name" => "col_$order"
+                ));
+                $db->execute();
                 $order++;
             }
         }
@@ -1281,7 +1289,7 @@ class Forms {
         $LANG = Core::$L;
         $db = Core::$db;
         $db_table_charset = Core::getDbTableCharset();
-        $field_sizes = FieldSizes::get();
+        $FIELD_SIZES = FieldSizes::get();
 
         $form_fields = Fields::getFormFields($form_id);
         $query = "
@@ -1290,12 +1298,10 @@ class Forms {
             PRIMARY KEY(submission_id),\n";
 
         foreach ($form_fields as $field) {
-            // don't add system fields (submission ID, Date, Last Modified & IP address)
             if ($field["is_system_field"] == "yes") {
                 continue;
             }
-
-            $sql_size = $field_sizes[$field["field_size"]]["sql"];
+            $sql_size = $FIELD_SIZES[$field["field_size"]]["sql"];
             $query .= "{$field['col_name']} $sql_size,\n";
         }
 
@@ -1303,10 +1309,11 @@ class Forms {
             last_modified_date DATETIME NOT NULL,
             ip_address VARCHAR(15),
             is_finalized ENUM('yes','no') default 'yes')
-            DEFAULT CHARSET=$db_table_charset";
+            DEFAULT CHARSET = $db_table_charset";
 
         try {
             $db->query($query);
+            $db->execute();
         } catch (PDOException $e) {
             return array(
                 "success" => "0",
@@ -1469,41 +1476,7 @@ class Forms {
 
         $file_delete_problems = array();
         if ($remove_associated_files) {
-            $submission_id_query = $db->query("SELECT submission_id FROM {PREFIX}form_{$form_id}");
-            $file_fields_to_delete = array();
-
-            while ($row = mysql_fetch_assoc($submission_id_query)) {
-                $submission_id = $row["submission_id"];
-
-                foreach ($form_fields as $form_field_info) {
-                    if ($form_field_info["is_file_field"] == "no") {
-                        continue;
-                    }
-
-                    // I really don't like this... what should be done is do a SINGLE query after this loop is complete
-                    // to return a map of field_id to values. That would then update $file_fields_to_delete
-                    // with a fraction of the cost
-                    $submission_info = ft_get_submission_info($form_id, $submission_id);
-                    $filename = $submission_info[$form_field_info["col_name"]];
-
-                    // if no filename was stored, it was empty - just continue
-                    if (empty($filename)) {
-                        continue;
-                    }
-
-                    $file_fields_to_delete[] = array(
-                        "submission_id" => $submission_id,
-                        "field_id"      => $form_field_info["field_id"],
-                        "field_type_id" => $form_field_info["field_type_id"],
-                        "filename"      => $filename
-                    );
-                }
-            }
-
-            if (!empty($file_fields_to_delete)) {
-                list($success, $file_delete_problems) = Files::deleteSubmissionFiles($form_id, $file_fields_to_delete,
-                    "ft_delete_form");
-            }
+            $file_delete_problems = Files::removeFormFiles($form_id, $form_fields);
         }
 
         // remove the table
@@ -1521,10 +1494,6 @@ class Forms {
         $db->execute();
 
         $db->query("DELETE FROM {PREFIX}client_forms WHERE form_id = :form_id");
-        $db->bind("form_id", $form_id);
-        $db->execute();
-
-        $db->query("DELETE FROM {PREFIX}form_export_templates WHERE form_id = :form_id");
         $db->bind("form_id", $form_id);
         $db->execute();
 
@@ -1550,9 +1519,9 @@ class Forms {
         }
 
         // delete all form Views
-        $views_result = $db->query("SELECT view_id FROM {PREFIX}views WHERE form_id = $form_id");
-        while ($info = mysql_fetch_assoc($views_result)) {
-            ft_delete_view($info["view_id"]);
+        $view_ids = Views::getViewIds($form_id);
+        foreach ($view_ids as $view_id) {
+            Views::deleteView($view_id);
         }
 
         // remove any field settings
@@ -1562,7 +1531,7 @@ class Forms {
         }
 
         // as with many things in the script, potentially we need to return a vast range of information from this last function. But
-        // we'l limit
+        // we'll limit it to the file delete problems
         if (!$success) {
             $message = $file_delete_problems;
         }

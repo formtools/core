@@ -30,13 +30,11 @@ class Errors
     line-height: 22px;
   }
   div {
-    -webkit-border-radius: 20px;
-    -moz-border-radius: 20px;
-    border-radius: 20px;
-    border: 1px solid #666666;
+    border-radius: 15px;
+    border: 1px solid #999999;
     padding: 40px;
     background-color: white;
-    width: 600px;
+    width: 800px;
     text-align: left;
     margin: 30px auto;
     word-wrap: break-word;
@@ -54,12 +52,17 @@ END;
      * process and shows an Uh-oh page. This was added in Form Tools 3. Before that, the vast majority of database
      * queries weren't error handled.
      */
-    public static function handleDatabaseError($class, $file, $line, $error) {
+    public static function handleDatabaseError($class, $file, $line, $error)
+    {
+        $header = self::$headerHTML;
+        $footer = self::$footerHTML;
+
         echo <<< END
-  {self::$headerHTML}
+  {$header}
   <h1>Uh-oh.</h1>
   <p>
     The system encountered a serious database error. This should not occur. Please report these details
+    in the Form Tools forums.
   </p>
   <ul>
     <li>Class: {$class}</li>
@@ -67,10 +70,8 @@ END;
     <li>Line: {$line}</li>
     <li>Error: {$error}</li>
   </ul>
-  {$error}
-  {self::$footerHTML}
+  {$footer}
 END;
-
     }
 
     /**
