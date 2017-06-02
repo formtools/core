@@ -328,7 +328,7 @@ class Submissions {
      * @return array Returns an array of hashes. Each index is a separate form field and its value is
      *           a hash of information about it, such as value, field type, field size, etc.
      */
-    private static function getSubmission($form_id, $submission_id, $view_id = "")
+    public static function getSubmission($form_id, $submission_id, $view_id = "")
     {
         $return_arr = array();
 

@@ -141,7 +141,7 @@ class Accounts {
                 SELECT count(*) as c
                 FROM   {PREFIX}account_settings
                 WHERE  setting_name = :setting_name AND
-                       account_id = $account_id
+                       account_id = :account_id
             ");
             $db->bindAll(array(
                 ":setting_name" => $setting_name,
@@ -327,6 +327,7 @@ class Accounts {
         if (!empty($account_id)) {
             $db->bind(":account_id", $account_id);
         }
+
         $db->execute();
         $info = $db->fetch();
 

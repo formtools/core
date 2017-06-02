@@ -295,4 +295,4 @@ var page_ns = {
 }
 END;
 
-Themes::displayPage("admin/forms/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit/index.tpl", $page_vars);

@@ -1,14 +1,13 @@
 <?php
 
-require_once("../../global/library.php");
+require_once("../../../global/library.php");
 
 use FormTools\Core;
 use FormTools\Forms;
 use FormTools\General;
+use FormTools\Modules;
 
 Core::init();
-
-//require("../../global/session_start.php");
 Core::$user->checkAuth("admin");
 
 
@@ -76,7 +75,7 @@ $tabs = array(
 	)
 );
 
-$tabs = ft_module_override_data("admin_edit_form_tabs", $tabs);
+$tabs = Modules::moduleOverrideData("admin_edit_form_tabs", $tabs);
 
 $order     = General::loadField("order", "form_sort_order", "form_name-ASC");
 $keyword   = General::loadField("keyword", "form_search_keyword", "");
@@ -110,41 +109,22 @@ $page_vars["next_tabset_link_label"] = $LANG["phrase_next_form"];
 
 
 // load the appropriate code page
-switch ($page) {
-	case "main":
-		require("page_main.php");
-		break;
-	case "public_form_omit_list":
-		require("page_public_form_omit_list.php");
-		break;
-	case "fields":
-		require("page_fields.php");
-		break;
-	case "files":
-		require("page_files.php");
-		break;
-	case "views":
-		require("page_views.php");
-		break;
-	case "edit_view":
-		require("page_edit_view.php");
-		break;
-	case "public_view_omit_list":
-		require("page_public_view_omit_list.php");
-		break;
-	case "emails":
-		require("page_emails.php");
-		break;
-	case "email_settings":
-		require("page_email_settings.php");
-		break;
-	case "edit_email":
-		require("page_edit_email.php");
-		break;
+$page_map = array(
+    "main" => "page_main.php",
+    "public_form_omit_list" => "page_public_form_omit_list.php",
+    "fields" => "page_fields.php",
+    "views" => "page_views.php",
+    "edit_view" => "page_edit_view.php",
+    "public_view_omit_list" => "page_public_view_omit_list.php",
+    "emails" => "page_emails.php",
+    "email_settings" => "page_email_settings.php",
+    "edit_email" => "page_edit_email.php"
+);
 
-	default:
-		$vals = ft_module_override_data("admin_edit_form_page_name_include", array("page_name" => "page_main.php"));
-		require($vals["page_name"]);
-		break;
+if (isset($page_map[$page])) {
+    require_once($page_map[$page]);
+} else {
+    $vals = Modules::moduleOverrideData("admin_edit_form_page_name_include", array("page_name" => "page_main.php"));
+    require_once($vals["page_name"]);
 }
 

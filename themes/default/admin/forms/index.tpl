@@ -226,7 +226,7 @@
                 {assign var='status' value="<span style=\"color: red\">`$LANG.word_incomplete`</span>"}
                 {assign var='file' value='add/step2.php'}
               {else}
-                {assign var='file' value='edit.php'}
+                {assign var='file' value='edit/'}
               {/if}
 
               {$status}

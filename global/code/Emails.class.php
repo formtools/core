@@ -94,7 +94,7 @@ class Emails {
      * @param integer $create_email_from_email_id this option parameter lets the user create a new email based on
      *      an existing one, saving them the effort of having to re-enter everything.
      */
-    public static function ft_create_blank_email_template($form_id, $create_email_from_email_id = "")
+    public static function createBlankEmailTemplate($form_id, $create_email_from_email_id = "")
     {
         $db = Core::$db;
 

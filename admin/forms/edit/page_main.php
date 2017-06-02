@@ -1,8 +1,9 @@
 <?php
 
+use FormTools\Core;
 use FormTools\Forms;
 use FormTools\Themes;
-
+use FormTools\Pages;
 
 $sortable_id = "multi_page_form_list";
 
@@ -21,21 +22,28 @@ foreach ($form_info["client_info"] as $client_info) {
 
 $num_pages_in_multi_page_form = count($form_info["multi_page_form_urls"]) + 1;
 
+
 // ------------------------------------------------------------------------------------------------
 
-// compile the templates information
-$page_vars["page"]       = "main";
-$page_vars["page_url"]   = Pages::getPageUrl("edit_form_main", array("form_id" => $form_id));
+$root_url = Core::getRootUrl();
+$LANG = Core::$L;
+
+// continued from parent
+$page_vars["page"] = "main";
+$page_vars["page_url"] = Pages::getPageUrl("edit_form_main", array("form_id" => $form_id));
 $page_vars["head_title"] = "{$LANG["phrase_edit_form"]} - {$LANG["word_main"]}";
 $page_vars["form_info"]  = $form_info;
 $page_vars["selected_client_ids"] = $selected_client_ids;
 $page_vars["num_clients_on_omit_list"] = $num_clients_on_omit_list;
 $page_vars["sortable_id"] = $sortable_id;
-$page_vars["js_messages"] = array("validation_no_url", "phrase_check_url", "word_page", "validation_invalid_url",
-	"word_close", "validation_no_form_url", "phrase_form_field_placeholders");
+$page_vars["js_messages"] = array(
+    "validation_no_url", "phrase_check_url", "word_page", "validation_invalid_url",
+    "word_close", "validation_no_form_url", "phrase_form_field_placeholders"
+);
+
 $page_vars["head_string"] =<<< END
-<script src="$g_root_url/global/scripts/manage_forms.js?v=2"></script>
-<script src="$g_root_url/global/scripts/sortable.js?v=2"></script>
+<script src="$root_url/global/scripts/manage_forms.js?v=2"></script>
+<script src="$root_url/global/scripts/sortable.js?v=2"></script>
 END;
 
 $page_vars["head_js"] =<<< END
@@ -101,4 +109,4 @@ $(function() {
 });
 END;
 
-Themes::displayPage("admin/forms/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit/index.tpl", $page_vars);

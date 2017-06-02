@@ -35,29 +35,29 @@
     <table cellpadding="0" cellspacing="1">
     <tr>
       <td class="medium_grey" width="130">{$LANG.phrase_first_name}</td>
-      <td><input type="text" name="first_name" id="first_name" style="width: 150px" value="{$vals.first_name|escape}" /></td>
+      <td><input type="text" name="first_name" id="first_name" style="width: 150px" value="{$vals.first_name|escape|default}" /></td>
     </tr>
     <tr>
       <td class="medium_grey">{$LANG.phrase_last_name}</td>
-      <td><input type="text" name="last_name" style="width: 150px" value="{$vals.last_name|escape}" /></td>
+      <td><input type="text" name="last_name" style="width: 150px" value="{$vals.last_name|escape|default}" /></td>
     </tr>
     <tr>
       <td class="medium_grey">{$LANG.word_email}</td>
-      <td><input type="text" name="email" style="width: 150px" value="{$vals.email|escape}" /></td>
+      <td><input type="text" name="email" style="width: 150px" value="{$vals.email|escape|default}" /></td>
     </tr>
     <tr>
       <td class="medium_grey">{$LANG.word_username}</td>
-      <td><input type="text" name="username" style="width: 100px" value="{$vals.username|escape}" /></td>
+      <td><input type="text" name="username" style="width: 100px" value="{$vals.username|escape|default}" /></td>
     </tr>
     <tr>
       <td valign="top" class="medium_grey">{$LANG.word_password}</td>
       <td>
-        <input type="password" name="password" style="width: 100px" value="{$vals.password}" />
+        <input type="password" name="password" style="width: 100px" value="{$vals.password|default}" />
       </td>
     </tr>
     <tr>
       <td class="medium_grey">{$LANG.phrase_re_enter_password}</td>
-      <td><input type="password" name="password_2" style="width: 100px" value="{$vals.password_2}"/></td>
+      <td><input type="password" name="password_2" style="width: 100px" value="{$vals.password_2|default}"/></td>
     </tr>
     </table>
 

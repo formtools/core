@@ -36,6 +36,7 @@ foreach ($grouped_views as $curr_group) {
 
 
 $LANG = Core::$L;
+$root_url = Core::getRootUrl();
 
 // compile the template information
 $page_vars["page"]       = "views";
@@ -49,8 +50,8 @@ $page_vars["js_messages"] = array("phrase_remove_row", "phrase_create_group", "w
 	"confirm_delete_group", "phrase_create_new_view");
 $page_vars["num_views"] = $num_views;
 $page_vars["head_string"] =<<< END
-<script src="$g_root_url/global/scripts/sortable.js?v=2"></script>
-<script src="$g_root_url/global/scripts/manage_views.js?v=4"></script>
+<script src="$root_url/global/scripts/sortable.js?v=2"></script>
+<script src="$root_url/global/scripts/manage_views.js?v=4"></script>
 END;
 
-Themes::displayPage("admin/forms/edit.tpl", $page_vars);
+Themes::displayPage("admin/forms/edit/index.tpl", $page_vars);

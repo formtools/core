@@ -2159,9 +2159,9 @@ class Forms {
         }
 
         return array(
-        "order_clause" => $order_clause,
-        "where_clause" => $where_clause,
-        "omitted_forms" => $omitted_forms
+            "order_clause" => $order_clause,
+            "where_clause" => $where_clause,
+            "omitted_forms" => $omitted_forms
         );
     }
 
@@ -2173,14 +2173,14 @@ class Forms {
         }
 
         $order_map = array(
-        "form_id-ASC" => "form_id ASC",
-        "form_id-DESC" => "form_id DESC",
-        "form_name-ASC" => "form_name ASC",
-        "form_name-DESC" => "form_name DESC",
-        "form_type-ASC" => "form_type ASC",
-        "form_type-DESC" => "form_type DESC",
-        "status-ASC" => "is_active = 'yes', is_active = 'no', (is_initialized = 'no' AND is_complete = 'no')",
-        "status-DESC" => "(is_initialized = 'no' AND is_complete = 'no'), is_active = 'no', is_active = 'yes'",
+            "form_id-ASC" => "form_id ASC",
+            "form_id-DESC" => "form_id DESC",
+            "form_name-ASC" => "form_name ASC",
+            "form_name-DESC" => "form_name DESC",
+            "form_type-ASC" => "form_type ASC",
+            "form_type-DESC" => "form_type DESC",
+            "status-ASC" => "is_active = 'yes', is_active = 'no', (is_initialized = 'no' AND is_complete = 'no')",
+            "status-DESC" => "(is_initialized = 'no' AND is_complete = 'no'), is_active = 'no', is_active = 'yes'",
         );
 
         if (isset($order_map[$order])) {
