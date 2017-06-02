@@ -5,6 +5,7 @@ use FormTools\FieldTypes;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\Settings;
+use FormTools\Submissions;
 use FormTools\Themes;
 use FormTools\Views;
 
@@ -44,7 +45,7 @@ $form_info = Forms::getForm($form_id);
 $view_info = Views::getView($view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes") {
-	$submission_id = ft_create_blank_submission($form_id, $view_id, true);
+	$submission_id = Submissions::createBlankSubmission($form_id, $view_id, true);
     General::redirect("edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id");
 }
 

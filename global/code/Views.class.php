@@ -1,12 +1,20 @@
 <?php
 
 /**
- * Views.
+ * This file contains all top-level methods relating to form Views. See the other View*.class.php files for more
+ * specific things within Views (ViewFields, ViewFilters).
+ *
+ * @copyright Benjamin Keen 2017
+ * @author Benjamin Keen <ben.keen@gmail.com>
+ * @package 3-0-x
+ * @subpackage Views
  */
 
 // -------------------------------------------------------------------------------------------------
 
 namespace FormTools;
+
+use PDOException;
 
 
 class Views
@@ -240,7 +248,7 @@ class Views
             }
 
             // default submission values
-            $submission_defaults = ft_get_new_view_submission_defaults($create_from_view_id);
+            $submission_defaults = Views::getNewViewSubmissionDefaults($create_from_view_id);
             foreach ($submission_defaults as $row) {
                 $db->query("
                     INSERT INTO {PREFIX}new_view_submission_defaults (view_id, field_id, default_value, list_order)
@@ -256,7 +264,7 @@ class Views
             }
 
             // public View omit list
-            $client_ids = ft_get_public_view_omit_list($create_from_view_id);
+            $client_ids = Views::getPublicViewOmitList($create_from_view_id);
             foreach ($client_ids as $client_id) {
                 $db->query("
                     INSERT INTO {PREFIX}public_view_omit_list (view_id, account_id)
@@ -379,6 +387,7 @@ class Views
 
     public static function deletePublicViewOmitList($view_id)
     {
+        $db = Core::$db;
         $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE view_id = :view_id");
         $db->bind("view_id", $view_id);
         $db->execute();
@@ -391,6 +400,166 @@ class Views
         $db->query("DELETE FROM {PREFIX}client_views WHERE view_id = :view_id");
         $db->bind("view_id", $view_id);
         $db->execute();
+    }
+
+
+    /**
+     * Called by the administrator only. Updates the list of clients on a public View's omit list.
+     *
+     * @param array $info
+     * @param integer $view_id
+     * @return array [0] T/F, [1] message
+     */
+    public static function updatePublicViewOmitList($info, $view_id)
+    {
+        $db = Core::$db;
+        $LANG = Core::$L;
+
+        Views::deletePublicViewOmitList($view_id);
+
+        $client_ids = (isset($info["selected_client_ids"])) ? $info["selected_client_ids"] : array();
+        foreach ($client_ids as $account_id) {
+            $db->query("INSERT INTO {PREFIX}public_view_omit_list (view_id, account_id) VALUES ($view_id, $account_id)");
+        }
+
+        return array(true, $LANG["notify_public_view_omit_list_updated"]);
+    }
+
+
+    /**
+     * Caches the total number of (finalized) submissions in a particular form - or all forms -
+     * in the $_SESSION["ft"]["form_{$form_id}_num_submissions"] key. That value is used on the administrators
+     * main Forms page to list the form submission count.
+     *
+     * @param integer $form_id
+     */
+    public static function cacheViewStats($form_id, $view_id = "")
+    {
+        $db = Core::$db;
+
+        $view_ids = array();
+        if (empty($view_id)) {
+            $view_ids = Views::getViewIds($form_id);
+        } else {
+            $view_ids[] = $view_id;
+        }
+
+        foreach ($view_ids as $view_id) {
+            $filters = ViewFilters::getViewFilterSql($view_id);
+
+            // if there aren't any filters, just set the submission count & first submission date to the same
+            // as the parent form
+            if (empty($filters)) {
+                $_SESSION["ft"]["view_{$view_id}_num_submissions"] = $_SESSION["ft"]["form_{$form_id}_num_submissions"];
+            } else {
+                $filter_clause = join(" AND ", $filters);
+
+                try {
+                    $db->query("
+                        SELECT count(*) as c
+                        FROM   {PREFIX}form_$form_id
+                        WHERE  is_finalized = 'yes' AND
+                               $filter_clause
+                    ");
+                    $db->execute();
+                } catch (PDOException $e) {
+                    Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+                    exit;
+                }
+
+                $info = $db->fetch();
+                $_SESSION["ft"]["view_{$view_id}_num_submissions"] = $info["c"];
+            }
+        }
+    }
+
+
+    /**
+     * A very simple getter function that retrieves an an ordered array of view_id => view name hashes for a
+     * particular form.
+     *
+     * @param integer $form_id
+     * @return array
+     */
+    public static function getViewList($form_id)
+    {
+        $db = Core::$db;
+
+        try {
+            $db->query("
+                SELECT view_id, view_name
+                FROM   {PREFIX}views
+                WHERE  form_id = $form_id
+                ORDER BY view_order
+            ");
+        } catch (PDOException $e) {
+            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            exit;
+        }
+
+        $result = $db->fetchAll();
+
+        extract(Hooks::processHookCalls("end", compact("form_id", "result"), array("result")), EXTR_OVERWRITE);
+
+        return $result;
+    }
+
+
+    /**
+     * Used internally. This is called to figure out which View should be used by default. It actually
+     * just picks the first on in the list of Views.
+     *
+     * @param integer $form_id
+     * @return mixed $view_id the View ID or the empty string if no Views associated with form.
+     */
+    function ft_get_default_view($form_id)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT view_id
+            FROM   {PREFIX}views
+            WHERE  form_id = :form_id
+            ORDER BY view_order
+            LIMIT 1
+        ");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+
+        $view_id = "";
+        $view_info = $db->fetch();
+
+        if (!empty($view_info)) {
+            $view_id = $view_info["view_id"];
+        }
+
+        return $view_id;
+    }
+
+
+    /**
+     * This feature was added in 2.1.0 - it lets administrators define default values for all new submissions
+     * created with the View. This was added to solve a problem where submissions were created in a View where
+     * that new submission wouldn't meet the criteria for inclusion. But beyond that, this is a handy feature to
+     * cut down on configuration time for new data sets.
+     *
+     * @param $view_id
+     * @return array
+     */
+    public static function getNewViewSubmissionDefaults($view_id)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT *
+            FROM {PREFIX}new_view_submission_defaults
+            WHERE view_id = :view_id
+            ORDER BY list_order
+        ");
+        $db->bind("view_id", $view_id);
+        $db->execute();
+
+        return $db->fetchAll();
     }
 
 
@@ -791,7 +960,7 @@ class Views
                 $view_id = $view_info["view_id"];
                 if ($params["include_clients"]) {
                     $view_info["client_info"]      = Views::getViewClients($view_id);
-                    $view_info["client_omit_list"] = ft_get_public_view_omit_list($view_id);
+                    $view_info["client_omit_list"] = Views::getPublicViewOmitList($view_id);
                 }
 
                 $view_info["columns"] = ViewColumns::getViewColumns($view_id);
@@ -839,7 +1008,7 @@ class Views
         $view_info["filters"]     = ViewFilters::getViewFilters($view_id);
         $view_info["tabs"]        = ViewTabs::getViewTabs($view_id);
         $view_info["client_omit_list"] = (isset($view_info["access_type"]) && $view_info["access_type"] == "public") ?
-        ft_get_public_view_omit_list($view_id) : array();
+        Views::getPublicViewOmitList($view_id) : array();
 
         extract(Hooks::processHookCalls("end", compact("view_id", "view_info"), array("view_info")), EXTR_OVERWRITE);
 
@@ -1023,4 +1192,27 @@ class Views
             $db->execute();
         }
     }
+
+
+    /**
+     * Returns an array of account IDs of those clients in the omit list for this public View.
+     *
+     * @param integer $view_id
+     * @return array
+     */
+    public static function getPublicViewOmitList($view_id)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT account_id
+            FROM   {PREFIX}public_view_omit_list
+            WHERE  view_id = :view_id
+        ");
+        $db->bind("view_id", $view_id);
+        $db->execute();
+
+        return $db->fetchAll();
+    }
+
 }

@@ -1,16 +1,18 @@
 <?php
 
+use FormTools\Forms;
 use FormTools\Themes;
+use FormTools\Views;
 
 
 $view_id = $request["view_id"];
 
 if (isset($request["update_public_view_omit_list"])) {
-    list($g_success, $g_message) = ft_update_public_view_omit_list($request, $view_id);
+    list($g_success, $g_message) = Views::updatePublicViewOmitList($request, $view_id);
 }
 
 $form_info = Forms::getForm($form_id);
-$view_omit_list = ft_get_public_view_omit_list($view_id);
+$view_omit_list = Views::getPublicViewOmitList($view_id);
 
 
 // override the form nav links so that it always links to the Views page

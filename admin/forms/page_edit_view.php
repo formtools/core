@@ -35,7 +35,7 @@ $view_tabs     = ViewTabs::getViewTabs($view_id);
 $grouped_fields = ViewFields::getGroupedViewFields($view_id);
 $field_types = FieldTypes::getFieldTypeNames();
 
-$new_view_submission_defaults = ft_get_new_view_submission_defaults($view_id);
+$new_view_submission_defaults = Views::getNewViewSubmissionDefaults($view_id);
 
 // this returns ALL filters: standard and client map
 $standard_filters   = ViewFilters::getViewFilters($view_id, "standard");
@@ -49,7 +49,7 @@ if (isset($request["edit_view_tab"])) {
 	$_SESSION["ft"]["inner_tabs"]["edit_view"] = $edit_view_tab;
 }
 
-$view_omit_list = ft_get_public_view_omit_list($view_id);
+$view_omit_list = Views::getPublicViewOmitList($view_id);
 $num_clients_on_omit_list = count($view_omit_list);
 
 // assumes view_ns.all_form_fields and view_ns.view_tabs JS arrays have been defined in manage_views.js

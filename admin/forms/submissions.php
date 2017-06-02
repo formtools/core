@@ -51,7 +51,7 @@ $form_fields = Fields::getFormFields($form_id, array("include_field_type_info" =
 $view_info   = Views::getView($view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes") {
-	$submission_id = ft_create_blank_submission($form_id, $view_id, true);
+	$submission_id = Submissions::createBlankSubmission($form_id, $view_id, true);
     General::redirect("edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id&message=new_submission");
 }
 
@@ -215,7 +215,7 @@ if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$vi
 // this sets the total number of submissions that the admin can see in this form and View in the form_X_num_submissions
 // and view_X_num_submissions keys
 Forms::cacheFormStats($form_id);
-_ft_cache_view_stats($form_id, $view_id);
+Views::cacheViewStats($form_id, $view_id);
 
 if (!isset($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {
     $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";

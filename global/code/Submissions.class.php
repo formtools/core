@@ -20,7 +20,7 @@ class Submissions {
      * @param integer $view_id
      * @param boolean $is_finalized whether the submission is finalized or not.
      */
-    public static function ft_create_blank_submission($form_id, $view_id, $is_finalized = false)
+    public static function createBlankSubmission($form_id, $view_id, $is_finalized = false)
     {
         $db = Core::$db;
 
