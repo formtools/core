@@ -33,7 +33,7 @@ $grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => tru
 
 // check the current client is permitted to view this information!
 General::checkClientMayView($account_id, $form_id, $view_id);
-if (!ft_check_view_contains_submission($form_id, $view_id, $submission_id)) {
+if (!Submissions::checkViewContainsSubmission($form_id, $view_id, $submission_id)) {
     General::redirect("index.php");
 }
 

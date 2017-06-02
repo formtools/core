@@ -79,7 +79,7 @@ function smarty_function_views_dropdown($params, &$smarty)
                 $view_options .= "<option value=\"$curr_view_id\" {$is_selected}>$view_name</option>\n";
                 $num_views++;
             } else {
-                if (ft_check_view_contains_submission($form_id, $curr_view_id, $submission_id)) {
+                if (Submissions::checkViewContainsSubmission($form_id, $curr_view_id, $submission_id)) {
                     $view_options .= "<option value=\"$curr_view_id\" {$is_selected}>$view_name</option>";
                     $num_views++;
                 }

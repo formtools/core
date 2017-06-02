@@ -1,7 +1,9 @@
 <?php
 
+use FormTools\General;
 use FormTools\OptionLists;
 use FormTools\Settings;
+use FormTools\Submissions;
 
 
 /**
@@ -134,7 +136,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
     {
       if (preg_match("/^form_field/", $value))
       {
-        $value = ft_get_mapped_form_field_data($value);
+        $value = Submissions::getMappedFormFieldData($value);
       }
       else
       {

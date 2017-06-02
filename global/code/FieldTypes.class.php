@@ -1043,7 +1043,7 @@ END;
                 // if this setting type is a dropdown list and $value is non-empty, get the option list
                 if ($curr_setting_field_type == "option_list_or_form_field" && !empty($value)) {
                     if (preg_match("/form_field:/", $value)) {
-                        $value = ft_get_mapped_form_field_data($value);
+                        $value = Submissions::getMappedFormFieldData($value);
                     } else {
                         $option_list_id = $value;
 

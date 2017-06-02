@@ -677,4 +677,551 @@ class Submissions {
     }
 
 
+    /**
+     * Creates and returns a search for any form View, and any subset of its columns, returning results in
+     * any column order and for any single page subset (or all pages). The final $search_columns parameter
+     * was added most recently to fix bug #173. That parameter lets the caller differentiate between the
+     * columns being returned ($columns param) and columns to be searched ($search_columns).
+     *
+     * @param integer $form_id the unique form ID
+     * @param integer $view_id the unique View ID
+     * @param mixed $results_per_page an integer, or "all".
+     * @param integer $page_num The current page number - or empty string, if this function is returning all
+     *              results in one page (e.g. printer friendly page).
+     * @param string $order A string of form: "{db column}_{ASC|DESC}"
+     * @param mixed $columns An array containing which database columns to search and return, or a string:
+     *              "all" - which returns all columns in the form.
+     * @param array $search_fields an optional hash with these keys:<br/>
+     *                  search_field<br/>
+     *                  search_date<br/>
+     *                  search_keyword<br/>
+     * @param array submission_ids - an optional array containing a list of submission IDs to return.
+     *     This may seem counterintuitive to pass the results that it needs to return to the function that
+     *     figures out WHICH results to return, but it's actually kinda handy: this function returns exactly
+     *     the field information that's needed in the order that's needed.
+     * @param array $submission_ids an optional array of submission IDs to return
+     * @param array $search_columns an optional array determining which database columns should be included
+     *     in the search. Note: this is different from the $columns parameter which just determines which
+     *     database columns will be returned. If it's not defined, it's just set to $columns.
+     *
+     * @return array returns a hash with these keys:<br/>
+     *                ["search_query"]       => an array of hashes, each index a search result row<br />
+     *                ["search_num_results"] => the number of results in the search (not just the 10 or so
+     *                                          that will appear in the current page, listed in the
+     *                                          "search_query" key<br />
+     *                ["view_num_results"]   => the total number of results in this View, regardless of the
+     *                                          current search values.
+     */
+    public static function searchSubmissions($form_id, $view_id, $results_per_page, $page_num, $order, $columns_to_return,
+        $search_fields = array(), $submission_ids = array(), $searchable_columns = array())
+    {
+        $db = Core::$db;
+
+        // for backward compatibility
+        if (empty($searchable_columns)) {
+            $searchable_columns = $columns_to_return;
+        }
+
+        // determine the various SQL clauses for the searches
+        $order_by             = Submissions::getSearchSubmissionsOrderByClause($form_id, $order);
+        $limit_clause         = General::getQueryPageLimitClause($page_num, $results_per_page);
+        $select_clause        = Submissions::getSearchSubmissionsSelectClause($columns_to_return);
+        $filter_clause        = Submissions::getSearchSubmissionsViewFilterClause($view_id);
+        $submission_id_clause = Submissions::getSearchSubmissionsSubmissionIdClause($submission_ids);
+        $search_where_clause  = Submissions::getSearchSubmissionsSearchWhereClause($form_id, $search_fields, $searchable_columns);
+
+        // (1) our main search query that returns a PAGE of submission info
+        try {
+            $db->query("
+                SELECT $select_clause
+                FROM   {PREFIX}form_{$form_id}
+                WHERE  is_finalized = 'yes'
+                       $search_where_clause
+                       $filter_clause
+                       $submission_id_clause
+                ORDER BY $order_by
+                       $limit_clause
+            ");
+            $db->execute();
+        } catch (PDOException $e) {
+            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            exit;
+        }
+
+        $search_result_rows = $db->fetchAll();
+
+        // (2) find out how many results there are in this current search
+        try {
+            $db->query("
+                SELECT count(*) as c
+                FROM   {PREFIX}form_{$form_id}
+                WHERE  is_finalized = 'yes'
+                       $search_where_clause
+                       $filter_clause
+                       $submission_id_clause
+            ");
+        } catch (PDOException $e) {
+            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            exit;
+        }
+
+        $search_num_results_info = $db->fetch();
+        $search_num_results = $search_num_results_info["c"];
+
+        // (3) find out how many results should appear in the View, regardless of the current search criteria
+        try {
+            $db->query("
+                SELECT count(*) as c
+                FROM   {PREFIX}form_{$form_id}
+                WHERE  is_finalized = 'yes'
+                $filter_clause
+            ");
+        } catch (PDOException $e) {
+            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            exit;
+        }
+
+        $view_num_results_info = $db->fetch();
+        $view_num_results = $view_num_results_info["c"];
+
+        $return_hash["search_rows"]        = $search_result_rows;
+        $return_hash["search_num_results"] = $search_num_results;
+        $return_hash["view_num_results"]   = $view_num_results;
+
+        extract(Hooks::processHookCalls("end", compact("form_id", "submission_id", "view_id", "results_per_page", "page_num", "order", "columns", "search_fields", "submission_ids", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
+
+        return $return_hash;
+    }
+
+
+    /**
+     * This function is used for displaying and exporting the data. Basically it merges all information
+     * about a particular field from the view_fields table with the form_fields and field_options table,
+     * providing ALL information about a field in a single variable.
+     *
+     * It accepts the result of the Views::getViewFields() function as the first parameter and an optional
+     * boolean to let it know whether to return ALL results or not.
+     *
+     * TODO maybe deprecate? Only used mass_edit
+     *
+     * @param array $view_fields
+     * @param boolean $return_all_fields
+     */
+    public static function getSubmissionFieldInfo($view_fields)
+    {
+        $display_fields = array();
+        foreach ($view_fields as $field) {
+            $field_id = $field["field_id"];
+            $curr_field_info = array(
+                "field_id"    => $field_id,
+                "field_title" => $field["field_title"],
+                "col_name"    => $field["col_name"],
+                "list_order"  => $field["list_order"]
+            );
+            $field_info = Fields::getFormField($field_id);
+            $curr_field_info["field_info"] = $field_info;
+            $display_fields[] = $curr_field_info;
+        }
+        return $display_fields;
+    }
+
+
+    /**
+     * This checks to see if a particular submission meets the criteria to belong in a particular View.
+     * It only applies to those Views that have one or more filters set up, but it works on all Views
+     * nonetheless.
+     *
+     * @param integer $view_id
+     * @param integer $view_id
+     * @param integer $submission_id
+     */
+    public static function checkViewContainsSubmission($form_id, $view_id, $submission_id)
+    {
+        $db = Core::$db;
+
+        $filter_sql = ViewFilters::getViewFilterSql($view_id);
+
+        if (empty($filter_sql))
+            return true;
+
+        $filter_sql_clause = join(" AND ", $filter_sql);
+
+        $db->query("
+            SELECT count(*) as c
+            FROM   {PREFIX}form_{$form_id}
+            WHERE  submission_id = :submission_id AND
+                   ($filter_sql_clause)
+        ");
+        $db->bind("submission_id", $submission_id);
+        $db->execute();
+
+        $result = $db->fetch();
+
+        return $result["c"] == 1;
+    }
+
+
+    /**
+     * A helper function to find out it a submission is finalized or not.
+     *
+     * Assumption: form ID and submission ID are both valid & the form is fully set up and configured.
+     *
+     * @param integer $form_id
+     * @param integer $submission_id
+     * @return boolean
+     */
+    public static function checkSubmissionFinalized($form_id, $submission_id)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT is_finalized
+            FROM   {PREFIX}form_$form_id
+            WHERE  submission_id = :submission_id
+        ");
+        $db->bind("submission_id", $submission_id);
+        $db->execute();
+
+        $result = $db->fetch();
+
+        return $result["is_finalized"] == "yes";
+    }
+
+
+    /**
+     * A helper function to find out it a submission is finalized or not.
+     *
+     * Assumption: form ID and submission ID are both valid & the form is fully set up and configured.
+     *
+     * @param integer $form_id
+     * @param integer $submission_id
+     * @return boolean
+     */
+    function ft_check_submission_exists($form_id, $submission_id)
+    {
+        $db = Core::$db;
+
+        try {
+            $db->query("
+                SELECT submission_id
+                FROM   {PREFIX}form_$form_id
+                WHERE  submission_id = :submission_id
+            ");
+            $db->bind("submission_id", $submission_id);
+            $db->execute();
+        } catch (PDOException $e) {
+            return null;
+        }
+
+        return $db->numRows() === 1;
+    }
+
+
+    /**
+     * This generic function processes any form field with a field type that requires additional
+     * processing, e.g. phone number fields, date fields etc. - anything that needs a little extra PHP
+     * in order to convert the form data into.
+     *
+     * @param array $info
+     */
+    public static function processFormField($vars)
+    {
+        eval($vars["code"]);
+        return (isset($value)) ? $value : "";
+    }
+
+
+    /**
+     * Used for retrieving the data for a mapped form field; i.e. a dropdown, radio group or checkbox group
+     * field whose source contents is the contents of a different form field.
+     *
+     * @param integer $form_id
+     * @param array $results a complex data structure
+     */
+    public static function getMappedFormFieldData($setting_value)
+    {
+        $db = Core::$db;
+
+        $trimmed = preg_replace("/form_field:/", "", $setting_value);
+
+        // this prevents anything wonky being shown if the following query fails (for whatever reason)
+        $formatted_results = "";
+
+        list($form_id, $field_id, $order) = explode("|", $trimmed);
+        if (!empty($form_id) && !empty($field_id) && !empty($order))
+        {
+            $map = Fields::getFieldColByFieldId($form_id, $field_id);
+            $col_name = $map[$field_id];
+            $db->query("
+                SELECT submission_id, $col_name
+                FROM   {PREFIX}form_{$form_id}
+                ORDER BY $col_name $order
+            ");
+
+            if ($query)
+            {
+                $results = array();
+                while ($row = mysql_fetch_assoc($query))
+                {
+                    $results[] = array(
+                    "option_value" => $row["submission_id"],
+                    "option_name"  => $row[$col_name]
+                    );
+                }
+
+                // yuck! But we need to force the form field info into the same format as the option lists,
+                // so the Field Types don't need to do additional work to display both cases
+                $formatted_results = array(
+                "type"     => "form_field",
+                "form_id"  => $form_id,
+                "field_id" => $field_id,
+                "options" => array(
+                array(
+                "group_info" => array(),
+                "options" => $results
+                )
+                )
+                );
+            }
+        }
+
+        return $formatted_results;
+    }
+
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+
+    /**
+     * Used in the ft_search_submissions function to abstract away a few minor details.
+     *
+     * @param $form_id integer
+     * @param $order string
+     * @return string
+     */
+    private static function getSearchSubmissionsOrderByClause($form_id, $order)
+    {
+        $order_by = "submission_id";
+        if (empty($order)) {
+            return $order_by;
+        }
+
+        // sorting by column, format: col_x-desc / col_y-asc
+        list($column, $direction) = explode("-", $order);
+        $field_info = Fields::getFieldOrderInfoByColname($form_id, $column);
+
+        // no field can be found if the administrator just changed the DB field contents and then went back to the
+        // submissions page where they'd already done a sort - and had it cached
+        if (!empty($field_info)) {
+            if ($field_info["is_date_field"] == "yes") {
+                if ($column == "submission_date" || $column == "last_modified_date") {
+                    $order_by = "$column $direction";
+                } else {
+                    $order_by = "CAST($column as DATETIME) $direction";
+                }
+            } else {
+                if ($field_info["data_type"] == "number") {
+                    $order_by = "CAST($column as SIGNED) $direction";
+                } else {
+                    $order_by = "$column $direction";
+                }
+            }
+
+            // important! If the ORDER BY column wasn't the submission_id, we need to add
+            // the submission ID as the secondary sorting column
+            if ($column != "submission_id") {
+                $order_by .= ", submission_id";
+            }
+        }
+
+        return $order_by;
+    }
+
+
+    /**
+     * Used in the ft_search_submissions function to abstract away a few minor details.
+     *
+     * @param array $columns
+     * @return string
+     */
+    private static function getSearchSubmissionsSelectClause($columns)
+    {
+        if (!is_array($columns) && $columns == "all") {
+            $select_clause = " * ";
+        } else {
+            $columns = array_unique($columns);
+
+            // if submission_id isn't included, add it - it'll be needed at some point
+            if (!in_array("submission_id", $columns)) {
+                $columns[] = "submission_id";
+            }
+
+            // just in case. This prevents empty column names (which shouldn't get here, but do if something
+            // goes wrong) getting into the column list
+            $columns = General::arrayRemoveEmptyEls($columns);
+            $select_clause = join(", ", $columns);
+        }
+
+        return $select_clause;
+    }
+
+
+    /**
+     * Used in the ft_search_submissions function to abstract away a few minor details.
+     *
+     * @param integer $view_id
+     * @return string
+     */
+    private static function getSearchSubmissionsViewFilterClause($view_id)
+    {
+        $view_filters = ViewFilters::getViewFilterSql($view_id);
+        $filter_clause = "";
+        if (!empty($view_filters)) {
+            $filter_clause = "AND " . join(" AND ", $view_filters);
+        }
+        return $filter_clause;
+    }
+
+
+    /**
+     * Used in the ft_search_submissions function. This figures out the additional SQL clauses required for
+     * a custom search. Note: as of the Dec 2009 build, this function properly only searches those fields
+     * marked as "is_searchable" in the database.
+     *
+     * @param integer $form_id
+     * @param array $search_fields
+     * @param array $columns the View columns that have been marked as "is_searchable"
+     * @return string
+     */
+    private static function getSearchSubmissionsSearchWhereClause($form_id, $search_fields, $searchable_columns)
+    {
+        $search_where_clause = "";
+        if (empty($search_fields)) {
+            return $search_where_clause;
+        }
+
+        $search_form_date_field_format = Core::getSearchFormDateFieldFormat();
+
+        $clean_search_fields = $search_fields;
+        $search_field   = $clean_search_fields["search_field"];
+        $search_date    = $clean_search_fields["search_date"];
+        $search_keyword = $clean_search_fields["search_keyword"];
+
+        // search field can either be "all" or a database column name. "submission_date" and "last_modified_date"
+        // have special meanings, since they allow for keyword searching within specific date ranges
+        if ($search_field == "all") {
+            if (!empty($search_keyword)) {
+
+                // if we're searching ALL columns, get all col names. This shouldn't ever get called any more - but
+                // I'll leave it in for regression purposes
+                $clauses = array();
+                if (!is_array($searchable_columns) && $searchable_columns == "all")  {
+                    $col_info = Forms::getFormColumnNames($form_id);
+                    $col_names = array_keys($col_info);
+                    unset($col_names["is_finalized"]);
+                    unset($col_names["submission_date"]);
+                    unset($col_names["last_modified_date"]);
+
+                    foreach ($col_names as $col_name) {
+                        $clauses[] = "$col_name LIKE '%$search_keyword%'";
+                    }
+                } else if (is_array($searchable_columns)) {
+                    foreach ($searchable_columns as $col_name) {
+                        $clauses[] = "$col_name LIKE '%$search_keyword%'";
+                    }
+                }
+
+                if (!empty($clauses)) {
+                    $search_where_clause = "AND (" . join(" OR ", $clauses) . ") ";
+                }
+            }
+        }
+
+        // date field! Date fields actually take two forms: they're either the Core fields (Submission Date and
+        // Last Modified Date), which are real DATETIME fields, or custom date fields which are varchars
+        else if (preg_match("/\|date$/", $search_field)) {
+            $search_field = preg_replace("/\|date$/", "", $search_field);
+            $is_core_date_field = ($search_field == "submission_date" || $search_field == "last_modified_date") ? true : false;
+            if (!$is_core_date_field) {
+                $search_field = "CAST($search_field as DATETIME) ";
+            }
+
+            if (!empty($search_date)) {
+                // search by date range
+                if (strpos($search_date, "-") !== false) {
+                    $dates = explode(" - ", $search_date);
+                    $start = $dates[0];
+                    $end   = $dates[1];
+                    if ($search_form_date_field_format == "d/m/y") {
+                        list($start_day, $start_month, $start_year) = explode("/", $start);
+                        list($end_day, $end_month, $end_year)       = explode("/", $end);
+                    } else {
+                        list($start_month, $start_day, $start_year) = explode("/", $start);
+                        list($end_month, $end_day, $end_year)       = explode("/", $end);
+                    }
+                    $start_day   = str_pad($start_day, 2, "0", STR_PAD_LEFT);
+                    $start_month = str_pad($start_month, 2, "0", STR_PAD_LEFT);
+                    $end_day     = str_pad($end_day, 2, "0", STR_PAD_LEFT);
+                    $end_month   = str_pad($end_month, 2, "0", STR_PAD_LEFT);
+
+                    $start_date = "{$start_year}-{$start_month}-{$start_day} 00:00:00";
+                    $end_date   = "{$end_year}-{$end_month}-{$end_day} 23:59:59";
+                    $search_where_clause = "AND ($search_field >= '$start_date' AND $search_field <= '$end_date') ";
+
+                // otherwise, return a specific day
+                } else {
+                    if ($search_form_date_field_format == "d/m/y") {
+                        list($day, $month, $year) = explode("/", $search_date);
+                    } else {
+                        list($month, $day, $year) = explode("/", $search_date);
+                    }
+                    $month = str_pad($month, 2, "0", STR_PAD_LEFT);
+                    $day   = str_pad($day, 2, "0", STR_PAD_LEFT);
+
+                    $start = "{$year}-{$month}-{$day} 00:00:00";
+                    $end   = "{$year}-{$month}-{$day} 23:59:59";
+                    $search_where_clause = "AND ($search_field >= '$start' AND $search_field <= '$end') ";
+                }
+
+                if (!empty($search_keyword)) {
+                    $clauses = array();
+                    foreach ($searchable_columns as $col_name) {
+                        $clauses[] = "$col_name LIKE '%$search_keyword%'";
+                    }
+                    if (!empty($clauses)) {
+                        $search_where_clause .= "AND (" . join(" OR ", $clauses) . ") ";
+                    }
+                }
+            }
+
+        } else {
+            if (!empty($search_keyword) && !empty($search_field)) {
+                $search_where_clause = "AND $search_field LIKE '%$search_keyword%'";
+            }
+        }
+
+        return $search_where_clause;
+    }
+
+
+    /**
+     * Used in the ft_search_submissions function to abstract away a few minor details.
+     *
+     * @param array $submission_ids
+     * @return string
+     */
+    private static function getSearchSubmissionsSubmissionIdClause($submission_ids)
+    {
+        $submission_id_clause = "";
+        if (!empty($submission_ids)) {
+            $rows = array();
+            foreach ($submission_ids as $submission_id) {
+                $rows[] = "submission_id = $submission_id";
+            }
+            $submission_id_clause = "AND (" . join(" OR ", $rows) . ") ";
+        }
+
+        return $submission_id_clause;
+    }
+
 }

@@ -168,6 +168,10 @@ class Database
         return $this->statement->fetchAll($fetch_style);
     }
 
+    public function numRows() {
+        return $this->statement->rowCount;
+    }
+
     public function getResultsArray() {
         $info = array();
         foreach ($this->fetchAll() as $row) {

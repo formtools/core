@@ -1,5 +1,9 @@
 <?php
 
+use FormTools\General;
+use FormTools\Submissions;
+use FormTools\Views;
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -57,8 +61,7 @@ function smarty_function_display_edit_submission_view_dropdown($params, &$smarty
 	  {
 	  	$curr_view_id   = $view_info["view_id"];
 	  	$curr_view_name = $view_info["view_name"];
-	    if (ft_check_view_contains_submission($form_id, $curr_view_id, $submission_id))
-	    {
+	    if (Submissions::checkViewContainsSubmission($form_id, $curr_view_id, $submission_id)) {
 	      $selected = ($curr_view_id == $view_id) ? " selected" : "";
 	      $html .="<option value=\"$curr_view_id\"{$selected}>$curr_view_name</option>";
 	    }
