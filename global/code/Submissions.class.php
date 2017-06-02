@@ -508,4 +508,173 @@ class Submissions {
         return $db->fetchAll();
     }
 
+
+    /**
+     * Updates an individual form submission. Called by both clients and administrator.
+     *
+     * @param array $infohash This parameter should be a hash (e.g. $_POST or $_GET) containing the
+     *             various fields from the update submission page. The contents of it change for each
+     *             form and form View, of course.
+     * @return array Returns array with indexes:<br/>
+     *               [0]: true/false (success / failure)<br/>
+     *               [1]: message string<br/>
+     */
+    public static function updateSubmission($form_id, $submission_id, $infohash)
+    {
+        $db = Core::$db;
+        $LANG = Core::$L;
+        $multi_val_delimiter = Core::getMultiFieldValDelimiter();
+
+        $success = true;
+        $message = $LANG["notify_form_submission_updated"];
+
+        extract(Hooks::processHookCalls("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
+
+        $field_ids = array();
+        if (!empty($infohash["field_ids"])) {
+            $field_ids = explode(",", $infohash["field_ids"]);
+        }
+
+        // perform any server-side validation
+        $errors = FieldValidation::validateSubmission($infohash["editable_field_ids"], $infohash);
+
+        // if there are any problems, return right away
+        if (!empty($errors)) {
+            return array(false, General::getErrorListHTML($errors));
+        }
+
+        $form_fields = Fields::getFormFields($form_id);
+        $field_types_processing_info = FieldTypes::getFieldTypeProcessingInfo();
+
+        // this gets all settings for the fields, taking into account whatever has been overridden
+        $field_settings = FieldTypes::getFormFieldFieldTypeSettings($field_ids, $form_fields);
+
+        $now = General::getCurrentDatetime();
+        $query = array();
+        $query[] = "last_modified_date = '$now'";
+
+        $file_fields = array();
+        foreach ($form_fields as $row) {
+            $field_id = $row["field_id"];
+
+            // if the field ID isn't in the page's tab, ignore it
+            if (!in_array($field_id, $field_ids)) {
+                continue;
+            }
+
+            // if the field ID isn't editable, the person's being BAD and trying to hack a field value. Ignore it.
+            if (!in_array($field_id, $infohash["editable_field_ids"])) {
+                continue;
+            }
+
+            // if this is a FILE field that doesn't have any overridden PHP processing code, just store the info
+            // about the field. Presumably, the module / field type has registered the appropriate hooks for
+            // processing the file. Without it, the module wouldn't work. We pass that field + file into to the hook.
+            if ($field_types_processing_info[$row["field_type_id"]]["is_file_field"] == "yes") {
+                $file_data = array(
+                    "field_id"   => $field_id,
+                    "field_info" => $row,
+                    "data"       => $infohash,
+                    "code"       => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
+                    "settings"   => $field_settings[$field_id]
+                );
+
+                if (empty($field_types_processing_info[$row["field_type_id"]]["php_processing"])) {
+                    $file_fields[] = $file_data;
+                    continue;
+                } else {
+                    $value = Submissions::processFormField($file_data);
+                    $query[] = $row["col_name"] . " = '$value'";
+                }
+            }
+
+            if ($row["field_name"] == "core__submission_date" || $row["col_name"] == "core__last_modified") {
+                if (!isset($infohash[$row["field_name"]]) || empty($infohash[$row["field_name"]])) {
+                    continue;
+                }
+            }
+
+            // see if this field type has any special PHP processing to do
+            if (!empty($field_types_processing_info[$row["field_type_id"]]["php_processing"])) {
+                $data = array(
+                    "field_info"   => $row,
+                    "data"         => $infohash,
+                    "code"         => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
+                    "settings"     => $field_settings[$field_id],
+                    "account_info" => isset($_SESSION["ft"]["account"]) ? $_SESSION["ft"]["account"] : array()
+                );
+                $value = Submissions::processFormField($data);
+                $query[] = $row["col_name"] . " = '$value'";
+            } else {
+                if (isset($infohash[$row["field_name"]])) {
+                    if (is_array($infohash[$row["field_name"]])) {
+                        $query[] = $row["col_name"] . " = '" . implode("$multi_val_delimiter", $infohash[$row["field_name"]]) . "'";
+                    } else {
+                        $query[] = $row["col_name"] . " = '" . $infohash[$row["field_name"]] . "'";
+                    }
+                } else {
+                    $query[] = $row["col_name"] . " = ''";
+                }
+            }
+        }
+
+        $set_query = join(",\n", $query);
+
+        try {
+            $db->query("
+                UPDATE {PREFIX}form_{$form_id}
+                SET    $set_query
+                WHERE  submission_id = :submission_id
+            ");
+            $db->bind("submission_id", $submission_id);
+            $db->execute();
+        } catch (PDOException $e) {
+
+            // if there was a problem updating the submission, don't even bother calling the file upload hook. Just exit right away
+            return array(false, $LANG["notify_submission_not_updated"]);
+        }
+
+        // now process any file fields
+        extract(Hooks::processHookCalls("manage_files", compact("form_id", "submission_id", "file_fields"), array("success", "message")), EXTR_OVERWRITE);
+
+        // send any emails
+        Emails::sendEmails("on_edit", $form_id, $submission_id);
+
+        extract(Hooks::processHookCalls("end", compact("form_id", "submission_id", "infohash"), array("success", "message")), EXTR_OVERWRITE);
+
+        return array($success, $message);
+    }
+
+
+    /**
+     * For use by programmers to finalize a submission (i.e. make it appear in the client's user
+     * interface).
+     *
+     * @param integer $form_id The unique form ID.
+     * @param integer $submission_id A unique submission ID.
+     * @return boolean $success True on success, false otherwise.
+     */
+    public static function finalizeSubmission($form_id, $submission_id)
+    {
+        $db = Core::$db;
+
+        // check the form_id is valid
+        if (!Forms::checkFormExists($form_id)) {
+            return false;
+        }
+
+        $db->query("
+            UPDATE {PREFIX}form_$form_id
+            SET    is_finalized = 'yes'
+            WHERE  submission_id = $submission_id
+        ");
+        $db->bind("submission_id", $submission_id);
+        $db->execute();
+
+        Emails::sendEmails("on_submission", $form_id, $submission_id);
+
+        return true;
+    }
+
+
 }
