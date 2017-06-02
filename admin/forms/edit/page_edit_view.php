@@ -1,9 +1,11 @@
 <?php
 
+use FormTools\Core;
 use FormTools\Fields;
 use FormTools\FieldTypes;
 use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 use FormTools\Views;
 use FormTools\ViewFields;
@@ -22,7 +24,7 @@ if (isset($request["update_view"])) {
 	$request["form_id"] = $form_id;
 	$request["view_fields_sortable_id"] = $view_fields_sortable_id;
 	$request["submission_list_sortable_id"] = $submission_list_sortable_id;
-	list($g_success, $g_message) = ft_update_view($view_id, $request);
+	list($g_success, $g_message) = Views::updateView($view_id, $request);
 }
 
 $form_info   = Forms::getForm($form_id);
@@ -138,6 +140,9 @@ $page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "edit.php?pa
 
 // -----------------------------------------------------------------------------------------------
 
+$root_url = Core::getRootUrl();
+$LANG = Core::$L;
+
 // compile the templates information
 $page_vars["page"]       = "edit_view";
 $page_vars["page_url"]   = Pages::getPageUrl("edit_view");
@@ -167,9 +172,9 @@ $page_vars["view_fields_sortable_id"] = $view_fields_sortable_id;
 $page_vars["submission_list_sortable_id"] = $submission_list_sortable_id;
 
 $page_vars["head_string"] =<<< END
-  <script src="$g_root_url/global/scripts/jquery-ui-timepicker-addon.js"></script>
-  <script src="$g_root_url/global/scripts/sortable.js?v=2"></script>
-  <script src="$g_root_url/global/scripts/manage_views.js?v=4"></script>
+  <script src="$root_url/global/scripts/jquery-ui-timepicker-addon.js"></script>
+  <script src="$root_url/global/scripts/sortable.js?v=2"></script>
+  <script src="$root_url/global/scripts/manage_views.js?v=4"></script>
 END;
 
 $replacements = array("user_doc_link" => "https://docs.formtools.org/userdoc/views/standard_filters/?page=view_filters");

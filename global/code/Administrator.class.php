@@ -100,10 +100,10 @@ class Administrator {
         }
 
         if (!empty($errors)) {
-            return array(false, General::getErrorListHTML($errors));
+            return array(false, General::getErrorListHTML($errors), "");
         }
 
-        $password = md5(md5($form_vals["password"]));
+        $password = General::encode($form_vals["password"]);
 
         // first, insert the record into the accounts table. This contains all the settings common to ALL
         // accounts (including the administrator and any other future account types)
@@ -286,7 +286,7 @@ class Administrator {
 
         // if the password is defined, md5 it
         $password_clause = (!empty($password)) ? "password = :password', " : "";
-        $enc_password = md5(md5($password));
+        $enc_password = General::encode($password);
 
         $db->query("
             UPDATE  {PREFIX}accounts
@@ -388,7 +388,7 @@ class Administrator {
                 $rules[] = "if:password!=,required,password_2,{$LANG["validation_no_account_password_confirmed"]}";
                 $rules[] = "if:password!=,same_as,password,password_2,{$LANG["validation_passwords_different"]}";
 
-                $account_settings = ft_get_account_settings($account_id);
+                $account_settings = Accounts::getAccountSettings($account_id);
                 if ($account_settings["min_password_length"] != "" && !empty($form_vals["password"])) {
                     $rule = General::evalSmartyString($LANG["validation_client_password_too_short"], array("number" => $account_settings["min_password_length"]));
                     $rules[] = "length>={$account_settings["min_password_length"]},password,$rule";
@@ -421,8 +421,8 @@ class Administrator {
                 if (!empty($form_vals["password"])) {
                     // check the password isn't already in password history (if relevant)
                     if (!empty($account_settings["num_password_history"])) {
-                        $encrypted_password = md5(md5($form_vals["password"]));
-                        if (ft_password_in_password_history($account_id, $encrypted_password, $account_settings["num_password_history"])) {
+                        $encrypted_password = General::encode($form_vals["password"]);
+                        if (Accounts::passwordInPasswordHistory($account_id, $encrypted_password, $account_settings["num_password_history"])) {
                             $errors[] = General::evalSmartyString($LANG["validation_password_in_password_history"],
                             array("history_size" => $account_settings["num_password_history"]));
                         } else {
@@ -442,7 +442,7 @@ class Administrator {
                 $password        = $form_vals['password'];
 
                 // if the password is defined, md5 it
-                $password_sql = (!empty($password)) ? "password = '" . md5(md5($password)) . "', " : "";
+                $password_sql = (!empty($password)) ? "password = '" . General::encode($password) . "', " : "";
 
                 $query = "
                     UPDATE  {PREFIX}accounts

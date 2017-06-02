@@ -27,15 +27,16 @@ $status    = General::loadField("status", "form_search_status", "");
 $client_id = General::loadField("client_id", "form_search_client_id", "");
 
 $search_criteria = array(
+    "is_admin"  => true,
 	"order"     => $order,
 	"keyword"   => $keyword,
 	"status"    => $status,
-	"client_id" => $client_id
+    "account_id" => $client_id
 );
 
 $clients   = Clients::getList();
 $num_forms = Clients::getFormCount();
-$forms     = Forms::searchForms($client_id, true, $search_criteria);
+$forms     = Forms::searchForms($search_criteria);
 $max_forms = Core::getMaxForms();
 $LANG = Core::$L;
 

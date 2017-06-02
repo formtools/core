@@ -464,11 +464,12 @@ class FieldTypes {
         $db = Core::$db;
 
         $options = array_merge(array(
-            "page_ns" => "page_ns",
+            "namespace" => "page_ns",
             "js_key" => "field_type_id"
         ), $params);
+
         $namespace = $options["namespace"];
-        $js_key = $options["js_key"];
+        $js_key    = $options["js_key"];
 
         $minimize = true;
         $delimiter = "\n";

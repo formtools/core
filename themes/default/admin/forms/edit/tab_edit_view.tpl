@@ -22,19 +22,19 @@
         </div>
         <div class="inner_tab_content">
           <div class="inner_tab_content1" {if $edit_view_tab != 1}style="display:none"{/if}>
-            {ft_include file="admin/forms/tab_edit_view__main.tpl"}
+            {ft_include file="admin/forms/edit/tab_edit_view__main.tpl"}
           </div>
           <div class="inner_tab_content2" {if $edit_view_tab != 2}style="display:none"{/if}>
-            {ft_include file="admin/forms/tab_edit_view__list_page.tpl"}
+            {ft_include file="admin/forms/edit/tab_edit_view__list_page.tpl"}
           </div>
           <div class="inner_tab_content3" {if $edit_view_tab != 3}style="display:none"{/if}>
-            {ft_include file="admin/forms/tab_edit_view__fields.tpl"}
+            {ft_include file="admin/forms/edit/tab_edit_view__fields.tpl"}
           </div>
           <div class="inner_tab_content4" {if $edit_view_tab != 4}style="display:none"{/if}>
-            {ft_include file="admin/forms/tab_edit_view__tabs.tpl"}
+            {ft_include file="admin/forms/edit/tab_edit_view__tabs.tpl"}
           </div>
           <div class="inner_tab_content5" {if $edit_view_tab != 5}style="display:none"{/if}>
-            {ft_include file="admin/forms/tab_edit_view__filters.tpl"}
+            {ft_include file="admin/forms/edit/tab_edit_view__filters.tpl"}
           </div>
         </div>
       </div>

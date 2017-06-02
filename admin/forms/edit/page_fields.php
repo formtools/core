@@ -1,13 +1,16 @@
 <?php
 
+use FormTools\Core;
 use FormTools\Fields;
 use FormTools\FieldSizes;
 use FormTools\FieldValidation;
 use FormTools\FieldTypes;
 use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
 use FormTools\Settings;
 use FormTools\Themes;
+
 
 
 $sortable_id = "edit_fields";
@@ -52,6 +55,9 @@ $php_self = General::getCleanPhpSelf();
 $shared_characteristics_js = FieldTypes::getFieldTypeSettingSharedCharacteristicsJs();
 
 
+$LANG = Core::$L;
+$root_url = Core::getRootUrl();
+
 // compile the template fields
 $page_vars["page"]         = "fields";
 $page_vars["page_url"]     = Pages::getPageUrl("edit_form_fields", array("form_id" => $form_id));
@@ -77,8 +83,8 @@ if ($num_fields_per_page != "all") {
 }
 
 $page_vars["head_string"] =<<< END
-  <script src="{$g_root_url}/global/scripts/sortable.js?v=2"></script>
-  <script src="{$g_root_url}/global/scripts/manage_fields.js?v=3"></script>
+  <script src="{$root_url}/global/scripts/sortable.js?v=2"></script>
+  <script src="{$root_url}/global/scripts/manage_fields.js?v=3"></script>
 END;
 
 $replacement_info = array("views_tab_link" => "$php_self?page=views&form_id=$form_id");

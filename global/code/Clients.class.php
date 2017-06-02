@@ -61,7 +61,7 @@ class Clients {
                     }
 
                     // encrypt the password on the assumption that it passes validation. It'll be used in the update query
-                    $password = md5(md5($info['password']));
+                    $password = General::encode($info['password']);
                     $password_clause = "password = '$password',";
                 }
 
@@ -77,8 +77,8 @@ class Clients {
                 {
                     if (!empty($client_info["settings"]["num_password_history"]))
                     {
-                        $encrypted_password = md5(md5($info["password"]));
-                        if (ft_password_in_password_history($account_id, $encrypted_password, $client_info["settings"]["num_password_history"])) {
+                        $encrypted_password = General::encode($info["password"]);
+                        if (Accounts::passwordInPasswordHistory($account_id, $encrypted_password, $client_info["settings"]["num_password_history"])) {
                             $errors[] = General::evalSmartyString($LANG["validation_password_in_password_history"],
                             array("history_size" => $client_info["settings"]["num_password_history"]));
                         } else {
@@ -228,8 +228,15 @@ class Clients {
         $db->bind(":account_id", $account_id);
         $db->execute();
 
-        $db->query("DELETE FROM {PREFIX}email_templates WHERE email_from account_id = :account_id OR email_to_account_id = :account_id");
-        $db->bind(":account_id", $account_id);
+        // not sure if this is really correct. It deletes any email templates that have this client as a from or
+        // reply-to field
+        $db->query("
+            DELETE FROM {PREFIX}email_templates
+            WHERE email_from_account_id = :account_id1 OR
+                  email_reply_to_account_id = :account_id2
+        ");
+        $db->bind(":account_id1", $account_id);
+        $db->bind(":account_id2", $account_id);
         $db->execute();
 
         $db->query("DELETE FROM {PREFIX}public_form_omit_list WHERE account_id = :account_id");

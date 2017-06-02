@@ -18,6 +18,7 @@ use FormTools\Forms;
 use FormTools\General;
 use FormTools\ListGroups;
 use FormTools\OptionLists;
+use FormTools\Sessions;
 use FormTools\Settings;
 use FormTools\Themes;
 use FormTools\Views;
@@ -478,10 +479,10 @@ switch ($action) {
 		$problems = array();
 		$count = 1;
 		$new_field_map = array();
-		foreach ($changed_field_ids as $field_id)
-		{
-			if (!isset($request["data"]["field_$field_id"]))
-				continue;
+		foreach ($changed_field_ids as $field_id) {
+			if (!isset($request["data"]["field_$field_id"])) {
+                continue;
+            }
 
 			// if this is a NEW field, we just ignore it here. New fields are only added by updating the main page, not
 			// via the Edit Field dialog
@@ -489,18 +490,14 @@ switch ($action) {
 				continue;
 
 			list($success, $message) = Fields::updateField($form_id, $field_id, $request["data"]["field_$field_id"]);
-			if (!$success)
-			{
+			if (!$success) {
 				$problems[] = array("field_id" => $field_id, "error" => $message);
 			}
 		}
-		if (!empty($problems))
-		{
+		if (!empty($problems)) {
 			$problems_json = json_encode($problems);
 			echo "{ \"success\": \"0\", \"problems\": $problems_json{$return_str} }";
-		}
-		else
-		{
+		} else {
 			echo "{ \"success\": \"1\"{$return_str} }";
 		}
 		break;

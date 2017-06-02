@@ -169,7 +169,7 @@ class Database
     }
 
     public function numRows() {
-        return $this->statement->rowCount;
+        return $this->statement->rowCount();
     }
 
     public function getResultsArray() {

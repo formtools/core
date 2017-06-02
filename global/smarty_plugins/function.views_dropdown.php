@@ -1,6 +1,8 @@
 <?php
 
+use FormTools\Core;
 use FormTools\Views;
+use FormTools\Submissions;
 
 /*
  * Smarty plugin

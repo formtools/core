@@ -276,7 +276,7 @@ class Accounts {
 
 
     /**
-     * Updates the password history queue for a client account. The assumption is that ft_password_in_password_history()
+     * Updates the password history queue for a client account. The assumption is that passwordInPasswordHistory()
      * has already been called to determine whether or not the password should be added to the list.
      *
      * @param integer $account_id
@@ -306,8 +306,8 @@ class Accounts {
      */
     public static function isValidUsername($username, $account_id = "")
     {
-        $LANG = Core::$L;
         $db = Core::$db;
+        $LANG = Core::$L;
 
         // check the username is alphanumeric
         if (preg_match("/[^\.a-zA-Z0-9_@]/", $username)) {
@@ -317,21 +317,25 @@ class Accounts {
         $clause = (!empty($account_id)) ? "AND account_id != :account_id" : "";
 
         // now check the username isn't already taken
-        $db->query("
-            SELECT count(*)
-            FROM   {PREFIX}accounts
-            WHERE  username = :username
-            $clause
-        ");
-        $db->bind(":username", $username);
-        if (!empty($account_id)) {
-            $db->bind(":account_id", $account_id);
+        try {
+            $db->query("
+                SELECT count(*)
+                FROM   {PREFIX}accounts
+                WHERE  username = :username
+                $clause
+            ");
+            $db->bind(":username", $username);
+            if (!empty($account_id)) {
+                $db->bind(":account_id", $account_id);
+            }
+
+            $db->execute();
+        } catch (PDOException $e) {
+            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            exit;
         }
 
-        $db->execute();
-        $info = $db->fetch();
-
-        if ($info[0] > 0) {
+        if ($db->numRows() > 0) {
             return array(false, $LANG["validation_username_taken"]);
         } else {
             return array(true, "");
@@ -347,43 +351,45 @@ class Accounts {
      * @return array [0]: true/false (success / failure)
      *               [1]: message string
      */
-    public static function ft_send_password($info)
+    public static function sendPassword($info)
     {
-        global $g_root_url, $g_root_dir, $g_table_prefix, $LANG;
+        $db = Core::$db;
+        $root_url = Core::getRootUrl();
+        $root_dir = Core::getRootDir();
+        $LANG = Core::$L;
 
         extract(Hooks::processHookCalls("start", compact("info"), array("info")), EXTR_OVERWRITE);
 
         $success = true;
         $message = $LANG["notify_login_info_emailed"];
 
-        if (!isset($info["username"]) || empty($info["username"]))
-        {
+        if (!isset($info["username"]) || empty($info["username"])) {
             $success = false;
             $message = $LANG["validation_no_username_or_js"];
             return array($success, $message);
         }
         $username = $info["username"];
 
-        $query = $db->query("
-     SELECT *
-     FROM   {PREFIX}accounts
-     WHERE  username = '$username'
-          ");
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}accounts
+            WHERE  username = :username
+        ");
+        $db->bind("username", $username);
+        $db->execute();
 
         // not found
-        if (!mysql_num_rows($query))
-        {
+        if ($db->numRows() === 0) {
             $success = false;
             $message = $LANG["validation_account_not_recognized_info"];
             return array($success, $message);
         }
 
-        $account_info = mysql_fetch_assoc($query);
+        $account_info = $db->fetch();
         $email        = $account_info["email"];
 
         // one final check: confirm the email is defined & valid
-        if (empty($email) || !General::isValidEmail($email))
-        {
+        if (empty($email) || !General::isValidEmail($email)) {
             $success = false;
             $message = $LANG["validation_email_not_found_or_invalid"];
             return array($success, $message);
@@ -392,46 +398,49 @@ class Accounts {
         $account_id   = $account_info["account_id"];
         $username     = $account_info["username"];
         $new_password = General::generatePassword();
-        $encrypted_password = md5(md5($new_password));
+        $encrypted_password = General::encode($new_password);
 
         // update the database with the new password (encrypted). As of 2.1.0 there's a second field to store the
         // temporary generated password, leaving the original password intact. This prevents a situation arising when
         // someone other than the admin / client uses the "Forget Password" feature and invalidates a valid, known password.
         // Any time the user successfully logs in,
         $db->query("
-    UPDATE {PREFIX}accounts
-    SET    temp_reset_password = '$encrypted_password'
-    WHERE  account_id = $account_id
-      ");
+            UPDATE {PREFIX}accounts
+            SET    temp_reset_password = :encrypted_password
+            WHERE  account_id = :account_id
+        ");
+        $db->bindAll(array(
+            "encrypted_password" => $encrypted_password,
+            "account_id" => $account_id
+        ));
 
         // now build and sent the email
 
         // 1. build the email content
         $placeholders = array(
-        "login_url" => "$g_root_url/?id=$account_id",
-        "email"     => $email,
-        "username"  => $username,
-        "new_password" => $new_password
+            "login_url" => "$root_url/?id=$account_id",
+            "email"     => $email,
+            "username"  => $username,
+            "new_password" => $new_password
         );
-        $smarty_template_email_content = file_get_contents("$g_root_dir/global/emails/forget_password.tpl");
+        $smarty_template_email_content = file_get_contents("$root_dir/global/emails/forget_password.tpl");
         $email_content = General::evalSmartyString($smarty_template_email_content, $placeholders);
 
         // 2. build the email subject line
         $placeholders = array(
-        "program_name" => Settings::get("program_name")
+            "program_name" => Settings::get("program_name")
         );
-        $smarty_template_email_subject = file_get_contents("$g_root_dir/global/emails/forget_password_subject.tpl");
+        $smarty_template_email_subject = file_get_contents("$root_dir/global/emails/forget_password_subject.tpl");
         $email_subject = trim(General::evalSmartyString($smarty_template_email_subject, $placeholders));
 
         // if Swift Mailer is enabled, send the emails with that. In case there's a problem sending the message with
         // Swift, it falls back the default mail() function.
         $swift_mail_error = false;
         $swift_mail_enabled = Modules::checkModuleEnabled("swift_mailer");
-        if ($swift_mail_enabled)
-        {
+        if ($swift_mail_enabled) {
             $sm_settings = Modules::getModuleSettings("", "swift_mailer");
-            if ($sm_settings["swiftmailer_enabled"] == "yes")
-            {
+
+            if ($sm_settings["swiftmailer_enabled"] == "yes") {
                 Modules::includeModule("swift_mailer");
 
                 // get the admin info. We'll use that info for the "from" and "reply-to" values. Note
@@ -453,8 +462,7 @@ class Accounts {
 
                 // if the email couldn't be sent, display the appropriate error message. Otherwise
                 // the default success message is used
-                if (!$success)
-                {
+                if (!$success) {
                     $swift_mail_error = true;
                     $message = $sm_message;
                 }
@@ -462,11 +470,10 @@ class Accounts {
         }
 
         // if there was an error sending with Swift, or if it wasn't installed, send it by mail()
-        if (!$swift_mail_enabled || $swift_mail_error)
-        {
+        if (!$swift_mail_enabled || $swift_mail_error) {
+
             // send email [note: the double quotes around the email recipient and content are intentional: some systems fail without it]
-            if (!@mail("$email", $email_subject, $email_content))
-            {
+            if (!@mail("$email", $email_subject, $email_content)) {
                 $success = false;
                 $message = $LANG["notify_email_not_sent"];
                 return array($success, $message);

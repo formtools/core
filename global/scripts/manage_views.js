@@ -56,7 +56,7 @@ $(function() {
                 console.log(data);
                 return;
               }
-              window.location = "edit.php?page=edit_view&edit_view_tab=1&form_id=" + form_id + "&view_id=" + data.view_id;
+              window.location = "?page=edit_view&edit_view_tab=1&form_id=" + form_id + "&view_id=" + data.view_id;
             },
             error: function(jqXHR, textStatus, errorThrown) {
               $("#new_view_dialog").dialog("close");

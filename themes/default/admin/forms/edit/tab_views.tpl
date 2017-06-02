@@ -71,7 +71,11 @@
                 </li>
                 {/if}
                 <li class="sortable_row">
-                {assign var=next_item_is_new_sort_group value=$views[$smarty.foreach.row.iteration].is_new_sort_group}
+                {if $smarty.foreach.row.last}
+                    {assign var=next_item_is_new_sort_group value="yes"}
+                {else}
+                    {assign var=next_item_is_new_sort_group value=$views[$smarty.foreach.row.iteration].is_new_sort_group}
+                {/if}
                 <div class="row_content{if $next_item_is_new_sort_group == 'no'} grouped_row{/if}">
               {/if}
 
@@ -110,11 +114,11 @@
                         <span class="pad_left_small light_grey">{$LANG.phrase_no_clients}</span>
                       {/if}
                     </li>
-                    <li class="col5"><a href="edit.php?page=edit_view&view_id={$view_id}&edit_view_tab=2" title="{$view.columns|@count} {$LANG.word_columns_sp|lower}">{$view.columns|@count}</a></li>
-                    <li class="col6"><a href="edit.php?page=edit_view&view_id={$view_id}&edit_view_tab=3" title="{$view.fields|@count} {$LANG.word_fields_sp|lower}">{$view.fields|@count}</a></li>
-                    <li class="col7"><a href="edit.php?page=edit_view&view_id={$view_id}&edit_view_tab=4" title="{$view.tabs|@count} {$LANG.word_tabs_sp|lower}">{$view.tabs|@count}</a></li>
-                    <li class="col8"><a href="edit.php?page=edit_view&view_id={$view_id}&edit_view_tab=5" title="{$view.filters|@count} {$LANG.word_filters_sp|lower}">{$view.filters|@count}</a></li>
-                    <li class="col9 edit"><a href="edit.php?page=edit_view&view_id={$view_id}"></a></li>
+                    <li class="col5"><a href="?page=edit_view&view_id={$view_id}&edit_view_tab=2" title="{$view.columns|@count} {$LANG.word_columns_sp|lower}">{$view.columns|@count}</a></li>
+                    <li class="col6"><a href="?page=edit_view&view_id={$view_id}&edit_view_tab=3" title="{$view.fields|@count} {$LANG.word_fields_sp|lower}">{$view.fields|@count}</a></li>
+                    <li class="col7"><a href="?page=edit_view&view_id={$view_id}&edit_view_tab=4" title="{$view.tabs|@count} {$LANG.word_tabs_sp|lower}">{$view.tabs|@count}</a></li>
+                    <li class="col8"><a href="?page=edit_view&view_id={$view_id}&edit_view_tab=5" title="{$view.filters|@count} {$LANG.word_filters_sp|lower}">{$view.filters|@count}</a></li>
+                    <li class="col9 edit"><a href="?page=edit_view&view_id={$view_id}"></a></li>
                     <li class="col10 colN del"> </li>
                   </ul>
                   <div class="clear"></div>

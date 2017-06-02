@@ -17,7 +17,7 @@ $request = array_merge($_POST, $_GET);
 if (isset($request["add_form"])) {
 	list($g_success, $g_message, $new_form_id) = Forms::createInternalForm($request);
 	if ($g_message) {
-        General::redirect("../edit.php?form_id={$new_form_id}&message=notify_internal_form_created");
+        General::redirect("../edit/?form_id={$new_form_id}&message=notify_internal_form_created");
 	}
 }
 

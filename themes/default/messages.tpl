@@ -26,7 +26,6 @@
 {/if}
 
 {if $g_message}
-    {assign var="class_name" value=""}
     {if $g_success}
         <script>{literal}$(function() { $("#ft_message_inner").effect("highlight", {color: "#" + g.notify_colours[1] }, 1200); });{/literal}</script>
     {else}

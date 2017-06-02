@@ -82,19 +82,16 @@ $keyword   = General::loadField("keyword", "form_search_keyword", "");
 $status    = General::loadField("status", "form_search_status", "");
 $client_id = General::loadField("client_id", "form_search_client_id", "");
 $search_criteria = array(
-	"order"     => $order,
-	"keyword"   => $keyword,
-	"status"    => $status,
-	"client_id" => $client_id,
-
-	// this is a bit weird, but it's used so that ft_get_form_prev_next_links() doesn't return incomplete forms:
-	// they're not fully set up, so the Edit pages wouldn't work for them yet
-	"is_admin"  => false
+	"order"      => $order,
+	"keyword"    => $keyword,
+	"status"     => $status,
+	"account_id" => $client_id,
+	"is_admin"   => false
 );
 
 $links = Forms::getFormPrevNextLinks($form_id, $search_criteria);
-$prev_tabset_link = (!empty($links["prev_form_id"])) ? "edit.php?page=$page&form_id={$links["prev_form_id"]}" : "";
-$next_tabset_link = (!empty($links["next_form_id"])) ? "edit.php?page=$page&form_id={$links["next_form_id"]}" : "";
+$prev_tabset_link = (!empty($links["prev_form_id"])) ? "?page=$page&form_id={$links["prev_form_id"]}" : "";
+$next_tabset_link = (!empty($links["next_form_id"])) ? "?page=$page&form_id={$links["next_form_id"]}" : "";
 
 // start compiling the page vars here, so we don't have to duplicate the shared stuff for each included code file below
 $page_vars = array();

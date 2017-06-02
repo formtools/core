@@ -21,7 +21,7 @@ class Forms {
      */
     public static function getForms()
     {
-        return self::searchForms($account_id = "", true);
+        return self::searchForms("", true);
     }
 
 
@@ -346,25 +346,31 @@ class Forms {
      * people use Form Tools for a small number of forms < 100) so the form tables are displaying via JS, with all
      * results actually returned and hidden in the page ready to be displayed.
      *
-     * @param integer $account_id if blank, return all finalized forms, otherwise returns the forms associated with this
-     *                  particular client.
-     * @param boolean $is_admin whether or not the user retrieving the data is an administrator or not. If it is, ALL
-     *                  forms are retrieved - even those that aren't yet finalized.
      * @param array $search_criteria an optional hash with any of the following keys:
-     *                 "status"  - (string) online / offline
-     *                 "keyword" - (any string)
-     *                 "order"   - (string) form_id-DESC, form_id-ASC, form_name-DESC, form-name-ASC,
-     *                             status-DESC, status-ASC
+     *                 "account_id" - if blank, return all finalized forms, otherwise returns the forms associated with
+     *                                this particular client.
+     *                 "is_admin"   - (boolean) whether or not the user retrieving the data is an administrator or not.
+     *                                If it is, ALL forms are retrieved - even those that aren't yet finalized.
+     *                 "status"     - (string) online / offline
+     *                 "keyword"    - (any string)
+     *                 "order"      - (string) form_id-DESC, form_id-ASC, form_name-DESC, form-name-ASC,
+     *                                status-DESC, status-ASC
      * @return array returns an array of form hashes
      */
-    public static function searchForms($account_id = "", $is_admin = false, $search_criteria = array())
+    public static function searchForms($params = array())
     {
         $db = Core::$db;
 
+        $search_criteria = array_merge(array(
+            "account_id" => "",
+            "is_admin"   => false,
+            "status"     => "online",
+            "keyword"    => "",
+            "order"      => "form_id-DESC"
+        ), $params);
+
         extract(Hooks::processHookCalls("start", compact("account_id", "is_admin", "search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
 
-        $search_criteria["account_id"] = $account_id;
-        $search_criteria["is_admin"]   = $is_admin;
         $results = self::getSearchFormSqlClauses($search_criteria);
 
         // get the form IDs. All info about the forms will be retrieved in a separate query
@@ -2166,7 +2172,7 @@ class Forms {
     }
 
 
-    private static function getOrderClause ($order)
+    private static function getOrderClause($order)
     {
         if (!isset($order) || empty($order)) {
             $search_criteria["order"] = "form_id-DESC";
@@ -2237,7 +2243,7 @@ class Forms {
 
 
     /**
-     * Used in the search query to ensure the search limits the results to whatever forms the current account may view.
+     * Used in the search query to ensure the search limits the results to whatever forms a particular account may view.
      * @param $account_id
      * @return string
      */
@@ -2277,7 +2283,7 @@ class Forms {
                 $clause = "(((" . join(" OR ", $form_clauses) . ") OR $is_public_clause) AND ($is_setup_clause))";
             } else {
                 $clause = isset($form_clauses[0]) ? "(({$form_clauses[0]} OR $is_public_clause) AND ($is_setup_clause))" :
-                "($is_public_clause AND ($is_setup_clause))";
+                    "($is_public_clause AND ($is_setup_clause))";
             }
         }
 
