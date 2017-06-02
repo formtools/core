@@ -948,44 +948,95 @@ class Submissions {
         $formatted_results = "";
 
         list($form_id, $field_id, $order) = explode("|", $trimmed);
-        if (!empty($form_id) && !empty($field_id) && !empty($order))
-        {
+        if (!empty($form_id) && !empty($field_id) && !empty($order)) {
             $map = Fields::getFieldColByFieldId($form_id, $field_id);
             $col_name = $map[$field_id];
-            $db->query("
-                SELECT submission_id, $col_name
-                FROM   {PREFIX}form_{$form_id}
-                ORDER BY $col_name $order
-            ");
 
-            if ($query)
-            {
-                $results = array();
-                while ($row = mysql_fetch_assoc($query))
-                {
-                    $results[] = array(
+            try {
+                $db->query("
+                    SELECT submission_id, $col_name
+                    FROM   {PREFIX}form_{$form_id}
+                    ORDER BY $col_name $order
+                ");
+                $db->execute();
+            } catch (PDOException $e) {
+                Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+                exit;
+            }
+
+            $results = array();
+            foreach ($db->fetchAll() as $row) {
+                $results[] = array(
                     "option_value" => $row["submission_id"],
                     "option_name"  => $row[$col_name]
-                    );
-                }
+                );
+            }
 
-                // yuck! But we need to force the form field info into the same format as the option lists,
-                // so the Field Types don't need to do additional work to display both cases
-                $formatted_results = array(
+            // yuck! But we need to force the form field info into the same format as the option lists,
+            // so the Field Types don't need to do additional work to display both cases
+            $formatted_results = array(
                 "type"     => "form_field",
                 "form_id"  => $form_id,
                 "field_id" => $field_id,
                 "options" => array(
-                array(
-                "group_info" => array(),
-                "options" => $results
+                    array(
+                        "group_info" => array(),
+                        "options" => $results
+                    )
                 )
-                )
-                );
-            }
+            );
         }
 
         return $formatted_results;
+    }
+
+
+    /**
+     * Added in 2.1.0. This lets modules add icons to a "quicklink" icon row on the Submission Listing page. To add it,
+     * they need to define a hook call and return a $quicklinks hash with the following keys:
+     *   icon_url
+     *   alt_text
+     *
+     * @param $context "admin" or "client"
+     */
+    public static function displaySubmissionListingQuicklinks($context)
+    {
+        $quicklinks = array();
+
+        extract(Hooks::processHookCalls("main", compact("context"), array("quicklinks"), array("quicklinks")), EXTR_OVERWRITE);
+
+        if (empty($quicklinks)) {
+            return "";
+        }
+
+        echo "<ul id=\"ft_quicklinks\">";
+
+        $num_quicklinks = count($quicklinks);
+        for ($i=0; $i<$num_quicklinks; $i++) {
+            $classes = array();
+            if ($i == 0) {
+                $classes[] = "ft_quicklinks_first";
+            }
+            if ($i == $num_quicklinks - 1) {
+                $classes[] = "ft_quicklinks_last";
+            }
+
+            $class = implode(" ", $classes);
+
+            $quicklink_info = $quicklinks[$i];
+            $icon_url       = isset($quicklink_info["icon_url"]) ? $quicklink_info["icon_url"] : "";
+            $title_text     = isset($quicklink_info["title_text"]) ? $quicklink_info["title_text"] : "";
+            $onclick        = isset($quicklink_info["onclick"]) ? $quicklink_info["onclick"] : "";
+            $title_text = htmlspecialchars($title_text);
+
+            if (empty($icon_url)) {
+                continue;
+            }
+
+            echo "<li class=\"$class\" onclick=\"$onclick\"><img src=\"$icon_url\" title=\"$title_text\" /></li>\n";
+        }
+
+        echo "</ul>";
     }
 
 

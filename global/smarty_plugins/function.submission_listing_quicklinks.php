@@ -9,5 +9,5 @@
  */
 function smarty_function_submission_listing_quicklinks($params, &$smarty)
 {
-    echo ft_display_submission_listing_quicklinks($params["context"], $smarty);
+    echo Submissions::displaySubmissionListingQuicklinks($params["context"], $smarty);
 }
