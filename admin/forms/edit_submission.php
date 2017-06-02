@@ -6,6 +6,7 @@ use FormTools\FieldValidation;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\Settings;
+use FormTools\Submissions;
 use FormTools\Themes;
 use FormTools\Views;
 use FormTools\ViewFields;
@@ -108,8 +109,7 @@ if (isset($_SESSION["ft"]["new_search"]) && $_SESSION["ft"]["new_search"] == "ye
 	$searchable_columns = ViewFields::getViewSearchableFields("", $view_info["fields"]);
 
 	// extract the original search settings and get the list of IDs
-	$submission_ids = ft_get_search_submission_ids($form_id, $view_id, $search["results_per_page"], $search["order"],
-		$search["search_fields"], $searchable_columns);
+	$submission_ids = Submissions::getSearchSubmissionIds($form_id, $view_id, $search["order"], $search["search_fields"], $searchable_columns);
 	$_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"] = $submission_ids;
 	$_SESSION["ft"]["new_search"] = "no";
 }

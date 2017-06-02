@@ -1,12 +1,19 @@
 <?php
 
 /**
- * Submissions.
+ * This file defines all functions related to managing form submissions.
+ *
+ * @copyright Benjamin Keen 2017
+ * @author Benjamin Keen <ben.keen@gmail.com>
+ * @package 3-0-x
+ * @subpackage Submissions
  */
 
 // -------------------------------------------------------------------------------------------------
 
 namespace FormTools;
+
+use PDOException, PDO;
 
 
 class Submissions {
@@ -193,9 +200,8 @@ class Submissions {
         $db = Core::$db;
         $LANG = Core::$L;
 
-        $submission_ids = array();
         if ($submissions_to_delete == "all") {
-            // get the list of searchable columns for this View. This is needed to ensure that ft_get_search_submission_ids receives
+            // get the list of searchable columns for this View. This is needed to ensure that get_search_submission_ids receives
             // the correct info to determine what submission IDs are appearing in this current search.
             $searchable_columns = Views::getViewSearchableFields($view_id);
             $submission_ids = Submissions::getSearchSubmissionIds($form_id, $view_id, "all", "submission_id-ASC", $search_fields, $searchable_columns);
@@ -308,6 +314,198 @@ class Submissions {
         extract(Hooks::processHookCalls("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);
+    }
+
+
+    /**
+     * Retrieves everything about a form submission. It contains a lot of meta-information about the field,
+     * from the form_fields and view_tabs. If the optional view_id parameter is included, only the fields
+     * in the View are returned (AND all system fields, if they're not included).
+     *
+     * @param integer $form_id the unique form ID
+     * @param integer $submission_id the unique submission ID
+     * @param integer $view_id an optional view ID parameter
+     * @return array Returns an array of hashes. Each index is a separate form field and its value is
+     *           a hash of information about it, such as value, field type, field size, etc.
+     */
+    private static function getSubmission($form_id, $submission_id, $view_id = "")
+    {
+        $return_arr = array();
+
+        $form_fields = Fields::getFormFields($form_id);
+        $submission  = ft_get_submission_info($form_id, $submission_id);
+
+        $view_fields = (!empty($view_id)) ? ViewFields::getViewFields($view_id) : array();
+
+        if (empty($submission)) {
+            return array();
+        }
+
+        $view_field_ids = array();
+        foreach ($view_fields as $view_field) {
+            $view_field_ids[] = $view_field["field_id"];
+        }
+
+        // for each field, combine the meta form info (like field size, type, data type etc) from $form_fields
+        // with the info about the submission itself. Also, if there's a View specified, filter out any fields
+        // that aren't used in the View
+        foreach ($form_fields as $field_info) {
+            $field_id = $field_info["field_id"];
+
+            // if we're looking at this submission through a View,
+            if (!empty($view_id) && !in_array($field_id, $view_field_ids)) {
+                continue;
+            }
+
+            // if the submission contains contents for this field, add it
+            if (array_key_exists($field_info['col_name'], $submission)) {
+                $field_info["content"] = $submission[$field_info['col_name']];
+            }
+
+            // if a view ID is specified, return the view-specific field info as well
+            if (!empty($view_id)) {
+                $field_view_info = ViewFields::getViewField($view_id, $field_id);
+
+                if (!empty($field_view_info)) {
+                    foreach ($field_view_info as $key => $value) {
+                        $field_info[$key] = $value;
+                    }
+                }
+            }
+
+            $return_arr[] = $field_info;
+        }
+
+        // finally, if a View is specified, ensure that the order in which the submission fields are returned
+        // is determined by the View. [NOT efficient!]
+        if (!empty($view_id)) {
+            $ordered_return_arr = array();
+
+            foreach ($view_fields as $view_field_info) {
+                $field_id = $view_field_info["field_id"];
+                foreach ($return_arr as $field_info) {
+                    if ($field_info["field_id"] == $field_id) {
+                        $ordered_return_arr[] = $field_info;
+                        break;
+                    }
+                }
+            }
+            $return_arr = $ordered_return_arr;
+        }
+
+        extract(Hooks::processHookCalls("end", compact("form_id", "submission_id", "view_id", "return_arr"), array("return_arr")), EXTR_OVERWRITE);
+
+        return $return_arr;
+    }
+
+
+    /**
+     * Retrieves ONLY the submission data itself. If you require "meta" information about the submision
+     * such as it's field type, size, database table name etc, use ft_get_submision().
+     *
+     * @param integer $form_id The unique form ID.
+     * @param integer $submission_id The unique submission ID.
+     * @return array Returns a hash of submission information.
+     */
+    public static function getSubmissionInfo($form_id, $submission_id)
+    {
+        $db = Core::$db;
+
+        // get the form submission info
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}form_{$form_id}
+            WHERE  submission_id = :submission_id
+        ");
+        $db->bind("submission_id", $submission_id);
+        $db->execute();
+
+        $submission = $db->fetch();
+
+        extract(Hooks::processHookCalls("end", compact("form_id", "submission_id", "submission"), array("submission")), EXTR_OVERWRITE);
+
+        return $submission;
+    }
+
+
+    /**
+     * Gets the number of submissions made through a form.
+     *
+     * @param integer $form_id the form ID
+     * @param integer $view_id the View ID
+     * @return integer The number of (finalized) submissions
+     */
+    public static function getSubmissionCount($form_id, $view_id = "")
+    {
+        $db = Core::$db;
+
+        $filter_sql_clause = "";
+        if (!empty($view_id)) {
+            $filter_sql = ViewFilters::getViewFilterSql($view_id);
+            if (!empty($filter_sql)) {
+                $filter_sql_clause = "AND" . join(" AND ", $filter_sql);
+            }
+        }
+
+        // get the form submission info
+        $db->query("
+            SELECT count(*)
+            FROM   {PREFIX}form_{$form_id}
+            WHERE  is_finalized = 'yes'
+                   $filter_sql_clause
+        ");
+        $db->execute();
+
+        $result = $db->fetch(PDO::FETCH_NUM);
+        $submission_count = $result[0];
+
+        return $submission_count;
+    }
+
+
+    /**
+     * Returns all submission IDs in a search result set. This is used on the item details pages (admin
+     * and client) to build the << previous / next >> links. Since the system now properly only searches
+     * fields marked as "is_searchable", this function needs the final $search_columns parameter, containing
+     * the list of searchable fields (which is View-dependent).
+     *
+     * @param integer $form_id the unique form ID
+     * @param integer $view_id the unique form ID
+     * @param mixed   $results_per_page an integer, or "all"
+     * @param string  $order a string of form: "{db column}_{ASC|DESC}"
+     * @param array   $search_fields an optional hash with these keys:<br/>
+     *                  search_field<br/>
+     *                  search_date<br/>
+     *                  search_keyword<br/>
+     * @param array   $search_columns the columns that are being searched
+     * @return string an HTML string
+     */
+    public static function getSearchSubmissionIds($form_id, $view_id, $results_per_page, $order, $search_fields = array(), $search_columns = array())
+    {
+        $db = Core::$db;
+
+        // determine the various SQL clauses
+        $order_by            = _ft_get_search_submissions_order_by_clause($form_id, $order);
+        $filter_clause       = _ft_get_search_submissions_view_filter_clause($view_id);
+        $search_where_clause = _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $search_columns);
+
+        // now build our query
+        try {
+            $db->query("
+                SELECT submission_id
+                FROM   {PREFIX}form_{$form_id}
+                WHERE  is_finalized = 'yes'
+                       $search_where_clause
+                       $filter_clause
+                ORDER BY $order_by
+            ");
+            $db->execute();
+        } catch (PDOException $e) {
+            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            exit;
+        }
+
+        return $db->fetchAll();
     }
 
 }

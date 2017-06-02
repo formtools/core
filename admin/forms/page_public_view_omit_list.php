@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Forms;
+use FormTools\Pages;
 use FormTools\Themes;
 use FormTools\Views;
 
