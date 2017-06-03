@@ -3,6 +3,7 @@
 use FormTools\Core;
 use FormTools\Forms;
 use FormTools\Themes;
+use FormTools\OmitLists;
 use FormTools\Pages;
 
 $sortable_id = "multi_page_form_list";
@@ -12,7 +13,7 @@ if (isset($request["update_main"])) {
 }
 
 $form_info = Forms::getForm($form_id);
-$form_omit_list = Forms::getPublicFormOmitList($form_id);
+$form_omit_list = OmitLists::getPublicFormOmitList($form_id);
 $num_clients_on_omit_list = count($form_omit_list);
 
 $selected_client_ids = array();

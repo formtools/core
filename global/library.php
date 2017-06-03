@@ -23,6 +23,7 @@ require_once(__DIR__ . "/code/ListGroups.class.php");
 require_once(__DIR__ . "/code/Menus.class.php");
 require_once(__DIR__ . "/code/Modules.class.php");
 require_once(__DIR__ . "/code/OptionLists.class.php");
+require_once(__DIR__ . "/code/OmitLists.class.php");
 require_once(__DIR__ . "/code/Pages.class.php");
 require_once(__DIR__ . "/code/polyfills.php");
 require_once(__DIR__ . "/code/Sessions.class.php");

@@ -566,10 +566,10 @@ class Administrator {
             // FORMS tab
             case "3":
                 // clear out the old mappings for the client-forms and client-Views. This section re-inserts everything
-                $db->query("DELETE FROM {PREFIX}client_forms WHERE account_id = $account_id");
+                Forms::deleteClientFormsByAccountId($account_id);
                 $db->query("DELETE FROM {PREFIX}client_views WHERE account_id = $account_id");
-                $db->query("DELETE FROM {PREFIX}public_form_omit_list WHERE account_id = $account_id");
-                $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE account_id = $account_id");
+                OmitLists::deleteFormOmitListByAccountId($account_id);
+                OmitLists::deleteViewOmitListByAccountId($account_id);
 
                 $num_form_rows = $infohash["num_forms"];
                 $client_forms      = array(); // stores the form IDs of all forms this client has been added to

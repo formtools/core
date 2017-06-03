@@ -23,10 +23,10 @@
           {if $clients|@count > 0}
           <td>
             <select name="client_id">
-              <option value="" {if $search_criteria.client_id == ""}selected{/if}>{$LANG.phrase_forms_assigned_to_any_account}</option>
+              <option value="" {if $search_criteria.account_id == ""}selected{/if}>{$LANG.phrase_forms_assigned_to_any_account}</option>
               <optgroup label="{$LANG.word_clients}">
                 {foreach from=$clients item=client name=row}
-                  <option value="{$client.account_id}" {if $search_criteria.client_id == $client.account_id}selected{/if}>{$client.first_name} {$client.last_name}</option>
+                  <option value="{$client.account_id}" {if $search_criteria.account_id == $client.account_id}selected{/if}>{$client.first_name} {$client.last_name}</option>
                 {/foreach}
               </optgroup>
             </select>

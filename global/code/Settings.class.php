@@ -2,10 +2,14 @@
 
 /**
  * The installation class. Added in 2.3.0.
+ *
+ * @copyright Benjamin Keen 2017
+ * @author Benjamin Keen <ben.keen@gmail.com>
+ * @package 3-0-x
+ * @subpackage Templates
  */
 
-
-// -------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 namespace FormTools;
 

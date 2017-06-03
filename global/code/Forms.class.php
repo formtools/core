@@ -424,7 +424,7 @@ class Forms {
         }
 
         $form_info["client_info"] = Forms::getFormClients($form_id);
-        $form_info["client_omit_list"] = ($form_info["access_type"] == "public") ? self::getPublicFormOmitList($form_id) : array();
+        $form_info["client_omit_list"] = ($form_info["access_type"] == "public") ? OmitLists::getPublicFormOmitList($form_id) : array();
 
         $db->query("SELECT * FROM {PREFIX}multi_page_form_urls WHERE form_id = :form_id ORDER BY page_num");
         $form_info["multi_page_form_urls"] = array();
@@ -462,7 +462,7 @@ class Forms {
 
         $accounts = array();
         if ($access_type == "public") {
-            $client_omit_list = self::getPublicFormOmitList($form_id);
+            $client_omit_list = OmitLists::getPublicFormOmitList($form_id);
             $all_clients = Clients::getList();
 
             foreach ($all_clients as $client_info) {
@@ -489,34 +489,6 @@ class Forms {
         extract(Hooks::processHookCalls("end", compact("form_id", "accounts"), array("accounts")), EXTR_OVERWRITE);
 
         return $accounts;
-    }
-
-
-    /**
-     * Returns an array of account IDs of those clients in the omit list for this public form.
-     *
-     * @param integer $form_id
-     * @return array
-     */
-    public static function getPublicFormOmitList($form_id)
-    {
-        $db = Core::$db;
-        $db->query("
-            SELECT account_id
-            FROM   {PREFIX}public_form_omit_list
-            WHERE form_id = :form_id
-        ");
-        $db->bind("form_id", $form_id);
-        $db->execute();
-
-        $client_ids = array();
-        foreach ($db->fetchAll() as $row) {
-            $client_ids[] = $row["account_id"];
-        }
-
-        extract(Hooks::processHookCalls("end", compact("clients_id", "form_id"), array("client_ids")), EXTR_OVERWRITE);
-
-        return $client_ids;
     }
 
 
@@ -779,9 +751,7 @@ class Forms {
         $db = Core::$db;
 
         // remove any old mappings
-        $db->query("DELETE FROM {PREFIX}client_forms WHERE form_id = :form_id");
-        $db->bind("form_id", $form_id);
-        $db->execute();
+        Forms::deleteClientForms($form_id);
 
         // add the new clients (assuming there are any)
         foreach ($client_ids as $client_id) {
@@ -903,9 +873,7 @@ class Forms {
         $db = Core::$db;
         $LANG = Core::$L;
 
-        $db->query("DELETE FROM {PREFIX}public_form_omit_list WHERE form_id = :form_id");
-        $db->bind("form_id", $form_id);
-        $db->execute();
+        OmitLists::deleteFormOmitList($form_id);
 
         $client_ids = (isset($info["selected_client_ids"])) ? $info["selected_client_ids"] : array();
         foreach ($client_ids as $account_id) {
@@ -1130,9 +1098,7 @@ class Forms {
         ));
         $db->execute();
 
-        $db->query("DELETE FROM {PREFIX}client_forms WHERE form_id = :form_id");
-        $db->bind("form_id", $form_id);
-        $db->execute();
+        Forms::deleteClientForms($form_id);
 
         foreach ($client_ids as $client_id) {
             $db->query("INSERT INTO {PREFIX}client_forms (account_id, form_id) VALUES (:client_id, :form_id)");
@@ -1499,17 +1465,13 @@ class Forms {
         $db->bind("form_id", $form_id);
         $db->execute();
 
-        $db->query("DELETE FROM {PREFIX}client_forms WHERE form_id = :form_id");
-        $db->bind("form_id", $form_id);
-        $db->execute();
+        Forms::deleteClientForms($form_id);
 
         $db->query("DELETE FROM {PREFIX}form_email_fields WHERE form_id = :form_id");
         $db->bind("form_id", $form_id);
         $db->execute();
 
-        $db->query("DELETE FROM {PREFIX}public_form_omit_list WHERE form_id = :form_id");
-        $db->bind("form_id", $form_id);
-        $db->execute();
+        OmitLists::deleteFormOmitList($form_id);
 
         $db->query("DELETE FROM {PREFIX}multi_page_form_urls WHERE form_id = :form_id");
         $db->bind("form_id", $form_id);
@@ -1669,9 +1631,6 @@ class Forms {
 
         extract(Hooks::processHookCalls("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
 
-        $success = true;
-        $message = $LANG["notify_form_updated"];
-
         // check required POST fields
         $rules = array();
         $rules[] = "required,form_name,{$LANG["validation_no_form_name"]}";
@@ -1702,130 +1661,46 @@ class Forms {
             $form_url = $infohash["form_url"];
         }
 
-        $db->query("
-            UPDATE {PREFIX}forms
-            SET    $is_active
-                  form_type = :form_type,
-                  submission_type = :submission_type,
-                  is_multi_page_form = :is_multi_page_form,
-                  form_url = :form_url,
-                  form_name = :form_name,
-                  redirect_url = :redirect_url,
-                  access_type = :access_type,
-                  auto_delete_submission_files = :auto_delete_submission_files,
-                  submission_strip_tags = :submission_strip_tags,
-                  edit_submission_page_label = :edit_submission_page_label,
-                  add_submission_button_label = :add_submission_button_label
-            WHERE form_id = :form_id
-        ");
-        $db->bindAll(array(
-            "form_type" => $infohash["form_type"],
-            "submission_type" => $submission_type,
-            "is_multi_page_form" => $is_multi_page_form,
-            "form_url" => $form_url,
-            "form_name" => $infohash["form_name"],
-            "redirect_url" => isset($infohash["redirect_url"]) ? $infohash["redirect_url"] : "",
-            "access_type" => $access_type,
-            "auto_delete_submission_files" => $infohash["auto_delete_submission_files"],
-            "submission_strip_tags" => $infohash["submission_strip_tags"],
-            "edit_submission_page_label" => $infohash["edit_submission_page_label"],
-            "add_submission_button_label" => $infohash["add_submission_button_label"],
-            "form_id" => $form_id
-        ));
-
         try {
+            $db->query("
+                UPDATE {PREFIX}forms
+                SET    $is_active
+                       form_type = :form_type,
+                       submission_type = :submission_type,
+                       is_multi_page_form = :is_multi_page_form,
+                       form_url = :form_url,
+                       form_name = :form_name,
+                       redirect_url = :redirect_url,
+                       access_type = :access_type,
+                       auto_delete_submission_files = :auto_delete_submission_files,
+                       submission_strip_tags = :submission_strip_tags,
+                       edit_submission_page_label = :edit_submission_page_label,
+                       add_submission_button_label = :add_submission_button_label
+                WHERE  form_id = :form_id
+            ");
+            $db->bindAll(array(
+                "form_type" => $infohash["form_type"],
+                "submission_type" => $submission_type,
+                "is_multi_page_form" => $is_multi_page_form,
+                "form_url" => $form_url,
+                "form_name" => $infohash["form_name"],
+                "redirect_url" => isset($infohash["redirect_url"]) ? $infohash["redirect_url"] : "",
+                "access_type" => $access_type,
+                "auto_delete_submission_files" => $infohash["auto_delete_submission_files"],
+                "submission_strip_tags" => $infohash["submission_strip_tags"],
+                "edit_submission_page_label" => $infohash["edit_submission_page_label"],
+                "add_submission_button_label" => $infohash["add_submission_button_label"],
+                "form_id" => $form_id
+            ));
+
             $db->execute();
         } catch (PDOException $e) {
-            General::handleError("Failed query in <b>" . __CLASS__ . ", " .__FUNCTION__ . "</b>, line " . __LINE__ . ": ", $e->getMessage());
+            Errors::handleDatabaseError(__CLASS__ , __FILE__, __LINE__, $e->getMessage());
             exit;
         }
 
-        // finally, update the list of clients associated with this form
-        $db->query("DELETE FROM {PREFIX}client_forms WHERE form_id = :form_id");
-        $db->bind("form_id", $form_id);
-        $db->execute();
-
-        foreach ($client_ids as $client_id) {
-            $db->query("
-                INSERT INTO {PREFIX}client_forms (account_id, form_id)
-                VALUES  (:client_id, :form_id)
-            ");
-            $db->bindAll(array(
-                "client_id" => $client_id,
-                "form_id" => $form_id
-            ));
-            $db->execute();
-        }
-
-        // since the client list may have just changed, do a little cleanup on the database data
-        switch ($access_type) {
-
-            // no changes needed!
-            case "public":
-                break;
-
-            // delete all client_view, client_form, public_form_omit_list, and public_view_omit_list entries concerning this form &
-            // it's Views. Since only the administrator can see the form, no client can see any of it's sub-parts
-            case "admin":
-                $db->query("DELETE FROM {PREFIX}client_forms WHERE form_id = :form_id");
-                $db->bind("form_id", $form_id);
-                $db->execute();
-
-                $db->query("DELETE FROM {PREFIX}public_form_omit_list WHERE form_id = :form_id");
-                $db->bind("form_id", $form_id);
-                $db->execute();
-
-                $view_ids = Views::getViewIds($form_id);
-                foreach ($view_ids as $view_id) {
-                    $db->query("DELETE FROM {PREFIX}client_views WHERE view_id = :view_id");
-                    $db->bind("view_id", $view_id);
-                    $db->execute();
-
-                    Views::deletePublicViewOmitList($view_id);                }
-                break;
-
-            // remove any records from the client_view and public_view_omit_list tables concerned clients NOT associated
-            // with this form.
-            case "private":
-                $db->query("DELETE FROM {PREFIX}public_form_omit_list WHERE form_id = :form_id");
-                $db->bind("form_id", $form_id);
-                $db->execute();
-
-                $client_clauses = array();
-                foreach ($client_ids as $client_id) {
-                    $client_clauses[] = "account_id != $client_id";
-                }
-
-                // there WERE clients associated with this form. Delete the ones that AREN'T associated
-                if (!empty($client_clauses)) {
-                    $client_id_clause = implode(" AND ", $client_clauses);
-                    $db->query("DELETE FROM {PREFIX}client_views WHERE form_id = :form_id AND $client_id_clause");
-                    $db->bind("form_id", $form_id);
-                    $db->execute();
-
-                    // also delete any orphaned records in the View omit list
-                    $view_ids = Views::getViewIds($form_id);
-                    foreach ($view_ids as $view_id) {
-                        $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE view_id = :view_id AND $client_id_clause");
-                        $db->bind("view_id", $view_id);
-                        $db->execute();
-                    }
-
-                // for some reason, the administrator has assigned NO clients to this private form. So, delete all clients
-                // associated with the Views
-                } else {
-                    $view_ids = Views::getViewIds($form_id);
-                    foreach ($view_ids as $view_id) {
-                        $db->query("DELETE FROM {PREFIX}client_views WHERE view_id = :view_id");
-                        $db->bind("view_id", $view_id);
-                        $db->execute();
-
-                        Views::deletePublicViewOmitList($view_id);
-                    }
-                }
-                break;
-        }
-
+        // update the list of clients associated with this form
+        Forms::updateFormAccess($form_id, $access_type, $client_ids);
 
         // update the multi-page form URLs
         $db->query("DELETE FROM {PREFIX}multi_page_form_urls WHERE form_id = :form_id");
@@ -1857,9 +1732,117 @@ class Forms {
             }
         }
 
+        $success = true;
+        $message = $LANG["notify_form_updated"];
+
         extract(Hooks::processHookCalls("end", compact("infohash", "form_id", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);
+    }
+
+
+    /**
+     *
+     * @param $form_id
+     * @param $client_ids
+     */
+    public static function updateFormAccess($form_id, $access_type, $client_ids)
+    {
+        $db = Core::$db;
+
+        // first, update the client-form mapping
+        Forms::deleteClientForms($form_id);
+        foreach ($client_ids as $client_id) {
+            $db->query("
+                INSERT INTO {PREFIX}client_forms (account_id, form_id)
+                VALUES  (:client_id, :form_id)
+            ");
+            $db->bindAll(array(
+                "client_id" => $client_id,
+                "form_id" => $form_id
+            ));
+            $db->execute();
+        }
+
+        // since the client list may have just changed, do a little cleanup on the database data
+        switch ($access_type) {
+
+            // no changes needed! (see above)
+            case "public":
+                break;
+
+            // delete all client_view, client_form, public_form_omit_list, and public_view_omit_list entries concerning this form &
+            // its Views. Since only the administrator can see the form, no client can see any of its sub-parts
+            case "admin":
+                Forms::deleteClientForms($form_id);
+
+                $view_ids = Views::getViewIds($form_id);
+                foreach ($view_ids as $view_id) {
+                    $db->query("DELETE FROM {PREFIX}client_views WHERE view_id = :view_id");
+                    $db->bind("view_id", $view_id);
+                    $db->execute();
+
+                    Views::deletePublicViewOmitList($view_id);
+                }
+                break;
+
+            // remove any records from the client_view and public_view_omit_list tables concerned clients NOT associated
+            // with this form.
+            case "private":
+                OmitLists::deleteFormOmitList($form_id);
+
+                $client_clauses = array();
+                foreach ($client_ids as $client_id) {
+                    $client_clauses[] = "account_id != $client_id";
+                }
+
+                // there WERE clients associated with this form. Delete the ones that AREN'T associated
+                if (!empty($client_clauses)) {
+                    $client_id_clause = implode(" AND ", $client_clauses);
+                    $db->query("DELETE FROM {PREFIX}client_views WHERE form_id = :form_id AND $client_id_clause");
+                    $db->bind("form_id", $form_id);
+                    $db->execute();
+
+                    // also delete any orphaned records in the View omit list
+                    $view_ids = Views::getViewIds($form_id);
+                    foreach ($view_ids as $view_id) {
+                        $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE view_id = :view_id AND $client_id_clause");
+                        $db->bind("view_id", $view_id);
+                        $db->execute();
+                    }
+
+                    // for some reason, the administrator has assigned NO clients to this private form. So, delete all clients
+                    // associated with the Views
+                } else {
+                    $view_ids = Views::getViewIds($form_id);
+                    foreach ($view_ids as $view_id) {
+                        $db->query("DELETE FROM {PREFIX}client_views WHERE view_id = :view_id");
+                        $db->bind("view_id", $view_id);
+                        $db->execute();
+
+                        Views::deletePublicViewOmitList($view_id);
+                    }
+                }
+                break;
+        }
+    }
+
+
+    public static function deleteClientForms($form_id)
+    {
+        $db = Core::$db;
+        $db->query("DELETE FROM {PREFIX}client_forms WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+    }
+
+
+    public static function deleteClientFormsByAccountId($account_id)
+    {
+        $db = Core::$db;
+        $db->query("DELETE FROM {PREFIX}client_forms WHERE account_id = :account_id");
+        $db->bind("account_id", $account_id);
+        $db->execute();
     }
 
 
@@ -1874,7 +1857,10 @@ class Forms {
      */
     public static function updateFormFieldsTab($form_id, $infohash)
     {
-        global $g_table_prefix, $g_debug, $LANG, $g_field_sizes;
+        $db = Core::$db;
+        $debug_enabled = Core::isDebugEnabled();
+        $LANG = Core::$L;
+        $field_sizes = FieldSizes::get();
 
         $success = true;
         $message = $LANG["notify_field_changes_saved"];
@@ -1890,8 +1876,7 @@ class Forms {
 
         $new_sort_groups = explode(",", $infohash["{$sortable_id}_sortable__new_groups"]);
 
-        foreach ($field_ids as $field_id)
-        {
+        foreach ($field_ids as $field_id) {
             $is_new_field = preg_match("/^NEW/", $field_id) ? true : false;
             $display_name        = (isset($infohash["field_{$field_id}_display_name"])) ? $infohash["field_{$field_id}_display_name"] : "";
             $form_field_name     = (isset($infohash["field_{$field_id}_name"])) ? $infohash["field_{$field_id}_name"] : "";
@@ -1909,26 +1894,26 @@ class Forms {
             $old_field_type_id   = (isset($infohash["old_field_{$field_id}_type_id"])) ? $infohash["old_field_{$field_id}_type_id"] : "";
 
             $field_info[] = array(
-            "is_new_field"        => $is_new_field,
-            "field_id"            => $field_id,
-            "display_name"        => $display_name,
-            "form_field_name"     => $form_field_name,
-            "field_type_id"       => $field_type_id,
-            "old_field_type_id"   => $old_field_type_id,
-            "include_on_redirect" => $include_on_redirect,
-            "is_system_field"     => $is_system_field,
-            "list_order"          => $order,
-            "is_new_sort_group"   => (in_array($field_id, $new_sort_groups)) ? "yes" : "no",
+                "is_new_field"        => $is_new_field,
+                "field_id"            => $field_id,
+                "display_name"        => $display_name,
+                "form_field_name"     => $form_field_name,
+                "field_type_id"       => $field_type_id,
+                "old_field_type_id"   => $old_field_type_id,
+                "include_on_redirect" => $include_on_redirect,
+                "is_system_field"     => $is_system_field,
+                "list_order"          => $order,
+                "is_new_sort_group"   => (in_array($field_id, $new_sort_groups)) ? "yes" : "no",
 
                 // column name info
-            "col_name"            => $col_name,
-            "old_col_name"        => $old_col_name,
-            "col_name_changed"    => ($col_name != $old_col_name) ? "yes" : "no",
+                "col_name"            => $col_name,
+                "old_col_name"        => $old_col_name,
+                "col_name_changed"    => ($col_name != $old_col_name) ? "yes" : "no",
 
                 // field size info
-            "field_size"          => $field_size,
-            "old_field_size"      => $old_field_size,
-            "field_size_changed"  => ($field_size != $old_field_size) ? "yes" : "no"
+                "field_size"          => $field_size,
+                "old_field_size"      => $old_field_size,
+                "field_size_changed"  => ($field_size != $old_field_size) ? "yes" : "no"
             );
             $order++;
         }
@@ -1940,40 +1925,41 @@ class Forms {
         //   2. with the addition of Shared Characteristics, this only deletes fields that aren't mapped between the
         //      two fields types (old and new)
         $changed_fields = array();
-        foreach ($field_info as $curr_field_info)
-        {
+        foreach ($field_info as $curr_field_info) {
             if ($curr_field_info["is_new_field"] || $curr_field_info["is_system_field"] == "yes" ||
-            $curr_field_info["field_type_id"] == $curr_field_info["old_field_type_id"])
+                $curr_field_info["field_type_id"] == $curr_field_info["old_field_type_id"]) {
                 continue;
-
+            }
             $changed_fields[] = $curr_field_info;
         }
 
-        if (!empty($changed_fields))
-        {
+        if (!empty($changed_fields)) {
             $field_type_settings_shared_characteristics = Settings::get("field_type_settings_shared_characteristics");
             $field_type_map = FieldTypes::getFieldTypeIdToIdentifierMap();
 
             $shared_settings = array();
-            foreach ($changed_fields as $changed_field_info)
-            {
+            foreach ($changed_fields as $changed_field_info) {
                 $field_id = $changed_field_info["field_id"];
                 $shared_settings[] = FieldTypes::getSharedFieldSettingInfo($field_type_map, $field_type_settings_shared_characteristics, $field_id, $changed_field_info["field_type_id"], $changed_field_info["old_field_type_id"]);
                 Fields::deleteExtendedFieldSettings($field_id);
                 FieldValidation::delete($field_id);
             }
 
-            foreach ($shared_settings as $setting)
-            {
-                foreach ($setting as $setting_info)
-                {
+            foreach ($shared_settings as $setting) {
+                foreach ($setting as $setting_info) {
                     $field_id      = $setting_info["field_id"];
                     $setting_id    = $setting_info["new_setting_id"];
                     $setting_value = $setting_info["setting_value"];
                     $db->query("
-          INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
-          VALUES ($field_id, $setting_id, '$setting_value')
-        ");
+                        INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
+                        VALUES (:field_id, :setting_id, :setting_value)
+                    ");
+                    $db->bindAll(array(
+                        "field_id" => $field_id,
+                        "setting_id" => $setting_id,
+                        "setting_value" => $setting_value
+                    ));
+                    $db->execute();
                 }
             }
         }
@@ -1981,15 +1967,14 @@ class Forms {
         // the database column name and size field both affect the form's actual database table structure. If either
         // of those changed, we need to update the database
         $db_col_changes     = array();
-        $db_col_change_hash = array(); // added later. Could use refactoring...
         $table_name = "{PREFIX}form_{$form_id}";
-        foreach ($field_info as $curr_field_info)
-        {
-            if ($curr_field_info["col_name_changed"] == "no" && $curr_field_info["field_size_changed"] == "no")
+        foreach ($field_info as $curr_field_info) {
+            if ($curr_field_info["col_name_changed"] == "no" && $curr_field_info["field_size_changed"] == "no") {
                 continue;
-
-            if ($curr_field_info["is_new_field"])
+            }
+            if ($curr_field_info["is_new_field"]) {
                 continue;
+            }
 
             $field_id       = $curr_field_info["field_id"];
             $old_col_name   = $curr_field_info["old_col_name"];
@@ -1998,36 +1983,40 @@ class Forms {
             $new_field_size_sql = $g_field_sizes[$new_field_size]["sql"];
 
             list($is_success, $err_message) = General::alterTableColumn($table_name, $old_col_name, $new_col_name, $new_field_size_sql);
-            if ($is_success)
-            {
+            if ($is_success) {
                 $db_col_changes[$field_id] = array(
-                "col_name"   => $new_col_name,
-                "field_size" => $new_field_size
+                    "col_name"   => $new_col_name,
+                    "field_size" => $new_field_size
                 );
-            }
 
-            // if there was a problem, return an error immediately
-            else
-            {
+                // if there was a problem, return an error immediately
+            } else {
+
                 // if there have already been successful database column name changes already made,
                 // update the database. This helps prevent things getting out of whack
-                if (!empty($db_col_changes))
-                {
-                    while (list($field_id, $changes) = each($db_col_changes))
-                    {
+                if (!empty($db_col_changes)) {
+                    while (list($field_id, $changes) = each($db_col_changes)) {
                         $col_name   = $changes["col_name"];
                         $field_size = $changes["field_size"];
 
-                        @$db->query("
-            UPDATE {PREFIX}form_fields
-            SET    col_name   = '$col_name',
-                   field_size = '$field_size'
-            WHERE  field_id = $field_id
-                      ");
+                        $db->query("
+                            UPDATE {PREFIX}form_fields
+                            SET    col_name = :col_name,
+                                   field_size = :field_size
+                            WHERE  field_id = :field_id
+                        ");
+                        $db->bindAll(array(
+                            "col_name" => $col_name,
+                            "field_size" => $field_size,
+                            "field_id" => $field_id
+                        ));
+                        $db->execute();
                     }
                 }
                 $message = $LANG["validation_db_not_updated_invalid_input"];
-                if ($g_debug) $message .= " \"$err_message\"";
+                if ($debug_enabled) {
+                    $message .= " \"$err_message\"";
+                }
                 return array(false, $message);
             }
         }
@@ -2035,8 +2024,9 @@ class Forms {
         // now update the fields, and, if need be, the form's database table
         foreach ($field_info as $field)
         {
-            if ($field["is_new_field"])
+            if ($field["is_new_field"]) {
                 continue;
+            }
 
             $field_id      = $field["field_id"];
             $display_name  = $field["display_name"];
@@ -2049,30 +2039,27 @@ class Forms {
             $list_order      = $field["list_order"];
             $is_new_sort_group = $field["is_new_sort_group"];
 
-            if ($is_system_field == "yes")
-            {
+            if ($is_system_field == "yes") {
                 $query = "
-        UPDATE {PREFIX}form_fields
-        SET    field_title = '$display_name',
-               include_on_redirect = '$include_on_redirect',
-               list_order = $list_order,
-               is_new_sort_group = '$is_new_sort_group'
-        WHERE  field_id = $field_id
+                    UPDATE {PREFIX}form_fields
+                    SET    field_title = '$display_name',
+                           include_on_redirect = '$include_on_redirect',
+                           list_order = $list_order,
+                           is_new_sort_group = '$is_new_sort_group'
+                    WHERE  field_id = $field_id
                   ";
-            }
-            else
-            {
+            } else {
                 $query = "
-        UPDATE {PREFIX}form_fields
-        SET    field_name = '$field_name',
-               field_title = '$display_name',
-               field_size = '$field_size',
-               col_name = '$col_name',
-               field_type_id  = '$field_type_id',
-               include_on_redirect = '$include_on_redirect',
-               list_order = $list_order,
-               is_new_sort_group = '$is_new_sort_group'
-        WHERE  field_id = $field_id
+                    UPDATE {PREFIX}form_fields
+                    SET    field_name = '$field_name',
+                           field_title = '$display_name',
+                           field_size = '$field_size',
+                           col_name = '$col_name',
+                           field_type_id  = '$field_type_id',
+                           include_on_redirect = '$include_on_redirect',
+                           list_order = $list_order,
+                           is_new_sort_group = '$is_new_sort_group'
+                    WHERE  field_id = $field_id
                   ";
             }
 
@@ -2125,6 +2112,7 @@ class Forms {
 
     // --------------------------------------------------------------------------------------------
 
+    // Private methods
 
     /**
      * Used in ft_search_forms and ft_get_form_prev_next_links, this function looks at the current search and figures
@@ -2140,7 +2128,7 @@ class Forms {
         $status_clause = self::getStatusClause($search_criteria["status"]);
         $keyword_clause = self::getKeywordClause($search_criteria["keyword"]);
         $form_clause = self::getFormClause($search_criteria["account_id"]);
-        $omitted_forms = self::getFormOmitList($search_criteria["account_id"]);
+        $omitted_forms = OmitLists::getPublicFormOmitListByAccountId($search_criteria["account_id"]);
         $admin_clause = (!$search_criteria["is_admin"]) ? "is_complete = 'yes' AND is_initialized = 'yes'" : "";
 
         // add up the where clauses
@@ -2288,34 +2276,6 @@ class Forms {
         }
 
         return $clause;
-    }
-
-
-    private static function getFormOmitList($account_id) {
-        if (empty($account_id)) {
-            return array();
-        }
-
-        $db = Core::$db;
-
-        // this var is populated ONLY for searches on a particular client account. It stores those public forms on
-        // which the client is on the Omit List. This value is used at the end of this function to trim the results
-        // returned to NOT include those forms
-        $omitted_forms = array();
-
-        // see if this client account has been omitted from any public forms. If it is, this will be used to
-        // filter the results
-        $db->query("
-            SELECT form_id
-            FROM {PREFIX}public_form_omit_list
-            WHERE account_id = :account_id
-        ");
-        $db->bind("account_id", $account_id);
-        foreach ($db->fetchAll() as $row) {
-            $omitted_forms[] = $row["form_id"];
-        }
-
-        return $omitted_forms;
     }
 
 }

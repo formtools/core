@@ -14,7 +14,7 @@
 
 namespace FormTools;
 
-use PDOException;
+use PDO, PDOException;
 
 
 class Views
@@ -84,7 +84,7 @@ class Views
         $db->bind("form_id", $form_id);
         $db->execute();
 
-        $view_ids = $db->fetchAll();
+        $view_ids = $db->fetchAll(PDO::FETCH_COLUMN);
 
         extract(Hooks::processHookCalls("end", compact("view_ids"), array("view_ids")), EXTR_OVERWRITE);
 
@@ -322,8 +322,8 @@ class Views
         $db->execute();
 
         // first, delete all the Views
-        foreach ($db->fetchAll() as $view_info) {
-            Views::deleteView($view_info["view_id"]);
+        foreach ($db->fetchAll(PDO::FETCH_COLUMN) as $view_id) {
+            Views::deleteView($view_id);
         }
 
         // next, delete the group
@@ -374,8 +374,15 @@ class Views
         $db->bind("view_id", $view_id);
         $db->execute();
 
-        // hmm... This should be handled better: the user needs to be notified prior to deleting a View to describe all the dependencies
-        $db->query("UPDATE {PREFIX}email_templates SET limit_email_content_to_fields_in_view = NULL WHERE limit_email_content_to_fields_in_view = $view_id");
+        // hmm... This should be handled better: the user needs to be notified prior to deleting a View to describe
+        // all the dependencies
+        $db->query("
+            UPDATE {PREFIX}email_templates
+            SET limit_email_content_to_fields_in_view = NULL
+            WHERE limit_email_content_to_fields_in_view = :view_id
+        ");
+        $db->bind("view_id", $view_id);
+        $db->execute();
 
         $success = true;
         $message = $LANG["notify_view_deleted"];

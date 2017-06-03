@@ -2,7 +2,14 @@
 
 /**
  * Contains methods for the current logged in user: admin or client. Submission Accounts are handled via that module.
+ *
+ * @copyright Benjamin Keen 2017
+ * @author Benjamin Keen <ben.keen@gmail.com>
+ * @package 3-0-x
+ * @subpackage User
  */
+
+// -------------------------------------------------------------------------------------------------
 
 namespace FormTools;
 

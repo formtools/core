@@ -220,9 +220,7 @@ class Clients {
         $db->bind(":account_id", $account_id);
         $db->execute();
 
-        $db->query("DELETE FROM {PREFIX}client_forms WHERE account_id = :account_id");
-        $db->bind(":account_id", $account_id);
-        $db->execute();
+        Forms::deleteClientFormsByAccountId($account_id);
 
         $db->query("DELETE FROM {PREFIX}email_template_recipients WHERE account_id = :account_id");
         $db->bind(":account_id", $account_id);
@@ -239,13 +237,8 @@ class Clients {
         $db->bind(":account_id2", $account_id);
         $db->execute();
 
-        $db->query("DELETE FROM {PREFIX}public_form_omit_list WHERE account_id = :account_id");
-        $db->bind(":account_id", $account_id);
-        $db->execute();
-
-        $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE account_id = :account_id");
-        $db->bind(":account_id", $account_id);
-        $db->execute();
+        OmitLists::deleteFormOmitListByAccountId($account_id);
+        OmitLists::deleteViewOmitListByAccountId($account_id);
 
         $db->processTransaction();
 
