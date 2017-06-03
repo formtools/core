@@ -46,18 +46,17 @@ class Translations
      */
     public function refreshLanguageList()
     {
-        global $g_root_dir, $g_table_prefix, $LANG;
+        $db = Core::$db;
+        $LANG = Core::$L;
+        $root_dir = Core::getRootDir();
 
-        $language_folder_dir = "$g_root_dir/global/lang";
+        $language_folder_dir = "$root_dir/global/lang";
 
         $available_language_info = array();
-        if ($handle = opendir($language_folder_dir))
-        {
-            while (false !== ($filename = readdir($handle)))
-            {
+        if ($handle = opendir($language_folder_dir)) {
+            while (false !== ($filename = readdir($handle))) {
                 if ($filename != '.' && $filename != '..' && $filename != "index.php" &&
-                Files::getFilenameExtension($filename, true) == "php")
-                {
+                    Files::getFilenameExtension($filename, true) == "php") {
                     list($lang_file, $lang_display) = $this->getLanguageFileInfo("$language_folder_dir/$filename");
                     $available_language_info[$lang_file] = $lang_display;
                 }
@@ -70,18 +69,21 @@ class Translations
 
         // now piece everything together in a single string for storing in the database
         $available_languages = array();
-        while (list($key,$val) = each($available_language_info))
+        while (list($key,$val) = each($available_language_info)) {
             $available_languages[] = "$key,$val";
+        }
         $available_language_str = join("|", $available_languages);
 
         $db->query("
-    UPDATE {PREFIX}settings
-    SET    setting_value = '$available_language_str'
-    WHERE  setting_name = 'available_languages'
-      ");
+            UPDATE {PREFIX}settings
+            SET    setting_value = :setting_value
+            WHERE  setting_name = 'available_languages'
+        ");
+        $db->bind("setting_value", $available_language_str);
+        $db->execute();
 
         // update the values in sessions
-        $_SESSION["ft"]["settings"]["available_languages"] = $available_language_str;
+        Sessions::set("settings.available_languages", $available_language_str);
 
         return array(true, $LANG["notify_lang_list_updated"]);
     }

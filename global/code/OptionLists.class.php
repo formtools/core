@@ -31,7 +31,7 @@ class OptionLists {
         if ($options["page"] == "all") {
             $limit_clause = "";
         } else {
-            $first_item = ($options["per_page"] - 1) * $options["per_page"];
+            $first_item = ($options["page"] - 1) * $options["per_page"];
             $limit_clause = "LIMIT $first_item, {$options["per_page"]}";
         }
 
@@ -398,17 +398,16 @@ class OptionLists {
         $db = Core::$db;
         $LANG = Core::$L;
 
-        $option_list_name = $info["option_list_name"];
         $is_grouped = isset($info["is_grouped"]) ? $info["is_grouped"] : "no";
 
         $db->query("
             UPDATE {PREFIX}option_lists
-            SET    option_list_name  = :option_list_name,
-                   is_grouped = :is_grouped,
+            SET    option_list_name = :option_list_name,
+                   is_grouped = :is_grouped
             WHERE  list_id = :list_id
         ");
         $db->bindAll(array(
-            "option_list_name" => $option_list_name,
+            "option_list_name" => $info["option_list_name"],
             "is_grouped" => $is_grouped,
             "list_id" => $list_id
         ));
@@ -464,10 +463,18 @@ class OptionLists {
                 $is_new_sort_group = (in_array($i, $new_groups)) ? "yes" : "no";
 
                 $db->query("
-                    INSERT INTO {PREFIX}field_options (list_id, option_order, option_value, option_name,
-                      is_new_sort_group, list_group_id)
-                    VALUES ($list_id, $order, '$value', '$text', '$is_new_sort_group', $curr_group_id)
+                    INSERT INTO {PREFIX}field_options (list_id, option_order, option_value, option_name, is_new_sort_group, list_group_id)
+                    VALUES (:list_id, :option_order, :option_value, :option_name, :is_new_sort_group, :list_group_id)
                 ");
+                $db->bindAll(array(
+                    "list_id" => $list_id,
+                    "option_order" => $order,
+                    "option_value" => $value,
+                    "option_name" => $text,
+                    "is_new_sort_group" => $is_new_sort_group,
+                    "list_group_id" => $curr_group_id
+                ));
+                $db->execute();
                 $order++;
             }
         }
@@ -491,10 +498,13 @@ class OptionLists {
      */
     public static function deleteOptionList($list_id)
     {
+        $db = Core::$db;
+        $LANG = Core::$L;
+
         // slight behavioural change in 2.1.0. Now you CAN delete Option Lists that are used by one or more fields.
         // It just clears any references, thus leaving those fields incompletely configured (which isn't the end of
         // the world!)
-        $fields = ft_get_fields_using_option_list($list_id);
+        $fields = OptionLists::getFieldsUsingOptionList($list_id);
 
         foreach ($fields as $field_info) {
             $field_id      = $field_info["field_id"];
@@ -502,37 +512,47 @@ class OptionLists {
             $settings = FieldTypes::getFieldTypeSettings($field_type_id);
 
             $setting_ids = array();
-            foreach ($settings as $setting_info)
-            {
-                if ($setting_info["field_type"] == "option_list_or_form_field")
-                {
+            foreach ($settings as $setting_info) {
+                if ($setting_info["field_type"] == "option_list_or_form_field") {
                     $setting_ids[] = $setting_info["setting_id"];
                 }
             }
-            if (empty($setting_ids))
+            if (empty($setting_ids)) {
                 continue;
+            }
 
             $setting_id_str = implode(",", $setting_ids);
 
             // now we delete any entries in the field_settings table with field_id, setting_id and a NUMERIC value for the
             // setting_value column. That column is also
             $db->query("
-      DELETE FROM {PREFIX}field_settings
-      WHERE field_id = $field_id AND
-            setting_id IN ($setting_id_str) AND
-            setting_value NOT LIKE 'form_field%'
-    ");
+                DELETE FROM {PREFIX}field_settings
+                WHERE field_id = :field_id AND
+                      setting_id IN ($setting_id_str) AND
+                      setting_value NOT LIKE 'form_field%'
+            ");
+            $db->bind("field_id", $field_id);
+            $db->execute();
         }
 
-        $db->query("DELETE FROM {PREFIX}field_options WHERE list_id = $list_id");
-        $db->query("DELETE FROM {PREFIX}option_lists WHERE list_id = $list_id");
-        $db->query("DELETE FROM {PREFIX}list_groups WHERE group_type = 'option_list_{$list_id}'");
+        $db->query("DELETE FROM {PREFIX}field_options WHERE list_id = :list_id");
+        $db->bind("list_id", $list_id);
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}option_lists WHERE list_id = :list_id");
+        $db->bind("list_id", $list_id);
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}list_groups WHERE group_type = :group_type");
+        $db->bind("group_type", "option_list_{$list_id}");
+        $db->execute();
 
         $success = true;
         $message = $LANG["notify_option_list_deleted"];
+
         extract(Hooks::processHookCalls("end", compact("list_id"), array("success", "message")), EXTR_OVERWRITE);
 
-        return array(true, $message);
+        return array($success, $message);
     }
 
 

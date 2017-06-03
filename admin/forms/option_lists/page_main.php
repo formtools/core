@@ -14,7 +14,7 @@ $LANG = Core::$L;
 $sortable_id = "option_list";
 if (isset($request["update_page"])) {
 	$request["sortable_id"] = $sortable_id;
-	list($g_success, $g_message) = OptionLists::updateOptionLIst($list_id, $request);
+	list($g_success, $g_message) = OptionLists::updateOptionList($list_id, $request);
 }
 
 $list_info = OptionLists::getOptionList($list_id);

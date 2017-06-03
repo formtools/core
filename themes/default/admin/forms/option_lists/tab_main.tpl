@@ -1,5 +1,4 @@
-
-  <form action="{$same_page}" id="option_list_form" method="post">
+ <form action="{$same_page}" id="option_list_form" method="post">
     <input type="hidden" name="update_page" value="1" />
     <input type="hidden" name="num_rows" id="num_rows" value="{$total_options}" />
 
@@ -107,11 +106,15 @@
                   </li>
                   {/if}
                   <li class="sortable_row">
-                   {assign var=next_item_is_new_sort_group value=$options[$smarty.foreach.row.iteration].is_new_sort_group}
-                   <div class="row_content{if $next_item_is_new_sort_group == 'no'} grouped_row{/if}">
+                    {if $smarty.foreach.row.last}
+                      {assign var=next_item_is_new_sort_group value="yes"}
+                    {else}
+                      {assign var=next_item_is_new_sort_group value=$options[$smarty.foreach.row.iteration].is_new_sort_group}
+                    {/if}
+                    <div class="row_content{if $next_item_is_new_sort_group == 'no'} grouped_row{/if}">
                 {/if}
 
-                {assign var=previous_item value=$i}
+                {assign var=previous_item value=$option}
 
                 <div class="row_group{if $smarty.foreach.row.last} rowN{/if}">
                   <input type="hidden" class="sr_order" value="{$running_row_count}" />

@@ -50,15 +50,13 @@ $page_vars["show_tabset_nav_links"] = true;
 $page_vars["prev_tabset_link"] = $prev_tabset_link;
 $page_vars["next_tabset_link"] = $next_tabset_link;
 
-switch ($page) {
-	case "main":
-		require("page_main.php");
-		break;
-	case "form_fields":
-		require("page_form_fields.php");
-		break;
+$page_map = array(
+    "main" => "page_main.php",
+    "form_fields" => "page_form_fields.php"
+);
 
-	default:
-		require("page_main.php");
-		break;
+if (isset($page_map[$page])) {
+    require_once($page_map[$page]);
+} else {
+    require_once($page_map["main"]);
 }

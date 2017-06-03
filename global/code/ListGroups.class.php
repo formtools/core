@@ -24,13 +24,13 @@ class ListGroups {
 
         $db->query("
             INSERT INTO {PREFIX}list_groups (group_type, group_name, custom_data, list_order)
-            VALUES (:group_type, :group_name, :custom_data, :next_order)
+            VALUES (:group_type, :group_name, :custom_data, :list_order)
         ");
         $db->bindAll(array(
             ":group_type" => $group_type,
             ":group_name" => $group_name,
             ":custom_data" => "",
-            ":order" => $next_order
+            ":list_order" => $next_order
         ));
         $db->execute();
 
