@@ -135,8 +135,8 @@ for ($i=0; $i<$num_views; $i++) {
 }
 
 // override the form nav links so that it always links to the Views page
-$page_vars["prev_tabset_link"] = (!empty($links["prev_form_id"])) ? "edit.php?page=views&form_id={$links["prev_form_id"]}" : "";
-$page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "edit.php?page=views&form_id={$links["next_form_id"]}" : "";
+$page_vars["prev_tabset_link"] = (!empty($links["prev_form_id"])) ? "?page=views&form_id={$links["prev_form_id"]}" : "";
+$page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "?page=views&form_id={$links["next_form_id"]}" : "";
 
 // -----------------------------------------------------------------------------------------------
 

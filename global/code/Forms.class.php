@@ -12,16 +12,15 @@ namespace FormTools;
 use PDOException;
 
 
-class Forms {
-
-
+class Forms
+{
     /**
-     * Returns all forms.
+     * Returns all forms. Should only be called by adminstrators.
      * @return array
      */
     public static function getForms()
     {
-        return self::searchForms("", true);
+        return self::searchForms(array("is_admin" => true));
     }
 
 
@@ -30,8 +29,7 @@ class Forms {
      */
     public static function processForm($form_data)
     {
-        global $g_table_prefix, $g_multi_val_delimiter, $g_query_str_multi_val_separator, $LANG,
-               $g_api_version, $g_api_recaptcha_private_key;
+        global $g_multi_val_delimiter, $g_query_str_multi_val_separator, $LANG, $g_api_version, $g_api_recaptcha_private_key;
 
         // ensure the incoming values are escaped
         $form_id = $form_data["form_tools_form_id"];
@@ -1741,41 +1739,60 @@ class Forms {
     }
 
 
-    /**
-     *
-     * @param $form_id
-     * @param $client_ids
-     */
     public static function updateFormAccess($form_id, $access_type, $client_ids)
     {
         $db = Core::$db;
 
-        // first, update the client-form mapping
-        Forms::deleteClientForms($form_id);
-        foreach ($client_ids as $client_id) {
-            $db->query("
-                INSERT INTO {PREFIX}client_forms (account_id, form_id)
-                VALUES  (:client_id, :form_id)
-            ");
-            $db->bindAll(array(
-                "client_id" => $client_id,
-                "form_id" => $form_id
-            ));
-            $db->execute();
+        if ($access_type === "public") {
+            Forms::deleteClientForms($form_id);
+            foreach ($client_ids as $client_id) {
+                $db->query("
+                    INSERT INTO {PREFIX}client_forms (account_id, form_id)
+                    VALUES  (:client_id, :form_id)
+                ");
+                $db->bindAll(array(
+                    "client_id" => $client_id,
+                    "form_id" => $form_id
+                ));
+                $db->execute();
+            }
         }
 
-        // since the client list may have just changed, do a little cleanup on the database data
-        switch ($access_type) {
+        // delete all client_view, client_form, public_form_omit_list, and public_view_omit_list entries concerning this
+        // form & its Views. Since only the administrator can see the form, no client can see any of its sub-parts
+        if ($access_type == "admin") {
+            Forms::deleteClientForms($form_id);
+            Views::deleteClientViewsByFormId($form_id);
+        }
 
-            // no changes needed! (see above)
-            case "public":
-                break;
+        // remove any records from the client_view and public_view_omit_list tables concerned clients NOT associated
+        // with this form.
+        if ($access_type == "private") {
+            OmitLists::deleteFormOmitList($form_id);
 
-            // delete all client_view, client_form, public_form_omit_list, and public_view_omit_list entries concerning this form &
-            // its Views. Since only the administrator can see the form, no client can see any of its sub-parts
-            case "admin":
-                Forms::deleteClientForms($form_id);
+            $client_clauses = array();
+            foreach ($client_ids as $client_id) {
+                $client_clauses[] = "account_id != $client_id";
+            }
 
+            // there WERE clients associated with this form. Delete the ones that AREN'T associated
+            if (!empty($client_clauses)) {
+                $client_id_clause = implode(" AND ", $client_clauses);
+                $db->query("DELETE FROM {PREFIX}client_views WHERE form_id = :form_id AND $client_id_clause");
+                $db->bind("form_id", $form_id);
+                $db->execute();
+
+                // also delete any orphaned records in the View omit list
+                $view_ids = Views::getViewIds($form_id);
+                foreach ($view_ids as $view_id) {
+                    $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE view_id = :view_id AND $client_id_clause");
+                    $db->bind("view_id", $view_id);
+                    $db->execute();
+                }
+
+                // for some reason, the administrator has assigned NO clients to this private form. So, delete all clients
+                // associated with the Views
+            } else {
                 $view_ids = Views::getViewIds($form_id);
                 foreach ($view_ids as $view_id) {
                     $db->query("DELETE FROM {PREFIX}client_views WHERE view_id = :view_id");
@@ -1784,46 +1801,7 @@ class Forms {
 
                     Views::deletePublicViewOmitList($view_id);
                 }
-                break;
-
-            // remove any records from the client_view and public_view_omit_list tables concerned clients NOT associated
-            // with this form.
-            case "private":
-                OmitLists::deleteFormOmitList($form_id);
-
-                $client_clauses = array();
-                foreach ($client_ids as $client_id) {
-                    $client_clauses[] = "account_id != $client_id";
-                }
-
-                // there WERE clients associated with this form. Delete the ones that AREN'T associated
-                if (!empty($client_clauses)) {
-                    $client_id_clause = implode(" AND ", $client_clauses);
-                    $db->query("DELETE FROM {PREFIX}client_views WHERE form_id = :form_id AND $client_id_clause");
-                    $db->bind("form_id", $form_id);
-                    $db->execute();
-
-                    // also delete any orphaned records in the View omit list
-                    $view_ids = Views::getViewIds($form_id);
-                    foreach ($view_ids as $view_id) {
-                        $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE view_id = :view_id AND $client_id_clause");
-                        $db->bind("view_id", $view_id);
-                        $db->execute();
-                    }
-
-                    // for some reason, the administrator has assigned NO clients to this private form. So, delete all clients
-                    // associated with the Views
-                } else {
-                    $view_ids = Views::getViewIds($form_id);
-                    foreach ($view_ids as $view_id) {
-                        $db->query("DELETE FROM {PREFIX}client_views WHERE view_id = :view_id");
-                        $db->bind("view_id", $view_id);
-                        $db->execute();
-
-                        Views::deletePublicViewOmitList($view_id);
-                    }
-                }
-                break;
+            }
         }
     }
 
@@ -1860,7 +1838,7 @@ class Forms {
         $db = Core::$db;
         $debug_enabled = Core::isDebugEnabled();
         $LANG = Core::$L;
-        $field_sizes = FieldSizes::get();
+        $FIELD_SIZES = FieldSizes::get();
 
         $success = true;
         $message = $LANG["notify_field_changes_saved"];
@@ -2085,7 +2063,7 @@ class Forms {
         }
         if (!empty($new_fields))
         {
-            list($is_success, $error) = ft_add_form_fields($form_id, $new_fields);
+            list($is_success, $error) = Fields::addFormFields($form_id, $new_fields);
 
             // if there was a problem adding any of the new fields, inform the user
             if (!$is_success)
@@ -2115,7 +2093,7 @@ class Forms {
     // Private methods
 
     /**
-     * Used in ft_search_forms and ft_get_form_prev_next_links, this function looks at the current search and figures
+     * Used in Forms::searchForms and Forms::getFormPrevNextLinks, this function looks at the current search and figures
      * out the WHERE and ORDER BY clauses so that the calling function can retrieve the appropriate form results in
      * the appropriate order.
      *

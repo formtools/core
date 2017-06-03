@@ -24,7 +24,7 @@ foreach ($list_info["options"] as $option_info) {
 }
 
 $placeholders = array(
-	"link1" => "edit.php?page=form_fields",
+	"link1" => "?page=form_fields",
 	"link2" => "index.php?add_option_list=1&create_option_list_from_list_id={$list_info["list_id"]}"
 );
 

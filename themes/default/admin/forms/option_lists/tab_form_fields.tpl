@@ -38,7 +38,7 @@
           {if $field_info.form_id|in_array:$incomplete_forms}
             <span class="light_grey">{$LANG.phrase_edit_field|upper}</span>
           {else}
-            <a href="../edit.php?page=fields&field_id={$field_info.field_id}&form_id={$field_info.form_id}">{$LANG.phrase_edit_field|upper}</a>
+            <a href="../edit/?page=fields&field_id={$field_info.field_id}&form_id={$field_info.form_id}">{$LANG.phrase_edit_field|upper}</a>
           {/if}
         </td>
       </tr>

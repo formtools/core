@@ -1,5 +1,6 @@
 <?php
 
+use FormTools\Core;
 use FormTools\Forms;
 use FormTools\Pages;
 use FormTools\Themes;
@@ -15,10 +16,11 @@ if (isset($request["update_public_view_omit_list"])) {
 $form_info = Forms::getForm($form_id);
 $view_omit_list = Views::getPublicViewOmitList($view_id);
 
+$LANG = Core::$L;
 
 // override the form nav links so that it always links to the Views page
-$page_vars["prev_tabset_link"] = (!empty($links["prev_form_id"])) ? "edit.php?page=views&form_id={$links["prev_form_id"]}" : "";
-$page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "edit.php?page=views&form_id={$links["next_form_id"]}" : "";
+$page_vars["prev_tabset_link"] = (!empty($links["prev_form_id"])) ? "?page=views&form_id={$links["prev_form_id"]}" : "";
+$page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "?page=views&form_id={$links["next_form_id"]}" : "";
 
 $page_vars["page"]       = "public_view_omit_list";
 $page_vars["page_url"]   = Pages::getPageUrl("edit_form_public_view_omit_list", array("form_id" => $form_id, "view_id" => $view_id));

@@ -36,7 +36,11 @@
             </li>
             {/if}
             <li class="sortable_row">
-            {assign var=next_item_is_new_sort_group value=$menu.menu_items[$smarty.foreach.admin_menu_items.iteration].is_new_sort_group}
+              {if $smarty.foreach.admin_menu_items.last}
+                {assign var=next_item_is_new_sort_group value="yes"}
+              {else}
+                  {assign var=next_item_is_new_sort_group value=$menu.menu_items[$smarty.foreach.admin_menu_items.iteration].is_new_sort_group}
+              {/if}
             <div class="row_content{if $next_item_is_new_sort_group == 'no'} grouped_row{/if}">
           {/if}
 

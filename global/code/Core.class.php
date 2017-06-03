@@ -629,4 +629,8 @@ class Core {
     public static function isDebugEnabled() {
         return self::$debugEnabled;
     }
+
+    public static function getDefaultErrorReporting() {
+        return self::$errorReporting;
+    }
 }

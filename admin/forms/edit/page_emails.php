@@ -11,7 +11,7 @@ use FormTools\Themes;
 if (isset($request["add_email"])) {
 	$create_email_from_email_id = (isset($request["create_email_from_email_id"])) ? $request["create_email_from_email_id"] : "";
 	$email_id = Emails::createBlankEmailTemplate($form_id, $create_email_from_email_id);
-    General::redirect("edit.php?page=edit_email&form_id=$form_id&email_id=$email_id");
+    General::redirect("?page=edit_email&form_id=$form_id&email_id=$email_id");
 }
 
 if (isset($request["delete"])) {

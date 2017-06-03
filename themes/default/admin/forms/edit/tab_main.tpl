@@ -161,7 +161,7 @@
             <div style="float:right;margin-left: 20px">
               <input type="button" id="client_omit_list_button"
                 value="{$LANG.phrase_manage_client_omit_list}{if $form_info.access_type == 'public'} ({$num_clients_on_omit_list}){/if}"
-                onclick="window.location='edit.php?page=public_form_omit_list&form_id={$form_id}'"
+                onclick="window.location='?page=public_form_omit_list&form_id={$form_id}'"
                 {if $form_info.access_type != 'public'}disabled{/if} /><br />
             </div>
             <input type="radio" name="access_type" id="at2" value="public" {if $form_info.access_type == 'public'}checked{/if} />

@@ -59,7 +59,7 @@ $return_val_str = "";
 if (isset($request["return_vals"])) {
 	$vals = array();
 	foreach ($request["return_vals"] as $pair) {
-		list($key, $value) = split(":", $pair);
+		list($key, $value) = explode(":", $pair);
 		$vals[] = "\"$key\": \"$value\"";
 	}
 	$return_val_str = ", " . implode(", ", $vals);
@@ -152,7 +152,7 @@ switch ($action) {
 
 	case "select_submissions":
 		$form_id        = $request["form_id"];
-		$submission_ids = split(",", $request["submission_ids"]);
+		$submission_ids = explode(",", $request["submission_ids"]);
 
 		// user HASN'T selected all submissions
 		if (empty($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {

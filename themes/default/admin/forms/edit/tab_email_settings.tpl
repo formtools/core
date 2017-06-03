@@ -1,5 +1,5 @@
   <div class="previous_page_icon">
-    <a href="edit.php?page=emails&form_id={$form_id}"><img src="{$images_url}/up.jpg" title="{$LANG.phrase_previous_page}" alt="{$LANG.phrase_previous_page}" border="0" /></a>
+    <a href="?page=emails&form_id={$form_id}"><img src="{$images_url}/up.jpg" title="{$LANG.phrase_previous_page}" alt="{$LANG.phrase_previous_page}" border="0" /></a>
   </div>
 
   <div class="subtitle underline margin_top_large">{$LANG.phrase_form_email_field_configuration|upper}</div>

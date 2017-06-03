@@ -47,7 +47,6 @@
         <td>
           {languages_dropdown name_id="ui_language" default=$client_info.ui_language}
           <input type="button" value="{$LANG.phrase_refresh_list}" onclick="window.location='edit.php?client_id={$client_id}&page=settings&refresh_lang_list'" />
-          <a href="http://translations.formtools.org" target="_blank">{$LANG.phrase_get_more}</a>
         </td>
         <td class="check_area" align="center"><input type="checkbox" name="may_edit_language" {if $client_info.settings.may_edit_language == "yes"}checked="checked"{/if} /></td>
       </tr>

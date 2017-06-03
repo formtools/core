@@ -42,7 +42,7 @@
           <div style="float:right;margin-left: 20px">
             <input type="button" id="client_omit_list_button"
               value="Manage Client Omit List{if $view_info.access_type == 'public'} ({$num_clients_on_omit_list}){/if}"
-              onclick="window.location='edit.php?page=public_view_omit_list&view_id={$view_id}'"
+              onclick="window.location='?page=public_view_omit_list&view_id={$view_id}'"
               {if $view_info.access_type != 'public'}disabled{/if} />
           </div>
           <input type="radio" name="access_type" id="at2" value="public" {if $view_info.access_type == 'public'}checked{/if} />

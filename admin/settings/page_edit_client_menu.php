@@ -1,8 +1,9 @@
 <?php
 
+use FormTools\Core;
 use FormTools\Menus;
+use FormTools\Pages;
 use FormTools\Themes;
-
 
 $is_new_menu = false;
 $sortable_id = "edit_client_menu";
@@ -51,22 +52,28 @@ if ($num_menu_items == 0) {
 
 // ------------------------------------------------------------------------------------------------
 
-// compile the header information
-$page_vars = array();
-$page_vars["page"] = "edit_client_menu";
-$page_vars["page_url"] = Pages::getPageUrl("edit_client_menu");
-$page_vars["tabs"] = $tabs;
-$page_vars["head_title"] = "{$_SESSION["ft"]["settings"]["program_name"]} - {$LANG["phrase_setup_options"]} - {$LANG["word_menus"]}";
-$page_vars["menu"] = $menu_info;
-$page_vars["is_new_menu"] = $is_new_menu;
-$page_vars["selected_client_ids"] = $selected_client_ids;
-$page_vars["sortable_id"] = $sortable_id;
+$LANG = Core::$L;
+$root_url = Core::getRootUrl();
+
+$page_vars = array(
+    "page" => "edit_client_menu",
+    "page_url" => Pages::getPageUrl("edit_client_menu"),
+    "tabs" => $tabs,
+    "head_title" => "{$_SESSION["ft"]["settings"]["program_name"]} - {$LANG["phrase_setup_options"]} - {$LANG["word_menus"]}",
+    "menu" => $menu_info,
+    "is_new_menu" => $is_new_menu,
+    "selected_client_ids" => $selected_client_ids,
+    "sortable_id" => $sortable_id,
+    "js_messages" => array(
+        "word_remove", "word_na", "word_form_c", "word_client_c", "word_url_c",
+        "validation_menu_name_taken", "phrase_delete_row", "phrase_connect_rows", "phrase_disconnect_rows"
+    ),
+    "head_js" => $js
+);
+
 $page_vars["head_string"] =<<< END
-  <script src="$g_root_url/global/scripts/sortable.js?v=2"></script>
-  <script src="$g_root_url/global/scripts/manage_menus.js"></script>
+  <script src="$root_url/global/scripts/sortable.js?v=2"></script>
+  <script src="$root_url/global/scripts/manage_menus.js"></script>
 END;
-$page_vars["js_messages"] = array("word_remove", "word_na", "word_form_c", "word_client_c", "word_url_c",
-	"validation_menu_name_taken", "phrase_delete_row", "phrase_connect_rows", "phrase_disconnect_rows");
-$page_vars["head_js"] = $js;
 
 Themes::displayPage("admin/settings/index.tpl", $page_vars);

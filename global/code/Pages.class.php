@@ -9,7 +9,7 @@ class Pages
     /**
      * This is a hash of page identifiers to URLs. Every page in Form Tools has a unique page identifier
      * to differentiate it from other pages. There had to be a way of mapping a menu item to a "physical"
-     * pages in the program to allow for customizable menus.
+     * page in the program to allow for customizable menus.
      *
      * It also lets us do away with hardcoding page URLs in various places throughout the script. Instead,
      * we can do it just once, here.
@@ -41,20 +41,20 @@ class Pages
         "edit_option_list" => "/admin/forms/option_lists/edit.php",
 
         "delete_form" => "/admin/forms/delete_form.php",
-        "edit_form" => "/admin/forms/edit.php",
-        "edit_form_main" => "/admin/forms/edit.php?page=main",
-        "edit_form_public_form_omit_list" => "/admin/forms/edit.php?page=public_form_omit_list",
-        "edit_form_fields" => "/admin/forms/edit.php?page=fields",
-        "edit_form_views" => "/admin/forms/edit.php?page=views",
-        "edit_form_public_view_omit_list" => "/admin/forms/edit.php?page=public_view_omit_list",
-        "edit_form_emails" => "/admin/forms/edit.php?page=emails",
-        "edit_form_email_settings" => "/admin/forms/edit.php?page=email_settings",
+        "edit_form" => "/admin/forms/edit/",
+        "edit_form_main" => "/admin/forms/edit/?page=main",
+        "edit_form_public_form_omit_list" => "/admin/forms/edit/?page=public_form_omit_list",
+        "edit_form_fields" => "/admin/forms/edit/?page=fields",
+        "edit_form_views" => "/admin/forms/edit/?page=views",
+        "edit_form_public_view_omit_list" => "/admin/forms/edit/?page=public_view_omit_list",
+        "edit_form_emails" => "/admin/forms/edit/?page=emails",
+        "edit_form_email_settings" => "/admin/forms/edit/?page=email_settings",
 
         "edit_admin_menu" => "/admin/settings/index.php?page=edit_admin_menu",
         "edit_client_menu" => "/admin/settings/index.php?page=edit_client_menu",
-        "edit_view" => "/admin/forms/edit.php?page=edit_view",
+        "edit_view" => "/admin/forms/edit/?page=edit_view",
         "admin_edit_submission" => "/admin/forms/edit_submission.php",
-        "edit_form_field_options" => "/admin/forms/edit.php?page=options",
+        "edit_form_field_options" => "/admin/forms/edit/?page=options",
         "clients" => "/admin/clients/",
         "add_client" => "/admin/clients/add.php",
         "edit_client" => "/admin/clients/edit.php",

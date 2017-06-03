@@ -1,5 +1,5 @@
   <div class="previous_page_icon">
-    <a href="edit.php?page=edit_view&form_id={$form_id}&view_id={$view_id}"><img src="{$images_url}/up.jpg" title="{$LANG.phrase_previous_page}"
+    <a href="?page=edit_view&form_id={$form_id}&view_id={$view_id}"><img src="{$images_url}/up.jpg" title="{$LANG.phrase_previous_page}"
       alt="{$LANG.phrase_previous_page}" border="0" /></a>
   </div>
 

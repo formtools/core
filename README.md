@@ -45,13 +45,16 @@ module.
 
 - I'm dropping the `$g_unicode` for SQL queries which has been enabled by default since a very early version of Form Tools. 
 I don't see the point of non-unicode queries, so unless I hear otherwise it'll be removed.
-- I'm going to start including all language files with the primary download bundles (not here in this core repo). There's
-really no value in NOT including them all. 
+- All language files are now included in the main repo. "Get more..." link in the UI are removed. 
 - A lot of the internals are changing:
     - the sessions content is totally revamped & data will be stored in different locations.
     - the hooks used to be tied to function name. Now we've gone object-oriented, the mapping has all changed .The 
     upgrade process will automatically update your database so it'll work seamlessly, but if you had custom hooks 
     written in your own modules they will no longer continue to function.
+
+- Folder path for "edit" section of forms now in /edit subfolder, like /add.
+- Default max file upload size setting changed from 200KB to 500KB.
+ 
 
 
 ### Notes

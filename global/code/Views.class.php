@@ -348,7 +348,7 @@ class Views
         $db = Core::$db;
         $LANG = Core::$L;
 
-        Views::deleteClientViewsByViewId($view_id);
+        Views::deleteClientViews($view_id);
         ViewTabs::deleteViewTabs($view_id);
         ViewFields::deleteViewFields($view_id);
         Views::deletePublicViewOmitList($view_id);
@@ -401,14 +401,26 @@ class Views
     }
 
 
-    public static function deleteClientViewsByViewId($view_id)
+    /**
+     * @param $view_id
+     */
+    public static function deleteClientViews($view_id)
     {
         $db = Core::$db;
         $db->query("DELETE FROM {PREFIX}client_views WHERE view_id = :view_id");
         $db->bind("view_id", $view_id);
         $db->execute();
+        Views::deletePublicViewOmitList($view_id);
     }
 
+
+    public static function deleteClientViewsByFormId($form_id)
+    {
+        $view_ids = Views::getViewIds($form_id);
+        foreach ($view_ids as $view_id) {
+            Views::deleteClientViews($view_id);
+        }
+    }
 
     /**
      * Called by the administrator only. Updates the list of clients on a public View's omit list.
@@ -747,17 +759,17 @@ class Views
 
         switch ($access_type) {
             case "admin":
-                Views::deleteClientViewsByViewId($view_id);
+                Views::deleteClientViews($view_id);
                 Views::deletePublicViewOmitList($view_id);
                 break;
 
             case "public":
-                Views::deleteClientViewsByViewId($view_id);
+                Views::deleteClientViews($view_id);
                 break;
 
             case "private":
                 $selected_user_ids = isset($info["selected_user_ids"]) ? $info["selected_user_ids"] : array();
-                Views::deleteClientViewsByViewId($view_id);
+                Views::deleteClientViews($view_id);
                 foreach ($selected_user_ids as $client_id) {
                     $db->query("INSERT INTO {PREFIX}client_views (account_id, view_id) VALUES ($client_id, $view_id)");
                 }
@@ -766,7 +778,7 @@ class Views
                 break;
 
             case "hidden":
-                Views::deleteClientViewsByViewId($view_id);
+                Views::deleteClientViews($view_id);
                 Views::deletePublicViewOmitList($view_id);
                 break;
         }

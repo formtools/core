@@ -1,11 +1,15 @@
 <?php
 
+use FormTools\Core;
 use FormTools\Administrator;
 use FormTools\Emails;
 use FormTools\Fields;
 use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
+use FormTools\Submissions;
 use FormTools\Themes;
+use FormTools\Views;
 
 
 $email_id = General::loadField("email_id", "email_id", "");
@@ -31,13 +35,13 @@ $form_has_file_upload_field = Forms::getNumFileUploadFields($form_id) > 0;
 $file_field_text = ($form_has_file_upload_field) ? $LANG["text_file_field_placeholders_info"] : "";
 
 // values for the test email subpage
-$num_submissions = ft_get_submission_count($form_id);
+$num_submissions = Submissions::getSubmissionCount($form_id);
 $test_email_format = General::loadField("test_email_format", "test_email_format");
 $test_email_recipient = General::loadField("test_email_recipient", "test_email_recipient", $admin_info["email"]);
 $test_email_data_source = General::loadField("test_email_data_source", "test_email_data_source", "random_submission");
 $test_email_submission_id = General::loadField("test_email_submission_id", "test_email_submission_id", "");
 
-$views = ft_get_views($form_id);
+$views = Views::getViews($form_id);
 
 $filtered_views = array();
 $selected_edit_submission_views = array();
@@ -53,6 +57,8 @@ foreach ($views["results"] as $view) {
         $selected_when_sent_views[] = $view;
     }
 }
+
+$root_url = Core::getRootUrl();
 
 // compile the template information
 $page_vars["page"]       = "edit_email";
@@ -79,8 +85,8 @@ $page_vars["js_messages"] = array("validation_invalid_email", "validation_no_cus
 );
 
 // a little hacky, but not too bad. Override the form nav links so that it always links to the email tab
-$page_vars["prev_tabset_link"] = (!empty($links["prev_form_id"])) ? "edit.php?page=emails&form_id={$links["prev_form_id"]}" : "";
-$page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "edit.php?page=emails&form_id={$links["next_form_id"]}" : "";
+$page_vars["prev_tabset_link"] = (!empty($links["prev_form_id"])) ? "?page=emails&form_id={$links["prev_form_id"]}" : "";
+$page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "?page=emails&form_id={$links["next_form_id"]}" : "";
 
 $page_vars["template_info"]  = $template_info;
 $page_vars["edit_email_tab"] = $edit_email_tab;
@@ -91,8 +97,8 @@ $page_vars["test_email_data_source"] = $test_email_data_source;
 $page_vars["test_email_submission_id"] = $test_email_submission_id;
 $page_vars["registered_form_emails"] = Emails::getEmailFields($form_id);
 $page_vars["head_string"] =<<< END
-<script src="$g_root_url/global/scripts/manage_email_templates.js?v=3"></script>
-<script src="$g_root_url/global/codemirror/js/codemirror.js"></script>
+<script src="$root_url/global/scripts/manage_email_templates.js?v=3"></script>
+<script src="$root_url/global/codemirror/js/codemirror.js"></script>
 END;
 
 $page_vars["head_js"] =<<< END
