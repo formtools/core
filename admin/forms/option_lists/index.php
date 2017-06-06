@@ -26,6 +26,8 @@ if (isset($_GET["delete"])) {
 if (!is_numeric($option_list_page)) {
     $option_list_page = 1;
 }
+
+// creates a new option list, optionally based on an existing once
 if (isset($request["add_option_list"])) {
 	$duplicate_list_id = "";
 	if (isset($request["create_option_list_from_list_id"]) && !empty($request["create_option_list_from_list_id"])) {

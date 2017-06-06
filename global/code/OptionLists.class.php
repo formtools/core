@@ -1,12 +1,26 @@
 <?php
 
 /**
- * Option Lists.
+ * Option Lists are preset lists of static strings.
+ *
+ * The DB structure that houses the data is a bit odd - looks like I retrofitted it to allow for grouping elements
+ * in the list and I wanted to generalize the "grouping" part of it, hence the "list_group" table, used to house grouping
+ * of any lists (not just option lists).
+ *
+ * DB structure for an option list.
+ *      option_list [list_id] - the main (single) entry for the option list. This just stores a couple of pieces of
+ *                              metadata: the name of the option list & whether the user wants it grouped or not.
+ *      list_group [group_id] - all option lists have at least ONE list group. For option lists, this table contains
+ *                              a (non-enforced!) unique identifier for the option list in the `group_type` column of
+ *                              the form `option_list_N`, where N is the option list ID.
+ *      field_options         - the actual items in the option list. Each item is mapped to a particular list group.
  */
 
 // -------------------------------------------------------------------------------------------------
 
 namespace FormTools;
+
+use PDO, PDOException;
 
 
 class OptionLists {
@@ -86,9 +100,6 @@ class OptionLists {
      * the user was using a single group for multiple fields, but one of the form fields changed. They can just
      * create a new copy, tweak it and re-assign the field.
      *
-     * If no Option List ID is passed in the first param, it creates a new blank Option List (sorry for the crappy
-     * function name).
-     *
      * @param integer $list_id
      * @param integer $field_id if this parameter is set, the new Option List will be assigned to whatever
      *   field IDs are specified. Note: this only works for Field Types that have a single
@@ -97,7 +108,6 @@ class OptionLists {
     public static function duplicateOptionList($list_id = "", $field_ids = array())
     {
         $db = Core::$db;
-        $LANG = Core::$L;
 
         $new_option_list_name = self::getNextOptionListName();
 
@@ -107,14 +117,19 @@ class OptionLists {
             $option_list_info = self::getOptionList($list_id);
             $new_list_id = self::addOptionList($new_option_list_name, $option_list_info["is_grouped"]);
 
-            // add add the option groups and their field options
+            // add the option groups and their field options
             foreach ($option_list_info["options"] as $grouped_option_info) {
                 $group_info = $grouped_option_info["group_info"];
                 $options    = $grouped_option_info["options"];
 
+                print_r($grouped_option_info);
+exit;
+
                 $group_type = "option_list_{$new_list_id}";
                 $group_name = $group_info["group_name"];
                 $list_order = $group_info["list_order"];
+exit;
+
                 $new_list_group_info = ListGroups::addListGroup($group_type, $group_name, $list_order);
                 $new_list_group_id = $new_list_group_info["group_id"];
 
@@ -213,7 +228,10 @@ class OptionLists {
     }
 
 
-    public static function addOptionList($name, $is_grouped)
+    /**
+     * Creates a new option list in the database.
+     */
+    public static function addOptionList($name, $is_grouped = "no", $field_options = array())
     {
         $db = Core::$db;
         $db->query("
@@ -226,7 +244,14 @@ class OptionLists {
         ));
         $db->execute();
 
-        return $db->getInsertId();
+        // now we add the groups for the option list items
+        $list_id = $db->getInsertId();
+
+        if ($is_grouped == "no") {
+            ListGroups::addListGroup("option_list_{$list_id}", "", 1);
+        }
+
+        return $list_id;
     }
 
 
@@ -254,14 +279,11 @@ class OptionLists {
 
     /**
      * Awkward name, but there you go. It returns all options in an option list. If you want to get ALL
-     * information about the group (e.g. the group name etc), use ft_get_option_list().
+     * information about the group (e.g. the group name etc), use getOptionList().
      *
      * Option lists may or may not be grouped - but for consistency on the backend, even ungrouped option
-     * lists are stored in an "empty" group. It's a little ugly, I know - but overall it keeps the code
-     * simple (i.e. you don't have to do two things depending on whether they're grouped or not). Plus the
-     * UI on the option lists page was easy to hide/show the grouping functionality. With this in mind,
-     * this function returns the GROUPED option lists as an array with the following structure (there will
-     * only ever be a single top level array index for ungrouped option lists):
+     * lists are stored in an "empty" group. This function returns the GROUPED option lists as an array with the
+     * following structure (there will only ever be a single top level array index for ungrouped option lists):
      *
      *   [0] => array(
      *            "group_info" => array(
@@ -298,10 +320,7 @@ class OptionLists {
             $db->bind("group_id", $row["group_id"]);
             $db->execute();
 
-            $options = array();
-            foreach ($db->fetchAll() as $row) {
-                $options[] = $row;
-            }
+            $options = $db->fetchAll();
 
             $curr_group = array(
                 "group_info" => $row,
@@ -363,13 +382,13 @@ class OptionLists {
         ");
         $db->execute();
 
-        $sorted_list_ids = array();
-        foreach ($db->fetchAll() as $row) {
-            $sorted_list_ids[] = $row["list_id"];
-        }
+        $sorted_list_ids = $db->fetchAll(PDO::FETCH_COLUMN);
         $current_index = array_search($list_id, $sorted_list_ids);
 
-        $return_info = array("prev_option_list_id" => "", "next_option_list_id" => "");
+        $return_info = array(
+            "prev_option_list_id" => "",
+            "next_option_list_id" => ""
+        );
         if ($current_index === 0) {
             if (count($sorted_list_ids) > 1) {
                 $return_info["next_option_list_id"] = $sorted_list_ids[$current_index+1];
@@ -388,10 +407,7 @@ class OptionLists {
 
 
     /**
-     * Updates a single field option group.
-     *
-     * @param integer $group_id
-     * @param array $info
+     * Updates an option list.
      */
     public static function updateOptionList($list_id, $info)
     {
@@ -417,14 +433,14 @@ class OptionLists {
         FieldOptions::deleteByListId($list_id);
         ListGroups::deleteByGroupType("option_list_{$list_id}");
 
-        // urgh!
+        // some ugliness to find out how our data is grouped and what's been removed
         $sortable_id = $info["sortable_id"];
         $new_groups    = explode(",", $info["{$sortable_id}_sortable__new_groups"]);
         $grouped_rows  = explode("~", $info["{$sortable_id}_sortable__rows"]);
         $deleted_group = isset($info["{$sortable_id}_sortable__delete_group"]) ? $info["{$sortable_id}_sortable__delete_group"] : "";
 
         // the logic here is a bit complex, but the general idea is that this code works for both grouped and
-        // ungrouped option lists. Ungrouped option lists are still grouped in a single group - behind the scenes.
+        // ungrouped option lists. Ungrouped option lists are still grouped in a single group behind the scenes
         $new_group_order = 1;
 
         if ($is_grouped == "no") {
@@ -592,17 +608,15 @@ class OptionLists {
         }
 
         $field_id_str = implode(",", $field_ids);
-        $query = $db->query("
+        $db->query("
             SELECT f.*, ff.*
             FROM   {PREFIX}form_fields ff, {PREFIX}forms f
             WHERE  field_id IN ($field_id_str) AND
                    f.form_id = ff.form_id
             ORDER BY f.form_name, ff.field_title
         ");
-
-        $results = array();
-        while ($row = mysql_fetch_assoc($query))
-            $results[] = $row;
+        $db->execute();
+        $results = $db->fetchAll();
 
         if ($params["group_by_form"]) {
             $grouped_results = array();
@@ -694,7 +708,7 @@ class OptionLists {
 
             $db->query("
                 INSERT INTO {PREFIX}option_lists (option_list_name, is_grouped, original_form_id)
-                VALUES ('$option_list_name', 'no', $form_id)
+                VALUES (:option_list_name, 'no', :form_id)
             ");
             $db->bindAll(array(
                 "option_list_name" => $option_list_name,

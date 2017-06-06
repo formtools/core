@@ -18,6 +18,7 @@ if (isset($request["update_page"])) {
 }
 
 $list_info = OptionLists::getOptionList($list_id);
+
 $total_options = 0;
 foreach ($list_info["options"] as $option_info) {
 	$total_options += count($option_info["options"]);

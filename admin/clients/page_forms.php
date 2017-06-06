@@ -78,8 +78,10 @@ $page_vars["forms"]          = $forms;
 $page_vars["client_forms"]   = $updated_client_forms;
 $page_vars["all_form_views"] = $all_form_views;
 $page_vars["client_id"]      = $client_id;
-$page_vars["js_messages"]    = array("word_delete", "phrase_please_select", "phrase_please_select_form", "word_add_uc_rightarrow",
-	"word_remove_uc_leftarrow", "phrase_form_already_selected");
+$page_vars["js_messages"]    = array(
+    "word_delete", "phrase_please_select", "phrase_please_select_form", "word_add_uc_rightarrow",
+	"word_remove_uc_leftarrow", "phrase_form_already_selected"
+);
 $page_vars["head_string"]    = "<script type=\"text/javascript\" src=\"$root_url/global/scripts/manage_client_forms.js\"></script>";
 $page_vars["head_js"] =<<< END
 $forms_js
