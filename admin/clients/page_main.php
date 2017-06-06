@@ -10,7 +10,6 @@ use FormTools\Pages;
 $LANG = Core::$L;
 $req_password_special_chars = Core::getRequiredPasswordSpecialChars();
 
-
 // update this client
 if (isset($_POST["update_client"])) {
     list($g_success, $g_message) = Administrator::adminUpdateClient($request, 1);

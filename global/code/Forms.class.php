@@ -1795,10 +1795,7 @@ class Forms
             } else {
                 $view_ids = Views::getViewIds($form_id);
                 foreach ($view_ids as $view_id) {
-                    $db->query("DELETE FROM {PREFIX}client_views WHERE view_id = :view_id");
-                    $db->bind("view_id", $view_id);
-                    $db->execute();
-
+                    Views::deleteClientViews($view_id);
                     Views::deletePublicViewOmitList($view_id);
                 }
             }

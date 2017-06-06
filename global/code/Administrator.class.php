@@ -1,14 +1,13 @@
 <?php
 
 /**
- * Administrator.
+ * Administrator-related functionality.
  *
  * This class will be changed. I'm going to make this class a singleton that inherits the methods of User &
- * instantiated instead of User. It opens up the possibility of other user types (Submission Accounts...?)
- * which I'll keep in mind.
+ * instantiated instead of User in Core. It opens up the possibility of other user types (Submission Accounts...?).
  */
 
-// -------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
 
 namespace FormTools;
 
@@ -354,8 +353,6 @@ class Administrator {
 
 
     /**
-     * TODO split up this method, sheesh!
-     *
      * Administrator function used to update a client account. It updates one tab at a time - determined by the
      * second $tab_num parameter.
      *
@@ -376,100 +373,12 @@ class Administrator {
         } else if ($tab_num === 2) {
             list ($success, $message) = Administrator::adminUpdateClientAccountSettingsTab($infohash);
         } else if ($tab_num === 3) {
-            list ($success, $message) = Administrator::adminUpdateClientAccountSettingsTab();
+            list ($success, $message) = Administrator::adminUpdateClientAccountFormsTab($infohash);
         }
 
         if ($success) {
             $message = $LANG["notify_client_account_updated"];
         }
-
-        /*
-            // FORMS tab
-            case "3":
-                // clear out the old mappings for the client-forms and client-Views. This section re-inserts everything
-                Forms::deleteClientFormsByAccountId($account_id);
-                $db->query("DELETE FROM {PREFIX}client_views WHERE account_id = $account_id");
-                OmitLists::deleteFormOmitListByAccountId($account_id);
-                OmitLists::deleteViewOmitListByAccountId($account_id);
-
-                $num_form_rows = $infohash["num_forms"];
-                $client_forms      = array(); // stores the form IDs of all forms this client has been added to
-                $client_form_views = array(); // stores the view IDs of each form this client is associated with
-
-                for ($i=1; $i<=$num_form_rows; $i++) {
-
-                    // ignore blank and empty form rows
-                    if (!isset($infohash["form_row_{$i}"]) || empty($infohash["form_row_{$i}"])) {
-                        continue;
-                    }
-
-                    $form_id = $infohash["form_row_{$i}"];
-                    $client_forms[] = $form_id;
-                    $client_form_views[$form_id] = array();
-
-                    // find out a little info about this form. If it's a public form, the user is already (implicitly) assigned
-                    // to it, so don't bother inserting a redundant record into the client_forms table
-                    $form_info_query = $db->query("SELECT access_type FROM {PREFIX}forms WHERE form_id = $form_id");
-                    $form_info = mysql_fetch_assoc($form_info_query);
-
-                    if ($form_info["access_type"] != "public") {
-                        $db->query("INSERT INTO {PREFIX}client_forms (account_id, form_id) VALUES ($account_id, $form_id)");
-                    }
-
-                    // if this form was previously an "admin" type, it no longer is! By adding this client to the form, it's now
-                    // changed to a "private" access type
-                    if ($form_info["access_type"] == "admin") {
-                        $db->query("UPDATE {PREFIX}forms SET access_type = 'private' WHERE form_id = $form_id");
-                    }
-
-                    // now loop through selected Views. Get View info
-                    if (!isset($infohash["row_{$i}_selected_views"])) {
-                        continue;
-                    }
-
-                    $client_form_views[$form_id] = $infohash["row_{$i}_selected_views"];
-                    foreach ($infohash["row_{$i}_selected_views"] as $view_id) {
-                        $view_info_query = $db->query("SELECT access_type FROM {PREFIX}views WHERE view_id = $view_id");
-                        $view_info = mysql_fetch_assoc($view_info_query);
-
-                        if ($view_info["access_type"] != "public") {
-                            $db->query("INSERT INTO {PREFIX}client_views (account_id, view_id) VALUES ($account_id, $view_id)");
-                        }
-
-                        // if this View was previously an "admin" type, it no longer is! By adding this client to the View, it's now
-                        // changed to a "private" access type
-                        if ($view_info["access_type"] == "admin") {
-                            $db->query("UPDATE {PREFIX}views SET access_type = 'private' WHERE view_id = $view_id");
-                        }
-                    }
-                }
-
-                // now all the ADDING the forms/Views is done, we look at all other public forms in the database and if this
-                // update request didn't include that form, add this client to its omit list. Same goes for the form Views
-                $public_form_query = $db->query("SELECT form_id, access_type FROM {PREFIX}forms");
-                while ($form_info = mysql_fetch_assoc($public_form_query)) {
-                    $form_id        = $form_info["form_id"];
-                    $form_is_public = ($form_info["access_type"] == "public") ? true : false;
-
-                    if ($form_is_public && !in_array($form_id, $client_forms)) {
-                        $db->query("INSERT INTO {PREFIX}public_form_omit_list (account_id, form_id) VALUES ($account_id, $form_id)");
-                    }
-
-                    if (in_array($form_id, $client_forms)) {
-                        $public_view_query = $db->query("SELECT view_id, access_type FROM {PREFIX}views WHERE form_id = $form_id");
-
-                        while ($view_info = mysql_fetch_assoc($public_view_query)) {
-                            $view_id        = $view_info["view_id"];
-                            $view_is_public = ($view_info["access_type"] == "public") ? true : false;
-
-                            if ($view_is_public && !in_array($view_id, $client_form_views[$form_id])) {
-                                $db->query("INSERT INTO {PREFIX}public_view_omit_list (account_id, view_id) VALUES ($account_id, $view_id)");
-                            }
-                        }
-                    }
-                }
-                break;
-*/
 
         extract(Hooks::processHookCalls("end", compact("infohash", "tab_num"), array("success", "message")), EXTR_OVERWRITE);
 
@@ -611,9 +520,9 @@ class Administrator {
         }
 
         // update the main accounts table
-        $account_id = $form_vals["account_id"];
+        $account_id = $form_vals["client_id"];
         $theme      = $form_vals['theme'];
-        $swatch = (isset($infohash["{$theme}_theme_swatches"])) ? $swatch = $infohash["{$theme}_theme_swatches"] : "";
+        $swatch = (isset($form_vals["{$theme}_theme_swatches"])) ? $swatch = $form_vals["{$theme}_theme_swatches"] : "";
 
         $db->query("
             UPDATE  {PREFIX}accounts
@@ -651,20 +560,20 @@ class Administrator {
             return array(false, $message);
         }
 
-        $may_edit_page_titles      = isset($infohash["may_edit_page_titles"]) ? "yes" : "no";
-        $may_edit_footer_text      = isset($infohash["may_edit_footer_text"]) ? "yes" : "no";
-        $may_edit_theme            = isset($infohash["may_edit_theme"]) ? "yes" : "no";
-        $may_edit_logout_url       = isset($infohash["may_edit_logout_url"]) ? "yes" : "no";
-        $may_edit_language         = isset($infohash["may_edit_language"]) ? "yes" : "no";
-        $may_edit_timezone_offset  = isset($infohash["may_edit_timezone_offset"]) ? "yes" : "no";
-        $may_edit_sessions_timeout = isset($infohash["may_edit_sessions_timeout"]) ? "yes" : "no";
-        $may_edit_date_format      = isset($infohash["may_edit_date_format"]) ? "yes" : "no";
-        $may_edit_max_failed_login_attempts = isset($infohash["may_edit_max_failed_login_attempts"]) ? "yes" : "no";
-        $max_failed_login_attempts = $infohash["max_failed_login_attempts"];
-        $min_password_length       = $infohash["min_password_length"];
-        $num_password_history      = $infohash["num_password_history"];
-        $required_password_chars   = (isset($infohash["required_password_chars"]) && is_array($infohash["required_password_chars"])) ? implode(",", $infohash["required_password_chars"]) : "";
-        $forms_page_default_message = $infohash["forms_page_default_message"];
+        $may_edit_page_titles      = isset($form_vals["may_edit_page_titles"]) ? "yes" : "no";
+        $may_edit_footer_text      = isset($form_vals["may_edit_footer_text"]) ? "yes" : "no";
+        $may_edit_theme            = isset($form_vals["may_edit_theme"]) ? "yes" : "no";
+        $may_edit_logout_url       = isset($form_vals["may_edit_logout_url"]) ? "yes" : "no";
+        $may_edit_language         = isset($form_vals["may_edit_language"]) ? "yes" : "no";
+        $may_edit_timezone_offset  = isset($form_vals["may_edit_timezone_offset"]) ? "yes" : "no";
+        $may_edit_sessions_timeout = isset($form_vals["may_edit_sessions_timeout"]) ? "yes" : "no";
+        $may_edit_date_format      = isset($form_vals["may_edit_date_format"]) ? "yes" : "no";
+        $may_edit_max_failed_login_attempts = isset($form_vals["may_edit_max_failed_login_attempts"]) ? "yes" : "no";
+        $max_failed_login_attempts = $form_vals["max_failed_login_attempts"];
+        $min_password_length       = $form_vals["min_password_length"];
+        $num_password_history      = $form_vals["num_password_history"];
+        $required_password_chars   = (isset($form_vals["required_password_chars"]) && is_array($form_vals["required_password_chars"])) ? implode(",", $form_vals["required_password_chars"]) : "";
+        $forms_page_default_message = $form_vals["forms_page_default_message"];
 
         // update the client custom account settings table
         $settings = array(
@@ -679,11 +588,109 @@ class Administrator {
             "may_edit_sessions_timeout" => $may_edit_sessions_timeout,
             "may_edit_max_failed_login_attempts" => $may_edit_max_failed_login_attempts,
             "max_failed_login_attempts" => $max_failed_login_attempts,
+            "may_edit_date_format" => $may_edit_date_format,
             "required_password_chars" => $required_password_chars,
             "min_password_length" => $min_password_length,
             "num_password_history" => $num_password_history,
             "forms_page_default_message" => $forms_page_default_message
         );
         Accounts::setAccountSettings($account_id, $settings);
+
+        return array(true, "");
     }
+
+
+    private static function adminUpdateClientAccountFormsTab($form_vals)
+    {
+        $db = Core::$db;
+
+        $account_id = $form_vals["client_id"];
+
+        // clear out the old mappings for the client-forms and client-Views. This section re-inserts everything
+        Forms::deleteClientFormsByAccountId($account_id);
+        Views::deleteClientViewsByAccountId($account_id);
+        OmitLists::deleteFormOmitListByAccountId($account_id);
+        OmitLists::deleteViewOmitListByAccountId($account_id);
+
+        $num_form_rows = $form_vals["num_forms"];
+        $client_forms      = array(); // stores the form IDs of all forms this client has been added to
+        $client_form_views = array(); // stores the view IDs of each form this client is associated with
+
+        for ($i=1; $i<=$num_form_rows; $i++) {
+
+            // ignore blank and empty form rows
+            if (!isset($form_vals["form_row_{$i}"]) || empty($form_vals["form_row_{$i}"])) {
+                continue;
+            }
+
+            $form_id = $form_vals["form_row_{$i}"];
+            $client_forms[] = $form_id;
+            $client_form_views[$form_id] = array();
+
+            // find out a little info about this form. If it's a public form, the user is already (implicitly) assigned
+            // to it, so don't bother inserting a redundant record into the client_forms table
+            $db->query("SELECT access_type FROM {PREFIX}forms WHERE form_id = :form_id");
+            $db->bind("form_id", $form_id);
+            $db->execute();
+
+            $form_info = $db->fetch();
+
+            if ($form_info["access_type"] != "public") {
+                $db->query("INSERT INTO {PREFIX}client_forms (account_id, form_id) VALUES ($account_id, $form_id)");
+            }
+
+            // if this form was previously an "admin" type, it no longer is! By adding this client to the form, it's now
+            // changed to a "private" access type
+            if ($form_info["access_type"] == "admin") {
+                $db->query("UPDATE {PREFIX}forms SET access_type = 'private' WHERE form_id = $form_id");
+            }
+
+            // now loop through selected Views. Get View info
+            if (!isset($infohash["row_{$i}_selected_views"])) {
+                continue;
+            }
+
+            $client_form_views[$form_id] = $infohash["row_{$i}_selected_views"];
+            foreach ($infohash["row_{$i}_selected_views"] as $view_id) {
+                $view_info_query = $db->query("SELECT access_type FROM {PREFIX}views WHERE view_id = $view_id");
+                $view_info = mysql_fetch_assoc($view_info_query);
+
+                if ($view_info["access_type"] != "public") {
+                    $db->query("INSERT INTO {PREFIX}client_views (account_id, view_id) VALUES ($account_id, $view_id)");
+                }
+
+                // if this View was previously an "admin" type, it no longer is! By adding this client to the View, it's now
+                // changed to a "private" access type
+                if ($view_info["access_type"] == "admin") {
+                    $db->query("UPDATE {PREFIX}views SET access_type = 'private' WHERE view_id = $view_id");
+                }
+            }
+        }
+
+        // now all the ADDING the forms/Views is done, we look at all other public forms in the database and if this
+        // update request didn't include that form, add this client to its omit list. Same goes for the form Views
+        $public_form_query = $db->query("SELECT form_id, access_type FROM {PREFIX}forms");
+        while ($form_info = mysql_fetch_assoc($public_form_query)) {
+            $form_id        = $form_info["form_id"];
+            $form_is_public = ($form_info["access_type"] == "public") ? true : false;
+
+            if ($form_is_public && !in_array($form_id, $client_forms)) {
+                $db->query("INSERT INTO {PREFIX}public_form_omit_list (account_id, form_id) VALUES ($account_id, $form_id)");
+            }
+
+            if (in_array($form_id, $client_forms)) {
+                $public_view_query = $db->query("SELECT view_id, access_type FROM {PREFIX}views WHERE form_id = $form_id");
+
+                while ($view_info = mysql_fetch_assoc($public_view_query)) {
+                    $view_id        = $view_info["view_id"];
+                    $view_is_public = ($view_info["access_type"] == "public") ? true : false;
+
+                    if ($view_is_public && !in_array($view_id, $client_form_views[$form_id])) {
+                        $db->query("INSERT INTO {PREFIX}public_view_omit_list (account_id, view_id) VALUES ($account_id, $view_id)");
+                    }
+                }
+            }
+        }
+    }
+
 }

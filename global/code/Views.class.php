@@ -413,6 +413,13 @@ class Views
         Views::deletePublicViewOmitList($view_id);
     }
 
+    public static function deleteClientViewsByAccountId($account_id)
+    {
+        $db = Core::$db;
+        $db->query("DELETE FROM {PREFIX}client_views WHERE account_id = :account_id");
+        $db->bind("account_id", $account_id);
+        $db->execute();
+    }
 
     public static function deleteClientViewsByFormId($form_id)
     {

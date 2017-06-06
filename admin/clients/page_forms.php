@@ -2,8 +2,11 @@
 
 use FormTools\Accounts;
 use FormTools\Administrator;
+use FormTools\Core;
 use FormTools\Forms;
+use FormTools\Pages;
 use FormTools\Themes;
+use FormTools\Views;
 
 
 // update this client
@@ -30,7 +33,7 @@ foreach ($forms as $form_info) {
 	$form_name = htmlspecialchars($form_info["form_name"]);
 	$forms_js_rows[] = "page_ns.forms.push([$form_id, \"$form_name\"])";
 
-	$form_views = ft_get_views($form_id);
+	$form_views = Views::getViews($form_id);
 
 	$v = array();
 	foreach ($form_views["results"] as $form_view) {
@@ -53,7 +56,7 @@ foreach ($forms as $form_info) {
 	$all_form_views[$form_id] = Views::getFormViews($form_id);
 }
 
-$client_forms = Forms::searchForms($client_id, true);
+$client_forms = Forms::searchForms(array("account_id" => $client_id, "is_admin" => true));
 $updated_client_forms = array();
 foreach ($client_forms as $form_info) {
 	$form_id = $form_info["form_id"];
@@ -61,7 +64,10 @@ foreach ($client_forms as $form_info) {
 	$updated_client_forms[] = $form_info;
 }
 
-// -------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
+
+$LANG = Core::$L;
+$root_url = Core::getRootUrl();
 
 // compile header information
 $page_vars["page"] = "forms";
@@ -74,7 +80,7 @@ $page_vars["all_form_views"] = $all_form_views;
 $page_vars["client_id"]      = $client_id;
 $page_vars["js_messages"]    = array("word_delete", "phrase_please_select", "phrase_please_select_form", "word_add_uc_rightarrow",
 	"word_remove_uc_leftarrow", "phrase_form_already_selected");
-$page_vars["head_string"]    = "<script type=\"text/javascript\" src=\"$g_root_url/global/scripts/manage_client_forms.js\"></script>";
+$page_vars["head_string"]    = "<script type=\"text/javascript\" src=\"$root_url/global/scripts/manage_client_forms.js\"></script>";
 $page_vars["head_js"] =<<< END
 $forms_js
 $form_views_js
