@@ -1136,7 +1136,7 @@ class Emails {
      * @param integer $view_id
      * @return array
      */
-    public static function ft_get_edit_submission_email_templates($form_id, $view_id)
+    public static function getEditSubmissionEmailTemplates($form_id, $view_id)
     {
         $db = Core::$db;
 

@@ -9,7 +9,7 @@
 
 namespace FormTools;
 
-use PDOException;
+use PDOException, PDO;
 
 
 /**
@@ -319,7 +319,7 @@ class Accounts {
         // now check the username isn't already taken
         try {
             $db->query("
-                SELECT count(*)
+                SELECT count(*) as c
                 FROM   {PREFIX}accounts
                 WHERE  username = :username
                 $clause
@@ -335,7 +335,8 @@ class Accounts {
             exit;
         }
 
-        if ($db->numRows() > 0) {
+        $result = $db->fetch(PDO::FETCH_NUM);
+        if ($result[0] > 0) {
             return array(false, $LANG["validation_username_taken"]);
         } else {
             return array(true, "");

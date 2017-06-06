@@ -934,7 +934,7 @@ END;
      * @param mixed $input
      * @return mixed
      */
-    public static function ft_undo_magic_quotes($input)
+    public static function undoMagicQuotes($input)
     {
         if (!get_magic_quotes_gpc()) {
             return $input;

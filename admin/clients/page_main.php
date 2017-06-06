@@ -2,7 +2,13 @@
 
 use FormTools\Accounts;
 use FormTools\Administrator;
+use FormTools\Core;
+use FormTools\General;
 use FormTools\Themes;
+use FormTools\Pages;
+
+$LANG = Core::$L;
+$req_password_special_chars = Core::getRequiredPasswordSpecialChars();
 
 
 // update this client
@@ -25,8 +31,8 @@ if (in_array("number", $required_password_chars)) {
     $conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[0-9],{$LANG["validation_client_password_missing_number"]}\")";
 }
 if (in_array("special_char", $required_password_chars)) {
-	$error = General::evalSmartyString($LANG["validation_client_password_missing_special_char"], array("chars" => $g_password_special_chars));
-	$password_special_chars = preg_quote($g_password_special_chars);
+	$error = General::evalSmartyString($LANG["validation_client_password_missing_special_char"], array("chars" => $req_password_special_chars));
+	$password_special_chars = preg_quote($req_password_special_chars);
 	$conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[$password_special_chars],$error\")";
 }
 $conditional_rules = implode("\n", $conditional_validation);
@@ -39,10 +45,10 @@ $page_vars["head_title"]   = "{$LANG["phrase_edit_client"]} - {$LANG["word_main"
 $page_vars["client_info"]  = $client_info;
 $page_vars["client_id"]    = $client_id;
 $page_vars["required_password_chars"] = $required_password_chars;
-$page_vars["password_special_chars"]  = $g_password_special_chars;
+$page_vars["password_special_chars"]  = $req_password_special_chars;
 $page_vars["has_extra_password_requirements"] = (!empty($client_info["settings"]["required_password_chars"]) || !empty($client_info["settings"]["min_password_length"]));
 $page_vars["has_min_password_length"] = !empty($client_info["settings"]["min_password_length"]);
-$page_vars["password_special_char"] = General::evalSmartyString($LANG["phrase_password_special_char"], array("chars" => $g_password_special_chars));
+$page_vars["password_special_char"] = General::evalSmartyString($LANG["phrase_password_special_char"], array("chars" => $req_password_special_chars));
 $page_vars["phrase_password_min"]   = General::evalSmartyString($LANG["phrase_password_min"], array("length" => $client_info["settings"]["min_password_length"]));
 
 $page_vars["head_js"] =<<<END

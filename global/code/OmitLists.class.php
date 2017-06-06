@@ -14,6 +14,8 @@
 
 namespace FormTools;
 
+use PDO, PDOException;
+
 
 class OmitLists
 {

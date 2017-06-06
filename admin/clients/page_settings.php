@@ -3,7 +3,13 @@
 use FormTools\Accounts;
 use FormTools\Administrator;
 use FormTools\Core;
+use FormTools\Forms;
+use FormTools\General;
+use FormTools\Pages;
+use FormTools\Themes;
 
+$LANG = Core::$L;
+$req_password_special_chars = Core::getRequiredPasswordSpecialChars();
 
 if (isset($_POST['update_client'])) {
     list($g_success, $g_message) = Administrator::adminUpdateClient($request, 2);
@@ -15,9 +21,11 @@ if (isset($_GET["refresh_lang_list"])) {
 }
 
 $client_info = Accounts::getAccountInfo($client_id);
-$forms = ft_search_forms($client_id);
+$forms = Forms::searchForms(array("account_id" => $client_id));
 
-$replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>');
+$replacement_info = array(
+    "datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>'
+);
 
 // -------------------------------------------------------------------------------------------
 
@@ -25,7 +33,7 @@ $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/man
 $page_vars["page"] = "settings";
 $page_vars["page_url"] = Pages::getPageUrl("edit_client_settings", array("client_id" => $client_id));
 $page_vars["head_title"]  = "{$LANG["phrase_edit_client"]} - {$LANG["word_settings"]}";
-$page_vars["phrase_one_special_char"] = General::evalSmartyString($LANG["phrase_one_special_char"], array("chars" => $g_password_special_chars));
+$page_vars["phrase_one_special_char"] = General::evalSmartyString($LANG["phrase_one_special_char"], array("chars" => $req_password_special_chars));
 $page_vars["client_info"] = $client_info;
 $page_vars["forms"]       = $forms;
 $page_vars["client_id"]   = $client_id;

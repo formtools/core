@@ -9,6 +9,7 @@ use FormTools\General;
 Core::init();
 Core::$user->checkAuth("admin");
 
+$LANG = Core::$L;
 
 $request = array_merge($_POST, $_GET);
 $client_id = General::loadField("client_id", "curr_client_id", "");
@@ -51,18 +52,13 @@ $page_vars["next_tabset_link"] = $next_tabset_link;
 $page_vars["prev_tabset_link_label"] = $LANG["phrase_prev_client"];
 $page_vars["next_tabset_link_label"] = $LANG["phrase_next_client"];
 
-switch ($page) {
-	case "main":
-		include("page_main.php");
-		break;
-	case "settings":
-		include("page_settings.php");
-		break;
-	case "forms":
-		include("page_forms.php");
-		break;
-
-	default:
-		include("page_main.php");
-		break;
+$map = array(
+    "main" => "page_main.php",
+    "settings" => "page_settings.php",
+    "forms" => "page_forms.php"
+);
+if (isset($map[$page])) {
+    require_once($map[$page]);
+} else {
+    require_once($map["main"]);
 }

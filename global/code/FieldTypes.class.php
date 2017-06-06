@@ -1507,7 +1507,7 @@ END;
      *
      * @param $field_type_id
      */
-    public static function ft_get_field_type_validation_rules($field_type_id) {
+    public static function getFieldTypeValidationRules($field_type_id) {
         $db = Core::$db;
 
         $db->query("

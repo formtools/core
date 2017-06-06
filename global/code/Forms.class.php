@@ -1958,7 +1958,7 @@ class Forms
             $old_col_name   = $curr_field_info["old_col_name"];
             $new_col_name   = $curr_field_info["col_name"];
             $new_field_size = $curr_field_info["field_size"];
-            $new_field_size_sql = $g_field_sizes[$new_field_size]["sql"];
+            $new_field_size_sql = $FIELD_SIZES[$new_field_size]["sql"];
 
             list($is_success, $err_message) = General::alterTableColumn($table_name, $old_col_name, $new_col_name, $new_field_size_sql);
             if ($is_success) {

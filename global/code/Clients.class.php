@@ -8,6 +8,8 @@
 
 namespace FormTools;
 
+use PDOException, PDO;
+
 
 class Clients {
 
@@ -496,63 +498,62 @@ class Clients {
      *
      * @param integer $account_id
      * @param array $search_criteria
-     * @return hash prev_account_id => the previous account ID (or empty string)
-     *              next_account_id => the next account ID (or empty string)
+     * @return array prev_account_id => the previous account ID (or empty string)
+     *               next_account_id => the next account ID (or empty string)
      */
-    function ft_get_client_prev_next_links($account_id, $search_criteria = array())
+    public static function getClientPrevNextLinks($account_id, $search_criteria = array())
     {
-        global $g_table_prefix;
+        $db = Core::$db;
 
         $keyword_clause = "";
-        if (isset($search_criteria["keyword"]) && !empty($search_criteria["keyword"]))
-        {
+        if (isset($search_criteria["keyword"]) && !empty($search_criteria["keyword"])) {
             $string = $search_criteria["keyword"];
             $fields = array("last_name", "first_name", "email", "account_id");
 
             $clauses = array();
-            foreach ($fields as $field)
+            foreach ($fields as $field) {
                 $clauses[] = "$field LIKE '%$string%'";
-
+            }
             $keyword_clause = implode(" OR ", $clauses);
         }
 
         // add up the where clauses
         $where_clauses = array("account_type = 'client'");
-        if (!empty($status_clause)) $where_clauses[] = "($status_clause)";
-        if (!empty($keyword_clause)) $where_clauses[] = "($keyword_clause)";
+        if (!empty($status_clause)) {
+            $where_clauses[] = "($status_clause)";
+        }
+        if (!empty($keyword_clause)) {
+            $where_clauses[] = "($keyword_clause)";
+        }
 
         $where_clause = "WHERE " . implode(" AND ", $where_clauses);
-
         $order_clause = self::getClientOrderClause($search_criteria["order"]);
 
         // get the clients
-        $client_query_result = $db->query("
-    SELECT account_id
-    FROM   {PREFIX}accounts
-    $where_clause
-    $order_clause
-           ");
+        $db->query("
+            SELECT account_id
+            FROM   {PREFIX}accounts
+            $where_clause
+            $order_clause
+        ");
+        $db->execute();
 
-        $sorted_account_ids = array();
-        while ($row = mysql_fetch_assoc($client_query_result))
-        {
-            $sorted_account_ids[] = $row["account_id"];
-        }
+        $sorted_account_ids = $db->fetchAll(PDO::FETCH_COLUMN);
         $current_index = array_search($account_id, $sorted_account_ids);
 
-        $return_info = array("prev_account_id" => "", "next_account_id" => "");
-        if ($current_index === 0)
-        {
-            if (count($sorted_account_ids) > 1)
-                $return_info["next_account_id"] = $sorted_account_ids[$current_index+1];
-        }
-        else if ($current_index === count($sorted_account_ids)-1)
-        {
-            if (count($sorted_account_ids) > 1)
+        $return_info = array(
+            "prev_account_id" => "",
+            "next_account_id" => ""
+        );
+        if ($current_index === 0) {
+            if (count($sorted_account_ids) > 1) {
+                $return_info["next_account_id"] = $sorted_account_ids[$current_index + 1];
+            }
+        } else if ($current_index === count($sorted_account_ids)-1) {
+            if (count($sorted_account_ids) > 1) {
                 $return_info["prev_account_id"] = $sorted_account_ids[$current_index-1];
-        }
-        else
-        {
+            }
+        } else {
             $return_info["prev_account_id"] = $sorted_account_ids[$current_index-1];
             $return_info["next_account_id"] = $sorted_account_ids[$current_index+1];
         }
@@ -563,61 +564,35 @@ class Clients {
 
     // --------------------------------------------------------------------------------------------
 
+
     /**
-     * Used in a couple of places, so I stuck it here. (Refactor this hideousness!)
+     * Used in a couple of places, so I stuck it here.
      *
      * @param string $order
      * @return string the ORDER BY clause
      */
     private static function getClientOrderClause($order = "")
     {
-        $order_clause = "";
-        switch ($order)
-        {
-            case "client_id-DESC":
-                $order_clause = "account_id DESC";
-                break;
-            case "client_id-ASC":
-                $order_clause = "account_id ASC";
-                break;
-            case "first_name-DESC":
-                $order_clause = "first_name DESC";
-                break;
-            case "first_name-ASC":
-                $order_clause = "first_name ASC";
-                break;
-            case "last_name-DESC":
-                $order_clause = "last_name DESC";
-                break;
-            case "last_name-ASC":
-                $order_clause = "last_name ASC";
-                break;
-            case "email-DESC":
-                $order_clause = "email DESC";
-                break;
-            case "email-ASC":
-                $order_clause = "email ASC";
-                break;
-            case "status-DESC":
-                $order_clause = "account_status DESC";
-                break;
-            case "status-ASC":
-                $order_clause = "account_status ASC";
-                break;
-            case "last_logged_in-DESC":
-                $order_clause = "last_logged_in DESC";
-                break;
-            case "last_logged_in-ASC":
-                $order_clause = "last_logged_in ASC";
-                break;
+        $map = array(
+            "client_id-DESC" => "account_id DESC",
+            "client_id-ASC" => "account_id ASC",
+            "first_name-DESC" => "first_name DESC",
+            "first_name-ASC" => "first_name ASC",
+            "last_name-DESC" => "last_name DESC",
+            "last_name-ASC" => "last_name ASC",
+            "email-DESC" => "email DESC",
+            "email-ASC" => "email ASC",
+            "status-DESC" => "account_status DESC",
+            "status-ASC" => "account_status ASC",
+            "last_logged_in-DESC" => "last_logged_in DESC",
+            "last_logged_in-ASC" => "last_logged_in ASC"
+        );
 
-            default:
-                $order_clause = "account_id DESC";
-                break;
+        if (isset($map[$order])) {
+            $order_clause = "ORDER BY {$map[$order]}";
+        } else {
+            $order_clause = "ORDER BY account_id DESC";
         }
-
-        if (!empty($order_clause))
-            $order_clause = "ORDER BY $order_clause";
 
         return $order_clause;
     }

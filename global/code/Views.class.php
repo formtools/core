@@ -531,7 +531,7 @@ class Views
      * @param integer $form_id
      * @return mixed $view_id the View ID or the empty string if no Views associated with form.
      */
-    function ft_get_default_view($form_id)
+    public static function getDefaultView($form_id)
     {
         $db = Core::$db;
 
@@ -685,10 +685,8 @@ class Views
      *               [0]: true/false (success / failure)<br/>
      *               [1]: message string<br/>
      */
-    public static function ft_update_view($view_id, $info)
+    public static function updateView($view_id, $info)
     {
-        global $LANG;
-
         // update each of the tabs
         Views::updateViewMainSettings($view_id, $info);
         ViewColumns::updateViewColumnsSettings($view_id, $info);
@@ -697,7 +695,7 @@ class Views
         ViewFilters::updateViewFilterSettings($view_id, $info);
 
         $success = true;
-        $message = $LANG["notify_view_updated"];
+        $message = Core::$L["notify_view_updated"];
         extract(Hooks::processHookCalls("end", compact("view_id", "info"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);

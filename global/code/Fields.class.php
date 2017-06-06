@@ -645,7 +645,7 @@ class Fields {
      *               [0]: true/false (success / failure)<br/>
      *               [1]: message string<br/>
      */
-    public static function ft_add_form_fields($form_id, $fields)
+    public static function addFormFieldsAdvanced($form_id, $fields)
     {
         $db = Core::$db;
         $LANG = Core::$L;

@@ -12,6 +12,8 @@
 
 namespace FormTools;
 
+use PDOException, PDO;
+
 
 class Administrator {
 
@@ -365,204 +367,23 @@ class Administrator {
      */
     public static function adminUpdateClient($infohash, $tab_num)
     {
-        global $g_debug, $LANG, $g_password_special_chars;
+        $LANG = Core::$L;
 
         extract(Hooks::processHookCalls("start", compact("infohash", "tab_num"), array("infohash", "tab_num")), EXTR_OVERWRITE);
 
-        $success = true;
-        $message = $LANG["notify_client_account_updated"];
+        if ($tab_num === 1) {
+            list ($success, $message) = Administrator::adminUpdateClientAccountMainTab($infohash);
+        } else if ($tab_num === 2) {
+            list ($success, $message) = Administrator::adminUpdateClientAccountSettingsTab($infohash);
+        } else if ($tab_num === 3) {
+            list ($success, $message) = Administrator::adminUpdateClientAccountSettingsTab();
+        }
 
-        $form_vals = $infohash;
-        $account_id = $form_vals["client_id"];
+        if ($success) {
+            $message = $LANG["notify_client_account_updated"];
+        }
 
-        switch ($tab_num) {
-
-            // MAIN tab
-            case "1":
-                $rules = array();
-                $rules[] = "required,first_name,{$LANG["validation_no_client_first_name"]}";
-                $rules[] = "required,last_name,{$LANG["validation_no_client_last_name"]}";
-                $rules[] = "required,email,{$LANG["validation_no_client_email"]}";
-                $rules[] = "valid_email,email,{$LANG["validation_invalid_email"]}";
-                $rules[] = "required,username,{$LANG["validation_no_client_username"]}";
-                $rules[] = "if:password!=,required,password_2,{$LANG["validation_no_account_password_confirmed"]}";
-                $rules[] = "if:password!=,same_as,password,password_2,{$LANG["validation_passwords_different"]}";
-
-                $account_settings = Accounts::getAccountSettings($account_id);
-                if ($account_settings["min_password_length"] != "" && !empty($form_vals["password"])) {
-                    $rule = General::evalSmartyString($LANG["validation_client_password_too_short"], array("number" => $account_settings["min_password_length"]));
-                    $rules[] = "length>={$account_settings["min_password_length"]},password,$rule";
-                }
-
-                if (!empty($form_vals["password"])) {
-                    $required_password_chars = explode(",", $account_settings["required_password_chars"]);
-                    if (in_array("uppercase", $required_password_chars)) {
-                        $rules[] = "reg_exp,password,[A-Z],{$LANG["validation_client_password_missing_uppercase"]}";
-                    }
-                    if (in_array("number", $required_password_chars)) {
-                        $rules[] = "reg_exp,password,[0-9],{$LANG["validation_client_password_missing_number"]}";
-                    }
-                    if (in_array("special_char", $required_password_chars)) {
-                        $error = General::evalSmartyString($LANG["validation_client_password_missing_special_char"], array("chars" => $g_password_special_chars));
-                        $password_special_chars = preg_quote($g_password_special_chars);
-                        $rules[] = "reg_exp,password,[$password_special_chars],$error";
-                    }
-                }
-
-                $errors = validate_fields($form_vals, $rules);
-
-                // check the username isn't already taken
-                $username = $form_vals['username'];
-                list($valid_username, $problem) = Accounts::isValidUsername($username, $account_id);
-                if (!$valid_username) {
-                    $errors[] = $problem;
-                }
-
-                if (!empty($form_vals["password"])) {
-                    // check the password isn't already in password history (if relevant)
-                    if (!empty($account_settings["num_password_history"])) {
-                        $encrypted_password = General::encode($form_vals["password"]);
-                        if (Accounts::passwordInPasswordHistory($account_id, $encrypted_password, $account_settings["num_password_history"])) {
-                            $errors[] = General::evalSmartyString($LANG["validation_password_in_password_history"],
-                            array("history_size" => $account_settings["num_password_history"]));
-                        } else {
-                            Accounts::addPasswordToPasswordHistory($account_id, $encrypted_password);
-                        }
-                    }
-                }
-
-                if (!empty($errors)) {
-                    return array(false, General::getErrorListHTML($errors));
-                }
-
-                $account_status  = $form_vals['account_status'];
-                $first_name      = $form_vals['first_name'];
-                $last_name       = $form_vals['last_name'];
-                $email           = $form_vals['email'];
-                $password        = $form_vals['password'];
-
-                // if the password is defined, md5 it
-                $password_sql = (!empty($password)) ? "password = '" . General::encode($password) . "', " : "";
-
-                $query = "
-                    UPDATE  {PREFIX}accounts
-                    SET     $password_sql
-                      account_status = '$account_status',
-                      first_name = '$first_name',
-                      last_name = '$last_name',
-                      email = '$email',
-                      username = '$username'
-                    WHERE   account_id = $account_id
-                ";
-
-                // execute the query
-                $result = @$db->query($query);
-                if (!$result) {
-                    $success = false;
-                    $message = $LANG["notify_client_account_not_updated"];
-                    if ($g_debug) {
-                        $message .= "<br/>Query: $query<br />Error: " . mysql_error();
-                    }
-                }
-
-                $new_account_settings = array(
-                    "client_notes" => $form_vals["client_notes"],
-                    "company_name" => $form_vals["company_name"]
-                );
-                Accounts::setAccountSettings($account_id, $new_account_settings);
-                break;
-
-            // SETTINGS tab
-            case "2":
-                $rules = array();
-                $rules[] = "required,page_titles,{$LANG["validation_no_titles"]}";
-                $rules[] = "required,menu_id,{$LANG["validation_no_menu"]}";
-                $rules[] = "required,theme,{$LANG["validation_no_theme"]}";
-                $rules[] = "required,login_page,{$LANG["validation_no_client_login_page"]}";
-                $rules[] = "required,logout_url,{$LANG["validation_no_logout_url"]}";
-                $rules[] = "required,ui_language,{$LANG["validation_no_ui_language"]}";
-                $rules[] = "required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}";
-                $rules[] = "digits_only,sessions_timeout,{$LANG["validation_invalid_sessions_timeout"]}";
-                $rules[] = "required,date_format,{$LANG["validation_no_date_format"]}";
-                $errors = validate_fields($form_vals, $rules);
-
-                if (!empty($errors)) {
-                    return array(false, General::getErrorListHTML($errors));
-                }
-
-                // update the main accounts table
-                $ui_language      = $form_vals['ui_language'];
-                $timezone_offset  = $form_vals['timezone_offset'];
-                $login_page       = $form_vals['login_page'];
-                $logout_url       = $form_vals['logout_url'];
-                $menu_id          = $form_vals['menu_id'];
-                $theme            = $form_vals['theme'];
-                $sessions_timeout = $form_vals['sessions_timeout'];
-                $date_format      = $form_vals['date_format'];
-
-                $swatch = "";
-                if (isset($infohash["{$theme}_theme_swatches"])) {
-                    $swatch = $infohash["{$theme}_theme_swatches"];
-                }
-
-                $query = "
-                    UPDATE  {PREFIX}accounts
-                    SET     ui_language = '$ui_language',
-                            timezone_offset = '$timezone_offset',
-                            login_page = '$login_page',
-                            logout_url = '$logout_url',
-                            menu_id = $menu_id,
-                            theme = '$theme',
-                            swatch = '$swatch',
-                            sessions_timeout = '$sessions_timeout',
-                            date_format = '$date_format'
-                    WHERE   account_id = $account_id
-                ";
-
-                $result = @$db->query($query);
-                if (!$result) {
-                    $success = false;
-                    $message = $LANG["notify_client_account_not_updated"];
-                    if ($g_debug) $message .= "<br/>Query: $query<br />Error: " . mysql_error();
-                    return array($success, $message);
-                }
-
-                $may_edit_page_titles      = isset($infohash["may_edit_page_titles"]) ? "yes" : "no";
-                $may_edit_footer_text      = isset($infohash["may_edit_footer_text"]) ? "yes" : "no";
-                $may_edit_theme            = isset($infohash["may_edit_theme"]) ? "yes" : "no";
-                $may_edit_logout_url       = isset($infohash["may_edit_logout_url"]) ? "yes" : "no";
-                $may_edit_language         = isset($infohash["may_edit_language"]) ? "yes" : "no";
-                $may_edit_timezone_offset  = isset($infohash["may_edit_timezone_offset"]) ? "yes" : "no";
-                $may_edit_sessions_timeout = isset($infohash["may_edit_sessions_timeout"]) ? "yes" : "no";
-                $may_edit_date_format      = isset($infohash["may_edit_date_format"]) ? "yes" : "no";
-                $may_edit_max_failed_login_attempts = isset($infohash["may_edit_max_failed_login_attempts"]) ? "yes" : "no";
-                $max_failed_login_attempts = $infohash["max_failed_login_attempts"];
-                $min_password_length       = $infohash["min_password_length"];
-                $num_password_history      = $infohash["num_password_history"];
-                $required_password_chars   = (isset($infohash["required_password_chars"]) && is_array($infohash["required_password_chars"])) ? implode(",", $infohash["required_password_chars"]) : "";
-                $forms_page_default_message = $infohash["forms_page_default_message"];
-
-                // update the client custom account settings table
-                $settings = array(
-                    "page_titles" => $form_vals["page_titles"],
-                    "footer_text" => $form_vals["footer_text"],
-                    "may_edit_page_titles" => $may_edit_page_titles,
-                    "may_edit_footer_text" => $may_edit_footer_text,
-                    "may_edit_theme"       => $may_edit_theme,
-                    "may_edit_logout_url"  => $may_edit_logout_url,
-                    "may_edit_language"    => $may_edit_language,
-                    "may_edit_timezone_offset"  => $may_edit_timezone_offset,
-                    "may_edit_sessions_timeout" => $may_edit_sessions_timeout,
-                    "may_edit_max_failed_login_attempts" => $may_edit_max_failed_login_attempts,
-                    "max_failed_login_attempts" => $max_failed_login_attempts,
-                    "required_password_chars" => $required_password_chars,
-                    "min_password_length" => $min_password_length,
-                    "num_password_history" => $num_password_history,
-                    "forms_page_default_message" => $forms_page_default_message
-                );
-                Accounts::setAccountSettings($account_id, $settings);
-                break;
-
+        /*
             // FORMS tab
             case "3":
                 // clear out the old mappings for the client-forms and client-Views. This section re-inserts everything
@@ -648,10 +469,221 @@ class Administrator {
                     }
                 }
                 break;
-        }
+*/
 
         extract(Hooks::processHookCalls("end", compact("infohash", "tab_num"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);
+    }
+
+
+    // ----------------------------------------------------------------------------------------------------------------
+
+
+    private static function adminUpdateClientAccountMainTab($form_vals)
+    {
+        $db = Core::$db;
+        $LANG = Core::$L;
+        $req_password_special_chars = Core::getRequiredPasswordSpecialChars();
+        $debug_enabled = Core::isDebugEnabled();
+        $account_id = $form_vals["client_id"];
+
+        $rules = array();
+        $rules[] = "required,first_name,{$LANG["validation_no_client_first_name"]}";
+        $rules[] = "required,last_name,{$LANG["validation_no_client_last_name"]}";
+        $rules[] = "required,email,{$LANG["validation_no_client_email"]}";
+        $rules[] = "valid_email,email,{$LANG["validation_invalid_email"]}";
+        $rules[] = "required,username,{$LANG["validation_no_client_username"]}";
+        $rules[] = "if:password!=,required,password_2,{$LANG["validation_no_account_password_confirmed"]}";
+        $rules[] = "if:password!=,same_as,password,password_2,{$LANG["validation_passwords_different"]}";
+
+        $account_settings = Accounts::getAccountSettings($account_id);
+        if ($account_settings["min_password_length"] != "" && !empty($form_vals["password"])) {
+            $rule = General::evalSmartyString($LANG["validation_client_password_too_short"], array("number" => $account_settings["min_password_length"]));
+            $rules[] = "length>={$account_settings["min_password_length"]},password,$rule";
+        }
+
+        if (!empty($form_vals["password"])) {
+            $required_password_chars = explode(",", $account_settings["required_password_chars"]);
+            if (in_array("uppercase", $required_password_chars)) {
+                $rules[] = "reg_exp,password,[A-Z],{$LANG["validation_client_password_missing_uppercase"]}";
+            }
+            if (in_array("number", $required_password_chars)) {
+                $rules[] = "reg_exp,password,[0-9],{$LANG["validation_client_password_missing_number"]}";
+            }
+            if (in_array("special_char", $required_password_chars)) {
+                $error = General::evalSmartyString($LANG["validation_client_password_missing_special_char"], array("chars" => $req_password_special_chars));
+                $password_special_chars = preg_quote($req_password_special_chars);
+                $rules[] = "reg_exp,password,[$password_special_chars],$error";
+            }
+        }
+
+        $errors = validate_fields($form_vals, $rules);
+
+        // check the username isn't already taken
+        $username = $form_vals["username"];
+        list($valid_username, $problem) = Accounts::isValidUsername($username, $account_id);
+        if (!$valid_username) {
+            $errors[] = $problem;
+        }
+
+        if (!empty($form_vals["password"])) {
+            // check the password isn't already in password history (if relevant)
+            if (!empty($account_settings["num_password_history"])) {
+                $encrypted_password = General::encode($form_vals["password"]);
+                if (Accounts::passwordInPasswordHistory($account_id, $encrypted_password, $account_settings["num_password_history"])) {
+                    $errors[] = General::evalSmartyString($LANG["validation_password_in_password_history"],
+                        array("history_size" => $account_settings["num_password_history"]));
+                } else {
+                    Accounts::addPasswordToPasswordHistory($account_id, $encrypted_password);
+                }
+            }
+        }
+
+        if (!empty($errors)) {
+            return array(false, General::getErrorListHTML($errors));
+        }
+
+
+        // if the password is defined, md5 it
+        $password = $form_vals['password'];
+        $password_sql = (!empty($password)) ? "password = '" . General::encode($password) . "', " : "";
+
+        // execute the query
+        $db->query("
+            UPDATE  {PREFIX}accounts
+            SET     $password_sql
+                    account_status = :account_status,
+                    first_name = :first_name,
+                    last_name = :last_name,
+                    email = :email,
+                    username = :username
+            WHERE   account_id = :account_id
+        ");
+        $db->bindAll(array(
+            "account_status" => $form_vals['account_status'],
+            "first_name" => $form_vals['first_name'],
+            "last_name" => $form_vals['last_name'],
+            "email" => $form_vals['email'],
+            "username" => $username,
+            "account_id" => $account_id
+        ));
+        try {
+            $db->execute();
+        } catch (PDOException $e) {
+            $message = $LANG["notify_client_account_not_updated"];
+            if ($debug_enabled) {
+                $message .= "<br/>Error: " . $e->getMessage();
+            }
+            return array(false, $message);
+        }
+
+        $new_account_settings = array(
+            "client_notes" => $form_vals["client_notes"],
+            "company_name" => $form_vals["company_name"]
+        );
+        Accounts::setAccountSettings($account_id, $new_account_settings);
+
+        return array(true, "");
+    }
+
+
+    private static function adminUpdateClientAccountSettingsTab($form_vals)
+    {
+        $db = Core::$db;
+        $LANG = Core::$L;
+        $debug_enabled = Core::isDebugEnabled();
+
+        $rules = array();
+        $rules[] = "required,page_titles,{$LANG["validation_no_titles"]}";
+        $rules[] = "required,menu_id,{$LANG["validation_no_menu"]}";
+        $rules[] = "required,theme,{$LANG["validation_no_theme"]}";
+        $rules[] = "required,login_page,{$LANG["validation_no_client_login_page"]}";
+        $rules[] = "required,logout_url,{$LANG["validation_no_logout_url"]}";
+        $rules[] = "required,ui_language,{$LANG["validation_no_ui_language"]}";
+        $rules[] = "required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}";
+        $rules[] = "digits_only,sessions_timeout,{$LANG["validation_invalid_sessions_timeout"]}";
+        $rules[] = "required,date_format,{$LANG["validation_no_date_format"]}";
+        $errors = validate_fields($form_vals, $rules);
+
+        if (!empty($errors)) {
+            return array(false, General::getErrorListHTML($errors));
+        }
+
+        // update the main accounts table
+        $account_id = $form_vals["account_id"];
+        $theme      = $form_vals['theme'];
+        $swatch = (isset($infohash["{$theme}_theme_swatches"])) ? $swatch = $infohash["{$theme}_theme_swatches"] : "";
+
+        $db->query("
+            UPDATE  {PREFIX}accounts
+            SET     ui_language = :ui_language,
+                    timezone_offset = :timezone_offset,
+                    login_page = :login_page,
+                    logout_url = :logout_url,
+                    menu_id = :menu_id,
+                    theme = :theme,
+                    swatch = :swatch,
+                    sessions_timeout = :sessions_timeout,
+                    date_format = :date_format
+            WHERE   account_id = :account_id
+        ");
+        $db->bindAll(array(
+            "ui_language" => $form_vals['ui_language'],
+            "timezone_offset" => $form_vals['timezone_offset'],
+            "login_page" => $form_vals['login_page'],
+            "logout_url" => $form_vals['logout_url'],
+            "menu_id" => $form_vals['menu_id'],
+            "theme" => $theme,
+            "swatch" => $swatch,
+            "sessions_timeout" => $form_vals['sessions_timeout'],
+            "date_format" => $form_vals['date_format'],
+            "account_id" => $account_id
+        ));
+
+        try {
+            $db->execute();
+        } catch (PDOException $e) {
+            $message = $LANG["notify_client_account_not_updated"];
+            if ($debug_enabled) {
+                $message .= "<br/>Error: " . $e->getMessage();
+            }
+            return array(false, $message);
+        }
+
+        $may_edit_page_titles      = isset($infohash["may_edit_page_titles"]) ? "yes" : "no";
+        $may_edit_footer_text      = isset($infohash["may_edit_footer_text"]) ? "yes" : "no";
+        $may_edit_theme            = isset($infohash["may_edit_theme"]) ? "yes" : "no";
+        $may_edit_logout_url       = isset($infohash["may_edit_logout_url"]) ? "yes" : "no";
+        $may_edit_language         = isset($infohash["may_edit_language"]) ? "yes" : "no";
+        $may_edit_timezone_offset  = isset($infohash["may_edit_timezone_offset"]) ? "yes" : "no";
+        $may_edit_sessions_timeout = isset($infohash["may_edit_sessions_timeout"]) ? "yes" : "no";
+        $may_edit_date_format      = isset($infohash["may_edit_date_format"]) ? "yes" : "no";
+        $may_edit_max_failed_login_attempts = isset($infohash["may_edit_max_failed_login_attempts"]) ? "yes" : "no";
+        $max_failed_login_attempts = $infohash["max_failed_login_attempts"];
+        $min_password_length       = $infohash["min_password_length"];
+        $num_password_history      = $infohash["num_password_history"];
+        $required_password_chars   = (isset($infohash["required_password_chars"]) && is_array($infohash["required_password_chars"])) ? implode(",", $infohash["required_password_chars"]) : "";
+        $forms_page_default_message = $infohash["forms_page_default_message"];
+
+        // update the client custom account settings table
+        $settings = array(
+            "page_titles" => $form_vals["page_titles"],
+            "footer_text" => $form_vals["footer_text"],
+            "may_edit_page_titles" => $may_edit_page_titles,
+            "may_edit_footer_text" => $may_edit_footer_text,
+            "may_edit_theme"       => $may_edit_theme,
+            "may_edit_logout_url"  => $may_edit_logout_url,
+            "may_edit_language"    => $may_edit_language,
+            "may_edit_timezone_offset"  => $may_edit_timezone_offset,
+            "may_edit_sessions_timeout" => $may_edit_sessions_timeout,
+            "may_edit_max_failed_login_attempts" => $may_edit_max_failed_login_attempts,
+            "max_failed_login_attempts" => $max_failed_login_attempts,
+            "required_password_chars" => $required_password_chars,
+            "min_password_length" => $min_password_length,
+            "num_password_history" => $num_password_history,
+            "forms_page_default_message" => $forms_page_default_message
+        );
+        Accounts::setAccountSettings($account_id, $settings);
     }
 }

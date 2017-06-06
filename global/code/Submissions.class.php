@@ -897,7 +897,7 @@ class Submissions {
      * @param integer $submission_id
      * @return boolean
      */
-    function ft_check_submission_exists($form_id, $submission_id)
+    public static function checkSubmissionExists($form_id, $submission_id)
     {
         $db = Core::$db;
 
