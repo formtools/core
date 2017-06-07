@@ -1406,16 +1406,7 @@ class Forms
                 $list_id = OptionLists::createUniqueOptionList($form_id, $option_list_info);
                 $raw_field_type_map_multi_select_id = $field_type_id_to_option_list_map[$option_list_info["field_type_id"]];
                 if (is_numeric($list_id)) {
-                    $db->query("
-                        INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
-                        VALUES (:field_id, :setting_id, :setting_value)
-                    ");
-                    $db->bindAll(array(
-                        "field_id" => $field_id,
-                        "setting_id" => $raw_field_type_map_multi_select_id,
-                        "setting_value" => $list_id
-                    ));
-                    $db->execute();
+                    FieldSettings::addSetting($field_id, $raw_field_type_map_multi_select_id, $list_id);
                 }
             }
         }
@@ -1492,8 +1483,7 @@ class Forms
 
         // remove any field settings
         foreach ($form_fields as $field_info) {
-            $field_id = $field_info["field_id"];
-            $db->query("DELETE FROM {PREFIX}field_settings WHERE field_id = $field_id");
+            FieldSettings::deleteSettings($field_info["field_id"]);
         }
 
         // as with many things in the script, potentially we need to return a vast range of information from this last function. But

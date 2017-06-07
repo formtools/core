@@ -20,4 +20,13 @@ class FieldSettings
         ));
         $db->execute();
     }
+
+
+    public static function deleteSettings($field_id) {
+        $db = Core::$db;
+
+        $db->query("DELETE FROM {PREFIX}field_settings WHERE field_id = :field_id");
+        $db->bind("field_id", $field_id);
+        $db->execute();
+    }
 }
