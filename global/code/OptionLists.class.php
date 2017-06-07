@@ -115,37 +115,7 @@ class OptionLists {
             $new_list_id = self::addOptionList($new_option_list_name, "no");
         } else {
             $option_list_info = self::getOptionList($list_id);
-            $new_list_id = self::addOptionList($new_option_list_name, $option_list_info["is_grouped"]);
-
-            // add the option groups and their field options
-            foreach ($option_list_info["options"] as $grouped_option_info) {
-                $group_info = $grouped_option_info["group_info"];
-                $options    = $grouped_option_info["options"];
-
-                print_r($grouped_option_info);
-exit;
-
-                $group_type = "option_list_{$new_list_id}";
-                $group_name = $group_info["group_name"];
-                $list_order = $group_info["list_order"];
-exit;
-
-                $new_list_group_info = ListGroups::addListGroup($group_type, $group_name, $list_order);
-                $new_list_group_id = $new_list_group_info["group_id"];
-
-                foreach ($options as $option_info) {
-                    $order = $option_info["option_order"];
-                    $value = $option_info["option_value"];
-                    $name  = $option_info["option_name"];
-                    $is_new_sort_group = $option_info["is_new_sort_group"];
-
-                    $db->query("
-          INSERT INTO {PREFIX}field_options (list_id, list_group_id, option_order,
-            option_value, option_name, is_new_sort_group)
-          VALUES ($new_list_id, $new_list_group_id, '$order', '$value', '$name', '$is_new_sort_group')
-            ") or die(mysql_error());
-                }
-            }
+            $new_list_id = self::addOptionList($new_option_list_name, $option_list_info["is_grouped"], $option_list_info["options"]);
         }
 
         // if we need to map this new option list to a field - or fields, loop through them and add them
@@ -168,10 +138,16 @@ exit;
                 // this should ALWAYS have found a setting, but just in case...
                 if (!empty($option_list_setting_id)) {
                     $db->query("DELETE FROM {PREFIX}field_settings WHERE field_id = $field_id AND setting_id = $option_list_setting_id");
-                    @$db->query("
-          INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
-          VALUES ($field_id, $option_list_setting_id, $new_list_id)
-           ");
+                    $db->query("
+                        INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
+                        VALUES (:field_id, :setting_id, :setting_value)
+                    ");
+                    $db->bindAll(array(
+                        "field_id" => $field_id,
+                        "setting_id" => $option_list_setting_id,
+                        "setting_value" => $new_list_id
+                    ));
+                    $db->execute();
                 }
             }
         }
@@ -229,7 +205,26 @@ exit;
 
 
     /**
-     * Creates a new option list in the database.
+     * Creates a new option list in the database. If the third $field_options parameter is set, it expects it
+     * to be an array of form:
+     *    array(
+     *       array(
+     *          "group_info" => array(
+     *              "group_type" => "",
+     *              "group_name" => ""
+     *          ),
+     *          "options" => array(
+     *              array(
+     *                 "option_value" => "",
+     *                 "option_name" => "",
+     *                 "is_new_sort_group" => "yes" | "no"
+     *              )
+     *          )
+     *       )
+     *    )
+     *
+     * Any other fields in the array are ignored. This allows us to pass the content from the getOptionList() right into
+     * this method & it will create a new option list with the same data.
      */
     public static function addOptionList($name, $is_grouped = "no", $field_options = array())
     {
@@ -249,6 +244,29 @@ exit;
 
         if ($is_grouped == "no") {
             ListGroups::addListGroup("option_list_{$list_id}", "", 1);
+        } else {
+
+            // add the option groups and their field options
+            $order = 1;
+            foreach ($field_options as $grouped_option_info) {
+                $group_info = $grouped_option_info["group_info"];
+                $options    = $grouped_option_info["options"];
+
+                $group_type = "option_list_{$list_id}";
+                $group_name = $group_info["group_name"];
+
+                $new_list_group_info = ListGroups::addListGroup($group_type, $group_name, $order);
+                $new_list_group_id = $new_list_group_info["group_id"];
+
+                $option_order = 1;
+                foreach ($options as $opt) {
+                    FieldOptions::addFieldOption($list_id, $new_list_group_id, $option_order, $opt["option_value"],
+                        $opt["option_name"], $opt["is_new_sort_group"]);
+                    $option_order++;
+                }
+                $order++;
+            }
+
         }
 
         return $list_id;
@@ -478,19 +496,7 @@ exit;
                 $text  = $info["field_option_text_{$i}"];
                 $is_new_sort_group = (in_array($i, $new_groups)) ? "yes" : "no";
 
-                $db->query("
-                    INSERT INTO {PREFIX}field_options (list_id, option_order, option_value, option_name, is_new_sort_group, list_group_id)
-                    VALUES (:list_id, :option_order, :option_value, :option_name, :is_new_sort_group, :list_group_id)
-                ");
-                $db->bindAll(array(
-                    "list_id" => $list_id,
-                    "option_order" => $order,
-                    "option_value" => $value,
-                    "option_name" => $text,
-                    "is_new_sort_group" => $is_new_sort_group,
-                    "list_group_id" => $curr_group_id
-                ));
-                $db->execute();
+                FieldOptions::addFieldOption($list_id, $curr_group_id, $order, $value, $text, $is_new_sort_group);
                 $order++;
             }
         }
