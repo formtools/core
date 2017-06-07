@@ -11,6 +11,7 @@ require_once(__DIR__ . "/code/Emails.class.php");
 require_once(__DIR__ . "/code/Errors.class.php");
 require_once(__DIR__ . "/code/Fields.class.php");
 require_once(__DIR__ . "/code/FieldOptions.class.php");
+require_once(__DIR__ . "/code/FieldSettings.class.php");
 require_once(__DIR__ . "/code/FieldSizes.class.php");
 require_once(__DIR__ . "/code/FieldTypes.class.php");
 require_once(__DIR__ . "/code/FieldValidation.class.php");

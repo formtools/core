@@ -1925,16 +1925,7 @@ class Forms
                     $field_id      = $setting_info["field_id"];
                     $setting_id    = $setting_info["new_setting_id"];
                     $setting_value = $setting_info["setting_value"];
-                    $db->query("
-                        INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
-                        VALUES (:field_id, :setting_id, :setting_value)
-                    ");
-                    $db->bindAll(array(
-                        "field_id" => $field_id,
-                        "setting_id" => $setting_id,
-                        "setting_value" => $setting_value
-                    ));
-                    $db->execute();
+                    FieldSettings::addSetting($field_id, $setting_id, $setting_value);
                 }
             }
         }
@@ -1967,8 +1958,8 @@ class Forms
                 // if there was a problem, return an error immediately
             } else {
 
-                // if there have already been successful database column name changes already made,
-                // update the database. This helps prevent things getting out of whack
+                // if there have already been successful database column name changes already made, update the database.
+                // This helps prevent things getting out of whack
                 if (!empty($db_col_changes)) {
                     while (list($field_id, $changes) = each($db_col_changes)) {
                         $col_name   = $changes["col_name"];
@@ -1997,74 +1988,84 @@ class Forms
         }
 
         // now update the fields, and, if need be, the form's database table
-        foreach ($field_info as $field)
-        {
+        foreach ($field_info as $field) {
             if ($field["is_new_field"]) {
                 continue;
             }
 
-            $field_id      = $field["field_id"];
-            $display_name  = $field["display_name"];
-            $field_name    = $field["form_field_name"];
-            $field_type_id = $field["field_type_id"];
-            $include_on_redirect = $field["include_on_redirect"];
-            $is_system_field = $field["is_system_field"];
-            $field_size      = $field["field_size"];
-            $col_name        = $field["col_name"];
-            $list_order      = $field["list_order"];
-            $is_new_sort_group = $field["is_new_sort_group"];
-
-            if ($is_system_field == "yes") {
-                $query = "
+            if ($field["is_system_field"] == "yes") {
+                $db->query("
                     UPDATE {PREFIX}form_fields
-                    SET    field_title = '$display_name',
-                           include_on_redirect = '$include_on_redirect',
-                           list_order = $list_order,
-                           is_new_sort_group = '$is_new_sort_group'
-                    WHERE  field_id = $field_id
-                  ";
+                    SET    field_title = :field_title,
+                           include_on_redirect = :include_on_redirect,
+                           list_order = :list_order,
+                           is_new_sort_group = :is_new_sort_group
+                    WHERE  field_id = :field_id
+                ");
+                $db->bindAll(array(
+                    "field_title" => $field["display_name"],
+                    "include_on_redirect" => $field["include_on_redirect"],
+                    "list_order" => $field["list_order"],
+                    "is_new_sort_group" => $field["is_new_sort_group"],
+                    "field_id" => $field["field_id"]
+                ));
             } else {
-                $query = "
+                $db->query("
                     UPDATE {PREFIX}form_fields
-                    SET    field_name = '$field_name',
-                           field_title = '$display_name',
-                           field_size = '$field_size',
-                           col_name = '$col_name',
-                           field_type_id  = '$field_type_id',
-                           include_on_redirect = '$include_on_redirect',
-                           list_order = $list_order,
-                           is_new_sort_group = '$is_new_sort_group'
-                    WHERE  field_id = $field_id
-                  ";
+                    SET    field_name = :field_name,
+                           field_title = :field_title,
+                           field_size = :field_size,
+                           col_name = :col_name,
+                           field_type_id  = :field_type_id,
+                           include_on_redirect = :include_on_redirect,
+                           list_order = :list_order,
+                           is_new_sort_group = :is_new_sort_group
+                    WHERE  field_id = :field_id
+                ");
+                $db->bindAll(array(
+                    "field_name" => $field["form_field_name"],
+                    "field_title" => $field["display_name"],
+                    "field_size" => $field["field_size"],
+                    "col_name" => $field["col_name"],
+                    "field_type_id" => $field["field_type_id"],
+                    "include_on_redirect" => $field["include_on_redirect"],
+                    "list_order" => $field["list_order"],
+                    "is_new_sort_group" => $field["is_new_sort_group"],
+                    "field_id" => $field["field_id"]
+                ));
             }
 
-            $db->query($query)
-            or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>, line " . __LINE__ . ": <i>$query</i>", mysql_error());
+            try {
+                $db->execute();
+            } catch (PDOException $e) {
+                Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+                exit;
+            }
         }
+
 
         // if any of the database column names just changed we need to update any View filters that relied on them
         if (!empty($db_col_changes)) {
-            while (list($field_id, $changes) = each($db_col_changes)) {
+            while (list($field_id) = each($db_col_changes)) {
                 Fields::updateFieldFilters($field_id);
             }
         }
 
         // okay! now add any new fields that the user just added
         $new_fields = array();
-        foreach ($field_info as $curr_field)
-        {
-            if ($curr_field["is_new_field"])
-            {
+        $num_existing_fields = 0;
+        foreach ($field_info as $curr_field) {
+            if ($curr_field["is_new_field"]) {
                 $new_fields[] = $curr_field;
+            } else {
+                $num_existing_fields++;
             }
         }
-        if (!empty($new_fields))
-        {
-            list($is_success, $error) = Fields::addFormFields($form_id, $new_fields);
+        if (!empty($new_fields)) {
+            list($is_success, $error) = Fields::addFormFields($form_id, $new_fields, $num_existing_fields+1);
 
             // if there was a problem adding any of the new fields, inform the user
-            if (!$is_success)
-            {
+            if (!$is_success) {
                 $success = false;
                 $message = $error;
             }
