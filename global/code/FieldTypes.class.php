@@ -1364,7 +1364,7 @@ END;
             $old_setting_id = self::getFieldTypeSettingIdByIdentifier($old_field_type_id, $settings[$new_field_type_identifier]);
             $new_setting_id = self::getFieldTypeSettingIdByIdentifier($new_field_type_id, $settings[$old_field_type_identifier]);
 
-            $old_setting_value = Fields::getFieldSetting($field_id, $old_setting_id);
+            $old_setting_value = FieldSettings::getFieldSetting($field_id, $old_setting_id);
             $return_info[] = array(
                 "field_id"       => $field_id,
                 "old_setting_id" => $old_setting_id,

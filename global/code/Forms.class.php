@@ -1814,6 +1814,8 @@ class Forms
     /**
      * Called by administrators; updates the content stored on the "Fields" tab in the Edit Form pages.
      *
+     * TODO refactor.
+     *
      * @param integer $form_id the unique form ID
      * @param array $infohash a hash containing the contents of the Edit Form Display tab
      * @return array returns array with indexes:<br/>
@@ -1822,224 +1824,26 @@ class Forms
      */
     public static function updateFormFieldsTab($form_id, $infohash)
     {
-        $db = Core::$db;
-        $debug_enabled = Core::isDebugEnabled();
         $LANG = Core::$L;
-        $FIELD_SIZES = FieldSizes::get();
-
         $success = true;
         $message = $LANG["notify_field_changes_saved"];
 
         extract(Hooks::processHookCalls("start", compact("infohash", "form_id"), array("infohash")), EXTR_OVERWRITE);
 
-        // stores the cleaned-up version of the POST content
-        $field_info = array();
-
+        // JS-generated stuff from the page
         $sortable_id = $infohash["sortable_id"];
         $field_ids = explode(",", $infohash["{$sortable_id}_sortable__rows"]);
         $order = $infohash["sortable_row_offset"];
-
         $new_sort_groups = explode(",", $infohash["{$sortable_id}_sortable__new_groups"]);
 
-        foreach ($field_ids as $field_id) {
-            $is_new_field = preg_match("/^NEW/", $field_id) ? true : false;
-            $display_name        = (isset($infohash["field_{$field_id}_display_name"])) ? $infohash["field_{$field_id}_display_name"] : "";
-            $form_field_name     = (isset($infohash["field_{$field_id}_name"])) ? $infohash["field_{$field_id}_name"] : "";
-            $include_on_redirect = (isset($infohash["field_{$field_id}_include_on_redirect"])) ? "yes" : "no";
-            $field_size          = (isset($infohash["field_{$field_id}_size"])) ? $infohash["field_{$field_id}_size"] : "";
-            $col_name            = (isset($infohash["col_{$field_id}_name"])) ? $infohash["col_{$field_id}_name"] : "";
-            $old_field_size      = (isset($infohash["old_field_{$field_id}_size"])) ? $infohash["old_field_{$field_id}_size"] : "";
-            $old_col_name        = (isset($infohash["old_col_{$field_id}_name"])) ? $infohash["old_col_{$field_id}_name"] : "";
-            $is_system_field     = (in_array($field_id, $infohash["system_fields"])) ? "yes" : "no";
+        // parse the POST data to get the info in a simple format
+        $field_info = Forms::editFieldsPageGetFormattedPostData($field_ids, $infohash, $order, $new_sort_groups);
 
-            // this is only sent for non-system fields
-            $field_type_id       = isset($infohash["field_{$field_id}_type_id"]) ? $infohash["field_{$field_id}_type_id"] : "";
+        // delete any extended field settings for those fields whose field type just changed
+        Forms::editFieldsPageUpdateFieldSettings($field_info);
 
-            // won't be defined for new fields
-            $old_field_type_id   = (isset($infohash["old_field_{$field_id}_type_id"])) ? $infohash["old_field_{$field_id}_type_id"] : "";
-
-            $field_info[] = array(
-                "is_new_field"        => $is_new_field,
-                "field_id"            => $field_id,
-                "display_name"        => $display_name,
-                "form_field_name"     => $form_field_name,
-                "field_type_id"       => $field_type_id,
-                "old_field_type_id"   => $old_field_type_id,
-                "include_on_redirect" => $include_on_redirect,
-                "is_system_field"     => $is_system_field,
-                "list_order"          => $order,
-                "is_new_sort_group"   => (in_array($field_id, $new_sort_groups)) ? "yes" : "no",
-
-                // column name info
-                "col_name"            => $col_name,
-                "old_col_name"        => $old_col_name,
-                "col_name_changed"    => ($col_name != $old_col_name) ? "yes" : "no",
-
-                // field size info
-                "field_size"          => $field_size,
-                "old_field_size"      => $old_field_size,
-                "field_size_changed"  => ($field_size != $old_field_size) ? "yes" : "no"
-            );
-            $order++;
-        }
-        reset($infohash);
-
-        // delete any extended field settings for those fields whose field type just changed. Two comments:
-        //   1. this is compatible with editing the fields in the dialog window. When that happens & the user updates
-        //      it, the code updates the old_field_type_id info in the page so this is never called.
-        //   2. with the addition of Shared Characteristics, this only deletes fields that aren't mapped between the
-        //      two fields types (old and new)
-        $changed_fields = array();
-        foreach ($field_info as $curr_field_info) {
-            if ($curr_field_info["is_new_field"] || $curr_field_info["is_system_field"] == "yes" ||
-                $curr_field_info["field_type_id"] == $curr_field_info["old_field_type_id"]) {
-                continue;
-            }
-            $changed_fields[] = $curr_field_info;
-        }
-
-        if (!empty($changed_fields)) {
-            $field_type_settings_shared_characteristics = Settings::get("field_type_settings_shared_characteristics");
-            $field_type_map = FieldTypes::getFieldTypeIdToIdentifierMap();
-
-            $shared_settings = array();
-            foreach ($changed_fields as $changed_field_info) {
-                $field_id = $changed_field_info["field_id"];
-                $shared_settings[] = FieldTypes::getSharedFieldSettingInfo($field_type_map, $field_type_settings_shared_characteristics, $field_id, $changed_field_info["field_type_id"], $changed_field_info["old_field_type_id"]);
-                Fields::deleteExtendedFieldSettings($field_id);
-                FieldValidation::delete($field_id);
-            }
-
-            foreach ($shared_settings as $setting) {
-                foreach ($setting as $setting_info) {
-                    $field_id      = $setting_info["field_id"];
-                    $setting_id    = $setting_info["new_setting_id"];
-                    $setting_value = $setting_info["setting_value"];
-                    FieldSettings::addSetting($field_id, $setting_id, $setting_value);
-                }
-            }
-        }
-
-        // the database column name and size field both affect the form's actual database table structure. If either
-        // of those changed, we need to update the database
-        $db_col_changes     = array();
-        $table_name = "{PREFIX}form_{$form_id}";
-        foreach ($field_info as $curr_field_info) {
-            if ($curr_field_info["col_name_changed"] == "no" && $curr_field_info["field_size_changed"] == "no") {
-                continue;
-            }
-            if ($curr_field_info["is_new_field"]) {
-                continue;
-            }
-
-            $field_id       = $curr_field_info["field_id"];
-            $old_col_name   = $curr_field_info["old_col_name"];
-            $new_col_name   = $curr_field_info["col_name"];
-            $new_field_size = $curr_field_info["field_size"];
-            $new_field_size_sql = $FIELD_SIZES[$new_field_size]["sql"];
-
-            list($is_success, $err_message) = General::alterTableColumn($table_name, $old_col_name, $new_col_name, $new_field_size_sql);
-            if ($is_success) {
-                $db_col_changes[$field_id] = array(
-                    "col_name"   => $new_col_name,
-                    "field_size" => $new_field_size
-                );
-
-                // if there was a problem, return an error immediately
-            } else {
-
-                // if there have already been successful database column name changes already made, update the database.
-                // This helps prevent things getting out of whack
-                if (!empty($db_col_changes)) {
-                    while (list($field_id, $changes) = each($db_col_changes)) {
-                        $col_name   = $changes["col_name"];
-                        $field_size = $changes["field_size"];
-
-                        $db->query("
-                            UPDATE {PREFIX}form_fields
-                            SET    col_name = :col_name,
-                                   field_size = :field_size
-                            WHERE  field_id = :field_id
-                        ");
-                        $db->bindAll(array(
-                            "col_name" => $col_name,
-                            "field_size" => $field_size,
-                            "field_id" => $field_id
-                        ));
-                        $db->execute();
-                    }
-                }
-                $message = $LANG["validation_db_not_updated_invalid_input"];
-                if ($debug_enabled) {
-                    $message .= " \"$err_message\"";
-                }
-                return array(false, $message);
-            }
-        }
-
-        // now update the fields, and, if need be, the form's database table
-        foreach ($field_info as $field) {
-            if ($field["is_new_field"]) {
-                continue;
-            }
-
-            if ($field["is_system_field"] == "yes") {
-                $db->query("
-                    UPDATE {PREFIX}form_fields
-                    SET    field_title = :field_title,
-                           include_on_redirect = :include_on_redirect,
-                           list_order = :list_order,
-                           is_new_sort_group = :is_new_sort_group
-                    WHERE  field_id = :field_id
-                ");
-                $db->bindAll(array(
-                    "field_title" => $field["display_name"],
-                    "include_on_redirect" => $field["include_on_redirect"],
-                    "list_order" => $field["list_order"],
-                    "is_new_sort_group" => $field["is_new_sort_group"],
-                    "field_id" => $field["field_id"]
-                ));
-            } else {
-                $db->query("
-                    UPDATE {PREFIX}form_fields
-                    SET    field_name = :field_name,
-                           field_title = :field_title,
-                           field_size = :field_size,
-                           col_name = :col_name,
-                           field_type_id  = :field_type_id,
-                           include_on_redirect = :include_on_redirect,
-                           list_order = :list_order,
-                           is_new_sort_group = :is_new_sort_group
-                    WHERE  field_id = :field_id
-                ");
-                $db->bindAll(array(
-                    "field_name" => $field["form_field_name"],
-                    "field_title" => $field["display_name"],
-                    "field_size" => $field["field_size"],
-                    "col_name" => $field["col_name"],
-                    "field_type_id" => $field["field_type_id"],
-                    "include_on_redirect" => $field["include_on_redirect"],
-                    "list_order" => $field["list_order"],
-                    "is_new_sort_group" => $field["is_new_sort_group"],
-                    "field_id" => $field["field_id"]
-                ));
-            }
-
-            try {
-                $db->execute();
-            } catch (PDOException $e) {
-                Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
-                exit;
-            }
-        }
-
-
-        // if any of the database column names just changed we need to update any View filters that relied on them
-        if (!empty($db_col_changes)) {
-            while (list($field_id) = each($db_col_changes)) {
-                Fields::updateFieldFilters($field_id);
-            }
-        }
+        // update database table structure + form field record
+        Forms::editFieldsPageUpdateDatabaseCols($form_id, $field_info);
 
         // okay! now add any new fields that the user just added
         $new_fields = array();
@@ -2052,7 +1856,7 @@ class Forms
             }
         }
         if (!empty($new_fields)) {
-            list($is_success, $error) = Fields::addFormFields($form_id, $new_fields, $num_existing_fields+1);
+            list($is_success, $error) = Fields::addFormFieldsAdvanced($form_id, $new_fields, $num_existing_fields+1);
 
             // if there was a problem adding any of the new fields, inform the user
             if (!$is_success) {
@@ -2061,7 +1865,7 @@ class Forms
             }
         }
 
-        // Lastly, delete the specified fields. Since some field types (e.g. files) may have additional functionality
+        // Lastly, delete the necessary fields. Since some field types (e.g. files) may have additional functionality
         // needed at this stage (e.g. deleting the actual files that had been uploaded via the form). This occurs regardless
         // of whether the add fields step worked or not
         $deleted_field_ids = explode(",", $infohash["{$sortable_id}_sortable__deleted_rows"]);
@@ -2244,4 +2048,175 @@ class Forms
         return $clause;
     }
 
+
+    /**
+     * Helper method used on the Edit Form -> Fields page to clean up the POST data into a simple array.
+     */
+    private static function editFieldsPageGetFormattedPostData($field_ids, $post, $order, $sort_groups)
+    {
+        $field_info = array();
+        foreach ($field_ids as $field_id) {
+            $is_new_field = preg_match("/^NEW/", $field_id) ? true : false;
+            $display_name        = (isset($post["field_{$field_id}_display_name"])) ? $post["field_{$field_id}_display_name"] : "";
+            $form_field_name     = (isset($post["field_{$field_id}_name"])) ? $post["field_{$field_id}_name"] : "";
+            $include_on_redirect = (isset($post["field_{$field_id}_include_on_redirect"])) ? "yes" : "no";
+            $field_size          = (isset($post["field_{$field_id}_size"])) ? $post["field_{$field_id}_size"] : "";
+            $col_name            = (isset($post["col_{$field_id}_name"])) ? $post["col_{$field_id}_name"] : "";
+            $old_field_size      = (isset($post["old_field_{$field_id}_size"])) ? $post["old_field_{$field_id}_size"] : "";
+            $old_col_name        = (isset($post["old_col_{$field_id}_name"])) ? $post["old_col_{$field_id}_name"] : "";
+            $is_system_field     = (in_array($field_id, $post["system_fields"])) ? "yes" : "no";
+
+            // this is only sent for non-system fields
+            $field_type_id       = isset($post["field_{$field_id}_type_id"]) ? $post["field_{$field_id}_type_id"] : "";
+
+            // won't be defined for new fields
+            $old_field_type_id   = (isset($post["old_field_{$field_id}_type_id"])) ? $post["old_field_{$field_id}_type_id"] : "";
+
+            $field_info[] = array(
+                "is_new_field"        => $is_new_field,
+                "field_id"            => $field_id,
+                "display_name"        => $display_name,
+                "form_field_name"     => $form_field_name,
+                "field_type_id"       => $field_type_id,
+                "old_field_type_id"   => $old_field_type_id,
+                "include_on_redirect" => $include_on_redirect,
+                "is_system_field"     => $is_system_field,
+                "list_order"          => $order,
+                "is_new_sort_group"   => (in_array($field_id, $sort_groups)) ? "yes" : "no",
+
+                // column name info
+                "col_name"            => $col_name,
+                "old_col_name"        => $old_col_name,
+                "col_name_changed"    => ($col_name != $old_col_name) ? "yes" : "no",
+
+                // field size info
+                "field_size"          => $field_size,
+                "old_field_size"      => $old_field_size,
+                "field_size_changed"  => ($field_size != $old_field_size) ? "yes" : "no"
+            );
+            $order++;
+        }
+
+        return $field_info;
+    }
+
+    /**
+     * Delete any extended field settings for those fields whose field type just changed. Two comments:
+     *    1. this is compatible with editing the fields in the dialog window. When that happens & the user updates it,
+     *       the code updates the old_field_type_id info in the page so this is never called.
+     *    2. with the addition of Shared Characteristics, this only deletes fields that aren't mapped between the two
+     *       fields types (old and new)
+     */
+    private static function editFieldsPageUpdateFieldSettings($field_info)
+    {
+        $changed_fields = array();
+        foreach ($field_info as $curr_field_info) {
+            if ($curr_field_info["is_new_field"] || $curr_field_info["is_system_field"] == "yes" ||
+            $curr_field_info["field_type_id"] == $curr_field_info["old_field_type_id"]) {
+                continue;
+            }
+            $changed_fields[] = $curr_field_info;
+        }
+
+        if (!empty($changed_fields)) {
+            $field_type_settings_shared_characteristics = Settings::get("field_type_settings_shared_characteristics");
+            $field_type_map = FieldTypes::getFieldTypeIdToIdentifierMap();
+
+            $shared_settings = array();
+            foreach ($changed_fields as $changed_field_info) {
+                $field_id = $changed_field_info["field_id"];
+                $shared_settings[] = FieldTypes::getSharedFieldSettingInfo($field_type_map, $field_type_settings_shared_characteristics, $field_id, $changed_field_info["field_type_id"], $changed_field_info["old_field_type_id"]);
+                Fields::deleteExtendedFieldSettings($field_id);
+                FieldValidation::delete($field_id);
+            }
+
+            foreach ($shared_settings as $setting) {
+                foreach ($setting as $setting_info) {
+                    $field_id      = $setting_info["field_id"];
+                    $setting_id    = $setting_info["new_setting_id"];
+                    $setting_value = $setting_info["setting_value"];
+                    FieldSettings::addSetting($field_id, $setting_id, $setting_value);
+                }
+            }
+        }
+    }
+
+    /**
+     * Called on the Edit Form -> Fields page. This examines the list of updated fields to see if any of them has had
+     * the database column renamed. If so, updates it along with the corresponding form field record.
+     */
+    private static function editFieldsPageUpdateDatabaseCols($form_id, $field_info)
+    {
+        $db = Core::$db;
+        $LANG = Core::$L;
+        $debug_enabled = Core::isDebugEnabled();
+        $FIELD_SIZES = FieldSizes::get();
+
+        // the database column name and size field both affect the form's actual database table structure. If either
+        // of those changed, we need to update the database
+        $table_name = "{PREFIX}form_{$form_id}";
+        foreach ($field_info as $curr_field_info) {
+            if ($curr_field_info["col_name_changed"] == "no" && $curr_field_info["field_size_changed"] == "no") {
+                continue;
+            }
+            if ($curr_field_info["is_new_field"]) {
+                continue;
+            }
+
+            $field_id       = $curr_field_info["field_id"];
+            $old_col_name   = $curr_field_info["old_col_name"];
+            $new_col_name   = $curr_field_info["col_name"];
+            $new_field_size_sql = $FIELD_SIZES[$curr_field_info["field_size"]]["sql"];
+
+            // we group the table column changes with the record updates in a single transaction to ensure nothing gets
+            // out of sync.
+            try {
+                $db->beginTransaction();
+
+                // first update the actual table column
+                // TODO!!!!! confirm that if this fails, the next thing doesn't fire. VERY bloody important to know this!!!!
+                General::alterTableColumn($table_name, $old_col_name, $new_col_name, $new_field_size_sql);
+
+                // if any of the database column names just changed we need to update any View filters that relied on them
+                Fields::updateFieldFilters($field_id);
+
+                // now update the form field record
+
+                $db->processTransaction();
+            } catch (PDOException $e) {
+                continue;
+            }
+
+//                // if there have already been successful database column name changes already made, update the database.
+//                // This helps prevent things getting out of whack
+//                if (!empty($db_col_changes)) {
+//                    while (list($field_id, $changes) = each($db_col_changes)) {
+//                        $col_name   = $changes["col_name"];
+//                        $field_size = $changes["field_size"];
+//
+//                        $db->query("
+//                            UPDATE {PREFIX}form_fields
+//                            SET    col_name = :col_name,
+//                                   field_size = :field_size
+//                            WHERE  field_id = :field_id
+//                        ");
+//                        $db->bindAll(array(
+//                            "col_name" => $col_name,
+//                            "field_size" => $field_size,
+//                            "field_id" => $field_id
+//                        ));
+//                        $db->execute();
+//                    }
+//                }
+//                $message = $LANG["validation_db_not_updated_invalid_input"];
+//                if ($debug_enabled) {
+//                    $message .= " \"$err_message\"";
+//                }
+//                return array(false, $message);
+//            }
+        }
+
+        // loop through each
+        //Fields::temporaryUpdateFields();
+    }
 }

@@ -1193,27 +1193,6 @@ class Fields {
     }
 
 
-    public static function getFieldSetting($field_id, $setting_id)
-    {
-        $db = Core::$db;
-
-        $db->query("
-            SELECT setting_value
-            FROM   {PREFIX}field_settings
-            WHERE  field_id = :field_id AND
-                   setting_id = :setting_id
-        ");
-        $db->bindAll(array(
-            "field_id" => $field_id,
-            "setting_id" => $setting_id
-        ));
-        $db->execute();
-        $result = $db->fetch();
-
-        return (isset($result["setting_value"])) ? $result["setting_value"] : "";
-    }
-
-
     /**
      * Adds/updates all options for a given field. This is called when the user edits fields from the dialog
      * window on the Fields tab. It updates all information about a field: including the custom settings.
@@ -1559,5 +1538,68 @@ class Fields {
         }
     }
 
+
+    /**
+     * temporary. How to improve? Could make this just be passed a hash with the vals to update...
+     */
+    public static function temporaryUpdateFields($field)
+    {
+        $db = Core::$db;
+
+//        // now update the fields, and, if need be, the form's database table
+//        foreach ($field_info as $field) {
+//            if ($field["is_new_field"]) {
+//                continue;
+//            }
+
+        if ($field["is_system_field"] == "yes") {
+            $db->query("
+                UPDATE {PREFIX}form_fields
+                SET    field_title = :field_title,
+                       include_on_redirect = :include_on_redirect,
+                       list_order = :list_order,
+                       is_new_sort_group = :is_new_sort_group
+                WHERE  field_id = :field_id
+            ");
+            $db->bindAll(array(
+                "field_title" => $field["display_name"],
+                "include_on_redirect" => $field["include_on_redirect"],
+                "list_order" => $field["list_order"],
+                "is_new_sort_group" => $field["is_new_sort_group"],
+                "field_id" => $field["field_id"]
+            ));
+        } else {
+            $db->query("
+                UPDATE {PREFIX}form_fields
+                SET    field_name = :field_name,
+                       field_title = :field_title,
+                       field_size = :field_size,
+                       col_name = :col_name,
+                       field_type_id  = :field_type_id,
+                       include_on_redirect = :include_on_redirect,
+                       list_order = :list_order,
+                       is_new_sort_group = :is_new_sort_group
+                WHERE  field_id = :field_id
+            ");
+            $db->bindAll(array(
+                "field_name" => $field["form_field_name"],
+                "field_title" => $field["display_name"],
+                "field_size" => $field["field_size"],
+                "col_name" => $field["col_name"],
+                "field_type_id" => $field["field_type_id"],
+                "include_on_redirect" => $field["include_on_redirect"],
+                "list_order" => $field["list_order"],
+                "is_new_sort_group" => $field["is_new_sort_group"],
+                "field_id" => $field["field_id"]
+            ));
+        }
+
+        try {
+            $db->execute();
+        } catch (PDOException $e) {
+            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            exit;
+        }
+    }
 }
 

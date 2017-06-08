@@ -12,7 +12,6 @@ use FormTools\Settings;
 use FormTools\Themes;
 
 
-
 $sortable_id = "edit_fields";
 
 if (isset($request["update_fields"])) {
