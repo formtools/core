@@ -331,7 +331,7 @@ class Accounts {
 
             $db->execute();
         } catch (PDOException $e) {
-            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
 

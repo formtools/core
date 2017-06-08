@@ -29,7 +29,13 @@ class Forms
      */
     public static function processForm($form_data)
     {
-        global $g_multi_val_delimiter, $g_query_str_multi_val_separator, $LANG, $g_api_version, $g_api_recaptcha_private_key;
+        $db = Core::$db;
+        $LANG = Core::$L;
+        $multi_val_delimiter = Core::getMultiFieldValDelimiter();
+        $query_str_delimiter = Core::getQueryStrMultiValSeparator();
+
+        // $g_multi_val_delimiter, $g_query_str_multi_val_separator,
+        global $g_api_version, $g_api_recaptcha_private_key;
 
         // ensure the incoming values are escaped
         $form_id = $form_data["form_tools_form_id"];
@@ -68,7 +74,6 @@ class Forms
             Themes::displayPage("error.tpl", $page_vars);
             exit;
         }
-
 
         // was there a reCAPTCHA response? If so, a recaptcha was just submitted. This generally implies the
         // form page included the API, so check it was entered correctly. If not, return the user to the webpage
@@ -189,14 +194,22 @@ class Forms
         // add the submission to the database (if form_tools_ignore_submission key isn't set by either the form or a module)
         $submission_id = "";
         if (!isset($form_data["form_tools_ignore_submission"])) {
-            $result = $db->query($query);
+            try {
+                $db->query($query);
+            } catch (PDOException $e) {
 
-            if (!$result) {
-                $page_vars = array("message_type" => "error", "error_code" => 304, "error_type" => "system",
-                    "debugging"=> "Failed query in <b>" . __FUNCTION__ . ", " . __FILE__ . "</b>, line " . __LINE__ .
-                    ": <i>" . nl2br($query) . "</i>", mysql_error());
+//                Errors::showErrorCode();
+
+                $page_vars = array(
+                    "message_type" => "error",
+                    "error_code" => 304,
+                    "error_type" => "system",
+                    "debugging"=> "Failed query in <b>" . __CLASS__ . ", " . __FILE__ . "</b>, line " . __LINE__ .
+                    ": <i>" . nl2br($query) . "</i>", mysql_error()
+                );
                 Themes::displayPage("error.tpl", $page_vars);
                 exit;
+
             }
 
             $submission_id = mysql_insert_id();
@@ -331,7 +344,7 @@ class Forms
             } catch (PDOException $e) {
 
                 // need a softer error here. If the form table doesn't exist, we need to log the issue.
-//                Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+//                Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
 //                exit;
             }
         }
@@ -1683,7 +1696,7 @@ class Forms
 
             $db->execute();
         } catch (PDOException $e) {
-            Errors::handleDatabaseError(__CLASS__ , __FILE__, __LINE__, $e->getMessage());
+            Errors::queryError(__CLASS__ , __FILE__, __LINE__, $e->getMessage());
             exit;
         }
 

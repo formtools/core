@@ -501,7 +501,7 @@ class Submissions {
             ");
             $db->execute();
         } catch (PDOException $e) {
-            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
 
@@ -744,7 +744,7 @@ class Submissions {
             ");
             $db->execute();
         } catch (PDOException $e) {
-            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
 
@@ -761,7 +761,7 @@ class Submissions {
                        $submission_id_clause
             ");
         } catch (PDOException $e) {
-            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
 
@@ -777,7 +777,7 @@ class Submissions {
                 $filter_clause
             ");
         } catch (PDOException $e) {
-            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
 
@@ -960,7 +960,7 @@ class Submissions {
                 ");
                 $db->execute();
             } catch (PDOException $e) {
-                Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+                Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
                 exit;
             }
 

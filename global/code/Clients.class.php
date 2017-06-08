@@ -555,7 +555,7 @@ class Clients {
                 Clients::clearResetPassword($account_id);
             }
         } catch (PDOException $e) {
-            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
         }
     }
 
@@ -622,29 +622,40 @@ class Clients {
 
         if (!empty($settings)) {
             $sql_rows = array();
-            while (list($column, $value) = each($settings)) {
-                $sql_rows[] = "$column = '$value'";
+            foreach (array_keys($settings) as $col) {
+                $sql_rows[] = "$col = :$col";
             }
 
-            // column = :column
-
             $sql = implode(",\n", $sql_rows);
+
+            $binding_map = $settings;
+            $binding_map["account_id"] = $account_id;
             $db->query("
                 UPDATE  {PREFIX}accounts
                 SET     $sql
                 WHERE   account_id = :account_id
             ");
-            $db->query($query)
-//            or ft_handle_error("Failed query in <b>" . __FUNCTION__ . "</b>: <i>$query</i>", mysql_error());
+            $db->bindAll($binding_map);
+
+            try {
+                $db->execute();
+            } catch (PDOException $e) {
+                Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+                exit;
+            }
         }
 
+        // separate
         $settings = array();
-        if (isset($info["page_titles"]))
+        if (isset($info["page_titles"])) {
             $settings["page_titles"] = $info["page_titles"];
-        if (isset($info["footer_text"]))
+        }
+        if (isset($info["footer_text"])) {
             $settings["footer_text"] = $info["footer_text"];
-        if (isset($info["max_failed_login_attempts"]))
+        }
+        if (isset($info["max_failed_login_attempts"])) {
             $settings["max_failed_login_attempts"] = $info["max_failed_login_attempts"];
+        }
 
         if (!empty($settings)) {
             Accounts::setAccountSettings($account_id, $settings);

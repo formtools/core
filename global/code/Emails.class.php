@@ -8,7 +8,7 @@
 
 namespace FormTools;
 
-use PDOException;
+use PDO, PDOException;
 
 
 class Emails {
@@ -110,7 +110,7 @@ class Emails {
             $email_template_info = self::getEmailTemplate($create_email_from_email_id);
 
             // WISHLIST: to have a generic "copy_table_row" function...
-            $query = $db->query("
+            $db->query("
               INSERT INTO {PREFIX}email_templates (form_id, email_template_name, email_status,
                 view_mapping_type, limit_email_content_to_fields_in_view, email_event_trigger,
                 include_on_edit_submission_page, subject, email_from, email_from_account_id, custom_from_name,
@@ -121,12 +121,14 @@ class Emails {
                    include_on_edit_submission_page, subject, email_from, email_from_account_id, custom_from_name,
                    custom_from_email, email_reply_to, email_reply_to_account_id, custom_reply_to_name, custom_reply_to_email,
                    html_template, text_template
-                 FROM {PREFIX}email_templates WHERE email_id = $create_email_from_email_id)
+                 FROM {PREFIX}email_templates WHERE email_id = :email_id)
             ");
-            $email_id = mysql_insert_id();
+            $db->bind("email_id", $create_email_from_email_id);
+            $db->execute();
 
-            foreach ($email_template_info["recipients"] as $recipient)
-            {
+            $email_id = $db->getInsertId();
+
+            foreach ($email_template_info["recipients"] as $recipient) {
                 $recipient_user_type    = $recipient["recipient_user_type"];
                 $recipient_type         = $recipient["recipient_type"];
                 $account_id             = !empty($recipient["account_id"]) ? $recipient["account_id"] : "NULL";
@@ -135,27 +137,50 @@ class Emails {
                 $custom_recipient_email = $recipient["custom_recipient_email"];
 
                 $db->query("
-        INSERT INTO {PREFIX}email_template_recipients (email_template_id, recipient_user_type,
-          recipient_type, account_id, form_email_id, custom_recipient_name, custom_recipient_email)
-        VALUES ($email_id, '$recipient_user_type', '$recipient_type', $account_id, $form_email_id,
-        '$custom_recipient_name', '$custom_recipient_email')
-          ") or die(mysql_error());
+                    INSERT INTO {PREFIX}email_template_recipients (email_template_id, recipient_user_type,
+                      recipient_type, account_id, form_email_id, custom_recipient_name, custom_recipient_email)
+                    VALUES ($email_id, :recipient_user_type, :recipient_type, :account_id, :form_email_id,
+                      :custom_recipient_name, :custom_recipient_email)
+                ");
+                $db->bindAll(array(
+                    "email_id" => $email_id,
+                    "recipient_user_type" => $recipient_user_type,
+                    "recipient_type" => $recipient_type,
+                    "account_id" => $account_id,
+                    "form_email_id" => $form_email_id,
+                    "custom_recipient_name" => $custom_recipient_name,
+                    "custom_recipient_email" => $custom_recipient_email
+                ));
+                try {
+                    $db->execute();
+                } catch (PDOException $e) {
+                    Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+                    exit;
+                }
             }
 
-            foreach ($email_template_info["edit_submission_page_view_ids"] as $view_id)
-            {
+            foreach ($email_template_info["edit_submission_page_view_ids"] as $view_id) {
                 $db->query("
-        INSERT INTO {PREFIX}email_template_edit_submission_views (email_id, view_id)
-        VALUES ($email_id, $view_id)
-          ");
+                    INSERT INTO {PREFIX}email_template_edit_submission_views (email_id, view_id)
+                    VALUES (:email_id, :view_id)
+                ");
+                $db->bindAll(array(
+                    "email_id" => $email_id,
+                    "view_id" => $view_id
+                ));
+                $db->execute();
             }
 
-            foreach ($email_template_info["when_sent_view_ids"] as $view_id)
-            {
+            foreach ($email_template_info["when_sent_view_ids"] as $view_id) {
                 $db->query("
-        INSERT INTO {PREFIX}email_template_when_sent_views (email_id, view_id)
-        VALUES ($email_id, $view_id)
-          ");
+                    INSERT INTO {PREFIX}email_template_when_sent_views (email_id, view_id)
+                    VALUES (:email_id, :view_id)
+                ");
+                $db->bindAll(array(
+                    "email_id" => $email_id,
+                    "view_id" => $view_id
+                ));
+                $db->execute();
             }
         }
 
@@ -192,10 +217,7 @@ class Emails {
         $db->bind("email_id", $email_id);
         $db->execute();
 
-        $view_ids = array();
-        foreach ($db->fetchAll() as $row) {
-            $view_ids[] = $row["view_id"];
-        }
+        $view_ids = $db->fetchAll(PDO::FETCH_COLUMN);
         $email_template["edit_submission_page_view_ids"] = $view_ids;
 
         // get the list of Views for which this email template is assigned to be sent
@@ -903,28 +925,49 @@ class Emails {
 
         $db->query("
             UPDATE {PREFIX}email_templates
-            SET    email_template_name = '$email_template_name',
-                   email_status = '$email_status',
-                   view_mapping_type = '$view_mapping_type',
-                   limit_email_content_to_fields_in_view = $limit_email_content_to_fields_in_view,
-                   email_event_trigger = '$email_event_trigger',
-                   include_on_edit_submission_page = '$include_on_edit_submission_page',
-                   subject = '$subject',
-                   email_from = $email_from,
-                   email_from_account_id = $email_from_account_id,
-                   email_from_form_email_id = $email_from_form_email_id,
-                   custom_from_name = '$custom_from_name',
-                   custom_from_email = '$custom_from_email',
-                   email_reply_to = $email_reply_to,
-                   email_reply_to_account_id = $email_reply_to_account_id,
-                   email_reply_to_form_email_id = $email_reply_to_form_email_id,
-                   custom_reply_to_name = '$custom_reply_to_name',
-                   custom_reply_to_email = '$custom_reply_to_email',
-                   html_template = '$html_template',
-                   text_template = '$text_template'
+            SET    email_template_name = :email_template_name,
+                   email_status = :email_status,
+                   view_mapping_type = :view_mapping_type,
+                   limit_email_content_to_fields_in_view = :limit_email_content_to_fields_in_view,
+                   email_event_trigger = :email_event_trigger,
+                   include_on_edit_submission_page = :include_on_edit_submission_page,
+                   subject = :subject,
+                   email_from = :email_from,
+                   email_from_account_id = :email_from_account_id,
+                   email_from_form_email_id = :email_from_form_email_id,
+                   custom_from_name = :custom_from_name,
+                   custom_from_email = :custom_from_email,
+                   email_reply_to = :email_reply_to,
+                   email_reply_to_account_id = :email_reply_to_account_id,
+                   email_reply_to_form_email_id = :email_reply_to_form_email_id,
+                   custom_reply_to_name = :custom_reply_to_name,
+                   custom_reply_to_email = :custom_reply_to_email,
+                   html_template = :html_template,
+                   text_template = :text_template
             WHERE  email_id = :email_id
         ");
-        $db->bind("email_id", $email_id);
+        $db->bindAll(array(
+            "email_template_name" => $email_template_name,
+            "email_status" => $email_status,
+            "view_mapping_type" => $view_mapping_type,
+            "limit_email_content_to_fields_in_view" => $limit_email_content_to_fields_in_view,
+            "email_event_trigger" => $email_event_trigger,
+            "include_on_edit_submission_page" => $include_on_edit_submission_page,
+            "subject" => $subject,
+            "email_from" => $email_from,
+            "email_from_account_id" => $email_from_account_id,
+            "email_from_form_email_id" => $email_from_form_email_id,
+            "custom_from_name" => $custom_from_name,
+            "custom_from_email" => $custom_from_email,
+            "email_reply_to" => $email_reply_to,
+            "email_reply_to_account_id" => $email_reply_to_account_id,
+            "email_reply_to_form_email_id" => $email_reply_to_form_email_id,
+            "custom_reply_to_name" => $custom_reply_to_name,
+            "custom_reply_to_email" => $custom_reply_to_email,
+            "html_template" => $html_template,
+            "text_template" => $text_template,
+            "email_id" => $email_id
+        ));
         $db->execute();
 
         // update the email template edit submission page Views
@@ -1025,12 +1068,12 @@ class Emails {
                     $db->query("
                           INSERT INTO {PREFIX}email_template_recipients
                             (email_template_id, recipient_user_type, recipient_type, custom_recipient_name, custom_recipient_email)
-                          VALUES (:email_id, 'custom', :recipient_type, :name, :email)
+                          VALUES (:email_id, 'custom', :recipient_type, :custom_recipient_name, :email)
                     ");
                     $db->bindAll(array(
                         "email_id" => $email_id,
                         "recipient_type" => $recipient_type,
-                        "name" => $name,
+                        "custom_recipient_name" => $name,
                         "email" => $email
                     ));
                     $db->execute();

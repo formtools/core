@@ -446,7 +446,7 @@ class Files {
             $db->query("SELECT submission_id FROM {PREFIX}form_{$form_id}");
             $db->execute();
         } catch (PDOException $e) {
-            Errors::handleDatabaseError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
 

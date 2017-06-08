@@ -232,7 +232,7 @@ class Themes {
 
         // check the compile directory has the write permissions
         if (!is_writable($smarty->getCompileDir())) {
-            Errors::displaySeriousError("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$smarty->compile_dir}</b> to have full read-write permissions (777 on unix).", "");
+            Errors::majorError("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$smarty->compile_dir}</b> to have full read-write permissions (777 on unix).", "");
             exit;
         }
 

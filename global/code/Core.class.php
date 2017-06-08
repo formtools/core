@@ -130,7 +130,7 @@ class Core {
      * in your form that have the same name, or multi-select dropdowns) when submitted via a query
      * string for "direct" form submissions (added in version 1.4.2).
      */
-    private static $queryStrMultiValSeparator = ",";
+    private static $queryStrMultiValSeparator;
 
     /**
      * For module developers. This prevents the code from automatically deleting your module folder when you're
@@ -478,6 +478,7 @@ class Core {
         self::$maxNavPages = isset($g_max_nav_pages) ? $g_max_nav_pages : 16;
         self::$searchFormDateFieldFormat = isset($g_search_form_date_field_format) ? $g_search_form_date_field_format : "d/m/y";
         self::$multiFieldValDelimiter = isset($g_multi_val_delimiter) ? $g_multi_val_delimiter : ", ";
+        self::$queryStrMultiValSeparator = isset($g_query_str_multi_val_separator) ? $g_query_str_multi_val_separator : ",";
         self::$errorReporting = isset($g_default_error_reporting) ? $g_default_error_reporting : 1;
         self::$debugEnabled = isset($g_debug) ? $g_debug : false;
     }
@@ -632,5 +633,9 @@ class Core {
 
     public static function getDefaultErrorReporting() {
         return self::$errorReporting;
+    }
+
+    public static function getQueryStrMultiValSeparator() {
+        return self::$queryStrMultiValSeparator;
     }
 }
