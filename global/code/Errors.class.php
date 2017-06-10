@@ -28,6 +28,15 @@ namespace FormTools;
 
 class Errors
 {
+
+    // see: https://docs.formtools.org/api/error_codes/
+    public static $CODES = array(
+        "100" => 100,
+        "101" => 101,
+        // 102, 103, 104, 105 removed in Form Tools 3
+        "106" => 106
+    );
+
     public static $headerHTML =<<< END
 <!DOCTYPE>
 <html>
@@ -105,6 +114,17 @@ END;
   {$error}
   {$footer}
 END;
+    }
+
+
+    public static function showErrorCode($error_code, $debugging = "")
+    {
+        Themes::displayPage("error.tpl", array(
+            "message_type" => "error",
+            "error_code" => $error_code,
+            "debugging" => $debugging
+        ));
+        exit;
     }
 
 }

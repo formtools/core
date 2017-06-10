@@ -200,6 +200,8 @@ class Forms
 
 //                Errors::showErrorCode();
 
+                // TODO change to queryError. No more "system" errors
+
                 $page_vars = array(
                     "message_type" => "error",
                     "error_code" => 304,
@@ -1168,22 +1170,14 @@ class Forms
 
         // check the form ID is valid
         if (!self::checkFormExists($form_id, true)) {
-            Themes::displayPage("error.tpl", array(
-                "message_type" => "error",
-                "error_code" => Constants::$ERROR_CODES["100"]
-            ));
-            exit;
+            Errors::showErrorCode(Errors::$CODES["100"]);
         }
 
         $form_info = self::getForm($form_id);
 
         // if this form has already been completed, exit with an error message
         if ($form_info["is_complete"] == "yes") {
-            Themes::displayPage("error.tpl", array(
-                "message_type" => "error",
-                "error_code" => Constants::$ERROR_CODES["101"]
-            ));
-            exit;
+            Errors::showErrorCode(Errors::$CODES["101"]);
         }
 
         // since this form is still incomplete, remove any old records from form_fields concerning this form
@@ -1207,13 +1201,7 @@ class Forms
 
         } catch (PDOException $e) {
             $db->rollbackTransaction();
-            Themes::displayPage("error.tpl", array(
-                "message_type" => "error",
-                "error_code" => Constants::$ERROR_CODES["103"],
-                "error_type" => "system",
-                "debugging" => $e->getMessage()
-            ));
-            exit;
+            Errors::showErrorCode(Errors::$CODES["103"], $e->getMessage());
         }
 
         // finally, set this form's "is_initialized" value to "yes", so the administrator can proceed to
@@ -1223,6 +1211,8 @@ class Forms
         // alert a "test submission complete" message. The only time this wouldn't be outputted would be
         // if this function is being called programmatically, like with the blank_form module
         if ($display_notification_page) {
+
+            // not an error! Find to re-purpose the template but rename it to notification.tpl
             $page_vars = array(
                 "message" => $LANG["processing_init_complete"],
                 "message_type" => "notify",

@@ -316,7 +316,7 @@ class ViewFields
 
         $map = array();
         foreach ($db->fetchAll() as $row) {
-            $group_id    = $row["group_id"];
+            $group_id = $row["group_id"];
 
             try {
                 $db->query("
