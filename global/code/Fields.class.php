@@ -463,6 +463,10 @@ class Fields {
         $affected_views = array();
         $removed_field_ids = array();
 
+        print_r($field_ids);
+        print_r($form_info);
+        exit;
+
         $deleted_field_info = array();
         foreach ($field_ids as $field_id) {
             $field_id = trim($field_id);
@@ -527,13 +531,14 @@ class Fields {
                 UPDATE {PREFIX}views
                 SET     default_sort_field = 'submission_date',
                         default_sort_field_order = 'desc'
-                WHERE   default_sort_field = :drop_column AND
+                WHERE   default_sort_field = :default_sort_field AND
                         form_id = :form_id
             ");
             $db->bindAll(array(
                 "default_sort_field" => $drop_column,
                 "form_id" => $form_id
             ));
+            $db->execute();
 
             $removed_field_ids[] = $field_id;
         }
