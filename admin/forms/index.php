@@ -35,7 +35,7 @@ $search_criteria = array(
 );
 
 $clients   = Clients::getList();
-$num_forms = Clients::getFormCount();
+$num_forms = Forms::getFormCount();
 $forms     = Forms::searchForms($search_criteria);
 $max_forms = Core::getMaxForms();
 $LANG = Core::$L;

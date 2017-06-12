@@ -86,29 +86,26 @@ class FieldValidation {
      */
     public static function mergeFormSubmission($grouped_fields, $request)
     {
-        global $g_multi_val_delimiter;
+        $multi_val_delimiter = Core::getMultiFieldValDelimiter();
 
         $updated_grouped_fields = array();
-        foreach ($grouped_fields as $group_info)
-        {
+        foreach ($grouped_fields as $group_info) {
             $group  = $group_info["group"];
             $fields = $group_info["fields"];
 
             $updated_fields = array();
-            foreach ($fields as $field_info)
-            {
-                if (array_key_exists($field_info["field_name"], $request))
-                {
+            foreach ($fields as $field_info) {
+                if (array_key_exists($field_info["field_name"], $request)) {
                     // TODO! This won't work for phone_number fields, other fields
-                    $value = (is_array($request[$field_info["field_name"]])) ? implode($g_multi_val_delimiter, $request[$field_info["field_name"]]) : $request[$field_info["field_name"]];
+                    $value = (is_array($request[$field_info["field_name"]])) ? implode($multi_val_delimiter, $request[$field_info["field_name"]]) : $request[$field_info["field_name"]];
                     $field_info["submission_value"] = $value;
                 }
                 $updated_fields[] = $field_info;
             }
 
             $updated_grouped_fields[] = array(
-            "group"  => $group,
-            "fields" => $updated_fields
+                "group"  => $group,
+                "fields" => $updated_fields
             );
         }
 

@@ -958,7 +958,11 @@ END;
      */
     public static function generateViewableField($params)
     {
-        global $LANG, $g_root_url, $g_root_dir, $g_multi_val_delimiter, $g_cache;
+        $multi_val_delimiter = Core::getMultiFieldValDelimiter();
+        $root_url = Core::getRootUrl();
+        $root_dir = Core::getRootUrl();
+
+        global $g_cache;
 
         // REQUIRED
         $form_id       = $params["form_id"];
@@ -998,9 +1002,9 @@ END;
                 "SETTINGS"      => $settings,
                 "CONTEXTPAGE"   => $context,
                 "ACCOUNT_INFO"  => $account_info,
-                "g_root_url"    => $g_root_url,
-                "g_root_dir"    => $g_root_dir,
-                "g_multi_val_delimiter" => $g_multi_val_delimiter
+                "g_root_url"    => $root_url,
+                "g_root_dir"    => $root_dir,
+                "g_multi_val_delimiter" => $multi_val_delimiter
             );
 
             // add in all field type settings and their replacements
@@ -1069,7 +1073,7 @@ END;
                 // if this is a module, include the module's library.php file so we have access to the function
                 if ($field_type_info["view_field_php_function_source"] != "core" && is_numeric($field_type_info["view_field_php_function_source"])) {
                     $module_folder = Modules::getModuleFolderFromModuleId($field_type_info["view_field_php_function_source"]);
-                    @include_once("$g_root_dir/modules/$module_folder/library.php");
+                    @include_once("$root_dir/modules/$module_folder/library.php");
                 }
 
                 if (function_exists($php_function)) {
@@ -1297,7 +1301,7 @@ END;
             $code_markup = $placeholders["code_markup"];
             $value       = $placeholders["VALUE"];
             $height      = $placeholders["height"];
-            $g_root_url  = $placeholders["g_root_url"];
+            $root_url    = $placeholders["g_root_url"];
 
             // TODO name not defined!
 
@@ -1306,17 +1310,17 @@ END;
 	<script>
 	var code_mirror_{$name} = new CodeMirror.fromTextArea("{$name}_id", {
 		height:   "{$height}px",
-		path:     "{$g_root_url}/global/codemirror/js/",
+		path:     "{$root_url}/global/codemirror/js/",
 		readOnly: true,
 		{if $code_markup == "HTML" || $code_markup == "XML"}
 			parserfile: ["parsexml.js"],
-			stylesheet: "{$g_root_url}/global/codemirror/css/xmlcolors.css"
+			stylesheet: "{$root_url}/global/codemirror/css/xmlcolors.css"
 		{elseif $code_markup == "CSS"}
 			parserfile: ["parsecss.js"],
-			stylesheet: "{$g_root_url}/global/codemirror/css/csscolors.css"
+			stylesheet: "{$root_url}/global/codemirror/css/csscolors.css"
 		{elseif $code_markup == "JavaScript"}
 			parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
-			stylesheet: "{$g_root_url}/global/codemirror/css/jscolors.css"
+			stylesheet: "{$root_url}/global/codemirror/css/jscolors.css"
 		{/if}
 	});
 	</script>

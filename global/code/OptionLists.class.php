@@ -60,10 +60,6 @@ class OptionLists {
         $db->execute();
         $results = $db->fetchAll();
 
-        $db->query("SELECT count(*) as c FROM {PREFIX}option_lists");
-        $db->execute();
-        $count_hash = $db->fetch();
-
         $option_lists = array();
         foreach ($results as $row) {
             $option_lists[] = $row;
@@ -71,7 +67,7 @@ class OptionLists {
 
         $return_hash = array(
             "results" => $option_lists,
-            "num_results" => $count_hash["c"]
+            "num_results" => OptionLists::getNumOptionLists()
         );
 
         extract(Hooks::processHookCalls("end", compact("return_hash"), array("return_hash")), EXTR_OVERWRITE);

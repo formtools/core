@@ -32,9 +32,9 @@ class Forms
         $db = Core::$db;
         $LANG = Core::$L;
         $multi_val_delimiter = Core::getMultiFieldValDelimiter();
-        $query_str_delimiter = Core::getQueryStrMultiValSeparator();
+        $query_str_multi_val_separator = Core::getQueryStrMultiValSeparator();
 
-        // $g_multi_val_delimiter, $g_query_str_multi_val_separator,
+        // $g_query_str_multi_val_separator,
         global $g_api_version, $g_api_recaptcha_private_key;
 
         // ensure the incoming values are escaped
@@ -130,17 +130,17 @@ class Forms
 
             if ($field_info["is_file_field"] == "no") {
                 $custom_form_fields[$field_name] = array(
-                "field_id"    => $field_id,
-                "col_name"    => $field_info["col_name"],
-                "field_title" => $field_info["field_title"],
-                "include_on_redirect" => $field_info["include_on_redirect"],
-                "field_type_id" => $field_info["field_type_id"],
-                "is_date_field" => $field_info["is_date_field"]
+                    "field_id"    => $field_id,
+                    "col_name"    => $field_info["col_name"],
+                    "field_title" => $field_info["field_title"],
+                    "include_on_redirect" => $field_info["include_on_redirect"],
+                    "field_type_id" => $field_info["field_type_id"],
+                    "is_date_field" => $field_info["is_date_field"]
                 );
             } else {
                 $file_fields[] = array(
-                "field_id"   => $field_id,
-                "field_info" => $field_info
+                    "field_id"   => $field_id,
+                    "field_info" => $field_info
                 );
             }
         }
@@ -160,7 +160,7 @@ class Forms
                             $value[$i] = strip_tags($value[$i]);
                     }
 
-                    $cleaned_value = implode("$g_multi_val_delimiter", $value);
+                    $cleaned_value = implode("$multi_val_delimiter", $value);
                 } else {
                     if ($form_info["submission_strip_tags"] == "yes")
                         $cleaned_value = strip_tags($value);
@@ -251,7 +251,7 @@ class Forms
                     // if $value is an array, convert it to a string, separated by $g_query_str_multi_val_separator
                     if (isset($form_data[$field_name])) {
                         if (is_array($form_data[$field_name])) {
-                            $value_str = join($g_query_str_multi_val_separator, $form_data[$field_name]);
+                            $value_str = join($query_str_multi_val_separator, $form_data[$field_name]);
                             $redirect_query_params[] = "$field_name=" . rawurlencode($value_str);
                         } else {
                             $redirect_query_params[] = "$field_name=" . rawurlencode($form_data[$field_name]);
@@ -1880,6 +1880,23 @@ class Forms
         extract(Hooks::processHookCalls("end", compact("infohash", "field_info", "form_id"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);
+    }
+
+
+    /**
+     * Simple function to find out how many forms are in the database, regardless of status or anything else.
+     *
+     * @return integer the number of forms.
+     */
+    public static function getFormCount()
+    {
+        $db = Core::$db;
+
+        $db->query("SELECT count(*) as c FROM {PREFIX}forms");
+        $db->execute();
+        $result = $db->fetch();
+
+        return $result["c"];
     }
 
 

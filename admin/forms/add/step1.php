@@ -2,7 +2,6 @@
 
 require_once("../../../global/library.php");
 
-use FormTools\Clients;
 use FormTools\Core;
 use FormTools\Forms;
 use FormTools\General;
@@ -15,7 +14,7 @@ Core::$user->checkAuth("admin");
 
 $request = array_merge($_POST, $_GET);
 
-$num_forms = Clients::getFormCount();
+$num_forms = Forms::getFormCount();
 $max_forms = Core::getMaxForms();
 if (!empty($max_forms) && $num_forms > $max_forms) { // note it's not >=
     General::redirect("../");

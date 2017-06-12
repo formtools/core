@@ -266,19 +266,20 @@ EOF;
      */
     public static function sendWelcomeEmail($email, $username, $password)
     {
-        global $g_root_dir, $g_root_url;
+        $root_dir = Core::getRootDir();
+        $root_url = Core::getRootUrl();
 
         // 1. build the email content
         $placeholders = array(
-            "login_url" => $g_root_url,
+            "login_url" => $root_url,
             "username" => $username,
             "password" => $password
         );
-        $smarty_template_email_content = file_get_contents("$g_root_dir/global/emails/installed.tpl");
+        $smarty_template_email_content = file_get_contents("$root_dir/global/emails/installed.tpl");
         $email_content = General::evalSmartyString($smarty_template_email_content, $placeholders);
 
         // 2. build the email subject line
-        $smarty_template_email_subject = file_get_contents("$g_root_dir/global/emails/installed_subject.tpl");
+        $smarty_template_email_subject = file_get_contents("$root_dir/global/emails/installed_subject.tpl");
         $email_subject = trim(General::evalSmartyString($smarty_template_email_subject, array()));
 
         // send email [note: the double quotes around the email recipient and content are intentional:

@@ -50,6 +50,8 @@ if (!$sessions_still_valid) {
 $request = array_merge($_GET, $_POST);
 $action  = $request["action"];
 
+$root_url = Core::getRootUrl();
+
 // To be deprecated! This is the pre-jQuery way to return vars back. Change to use return_vars, which passes an object
 // ------------
 // Find out if we need to return anything back with the response. This mechanism allows us to pass any information
@@ -219,7 +221,7 @@ switch ($action) {
 			$success = 1;
 			$message = $LANG["notify_email_sent"];
 		} else {
-			$edit_email_template_link = "[<a href=\"{$g_root_url}/admin/forms/edit.php?form_id=$form_id&email_id=$email_id&page=edit_email\">edit email template</a>]";
+			$edit_email_template_link = "[<a href=\"{$root_url}/admin/forms/edit.php?form_id=$form_id&email_id=$email_id&page=edit_email\">edit email template</a>]";
 			$success = 0;
 			$message = $LANG["notify_email_not_sent_c"] . mb_strtolower($message) . " " . $edit_email_template_link;
 		}
@@ -506,7 +508,7 @@ switch ($action) {
 	case "get_form_field_placeholders":
 		$form_id = $request["form_id"];
 
-		$text_reference_tab_info = General::evalSmartyString($LANG["text_reference_tab_info"], array("g_root_url" => $g_root_url));
+		$text_reference_tab_info = General::evalSmartyString($LANG["text_reference_tab_info"], array("g_root_url" => $root_url));
 
 		$page_vars = array();
 		$page_vars["form_id"] = $form_id;

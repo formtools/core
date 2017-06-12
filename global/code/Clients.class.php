@@ -176,23 +176,7 @@ class Clients {
      */
     public static function getClientForms($account_id)
     {
-        return ft_search_forms($account_id, true);
-    }
-
-    /**
-     * Simple function to find out how many forms are in the database, regardless of status or anything else.
-     *
-     * @return integer the number of forms.
-     */
-    public static function getFormCount()
-    {
-        $db = Core::$db;
-
-        $db->query("SELECT count(*) as c FROM {PREFIX}forms");
-        $db->execute();
-        $result = $db->fetch();
-
-        return $result["c"];
+        return Forms::searchForms(array("account_id" => $account_id, "is_admin" => true));
     }
 
 
@@ -203,7 +187,7 @@ class Clients {
      */
     public static function getClientFormViews($account_id)
     {
-        $client_forms = ft_search_forms($account_id);
+        $client_forms = Forms::searchForms(array("account_id" =>$account_id));
 
         $info = array();
         foreach ($client_forms as $form_info) {

@@ -334,10 +334,12 @@ class Themes {
      */
     public static function displayModulePage($template, $page_vars = array(), $theme = "", $swatch = "")
     {
-        global $g_root_dir, $g_root_url, $g_success, $g_message, $g_link, $g_smarty_debug, $g_language, $LANG,
-               $g_smarty, $L, $g_smarty_use_sub_dirs, $g_enable_benchmarking,
-               $g_hide_upgrade_link;
+        global $g_success, $g_message, $g_smarty_debug, $LANG,
+               $L, $g_smarty_use_sub_dirs, $g_enable_benchmarking, $g_hide_upgrade_link;
 
+        $smarty = Core::$smarty;
+        $root_dir = Core::getRootDir();
+        $root_url = Core::getRootUrl();
         $module_folder = Modules::getCurrentModuleFolder();
 
         if (empty($theme) && (isset($_SESSION["ft"]["account"]["theme"]))) {
@@ -357,40 +359,41 @@ class Themes {
         }
 
         // common variables. These are sent to EVERY template
-        $g_smarty->template_dir = "$g_root_dir/themes/$theme";
-        $g_smarty->compile_dir  = "$g_root_dir/themes/$theme/cache/";
-        $g_smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
-        $g_smarty->assign("LANG", $LANG);
+        $smarty->setTemplateDir("$root_dir/themes/$theme");
+        $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
+        $smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
+        $smarty->assign("LANG", $LANG);
 
         // this contains the custom language content of the module, in the language required. It's populated by
         // ft_init_module_page(), called on every module page
-        $g_smarty->assign("L", $L);
+        $smarty->assign("L", $L);
 
-        $g_smarty->assign("SESSION", $_SESSION["ft"]);
+        $smarty->assign("SESSION", $_SESSION["ft"]);
+
         $settings = isset($_SESSION["ft"]["settings"]) ? $_SESSION["ft"]["settings"] : array();
-        $g_smarty->assign("settings", $settings);
-        $g_smarty->assign("account", $_SESSION["ft"]["account"]);
-        $g_smarty->assign("g_root_dir", $g_root_dir);
-        $g_smarty->assign("g_root_url", $g_root_url);
-        $g_smarty->assign("g_js_debug", Core::isJsDebugEnabled() ? "true" : "false");
-        $g_smarty->assign("g_hide_upgrade_link", $g_hide_upgrade_link);
-        $g_smarty->assign("same_page", General::getCleanPhpSelf());
-        $g_smarty->assign("query_string", $_SERVER["QUERY_STRING"]); // TODO FIX
-        $g_smarty->assign("dir", $LANG["special_text_direction"]);
-        $g_smarty->assign("g_enable_benchmarking", $g_enable_benchmarking);
-        $g_smarty->assign("swatch", $swatch);
+        $smarty->assign("settings", $settings);
+        $smarty->assign("account", $_SESSION["ft"]["account"]);
+        $smarty->assign("g_root_dir", $root_dir);
+        $smarty->assign("g_root_url", $root_url);
+        $smarty->assign("g_js_debug", Core::isJsDebugEnabled() ? "true" : "false");
+        $smarty->assign("g_hide_upgrade_link", $g_hide_upgrade_link);
+        $smarty->assign("same_page", General::getCleanPhpSelf());
+        $smarty->assign("query_string", $_SERVER["QUERY_STRING"]); // TODO FIX
+        $smarty->assign("dir", $LANG["special_text_direction"]);
+        $smarty->assign("g_enable_benchmarking", $g_enable_benchmarking);
+        $smarty->assign("swatch", $swatch);
 
         // if this page has been told to dislay a custom message, override g_success and g_message
         if (isset($_GET["message"])) {
             list($g_success, $g_message) = General::displayCustomPageMessage($_GET["message"]);
         }
-        $g_smarty->assign("g_success", $g_success);
-        $g_smarty->assign("g_message", $g_message);
+        $smarty->assign("g_success", $g_success);
+        $smarty->assign("g_message", $g_message);
 
 
         $module_id = Modules::getModuleIdFromModuleFolder($module_folder);
         $module_nav = ModuleMenu::getMenuItems($module_id, $module_folder);
-        $g_smarty->assign("module_nav", $module_nav);
+        $smarty->assign("module_nav", $module_nav);
 
         // if there's no module title, display the module name. TODO not compatible with languages...
         if (!isset($page_vars["head_title"])) {
@@ -426,30 +429,28 @@ class Themes {
         }
 
         // theme-specific vars
-        $g_smarty->assign("images_url", "$g_root_url/themes/$theme/images");
-        $g_smarty->assign("theme_url", "$g_root_url/themes/$theme");
-        $g_smarty->assign("theme_dir", "$g_root_dir/themes/$theme");
+        $smarty->assign("images_url", "$root_url/themes/$theme/images");
+        $smarty->assign("theme_url", "$root_url/themes/$theme");
+        $smarty->assign("theme_dir", "$root_dir/themes/$theme");
 
         // if there's a Smarty folder, import any of its resources
-        if (is_dir("$g_root_dir/modules/$module_folder/smarty")) {
-            $g_smarty->plugins_dir[] = "$g_root_dir/modules/$module_folder/smarty";
+        if (is_dir("$root_dir/modules/$module_folder/smarty")) {
+            $smarty->plugins_dir[] = "$root_dir/modules/$module_folder/smarty";
         }
 
         // now add the custom variables for this template, as defined in $page_vars
         foreach ($page_vars as $key=>$value) {
-            $g_smarty->assign($key, $value);
+            $smarty->assign($key, $value);
         }
 
         // if smarty debug is on, enable Smarty debugging
         if ($g_smarty_debug) {
-            $g_smarty->debugging = true;
+            $smarty->debugging = true;
         }
 
         extract(Hooks::processHookCalls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
 
-        $g_smarty->display("$g_root_dir/modules/$module_folder/$template");
-
-        ft_db_disconnect($g_link);
+        $smarty->display("$root_dir/modules/$module_folder/$template");
     }
 
 
@@ -482,7 +483,7 @@ class Themes {
 
 
     /**
-     * TODO move to administrator?
+     * TODO move to administrator... / user?
      *
      * This function is provided for theme developers who find themselves in a position where a theme they
      * create is wonky, and prevents them seeing anything in the UI. It can only be called after having

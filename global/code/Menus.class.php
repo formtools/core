@@ -3,6 +3,8 @@
 namespace FormTools;
 
 
+use PDO, PDOException;
+
 
 class Menus
 {
@@ -716,13 +718,19 @@ class Menus
             $db->query("
                 UPDATE {PREFIX}accounts
                 SET menu_id = :menu_id
-                WHERE account_id = :client_id
+                WHERE account_id = :account_id
             ");
-            $db->bindAll(array(
-                "menu_id" => $menu_id,
-                "account_id" => $client_id
-            ));
-            $db->execute();
+
+            try {
+                $db->bindAll(array(
+                    "menu_id" => $menu_id,
+                    "account_id" => $client_id
+                ));
+                $db->execute();
+            } catch (PDOException $e) {
+                Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+                exit;
+            }
         }
 
         $placeholders = array("menu_name" => $menu_name);

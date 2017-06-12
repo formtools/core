@@ -2,8 +2,8 @@
 
 require_once("../../../global/library.php");
 
-use FormTools\Clients;
 use FormTools\Core;
+use FormTools\Forms;
 use FormTools\General;
 use FormTools\Themes;
 use FormTools\Pages;
@@ -24,7 +24,7 @@ if (isset($request["new_form"])) {
 }
 
 $LANG = Core::$L;
-$num_forms = Clients::getFormCount();
+$num_forms = Forms::getFormCount();
 $max_forms = Core::getMaxForms();
 
 $head_js =<<< END

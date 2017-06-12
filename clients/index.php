@@ -5,6 +5,7 @@ use FormTools\Clients;
 use FormTools\Core;
 use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 
 
@@ -29,7 +30,7 @@ $search_criteria = array(
 );
 
 $num_client_forms = count(Clients::getClientForms($account_id));
-$forms            = ft_search_forms($account_id, false, $search_criteria);
+//$forms            = Forms::searchForms(array("account_id" => $account_id, "is_admin" => false, ... plus $search_criteria);
 $client_info      = Accounts::getAccountInfo($account_id);
 $forms_page_default_message = General::evalSmartyString($client_info["settings"]["forms_page_default_message"]);
 

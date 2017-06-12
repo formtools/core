@@ -117,7 +117,6 @@ class Core {
     private static $debugEnabled;
     private static $jsDebugEnabled;
     private static $smartyDebug = false;
-    private static $apiDebug = true;
 
     /**
      * This tells Smarty to create the compiled templates in subdirectories, which is slightly more efficient.
@@ -152,11 +151,18 @@ class Core {
     private static $sessionSavePath = "";
 
     /**
+     * API settings.
      * These two settings are for the ft_api_display_captcha() function. See the API documentation for more
      * information on how that works.
      */
     private static $apiRecaptchaPublicKey  = "";
     private static $apiRecaptchaPrivateKey = "";
+    private static $apiDebug = true;
+
+    /**
+     * The default sessions timeout for the API. Default is 1 hour (3600 seconds)
+     */
+    private static $apiSessionsTimeout = 3600;
 
     /**
      * This is used by the ft_api_init_form_page() function when setting up the environment for the webpage;
@@ -169,11 +175,6 @@ class Core {
      * them to change it and install the script.
      */
     private static $dbTableCharset = "utf8";
-
-    /**
-     * The default sessions timeout for the API. Default is 1 hour (3600 seconds)
-     */
-    private static $apiSessionsTimeout = 3600;
 
     /**
      * Permissible characters in a filename. All other characters are stripped out. *** including a hyphen here
