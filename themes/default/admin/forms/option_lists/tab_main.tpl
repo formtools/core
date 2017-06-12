@@ -181,8 +181,8 @@
       </tr>
       <tr>
         <td nowrap>{$LANG.phrase_smart_fill_fields_from_c}</td>
-        <td><input type="text" id="smart_fill_source_form_field" style="width:150px" /></td>
-        <td><input type="text" id="smart_fill_source_url" style="width:250px" /></td>
+        <td><input type="text" name="smart_fill_source_form_field" id="smart_fill_source_form_field" style="width:150px" /></td>
+        <td><input type="text" name="smart_fill_source_url" id="smart_fill_source_url" style="width:250px" /></td>
         <td><input type="button" value="{$LANG.phrase_smart_fill|upper}" onclick="sf_ns.smart_fill_field()" /></td>
         <td width="50" align="center">
           <div id="ajax_activity" style="display:none"><img src="{$images_url}/ajax_activity_light_grey.gif" /></div>

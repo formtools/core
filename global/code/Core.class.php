@@ -638,4 +638,8 @@ class Core {
     public static function getQueryStrMultiValSeparator() {
         return self::$queryStrMultiValSeparator;
     }
+
+    public static function getSessionSavePath() {
+        return self::$sessionSavePath;
+    }
 }

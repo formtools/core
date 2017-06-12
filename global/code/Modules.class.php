@@ -4,7 +4,6 @@
  * Modules.
  */
 
-
 // -------------------------------------------------------------------------------------------------
 
 namespace FormTools;
@@ -89,18 +88,7 @@ class Modules
                 // odd this. Why not just store the lang string in the DB? That way it'll be translated for each user...
                 $display_text = isset($lang_info[$lang_file_key]) ? $lang_info[$lang_file_key] : $LANG[$lang_file_key];
 
-                $db->query("
-                    INSERT INTO {PREFIX}module_menu_items (module_id, display_text, url, is_submenu, list_order)
-                    VALUES (:module_id, :display_text, :url, :is_submenu, :nav_order)
-                ");
-                $db->bindAll(array(
-                    ":module_id" => $module_id,
-                    ":display_text" => $display_text,
-                    ":url" => $url,
-                    ":is_submenu" => $is_submenu,
-                    ":nav_order" => $order
-                ));
-                $db->execute();
+                ModuleMenu::addMenuItem($module_id, $display_text, $url, $is_submenu, $order);
                 $order++;
             }
         }
@@ -224,12 +212,13 @@ class Modules
      */
     public static function upgradeModule($module_id)
     {
-        global $LANG, $g_root_url, $g_root_dir, $g_table_prefix;
+        $db = Core::$db;
+        $LANG = Core::$L;
+        $root_url = Core::getRootUrl();
+        $root_dir = Core::getRootDir();
 
         $module_info = self::getModule($module_id);
         $module_folder = $module_info["module_folder"];
-        $module_name = $module_info["module_name"];
-        $old_module_version_date = $module_info["module_date"];
         $current_db_version = $module_info["version"];
 
         $info = self::getModuleInfoFileContents($module_folder);
@@ -243,7 +232,7 @@ class Modules
         // in the way modules were being updated. For backward compatibility, the new upgrade function
         // must be named [module folder]__update (not ...__upgrade). if the __update function is defined,
         // it will be called instead of the older __upgrade one.
-        @include_once("$g_root_dir/modules/$module_folder/library.php");
+        @include_once("$root_dir/modules/$module_folder/library.php");
 
         // NEW "update" function
         $update_function_name = "{$module_folder}__update";
@@ -265,7 +254,7 @@ class Modules
         // we're assuming the module developer hasn't removed any of the required fields...
 
         // now check the language file contains the two required fields: module_name and module_description
-        $lang_file = "$g_root_dir/modules/$module_folder/lang/{$info["origin_language"]}.php";
+        $lang_file = "$root_dir/modules/$module_folder/lang/{$info["origin_language"]}.php";
         $lang_info = _ft_get_module_lang_file_contents($lang_file);
 
         // check the required language file fields
@@ -274,15 +263,9 @@ class Modules
             return;
         }
 
-        $author               = $info["author"];
-        $author_email         = $info["author_email"];
-        $author_link          = $info["author_link"];
-        $module_version       = $info["version"];
-        $module_date          = $info["date"];
-        $origin_language      = $info["origin_language"];
+        $module_date = $info["date"];
         $nav                  = $info["nav"];
 
-        $module_name          = $lang_info["module_name"];
         $module_description   = $lang_info["module_description"];
 
         // convert the date into a MySQL datetime
@@ -290,43 +273,36 @@ class Modules
         $timestamp = mktime(null, null, null, $month, $day, $year);
         $module_datetime = General::getCurrentDatetime($timestamp);
 
-        @$db->query("
-    UPDATE {PREFIX}modules
-    SET    origin_language = '$origin_language',
-           module_name = '$module_name',
-           version = '$module_version',
-           author = '$author',
-           author_email = '$author_email',
-           author_link = '$author_link',
-           description = '$module_description',
-           module_date = '$module_datetime'
-    WHERE  module_id = $module_id
-      ") or die(mysql_error());
+        $db->query("
+            UPDATE {PREFIX}modules
+            SET    origin_language = :origin_language,
+                   module_name = :module_name,
+                   version = :module_version,
+                   author = :author,
+                   author_email = :author_email,
+                   author_link = :author_link,
+                   description = '$module_description',
+                   module_date = '$module_datetime'
+            WHERE  module_id = $module_id
+        ");
+        $db->bindAll(array(
+            "origin_language" => $info["origin_language"],
+            "module_name" => $lang_info["module_name"],
+            "module_version" => $info["version"],
+            "author" => $info["author"],
+            "author_email" => $info["author_email"],
+            "author_link" => $info["author_link"],
+            "module_date" => $module_date,
+        ));
 
         // remove and update the navigation links for this module
-        @$db->query("DELETE FROM {PREFIX}module_menu_items WHERE module_id = $module_id");
-        $order = 1;
-        while (list($lang_file_key, $info) = each($nav)) {
-            $url        = $info[0];
-            $is_submenu = ($info[1]) ? "yes" : "no";
-            if (empty($lang_file_key) || empty($url))
-                continue;
-
-            $display_text = isset($lang_info[$lang_file_key]) ? $lang_info[$lang_file_key] : $LANG[$lang_file_key];
-
-            $db->query("
-      INSERT INTO {PREFIX}module_menu_items (module_id, display_text, url, is_submenu, list_order)
-      VALUES ($module_id, '$display_text', '$url', '$is_submenu', $order)
-        ") or die(mysql_error());
-
-            $order++;
-        }
+        ModuleMenu::resetModuleNav($module_id, $nav);
 
         // And we're done! inform the user that it's been upgraded
         $placeholders = array(
-        "module"  => $module_name,
-        "version" => $new_version,
-        "link"    => "$g_root_url/modules/$module_folder"
+            "module"  => $lang_info["module_name"],
+            "version" => $new_version,
+            "link"    => "$root_url/modules/$module_folder"
         );
 
         $message = General::evalSmartyString($LANG["notify_module_updated"], $placeholders);
@@ -686,12 +662,7 @@ class Modules
             $db->bind("module_id", $module_id);
             $db->execute();
 
-            $db->query("
-                DELETE FROM {PREFIX}module_menu_items
-                WHERE module_id = $module_id
-            ");
-            $db->bind("module_id", $module_id);
-            $db->execute();
+            ModuleMenu::clearModuleNav($module_id);
 
             // if this module was used in any menus, update them
             $db->query("
@@ -771,47 +742,6 @@ class Modules
 
 
     /**
-     * This is called implicitly by the Themes::displayModulePage function (only!). That function is used
-     * to display any module page; it automatically calls this function to load any custom navigation
-     * menu items for a particular module. Then, the theme's modules_header.tpl template uses this
-     * information to render the module nav in an appropriate style.
-     *
-     * Note: to resolve path issues for developers when specifying the paths of the menu items, they may
-     * enter the {$module_dir} Smarty placeholder, which is here escaped to the appropriate URL.
-     *
-     * @param integer $module_id
-     */
-    public static function getModuleMenuItems($module_id, $module_folder)
-    {
-        $db = Core::$db;
-        $root_url = Core::getRootUrl();
-
-        $db->query("
-            SELECT *
-            FROM {PREFIX}module_menu_items
-            WHERE module_id = :module_id
-            ORDER BY list_order ASC
-        ");
-        $db->bind("module_id", $module_id);
-        $db->execute();
-
-        $placeholders = array(
-            "module_dir" => "$root_url/modules/$module_folder"
-        );
-
-        $menu_items = array();
-        foreach ($db->fetchAll() as $row) {
-            $row["url"] = General::evalSmartyString($row["url"], $placeholders);
-            $menu_items[] = $row;
-        }
-
-        extract(Hooks::processHookCalls("end", compact("menu_items", "module_id", "module_folder"), array("menu_items")), EXTR_OVERWRITE);
-
-        return $menu_items;
-    }
-
-
-    /**
      * Retrieves one or more settings for a module. This can be used in two ways:
      * 1. It can be called within any module page WITHOUT the second parameter; it then figures out
      *    what module you're currently on, and returns those setting(s) for that module.
@@ -869,22 +799,27 @@ class Modules
      *
      * @param string $account_type who is allowed to see this module page: "admin", "client"
      */
-    public static function initModulePage($account_type = "admin")
+    public static function initModulePage($required_account_type = "admin")
     {
-        global $g_root_dir, $g_session_type, $g_session_save_path, $g_check_ft_sessions, $LANG;
+        $LANG = Core::$L;
+        $root_dir = Core::getRootDir();
+        $session_save_path = Core::getSessionSavePath();
+
+        global $g_session_type, $g_check_ft_sessions;
 
         if ($g_session_type == "database") {
             $sess = new SessionManager();
         }
 
-        if (!empty($g_session_save_path)) {
-            session_save_path($g_session_save_path);
+        if (!empty($session_save_path)) {
+            session_save_path($session_save_path);
         }
 
         @session_start();
         header("Cache-control: private");
         header("Content-Type: text/html; charset=utf-8");
-        ft_check_permission($account_type);
+
+        Core::$user->checkAuth($required_account_type);
 
         if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"])) {
             General::checkSessionsTimeout();
@@ -893,11 +828,12 @@ class Modules
         $module_folder = self::getCurrentModuleFolder();
 
         // if there's a library file defined, include it
-        if (is_file("$g_root_dir/modules/$module_folder/library.php"))
-            include_once("$g_root_dir/modules/$module_folder/library.php");
+        if (is_file("$root_dir/modules/$module_folder/library.php")) {
+            include_once("$root_dir/modules/$module_folder/library.php");
+        }
 
         // get the language file content
-        $content = self::getModuleLangFile($module_folder, Core::$user-getLang());
+        $content = self::getModuleLangFile($module_folder, Core::$user->getLang());
         $LANG[$module_folder] = $content;
         $GLOBALS["L"] = $content;
 

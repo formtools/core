@@ -11,6 +11,7 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("client");
 
+$LANG = Core::$L;
 
 // update the administrator's account
 if (isset($_POST) && !empty($_POST)) {
@@ -66,6 +67,7 @@ $page_vars["head_js"] =<<<END
     }
     return true;
   }
+
   function validate_username() {
     var username = $("input[name=username]").val();
     if (username.match(/[^\.@a-zA-Z0-9_]/)) {

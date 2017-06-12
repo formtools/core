@@ -79,6 +79,7 @@ foreach ($option_lists as $option_list) {
 $all_option_lists = OptionLists::getList(array(
     "per_page" => Sessions::get("settings.num_option_lists_per_page")
 ));
+
 $root_url = Core::getRootUrl();
 $LANG = Core::$L;
 

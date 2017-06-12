@@ -49,7 +49,7 @@ class OptionLists {
             $limit_clause = "LIMIT $first_item, {$options["per_page"]}";
         }
 
-        $order_clause = self::getOptionListOrderClause($options["page"]);
+        $order_clause = self::getOptionListOrderClause($options["order"]);
 
         $db->query("
             SELECT *

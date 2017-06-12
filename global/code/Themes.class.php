@@ -389,7 +389,7 @@ class Themes {
 
 
         $module_id = Modules::getModuleIdFromModuleFolder($module_folder);
-        $module_nav = Modules::getModuleMenuItems($module_id, $module_folder);
+        $module_nav = ModuleMenu::getMenuItems($module_id, $module_folder);
         $g_smarty->assign("module_nav", $module_nav);
 
         // if there's no module title, display the module name. TODO not compatible with languages...
