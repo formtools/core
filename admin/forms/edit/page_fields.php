@@ -56,6 +56,7 @@ $shared_characteristics_js = FieldTypes::getFieldTypeSettingSharedCharacteristic
 
 $LANG = Core::$L;
 $root_url = Core::getRootUrl();
+$max_form_fields = Core::getMaxFormFields();
 
 // compile the template fields
 $page_vars["page"]         = "fields";
@@ -67,7 +68,7 @@ $page_vars["order_start_number"] = 1;
 $page_vars["num_fields_per_page"] = "all";
 $page_vars["pagination"] = "";
 $page_vars["sortable_id"] = $sortable_id;
-$page_vars["limit_fields"] = (isset($g_max_ft_form_fields) && !empty($g_max_ft_form_fields)) ? true : false;
+$page_vars["limit_fields"] = (!empty($max_form_fields)) ? true : false;
 
 
 if ($num_fields_per_page != "all") {
@@ -104,7 +105,7 @@ $page_vars["js_messages"] = array("validation_no_form_field_name", "validation_i
 );
 
 $edit_field_onload_js = "";
-$limit_fields_enabled_js = ($page_vars["limit_fields"]) ? "fields_ns.limit_fields_enabled = true;\n  fields_ns.max_fields = $g_max_ft_form_fields;" : "";
+$limit_fields_enabled_js = ($page_vars["limit_fields"]) ? "fields_ns.limit_fields_enabled = true;\n  fields_ns.max_fields = $max_form_fields;" : "";
 if (isset($_GET["field_id"])) {
 	$edit_field_onload_js =<<< EOF
   var row_group = $(".sr_order[value={$_GET["field_id"]}]").closest(".row_group");

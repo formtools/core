@@ -332,13 +332,13 @@ class Hooks {
                 VALUES (:hook_type, :component, :file, :action_location, :function_name, :params, :overridable)
             ");
             $db->bindAll(array(
-                ":hook_type" => "code",
-                ":component" => $hook_info["component"],
-                ":file" => $hook_info["file"],
-                ":action_location" => $hook_info["action_location"],
-                ":function_name" => $hook_info["function_name"],
-                ":params" => implode(",", $hook_info["params"]),
-                ":overridable" => implode(",", $hook_info["overridable"])
+                "hook_type" => "code",
+                "component" => $hook_info["component"],
+                "file" => $hook_info["file"],
+                "action_location" => $hook_info["action_location"],
+                "function_name" => $hook_info["function_name"],
+                "params" => implode(",", $hook_info["params"]),
+                "overridable" => implode(",", $hook_info["overridable"])
             ));
             $db->execute();
         }

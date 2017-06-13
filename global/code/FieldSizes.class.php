@@ -39,7 +39,7 @@ class FieldSizes {
             FROM   {PREFIX}field_types
             WHERE  field_type_id = :field_type_id
         ");
-        $db->bind(":field_type_id", $field_type_id);
+        $db->bind("field_type_id", $field_type_id);
         $db->execute();
         $result = $db->fetch();
 

@@ -46,7 +46,7 @@ class FieldValidation {
     {
         $db = Core::$db;
         $db->query("DELETE FROM {PREFIX}field_validation WHERE field_id = :field_id");
-        $db->bind(":field_id", $field_id);
+        $db->bind("field_id", $field_id);
         $db->execute();
     }
 
@@ -65,7 +65,7 @@ class FieldValidation {
                    ftvr.custom_function_required != 'yes'
             ORDER BY fv.field_id, ftvr.list_order
         ");
-        $db->bind(":field_ids", implode(",", $field_ids));
+        $db->bind("field_ids", implode(",", $field_ids));
         $db->execute();
 
         $rules = array();

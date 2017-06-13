@@ -27,10 +27,10 @@ class ListGroups {
             VALUES (:group_type, :group_name, :custom_data, :list_order)
         ");
         $db->bindAll(array(
-            ":group_type" => $group_type,
-            ":group_name" => $group_name,
-            ":custom_data" => "",
-            ":list_order" => $next_order
+            "group_type" => $group_type,
+            "group_name" => $group_name,
+            "custom_data" => "",
+            "list_order" => $next_order
         ));
         $db->execute();
 
@@ -51,7 +51,7 @@ class ListGroups {
             ORDER BY list_order 
             DESC LIMIT 1
         ");
-        Core::$db->bind(":group_type", $group_type);
+        Core::$db->bind("group_type", $group_type);
         Core::$db->execute();
         $result = Core::fetch();
         return (!isset($result["list_order"])) ? 1 : $result["list_order"] + 1;
@@ -64,7 +64,7 @@ class ListGroups {
     public static function deleteListGroup($group_id)
     {
         Core::$db->query("DELETE FROM {PREFIX}list_groups WHERE group_id = :group_id");
-        Core::$db->bind(":group_id", $group_id);
+        Core::$db->bind("group_id", $group_id);
         Core::$db->execute();
     }
 
@@ -72,7 +72,7 @@ class ListGroups {
     public static function deleteByGroupType($group_type)
     {
         Core::$db->query("DELETE FROM {PREFIX}list_groups WHERE group_type = :group_type");
-        Core::$db->bind(":group_type", $group_type);
+        Core::$db->bind("group_type", $group_type);
         Core::$db->execute();
     }
 

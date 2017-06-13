@@ -63,15 +63,15 @@ class Modules
             $db->bindAll(array(
                 "is_installed" => "no",
                 "is_enabled" => "no",
-                ":origin_language"    => $module_info["origin_language"],
-                ":module_name"        => $lang_info["module_name"],
-                ":folder"             => $module_folder,
-                ":module_version"     => $module_info["version"],
-                ":author"             => $module_info["author"],
-                ":author_email"       => $module_info["author_email"],
-                ":author_link"        => $module_info["author_link"],
-                ":module_description" => $lang_info["module_description"],
-                ":module_date"        => $module_date
+                "origin_language"    => $module_info["origin_language"],
+                "module_name"        => $lang_info["module_name"],
+                "folder"             => $module_folder,
+                "module_version"     => $module_info["version"],
+                "author"             => $module_info["author"],
+                "author_email"       => $module_info["author_email"],
+                "author_link"        => $module_info["author_link"],
+                "module_description" => $lang_info["module_description"],
+                "module_date"        => $module_date
             ));
             $db->execute();
             $module_id = $db->getInsertId();
@@ -580,7 +580,7 @@ class Modules
             FROM   {PREFIX}modules
             WHERE  module_folder = :module_folder
         ");
-        $db->bind(":module_folder", $module_folder);
+        $db->bind("module_folder", $module_folder);
         $db->execute();
         $result = $db->fetch();
 
@@ -604,7 +604,7 @@ class Modules
             FROM   {PREFIX}modules
             WHERE  module_folder = :module_folder
         ");
-        $db->bind(":module_folder", $module_folder);
+        $db->bind("module_folder", $module_folder);
         $db->execute();
         $result = $db->fetch();
 
@@ -733,7 +733,7 @@ class Modules
             FROM   {PREFIX}modules
             WHERE  module_id = :module_id
         ");
-        $db->bind(":module_id", $module_id);
+        $db->bind("module_id", $module_id);
         $db->execute();
         $info = $db->fetch();
 

@@ -508,8 +508,8 @@ class Themes {
             WHERE  account_id = :admin_id
         ");
         $db->bindAll(array(
-            ":theme" => $theme,
-            ":admin_id" => $admin_id
+            "theme" => $theme,
+            "admin_id" => $admin_id
         ));
         $db->execute();
 

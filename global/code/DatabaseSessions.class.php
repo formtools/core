@@ -45,8 +45,8 @@ class DatabaseSessions
 		// fetch session data from the selected database
 		$db->query("SELECT session_data FROM {PREFIX}sessions WHERE session_id = :session_id AND expires > :time");
         $db->bindAll(array(
-            ":session_id" => $session_id,
-            ":time" => time()
+            "session_id" => $session_id,
+            "time" => time()
         ));
         $db->execute();
 

@@ -62,11 +62,11 @@ class ModuleMenu
             VALUES (:module_id, :display_text, :url, :is_submenu, :nav_order)
         ");
         $db->bindAll(array(
-            ":module_id" => $module_id,
-            ":display_text" => $display_text,
-            ":url" => $url,
-            ":is_submenu" => $is_submenu,
-            ":nav_order" => $order
+            "module_id" => $module_id,
+            "display_text" => $display_text,
+            "url" => $url,
+            "is_submenu" => $is_submenu,
+            "nav_order" => $order
         ));
         $db->execute();
     }

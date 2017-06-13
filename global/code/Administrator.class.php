@@ -14,8 +14,8 @@ namespace FormTools;
 use PDOException, PDO;
 
 
-class Administrator {
-
+class Administrator
+{
     /**
      * Returns information about the administrator account.
      *
@@ -115,22 +115,22 @@ class Administrator {
               :login_page, :logout_url, :theme, :swatch, :menu_id, :first_name, :last_name, :email, :username, :password)
         ");
         $db->bindAll(array(
-            ":account_type" => "client",
-            ":account_status" => "active",
-            ":ui_language" => $settings["default_language"],
-            ":timezone_offset" => $settings["default_timezone_offset"],
-            ":sessions_timeout" => $settings["default_sessions_timeout"],
-            ":date_format" => $settings["default_date_format"],
-            ":login_page" => $settings["default_login_page"],
-            ":logout_url" => $settings["default_logout_url"],
-            ":theme" => $settings["default_theme"],
-            ":swatch" => $settings["default_client_swatch"],
-            ":menu_id" => $settings["default_client_menu_id"],
-            ":first_name" => $form_vals["first_name"],
-            ":last_name" => $form_vals["last_name"],
-            ":email" => $form_vals["email"],
-            ":username" => $form_vals["username"],
-            ":password" => $password
+            "account_type" => "client",
+            "account_status" => "active",
+            "ui_language" => $settings["default_language"],
+            "timezone_offset" => $settings["default_timezone_offset"],
+            "sessions_timeout" => $settings["default_sessions_timeout"],
+            "date_format" => $settings["default_date_format"],
+            "login_page" => $settings["default_login_page"],
+            "logout_url" => $settings["default_logout_url"],
+            "theme" => $settings["default_theme"],
+            "swatch" => $settings["default_client_swatch"],
+            "menu_id" => $settings["default_client_menu_id"],
+            "first_name" => $form_vals["first_name"],
+            "last_name" => $form_vals["last_name"],
+            "email" => $form_vals["email"],
+            "username" => $form_vals["username"],
+            "password" => $password
         ));
         $db->execute();
 
@@ -207,8 +207,8 @@ class Administrator {
         $root_url = Core::getRootUrl();
 
         // empty old sessions and reload admin settings
-        $admin_values = $_SESSION["ft"]["admin"];
-        $client_id    = $_SESSION["ft"]["account"]["account_id"];
+        $admin_values = Sessions::get("admin");
+        $client_id    = Sessions::get("account.account_id");
         $_SESSION["ft"] = array();
 
         foreach ($admin_values as $key => $value) {
@@ -307,43 +307,34 @@ class Administrator {
             WHERE   account_id = :account_id
         ");
         $db->bindAll(array(
-            ":first_name" => $infohash["first_name"],
-            ":last_name" => $infohash["last_name"],
-            ":email" => $infohash["email"],
-            ":theme" => $theme,
-            ":swatch" => $swatch,
-            ":login_page" => $infohash["login_page"],
-            ":logout_url" => $infohash["logout_url"],
-            ":ui_language" => $infohash["ui_language"],
-            ":timezone_offset" => $infohash["timezone_offset"],
-            ":sessions_timeout" => $infohash["sessions_timeout"],
-            ":date_format" => $infohash["date_format"],
-            ":account_id" => $account_id
+            "first_name" => $infohash["first_name"],
+            "last_name" => $infohash["last_name"],
+            "email" => $infohash["email"],
+            "theme" => $theme,
+            "swatch" => $swatch,
+            "login_page" => $infohash["login_page"],
+            "logout_url" => $infohash["logout_url"],
+            "ui_language" => $infohash["ui_language"],
+            "timezone_offset" => $infohash["timezone_offset"],
+            "sessions_timeout" => $infohash["sessions_timeout"],
+            "date_format" => $infohash["date_format"],
+            "account_id" => $account_id
         ));
         if (!empty($password)) {
-            $db->bind(":password", $enc_password);
+            $db->bind("password", $enc_password);
         }
         $db->execute();
 
         // update the settings
-        $_SESSION["ft"]["settings"] = Settings::get();
-        $_SESSION["ft"]["account"] = Accounts::getAccountInfo($account_id);
-        $_SESSION["ft"]["account"]["is_logged_in"] = true;
+        Sessions::set("settings", Settings::get());
+        Sessions::set("account", Accounts::getAccountInfo($account_id));
+        Sessions::set("account.is_logged_in", true);
 
         // if the password just changed, update sessions and empty any temporary password that happens to have been
         // stored
         if (!empty($password)) {
-            $_SESSION["ft"]["account"]  = Accounts::getAccountInfo($account_id);
-            $_SESSION["ft"]["account"]["is_logged_in"] = true;
-            $_SESSION["ft"]["account"]["password"] = $enc_password;
-
-            $db->query("
-                UPDATE {PREFIX}accounts
-                SET temp_reset_password = NULL 
-                WHERE account_id = :account_id
-            ");
-            $db->bind(":account_id", $account_id);
-            $db->execute();
+            Sessions::set("account.password", $enc_password);
+            Accounts::clearResetPassword($account_id);
         }
 
         extract(Hooks::processHookCalls("end", compact("infohash", "account_id"), array("success", "message")), EXTR_OVERWRITE);

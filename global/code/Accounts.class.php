@@ -15,64 +15,8 @@ use PDOException, PDO;
 /**
  * Form Tools Accounts class.
  */
-class Accounts {
-
-    /**
-     * Creates the administrator account. Used within the installation process.
-     * @param array $info
-     * @return array
-     */
-    public static function setAdminAccount(array $info)
-    {
-        $LANG = Core::$L;
-
-        $rules = array();
-        $rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
-        $rules[] = "required,last_name,{$LANG["validation_no_last_name"]}";
-        $rules[] = "required,email,{$LANG["validation_no_admin_email"]}";
-        $rules[] = "valid_email,email,Please enter a valid administrator email address.";
-        $rules[] = "required,username,{$LANG["validation_no_username"]}";
-        $rules[] = "required,password,{$LANG["validation_no_password"]}";
-        $rules[] = "required,password_2,{$LANG["validation_no_second_password"]}";
-        $rules[] = "same_as,password,password_2,{$LANG["validation_passwords_different"]}";
-        $errors = validate_fields($info, $rules);
-
-        if (!empty($errors)) {
-            return array(false, General::getErrorListHTML($errors));
-        }
-
-        $db = Core::$db;
-        $db->query("
-            UPDATE {PREFIX}accounts
-            SET first_name = :first_name,
-                last_name = :last_name,
-                email = :email,
-                username = :username,
-                password = :password,
-                logout_url = :logout_url
-            WHERE account_id = :account_id
-        ");
-
-        $db->bindAll(array(
-            "first_name" => $info["first_name"],
-            "last_name" => $info["last_name"],
-            "email" => $info["email"],
-            "username" => $info["username"],
-            "password" => md5(md5($info["password"])),
-            "logout_url" => Core::getRootUrl(),
-            "account_id" => 1 // the admin account is always ID 1
-        ));
-
-        try {
-            $db->execute();
-        } catch (PDOException $e) {
-            return array(false, $e->getMessage());
-        }
-
-        return array(true, "");
-    }
-
-
+class Accounts
+{
     public static function getAccountByUsername($username) {
         $db = Core::$db;
         $db->query("
@@ -81,7 +25,7 @@ class Accounts {
             FROM   {PREFIX}accounts
             WHERE  username = :username
         ");
-        $db->bind(":username", $username);
+        $db->bind("username", $username);
         $db->execute();
         return $db->fetch();
     }
@@ -107,7 +51,7 @@ class Accounts {
             FROM   {PREFIX}account_settings
             WHERE  account_id = :account_id
         ");
-        $db->bind(":account_id", $account_id);
+        $db->bind("account_id", $account_id);
         $db->execute();
 
         $hash = array();
@@ -144,8 +88,8 @@ class Accounts {
                        account_id = :account_id
             ");
             $db->bindAll(array(
-                ":setting_name" => $setting_name,
-                ":account_id" => $account_id
+                "setting_name" => $setting_name,
+                "account_id" => $account_id
             ));
             $db->execute();
             $info = $db->fetch();
@@ -165,9 +109,9 @@ class Accounts {
             }
 
             $db->bindAll(array(
-                ":account_id" => $account_id,
-                ":setting_name" => $setting_name,
-                ":setting_value" => $setting_value
+                "account_id" => $account_id,
+                "setting_name" => $setting_name,
+                "setting_value" => $setting_value
             ));
             $db->execute();
         }
@@ -192,7 +136,7 @@ class Accounts {
             FROM {PREFIX}accounts
             WHERE account_id = :account_id
         ");
-        $db->bind(":account_id", $account_id);
+        $db->bind("account_id", $account_id);
         $db->execute();
 
         $result = $db->fetch();
@@ -216,7 +160,7 @@ class Accounts {
             FROM {PREFIX}accounts
             WHERE account_id = :account_id
         ");
-        $db->bind(":account_id", $account_id);
+        $db->bind("account_id", $account_id);
         $db->execute();
 
         $account_info = $db->fetch();
@@ -231,7 +175,7 @@ class Accounts {
             FROM {PREFIX}account_settings 
             WHERE account_id = :account_id
         ");
-        $db->bind(":account_id", $account_id);
+        $db->bind("account_id", $account_id);
         $db->execute();
 
         $settings = array();
@@ -324,9 +268,9 @@ class Accounts {
                 WHERE  username = :username
                 $clause
             ");
-            $db->bind(":username", $username);
+            $db->bind("username", $username);
             if (!empty($account_id)) {
-                $db->bind(":account_id", $account_id);
+                $db->bind("account_id", $account_id);
             }
 
             $db->execute();
@@ -484,6 +428,19 @@ class Accounts {
         extract(Hooks::processHookCalls("end", compact("success", "message", "info"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);
+    }
+
+    public static function clearResetPassword($account_id)
+    {
+        $db = Core::$db;
+
+        $db->query("
+                UPDATE {PREFIX}accounts
+                SET temp_reset_password = NULL 
+                WHERE account_id = :account_id
+            ");
+        $db->bind("account_id", $account_id);
+        $db->execute();
     }
 }
 

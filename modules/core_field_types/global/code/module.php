@@ -148,10 +148,10 @@ function cft_install_module()
 	// first, insert the groups for the forthcoming field types
 	$db->query($group_query);
 	$db->bindAll(array(
-	    ":group_type" => "field_types",
-        ":group_name" => "{\$LANG.phrase_standard_fields}",
-        ":custom_data" => "",
-        ":list_order" => 1
+	    "group_type" => "field_types",
+        "group_name" => "{\$LANG.phrase_standard_fields}",
+        "custom_data" => "",
+        "list_order" => 1
     ));
     try {
         $db->execute();
@@ -163,10 +163,10 @@ function cft_install_module()
 
     $db->query($group_query);
     $db->bindAll(array(
-        ":group_type" => "field_types",
-        ":group_name" => "{\$LANG.phrase_special_fields}",
-        ":custom_data" => "",
-        ":list_order" => 2
+        "group_type" => "field_types",
+        "group_name" => "{\$LANG.phrase_special_fields}",
+        "custom_data" => "",
+        "list_order" => 2
     ));
 
     try {

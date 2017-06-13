@@ -96,7 +96,7 @@ class General
 
         $found = false;
         $db->query("SHOW TABLES FROM :db_name");
-        $db->bind(":db_name", $db_name);
+        $db->bind("db_name", $db_name);
         $db->execute();
         foreach ($db->fetchAll() as $row) {
             if ($row[0] == $table) {
@@ -750,7 +750,7 @@ END;
         }
 
         // log this unixtime for checking the sessions timeout
-        $_SESSION["ft"]["account"]["last_activity_unixtime"] = $now;
+        Sessions::set("account.last_activity_unixtime", $now);
 
         return $sessions_valid;
     }

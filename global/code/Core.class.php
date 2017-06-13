@@ -103,7 +103,7 @@ class Core {
      * that doesn't require the person to be logged into Form Tools. This lets you leverage the Form Tools
      * functionality in the outside world without already being logged into Form Tools.
      */
-    private static $checkFTSessions = true;
+    //private static $checkFTSessions = true;
 
     /**
      * This is set to 1 by default (genuine errors only). Crank it up to 2047 to list every
@@ -378,8 +378,8 @@ class Core {
      *   - if a user is logged in, instantiates the User object and makes it available via Core::$user
      *   - The language is user-specific, but lang strings available as a convenience here: Core::$L
      */
-    public static function init($options = array()) {
-
+    public static function init($options = array())
+    {
         self::loadConfigFile();
 
         // explicitly set the error reporting value
@@ -401,9 +401,9 @@ class Core {
         self::$user = new User();
         self::$currLang = self::$user->getLang();
 
-//        if (self::checkFTSessions() && self::$user->isLoggedIn()) {
-//            ft_check_sessions_timeout();
-//        }
+        if (self::$user->isLoggedIn()) {
+            General::checkSessionsTimeout();
+        }
 
         // OVERRIDES - TODO interface
         if (isset($options["currLang"])) {
@@ -418,13 +418,19 @@ class Core {
             self::$benchmarkStart = General::getMicrotimeFloat();
         }
 
-        // not thrilled with this, but it needs to be handled on all pages, and this is a convenient spot
+        // not thrilled with this, but it needs to be handled on all pages and this is a convenient spot
         if (Core::checkConfigFileExists()) {
             if (isset($_GET["logout"])) {
                 Core::$user->logout();
             }
         }
     }
+
+    public static function initNoSessions($options = array())
+    {
+
+    }
+
 
     public static function startSessions() {
         if (self::$sessionType == "database") {
@@ -476,6 +482,7 @@ class Core {
         self::$enableBenchmarking = (isset($g_enable_benchmarking)) ? $g_enable_benchmarking : false;
         self::$jsDebugEnabled = isset($g_js_debug) ? $g_js_debug : false;
         self::$maxForms = isset($g_max_forms) ? $g_max_forms : "";
+        self::$maxFormFields = isset($g_max_ft_form_fields) ? $g_max_ft_form_fields : "";
         self::$maxNavPages = isset($g_max_nav_pages) ? $g_max_nav_pages : 16;
         self::$searchFormDateFieldFormat = isset($g_search_form_date_field_format) ? $g_search_form_date_field_format : "d/m/y";
         self::$multiFieldValDelimiter = isset($g_multi_val_delimiter) ? $g_multi_val_delimiter : ", ";
@@ -572,9 +579,9 @@ class Core {
         return self::$currLang;
     }
 
-    public static function checkFTSessions() {
-        return self::$checkFTSessions;
-    }
+//    public static function checkFTSessions() {
+//        return self::$checkFTSessions;
+//    }
 
     public static function getPasswordHistorySize() {
         return self::$passwordHistorySize;
@@ -614,6 +621,10 @@ class Core {
 
     public static function getMaxForms() {
         return self::$maxForms;
+    }
+
+    public static function getMaxFormFields() {
+        return self::$maxFormFields;
     }
 
     public static function getMaxNavPages() {

@@ -1559,7 +1559,7 @@ END;
                 ORDER BY g.list_order, ft.list_order
             ");
         }
-        $db->bind(":field_types", "field_types");
+        $db->bind("field_types", "field_types");
         $db->execute();
         $results = $db->fetchAll();
 
@@ -1584,7 +1584,7 @@ END;
             FROM   {PREFIX}field_types
             WHERE  field_type_identifier = :identifier
         ");
-        $db->bind(":identifier", $identifier);
+        $db->bind("identifier", $identifier);
         $db->execute();
         $info = $db->fetch();
 

@@ -26,7 +26,7 @@ function cft_install_field_type($field_type_identifier, $group_id)
 
     // Step 1: install the main field_types record
     $db->query("SELECT count(*) as c FROM {PREFIX}field_types WHERE group_id = :group_id");
-    $db->bind(":group_id", $group_id);
+    $db->bind("group_id", $group_id);
     $db->execute();
     $result = $db->fetch();
 
@@ -46,26 +46,26 @@ function cft_install_field_type($field_type_identifier, $group_id)
         )
     ");
     $db->bindAll(array(
-        ":is_editable" => $data["field_type"]["is_editable"],
-        ":non_editable_info" => $data["field_type"]["non_editable_info"],
-        ":managed_by_module_id" => $data["field_type"]["managed_by_module_id"],
-        ":field_type_name" => $data["field_type"]["field_type_name"],
-        ":field_type_identifier" => $data["field_type"]["field_type_identifier"],
-        ":group_id" => $group_id,
-        ":is_file_field" => $data["field_type"]["is_file_field"],
-        ":is_date_field" => $data["field_type"]["is_date_field"],
-        ":raw_field_type_map" => $data["field_type"]["raw_field_type_map"],
-        ":raw_field_type_map_multi_select_id" => null,
-        ":list_order" => $next_list_order,
-        ":compatible_field_sizes" => $data["field_type"]["compatible_field_sizes"],
-        ":view_field_rendering_type" => $data["field_type"]["view_field_rendering_type"],
-        ":view_field_php_function_source" => $data["field_type"]["view_field_php_function_source"],
-        ":view_field_php_function" => $data["field_type"]["view_field_php_function"],
-        ":view_field_smarty_markup" => $data["field_type"]["view_field_smarty_markup"],
-        ":edit_field_smarty_markup" => $data["field_type"]["edit_field_smarty_markup"],
-        ":php_processing" => $data["field_type"]["php_processing"],
-        ":resources_css" => $data["field_type"]["resources_css"],
-        ":resources_js" => $data["field_type"]["resources_js"]
+        "is_editable" => $data["field_type"]["is_editable"],
+        "non_editable_info" => $data["field_type"]["non_editable_info"],
+        "managed_by_module_id" => $data["field_type"]["managed_by_module_id"],
+        "field_type_name" => $data["field_type"]["field_type_name"],
+        "field_type_identifier" => $data["field_type"]["field_type_identifier"],
+        "group_id" => $group_id,
+        "is_file_field" => $data["field_type"]["is_file_field"],
+        "is_date_field" => $data["field_type"]["is_date_field"],
+        "raw_field_type_map" => $data["field_type"]["raw_field_type_map"],
+        "raw_field_type_map_multi_select_id" => null,
+        "list_order" => $next_list_order,
+        "compatible_field_sizes" => $data["field_type"]["compatible_field_sizes"],
+        "view_field_rendering_type" => $data["field_type"]["view_field_rendering_type"],
+        "view_field_php_function_source" => $data["field_type"]["view_field_php_function_source"],
+        "view_field_php_function" => $data["field_type"]["view_field_php_function"],
+        "view_field_smarty_markup" => $data["field_type"]["view_field_smarty_markup"],
+        "edit_field_smarty_markup" => $data["field_type"]["edit_field_smarty_markup"],
+        "php_processing" => $data["field_type"]["php_processing"],
+        "resources_css" => $data["field_type"]["resources_css"],
+        "resources_js" => $data["field_type"]["resources_js"]
     ));
 
     try {
@@ -117,7 +117,7 @@ function cft_install_field_type($field_type_identifier, $group_id)
                 SET    raw_field_type_map_multi_select_id = $setting_id
                 WHERE  field_type_id = :field_type_id
             ");
-            $db->bind(":field_type_id", $field_type_id);
+            $db->bind("field_type_id", $field_type_id);
         }
 
         for ($j=1; $j<=count($setting_info["options"]); $j++) {
@@ -129,11 +129,11 @@ function cft_install_field_type($field_type_identifier, $group_id)
                 VALUES (:setting_id, :option_text, :option_value, :option_order, :is_new_sort_group)
             ");
             $db->bindAll(array(
-                ":setting_id" => $setting_id,
-                ":option_text" => $option_info["option_text"],
-                ":option_value" => $option_info["option_value"],
-                ":option_order" => $j,
-                ":is_new_sort_group" => $option_info["is_new_sort_group"]
+                "setting_id" => $setting_id,
+                "option_text" => $option_info["option_text"],
+                "option_value" => $option_info["option_value"],
+                "option_order" => $j,
+                "is_new_sort_group" => $option_info["is_new_sort_group"]
             ));
 
             try {
@@ -157,14 +157,14 @@ function cft_install_field_type($field_type_identifier, $group_id)
                 :custom_function_required, :default_error_message, :list_order)
         ");
         $db->bindAll(array(
-            ":field_type_id" => $field_type_id,
-            ":rsv_rule" => $rule_info["rsv_rule"],
-            ":rule_label" => $rule_info["rule_label"],
-            ":rsv_field_name" => $rule_info["rsv_field_name"],
-            ":custom_function" => $rule_info["custom_function"],
-            ":custom_function_required" => $rule_info["custom_function_required"],
-            ":default_error_message" => $rule_info["default_error_message"],
-            ":list_order" => $i
+            "field_type_id" => $field_type_id,
+            "rsv_rule" => $rule_info["rsv_rule"],
+            "rule_label" => $rule_info["rule_label"],
+            "rsv_field_name" => $rule_info["rsv_field_name"],
+            "custom_function" => $rule_info["custom_function"],
+            "custom_function_required" => $rule_info["custom_function_required"],
+            "default_error_message" => $rule_info["default_error_message"],
+            "list_order" => $i
         ));
 
         try {
@@ -191,7 +191,7 @@ function cft_rollback_new_installation()
     $db = Core::$db;
 
     $db->query("DELETE FROM {PREFIX}list_groups WHERE group_type = :group_type");
-    $db->bind(":group_type", "field_types");
+    $db->bind("group_type", "field_types");
     $db->execute();
 
     $db->query("TRUNCATE TABLE {PREFIX}field_types");

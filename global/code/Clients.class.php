@@ -43,16 +43,15 @@ class Clients {
         extract(Hooks::processHookCalls("end", compact("account_id", "info"), array("success", "message")), EXTR_OVERWRITE);
 
         // update sessions
-        $_SESSION["ft"]["settings"] = Settings::get();
-        $_SESSION["ft"]["account"]  = Accounts::getAccountInfo($account_id);
-        $_SESSION["ft"]["account"]["is_logged_in"] = true;
+        Sessions::set("settings", Settings::get());
+        Sessions::set("account", Accounts::getAccountInfo($account_id));
+        Sessions::set("account.is_logged_in", true);
 
         return array($success, $message);
     }
 
 
     /**
-     * TODO move to administrator?
      * Completely removes a client account from the database, including any email-related stuff that requires
      * their user account.
      *
@@ -66,17 +65,17 @@ class Clients {
         $db->beginTransaction();
 
         $db->query("DELETE FROM {PREFIX}accounts WHERE account_id = :account_id");
-        $db->bind(":account_id", $account_id);
+        $db->bind("account_id", $account_id);
         $db->execute();
 
         $db->query("DELETE FROM {PREFIX}account_settings WHERE account_id = :account_id");
-        $db->bind(":account_id", $account_id);
+        $db->bind("account_id", $account_id);
         $db->execute();
 
         Forms::deleteClientFormsByAccountId($account_id);
 
         $db->query("DELETE FROM {PREFIX}email_template_recipients WHERE account_id = :account_id");
-        $db->bind(":account_id", $account_id);
+        $db->bind("account_id", $account_id);
         $db->execute();
 
         // not sure if this is really correct. It deletes any email templates that have this client as a from or
@@ -86,8 +85,8 @@ class Clients {
             WHERE email_from_account_id = :account_id1 OR
                   email_reply_to_account_id = :account_id2
         ");
-        $db->bind(":account_id1", $account_id);
-        $db->bind(":account_id2", $account_id);
+        $db->bind("account_id1", $account_id);
+        $db->bind("account_id2", $account_id);
         $db->execute();
 
         OmitLists::deleteFormOmitListByAccountId($account_id);
@@ -120,7 +119,7 @@ class Clients {
             SET account_status = 'disabled'
             WHERE account_id = :account_id
         ");
-        $db->bind(":account_id", $account_id);
+        $db->bind("account_id", $account_id);
         $db->execute();
 
         extract(Hooks::processHookCalls("end", compact("account_id"), array()), EXTR_OVERWRITE);
@@ -407,19 +406,6 @@ class Clients {
     }
 
 
-    public static function clearResetPassword($account_id)
-    {
-        $db = Core::$db;
-        $db->query("
-            UPDATE {PREFIX}accounts
-            SET temp_reset_password = NULL
-            WHERE account_id = :account_id
-        ");
-        $db->bind("account_id", $account_id);
-        $db->execute();
-    }
-
-
     // --------------------------------------------------------------------------------------------
 
 
@@ -536,7 +522,7 @@ class Clients {
 
             // if the password wasn't empty, reset the temporary password, in case it was set
             if (!empty($info["password"])) {
-                Clients::clearResetPassword($account_id);
+                Accounts::clearResetPassword($account_id);
             }
         } catch (PDOException $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());

@@ -50,7 +50,7 @@ class Settings {
                 $where_module_clause
             ");
             if (!empty($module)) {
-                $db->bind(":module", $module);
+                $db->bind("module", $module);
             }
             $db->execute();
 
@@ -67,7 +67,7 @@ class Settings {
                 $and_module_clause
             ");
             if (!empty($module)) {
-                $db->bind(":module", $module);
+                $db->bind("module", $module);
             }
             $db->execute();
             $info = $db->fetch();
@@ -83,7 +83,7 @@ class Settings {
                     $and_module_clause
                 ");
                 if (!empty($module)) {
-                    $db->bind(":module", $module);
+                    $db->bind("module", $module);
                 }
                 $db->execute();
                 $info = $db->fetch();

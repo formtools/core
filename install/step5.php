@@ -2,8 +2,8 @@
 
 require_once("../global/library.php");
 
-use FormTools\Accounts;
 use FormTools\Core;
+use FormTools\General;
 use FormTools\Installation;
 
 Core::setHooksEnabled(false);
@@ -13,7 +13,7 @@ Core::init();
 // if required, add the user account
 $account_created = false;
 if (isset($_POST["add_account"])) {
-	list($account_created, $g_message) = Accounts::setAdminAccount($_POST);
+	list($account_created, $g_message) = Installation::setAdminAccount($_POST);
 
 	// store for later use
 	$_SESSION["ft_install"]["email"] = $_POST["email"];
