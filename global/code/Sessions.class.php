@@ -66,6 +66,11 @@ class Sessions
         return $exists;
     }
 
+    public static function createIfNotExists($key, $value) {
+        if (!self::exists($key)) {
+            self::set($key, $value);
+        }
+    }
 
     /**
      * Clears a top-level key.
@@ -73,5 +78,11 @@ class Sessions
      */
     public static function clear($key) {
         unset($_SESSION["ft"][$key]);
+    }
+
+
+    public static function clearAll() {
+        unset($_SESSION["ft"]);
+        $_SESSION["ft"] = array();
     }
 }

@@ -209,13 +209,13 @@ class Administrator
         // empty old sessions and reload admin settings
         $admin_values = Sessions::get("admin");
         $client_id    = Sessions::get("account.account_id");
-        $_SESSION["ft"] = array();
 
+        Sessions::clearAll();
         foreach ($admin_values as $key => $value) {
-            $_SESSION["ft"][$key] = $value;
+            Sessions::set($key, $value);
         }
 
-        unset($_SESSION["ft"]["admin"]);
+        Sessions::clear("admin");
 
         // redirect them back to the edit client page
         General::redirect("$root_url/admin/clients/edit.php?client_id=$client_id");
@@ -360,11 +360,11 @@ class Administrator
         extract(Hooks::processHookCalls("start", compact("infohash", "tab_num"), array("infohash", "tab_num")), EXTR_OVERWRITE);
 
         if ($tab_num === 1) {
-            list ($success, $message) = Administrator::adminUpdateClientAccountMainTab($infohash);
+            list($success, $message) = Administrator::adminUpdateClientAccountMainTab($infohash);
         } else if ($tab_num === 2) {
-            list ($success, $message) = Administrator::adminUpdateClientAccountSettingsTab($infohash);
+            list($success, $message) = Administrator::adminUpdateClientAccountSettingsTab($infohash);
         } else if ($tab_num === 3) {
-            list ($success, $message) = Administrator::adminUpdateClientAccountFormsTab($infohash);
+            list($success, $message) = Administrator::adminUpdateClientAccountFormsTab($infohash);
         }
 
         if ($success) {

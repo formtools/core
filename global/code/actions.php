@@ -39,7 +39,8 @@ $permission_check = Core::$user->checkAuth("user", false);
 $sessions_still_valid = General::checkSessionsTimeout(false);
 if (!$sessions_still_valid) {
 	@session_destroy();
-	$_SESSION["ft"] = array();
+
+	Sessions::clearAll();
 
 	$permission_check["has_permission"] = false;
 	$permission_check["message"] = "session_expired";
@@ -101,10 +102,8 @@ switch ($action) {
 		$tabset = strip_tags($request["tabset"]);
 		$tab    = strip_tags($request["tab"]);
 
-		if (!array_key_exists("inner_tabs", $_SESSION["ft"])) {
-            $_SESSION["ft"]["inner_tabs"] = array();
-        }
-		$_SESSION["ft"]["inner_tabs"][$tabset] = $tab;
+		Sessions::createIfNotExists("inner_tabs", array());
+		Sessions::set($tabset, $tab);
 		break;
 
 	case "select_submission":

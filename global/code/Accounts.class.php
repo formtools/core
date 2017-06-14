@@ -345,19 +345,7 @@ class Accounts
         $new_password = General::generatePassword();
         $encrypted_password = General::encode($new_password);
 
-        // update the database with the new password (encrypted). As of 2.1.0 there's a second field to store the
-        // temporary generated password, leaving the original password intact. This prevents a situation arising when
-        // someone other than the admin / client uses the "Forget Password" feature and invalidates a valid, known password.
-        // Any time the user successfully logs in,
-        $db->query("
-            UPDATE {PREFIX}accounts
-            SET    temp_reset_password = :encrypted_password
-            WHERE  account_id = :account_id
-        ");
-        $db->bindAll(array(
-            "encrypted_password" => $encrypted_password,
-            "account_id" => $account_id
-        ));
+        Accounts::setResetPassword($account_id, $encrypted_password);
 
         // now build and sent the email
 
@@ -430,6 +418,24 @@ class Accounts
         return array($success, $message);
     }
 
+
+    public static function setResetPassword($account_id, $encrypted_password)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            UPDATE {PREFIX}accounts
+            SET    temp_reset_password = :encrypted_password
+            WHERE  account_id = :account_id
+        ");
+        $db->bindAll(array(
+            "encrypted_password" => $encrypted_password,
+            "account_id" => $account_id
+        ));
+
+        $db->execute();
+    }
+
     public static function clearResetPassword($account_id)
     {
         $db = Core::$db;
@@ -442,5 +448,6 @@ class Accounts
         $db->bind("account_id", $account_id);
         $db->execute();
     }
+
 }
 
