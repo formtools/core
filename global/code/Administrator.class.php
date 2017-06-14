@@ -188,11 +188,11 @@ class Administrator
         $info = array();
         $info["username"] = $client_info["username"];
 
-        // move the session values to separate $_SESSION["ft"]["admin"] values, so that
-        // once the administrator logs out we can reset the sessions appropriately
-        $current_values = $_SESSION["ft"];
-        $_SESSION["ft"] = array();
-        $_SESSION["ft"]["admin"] = $current_values;
+        // move the session values to a separate "admin" location, so that once the administrator logs out we can
+        // reset the sessions appropriately
+        $current_values = Sessions::get();
+        Sessions::clearAll();
+        Sessions::set("admin", $current_values);
 
         // now log in
         ft_login($info, true);

@@ -173,7 +173,7 @@ class General
      */
     public static function checkClientMayView($client_id, $form_id, $view_id, $return_boolean = false)
     {
-        $permissions = isset($_SESSION["ft"]["permissions"]) ? $_SESSION["ft"]["permissions"] : array();
+        $permissions = Sessions::getWithFallback("permissions", array());
 
         extract(Hooks::processHookCalls("main", compact("client_id", "form_id", "view_id", "permissions"), array("permissions")), EXTR_OVERWRITE);
 
@@ -736,11 +736,11 @@ END;
         $sessions_valid = true;
 
         // check to see if the session has timed-out
-        if (isset($_SESSION["ft"]["account"]["last_activity_unixtime"]) && isset($_SESSION["ft"]["account"]["sessions_timeout"])) {
-            $sessions_timeout_mins = $_SESSION["ft"]["account"]["sessions_timeout"];
+        if (Sessions::exists("account.last_activity_unixtime") && Sessions::exists("account.sessions_timeout")) {
+            $sessions_timeout_mins = Sessions::get("account.sessions_timeout");
             $timeout_secs = $sessions_timeout_mins * 60;
 
-            if ($_SESSION["ft"]["account"]["last_activity_unixtime"] + $timeout_secs < $now) {
+            if (Sessions::get("account.last_activity_unixtime") + $timeout_secs < $now) {
                 if ($auto_logout) {
                     Core::$user->logout("notify_sessions_timeout");
                 } else {
@@ -823,11 +823,11 @@ END;
             $root_url = "$root_url/";
         }
 
-        $_SESSION["ft"]["last_error"]       = $error_message;
-        $_SESSION["ft"]["last_error_debug"] = $debug_details;
-        $_SESSION["ft"]["last_error_type"]  = $error_type;
+        Sessions::set("last_error", $error_message);
+        Sessions::set("last_error_debug", $debug_details);
+        Sessions::set("last_error_type", $error_type);
 
-        General::redirect("{$root_url}/error.php");
+        General::redirect("$root_url/error.php");
     }
 
 

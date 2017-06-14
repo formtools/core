@@ -10,6 +10,8 @@
 
 namespace FormTools;
 
+use PDO, PDOException;
+
 
 class DatabaseSessions
 {
@@ -28,6 +30,7 @@ class DatabaseSessions
 
 	private function open($save_path)
 	{
+	    // TODO... this looks backwards... Core::getSessionSavePath()
 		global $sess_save_path;
 		$sess_save_path = $save_path;
 		return true;
@@ -43,12 +46,22 @@ class DatabaseSessions
 	    $db = Core::$db;
 
 		// fetch session data from the selected database
-		$db->query("SELECT session_data FROM {PREFIX}sessions WHERE session_id = :session_id AND expires > :time");
-        $db->bindAll(array(
-            "session_id" => $session_id,
-            "time" => time()
-        ));
-        $db->execute();
+		$db->query("
+            SELECT session_data
+            FROM {PREFIX}sessions
+            WHERE session_id = :session_id AND 
+                  expires > :expiry_time
+        ");
+		try {
+            $db->bindAll(array(
+                "session_id" => $session_id,
+                "expiry_time" => time()
+            ));
+            $db->execute();
+        } catch (PDOException $e) {
+            Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            exit;
+        }
 
         $result = $db->fetchAll();
 
@@ -66,27 +79,36 @@ class DatabaseSessions
 	// this is only executed until after the output stream has been closed
     private function write($session_id, $data)
 	{
-		global $g_api_sessions_timeout;
+	    $db = Core::$db;
 
-		if (isset($_SESSION["ft"]["account"]["sessions_timeout"])) {
-            $life_time = $_SESSION["ft"]["account"]["sessions_timeout"] * 60;
+		if (Sessions::exists("account.sessions_timeout")) {
+            $life_time = Sessions::get("account.sessions_timeout") * 60;
         } else {
-            $life_time = $g_api_sessions_timeout;
+            $life_time = Core::getApiSessionsTimeout();
         }
 
-		$time = time() + $life_time;
-
-		$newid   = mysql_real_escape_string($session_id, $this->db_link);
-		$newdata = mysql_real_escape_string($data, $this->db_link);
-
-		$sql = "REPLACE {PREFIX}sessions (session_id, session_data, expires) VALUES('$newid', '$newdata', $time)";
-		$db->query($sql, $this->db_link);
+		$db->query("
+		    REPLACE {PREFIX}sessions (session_id, session_data, expires)
+		    VALUES (:session_id, :session_data, :expiry_time)
+        ");
+		try {
+            $db->bindAll(array(
+                "session_id" => $session_id,
+                "session_data" => $data,
+                "expiry_time" => time() + $life_time
+            ));
+        } catch (PDOException $e) {
+		    Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+		    return false;
+        }
 
 		return true;
 	}
 
     private function destroy($id)
 	{
+	    $db = Core::$db;
+
 		$newid = mysql_real_escape_string($id);
 		$sql = "DELETE FROM {PREFIX}sessions WHERE session_id = '$newid'";
 

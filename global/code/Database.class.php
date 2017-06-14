@@ -96,9 +96,6 @@ class Database
     if ($g_set_sql_mode)
     @$db->query("SET SQL_MODE=''", $link);
 
-    if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"]))
-    ft_check_sessions_timeout();
-
     return $link;
     }
      */

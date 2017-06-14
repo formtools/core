@@ -16,7 +16,8 @@ namespace FormTools;
 
 class Sessions
 {
-    public static function get($key = "") {
+    public static function get($key = "")
+    {
         if (empty($key)) {
             return $_SESSION["ft"];
         }
@@ -30,6 +31,19 @@ class Sessions
         return $ref;
     }
 
+    /**
+     * Simple helper method to return the value of something in session, or if it's not defined,
+     * @param $key
+     * @param $defaultValue
+     */
+    public static function getWithFallback($key, $defaultValue)
+    {
+        if (Sessions::exists($key)) {
+            return Sessions::get($key);
+        } else {
+            return $defaultValue;
+        }
+    }
 
     /**
      * Stores data in sessions.

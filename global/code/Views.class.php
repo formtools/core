@@ -19,7 +19,6 @@ use PDO, PDOException;
 
 class Views
 {
-
     /**
      * Retrieves a list of all views for a form. As of 2.0.5 this function now always returns ALL Views,
      * instead of the option of a single page.

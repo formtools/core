@@ -5,6 +5,8 @@ use FormTools\FieldTypes;
 use FormTools\FieldValidation;
 use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
+use FormTools\Sessions;
 use FormTools\Settings;
 use FormTools\Submissions;
 use FormTools\Themes;
@@ -25,9 +27,10 @@ $submission_id = isset($request["submission_id"]) ? $request["submission_id"] : 
 if (empty($submission_id)) {
     General::redirect("submissions.php");
 }
-$_SESSION["ft"]["last_submission_id"] = $submission_id;
-$_SESSION["ft"]["last_submission_id_{$form_id}"] = $submission_id;
-$_SESSION["ft"]["last_link_page_{$form_id}"] = "edit";
+
+Sessions::set("last_submission_id", $submission_id);
+Sessions::set("last_submission_id_{$form_id}", $submission_id);
+Sessions::set("last_link_page_{$form_id}",  "edit");
 
 // get a list of all editable fields in the View. This is used for security purposes for the update function and to
 // determine whether the page contains any editable fields
@@ -36,10 +39,10 @@ $editable_field_ids = ViewFields::getEditableViewFields($view_id);
 // update the submission
 $failed_validation = false;
 if (isset($_POST) && !empty($_POST)) {
-	$_SESSION["ft"]["new_search"] = "yes";
+    Sessions::set("new_search", "yes");
 	$request["view_id"] = $view_id;
 	$request["editable_field_ids"] = $editable_field_ids;
-	list($g_success, $g_message) = ft_update_submission($form_id, $submission_id, $request);
+	list($g_success, $g_message) = Submissions::updateSubmission($form_id, $submission_id, $request);
 
 	// if there was any problem udpating this submission, make a special note of it: we'll use that info to merge the current POST request
 	// info with the original field values to ensure the page contains the latest data (i.e. for cases where they fail server-side validation)
@@ -104,14 +107,14 @@ $editable_tab_fields = array_intersect($page_field_ids, $editable_field_ids);
 // if we're just coming here from the search results page, get a fresh list of every submission ID in this
 // search result set. This is used to build the internal "<< previous   next >>" nav on this details page.
 // They need to exactly correspond to the ordering of the search results or they don't make sense
-$search = isset($_SESSION["ft"]["current_search"]) ? $_SESSION["ft"]["current_search"] : array();
-if (isset($_SESSION["ft"]["new_search"]) && $_SESSION["ft"]["new_search"] == "yes") {
+$search = Sessions::exists("current_search") ? Sessions::get("current_search") : array();
+if (Sessions::exists("new_search") && Sessions::get("new_search") == "yes") {
 	$searchable_columns = ViewFields::getViewSearchableFields("", $view_info["fields"]);
 
 	// extract the original search settings and get the list of IDs
 	$submission_ids = Submissions::getSearchSubmissionIds($form_id, $view_id, $search["order"], $search["search_fields"], $searchable_columns);
-	$_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"] = $submission_ids;
-	$_SESSION["ft"]["new_search"] = "no";
+	Sessions::set("form_{$form_id}_view_{$view_id}_submissions", $submission_ids);
+    Sessions::set("new_search", "no");
 }
 
 list($prev_link_html, $search_results_link_html, $next_link_html) = _ft_code_get_link_html($form_id, $view_id, $submission_id, $search["results_per_page"]);

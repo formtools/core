@@ -5,6 +5,7 @@ use FormTools\FieldTypes;
 use FormTools\FieldValidation;
 use FormTools\Forms;
 use FormTools\General;
+use FormTools\Sessions;
 use FormTools\Settings;
 use FormTools\Submissions;
 use FormTools\Themes;
@@ -15,9 +16,9 @@ Core::init();
 Core::$user->checkAuth("client");
 
 
-require(__DIR__ . "/edit_submission__code.php");
+require_once(__DIR__ . "/edit_submission__code.php");
 
-$account_id = $_SESSION["ft"]["account"]["account_id"];
+$account_id = Sessions::get("account.account_id");
 
 // blur the GET and POST variables into a single variable for easy reference
 $request = array_merge($_GET, $_POST);
@@ -29,7 +30,7 @@ if (empty($submission_id)) {
 }
 
 $tab_number = General::loadField("tab", "view_{$view_id}_current_tab", 1);
-$grouped_views = ft_get_grouped_views($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
+$grouped_views = Views::getGroupedViews($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
 
 // check the current client is permitted to view this information!
 General::checkClientMayView($account_id, $form_id, $view_id);
@@ -38,7 +39,7 @@ if (!Submissions::checkViewContainsSubmission($form_id, $view_id, $submission_id
 }
 
 // store this submission ID
-$_SESSION["ft"]["last_submission_id"] = $submission_id;
+Sessions::set("last_submission_id", $submission_id);
 
 // get a list of all editable fields in the View. This is used both for security purposes
 // for the update function and to determine whether the page contains any editable fields
@@ -50,7 +51,7 @@ if (isset($_POST) && !empty($_POST)) {
 	// add the view ID to the request hash, for use by the ft_update_submission function
 	$request["view_id"] = $view_id;
 	$request["editable_field_ids"] = $editable_field_ids;
-	list($g_success, $g_message) = ft_update_submission($form_id, $submission_id, $request);
+	list($g_success, $g_message) = Submissions::updateSubmission($form_id, $submission_id, $request);
 
 	// if there was any problem udpating this submission, make a special note of it: we'll use that info to merge the current POST request
 	// info with the original field values to ensure the page contains the latest data (i.e. for cases where they fail server-side validation)
@@ -60,7 +61,7 @@ if (isset($_POST) && !empty($_POST)) {
 
 	// required. The reason being, this setting determines whether the submission IDs in the current form-view-search
 	// are cached. Any time the data changes, the submission may then belong to different Views, so we need to re-cache it
-	$_SESSION["ft"]["new_search"] = "yes";
+    Sessions::set("new_search", "yes");
 }
 
 $form_info = Forms::getForm($form_id);
@@ -112,17 +113,18 @@ while (list($key, $value) = each($view_tabs)) {
 // get a list of editable fields on this tab
 $editable_tab_fields = array_intersect($page_field_ids, $editable_field_ids);
 
-$search = isset($_SESSION["ft"]["current_search"]) ? $_SESSION["ft"]["current_search"] : array();
+$search = Sessions::exists("current_search") ? Sessions::get("current_search") : array();
 
 // if we're just coming here from the search results page, get a fresh list of every submission ID in this
 // search result set. This is used to build the internal "<< previous   next >>" nav on this details page
-if (isset($_SESSION["ft"]["new_search"]) && $_SESSION["ft"]["new_search"] == "yes") {
+if (Sessions::exists("new_search") && Sessions::get("new_search") == "yes") {
 	// extract the original search settings and get the list of IDs
 	$searchable_columns = ViewFields::getViewSearchableFields("", $view_info["fields"]);
-	$submission_ids = Submissions::getSearch_submission_ids($form_id, $view_id, $search["order"], $search["search_fields"], $searchable_columns);
+	$submission_ids = Submissions::getSearchSubmissionIds($form_id, $view_id, $search["order"], $search["search_fields"], $searchable_columns);
 
-	$_SESSION["ft"]["form_{$form_id}_view_{$view_id}_submissions"] = $submission_ids;
-	$_SESSION["ft"]["new_search"] = "no";
+	// this is awful.
+	Sessions::set("form_{$form_id}_view_{$view_id}_submissions", $submission_ids);
+	Sessions::set("new_search", "no");
 }
 
 list($prev_link_html, $search_results_link_html, $next_link_html) = _ft_code_get_link_html($form_id, $view_id, $submission_id, $search["results_per_page"]);

@@ -3,6 +3,7 @@
 use FormTools\Core;
 use FormTools\General;
 use FormTools\OptionLists;
+use FormTools\Sessions;
 use FormTools\Settings;
 use FormTools\Submissions;
 use FormTools\Templates;
@@ -67,7 +68,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
         "VALUE"         => isset($field_info["submission_value"]) ? $field_info["submission_value"] : "",
         "SETTINGS"      => $settings,
         "CONTEXTPAGE"   => "edit_submission",
-        "ACCOUNT_INFO"  => isset($_SESSION["ft"]["account"]) ? $_SESSION["ft"]["account"] : array(),
+        "ACCOUNT_INFO"  => Sessions::getWithFallback("account", array()),
         "g_root_url"    => $root_url,
         "g_root_dir"    => $root_dir,
         "g_multi_val_delimiter" => $multi_val_delimiter

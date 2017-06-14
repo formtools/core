@@ -989,7 +989,7 @@ END;
         if ($field_type_info["view_field_rendering_type"] == "none" || empty($markup_with_placeholders)) {
             $output = $value;
         } else {
-            $account_info = isset($_SESSION["ft"]["account"]) ? $_SESSION["ft"]["account"] : array();
+            $account_info = Sessions::getWithFallback("account", array());
 
             // now construct all available placeholders
             $placeholders = array(

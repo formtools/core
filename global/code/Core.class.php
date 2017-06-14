@@ -162,7 +162,7 @@ class Core {
     /**
      * The default sessions timeout for the API. Default is 1 hour (3600 seconds)
      */
-    private static $apiSessionsTimeout = 3600;
+    private static $apiSessionsTimeout;
 
     /**
      * This is used by the ft_api_init_form_page() function when setting up the environment for the webpage;
@@ -489,6 +489,7 @@ class Core {
         self::$queryStrMultiValSeparator = isset($g_query_str_multi_val_separator) ? $g_query_str_multi_val_separator : ",";
         self::$errorReporting = isset($g_default_error_reporting) ? $g_default_error_reporting : 1;
         self::$debugEnabled = isset($g_debug) ? $g_debug : false;
+        self::$apiSessionsTimeout = isset($g_api_sessions_timeout) ? $g_api_sessions_timeout : 3600;
     }
 
     /**
@@ -653,5 +654,9 @@ class Core {
 
     public static function getSessionSavePath() {
         return self::$sessionSavePath;
+    }
+
+    public static function getApiSessionsTimeout() {
+        return self::$apiSessionsTimeout;
     }
 }

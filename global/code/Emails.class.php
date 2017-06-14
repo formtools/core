@@ -247,7 +247,7 @@ class Emails {
     {
         $db = Core::$db;
 
-        $num_emails_per_page = isset($_SESSION["ft"]["settings"]["num_emails_per_page"]) ? $_SESSION["ft"]["settings"]["num_emails_per_page"] : 10;
+        $num_emails_per_page = Sessions::getWithFallback("settings.num_emails_per_page", 10);
 
         // determine the LIMIT clause
         if (empty($page_num)) {
@@ -305,8 +305,8 @@ class Emails {
 
         extract(Hooks::processHookCalls("start", compact("info"), array("info")), EXTR_OVERWRITE);
 
-        $form_id        = $_SESSION["ft"]["form_id"];
-        $email_id       = $_SESSION["ft"]["email_id"];
+        $form_id        = Sessions::get("form_id");
+        $email_id       = Sessions::get("email_id");
         $submission_id  = (isset($info["submission_id"]) && !empty($info["submission_id"])) ? $info["submission_id"] : "";
 
         list ($success, $email_info) = self::getEmailComponents($form_id, $submission_id, $email_id, true, $info);
