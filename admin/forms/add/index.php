@@ -7,6 +7,7 @@ use FormTools\Forms;
 use FormTools\General;
 use FormTools\Themes;
 use FormTools\Pages;
+use FormTools\Sessions;
 
 Core::init();
 Core::$user->checkAuth("client");
@@ -20,7 +21,7 @@ if (isset($request["external"])) {
 }
 
 if (isset($request["new_form"])) {
-	$_SESSION["ft"]["add_form_form_id"] = "";
+    Sessions::clear("add_form_form_id");
 }
 
 $LANG = Core::$L;

@@ -6,6 +6,7 @@ use FormTools\Core;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\Pages;
+use FormTools\Sessions;
 use FormTools\Themes;
 
 
@@ -15,11 +16,11 @@ Core::$user->checkAuth("client");
 
 Forms::cacheFormStats();
 
-$account_id = $_SESSION["ft"]["account"]["account_id"];
+$account_id = Sessions::get("account.account_id");
 
 if (isset($_GET["reset"])) {
-	$_SESSION["ft"]["form_sort_order"] = "";
-	$_SESSION["ft"]["form_search_keyword"] = "";
+    Sessions::clear("form_sort_order");
+    Sessions::clear("form_search_keyword");
 }
 $order   = General::loadField("order", "form_sort_order", "form_name-ASC");
 $keyword = General::loadField("keyword", "form_search_keyword", "");
@@ -36,9 +37,11 @@ $forms_page_default_message = General::evalSmartyString($client_info["settings"]
 
 // ------------------------------------------------------------------------------------------
 
+$LANG = Core::$L;
+
 // compile header information
 $page_vars = array();
-$page_vars["head_title"] = General::evalSmartyString($_SESSION["ft"]["account"]["settings"]["page_titles"], array("page" => $LANG["word_forms"]));
+$page_vars["head_title"] = General::evalSmartyString(Sessions::get("account.settings.page_titles"), array("page" => $LANG["word_forms"]));
 $page_vars["page"]     = "client_forms";
 $page_vars["page_url"] = Pages::getPageUrl("client_forms");
 $page_vars["num_client_forms"] = $num_client_forms;

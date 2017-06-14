@@ -67,6 +67,7 @@ class Sessions
             return false;
         }
 
+        // TODO test!
         $parts = mb_split("\.", $key);
         $exists = false;
         $temp = &$_SESSION["ft"];
@@ -87,11 +88,16 @@ class Sessions
     }
 
     /**
-     * Clears a top-level key.
+     * Clears a key or keys.
+     * TODO
      * @param $key
      */
     public static function clear($key) {
-        unset($_SESSION["ft"][$key]);
+        if (is_string($key)) {
+            unset($_SESSION["ft"][$key]);
+        } else if (is_array($key)) {
+
+        }
     }
 
 

@@ -31,9 +31,9 @@ if (isset($request["upgrade"])) {
     list($g_success, $g_message) = Modules::upgradeModule($request["upgrade"]);
 }
 if (isset($_GET["reset"])) {
-	$_SESSION["ft"]["module_sort_order"] = "";
-	$_SESSION["ft"]["module_search_keyword"] = "";
-	$_SESSION["ft"]["module_search_status"] = array("enabled", "disabled");
+    Sessions::set("module_sort_order", "");
+    Sessions::set("module_search_keyword", "");
+    Sessions::set("module_search_status", array("enabled", "disabled"));
 }
 
 $order   = General::loadField("order", "module_sort_order", "");

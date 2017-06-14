@@ -2,14 +2,14 @@
 
 use FormTools\Core;
 use FormTools\General;
-
+use FormTools\Sessions;
 
 Core::init();
 Core::$user->checkAuth("client");
-
+$LANG = Core::$L;
 
 $request = array_merge($_POST, $_GET);
-$account_id = $_SESSION["ft"]["account"]["account_id"];
+$account_id = Sessions::get("account.account_id");
 
 // store the current selected tab in memory
 $page = General::loadField("page", "account_page", "main");

@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Core;
+use FormTools\Fields;
 use FormTools\FieldTypes;
 use FormTools\Forms;
 use FormTools\General;
@@ -8,13 +9,14 @@ use FormTools\Settings;
 use FormTools\Submissions;
 use FormTools\Themes;
 use FormTools\Views;
+use FormTools\Sessions;
 
 Core::init();
 Core::$user->checkAuth("client");
 
 
 $request = array_merge($_POST, $_GET);
-$account_id = $_SESSION["ft"]["account"]["account_id"];
+$account_id = Sessions::get("account.account_id");
 
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
 $form_id = General::loadField("form_id", "curr_form_id");
@@ -39,7 +41,7 @@ if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
 		$view_id = $grouped_views[0]["views"][0]["view_id"];
 	}
 }
-$_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
+Sessions::set("form_{$form_id}_view_id", $view_id);
 
 $form_info = Forms::getForm($form_id);
 $view_info = Views::getView($view_id);
@@ -52,26 +54,26 @@ if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes"
 // if the View just changed (i.e. it was just selected by the user), deselect any items in
 // this form
 if (isset($request["view_id"])) {
-	$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-	$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
-	$_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
+    Sessions::set("form_{$form_id}_selected_submissions", array());
+    Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
+    Sessions::set("form_{$form_id}_select_all_submissions", "");
 }
 
 // Fix for bug #174
-$has_search_info_for_other_form = (isset($_SESSION["ft"]["current_search"]) && $_SESSION["ft"]["current_search"]["form_id"] != $form_id);
+$has_search_info_for_other_form = (Sessions::exists("current_search") && Sessions::get("current_search.form_id") != $form_id);
 $is_resetting_search            = (isset($_GET["reset"]) && $_GET["reset"] == "1");
 
 if ($is_resetting_search || $has_search_info_for_other_form) {
-	unset($_SESSION["ft"]["search_field"]);
-	unset($_SESSION["ft"]["search_keyword"]);
-	unset($_SESSION["ft"]["search_date"]);
-	unset($_SESSION["ft"]["current_search"]);
+    Sessions::clear("search_field");
+    Sessions::clear("search_keyword");
+    Sessions::clear("search_date");
+    Sessions::clear("current_search");
 
 	// only empty the memory of selected submission ID info if the user just reset the search
 	if ($is_resetting_search) {
-		$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-		$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
-		$_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
+	    Sessions::set("form_{$form_id}_selected_submissions", array());
+        Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
+        Sessions::set("form_{$form_id}_select_all_submissions", "");
 	}
 }
 
@@ -89,14 +91,14 @@ if (isset($_GET["delete"])) {
 		foreach ($ids as $id)
 			list($g_success, $g_message) = Submissions::deleteSubmission($form_id, $view_id, $id, true);
 	} else {
-		$delete_all = (isset($_SESSION["ft"]["form_{$form_id}_select_all_submissions"]) && $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] == 1) ? true : false;
-		$submissions_to_delete = $_SESSION["ft"]["form_{$form_id}_selected_submissions"];
+	    $session_key = "form_{$form_id}_select_all_submissions";
+		$delete_all = Sessions::exists($session_key) && Sessions::get("form_{$form_id}_select_all_submissions") == 1;
+		$submissions_to_delete = Sessions::get("form_{$form_id}_selected_submissions");
 		$omit_list = array();
 		if ($delete_all) {
 			$submissions_to_delete = "all";
-			$omit_list = $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"];
+			$omit_list = Sessions::get("form_{$form_id}_all_submissions_selected_omit_list");
 		}
-
 		list($g_success, $g_message) = Submissions::deleteSubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, true);
 	}
 }
@@ -165,12 +167,13 @@ foreach ($view_info["columns"] as $col_info) {
 
 
 // determine the sort order
+$session_key = "view_{$view_id}_sort_order";
 if (isset($_GET["order"])) {
-	$_SESSION["ft"]["view_{$view_id}_sort_order"] = $_GET["order"];
+	Sessions::set($session_key, $_GET["order"]);
 	$order = $_GET["order"];
 } else {
-	if (isset($_SESSION["ft"]["view_{$view_id}_sort_order"])) {
-        $order = $_SESSION["ft"]["view_{$view_id}_sort_order"];
+	if (Sessions::exists($session_key)) {
+        $order = Sessions::get($session_key);
     } else {
         $order = "{$view_info['default_sort_field']}-{$view_info['default_sort_field_order']}";
     }
@@ -179,7 +182,7 @@ if (isset($_GET["order"])) {
 $results_per_page = $view_info["num_submissions_per_page"];
 
 // perform the almighty search query
-$results_info = ft_search_submissions($form_id, $view_id, $results_per_page, $current_page, $order, $db_columns, $search_fields,
+$results_info = Submissions::searchSubmissions($form_id, $view_id, $results_per_page, $current_page, $order, $db_columns, $search_fields,
 	array(), $searchable_columns);
 
 $search_rows        = $results_info["search_rows"];
@@ -188,13 +191,13 @@ $view_num_results   = $results_info["view_num_results"];
 
 // store the current search settings. This information is used on the item details page to provide
 // "<< previous  next >>" links that only apply to the CURRENT search result set
-$_SESSION["ft"]["new_search"] = "yes";
-$_SESSION["ft"]["current_search"] = array(
+Sessions::set("new_search", "yes");
+Sessions::set("current_search", array(
 	"form_id"          => $form_id,
 	"results_per_page" => $results_per_page,
 	"order"            => $order,
 	"search_fields"    => $search_fields
-);
+));
 
 // check that the current page is stored in sessions is, in fact, a valid page. e.g. if the person
 // was having 10 submissions listed per page, had 11 submissions, and was on page 2 before deleting
@@ -202,8 +205,9 @@ $_SESSION["ft"]["current_search"] = array(
 // is no longer a second page. So for this fringe case, we update the session and refresh the page to
 // load the appropriate page
 $total_pages = ceil($search_num_results / $results_per_page);
-if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$view_id}_page"] > $total_pages) {
-	$_SESSION["ft"]["view_{$view_id}_page"] = $total_pages;
+$session_key = "view_{$view_id}_page";
+if (Sessions::exists($session_key) && Sessions::get($session_key) > $total_pages) {
+	Sessions::set($session_key, $total_pages);
     General::redirect("index.php");
 }
 
@@ -212,8 +216,9 @@ if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$vi
 Forms::cacheFormStats($form_id);
 Views::cacheViewStats($form_id, $view_id);
 
-if (!isset($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {
-    $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
+$session_key = "form_{$form_id}_select_all_submissions";
+if (!Sessions::exists($session_key)) {
+    Sessions::set($session_key, "");
 }
 
 // get a list of all submission IDs in this page
@@ -226,23 +231,20 @@ $submission_id_str = implode(",", $submission_ids);
 
 
 // set as STRING for used in JS below
-$select_all_submissions_returned = ($_SESSION["ft"]["form_{$form_id}_select_all_submissions"] == "1") ? "true" : "false";
+$select_all_submissions_returned = (Sessions::get("form_{$form_id}_select_all_submissions") == "1") ? "true" : "false";
 
 // figure out which submissions should be selected on page load
 $preselected_subids = array();
 $all_submissions_selected_omit_list_str = "";
 if ($select_all_submissions_returned == "true") {
-	$all_submissions_selected_omit_list = isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]) ?
-		$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] : array();
-
+	$all_submissions_selected_omit_list = Sessions::getWithFallback("form_{$form_id}_all_submissions_selected_omit_list", array());
 	$all_submissions_selected_omit_list_str = implode(",", $all_submissions_selected_omit_list);
 	$preselected_subids = array_diff($submission_ids, $all_submissions_selected_omit_list);
 } else {
-    $preselected_subids = isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) ? $_SESSION["ft"]["form_{$form_id}_selected_submissions"] : array();
+    $preselected_subids = Sessions::getWithFallback("form_{$form_id}_selected_submissions", array());
 }
 
 $preselected_subids_str = implode(",", $preselected_subids);
-
 $field_types = FieldTypes::get(true);
 
 $has_searchable_field = false;
@@ -281,7 +283,7 @@ $page_vars["search_rows"] = $search_rows;
 $page_vars["search_num_results"] = $search_num_results;
 $page_vars["view_num_results"] = $view_num_results;
 $page_vars["default_date_field_search_value"] = $default_date_field_search_value;
-$page_vars["total_form_submissions"] = $_SESSION["ft"]["form_{$form_id}_num_submissions"];
+$page_vars["total_form_submissions"] = Sessions::get("form_{$form_id}_num_submissions");
 $page_vars["grouped_views"] = $grouped_views;
 $page_vars["view_info"]     = $view_info;
 $page_vars["settings"]      = $settings;
@@ -292,7 +294,7 @@ $page_vars["display_fields"]     = $display_fields;
 $page_vars["order"]              = $order;
 $page_vars["field_types"]        = $field_types;
 $page_vars["has_searchable_field"] = $has_searchable_field;
-$page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
+$page_vars["curr_search_fields"] = Sessions::get("current_search.search_fields");
 $page_vars["pagination"]  = General::getPageNav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download", "validation_select_submissions_to_delete",
 	"confirm_delete_submission", "confirm_delete_submissions", "phrase_select_all_X_results",

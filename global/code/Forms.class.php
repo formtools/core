@@ -305,7 +305,7 @@ class Forms
 
     /**
      * Caches the total number of (finalized) submissions in a particular form - or all forms - in the
-     * $_SESSION["ft"]["form_{$form_id}_num_submissions"] key. That value is used on the administrator's main Forms
+     * "form_{$form_id}_num_submissions" sessions key. That value is used on the administrator's main Forms
      * page to list the form submission count.
      *
      * @param integer $form_id

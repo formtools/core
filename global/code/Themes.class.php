@@ -500,7 +500,7 @@ class Themes {
         $LANG = Core::$L;
 
         // yikes!
-        $admin_id = $_SESSION["ft"]["account"]["account_id"];
+        $admin_id = Sessions::get("account.account_id");
 
         $db->query("
             UPDATE {PREFIX}accounts

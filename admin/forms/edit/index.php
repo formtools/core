@@ -6,6 +6,7 @@ use FormTools\Core;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\Modules;
+use FormTools\Sessions;
 
 Core::init();
 Core::$user->checkAuth("admin");
@@ -32,7 +33,7 @@ if (isset($request["page"]) && !empty($request["page"])) {
 			$remember_page = "emails";
 			break;
 	}
-	$_SESSION["ft"]["form_{$form_id}_tab"] = $remember_page;
+	Sessions::set("form_{$form_id}_tab", $remember_page);
 	$page = $request["page"];
 } else {
 	$page = General::loadField("page", "form_{$form_id}_tab", "edit_form_main");
@@ -44,9 +45,10 @@ if (isset($request['edit_email_user_settings'])) {
 }
 
 $view_submissions_link = "submissions.php?form_id={$form_id}";
-if (isset($_SESSION["ft"]["last_link_page_{$form_id}"]) && isset($_SESSION["ft"]["last_submission_id_{$form_id}"]) &&
-	$_SESSION["ft"]["last_link_page_{$form_id}"] == "edit") {
-	$view_submissions_link = "edit_submission.php?form_id={$form_id}&submission_id={$_SESSION["ft"]["last_submission_id_{$form_id}"]}";
+if (Sessions::exists("last_link_page_{$form_id}") && Sessions::exists("last_submission_id_{$form_id}") &&
+	Sessions::get("last_link_page_{$form_id}") == "edit") {
+    $last_submission = Sessions::get("last_submission_id_{$form_id}");
+	$view_submissions_link = "edit_submission.php?form_id={$form_id}&submission_id=$last_submission";
 }
 
 $LANG = Core::$L;

@@ -158,8 +158,7 @@ class General
      * creates a client menu containing links to particular forms; then accidentally assigning a client to the menu
      * that doesn't have permission to view the form).
      *
-     * This relies on the $_SESSION["ft"]["permissions"] key being set by the login function: it contains the form
-     * and View IDs that this.
+     * This relies on the "permissions" key being set by the login function: it contains the form and View IDs.
      *
      * Because of this, any time the administrator changes the permissions for a client, they'll need te re-login to
      * access that new information.
@@ -476,7 +475,6 @@ END;
         $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
         $smarty->setUseSubDirs(Core::shouldUseSmartySubDirs());
         $smarty->assign("LANG", $LANG);
-        //$smarty->assign("SESSION", $_SESSION["ft"]);
         $smarty->assign("g_root_dir", $root_dir);
         $smarty->assign("g_root_url", $root_url);
         $smarty->assign("samepage", General::getCleanPhpSelf());
@@ -547,10 +545,6 @@ END;
         $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
         $smarty->setUseSubDirs(Core::shouldUseSmartySubDirs());
         $smarty->assign("LANG", $LANG);
-
-//        if (isset($_SESSION["ft"])) {}
-//            $smarty->assign("SESSION", $_SESSION["ft"]);
-
         $smarty->assign("g_root_dir", $root_dir);
         $smarty->assign("g_root_url", $root_url);
         $smarty->assign("samepage", General::getCleanPhpSelf());

@@ -487,7 +487,7 @@ class Settings {
         // hoorah! Validation complete, let's update the bloomin' database at last
 
         // update the admin settings
-        $admin_id = $_SESSION["ft"]["account"]["account_id"];
+        $admin_id = Sessions::get("account.account_id");
         $admin_swatch = "";
         if (isset($infohash["{$admin_theme}_admin_theme_swatches"])) {
             $admin_swatch = $infohash["{$admin_theme}_admin_theme_swatches"];

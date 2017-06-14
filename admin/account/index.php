@@ -7,6 +7,7 @@ use FormTools\Core;
 use FormTools\General;
 use FormTools\Pages;
 use FormTools\Themes;
+use FormTools\Sessions;
 
 Core::init();
 Core::$user->checkAuth("client");
@@ -15,11 +16,11 @@ $LANG = Core::$L;
 
 // update the administrator's account
 if (isset($_POST) && !empty($_POST)) {
-	list($g_success, $g_message) = Administrator::updateAdminAccount($_POST, $_SESSION["ft"]["account"]["account_id"]);
+	list($g_success, $g_message) = Administrator::updateAdminAccount($_POST, Sessions::get("account.account_id"));
 
 	// if the user just changed their language file, reset the value in sessions and refresh the page
 	if ($g_success && ($_POST["old_ui_language"] != $_POST["ui_language"])) {
-		$_SESSION["ft"]["ui_language"] = $_POST["ui_language"];
+		Sessions::set("ui_language", $_POST["ui_language"]);
         General::redirect("index.php?updated");
 	}
 }
