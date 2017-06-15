@@ -6,6 +6,7 @@ use FormTools\Core;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\Pages;
+use FormTools\Sessions;
 use FormTools\Themes;
 
 Core::init();
@@ -33,7 +34,7 @@ $hidden_fields = '<input type="hidden" name="form_tools_initialize_form" value="
 	. '<input type="hidden" name="form_tools_form_id" value="' . $form_id . '" />';
 $form_tag = '<form action="' . $root_url . '/process.php" method="post"';
 
-if ($_SESSION["ft"]["uploading_files"] == "yes") {
+if (Sessions::get("uploading_files")== "yes") {
     $form_tag .= ' enctype="multipart/form-data"';
 }
 

@@ -54,12 +54,13 @@ if ($num_menu_items == 0) {
 
 $LANG = Core::$L;
 $root_url = Core::getRootUrl();
+$program_name = Sessions::get("settings.program_name");
 
 $page_vars = array(
     "page" => "edit_client_menu",
     "page_url" => Pages::getPageUrl("edit_client_menu"),
     "tabs" => $tabs,
-    "head_title" => "{$_SESSION["ft"]["settings"]["program_name"]} - {$LANG["phrase_setup_options"]} - {$LANG["word_menus"]}",
+    "head_title" => "$program_name - {$LANG["phrase_setup_options"]} - {$LANG["word_menus"]}",
     "menu" => $menu_info,
     "is_new_menu" => $is_new_menu,
     "selected_client_ids" => $selected_client_ids,

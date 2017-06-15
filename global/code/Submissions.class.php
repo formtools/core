@@ -169,9 +169,14 @@ class Submissions {
         extract(Hooks::processHookCalls("end", compact("form_id", "view_id", "submission_id", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
 
         // update sessions
-        if (isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) && in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
-            array_splice($_SESSION["ft"]["form_{$form_id}_selected_submissions"],
-            array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]), 1);
+        $session_key = "form_{$form_id}_selected_submissions";
+        if (Sessions::exists($session_key)) {
+            $selected = Sessions::get($session_key);
+            if (in_array($submission_id, Sessions::get($session_key))) {
+
+                // TODO check this. Presumably need a Sessions::set()
+                array_splice($selected, array_search($submission_id, $selected), 1);
+            }
         }
 
         return array($success, $message);
@@ -300,9 +305,9 @@ class Submissions {
         Forms::cacheFormStats($form_id);
         Views::cacheViewStats($form_id, $view_id);
 
-        $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
-        $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-        $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
+        Sessions::set("form_{$form_id}_select_all_submissions", "");
+        Sessions::set("form_{$form_id}_selected_submissions", array());
+        Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
 
         // loop through all submissions deleted and send any emails
         reset($submission_ids);
@@ -601,7 +606,7 @@ class Submissions {
                     "data"         => $infohash,
                     "code"         => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
                     "settings"     => $field_settings[$field_id],
-                    "account_info" => isset($_SESSION["ft"]["account"]) ? $_SESSION["ft"]["account"] : array()
+                    "account_info" => Sessions::getWithFallback("account", array())
                 );
                 $value = Submissions::processFormField($data);
                 $query[] = $row["col_name"] . " = '$value'";

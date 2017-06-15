@@ -72,7 +72,32 @@ class Sessions
         $exists = false;
         $temp = &$_SESSION["ft"];
         foreach ($parts as $section) {
+            $exists = false;
             if (isset($temp[$section])) {
+                $exists = true;
+            }
+            $temp = &$temp[$section];
+        }
+
+        return $exists;
+    }
+
+
+    /**
+     * Helper to find out if a key exists and is non-empty.
+     */
+    public static function isNonEmpty($key) {
+        if (!isset($_SESSION["ft"])) {
+            return false;
+        }
+
+        // TODO test!!!
+        $parts = mb_split("\.", $key);
+        $exists = false;
+        $temp = &$_SESSION["ft"];
+        foreach ($parts as $section) {
+            $exists = false;
+            if (isset($temp[$section]) && !empty($temp[$section])) {
                 $exists = true;
             }
             $temp = &$temp[$section];

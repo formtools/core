@@ -2,6 +2,9 @@
 
 use FormTools\Accounts;
 use FormTools\Clients;
+use FormTools\General;
+use FormTools\Pages;
+use FormTools\Sessions;
 use FormTools\Themes;
 
 
@@ -18,12 +21,13 @@ if (!empty($client_info["settings"]["min_password_length"])) {
 }
 
 $required_password_chars = explode(",", $client_info["settings"]["required_password_chars"]);
-if (in_array("uppercase", $required_password_chars))
-	$conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[A-Z],{$LANG["validation_client_password_missing_uppercase"]}\")";
-if (in_array("number", $required_password_chars))
-	$conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[0-9],{$LANG["validation_client_password_missing_number"]}\")";
-if (in_array("special_char", $required_password_chars))
-{
+if (in_array("uppercase", $required_password_chars)) {
+    $conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[A-Z],{$LANG["validation_client_password_missing_uppercase"]}\")";
+}
+if (in_array("number", $required_password_chars)) {
+    $conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[0-9],{$LANG["validation_client_password_missing_number"]}\")";
+}
+if (in_array("special_char", $required_password_chars)) {
 	$error = General::evalSmartyString($LANG["validation_client_password_missing_special_char"], array("chars" => $g_password_special_chars));
 	$password_special_chars = preg_quote($g_password_special_chars);
 	$conditional_validation[] = "rules.push(\"if:password!=,reg_exp,password,[$password_special_chars],$error\")";
@@ -33,7 +37,7 @@ $conditional_rules = implode("\n", $conditional_validation);
 
 // compile header information
 $page_vars = array();
-$page_vars["head_title"] = General::evalSmartyString($_SESSION["ft"]["account"]["settings"]["page_titles"], array("page" => $LANG["phrase_login_info"]));
+$page_vars["head_title"] = General::evalSmartyString(Sessions::get("account.settings.page_titles"), array("page" => $LANG["phrase_login_info"]));
 $page_vars["page"]     = "main";
 $page_vars["tabs"]     = $tabs;
 $page_vars["client_info"] = $client_info;

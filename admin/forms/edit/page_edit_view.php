@@ -6,6 +6,7 @@ use FormTools\FieldTypes;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\Pages;
+use FormTools\Sessions;
 use FormTools\Themes;
 use FormTools\Views;
 use FormTools\ViewFields;
@@ -45,10 +46,10 @@ $client_map_filters = ViewFilters::getViewFilters($view_id, "client_map");
 $num_standard_filters   = count($standard_filters);
 $num_client_map_filters = count($client_map_filters);
 
-$edit_view_tab = (isset($_SESSION["ft"]["inner_tabs"]["edit_view"])) ? $_SESSION["ft"]["inner_tabs"]["edit_view"] : 1;
+$edit_view_tab = Sessions::getWithFallback("inner_tabs.edit_view", 1);
 if (isset($request["edit_view_tab"])) {
 	$edit_view_tab = $request["edit_view_tab"];
-	$_SESSION["ft"]["inner_tabs"]["edit_view"] = $edit_view_tab;
+	Sessions::set("inner_tabs.edit_view", $edit_view_tab);
 }
 
 $view_omit_list = Views::getPublicViewOmitList($view_id);

@@ -1,10 +1,14 @@
 <?php
 
 use FormTools\Core;
+use FormTools\Fields;
 use FormTools\FieldTypes;
 use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
+use FormTools\Sessions;
 use FormTools\Settings;
+use FormTools\Submissions;
 use FormTools\Themes;
 use FormTools\Views;
 
@@ -43,8 +47,8 @@ if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
 	}
 }
 
-$_SESSION["ft"]["form_{$form_id}_view_id"] = $view_id;
-$_SESSION["ft"]["last_link_page_{$form_id}"] = "submissions";
+Sessions::set("form_{$form_id}_view_id", $view_id);
+Sessions::set("last_link_page_{$form_id}", "submissions");
 
 $form_info   = Forms::getForm($form_id);
 $form_fields = Fields::getFormFields($form_id, array("include_field_type_info" => true, "include_field_settings" => true));
@@ -57,26 +61,26 @@ if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes"
 
 // if the View just changed (i.e. it was just selected by the user), deselect any form rows
 if (isset($request["view_id"])) {
-	$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-	$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
-	$_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
+    Sessions::set("form_{$form_id}_selected_submissions", array());
+    Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
+    Sessions::set("form_{$form_id}_select_all_submissions", "");
 }
 
 // Fix for bug #174
-$has_search_info_for_other_form = (isset($_SESSION["ft"]["current_search"]) && $_SESSION["ft"]["current_search"]["form_id"] != $form_id);
+$has_search_info_for_other_form = (Sessions::exists("current_search") && Sessions::get("current_search.form_id") != $form_id);
 $is_resetting_search            = (isset($_GET["reset"]) && $_GET["reset"] == "1");
 
 if ($is_resetting_search || $has_search_info_for_other_form) {
-	unset($_SESSION["ft"]["search_field"]);
-	unset($_SESSION["ft"]["search_keyword"]);
-	unset($_SESSION["ft"]["search_date"]);
-	unset($_SESSION["ft"]["current_search"]);
+    Sessions::clear("search_field");
+    Sessions::clear("search_keyword");
+    Sessions::clear("search_date");
+    Sessions::clear("current_search");
 
 	// only empty the memory of selected submission ID info if the user just reset the search
 	if ($is_resetting_search) {
-		$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-		$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
-		$_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
+	    Sessions::set("form_{$form_id}_selected_submissions", array());
+        Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
+        Sessions::set("form_{$form_id}_select_all_submissions", "");
 	}
 }
 $search_fields = array(
@@ -91,17 +95,18 @@ if (isset($_GET["delete"])) {
 	if (!empty($_GET["delete"])) {
 		$ids = explode(",", $_GET["delete"]);
 		foreach ($ids as $id) {
-			list($g_success, $g_message) = ft_delete_submission($form_id, $view_id, $id, true);
+			list($g_success, $g_message) = Submissions::deleteSubmission($form_id, $view_id, $id, true);
 		}
 	} else {
-		$delete_all = (isset($_SESSION["ft"]["form_{$form_id}_select_all_submissions"]) && $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] == 1) ? true : false;
-		$submissions_to_delete = $_SESSION["ft"]["form_{$form_id}_selected_submissions"];
+	    $all_selected_key = "form_{$form_id}_select_all_submissions";
+		$delete_all = Sessions::exists($all_selected_key) && Sessions::get($all_selected_key) == 1;
+		$submissions_to_delete = Sessions::get("form_{$form_id}_selected_submissions");
 		$omit_list = array();
 		if ($delete_all) {
 			$submissions_to_delete = "all";
-			$omit_list = $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"];
+			$omit_list = Sessions::get("form_{$form_id}_all_submissions_selected_omit_list");
 		}
-		list($g_success, $g_message) = Submissions::delete_submissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, true);
+		list($g_success, $g_message) = Submissions::deleteSubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, true);
 	}
 }
 
@@ -171,20 +176,16 @@ foreach ($view_info["columns"] as $col_info) {
 
 // determine the sort order
 if (isset($_GET["order"])) {
-	$_SESSION["ft"]["view_{$view_id}_sort_order"] = $_GET["order"];
+    Sessions::set("view_{$view_id}_sort_order", $_GET["order"]);
 	$order = $_GET["order"];
 } else {
-	if (isset($_SESSION["ft"]["view_{$view_id}_sort_order"])) {
-        $order = $_SESSION["ft"]["view_{$view_id}_sort_order"];
-    } else {
-        $order = "{$view_info['default_sort_field']}-{$view_info['default_sort_field_order']}";
-    }
+    $order = Sessions::getWithFallback("view_{$view_id}_sort_order", "{$view_info['default_sort_field']}-{$view_info['default_sort_field_order']}");
 }
 
 $results_per_page = $view_info["num_submissions_per_page"];
 
 // perform the almighty search query [urgh. Too many params...!]
-$results_info = ft_search_submissions($form_id, $view_id, $results_per_page, $current_page, $order, $db_columns,
+$results_info = Submissions::searchSubmissions($form_id, $view_id, $results_per_page, $current_page, $order, $db_columns,
 	$search_fields, array(), $searchable_columns);
 
 $search_rows        = $results_info["search_rows"];
@@ -193,13 +194,13 @@ $view_num_results   = $results_info["view_num_results"];
 
 // store the current search settings. This information is used on the item details page to provide
 // "<< previous  next >>" links that only apply to the CURRENT search result set
-$_SESSION["ft"]["new_search"] = "yes";
-$_SESSION["ft"]["current_search"] = array(
+Sessions::set("new_search", "yes");
+Sessions::set("current_search", array(
 	"form_id"          => $form_id,
 	"results_per_page" => $results_per_page,
 	"order"            => $order,
 	"search_fields"    => $search_fields
-);
+));
 
 // check that the current page is stored in sessions is, in fact, a valid page. e.g. if the person
 // was having 10 submissions listed per page, had 11 submissions, and was on page 2 before deleting

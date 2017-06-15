@@ -5,6 +5,7 @@ use FormTools\Emails;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\Pages;
+use FormTools\Sessions;
 use FormTools\Themes;
 
 
@@ -47,7 +48,7 @@ $page_vars["js_messages"] = array("word_edit", "word_remove");
 
 // build values to pass along in nav query string
 $pass_along_str = "page=emails&form_id=$form_id";
-$page_vars["pagination"] = General::getPageNav($num_form_emails, $_SESSION["ft"]["settings"]["num_emails_per_page"], $emails_page, $pass_along_str, "emails_page");
+$page_vars["pagination"] = General::getPageNav($num_form_emails, Sessions::get("settings.num_emails_per_page"), $emails_page, $pass_along_str, "emails_page");
 $page_vars["num_registered_form_emails"] = $num_registered_form_emails;
 
 $page_vars["head_js"] =<<< END

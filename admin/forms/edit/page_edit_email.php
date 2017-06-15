@@ -7,6 +7,7 @@ use FormTools\Fields;
 use FormTools\Forms;
 use FormTools\General;
 use FormTools\Pages;
+use FormTools\Sessions;
 use FormTools\Submissions;
 use FormTools\Themes;
 use FormTools\Views;
@@ -27,7 +28,7 @@ $template_info["email_event_trigger"] = $event_trigger_arr;
 $clients         = $form_info["client_info"];
 $admin_info      = Administrator::getAdminInfo();
 
-$edit_email_tab = (isset($_SESSION["ft"]["inner_tabs"]["edit_email_template"])) ? $_SESSION["ft"]["inner_tabs"]["edit_email_template"] : 1;
+$edit_email_tab = Sessions::getWithFallback("inner_tabs.edit_email_template", 1);
 if (isset($request["edit_email_template"]))
 	$edit_email_tab = $request["edit_email_template"];
 

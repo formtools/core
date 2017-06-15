@@ -2,6 +2,8 @@
 
 use FormTools\Accounts;
 use FormTools\Clients;
+use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 use FormTools\Sessions;
 
@@ -16,7 +18,7 @@ $client_info = Accounts::getAccountInfo($account_id);
 
 // compile header information
 $page_vars = array();
-$page_vars["head_title"]  = General::evalSmartyString($_SESSION["ft"]["account"]["settings"]["page_titles"], array("page" => $LANG["phrase_account_settings"]));
+$page_vars["head_title"]  = General::evalSmartyString(Sessions::get("account.settings.page_titles"), array("page" => $LANG["phrase_account_settings"]));
 $page_vars["page"]        = "settings";
 $page_vars["tabs"]        = $tabs;
 $page_vars["client_info"] = $client_info;
@@ -25,8 +27,7 @@ $page_vars["page_url"]    = Pages::getPageUrl("client_account_settings");
 $js = array("var rules = []");
 if ($client_info["settings"]["may_edit_page_titles"] == "yes")
 	$js[] = "rules.push(\"required,page_titles,{$LANG["validation_no_titles"]}\")";
-if ($client_info["settings"]["may_edit_theme"] == "yes")
-{
+if ($client_info["settings"]["may_edit_theme"] == "yes") {
 	$js[] = "rules.push(\"required,theme,{$LANG["validation_no_theme"]}\")";
 	$js[] = "rules.push(\"function,validate_swatch\")";
 }
@@ -36,8 +37,7 @@ if ($client_info["settings"]["may_edit_language"] == "yes")
 	$js[] = "rules.push(\"required,ui_language,{$LANG["validation_no_ui_language"]}\")";
 if ($client_info["settings"]["may_edit_timezone_offset"] == "yes")
 	$js[] = "rules.push(\"required,timezone_offset,{$LANG["validation_no_timezone_offset"]}\")";
-if ($client_info["settings"]["may_edit_sessions_timeout"] == "yes")
-{
+if ($client_info["settings"]["may_edit_sessions_timeout"] == "yes") {
 	$js[] = "rules.push(\"required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}\")";
 	$js[] = "rules.push(\"digits_only,sessions_timeout,{$LANG["validation_invalid_sessions_timeout"]}\")";
 }
