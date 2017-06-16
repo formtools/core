@@ -285,7 +285,7 @@ class User
 
         // first, if $_SESSION["ft"]["admin"] is set, it is an administrator logging out, so just redirect them
         // back to the admin pages
-        if (isset($_SESSION["ft"]) && array_key_exists("admin", $_SESSION["ft"])) {
+        if (Sessions::exists("admin")) {
             Administrator::logoutAsClient();
         } else {
             if (!empty($message_flag)) {

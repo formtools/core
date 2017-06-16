@@ -208,8 +208,9 @@ Sessions::set("current_search", array(
 // is no longer a second page. So for this fringe case, we update the session and refresh the page to
 // load the appropriate page
 $total_pages = ceil($search_num_results / $results_per_page);
-if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$view_id}_page"] > $total_pages) {
-	$_SESSION["ft"]["view_{$view_id}_page"] = $total_pages;
+$session_key = "view_{$view_id}_page";
+if (Sessions::exists($session_key) && Sessions::get($session_key) > $total_pages) {
+	Sessions::set($session_key, $total_pages);
     General::redirect("submissions.php");
 }
 
@@ -218,9 +219,7 @@ if (isset($_SESSION["ft"]["view_{$view_id}_page"]) && $_SESSION["ft"]["view_{$vi
 Forms::cacheFormStats($form_id);
 Views::cacheViewStats($form_id, $view_id);
 
-if (!isset($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {
-    $_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
-}
+Sessions::setIfNotExists("form_{$form_id}_select_all_submissions", "");
 
 // get a list of all submission IDs in this page
 $submission_ids = array();
@@ -231,19 +230,17 @@ for ($i=0; $i<count($search_rows); $i++) {
 $submission_id_str = implode(",", $submission_ids);
 
 // set as STRING for used in JS below
-$select_all_submissions_returned = ($_SESSION["ft"]["form_{$form_id}_select_all_submissions"] == "1") ? "true" : "false";
+$select_all_submissions_returned = (Sessions::get("form_{$form_id}_select_all_submissions") == "1") ? "true" : "false";
 
 // figure out which submissions should be selected on page load
 $preselected_subids = array();
 $all_submissions_selected_omit_list_str = "";
 if ($select_all_submissions_returned == "true") {
-	$all_submissions_selected_omit_list = isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]) ?
-		$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] : array();
-
+	$all_submissions_selected_omit_list = Sessions::getWithFallback("form_{$form_id}_all_submissions_selected_omit_list", array());
 	$all_submissions_selected_omit_list_str = implode(",", $all_submissions_selected_omit_list);
 	$preselected_subids = array_diff($submission_ids, $all_submissions_selected_omit_list);
 } else {
-    $preselected_subids = isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"]) ? $_SESSION["ft"]["form_{$form_id}_selected_submissions"] : array();
+    $preselected_subids = Sessions::getWithFallback("form_{$form_id}_selected_submissions", array());
 }
 
 $preselected_subids_str = implode(",", $preselected_subids);
@@ -287,7 +284,7 @@ $page_vars["default_date_field_search_value"] = $default_date_field_search_value
 $page_vars["search_rows"] = $search_rows;
 $page_vars["search_num_results"] = $search_num_results;
 $page_vars["view_num_results"] = $view_num_results;
-$page_vars["total_form_submissions"] = $_SESSION["ft"]["form_{$form_id}_num_submissions"];
+$page_vars["total_form_submissions"] = Sessions::get("form_{$form_id}_num_submissions");
 $page_vars["grouped_views"] = $grouped_views;
 $page_vars["view_info"]     = $view_info;
 $page_vars["settings"]      = $settings;
@@ -299,7 +296,7 @@ $page_vars["order"] = $order;
 $page_vars["field_types"] = $field_types;
 $page_vars["has_searchable_field"] = $has_searchable_field;
 $page_vars["notify_view_missing_columns_admin_fix"] = General::evalSmartyString($LANG["notify_view_missing_columns_admin_fix"], array("LINK" => "edit.php?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2"));
-$page_vars["curr_search_fields"] = $_SESSION["ft"]["current_search"]["search_fields"];
+$page_vars["curr_search_fields"] = Sessions::get("current_search.search_fields");
 $page_vars["pagination"]  = General::getPageNav($search_num_results, $results_per_page, $current_page, "");
 $page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download",
 	"validation_select_submissions_to_delete", "confirm_delete_submission", "confirm_delete_submissions",

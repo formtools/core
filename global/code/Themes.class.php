@@ -342,21 +342,17 @@ class Themes {
         $root_url = Core::getRootUrl();
         $module_folder = Modules::getCurrentModuleFolder();
 
-        if (empty($theme) && (isset($_SESSION["ft"]["account"]["theme"]))) {
-            $theme  = $_SESSION["ft"]["account"]["theme"];
-            $swatch = isset($_SESSION["ft"]["account"]["swatch"]) ? $_SESSION["ft"]["account"]["swatch"] : "";
+        if (empty($theme) && (Sessions::exists("account.theme"))) {
+            $theme  = Sessions::get("account.theme");
+            $swatch = Sessions::getWithFallback("account.swatch", "");
         } elseif (empty($theme)) {
             $settings = Settings::get(array("default_theme", "default_client_swatch"));
             $theme  = $settings["default_theme"];
             $swatch = $settings["default_client_swatch"];
         }
 
-        if (!isset($_SESSION["ft"]["account"]["is_logged_in"])) {
-            $_SESSION["ft"]["account"]["is_logged_in"] = false;
-        }
-        if (!isset($_SESSION["ft"]["account"]["account_type"])) {
-            $_SESSION["ft"]["account"]["account_type"] = "";
-        }
+        Sessions::setIfNotExists("account.is_logged_in", false);
+        Sessions::setIfNotExists("account.account_type", "");
 
         // common variables. These are sent to EVERY template
         $smarty->setTemplateDir("$root_dir/themes/$theme");
@@ -368,9 +364,9 @@ class Themes {
         // ft_init_module_page(), called on every module page
         $smarty->assign("L", $L);
 
-        $smarty->assign("SESSION", $_SESSION["ft"]);
+        //$smarty->assign("SESSION", $_SESSION["ft"]);
 
-        $settings = isset($_SESSION["ft"]["settings"]) ? $_SESSION["ft"]["settings"] : array();
+        $settings = Sessions::getWithFallback("settings", array());
         $smarty->assign("settings", $settings);
         $smarty->assign("account", $_SESSION["ft"]["account"]);
         $smarty->assign("g_root_dir", $root_dir);

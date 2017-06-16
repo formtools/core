@@ -62,6 +62,14 @@ class Sessions
     }
 
 
+    public static function setIfNotExists($key, $value)
+    {
+        if (!self::exists($key)) {
+            self::set($key, $value);
+        }
+    }
+
+
     public static function exists($key) {
         if (!isset($_SESSION["ft"])) {
             return false;
