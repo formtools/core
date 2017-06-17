@@ -2,11 +2,13 @@
 
 use FormTools\Accounts;
 use FormTools\Clients;
+use FormTools\Core;
 use FormTools\General;
 use FormTools\Pages;
 use FormTools\Themes;
 use FormTools\Sessions;
 
+$LANG = Core::$L;
 
 if (isset($request["update_account_settings"])) {
 	$account_id = Sessions::get("account.account_id");

@@ -49,7 +49,8 @@ class Sessions
      * Stores data in sessions.
      * @param $key string dot-delimited e.g. settings.num_per_page
      */
-    public static function set($key, $value) {
+    public static function set($key, $value)
+    {
         $parts = mb_split("\.", $key);
         if (!isset($_SESSION["ft"])) {
             $_SESSION["ft"] = array();
@@ -70,7 +71,8 @@ class Sessions
     }
 
 
-    public static function exists($key) {
+    public static function exists($key)
+    {
         if (!isset($_SESSION["ft"])) {
             return false;
         }
@@ -88,6 +90,19 @@ class Sessions
         }
 
         return $exists;
+    }
+
+
+    /**
+     * Returns true is the key doesn't exist or if it's empty().
+     */
+    public static function isEmpty($key)
+    {
+        if (!self::exists($key)) {
+            return true;
+        }
+        $value = self::get($key);
+        return empty($value);
     }
 
 

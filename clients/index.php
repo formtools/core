@@ -1,5 +1,7 @@
 <?php
 
+require_once("../global/library.php");
+
 use FormTools\Accounts;
 use FormTools\Clients;
 use FormTools\Core;
@@ -9,10 +11,8 @@ use FormTools\Pages;
 use FormTools\Sessions;
 use FormTools\Themes;
 
-
 Core::init();
 Core::$user->checkAuth("client");
-
 
 Forms::cacheFormStats();
 
@@ -30,10 +30,16 @@ $search_criteria = array(
 	"keyword" => $keyword
 );
 
+
 $num_client_forms = count(Clients::getClientForms($account_id));
-//$forms            = Forms::searchForms(array("account_id" => $account_id, "is_admin" => false, ... plus $search_criteria);
 $client_info      = Accounts::getAccountInfo($account_id);
 $forms_page_default_message = General::evalSmartyString($client_info["settings"]["forms_page_default_message"]);
+$forms = Forms::searchForms(array(
+    "account_id" => $account_id,
+    "is_admin" => false,
+    "order" => $order,
+    "keyword" => $keyword
+));
 
 // ------------------------------------------------------------------------------------------
 

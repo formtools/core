@@ -293,19 +293,19 @@ class User
                 // PHP scripts the user's running right now should be unaffected
                 @session_start();
                 @session_destroy();
-                $_SESSION["ft"] = array();
+                Sessions::clearAll();
 
                 // redirect to the login page, passing along the appropriate message flag so the page knows what to display
                 $logout_url = General::constructUrl($root_url, "message=$message_flag");
                 General::redirect($logout_url);
             } else {
-                $logout_url = isset($_SESSION["ft"]["account"]["logout_url"]) ? $_SESSION["ft"]["account"]["logout_url"] : "";
+                $logout_url = Sessions::getWithFallback("account.logout_url", "");
 
                 // empty sessions, but be nice about it. Only delete the Form Tools namespaced sessions - any other
                 // PHP scripts the user happens to be running right now should be unaffected
                 @session_start();
                 @session_destroy();
-                $_SESSION["ft"] = array();
+                Sessions::clearAll();
 
                 if (empty($logout_url)) {
                     $logout_url = $root_url;
@@ -349,8 +349,8 @@ class User
         // IF the minimum account type of the page is a "user", it EITHER has the user account info set (i.e. the submission ID)
         // or it's a regular client or admin account with the account_id set. Crumby, but it'll have to suffice for now.
         if ($this->accountType == "user") {
-            if ((!isset($_SESSION["ft"]["account"]["submission_id"]) || empty($_SESSION["ft"]["account"]["submission_id"])) &&
-                empty($_SESSION["ft"]["account"]["account_id"])) {
+            if ((!Sessions::exists("account.submission_id") || General::isEmpty(Sessions::get("account.submission_id"))) &&
+                General::isEmpty(Sessions::get("account.account_id"))) {
                 if ($auto_logout) {
                     General::redirect("$root_url/modules/submission_accounts/logout.php");
                 } else {

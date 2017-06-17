@@ -30,7 +30,7 @@ use FormTools\Views;
 //$g_check_ft_sessions = false;
 ////require_once("../session_start.php");
 
-Core::init(array("check_sessions" => false)); // TODO
+Core::initNoSessions(); // TODO
 
 // check the permissions
 $permission_check = Core::$user->checkAuth("user", false);
@@ -107,21 +107,20 @@ switch ($action) {
 		break;
 
 	case "select_submission":
-		$form_id = $request["form_id"];
+		$form_id       = $request["form_id"];
 		$submission_id = $request["submission_id"];
 
-		if (empty($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {
-			if (!isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
-                $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-            }
-			if (!in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
-                $_SESSION["ft"]["form_{$form_id}_selected_submissions"][] = $submission_id;
+		if (Sessions::isEmpty("form_{$form_id}_select_all_submissions")) {
+		    $session_key = "form_{$form_id}_selected_submissions";
+		    Sessions::setIfNotExists($session_key, array());
+			if (!in_array($submission_id, Sessions::get($session_key))) {
+                Sessions::set($session_key, $submission_id);
             }
 		} else {
 			// if it's in the omit list, remove it
-			if (in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
-                array_splice($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"],
-                array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]), 1);
+            $omit_list = Sessions::get("form_{$form_id}_all_submissions_selected_omit_list");
+			if (in_array($submission_id, $omit_list)) {
+                array_splice($omit_list, array_search($submission_id, $omit_list), 1);
             }
 		}
 		break;

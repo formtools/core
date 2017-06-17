@@ -475,7 +475,7 @@ class Views
             // if there aren't any filters, just set the submission count & first submission date to the same
             // as the parent form
             if (empty($filters)) {
-                $_SESSION["ft"]["view_{$view_id}_num_submissions"] = $_SESSION["ft"]["form_{$form_id}_num_submissions"];
+                Sessions::set("view_{$view_id}_num_submissions", Sessions::get("form_{$form_id}_num_submissions"));
             } else {
                 $filter_clause = join(" AND ", $filters);
 
@@ -493,7 +493,7 @@ class Views
                 }
 
                 $info = $db->fetch();
-                $_SESSION["ft"]["view_{$view_id}_num_submissions"] = $info["c"];
+                Sessions::set("view_{$view_id}_num_submissions", $info["c"]);
             }
         }
     }
@@ -1057,7 +1057,7 @@ class Views
 
         // 1. create the new View
         $form_info = Forms::getForm($form_id);
-        $num_submissions_per_page = isset($_SESSION["ft"]["settings"]["num_submissions_per_page"]) ? $_SESSION["ft"]["settings"]["num_submissions_per_page"] : 10;
+        $num_submissions_per_page = Sessions::getWithFallback("settings.num_submissions_per_page", 10);
 
         $db->query("
             INSERT INTO {PREFIX}views (form_id, view_name, view_order, num_submissions_per_page,

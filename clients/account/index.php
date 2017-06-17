@@ -1,11 +1,14 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Sessions;
 
 Core::init();
 Core::$user->checkAuth("client");
+
 $LANG = Core::$L;
 
 $request = array_merge($_POST, $_GET);
@@ -20,17 +23,13 @@ $tabs = array(
 	"settings" => array("tab_label" => $LANG["word_settings"], "tab_link" => "{$same_page}?page=settings")
 );
 
-// ------------------------------------------------------------------------------------------
+$map = array(
+    "main" => "page_main.php",
+    "settings" => "page_settings.php"
+);
 
-switch ($page)
-{
-	case "main":
-		include("page_main.php");
-		break;
-	case "settings":
-		include("page_settings.php");
-		break;
-	default:
-		include("page_main.php");
-		break;
+if (array_key_exists($page, $map)) {
+    require_once($map[$page]);
+} else {
+    require_once($map["main"]);
 }

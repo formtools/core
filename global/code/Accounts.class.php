@@ -206,7 +206,10 @@ class Accounts
     {
         $account_settings = self::getAccountSettings($account_id);
         $last_passwords = (isset($account_settings["password_history"]) && !empty($account_settings["password_history"])) ?
-        explode(",", $account_settings["password_history"]) : array();
+            explode(",", $account_settings["password_history"]) : array();
+
+        //print_r($last_passwords);
+
 
         $is_found = false;
         for ($i=0; $i<$num_password_history; $i++) {

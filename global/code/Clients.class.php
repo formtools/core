@@ -507,17 +507,18 @@ class Clients {
                     last_name = :last_name,
                     username = :username,
                     email = :email
-            WHERE   account_id = $:ccount_id
+            WHERE   account_id = :account_id
         ");
-        $db->bindAll(array(
-            "first_name" => $info["first_name"],
-            "last_name" => $info["last_name"],
-            "username" => $username,
-            "email" => $info["email"],
-            "account_id" => $account_id
-        ));
 
         try {
+            $db->bindAll(array(
+                "first_name" => $info["first_name"],
+                "last_name" => $info["last_name"],
+                "username" => $username,
+                "email" => $info["email"],
+                "account_id" => $account_id
+            ));
+
             $db->execute();
 
             // if the password wasn't empty, reset the temporary password, in case it was set

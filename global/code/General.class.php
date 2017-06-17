@@ -1320,5 +1320,11 @@ END;
 
         return $placeholders;
     }
+
+    // bizarrely, you can pass expressions to empty() until PHP 5.5. (?!?!?) so this is a convenience wrapper
+    public static function isEmpty($var)
+    {
+        return empty($var);
+    }
 }
 

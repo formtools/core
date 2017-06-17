@@ -75,12 +75,11 @@ class ViewFilters
     {
         $db = Core::$db;
 
-        $is_client_account = (isset($_SESSION["ft"]["account"]["account_type"]) &&
-            $_SESSION["ft"]["account"]["account_type"] == "client") ? true : false;
+        $is_client_account = Sessions::exists("account.account_type") && Sessions::get("account.account_type") == "client";
 
         $placeholders = array();
         if ($is_client_account) {
-            $account_info = $_SESSION["ft"]["account"];
+            $account_info = Sessions::get("account");
 
             $placeholders = array(
                 "account_id"   => $account_info["account_id"],
