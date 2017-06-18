@@ -6,7 +6,7 @@
       <td><span class="title">{$edit_submission_page_label}</span></td>
       <td align="right">
         <div style="float:right; padding-left: 4px;">
-          <a href="edit.php?form_id={$form_id}"><img src="{$images_url}/admin_view.png" border="0" alt="{$LANG.phrase_edit_form}"
+          <a href="edit/?form_id={$form_id}"><img src="{$images_url}/admin_view.png" border="0" alt="{$LANG.phrase_edit_form}"
             title="{$LANG.phrase_edit_form}" width="48" height="23" /></a>
         </div>
         <div class="views_dropdown">

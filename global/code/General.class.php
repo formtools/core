@@ -477,7 +477,7 @@ END;
         $smarty->assign("LANG", $LANG);
         $smarty->assign("g_root_dir", $root_dir);
         $smarty->assign("g_root_url", $root_url);
-        $smarty->assign("samepage", General::getCleanPhpSelf());
+        $smarty->assign("same_page", General::getCleanPhpSelf());
         $smarty->assign("num_results", $num_results);
         $smarty->assign("num_per_page", $num_per_page);
         $smarty->assign("current_page", $current_page);
@@ -547,7 +547,7 @@ END;
         $smarty->assign("LANG", $LANG);
         $smarty->assign("g_root_dir", $root_dir);
         $smarty->assign("g_root_url", $root_url);
-        $smarty->assign("samepage", General::getCleanPhpSelf());
+        $smarty->assign("same_page", General::getCleanPhpSelf());
         $smarty->assign("num_results", $num_results);
         $smarty->assign("num_per_page", $num_per_page);
         $smarty->assign("current_page", $current_page);
@@ -577,9 +577,7 @@ END;
         $smarty->assign("total_pages", $total_pages);
 
         // piece together additional query string values
-        if (!empty($pass_along_str)) {
-            $smarty->assign("query_str", "&{$pass_along_str}");
-        }
+        $smarty->assign("query_str", !empty($pass_along_str) ? "&{$pass_along_str}" : "");
 
         // determine the first and last pages to show page nav links for
         $half_total_nav_pages  = floor(Core::getMaxNavPages() / 2);

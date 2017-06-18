@@ -92,7 +92,6 @@ foreach ($grouped_fields as $group) {
 }
 $page_field_types = FieldTypes::get(true, $page_field_type_ids);
 
-
 // construct the tab list
 $view_tabs = ViewTabs::getViewTabs($view_id, true);
 $tabs      = array();
@@ -126,7 +125,9 @@ list($prev_link_html, $search_results_link_html, $next_link_html) = _ft_code_get
 $submission_placeholders = General::getSubmissionPlaceholders($form_id, $submission_id);
 $edit_submission_page_label = General::evalSmartyString($form_info["edit_submission_page_label"], $submission_placeholders);
 
+
 $validation_js = FieldValidation::generateSubmissionJsValidation($grouped_fields);
+
 
 
 // get all the shared resources

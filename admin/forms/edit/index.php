@@ -44,11 +44,11 @@ if (isset($request['edit_email_user_settings'])) {
     exit;
 }
 
-$view_submissions_link = "submissions.php?form_id={$form_id}";
+$view_submissions_link = "../submissions.php?form_id={$form_id}";
 if (Sessions::exists("last_link_page_{$form_id}") && Sessions::exists("last_submission_id_{$form_id}") &&
 	Sessions::get("last_link_page_{$form_id}") == "edit") {
     $last_submission = Sessions::get("last_submission_id_{$form_id}");
-	$view_submissions_link = "edit_submission.php?form_id={$form_id}&submission_id=$last_submission";
+	$view_submissions_link = "../edit_submission.php?form_id={$form_id}&submission_id=$last_submission";
 }
 
 $LANG = Core::$L;

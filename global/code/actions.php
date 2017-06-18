@@ -30,7 +30,7 @@ use FormTools\Views;
 //$g_check_ft_sessions = false;
 ////require_once("../session_start.php");
 
-Core::initNoSessions(); // TODO
+Core::init(); // TODO initNoSessions
 
 // check the permissions
 $permission_check = Core::$user->checkAuth("user", false);
@@ -41,7 +41,6 @@ if (!$sessions_still_valid) {
 	@session_destroy();
 
 	Sessions::clearAll();
-
 	$permission_check["has_permission"] = false;
 	$permission_check["message"] = "session_expired";
 }

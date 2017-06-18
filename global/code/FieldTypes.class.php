@@ -983,7 +983,6 @@ END;
         }
 
         $markup_with_placeholders = trim($field_type_info["view_field_smarty_markup"]);
-        $field_settings = $field_info["field_settings"];
 
         $output = "";
         if ($field_type_info["view_field_rendering_type"] == "none" || empty($markup_with_placeholders)) {
@@ -1015,7 +1014,8 @@ END;
                 $value                   = $setting_info["default_value"];
                 $identifier              = $setting_info["field_setting_identifier"];
 
-                if (isset($field_settings) && !empty($field_settings)) {
+                if (isset($field_info["field_settings"]) && !empty($field_info["field_settings"])) {
+                    $field_settings = $field_info["field_settings"];
                     for ($i=0; $i<count($field_settings); $i++) {
                         while (list($setting_id, $setting_value) = each($field_settings[$i])) {
                             if ($setting_id == $curr_setting_id) {
@@ -1566,8 +1566,7 @@ END;
         $field_types = array();
         foreach ($results as $row) {
             if ($return_settings) {
-                $curr_field_type_id = $row["field_type_id"];
-                $row["settings"] = FieldTypes::getFieldTypeSettings($curr_field_type_id, false);
+                $row["settings"] = FieldTypes::getFieldTypeSettings($row["field_type_id"], false);
             }
             $field_types[] = $row;
         }

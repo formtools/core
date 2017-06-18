@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Submissions;
+
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
