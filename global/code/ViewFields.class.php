@@ -356,6 +356,10 @@ class ViewFields
     {
         $db = Core::$db;
 
+        if (!empty($submission_id)) {
+            $submission_info = Submissions::getSubmissionInfo($form_id, $submission_id);
+        }
+
         $tab_clause = (!empty($tab_number)) ? "AND custom_data = $tab_number" : "";
 
         $db->query("
@@ -367,10 +371,6 @@ class ViewFields
         ");
         $db->bind("group_type", "view_fields_{$view_id}");
         $db->execute();
-
-        if (!empty($submission_id)) {
-            $submission_info = Submissions::getSubmissionInfo($form_id, $submission_id);
-        }
 
         $grouped_info = array();
         foreach ($db->fetchAll() as $group_info) {

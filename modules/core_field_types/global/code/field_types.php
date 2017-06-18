@@ -10,68 +10,65 @@
 
 function cft_get_field_types()
 {
-  $cft_field_types = array();
-  $cft_field_types["textbox"] = array(
+    $cft_field_types = array();
+    $cft_field_types["textbox"] = array(
+        "field_type" => array(
+            "is_editable"                    => "no",
+            "non_editable_info"              => "'{\$LANG.text_non_deletable_fields}'",
+            "managed_by_module_id"           => "NULL",
+            "field_type_name"                => "{\$LANG.word_textbox}",
+            "field_type_identifier"          => "textbox",
+            "is_file_field"                  => "no",
+            "is_date_field"                  => "no",
+            "raw_field_type_map"             => "textbox",
+            "compatible_field_sizes"         => "1char,2chars,tiny,small,medium,large,very_large",
+            "view_field_rendering_type"      => "smarty",
+            "view_field_php_function_source" => "core",
+            "view_field_php_function"        => "",
+            "view_field_smarty_markup"       => "{\$VALUE|htmlspecialchars}",
+            "edit_field_smarty_markup"       => "<input type=\"text\" name=\"{\$NAME}\" value=\"{\$VALUE|escape}\" \r\n  class=\"{\$size}{if \$highlight} {\$highlight}{/if}\" \r\n  {if \$maxlength}maxlength=\"{\$maxlength}\"{/if} />\r\n \r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}",
+            "php_processing"                 => "",
+            "resources_css"                  => "input.cf_size_tiny {\r\n  width: 30px; \r\n}\r\ninput.cf_size_small {\r\n  width: 80px; \r\n}\r\ninput.cf_size_medium {\r\n  width: 150px; \r\n}\r\ninput.cf_size_large {\r\n  width: 250px;\r\n}\r\ninput.cf_size_full_width {\r\n  width: 99%; \r\n}",
+            "resources_js"                   => ""
+        ),
 
-    "field_type" => array(
-      "is_editable"                    => "no",
-      "non_editable_info"              => "'{\$LANG.text_non_deletable_fields}'",
-      "managed_by_module_id"           => "NULL",
-      "field_type_name"                => "{\$LANG.word_textbox}",
-      "field_type_identifier"          => "textbox",
-      "is_file_field"                  => "no",
-      "is_date_field"                  => "no",
-      "raw_field_type_map"             => "textbox",
-      "compatible_field_sizes"         => "1char,2chars,tiny,small,medium,large,very_large",
-      "view_field_rendering_type"      => "smarty",
-      "view_field_php_function_source" => "core",
-      "view_field_php_function"        => "",
-      "view_field_smarty_markup"       => "{\$VALUE|htmlspecialchars}",
-      "edit_field_smarty_markup"       => "<input type=\"text\" name=\"{\$NAME}\" value=\"{\$VALUE|escape}\" \r\n  class=\"{\$size}{if \$highlight} {\$highlight}{/if}\" \r\n  {if \$maxlength}maxlength=\"{\$maxlength}\"{/if} />\r\n \r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}",
-      "php_processing"                 => "",
-      "resources_css"                  => "input.cf_size_tiny {\r\n  width: 30px; \r\n}\r\ninput.cf_size_small {\r\n  width: 80px; \r\n}\r\ninput.cf_size_medium {\r\n  width: 150px; \r\n}\r\ninput.cf_size_large {\r\n  width: 250px;\r\n}\r\ninput.cf_size_full_width {\r\n  width: 99%; \r\n}",
-      "resources_js"                   => ""
-    ),
-
-    "settings" => array(
-
-      // Size
-      array(
-        "field_label"              => "{\$LANG.word_size}",
-        "field_setting_identifier" => "size",
-        "field_type"               => "select",
-        "field_orientation"        => "na",
-        "default_value_type"       => "static",
-        "default_value"            => "cf_size_medium",
-
-        "options" => array(
-          array(
-            "option_text"       => "{\$LANG.word_tiny}",
-            "option_value"      => "cf_size_tiny",
-            "is_new_sort_group" => "yes"
-          ),
-          array(
-            "option_text"       => "{\$LANG.word_small}",
-            "option_value"      => "cf_size_small",
-            "is_new_sort_group" => "yes"
-          ),
-          array(
-            "option_text"       => "{\$LANG.word_medium}",
-            "option_value"      => "cf_size_medium",
-            "is_new_sort_group" => "yes"
-          ),
-          array(
-            "option_text"       => "{\$LANG.word_large}",
-            "option_value"      => "cf_size_large",
-            "is_new_sort_group" => "yes"
-          ),
-          array(
-            "option_text"       => "{\$LANG.phrase_full_width}",
-            "option_value"      => "cf_size_full_width",
-            "is_new_sort_group" => "yes"
-          )
-        )
-      ),
+        "settings" => array(
+            // Size
+            array(
+            "field_label"              => "{\$LANG.word_size}",
+            "field_setting_identifier" => "size",
+            "field_type"               => "select",
+            "field_orientation"        => "na",
+            "default_value_type"       => "static",
+            "default_value"            => "cf_size_medium",
+            "options" => array(
+                array(
+                    "option_text"       => "{\$LANG.word_tiny}",
+                    "option_value"      => "cf_size_tiny",
+                    "is_new_sort_group" => "yes"
+                ),
+                array(
+                    "option_text"       => "{\$LANG.word_small}",
+                    "option_value"      => "cf_size_small",
+                    "is_new_sort_group" => "yes"
+                ),
+                array(
+                    "option_text"       => "{\$LANG.word_medium}",
+                    "option_value"      => "cf_size_medium",
+                    "is_new_sort_group" => "yes"
+                ),
+                array(
+                    "option_text"       => "{\$LANG.word_large}",
+                    "option_value"      => "cf_size_large",
+                    "is_new_sort_group" => "yes"
+                ),
+                array(
+                    "option_text"       => "{\$LANG.phrase_full_width}",
+                    "option_value"      => "cf_size_full_width",
+                    "is_new_sort_group" => "yes"
+                )
+            )
+        ),
 
       // Max Length
       array(

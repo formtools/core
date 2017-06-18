@@ -293,7 +293,7 @@ END;
      */
     public static function displayCustomPageMessage($flag)
     {
-        global $LANG;
+        $LANG = Core::$L;
 
         $g_success = "";
         $g_message = "";

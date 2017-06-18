@@ -65,13 +65,9 @@ foreach ($view_info["tabs"] as $tab_info) {
 		break;
 	}
 }
-if ($has_tabs) {
-    $tab_number = General::loadField("tab", "view_{$view_id}_current_tab", 1);
-} else {
-    $tab_number = "";
-}
-
+$tab_number = $has_tabs ? General::loadField("tab", "view_{$view_id}_current_tab", 1) : "";
 $grouped_fields = ViewFields::getGroupedViewFields($view_id, $tab_number, $form_id, $submission_id);
+
 if ($failed_validation) {
 	$grouped_fields = FieldValidation::mergeFormSubmission($grouped_fields, $_POST);
 }
@@ -125,9 +121,7 @@ list($prev_link_html, $search_results_link_html, $next_link_html) = _ft_code_get
 $submission_placeholders = General::getSubmissionPlaceholders($form_id, $submission_id);
 $edit_submission_page_label = General::evalSmartyString($form_info["edit_submission_page_label"], $submission_placeholders);
 
-
 $validation_js = FieldValidation::generateSubmissionJsValidation($grouped_fields);
-
 
 
 // get all the shared resources
@@ -140,39 +134,41 @@ foreach ($shared_resources_array as $resource) {
 }
 
 // compile the header information
-$page_vars = array();
-$page_vars["page"]   = "admin_edit_submission";
-$page_vars["page_url"] = Pages::getPageUrl("admin_edit_submission");
-$page_vars["head_title"] = $edit_submission_page_label;
-$page_vars["form_info"] = $form_info;
-$page_vars["form_id"] = $form_id;
-$page_vars["view_id"] = $view_id;
-$page_vars["submission_id"] = $submission_id;
-$page_vars["tabs"] = $tabs;
-$page_vars["settings"] = $settings;
-$page_vars["tab_number"] = $tab_number;
-$page_vars["grouped_fields"] = $grouped_fields;
-$page_vars["field_types"] = $page_field_types;
-$page_vars["previous_link_html"] = $prev_link_html;
-$page_vars["page_has_required_fields"] = $page_has_required_fields;
-$page_vars["search_results_link_html"] = $search_results_link_html;
-$page_vars["next_link_html"] = $next_link_html;
-$page_vars["tab_has_editable_fields"] = count($editable_tab_fields) > 0;
-$page_vars["view_info"] = $view_info;
-$page_vars["edit_submission_page_label"] = $edit_submission_page_label;
-$page_vars["page_field_ids"] = $page_field_ids;
-$page_vars["page_field_ids_str"] = implode(",", $page_field_ids);
-$page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected", "confirm_delete_submission_file",
-	"phrase_please_confirm", "word_no", "word_yes", "word_close", "phrase_validation_error");
+$page_vars = array(
+    "page" => "admin_edit_submission",
+    "page_url" => Pages::getPageUrl("admin_edit_submission"),
+    "head_title" => $edit_submission_page_label,
+    "form_info" => $form_info,
+    "form_id" => $form_id,
+    "view_id" => $view_id,
+    "submission_id" => $submission_id,
+    "tabs" => $tabs,
+    "settings" => $settings,
+    "tab_number" => $tab_number,
+    "grouped_fields" => $grouped_fields,
+    "field_types" => $page_field_types,
+    "previous_link_html" => $prev_link_html,
+    "page_has_required_fields" => $page_has_required_fields,
+    "search_results_link_html" => $search_results_link_html,
+    "next_link_html" => $next_link_html,
+    "tab_has_editable_fields" => count($editable_tab_fields) > 0,
+    "view_info" => $view_info,
+    "edit_submission_page_label" => $edit_submission_page_label,
+    "page_field_ids" => $page_field_ids,
+    "page_field_ids_str" => implode(",", $page_field_ids),
+    "js_messages" => array(
+        "confirm_delete_submission", "notify_no_email_template_selected", "confirm_delete_submission_file",
+        "phrase_please_confirm", "word_no", "word_yes", "word_close", "phrase_validation_error"
+    )
+);
 $page_vars["head_string"] =<<< EOF
-  <script src="$root_url/global/scripts/manage_submissions.js"></script>
-  <script src="$root_url/global/scripts/field_types.php"></script>
-  <link rel="stylesheet" href="$root_url/global/css/field_types.php" type="text/css" />
+    <script src="$root_url/global/scripts/manage_submissions.js"></script>
+    <script src="$root_url/global/scripts/field_types.php"></script>
+    <link rel="stylesheet" href="$root_url/global/css/field_types.php" type="text/css" />
 $shared_resources
 EOF;
 $page_vars["head_js"] =<<< END
 $validation_js
 END;
-
 
 Themes::displayPage("admin/forms/edit_submission.tpl", $page_vars);

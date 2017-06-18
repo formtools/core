@@ -11,7 +11,7 @@
     </td>
     <td align="right" valign="top">
       <div style="float:right; padding-left: 4px;">
-        <a href="edit.php?form_id={$form_id}"><img src="{$images_url}/admin_view.png" border="0" alt="{$LANG.phrase_edit_form}"
+        <a href="edit/?form_id={$form_id}"><img src="{$images_url}/admin_view.png" border="0" alt="{$LANG.phrase_edit_form}"
           title="{$LANG.phrase_edit_form}" width="48" height="23" /></a>
       </div>
       {views_dropdown grouped_views=$grouped_views form_id=$form_id selected=$view_id

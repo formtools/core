@@ -389,14 +389,11 @@ class Core {
             self::initDatabase();
         }
 
-        // ensure the application has been installed. This redirects the
+        // ensure the application has been installed
         Installation::checkInstalled();
 
         self::$smarty = new Smarty();
-
-//        if ($options["check_sessions"] == false) {
         self::startSessions();
-  //      }
 
         self::$user = new User();
         self::$currLang = self::$user->getLang();
@@ -428,6 +425,45 @@ class Core {
 
     public static function initNoSessions($options = array())
     {
+        self::loadConfigFile();
+
+        // explicitly set the error reporting value
+        error_reporting(self::$errorReporting);
+
+        if (self::$configFileExists) {
+            self::initDatabase();
+        }
+
+        // ensure the application has been installed
+        Installation::checkInstalled();
+
+        self::$smarty = new Smarty();
+        self::$user = new User();
+        self::$currLang = self::$user->getLang();
+
+        if (self::$user->isLoggedIn()) {
+            General::checkSessionsTimeout();
+        }
+
+        // OVERRIDES - TODO interface
+        if (isset($options["currLang"])) {
+            self::$currLang = $options["currLang"];
+        }
+
+        self::setCurrLang(self::$currLang);
+        self::enableDebugging();
+
+        // optionally enable benchmarking. Dev-only feature to confirm pages aren't taking too long to load
+        if (self::$enableBenchmarking) {
+            self::$benchmarkStart = General::getMicrotimeFloat();
+        }
+
+        // not thrilled with this, but it needs to be handled on all pages and this is a convenient spot
+        if (Core::checkConfigFileExists()) {
+            if (isset($_GET["logout"])) {
+                Core::$user->logout();
+            }
+        }
 
     }
 

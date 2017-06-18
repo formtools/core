@@ -463,10 +463,6 @@ class Fields {
         $affected_views = array();
         $removed_field_ids = array();
 
-        print_r($field_ids);
-        print_r($form_info);
-        exit;
-
         $deleted_field_info = array();
         foreach ($field_ids as $field_id) {
             $field_id = trim($field_id);
@@ -518,7 +514,7 @@ class Fields {
 
             foreach ($db->fetchAll() as $row) {
                 $affected_views[] = $row["view_id"];
-                Views::deleteViewField($row["view_id"], $field_id);
+                ViewFields::deleteViewField($row["view_id"], $field_id);
             }
 
             $drop_column = $old_field_info["col_name"];
