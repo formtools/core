@@ -3,6 +3,7 @@
 use FormTools\Core;
 use FormTools\Views;
 use FormTools\Submissions;
+use FormTools\Templates;
 
 /*
  * Smarty plugin
@@ -18,9 +19,8 @@ function smarty_function_views_dropdown($params, &$smarty)
 {
     $LANG = Core::$L;
 
-    if (empty($params["form_id"])) {
-        $smarty->trigger_error("assign: missing 'form_id' parameter.");
-        return;
+    if (!Templates::hasRequiredParams($smarty, $params, array("form_id"))) {
+        return "";
     }
 
     $form_id           = $params["form_id"];

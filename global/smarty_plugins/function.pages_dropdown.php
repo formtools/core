@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Menus;
+use FormTools\Templates;
 
 /*
  * Smarty plugin
@@ -14,13 +15,8 @@ use FormTools\Menus;
  */
 function smarty_function_pages_dropdown($params, &$smarty)
 {
-    if (empty($params["menu_type"])) {
-        $smarty->trigger_error("assign: missing 'menu_type' parameter. Possible options: \"admin\" or \"client\".");
-        return;
-    }
-	if (empty($params["name_id"])) {
-        $smarty->trigger_error("assign: missing 'name_id' parameter. This is used to give the select field a name and id value.");
-        return;
+    if (!Templates::hasRequiredParams($smarty, $params, array("menu_type", "name_id"))) {
+        return "";
     }
 
     $menu_type        = $params["menu_type"];

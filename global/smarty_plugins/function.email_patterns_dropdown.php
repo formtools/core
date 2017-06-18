@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Emails;
+use FormTools\Templates;
 
 /*
  * Smarty plugin
@@ -16,13 +17,8 @@ function smarty_function_email_patterns_dropdown($params, &$smarty)
 {
     global $LANG;
 
-    if (empty($params["type"])) {
-        $smarty->trigger_error("assign: missing 'type' parameter. This should be set to 'html' or 'text'.");
-        return;
-    }
-    if (empty($params["form_id"])) {
-        $smarty->trigger_error("assign: missing 'form_id' parameter. This should be set to 'html' or 'text'.");
-        return;
+    if (!Templates::hasRequiredParams($smarty, $params, array("type", "form_id"))) {
+        return "";
     }
 
     $type = $params["type"];

@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Core;
+use FormTools\Templates;
 use FormTools\Themes;
 
 
@@ -18,9 +19,8 @@ use FormTools\Themes;
  */
 function smarty_function_ft_include($params, &$smarty)
 {
-    if (empty($params["file"])) {
-        $smarty->trigger_error("assign: missing 'file' parameter. This is required.");
-        return;
+    if (!Templates::hasRequiredParams($smarty, $params, array("file"))) {
+        return "";
     }
 
     // the template ("file") should be an absolute path relative to the root

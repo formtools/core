@@ -1051,7 +1051,7 @@ class Fields {
         ));
         $db->execute();
 
-        return $db->fetchAll();
+        return $db->fetch();
     }
 
 

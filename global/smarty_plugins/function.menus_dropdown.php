@@ -2,7 +2,7 @@
 
 use FormTools\Core;
 use FormTools\Menus;
-
+use FormTools\Templates;
 
 /*
  * Smarty plugin
@@ -15,9 +15,8 @@ use FormTools\Menus;
  */
 function smarty_function_menus_dropdown($params, &$smarty)
 {
-	if (empty($params["name_id"])) {
-        $smarty->trigger_error("assign: missing 'name_id' parameter. This is used to give the select field a name and id value.");
-        return;
+    if (!Templates::hasRequiredParams($smarty, $params, array("name_id"))) {
+        return "";
     }
 
     $LANG = Core::$L;

@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\General;
+use FormTools\Templates;
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -17,11 +20,8 @@
  */
 function smarty_function_eval_smarty_string($params, &$smarty)
 {
-    global $LANG;
-
-    if (empty($params["placeholder_str"])) {
-        $smarty->trigger_error("assign: missing 'placeholder_str' parameter.");
-        return;
+    if (!Templates::hasRequiredParams($smarty, $params, array("placeholder_str"))) {
+        return "";
     }
 
     $placeholders = $params;

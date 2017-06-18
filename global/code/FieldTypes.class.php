@@ -958,11 +958,11 @@ END;
      */
     public static function generateViewableField($params)
     {
+        global $g_cache;
+
         $multi_val_delimiter = Core::getMultiFieldValDelimiter();
         $root_url = Core::getRootUrl();
         $root_dir = Core::getRootUrl();
-
-        global $g_cache;
 
         // REQUIRED
         $form_id       = $params["form_id"];

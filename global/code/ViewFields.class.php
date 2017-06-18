@@ -14,7 +14,7 @@
 
 namespace FormTools;
 
-use PDOException;
+use PDO, PDOException;
 
 
 class ViewFields
@@ -524,7 +524,7 @@ class ViewFields
         $db->bind("view_id", $view_id);
         $db->execute();
 
-        return $db->fetchAll();
+        return $db->fetchAll(PDO::FETCH_COLUMN);
     }
 
 }

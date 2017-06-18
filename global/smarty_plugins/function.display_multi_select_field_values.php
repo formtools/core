@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Core;
+use FormTools\Templates;
 
 /*
  * Smarty plugin
@@ -18,9 +19,8 @@ function smarty_function_display_multi_select_field_values($params, &$smarty)
 
 	// technically, options CAN be empty: this can happen if the admin just set the field type to a multi-value
 	// type (radio, checkboxes, select, multi-select) but didn't assign a field option group
-	if (!isset($params["options"])) {
-        $smarty->trigger_error("assign: missing 'options' parameter. This contains all available multi-select options.");
-        return;
+    if (!Templates::hasRequiredParams($smarty, $params, array("options"))) {
+        return "";
     }
 
     $options  = (isset($params["options"])) ? $params["options"] : "";

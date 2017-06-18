@@ -2,6 +2,7 @@
 
 use FormTools\Fields;
 use FormTools\General;
+use FormTools\Templates;
 
 
 /*
@@ -16,13 +17,8 @@ use FormTools\General;
  */
 function smarty_function_display_file_field($params, &$smarty)
 {
-	if (empty($params["field_id"])) {
-        $smarty->trigger_error("assign: missing 'field_id' parameter.");
-        return;
-    }
-	if (empty($params["filename"])) {
-        $smarty->trigger_error("assign: missing 'filename' parameter.");
-        return;
+    if (!Templates::hasRequiredParams($smarty, $params, array("field_id", "filename"))) {
+        return "";
     }
 
     $field_id = (isset($params["field_id"])) ? $params["field_id"] : "";

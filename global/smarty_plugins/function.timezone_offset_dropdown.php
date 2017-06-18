@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Core;
+use FormTools\Templates;
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -11,31 +14,28 @@
  */
 function smarty_function_timezone_offset_dropdown($params, &$smarty)
 {
-	global $LANG;
+	$LANG = Core::$L;
 
-	if (empty($params["name_id"]))
-  {
-	  $smarty->trigger_error("assign: missing 'name_id' parameter. This is used to give the select field a name and id value.");
-    return;
-  }
-  $default = (isset($params["default"])) ? $params["default"] : "";
+    if (!Templates::hasRequiredParams($smarty, $params, array("name_id"))) {
+        return "";
+    }
 
-  $attributes = array(
-    "id"   => $params["name_id"],
-    "name" => $params["name_id"],
-      );
+    $default = (isset($params["default"])) ? $params["default"] : "";
 
-	$attribute_str = "";
-  while (list($key, $value) = each($attributes))
-  {
-  	if (!empty($value))
-  	  $attribute_str .= " $key=\"$value\"";
-  }
+    $attributes = array(
+        "id"   => $params["name_id"],
+        "name" => $params["name_id"],
+    );
 
-  $seconds_in_hour = (60 * 60);
+    $attribute_str = "";
+    while (list($key, $value) = each($attributes)) {
+        if (!empty($value)) {
+            $attribute_str .= " $key=\"$value\"";
+        }
+    }
 
-
-  $dd = "<select $attribute_str>
+    $seconds_in_hour = (60 * 60);
+    $dd = "<select $attribute_str>
 	        <option value=\"-18\"" . (($default == "-18") ? " selected" : "") . ">- 18 {$LANG["word_hours"]} " . (date("(g:i A)", (date("U") - (18 * $seconds_in_hour)))) . "</option>
 	        <option value=\"-17\"" . (($default == "-17") ? " selected" : "") . ">- 17 {$LANG["word_hours"]} " . (date("(g:i A)", (date("U") - (17 * $seconds_in_hour)))) . "</option>
 	        <option value=\"-16\"" . (($default == "-16") ? " selected" : "") . ">- 16 {$LANG["word_hours"]} " . (date("(g:i A)", (date("U") - (16 * $seconds_in_hour)))) . "</option>
@@ -81,7 +81,5 @@ function smarty_function_timezone_offset_dropdown($params, &$smarty)
 	        <option value=\"18\"" . (($default == "18") ? " selected" : "") . ">+ 18 {$LANG["word_hours"]} " . (date("(g:i A)", (date("U") + (18 * $seconds_in_hour)))) . "</option>
 	      </select>";
 
-  return $dd;
+    return $dd;
 }
-
-?>

@@ -118,7 +118,7 @@ class Submissions {
                 // I really don't like this... what should be done is do a SINGLE query after this loop is complete
                 // to return a map of field_id to values. That would then update $file_fields_to_delete
                 // with a fraction of the cost
-                $submission_info = ft_get_submission_info($form_id, $submission_id);
+                $submission_info = Submissions::getSubmissionInfo($form_id, $submission_id);
                 $filename = $submission_info[$field_info['col_name']];
 
                 // if no filename was stored, it was empty - just continue
@@ -338,7 +338,7 @@ class Submissions {
         $return_arr = array();
 
         $form_fields = Fields::getFormFields($form_id);
-        $submission  = ft_get_submission_info($form_id, $submission_id);
+        $submission  = Submissions::getSubmissionInfo($form_id, $submission_id);
 
         $view_fields = (!empty($view_id)) ? ViewFields::getViewFields($view_id) : array();
 
@@ -490,9 +490,9 @@ class Submissions {
         $db = Core::$db;
 
         // determine the various SQL clauses
-        $order_by            = _ft_get_search_submissions_order_by_clause($form_id, $order);
-        $filter_clause       = _ft_get_search_submissions_view_filter_clause($view_id);
-        $search_where_clause = _ft_get_search_submissions_search_where_clause($form_id, $search_fields, $search_columns);
+        $order_by            = self::getSearchSubmissionsOrderByClause($form_id, $order);
+        $filter_clause       = self::getSearchSubmissionsViewFilterClause($view_id);
+        $search_where_clause = self::getSearchSubmissionsSearchWhereClause($form_id, $search_fields, $search_columns);
 
         // now build our query
         try {

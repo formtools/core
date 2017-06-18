@@ -1,6 +1,8 @@
 <?php
 
+use FormTools\Core;
 use FormTools\General;
+use FormTools\Templates;
 use FormTools\Themes;
 
 
@@ -16,12 +18,12 @@ use FormTools\Themes;
  */
 function smarty_function_themes_dropdown($params, &$smarty)
 {
-    global $LANG;
+    $LANG = Core::$L;
 
-    if (empty($params["name_id"])) {
-        $smarty->trigger_error("assign: missing 'name_id' parameter. This is used to give the select field a name and id value.");
-        return;
+    if (!Templates::hasRequiredParams($smarty, $params, array("name_id"))) {
+        return "";
     }
+
     $default_value   = (isset($params["default"])) ? $params["default"] : "";
     $default_swatch  = (isset($params["default_swatch"])) ? $params["default_swatch"] : "";
     $onchange        = (isset($params["onchange"])) ? $params["onchange"] : "";

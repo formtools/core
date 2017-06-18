@@ -1,5 +1,7 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Core;
 use FormTools\Fields;
 use FormTools\FieldTypes;
@@ -15,6 +17,8 @@ use FormTools\Views;
 Core::init();
 Core::$user->checkAuth("admin");
 
+$root_url = Core::getRootUrl();
+$LANG = Core::$L;
 
 $request = array_merge($_POST, $_GET);
 
@@ -267,7 +271,7 @@ $shared_resources_list = Settings::get("edit_submission_onload_resources");
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
 foreach ($shared_resources_array as $resource) {
-	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $g_root_url)) . "\n";
+	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $root_url)) . "\n";
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -308,8 +312,8 @@ $page_vars["head_string"] =<<< END
 <link rel="stylesheet" href="../../global/css/ui.daterangepicker.css" type="text/css" />
 <script src="../../global/scripts/manage_submissions.js"></script>
 <script src="../../global/scripts/daterangepicker.jquery.js"></script>
-<script src="$g_root_url/global/scripts/field_types.php"></script>
-<link rel="stylesheet" href="$g_root_url/global/css/field_types.php" type="text/css" />
+<script src="$root_url/global/scripts/field_types.php"></script>
+<link rel="stylesheet" href="$root_url/global/css/field_types.php" type="text/css" />
 $shared_resources
 END;
 

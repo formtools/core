@@ -18,33 +18,29 @@ if (isset($request["update_account_settings"])) {
 
 $client_info = Accounts::getAccountInfo($account_id);
 
-// compile header information
-$page_vars = array();
-$page_vars["head_title"]  = General::evalSmartyString(Sessions::get("account.settings.page_titles"), array("page" => $LANG["phrase_account_settings"]));
-$page_vars["page"]        = "settings";
-$page_vars["tabs"]        = $tabs;
-$page_vars["client_info"] = $client_info;
-$page_vars["page_url"]    = Pages::getPageUrl("client_account_settings");
+$text_date_formatting_link = General::evalSmartyString($LANG["text_date_formatting_link"], array(
+    "datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>'
+));
 
 $js = array("var rules = []");
 if ($client_info["settings"]["may_edit_page_titles"] == "yes")
-	$js[] = "rules.push(\"required,page_titles,{$LANG["validation_no_titles"]}\")";
+    $js[] = "rules.push(\"required,page_titles,{$LANG["validation_no_titles"]}\")";
 if ($client_info["settings"]["may_edit_theme"] == "yes") {
-	$js[] = "rules.push(\"required,theme,{$LANG["validation_no_theme"]}\")";
-	$js[] = "rules.push(\"function,validate_swatch\")";
+    $js[] = "rules.push(\"required,theme,{$LANG["validation_no_theme"]}\")";
+    $js[] = "rules.push(\"function,validate_swatch\")";
 }
 if ($client_info["settings"]["may_edit_logout_url"] == "yes")
-	$js[] = "rules.push(\"required,logout_url,{$LANG["validation_no_logout_url"]}\")";
+    $js[] = "rules.push(\"required,logout_url,{$LANG["validation_no_logout_url"]}\")";
 if ($client_info["settings"]["may_edit_language"] == "yes")
-	$js[] = "rules.push(\"required,ui_language,{$LANG["validation_no_ui_language"]}\")";
+    $js[] = "rules.push(\"required,ui_language,{$LANG["validation_no_ui_language"]}\")";
 if ($client_info["settings"]["may_edit_timezone_offset"] == "yes")
-	$js[] = "rules.push(\"required,timezone_offset,{$LANG["validation_no_timezone_offset"]}\")";
+    $js[] = "rules.push(\"required,timezone_offset,{$LANG["validation_no_timezone_offset"]}\")";
 if ($client_info["settings"]["may_edit_sessions_timeout"] == "yes") {
-	$js[] = "rules.push(\"required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}\")";
-	$js[] = "rules.push(\"digits_only,sessions_timeout,{$LANG["validation_invalid_sessions_timeout"]}\")";
+    $js[] = "rules.push(\"required,sessions_timeout,{$LANG["validation_no_sessions_timeout"]}\")";
+    $js[] = "rules.push(\"digits_only,sessions_timeout,{$LANG["validation_invalid_sessions_timeout"]}\")";
 }
 if ($client_info["settings"]["may_edit_date_format"] == "yes")
-	$js[] = "rules.push(\"required,date_format,{$LANG["validation_no_date_format"]}\")";
+    $js[] = "rules.push(\"required,date_format,{$LANG["validation_no_date_format"]}\")";
 
 $js[] =<<< END
 function validate_swatch() {
@@ -57,7 +53,14 @@ function validate_swatch() {
 }
 END;
 
-$page_vars["head_js"] = implode(";\n", $js);
-
+$page_vars = array(
+    "head_title"  => General::evalSmartyString(Sessions::get("account.settings.page_titles"), array("page" => $LANG["phrase_account_settings"])),
+    "page"        => "settings",
+    "text_date_formatting_link" => $text_date_formatting_link,
+    "tabs"        => $tabs,
+    "client_info" => $client_info,
+    "page_url"    => Pages::getPageUrl("client_account_settings"),
+    "head_js"     => implode(";\n", $js)
+);
 
 Themes::displayPage("clients/account/index.tpl", $page_vars);

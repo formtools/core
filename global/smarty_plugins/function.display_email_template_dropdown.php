@@ -1,5 +1,8 @@
 <?php
 
+use FormTools\Emails;
+use FormTools\Templates;
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -17,28 +20,16 @@
  */
 function smarty_function_display_email_template_dropdown($params, &$smarty)
 {
-  global $LANG;
+    global $LANG;
 
-  if (empty($params["form_id"]))
-  {
-	$smarty->trigger_error("assign: missing 'form_id' parameter.");
-    return;
-  }
-	if (empty($params["view_id"]))
-  {
-	  $smarty->trigger_error("assign: missing 'view_id' parameter.");
-    return;
-  }
-	if (empty($params["submission_id"]))
-  {
-	  $smarty->trigger_error("assign: missing 'submission_id' parameter.");
-    return;
-  }
+    if (!Templates::hasRequiredParams($smarty, $params, array("form_id", "view_id", "submission_id"))) {
+        return "";
+    }
 
-  $submission_id = $params["submission_id"];
-  $view_id       = $params["view_id"];
-	$form_id       = $params["form_id"];
-  $email_templates = ft_get_edit_submission_email_templates($form_id, $view_id);
+    $submission_id = $params["submission_id"];
+    $view_id       = $params["view_id"];
+    $form_id       = $params["form_id"];
+    $email_templates = Emails::getEditSubmissionEmailTemplates($form_id, $view_id);
 
   $html = "";
   if (!empty($email_templates))

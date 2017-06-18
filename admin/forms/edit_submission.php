@@ -1,5 +1,8 @@
 <?php
 
+require_once("../../global/library.php");
+require_once(__DIR__ . "/edit_submission__code.php");
+
 use FormTools\Core;
 use FormTools\FieldTypes;
 use FormTools\FieldValidation;
@@ -12,16 +15,16 @@ use FormTools\Submissions;
 use FormTools\Themes;
 use FormTools\Views;
 use FormTools\ViewFields;
+use FormTools\ViewTabs;
 
 Core::init();
 Core::$user->checkAuth("admin");
 
 
-require_once(__DIR__ . "/edit_submission__code.php");
-
 $request = array_merge($_GET, $_POST);
 $form_id = General::loadField("form_id", "curr_form_id");
 $view_id = _ft_code_get_view($request, $form_id);
+$root_url = Core::getRootUrl();
 
 $submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";
 if (empty($submission_id)) {
@@ -132,10 +135,8 @@ $shared_resources_list = $settings["edit_submission_onload_resources"];
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
 foreach ($shared_resources_array as $resource) {
-	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $g_root_url)) . "\n";
+	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $root_url)) . "\n";
 }
-
-// ------------------------------------------------------------------------------------------------
 
 // compile the header information
 $page_vars = array();
@@ -163,9 +164,9 @@ $page_vars["page_field_ids_str"] = implode(",", $page_field_ids);
 $page_vars["js_messages"] = array("confirm_delete_submission", "notify_no_email_template_selected", "confirm_delete_submission_file",
 	"phrase_please_confirm", "word_no", "word_yes", "word_close", "phrase_validation_error");
 $page_vars["head_string"] =<<< EOF
-  <script src="$g_root_url/global/scripts/manage_submissions.js"></script>
-  <script src="$g_root_url/global/scripts/field_types.php"></script>
-  <link rel="stylesheet" href="$g_root_url/global/css/field_types.php" type="text/css" />
+  <script src="$root_url/global/scripts/manage_submissions.js"></script>
+  <script src="$root_url/global/scripts/field_types.php"></script>
+  <link rel="stylesheet" href="$root_url/global/css/field_types.php" type="text/css" />
 $shared_resources
 EOF;
 $page_vars["head_js"] =<<< END

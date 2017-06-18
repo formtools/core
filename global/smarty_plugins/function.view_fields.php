@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\ViewFields;
+use FormTools\Templates;
 
 /*
  * Smarty plugin
@@ -11,13 +12,8 @@ use FormTools\ViewFields;
  */
 function smarty_function_view_fields($params, &$smarty)
 {
-    if (empty($params["name_id"])) {
-        $smarty->trigger_error("assign: missing 'name_id' parameter. This is used to give the select field a name and id value.");
-        return;
-    }
-    if (empty($params["view_id"])) {
-        $smarty->trigger_error("assign: missing 'view_id' parameter.");
-        return;
+    if (!Templates::hasRequiredParams($smarty, $params, array("name_id", "view_id"))) {
+        return "";
     }
 
     $default_value = (isset($params["default"])) ? $params["default"] : "";
