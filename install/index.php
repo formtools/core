@@ -10,9 +10,9 @@ use FormTools\Core;
 use FormTools\General;
 use FormTools\Installation;
 
-
 Core::setHooksEnabled(false);
-Core::init();
+Core::startSessions();
+Core::initSmarty();
 Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));
 
 if (isset($_POST["next"])) {

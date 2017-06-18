@@ -255,11 +255,6 @@ class Core {
     public static $user;
 
     /**
-     * Tracks whether the user's configuration file exists.
-     */
-    private static $configFileExists = false;
-
-    /**
      * The current version of the Form Tools Core.
      */
     private static $version = "3.0.0";
@@ -371,28 +366,26 @@ class Core {
     /**
      * Initializes the Core singleton for use throughout Form Tools.
      *
-     * *** This contents of this method is still being determined ***
-     *
      *   - sets up PDO database connection available through Core::$db
      *   - starts sessions
      *   - if a user is logged in, instantiates the User object and makes it available via Core::$user
      *   - The language is user-specific, but lang strings available as a convenience here: Core::$L
      */
-    public static function init($options = array())
+    public static function init()
     {
         self::loadConfigFile();
 
         // explicitly set the error reporting value
         error_reporting(self::$errorReporting);
 
-        if (self::$configFileExists) {
+        if (self::checkConfigFileExists()) {
             self::initDatabase();
         }
 
         // ensure the application has been installed
         Installation::checkInstalled();
 
-        self::$smarty = new Smarty();
+        self::initSmarty();
         self::startSessions();
 
         self::$user = new User();
@@ -402,11 +395,6 @@ class Core {
             General::checkSessionsTimeout();
         }
 
-        // OVERRIDES - TODO interface
-        if (isset($options["currLang"])) {
-            self::$currLang = $options["currLang"];
-        }
-
         self::setCurrLang(self::$currLang);
         self::enableDebugging();
 
@@ -423,14 +411,14 @@ class Core {
         }
     }
 
-    public static function initNoSessions($options = array())
+    public static function initNoSessions()
     {
         self::loadConfigFile();
 
         // explicitly set the error reporting value
         error_reporting(self::$errorReporting);
 
-        if (self::$configFileExists) {
+        if (self::checkConfigFileExists()) {
             self::initDatabase();
         }
 
@@ -445,11 +433,6 @@ class Core {
             General::checkSessionsTimeout();
         }
 
-        // OVERRIDES - TODO interface
-        if (isset($options["currLang"])) {
-            self::$currLang = $options["currLang"];
-        }
-
         self::setCurrLang(self::$currLang);
         self::enableDebugging();
 
@@ -464,11 +447,15 @@ class Core {
                 Core::$user->logout();
             }
         }
-
     }
 
+    public static function initSmarty()
+    {
+        self::$smarty = new Smarty();
+    }
 
-    public static function startSessions() {
+    public static function startSessions()
+    {
         if (self::$sessionType == "database") {
             new SessionManager();
         }
@@ -483,26 +470,25 @@ class Core {
     }
 
     /**
-     * @access public
+     * This can be called independently of anything else. It simply checks for the existence of the config file.
      */
     public static function checkConfigFileExists() {
-        return self::$configFileExists;
+        return file_exists(self::getConfigFilePath());
     }
 
+    public static function getConfigFilePath() {
+        return realpath(__DIR__ . "/../config.php");
+    }
 
     /**
      * Loads the user's config file. If successful, it updates the various private member vars
      * with whatever's been defined.
      * @access private
      */
-    private static function loadConfigFile() {
-        $configFilePath = realpath(__DIR__ . "/../config.php");
-        if (!file_exists($configFilePath)) {
-            return;
+    public static function loadConfigFile() {
+        if (self::checkConfigFileExists()) {
+            require_once(self::getConfigFilePath());
         }
-        require_once($configFilePath);
-
-        self::$configFileExists = true;
 
         self::$rootURL     = (isset($g_root_url)) ? $g_root_url : null;
         self::$rootDir     = (isset($g_root_dir)) ? $g_root_dir : null;
@@ -531,7 +517,7 @@ class Core {
     /**
      * Called automatically in Core::init(). This initializes a default database connection, accessible via Core::$db
      */
-    private static function initDatabase() {
+    public static function initDatabase() {
         self::$db = new Database(self::$dbHostname, self::$dbName, self::$dbPort, self::$dbUsername, self::$dbPassword,
             self::$dbTablePrefix);
     }

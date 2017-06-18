@@ -8,9 +8,9 @@ use FormTools\Database;
 use FormTools\General;
 use FormTools\Installation;
 
-
 Core::setHooksEnabled(false);
-Core::init();
+Core::startSessions();
+Core::initSmarty();
 Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));
 
 $hostname = General::loadField("g_db_hostname", "g_db_hostname", "localhost");

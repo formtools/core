@@ -3,11 +3,13 @@
 require_once("../global/library.php");
 
 use FormTools\Core;
+use FormTools\General;
 use FormTools\Installation;
 
 Core::setHooksEnabled(false);
-Core::init();
-
+Core::startSessions();
+Core::initSmarty();
+Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));
 
 $config_file = Installation::getConfigFileContents();
 

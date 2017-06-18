@@ -129,7 +129,7 @@ class Installation
 
     public static function evalSmartyString($placeholder_str, $placeholders = array(), $theme = "default")
     {
-        global $LANG;
+        $LANG = Core::$L;
 
         $smarty = new Smarty();
         $smarty->template_dir = "../global/smarty_plugins/";
@@ -157,7 +157,7 @@ class Installation
     {
         $release_type = Core::getReleaseType();
         $release_date = Core::getReleaseDate();
-        $version = Core::getCoreVersion();
+        $version      = Core::getCoreVersion();
         $LANG = Core::$L;
 
         clearstatcache();
@@ -215,9 +215,10 @@ EOF;
         }
 
         $smarty = new Smarty();
-        $smarty->template_dir = $theme_folder;
-        $smarty->compile_dir  = $cache_folder;
-        $smarty->use_sub_dirs = false;
+        $smarty->setTemplateDir($theme_folder);
+        $smarty->setCompileDir($cache_folder);
+        $smarty->setUseSubDirs(false);
+
         $smarty->assign("LANG", $LANG);
         $smarty->assign("same_page", $_SERVER["PHP_SELF"]);
         $smarty->assign("dir", $LANG["special_text_direction"]);
@@ -251,6 +252,9 @@ EOF;
         foreach ($page_vars as $key=>$value) {
             $smarty->assign($key, $value);
         }
+
+        error_reporting(E_ALL);
+        ini_set('display_errors', 1);
 
         $smarty->display(realpath(__DIR__ . "/../../install/$template"));
     }
@@ -420,6 +424,7 @@ EOF;
      */
     public static function setAdminAccount(array $info)
     {
+        $db = Core::$db;
         $LANG = Core::$L;
 
         $rules = array();
@@ -437,7 +442,6 @@ EOF;
             return array(false, General::getErrorListHTML($errors));
         }
 
-        $db = Core::$db;
         $db->query("
             UPDATE {PREFIX}accounts
             SET   first_name = :first_name,
@@ -448,12 +452,13 @@ EOF;
                   logout_url = :logout_url
             WHERE account_id = :account_id
         ");
+
         $db->bindAll(array(
             "first_name" => $info["first_name"],
             "last_name" => $info["last_name"],
             "email" => $info["email"],
             "username" => $info["username"],
-            "password" => md5(md5($info["password"])),
+            "password" => General::encode($info["password"]),
             "logout_url" => Core::getRootUrl(),
             "account_id" => 1 // the admin account is always ID 1
         ));
@@ -470,12 +475,16 @@ EOF;
 
     /**
      * This function - called on all Form Tools page confirms the script has been installed. If it hasn't, it redirects
-     * the user to the installation script. As of 3.0 the user no longer needs to remove the /inntall folder.
+     * the user to the installation script. As of 3.0 the user no longer needs to remove the /install folder.
      */
-    public static function checkInstalled()
+    public static function checkInstalled($redirect_url = "")
     {
-        if (!Core::checkConfigFileExists() && is_dir('../../install')) {
-            General::redirect("../../install/");
+        if (!Core::checkConfigFileExists() && realpath(__DIR__ . '/../../install')) {
+            if (empty($redirect_url)) {
+                $root_url = Core::getRootUrl();
+                $redirect_url = "$root_url/install/";
+            }
+            General::redirect($redirect_url);
         }
     }
 

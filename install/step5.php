@@ -5,10 +5,14 @@ require_once("../global/library.php");
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Installation;
+use FormTools\Sessions;
 
 Core::setHooksEnabled(false);
-Core::init();
-
+Core::loadConfigFile();
+Core::startSessions();
+Core::initSmarty();
+Core::initDatabase();
+Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));
 
 // if required, add the user account
 $account_created = false;
@@ -16,9 +20,8 @@ if (isset($_POST["add_account"])) {
 	list($account_created, $g_message) = Installation::setAdminAccount($_POST);
 
 	// store for later use
-	$_SESSION["ft_install"]["email"] = $_POST["email"];
-	$_SESSION["ft_install"]["username"] = $_POST["username"];
-	$_SESSION["ft_install"]["password"] = $_POST["password"];
+    Sessions::set("install_email", $_POST["email"]);
+    Sessions::set("install_username", $_POST["username"]);
 
 	// everything's done! Now just make a few minor updates to the database for this user's configuration
 	if ($account_created) {

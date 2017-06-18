@@ -10,8 +10,7 @@ use FormTools\Pages;
 use FormTools\Settings;
 use FormTools\Themes;
 
-
-Installation::checkInstalled();
+Installation::checkInstalled("install/");
 Core::init();
 
 //$g_upgrade_info = ft_upgrade_form_tools();
