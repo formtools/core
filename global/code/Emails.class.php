@@ -471,8 +471,8 @@ class Emails {
         $return_info["attachments"] = array();
 
         $smarty = new \Smarty();
-        $smarty->template_dir = "$root_dir/global/smarty/";
-        $smarty->compile_dir  = "$root_dir/themes/$default_theme/cache/";
+        $smarty->setTemplateDir("$root_dir/global/smarty/");
+        $smarty->setCompileDir("$root_dir/themes/$default_theme/cache/");
         $smarty->assign("LANG", $LANG);
         $smarty->assign("fields", $fields_for_email_template);
 

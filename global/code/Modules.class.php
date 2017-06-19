@@ -929,11 +929,11 @@ class Modules
 
         // Smarty resources
         if (is_dir("$root_dir/modules/$module_folder/smarty")) {
-            $smarty->setPluginsDir("$root_dir/modules/$module_folder/smarty");
+            $smarty->setPluginsDir("$root_dir/modules/$module_folder/smarty_plugins");
         }
 
         // load the language file into the $LANG var, under
-        $content = self::getModuleLangFile($module_folder, Core::$user-getLang());
+        $content = self::getModuleLangFile($module_folder, Core::$user->getLang());
         $LANG[$module_folder] = $content;
 
         extract(Hooks::processHookCalls("end", compact("module_folder"), array()), EXTR_OVERWRITE);

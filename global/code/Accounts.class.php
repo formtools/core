@@ -17,11 +17,11 @@ use PDOException, PDO;
  */
 class Accounts
 {
-    public static function getAccountByUsername($username) {
+    public static function getAccountByUsername($username)
+    {
         $db = Core::$db;
         $db->query("
-            SELECT account_id, account_type, account_status, password, temp_reset_password, login_page, theme, swatch,
-                   ui_language
+            SELECT *
             FROM   {PREFIX}accounts
             WHERE  username = :username
         ");
@@ -435,19 +435,17 @@ class Accounts
             "encrypted_password" => $encrypted_password,
             "account_id" => $account_id
         ));
-
         $db->execute();
     }
 
     public static function clearResetPassword($account_id)
     {
         $db = Core::$db;
-
         $db->query("
-                UPDATE {PREFIX}accounts
-                SET temp_reset_password = NULL 
-                WHERE account_id = :account_id
-            ");
+            UPDATE {PREFIX}accounts
+            SET temp_reset_password = NULL 
+            WHERE account_id = :account_id
+        ");
         $db->bind("account_id", $account_id);
         $db->execute();
     }

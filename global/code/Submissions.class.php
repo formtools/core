@@ -755,20 +755,20 @@ class Submissions {
         // (2) find out how many results there are in this current search
         try {
             $db->query("
-                SELECT count(*) as c
+                SELECT count(*)
                 FROM   {PREFIX}form_{$form_id}
                 WHERE  is_finalized = 'yes'
                        $search_where_clause
                        $filter_clause
                        $submission_id_clause
             ");
+            $db->execute();
         } catch (PDOException $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
 
-        $search_num_results_info = $db->fetch();
-        $search_num_results = $search_num_results_info["c"];
+        $search_num_results = $db->fetch(PDO::FETCH_COLUMN);
 
         // (3) find out how many results should appear in the View, regardless of the current search criteria
         try {

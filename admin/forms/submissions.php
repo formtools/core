@@ -188,7 +188,7 @@ if (isset($_GET["order"])) {
 
 $results_per_page = $view_info["num_submissions_per_page"];
 
-// perform the almighty search query [urgh. Too many params...!]
+// perform the almighty search query
 $results_info = Submissions::searchSubmissions($form_id, $view_id, $results_per_page, $current_page, $order, $db_columns,
 	$search_fields, array(), $searchable_columns);
 
@@ -230,7 +230,6 @@ $submission_ids = array();
 for ($i=0; $i<count($search_rows); $i++) {
     $submission_ids[] = $search_rows[$i]["submission_id"];
 }
-
 $submission_id_str = implode(",", $submission_ids);
 
 // set as STRING for used in JS below
@@ -261,7 +260,6 @@ foreach ($view_info["fields"] as $field_info) {
 }
 
 $settings = Settings::get("", "core");
-
 $date_picker_info = FieldTypes::getDefaultDateFieldSearchValue($settings["default_date_field_search_value"]);
 $default_date_field_search_value = $date_picker_info["default_date_field_search_value"];
 $date_field_search_js_format     = $date_picker_info["date_field_search_js_format"];
@@ -274,40 +272,42 @@ foreach ($shared_resources_array as $resource) {
 	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $root_url)) . "\n";
 }
 
-// ------------------------------------------------------------------------------------------------
-
 // compile the header information
-$page_vars = array();
-$page_vars["page"]    = "admin_forms";
-$page_vars["page_url"] = Pages::getPageUrl("form_submissions", array("form_id" => $form_id));
-$page_vars["head_title"]  = $LANG["word_submissions"];
-$page_vars["form_info"]   = $form_info;
-$page_vars["form_id"]     = $form_id;
-$page_vars["view_id"]     = $view_id;
-$page_vars["default_date_field_search_value"] = $default_date_field_search_value;
-$page_vars["search_rows"] = $search_rows;
-$page_vars["search_num_results"] = $search_num_results;
-$page_vars["view_num_results"] = $view_num_results;
-$page_vars["total_form_submissions"] = Sessions::get("form_{$form_id}_num_submissions");
-$page_vars["grouped_views"] = $grouped_views;
-$page_vars["view_info"]     = $view_info;
-$page_vars["settings"]      = $settings;
-$page_vars["preselected_subids"] = $preselected_subids;
-$page_vars["results_per_page"]   = $results_per_page;
-$page_vars["display_fields"]    = $display_fields;
-$page_vars["page_submission_ids"] = $submission_id_str;
-$page_vars["order"] = $order;
-$page_vars["field_types"] = $field_types;
-$page_vars["has_searchable_field"] = $has_searchable_field;
-$page_vars["notify_view_missing_columns_admin_fix"] = General::evalSmartyString($LANG["notify_view_missing_columns_admin_fix"], array("LINK" => "edit/?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2"));
-$page_vars["curr_search_fields"] = Sessions::get("current_search.search_fields");
-$page_vars["pagination"]  = General::getPageNav($search_num_results, $results_per_page, $current_page, "");
-$page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download",
+$page_vars = array(
+    "page"    => "admin_forms",
+    "page_url" => Pages::getPageUrl("form_submissions", array("form_id" => $form_id)),
+    "head_title"  => $LANG["word_submissions"],
+    "form_info"   => $form_info,
+    "form_id"     => $form_id,
+    "view_id"     => $view_id,
+    "default_date_field_search_value" => $default_date_field_search_value,
+    "search_rows" => $search_rows,
+    "search_num_results" => $search_num_results,
+    "view_num_results" => $view_num_results,
+    "total_form_submissions" => Sessions::get("form_{$form_id}_num_submissions"),
+    "grouped_views" => $grouped_views,
+    "view_info"     => $view_info,
+    "settings"      => $settings,
+    "preselected_subids" => $preselected_subids,
+    "results_per_page"   => $results_per_page,
+    "display_fields"     => $display_fields,
+    "page_submission_ids" => $submission_id_str,
+    "order" => $order,
+    "field_types" => $field_types,
+    "has_searchable_field" => $has_searchable_field,
+    "notify_view_missing_columns_admin_fix" => General::evalSmartyString($LANG["notify_view_missing_columns_admin_fix"], array("LINK" => "edit/?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2")),
+    "curr_search_fields" => Sessions::get("current_search.search_fields"),
+    "pagination" => General::getPageNav($search_num_results, $results_per_page, $current_page, "")
+);
+
+$page_vars["js_messages"] = array(
+    "validation_select_rows_to_view", "validation_select_rows_to_download",
 	"validation_select_submissions_to_delete", "confirm_delete_submission", "confirm_delete_submissions",
 	"phrase_select_all_X_results", "phrase_select_all_on_page", "phrase_all_X_results_selected",
 	"phrase_row_selected", "phrase_rows_selected", "confirm_delete_submissions_on_other_pages",
 	"confirm_delete_submissions_on_other_pages2", "word_yes", "word_no", "phrase_please_confirm",
-	"validation_please_enter_search_keyword", "notify_invalid_search_dates");
+	"validation_please_enter_search_keyword", "notify_invalid_search_dates"
+);
 $page_vars["head_string"] =<<< END
 <link rel="stylesheet" href="../../global/css/ui.daterangepicker.css" type="text/css" />
 <script src="../../global/scripts/manage_submissions.js"></script>

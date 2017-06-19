@@ -2,7 +2,6 @@
 
 require_once("global/library.php");
 
-use FormTools\Accounts;
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Installation;
@@ -79,7 +78,6 @@ $page = array(
     "head_string" => "<noscript><style type=\"text/css\">.login_outer_table { display: none; }</style></noscript>",
     "upgrade_notification" => ""
 );
-
 
 //if ($g_upgrade_info["upgraded"])
 //{

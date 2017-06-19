@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Clients;
+use FormTools\Core;
 
 
 /*
@@ -16,7 +17,7 @@ use FormTools\Clients;
  */
 function smarty_function_clients_dropdown($params, &$smarty)
 {
-    global $LANG;
+    $LANG = Core::$L;
 
     $default_value = (isset($params["default"])) ? $params["default"] : "";
     $onchange      = (isset($params["onchange"])) ? $params["onchange"] : "";

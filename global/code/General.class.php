@@ -337,15 +337,16 @@ END;
     public static function evalSmartyString($placeholder_str, $placeholders = array(), $theme = "", $plugin_dirs = array())
     {
         $LANG = Core::$L;
-        $rootDir = Core::getRootDir();
+        $root_dir = Core::getRootDir();
 
         $theme = Core::$user->getTheme();
-        $smarty = new \Smarty();
-        $smarty->template_dir = "$rootDir/global/smarty/";
-        $smarty->compile_dir  = "$rootDir/themes/$theme/cache/";
+
+        $smarty = Core::$smarty;
+        $smarty->setTemplateDir("$root_dir/global/smarty_plugins/");
+        $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
 
         foreach ($plugin_dirs as $dir) {
-            $smarty->plugins_dir[] = $dir;
+            $smarty->addPluginsDir($dir);
         }
 
         $smarty->assign("eval_str", $placeholder_str);

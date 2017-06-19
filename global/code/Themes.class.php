@@ -386,7 +386,6 @@ class Themes {
         $smarty->assign("g_success", $g_success);
         $smarty->assign("g_message", $g_message);
 
-
         $module_id = Modules::getModuleIdFromModuleFolder($module_folder);
         $module_nav = ModuleMenu::getMenuItems($module_id, $module_folder);
         $smarty->assign("module_nav", $module_nav);
@@ -430,8 +429,8 @@ class Themes {
         $smarty->assign("theme_dir", "$root_dir/themes/$theme");
 
         // if there's a Smarty folder, import any of its resources
-        if (is_dir("$root_dir/modules/$module_folder/smarty")) {
-            $smarty->plugins_dir[] = "$root_dir/modules/$module_folder/smarty";
+        if (is_dir("$root_dir/modules/$module_folder/smarty_plugins")) {
+            $smarty->addPluginsDir("$root_dir/modules/$module_folder/smarty_plugins");
         }
 
         // now add the custom variables for this template, as defined in $page_vars

@@ -100,9 +100,8 @@ class User
                 return $LANG["validation_account_not_recognized"];
             }
 
-            $password_correct      = (General::encode($password) == $account_info["password"]);
-            $temp_password_correct = (General::encode($password) == $account_info["temp_reset_password"]);
-
+            $password_correct      = General::encode($password) == $account_info["password"];
+            $temp_password_correct = General::encode($password) == $account_info["temp_reset_password"];
 
             // if this is a client account and the administrator has enabled the maximum failed login attempts feature,
             // keep track of the count

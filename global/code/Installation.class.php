@@ -132,8 +132,8 @@ class Installation
         $LANG = Core::$L;
 
         $smarty = new Smarty();
-        $smarty->template_dir = "../global/smarty_plugins/";
-        $smarty->compile_dir  = "../../themes/$theme/cache/";
+        $smarty->setTemplateDir("../global/smarty_plugins/");
+        $smarty->setCompileDir("../../themes/$theme/cache/");
 
         $smarty->assign("eval_str", $placeholder_str);
         if (!empty($placeholders)) {

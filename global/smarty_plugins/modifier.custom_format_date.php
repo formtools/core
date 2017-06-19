@@ -15,5 +15,5 @@ use FormTools\General;
  */
 function smarty_modifier_custom_format_date($date_str, $timezone_offset, $date_format)
 {
-  return General::getDate($timezone_offset, $date_str, $date_format);
+    return General::getDate($timezone_offset, $date_str, $date_format);
 }

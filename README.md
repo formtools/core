@@ -63,3 +63,4 @@ I don't see the point of non-unicode queries, so unless I hear otherwise it'll b
 command-line nonsense to get the script running. As such, I'm going to commit the _vendor/_ folder with all dependencies
 and omit the _composer.lock_ file.
 - Any way to add in PSR-2 checking for code quality...? Maybe too early...? 
+- error handling for scenario where DB is gone but config exists
