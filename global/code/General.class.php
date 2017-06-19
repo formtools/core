@@ -239,7 +239,6 @@ class General
     public static function generateJsMessages($keys = array(), $module_keys = array())
     {
         $LANG = Core::$L;
-        //$theme = Core::$user->getTheme();
 
         $js_rows = array();
         if (!empty($keys)) {
@@ -267,8 +266,7 @@ class General
 if (typeof g == "undefined") {
   g = {};
 }
-//g.theme_folder = "$theme";
-g.messages     = [];
+g.messages = [];
 $rows
 END;
 

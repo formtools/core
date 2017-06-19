@@ -371,7 +371,7 @@ class Core {
      *   - if a user is logged in, instantiates the User object and makes it available via Core::$user
      *   - The language is user-specific, but lang strings available as a convenience here: Core::$L
      */
-    public static function init()
+    public static function init($options = array())
     {
         self::loadConfigFile();
 
@@ -386,7 +386,9 @@ class Core {
         Installation::checkInstalled();
 
         self::initSmarty();
-        self::startSessions();
+        if (!isset($options["no_sessions"])) {
+            self::startSessions();
+        }
 
         self::$user = new User();
         self::$currLang = self::$user->getLang();
@@ -404,49 +406,22 @@ class Core {
         }
 
         // not thrilled with this, but it needs to be handled on all pages and this is a convenient spot
-        if (Core::checkConfigFileExists()) {
-            if (isset($_GET["logout"])) {
+        if (!isset($options["no_logout"])) {
+            if (Core::checkConfigFileExists() && isset($_GET["logout"])) {
                 Core::$user->logout();
             }
         }
     }
 
+    // call the above method with a param/
     public static function initNoSessions()
     {
-        self::loadConfigFile();
+        self::init(array("no_sessions" => true));
+    }
 
-        // explicitly set the error reporting value
-        error_reporting(self::$errorReporting);
-
-        if (self::checkConfigFileExists()) {
-            self::initDatabase();
-        }
-
-        // ensure the application has been installed
-        Installation::checkInstalled();
-
-        self::$smarty = new Smarty();
-        self::$user = new User();
-        self::$currLang = self::$user->getLang();
-
-        if (self::$user->isLoggedIn()) {
-            General::checkSessionsTimeout();
-        }
-
-        self::setCurrLang(self::$currLang);
-        self::enableDebugging();
-
-        // optionally enable benchmarking. Dev-only feature to confirm pages aren't taking too long to load
-        if (self::$enableBenchmarking) {
-            self::$benchmarkStart = General::getMicrotimeFloat();
-        }
-
-        // not thrilled with this, but it needs to be handled on all pages and this is a convenient spot
-        if (Core::checkConfigFileExists()) {
-            if (isset($_GET["logout"])) {
-                Core::$user->logout();
-            }
-        }
+    public static function initNoLogout()
+    {
+        self::init(array("no_logout" => true));
     }
 
     public static function initSmarty()
@@ -601,10 +576,6 @@ class Core {
     public static function getCurrentLang() {
         return self::$currLang;
     }
-
-//    public static function checkFTSessions() {
-//        return self::$checkFTSessions;
-//    }
 
     public static function getPasswordHistorySize() {
         return self::$passwordHistorySize;

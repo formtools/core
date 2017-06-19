@@ -290,9 +290,10 @@ class Fields {
             $db->query("
                 INSERT INTO {PREFIX}form_fields (form_id, field_name, field_type_id, is_system_field,
                   field_test_value, data_type, list_order)
-                VALUES ($form_id, :field_key, 8, 'no', :field_label, 'string', :field_order)
+                VALUES (:form_id, :field_key, 8, 'no', :field_label, 'string', :field_order)
             ");
             $db->bindAll(array(
+                "form_id" => $form_id,
                 "field_key" => $key,
                 "field_label" => $LANG["word_file_b_uc"],
                 "field_order" => $order
@@ -335,7 +336,6 @@ class Fields {
         $db->execute();
         $submission_date_field_id = $db->getInsertId();
 
-        // TODO why 2?
         FieldSettings::addSetting($submission_date_field_id, $date_field_type_datetime_setting_id, FieldTypes::$defaultDatetimeFormat);
         FieldSettings::addSetting($submission_date_field_id, $date_field_type_timezone_setting_id, "yes");
 
@@ -355,9 +355,8 @@ class Fields {
         $db->execute();
         $last_modified_date_field_id = $db->getInsertId();
 
-        // TODO again, why 2?
         FieldSettings::addSetting($last_modified_date_field_id, $date_field_type_datetime_setting_id, FieldTypes::$defaultDatetimeFormat);
-        FieldSettings::addSetting($last_modified_date_field_id, $date_field_type_datetime_setting_id, "yes");
+        FieldSettings::addSetting($last_modified_date_field_id, $date_field_type_timezone_setting_id, "yes");
 
         // ip address
         $db->query("

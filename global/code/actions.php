@@ -24,18 +24,14 @@ use FormTools\Themes;
 use FormTools\Views;
 
 
-// -------------------------------------------------------------------------------------------------
-
-// this var prevents the default behaviour of auto-logging the user out
-//$g_check_ft_sessions = false;
-////require_once("../session_start.php");
-
-Core::init(); // TODO initNoSessions
+Core::initNoLogout();
+$root_url = Core::getRootUrl();
+$LANG = Core::$L;
 
 // check the permissions
 $permission_check = Core::$user->checkAuth("user", false);
 
-// check the sessions haven't timeoutted
+// check the sessions haven't time-outted
 $sessions_still_valid = General::checkSessionsTimeout(false);
 if (!$sessions_still_valid) {
 	@session_destroy();
@@ -49,8 +45,6 @@ if (!$sessions_still_valid) {
 // multiple calls on same page to load content in unique areas)
 $request = array_merge($_GET, $_POST);
 $action  = $request["action"];
-
-$root_url = Core::getRootUrl();
 
 // To be deprecated! This is the pre-jQuery way to return vars back. Change to use return_vars, which passes an object
 // ------------
@@ -100,9 +94,8 @@ switch ($action) {
 	case "remember_inner_tab":
 		$tabset = strip_tags($request["tabset"]);
 		$tab    = strip_tags($request["tab"]);
-
 		Sessions::createIfNotExists("inner_tabs", array());
-		Sessions::set($tabset, $tab);
+		Sessions::set("inner_tabs.{$tabset}", $tab);
 		break;
 
 	case "select_submission":
@@ -213,7 +206,7 @@ switch ($action) {
 		$submission_id = $request["submission_id"];
 		$email_id      = $request["email_id"];
 
-		list($success, $message) = ft_process_email_template($form_id, $submission_id, $email_id);
+		list($success, $message) = Emails::processEmailTemplate($form_id, $submission_id, $email_id);
 		if ($success) {
 			$success = 1;
 			$message = $LANG["notify_email_sent"];
@@ -515,4 +508,3 @@ switch ($action) {
 		Themes::displayPage("admin/forms/form_placeholders.tpl", $page_vars);
 		break;
 }
-

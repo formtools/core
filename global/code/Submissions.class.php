@@ -485,7 +485,7 @@ class Submissions {
      * @param array   $search_columns the columns that are being searched
      * @return string an HTML string
      */
-    public static function getSearchSubmissionIds($form_id, $view_id, $results_per_page, $order, $search_fields = array(), $search_columns = array())
+    public static function getSearchSubmissionIds($form_id, $view_id, $order, $search_fields = array(), $search_columns = array())
     {
         $db = Core::$db;
 
@@ -535,10 +535,7 @@ class Submissions {
 
         extract(Hooks::processHookCalls("start", compact("form_id", "submission_id", "infohash"), array("infohash")), EXTR_OVERWRITE);
 
-        $field_ids = array();
-        if (!empty($infohash["field_ids"])) {
-            $field_ids = explode(",", $infohash["field_ids"]);
-        }
+        $field_ids = (!empty($infohash["field_ids"])) ? explode(",", $infohash["field_ids"]) : array();
 
         // perform any server-side validation
         $errors = FieldValidation::validateSubmission($infohash["editable_field_ids"], $infohash);

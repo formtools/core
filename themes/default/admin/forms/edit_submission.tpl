@@ -54,7 +54,7 @@
         {/if}
 
         {foreach from=$fields item=curr_field}
-          {assign var=field_id value=$field.field_id}
+          {assign var=field_id value=$curr_field.field_id}
           <tr>
             <td width="160" class="pad_left_small" valign="top">{$curr_field.field_title}
               {if $curr_field.is_required && $curr_field.is_editable == "yes"}<span class="req">*</span>{/if}

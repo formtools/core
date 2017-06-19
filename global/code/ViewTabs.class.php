@@ -43,6 +43,7 @@ class ViewTabs
 
     public static function deleteViewTabs($view_id) {
         $db = Core::$db;
+
         $db->query("DELETE FROM {PREFIX}view_tabs WHERE view_id = :view_id");
         $db->bind("view_id", $view_id);
         $db->execute();
@@ -84,7 +85,7 @@ class ViewTabs
      * @return array [0]: true/false (success / failure)
      *               [1]: message string
      */
-    public static function updateViewTabSettings($view_id, $info)
+    public static function updateViewTabs($view_id, $info)
     {
         $db = Core::$db;
 

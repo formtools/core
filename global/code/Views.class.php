@@ -352,7 +352,7 @@ class Views
         ViewFields::deleteViewFields($view_id);
         Views::deletePublicViewOmitList($view_id);
 
-        // these should be moved. For now just
+        // these should be moved
         $db->query("DELETE FROM {PREFIX}list_groups WHERE group_type = :group_type");
         $db->bind("group_type", "view_fields_$view_id");
         $db->execute();
@@ -695,10 +695,10 @@ class Views
     {
         // update each of the tabs
         Views::updateViewMainSettings($view_id, $info);
-        ViewColumns::updateViewColumnsSettings($view_id, $info);
-        ViewFields::updateViewFieldSettings($view_id, $info);
-        ViewTabs::updateViewTabSettings($view_id, $info);
-        ViewFilters::updateViewFilterSettings($view_id, $info);
+        ViewColumns::updateViewColumns($view_id, $info);
+        ViewFields::updateViewFields($view_id, $info);
+        ViewTabs::updateViewTabs($view_id, $info);
+        ViewFilters::updateViewFilters($view_id, $info);
 
         $success = true;
         $message = Core::$L["notify_view_updated"];

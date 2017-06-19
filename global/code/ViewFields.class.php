@@ -127,23 +127,15 @@ class ViewFields
     }
 
 
-    /**
-     * Deletes all fields in a View.
-     * @param $view_id
-     */
     public static function deleteViewFields($view_id) {
         $db = Core::$db;
 
-        $db->query("DELETE FROM {PREFIX}view_columns WHERE view_id = :view_id");
-        $db->bind("view_id", $view_id);
-        $db->execute();
-
-        ViewFilters::deleteViewFilters($view_id);
+//        ViewColumns::deleteViewColumns($view_id);
+//        ViewFilters::deleteViewFilters($view_id);
 
         $db->query("DELETE FROM {PREFIX}view_fields WHERE view_id = :view_id");
         $db->bind("view_id", $view_id);
         $db->execute();
-
     }
 
 
@@ -189,7 +181,7 @@ class ViewFields
      * @param integer $view_id
      * @param array $info
      */
-    public static function updateViewFieldSettings($view_id, $info)
+    public static function updateViewFields($view_id, $info)
     {
         $db = Core::$db;
 

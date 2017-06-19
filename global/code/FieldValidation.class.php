@@ -8,6 +8,8 @@
 
 namespace FormTools;
 
+use PDO, PDOException;
+
 
 class FieldValidation {
 
@@ -57,16 +59,21 @@ class FieldValidation {
             return array();
         }
 
-        $db->query("
-            SELECT *
-            FROM   {PREFIX}field_validation fv, {PREFIX}field_type_validation_rules ftvr
-            WHERE  fv.field_id IN (:field_id_str) AND
-                   fv.rule_id = ftvr.rule_id AND
-                   ftvr.custom_function_required != 'yes'
-            ORDER BY fv.field_id, ftvr.list_order
-        ");
-        $db->bind("field_ids", implode(",", $field_ids));
-        $db->execute();
+        $field_ids = implode(",", $field_ids);
+        try {
+            $db->query("
+                SELECT *
+                FROM   {PREFIX}field_validation fv, {PREFIX}field_type_validation_rules ftvr
+                WHERE  fv.field_id IN ($field_ids) AND
+                       fv.rule_id = ftvr.rule_id AND
+                       ftvr.custom_function_required != 'yes'
+                ORDER BY fv.field_id, ftvr.list_order
+            ");
+            $db->execute();
+        } catch (PDOException $e) {
+            Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            exit;
+        }
 
         $rules = array();
         foreach ($db->fetchAll() as $row) {

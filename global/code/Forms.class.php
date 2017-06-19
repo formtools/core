@@ -1196,9 +1196,7 @@ class Forms
             $order = Fields::addFormFields($form_id, $form_data, 2); // 2 = the second field (we just added submission ID)
             $order = Fields::addFormFileFields($form_id, $_FILES, $order);
             Fields::addSystemFields($form_id, $textbox_field_type_id, $order);
-
             $db->processTransaction();
-
         } catch (PDOException $e) {
             $db->rollbackTransaction();
             Errors::showErrorCode(Errors::$CODES["103"], $e->getMessage());

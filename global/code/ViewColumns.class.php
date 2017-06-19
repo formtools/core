@@ -3,6 +3,8 @@
 
 namespace FormTools;
 
+use PDO, PDOException;
+
 
 class ViewColumns
 {
@@ -28,19 +30,19 @@ class ViewColumns
     }
 
 
-    public static function updateViewColumnsSettings($view_id, $info)
+    // yuck! $info is a mess
+    public static function updateViewColumns($view_id, $info)
     {
         $db = Core::$db;
 
         $sortable_id  = $info["submission_list_sortable_id"];
         $sortable_rows = explode(",", $info["{$sortable_id}_sortable__rows"]);
 
-        $db->query("DELETE FROM {PREFIX}view_columns WHERE view_id = :view_id");
-        $db->bind("view_id", $view_id);
-        $db->execute();
+        ViewColumns::deleteViewColumns($view_id);
 
-        $insert_statements = array();
         $list_order = 1;
+        $placeholders = array();
+        $data = array();
         foreach ($sortable_rows as $row_id) {
 
             // if the user didn't select a field for this row, ignore it
@@ -71,18 +73,39 @@ class ViewColumns
 
             $truncate = $info["truncate_{$row_id}"];
 
-            $insert_statements[] = "($view_id, $field_id, $list_order, '$is_sortable', '$auto_size', '$custom_width', '$truncate')";
+            $data[] = $view_id;
+            $data[] = $field_id;
+            $data[] = $list_order;
+            $data[] = $is_sortable;
+            $data[] = $auto_size;
+            $data[] = $custom_width;
+            $data[] = $truncate;
+            $placeholders[] = "(?, ?, ?, ?, ?, ?, ?)";
             $list_order++;
         }
 
-        if (!empty($insert_statements)) {
-            $insert_statement_str = implode(",\n", $insert_statements);
+        try {
+            $db->beginTransaction();
+            $placeholder_str = implode(", ", $placeholders);
             $db->query("
                 INSERT INTO {PREFIX}view_columns (view_id, field_id, list_order, is_sortable, auto_size, custom_width, truncate)
-                VALUES $insert_statement_str
+                VALUES $placeholder_str
             ");
-            $db->execute();
+            $db->execute($data);
+            $db->processTransaction();
+        } catch (PDOException $e) {
+            $db->rollbackTransaction();
+            Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
         }
     }
 
+
+    public static function deleteViewColumns($view_id)
+    {
+        $db = Core::$db;
+
+        $db->query("DELETE FROM {PREFIX}view_columns WHERE view_id = :view_id");
+        $db->bind("view_id", $view_id);
+        $db->execute();
+    }
 }

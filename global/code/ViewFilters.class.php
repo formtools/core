@@ -123,7 +123,7 @@ class ViewFilters
      * @param integer $view_id
      * @param array $info
      */
-    public static function updateViewFilterSettings($view_id, $info)
+    public static function updateViewFilters($view_id, $info)
     {
         $db = Core::$db;
         $LANG = Core::$L;
