@@ -44,7 +44,7 @@ class FieldValidation {
      *
      * @param integer $field_id
      */
-    public static function delete($field_id)
+    public static function deleteValidation($field_id)
     {
         $db = Core::$db;
         $db->query("DELETE FROM {PREFIX}field_validation WHERE field_id = :field_id");

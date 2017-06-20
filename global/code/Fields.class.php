@@ -536,8 +536,7 @@ class Fields {
 
 
     /**
-     * Adds new form field(s) to the database. This was totally re-written in 2.1.0, for the new Edit Fields
-     * page.
+     * Adds new form field(s) to the database.
      *
      * @param integer $infohash a hash containing the contents of the Edit Form Advanced -> Add Fields page.
      * @param integer $form_id The unique form ID
@@ -570,6 +569,8 @@ class Fields {
             if (empty($display_name) || empty($field_name) || empty($field_size) || empty($col_name)) {
                 continue;
             }
+
+            // TODO use transaction
 
             // add the new field to form_fields
             $db->query("
@@ -1468,18 +1469,9 @@ class Fields {
     }
 
 
-    /**
-     * temporary. How to improve? Could make this just be passed a hash with the vals to update...
-     */
-    public static function temporaryUpdateFields($field)
+    public static function updateFormField($field)
     {
         $db = Core::$db;
-
-//        // now update the fields, and, if need be, the form's database table
-//        foreach ($field_info as $field) {
-//            if ($field["is_new_field"]) {
-//                continue;
-//            }
 
         if ($field["is_system_field"] == "yes") {
             $db->query("

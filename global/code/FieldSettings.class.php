@@ -26,7 +26,8 @@ class FieldSettings
         return (isset($result["setting_value"])) ? $result["setting_value"] : "";
     }
 
-    public static function addSetting($field_id, $setting_id, $setting_value) {
+    public static function addSetting($field_id, $setting_id, $setting_value)
+    {
         $db = Core::$db;
 
         $db->query("
@@ -42,7 +43,8 @@ class FieldSettings
     }
 
 
-    public static function deleteSettings($field_id) {
+    public static function deleteSettings($field_id)
+    {
         $db = Core::$db;
 
         $db->query("DELETE FROM {PREFIX}field_settings WHERE field_id = :field_id");

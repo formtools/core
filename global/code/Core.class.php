@@ -295,13 +295,6 @@ class Core {
     private static $multiFieldValDelimiter;
 
     /**
-     * Used throughout the script to store any and all temporary error / notification messages. Don't change
-     * or remove - defining them here prevents unwanted PHP notices.
-     */
-//    private static $g_success = "";
-//    private static $g_message = "";
-
-    /**
      * Simple benchmarking code. When enabled, this outputs a page load time in the footer.
      */
     private static $enableBenchmarking;

@@ -1815,8 +1815,6 @@ class Forms
     /**
      * Called by administrators; updates the content stored on the "Fields" tab in the Edit Form pages.
      *
-     * TODO refactor.
-     *
      * @param integer $form_id the unique form ID
      * @param array $infohash a hash containing the contents of the Edit Form Display tab
      * @return array returns array with indexes:<br/>
@@ -1837,14 +1835,14 @@ class Forms
         $order = $infohash["sortable_row_offset"];
         $new_sort_groups = explode(",", $infohash["{$sortable_id}_sortable__new_groups"]);
 
-        // parse the POST data to get the info in a simple format
+        // parse the POST data to get the info in a manageable format
         $field_info = Forms::editFieldsPageGetFormattedPostData($field_ids, $infohash, $order, $new_sort_groups);
 
         // delete any extended field settings for those fields whose field type just changed
         Forms::editFieldsPageUpdateFieldSettings($field_info);
 
         // update database table structure + form field record
-        Forms::editFieldsPageUpdateDatabaseCols($form_id, $field_info);
+        Forms::updateExistingFormsFields($form_id, $field_info);
 
         // okay! now add any new fields that the user just added
         $new_fields = array();
@@ -1871,10 +1869,7 @@ class Forms
         // of whether the add fields step worked or not
         $deleted_field_ids = explode(",", $infohash["{$sortable_id}_sortable__deleted_rows"]);
         extract(Hooks::processHookCalls("delete_fields", compact("deleted_field_ids", "infohash", "form_id"), array()), EXTR_OVERWRITE);
-
-        // now actually delete the fields
         Fields::deleteFormFields($form_id, $deleted_field_ids);
-
         extract(Hooks::processHookCalls("end", compact("infohash", "field_info", "form_id"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);
@@ -2119,7 +2114,7 @@ class Forms
     }
 
     /**
-     * Delete any extended field settings for those fields whose field type just changed. Two comments:
+     * Delete any extended field settings for those fields whose field type just changed.
      *    1. this is compatible with editing the fields in the dialog window. When that happens & the user updates it,
      *       the code updates the old_field_type_id info in the page so this is never called.
      *    2. with the addition of Shared Characteristics, this only deletes fields that aren't mapped between the two
@@ -2144,8 +2139,8 @@ class Forms
             foreach ($changed_fields as $changed_field_info) {
                 $field_id = $changed_field_info["field_id"];
                 $shared_settings[] = FieldTypes::getSharedFieldSettingInfo($field_type_map, $field_type_settings_shared_characteristics, $field_id, $changed_field_info["field_type_id"], $changed_field_info["old_field_type_id"]);
-                Fields::deleteExtendedFieldSettings($field_id);
-                FieldValidation::delete($field_id);
+                FieldSettings::deleteSettings($field_id);
+                FieldValidation::deleteValidation($field_id);
             }
 
             foreach ($shared_settings as $setting) {
@@ -2163,78 +2158,59 @@ class Forms
      * Called on the Edit Form -> Fields page. This examines the list of updated fields to see if any of them has had
      * the database column renamed. If so, updates it along with the corresponding form field record.
      */
-    private static function editFieldsPageUpdateDatabaseCols($form_id, $field_info)
+    private static function updateExistingFormsFields($form_id, $field_info)
     {
         $db = Core::$db;
         $LANG = Core::$L;
         $debug_enabled = Core::isDebugEnabled();
         $FIELD_SIZES = FieldSizes::get();
 
-        // the database column name and size field both affect the form's actual database table structure. If either
-        // of those changed, we need to update the database
         $table_name = "{PREFIX}form_{$form_id}";
         foreach ($field_info as $curr_field_info) {
-            if ($curr_field_info["col_name_changed"] == "no" && $curr_field_info["field_size_changed"] == "no") {
-                continue;
-            }
             if ($curr_field_info["is_new_field"]) {
                 continue;
             }
 
-            $field_id       = $curr_field_info["field_id"];
-            $old_col_name   = $curr_field_info["old_col_name"];
-            $new_col_name   = $curr_field_info["col_name"];
-            $new_field_size_sql = $FIELD_SIZES[$curr_field_info["field_size"]]["sql"];
+            $field_id = $curr_field_info["field_id"];
 
-            // we group the table column changes with the record updates in a single transaction to ensure nothing gets
-            // out of sync.
             try {
                 $db->beginTransaction();
 
-                // first update the actual table column
-                // TODO!!!!! confirm that if this fails, the next thing doesn't fire. VERY bloody important to know this!!!!
-                General::alterTableColumn($table_name, $old_col_name, $new_col_name, $new_field_size_sql);
+                $old_col_name   = $curr_field_info["old_col_name"];
+                $new_col_name   = $curr_field_info["col_name"];
+                if ($curr_field_info["col_name_changed"] == "yes" || $curr_field_info["field_size_changed"] == "yes") {
+                    $new_field_size_sql = $FIELD_SIZES[$curr_field_info["field_size"]]["sql"];
+
+                    // first update the actual table column
+                    General::alterTableColumn($table_name, $old_col_name, $new_col_name, $new_field_size_sql);
+                }
 
                 // if any of the database column names just changed we need to update any View filters that relied on them
                 Fields::updateFieldFilters($field_id);
 
-                // now update the form field record
+                Fields::updateFormField(array(
+                    "field_id" => $field_id,
+                    "col_name" => $new_col_name,
+                    "field_size" => $curr_field_info["field_size"],
+                    "form_field_name" => $curr_field_info["form_field_name"],
+                    "display_name" => $curr_field_info["display_name"],
+                    "include_on_redirect" => $curr_field_info["include_on_redirect"],
+                    "list_order" => $curr_field_info["list_order"],
+                    "is_system_field" => $curr_field_info["is_system_field"],
+                    "is_new_sort_group" => $curr_field_info["is_new_sort_group"],
+                    "field_type_id" => $curr_field_info["field_type_id"]
+                ));
 
                 $db->processTransaction();
             } catch (PDOException $e) {
-                continue;
+                $db->rollbackTransaction();
+
+                $message = $LANG["validation_db_not_updated_invalid_input"];
+                if ($debug_enabled) {
+                    $message .= " \"$err_message\"";
+                }
+                return array(false, $message);
             }
-
-//                // if there have already been successful database column name changes already made, update the database.
-//                // This helps prevent things getting out of whack
-//                if (!empty($db_col_changes)) {
-//                    while (list($field_id, $changes) = each($db_col_changes)) {
-//                        $col_name   = $changes["col_name"];
-//                        $field_size = $changes["field_size"];
-//
-//                        $db->query("
-//                            UPDATE {PREFIX}form_fields
-//                            SET    col_name = :col_name,
-//                                   field_size = :field_size
-//                            WHERE  field_id = :field_id
-//                        ");
-//                        $db->bindAll(array(
-//                            "col_name" => $col_name,
-//                            "field_size" => $field_size,
-//                            "field_id" => $field_id
-//                        ));
-//                        $db->execute();
-//                    }
-//                }
-//                $message = $LANG["validation_db_not_updated_invalid_input"];
-//                if ($debug_enabled) {
-//                    $message .= " \"$err_message\"";
-//                }
-//                return array(false, $message);
-//            }
         }
-
-        // loop through each
-        //Fields::temporaryUpdateFields();
     }
 }
