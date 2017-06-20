@@ -2077,6 +2077,7 @@ class Forms
             $col_name            = (isset($post["col_{$field_id}_name"])) ? $post["col_{$field_id}_name"] : "";
             $old_field_size      = (isset($post["old_field_{$field_id}_size"])) ? $post["old_field_{$field_id}_size"] : "";
             $old_col_name        = (isset($post["old_col_{$field_id}_name"])) ? $post["old_col_{$field_id}_name"] : "";
+            $data_type           = (isset($post["field_{$field_id}_data_type"])) ? $post["field_{$field_id}_data_type"] : "";
             $is_system_field     = (in_array($field_id, $post["system_fields"])) ? "yes" : "no";
 
             // this is only sent for non-system fields
@@ -2090,6 +2091,7 @@ class Forms
                 "field_id"            => $field_id,
                 "display_name"        => $display_name,
                 "form_field_name"     => $form_field_name,
+                "data_type"           => $data_type,
                 "field_type_id"       => $field_type_id,
                 "old_field_type_id"   => $old_field_type_id,
                 "include_on_redirect" => $include_on_redirect,
@@ -2193,6 +2195,7 @@ class Forms
                     "col_name" => $new_col_name,
                     "field_size" => $curr_field_info["field_size"],
                     "form_field_name" => $curr_field_info["form_field_name"],
+                    "data_type" => $curr_field_info["data_type"],
                     "display_name" => $curr_field_info["display_name"],
                     "include_on_redirect" => $curr_field_info["include_on_redirect"],
                     "list_order" => $curr_field_info["list_order"],
@@ -2207,7 +2210,7 @@ class Forms
 
                 $message = $LANG["validation_db_not_updated_invalid_input"];
                 if ($debug_enabled) {
-                    $message .= " \"$err_message\"";
+                    $message .= " \"" . $e->getMessage() . "\""; // TODO
                 }
                 return array(false, $message);
             }

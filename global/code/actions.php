@@ -435,16 +435,15 @@ switch ($action) {
 		// here, create_view_from_view_id either contains the ID of the View that the user wants to copy,
 		// or "blank_view_no_fields", meaning a totally blank View or "blank_view_all_fields" meaning
 		// they want all View fields added by default
-		if (isset($request["create_view_from_view_id"]) && !empty($request["create_view_from_view_id"]))
-		{
+		if (isset($request["create_view_from_view_id"]) && !empty($request["create_view_from_view_id"])) {
 			$duplicate_view_id = $request["create_view_from_view_id"];
 		}
 
 		$view_id = Views::createNewView($form_id, $group_id, $view_name, $duplicate_view_id);
 
 		// always set the default Edit View tab to the first one
-		$_SESSION["ft"]["edit_view_tab"] = 1;
-		echo "{ \"success\": \"1\", \"view_id\": \"$view_id\" }";
+        Sessions::set("edit_view_tab", 1);
+		echo json_encode(array("success" => 1, "view_id" => $view_id));
 		break;
 
 	case "create_new_view_group":
@@ -457,8 +456,8 @@ switch ($action) {
 
 	case "delete_view":
 		$view_id = $request["view_id"];
-		ft_delete_view($view_id);
-		echo "{ \"success\": \"1\", \"view_id\": \"$view_id\" }";
+		Views::deleteView($view_id);
+		echo json_encode(array("success" => "1", "view_id" => $view_id));
 		break;
 
 	// this is called when the user clicks on the "Save Changes" button on the Edit Field dialog on the
