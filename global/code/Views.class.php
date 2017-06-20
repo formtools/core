@@ -102,7 +102,7 @@ class Views
      *                or "blank_view_no_fields" or "blank_view_all_fields"
      * @return integer the new view ID
      */
-    public static function createNewView($form_id, $group_id, $view_name = "", $create_from_view_id = "")
+    public static function createView($form_id, $group_id, $view_name = "", $create_from_view_id = "")
     {
         $db = Core::$db;
         $LANG = Core::$L;
@@ -176,7 +176,6 @@ class Views
                 "has_standard_filter" => $has_standard_filter
             ));
             $db->execute();
-
             $view_id = $db->getInsertId();
 
             foreach ($view_info["client_info"] as $client_info) {
@@ -224,6 +223,7 @@ class Views
                 $truncate     = $field_info["truncate"];
                 $view_column_inserts[] = "($view_id, $field_id, $list_order, '$is_sortable', '$auto_size', '$custom_width', '$truncate')";
             }
+
             if (!empty($view_column_inserts)) {
                 $view_column_insert_str = implode(",\n", $view_column_inserts);
                 $db->query("

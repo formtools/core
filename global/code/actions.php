@@ -73,7 +73,8 @@ if (isset($request["return_vars"])) {
 
 if (!$permission_check["has_permission"]) {
 	$message = $permission_check["message"];
-	echo "{ \"success\": \"0\", \"ft_logout\": \"1\", \"message\": \"$message\"{$return_val_str} }";
+	echo json_encode(array("success" => 0, "ft_logout" => 1, "message" => $message));
+//	echo "{ \"success\": \"0\", \"ft_logout\": \"1\", \"message\": \"$message\"{$return_val_str} }";
 	exit;
 }
 
@@ -81,13 +82,16 @@ switch ($action) {
 	case "test_folder_permissions":
 		list($success, $message) = Files::checkUploadFolder($request["file_upload_dir"]);
 		$success = ($success) ? 1 : 0;
-		echo "{ \"success\": \"$success\", \"message\": \"$message\"{$return_val_str} }";
+		echo json_encode(array("success" => $success, "message" => $message));
+//		echo "{ \"success\": \"$success\", \"message\": \"$message\"{$return_val_str} }";
 		break;
 
 	case "test_folder_url_match":
 		list($success, $message) = Files::checkFolderUrlMatch($request["file_upload_dir"], $request["file_upload_url"]);
 		$success = ($success) ? 1 : 0;
-		echo "{ \"success\": \"$success\", \"message\": \"$message\"{$return_val_str} }";
+        echo json_encode(array("success" => $success, "message" => $message));
+
+//		echo "{ \"success\": \"$success\", \"message\": \"$message\"{$return_val_str} }";
 		break;
 
 	// expects the tabset name and inner_tab to contain an alphanumeric string only
@@ -124,17 +128,17 @@ switch ($action) {
 		$form_id = $request["form_id"];
 		$submission_id = $request["submission_id"];
 
-		if (empty($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {
-			if (!isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
-                $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
+		if (Sessions::isEmpty("form_{$form_id}_select_all_submissions")) {
+			if (!Sessions::exists("form_{$form_id}_selected_submissions")) {
+                Sessions::set("form_{$form_id}_selected_submissions", array());
             }
-            if (in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
-                array_splice($_SESSION["ft"]["form_{$form_id}_selected_submissions"],
-                array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"]), 1);
+            if (in_array($submission_id, Sessions::get("form_{$form_id}_selected_submissions"))) {
+                array_splice(Sessions::get("form_{$form_id}_selected_submissions"),
+                    array_search($submission_id, Sessions::get("form_{$form_id}_selected_submissions")), 1);
             }
 		} else {
 			if (!isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
-                $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
+                Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
             }
 			if (!in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
                 $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"][] = $submission_id;
@@ -161,12 +165,12 @@ switch ($action) {
         // the form submission omit list
 		} else {
 			if (!isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
-                $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
+                Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
             }
 			foreach ($submission_ids as $submission_id) {
-				if (in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
-                    array_splice($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"],
-                    array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]),
+				if (in_array($submission_id, Sessions::get("form_{$form_id}_all_submissions_selected_omit_list"))) {
+                    array_splice(Sessions::get("form_{$form_id}_all_submissions_selected_omit_list"),
+                        array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]),
                     1);
                 }
 			}
@@ -176,9 +180,9 @@ switch ($action) {
 	// this is called when the user has selected all submissions in a result set, regardless of page
 	case "select_all_submissions":
 		$form_id = $request["form_id"];
-		$_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "1";
-		$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array(); // empty the specific selected submission
-		$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
+		Sessions::set("form_{$form_id}_select_all_submissions", "1");
+        Sessions::set("form_{$form_id}_selected_submissions", array()); // empty the specific selected submission
+		Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
 		break;
 
 	case "unselect_all_submissions":
@@ -439,7 +443,7 @@ switch ($action) {
 			$duplicate_view_id = $request["create_view_from_view_id"];
 		}
 
-		$view_id = Views::createNewView($form_id, $group_id, $view_name, $duplicate_view_id);
+		$view_id = Views::createView($form_id, $group_id, $view_name, $duplicate_view_id);
 
 		// always set the default Edit View tab to the first one
         Sessions::set("edit_view_tab", 1);
@@ -486,8 +490,9 @@ switch ($action) {
 			}
 		}
 		if (!empty($problems)) {
-			$problems_json = json_encode($problems);
-			echo "{ \"success\": \"0\", \"problems\": $problems_json{$return_str} }";
+            echo json_encode(array("success" => 0, "problems" => $problems_json));
+
+//			echo "{ \"success\": \"0\", \"problems\": $problems_json{$return_str} }";
 		} else {
 			echo "{ \"success\": \"1\"{$return_str} }";
 		}
