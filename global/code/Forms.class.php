@@ -728,9 +728,9 @@ class Forms
 
         $db->query("
             INSERT INTO {PREFIX}forms (form_type, access_type, submission_type, date_created, is_active, is_complete,
-              is_multi_page_form, form_name, form_url, redirect_url, edit_submission_page_label)
+              is_multi_page_form, form_name, form_url, redirect_url, edit_submission_page_label, add_submission_button_label)
             VALUES (:form_type, :access_type, :submission_type, :now, :is_active, :is_complete, :is_multi_page_form,
-              :form_name, :form_url, :redirect_url, :phrase_edit_submission)
+              :form_name, :form_url, :redirect_url, :phrase_edit_submission, :phrase_add_submission)
         ");
         $db->bindAll(array(
             "form_type" => $info["form_type"],
@@ -743,7 +743,8 @@ class Forms
             "form_name" => $form_name,
             "form_url" => $form_url,
             "redirect_url" => $redirect_url,
-            "phrase_edit_submission" => $phrase_edit_submission
+            "phrase_edit_submission" => $phrase_edit_submission,
+            "phrase_add_submission" => ""
         ));
         $db->execute();
 

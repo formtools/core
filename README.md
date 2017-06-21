@@ -54,7 +54,12 @@ I don't see the point of non-unicode queries, so unless I hear otherwise it'll b
 
 - Folder path for "edit" section of forms now in /edit subfolder, like /add.
 - Default max file upload size setting changed from 200KB to 500KB.
- 
+- When creating a new form, the `Add Submission Button` setting would have a default label of `{$LANG.word_add_rightarrow}`.
+The idea here was that by entering language string placeholders, users logging into the interface with different languages would 
+see that button label localized in their own country. Cool idea, weird implementation! I'm now going to be setting that 
+value (and others) to be in the current language - "Add &raquo;" for English, in this case. The fields can _still_ accept
+language placeholders for the tiny percentage of people that need this feature, but it'll be much clearer for the bulk of 
+users that don't need this feature.
 
 
 ### Notes
