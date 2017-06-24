@@ -801,11 +801,11 @@ class Modules
      */
     public static function initModulePage($required_account_type = "admin")
     {
+        global $g_session_type, $g_check_ft_sessions;
+
         $LANG = Core::$L;
         $root_dir = Core::getRootDir();
         $session_save_path = Core::getSessionSavePath();
-
-        global $g_session_type, $g_check_ft_sessions;
 
         if ($g_session_type == "database") {
             $sess = new SessionManager();

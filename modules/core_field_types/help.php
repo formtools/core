@@ -1,8 +1,10 @@
 <?php
 
+require("../../global/library.php");
+
+use FormTools\Modules;
 use FormTools\Themes;
 
-require("../../global/library.php");
-ft_init_module_page();
+Modules::initModulePage();
 
 Themes::displayModulePage("templates/help.tpl");
