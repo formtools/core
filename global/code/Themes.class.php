@@ -217,22 +217,7 @@ class Themes {
         $theme = (empty($theme)) ? Core::$user->getTheme() : $theme;
         $swatch = (empty($swatch)) ? Core::$user->getSwatch() : $swatch;
 
-        $root_dir = Core::getRootDir();
-        $root_url = Core::getRootUrl();
-        $LANG = Core::$L;
-        $smarty = Core::$smarty;
-        $debug_enabled = Core::isDebugEnabled();
-
-        $smarty->addTemplateDir("$root_dir/themes/$theme");
-        $smarty->addPluginsDir(array("$root_dir/global/smarty_plugins"));
-        $smarty->setCompileDir("$root_dir/themes/$theme/cache");
-        $smarty->setUseSubDirs(Core::shouldUseSmartySubDirs());
-
-        // check the compile directory has the write permissions
-        if (!is_writable($smarty->getCompileDir())) {
-            Errors::majorError("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$smarty->compile_dir}</b> to have full read-write permissions (777 on unix).");
-            exit;
-        }
+        $smarty = Templates::getPreloadedSmarty($theme);
 
         if (Core::$user->isLoggedIn()) {
             $smarty->assign("settings", Sessions::get("settings"));
@@ -241,20 +226,7 @@ class Themes {
         } else {
             $smarty->assign("menu_items", array());
         }
-
-        $smarty->assign("LANG", $LANG);
-        $smarty->assign("g_root_dir", $root_dir);
-        $smarty->assign("g_root_url", $root_url);
-        $smarty->assign("g_debug", $debug_enabled);
-        $smarty->assign("g_js_debug", Core::isJsDebugEnabled() ? "true" : "false");
-        $smarty->assign("g_hide_upgrade_link", Core::shouldHideUpgradeLink());
-        $smarty->assign("same_page", General::getCleanPhpSelf());
-        $smarty->assign("query_string", $_SERVER["QUERY_STRING"]);
-        $smarty->assign("dir", $LANG["special_text_direction"]);
-        $smarty->assign("g_enable_benchmarking", Core::isBenchmarkingEnabled());
         $smarty->assign("swatch", $swatch);
-        $smarty->assign("is_logged_in", Core::$user->isLoggedIn());
-        $smarty->assign("account_type", Core::$user->getAccountType());
 
         $g_success = (isset($page_vars["g_success"])) ?  $page_vars["g_success"] : "";
         $g_message = (isset($page_vars["g_message"])) ?  $page_vars["g_message"] : "";
@@ -267,7 +239,6 @@ class Themes {
                 $g_message = $message;
             }
         }
-
         $smarty->assign("g_success", $g_success);
         $smarty->assign("g_message", $g_message);
 
@@ -294,11 +265,6 @@ class Themes {
         if (!isset($page_vars["head_css"])) {
             $page_vars["head_css"] = "";
         }
-
-        $smarty->assign("modules_dir", "$root_url/modules");
-        $smarty->assign("images_url", "$root_url/themes/$theme/images");
-        $smarty->assign("theme_url", "$root_url/themes/$theme");
-        $smarty->assign("theme_dir", "$root_dir/themes/$theme");
 
         // now add the custom variables for this template, as defined in $page_vars
         foreach ($page_vars as $key=>$value) {
@@ -336,8 +302,7 @@ class Themes {
      */
     public static function displayModulePage($template, $page_vars = array(), $theme = "", $swatch = "")
     {
-        global $g_success, $g_message, $g_smarty_debug, $LANG,
-               $L, $g_smarty_use_sub_dirs, $g_enable_benchmarking, $g_hide_upgrade_link;
+//        global $g_smarty_debug, $L;
 
         $root_dir = Core::getRootDir();
         $root_url = Core::getRootUrl();
@@ -353,30 +318,35 @@ class Themes {
         }
 
         $smarty = Templates::getPreloadedSmarty($theme);
+//        $smarty->setTemplateDir();
+//
+//        $smarty->setTemplateDir(array(
+//            "$root_dir/themes/$theme",
+//            "$root_dir/global/smarty_plugins/"
+//        ));
+
         Sessions::setIfNotExists("account.is_logged_in", false);
         Sessions::setIfNotExists("account.account_type", "");
 
         // this contains the custom language content of the module, in the language required. It's populated by
         // ft_init_module_page(), called on every module page
-        $smarty->assign("L", $L);
 
-        //$smarty->assign("SESSION", $_SESSION["ft"]);
+        // get the language file content
+        $module_lang_strings = Modules::getModuleLangFile($module_folder, Core::$user->getLang());
+        $LANG[$module_folder] = $module_lang_strings;
+        $smarty->assign("L", $module_lang_strings);
+
+        extract(Hooks::processHookCalls("end", compact("account_type", "module_folder"), array()), EXTR_OVERWRITE);
 
         $settings = Sessions::getWithFallback("settings", array());
         $smarty->assign("settings", $settings);
         $smarty->assign("account", $_SESSION["ft"]["account"]);
-        $smarty->assign("g_js_debug", Core::isJsDebugEnabled() ? "true" : "false");
-        $smarty->assign("g_hide_upgrade_link", $g_hide_upgrade_link);
-        $smarty->assign("same_page", General::getCleanPhpSelf());
-        $smarty->assign("query_string", $_SERVER["QUERY_STRING"]); // TODO FIX
-        $smarty->assign("dir", $LANG["special_text_direction"]);
-        $smarty->assign("g_enable_benchmarking", $g_enable_benchmarking);
         $smarty->assign("swatch", $swatch);
 
         // if this page has been told to dislay a custom message, override g_success and g_message
-        if (isset($_GET["message"])) {
-            list($g_success, $g_message) = General::displayCustomPageMessage($_GET["message"]);
-        }
+//        if (isset($_GET["message"])) {
+//            list($g_success, $g_message) = General::displayCustomPageMessage($_GET["message"]);
+//        }
 
         $module_id = Modules::getModuleIdFromModuleFolder($module_folder);
         $module_nav = ModuleMenu::getMenuItems($module_id, $module_folder);
@@ -423,11 +393,6 @@ class Themes {
         // now add the custom variables for this template, as defined in $page_vars
         foreach ($page_vars as $key=>$value) {
             $smarty->assign($key, $value);
-        }
-
-        // if smarty debug is on, enable Smarty debugging
-        if ($g_smarty_debug) {
-            $smarty->debugging = true;
         }
 
         extract(Hooks::processHookCalls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);

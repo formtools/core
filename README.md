@@ -75,5 +75,8 @@ and omit the _composer.lock_ file.
 
 ### TODO
  
-- themes page doesn't immediately update after clicking Update. 
+- themes page doesn't immediately update after clicking Update.
+- Database sessions.
+- API
+
 

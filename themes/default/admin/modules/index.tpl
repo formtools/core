@@ -1,4 +1,4 @@
-{include file='header.tpl'}
+{ft_include file='header.tpl'}
 
   <table cellpadding="0" cellspacing="0" height="35">
   <tr>
@@ -180,4 +180,4 @@
     </div>
   {/if}
 
-{include file='footer.tpl'}
+{ft_include file='footer.tpl'}

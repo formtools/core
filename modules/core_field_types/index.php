@@ -7,5 +7,8 @@ use FormTools\Modules;
 use FormTools\Themes;
 
 Core::init();
+Core::$user->checkAuth("admin");
+
 Modules::initModulePage();
+
 Themes::displayModulePage("templates/index.tpl");

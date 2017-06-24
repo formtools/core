@@ -783,61 +783,17 @@ class Modules
 
 
     /**
-     * This function should be called at the top of every module page - or at least every module page that wants to
-     * retain the custom module nav. It does the following:
-     *
-     * 	- start sessions
-     *  - checks permission
-     *  - loads the module language file into the $LANG[module_folder] variable in the global namespace with
-     *    the users chosen language (or if it doesn't exist, the module's default language). It also
-     *    loads the language snippets into a $L global, for shorter use. So these are synonymous:
-     *        $LANG.image_manager.phrase_hello_world
-     *        $L.phrase_hello_world
-     *
-     * (the longer option is provided simply for consistency: that's how you access the module language variables in
-     * regular Form Tools pages after using the ft_include_module() function).
-     *
-     * @param string $account_type who is allowed to see this module page: "admin", "client"
+     * Includes the module's library.php file.
      */
-    public static function initModulePage($required_account_type = "admin")
+    public static function initModulePage()
     {
-        global $g_session_type, $g_check_ft_sessions;
-
-        $LANG = Core::$L;
         $root_dir = Core::getRootDir();
-        $session_save_path = Core::getSessionSavePath();
-
-        if ($g_session_type == "database") {
-            $sess = new SessionManager();
-        }
-
-        if (!empty($session_save_path)) {
-            session_save_path($session_save_path);
-        }
-
-        @session_start();
-        header("Cache-control: private");
-        header("Content-Type: text/html; charset=utf-8");
-
-        Core::$user->checkAuth($required_account_type);
-
-        if ($g_check_ft_sessions && isset($_SESSION["ft"]["account"])) {
-            General::checkSessionsTimeout();
-        }
-
         $module_folder = self::getCurrentModuleFolder();
 
         // if there's a library file defined, include it
         if (is_file("$root_dir/modules/$module_folder/library.php")) {
-            include_once("$root_dir/modules/$module_folder/library.php");
+            require_once("$root_dir/modules/$module_folder/library.php");
         }
-
-        // get the language file content
-        $content = self::getModuleLangFile($module_folder, Core::$user->getLang());
-        $LANG[$module_folder] = $content;
-        $GLOBALS["L"] = $content;
-
-        extract(Hooks::processHookCalls("end", compact("account_type", "module_folder"), array()), EXTR_OVERWRITE);
     }
 
 
