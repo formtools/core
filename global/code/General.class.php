@@ -293,34 +293,26 @@ END;
     {
         $LANG = Core::$L;
 
+        $map = array(
+            "no_views"                     => array(false, $LANG["notify_no_views"]),
+            "notify_internal_form_created" => array(true, $LANG["notify_internal_form_created"]),
+            "change_temp_password"         => array(true, $LANG["notify_change_temp_password"]),
+            "new_submission"               => array(true, $LANG["notify_new_submission_created"]),
+            "notify_sessions_timeout"      => array(true, $LANG["notify_sessions_timeout"])
+        );
+
+        $found = false;
         $g_success = "";
         $g_message = "";
-        switch ($flag) {
-            case "no_views":
-                $g_success = false;
-                $g_message = $LANG["notify_no_views"];
-                break;
-            case "notify_internal_form_created":
-                $g_success = true;
-                $g_message = $LANG["notify_internal_form_created"];
-                break;
-            case "change_temp_password":
-                $g_success = true;
-                $g_message = $LANG["notify_change_temp_password"];
-                break;
-            case "new_submission":
-                $g_success = true;
-                $g_message = $LANG["notify_new_submission_created"];
-                break;
-            case "notify_sessions_timeout":
-                $g_success = true;
-                $g_message = $LANG["notify_sessions_timeout"];
-                break;
+        if (array_key_exists($map, $flag)) {
+            $found = true;
+            $g_success = $map[$flag][0];
+            $g_message = $map[$flag][1];
         }
 
         extract(Hooks::processHookCalls("end", compact("flag"), array("g_success", "g_message")), EXTR_OVERWRITE);
 
-        return array($g_success, $g_message);
+        return array($found, $g_success, $g_message);
     }
 
 
@@ -336,14 +328,9 @@ END;
      */
     public static function evalSmartyString($placeholder_str, $placeholders = array(), $theme = "", $plugin_dirs = array())
     {
-        $LANG = Core::$L;
-        $root_dir = Core::getRootDir();
-
         $theme = Core::$user->getTheme();
 
-        $smarty = Core::$smarty;
-        $smarty->setTemplateDir("$root_dir/global/smarty_plugins/");
-        $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
+        $smarty = Templates::getPreloadedSmarty($theme);
 
         foreach ($plugin_dirs as $dir) {
             $smarty->addPluginsDir($dir);
@@ -355,7 +342,6 @@ END;
                 $smarty->assign($key, $value);
             }
         }
-        $smarty->assign("LANG", $LANG);
 
         $output = $smarty->fetch(realpath(__DIR__ . "/../smarty_plugins/eval.tpl"));
 
@@ -465,18 +451,9 @@ END;
     public static function getJsPageNav($num_results, $num_per_page, $current_page = 1)
     {
         $theme = Core::$user->getTheme();
-        $root_dir = Core::getRootDir();
-        $root_url = Core::getRootUrl();
         $LANG = Core::$L;
 
-        $smarty = Core::$smarty;
-        $smarty->setTemplateDir("$root_dir/themes/$theme");
-        $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
-        $smarty->setUseSubDirs(Core::shouldUseSmartySubDirs());
-        $smarty->assign("LANG", $LANG);
-        $smarty->assign("g_root_dir", $root_dir);
-        $smarty->assign("g_root_url", $root_url);
-        $smarty->assign("same_page", General::getCleanPhpSelf());
+        $smarty = Templates::getPreloadedSmarty($theme);
         $smarty->assign("num_results", $num_results);
         $smarty->assign("num_per_page", $num_per_page);
         $smarty->assign("current_page", $current_page);
@@ -526,34 +503,21 @@ END;
     public static function getPageNav($num_results, $num_per_page, $current_page = 1, $pass_along_str = "",
         $page_str = "page", $theme = "", $settings = array())
     {
-        //global $g_max_nav_pages, $g_smarty_debug, $g_smarty, $g_smarty_use_sub_dirs;
+        //global $g_max_nav_pages, $g_smarty_debug;
         $LANG = Core::$L;
-        $root_dir = Core::getRootDir();
-        $root_url = Core::getRootUrl();
 
         $current_page = ($current_page < 1) ? 1 : $current_page;
-
         if (empty($theme)) {
             $theme = Sessions::get("account.theme");
         }
 
-        // TODO enough of this! Move to helper for all instances
-
-        $smarty = Core::$smarty;
-        $smarty->setTemplateDir("$root_dir/themes/$theme");
-        $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
-        $smarty->setUseSubDirs(Core::shouldUseSmartySubDirs());
-        $smarty->assign("LANG", $LANG);
-        $smarty->assign("g_root_dir", $root_dir);
-        $smarty->assign("g_root_url", $root_url);
-        $smarty->assign("same_page", General::getCleanPhpSelf());
+        $smarty = Templates::getPreloadedSmarty($theme);
         $smarty->assign("num_results", $num_results);
         $smarty->assign("num_per_page", $num_per_page);
         $smarty->assign("current_page", $current_page);
         $smarty->assign("page_str", $page_str);
         $smarty->assign("show_total_results", (isset($settings["show_total_results"])) ? $settings["show_total_results"] : true);
         $smarty->assign("show_page_label", (isset($settings["show_page_label"])) ? $settings["show_page_label"] : true);
-
 
         // display the total number of results found
         $range_start = ($current_page - 1) * $num_per_page + 1;
@@ -566,8 +530,8 @@ END;
         $viewing_range = "";
         if ($num_results > $num_per_page) {
             $replacement_info = array(
-            "startnum" => "<span id='nav_viewing_num_start'>$range_start</span>",
-            "endnum"   => "<span id='nav_viewing_num_end'>$range_end</span>"
+                "startnum" => "<span id='nav_viewing_num_start'>$range_start</span>",
+                "endnum"   => "<span id='nav_viewing_num_end'>$range_end</span>"
             );
             $viewing_range = General::evalSmartyString($LANG["phrase_viewing_range"], $replacement_info);
         }
@@ -585,10 +549,8 @@ END;
 
         $smarty->assign("first_page", $first_page);
         $smarty->assign("last_page", $last_page);
-
         $smarty->assign("include_first_page_direct_link", (($first_page != 1) ? true : false));
         $smarty->assign("include_last_page_direct_link", (($first_page != $total_pages) ? true : false));
-
 
         // now process the template and return the HTML
         return $smarty->fetch(Themes::getSmartyTemplateWithFallback($theme, "pagination.tpl"));
@@ -652,11 +614,10 @@ END;
     public static function getQueryPageLimitClause($page_num, $results_per_page)
     {
         $limit_clause = "";
-        if ($results_per_page != "all")
-        {
-            if (empty($page_num) || !is_numeric($page_num))
+        if ($results_per_page != "all") {
+            if (empty($page_num) || !is_numeric($page_num)) {
                 $page_num = 1;
-
+            }
             $first_item = ($page_num - 1) * $results_per_page;
             $limit_clause = "LIMIT $first_item, $results_per_page";
         }

@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Contains methods for the current logged in user: admin or client. Submission Accounts are handled via that module.
+ * Contains methods for the current logged in user: admin or client. Submission Accounts are handled entirely
+ * via that module.
  *
  * @copyright Benjamin Keen 2017
  * @author Benjamin Keen <ben.keen@gmail.com>

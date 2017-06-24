@@ -68,4 +68,12 @@ users that don't need this feature.
 command-line nonsense to get the script running. As such, I'm going to commit the _vendor/_ folder with all dependencies
 and omit the _composer.lock_ file.
 - Any way to add in PSR-2 checking for code quality...? Maybe too early...? 
-- error handling for scenario where DB is gone but config exists
+- error handling for scenario where DB is gone but config exists.
+- Keep the very un-OO user/administrator class code for 3.0. Will refactor that all anyway for user roles in 4.0.
+- Still need to solve `g_success`, `g_message`...
+- combine all that displayPage/displayModulePage etc. code.
+
+### TODO
+ 
+- themes page doesn't immediately update after clicking Update. 
+

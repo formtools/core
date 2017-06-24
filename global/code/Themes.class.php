@@ -214,8 +214,6 @@ class Themes {
      */
     public static function displayPage($template, $page_vars, $theme = "", $swatch = "")
     {
-        global $g_success, $g_message, $g_upgrade_info;
-
         $theme = (empty($theme)) ? Core::$user->getTheme() : $theme;
         $swatch = (empty($swatch)) ? Core::$user->getSwatch() : $swatch;
 
@@ -232,11 +230,10 @@ class Themes {
 
         // check the compile directory has the write permissions
         if (!is_writable($smarty->getCompileDir())) {
-            Errors::majorError("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$smarty->compile_dir}</b> to have full read-write permissions (777 on unix).", "");
+            Errors::majorError("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$smarty->compile_dir}</b> to have full read-write permissions (777 on unix).");
             exit;
         }
 
-        // require the user to be logged in
         if (Core::$user->isLoggedIn()) {
             $smarty->assign("settings", Sessions::get("settings"));
             $smarty->assign("account", Sessions::get("account"));
@@ -259,12 +256,18 @@ class Themes {
         $smarty->assign("is_logged_in", Core::$user->isLoggedIn());
         $smarty->assign("account_type", Core::$user->getAccountType());
 
+        $g_success = (isset($page_vars["g_success"])) ?  $page_vars["g_success"] : "";
+        $g_message = (isset($page_vars["g_message"])) ?  $page_vars["g_message"] : "";
+
         // if this page has been told to display a custom message, override g_success and g_message
-        if ((!isset($g_upgrade_info["message"]) || empty($g_upgrade_info["message"])) && isset($_GET["message"])) {
-            list($g_success, $g_message) = General::displayCustomPageMessage($_GET["message"]);
+        if (isset($_GET["message"])) {
+            list($found, $success, $message) = General::displayCustomPageMessage($_GET["message"]);
+            if ($found) {
+                $g_success = $success;
+                $g_message = $message;
+            }
         }
 
-        // ...
         $smarty->assign("g_success", $g_success);
         $smarty->assign("g_message", $g_message);
 
@@ -314,7 +317,6 @@ class Themes {
         // was safely moved here in 2.2.0, because nothing used it (!)
 //        if (!empty($smarty->_tpl_vars["head_css"])) {
 //            $smarty->set
-//
 //            ("head_css", "<style type=\"text/css\">\n{$smarty->_tpl_vars["head_css"]}\n</style>");
 //        }
 
@@ -337,7 +339,6 @@ class Themes {
         global $g_success, $g_message, $g_smarty_debug, $LANG,
                $L, $g_smarty_use_sub_dirs, $g_enable_benchmarking, $g_hide_upgrade_link;
 
-        $smarty = Core::$smarty;
         $root_dir = Core::getRootDir();
         $root_url = Core::getRootUrl();
         $module_folder = Modules::getCurrentModuleFolder();
@@ -351,14 +352,9 @@ class Themes {
             $swatch = $settings["default_client_swatch"];
         }
 
+        $smarty = Templates::getPreloadedSmarty($theme);
         Sessions::setIfNotExists("account.is_logged_in", false);
         Sessions::setIfNotExists("account.account_type", "");
-
-        // common variables. These are sent to EVERY template
-        $smarty->setTemplateDir("$root_dir/themes/$theme");
-        $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
-        $smarty->use_sub_dirs = $g_smarty_use_sub_dirs;
-        $smarty->assign("LANG", $LANG);
 
         // this contains the custom language content of the module, in the language required. It's populated by
         // ft_init_module_page(), called on every module page
@@ -369,8 +365,6 @@ class Themes {
         $settings = Sessions::getWithFallback("settings", array());
         $smarty->assign("settings", $settings);
         $smarty->assign("account", $_SESSION["ft"]["account"]);
-        $smarty->assign("g_root_dir", $root_dir);
-        $smarty->assign("g_root_url", $root_url);
         $smarty->assign("g_js_debug", Core::isJsDebugEnabled() ? "true" : "false");
         $smarty->assign("g_hide_upgrade_link", $g_hide_upgrade_link);
         $smarty->assign("same_page", General::getCleanPhpSelf());
@@ -383,8 +377,6 @@ class Themes {
         if (isset($_GET["message"])) {
             list($g_success, $g_message) = General::displayCustomPageMessage($_GET["message"]);
         }
-        $smarty->assign("g_success", $g_success);
-        $smarty->assign("g_message", $g_message);
 
         $module_id = Modules::getModuleIdFromModuleFolder($module_folder);
         $module_nav = ModuleMenu::getMenuItems($module_id, $module_folder);
@@ -422,11 +414,6 @@ class Themes {
         } else if (!empty($page_vars["head_css"])) {
             $page_vars["head_css"] = "<style type=\"text/css\">\n{$page_vars["head_css"]}\n</style>";
         }
-
-        // theme-specific vars
-        $smarty->assign("images_url", "$root_url/themes/$theme/images");
-        $smarty->assign("theme_url", "$root_url/themes/$theme");
-        $smarty->assign("theme_dir", "$root_dir/themes/$theme");
 
         // if there's a Smarty folder, import any of its resources
         if (is_dir("$root_dir/modules/$module_folder/smarty_plugins")) {
