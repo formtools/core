@@ -12,11 +12,13 @@ $menu_page = General::loadField("menu_page", "menu_page", 1);
 
 // if required, delete the menu. If any clients were assigned to this menu, the success response will
 // include their names
+$success = true;
+$message = "";
 if (isset($request["delete"])) {
-    list($g_success, $g_message) = Menus::deleteClientMenu($request["delete"]);
+    list($success, $message) = Menus::deleteClientMenu($request["delete"]);
 }
 if (isset($_GET["mass_assign"])) {
-    list($g_success, $g_message) = Menus::updateClientMenus($_GET["accounts"], $_GET["menu_id"]);
+    list($success, $message) = Menus::updateClientMenus($_GET["accounts"], $_GET["menu_id"]);
 }
 
 $menus = Menus::getList($menu_page, Sessions::get("settings.num_menus_per_page"));
@@ -51,6 +53,8 @@ END;
 
 $page_vars = array(
     "page" => "menus",
+    "g_success" => $success,
+    "g_message" => $message,
     "page_url" => Pages::getPageUrl("settings_menus"),
     "tabs" => $tabs,
     "head_title" => "{$LANG["word_settings"]} - {$LANG["word_menus"]}",

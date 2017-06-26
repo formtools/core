@@ -8,8 +8,10 @@ use FormTools\Themes;
 
 $LANG = Core::$L;
 
+$success = true;
+$message = "";
 if (isset($request["update_main"])) {
-    list($g_success, $g_message) = Settings::updateMainSettings($_POST);
+    list($success, $message) = Settings::updateMainSettings($_POST);
 }
 
 $text_date_formatting_link = General::evalSmartyString($LANG["text_date_formatting_link"], array(
@@ -35,6 +37,8 @@ END;
 
 $page_vars = array(
     "page" => "main",
+    "g_success" => $success,
+    "g_message" => $message,
     "page_url" => Pages::getPageUrl("settings_main"),
     "tabs" => $tabs,
     "head_title" => "{$LANG["word_settings"]} - {$LANG["word_main"]}",

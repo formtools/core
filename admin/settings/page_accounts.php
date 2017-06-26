@@ -6,14 +6,15 @@ use FormTools\Pages;
 use FormTools\Settings;
 use FormTools\Themes;
 
-
+$success = true;
+$message = "";
 if (isset($request["update_accounts"])) {
-    list($g_success, $g_message) = Settings::updateAccountSettings($request);
+    list($success, $message) = Settings::updateAccountSettings($request);
 }
 
 // if required, update the list of available languages
 if (isset($_GET["refresh_lang_list"])) {
-    list($g_success, $g_message) = Core::$translations->refreshLanguageList();
+    list($success, $message) = Core::$translations->refreshLanguageList();
 }
 $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>');
 
@@ -23,6 +24,8 @@ $password_special_chars = Core::getRequiredPasswordSpecialChars();
 // compile the theme vars
 $page_vars = array();
 $page_vars["page"] = "accounts";
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
 $page_vars["page_url"] = Pages::getPageUrl("settings_accounts");
 $page_vars["tabs"] = $tabs;
 $page_vars["head_title"] = "{$LANG["word_settings"]} - {$LANG["word_accounts"]}";

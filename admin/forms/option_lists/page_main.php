@@ -11,10 +11,12 @@ use FormTools\Themes;
 $root_url = Core::getRootUrl();
 $LANG = Core::$L;
 
+$success = true;
+$message = "";
 $sortable_id = "option_list";
 if (isset($request["update_page"])) {
 	$request["sortable_id"] = $sortable_id;
-	list($g_success, $g_message) = OptionLists::updateOptionList($list_id, $request);
+	list($success, $message) = OptionLists::updateOptionList($list_id, $request);
 }
 
 $list_info = OptionLists::getOptionList($list_id);
@@ -49,6 +51,8 @@ $existing_option_list_names_js = "page_ns.option_list_names = [$list_names];";
 
 // compile template info
 $page_vars["list_info"] = $list_info;
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
 $page_vars["text_option_list_used_by_fields"] = General::evalSmartyString($LANG["text_option_list_used_by_fields"], $placeholders);
 $page_vars["tabs"] = $tabs;
 $page_vars["page_url"] = Pages::getPageUrl("edit_option_list");

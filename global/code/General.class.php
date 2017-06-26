@@ -304,7 +304,7 @@ END;
         $found = false;
         $g_success = "";
         $g_message = "";
-        if (array_key_exists($map, $flag)) {
+        if (array_key_exists($flag, $map)) {
             $found = true;
             $g_success = $map[$flag][0];
             $g_message = $map[$flag][1];

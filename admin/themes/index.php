@@ -16,17 +16,19 @@ Core::$user->checkAuth("client");
 $request = array_merge($_POST, $_GET);
 
 // provides means to manually override admin theme in case of disaster
+$success = true;
+$message = "";
 if (isset($request["theme_override"])) {
-    list($g_success, $g_message) = Themes::resetAdminTheme($request["theme_override"]);
+    list($success, $message) = Themes::resetAdminTheme($request["theme_override"]);
 }
 if (isset($request["update"])) {
-    list($g_success, $g_message) = Settings::updateThemeSettings($_POST);
+    list($success, $message) = Settings::updateThemeSettings($_POST);
 }
 if (isset($_POST["refresh_theme_list"])) {
-    list($g_success, $g_message) = Themes::updateThemeList();
+    list($success, $message) = Themes::updateThemeList();
 }
 if (isset($_GET["mass_assign"])) {
-    list($g_success, $g_message) = Clients::updateClientThemes($_GET["accounts"], $_GET["theme_id"]);
+    list($success, $message) = Clients::updateClientThemes($_GET["accounts"], $_GET["theme_id"]);
 }
 
 $themes = Themes::getList();
@@ -84,6 +86,8 @@ END;
 
 $page = array(
     "page" => "themes",
+    "g_success" => $success,
+    "g_message" => $message,
     "page_url" => Pages::getPageUrl("settings_themes"),
     "head_title" => "{$LANG["word_settings"]} - {$LANG["word_themes"]}",
     "nav_page" => "program_settings",

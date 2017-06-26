@@ -27,15 +27,10 @@ class FieldValidation {
             WHERE  fv.field_id = :field_id AND
                 ftvr.rule_id = fv.rule_id
         ");
-        $db->query(":field_id", $field_id);
+        $db->bind("field_id", $field_id);
         $db->execute();
 
-        $rules = array();
-        foreach ($db->fetchAll() as $row) {
-            $rules[] = $row;
-        }
-
-        return $rules;
+        return $db->fetchAll();
     }
 
     /**
@@ -233,7 +228,8 @@ class FieldValidation {
             $curr_js[] = "{$namespace}.field_validation[\"field_type_{$field_type_id}\"] = [";
             $curr_rules = array();
             foreach ($rules as $rule_info) {
-                $curr_rules[] = "{ rule_id: {$rule_info["rule_id"]}, label: \"{$rule_info["rule_label"]}\", error: \"{$rule_info["default_error_message"]}\" }";
+                $error = html_entity_decode($rule_info["default_error_message"]);
+                $curr_rules[] = "{ rule_id: {$rule_info["rule_id"]}, label: \"{$rule_info["rule_label"]}\", error: \"$error\" }";
             }
             $curr_js[] = implode(",$delimiter", $curr_rules);
             $curr_js[] = "];";

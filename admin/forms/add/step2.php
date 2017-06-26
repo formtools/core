@@ -26,16 +26,18 @@ Forms::setSubmissionType($form_id, $submission_type);
 $page = array();
 
 // start setting up the form
+$success = true;
+$message = "";
 if (isset($request["add_form"])) {
 	$request["form_type"]       = "external";
 	$request["submission_type"] = $submission_type;
-	list($g_success, $g_message, $form_id) = Forms::setupForm($request);
+	list($success, $message, $form_id) = Forms::setupForm($request);
 
 	// store the uploading_files value for the duration of this session
     Sessions::set("uploading_files", isset($request['uploading_files']) ? $request['uploading_files'] : "no");
 
 	// form successfully added. Continue to step 2.
-	if ($g_success) {
+	if ($success) {
         General::redirect("step3.php?form_id=$form_id");
 
     // error. Reload the page with the already entered form values, and display the appropriate error message.
@@ -51,8 +53,8 @@ else if (isset($request['update_form'])) {
     Sessions::set("uploading_files", isset($request["uploading_files"]) ? $request["uploading_files"] : "no");
 	$request["submission_type"] = $submission_type;
 
-	list($g_success, $g_message) = Forms::setFormMainSettings($request);
-	if ($g_success) {
+	list($success, $message) = Forms::setFormMainSettings($request);
+	if ($success) {
         General::redirect("step3.php?form_id=$form_id");
 	} else {
         $page = Forms::addFormGetExternalFormValues("post", $form_id, $request);
@@ -82,6 +84,8 @@ $num_pages_in_multi_page_form = count($page["multi_page_form_urls"]) + 1;
 
 // compile the header information
 $page_vars["page"]     = "add_form1";
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
 $page_vars["page_url"] = Pages::getPageUrl("add_form2");
 $page_vars["head_title"] = "{$LANG['phrase_add_form']} - {$LANG["phrase_step_2"]}";
 $page_vars["page_values"] = $page;

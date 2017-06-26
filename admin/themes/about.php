@@ -2,6 +2,7 @@
 
 use FormTools\Core;
 use FormTools\General;
+use FormTools\Pages;
 use FormTools\Themes;
 
 Core::init();

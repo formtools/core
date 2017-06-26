@@ -13,12 +13,13 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("admin");
 
-
+$success = true;
+$message = "";
 if (isset($_GET['delete']) && !empty($_GET['client_id'])) {
-    list($g_success, $g_message) = Clients::deleteClient($_GET['client_id']);
+    list($success, $message) = Clients::deleteClient($_GET['client_id']);
 }
 if (isset($_GET['login'])) {
-    list($g_success, $g_message) = Administrator::loginAsClient($_GET['login']);
+    list($success, $message) = Administrator::loginAsClient($_GET['login']);
 }
 
 if (isset($_GET["reset"])) {
@@ -72,6 +73,8 @@ END;
 
 $page = array(
     "page" => "clients",
+    "g_success" => $success,
+    "g_message" => $message,
     "page_url" => Pages::getPageUrl("clients"),
     "head_title" => $LANG["word_clients"],
     "num_clients" => $num_clients,

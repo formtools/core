@@ -11,8 +11,10 @@ $LANG = Core::$L;
 $req_password_special_chars = Core::getRequiredPasswordSpecialChars();
 
 // update this client
+$success = true;
+$message = "";
 if (isset($_POST["update_client"])) {
-    list($g_success, $g_message) = Administrator::adminUpdateClient($request, 1);
+    list($success, $message) = Administrator::adminUpdateClient($request, 1);
 }
 
 $client_info = Accounts::getAccountInfo($client_id);
@@ -39,6 +41,8 @@ $conditional_rules = implode("\n", $conditional_validation);
 
 // define info for template
 $page_vars["page"] = "main";
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
 $page_vars["page_url"] = Pages::getPageUrl("edit_client_main", array("client_id" => $client_id));
 $page_vars["head_title"]   = "{$LANG["phrase_edit_client"]} - {$LANG["word_main"]}";
 $page_vars["client_info"]  = $client_info;

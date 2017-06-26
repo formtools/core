@@ -14,6 +14,8 @@
 
 namespace FormTools;
 
+use PDO, PDOException;
+
 
 class FieldTypes {
 
@@ -108,14 +110,7 @@ class FieldTypes {
             $list = $db->fetchAll();
             foreach ($list as $field_type_info) {
                 $field_type_id = $field_type_info["field_type_id"];
-                $db->query("
-                    SELECT *
-                    FROM   {PREFIX}field_type_settings
-                    WHERE  field_type_id = :field_type_id
-                ");
-                $db->bind("field_type_id", $field_type_id);
-                $db->execute();
-                $field_type_info["settings"] = $db->fetchAll();
+                $field_type_info["settings"] = FieldTypes::getFieldTypeSettingsList($field_type_id);
 
                 $db->query("
                     SELECT *
@@ -442,6 +437,8 @@ class FieldTypes {
      * is used to actual create the appropriate markup in the Edit Fields dialog window. Generates the following
      * data structure:
      *
+     * TODO how many queries?! This should be refactored.
+     *
      * page_ns.field_settings["field_type_X"] = [
      *   {
      *     setting_id:  X,
@@ -482,25 +479,17 @@ class FieldTypes {
             FROM {PREFIX}field_type_settings
         ");
         $db->execute();
+        $field_type_ids = $db->fetchAll(PDO::FETCH_COLUMN);
 
         $field_type_id_to_identifier_map = self::getFieldTypeIdToIdentifierMap();
         $curr_js = array("{$options["namespace"]}.field_settings = {};");
 
         $field_setting_rows = array();
-        foreach ($db->fetchAll() as $row) {
-            $field_type_id = $row["field_type_id"];
-
-            $db->query("
-                SELECT setting_id, field_label, field_setting_identifier, field_type, field_orientation, default_value
-                FROM   {PREFIX}field_type_settings
-                WHERE field_type_id = :field_type_id
-                ORDER BY list_order
-            ");
-            $db->bind("field_type_id", $field_type_id);
-            $db->execute();
+        foreach ($field_type_ids as $field_type_id) {
+            $settings = FieldTypes::getFieldTypeSettingsList($field_type_id);
 
             $settings_js = array();
-            foreach ($db->fetchAll() as $settings_row) {
+            foreach ($settings as $settings_row) {
                 $setting_id = $settings_row["setting_id"];
                 $field_label = General::evalSmartyString($settings_row["field_label"]);
                 $field_setting_identifier = $settings_row["field_setting_identifier"];
@@ -1595,4 +1584,19 @@ END;
         return $info;
     }
 
+
+    public static function getFieldTypeSettingsList($field_type_id)
+    {
+        $db = Core::$db;
+        $db->query("
+                SELECT *
+                FROM   {PREFIX}field_type_settings
+                WHERE field_type_id = :field_type_id
+                ORDER BY list_order
+            ");
+        $db->bind("field_type_id", $field_type_id);
+        $db->execute();
+
+        return $db->fetchAll();
+    }
 }

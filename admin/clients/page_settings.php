@@ -11,13 +11,15 @@ use FormTools\Themes;
 $LANG = Core::$L;
 $req_password_special_chars = Core::getRequiredPasswordSpecialChars();
 
+$success = true;
+$message = "";
 if (isset($_POST['update_client'])) {
-    list($g_success, $g_message) = Administrator::adminUpdateClient($request, 2);
+    list($success, $message) = Administrator::adminUpdateClient($request, 2);
 }
 
 // if required, update the list of available languages
 if (isset($_GET["refresh_lang_list"])) {
-    list($g_success, $g_message) = Core::$translations->refreshLanguageList();
+    list($success, $message) = Core::$translations->refreshLanguageList();
 }
 
 $client_info = Accounts::getAccountInfo($client_id);
@@ -31,6 +33,8 @@ $replacement_info = array(
 
 // compile header information
 $page_vars["page"] = "settings";
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
 $page_vars["page_url"] = Pages::getPageUrl("edit_client_settings", array("client_id" => $client_id));
 $page_vars["head_title"]  = "{$LANG["phrase_edit_client"]} - {$LANG["word_settings"]}";
 $page_vars["phrase_one_special_char"] = General::evalSmartyString($LANG["phrase_one_special_char"], array("chars" => $req_password_special_chars));

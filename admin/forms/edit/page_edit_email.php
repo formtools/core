@@ -15,8 +15,10 @@ use FormTools\Views;
 
 $email_id = General::loadField("email_id", "email_id", "");
 
+$success = true;
+$message = "";
 if (isset($request["update_email_template"])) {
-    list($g_success, $g_message) = Emails::updateEmailTemplate($email_id, $request);
+    list($success, $message) = Emails::updateEmailTemplate($email_id, $request);
 }
 
 $form_info      = Forms::getForm($form_id);
@@ -63,6 +65,8 @@ $root_url = Core::getRootUrl();
 
 // compile the template information
 $page_vars["page"]       = "edit_email";
+$page_vars["g_success"]  = $success;
+$page_vars["g_message"]  = $message;
 $page_vars["page_url"]   = Pages::getPageUrl("edit_form_email_settings", array("form_id" => $form_id));
 $page_vars["email_id"]   = $email_id;
 $page_vars["head_title"] = "{$LANG["phrase_edit_form"]} - {$LANG["phrase_edit_email_template"]}";

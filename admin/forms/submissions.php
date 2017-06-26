@@ -93,13 +93,15 @@ $search_fields = array(
 	"search_keyword" => General::loadField("search_keyword", "search_keyword", "")
 );
 
+$success = true;
+$message = "";
 if (isset($_GET["delete"])) {
 	// if delete actually a value, it's being fed a submission ID from the edit submission page
 	// in order to delete it
 	if (!empty($_GET["delete"])) {
 		$ids = explode(",", $_GET["delete"]);
 		foreach ($ids as $id) {
-			list($g_success, $g_message) = Submissions::deleteSubmission($form_id, $view_id, $id, true);
+			list($success, $message) = Submissions::deleteSubmission($form_id, $view_id, $id, true);
 		}
 	} else {
 	    $all_selected_key = "form_{$form_id}_select_all_submissions";
@@ -110,7 +112,7 @@ if (isset($_GET["delete"])) {
 			$submissions_to_delete = "all";
 			$omit_list = Sessions::get("form_{$form_id}_all_submissions_selected_omit_list");
 		}
-		list($g_success, $g_message) = Submissions::deleteSubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, true);
+		list($success, $message) = Submissions::deleteSubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, true);
 	}
 }
 
@@ -275,6 +277,8 @@ foreach ($shared_resources_array as $resource) {
 // compile the header information
 $page_vars = array(
     "page"    => "admin_forms",
+    "g_success" => $success,
+    "g_message" => $message,
     "page_url" => Pages::getPageUrl("form_submissions", array("form_id" => $form_id)),
     "head_title"  => $LANG["word_submissions"],
     "form_info"   => $form_info,

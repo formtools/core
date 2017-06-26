@@ -15,11 +15,13 @@ Core::$user->checkAuth("client");
 $LANG = Core::$L;
 
 // update the administrator's account
+$success = true;
+$message = "";
 if (isset($_POST) && !empty($_POST)) {
-	list($g_success, $g_message) = Administrator::updateAdminAccount($_POST, Sessions::get("account.account_id"));
+	list($success, $message) = Administrator::updateAdminAccount($_POST, Sessions::get("account.account_id"));
 
 	// if the user just changed their language file, reset the value in sessions and refresh the page
-	if ($g_success && ($_POST["old_ui_language"] != $_POST["ui_language"])) {
+	if ($success && ($_POST["old_ui_language"] != $_POST["ui_language"])) {
 		Sessions::set("ui_language", $_POST["ui_language"]);
         General::redirect("index.php?updated");
 	}
@@ -27,8 +29,8 @@ if (isset($_POST) && !empty($_POST)) {
 
 // here, the user has just changed their ui language
 if (isset($_GET["updated"])) {
-	$g_success = true;
-	$g_message = $LANG["notify_account_updated"];
+	$success = true;
+	$message = $LANG["notify_account_updated"];
 }
 
 $admin_info = Administrator::getAdminInfo();
@@ -37,12 +39,16 @@ $replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/man
 $LANG = Core::$L;
 
 // compile the theme variables
-$page_vars = array();
-$page_vars["page"] = "your_account";
-$page_vars["page_url"] = Pages::getPageUrl("your_account");
-$page_vars["head_title"] = $LANG["phrase_your_account"];
-$page_vars["admin_info"] = $admin_info;
-$page_vars["text_date_formatting_link"] = General::evalSmartyString($LANG["text_date_formatting_link"], $replacement_info);
+$page_vars = array(
+    "page" => "your_account",
+    "g_success" => $success,
+    "g_message" => $message,
+    "page_url" => Pages::getPageUrl("your_account"),
+    "head_title" => $LANG["phrase_your_account"],
+    "admin_info" => $admin_info,
+    "text_date_formatting_link" => General::evalSmartyString($LANG["text_date_formatting_link"], $replacement_info)
+);
+
 $page_vars["head_js"] =<<<END
   var rules = [];
   rules.push("required,first_name,{$LANG["validation_no_first_name"]}");

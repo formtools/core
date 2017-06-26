@@ -7,8 +7,10 @@ use FormTools\Sessions;
 use FormTools\Settings;
 use FormTools\Themes;
 
+$success = true;
+$message = "";
 if (isset($request["update_files"])) {
-    list($g_success, $g_message) = Settings::updateFileSettings($request);
+    list($success, $message) = Settings::updateFileSettings($request);
 }
 $all_preset_types = array(
     "bmp","gif","jpg","jpeg","png","avi","mp3","mp4","css","js","htm","html","doc","rtf",
@@ -32,6 +34,8 @@ $LANG = Core::$L;
 // compile the list of vars to pass to the page
 $page_vars = array();
 $page_vars["page"] = "files";
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
 $page_vars["page_url"] = Pages::getPageUrl("settings_files");
 $page_vars["tabs"] = $tabs;
 $page_vars["js_messages"] = "";

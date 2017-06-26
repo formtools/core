@@ -21,11 +21,13 @@ $submission_list_sortable_id = "submission_list";
 $view_id = General::loadField("view_id", "form_{$form_id}_view_id");
 
 // this updates all four sections of the view at once (since all may have been modified)
+$success = true;
+$message = "";
 if (isset($request["update_view"])) {
 	$request["form_id"] = $form_id;
 	$request["view_fields_sortable_id"] = $view_fields_sortable_id;
 	$request["submission_list_sortable_id"] = $submission_list_sortable_id;
-	list($g_success, $g_message) = Views::updateView($view_id, $request);
+	list($success, $message) = Views::updateView($view_id, $request);
 }
 
 $form_info   = Forms::getForm($form_id);
@@ -109,7 +111,6 @@ foreach ($form_info["client_info"] as $client) {
 	if (in_array($client["account_id"], $selected_user_ids)) {
         continue;
     }
-
 	$available_users_str .= "<option value=\"{$client['account_id']}\">{$client['first_name']} {$client['last_name']}</option>\n";
 }
 
@@ -146,6 +147,8 @@ $LANG = Core::$L;
 
 // compile the templates information
 $page_vars["page"]       = "edit_view";
+$page_vars["g_success"]  = $success;
+$page_vars["g_message"]  = $message;
 $page_vars["page_url"]   = Pages::getPageUrl("edit_view");
 $page_vars["view_id"]    = $view_id;
 $page_vars["grouped_fields"] = $grouped_fields;

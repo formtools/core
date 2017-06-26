@@ -41,15 +41,18 @@ $editable_field_ids = ViewFields::getEditableViewFields($view_id);
 
 // update the submission
 $failed_validation = false;
+$success = true;
+$message = "";
 if (isset($_POST) && !empty($_POST)) {
     Sessions::set("new_search", "yes");
 	$request["view_id"] = $view_id;
 	$request["editable_field_ids"] = $editable_field_ids;
-	list($g_success, $g_message) = Submissions::updateSubmission($form_id, $submission_id, $request);
+	list($success, $message) = Submissions::updateSubmission($form_id, $submission_id, $request);
 
-	// if there was any problem udpating this submission, make a special note of it: we'll use that info to merge the current POST request
-	// info with the original field values to ensure the page contains the latest data (i.e. for cases where they fail server-side validation)
-	if (!$g_success) {
+	// if there was any problem updating this submission, make a special note of it: we'll use that info to merge the
+    // current POST request info with the original field values to ensure the page contains the latest data (i.e. for
+    // cases where they fail server-side validation)
+	if (!$success) {
 		$failed_validation = true;
 	}
 }
@@ -137,6 +140,8 @@ foreach ($shared_resources_array as $resource) {
 $page_vars = array(
     "page" => "admin_edit_submission",
     "page_url" => Pages::getPageUrl("admin_edit_submission"),
+    "g_success" => $success,
+    "g_message" => $message,
     "head_title" => $edit_submission_page_label,
     "form_info" => $form_info,
     "form_id" => $form_id,

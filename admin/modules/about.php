@@ -3,6 +3,7 @@
 use FormTools\Core;
 use FormTools\Themes;
 use FormTools\Modules;
+use FormTools\Pages;
 
 Core::init();
 

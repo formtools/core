@@ -20,8 +20,10 @@ $num_option_lists_per_page = Sessions::get("settings.num_option_lists_per_page")
 
 $order = General::loadField("order", "option_list_order");
 
+$success = true;
+$message = "";
 if (isset($_GET["delete"])) {
-    list($g_success, $g_message) = OptionLists::deleteOptionList($_GET["delete"]);
+    list($success, $message) = OptionLists::deleteOptionList($_GET["delete"]);
 }
 if (!is_numeric($option_list_page)) {
     $option_list_page = 1;
@@ -85,6 +87,8 @@ $LANG = Core::$L;
 
 $page = array(
     "page" => "option_lists",
+    "g_success" => $success,
+    "g_message" => $message,
     "text_option_list_page" => General::evalSmartyString($LANG["text_option_list_page"], array("link" => "../add/step1.php")),
     "page_url" => Pages::getPageUrl("option_lists"),
     "head_title" => $LANG["phrase_option_lists"],

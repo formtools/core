@@ -3,6 +3,7 @@
 use FormTools\Core;
 use FormTools\Menus;
 use FormTools\Pages;
+use FormTools\Sessions;
 use FormTools\Themes;
 
 $is_new_menu = false;
@@ -15,10 +16,12 @@ if (isset($request["create_new_menu"])) {
     $menu_id = $request["menu_id"];
 }
 
+$success = true;
+$message = "";
 if (isset($request["update_client_menu"])) {
 	$info = $_POST;
 	$info["sortable_id"] = $sortable_id;
-	list($g_success, $g_message) = Menus::updateClientMenu($info);
+	list($success, $message) = Menus::updateClientMenu($info);
 }
 
 $menu_info = Menus::getClientMenu($menu_id);
@@ -58,6 +61,8 @@ $program_name = Sessions::get("settings.program_name");
 
 $page_vars = array(
     "page" => "edit_client_menu",
+    "g_success" => $success,
+    "g_message" => $message,
     "page_url" => Pages::getPageUrl("edit_client_menu"),
     "tabs" => $tabs,
     "head_title" => "$program_name - {$LANG["phrase_setup_options"]} - {$LANG["word_menus"]}",

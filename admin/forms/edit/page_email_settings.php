@@ -4,13 +4,16 @@ use FormTools\Emails;
 use FormTools\Fields;
 use FormTools\Forms;
 use FormTools\Themes;
+use FormTools\Pages;
 
 
+$success = true;
+$message = "";
 if (isset($request["update_email_settings"])) {
-    list($g_success, $g_message) = Emails::setFieldAsEmailField($form_id, $request);
+    list($success, $message) = Emails::setFieldAsEmailField($form_id, $request);
 }
 if (isset($request["delete_form_email_id"])) {
-    list($g_success, $g_message) = Emails::unsetFieldAsEmailField($request["delete_form_email_id"]);
+    list($success, $message) = Emails::unsetFieldAsEmailField($request["delete_form_email_id"]);
 }
 
 $form_info = Forms::getForm($form_id);
@@ -35,6 +38,8 @@ foreach ($form_fields as $field_info) {
 
 // compile the templates information
 $page_vars["page"]       = "email_settings";
+$page_vars["g_success"]  = $success;
+$page_vars["g_message"]  = $message;
 $page_vars["page_url"]   = Pages::getPageUrl("edit_form_email_settings", array("form_id" => $form_id));
 $page_vars["head_title"] = "{$LANG["phrase_edit_form"]} - {$LANG["phrase_email_settings"]}";
 $page_vars["form_info"]  = $form_info;

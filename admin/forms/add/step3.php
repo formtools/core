@@ -50,15 +50,18 @@ $replacement_info = array(
 );
 $code_form_para_2 = General::evalSmartyString($LANG["text_add_form_step_2_para_6"], $replacement_info);
 
-
+$success = true;
+$message = "";
 if (isset($_POST["refresh"]) && $form_info["is_initialized"] == "no") {
-	$g_success = false;
-	$g_message = $LANG["notify_no_test_submission"];
+	$success = false;
+	$message = $LANG["notify_no_test_submission"];
 }
 
 
 // compile the header information
 $page_vars["page"]     = "add_form3";
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
 $page_vars["page_url"] = Pages::getPageUrl("add_form3");
 $page_vars["head_title"] = "{$LANG['phrase_add_form']} - {$LANG["phrase_step_3"]}";
 $page_vars["form_id"] = $form_id;

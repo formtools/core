@@ -10,8 +10,10 @@ use FormTools\Views;
 
 
 // update this client
+$success = true;
+$message = "";
 if (isset($_POST["update_client"])) {
-    list($g_success, $g_message) = Administrator::adminUpdateClient($request, 3);
+    list($success, $message) = Administrator::adminUpdateClient($request, 3);
 }
 
 $client_info = Accounts::getAccountInfo($client_id);
@@ -71,6 +73,8 @@ $root_url = Core::getRootUrl();
 
 // compile header information
 $page_vars["page"] = "forms";
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
 $page_vars["page_url"] = Pages::getPageUrl("edit_client_forms", array("client_id" => $client_id));
 $page_vars["head_title"]   = "{$LANG["phrase_edit_client"]} - {$LANG["word_forms"]}";
 $page_vars["client_info"]    = $client_info;

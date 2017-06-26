@@ -8,8 +8,10 @@ use FormTools\Pages;
 
 $sortable_id = "multi_page_form_list";
 
+$success = true;
+$message = "";
 if (isset($request["update_main"])) {
-    list($g_success, $g_message) = Forms::updateFormMainTab($request, $form_id);
+    list($success, $message) = Forms::updateFormMainTab($request, $form_id);
 }
 
 $form_info = Forms::getForm($form_id);
@@ -31,6 +33,8 @@ $LANG = Core::$L;
 
 // continued from parent
 $page_vars["page"] = "main";
+$page_vars["g_success"] = $success;
+$page_vars["g_message"] = $message;
 $page_vars["page_url"] = Pages::getPageUrl("edit_form_main", array("form_id" => $form_id));
 $page_vars["head_title"] = "{$LANG["phrase_edit_form"]} - {$LANG["word_main"]}";
 $page_vars["form_info"]  = $form_info;

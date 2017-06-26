@@ -37,7 +37,7 @@
       <tr>
         <td><img src="{$theme_url}/images/account_section_left_{$swatch}.jpg" border="0" /></td>
         <td id="account_section">
-          {if $SESSION.account.is_logged_in}
+          {if $is_logged_in}
             {if $settings.release_type == "alpha"}
               <b>{$settings.program_version}-alpha-{$settings.release_date}</b>
             {elseif $settings.release_type == "beta"}
@@ -45,7 +45,7 @@
             {else}
               <b>{$settings.program_version}</b>
             {/if}
-            {if $SESSION.account.account_type == "admin" && !$g_hide_upgrade_link}
+            {if $account.account_type == "admin" && !$g_hide_upgrade_link}
               |
               <a href="#" onclick="return ft.check_updates()" class="update_link">{$LANG.word_update}</a>
             {/if}

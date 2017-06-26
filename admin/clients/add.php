@@ -15,11 +15,14 @@ Core::$user->checkAuth("admin");
 
 $request = array_merge($_POST, $_GET);
 $post_values = array();
+
+$success = true;
+$message = "";
 if (isset($_POST) && !empty($_POST['add_client'])) {
-	list($g_success, $g_message, $new_account_id) = Administrator::addClient($request);
+	list($success, $message, $new_account_id) = Administrator::addClient($request);
 
 	// if added, redirect to the manage client page
-	if ($g_success) {
+	if ($success) {
 	    General::redirect("edit.php?page=main&client_id=$new_account_id");
 		exit;
 	} else {
@@ -76,6 +79,8 @@ END;
 // compile the header information
 $page_vars = array(
     "page" => "add_client",
+    "g_success" => $success,
+    "g_message" => $message,
     "page_url" => Pages::getPageUrl("add_client"),
     "head_title" => $LANG["phrase_add_client"],
     "required_password_chars" => $required_password_chars,

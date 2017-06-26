@@ -217,74 +217,15 @@ class Themes {
         $theme = (empty($theme)) ? Core::$user->getTheme() : $theme;
         $swatch = (empty($swatch)) ? Core::$user->getSwatch() : $swatch;
 
-        $smarty = Templates::getPreloadedSmarty($theme);
-
-        if (Core::$user->isLoggedIn()) {
-            $smarty->assign("settings", Sessions::get("settings"));
-            $smarty->assign("account", Sessions::get("account"));
-            $smarty->assign("menu_items", Sessions::get("menu.menu_items"));
-        } else {
-            $smarty->assign("menu_items", array());
-        }
+        $smarty = Templates::getPreloadedSmarty($theme, $page_vars);
         $smarty->assign("swatch", $swatch);
-
-        $g_success = (isset($page_vars["g_success"])) ?  $page_vars["g_success"] : "";
-        $g_message = (isset($page_vars["g_message"])) ?  $page_vars["g_message"] : "";
-
-        // if this page has been told to display a custom message, override g_success and g_message
-        if (isset($_GET["message"])) {
-            list($found, $success, $message) = General::displayCustomPageMessage($_GET["message"]);
-            if ($found) {
-                $g_success = $success;
-                $g_message = $message;
-            }
-        }
-        $smarty->assign("g_success", $g_success);
-        $smarty->assign("g_message", $g_message);
 
         if (isset($page_vars["page_url"])) {
             $parent_page_url = Menus::getParentPageUrl($page_vars["page_url"]);
             $smarty->assign("nav_parent_page_url", $parent_page_url);
         }
 
-        // check the "required" vars are at least set so they don't produce warnings when smarty debug is enabled
-        if (!isset($page_vars["head_string"])) $page_vars["head_string"] = "";
-        if (!isset($page_vars["head_title"]))  $page_vars["head_title"] = "";
-        if (!isset($page_vars["head_js"]))     $page_vars["head_js"] = "";
-        if (!isset($page_vars["page"]))        $page_vars["page"] = "";
-
-        // if we need to include custom JS messages in the page, add it to the generated JS. Note: even if the js_messages
-        // key is defined but still empty, the General::generateJsMessages function is called, returning the "base" JS - like
-        // the JS version of g_root_url. Only if it is not defined will that info not be included.
-        $js_messages = (isset($page_vars["js_messages"])) ? General::generateJsMessages($page_vars["js_messages"]) : "";
-
-        if (!empty($page_vars["head_js"]) || !empty($js_messages)) {
-            $page_vars["head_js"] = "<script>\n//<![CDATA[\n{$page_vars["head_js"]}\n$js_messages\n//]]>\n</script>";
-        }
-
-        if (!isset($page_vars["head_css"])) {
-            $page_vars["head_css"] = "";
-        }
-
-        // now add the custom variables for this template, as defined in $page_vars
-        foreach ($page_vars as $key=>$value) {
-            $smarty->assign($key, $value);
-        }
-
-        // if smarty debug is on, enable Smarty debugging
-        if (Core::isSmartyDebugEnabled()) {
-            $smarty->debugging = true;
-        }
-
-        // TODO g_smarty renamed to smarty
         extract(Hooks::processHookCalls("main", compact("smarty", "template", "page_vars"), array("smarty")), EXTR_OVERWRITE);
-
-        // if the page or hook actually defined some CSS for inclusion in the page, wrap it in the appropriate style tag. This
-        // was safely moved here in 2.2.0, because nothing used it (!)
-//        if (!empty($smarty->_tpl_vars["head_css"])) {
-//            $smarty->set
-//            ("head_css", "<style type=\"text/css\">\n{$smarty->_tpl_vars["head_css"]}\n</style>");
-//        }
 
         $smarty->display(self::getSmartyTemplateWithFallback($theme, $template));
     }
@@ -302,10 +243,7 @@ class Themes {
      */
     public static function displayModulePage($template, $page_vars = array(), $theme = "", $swatch = "")
     {
-//        global $g_smarty_debug, $L;
-
         $root_dir = Core::getRootDir();
-        $root_url = Core::getRootUrl();
         $module_folder = Modules::getCurrentModuleFolder();
 
         if (empty($theme) && (Sessions::exists("account.theme"))) {
@@ -317,21 +255,12 @@ class Themes {
             $swatch = $settings["default_client_swatch"];
         }
 
-        $smarty = Templates::getPreloadedSmarty($theme);
-//        $smarty->setTemplateDir();
-//
-//        $smarty->setTemplateDir(array(
-//            "$root_dir/themes/$theme",
-//            "$root_dir/global/smarty_plugins/"
-//        ));
-
+        $smarty = Templates::getPreloadedSmarty($theme, $page_vars);
         Sessions::setIfNotExists("account.is_logged_in", false);
         Sessions::setIfNotExists("account.account_type", "");
 
         // this contains the custom language content of the module, in the language required. It's populated by
         // ft_init_module_page(), called on every module page
-
-        // get the language file content
         $module_lang_strings = Modules::getModuleLangFile($module_folder, Core::$user->getLang());
         $LANG[$module_folder] = $module_lang_strings;
         $smarty->assign("L", $module_lang_strings);
@@ -343,11 +272,6 @@ class Themes {
         $smarty->assign("account", $_SESSION["ft"]["account"]);
         $smarty->assign("swatch", $swatch);
 
-        // if this page has been told to dislay a custom message, override g_success and g_message
-//        if (isset($_GET["message"])) {
-//            list($g_success, $g_message) = General::displayCustomPageMessage($_GET["message"]);
-//        }
-
         $module_id = Modules::getModuleIdFromModuleFolder($module_folder);
         $module_nav = ModuleMenu::getMenuItems($module_id, $module_folder);
         $smarty->assign("module_nav", $module_nav);
@@ -358,11 +282,6 @@ class Themes {
             $module_info = Modules::getModule($module_id);
             $page_vars["head_title"] = $module_info["module_name"];
         }
-
-        // check the "required" vars are at least set so they don't produce warnings when smarty debug is enabled
-        if (!isset($page_vars["head_css"]))    $page_vars["head_css"] = "";
-        if (!isset($page_vars["head_js"]))     $page_vars["head_js"] = "";
-        if (!isset($page_vars["page"]))        $page_vars["page"] = "";
 
         // if we need to include custom JS messages in the page, add it to the generated JS. Note: even if the js_messages
         // key is defined but still empty, the General::generateJsMessages function is called, returning the "base" JS - like
@@ -376,13 +295,7 @@ class Themes {
         }
 
         if (!empty($page_vars["head_js"]) || !empty($js_messages)) {
-            $page_vars["head_js"] = "<script type=\"text/javascript\">\n//<![CDATA[\n{$page_vars["head_js"]}\n$js_messages\n//]]>\n</script>";
-        }
-
-        if (!isset($page_vars["head_css"])) {
-            $page_vars["head_css"] = "";
-        } else if (!empty($page_vars["head_css"])) {
-            $page_vars["head_css"] = "<style type=\"text/css\">\n{$page_vars["head_css"]}\n</style>";
+            $smarty->assign("head_js", "<script type=\"text/javascript\">\n//<![CDATA[\n{$page_vars["head_js"]}\n$js_messages\n//]]>\n</script>");
         }
 
         // if there's a Smarty folder, import any of its resources
@@ -390,9 +303,8 @@ class Themes {
             $smarty->addPluginsDir("$root_dir/modules/$module_folder/smarty_plugins");
         }
 
-        // now add the custom variables for this template, as defined in $page_vars
-        foreach ($page_vars as $key=>$value) {
-            $smarty->assign($key, $value);
+        if (!isset($page_vars["hide_nav_menu"])) {
+            $smarty->assign("hide_nav_menu", false);
         }
 
         extract(Hooks::processHookCalls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);

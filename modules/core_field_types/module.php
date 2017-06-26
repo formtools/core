@@ -4,8 +4,8 @@ $MODULE = array(
     "author"          => "Form Tools",
     "author_email"    => "ben.keen@gmail.com",
     "author_link"     => "http://formtools.org",
-    "version"         => "1.0.2",
-    "date"            => "2011-11-22",
+    "version"         => "1.1.0",
+    "date"            => "2017-06-24",
     "origin_language" => "en_us"
 );
 

@@ -14,9 +14,11 @@ Core::$user->checkAuth("admin");
 
 $request = array_merge($_POST, $_GET);
 
+$success = true;
+$message = "";
 if (isset($request["add_form"])) {
-	list($g_success, $g_message, $new_form_id) = Forms::createInternalForm($request);
-	if ($g_message) {
+	list($success, $message, $new_form_id) = Forms::createInternalForm($request);
+	if ($message) {
         General::redirect("../edit/?form_id={$new_form_id}&message=notify_internal_form_created");
 	}
 }
@@ -50,6 +52,8 @@ END;
 // compile the header information
 $page = array(
     "page"     => "add_form_internal",
+    "g_success" => $success,
+    "g_message" => $message,
     "page_url" => Pages::getPageUrl("add_form_internal"),
     "head_title" => $LANG["phrase_add_form"],
     "head_js" => $head_js

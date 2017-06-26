@@ -9,8 +9,10 @@ use FormTools\Views;
 
 $view_id = $request["view_id"];
 
+$success = true;
+$message = "";
 if (isset($request["update_public_view_omit_list"])) {
-    list($g_success, $g_message) = Views::updatePublicViewOmitList($request, $view_id);
+    list($success, $message) = Views::updatePublicViewOmitList($request, $view_id);
 }
 
 $form_info = Forms::getForm($form_id);
@@ -22,6 +24,8 @@ $LANG = Core::$L;
 $page_vars["prev_tabset_link"] = (!empty($links["prev_form_id"])) ? "?page=views&form_id={$links["prev_form_id"]}" : "";
 $page_vars["next_tabset_link"] = (!empty($links["next_form_id"])) ? "?page=views&form_id={$links["next_form_id"]}" : "";
 
+$page_vars["g_success"]  = $success;
+$page_vars["g_message"]  = $message;
 $page_vars["page"]       = "public_view_omit_list";
 $page_vars["page_url"]   = Pages::getPageUrl("edit_form_public_view_omit_list", array("form_id" => $form_id, "view_id" => $view_id));
 $page_vars["view_id"]    = $view_id;

@@ -15,20 +15,22 @@ Core::$user->checkAuth("admin");
 
 $request = array_merge($_POST, $_GET);
 
+$success = true;
+$message = "";
 if (isset($request["install"])) {
-    list($g_success, $g_message) = Modules::installModule($request);
+    list($success, $message) = Modules::installModule($request);
 }
 if (isset($request["enable_modules"])) {
-    list($g_success, $g_message) = Modules::updateEnabledModules($request);
+    list($success, $message) = Modules::updateEnabledModules($request);
 }
 if (isset($request["refresh_module_list"])) {
-    list($g_success, $g_message) = Modules::updateModuleList();
+    list($success, $message) = Modules::updateModuleList();
 }
 if (isset($request["uninstall"])) {
-    list($g_success, $g_message) = Modules::uninstallModule($request["uninstall"]);
+    list($success, $message) = Modules::uninstallModule($request["uninstall"]);
 }
 if (isset($request["upgrade"])) {
-    list($g_success, $g_message) = Modules::upgradeModule($request["upgrade"]);
+    list($success, $message) = Modules::upgradeModule($request["upgrade"]);
 }
 if (isset($_GET["reset"])) {
     Sessions::set("module_sort_order", "");
@@ -82,6 +84,8 @@ $LANG = Core::$L;
 
 $page_vars = array(
     "page"        => "modules",
+    "g_success"   => $success,
+    "g_message"   => $message,
     "page_url"    => Pages::getPageUrl("modules"),
     "head_title"  => $LANG["word_modules"],
     "modules"     => $modules,

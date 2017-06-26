@@ -12,7 +12,6 @@ use FormTools\Sessions;
 Core::init();
 Core::$user->checkAuth("client");
 
-
 $request = array_merge($_POST, $_GET);
 if (isset($request["external"])) {
     General::redirect("step1.php");

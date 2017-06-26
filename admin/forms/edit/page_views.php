@@ -12,18 +12,20 @@ $form_info = Forms::getForm($form_id);
 
 // this is called when the user clicks Update OR deletes a group. The delete group first updates the
 // view order to ensure that whatever group is being deleted actually has the View that the user expects
+$success = true;
+$message = "";
 if (isset($request["update_views"]) || isset($request["{$sortable_id}_sortable__delete_group"])) {
 	$request["sortable_id"] = $sortable_id;
-	list($g_success, $g_message) = Views::updateViews($request);
+	list($success, $message) = Views::updateViews($request);
 
 	if (isset($request["{$sortable_id}_sortable__delete_group"])) {
-        list($g_success, $g_message) = Views::deleteViewGroup($request["{$sortable_id}_sortable__delete_group"]);
+        list($success, $message) = Views::deleteViewGroup($request["{$sortable_id}_sortable__delete_group"]);
     }
 }
 
 // if the user deleted all their Views & View Groups, a special "add default view" option appears
 if (isset($request["recreate_initial_view"])) {
-	list($g_success, $g_message) = Views::addDefaultView($form_id);
+	list($success, $message) = Views::addDefaultView($form_id);
 }
 
 $grouped_views = Views::getGroupedViews($form_id, array("omit_empty_groups" => false, "include_clients" => true));
@@ -40,6 +42,8 @@ $root_url = Core::getRootUrl();
 
 // compile the template information
 $page_vars["page"]       = "views";
+$page_vars["g_success"]  = $success;
+$page_vars["g_message"]  = $message;
 $page_vars["page_url"]   = Pages::getPageUrl("edit_form_views", array("form_id" => $form_id));
 $page_vars["grouped_views"] = $grouped_views;
 $page_vars["head_title"] = "{$LANG["phrase_edit_form"]} - {$LANG["word_views"]}";

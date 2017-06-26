@@ -14,9 +14,11 @@ use FormTools\Themes;
 
 $sortable_id = "edit_fields";
 
+$success = true;
+$message = "";
 if (isset($request["update_fields"])) {
 	$request["sortable_id"] = $sortable_id;
-	list($g_success, $g_message) = Forms::updateFormFieldsTab($form_id, $request);
+	list($success, $message) = Forms::updateFormFieldsTab($form_id, $request);
 }
 
 $form_info = Forms::getForm($form_id);
@@ -60,6 +62,8 @@ $max_form_fields = Core::getMaxFormFields();
 
 // compile the template fields
 $page_vars["page"]         = "fields";
+$page_vars["g_success"]    = $success;
+$page_vars["g_message"]    = $message;
 $page_vars["page_url"]     = Pages::getPageUrl("edit_form_fields", array("form_id" => $form_id));
 $page_vars["head_title"]   = "{$LANG["phrase_edit_form"]} - {$LANG["word_fields"]}";
 $page_vars["form_info"]    = $form_info;
