@@ -277,7 +277,7 @@ END;
  */
 var cf_counter = {};
 cf_counter.get_max_count = function(el) {
-  var classes = \$(el).attr('class').split(" ").slice(-1);
+  var classes = $(el).attr('class').split(" ").slice(-1);
   var max = null;
   for (var i=0; i<classes.length; i++) {
     var result = classes[i].match(/max(\d+)/);
@@ -296,9 +296,9 @@ $(function() {
       return;
     }
     $(this).bind("keydown", function() {
-      var val = \$(this).val();
+      var val = $(this).val();
       var len = val.split(/[\s]+/);
-      var field_name = \$(this).attr("name");
+      var field_name = $(this).attr("name");
       var num_words  = len.length - 1;
       if (num_words > max) {
         var allowed_words = val.split(/[\s]+/, max);
@@ -1435,263 +1435,498 @@ END;
     // ------------------------------------------------------------------------------------------------
 
 
+    $time_edit_field =<<< END
+<div class="cf_date_group">
+  <input type="input" name="{\$NAME}" value="{\$VALUE}" class="cf_datefield cf_timepicker" />
+  <input type="hidden" id="{\$NAME}_id" value="{\$display_format}" />
+  {if \$comments}
+    <div class="cf_field_comments">{\$comments}</div>
+  {/if}
+</div>
+END;
+
+    $time_css =<<< END
+.cf_timepicker {
+  width: 60px;
+}
+.ui-timepicker-div .ui-widget-header {
+  margin-bottom: 8px;
+}
+.ui-timepicker-div dl {
+  text-align: left;
+}
+.ui-timepicker-div dl dt {
+  height: 25px;
+}
+.ui-timepicker-div dl dd {
+  margin: -25px 0 10px 65px;
+}
+.ui-timepicker-div td {
+  font-size: 90%;
+}
+END;
+
+    $time_js =<<< END
+$(function() {
+  var default_settings = {
+    buttonImage:     g.root_url + "/global/images/clock.png",
+    showOn:          "both",
+    buttonImageOnly: true
+  }
+  $(".cf_timepicker").each(function() {
+    var field_name = $(this).attr("name");
+    var settings = default_settings;
+    if ($("#" + field_name + "_id").length) {
+      var settings_list = $("#" + field_name + "_id").val().split("|");
+      if (settings_list.length > 0) {
+        settings.timeFormat = settings_list[0];
+        for (var i=1; i<settings_list.length; i++) {
+          var parts = settings_list[i].split("`");
+          if (parts[1] === "true") {
+            parts[1] = true;
+          } else if (parts[1] === "false") {
+            parts[1] = false;
+          }
+          settings[parts[0]] = parts[1];
+        }
+      }
+    }
+    $(this).timepicker(settings);
+  });
+});
+END;
+
+
 
     $cft_field_types["time"] = array(
+        "field_type" => array(
+            "is_editable"                    => "yes",
+            "non_editable_info"              => "NULL",
+            "managed_by_module_id"           => "NULL",
+            "field_type_name"                => "{\$LANG.word_time}",
+            "field_type_identifier"          => "time",
+            "is_file_field"                  => "no",
+            "is_date_field"                  => "no",
+            "raw_field_type_map"             => "",
+            "compatible_field_sizes"         => "small",
+            "view_field_rendering_type"      => "none",
+            "view_field_php_function_source" => "core",
+            "view_field_php_function"        => "",
+            "view_field_smarty_markup"       => "",
+            "edit_field_smarty_markup"       => $time_edit_field,
+            "php_processing"                 => "",
+            "resources_css"                  => $time_css,
+            "resources_js"                   => $time_js
+        ),
 
-    "field_type" => array(
-      "is_editable"                    => "yes",
-      "non_editable_info"              => "NULL",
-      "managed_by_module_id"           => "NULL",
-      "field_type_name"                => "{\$LANG.word_time}",
-      "field_type_identifier"          => "time",
-      "is_file_field"                  => "no",
-      "is_date_field"                  => "no",
-      "raw_field_type_map"             => "",
-      "compatible_field_sizes"         => "small",
-      "view_field_rendering_type"      => "none",
-      "view_field_php_function_source" => "core",
-      "view_field_php_function"        => "",
-      "view_field_smarty_markup"       => "",
-      "edit_field_smarty_markup"       => "<div class=\"cf_date_group\">\r\n  <input type=\"input\" name=\"{\$NAME}\" value=\"{\$VALUE}\" class=\"cf_datefield cf_timepicker\" />\r\n  <input type=\"hidden\" id=\"{\$NAME}_id\" value=\"{\$display_format}\" />\r\n  \r\n  {if \$comments}\r\n    <div class=\"cf_field_comments\">{\$comments}</div>\r\n  {/if}\r\n</div>",
-      "php_processing"                 => "",
-      "resources_css"                  => ".cf_timepicker {\r\n  width: 60px; \r\n}\r\n.ui-timepicker-div .ui-widget-header{ margin-bottom: 8px; }\r\n.ui-timepicker-div dl{ text-align: left; }\r\n.ui-timepicker-div dl dt{ height: 25px; }\r\n.ui-timepicker-div dl dd{ margin: -25px 0 10px 65px; }\r\n.ui-timepicker-div td { font-size: 90%; }",
-      "resources_js"                   => "\$(function() {  \r\n  var default_settings = {\r\n    buttonImage:     g.root_url + \"/global/images/clock.png\",      \r\n    showOn:          \"both\",\r\n    buttonImageOnly: true\r\n  }\r\n  \$(\".cf_timepicker\").each(function() {\r\n    var field_name = \$(this).attr(\"name\");\r\n    var settings = default_settings;\r\n    if (\$(\"#\" + field_name + \"_id\").length) {\r\n      var settings_list = \$(\"#\" + field_name + \"_id\").val().split(\"|\");      \r\n      if (settings_list.length > 0) {\r\n        settings.timeFormat = settings_list[0];\r\n        for (var i=1; i<settings_list.length; i++) {\r\n          var parts = settings_list[i].split(\"`\");\r\n          if (parts[1] === \"true\") {\r\n            parts[1] = true;\r\n          } else if (parts[1] === \"false\") {\r\n            parts[1] = false;\r\n          }\r\n          settings[parts[0]] = parts[1];\r\n        }\r\n      }\r\n    }\r\n    \$(this).timepicker(settings);\r\n  });\r\n});"
-    ),
+        "settings" => array(
 
-    "settings" => array(
+            // Custom Display Format
+            array(
+                "field_label"              => "{\$LANG.phrase_custom_display_format}",
+                "field_setting_identifier" => "display_format",
+                "field_type"               => "select",
+                "field_orientation"        => "na",
+                "default_value_type"       => "static",
+                "default_value"            => "h:mm TT|ampm`true",
 
-      // Custom Display Format
-      array(
-        "field_label"              => "{\$LANG.phrase_custom_display_format}",
-        "field_setting_identifier" => "display_format",
-        "field_type"               => "select",
-        "field_orientation"        => "na",
-        "default_value_type"       => "static",
-        "default_value"            => "h:mm TT|ampm`true",
+                "options" => array(
+                    array(
+                        "option_text"       => "8:00 AM",
+                        "option_value"      => "h:mm TT|ampm`true",
+                        "is_new_sort_group" => "yes"
+                    ),
+                    array(
+                        "option_text"       => "16:00",
+                        "option_value"      => "hh:mm|ampm`false",
+                        "is_new_sort_group" => "yes"
+                    ),
+                    array(
+                        "option_text"       => "16:00:00",
+                        "option_value"      => "hh:mm:ss|showSecond`true|ampm`false",
+                        "is_new_sort_group" => "yes"
+                    ),
+                )
+            ),
 
-        "options" => array(
-          array(
-            "option_text"       => "8:00 AM",
-            "option_value"      => "h:mm TT|ampm`true",
-            "is_new_sort_group" => "yes"
-          ),
-          array(
-            "option_text"       => "16:00",
-            "option_value"      => "hh:mm|ampm`false",
-            "is_new_sort_group" => "yes"
-          ),
-          array(
-            "option_text"       => "16:00:00",
-            "option_value"      => "hh:mm:ss|showSecond`true|ampm`false",
-            "is_new_sort_group" => "yes"
-          ),
+            // Field Comments
+            array(
+                "field_label"              => "{\$LANG.phrase_field_comments}",
+                "field_setting_identifier" => "comments",
+                "field_type"               => "textarea",
+                "field_orientation"        => "na",
+                "default_value_type"       => "static",
+                "default_value"            => "",
+                "options"                  => array()
+            )
+        ),
+
+        "validation" => array(
+            array(
+                "rsv_rule"                 => "required",
+                "rule_label"               => "{\$LANG.word_required}",
+                "rsv_field_name"           => "{\$field_name}",
+                "custom_function"          => "",
+                "custom_function_required" => "na",
+                "default_error_message"    => "{\$LANG.validation_default_rule_required}"
+            )
         )
-      ),
-
-      // Field Comments
-      array(
-        "field_label"              => "{\$LANG.phrase_field_comments}",
-        "field_setting_identifier" => "comments",
-        "field_type"               => "textarea",
-        "field_orientation"        => "na",
-        "default_value_type"       => "static",
-        "default_value"            => "",
-        "options"                  => array()
-      )
-    ),
-
-    "validation" => array(
-      array(
-        "rsv_rule"                 => "required",
-        "rule_label"               => "{\$LANG.word_required}",
-        "rsv_field_name"           => "{\$field_name}",
-        "custom_function"          => "",
-        "custom_function_required" => "na",
-        "default_error_message"    => "{\$LANG.validation_default_rule_required}"
-      )
-    )
-  );
+    );
 
 
-  // ------------------------------------------------------------------------------------------------
+    // ------------------------------------------------------------------------------------------------
 
+    $phone_view_field =<<< END
+{php}
+\$format = \$this->get_template_vars("phone_number_format");
+\$values = explode("|", \$this->get_template_vars("VALUE"));
+\$pieces = preg_split("/(x+)/", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);
+\$counter = 1;
+\$output = "";
+\$has_content = false;
+foreach (\$pieces as \$piece) {
+  if (empty(\$piece)) {
+    continue;
+  }
+  if (\$piece[0] == "x") {
+    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : "";
+    \$output .= \$value;
+    if (!empty(\$value)) {
+      \$has_content = true;
+    }
+    \$counter++;
+  } else {
+    \$output .= \$piece;
+  }
+}
 
-  $cft_field_types["phone"] = array(
+if (!empty(\$output) && \$has_content) {
+  echo \$output;
+}
+{/php}
+END;
 
-    "field_type" => array(
-      "is_editable"                    => "yes",
-      "non_editable_info"              => "NULL",
-      "managed_by_module_id"           => "NULL",
-      "field_type_name"                => "{\$LANG.phrase_phone_number}",
-      "field_type_identifier"          => "phone",
-      "is_file_field"                  => "no",
-      "is_date_field"                  => "no",
-      "raw_field_type_map"             => "",
-      "compatible_field_sizes"         => "small,medium",
-      "view_field_rendering_type"      => "php",
-      "view_field_php_function_source" => "core",
-      "view_field_php_function"        => "FieldTypes::displayFieldTypePhoneNumber",
-      "view_field_smarty_markup"       => "{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\n\$output = \"\";\r\n\$has_content = false;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (empty(\$piece))\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {    \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$output .= \$value;\r\n    if (!empty(\$value))\r\n    {\r\n      \$has_content = true;\r\n    }\r\n    \$counter++;\r\n  } else {\r\n    \$output .= \$piece;\r\n  }\r\n}\r\n\r\nif (!empty(\$output) && \$has_content)\r\n  echo \$output;\r\n{/php}",
-      "edit_field_smarty_markup"       => "{php}\r\n\$format = \$this->get_template_vars(\"phone_number_format\");\r\n\$values = explode(\"|\", \$this->get_template_vars(\"VALUE\"));\r\n\$name   = \$this->get_template_vars(\"NAME\");\r\n\r\n\$pieces = preg_split(\"/(x+)/\", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);\r\n\$counter = 1;\r\nforeach (\$pieces as \$piece)\r\n{\r\n  if (strlen(\$piece) == 0)\r\n    continue;\r\n\r\n  if (\$piece[0] == \"x\") {\r\n    \$size = strlen(\$piece); \r\n    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : \"\";\r\n    \$value = htmlspecialchars(\$value);\r\n    echo \"<input type=\\\\\"text\\\\\" name=\\\\\"{\$name}_\$counter\\\\\" value=\\\\\"\$value\\\\\"\r\n            size=\\\\\"\$size\\\\\" maxlength=\\\\\"\$size\\\\\" />\";\r\n    \$counter++;\r\n  } else {\r\n    echo \$piece;\r\n  }\r\n}\r\n{/php}\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}",
-      "php_processing"                 => "\$field_name = \$vars[\"field_info\"][\"field_name\"];\r\n\$joiner = \"|\";\r\n\r\n\$count = 1;\r\n\$parts = array();\r\nwhile (isset(\$vars[\"data\"][\"{\$field_name}_\$count\"]))\r\n{\r\n  \$parts[] = \$vars[\"data\"][\"{\$field_name}_\$count\"];\r\n  \$count++;\r\n}\r\n\$value = implode(\"|\", \$parts);",
-      "resources_css"                  => "",
-      "resources_js"                   => "var cf_phone = {};\r\ncf_phone.check_required = function() {\r\n  var errors = [];\r\n  for (var i=0; i<rsv_custom_func_errors.length; i++) {\r\n    if (rsv_custom_func_errors[i].func != \"cf_phone.check_required\") {\r\n      continue;\r\n    }\r\n    var field_name = rsv_custom_func_errors[i].field;\r\n    var fields = $(\"input[name^=\\\\\"\" + field_name + \"_\\\\\"]\");\r\n    fields.each(function() {\r\n      if (!this.name.match(/_(\\\\d+)$/)) {\r\n        return;\r\n      }\r\n      var req_len = $(this).attr(\"maxlength\");\r\n      var actual_len = this.value.length;\r\n      if (req_len != actual_len || this.value.match(/\\\\D/)) {\r\n        var el = document.edit_submission_form[field_name];\r\n        errors.push([el, rsv_custom_func_errors[i].err]);\r\n        return false;\r\n      }\r\n    });\r\n  }\r\n\r\n  if (errors.length) {\r\n    return errors;\r\n  }\r\n\r\n  return true;\r\n  \r\n}"
-    ),
+    $phone_edit_field =<<< END
+{php}
+\$format = \$this->get_template_vars("phone_number_format");
+\$values = explode("|", \$this->get_template_vars("VALUE"));
+\$name   = \$this->get_template_vars("NAME");
+\$pieces = preg_split("/(x+)/", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);
+\$counter = 1;
 
-    "settings" => array(
+foreach (\$pieces as \$piece) {
+  if (strlen(\$piece) == 0) {
+    continue;
+  }
+  if (\$piece[0] == "x") {
+    \$size = strlen(\$piece);
+    \$value = (isset(\$values[\$counter-1])) ? \$values[\$counter-1] : "";
+    \$value = htmlspecialchars(\$value);
+    echo "<input type=\"text\" name=\"{\$name}_\$counter\" value=\"\$value\" size=\"\$size\" maxlength="\$size\" />";
+    \$counter++;
+  } else {
+    echo \$piece;
+  }
+}
+{/php}
+{if \$comments}
+  <div class="cf_field_comments">{\$comments}</div>
+{/if}
+END;
 
-      // Phone Number Format
-      array(
-        "field_label"              => "{\$LANG.phrase_phone_number_format}",
-        "field_setting_identifier" => "phone_number_format",
-        "field_type"               => "textbox",
-        "field_orientation"        => "na",
-        "default_value_type"       => "static",
-        "default_value"            => "(xxx) xxx-xxxx",
-        "options"                  => array()
-      ),
+    $phone_php_processing =<<< END
+\$field_name = \$vars["field_info"]["field_name"];
+\$joiner = "|";
 
-      // Field Comments
-      array(
-        "field_label"              => "{\$LANG.phrase_field_comments}",
-        "field_setting_identifier" => "comments",
-        "field_type"               => "textarea",
-        "field_orientation"        => "na",
-        "default_value_type"       => "static",
-        "default_value"            => "",
-        "options"                  => array()
-      )
-    ),
+\$count = 1;
+\$parts = array();
+while (isset(\$vars["data"]["{\$field_name}_\$count"])) {
+  \$parts[] = \$vars["data"]["{\$field_name}_\$count"];
+  \$count++;
+}
+\$value = implode("|", \$parts);
+END;
 
-    "validation" => array(
-      array(
-        "rsv_rule"                 => "function",
-        "rule_label"               => "{\$LANG.word_required}",
-        "rsv_field_name"           => "",
-        "custom_function"          => "cf_phone.check_required",
-        "custom_function_required" => "yes",
-        "default_error_message"    => "{\$LANG.validation_default_phone_num_required}"
-      )
-    )
-  );
+    $phone_js =<<< END
+var cf_phone = {};
+cf_phone.check_required = function() {
+  var errors = [];
+  for (var i=0; i<rsv_custom_func_errors.length; i++) {
+    if (rsv_custom_func_errors[i].func != "cf_phone.check_required") {
+      continue;
+    }
+    var field_name = rsv_custom_func_errors[i].field;
+    var fields = $("input[name^=\"" + field_name + "_\"]");
+    fields.each(function() {
+      if (!this.name.match(/_(\d+)$/)) {
+        return;
+      }
+      var req_len = $(this).attr("maxlength");
+      var actual_len = this.value.length;
+      if (req_len != actual_len || this.value.match(/\D/)) {
+        var el = document.edit_submission_form[field_name];
+        errors.push([el, rsv_custom_func_errors[i].err]);
+        return false;
+      }
+    });
+  }
+  if (errors.length) {
+    return errors;
+  }
+  
+  return true;
+}
+END;
 
+    $cft_field_types["phone"] = array(
+        "field_type" => array(
+            "is_editable"                    => "yes",
+            "non_editable_info"              => "NULL",
+            "managed_by_module_id"           => "NULL",
+            "field_type_name"                => "{\$LANG.phrase_phone_number}",
+            "field_type_identifier"          => "phone",
+            "is_file_field"                  => "no",
+            "is_date_field"                  => "no",
+            "raw_field_type_map"             => "",
+            "compatible_field_sizes"         => "small,medium",
+            "view_field_rendering_type"      => "php",
+            "view_field_php_function_source" => "core",
+            "view_field_php_function"        => "FieldTypes::displayFieldTypePhoneNumber",
+            "view_field_smarty_markup"       => $phone_view_field,
+            "edit_field_smarty_markup"       => $phone_edit_field,
+            "php_processing"                 => $phone_php_processing,
+            "resources_css"                  => "",
+            "resources_js"                   => $phone_js
+        ),
 
-  // ------------------------------------------------------------------------------------------------
+        "settings" => array(
 
+            // Phone Number Format
+            array(
+                "field_label"              => "{\$LANG.phrase_phone_number_format}",
+                "field_setting_identifier" => "phone_number_format",
+                "field_type"               => "textbox",
+                "field_orientation"        => "na",
+                "default_value_type"       => "static",
+                "default_value"            => "(xxx) xxx-xxxx",
+                "options"                  => array()
+            ),
 
-  $cft_field_types["code_markup"] = array(
+            // Field Comments
+            array(
+                "field_label"              => "{\$LANG.phrase_field_comments}",
+                "field_setting_identifier" => "comments",
+                "field_type"               => "textarea",
+                "field_orientation"        => "na",
+                "default_value_type"       => "static",
+                "default_value"            => "",
+                "options"                  => array()
+            )
+        ),
 
-    "field_type" => array(
-      "is_editable"                    => "yes",
-      "non_editable_info"              => "NULL",
-      "managed_by_module_id"           => "NULL",
-      "field_type_name"                => "{\$LANG.phrase_code_markup_field}",
-      "field_type_identifier"          => "code_markup",
-      "is_file_field"                  => "no",
-      "is_date_field"                  => "no",
-      "raw_field_type_map"             => "textarea",
-      "compatible_field_sizes"         => "large,very_large",
-      "view_field_rendering_type"      => "php",
-      "view_field_php_function_source" => "core",
-      "view_field_php_function"        => "FieldTypes::displayFieldTypeCodeMarkup",
-      "view_field_smarty_markup"       => "{if \$CONTEXTPAGE == \"edit_submission\"}\r\n  <textarea id=\"{\$NAME}_id\" name=\"{\$NAME}\">{\$VALUE}</textarea>\r\n  <script>\r\n  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(\"{\$NAME}_id\", \r\n  {literal}{{/literal}\r\n    height: \"{\$SIZE_PX}px\",\r\n    path:   \"{\$g_root_url}/global/codemirror/js/\",\r\n    readOnly: true,\r\n    {if \$code_markup == \"HTML\" || \$code_markup == \"XML\"}\r\n      parserfile: [\"parsexml.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/xmlcolors.css\"\r\n    {elseif \$code_markup == \"CSS\"}\r\n      parserfile: [\"parsecss.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/csscolors.css\"\r\n    {elseif \$code_markup == \"JavaScript\"}  \r\n      parserfile: [\"tokenizejavascript.js\", \"parsejavascript.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/jscolors.css\"\r\n    {/if}\r\n  {literal}});{/literal}\r\n  </script>\r\n{else}\r\n  {\$VALUE|strip_tags}\r\n{/if}",
-      "edit_field_smarty_markup"       => "<div class=\"editor\">\r\n  <textarea id=\"{\$NAME}_id\" name=\"{\$NAME}\">{\$VALUE}</textarea>\r\n</div>\r\n<script>\r\n  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(\"{\$NAME}_id\", \r\n  {literal}{{/literal}\r\n    height: \"{\$height}px\",\r\n    path:   \"{\$g_root_url}/global/codemirror/js/\",\r\n    {if \$code_markup == \"HTML\" || \$code_markup == \"XML\"}\r\n      parserfile: [\"parsexml.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/xmlcolors.css\"\r\n    {elseif \$code_markup == \"CSS\"}\r\n      parserfile: [\"parsecss.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/csscolors.css\"\r\n    {elseif \$code_markup == \"JavaScript\"}  \r\n      parserfile: [\"tokenizejavascript.js\", \"parsejavascript.js\"],\r\n      stylesheet: \"{\$g_root_url}/global/codemirror/css/jscolors.css\"\r\n    {/if}\r\n  {literal}});{/literal}\r\n</script>\r\n\r\n{if \$comments}\r\n  <div class=\"cf_field_comments\">{\$comments}</div>\r\n{/if}",
-      "php_processing"                 => "",
-      "resources_css"                  => ".cf_view_markup_field {\r\n  margin: 0px; \r\n}",
-      "resources_js"                   => "var cf_code = {};\r\ncf_code.check_required = function() {\r\n  var errors = [];\r\n  for (var i=0; i<rsv_custom_func_errors.length; i++) {\r\n    if (rsv_custom_func_errors[i].func != \"cf_code.check_required\") {\r\n      continue;\r\n    }\r\n    var field_name = rsv_custom_func_errors[i].field;\r\n    var val = \$.trim(window[\"code_mirror_\" + field_name].getCode());\r\n    if (!val) {\r\n      var el = document.edit_submission_form[field_name];\r\n      errors.push([el, rsv_custom_func_errors[i].err]);\r\n    }\r\n  }\r\n  if (errors.length) {\r\n    return errors;\r\n  }\r\n  return true;  \r\n}"
-    ),
-
-    "settings" => array(
-
-      // Code / Markup Type
-      array(
-        "field_label"              => "{\$LANG.phrase_code_markup_type}",
-        "field_setting_identifier" => "code_markup",
-        "field_type"               => "select",
-        "field_orientation"        => "na",
-        "default_value_type"       => "static",
-        "default_value"            => "HTML",
-
-        "options" => array(
-          array(
-            "option_text"       => "CSS",
-            "option_value"      => "CSS",
-            "is_new_sort_group" => "yes"
-          ),
-          array(
-            "option_text"       => "HTML",
-            "option_value"      => "HTML",
-            "is_new_sort_group" => "yes"
-          ),
-          array(
-            "option_text"       => "JavaScript",
-            "option_value"      => "JavaScript",
-            "is_new_sort_group" => "yes"
-          ),
-          array(
-            "option_text"       => "XML",
-            "option_value"      => "XML",
-            "is_new_sort_group" => "yes"
-          )
+        "validation" => array(
+            array(
+                "rsv_rule"                 => "function",
+                "rule_label"               => "{\$LANG.word_required}",
+                "rsv_field_name"           => "",
+                "custom_function"          => "cf_phone.check_required",
+                "custom_function_required" => "yes",
+                "default_error_message"    => "{\$LANG.validation_default_phone_num_required}"
+            )
         )
-      ),
+    );
 
-      // Height
-      array(
-        "field_label"              => "{\$LANG.word_height}",
-        "field_setting_identifier" => "height",
-        "field_type"               => "select",
-        "field_orientation"        => "na",
-        "default_value_type"       => "static",
-        "default_value"            => "200",
 
-        "options" => array(
-          array(
-            "option_text"       => "{\$LANG.phrase_tiny_50px}",
-            "option_value"      => "50",
-            "is_new_sort_group" => "yes"
-          ),
-          array(
-            "option_text"       => "{\$LANG.phrase_small_100px}",
-            "option_value"      => "100",
-            "is_new_sort_group" => "yes"
-          ),
-          array(
-            "option_text"       => "{\$LANG.phrase_medium_200px}",
-            "option_value"      => "200",
-            "is_new_sort_group" => "yes"
-          ),
-          array(
-            "option_text"       => "{\$LANG.phrase_large_400px}",
-            "option_value"      => "400",
-            "is_new_sort_group" => "yes"
-          )
+    // ------------------------------------------------------------------------------------------------
+
+    $code_view_field =<<< END
+{if \$CONTEXTPAGE == "edit_submission"}
+
+  <textarea id="{\$NAME}_id" name="{\$NAME}">{\$VALUE}</textarea>
+  <script>
+  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea("{\$NAME}_id", 
+  {literal}{{/literal} height: "{\$SIZE_PX}px", path: "{\$g_root_url}/global/codemirror/js/",
+  readOnly: true,
+  {if \$code_markup == "HTML" || \$code_markup == "XML"}
+    parserfile: ["parsexml.js"],
+    stylesheet: "{\$g_root_url}/global/codemirror/css/xmlcolors.css"
+  {elseif \$code_markup == "CSS"}
+    parserfile: ["parsecss.js"],
+    stylesheet: "{\$g_root_url}/global/codemirror/css/csscolors.css"
+  {elseif \$code_markup == "JavaScript"}
+    parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
+    stylesheet: "{\$g_root_url}/global/codemirror/css/jscolors.css"
+  {/if}
+  {literal}});{/literal}
+  </script>
+  
+{else}
+  {\$VALUE|strip_tags}
+{/if}
+END;
+
+    $code_edit_field =<<< END
+<div class="editor">
+  <textarea id="{\$NAME}_id" name="{\$NAME}">{\$VALUE}</textarea>
+</div>
+
+<script>
+var code_mirror_{\$NAME} = new CodeMirror.fromTextArea("{\$NAME}_id", {literal}{{/literal}
+  height: "{\$height}px",
+  path:   "{\$g_root_url}/global/codemirror/js/",
+  {if \$code_markup == "HTML" || \$code_markup == "XML"} 
+    parserfile: ["parsexml.js"],
+    stylesheet: "{\$g_root_url}/global/codemirror/css/xmlcolors.css"
+  {elseif \$code_markup == "CSS"}
+    parserfile: ["parsecss.js"],
+    stylesheet: "{\$g_root_url}/global/codemirror/css/csscolors.css"
+  {elseif \$code_markup == "JavaScript"}
+    parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
+    stylesheet: "{\$g_root_url}/global/codemirror/css/jscolors.css"
+  {/if}
+  {literal}});{/literal}
+</script>
+
+{if \$comments}
+  <div class="cf_field_comments">{\$comments}</div>
+{/if}
+END;
+
+    $code_js =<<< END
+var cf_code = {};
+cf_code.check_required = function() {
+  var errors = [];
+  for (var i=0; i<rsv_custom_func_errors.length; i++) {
+    if (rsv_custom_func_errors[i].func != "cf_code.check_required") {
+      continue;
+    }
+    var field_name = rsv_custom_func_errors[i].field;
+    var val = $.trim(window["code_mirror_" + field_name].getCode());
+    if (!val) {
+      var el = document.edit_submission_form[field_name];
+      errors.push([el, rsv_custom_func_errors[i].err]);
+    }
+  }
+  if (errors.length) {
+    return errors;
+  }
+  return true;
+}"
+END;
+
+
+    $cft_field_types["code_markup"] = array(
+        "field_type" => array(
+            "is_editable"                    => "yes",
+            "non_editable_info"              => "NULL",
+            "managed_by_module_id"           => "NULL",
+            "field_type_name"                => "{\$LANG.phrase_code_markup_field}",
+            "field_type_identifier"          => "code_markup",
+            "is_file_field"                  => "no",
+            "is_date_field"                  => "no",
+            "raw_field_type_map"             => "textarea",
+            "compatible_field_sizes"         => "large,very_large",
+            "view_field_rendering_type"      => "php",
+            "view_field_php_function_source" => "core",
+            "view_field_php_function"        => "FieldTypes::displayFieldTypeCodeMarkup",
+            "view_field_smarty_markup"       => $code_view_field,
+            "edit_field_smarty_markup"       => $code_edit_field,
+            "php_processing"                 => "",
+            "resources_css"                  => ".cf_view_markup_field {\r\n  margin: 0px; \r\n}",
+            "resources_js"                   => $code_js
+        ),
+
+        "settings" => array(
+
+            // Code / Markup Type
+            array(
+                "field_label"              => "{\$LANG.phrase_code_markup_type}",
+                "field_setting_identifier" => "code_markup",
+                "field_type"               => "select",
+                "field_orientation"        => "na",
+                "default_value_type"       => "static",
+                "default_value"            => "HTML",
+
+                "options" => array(
+                    array(
+                        "option_text"       => "CSS",
+                        "option_value"      => "CSS",
+                        "is_new_sort_group" => "yes"
+                    ),
+                    array(
+                        "option_text"       => "HTML",
+                        "option_value"      => "HTML",
+                        "is_new_sort_group" => "yes"
+                        ),
+                    array(
+                        "option_text"       => "JavaScript",
+                        "option_value"      => "JavaScript",
+                        "is_new_sort_group" => "yes"
+                        ),
+                    array(
+                        "option_text"       => "XML",
+                        "option_value"      => "XML",
+                        "is_new_sort_group" => "yes"
+                    )
+                )
+            ),
+
+            // Height
+            array(
+                "field_label"              => "{\$LANG.word_height}",
+                "field_setting_identifier" => "height",
+                "field_type"               => "select",
+                "field_orientation"        => "na",
+                "default_value_type"       => "static",
+                "default_value"            => "200",
+
+                "options" => array(
+                    array(
+                        "option_text"       => "{\$LANG.phrase_tiny_50px}",
+                        "option_value"      => "50",
+                        "is_new_sort_group" => "yes"
+                    ),
+                    array(
+                        "option_text"       => "{\$LANG.phrase_small_100px}",
+                        "option_value"      => "100",
+                        "is_new_sort_group" => "yes"
+                    ),
+                    array(
+                        "option_text"       => "{\$LANG.phrase_medium_200px}",
+                        "option_value"      => "200",
+                        "is_new_sort_group" => "yes"
+                    ),
+                    array(
+                        "option_text"       => "{\$LANG.phrase_large_400px}",
+                        "option_value"      => "400",
+                        "is_new_sort_group" => "yes"
+                    )
+                )
+            ),
+
+            // Field Comments
+            array(
+                "field_label"              => "{\$LANG.phrase_field_comments}",
+                "field_setting_identifier" => "comments",
+                "field_type"               => "textarea",
+                "field_orientation"        => "na",
+                "default_value_type"       => "static",
+                "default_value"            => "",
+                "options"                  => array()
+            )
+        ),
+
+        "validation" => array(
+            array(
+                "rsv_rule"                 => "function",
+                "rule_label"               => "{\$LANG.word_required}",
+                "rsv_field_name"           => "",
+                "custom_function"          => "cf_code.check_required",
+                "custom_function_required" => "yes",
+                "default_error_message"    => "{\$LANG.validation_default_rule_required}"
+            )
         )
-      ),
+    );
 
-      // Field Comments
-      array(
-        "field_label"              => "{\$LANG.phrase_field_comments}",
-        "field_setting_identifier" => "comments",
-        "field_type"               => "textarea",
-        "field_orientation"        => "na",
-        "default_value_type"       => "static",
-        "default_value"            => "",
-        "options"                  => array()
-      )
-    ),
-
-    "validation" => array(
-      array(
-        "rsv_rule"                 => "function",
-        "rule_label"               => "{\$LANG.word_required}",
-        "rsv_field_name"           => "",
-        "custom_function"          => "cf_code.check_required",
-        "custom_function_required" => "yes",
-        "default_error_message"    => "{\$LANG.validation_default_rule_required}"
-      )
-    )
-  );
-
-  return $cft_field_types;
+    return $cft_field_types;
 }
