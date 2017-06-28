@@ -528,13 +528,16 @@ class Forms
 
         $info = $request;
         $config = array(
-            "form_type"    => "internal",
-            "form_name"    => $info["form_name"],
-            "access_type"  => $info["access_type"]
+            "form_type"   => "internal",
+            "form_name"   => $info["form_name"],
+            "access_type" => $info["access_type"]
         );
 
         // set up the entry for the form
         list($success, $message, $new_form_id) = Forms::setupForm($config);
+        if (!$success) {
+            return array($success, $message);
+        }
 
         $form_data = array(
             "form_tools_form_id" => $new_form_id,
@@ -569,7 +572,7 @@ class Forms
                 ");
                 $db->bindAll(array(
                     "field_title" => "$field_name_prefix $order",
-                    "col_name" => "col_$order"
+                    "col_name"    => "col_$order"
                 ));
                 $db->execute();
                 $order++;
@@ -1190,13 +1193,12 @@ class Forms
         unset($form_data["form_tools_form_id"]);
         unset($form_data["form_tools_display_notification_page"]);
 
-        $db->beginTransaction();
-
         try {
+            $db->beginTransaction();
             Fields::addSubmissionIdSystemField($form_id, $textbox_field_type_id);
             $order = Fields::addFormFields($form_id, $form_data, 2); // 2 = the second field (we just added submission ID)
-            $order = Fields::addFormFileFields($form_id, $_FILES, $order);
-            Fields::addSystemFields($form_id, $textbox_field_type_id, $order);
+            $order2 = Fields::addFormFileFields($form_id, $_FILES, $order);
+            Fields::addSystemFields($form_id, $textbox_field_type_id, $order2);
             $db->processTransaction();
         } catch (PDOException $e) {
             $db->rollbackTransaction();

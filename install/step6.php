@@ -10,7 +10,7 @@ use FormTools\Sessions;
 use FormTools\Themes;
 
 Core::setHooksEnabled(false);
-Core::init();
+Core::initNoLogout();
 
 // the home-stretch! populate the hooks table
 Hooks::updateAvailableHooks();

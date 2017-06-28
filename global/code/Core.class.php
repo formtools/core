@@ -364,8 +364,15 @@ class Core {
      *   - if a user is logged in, instantiates the User object and makes it available via Core::$user
      *   - The language is user-specific, but lang strings available as a convenience here: Core::$L
      */
-    public static function init($options = array())
+    public static function init($params = array())
     {
+        $options = array_merge(array(
+            "start_sessions" => true,
+
+            // if the users session has expired, or if ?logout=1 is set in the query string, this logs the user out
+            "auto_logout" => true
+        ), $params);
+
         self::loadConfigFile();
 
         // explicitly set the error reporting value
@@ -379,16 +386,12 @@ class Core {
         Installation::checkInstalled();
 
         self::initSmarty();
-        if (!isset($options["no_sessions"])) {
+        if ($options["start_sessions"]) {
             self::startSessions();
         }
 
         self::$user = new User();
         self::$currLang = self::$user->getLang();
-
-        if (self::$user->isLoggedIn()) {
-            General::checkSessionsTimeout();
-        }
 
         self::setCurrLang(self::$currLang);
         self::enableDebugging();
@@ -399,9 +402,12 @@ class Core {
         }
 
         // not thrilled with this, but it needs to be handled on all pages and this is a convenient spot
-        if (!isset($options["no_logout"])) {
+        if ($options["auto_logout"]) {
             if (Core::checkConfigFileExists() && isset($_GET["logout"])) {
                 Core::$user->logout();
+            }
+            if (self::$user->isLoggedIn()) {
+                General::checkSessionsTimeout();
             }
         }
     }
@@ -409,9 +415,10 @@ class Core {
     // call the above method with a param/
     public static function initNoSessions()
     {
-        self::init(array("no_sessions" => true));
+        self::init(array("start_sessions" => false));
     }
 
+    // this sucks
     public static function initNoLogout()
     {
         self::init(array("no_logout" => true));

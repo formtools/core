@@ -44,8 +44,8 @@ class FieldTypes {
         "file"          => "word_file"
     );
 
-// pity this has to be hardcoded... but right now the field setting options don't have their own unique
-// identifiers
+    // pity this has to be hardcoded... but right now the field setting options don't have their own unique
+    // identifiers
     public static $defaultDatetimeFormat = "datetime:yy-mm-dd|h:mm TT|ampm`true";
 
 
@@ -199,19 +199,14 @@ class FieldTypes {
         $db = Core::$db;
 
         $db->query("
-            SELECT *
+            SELECT field_type_id
             FROM   {PREFIX}field_types
             WHERE  field_type_identifier = :identifier
         ");
         $db->bind("identifier", $identifier);
         $db->execute();
-        $info = $db->fetch();
 
-        if (empty($info)) {
-            return "";
-        } else {
-            return $info["field_type_id"];
-        }
+        return $db->fetch(PDO::FETCH_COLUMN);
     }
 
 

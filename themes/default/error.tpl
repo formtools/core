@@ -33,7 +33,7 @@
     <div class="title underline">
       {if $message_type == "error"}
         <span class="red bold">
-          {if $title}
+          {if isset($title) && !empty($title)}
             {$title|upper}
           {else}
             {$LANG.word_error|upper}
@@ -41,7 +41,7 @@
         </span>
       {else}
         <span class="blue bold">
-          {if $title}
+          {if isset($title) && !empty($title)}
             {$title|upper}
           {else}
             {$LANG.word_notification|upper}

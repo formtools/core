@@ -78,5 +78,5 @@ and omit the _composer.lock_ file.
 - themes page doesn't immediately update after clicking Update.
 - Database sessions.
 - API
-
-
+- still doing a redirect to (root) /install when removing config.php.
+- after installation, shows a "no sessions" error on login page

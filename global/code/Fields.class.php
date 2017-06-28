@@ -285,7 +285,7 @@ class Fields {
         $db = Core::$db;
         $LANG = Core::$L;
 
-        // now see if any files were uploaded, too
+        // TODO: "8" is very magical
         while (list($key) = each($file_data)) {
             $db->query("
                 INSERT INTO {PREFIX}form_fields (form_id, field_name, field_type_id, is_system_field,

@@ -452,7 +452,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%themes (
   PRIMARY KEY (theme_id)
 ) DEFAULT CHARSET=%CHARSET%";
 
-$g_sql[] = "INSERT INTO %PREFIX%themes VALUES (1, 'default', 'Default', 'yes', 'green', 'Encore Web Studios', 'formtools@encorewebstudios.com', 'http://www.encorewebstudios.com', 'http://themes.formtools.org/', 'The default Form Tools theme for all new installations. It''s a green-coloured fixed-width theme requiring 1024 minimum width screens.', 'yes', '1.0.0')";
+$g_sql[] = "INSERT INTO %PREFIX%themes VALUES (1, 'default', 'Default', 'yes', 'green', 'Form Tools', 'ben.keen@gmail.com', 'https://formtools.org', 'https://themes.formtools.org/', 'The default Form Tools theme for all new installations. It''s a green-coloured fixed-width theme requiring 1024 minimum width screens.', 'yes', '1.0.0')";
 
 $g_sql[] = "CREATE TABLE %PREFIX%view_columns (
   view_id mediumint(9) NOT NULL,
