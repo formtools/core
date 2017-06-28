@@ -173,8 +173,8 @@ class Administrator
 
 
     /**
-     * Used by administrators to login as a client. This function moves the administrator's sessions to a
-     * temporary "admin" session key, and logs the administrator in under the client account. When logging out
+     * Used by administrators to login as a client. This function moves the administrator's session to a temporary
+     * "admin" session key, and logs the administrator in under the client account. When logging out
      * as a client, the logout function detects if it's really an administrator and erases the old client
      * sessions, replacing them with the old administrator sessions, to enable a smooth transition
      * from one account to the next.
@@ -185,8 +185,9 @@ class Administrator
     {
         // extract the user's login info
         $client_info = Accounts::getAccountInfo($client_id);
-        $info = array();
-        $info["username"] = $client_info["username"];
+        $info = array(
+            "username" => $client_info["username"]
+        );
 
         // move the session values to a separate "admin" location, so that once the administrator logs out we can
         // reset the sessions appropriately
@@ -194,8 +195,8 @@ class Administrator
         Sessions::clearAll();
         Sessions::set("admin", $current_values);
 
-        // now log in
-        ft_login($info, true);
+//        Core::initUser();
+        Core::$user->login($info, true);
     }
 
     /**

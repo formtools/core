@@ -42,7 +42,7 @@ END;
         "field_type" => array(
             "is_editable"                    => "no",
             "non_editable_info"              => "'{\$LANG.text_non_deletable_fields}'",
-            "managed_by_module_id"           => "NULL",
+            "managed_by_module_id"           => null,
             "field_type_name"                => "{\$LANG.word_textbox}",
             "field_type_identifier"          => "textbox",
             "is_file_field"                  => "no",
@@ -331,8 +331,8 @@ END;
     $cft_field_types["textarea"] = array(
         "field_type" => array(
             "is_editable"                    => "yes",
-            "non_editable_info"              => "NULL",
-            "managed_by_module_id"           => "NULL",
+            "non_editable_info"              => null,
+            "managed_by_module_id"           => null,
             "field_type_name"                => "{\$LANG.word_textarea}",
             "field_type_identifier"          => "textarea",
             "is_file_field"                  => "no",
@@ -504,8 +504,8 @@ END;
     $cft_field_types["password"] = array(
         "field_type" => array(
             "is_editable"                    => "yes",
-            "non_editable_info"              => "NULL",
-            "managed_by_module_id"           => "NULL",
+            "non_editable_info"              => null,
+            "managed_by_module_id"           => null,
             "field_type_name"                => "{\$LANG.word_password}",
             "field_type_identifier"          => "password",
             "is_file_field"                  => "no",
@@ -593,8 +593,8 @@ END;
     $cft_field_types["dropdown"] = array(
         "field_type" => array(
             "is_editable"                    => "yes",
-            "non_editable_info"              => "NULL",
-            "managed_by_module_id"           => "NULL",
+            "non_editable_info"              => null,
+            "managed_by_module_id"           => null,
             "field_type_name"                => "{\$LANG.word_dropdown}",
             "field_type_identifier"          => "dropdown",
             "is_file_field"                  => "no",
@@ -701,8 +701,8 @@ END;
     $cft_field_types["multi_select_dropdown"] = array(
         "field_type" => array(
             "is_editable"                    => "yes",
-            "non_editable_info"              => "NULL",
-            "managed_by_module_id"           => "NULL",
+            "non_editable_info"              => null,
+            "managed_by_module_id"           => null,
             "field_type_name"                => "{\$LANG.phrase_multi_select_dropdown}",
             "field_type_identifier"          => "multi_select_dropdown",
             "is_file_field"                  => "no",
@@ -822,8 +822,8 @@ END;
     $cft_field_types["radio_buttons"] = array(
         "field_type" => array(
             "is_editable"                    => "yes",
-            "non_editable_info"              => "NULL",
-            "managed_by_module_id"           => "NULL",
+            "non_editable_info"              => null,
+            "managed_by_module_id"           => null,
             "field_type_name"                => "{\$LANG.phrase_radio_buttons}",
             "field_type_identifier"          => "radio_buttons",
             "is_file_field"                  => "no",
@@ -984,8 +984,8 @@ END;
     $cft_field_types["checkboxes"] = array(
         "field_type" => array(
             "is_editable"                    => "yes",
-            "non_editable_info"              => "NULL",
-            "managed_by_module_id"           => "NULL",
+            "non_editable_info"              => null,
+            "managed_by_module_id"           => null,
             "field_type_name"                => "{\$LANG.word_checkboxes}",
             "field_type_identifier"          => "checkboxes",
             "is_file_field"                  => "no",
@@ -1283,7 +1283,7 @@ END;
         "field_type" => array(
             "is_editable"                    => "no",
             "non_editable_info"              => "'{\$LANG.text_non_deletable_fields}'",
-            "managed_by_module_id"           => "NULL",
+            "managed_by_module_id"           => null,
             "field_type_name"                => "{\$LANG.word_date}",
             "field_type_identifier"          => "date",
             "is_file_field"                  => "no",
@@ -1501,8 +1501,8 @@ END;
     $cft_field_types["time"] = array(
         "field_type" => array(
             "is_editable"                    => "yes",
-            "non_editable_info"              => "NULL",
-            "managed_by_module_id"           => "NULL",
+            "non_editable_info"              => null,
+            "managed_by_module_id"           => null,
             "field_type_name"                => "{\$LANG.word_time}",
             "field_type_identifier"          => "time",
             "is_file_field"                  => "no",
@@ -1573,13 +1573,12 @@ END;
         )
     );
 
-
     // ------------------------------------------------------------------------------------------------
 
     $phone_view_field =<<< END
 {php}
-\$format = \$this->get_template_vars("phone_number_format");
-\$values = explode("|", \$this->get_template_vars("VALUE"));
+\$format = \$this->getTemplateVars("phone_number_format");
+\$values = explode("|", \$this->getTemplateVars("VALUE"));
 \$pieces = preg_split("/(x+)/", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);
 \$counter = 1;
 \$output = "";
@@ -1608,9 +1607,9 @@ END;
 
     $phone_edit_field =<<< END
 {php}
-\$format = \$this->get_template_vars("phone_number_format");
-\$values = explode("|", \$this->get_template_vars("VALUE"));
-\$name   = \$this->get_template_vars("NAME");
+\$format = \$this->getTemplateVars("phone_number_format");
+\$values = explode("|", \$this->getTemplateVars("VALUE"));
+\$name   = \$this->getTemplateVars("NAME");
 \$pieces = preg_split("/(x+)/", \$format, 0, PREG_SPLIT_DELIM_CAPTURE);
 \$counter = 1;
 
@@ -1681,8 +1680,8 @@ END;
     $cft_field_types["phone"] = array(
         "field_type" => array(
             "is_editable"                    => "yes",
-            "non_editable_info"              => "NULL",
-            "managed_by_module_id"           => "NULL",
+            "non_editable_info"              => null,
+            "managed_by_module_id"           => null,
             "field_type_name"                => "{\$LANG.phrase_phone_number}",
             "field_type_identifier"          => "phone",
             "is_file_field"                  => "no",
@@ -1811,15 +1810,15 @@ cf_code.check_required = function() {
     return errors;
   }
   return true;
-}"
+}
 END;
 
 
     $cft_field_types["code_markup"] = array(
         "field_type" => array(
             "is_editable"                    => "yes",
-            "non_editable_info"              => "NULL",
-            "managed_by_module_id"           => "NULL",
+            "non_editable_info"              => null,
+            "managed_by_module_id"           => null,
             "field_type_name"                => "{\$LANG.phrase_code_markup_field}",
             "field_type_identifier"          => "code_markup",
             "is_file_field"                  => "no",
@@ -1832,7 +1831,7 @@ END;
             "view_field_smarty_markup"       => $code_view_field,
             "edit_field_smarty_markup"       => $code_edit_field,
             "php_processing"                 => "",
-            "resources_css"                  => ".cf_view_markup_field {\r\n  margin: 0px; \r\n}",
+            "resources_css"                  => ".cf_view_markup_field {\r\n  margin: 0px;\r\n}",
             "resources_js"                   => $code_js
         ),
 

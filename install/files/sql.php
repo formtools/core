@@ -229,7 +229,7 @@ $g_sql[] = "CREATE TABLE %PREFIX%forms (
   auto_delete_submission_files enum('yes','no') NOT NULL default 'yes',
   submission_strip_tags enum('yes','no') NOT NULL default 'yes',
   edit_submission_page_label text,
-  add_submission_button_label varchar(255) default '{\$LANG.word_add_rightarrow}',
+  add_submission_button_label varchar(255) default '',
   PRIMARY KEY (form_id)
 ) DEFAULT CHARSET=%CHARSET%";
 

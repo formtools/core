@@ -719,6 +719,7 @@ class Forms
         $is_multi_page_form = isset($info["is_multi_page_form"]) ? $info["is_multi_page_form"] : "no";
         $redirect_url       = isset($info["redirect_url"]) ? trim($info["redirect_url"]) : "";
         $phrase_edit_submission = $LANG["phrase_edit_submission"];
+        $phrase_add_submission = html_entity_decode($LANG["word_add_rightarrow"]);
 
         if ($is_multi_page_form == "yes") {
             $form_url = $info["multi_page_urls"][0];
@@ -747,7 +748,7 @@ class Forms
             "form_url" => $form_url,
             "redirect_url" => $redirect_url,
             "phrase_edit_submission" => $phrase_edit_submission,
-            "phrase_add_submission" => ""
+            "phrase_add_submission" => $phrase_add_submission
         ));
         $db->execute();
 

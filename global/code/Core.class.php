@@ -262,12 +262,12 @@ class Core {
     /**
      * The release type: alpha, beta or main
      */
-    private static $releaseType = "beta";
+    private static $releaseType = "alpha";
 
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20170616";
+    private static $releaseDate = "20170628";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
@@ -358,7 +358,6 @@ class Core {
 
     /**
      * Initializes the Core singleton for use throughout Form Tools.
-     *
      *   - sets up PDO database connection available through Core::$db
      *   - starts sessions
      *   - if a user is logged in, instantiates the User object and makes it available via Core::$user
@@ -390,10 +389,8 @@ class Core {
             self::startSessions();
         }
 
-        self::$user = new User();
-        self::$currLang = self::$user->getLang();
+        self::initUser();
 
-        self::setCurrLang(self::$currLang);
         self::enableDebugging();
 
         // optionally enable benchmarking. Dev-only feature to confirm pages aren't taking too long to load
@@ -421,7 +418,7 @@ class Core {
     // this sucks
     public static function initNoLogout()
     {
-        self::init(array("no_logout" => true));
+        self::init(array("auto_logout" => false));
     }
 
     public static function initSmarty()
@@ -442,6 +439,14 @@ class Core {
         session_start();
         header("Cache-control: private");
         header("Content-Type: text/html; charset=utf-8");
+    }
+
+    // make private...
+    public static function initUser()
+    {
+        self::$user = new User();
+        self::$currLang = self::$user->getLang();
+        self::setCurrLang(self::$currLang);
     }
 
     /**

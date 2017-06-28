@@ -44,7 +44,7 @@ class User
             $this->isLoggedIn = false;
 
             // the installation process tracks the UI lang
-            $lang = Sessions::get("ui_language"); // this is set at the top level of sessions (change?)
+            $lang = Sessions::get("ui_language"); // this is set at the top level of sessions (odd, change)
             $this->lang = ($lang) ? $lang : Core::getDefaultLang();
 
             $settings = Settings::get(array("default_theme", "default_client_swatch"));
@@ -139,7 +139,7 @@ class User
         // all checks out. Log them in, after populating sessions
         Sessions::set("settings", $settings);
         Sessions::set("account", $account_info);
-        Sessions::set("account.password", General::encode($password)); // this is deliberate [yuck, TODO...!]
+        Sessions::set("account.password", General::encode($password)); // this is deliberate [TODO...!!!!]
 
         Menus::cacheAccountMenu($account_info["account_id"]);
 
