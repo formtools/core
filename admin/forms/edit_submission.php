@@ -23,7 +23,7 @@ Core::$user->checkAuth("admin");
 
 $request = array_merge($_GET, $_POST);
 $form_id = General::loadField("form_id", "curr_form_id");
-$view_id = _ft_code_get_view($request, $form_id);
+$view_id = Views::getCurrentView($request, $form_id);
 $root_url = Core::getRootUrl();
 
 $submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";

@@ -2,7 +2,9 @@
 
 
 use FormTools\Core;
+use FormTools\Errors;
 use FormTools\FieldTypes;
+use FormTools\General;
 
 
 /**
@@ -20,106 +22,112 @@ function core_field_types__install($module_id)
 
 function core_field_types__update($old_version_info, $new_version_info)
 {
-	global $g_table_prefix;
+    $db = Core::$db;
 
-  $old_version_date = date("Ymd", General::convertDatetimeToTimestamp($old_version_info["module_date"]));
+    $old_version_date = date("Ymd", General::convertDatetimeToTimestamp($old_version_info["module_date"]));
 
-  // fix for MAJOR issue where the raw field types weren't mapped to Option List settings. This was an issue from Oct - Nov 2011, for all
-  // 2.1.5 - 2.1.8 versions installed during that time.
-  if ($old_version_date < 20111122)
-  {
-  	// dropdowns
+    $field_type_update_query = "
+        UPDATE {PREFIX}field_types
+        SET    raw_field_type_map_multi_select_id = :raw_field_type_map_multi_select_id
+        WHERE  field_type_id = :field_type_id AND raw_field_type_map_multi_select_id IS NULL
+        LIMIT 1
+    ";
+
+    // fix for MAJOR issue where the raw field types weren't mapped to Option List settings. This was an issue from
+    // Oct - Nov 2011, for all 2.1.5 - 2.1.8 versions installed during that time.
+    if ($old_version_date < 20111122)
+    {
+        // dropdowns
 		$select_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("dropdown");
-		$field_info = ft_get_field_type($select_field_type_id, true);
+		$field_info = FieldTypes::getFieldType($select_field_type_id, true);
 		$option_list_setting_id = "";
-		foreach ($field_info["settings"] as $setting_info)
-		{
-			if ($setting_info["field_type"] == "option_list_or_form_field")
-			{
+		foreach ($field_info["settings"] as $setting_info) {
+			if ($setting_info["field_type"] == "option_list_or_form_field") {
 				$option_list_setting_id = $setting_info["setting_id"];
 				break;
 			}
 		}
-		if (!empty($option_list_setting_id))
-		{
-			$db->query("
-			  UPDATE {PREFIX}field_types
-			  SET    raw_field_type_map_multi_select_id = $option_list_setting_id
-			  WHERE  field_type_id = $select_field_type_id AND
-			         raw_field_type_map_multi_select_id IS NULL
-			  LIMIT 1
-			") or die(mysql_error());
+		if (!empty($option_list_setting_id)) {
+			$db->query($field_type_update_query);
+			$db->bindAll(array(
+			    "raw_field_type_map_multi_select_id" => $option_list_setting_id,
+                "field_type_id" => $select_field_type_id
+            ));
+			try {
+                $db->execute();
+            } catch (PDOException $e) {
+                Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            }
 		}
 
 		$multi_select_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("multi_select_dropdown");
-		$field_info = ft_get_field_type($multi_select_field_type_id, true);
+		$field_info = FieldTypes::getFieldType($multi_select_field_type_id, true);
 		$option_list_setting_id = "";
-		foreach ($field_info["settings"] as $setting_info)
-		{
-			if ($setting_info["field_type"] == "option_list_or_form_field")
-			{
+		foreach ($field_info["settings"] as $setting_info) {
+			if ($setting_info["field_type"] == "option_list_or_form_field") {
 				$option_list_setting_id = $setting_info["setting_id"];
 				break;
 			}
 		}
-		if (!empty($option_list_setting_id))
-		{
-			$db->query("
-			  UPDATE {PREFIX}field_types
-			  SET    raw_field_type_map_multi_select_id = $option_list_setting_id
-			  WHERE  field_type_id = $multi_select_field_type_id AND
-			         raw_field_type_map_multi_select_id IS NULL
-			  LIMIT 1
-			") or die(mysql_error());
+		if (!empty($option_list_setting_id)) {
+			$db->query($field_type_update_query);
+			$db->bindAll(array(
+			    "raw_field_type_map_multi_select_id" => $option_list_setting_id,
+                "field_type_id" => $multi_select_field_type_id
+            ));
+            try {
+                $db->execute();
+            } catch (PDOException $e) {
+                Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            }
 		}
-
 
 		$radios_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("radio_buttons");
-		$field_info = ft_get_field_type($radios_field_type_id, true);
+		$field_info = FieldTypes::getFieldType($radios_field_type_id, true);
 		$option_list_setting_id = "";
-		foreach ($field_info["settings"] as $setting_info)
-		{
-			if ($setting_info["field_type"] == "option_list_or_form_field")
-			{
+		foreach ($field_info["settings"] as $setting_info) {
+			if ($setting_info["field_type"] == "option_list_or_form_field") {
 				$option_list_setting_id = $setting_info["setting_id"];
 				break;
 			}
 		}
-		if (!empty($option_list_setting_id))
-		{
-			$db->query("
-			  UPDATE {PREFIX}field_types
-			  SET    raw_field_type_map_multi_select_id = $option_list_setting_id
-			  WHERE  field_type_id = $radios_field_type_id AND
-			         raw_field_type_map_multi_select_id IS NULL
-			  LIMIT 1
-			") or die(mysql_error());
+		if (!empty($option_list_setting_id)) {
+			$db->query($field_type_update_query);
+            $db->bindAll(array(
+                "raw_field_type_map_multi_select_id" => $option_list_setting_id,
+                "field_type_id" => $radios_field_type_id
+            ));
+            try {
+                $db->execute();
+            } catch (PDOException $e) {
+                Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            }
 		}
 
 		$checkboxes_field_type_id = FieldTypes::getFieldTypeIdByIdentifier("checkboxes");
-		$field_info = ft_get_field_type($checkboxes_field_type_id, true);
+		$field_info = FieldTypes::getFieldType($checkboxes_field_type_id, true);
 		$option_list_setting_id = "";
-		foreach ($field_info["settings"] as $setting_info)
-		{
-			if ($setting_info["field_type"] == "option_list_or_form_field")
-			{
+		foreach ($field_info["settings"] as $setting_info) {
+			if ($setting_info["field_type"] == "option_list_or_form_field") {
 				$option_list_setting_id = $setting_info["setting_id"];
 				break;
 			}
 		}
-		if (!empty($option_list_setting_id))
-		{
-			$db->query("
-			  UPDATE {PREFIX}field_types
-			  SET    raw_field_type_map_multi_select_id = $option_list_setting_id
-			  WHERE  field_type_id = $checkboxes_field_type_id AND
-			         raw_field_type_map_multi_select_id IS NULL
-			  LIMIT 1
-			") or die(mysql_error());
+		if (!empty($option_list_setting_id)) {
+			$db->query($field_type_update_query);
+            $db->bindAll(array(
+                "raw_field_type_map_multi_select_id" => $option_list_setting_id,
+                "field_type_id" => $checkboxes_field_type_id
+            ));
+            try {
+                $db->execute();
+            } catch (PDOException $e) {
+                Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            }
 		}
-  }
+    }
 
-  return array(true, "");
+    return array(true, "");
 }
 
 
@@ -134,7 +142,7 @@ function cft_install_module()
 {
     $db = Core::$db;
 
-    // Hmph. This ensures that the module contents only get installed once.
+    // this ensures that the module contents only get installed once.
 	$field_types = FieldTypes::get();
 	if (count($field_types) > 0) {
 		return array(true, "");

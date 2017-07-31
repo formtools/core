@@ -3,7 +3,6 @@
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Sessions;
-use FormTools\Views;
 
 
 /**
@@ -62,30 +61,4 @@ function _ft_code_get_link_html($form_id, $view_id, $submission_id, $results_per
 	}
 
 	return array($previous_link_html, $search_results_link_html, $next_link_html);
-}
-
-
-/**
- * This figures out what View is currently being used.
- *
- * @param array $request the POST/GET merge
- * @param integer $form_id
- */
-function _ft_code_get_view($request, $form_id)
-{
-    $session_key = "form_{$form_id}_view_id";
-	if (isset($request["view_id"])) {
-		$view_id = $request["view_id"];
-		Sessions::set($session_key, $view_id);
-	} else {
-		$view_id = Sessions::exists($session_key) ? Sessions::get($session_key) : "";
-	}
-
-	// if the View ID isn't set, here - they probably just linked to the page directly from an email, module
-	// or elsewhere in the script. For this case, find and use the default View
-	if (empty($view_id)) {
-		$view_id = Views::getDefaultView($form_id);
-	}
-
-	return $view_id;
 }
