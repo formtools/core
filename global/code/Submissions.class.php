@@ -1042,6 +1042,42 @@ class Submissions {
     }
 
 
+    /**
+     * Gets the << prev, next >> etc. link HTML for the current submission.
+     */
+    public static function getPrevNextLinks($form_id, $view_id, $submission_id, $return_page = "index.php")
+    {
+        $LANG = Core::$L;
+
+        // defaults! As of 2.1.0, the navigation always appears. This is better for consistency's sake
+        $previous_link_html       = "<span class=\"light_grey\">{$LANG['word_previous_leftarrow']}</span>";
+        $next_link_html           = "<span class=\"light_grey\">{$LANG['word_next_rightarrow']}</span>";
+        $search_results_link_html = "<a href=\"{$return_page}?form_id=$form_id\">{$LANG['phrase_back_to_search_results']}</a>";
+
+        $session_key = "form_{$form_id}_view_{$view_id}_submissions";
+        if (Sessions::exists($session_key) && Sessions::get($session_key) != "") {
+            $php_self = General::getCleanPhpSelf();
+            $submission_ids = Sessions::get($session_key);
+            $current_sub_id_index = array_search($submission_id, $submission_ids);
+
+            if (!empty($current_sub_id_index) || $current_sub_id_index === 0) {
+                // PREVIOUS link
+                if ($submission_ids[0] != $submission_id && $current_sub_id_index != 0) {
+                    $previous_submission_id = $submission_ids[$current_sub_id_index - 1];
+                    $previous_link_html = "<a href=\"$php_self?form_id=$form_id&view_id=$view_id&submission_id=$previous_submission_id\">{$LANG['word_previous_leftarrow']}</a>";
+                }
+                // NEXT link
+                if ($submission_ids[count($submission_ids) - 1] != $submission_id) {
+                    $next_submission_id = $submission_ids[$current_sub_id_index + 1];
+                    $next_link_html = "<a href=\"$php_self?form_id=$form_id&view_id=$view_id&submission_id=$next_submission_id\">{$LANG['word_next_rightarrow']}</a>";
+                }
+            }
+        }
+
+        return array($previous_link_html, $search_results_link_html, $next_link_html);
+    }
+
+
     // -----------------------------------------------------------------------------------------------------------------
 
 

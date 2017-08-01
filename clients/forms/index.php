@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Core;
+use FormTools\Errors;
 use FormTools\Fields;
 use FormTools\FieldTypes;
 use FormTools\Forms;
@@ -35,7 +36,7 @@ $grouped_views = Views::getGroupedViews($form_id, array("omit_hidden_views" => t
 if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
 	if (count($grouped_views[0]["views"]) == 0) {
 		// no Views defined for this client
-		ft_handle_error($LANG["notify_no_views_assigned_to_client_form"], "", "notify");
+        Errors::majorError($LANG["notify_no_views_assigned_to_client_form"], "", "notify");
 		exit;
 	} else {
 		$view_id = $grouped_views[0]["views"][0]["view_id"];
@@ -60,7 +61,7 @@ if (isset($request["view_id"])) {
 }
 
 // Fix for bug #174
-$has_search_info_for_other_form = (Sessions::exists("current_search") && Sessions::get("current_search.form_id") != $form_id);
+$has_search_info_for_other_form = Sessions::exists("current_search") && Sessions::get("current_search.form_id") != $form_id;
 $is_resetting_search            = (isset($_GET["reset"]) && $_GET["reset"] == "1");
 
 if ($is_resetting_search || $has_search_info_for_other_form) {
@@ -228,7 +229,6 @@ for ($i=0; $i<count($search_rows); $i++) {
 }
 
 $submission_id_str = implode(",", $submission_ids);
-
 
 // set as STRING for used in JS below
 $select_all_submissions_returned = (Sessions::get("form_{$form_id}_select_all_submissions") == "1") ? "true" : "false";

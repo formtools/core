@@ -1,6 +1,7 @@
 <?php
 
 use FormTools\Accounts;
+use FormTools\Sessions;
 
 /*
  * Smarty plugin
@@ -12,7 +13,6 @@ use FormTools\Accounts;
  */
 function smarty_function_display_num_form_submissions($params, &$smarty)
 {
-//    {assign var='num_form_submissions' value="form_`$form_id`_num_submissions"}
-
-    return "0";
+    $form_id = $params["form_id"];
+    return Sessions::get("form_{$form_id}_num_submissions");
 }

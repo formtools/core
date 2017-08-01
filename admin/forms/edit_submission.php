@@ -1,7 +1,6 @@
 <?php
 
 require_once("../../global/library.php");
-require_once(__DIR__ . "/edit_submission__code.php");
 
 use FormTools\Core;
 use FormTools\FieldTypes;
@@ -19,7 +18,6 @@ use FormTools\ViewTabs;
 
 Core::init();
 Core::$user->checkAuth("admin");
-
 
 $request = array_merge($_GET, $_POST);
 $form_id = General::loadField("form_id", "curr_form_id");
@@ -118,7 +116,7 @@ if (Sessions::exists("new_search") && Sessions::get("new_search") == "yes") {
     Sessions::set("new_search", "no");
 }
 
-list($prev_link_html, $search_results_link_html, $next_link_html) = _ft_code_get_link_html($form_id, $view_id, $submission_id, $search["results_per_page"]);
+list($prev_link_html, $search_results_link_html, $next_link_html) = Submissions::getPrevNextLinks($form_id, $view_id, $submission_id);
 
 // construct the page label
 $submission_placeholders = General::getSubmissionPlaceholders($form_id, $submission_id);
