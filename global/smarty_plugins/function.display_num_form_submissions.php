@@ -1,6 +1,5 @@
 <?php
 
-use FormTools\Accounts;
 use FormTools\Sessions;
 
 /*

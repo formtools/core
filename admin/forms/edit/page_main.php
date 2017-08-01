@@ -25,7 +25,6 @@ foreach ($form_info["client_info"] as $client_info) {
 
 $num_pages_in_multi_page_form = count($form_info["multi_page_form_urls"]) + 1;
 
-
 // ------------------------------------------------------------------------------------------------
 
 $root_url = Core::getRootUrl();

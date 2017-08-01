@@ -70,7 +70,7 @@
             </tr>
             </table>
           </div>
-          <div id="form_url_multiple" {if $form_info.is_multi_page_form == "no" || $form_info.submission_info == "direct"}style="display:none"{/if}>
+          <div id="form_url_multiple" {if $form_info.is_multi_page_form == "no" || $form_info.submission_type == "direct"}style="display:none"{/if}>
             <div class="sortable multi_page_form_list" id="{$sortable_id}">
               <ul class="header_row">
                 <li class="col1">{$LANG.word_page}</li>

@@ -1716,11 +1716,10 @@ class Forms
                 ");
                 $db->bindAll(array(
                     "form_id" => $form_id,
-                    "form_url" => $form_url,
+                    "form_url" => $url,
                     "page_num" => $page_num
                 ));
                 $db->execute();
-
                 $page_num++;
             }
         }
@@ -1770,25 +1769,29 @@ class Forms
                 $client_clauses[] = "account_id != $client_id";
             }
 
+            $view_ids = Views::getViewIds($form_id);
+
             // there WERE clients associated with this form. Delete the ones that AREN'T associated
             if (!empty($client_clauses)) {
                 $client_id_clause = implode(" AND ", $client_clauses);
-                $db->query("DELETE FROM {PREFIX}client_views WHERE form_id = :form_id AND $client_id_clause");
-                $db->bind("form_id", $form_id);
-                $db->execute();
 
-                // also delete any orphaned records in the View omit list
-                $view_ids = Views::getViewIds($form_id);
                 foreach ($view_ids as $view_id) {
+                    $db->query("
+                        DELETE FROM {PREFIX}client_views
+                        WHERE view_id = :view_id AND $client_id_clause
+                    ");
+                    $db->bind("view_id", $view_id);
+                    $db->execute();
+
+                    // also delete any orphaned records in the View omit list
                     $db->query("DELETE FROM {PREFIX}public_view_omit_list WHERE view_id = :view_id AND $client_id_clause");
                     $db->bind("view_id", $view_id);
                     $db->execute();
                 }
 
-                // for some reason, the administrator has assigned NO clients to this private form. So, delete all clients
-                // associated with the Views
+            // for some reason, the administrator has assigned NO clients to this private form. So, delete all clients
+            // associated with the Views
             } else {
-                $view_ids = Views::getViewIds($form_id);
                 foreach ($view_ids as $view_id) {
                     Views::deleteClientViews($view_id);
                     Views::deletePublicViewOmitList($view_id);
