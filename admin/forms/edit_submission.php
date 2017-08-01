@@ -24,6 +24,10 @@ $form_id = General::loadField("form_id", "curr_form_id");
 $view_id = Views::getCurrentView($request, $form_id);
 $root_url = Core::getRootUrl();
 
+if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
+    General::redirect("edit/?page=views&form_id=$form_id&message=no_views");
+}
+
 $submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";
 if (empty($submission_id)) {
     General::redirect("submissions.php");
@@ -57,6 +61,8 @@ if (isset($_POST) && !empty($_POST)) {
 
 $form_info = Forms::getForm($form_id);
 $view_info = Views::getView($view_id);
+
+print_r($view_info);
 
 // this is crumby
 $has_tabs = false;

@@ -752,37 +752,6 @@ END;
         return $value;
     }
 
-
-    /**
-     * This function was added in 1.4.7 to handle serious, show-stopper errors instead of the former
-     * hardcoded die() function calls. This stores the error in sessions and redirects to error.php, which
-     * decides how the error is displayed based on the error_type ("notify": for "softer"
-     * errors like the install folder hasn't been deleted; "error" for more serious problems) and on
-     * whether or not the global $g_debug option is enabled. If it is, the error.php page displays
-     * the nitty-gritty errors returned by the server / database.
-     *
-     * @param string $error_message the user-friendly version of the error.
-     * @param string $debug_details the error message returned by the server / database.
-     * @param string $error_type either "error" or "notify"
-     */
-    public static function handleError($error_message, $debug_details, $error_type = "error")
-    {
-        $root_url = Core::getRootUrl();
-
-        // this is for NEW installations. For new installations the $g_root_url isn't set, so we want to
-        // redirect to the error page in the current form tools folder
-        if (!empty($root_url)) {
-            $root_url = "$root_url/";
-        }
-
-        Sessions::set("last_error", $error_message);
-        Sessions::set("last_error_debug", $debug_details);
-        Sessions::set("last_error_type", $error_type);
-
-        General::redirect("$root_url/error.php");
-    }
-
-
     /**
      * Return a date string from a MySQL datetime according based on an offset and a display format.
      * As of version 1.5.0, this function is language localized. The following php date() flags are

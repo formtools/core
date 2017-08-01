@@ -3,6 +3,7 @@
 require_once("../../global/library.php");
 
 use FormTools\Core;
+use FormTools\Errors;
 use FormTools\Fields;
 use FormTools\FieldTypes;
 use FormTools\Forms;
@@ -30,7 +31,7 @@ if (empty($form_id) || !is_numeric($form_id)) {
 
 // check this is a valid form
 if (!Forms::checkFormExists($form_id)) {
-	ft_handle_error($LANG["notify_form_does_not_exist"]);
+	Errors::handleError($LANG["notify_form_does_not_exist"]);
 	exit;
 }
 
@@ -42,10 +43,10 @@ $view_id       = General::loadField("view_id", "form_{$form_id}_view_id");
 $grouped_views = Views::getGroupedViews($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true));
 
 if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
-	// here, we know that the first View group has at least one item. [hmm...]
-	if (count($grouped_views[0]["views"]) == 0) {
-		// no Views defined for this form! redirect to the Views page and display a message
-        General::redirect("edit.php?page=views&form_id=$form_id&message=no_views");
+
+    // no Views defined for this form! redirect to the Views page and display a message
+	if (count($grouped_views) == 0 || count($grouped_views[0]["views"]) == 0) {
+        General::redirect("edit/?page=views&form_id=$form_id&message=no_views");
 	} else {
 		$view_id = $grouped_views[0]["views"][0]["view_id"];
 	}

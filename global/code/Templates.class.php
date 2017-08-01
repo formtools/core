@@ -69,20 +69,6 @@ class Templates
             $smarty->assign("footer_text", "");
         }
 
-        $success = (isset($page_vars["g_success"])) ? $page_vars["g_success"] : "";
-        $message = (isset($page_vars["g_message"])) ? $page_vars["g_message"] : "";
-
-        // if this page has been told to display a custom message, override g_success and g_message
-        if (isset($_GET["message"])) {
-            list($found, $s, $m) = General::displayCustomPageMessage($_GET["message"]);
-            if ($found) {
-                $success = $s;
-                $message = $m;
-            }
-        }
-        $smarty->assign("g_success", $success);
-        $smarty->assign("g_message", $message);
-
         // check the "required" vars are at least set so they don't produce warnings
         if (!isset($page_vars["head_string"])) $page_vars["head_string"] = "";
         if (!isset($page_vars["head_title"]))  $page_vars["head_title"] = "";
@@ -108,6 +94,20 @@ class Templates
         foreach ($page_vars as $key => $value) {
             $smarty->assign($key, $value);
         }
+
+        $success = (isset($page_vars["g_success"])) ? $page_vars["g_success"] : "";
+        $message = (isset($page_vars["g_message"])) ? $page_vars["g_message"] : "";
+
+        // if this page has been told to display a custom message, override g_success and g_message
+        if (isset($_GET["message"])) {
+            list($found, $s, $m) = General::displayCustomPageMessage($_GET["message"]);
+            if ($found) {
+                $success = $s;
+                $message = $m;
+            }
+        }
+        $smarty->assign("g_success", $success);
+        $smarty->assign("g_message", $message);
 
         return $smarty;
     }
