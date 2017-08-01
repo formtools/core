@@ -35,6 +35,12 @@ $(function() {
           ft.dialog_activity_icon($("#new_view_dialog"), "show");
           var form_id = $("#form_id").val();
           var data_type = (g.js_debug) ? "html" : "json";
+
+          var source_view_id = "";
+          if ($("#create_view_from_view_id").length > 0) {
+            source_view_id = $("#create_view_from_view_id").val();
+          }
+
           $.ajax({
             url:      g.root_url + "/global/code/actions.php",
             type:     "POST",
@@ -44,7 +50,7 @@ $(function() {
               group_id:                 group_id,
               action:                   "create_new_view",
               view_name:                $("#new_view_name").val(),
-              create_view_from_view_id: $("#create_view_from_view_id").val()
+              create_view_from_view_id: source_view_id
             },
             success: function(data) {
               // check the user wasn't logged out / denied permissions

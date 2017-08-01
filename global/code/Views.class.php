@@ -117,7 +117,7 @@ class Views
         $next_order = $num_form_views + 1;
         $view_name = (empty($view_name)) ? $LANG["phrase_new_view"] : $view_name;
 
-        if ($create_from_view_id == "blank_view_no_fields" || $create_from_view_id == "blank_view_all_fields") {
+        if (empty($create_from_view_id) || $create_from_view_id == "blank_view_no_fields" || $create_from_view_id == "blank_view_all_fields") {
             // add the View with default values
             $db->query("
                 INSERT INTO {PREFIX}views (form_id, view_name, view_order, is_new_sort_group, group_id)
@@ -135,7 +135,7 @@ class Views
             // add the default tab
             ViewTabs::addDefaultTabs($view_id);
 
-            if ($create_from_view_id == "blank_view_all_fields") {
+            if (empty($create_from_view_id) || $create_from_view_id == "blank_view_all_fields") {
                 Views::populateNewViewFields($form_id, $view_id);
             }
         } else {
