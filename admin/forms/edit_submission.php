@@ -62,8 +62,6 @@ if (isset($_POST) && !empty($_POST)) {
 $form_info = Forms::getForm($form_id);
 $view_info = Views::getView($view_id);
 
-print_r($view_info);
-
 // this is crumby
 $has_tabs = false;
 foreach ($view_info["tabs"] as $tab_info) {

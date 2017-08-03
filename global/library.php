@@ -1,5 +1,8 @@
 <?php
 
+error_reporting(2047);
+ini_set("display_errors", "1");
+
 require_once(__DIR__ . "/code/Accounts.class.php");
 require_once(__DIR__ . "/code/Administrator.class.php");
 require_once(__DIR__ . "/code/Clients.class.php");
@@ -43,6 +46,7 @@ require_once(__DIR__ . "/code/ViewFields.class.php");
 require_once(__DIR__ . "/code/ViewFilters.class.php");
 require_once(__DIR__ . "/code/ViewTabs.class.php");
 
-
-// autoload dependencies
+// autoload external dependencies
 require_once(__DIR__ . "/../vendor/autoload.php");
+
+require_once(__DIR__ . "/code/SecureSmarty.class.php");

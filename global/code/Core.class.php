@@ -25,11 +25,8 @@
 
 namespace FormTools;
 
-use Smarty;
-
 
 class Core {
-
 
     // SECTION 1: settings you can override in your global/config.php file
 
@@ -423,7 +420,7 @@ class Core {
 
     public static function initSmarty()
     {
-        self::$smarty = new Smarty();
+        self::$smarty = new SecureSmarty();
     }
 
     public static function startSessions()

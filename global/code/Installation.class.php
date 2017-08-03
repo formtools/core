@@ -131,7 +131,7 @@ class Installation
     {
         $LANG = Core::$L;
 
-        $smarty = new Smarty();
+        $smarty = new SecureSmarty();
         $smarty->setTemplateDir("../global/smarty_plugins/");
         $smarty->setCompileDir("../../themes/$theme/cache/");
 
@@ -214,7 +214,7 @@ EOF;
             exit;
         }
 
-        $smarty = new Smarty();
+        $smarty = new SecureSmarty();
         $smarty->setTemplateDir($theme_folder);
         $smarty->setCompileDir($cache_folder);
         $smarty->setUseSubDirs(false);
