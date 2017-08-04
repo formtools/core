@@ -14,9 +14,7 @@
 
 namespace FormTools;
 
-use Smarty;
-use PDO;
-use PDOException;
+use SmartyBC, PDO, PDOException;
 
 
 /**
@@ -131,7 +129,7 @@ class Installation
     {
         $LANG = Core::$L;
 
-        $smarty = new SecureSmarty();
+        $smarty = new SmartyBC();
         $smarty->setTemplateDir("../global/smarty_plugins/");
         $smarty->setCompileDir("../../themes/$theme/cache/");
 
@@ -214,7 +212,7 @@ EOF;
             exit;
         }
 
-        $smarty = new SecureSmarty();
+        $smarty = new SmartyBC();
         $smarty->setTemplateDir($theme_folder);
         $smarty->setCompileDir($cache_folder);
         $smarty->setUseSubDirs(false);

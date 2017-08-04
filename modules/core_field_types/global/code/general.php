@@ -3,6 +3,7 @@
 
 use FormTools\Core;
 use FormTools\FieldTypes;
+use FormTools\ListGroups;
 
 
 /**
@@ -190,9 +191,7 @@ function cft_rollback_new_installation()
 {
     $db = Core::$db;
 
-    $db->query("DELETE FROM {PREFIX}list_groups WHERE group_type = :group_type");
-    $db->bind("group_type", "field_types");
-    $db->execute();
+    ListGroups::deleteByGroupType("field_types");
 
     $db->query("TRUNCATE TABLE {PREFIX}field_types");
     $db->execute();

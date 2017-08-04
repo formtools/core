@@ -25,6 +25,8 @@
 
 namespace FormTools;
 
+use SmartyBC;
+
 
 class Core {
 
@@ -232,7 +234,7 @@ class Core {
     public static $db;
 
     /**
-     * @var Smarty
+     * @var SmartyBC
      */
     public static $smarty;
 
@@ -420,7 +422,7 @@ class Core {
 
     public static function initSmarty()
     {
-        self::$smarty = new SecureSmarty();
+        self::$smarty = new SmartyBC();
     }
 
     public static function startSessions()

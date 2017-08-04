@@ -202,9 +202,7 @@ class Fields {
 
         $db->beginTransaction();
         try {
-            $db->query("DELETE FROM {PREFIX}form_fields WHERE form_id = :form_id");
-            $db->bind("form_id", $form_id);
-            $db->execute();
+            Fields::deleteAllFormFields($form_id);
 
             // now delete any associated settings
             $db->query("DELETE FROM {PREFIX}field_settings WHERE field_id IN ($in_clause)");
@@ -217,6 +215,7 @@ class Fields {
             $db->rollbackTransaction();
         }
     }
+
 
 
     /**
@@ -1607,6 +1606,15 @@ class Fields {
             $db->rollbackTransaction();
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
         }
+    }
+
+    public static function deleteAllFormFields($form_id)
+    {
+        $db = Core::$db;
+
+        $db->query("DELETE FROM {PREFIX}form_fields WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
     }
 }
 

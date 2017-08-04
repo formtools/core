@@ -351,11 +351,7 @@ class Views
         ViewTabs::deleteViewTabs($view_id);
         ViewFields::deleteViewFields($view_id);
         Views::deletePublicViewOmitList($view_id);
-
-        // these should be moved
-        $db->query("DELETE FROM {PREFIX}list_groups WHERE group_type = :group_type");
-        $db->bind("group_type", "view_fields_$view_id");
-        $db->execute();
+        ListGroups::deleteByGroupType("view_fields_$view_id");
 
         $db->query("DELETE FROM {PREFIX}email_template_edit_submission_views WHERE view_id = :view_id");
         $db->bind("view_id", $view_id);

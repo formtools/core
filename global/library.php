@@ -48,5 +48,3 @@ require_once(__DIR__ . "/code/ViewTabs.class.php");
 
 // autoload external dependencies
 require_once(__DIR__ . "/../vendor/autoload.php");
-
-require_once(__DIR__ . "/code/SecureSmarty.class.php");

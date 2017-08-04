@@ -127,15 +127,14 @@ class ViewFields
     }
 
 
+    /**
+     * Convenient wrapper function to delete all of a View's fields, plus anywhere they're used.
+     * @param $view_id
+     */
     public static function deleteViewFields($view_id) {
-        $db = Core::$db;
-
-//        ViewColumns::deleteViewColumns($view_id);
-//        ViewFilters::deleteViewFilters($view_id);
-
-        $db->query("DELETE FROM {PREFIX}view_fields WHERE view_id = :view_id");
-        $db->bind("view_id", $view_id);
-        $db->execute();
+        ViewColumns::deleteViewColumns($view_id);
+        ViewFilters::deleteViewFilters($view_id);
+        ViewFields::deleteAllViewFields($view_id);
     }
 
 
@@ -519,4 +518,12 @@ class ViewFields
         return $db->fetchAll(PDO::FETCH_COLUMN);
     }
 
+
+    public static function deleteAllViewFields($view_id)
+    {
+        $db = Core::$db;
+        $db->query("DELETE FROM {PREFIX}view_fields WHERE view_id = :view_id");
+        $db->bind("view_id", $view_id);
+        $db->execute();
+    }
 }

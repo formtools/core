@@ -1445,14 +1445,13 @@ class Forms
             $file_delete_problems = Files::removeFormFiles($form_id, $form_fields);
         }
 
-        // remove the table
+        // TODO use transaction
+
         $db->query("DROP TABLE IF EXISTS {PREFIX}form_$form_id");
         $db->execute();
 
         // remove any reference to the form in form_fields
-        $db->query("DELETE FROM {PREFIX}form_fields WHERE form_id = :form_id");
-        $db->bind("form_id", $form_id);
-        $db->execute();
+        Fields::deleteAllFormFields($form_id);
 
         // remove any reference to the form in forms table
         $db->query("DELETE FROM {PREFIX}forms WHERE form_id = :form_id");
@@ -1471,9 +1470,7 @@ class Forms
         $db->bind("form_id", $form_id);
         $db->execute();
 
-        $db->query("DELETE FROM {PREFIX}list_groups WHERE group_type = :group_type");
-        $db->bind("group_type", "form_{$form_id}_view_group");
-        $db->execute();
+        ListGroups::deleteByGroupType("form_{$form_id}_view_group");
 
         // delete all email templates for the form
         foreach (Emails::getEmailTemplateList($form_id) as $email_template_info) {

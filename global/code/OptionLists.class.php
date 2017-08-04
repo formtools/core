@@ -561,9 +561,7 @@ class OptionLists {
         $db->bind("list_id", $list_id);
         $db->execute();
 
-        $db->query("DELETE FROM {PREFIX}list_groups WHERE group_type = :group_type");
-        $db->bind("group_type", "option_list_{$list_id}");
-        $db->execute();
+        ListGroups::deleteByGroupType("option_list_{$list_id}");
 
         $success = true;
         $message = $LANG["notify_option_list_deleted"];
@@ -757,7 +755,6 @@ class OptionLists {
     // --------------------------------------------------------------------------------------------
 
     /**
-     * Used in a couple of places, so I moved it here.
      * @param string $order
      */
     private static function getOptionListOrderClause($order)

@@ -57,10 +57,6 @@ class ListGroups {
         return (!isset($result["list_order"])) ? 1 : $result["list_order"] + 1;
     }
 
-
-    /**
-     * Deletes a list group. Doesn't appear to be used... (?)
-     */
     public static function deleteListGroup($group_id)
     {
         Core::$db->query("DELETE FROM {PREFIX}list_groups WHERE group_id = :group_id");
@@ -75,7 +71,6 @@ class ListGroups {
         Core::$db->bind("group_type", $group_type);
         Core::$db->execute();
     }
-
 
     public static function getByGroupType($group_type)
     {
