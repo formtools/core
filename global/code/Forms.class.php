@@ -583,18 +583,8 @@ class Forms
 
         // if the form has an access type of "private" add whatever client accounts the user selected
         if ($info["access_type"] == "private") {
-            $selected_client_ids = $info["selected_client_ids"];
-            $queries = array();
-            foreach ($selected_client_ids as $client_id) {
-                $queries[] = "($client_id, $new_form_id)";
-            }
-
-            if (!empty($queries)) {
-                $insert_values = implode(",", $queries);
-                $db->query("
-                    INSERT INTO {PREFIX}client_forms (account_id, form_id)
-                    VALUES $insert_values
-                ");
+            if (isset($info["selected_client_ids"]) && is_array($info["selected_client_ids"])) {
+                Forms::addClientsToForm($new_form_id, $info["selected_client_ids"]);
             }
         }
 
@@ -1734,42 +1724,32 @@ class Forms
     {
         $db = Core::$db;
 
-        if ($access_type === "public") {
-            Forms::deleteClientForms($form_id);
-            foreach ($client_ids as $client_id) {
-                $db->query("
-                    INSERT INTO {PREFIX}client_forms (account_id, form_id)
-                    VALUES  (:client_id, :form_id)
-                ");
-                $db->bindAll(array(
-                    "client_id" => $client_id,
-                    "form_id" => $form_id
-                ));
-                $db->execute();
-            }
+        Forms::deleteClientForms($form_id);
+
+        // the omit list is for public forms only. If it ain't public, it got to go, yo.
+        if ($access_type !== "public") {
+            OmitLists::deleteFormOmitList($form_id);
         }
 
-        // delete all client_view, client_form, public_form_omit_list, and public_view_omit_list entries concerning this
+        // delete all client_view, public_form_omit_list, and public_view_omit_list entries concerning this
         // form & its Views. Since only the administrator can see the form, no client can see any of its sub-parts
         if ($access_type == "admin") {
-            Forms::deleteClientForms($form_id);
+            OmitLists::deleteFormOmitList($form_id);
             Views::deleteClientViewsByFormId($form_id);
         }
 
-        // remove any records from the client_view and public_view_omit_list tables concerned clients NOT associated
-        // with this form.
         if ($access_type == "private") {
-            OmitLists::deleteFormOmitList($form_id);
-
-            $client_clauses = array();
-            foreach ($client_ids as $client_id) {
-                $client_clauses[] = "account_id != $client_id";
-            }
+            Forms::addClientsToForm($form_id, $client_ids);
 
             $view_ids = Views::getViewIds($form_id);
 
             // there WERE clients associated with this form. Delete the ones that AREN'T associated
-            if (!empty($client_clauses)) {
+            if (!empty($client_ids)) {
+
+                $client_clauses = array();
+                foreach ($client_ids as $client_id) {
+                    $client_clauses[] = "account_id != $client_id";
+                }
                 $client_id_clause = implode(" AND ", $client_clauses);
 
                 foreach ($view_ids as $view_id) {
@@ -2219,5 +2199,32 @@ class Forms
                 return array(false, $message);
             }
         }
+    }
+
+    public static function addClientToForm($form_id, $client_id)
+    {
+        Forms::addClientsToForm($form_id, array($client_id));
+    }
+
+    // TODO should be moved to proper PDO query
+    public static function addClientsToForm($form_id, $client_ids)
+    {
+        $db = Core::$db;
+
+        if (empty($client_ids)) {
+            return;
+        }
+
+        $queries = array();
+        foreach ($client_ids as $client_id) {
+            $queries[] = "($client_id, $form_id)";
+        }
+
+        $insert_values = implode(",", $queries);
+        $db->query("
+            INSERT INTO {PREFIX}client_forms (account_id, form_id)
+            VALUES $insert_values
+        ");
+        $db->execute();
     }
 }

@@ -405,8 +405,10 @@ class Views
         $db->query("DELETE FROM {PREFIX}client_views WHERE view_id = :view_id");
         $db->bind("view_id", $view_id);
         $db->execute();
+
         Views::deletePublicViewOmitList($view_id);
     }
+
 
     public static function deleteClientViewsByAccountId($account_id)
     {
