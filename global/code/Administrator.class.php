@@ -319,6 +319,7 @@ class Administrator
             "timezone_offset" => $infohash["timezone_offset"],
             "sessions_timeout" => $infohash["sessions_timeout"],
             "date_format" => $infohash["date_format"],
+            "username" => $infohash["username"],
             "account_id" => $account_id
         ));
         if (!empty($password)) {
@@ -330,6 +331,9 @@ class Administrator
         Sessions::set("settings", Settings::get());
         Sessions::set("account", Accounts::getAccountInfo($account_id));
         Sessions::set("account.is_logged_in", true);
+
+        Core::$user->setTheme($theme);
+        Core::$user->setSwatch($swatch);
 
         // if the password just changed, update sessions and empty any temporary password that happens to have been
         // stored

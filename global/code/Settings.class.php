@@ -508,6 +508,8 @@ class Settings {
 
         Sessions::set("account.theme", $admin_theme);
         Sessions::set("account.swatch", $admin_swatch);
+        Core::$user->setTheme($admin_theme);
+        Core::$user->setSwatch($admin_swatch);
 
         $default_client_swatch = "";
         if (isset($infohash["{$default_client_theme}_default_client_theme_swatches"])) {

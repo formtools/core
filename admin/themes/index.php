@@ -15,7 +15,7 @@ Core::$user->checkAuth("client");
 
 $request = array_merge($_POST, $_GET);
 
-// provides means to manually override admin theme in case of disaster
+// provides a way to manually override admin theme in case of disaster
 $success = true;
 $message = "";
 if (isset($request["theme_override"])) {

@@ -182,8 +182,16 @@ class User
         return $this->lang;
     }
 
+    public function setTheme($theme) {
+        $this->theme = $theme;
+    }
+
     public function getTheme() {
         return $this->theme;
+    }
+
+    public function setSwatch($swatch) {
+        $this->swatch = $swatch;
     }
 
     public function getSwatch() {

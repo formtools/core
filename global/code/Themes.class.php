@@ -358,7 +358,6 @@ class Themes {
         $db = Core::$db;
         $LANG = Core::$L;
 
-        // yikes!
         $admin_id = Sessions::get("account.account_id");
 
         $db->query("
@@ -372,8 +371,7 @@ class Themes {
         ));
         $db->execute();
 
-        // double yikes!
-        $_SESSION["ft"]["account"]["theme"] = $theme;
+        Core::$user->setTheme($theme);
 
         return array(true, $LANG["notify_admin_theme_overridden"]);
     }
