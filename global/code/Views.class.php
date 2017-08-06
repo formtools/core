@@ -693,6 +693,9 @@ class Views
     {
         // update each of the tabs
         Views::updateViewMainSettings($view_id, $info);
+
+        // remember! View cols & filters are independent of View fields, i.e. the user can choose to apply a filter
+        // to a field that isn't shown in the View. Same as show a different column.
         ViewColumns::updateViewColumns($view_id, $info);
         ViewFields::updateViewFields($view_id, $info);
         ViewTabs::updateViewTabs($view_id, $info);

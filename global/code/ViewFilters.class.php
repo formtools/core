@@ -125,7 +125,6 @@ class ViewFilters
      */
     public static function updateViewFilters($view_id, $info)
     {
-        $db = Core::$db;
         $LANG = Core::$L;
         $debug_enabled = Core::isDebugEnabled();
 
@@ -134,9 +133,7 @@ class ViewFilters
 
         // delete all old filters for this View. The two update view filter functions that follow re-insert
         // the most recent View info
-        $db->query("DELETE FROM {PREFIX}view_filters WHERE view_id = :view_id");
-        $db->bind("view_id", $view_id);
-        $db->execute();
+        ViewFilters::deleteViewFilters($view_id);
 
         // get a hash of field_id => col name for use in building the SQL statements
         $form_fields = Fields::getFormFields($form_id, array("include_field_type_info" => true));

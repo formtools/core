@@ -65,7 +65,7 @@ $(function() {
     var ifrm = $("#placeholder_field_overlay" + counter)[0];
     ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
     ifrm.document.open();
-    ifrm.document.write('<img src="../../global/images/lang_placeholder_field_icon.png" style="cursor: pointer" onclick="parent.ft.show_form_field_placeholders_dialog({ form_id: ' + form_id + ' });" />');
+    ifrm.document.write('<img src="' + g.root_url + '/global/images/lang_placeholder_field_icon.png" style="cursor: pointer" onclick="parent.ft.show_form_field_placeholders_dialog({ form_id: ' + form_id + ' });" />');
     ifrm.document.close();
     counter++;
   });

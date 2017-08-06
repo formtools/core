@@ -51,7 +51,7 @@
           <p class="subtitle">{$LANG.phrase_form_placeholders|upper}</p>
           <p>
             {$LANG.text_form_placeholder_info}
-            {$file_field_text}
+            {$file_field_text|default:""}
           </p>
 
           <table cellpadding="1" cellspacing="1" class="list_table" width="100%">

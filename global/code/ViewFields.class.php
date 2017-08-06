@@ -126,18 +126,6 @@ class ViewFields
         ViewFields::autoUpdateViewFieldOrder($view_id);
     }
 
-
-    /**
-     * Convenient wrapper function to delete all of a View's fields, plus anywhere they're used.
-     * @param $view_id
-     */
-    public static function deleteViewFields($view_id) {
-        ViewColumns::deleteViewColumns($view_id);
-        ViewFilters::deleteViewFilters($view_id);
-        ViewFields::deleteAllViewFields($view_id);
-    }
-
-
     /**
      * This function is called any time a form field is deleted, or unassigned to the View. It ensures
      * there are no gaps in the view_order
@@ -518,8 +506,12 @@ class ViewFields
         return $db->fetchAll(PDO::FETCH_COLUMN);
     }
 
-
-    public static function deleteAllViewFields($view_id)
+    /**
+     * Deletes all fields in a view. Note that View fields are *independent* of View columns and filters: a user
+     * is permitted to add columns or filters for fields that aren't shown in the View.
+     * @param $view_id
+     */
+    public static function deleteViewFields($view_id)
     {
         $db = Core::$db;
         $db->query("DELETE FROM {PREFIX}view_fields WHERE view_id = :view_id");

@@ -59,9 +59,42 @@ class Database
      * table prefix so you don't have to include it everywhere.
      * @param $query
      */
-    public function query($query) {
+    public function query($query)
+    {
         $query = str_replace('{PREFIX}', $this->table_prefix, $query);
         $this->statement = $this->dbh->prepare($query);
+    }
+
+    /**
+     * Another convenience function to abstract away PDO's awful insert-multiple syntax and actually execute the
+     * query as well. Does the same thing as a query() and an execute().
+     * @param string $table table name (OMIT the prefix)
+     * @param array $cols ordered array of tables names
+     * @param array $data array of arrays. Each subarray is a hash of col name to value.
+     */
+    public function insertQueryMultiple($table, $cols, $data)
+    {
+        function placeholders($text, $count = 0, $separator = ",") {
+            $result = array();
+            if ($count > 0) {
+                for ($i=0; $i<$count; $i++) {
+                    $result[] = $text;
+                }
+            }
+            return implode($separator, $result);
+        }
+
+        $insert_values = array();
+        foreach ($data as $d) {
+            $question_marks[] = '('  . placeholders('?', sizeof($d)) . ')';
+            $insert_values = array_merge($insert_values, array_values($d));
+        }
+
+        $table_name = $this->table_prefix . $table;
+        $query = "INSERT INTO $table_name (" . implode(",", $cols ) . ") VALUES " . implode(',', $question_marks);
+        $this->statement = $this->dbh->prepare($query);
+
+        return $this->statement->execute($insert_values);
     }
 
     public function bind($param, $value, $type = null) {

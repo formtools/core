@@ -35,14 +35,21 @@ class ViewColumns
     {
         $db = Core::$db;
 
-        $sortable_id  = $info["submission_list_sortable_id"];
-        $sortable_rows = explode(",", $info["{$sortable_id}_sortable__rows"]);
-
+        // delete the old view columns
         ViewColumns::deleteViewColumns($view_id);
 
+        $sortable_id  = $info["submission_list_sortable_id"];
+
+        // if there are no view columns, fine! We've deleted the old ones. Just return
+        if ($info["{$sortable_id}_sortable__rows"] === "") {
+            return;
+        }
+
+        $sortable_rows = explode(",", $info["{$sortable_id}_sortable__rows"]);
+
         $list_order = 1;
-        $placeholders = array();
         $data = array();
+
         foreach ($sortable_rows as $row_id) {
 
             // if the user didn't select a field for this row, ignore it
@@ -50,8 +57,8 @@ class ViewColumns
                 continue;
             }
 
-            $field_id     = $info["field_id_{$row_id}"];
-            $is_sortable  = (isset($info["is_sortable_{$row_id}"])) ? "yes" : "no";
+            $field_id    = $info["field_id_{$row_id}"];
+            $is_sortable = (isset($info["is_sortable_{$row_id}"])) ? "yes" : "no";
 
             $custom_width = "";
             if (isset($info["auto_size_{$row_id}"])) {
@@ -73,29 +80,24 @@ class ViewColumns
 
             $truncate = $info["truncate_{$row_id}"];
 
-            $data[] = $view_id;
-            $data[] = $field_id;
-            $data[] = $list_order;
-            $data[] = $is_sortable;
-            $data[] = $auto_size;
-            $data[] = $custom_width;
-            $data[] = $truncate;
-            $placeholders[] = "(?, ?, ?, ?, ?, ?, ?)";
+            $data[] = array(
+                "view_id" => $view_id,
+                "field_id" => $field_id,
+                "list_order" => $list_order,
+                "is_sortable" => $is_sortable,
+                "auto_size" => $auto_size,
+                "custom_width" => $custom_width,
+                "truncate" => $truncate
+            );
             $list_order++;
         }
 
         try {
-            $db->beginTransaction();
-            $placeholder_str = implode(", ", $placeholders);
-            $db->query("
-                INSERT INTO {PREFIX}view_columns (view_id, field_id, list_order, is_sortable, auto_size, custom_width, truncate)
-                VALUES $placeholder_str
-            ");
-            $db->execute($data);
-            $db->processTransaction();
+            $cols = array("view_id", "field_id", "list_order", "is_sortable", "auto_size", "custom_width", "truncate");
+            $db->insertQueryMultiple("view_columns", $cols, $data);
         } catch (PDOException $e) {
-            $db->rollbackTransaction();
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
+            exit;
         }
     }
 
