@@ -39,7 +39,7 @@ if (isset($request["page"]) && !empty($request["page"])) {
 }
 
 if (isset($request['edit_email_user_settings'])) {
-    General::redirect("edit.php?page=email_settings");
+    General::redirect("?page=email_settings");
     exit;
 }
 

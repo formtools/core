@@ -92,6 +92,7 @@
           </optgroup>
         </select>
       {/if}
+
       <input type="submit" name="add_email" value="{$LANG.phrase_create_new_email}" />
       <input type="submit" name="edit_email_user_settings" value="{$LANG.phrase_configure_form_email_fields} ({$num_registered_form_emails})" />
     </div>

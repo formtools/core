@@ -31,7 +31,6 @@ $num_registered_form_emails = count($registered_form_emails);
 $all_form_emails = Emails::getEmailTemplateList($form_id);
 $php_self = General::getCleanPhpSelf();
 
-
 // ------------------------------------------------------------------------------------------------
 
 $LANG = Core::$L;

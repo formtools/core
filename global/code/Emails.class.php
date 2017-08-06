@@ -35,9 +35,9 @@ class Emails {
         $templates = $db->fetchAll();
 
         $info = array();
-        foreach ($templates as $template) {
+        foreach ($templates as $row) {
             $db->query("SELECT view_id FROM {PREFIX}email_template_when_sent_views WHERE email_id = :email_id");
-            $db->bind("email_id", $template["email_id"]);
+            $db->bind("email_id", $row["email_id"]);
             $db->execute();
 
             $results = $db->fetchAll();
@@ -139,7 +139,7 @@ class Emails {
                 $db->query("
                     INSERT INTO {PREFIX}email_template_recipients (email_template_id, recipient_user_type,
                       recipient_type, account_id, form_email_id, custom_recipient_name, custom_recipient_email)
-                    VALUES ($email_id, :recipient_user_type, :recipient_type, :account_id, :form_email_id,
+                    VALUES (:email_id, :recipient_user_type, :recipient_type, :account_id, :form_email_id,
                       :custom_recipient_name, :custom_recipient_email)
                 ");
                 $db->bindAll(array(
@@ -912,12 +912,6 @@ class Emails {
             $email_reply_to_form_email_id = $matches[1];
             $email_reply_to = "form_email_field";
         }
-        $email_from_account_id = (empty($email_from_account_id)) ? "NULL" : "'$email_from_account_id'";
-        $email_from_form_email_id = (empty($email_from_form_email_id)) ? "NULL" : "'$email_from_form_email_id'";
-        $email_reply_to_account_id = (empty($email_reply_to_account_id)) ? "NULL" : "'$email_reply_to_account_id'";
-        $email_reply_to_form_email_id = (empty($email_reply_to_form_email_id)) ? "NULL" : "'$email_reply_to_form_email_id'";
-        $email_from = (empty($email_from)) ? "NULL" : "'$email_from'";
-        $email_reply_to = (empty($email_reply_to)) ? "NULL" : "'$email_reply_to'";
 
         // "Email Content" tab
         $html_template = $info["html_template"];
