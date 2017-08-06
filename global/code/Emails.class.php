@@ -8,7 +8,7 @@
 
 namespace FormTools;
 
-use PDO, PDOException;
+use SmartyBC, PDO, PDOException;
 
 
 class Emails {
@@ -393,7 +393,7 @@ class Emails {
      * This handy function figures out the various components of an email and returns them in a hash:
      *      from, reply_to, to, cc, bcc, subject, html_content and text_content
      *
-     * This is used both when sending the emails but also for testing. This should be the only place that
+     * This is used when sending the emails, plus testing. This should be the only place that
      * email content is actually constructed. All other email functions should be using it, regardless of
      * what mechanism actually sends the email.
      *
@@ -432,7 +432,13 @@ class Emails {
         // unfortunately we need this, even though it was just called in _ft_get_email_template_content()
         $submission_info = Submissions::getSubmission($form_id, $submission_id);
 
-        // retrieve the placeholders and their substitutes
+
+        // retrieve the placeholders and their substitutes. This is a hash of stuff like:
+        //    [ADMINEMAIL] => whatever@something.com
+        //    [FORMNAME] => Form 123
+        //    [FORMURL] =>
+        //    [SUBMISSIONID] => 10
+        //    [LOGINURL] => http://urlhere.com
         $submission_placeholders = General::getSubmissionPlaceholders($form_id, $submission_id);
         $admin_info = Administrator::getAdminInfo();
 
@@ -465,6 +471,18 @@ class Emails {
         }
         $fields_for_email_template = $updated_fields_for_email_template;
 
+        // minor bug fix never noticed in FT2.x. If an email template has been mapped to a View that has a filter defined,
+        // and the user has selected "random submission", there may well be NO submission ID that actually fits, so "answer"
+        // can have no value for each field. This just ensures the "answer" key is set so the email templates don't throw a
+        // warning
+        $updated_fields_for_email_template = array();
+        foreach ($fields_for_email_template as $field_info) {
+            if (!isset($field_info["answer"])) {
+                $field_info["answer"] = "";
+            }
+            $updated_fields_for_email_template[] = $field_info;
+        }
+        $fields_for_email_template = $updated_fields_for_email_template;
 
         $return_info = array();
         $return_info["email_id"] = $email_id;
@@ -1639,6 +1657,7 @@ class Emails {
             $test_email_data_source   = $test_settings["test_email_data_source"];
             $test_email_submission_id = $test_settings["test_email_submission_id"];
 
+
             // get the submission ID
             switch ($test_email_data_source) {
                 case "random_submission":
@@ -1658,9 +1677,8 @@ class Emails {
                         $where_clause
                         ORDER BY rand() LIMIT 1
                     ");
-
-                    $row = $db->fetch();
-                    $submission_id = $row[0];
+                    $db->execute();
+                    $submission_id = $db->fetch(PDO::FETCH_COLUMN);
                     break;
 
                 case "submission_id":

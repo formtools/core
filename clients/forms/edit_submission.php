@@ -139,7 +139,7 @@ $shared_resources_list = $settings["edit_submission_onload_resources"];
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
 foreach ($shared_resources_array as $resource) {
-	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $g_root_url)) . "\n";
+	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $root_url)) . "\n";
 }
 
 // ------------------------------------------------------------------------------------------------
