@@ -1223,9 +1223,9 @@ class Fields {
                     } else {
                         $db->query("
                             UPDATE {PREFIX}form_fields
-                            SET    field_type_id = :old_field_type_id,
-                                   field_size    = :old_field_size,
-                                   col_name      = :old_col_name
+                            SET    field_type_id = :field_type_id,
+                                   field_size    = :field_size,
+                                   col_name      = :col_name
                             WHERE  field_id = :field_id
                         ");
                         $db->bindAll(array(

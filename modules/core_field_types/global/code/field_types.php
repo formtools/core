@@ -1199,7 +1199,7 @@ if (empty(\$date)) {
     if (\$display_format == "dd/mm/yy") {
       \$date = substr(\$date, 3, 2) . "/" . substr(\$date, 0, 2) . "/" . substr(\$date, 6);
     } else if (\$display_format == "dd. mm. yy.") {
-      \$parts = explode(\" \", \$date);
+      \$parts = explode(" ", \$date);
       \$date = trim(\$parts[1], ".") . "/" . trim(\$parts[0], ".") . "/" . trim(\$parts[2], ".");
     }
   }
@@ -1211,7 +1211,7 @@ if (empty(\$date)) {
     \$seconds_offset = \$account_info["timezone_offset"] * 60 * 60;
     \$time += \$seconds_offset;
   }
-  \$value = date(\"Y-m-d H:i:s\", \$time);
+  \$value = date("Y-m-d H:i:s", \$time);
 }
 END;
 
