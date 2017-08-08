@@ -47,6 +47,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
         }
     }
 
+    $edit = false;
     if ($field_info["is_editable"] == "no") {
         $markup_with_placeholders = trim($field_type_info["view_field_smarty_markup"]);
         if (empty($markup_with_placeholders)) {
@@ -54,8 +55,10 @@ function smarty_function_edit_custom_field($params, &$smarty)
             return;
         }
     } else {
+        $edit = true;
         $markup_with_placeholders = $field_type_info["edit_field_smarty_markup"];
     }
+
 
     // now construct all available placeholders
     $placeholders = array(
@@ -116,6 +119,14 @@ function smarty_function_edit_custom_field($params, &$smarty)
 
         $placeholders[$identifier] = $value;
     }
+
+//    echo "<hr />";
+
+//    if ($edit) {
+//        echo $markup_with_placeholders;
+//        print_r($placeholders);
+//        echo "<hr />";
+//    }
 
     echo General::evalSmartyString($markup_with_placeholders, $placeholders);
 }

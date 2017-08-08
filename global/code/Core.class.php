@@ -656,4 +656,15 @@ class Core {
     public static function getApiSessionsTimeout() {
         return self::$apiSessionsTimeout;
     }
+
+    public static function isAPIAvailable()
+    {
+        return is_file(Core::getAPIPath());
+    }
+
+    public static function getAPIPath()
+    {
+        $root_dir = Core::getRootDir();
+        return "$root_dir/global/api/api.php";
+    }
 }

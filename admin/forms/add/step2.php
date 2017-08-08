@@ -19,9 +19,11 @@ $form_id = General::loadField("form_id", "add_form_form_id", "");
 $request = array_merge($_POST, $_GET);
 $submission_type = General::loadField("submission_type", "submission_type");
 
-// bit weird, but if a user's coming back to this page to complete setting up their form, update the submission_type
-Forms::setSubmissionType($form_id, $submission_type);
-
+// the form may or may not be created in the DB at this point. If a user's coming back to this page to complete
+// setting up their form, update the submission_type - otherwise we have the info in sessions
+if (!empty($form_id)) {
+    Forms::setSubmissionType($form_id, $submission_type);
+}
 
 $page = array();
 

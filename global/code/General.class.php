@@ -336,6 +336,9 @@ END;
             $smarty->addPluginsDir($dir);
         }
 
+//        echo $placeholder_str;
+//        echo "<hr />";
+
         $smarty->assign("eval_str", $placeholder_str);
         if (!empty($placeholders)) {
             while (list($key, $value) = each($placeholders)) {
@@ -394,17 +397,15 @@ END;
      */
     public static function updateApiVersion()
     {
-        $root_dir = Core::getRootDir();
-
-        $api_file = "$root_dir/global/api/api.php";
-        if (is_file($api_file)) {
-            include_once($api_file);
-
-            if (!isset($g_api_version) || empty($g_api_version)) {
-                return;
-            }
-            Settings::set(array("api_version" => $g_api_version));
+        if (!Core::isAPIAvailable()) {
+            return;
         }
+
+        include_once(Core::getAPIPath());
+        if (!isset($g_api_version) || empty($g_api_version)) {
+            return;
+        }
+        Settings::set(array("api_version" => $g_api_version));
     }
 
 

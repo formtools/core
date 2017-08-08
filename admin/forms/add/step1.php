@@ -52,6 +52,7 @@ END;
 $page = array(
     "page" => "add_form1",
     "page_url" => Pages::getPageUrl("add_form1"),
+    "has_api" => Core::isAPIAvailable(),
     "head_title" => "{$LANG['phrase_add_form']} - {$LANG["phrase_step_1"]}",
     "form_info" => $form_info,
     "head_js" => $head_js

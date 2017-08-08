@@ -43,6 +43,7 @@
             </div>
           </div>
         </td>
+        {if $has_api}
         <td width="2%"> </td>
         <td width="49%" valign="top">
           <div id="select_box" class="{if $form_info.submission_type == "code"}blue_box{else}grey_box{/if}">
@@ -56,6 +57,7 @@
             </div>
           </div>
         </td>
+        {/if}
       </tr>
       <tr>
         <td colspan="3">

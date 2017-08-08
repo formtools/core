@@ -16,6 +16,7 @@
 
 use FormTools\Core;
 use FormTools\Forms;
+use FormTools\Submissions;
 use FormTools\Themes;
 
 
@@ -47,5 +48,5 @@ if (empty($_POST)) {
 
 // otherwise, it's a regular form submission. Process it!
 } else {
-    Forms::processForm($_POST);
+    Submissions::processFormSubmission($_POST);
 }

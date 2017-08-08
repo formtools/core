@@ -96,6 +96,7 @@ END;
   </ul>
   {$footer}
 END;
+        exit;
     }
 
     /**

@@ -1580,19 +1580,19 @@ class Fields {
                     ViewFields::deleteViewField($row["view_id"], $field_id);
                 }
 
-                $drop_column = $old_field_info["col_name"];
                 $db->query("ALTER TABLE {PREFIX}form_$form_id DROP $drop_column");
                 $db->execute();
 
                 // if any Views had this field as the default sort order, reset them to having the submission_date
                 // field as the default sort order
                 $db->query("
-                        UPDATE {PREFIX}views
-                        SET     default_sort_field = 'submission_date',
-                                default_sort_field_order = 'desc'
-                        WHERE   default_sort_field = :default_sort_field AND
-                                form_id = :form_id
-                    ");
+                    UPDATE {PREFIX}views
+                    SET     default_sort_field = 'submission_date',
+                            default_sort_field_order = 'desc'
+                    WHERE   default_sort_field = :default_sort_field AND
+                            form_id = :form_id
+                ");
+
                 $db->bindAll(array(
                     "default_sort_field" => $drop_column,
                     "form_id" => $form_id
