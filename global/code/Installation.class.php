@@ -14,7 +14,7 @@
 
 namespace FormTools;
 
-use SmartyBC, PDO, PDOException;
+use Smarty, PDO, PDOException;
 
 
 /**
@@ -60,19 +60,6 @@ class Installation
                 "The config.php file does not exist. You need to create it in your /global folder with the content specified in order to continue."
             );
         }
-    }
-
-
-    /**
-     * Added in 2.1.5, this is a wrapped for the Core Field Types module's installation function. It's called on the
-     * final step of the installation script. The module is unique; it's installation function can only be called for
-     * fresh installations. It's called separately prior to other module installation functions to ensure the field
-     * type tables are populated prior to other custom field type modules.
-     */
-    public static function installCoreFieldTypes($module_folder)
-    {
-        require_once(realpath(__DIR__ . "/../../modules/$module_folder/library.php"));
-        return cft_install_module();
     }
 
 
@@ -129,7 +116,7 @@ class Installation
     {
         $LANG = Core::$L;
 
-        $smarty = new SmartyBC();
+        $smarty = new Smarty();
         $smarty->setTemplateDir("../global/smarty_plugins/");
         $smarty->setCompileDir("../../themes/$theme/cache/");
 
@@ -212,7 +199,7 @@ EOF;
             exit;
         }
 
-        $smarty = new SmartyBC();
+        $smarty = new Smarty();
         $smarty->setTemplateDir($theme_folder);
         $smarty->setCompileDir($cache_folder);
         $smarty->setUseSubDirs(false);
@@ -250,9 +237,6 @@ EOF;
         foreach ($page_vars as $key=>$value) {
             $smarty->assign($key, $value);
         }
-
-        error_reporting(E_ALL);
-        ini_set('display_errors', 1);
 
         $smarty->display(realpath(__DIR__ . "/../../install/$template"));
     }
@@ -486,5 +470,117 @@ EOF;
         }
     }
 
+    /**
+     * Installs the core field types. From 2.1.5 up until 3.0.0, the core fields were in a separate module. As of
+     * 3.0.0 they were moved to the Core.
+     */
+    public static function installCoreFieldTypes()
+    {
+        $db = Core::$db;
+
+        // this ensures that the module contents only get installed once
+        $field_types = FieldTypes::get();
+        if (count($field_types) > 0) {
+            return array(true, "");
+        }
+
+        $group_query = "
+            INSERT INTO {PREFIX}list_groups (group_type, group_name, custom_data, list_order)
+            VALUES (:group_type, :group_name, :custom_data, :list_order)
+        ";
+
+        // first, insert the groups for the upcoming field types
+        $db->query($group_query);
+        $db->bindAll(array(
+            "group_type" => "field_types",
+            "group_name" => "{\$LANG.phrase_standard_fields}",
+            "custom_data" => "",
+            "list_order" => 1
+        ));
+        try {
+            $db->execute();
+        } catch (PDOException $e) {
+            return array(false, "Problem inserting list group item #1: " . $e->getMessage());
+        }
+        $group1_id = $db->getInsertId();
+
+
+        $db->query($group_query);
+        $db->bindAll(array(
+            "group_type" => "field_types",
+            "group_name" => "{\$LANG.phrase_special_fields}",
+            "custom_data" => "",
+            "list_order" => 2
+        ));
+
+        try {
+            $db->execute();
+        } catch (PDOException $e) {
+            CoreFieldTypes::rollbackNewInstallation();
+            return array(false, "Problem inserting list group item #2: " . $e->getMessage());
+        }
+        $group2_id = $db->getInsertId();
+
+
+        // install each field type one-by-one. If anything fails, return immediately and inform the user. This should
+        // NEVER occur, because the only time this code is ever executed is when first installing the module
+        list($success, $error) = CoreFieldTypes::installFieldType("textbox", $group1_id);
+        if (!$success) {
+            CoreFieldTypes::rollbackNewInstallation();
+            return array($success, $error);
+        }
+        list($success, $error) = CoreFieldTypes::installFieldType("textarea", $group1_id);
+        if (!$success) {
+            CoreFieldTypes::rollbackNewInstallation();
+            return array($success, $error);
+        }
+        list($success, $error) = CoreFieldTypes::installFieldType("password", $group1_id);
+        if (!$success) {
+            CoreFieldTypes::rollbackNewInstallation();
+            return array($success, $error);
+        }
+        list($success, $error) = CoreFieldTypes::installFieldType("dropdown", $group1_id);
+        if (!$success) {
+            CoreFieldTypes::rollbackNewInstallation();
+            return array($success, $error);
+        }
+        list($success, $error) = CoreFieldTypes::installFieldType("multi_select_dropdown", $group1_id);
+        if (!$success) {
+            CoreFieldTypes::rollbackNewInstallation();
+            return array($success, $error);
+        }
+        list($success, $error) = CoreFieldTypes::installFieldType("radio_buttons", $group1_id);
+        if (!$success) {
+            CoreFieldTypes::rollbackNewInstallation();
+            return array($success, $error);
+        }
+        list($success, $error) = CoreFieldTypes::installFieldType("checkboxes", $group1_id);
+        if (!$success) {
+            CoreFieldTypes::rollbackNewInstallation();
+            return array($success, $error);
+        }
+        list($success, $error) = CoreFieldTypes::installFieldType("date", $group2_id);
+        if (!$success) {
+            CoreFieldTypes::rollbackNewInstallation();
+            return array($success, $error);
+        }
+        list($success, $error) = CoreFieldTypes::installFieldType("time", $group2_id);
+        if (!$success) {
+            CoreFieldTypes::rollbackNewInstallation();
+            return array($success, $error);
+        }
+        list($success, $error) = CoreFieldTypes::installFieldType("phone", $group2_id);
+        if (!$success) {
+            CoreFieldTypes::rollbackNewInstallation();
+            return array($success, $error);
+        }
+        list($success, $error) = CoreFieldTypes::installFieldType("code_markup", $group2_id);
+        if (!$success) {
+            CoreFieldTypes::rollbackNewInstallation();;
+            return array($success, $error);
+        }
+
+        return array(true, "");
+    }
 }
 

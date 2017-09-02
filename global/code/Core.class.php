@@ -25,7 +25,7 @@
 
 namespace FormTools;
 
-use SmartyBC;
+use Smarty;
 
 
 class Core {
@@ -234,7 +234,7 @@ class Core {
     public static $db;
 
     /**
-     * @var SmartyBC
+     * @var Smarty
      */
     public static $smarty;
 
@@ -266,7 +266,7 @@ class Core {
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20170806";
+    private static $releaseDate = "20170902";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
@@ -422,7 +422,7 @@ class Core {
 
     public static function initSmarty()
     {
-        self::$smarty = new SmartyBC();
+        self::$smarty = new Smarty();
     }
 
     public static function startSessions()
@@ -657,8 +657,7 @@ class Core {
         return self::$apiSessionsTimeout;
     }
 
-    public static function isAPIAvailable()
-    {
+    public static function isAPIAvailable() {
         return is_file(Core::getAPIPath());
     }
 

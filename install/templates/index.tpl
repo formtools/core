@@ -4,10 +4,6 @@
 
 {include file='messages.tpl'}
 
-<div class="notify margin_bottom_large">
-	{$LANG.text_install_already_upgraded}
-</div>
-
 <form action="{$same_page}" method="post">
 	<table cellspacing="0" cellpadding="0">
 		<tr>

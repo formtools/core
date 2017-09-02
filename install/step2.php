@@ -25,7 +25,6 @@ $page = array(
     "sessions_loaded" => extension_loaded("session"),
     "upload_folder_writable" => $upload_folder_writable,
     "default_theme_cache_dir_writable" => $default_theme_cache_dir_writable,
-    "core_field_types_module_available" => General::checkModuleAvailable("core_field_types"),
     "js_messages" => array(
         "word_error", "validation_incomplete_license_keys", "notify_invalid_license_keys",
         "word_close", "word_invalid", "word_verified", "word_continue"

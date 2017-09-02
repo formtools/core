@@ -26,7 +26,7 @@ class FieldTypes {
      * separate layer above this: you can create field types for any old thing - google maps fields, date fields,
      * plain text fields etc. These may or may not map to "actual" form field types understood natively by the
      * browser. But in order for the Add Form process to intelligently map the raw form field types to a Form
-     * Tools field type, we need to provide an (optional) mapping.
+     * Tools field type, we need to provide a mapping between the two.
      *
      * For instance, if you create a Date field type within Form Tools, it's really just a <input type="text" />
      * field in your original form that's enhanced with the jQuery calendar within FT. However, in order to

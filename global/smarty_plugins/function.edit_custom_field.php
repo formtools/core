@@ -120,13 +120,5 @@ function smarty_function_edit_custom_field($params, &$smarty)
         $placeholders[$identifier] = $value;
     }
 
-//    echo "<hr />";
-
-//    if ($edit) {
-//        echo $markup_with_placeholders;
-//        print_r($placeholders);
-//        echo "<hr />";
-//    }
-
     echo General::evalSmartyString($markup_with_placeholders, $placeholders);
 }

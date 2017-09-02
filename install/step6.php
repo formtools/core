@@ -19,7 +19,7 @@ Hooks::updateAvailableHooks();
 Modules::updateModuleList();
 Themes::updateThemeList();
 
-Installation::installCoreFieldTypes("core_field_types");
+Installation::installCoreFieldTypes();
 
 // now actually install
 Modules::installModules();

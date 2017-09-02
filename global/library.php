@@ -3,11 +3,15 @@
 error_reporting(2047);
 ini_set("display_errors", "1");
 
+// autoload external dependencies
+require_once(__DIR__ . "/../vendor/autoload.php");
+
 require_once(__DIR__ . "/code/Accounts.class.php");
 require_once(__DIR__ . "/code/Administrator.class.php");
 require_once(__DIR__ . "/code/Clients.class.php");
 require_once(__DIR__ . "/code/Constants.class.php");
 require_once(__DIR__ . "/code/Core.class.php");
+require_once(__DIR__ . "/code/CoreFieldTypes.class.php");
 require_once(__DIR__ . "/code/Database.class.php");
 require_once(__DIR__ . "/code/DatabaseSessions.class.php");
 require_once(__DIR__ . "/code/Emails.class.php");
@@ -45,6 +49,14 @@ require_once(__DIR__ . "/code/ViewColumns.class.php");
 require_once(__DIR__ . "/code/ViewFields.class.php");
 require_once(__DIR__ . "/code/ViewFilters.class.php");
 require_once(__DIR__ . "/code/ViewTabs.class.php");
-
-// autoload external dependencies
-require_once(__DIR__ . "/../vendor/autoload.php");
+require_once(__DIR__ . "/code/field_types/Checkbox.class.php");
+require_once(__DIR__ . "/code/field_types/Code.class.php");
+require_once(__DIR__ . "/code/field_types/Date.class.php");
+require_once(__DIR__ . "/code/field_types/Dropdown.class.php");
+require_once(__DIR__ . "/code/field_types/MultiSelect.class.php");
+require_once(__DIR__ . "/code/field_types/Password.class.php");
+require_once(__DIR__ . "/code/field_types/Phone.class.php");
+require_once(__DIR__ . "/code/field_types/Radio.class.php");
+require_once(__DIR__ . "/code/field_types/Textarea.class.php");
+require_once(__DIR__ . "/code/field_types/Textbox.class.php");
+require_once(__DIR__ . "/code/field_types/Time.class.php");

@@ -88,26 +88,9 @@
 			{/if}
 		</td>
 	</tr>
-	<tr>
-		<td><a href="http://modules.formtools.org/core_field_types/" target="_blank">{$LANG.phrase_core_field_types}</a> module available?</td>
-		<td class="bold">
-			{if $core_field_types_module_available}
-				{$LANG.word_yes}
-			{else}
-				{$LANG.word_no}
-			{/if}
-		</td>
-		<td align="center">
-			{if $core_field_types_module_available}
-				<span class="green">{$LANG.word_pass|upper}</span>
-			{else}
-				<span class="red">{$LANG.word_fail|upper}</span>
-			{/if}
-		</td>
-	</tr>
 </table>
 
-{if !$valid_php_version || !$pdo_available || !$pdo_mysql_available || !$sessions_loaded || !$core_field_types_module_available}
+{if !$valid_php_version || !$pdo_available || !$pdo_mysql_available || !$sessions_loaded}
 
 	<p class="error" style="padding: 6px">
 		{$LANG.text_install_form_tools_server_not_supported}

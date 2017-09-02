@@ -1,8 +1,7 @@
 # Form Tools Core
 
-This repo contains the source code for the Form Tools Core. The Core provides the basic code needed to run Form Tools
-on your server, with the exception of the [Core Field Types](https://github.com/formtools/module-core_field_types)
-module. That will need to be uploaded you your `/modules` folder.
+This repo contains the source code for the Form Tools Core. The Core provides the minimal code needed to run Form Tools
+on your server. That will need to be uploaded you your `/modules` folder.
 
 The other modules, themes and API all just expand on the core functionality to provide additional, optional features
 should you need them.
@@ -14,17 +13,16 @@ should you need them.
 - check out the release sections for earlier, stable releases. 
 
 
-### Where we're at (June, 2017)
+### Where we're at (Sept, 2017)
 
 Earlier this year I returned to work on Form Tools after a long (4 year!) break. There have been a lot of changes made 
 to PHP and the various code dependencies that Form Tools relies on. The goal for the 3.0.0 rewrite is:
 
 - *Run on PHP 7*.
 - Upgrade Smarty (necessary for PHP 7 compatibility)
-- Convert the codebase to object oriented. 
+- Convert the codebase to object oriented.
 - move database interaction to use *PDO*.
-- include Composer (just the basics right now, but all modules, themes etc. may end up as composer
-components... not sure yet)
+- include Composer (just the basics right now, but all modules, themes etc. may end up as composer components... not sure yet)
  
 
 ### PHP version compatibility

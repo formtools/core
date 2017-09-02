@@ -122,19 +122,17 @@
             <div class="medium_grey">{$module.description}</div>
           </td>
           <td valign="top" align="center">{$module.version}</td>
-          <td valign="top" align="center" {if $module.is_installed == "yes" && $module.module_folder != "core_field_types"}class="check_area"{/if}>
+          <td valign="top" align="center" {if $module.is_installed == "yes"}class="check_area"{/if}>
             {if $module.is_installed == "no"}
               <input type="hidden" class="module_id" value="{$module.module_id}" />
               <input type="hidden" class="module_folder" value="{$module.module_folder}" />
               <a href="{$same_page}?install={$module.module_id}">{$LANG.word_install|upper}</a>
             {else}
-              {if $module.module_folder != "core_field_types"}
-                <input type="checkbox" name="is_enabled[]" value="{$module.module_id}" {if $module.is_enabled == 'yes'}checked{/if} />
-              {/if}
+              <input type="checkbox" name="is_enabled[]" value="{$module.module_id}" {if $module.is_enabled == 'yes'}checked{/if} />
             {/if}
           </td>
           <td valign="top" align="center">
-            {if $module.is_enabled == "yes" || $module.module_folder == "core_field_types"}
+            {if $module.is_enabled == "yes"}
               {if $module.needs_upgrading}
                 <a href="{$same_page}?upgrade={$module_id}">{$LANG.word_upgrade|upper}</a>
               {else}
@@ -143,9 +141,7 @@
             {/if}
           </td>
           <td valign="top" class="del2" align="center">
-            {if $module.module_folder != "core_field_types"}
-              <a href="#" onclick="return mm.uninstall_module({$module.module_id})">{$LANG.word_uninstall|upper}</a>
-            {/if}
+            <a href="#" onclick="return mm.uninstall_module({$module.module_id})">{$LANG.word_uninstall|upper}</a>
           </td>
         </tr>
 

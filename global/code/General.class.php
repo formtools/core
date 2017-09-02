@@ -336,9 +336,6 @@ END;
             $smarty->addPluginsDir($dir);
         }
 
-//        echo $placeholder_str;
-//        echo "<hr />";
-
         $smarty->assign("eval_str", $placeholder_str);
         if (!empty($placeholders)) {
             while (list($key, $value) = each($placeholders)) {

@@ -8,7 +8,7 @@
 
 namespace FormTools;
 
-use SmartyBC, PDO, PDOException;
+use Smarty, PDO, PDOException;
 
 
 class Emails {
@@ -488,7 +488,7 @@ class Emails {
         $return_info["email_id"] = $email_id;
         $return_info["attachments"] = array();
 
-        $smarty = new SmartyBC();
+        $smarty = new Smarty();
         $smarty->setTemplateDir("$root_dir/global/smarty_plugins/");
         $smarty->setCompileDir("$root_dir/themes/$default_theme/cache/");
         $smarty->assign("LANG", $LANG);
