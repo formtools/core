@@ -169,7 +169,7 @@ class Date
         $content =<<< END
 {strip}
 {if \$VALUE}
-  {assign var=tzo value=""}
+  {assign var=tzo value=0}
   {if \$apply_timezone_offset == "yes"}
     {assign var=tzo value=\$ACCOUNT_INFO.timezone_offset}
   {/if}
