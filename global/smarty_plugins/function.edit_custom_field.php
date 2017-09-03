@@ -59,7 +59,6 @@ function smarty_function_edit_custom_field($params, &$smarty)
         $markup_with_placeholders = $field_type_info["edit_field_smarty_markup"];
     }
 
-
     // now construct all available placeholders
     $placeholders = array(
         "FORM_ID"       => $form_id,

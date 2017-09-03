@@ -120,7 +120,7 @@ if (Sessions::exists("new_search") && Sessions::get("new_search") == "yes") {
     Sessions::set("new_search", "no");
 }
 
-list($prev_link_html, $search_results_link_html, $next_link_html) = Submissions::getPrevNextLinks($form_id, $view_id, $submission_id);
+list($prev_link_html, $search_results_link_html, $next_link_html) = Submissions::getPrevNextLinks($form_id, $view_id, $submission_id, "submissions.php");
 
 // construct the page label
 $submission_placeholders = General::getSubmissionPlaceholders($form_id, $submission_id);

@@ -915,7 +915,7 @@ END;
 
     /**
      * This should be the one and only place that actually generates the content for a field for it
-     * to be Viewed. This is used on the Submission Listing page, Edit Submission page (for viewable,
+     * to be viewed. This is used on the Submission Listing page, Edit Submission page (for viewable,
      * non-editable fields), in the Export Manager, in the Email Templates, and anywhere else that needs
      * to output the content of a field.
      *

@@ -249,9 +249,10 @@ class Forms
 
         $info = $request;
         $config = array(
-            "form_type"   => "internal",
-            "form_name"   => $info["form_name"],
-            "access_type" => $info["access_type"]
+            "form_type"       => "internal",
+            "form_name"       => $info["form_name"],
+            "submission_type" => "direct",
+            "access_type"     => $info["access_type"]
         );
 
         // set up the entry for the form

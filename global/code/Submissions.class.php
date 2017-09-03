@@ -1334,7 +1334,7 @@ class Submissions {
     {
         $LANG = Core::$L;
 
-        // defaults! As of 2.1.0, the navigation always appears. This is better for consistency's sake
+        // defaults! As of 2.1.0, the navigation always appears
         $previous_link_html       = "<span class=\"light_grey\">{$LANG['word_previous_leftarrow']}</span>";
         $next_link_html           = "<span class=\"light_grey\">{$LANG['word_next_rightarrow']}</span>";
         $search_results_link_html = "<a href=\"{$return_page}?form_id=$form_id\">{$LANG['phrase_back_to_search_results']}</a>";

@@ -242,12 +242,14 @@ $select_all_submissions_returned = (Sessions::get("form_{$form_id}_select_all_su
 $preselected_subids = array();
 $all_submissions_selected_omit_list_str = "";
 if ($select_all_submissions_returned == "true") {
+    echo "..";
 	$all_submissions_selected_omit_list = Sessions::getWithFallback("form_{$form_id}_all_submissions_selected_omit_list", array());
 	$all_submissions_selected_omit_list_str = implode(",", $all_submissions_selected_omit_list);
 	$preselected_subids = array_diff($submission_ids, $all_submissions_selected_omit_list);
 } else {
     $preselected_subids = Sessions::getWithFallback("form_{$form_id}_selected_submissions", array());
 }
+print_r($preselected_subids);
 
 $preselected_subids_str = implode(",", $preselected_subids);
 
