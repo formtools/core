@@ -83,7 +83,7 @@ END;
                 "compatible_field_sizes"         => "1char,2chars,tiny,small,medium,large",
                 "view_field_rendering_type"      => "php",
                 "view_field_php_function_source" => "core",
-                "view_field_php_function"        => "FieldTypes::displayFieldTypeCheckboxes",
+                "view_field_php_function"        => "FormTools\\FieldTypes::displayFieldTypeCheckboxes",
                 "view_field_smarty_markup"       => $checkboxes_view_field,
                 "edit_field_smarty_markup"       => $checkboxes_edit_field,
                 "php_processing"                 => "",

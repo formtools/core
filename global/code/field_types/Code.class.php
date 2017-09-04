@@ -21,7 +21,7 @@ class Code
                 "compatible_field_sizes"         => "large,very_large",
                 "view_field_rendering_type"      => "php",
                 "view_field_php_function_source" => "core",
-                "view_field_php_function"        => "FieldTypes::displayFieldTypeCodeMarkup",
+                "view_field_php_function"        => "FormTools\\FieldTypes::displayFieldTypeCodeMarkup",
                 "view_field_smarty_markup"       => self::getViewField(),
                 "edit_field_smarty_markup"       => self::getEditField(),
                 "php_processing"                 => "",

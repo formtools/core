@@ -60,7 +60,7 @@ END;
                 "compatible_field_sizes"         => "1char,2chars,tiny,small,medium,large",
                 "view_field_rendering_type"      => "smarty",
                 "view_field_php_function_source" => "core",
-                "view_field_php_function"        => "FieldTypes::displayFieldTypeDropdown",
+                "view_field_php_function"        => "FormTools\\FieldTypes::displayFieldTypeDropdown",
                 "view_field_smarty_markup"       => $dropdown_view_field,
                 "edit_field_smarty_markup"       => $dropdown_edit_field,
                 "php_processing"                 => "",

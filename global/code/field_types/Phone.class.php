@@ -66,7 +66,7 @@ END;
                 "compatible_field_sizes"         => "small,medium",
                 "view_field_rendering_type"      => "smarty",
                 "view_field_php_function_source" => "core",
-                "view_field_php_function"        => "FieldTypes::displayFieldTypePhoneNumber",
+                "view_field_php_function"        => "FormTools\\FieldTypes::displayFieldTypePhoneNumber",
                 "view_field_smarty_markup"       => "{view_phone_field}",
                 "edit_field_smarty_markup"       => "{edit_phone_field}",
                 "php_processing"                 => $phone_php_processing,

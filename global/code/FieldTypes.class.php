@@ -1052,16 +1052,16 @@ END;
             }
 
             if ($field_type_info["view_field_rendering_type"] == "php") {
-                $php_function = $field_type_info["view_field_php_function"];
+                list ($class_plus_namespace, $method) = explode("::", $field_type_info["view_field_php_function"]);
 
-                // if this is a module, include the module's library.php file so we have access to the function
+                // if this is a module, include the module's library.php file so we have access to the class method
                 if ($field_type_info["view_field_php_function_source"] != "core" && is_numeric($field_type_info["view_field_php_function_source"])) {
                     $module_folder = Modules::getModuleFolderFromModuleId($field_type_info["view_field_php_function_source"]);
                     @include_once("$root_dir/modules/$module_folder/library.php");
                 }
 
-                if (function_exists($php_function)) {
-                    $output = $php_function($placeholders);
+                if (class_exists($class_plus_namespace) && method_exists($class_plus_namespace, $method)) {
+                    $output = call_user_func($field_type_info["view_field_php_function"], $placeholders);
                 }
             } else {
                 $output = General::evalSmartyString($markup_with_placeholders, $placeholders);

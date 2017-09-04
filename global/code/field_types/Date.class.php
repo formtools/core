@@ -21,7 +21,7 @@ class Date
                 "compatible_field_sizes"         => "small",
                 "view_field_rendering_type"      => "php",
                 "view_field_php_function_source" => "core",
-                "view_field_php_function"        => "FieldTypes::displayFieldTypeDate",
+                "view_field_php_function"        => "FormTools\\FieldTypes::displayFieldTypeDate",
                 "view_field_smarty_markup"       => self::getViewField(),
                 "edit_field_smarty_markup"       => self::getEditField(),
                 "php_processing"                 => self::getPhpProcessing(),

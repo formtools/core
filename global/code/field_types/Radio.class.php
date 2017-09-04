@@ -69,7 +69,7 @@ END;
                 "compatible_field_sizes"         => "1char,2chars,tiny,small,medium,large",
                 "view_field_rendering_type"      => "php",
                 "view_field_php_function_source" => "core",
-                "view_field_php_function"        => "FieldTypes::displayFieldTypeRadios",
+                "view_field_php_function"        => "FormTools\\FieldTypes::displayFieldTypeRadios",
                 "view_field_smarty_markup"       => $radio_view_field,
                 "edit_field_smarty_markup"       => $radio_edit_field,
                 "php_processing"                 => "",

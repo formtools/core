@@ -249,7 +249,6 @@ if ($select_all_submissions_returned == "true") {
 } else {
     $preselected_subids = Sessions::getWithFallback("form_{$form_id}_selected_submissions", array());
 }
-print_r($preselected_subids);
 
 $preselected_subids_str = implode(",", $preselected_subids);
 
