@@ -37,9 +37,11 @@
 
   {if $has_searchable_field}
     <div id="search_form">
+
       <form action="{$same_page}" method="post" name="search_form" onsubmit="return rsv.validate(this, rules)">
         <input type="hidden" name="search" value="1" />
-        <input type="hidden" name="select_all" value="{if $curr_view_select_all == "yes"}1{/if}"  />
+        <input type="hidden" name="select_all" value="{if $curr_view_select_all == "yes"}1{/if}" />
+
         <table cellspacing="0" cellpadding="0" id="search_form_table">
         <tr>
           <td class="blue" width="70">{$LANG.word_search}</td>
@@ -145,7 +147,8 @@
               <div class="truncate_no_fixed_width">
             {/if}
               {display_custom_field form_id=$form_id view_id=$view_id submission_id=$submission_id
-                value=$search_row.$col_name field_info=$curr_field field_types=$field_types settings=$settings}
+                value=$search_row.$col_name field_info=$curr_field field_types=$field_types settings=$settings
+                context="submission_listing"}
             {if $curr_field.truncate == "truncate"}
               </div>
             {/if}

@@ -3,11 +3,11 @@
 require_once("../../global/library.php");
 
 use FormTools\Core;
-use FormTools\Errors;
 use FormTools\Fields;
 use FormTools\FieldTypes;
 use FormTools\Forms;
 use FormTools\General;
+use FormTools\Pages;
 use FormTools\Settings;
 use FormTools\Submissions;
 use FormTools\Themes;
@@ -17,6 +17,7 @@ use FormTools\Sessions;
 Core::init();
 Core::$user->checkAuth("client");
 $LANG = Core::$L;
+$root_url = Core::getRootUrl();
 
 $request = array_merge($_POST, $_GET);
 $account_id = Sessions::get("account.account_id");
@@ -272,47 +273,48 @@ $shared_resources_list = Settings::get("edit_submission_onload_resources");
 $shared_resources_array = explode("|", $shared_resources_list);
 $shared_resources = "";
 foreach ($shared_resources_array as $resource) {
-	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $g_root_url)) . "\n";
+	$shared_resources .= General::evalSmartyString($resource, array("g_root_url" => $root_url)) . "\n";
 }
 
-// ------------------------------------------------------------------------------------------------
+$page_vars = array(
+    "page"     => "client_forms",
+    "page_url" => Pages::getPageUrl("client_form_submissions", array("form_id" => $form_id)),
+    "head_title"  => $LANG["word_submissions"],
+    "form_info"   => $form_info,
+    "form_id"     => $form_id,
+    "view_id"     => $view_id,
+    "search_rows" => $search_rows,
+    "search_num_results" => $search_num_results,
+    "view_num_results" => $view_num_results,
+    "default_date_field_search_value" => $default_date_field_search_value,
+    "total_form_submissions" => Sessions::get("form_{$form_id}_num_submissions"),
+    "grouped_views" => $grouped_views,
+    "view_info"     => $view_info,
+    "settings"      => $settings,
+    "preselected_subids" => $preselected_subids,
+    "page_submission_ids" => $submission_id_str,
+    "results_per_page"   => $results_per_page,
+    "display_fields"     => $display_fields,
+    "order"              => $order,
+    "field_types"        => $field_types,
+    "has_searchable_field" => $has_searchable_field,
+    "curr_search_fields" => Sessions::get("current_search.search_fields"),
+    "pagination"  => General::getPageNav($search_num_results, $results_per_page, $current_page, ""),
+);
 
-// compile the header information
-$page_vars = array();
-$page_vars["page"]    = "client_forms";
-$page_vars["page_url"] = Pages::getPageUrl("client_form_submissions", array("form_id" => $form_id));
-$page_vars["head_title"]  = $LANG["word_submissions"];
-$page_vars["form_info"]   = $form_info;
-$page_vars["form_id"]     = $form_id;
-$page_vars["view_id"]     = $view_id;
-$page_vars["search_rows"] = $search_rows;
-$page_vars["search_num_results"] = $search_num_results;
-$page_vars["view_num_results"] = $view_num_results;
-$page_vars["default_date_field_search_value"] = $default_date_field_search_value;
-$page_vars["total_form_submissions"] = Sessions::get("form_{$form_id}_num_submissions");
-$page_vars["grouped_views"] = $grouped_views;
-$page_vars["view_info"]     = $view_info;
-$page_vars["settings"]      = $settings;
-$page_vars["preselected_subids"] = $preselected_subids;
-$page_vars["page_submission_ids"] = $submission_id_str;
-$page_vars["results_per_page"]   = $results_per_page;
-$page_vars["display_fields"]     = $display_fields;
-$page_vars["order"]              = $order;
-$page_vars["field_types"]        = $field_types;
-$page_vars["has_searchable_field"] = $has_searchable_field;
-$page_vars["curr_search_fields"] = Sessions::get("current_search.search_fields");
-$page_vars["pagination"]  = General::getPageNav($search_num_results, $results_per_page, $current_page, "");
-$page_vars["js_messages"] = array("validation_select_rows_to_view", "validation_select_rows_to_download", "validation_select_submissions_to_delete",
+$page_vars["js_messages"] = array(
+    "validation_select_rows_to_view", "validation_select_rows_to_download", "validation_select_submissions_to_delete",
 	"confirm_delete_submission", "confirm_delete_submissions", "phrase_select_all_X_results",
 	"phrase_select_all_on_page", "phrase_all_X_results_selected", "phrase_row_selected", "phrase_rows_selected",
 	"confirm_delete_submissions_on_other_pages", "confirm_delete_submissions_on_other_pages2",
-	"word_yes", "word_no", "phrase_please_confirm", "validation_please_enter_search_keyword", "notify_invalid_search_dates");
+	"word_yes", "word_no", "phrase_please_confirm", "validation_please_enter_search_keyword", "notify_invalid_search_dates"
+);
 $page_vars["head_string"] =<<< END
 <link rel="stylesheet" href="../../global/css/ui.daterangepicker.css" type="text/css" />
 <script src="../../global/scripts/manage_submissions.js"></script>
 <script src="../../global/scripts/daterangepicker.jquery.js"></script>
-<script src="$g_root_url/global/scripts/field_types.php"></script>
-<link rel="stylesheet" href="$g_root_url/global/css/field_types.php" type="text/css" />
+<script src="$root_url/global/scripts/field_types.php"></script>
+<link rel="stylesheet" href="$root_url/global/css/field_types.php" type="text/css" />
 $shared_resources
 END;
 

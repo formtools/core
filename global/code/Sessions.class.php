@@ -78,6 +78,16 @@ class Sessions
     }
 
 
+    public static function removeArrayItem($key, $value) {
+        $items = self::get($key);
+        if (!in_array($value, $items)) {
+            return;
+        }
+        array_splice($items, array_search($value, self::get($key)), 1);
+        self::set($key, $items);
+    }
+
+
     public static function exists($key)
     {
         if (!isset($_SESSION["ft"])) {

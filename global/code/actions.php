@@ -82,10 +82,11 @@ switch ($action) {
 		$submission_id = $request["submission_id"];
 
 		if (Sessions::isEmpty("form_{$form_id}_select_all_submissions")) {
+
 		    $session_key = "form_{$form_id}_selected_submissions";
 		    Sessions::setIfNotExists($session_key, array());
 			if (!in_array($submission_id, Sessions::get($session_key))) {
-                Sessions::set($session_key, $submission_id);
+                Sessions::appendArrayItem($session_key, $submission_id);
             }
 		} else {
 			// if it's in the omit list, remove it
@@ -100,17 +101,12 @@ switch ($action) {
 	// set, it adds the submission ID to the form's submission ID omit list; otherwise it just logs the submission ID
 	// in the form's selected submission ID array
 	case "unselect_submission":
-		$form_id = $request["form_id"];
+		$form_id      = $request["form_id"];
 		$submission_id = $request["submission_id"];
 
 		if (Sessions::isEmpty("form_{$form_id}_select_all_submissions")) {
-			if (!Sessions::exists("form_{$form_id}_selected_submissions")) {
-                Sessions::set("form_{$form_id}_selected_submissions", array());
-            }
-            if (in_array($submission_id, Sessions::get("form_{$form_id}_selected_submissions"))) {
-                array_splice(Sessions::get("form_{$form_id}_selected_submissions"),
-                    array_search($submission_id, Sessions::get("form_{$form_id}_selected_submissions")), 1);
-            }
+            Sessions::setIfNotExists("form_{$form_id}_selected_submissions", array());
+            Sessions::removeArrayItem("form_{$form_id}_selected_submissions", $submission_id);
 		} else {
             Sessions::setIfNotExists("form_{$form_id}_all_submissions_selected_omit_list", array());
 			if (!in_array($submission_id, Sessions::get("form_{$form_id}_all_submissions_selected_omit_list"))) {
