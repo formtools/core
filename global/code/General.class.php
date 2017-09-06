@@ -298,7 +298,8 @@ END;
             "notify_internal_form_created" => array(true, $LANG["notify_internal_form_created"]),
             "change_temp_password"         => array(true, $LANG["notify_change_temp_password"]),
             "new_submission"               => array(true, $LANG["notify_new_submission_created"]),
-            "notify_sessions_timeout"      => array(true, $LANG["notify_sessions_timeout"])
+            "notify_sessions_timeout"      => array(true, $LANG["notify_sessions_timeout"]),
+            "notify_no_views_assigned_to_client_form" => array(false, $LANG["notify_no_views_assigned_to_client_form"])
         );
 
         $found = false;

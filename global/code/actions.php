@@ -46,35 +46,13 @@ if (!$sessions_still_valid) {
 $request = array_merge($_GET, $_POST);
 $action  = $request["action"];
 
-// To be deprecated! This is the pre-jQuery way to return vars back. Change to use return_vars, which passes an object
-// ------------
-// Find out if we need to return anything back with the response. This mechanism allows us to pass any information
-// between the Ajax submit function and the Ajax return function. Usage:
-//   "return_vals[]=question1:answer1&return_vals[]=question2:answer2&..."
-$return_val_str = "";
-if (isset($request["return_vals"])) {
-	$vals = array();
-	foreach ($request["return_vals"] as $pair) {
-		list($key, $value) = explode(":", $pair);
-		$vals[] = "\"$key\": \"$value\"";
-	}
-	$return_val_str = ", " . implode(", ", $vals);
-}
-
-// new method (see comment above). Doesn't allow double quotes in the key or value [Note: return_vars vs return_vals !]
-$return_str = "";
-if (isset($request["return_vars"])) {
-	$vals = array();
-	while (list($key, $value) = each($request["return_vars"])) {
-		$vals[] = "\"$key\": \"$value\"";
-	}
-	$return_str = ", " . implode(", ", $vals);
-}
 
 if (!$permission_check["has_permission"]) {
-	$message = $permission_check["message"];
-	echo json_encode(array("success" => 0, "ft_logout" => 1, "message" => $message));
-//	echo "{ \"success\": \"0\", \"ft_logout\": \"1\", \"message\": \"$message\"{$return_val_str} }";
+	echo constructReturnValue(array(
+        "success" => 0,
+        "ft_logout" => 1,
+        "message" => $permission_check["message"]
+    ));
 	exit;
 }
 
@@ -82,16 +60,13 @@ switch ($action) {
 	case "test_folder_permissions":
 		list($success, $message) = Files::checkUploadFolder($request["file_upload_dir"]);
 		$success = ($success) ? 1 : 0;
-		echo json_encode(array("success" => $success, "message" => $message));
-//		echo "{ \"success\": \"$success\", \"message\": \"$message\"{$return_val_str} }";
+		echo constructReturnValue(array("success" => $success, "message" => $message));
 		break;
 
 	case "test_folder_url_match":
 		list($success, $message) = Files::checkFolderUrlMatch($request["file_upload_dir"], $request["file_upload_url"]);
 		$success = ($success) ? 1 : 0;
-        echo json_encode(array("success" => $success, "message" => $message));
-
-//		echo "{ \"success\": \"$success\", \"message\": \"$message\"{$return_val_str} }";
+        echo constructReturnValue(array("success" => $success, "message" => $message));
 		break;
 
 	// expects the tabset name and inner_tab to contain an alphanumeric string only
@@ -137,11 +112,9 @@ switch ($action) {
                     array_search($submission_id, Sessions::get("form_{$form_id}_selected_submissions")), 1);
             }
 		} else {
-			if (!isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
-                Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
-            }
-			if (!in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
-                $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"][] = $submission_id;
+            Sessions::setIfNotExists("form_{$form_id}_all_submissions_selected_omit_list", array());
+			if (!in_array($submission_id, Sessions::get("form_{$form_id}_all_submissions_selected_omit_list"))) {
+                Sessions::appendArrayItem("form_{$form_id}_all_submissions_selected_omit_list", $submission_id);
             }
 		}
 		break;
@@ -151,27 +124,24 @@ switch ($action) {
 		$submission_ids = explode(",", $request["submission_ids"]);
 
 		// user HASN'T selected all submissions
-		if (empty($_SESSION["ft"]["form_{$form_id}_select_all_submissions"])) {
-			if (!isset($_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
-                $_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-            }
+		if (Sessions::exists("form_{$form_id}_select_all_submissions")) {
+		    Sessions::setIfNotExists("form_{$form_id}_selected_submissions", array());
+
+		    $selected_submissions = Sessions::get("form_{$form_id}_selected_submissions");
 			foreach ($submission_ids as $submission_id) {
-				if (!in_array($submission_id, $_SESSION["ft"]["form_{$form_id}_selected_submissions"])) {
-                    $_SESSION["ft"]["form_{$form_id}_selected_submissions"][] = $submission_id;
+				if (!in_array($submission_id, $selected_submissions)) {
+				    Sessions::appendArrayItem("form_{$form_id}_selected_submissions", $submission_id);
                 }
 			}
 
         // user has already selected all submissions. Here, we actually REMOVE the newly selected submissions from
         // the form submission omit list
 		} else {
-			if (!isset($_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"])) {
-                Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
-            }
+		    Sessions::setIfNotExists("form_{$form_id}_all_submissions_selected_omit_list", array());
+            $omit_list = Sessions::get("form_{$form_id}_all_submissions_selected_omit_list");
 			foreach ($submission_ids as $submission_id) {
-				if (in_array($submission_id, Sessions::get("form_{$form_id}_all_submissions_selected_omit_list"))) {
-                    array_splice(Sessions::get("form_{$form_id}_all_submissions_selected_omit_list"),
-                        array_search($submission_id, $_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"]),
-                    1);
+				if (in_array($submission_id, $omit_list)) {
+                    array_splice($omit_list, array_search($submission_id, $omit_list), 1);
                 }
 			}
 		}
@@ -187,20 +157,20 @@ switch ($action) {
 
 	case "unselect_all_submissions":
 		$form_id = $request["form_id"];
-		$_SESSION["ft"]["form_{$form_id}_select_all_submissions"] = "";
-		$_SESSION["ft"]["form_{$form_id}_selected_submissions"] = array();
-		$_SESSION["ft"]["form_{$form_id}_all_submissions_selected_omit_list"] = array();
+        Sessions::set("form_{$form_id}_select_all_submissions", "");
+        Sessions::set("form_{$form_id}_selected_submissions", array());
+        Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
 		break;
 
 	case "send_test_email":
 		list($success, $message) = Emails::sendTestEmail($request);
 		$success = ($success) ? 1 : 0;
-		echo "{ \"success\": \"$success\", \"message\": \"$message\" }";
+        echo constructReturnValue(array("success" => $success, "message" => $message));
 		break;
 
 	case "display_test_email":
-		$form_id  = $_SESSION["ft"]["form_id"];
-		$email_id = $_SESSION["ft"]["email_id"];
+		$form_id  = Sessions::get("form_id");
+		$email_id = Sessions::get("email_id");
 		$info = Emails::getEmailComponents($form_id, "", $email_id, true, $request);
 		echo json_encode($info);
 		break;
@@ -220,11 +190,11 @@ switch ($action) {
 			$message = $LANG["notify_email_not_sent_c"] . mb_strtolower($message) . " " . $edit_email_template_link;
 		}
 		$message = addslashes($message);
-		echo "{ \"success\": \"$success\", \"message\": \"$message\" }";
+        echo constructReturnValue(array("success" => $success, "message" => $message));
 		break;
 
 	case "remember_edit_email_advanced_settings":
-		$_SESSION["ft"]["edit_email_advanced_settings"] = $request["edit_email_advanced_settings"];
+		Sessions::set("edit_email_advanced_settings", $request["edit_email_advanced_settings"]);
 		break;
 
 	case "smart_fill":
@@ -258,7 +228,7 @@ switch ($action) {
 		break;
 
 	case "process_smart_fill_contents":
-		$form_id = $_SESSION["ft"]["add_form_form_id"];
+		$form_id = Sessions::get("add_form_form_id");
 		Forms::setFormFieldTypes($form_id, $request);
 
 		// finalize the form and redirect to step 6
@@ -267,14 +237,13 @@ switch ($action) {
 			$response = Forms::finalizeForm($form_id);
 			echo json_encode($response);
 		} else {
-			echo "{ \"success\": \"1\", \"message\": \"\" }";
+            echo constructReturnValue(array("success" => 1, "message" => ""));
 		}
 		break;
 
 	case "get_js_webpage_parse_method":
-		$url = $request["url"];
-		$method = General::getJsWebpageParseMethod($url);
-		echo "{ \"scrape_method\": \"$method\" }";
+		$method = General::getJsWebpageParseMethod($request["url"]);
+        echo constructReturnValue(array("scrape_method" => $method));
 		break;
 
 	// used on the Add Form Step 5 page and Edit Field Options pages. It uploads
@@ -287,47 +256,40 @@ switch ($action) {
 		$file_upload_url = $settings["file_upload_url"];
 		$upload_tmp_file_prefix = "ft_sf_tmp_";
 
-		if (!isset($_SESSION["ft"]["smart_fill_tmp_uploaded_files"]))
-			$_SESSION["ft"]["smart_fill_tmp_uploaded_files"] = array();
+		Sessions::setIfNotExists("smart_fill_tmp_uploaded_files", array());
 
 		$uploaded_file_info = array();
 		$error = false;
-		for ($i=1; $i<=$num_pages; $i++)
-		{
-			if (!isset($_FILES["form_page_{$i}"]))
-				continue;
+		for ($i=1; $i<=$num_pages; $i++) {
+			if (!isset($_FILES["form_page_{$i}"])) {
+                continue;
+            }
 
 			$filename     = $upload_tmp_file_prefix . $_FILES["form_page_{$i}"]["name"];
 			$tmp_location = $_FILES["form_page_{$i}"]["tmp_name"];
 
 			list($g_success, $g_message, $final_filename) = Files::uploadFile($file_upload_dir, $filename, $tmp_location);
-			if ($g_success)
-			{
+			if ($g_success) {
 				$uploaded_file_info[] = "$file_upload_url/$final_filename";
-				$_SESSION["ft"]["smart_fill_tmp_uploaded_files"][] = "$file_upload_dir/$final_filename";
-			}
-			else
-			{
+                $filenames = Sessions::get("smart_fill_tmp_uploaded_files");
+                $filenames[] = "$file_upload_dir/$final_filename";
+				Sessions::set("smart_fill_tmp_uploaded_files", $filenames);
+			} else {
 				$error = true;
 				break;
 			}
 		}
 
-		if ($error)
-		{
-			echo "{ \"success\": \"0\", \"message\": \"{$LANG["notify_smart_fill_upload_fields_fail"]}\" }";
-		}
-		else
-		{
-			$params = array("\"success\": \"1\"");
+		if ($error) {
+            echo constructReturnValue(array("success" => 0, "message" => $LANG["notify_smart_fill_upload_fields_fail"]));
+		} else {
+			$params = array("success" => 1);
 			$count = 1;
-			foreach ($uploaded_file_info as $url)
-			{
-				$params[] = "\"url_{$count}\": \"$url\"";
+			foreach ($uploaded_file_info as $url) {
+				$params["url_{$count}"] = $url;
 				$count++;
 			}
-
-			echo "{ " . implode(", ", $params) . " }";
+            echo constructReturnValue($params);
 		}
 		break;
 
@@ -339,28 +301,25 @@ switch ($action) {
 		$file_upload_url = $settings["file_upload_url"];
 		$upload_tmp_file_prefix = "ft_sf_tmp_";
 
-		if (!isset($_SESSION["ft"]["smart_fill_tmp_uploaded_files"]))
-			$_SESSION["ft"]["smart_fill_tmp_uploaded_files"] = array();
+        Sessions::setIfNotExists("smart_fill_tmp_uploaded_files", array());
 
 		$uploaded_file_info = array();
 		$error = false;
 
-		if (!isset($_FILES["form_page_1"]))
-			continue;
+		if (!isset($_FILES["form_page_1"])) {
+            exit;
+        }
 
-		$filename        = $upload_tmp_file_prefix . $_FILES["form_page_1"]["name"];
-		$tmp_location    = $_FILES["form_page_1"]["tmp_name"];
+		$filename     = $upload_tmp_file_prefix . $_FILES["form_page_1"]["name"];
+		$tmp_location = $_FILES["form_page_1"]["tmp_name"];
 
 		list($g_success, $g_message, $final_filename) = Files::uploadFile($file_upload_dir, $filename, $tmp_location);
-		if ($g_success)
-		{
-			$_SESSION["ft"]["smart_fill_tmp_uploaded_files"][] = "$file_upload_dir/$final_filename";
+		if ($g_success) {
+		    Sessions::appendArrayItem("smart_fill_tmp_uploaded_files", "$file_upload_dir/$final_filename");
 			header("location: $file_upload_url/$final_filename");
 			exit;
-		}
-		else
-		{
-			echo "{ \"success\": \"0\", \"message\": \"{$LANG["notify_smart_fill_upload_fields_fail"]}\" }";
+		} else {
+		    echo constructReturnValue(array("success" => 0, "message" => $LANG["notify_smart_fill_upload_fields_fail"]));
 			exit;
 		}
 		break;
@@ -368,8 +327,7 @@ switch ($action) {
 	case "get_upgrade_form_html":
 		$components = General::getFormtoolsInstalledComponents();
 		echo "<form action=\"http://www.formtools.org/upgrade.php\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
-		while (list($key, $value) = each($components))
-		{
+		while (list($key, $value) = each($components)) {
 			echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 		}
 		echo "</form>";
@@ -380,13 +338,12 @@ switch ($action) {
 		$field_type_id = $request["field_type_id"];
 		$settings      = Fields::getExtendedFieldSettings($field_id, "", true);
 		$validation    = FieldValidation::get($field_id);
-		$info = array(
+		echo constructReturnValue(array(
 			"field_id"      => $field_id,
 			"field_type_id" => $field_type_id,
 			"settings"      => $settings,
 			"validation"    => $validation
-		);
-		echo json_encode($info);
+		));
 		break;
 
 	case "get_option_lists":
@@ -397,7 +354,7 @@ switch ($action) {
 		foreach ($option_lists["results"] as $option_list) {
 			$option_list_info[$option_list["list_id"]] = $option_list["option_list_name"];
 		}
-		echo json_encode($option_list_info);
+        echo constructReturnValue($option_list_info);
 		break;
 
 	// used on the Edit Form -> Fields tab
@@ -407,7 +364,7 @@ switch ($action) {
 		foreach ($form_list as $form_info) {
 			$forms[$form_info["form_id"]] = $form_info["form_name"];
 		}
-		echo json_encode($forms);
+        echo constructReturnValue($forms);
 		break;
 
 	// used for the Edit Form -> fields tab. Note that any dynamic settings ARE evaluated.
@@ -417,17 +374,15 @@ switch ($action) {
 		$field_order = $request["field_order"];
 		$form_fields = Fields::getFormFields($form_id); // array("evaluate_dynamic_settings" => true)
 		$fields = array();
-		foreach ($form_fields as $field_info)
-		{
+		foreach ($form_fields as $field_info) {
 			$fields[$field_info["field_id"]] = $field_info["field_title"];
 		}
-		$return_info = array(
+        echo constructReturnValue(array(
 			"form_id"     => $form_id,
 			"field_id"    => $field_id,
 			"field_order" => $field_order,
 			"fields"      => $fields
-		);
-		echo json_encode($return_info);
+		));
 		break;
 
 	case "create_new_view":
@@ -447,21 +402,21 @@ switch ($action) {
 
 		// always set the default Edit View tab to the first one
         Sessions::set("edit_view_tab", 1);
-		echo json_encode(array("success" => 1, "view_id" => $view_id));
+        echo constructReturnValue(array("success" => 1, "view_id" => $view_id));
 		break;
 
 	case "create_new_view_group":
-		$form_id    = $_SESSION["ft"]["form_id"];
+		$form_id    = Sessions::get("form_id");
 		$group_type = "form_{$form_id}_view_group";
 		$group_name = $request["group_name"];
 		$info = ListGroups::addListGroup($group_type, $group_name);
-		echo json_encode($info);
+        echo constructReturnValue($info);
 		break;
 
 	case "delete_view":
 		$view_id = $request["view_id"];
 		Views::deleteView($view_id);
-		echo json_encode(array("success" => "1", "view_id" => $view_id));
+        echo constructReturnValue(array("success" => "1", "view_id" => $view_id));
 		break;
 
 	// this is called when the user clicks on the "Save Changes" button on the Edit Field dialog on the
@@ -481,20 +436,20 @@ switch ($action) {
 
 			// if this is a NEW field, we just ignore it here. New fields are only added by updating the main page, not
 			// via the Edit Field dialog
-			if (preg_match("/^NEW/", $field_id))
-				continue;
+			if (preg_match("/^NEW/", $field_id)) {
+                continue;
+            }
 
 			list($success, $message) = Fields::updateField($form_id, $field_id, $request["data"]["field_$field_id"]);
 			if (!$success) {
 				$problems[] = array("field_id" => $field_id, "error" => $message);
 			}
 		}
-		if (!empty($problems)) {
-            echo json_encode(array("success" => 0, "problems" => $problems_json));
 
-//			echo "{ \"success\": \"0\", \"problems\": $problems_json{$return_str} }";
+		if (!empty($problems)) {
+            echo constructReturnValue(array("success" => 0, "problems" => $problems));
 		} else {
-			echo "{ \"success\": \"1\"{$return_str} }";
+            echo constructReturnValue(array("success" => 1));
 		}
 		break;
 
@@ -511,4 +466,30 @@ switch ($action) {
 
 		Themes::displayPage("admin/forms/form_placeholders.tpl", $page_vars);
 		break;
+}
+
+
+/**
+ * There are two ways to pass data to be returned by these requests in this file:
+ * - pass a return_vals string with a `:` delimited key/value pairs
+ * - pass a return_vars object
+ * The first method shouldn't be used - it was pre-jQuery (!). But for now, this method just
+ */
+function constructReturnValue ($data) {
+    global $request;
+
+    $data_to_return = array();
+    if (isset($request["return_vals"])) {
+        foreach ($request["return_vals"] as $pair) {
+            list($key, $value) = explode(":", $pair);
+            $data_to_return[$key] = $value;
+        }
+    }
+
+    $obj_data_to_return = array();
+    if (isset($request["return_vars"]) && is_array($request["return_vars"])) {
+        $obj_data_to_return = $request["return_vars"];
+    }
+
+    return json_encode(array_merge($data_to_return, $obj_data_to_return, $data));
 }

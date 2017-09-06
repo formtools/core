@@ -79,3 +79,5 @@ and omit the _composer.lock_ file.
 - still doing a redirect to (root) /install when removing config.php.
 - after installation, shows a "no sessions" error on login page
 - add grunt task to add/remove specific keys from language files (translations repo)
+- can't log in as user. 
+

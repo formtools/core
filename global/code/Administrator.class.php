@@ -625,11 +625,7 @@ class Administrator
 
             // find out a little info about this form. If it's a public form, the user is already (implicitly) assigned
             // to it, so don't bother inserting a redundant record into the client_forms table
-            $db->query("SELECT access_type FROM {PREFIX}forms WHERE form_id = :form_id");
-            $db->bind("form_id", $form_id);
-            $db->execute();
-
-            $form_info = $db->fetch();
+            $form_info = Forms::getFormRow($form_id);
 
             if ($form_info["access_type"] != "public") {
                 $db->query("INSERT INTO {PREFIX}client_forms (account_id, form_id) VALUES (:account_id, :form_id)");

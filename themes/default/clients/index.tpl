@@ -93,9 +93,9 @@
 	        </td>
 	        <td align="center">
               <div class="form_info_link">
-  	            {assign var=form_num_submissions_key value="form_`$form_id`_num_submissions"}
-	            {assign var=num_submissions value=$SESSION.$form_num_submissions_key}
-	            <a href="forms/index.php?form_id={$form_id}">{$LANG.word_view|upper}<span class="num_submissions_box">{$num_submissions}</span></a>
+	            <a href="forms/index.php?form_id={$form_id}">{$LANG.word_view|upper}
+                    <span class="num_submissions_box">{display_num_form_submissions form_id=$form_id}</span>
+                </a>
               </div>
 	        </td>
 	      </tr>

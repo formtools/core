@@ -966,7 +966,7 @@ class Views
                            v.view_id NOT IN (
                               SELECT view_id
                               FROM   {PREFIX}public_view_omit_list
-                              WHERE  account_id = :account_id
+                              WHERE  account_id = :account_id2
                            )
                            $hidden_views_clause
                     ORDER BY v.view_order
@@ -974,7 +974,8 @@ class Views
                 $db->bindAll(array(
                     "form_id" => $form_id,
                     "group_id" => $group_id,
-                    "account_id" => $params["account_id"]
+                    "account_id" => $params["account_id"],
+                    "account_id2" => $params["account_id"]
                 ));
             }
             $db->execute();
@@ -1236,7 +1237,7 @@ class Views
         $db->bind("view_id", $view_id);
         $db->execute();
 
-        return $db->fetchAll();
+        return $db->fetchAll(PDO::FETCH_COLUMN);
     }
 
 

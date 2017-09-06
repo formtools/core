@@ -66,8 +66,6 @@ foreach ($client_forms as $form_info) {
 	$updated_client_forms[] = $form_info;
 }
 
-// ---------------------------------------------------------------------------------------------------------------------
-
 $LANG = Core::$L;
 $root_url = Core::getRootUrl();
 

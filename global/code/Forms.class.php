@@ -147,11 +147,7 @@ class Forms
     public static function getForm($form_id)
     {
         $db = Core::$db;
-
-        $db->query("SELECT * FROM {PREFIX}forms WHERE form_id = :form_id");
-        $db->bind("form_id", $form_id);
-        $db->execute();
-        $form_info = $db->fetch();
+        $form_info = Forms::getFormRow($form_id);
 
         if (empty($form_info)) {
             return array();
@@ -569,12 +565,7 @@ class Forms
      */
     public static function checkFormExists($form_id, $allow_incompleted_forms = false)
     {
-        $db = Core::$db;
-
-        $db->query("SELECT * FROM {PREFIX}forms WHERE form_id = :form_id");
-        $db->bind("form_id", $form_id);
-        $db->execute();
-        $form = $db->fetch();
+        $form = Forms::getFormRow($form_id);
 
         $is_valid_form_id = false;
         if (($form && $allow_incompleted_forms) || ($form["is_initialized"] == "yes" && $form["is_complete"] == "yes")) {
@@ -881,6 +872,7 @@ class Forms
 
         // check the form ID is valid
         if (!self::checkFormExists($form_id, true)) {
+            echo "??$form_id";
             Errors::showErrorCode(Errors::$CODES["100"]);
         }
 
@@ -1942,5 +1934,15 @@ class Forms
             VALUES $insert_values
         ");
         $db->execute();
+    }
+
+    public static function getFormRow($form_id)
+    {
+        $db = Core::$db;
+
+        $db->query("SELECT * FROM {PREFIX}forms WHERE form_id = :form_id");
+        $db->bind("form_id", $form_id);
+        $db->execute();
+        return $db->fetch();
     }
 }

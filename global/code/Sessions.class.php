@@ -71,6 +71,13 @@ class Sessions
     }
 
 
+    public static function appendArrayItem($key, $value) {
+        $array = Sessions::get($key);
+        $array[] = $value;
+        self::set($key, $array);
+    }
+
+
     public static function exists($key)
     {
         if (!isset($_SESSION["ft"])) {

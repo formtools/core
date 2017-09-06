@@ -1,5 +1,7 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Core;
 use FormTools\Errors;
 use FormTools\Fields;
@@ -14,7 +16,7 @@ use FormTools\Sessions;
 
 Core::init();
 Core::$user->checkAuth("client");
-
+$LANG = Core::$L;
 
 $request = array_merge($_POST, $_GET);
 $account_id = Sessions::get("account.account_id");
@@ -31,12 +33,16 @@ $view_id = General::loadField("view_id", "form_{$form_id}_view_id");
 General::checkClientMayView($account_id, $form_id, $view_id);
 
 // this returns all and ONLY the Views accessible by this client
-$grouped_views = Views::getGroupedViews($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
+$grouped_views = Views::getGroupedViews($form_id, array(
+    "omit_hidden_views" => true,
+    "omit_empty_groups" => true,
+    "account_id" => $account_id
+));
 
 if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
-	if (count($grouped_views[0]["views"]) == 0) {
-		// no Views defined for this client
-        Errors::majorError($LANG["notify_no_views_assigned_to_client_form"], "", "notify");
+	if (empty($grouped_views) || count($grouped_views[0]["views"]) == 0) {
+		// no Views defined for this client. Redirect the user back to their form list page and show an error
+        General::redirect("../?message=notify_no_views_assigned_to_client_form");
 		exit;
 	} else {
 		$view_id = $grouped_views[0]["views"][0]["view_id"];

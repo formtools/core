@@ -5,8 +5,8 @@
 <body>
 
 <form action="http://localhost:8888/core/process.php" method="post">
-    <input type="hidden" name="form_tools_initialize_form" value="1" />
-    <input type="hidden" name="form_tools_form_id" value="8" />
+    <input type="hidden" name="form_tools_form_id" value="3" />
+
     <div>
         <input type="text" name="textfield" value="Field 1" />
     </div>

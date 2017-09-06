@@ -676,14 +676,20 @@ ft.show_form_field_placeholders_dialog = function(options) {
  */
 ft.test_folder_permissions = function(folder, target_message_id) {
   $.ajax({
-    url:      g.root_url + "/global/code/actions.php",
-    data:     "file_upload_dir=" + folder + "&action=test_folder_permissions&return_vals[]=target_message_id:" + target_message_id,
+    url: g.root_url + "/global/code/actions.php",
+    data: {
+      action: 'test_folder_permissions',
+      file_upload_dir: folder,
+      return_vars: {
+        target_message_id: target_message_id
+      }
+    },
     dataType: "json",
     type:     "POST",
     success:  ft.response_handler,
     error:    ft.error_handler
   });
-}
+};
 
 
 /**

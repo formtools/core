@@ -269,7 +269,7 @@ class Themes {
 
         $settings = Sessions::getWithFallback("settings", array());
         $smarty->assign("settings", $settings);
-        $smarty->assign("account", $_SESSION["ft"]["account"]);
+        $smarty->assign("account", Sessions::get("account"));
         $smarty->assign("swatch", $swatch);
 
         $module_id = Modules::getModuleIdFromModuleFolder($module_folder);

@@ -57,7 +57,7 @@
     {if isset($error_code)}
       <p>
         <b>{$LANG.phrase_type_c}
-          {if $error_type == "system"}
+          {if !empty($error_type) && $error_type == "system"}
             <span class="red">{$LANG.word_system}</span>
           {else}
             <span class="green">{$LANG.word_user}</span>

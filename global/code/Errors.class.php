@@ -123,7 +123,7 @@ END;
         Themes::displayPage("error.tpl", array(
             "message_type" => "error",
             "error_code" => $error_code,
-            "debugging" => $debugging
+            "debugging" => !empty($debugging) ? $debugging : "No further information"
         ));
         exit;
     }
