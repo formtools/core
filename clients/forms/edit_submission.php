@@ -1,5 +1,7 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Core;
 use FormTools\FieldTypes;
 use FormTools\FieldValidation;
@@ -30,7 +32,11 @@ if (empty($submission_id)) {
 }
 
 $tab_number = General::loadField("tab", "view_{$view_id}_current_tab", 1);
-$grouped_views = Views::getGroupedViews($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true, "account_id" => $account_id));
+$grouped_views = Views::getGroupedViews($form_id, array(
+    "omit_hidden_views" => true,
+    "omit_empty_groups" => true,
+    "account_id" => $account_id
+));
 
 // check the current client is permitted to view this information!
 General::checkClientMayView($account_id, $form_id, $view_id);
@@ -44,6 +50,9 @@ Sessions::set("last_submission_id", $submission_id);
 // get a list of all editable fields in the View. This is used both for security purposes
 // for the update function and to determine whether the page contains any editable fields
 $editable_field_ids = ViewFields::getEditableViewFields($view_id);
+
+$g_success = false;
+$g_message = "";
 
 // handle POST requests
 $failed_validation = false;
@@ -154,6 +163,8 @@ EOF;
 $page_vars = array(
     "page"   => "client_edit_submission",
     "page_url" => Pages::getPageUrl("client_edit_submission"),
+    "g_success" => $g_success,
+    "g_message" => $g_message,
     "tabs" => $tabs,
     "form_info"   => $form_info,
     "grouped_views" => $grouped_views,

@@ -8,20 +8,6 @@ use FormTools\Settings;
 use FormTools\Submissions;
 use FormTools\Templates;
 
-
-/**
- * Smarty plugin
- * -------------------------------------------------------------
- * File:     function.edit_custom_field
- * Type:     function
- * Name:     edit_custom_field
- * Purpose:  This is used on the Edit Submission pages. It does all the clever stuff needed to generate the
- *           actual markup for a single field, with whatever user-defined settings have been employed.
- *
- *           It's strongly coupled to the ViewFields::getGroupedViewFields function (when called with the form ID &
- *           submission ID params) to ensure that all data is efficiently returned for use by this function.
- * -------------------------------------------------------------
- */
 function smarty_function_edit_custom_field($params, &$smarty)
 {
     $root_dir = Core::getRootDir();
