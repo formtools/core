@@ -10,8 +10,8 @@ use FormTools\Sessions;
 
 $LANG = Core::$L;
 
+$account_id = Sessions::get("account.account_id");
 if (isset($request["update_account_settings"])) {
-	$account_id = Sessions::get("account.account_id");
 	$request["page"] = "settings";
 	list($g_success, $g_message) = Clients::updateClient($account_id, $request);
 }

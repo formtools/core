@@ -73,11 +73,10 @@ and omit the _composer.lock_ file.
 
 ### TODO
  
-- themes page doesn't immediately update after clicking Update.
 - Database sessions.
 - API
-- still doing a redirect to (root) /install when removing config.php.
+- still doing a redirect to (root) /install when removing config.php
 - after installation, shows a "no sessions" error on login page
 - add grunt task to add/remove specific keys from language files (translations repo)
 - can't log in as user. 
-
+- update favicon! 

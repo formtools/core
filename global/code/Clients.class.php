@@ -616,6 +616,14 @@ class Clients {
             }
         }
 
+        // always ensure the theme & swatch is up to date for the current user
+        if (isset($info["theme"])) {
+            Core::$user->setTheme($info["theme"]);
+        }
+        if (isset($info["{$info["theme"]}_theme_swatches"])) {
+            Core::$user->setSwatch($info["{$info["theme"]}_theme_swatches"]);
+        }
+
         // separate
         $settings = array();
         if (isset($info["page_titles"])) {
