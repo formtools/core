@@ -44,7 +44,7 @@ class User
             $this->isLoggedIn = false;
 
             // the installation process tracks the UI lang
-            $lang = Sessions::get("ui_language"); // this is set at the top level of sessions (odd, change)
+            $lang = Sessions::get("ui_language");
             $this->lang = ($lang) ? $lang : Core::getDefaultLang();
 
             $settings = Settings::get(array("default_theme", "default_client_swatch"));
@@ -180,6 +180,10 @@ class User
 
     public function getLang() {
         return $this->lang;
+    }
+
+    public function setLang($lang) {
+        $this->lang = $lang;
     }
 
     public function setTheme($theme) {

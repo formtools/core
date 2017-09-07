@@ -76,7 +76,13 @@ and omit the _composer.lock_ file.
 - Database sessions.
 - API
 - still doing a redirect to (root) /install when removing config.php
-- after installation, shows a "no sessions" error on login page
-- add grunt task to add/remove specific keys from language files (translations repo)
-- can't log in as user. 
+- after installation, shows a "no sessions" error on login page (confirm)
+- admin can't log in as user 
 - update favicon! 
+- list of available translations wasn't set after fresh install
+- move translations to composer package
+- upgrading from FT2.x
+
+
+### Nice to haves
+- add grunt task to add/remove specific keys from language files (translations repo)

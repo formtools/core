@@ -616,12 +616,18 @@ class Clients {
             }
         }
 
-        // always ensure the theme & swatch is up to date for the current user
+        // always ensure the theme, swatch and language are up to date for the current user
         if (isset($info["theme"])) {
             Core::$user->setTheme($info["theme"]);
         }
         if (isset($info["{$info["theme"]}_theme_swatches"])) {
             Core::$user->setSwatch($info["{$info["theme"]}_theme_swatches"]);
+        }
+
+        // TODO
+        if ($client_info["settings"]["may_edit_language"] == "yes") {
+            Core::$user->setLang($info["ui_language"]);
+            Core::setCurrLang($info["ui_language"]);
         }
 
         // separate
