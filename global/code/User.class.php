@@ -86,7 +86,7 @@ class User
         $account_info = Accounts::getAccountByUsername($username);
         $account_settings = Accounts::getAccountSettings($account_info["account_id"]);
 
-        // error check user login info
+
         if (!$login_as_client) {
             if (empty($password)) {
                 return $LANG["validation_no_password"];
@@ -137,8 +137,14 @@ class User
         $account_info["settings"] = $account_settings;
 
         // all checks out. Log them in, after populating sessions
+//
+//        $_SESSION["ft"]["settings"] = $settings;
+//        $_SESSION["ft"]["account"]  = ft_get_account_info($account_info["account_id"]);
+//        $_SESSION["ft"]["account"]["is_logged_in"] = true;
+//
         Sessions::set("settings", $settings);
         Sessions::set("account", $account_info);
+        Sessions::set("account.is_logged_in", true);
         Sessions::set("account.password", General::encode($password)); // this is deliberate [TODO...!!!!]
 
         Menus::cacheAccountMenu($account_info["account_id"]);
@@ -174,6 +180,8 @@ class User
 //        $this->username = $username;
 //        $this->theme = $account_info["theme"];
 //        $this->swatch = $account_info["swatch"];
+
+        // we know sessions are set here.
 
         General::redirect($login_url);
     }
@@ -356,6 +364,7 @@ class User
         $account_id   = Sessions::exists("account.account_id") ? Sessions::get("account.account_id") : "";
         $account_type = Sessions::exists("account.account_type") ? Sessions::get("account.account_type") : "";
 
+        // TODO
         // some VERY complex logic here. The "user" account permission type is included so that people logged in
         // via the Submission Accounts can still view certain pages, e.g. pages with the Pages module. This checks that
         // IF the minimum account type of the page is a "user", it EITHER has the user account info set (i.e. the submission ID)
@@ -371,6 +380,7 @@ class User
                 }
             }
         }
+
 
         // check the user ID is in sessions
         else if (!$account_id || !$account_type) {
@@ -391,6 +401,11 @@ class User
             ));
             $db->execute();
             $info = $db->fetch();
+
+//            echo "$account_id, " . Sessions::get("account.password");
+//            if ($account_id == 1) {
+//                print_r($_SESSION["ft"]["account"]);
+//            }
 
             if ($info["c"] != 1) {
                 $boot_out_user = true;

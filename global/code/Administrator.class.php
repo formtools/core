@@ -190,12 +190,15 @@ class Administrator
         );
 
         // move the session values to a separate "admin" location, so that once the administrator logs out we can
-        // reset the sessions appropriately
+        // reset the sessions
         $current_values = Sessions::get();
         Sessions::clearAll();
+
         Sessions::set("admin", $current_values);
 
-//        Core::initUser();
+//        $_SESSION["ft"] = array();
+//        $_SESSION["ft"]["admin"] = $current_values;
+
         Core::$user->login($info, true);
     }
 

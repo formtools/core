@@ -14,8 +14,12 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("client");
 
+echo "WTF?";
+exit;
+
 Forms::cacheFormStats();
 
+$LANG = Core::$L;
 $account_id = Sessions::get("account.account_id");
 
 if (isset($_GET["reset"])) {
@@ -30,9 +34,10 @@ $search_criteria = array(
 	"keyword" => $keyword
 );
 
-
 $num_client_forms = count(Clients::getClientForms($account_id));
 $client_info      = Accounts::getAccountInfo($account_id);
+
+print_r($client_info["settings"]);
 $forms_page_default_message = General::evalSmartyString($client_info["settings"]["forms_page_default_message"]);
 $forms = Forms::searchForms(array(
     "account_id" => $account_id,
@@ -41,22 +46,21 @@ $forms = Forms::searchForms(array(
     "keyword" => $keyword
 ));
 
-// ------------------------------------------------------------------------------------------
+echo "......??";
+exit;
 
-$LANG = Core::$L;
 
 // compile header information
-$page_vars = array();
-$page_vars["head_title"] = General::evalSmartyString(Sessions::get("account.settings.page_titles"), array("page" => $LANG["word_forms"]));
-$page_vars["page"]     = "client_forms";
-$page_vars["page_url"] = Pages::getPageUrl("client_forms");
-$page_vars["num_client_forms"] = $num_client_forms;
-$page_vars["forms"] = $forms;
-$page_vars["forms_page_default_message"] = $forms_page_default_message;
-$page_vars["search_criteria"] = $search_criteria;
-$page_vars["js_messages"] = array("phrase_open_form_in_new_tab_or_win", "word_close", "phrase_show_form");
-$page_vars["head_js"] =<<< END
-$(function() { ft.init_show_form_links(); });
-END;
+$page_vars = array(
+    "head_title" => General::evalSmartyString(Sessions::get("account.settings.page_titles"), array("page" => $LANG["word_forms"])),
+    "page"     => "client_forms",
+    "page_url" => Pages::getPageUrl("client_forms"),
+    "num_client_forms" => $num_client_forms,
+    "forms" => $forms,
+    "forms_page_default_message" => $forms_page_default_message,
+    "search_criteria" => $search_criteria,
+    "js_messages" => array("phrase_open_form_in_new_tab_or_win", "word_close", "phrase_show_form"),
+    "head_js" => '$(function() { ft.init_show_form_links(); })'
+);
 
 Themes::displayPage("clients/index.tpl", $page_vars);

@@ -35,9 +35,6 @@ to PHP and the various code dependencies that Form Tools relies on. The goal for
 
 Don't install the code by itself. Download a main package from the https://formtools.org/download/ page. 
 
-If you want to run this repo as a standalone, right now you'll need to manually download and install the core-field-types 
-module.
-
 
 ### 3.0.0 Changes
 
@@ -58,7 +55,7 @@ see that button label localized in their own country. Cool idea, weird implement
 value (and others) to be in the current language - "Add &raquo;" for English, in this case. The fields can _still_ accept
 language placeholders for the tiny percentage of people that need this feature, but it'll be much clearer for the bulk of 
 users that don't need this feature.
-
+- The core-field-types module has been incorporated into the Core code. The module no longer exists as a standalone.
 
 ### Notes
 

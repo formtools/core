@@ -19,7 +19,7 @@ if (isset($_GET['delete']) && !empty($_GET['client_id'])) {
     list($success, $message) = Clients::deleteClient($_GET['client_id']);
 }
 if (isset($_GET['login'])) {
-    list($success, $message) = Administrator::loginAsClient($_GET['login']);
+    Administrator::loginAsClient($_GET['login']);
 }
 
 if (isset($_GET["reset"])) {

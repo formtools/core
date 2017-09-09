@@ -266,7 +266,7 @@ class Core {
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20170902";
+    private static $releaseDate = "20170907";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
@@ -388,8 +388,9 @@ class Core {
             self::startSessions();
         }
 
-        self::initUser();
+        // still set here.
 
+        self::initUser();
         self::enableDebugging();
 
         // optionally enable benchmarking. Dev-only feature to confirm pages aren't taking too long to load
@@ -427,13 +428,13 @@ class Core {
 
     public static function startSessions()
     {
-        if (self::$sessionType == "database") {
-            new SessionManager();
-        }
+//        if (self::$sessionType == "database") {
+//            new SessionManager();
+//        }
 
-        if (!empty(self::$sessionSavePath)) {
-            session_save_path(self::$sessionSavePath);
-        }
+//        if (!empty(self::$sessionSavePath)) {
+//            session_save_path(self::$sessionSavePath);
+//        }
 
         session_start();
         header("Cache-control: private");
