@@ -71,14 +71,11 @@ and omit the _composer.lock_ file.
 ### TODO
  
 - Database sessions.
-- API
 - still doing a redirect to (root) /install when removing config.php
 - after installation, shows a "no sessions" error on login page (confirm)
-- admin can't log in as user 
-- update favicon! 
 - list of available translations wasn't set after fresh install
 - move translations to composer package
-- upgrading from FT2.x
+- upgrading from FT2.x (for later alpha version - perhaps the first Beta?)
 
 
 ### Nice to haves
