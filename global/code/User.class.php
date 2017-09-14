@@ -53,9 +53,11 @@ class User
 
         } else {
             $this->isLoggedIn = true;
+            $this->accountId = $account_id;
             $this->theme = Sessions::get("account.theme");
             $this->swatch = Sessions::get("account.swatch");
             $this->lang = Sessions::get("account.ui_language");
+            $this->accountType = Sessions::get("account.account_type");
         }
     }
 
@@ -137,15 +139,13 @@ class User
         $account_info["settings"] = $account_settings;
 
         // all checks out. Log them in, after populating sessions
-//
-//        $_SESSION["ft"]["settings"] = $settings;
-//        $_SESSION["ft"]["account"]  = ft_get_account_info($account_info["account_id"]);
-//        $_SESSION["ft"]["account"]["is_logged_in"] = true;
-//
         Sessions::set("settings", $settings);
         Sessions::set("account", $account_info);
         Sessions::set("account.is_logged_in", true);
-        Sessions::set("account.password", General::encode($password)); // this is deliberate [TODO...!!!!]
+
+        if ($password) {
+            Sessions::set("account.password", General::encode($password));
+        }
 
         Menus::cacheAccountMenu($account_info["account_id"]);
 
@@ -222,23 +222,6 @@ class User
     public function getEmail() {
         return $this->email;
     }
-
-    /**
-     * Helper function to determine if the user currently logged in is an administrator or not.
-     */
-    function isAdmin()
-    {
-//        $account_id = isset($_SESSION["ft"]["account"]["account_id"]) ? $_SESSION["ft"]["account"]["account_id"] : "";
-//        if (empty($account_id))
-//            return false;
-//
-//        $account_info = Accounts::getAccountInfo($account_id);
-//        if (empty($account_info) || $account_info["account_type"] != "admin")
-//            return false;
-//
-//        return true;
-    }
-
 
     /**
      * Updates the last logged in date for the currently logged in user.
@@ -354,10 +337,9 @@ class User
 
         extract(Hooks::processHookCalls("end", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
 
-        $account_id   = Sessions::exists("account.account_id") ? Sessions::get("account.account_id") : "";
-        $account_type = Sessions::exists("account.account_type") ? Sessions::get("account.account_type") : "";
+        $account_id   = $this->accountId;
+        $account_type = $this->accountType;
 
-        // TODO
         // some VERY complex logic here. The "user" account permission type is included so that people logged in
         // via the Submission Accounts can still view certain pages, e.g. pages with the Pages module. This checks that
         // IF the minimum account type of the page is a "user", it EITHER has the user account info set (i.e. the submission ID)
@@ -373,7 +355,6 @@ class User
                 }
             }
         }
-
 
         // check the user ID is in sessions
         else if (!$account_id || !$account_type) {
@@ -394,11 +375,6 @@ class User
             ));
             $db->execute();
             $info = $db->fetch();
-
-//            echo "$account_id, " . Sessions::get("account.password");
-//            if ($account_id == 1) {
-//                print_r($_SESSION["ft"]["account"]);
-//            }
 
             if ($info["c"] != 1) {
                 $boot_out_user = true;
