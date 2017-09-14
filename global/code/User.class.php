@@ -176,13 +176,6 @@ class User
             $this->updateLastLoggedIn();
         }
 
-        // hmm...
-//        $this->username = $username;
-//        $this->theme = $account_info["theme"];
-//        $this->swatch = $account_info["swatch"];
-
-        // we know sessions are set here.
-
         General::redirect($login_url);
     }
 

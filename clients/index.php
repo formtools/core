@@ -14,8 +14,6 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("client");
 
-echo "WTF?";
-exit;
 
 Forms::cacheFormStats();
 
@@ -37,7 +35,6 @@ $search_criteria = array(
 $num_client_forms = count(Clients::getClientForms($account_id));
 $client_info      = Accounts::getAccountInfo($account_id);
 
-print_r($client_info["settings"]);
 $forms_page_default_message = General::evalSmartyString($client_info["settings"]["forms_page_default_message"]);
 $forms = Forms::searchForms(array(
     "account_id" => $account_id,
@@ -45,10 +42,6 @@ $forms = Forms::searchForms(array(
     "order" => $order,
     "keyword" => $keyword
 ));
-
-echo "......??";
-exit;
-
 
 // compile header information
 $page_vars = array(

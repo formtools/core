@@ -35,8 +35,7 @@ $permission_check = Core::$user->checkAuth("user", false);
 $sessions_still_valid = General::checkSessionsTimeout(false);
 if (!$sessions_still_valid) {
 	@session_destroy();
-
-	Sessions::clearAll();
+    Sessions::clearAll();
 	$permission_check["has_permission"] = false;
 	$permission_check["message"] = "session_expired";
 }

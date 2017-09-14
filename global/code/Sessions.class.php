@@ -165,7 +165,6 @@ class Sessions
         }
     }
 
-
     public static function clearAll() {
         unset($_SESSION["ft"]);
         $_SESSION["ft"] = array();

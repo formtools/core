@@ -388,8 +388,6 @@ class Core {
             self::startSessions();
         }
 
-        // still set here.
-
         self::initUser();
         self::enableDebugging();
 

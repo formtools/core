@@ -193,11 +193,7 @@ class Administrator
         // reset the sessions
         $current_values = Sessions::get();
         Sessions::clearAll();
-
         Sessions::set("admin", $current_values);
-
-//        $_SESSION["ft"] = array();
-//        $_SESSION["ft"]["admin"] = $current_values;
 
         Core::$user->login($info, true);
     }
