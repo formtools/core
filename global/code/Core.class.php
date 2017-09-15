@@ -407,44 +407,19 @@ class Core {
         }
     }
 
-    // call the above method with a param/
-    public static function initNoSessions()
-    {
-        self::init(array("start_sessions" => false));
-    }
-
-    // this sucks
-    public static function initNoLogout()
-    {
-        self::init(array("auto_logout" => false));
-    }
-
-    public static function initSmarty()
-    {
-        self::$smarty = new Smarty();
-    }
-
     public static function startSessions()
     {
-//        if (self::$sessionType == "database") {
-//            new SessionManager();
-//        }
+        if (self::$sessionType == "database") {
+            new DatabaseSessions(self::$db, self::$sessionSavePath);
+        }
 
-//        if (!empty(self::$sessionSavePath)) {
-//            session_save_path(self::$sessionSavePath);
-//        }
+        if (!empty(self::$sessionSavePath)) {
+            session_save_path(self::$sessionSavePath);
+        }
 
         session_start();
         header("Cache-control: private");
         header("Content-Type: text/html; charset=utf-8");
-    }
-
-    // make private...
-    public static function initUser()
-    {
-        self::$user = new User();
-        self::$currLang = self::$user->getLang();
-        self::setCurrLang(self::$currLang);
     }
 
     /**
@@ -489,7 +464,21 @@ class Core {
         self::$queryStrMultiValSeparator = isset($g_query_str_multi_val_separator) ? $g_query_str_multi_val_separator : ",";
         self::$errorReporting = isset($g_default_error_reporting) ? $g_default_error_reporting : 1;
         self::$debugEnabled = isset($g_debug) ? $g_debug : false;
+        self::$sessionType = isset($g_session_type) && in_array($g_session_type, array("php", "database")) ? $g_session_type : "php";
+        self::$sessionSavePath = isset($g_session_save_path) ? $g_session_save_path : "";
         self::$apiSessionsTimeout = isset($g_api_sessions_timeout) ? $g_api_sessions_timeout : 3600;
+    }
+
+    public static function initNoSessions() {
+        self::init(array("start_sessions" => false));
+    }
+
+    public static function initNoLogout() {
+        self::init(array("auto_logout" => false));
+    }
+
+    public static function initSmarty() {
+        self::$smarty = new Smarty();
     }
 
     /**
@@ -500,7 +489,7 @@ class Core {
             self::$dbTablePrefix);
     }
 
-    public static function getRootUrl() {
+    public static function getRootUrl(){
         return self::$rootURL;
     }
 
@@ -660,9 +649,15 @@ class Core {
         return is_file(Core::getAPIPath());
     }
 
-    public static function getAPIPath()
-    {
+    public static function getAPIPath() {
         $root_dir = Core::getRootDir();
         return "$root_dir/global/api/api.php";
     }
+
+    private static function initUser() {
+        self::$user = new User();
+        self::$currLang = self::$user->getLang();
+        self::setCurrLang(self::$currLang);
+    }
+
 }

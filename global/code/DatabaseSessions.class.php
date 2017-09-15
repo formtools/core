@@ -10,13 +10,23 @@
 
 namespace FormTools;
 
-use PDO, PDOException;
+use PDOException;
 
 
+/**
+ * Overrides the default PHP (file-based) sessions with database sessions, allowing using Form Tools being hosted
+ * on multiple servers.
+ */
 class DatabaseSessions
 {
-	public function DatabaseSessions()
+    private $sessionSavePath;
+    private $db;
+
+    function __construct($db, $session_save_path)
 	{
+        $this->db = $db;
+	    $this->sessionSavePath = $session_save_path;
+
 		// register the various session handler functions
 		session_set_save_handler(
 			array(&$this, "open"),
@@ -26,65 +36,62 @@ class DatabaseSessions
 			array(&$this, "destroy"),
 			array(&$this, "gc")
 		);
+
+        register_shutdown_function('session_write_close');
 	}
 
-	private function open($save_path)
-	{
-	    // TODO... this looks backwards... Core::getSessionSavePath()
-		global $sess_save_path;
-		$sess_save_path = $save_path;
-		return true;
-	}
-
-    private function close()
+	public function open()
 	{
 		return true;
 	}
 
-    private function read($session_id)
+    public function close()
 	{
-	    $db = Core::$db;
+		return true;
+	}
 
+    public function read($session_id)
+	{
 		// fetch session data from the selected database
-		$db->query("
+		$this->db->query("
             SELECT session_data
             FROM {PREFIX}sessions
             WHERE session_id = :session_id AND 
                   expires > :expiry_time
         ");
 		try {
-            $db->bindAll(array(
+            $this->db->bindAll(array(
                 "session_id" => $session_id,
                 "expiry_time" => time()
             ));
-            $db->execute();
+            $this->db->execute();
         } catch (PDOException $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
 
-        $result = $db->fetchAll();
+        $results = $this->db->fetchAll();
+		$a = count($results);
 
-//		$a = mysql_num_rows($rs);
-//      $data = "";
-//
-//		if ($a > 0) {
-//			$row = mysql_fetch_assoc($rs);
-//			$data = $row["session_data"];
-//		}
-//
-//		return $data;
+        $data = "";
+
+		if ($a > 0) {
+			$row = $results[0];
+			$data = $row["session_data"];
+		}
+
+		return $data;
 	}
 
 	// this is only executed until after the output stream has been closed
-    private function write($session_id, $data)
+    public function write($session_id, $data)
 	{
-	    $db = Core::$db;
+	    $db = $this->db;
 
 		if (Sessions::exists("account.sessions_timeout")) {
-            $life_time = Sessions::get("account.sessions_timeout") * 60;
+            $lifeTime = Sessions::get("account.sessions_timeout") * 60;
         } else {
-            $life_time = Core::getApiSessionsTimeout();
+            $lifeTime = Core::getApiSessionsTimeout();
         }
 
 		$db->query("
@@ -95,8 +102,9 @@ class DatabaseSessions
             $db->bindAll(array(
                 "session_id" => $session_id,
                 "session_data" => $data,
-                "expiry_time" => time() + $life_time
+                "expiry_time" => time() + $lifeTime
             ));
+            $db->execute();
         } catch (PDOException $e) {
 		    Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
 		    return false;
@@ -105,22 +113,20 @@ class DatabaseSessions
 		return true;
 	}
 
-    private function destroy($id)
+    public function destroy($id)
 	{
-	    $db = Core::$db;
+	    $db = $this->db;
+		$db->query("DELETE FROM {PREFIX}sessions WHERE session_id = :id");
+		$db->bind("id", $id);
+		$db->execute();
 
-		$newid = mysql_real_escape_string($id);
-		$sql = "DELETE FROM {PREFIX}sessions WHERE session_id = '$newid'";
-
-		$db->query($sql, $this->db_link);
 		return true;
 	}
 
-    private function gc()
+    // delete all records who have passed the expiration time
+    public function gc()
 	{
-		// delete all records who have passed the expiration time
-		$sql = "DELETE FROM {PREFIX}sessions WHERE expires < UNIX_TIMESTAMP()";
-		$db->query($sql);
+		$this->db->query("DELETE FROM {PREFIX}sessions WHERE expires < UNIX_TIMESTAMP()");
 		return true;
 	}
 }

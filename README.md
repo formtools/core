@@ -21,7 +21,7 @@ to PHP and the various code dependencies that Form Tools relies on. The goal for
 - *Run on PHP 7*.
 - Upgrade Smarty (necessary for PHP 7 compatibility)
 - Convert the codebase to object oriented.
-- move database interaction to use *PDO*.
+- move database interaction to use PDO.
 - include Composer (just the basics right now, but all modules, themes etc. may end up as composer components... not sure yet)
  
 
@@ -70,7 +70,6 @@ and omit the _composer.lock_ file.
 
 ### TODO
  
-- Database sessions.
 - still doing a redirect to (root) /install when removing config.php
 - after installation, shows a "no sessions" error on login page (confirm)
 - list of available translations wasn't set after fresh install
