@@ -75,7 +75,8 @@ and omit the _composer.lock_ file.
 - list of available translations wasn't set after fresh install
 - move translations to composer package
 - upgrading from FT2.x (for later alpha version - perhaps the first Beta?)
-
+- error removing a column from Forms -> Fields page. "
+Notice: Undefined variable: drop_column in /Applications/MAMP/htdocs/core/global/code/Fields.class.php". Error 1607.
 
 ### Nice to haves
 - add grunt task to add/remove specific keys from language files (translations repo)
