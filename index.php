@@ -2,6 +2,7 @@
 
 require_once("global/library.php");
 
+use FormTools\Accounts;
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Installation;
@@ -32,18 +33,21 @@ $swatch = $settings["default_client_swatch"];
 // if an account id is included in the query string, use it to determine the appearance of the
 // interface, including logo and footer and even language
 //$id = General::loadField("id", "id", "");
-
+//
 //if (!empty($id)) {
-//  $info = Accounts::getAccountInfo($id);
-//  if (isset($info["account_id"])) {
-//    // just in case, boot up the appropriate language file (this overrides any language file already loaded)
-//    $theme  = $info["theme"];
-//    $language = $info["ui_language"];
-//    if (!empty($language) && is_file("global/lang/{$language}.php"))
-//      include_once("global/lang/{$language}.php");
-//  }
+//    $info = Accounts::getAccountInfo($id);
+//
+//    if (isset($info["account_id"])) {
+//
+//        // just in case, boot up the appropriate language file (this overrides any language file already loaded)
+//        $theme    = $info["theme"];
+//        $swatch   = $info["swatch"];
+//        $language = $info["ui_language"];
+//        if (!empty($language) && is_file("global/lang/{$language}.php")) {
+//            include_once("global/lang/{$language}.php");
+//        }
+//    }
 //}
-
 
 $error = "";
 if (isset($_POST["username"]) && !empty($_POST["username"])) {
@@ -52,8 +56,6 @@ if (isset($_POST["username"]) && !empty($_POST["username"])) {
 
 $username = (isset($_POST["username"]) && !empty($_POST["username"])) ? $_POST["username"] : "";
 $username = General::stripChars($username);
-
-// -------------------------------------------------------------------------------------------
 
 $LANG = Core::$L;
 

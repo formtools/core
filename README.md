@@ -51,7 +51,7 @@ I don't see the point of non-unicode queries, so unless I hear otherwise it'll b
 - Default max file upload size setting changed from 200KB to 500KB.
 - When creating a new form, the `Add Submission Button` setting would have a default label of `{$LANG.word_add_rightarrow}`.
 The idea here was that by entering language string placeholders, users logging into the interface with different languages would 
-see that button label localized in their own country. Cool idea, weird implementation! I'm now going to be setting that 
+see that button label localized in their own country. Interesting idea, weird implementation! I'm now going to be setting that 
 value (and others) to be in the current language - "Add &raquo;" for English, in this case. The fields can _still_ accept
 language placeholders for the tiny percentage of people that need this feature, but it'll be much clearer for the bulk of 
 users that don't need this feature.
@@ -62,10 +62,9 @@ users that don't need this feature.
 - Composer is great, but I still want to distribute Form Tools in _packages_ and not require users to have to do any 
 command-line nonsense to get the script running. As such, I'm going to commit the _vendor/_ folder with all dependencies
 and omit the _composer.lock_ file.
-- Any way to add in PSR-2 checking for code quality...? Maybe too early...? 
+- Any way to add in PSR-2 checking for code quality...? 
 - error handling for scenario where DB is gone but config exists.
 - Keep the very un-OO user/administrator class code for 3.0. Will refactor that all anyway for user roles in 4.0.
-- Still need to solve `g_success`, `g_message`...
 - combine all that displayPage/displayModulePage etc. code.
 
 ### TODO
@@ -75,8 +74,6 @@ and omit the _composer.lock_ file.
 - list of available translations wasn't set after fresh install
 - move translations to composer package
 - upgrading from FT2.x (for later alpha version - perhaps the first Beta?)
-- error removing a column from Forms -> Fields page. "
-Notice: Undefined variable: drop_column in /Applications/MAMP/htdocs/core/global/code/Fields.class.php". Error 1607.
 
 ### Nice to haves
 - add grunt task to add/remove specific keys from language files (translations repo)

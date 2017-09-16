@@ -1539,6 +1539,7 @@ class Fields {
 
         // get the form field info before we delete it
         $old_field_info = self::getFormField($field_id);
+        $drop_column = $old_field_info["col_name"];
 
         try {
             $db->beginTransaction();
