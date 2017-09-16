@@ -20,19 +20,20 @@ $theme = $settings['default_theme'];
 $admin_info = Administrator::getAdminInfo();
 $admin_email = $admin_info["email"];
 
+
 // if a user id is included in the query string, use it to determine the appearance of the
 // interface (including logo)
-$id = General::loadField("id", "id", "");
-
-if (!empty($id)) {
-    $info = Accounts::getAccountInfo($id);
-
-    if (!empty($info)) {
-        $theme  = $info['theme'];
-        $language = $info["ui_language"];
-        include_once("global/lang/{$language}.php");
-    }
-}
+//$id = General::loadField("id", "id", "");
+//
+//if (!empty($id)) {
+//    $info = Accounts::getAccountInfo($id);
+//
+//    if (!empty($info)) {
+//        $theme  = $info['theme'];
+//        $language = $info["ui_language"];
+//        include_once("global/lang/{$language}.php");
+//    }
+//}
 
 // if trying to send password
 if (isset($_POST) && !empty($_POST)) {

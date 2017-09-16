@@ -6,7 +6,6 @@ on your server. That will need to be uploaded you your `/modules` folder.
 The other modules, themes and API all just expand on the core functionality to provide additional, optional features
 should you need them.
 
-
 ### Repo
 
 - `master` contains ongoing work for whatever next version of Form Tools. Right now it's 3.0.0. 
@@ -19,22 +18,18 @@ Earlier this year I returned to work on Form Tools after a long (4 year!) break.
 to PHP and the various code dependencies that Form Tools relies on. The goal for the 3.0.0 rewrite is:
 
 - *Run on PHP 7*.
-- Upgrade Smarty (necessary for PHP 7 compatibility)
-- Convert the codebase to object oriented.
-- move database interaction to use PDO.
-- include Composer (just the basics right now, but all modules, themes etc. may end up as composer components... not sure yet)
+- Upgrade Smarty
+- Convert the codebase to object oriented
+- move database interaction to use PDO
  
-
 ### PHP version compatibility
 
 - Everything up to *Form Tools Core 2.2.7* supports PHP 4.3 - 5.x.
 - *Form Tools Core 3.0.0* supports PHP 5.3 and later.
 
-
 ### Installation
 
 Don't install the code by itself. Download a main package from the https://formtools.org/download/ page. 
-
 
 ### 3.0.0 Changes
 
@@ -72,8 +67,8 @@ and omit the _composer.lock_ file.
 - still doing a redirect to (root) /install when removing config.php
 - after installation, shows a "no sessions" error on login page (confirm)
 - list of available translations wasn't set after fresh install
-- move translations to composer package
 - upgrading from FT2.x (for later alpha version - perhaps the first Beta?)
+- forget password. 
 
 ### Nice to haves
 - add grunt task to add/remove specific keys from language files (translations repo)
