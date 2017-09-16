@@ -271,7 +271,7 @@ class Core {
     /**
      * The minimum required PHP version needed to run Form Tools.
      */
-    protected static $requiredPhpVersion = "5.3";
+    protected static $requiredPhpVersion = "5.3.2";
 
     /**
      * The minimum required MySQL version needed to run Form Tools.
