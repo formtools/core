@@ -2,8 +2,4 @@
 themes/default/cache/*
 themes/cache
 .DS_Store
-global/lang/*
 global/config.php
-
-# this ensures the lang folder appears
-!global/lang/empty.txt
