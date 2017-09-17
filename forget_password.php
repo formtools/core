@@ -1,5 +1,7 @@
 <?php
 
+require_once("global/library.php");
+
 use FormTools\Accounts;
 use FormTools\Administrator;
 use FormTools\Core;
@@ -8,18 +10,14 @@ use FormTools\Pages;
 use FormTools\Settings;
 use FormTools\Themes;
 
-//require("global/session_start.php");
-
 Core::init();
 $LANG = Core::$L;
 
 $settings = Settings::get();
-$g_title = $settings['program_name'];
 $theme = $settings['default_theme'];
 
 $admin_info = Administrator::getAdminInfo();
 $admin_email = $admin_info["email"];
-
 
 // if a user id is included in the query string, use it to determine the appearance of the
 // interface (including logo)
@@ -36,6 +34,8 @@ $admin_email = $admin_info["email"];
 //}
 
 // if trying to send password
+$g_success = true;
+$g_message = "";
 if (isset($_POST) && !empty($_POST)) {
     list($g_success, $g_message) = Accounts::sendPassword($_POST);
 }
@@ -53,12 +53,15 @@ END;
 
 $page_vars = array(
     "text_forgot_password" => General::evalSmartyString($LANG["text_forgot_password"], $replacements),
+    "g_success" => $g_success,
+    "g_message" => $g_message,
     "head_title" => $settings["program_name"],
     "page" => "forgot_password",
     "page_url" => Pages::getPageUrl("forgot_password"),
     "settings" => $settings,
     "username" => $username,
-    "head_js" => $head_js
+    "head_js" => $head_js,
+    "query_params" => ""
 );
 
 Themes::displayPage("forget_password.tpl", $page_vars, $theme);

@@ -12,7 +12,7 @@
  */
 
 $theme_name = "Default";
-$theme_author = "Benjamin Keen";
+$theme_author = "Ben Keen";
 $theme_author_email = "ben.keen@gmail.com";
 $theme_link = "http://themes.formtools.org";
 $theme_description = "The default Form Tools theme. It's a fixed-width theme requiring 1024 minimum width screens, with a few different colour swatches to choose from.";

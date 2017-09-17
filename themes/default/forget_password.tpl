@@ -8,7 +8,7 @@
     {$text_forgot_password}
   </div>
 
-  <form name="forget_password" action="{$same_page}{$g_query_params}" method="post"
+  <form name="forget_password" action="{$same_page}{$query_params}" method="post"
     onsubmit="return rsv.validate(this, rules)">
 
     <div class="login_panel">
