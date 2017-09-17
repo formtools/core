@@ -75,19 +75,21 @@ class Settings {
 
         } else if (is_array($settings)) {
             $result = array();
+
             foreach ($settings as $setting) {
                 $db->query("
                     SELECT setting_value
                     FROM   {PREFIX}settings
-                    WHERE  setting_name = '$setting'
+                    WHERE  setting_name = :setting
                     $and_module_clause
                 ");
+                $db->bind("setting", $setting);
                 if (!empty($module)) {
                     $db->bind("module", $module);
                 }
                 $db->execute();
                 $info = $db->fetch();
-                $return_val[$setting] = $info["setting_value"];
+                $result[$setting] = $info["setting_value"];
             }
         }
 
