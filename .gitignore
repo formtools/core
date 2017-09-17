@@ -3,3 +3,6 @@ themes/default/cache/*
 themes/cache
 .DS_Store
 global/config.php
+
+# temporary
+modules/system_check
