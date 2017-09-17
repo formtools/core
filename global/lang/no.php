@@ -772,7 +772,7 @@ $LANG["text_add_form_field_types_multiple_fields_found6"] = "Din form er passord
 $LANG["text_add_form_field_types_multiple_fields_found7"] = "I en annen fane / vindu av denne nettleseren, logge deg inn skjemaet og klikk på Oppdater side-knappen nedenfor for å prøve å re-finne feltene.";
 $LANG["text_add_form_field_types_multiple_fields_found8"] = "Hvis ingen av løsningene over arbeidet, kan du også prøve å <a href=\"#\" onclick=\"{\$ONCLICK}\">manuelt laste opp former for behandling</a> .";
 $LANG["text_add_form_field_types_multiple_fields_found9"] = "Det var flere felt som ikke kunne finnes i form sidene du har angitt. Dette er mest sannsynlig forårsaket av en av disse:";
-$LANG["text_add_form_help_link"] = "Hvis du får noen problemer i løpet av disse trinnene, prøv å lese ut <a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\" target=\"_blank\">brukerdokumentasjon</a> .";
+$LANG["text_add_form_help_link"] = "Hvis du får noen problemer i løpet av disse trinnene, prøv å lese ut <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">brukerdokumentasjon</a> .";
 $LANG["text_add_form_step_1_text_1"] = "Følgende sider leder deg gjennom trinnene for å konfigurere Form Verktøy for å lagre skjemaet innleveringer. Før du fortsetter, må du kontrollere at:";
 $LANG["text_add_form_step_1_text_2"] = "skjemaet er allerede opprettet og det er tilgjengelig via en URL (localhost er fin)";
 $LANG["text_add_form_step_1_text_3"] = "er i stand til å redigere skjemaet";
@@ -851,7 +851,7 @@ $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">&quot;Kan i
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Access denied for user:&quot;</span> betyr at det er et problem med ditt brukernavn / passord kombinasjon.";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... til databasen ...&quot;</span> betyr at selv om ditt brukernavn og passord du har gitt er riktig, det var ikke koble til en bestemt database med denne kontoen. Dette kan bety at enten databasen er feil, eller at denne brukerkontoen ikke er knyttet til denne databasen.";
 $LANG["text_install_email_content_text"] = "Det er masse ressurser på vår hjemmeside for å hjelpe deg å komme i gang, inkludert vårt elektroniske dokumentasjon (http://docs.formtools.org) og opplæring (http://docs.formtools.org/tutorials). Hvis du synes du får problemer eller har spørsmål, pop av vårt forum (http://forums.formtools.org) og hils.";
-$LANG["text_install_form_tools_server_not_supported"] = "Beklager, vil Form Verktøy ikke kunne kjøres på serveren din. <a href=\"http://docs.formtools.org/userdoc2_1/?page=system_requirements\" target=\"_blank\">Vennligst klikk her</a> for minstekravene.";
+$LANG["text_install_form_tools_server_not_supported"] = "Beklager, vil Form Verktøy ikke kunne kjøres på serveren din. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Vennligst klikk her</a> for minstekravene.";
 $LANG["text_install_intro"] = "Velkommen til Form Verktøy installasjon scriptet! Velg ditt språk.";
 $LANG["text_install_system_check"] = "Denne siden kjører et par tester på systemet for å sikre at det er i stand til å kjøre Form Tools.";
 $LANG["text_internal_form_desc"] = "Intern former eksisterer bare innenfor Form Verktøy - ikke andre steder på nettstedet ditt. Kun Form Verktøy brukerkontoer vil ha tilgang til skjemaet. Velg dette alternativet hvis du ikke har et eksisterende skjema.";
@@ -874,7 +874,7 @@ $LANG["text_no_modules_found"] = "Ingen moduler ble funnet. Prøv å utvide dine
 $LANG["text_no_recipients_added"] = "Ingen mottakerne har blitt lagt til.";
 $LANG["text_no_search_results"] = "Det er ingen resultater med denne søkekriterier / View.";
 $LANG["text_no_submissions_found"] = "Beklager, ingen innleveringer funnet.";
-$LANG["text_no_themes"] = "Du har ikke noen temaer definert. Klikk på knappen under for å oppdatere temaet liste, eller sjekke <a href=\"http://docs.formtools.org/userdoc2_1/?page=themes\">Form Verktøy brukerdokumentasjonen</a> for informasjon om å legge til temaer.";
+$LANG["text_no_themes"] = "Du har ikke noen temaer definert. Klikk på knappen under for å oppdatere temaet liste, eller sjekke <a href=\"https://docs.formtools.org/userdoc/themes/\">Form Verktøy brukerdokumentasjonen</a> for informasjon om å legge til temaer.";
 $LANG["text_non_deletable_fields"] = "Dette feltet brukes av Core-script og kan ikke redigeres eller slettes uten å forårsake inkompatibilitet. Hvis du ønsker å gjøre endringer i feltet type, lage en kopi av det og redigere kopien.";
 $LANG["text_option_list_group_explanation"] = "Hvis dette er valgt, kan det å gruppere alternativene. Hvordan gruppene vises avhenger felttype bruker dette alternativet listen.";
 $LANG["text_option_list_page"] = "Radioknapper, avkrysningsbokser, rullegardinlistene og multi-velg dropdown feltene alle gir brukeren flere alternativer der de kan velge ett eller flere elementer. I Form Tools, er disse kjent som Alternativ Lister. Vanligvis er disse opprettes automatisk av <a href=\"{\$link}\">Legg ytre form</a> prosess, men du kan manuelt legge til eller redigere ditt valg listene nedenfor hvis skjemaet innhold endres eller du konstruere felt som bare brukes internt.";

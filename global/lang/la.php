@@ -767,7 +767,7 @@ $LANG["text_add_form_field_types_multiple_fields_found6"] = "Jūsu veidlapa ir a
 $LANG["text_add_form_field_types_multiple_fields_found7"] = "Citā cilnē / logā šo pārlūku, ieejiet savā formā, tad noklikšķiniet uz Atsvaidzināt Page pogu zemāk, lai mēģinātu vēlreiz atrast laukus.";
 $LANG["text_add_form_field_types_multiple_fields_found8"] = "Ja neviens no iepriekš minētajiem risinājumiem darbu, jūs arī varat mēģināt <a href=\"#\" onclick=\"{\$ONCLICK}\">manuāli augšupielādējot savu formu apstrādei</a> .";
 $LANG["text_add_form_field_types_multiple_fields_found9"] = "Bija vairākus laukus, kas nevar atrast tādā formā lapās Jūs esat izvēlējies. Tas ir galvenokārt iespējams izraisa kādu no šiem:";
-$LANG["text_add_form_help_link"] = "Ja jūs satikt nepatikšanas laikā šiem soļiem, izmēģiniet nolasīt <a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\" target=\"_blank\">lietotāja dokumentāciju</a> .";
+$LANG["text_add_form_help_link"] = "Ja jūs satikt nepatikšanas laikā šiem soļiem, izmēģiniet nolasīt <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">lietotāja dokumentāciju</a> .";
 $LANG["text_add_form_step_1_text_1"] = "Turpmākajās lappusēs palīdzēs jums konfigurēt veidlapu Tools pasākumus, lai saglabātu savu formu iesniegumus. Pirms turpināt, lūdzu, pārbaudiet, ka:";
 $LANG["text_add_form_step_1_text_2"] = "veidlapas jau ir izveidots, un tas ir pieejama caur URL (localhost ir fine)";
 $LANG["text_add_form_step_1_text_3"] = "var rediģēt jūsu veidlapas";
@@ -846,7 +846,7 @@ $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">&quot;Nevar
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Piekļuve liegta lietotājs&quot;</span> nozīmē, ka pastāv problēma ar jūsu lietotājvārda / paroles kombināciju.";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Piekļuve liegta lietotāju: ... datubāzei ...&quot;</span> nozīmē, ka, lai gan savu lietotājvārdu un paroli sniegto ir pareizs, tā nevar izveidot savienojumu ar šo konkrēto datu bāzi ar šo kontu. Tas var nozīmēt, ka vai nu Jūsu datu bāzes nosaukums ir nepareizs, vai šī lietotāja konts nav saistīts ar šo datu bāzi.";
 $LANG["text_install_email_content_text"] = "Pastāv daudz resursus, izmantojot mūsu mājas lapā, lai palīdzēt jums uzsākt, tai skaitā mūsu tiešsaistes dokumentācijas (http://docs.formtools.org) un konsultācijas (http://docs.formtools.org/tutorials). Ja atrodat jūs iesprūst vai jautājumu, pop mūsu forumiem (http://forums.formtools.org) and say hello.";
-$LANG["text_install_form_tools_server_not_supported"] = "Atvainojiet, forma Tools nevarēs palaist uz jūsu servera. <a href=\"http://docs.formtools.org/userdoc2_1/?page=system_requirements\" target=\"_blank\">Lūdzu, klikšķiniet šeit</a> , lai minimālās prasības.";
+$LANG["text_install_form_tools_server_not_supported"] = "Atvainojiet, forma Tools nevarēs palaist uz jūsu servera. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Lūdzu, klikšķiniet šeit</a> , lai minimālās prasības.";
 $LANG["text_install_intro"] = "Laipni lūgti Form Tools uzstādīšana skriptu! Lūdzu, izvēlieties savu valodu.";
 $LANG["text_install_system_check"] = "Šī lapa darbojas daži testi Jūsu sistēmu, lai nodrošinātu, ka tas ir spējīgs darboties Form Tools.";
 $LANG["text_internal_form_desc"] = "Iekšējā veidlapas pastāv tikai forma Tools - citur jūsu vietnē. Tikai Form Tools lietotāju kontiem būs piekļuve formā. Atlasiet šo opciju, ja jums nav esošo formu.";
@@ -869,7 +869,7 @@ $LANG["text_no_modules_found"] = "Nē moduļi tika atrasti. Mēģiniet paplašin
 $LANG["text_no_recipients_added"] = "Ne saņēmēji nav pievienots.";
 $LANG["text_no_search_results"] = "Nav ar šo meklēšanas kritērijiem rezultāti / View.";
 $LANG["text_no_submissions_found"] = "Atvainojiet, nav atbildes netika atrasts.";
-$LANG["text_no_themes"] = "Jums nav neviena definēti motīvi. Noklikšķiniet pogu zemāk, lai atsvaidzinātu jūsu tēmu saraksts, vai pārbaudīt <a href=\"http://docs.formtools.org/userdoc2_1/?page=themes\">Form Tools lietotāja dokumentācijā</a> informāciju par pievienojot tēmām.";
+$LANG["text_no_themes"] = "Jums nav neviena definēti motīvi. Noklikšķiniet pogu zemāk, lai atsvaidzinātu jūsu tēmu saraksts, vai pārbaudīt <a href=\"https://docs.formtools.org/userdoc/themes/\">Form Tools lietotāja dokumentācijā</a> informāciju par pievienojot tēmām.";
 $LANG["text_non_deletable_fields"] = "Šo lauku izmanto Core skriptu, un to nevar rediģēt vai dzēst neradot neatbilstības. Ja vēlaties veikt izmaiņas lauka tips, marka kopiju un rediģēt kopiju.";
 $LANG["text_option_list_group_explanation"] = "Ja tas ir izvēlēts, tas ļauj grupēt savas iespējas. Kā grupas ir parādīti atkarīgs lauka tipu, izmantojot šo opciju sarakstu.";
 $LANG["text_option_list_page"] = "Radio pogas, izvēles rūtiņas, dropdowns un multi-izvēlēties nolaižamajā laukus visiem nodrošināt lietotāju ar vairākas iespējas, no kurām var izvēlēties vienu vai vairākus vienumus. In Form Tools, tie ir pazīstami kā iespēja saraksti. Parasti šie ir izveidots automātiski <a href=\"{\$link}\">pievienot ārējo Form</a> process, bet jūs varat manuāli pievienot vai rediģēt jūsu izvēles saraksta zemāk, ja jūsu veidlapas satura izmaiņas vai jums izveidot lauki, tiek izmantotas tikai iekšēji.";

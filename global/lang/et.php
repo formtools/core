@@ -767,7 +767,7 @@ $LANG["text_add_form_field_types_multiple_fields_found6"] = "Teie vorm on parool
 $LANG["text_add_form_field_types_multiple_fields_found7"] = "Ühes teises tab / aken selle brauseriga sisse logida oma vormi seejärel käsku Värskenda Page allolevale nupule, et proovida uuesti leida väljad.";
 $LANG["text_add_form_field_types_multiple_fields_found8"] = "Kui ükski eespool lahendused töötavad, siis võib ka tahan proovida <a href=\"#\" onclick=\"{\$ONCLICK}\">käsitsi üleslaadimisel vormid töötlemiseks</a> .";
 $LANG["text_add_form_field_types_multiple_fields_found9"] = "Seal oli mitu välja, et ei leitud kujul lehekülgede määratud. See on enamasti põhjuseks ilmselt ühel neist:";
-$LANG["text_add_form_help_link"] = "Kui sul tekib mingeid probleeme ajal neid samme, proovida lugemine <a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\" target=\"_blank\">kasutaja dokumentatsiooni</a> .";
+$LANG["text_add_form_help_link"] = "Kui sul tekib mingeid probleeme ajal neid samme, proovida lugemine <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">kasutaja dokumentatsiooni</a> .";
 $LANG["text_add_form_step_1_text_1"] = "Järgmistel lehekülgedel viib teid läbi meetmed, et seadistada Form Vahendid salvestada vormis esildisi. Enne jätkamist kontrollige palun, et:";
 $LANG["text_add_form_step_1_text_2"] = "Teie vorm on juba loodud ja selle kaudu ligipääsetavad URL (localhost on hea)";
 $LANG["text_add_form_step_1_text_3"] = "on võimalik muuta oma vorm";
@@ -846,7 +846,7 @@ $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">&quot;Ei sa
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Access denied for user:&quot;</span> tähendab, et probleem on olemas oma kasutajanime / parooli kombinatsiooni.";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... andmebaasi ...&quot;</span> tähendab, et kuigi oma kasutajanimi ja parool, mida tarnitakse on õige, ei suuda ta ühendada, et eelkõige andmebaasi kontoga. See võib tähendada, et kas teie andmebaasi nimi on vale, või et selle kasutaja konto ei ole seotud andmebaasi.";
 $LANG["text_install_email_content_text"] = "Seal on piisavalt vahendeid meie kodulehel, mis aitab teil alustada, sealhulgas online-dokumendid (http://docs.formtools.org) ja juhendeid (http://docs.formtools.org/tutorials). Kui leiate te jänni või on küsimus, pop meie foorumites (http://forums.formtools.org) ja tere öelda.";
-$LANG["text_install_form_tools_server_not_supported"] = "Vabandust, vorm Tools ei saa sõita oma server. <a href=\"http://docs.formtools.org/userdoc2_1/?page=system_requirements\" target=\"_blank\">Palun kliki siia,</a> et miinimumnõuetele.";
+$LANG["text_install_form_tools_server_not_supported"] = "Vabandust, vorm Tools ei saa sõita oma server. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Palun kliki siia,</a> et miinimumnõuetele.";
 $LANG["text_install_intro"] = "Tere tulemast vorm Vahendid paigaldamise skript! Palun valige oma keel.";
 $LANG["text_install_system_check"] = "See leht jookseb mõned katsed oma süsteemi, et tagada see on võimelised sõitma vorm tööriistad.";
 $LANG["text_internal_form_desc"] = "Internal vorme ainult vorm Tools - mujal saidil. Ainult vormi Tools kasutajakontod on juurdepääs vormis. Valige see, kui sul ei ole olemasoleva vormi.";
@@ -869,7 +869,7 @@ $LANG["text_no_modules_found"] = "Nr mooduleid ei leitud. Proovige laiendada ots
 $LANG["text_no_recipients_added"] = "Nr saajad on lisatud.";
 $LANG["text_no_search_results"] = "Ei ole tulemusi käesoleva otsingukriteeriume / Vaade.";
 $LANG["text_no_submissions_found"] = "Sorry, no väidetele ei leitud.";
-$LANG["text_no_themes"] = "Sa ei pea iga teema määratletud. Klikka allolevale nupule, et värskendada oma teemade nimekirjas, või kontrollige <a href=\"http://docs.formtools.org/userdoc2_1/?page=themes\">vorm Tools kasutaja dokumentatsiooni</a> teavet lisades teemasid.";
+$LANG["text_no_themes"] = "Sa ei pea iga teema määratletud. Klikka allolevale nupule, et värskendada oma teemade nimekirjas, või kontrollige <a href=\"https://docs.formtools.org/userdoc/themes/\">vorm Tools kasutaja dokumentatsiooni</a> teavet lisades teemasid.";
 $LANG["text_non_deletable_fields"] = "See väli on kasutusel Core skripti ja ei saa redigeerida või kustutada, põhjustamata vastuolud. Kui soovite teha muudatusi valdkonnas tüübi, teha koopia ja muutke koopia.";
 $LANG["text_option_list_group_explanation"] = "Kui see on valitud, see võimaldab grupeerida oma võimalusi. Kuidas rühmad kuvatakse sõltub väljal selle võimaluse kasutamise nimekiri.";
 $LANG["text_option_list_page"] = "Raadio nupud, ruudud, ripploendid ja multi-vali rippmenüüst väljad kõik annavad kasutajale mitmeid võimalusi, kust nad saavad valida ühe või mitu üksust. Vormis Tööriistad, need on tuntud kui võimalus loendid. Tavaliselt on loodud automaatselt <a href=\"{\$link}\">Lisa väline vorm</a> protsess, kuid saate käsitsi lisada või muuta oma valik allpool esitatud nimekirju, kui oma vormi sisu muutub või siis ehitada valdkondades, mis on vaid kasutatakse ettevõttesiseselt.";

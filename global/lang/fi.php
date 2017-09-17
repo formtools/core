@@ -767,7 +767,7 @@ $LANG["text_add_form_field_types_multiple_fields_found6"] = "Lomake on suojattu 
 $LANG["text_add_form_field_types_multiple_fields_found7"] = "Toisessa välilehdessä / ikkuna tämän selaimen, kirjaudu lomake ja napsauta Päivitä sivu-painiketta alla yrittää uudelleen löytää kentät.";
 $LANG["text_add_form_field_types_multiple_fields_found8"] = "Jos mikään yllä olevista ratkaisuista ei toimi, voit myös kokeilla <a href=\"#\" onclick=\"{\$ONCLICK}\">manuaalisesti lataamalla lomakkeita käsittelyyn</a> .";
 $LANG["text_add_form_field_types_multiple_fields_found9"] = "Oli useita kenttiä, joita ei löydy muodossa sivujen määritetty. Tämä on useimmiten johtuu todennäköisesti jostain näistä:";
-$LANG["text_add_form_help_link"] = "Jos olet joutunut mitään ongelmia aikana nämä vaiheet, yritä lukea ulos <a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\" target=\"_blank\">käyttöohjeissa</a> .";
+$LANG["text_add_form_help_link"] = "Jos olet joutunut mitään ongelmia aikana nämä vaiheet, yritä lukea ulos <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">käyttöohjeissa</a> .";
 $LANG["text_add_form_step_1_text_1"] = "Seuraavilla sivuilla johtaa läpi vaiheet määrittää lomakkeen Työkalut tallentaa lomakkeen huomautuksia. Ennen kuin jatkat, tarkista, että:";
 $LANG["text_add_form_step_1_text_2"] = "lomake on jo luotu, ja se pääsee URL (localhost on hieno)";
 $LANG["text_add_form_step_1_text_3"] = "voivat muokata lomakkeen";
@@ -846,7 +846,7 @@ $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">&quot;Can&#
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Access denied for user:&quot;</span> tarkoittaa, että on ongelma käyttäjätunnus / salasana-yhdistelmää.";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... tietokantaan ...&quot;</span> tarkoittaa, että vaikka käyttäjätunnus ja salasana toimitetaan on oikea, se voi muodostaa, että erityisesti tietokannan kanssa huomioon. Tämä voi tarkoittaa, että joko tietokannan nimi on virheellinen, tai että kyseinen käyttäjä ei ole liitetty kyseiseen tietokantaan.";
 $LANG["text_install_email_content_text"] = "Ei paljon resursseja sivustomme auttaa sinua pääsemään alkuun, kuten online-dokumentaatio (http://docs.formtools.org) ja opetusohjelmia (http://docs.formtools.org/tutorials). Jos huomaat saada kiinni tai on kysymys, pop, joita meidän foorumeilla (http://forums.formtools.org) ja sanoa hei.";
-$LANG["text_install_form_tools_server_not_supported"] = "Anteeksi, muoto Tools ei voi ajaa palvelimella. <a href=\"http://docs.formtools.org/userdoc2_1/?page=system_requirements\" target=\"_blank\">Klikkaa tästä</a> ja vähimmäisvaatimukset.";
+$LANG["text_install_form_tools_server_not_supported"] = "Anteeksi, muoto Tools ei voi ajaa palvelimella. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Klikkaa tästä</a> ja vähimmäisvaatimukset.";
 $LANG["text_install_intro"] = "Tervetuloa lomakkeen Tools asennus script! Valitse kieli.";
 $LANG["text_install_system_check"] = "Tämä sivu toimii muutamia testit järjestelmän, jotta se voi suorittaa Form Tools.";
 $LANG["text_internal_form_desc"] = "Sisäinen muotoja on olemassa vain muoto Työkalut - muualle sivustossasi. Ainoa Työkalut käyttäjätunnukset pääsevät muodossa. Valitse tämä vaihtoehto, jos sinulla ei ole nykyisessä muodossaan.";
@@ -869,7 +869,7 @@ $LANG["text_no_modules_found"] = "No moduulit löytynyt. Yritä laajentaa hakueh
 $LANG["text_no_recipients_added"] = "O vastaanottajien on lisätty.";
 $LANG["text_no_search_results"] = "Tuloksia ei ole tämän hakuehdot / Näytä.";
 $LANG["text_no_submissions_found"] = "Sorry, ei huomautuksia ei löytynyt.";
-$LANG["text_no_themes"] = "Sinulla ei ole mitään teemoja määritelty. Klikkaa alla olevaa painiketta piristää teema luettelostamme, tai vilkaista <a href=\"http://docs.formtools.org/userdoc2_1/?page=themes\">muoto Työkalut käyttöohjeet</a> tietoa lisäämällä teemoista.";
+$LANG["text_no_themes"] = "Sinulla ei ole mitään teemoja määritelty. Klikkaa alla olevaa painiketta piristää teema luettelostamme, tai vilkaista <a href=\"https://docs.formtools.org/userdoc/themes/\">muoto Työkalut käyttöohjeet</a> tietoa lisäämällä teemoista.";
 $LANG["text_non_deletable_fields"] = "Tämä kenttää käyttää Core script, eikä niitä voi muokata tai poistaa aiheuttamatta yhteensopivuusongelmia. Jos haluat tehdä muutoksia kenttään, kopioi se ja muokata kopiota.";
 $LANG["text_option_list_group_explanation"] = "Jos tämä on valittu, se antaa ryhmitellä vaihtoehtoja. Miten ryhmät näkyvät riippuu kenttään käyttämällä tätä vaihtoehtoa luettelosta.";
 $LANG["text_option_list_page"] = "Radio painikkeet, valintaruudut, dropdowns ja multi-valitse pudotusvalikosta kentät kaikki antaa käyttäjälle useita vaihtoehtoja, joista he voivat valita yhden tai useamman kohteita. Muodossa Työkalut Näitä kutsutaan asetusvalikkoon. Yleensä nämä ovat luo automaattisesti <a href=\"{\$link}\">Lisää ulkoinen muoto</a> prosessi, mutta voit manuaalisesti lisätä tai muokata vaihtoehto luettelot alta, jos lomakkeen sisältö muuttuu tai piirrät kenttiä, joita käytetään ainoastaan ​​sisäisesti.";

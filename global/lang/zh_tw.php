@@ -768,7 +768,7 @@ $LANG["text_add_form_field_types_multiple_fields_found6"] = "你的密碼保護�
 $LANG["text_add_form_field_types_multiple_fields_found7"] = "在另一個標籤 /窗口的這個瀏覽器，登錄到您的窗體，然後單擊刷新頁面下面的按鈕嘗試重新找到的字段。";
 $LANG["text_add_form_field_types_multiple_fields_found8"] = "如果沒有上述解決方案的工作，你可能也想嘗試<a href=\"#\" onclick=\"{\$ONCLICK}\">手動上傳的形式進行處理</a> 。";
 $LANG["text_add_form_field_types_multiple_fields_found9"] = "有多個字段無法找到網頁的形式指定。這主要是有可能造成其中一個：";
-$LANG["text_add_form_help_link"] = "如果您遇到任何麻煩在這些步驟中，嘗試讀出<a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\" target=\"_blank\">用戶文件</a> 。";
+$LANG["text_add_form_help_link"] = "如果您遇到任何麻煩在這些步驟中，嘗試讀出<a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">用戶文件</a> 。";
 $LANG["text_add_form_step_1_text_1"] = "以下頁面帶領您通過步驟來配置表格工具來儲存您的表單提交。在繼續之前，請檢查：";
 $LANG["text_add_form_step_1_text_2"] = "您的窗體已創建和它可以通過一個 URL（localhost是罰款）";
 $LANG["text_add_form_step_1_text_3"] = "可以編輯表單";
@@ -847,7 +847,7 @@ $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">“無法�
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">“拒絕訪問用戶：”</span>是指有一個問題，您的用戶名/密碼組合。";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">“拒絕訪問用戶：數據庫... ...”</span>的意思是，雖然您的用戶名和密碼，您提供的是正確的，它無法連接到特定的數據庫，該帳戶。這意味著，要么你的數據庫的名稱不正確，或該用戶帳戶不關聯的數據庫。";
 $LANG["text_install_email_content_text"] = "有大量的資源在我們的網站，以幫助您開始，包括我們的聯機文檔（http://docs.formtools.org）和教程（http://docs.formtools.org/tutorials）。如果您發現您遇到問題或有問題，我們的流行音樂論壇（http://forums.formtools.org）和打招呼。";
-$LANG["text_install_form_tools_server_not_supported"] = "對不起，表格工具將無法在服務器上運行。 <a href=\"http://docs.formtools.org/userdoc2_1/?page=system_requirements\" target=\"_blank\">請點擊這裡</a>的最低要求。";
+$LANG["text_install_form_tools_server_not_supported"] = "對不起，表格工具將無法在服務器上運行。 <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">請點擊這裡</a>的最低要求。";
 $LANG["text_install_intro"] = "歡迎表格工具安裝腳本！請選擇您的語言。";
 $LANG["text_install_system_check"] = "本頁面運行幾個測試你的系統，以確保它能夠運行表格工具。";
 $LANG["text_internal_form_desc"] = "內部形式只存在於表工具 - 其他未在您的網站。唯一的形式工具的用戶帳戶將有機會獲得的形式。選擇此選項，如果您沒有現有的形式。";
@@ -870,7 +870,7 @@ $LANG["text_no_modules_found"] = "沒有模塊被發現。擴大您的搜索條�
 $LANG["text_no_recipients_added"] = "任何人已被添加。";
 $LANG["text_no_search_results"] = "沒有結果與此搜索條件 /查看。";
 $LANG["text_no_submissions_found"] = "對不起，沒有發現意見書。";
-$LANG["text_no_themes"] = "您沒有任何主題的定義。點擊下面的按鈕來刷新你的主題列表，或檢查<a href=\"http://docs.formtools.org/userdoc2_1/?page=themes\">表格工具用戶文檔</a>信息有關添加主題。";
+$LANG["text_no_themes"] = "您沒有任何主題的定義。點擊下面的按鈕來刷新你的主題列表，或檢查<a href=\"https://docs.formtools.org/userdoc/themes/\">表格工具用戶文檔</a>信息有關添加主題。";
 $LANG["text_non_deletable_fields"] = "此字段所使用的核心腳本，不能編輯或刪除，而不會造成不兼容。如果您想更改字段類型，使複製並編輯該副本。";
 $LANG["text_option_list_group_explanation"] = "如果被選中，它可以讓你的選擇進行分組。如何組顯示取決於字段類型使用此選項列表。";
 $LANG["text_option_list_page"] = "單選按鈕，複選框，下拉列表和多選下拉領域的所有用戶提供多種選擇，他們可以從中選擇一個或多個項目。在表格工具，這些被稱為選項列表。一般來說，這些自動創建的<a href=\"{\$link}\">添加外在形式</a>的過程，但你可以手動添加或編輯您的選擇，如果你的形式列出了以下內容更改或者構造域僅在內部使用。";

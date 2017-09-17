@@ -767,7 +767,7 @@ $LANG["text_add_form_field_types_multiple_fields_found6"] = "귀하의 양식을
 $LANG["text_add_form_field_types_multiple_fields_found7"] = "이 브라우저의 다른 탭 / 창에서 필드를 다시 찾으려고 아래 새로 고침 페이지 버튼을 클릭 후 양식에 로그인합니다.";
 $LANG["text_add_form_field_types_multiple_fields_found8"] = "위의 솔루션 작업 없음 경우에는보십시오 <a href=\"#\" onclick=\"{\$ONCLICK}\">수동 처리에 대한 양식을 업로드</a> .";
 $LANG["text_add_form_field_types_multiple_fields_found9"] = "지정한 양식 페이지에서 찾을 수 없습니다 여러 필드가있었습니다. 이것은 대부분의 가능성이 중 하나에 의해 발생합니다 :";
-$LANG["text_add_form_help_link"] = "이 단계 중에 어떤 문제로 실행하는 경우, 밖으로 읽어보세요 <a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\" target=\"_blank\">사용자 설명서를</a> .";
+$LANG["text_add_form_help_link"] = "이 단계 중에 어떤 문제로 실행하는 경우, 밖으로 읽어보세요 <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">사용자 설명서를</a> .";
 $LANG["text_add_form_step_1_text_1"] = "다음 페이지 양식 도구를 구성하는 단계를 통해 양식을 제출 저장소로 리드. 계속하기 전에 확인하시기 바랍니다 :";
 $LANG["text_add_form_step_1_text_2"] = "양식이 이미 만들어졌습니다 그리고 URL을 (localhost를 통해 접근할 수있어 괜찮 아요)입니다";
 $LANG["text_add_form_step_1_text_3"] = "양식을 수정하실 수있습니다";
@@ -846,7 +846,7 @@ $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">&quot;로�
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;사용자에 대한 액세스가 거부되었습니다 :&quot;거기에</span> 귀하의 사용자 이름 / 암호 조합에 문제가있는 것을 의미합니다.";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;사용자에 대한 액세스가 거부되었습니다 : ... 데이터베이스에 ...&quot;비록</span> 귀하의 사용자 이름과 비밀 번호가 정확한지 공급 즉, 그 계정에 특정 데이터베이스에 연결하지 못했습니다 의미합니다. 이것도 당신의 데이터베이스 이름, 또는 올바르지 않습니다이 사용자 계정은 데이터베이스와 연결되어 있지 않습니다 의미할 수있습니다.";
 $LANG["text_install_email_content_text"] = "거기에 많은 자원을 우리의 웹사이트에 당신을 시작하는 우리의 온라인 설명서 (http://docs.formtools.org) 및 튜토리얼 (http://docs.formtools.org/tutorials) 등 도움을주기 위해서. 만약 당신이 박히면서이나 질문이 있으시면, 저희 포럼에 오신걸 팝업 (http://forums.formtools.org) 및 안부 인사를 찾는다.";
-$LANG["text_install_form_tools_server_not_supported"] = "죄송합니다, 양식 도구는 서버에서 실행하실 수 없습니다. <a href=\"http://docs.formtools.org/userdoc2_1/?page=system_requirements\" target=\"_blank\">여기를 클릭하십시오</a> 최소 요구 사항.";
+$LANG["text_install_form_tools_server_not_supported"] = "죄송합니다, 양식 도구는 서버에서 실행하실 수 없습니다. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">여기를 클릭하십시오</a> 최소 요구 사항.";
 $LANG["text_install_intro"] = "에 오신 것을 환영 폼 도구를 설치하는 스크립트! 언어를 선택해주십시오.";
 $LANG["text_install_system_check"] = "이 페이지는 귀하의 시스템을 사용하면 양식 도구를 실행할 수의 보장에 관한 몇 가지 검사를 실행합니다.";
 $LANG["text_internal_form_desc"] = "아니라 다른 사이트에서 - 내부 양식은 양식 도구에서만 존재합니다. 전용 양식 도구 사용자 계정 양식에 액세스할 수 있습니다. 당신이 기존의 양식을 가지고 있지 않다면이 옵션을 선택합니다.";
@@ -869,7 +869,7 @@ $LANG["text_no_modules_found"] = "아니 모듈을 찾을 수없습니다. 귀�
 $LANG["text_no_recipients_added"] = "안받는 사람이 추가되었습니다.";
 $LANG["text_no_search_results"] = "이 검색 결과가없습니다 기준 /보기입니다.";
 $LANG["text_no_submissions_found"] = "죄송합니다, 아니 제출을 발견했다.";
-$LANG["text_no_themes"] = "당신은 정의된 테마가 없습니다. 테마 목록을 새로 고치거나 확인하려면 아래 버튼을 클릭 <a href=\"http://docs.formtools.org/userdoc2_1/?page=themes\">양식 도구 사용자 문서</a> 테마를 추가에 대한 자세한 내용은합니다.";
+$LANG["text_no_themes"] = "당신은 정의된 테마가 없습니다. 테마 목록을 새로 고치거나 확인하려면 아래 버튼을 클릭 <a href=\"https://docs.formtools.org/userdoc/themes/\">양식 도구 사용자 문서</a> 테마를 추가에 대한 자세한 내용은합니다.";
 $LANG["text_non_deletable_fields"] = "이 필드는 코어 스크립트에 의해 사용되며 편집 또는 비호환성을 유발하지 않고 삭제할 수 없습니다. 이 필드 유형을 변경하고자 할 경우, 그것의 복사본을 만들어 복사본을 편집합니다.";
 $LANG["text_option_list_group_explanation"] = "이것이 선택되어 있으면 옵션을 그룹에 있습니다. 어떻게 그룹이 표시됩니다하면이 옵션 목록을 사용하여 필드 종류에 따라 다릅니다.";
 $LANG["text_option_list_page"] = "라디오 버튼, 체크 박스, 드롭 다운 및 다중 선택 드롭 다운 필드는 모든 사람들이 하나 이상의 항목을 선택할 수있는 여러 옵션을 사용자에게 제공합니다. 양식 도구에서 이러한 옵션 목록으로 알려져 있습니다. 일반적으로, 이들은에 의해 자동으로 생성됩니다 <a href=\"{\$link}\">추가 외부 폼</a> 처리하지만 양식 내용 변경 또는 내부 적으로만 사용하는 필드를 만들 경우에는 수동으로 아래에 옵션 목록을 추가하거나 편집할 수 있습니다.";

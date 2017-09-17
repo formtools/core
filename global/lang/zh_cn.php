@@ -772,7 +772,7 @@ $LANG["text_add_form_field_types_multiple_fields_found6"] = "你的形式是密�
 $LANG["text_add_form_field_types_multiple_fields_found7"] = "在另一个选项卡/此浏览器窗口，登录到您的表单，然后单击刷新页面下面的按钮，尝试重新找到字段。";
 $LANG["text_add_form_field_types_multiple_fields_found8"] = "如果没有上述解决方案的工作，你可能也想尝试<a href=\"#\" onclick=\"{\$ONCLICK}\">手动上传你的形式进行</a>处理。";
 $LANG["text_add_form_field_types_multiple_fields_found9"] = "有等多个领域，无法在您指定的网页形式。这是最有可能造成这些：";
-$LANG["text_add_form_help_link"] = "如果遇到任何麻烦，在这些步骤中运行，尝试读<a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\" target=\"_blank\">出用户</a>文档。";
+$LANG["text_add_form_help_link"] = "如果遇到任何麻烦，在这些步骤中运行，尝试读<a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">出用户</a>文档。";
 $LANG["text_add_form_step_1_text_1"] = "以下页面带领的配置表格工具的步骤来存储您的表单提交。在继续之前，请检查：";
 $LANG["text_add_form_step_1_text_2"] = "您的窗体已创建和它的通过网址（本地主机访问的罚款）";
 $LANG["text_add_form_step_1_text_3"] = "可以编辑表单";
@@ -851,7 +851,7 @@ $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">“无法�
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">“访问用户被拒绝：”</span>意思是指您的用户名/密码组合的问题。";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">“访问用户被拒绝：数据库... ...”</span>的意思是，虽然您的用户名和密码，您提供的是正确的，它无法连接到该帐户与特定的数据库。这意味着，要么你的数据库的名称不正确，或该用户帐户不与该数据库关联的。";
 $LANG["text_install_email_content_text"] = "有我们的网站上大量的资源来帮助您开始使用，包括我们的联机文档（http://docs.formtools.org）和教程（http://docs.formtools.org/tutorials）。如果您发现您遇到问题或有问题，通过我们的论坛（http://forums.formtools.org）和打招呼流行。";
-$LANG["text_install_form_tools_server_not_supported"] = "对不起，表格工具将不能够运行您的服务器上<a href=\"http://docs.formtools.org/userdoc2_1/?page=system_requirements\" target=\"_blank\">，请点击</a>这里的最低要求。";
+$LANG["text_install_form_tools_server_not_supported"] = "对不起，表格工具将不能够运行您的服务器上<a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">，请点击</a>这里的最低要求。";
 $LANG["text_install_intro"] = "欢迎表格工具安装脚本！请选择您的语言。";
 $LANG["text_install_system_check"] = "这页你的系统上运行，以确保它能够运行中一些测试工具。";
 $LANG["text_internal_form_desc"] = "内部形式只存在于表工具 - 而不是在您网站上的其他地方。唯一的形式工具的用户帐户将访问的形式。选择此选项，如果你没有现成的形式。";
@@ -874,7 +874,7 @@ $LANG["text_no_modules_found"] = "没有模块被发现。扩大您的搜索条�
 $LANG["text_no_recipients_added"] = "任何人已被添加。";
 $LANG["text_no_search_results"] = "没有与该搜索条件的结果/查看。";
 $LANG["text_no_submissions_found"] = "对不起，没有找到任何提交。";
-$LANG["text_no_themes"] = "您没有任何主题定义。点击下面的按钮来刷新你的主题列表，或检查的<a href=\"http://docs.formtools.org/userdoc2_1/?page=themes\">表格工具，用户</a>文档，有关加入主题的信息。";
+$LANG["text_no_themes"] = "您没有任何主题定义。点击下面的按钮来刷新你的主题列表，或检查的<a href=\"https://docs.formtools.org/userdoc/themes/\">表格工具，用户</a>文档，有关加入主题的信息。";
 $LANG["text_non_deletable_fields"] = "此字段是核心脚本和使用而造成的不兼容，不能编辑或删除。如果你想使字段类型的变化，它的一个副本，并编辑副本。";
 $LANG["text_option_list_group_explanation"] = "如果选择此选项，它可以让组您的选择。如何显示组取决于字段类型使用此选项列表。";
 $LANG["text_option_list_page"] = "单选按钮，复选框，下拉列表和多选下拉领域的所有用户提供多个选项，从中他们可以选择一个或多个项目。在表格工具，这些被称为选项列表。一般来说，这些都是自动创建<a href=\"{\$link}\">添加的外在</a>形式的过程，但您可以手动添加或编辑以下选项列出，如果您的表单内容的变化，或者您构造，仅供内部使用的领域。";

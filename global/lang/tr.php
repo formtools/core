@@ -772,7 +772,7 @@ $LANG["text_add_form_field_types_multiple_fields_found6"] = "Formunuz parola kor
 $LANG["text_add_form_field_types_multiple_fields_found7"] = "Bu tarayıcının başka bir sekmeye / pencere, form alanları yeniden denemek için Yenile düğmesini tıklatın oturum.";
 $LANG["text_add_form_field_types_multiple_fields_found8"] = "Yukarıdaki çözüm hiçbiri varsa, siz de denemek isteyebilirsiniz <a href=\"#\" onclick=\"{\$ONCLICK}\">formları işleme için manuel yükleme</a> .";
 $LANG["text_add_form_field_types_multiple_fields_found9"] = "Belirtilen form sayfalarında bulunamadı birden çok alan vardı. Bu büyük olasılıkla bunlardan biri neden olur:";
-$LANG["text_add_form_help_link"] = "Bu adımları sırasında herhangi bir sorun yaşarsanız, okuma deneyin <a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\" target=\"_blank\">kullanıcı belgeleri</a> .";
+$LANG["text_add_form_help_link"] = "Bu adımları sırasında herhangi bir sorun yaşarsanız, okuma deneyin <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">kullanıcı belgeleri</a> .";
 $LANG["text_add_form_step_1_text_1"] = "Aşağıdaki sayfalarda yapılandırmak Formu Araçlar adımları boyunca form tabanlı gönderimleri saklamak için size yol gösterir. Devam etmeden önce, lütfen kontrol edin:";
 $LANG["text_add_form_step_1_text_2"] = "Form zaten oluşturulmuş ve URL (localhost üzerinden erişilebilir ince is)";
 $LANG["text_add_form_step_1_text_3"] = "Form değiştir edebiliyoruz";
@@ -851,7 +851,7 @@ $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">&quot;Yerel
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Access kullanıcı için reddedildi:&quot;</span> Bu oraya kullanıcı adı / şifre kombinasyonu ile bir sorunu var demektir.";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access kullanıcı için reddedildi: ... veritabanına ...&quot;</span> rağmen kullanıcı adınızı ve doğru olduğunu verilen şifre, bu hesapla o veritabanına bağlanamıyor anlamına gelir. Bu ya sizin veritabanı adı, veya yanlıştır, bu kullanıcı hesabını veritabanı ile ilişkili değildir anlamına gelebilir.";
 $LANG["text_install_email_content_text"] = "Orada kaynakları bol web sitemizde başlamanıza, online belgeler (http://docs.formtools.org) ve öğreticiler (http://docs.formtools.org/tutorials dahil) sunulmaktadır. Eğer takılırsanız veya bir sorum var, pop bizim forumları (http://forums.formtools.org) ve say hello tarafından bulabilirsiniz.";
-$LANG["text_install_form_tools_server_not_supported"] = "Üzgünüz, Form Araçları sunucu üzerinde çalıştırmak mümkün olmaz. <a href=\"http://docs.formtools.org/userdoc2_1/?page=system_requirements\" target=\"_blank\">lütfen tıklayınız</a> minimum gereksinimleri için.";
+$LANG["text_install_form_tools_server_not_supported"] = "Üzgünüz, Form Araçları sunucu üzerinde çalıştırmak mümkün olmaz. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">lütfen tıklayınız</a> minimum gereksinimleri için.";
 $LANG["text_install_intro"] = "Welcome Formu Araçlar kurulum betiği için! Lütfen dilinizi seçin.";
 $LANG["text_install_system_check"] = "Bu sayfa sistem o Formu Araçlar çalıştırabilir emin olmak için birkaç test eder.";
 $LANG["text_internal_form_desc"] = "Başka yerde sitenizde - İç formları Form Araçları içinde bulunmaktadır. Form Araçları kullanıcı hesapları oluşturmak için erişim olacaktır. Varolan bir form yoksa, bu seçeneği seçin.";
@@ -874,7 +874,7 @@ $LANG["text_no_modules_found"] = "No modülleri bulunamadı. Arama kriterleriniz
 $LANG["text_no_recipients_added"] = "No alıcıların eklendi.";
 $LANG["text_no_search_results"] = "Bu arama kriterleri ile sonuç / görünümü.";
 $LANG["text_no_submissions_found"] = "Üzgünüz, hiç kayıt bulunamadı";
-$LANG["text_no_themes"] = "Tanımlanmış herhangi bir temalar zorunda değilsiniz. Tema listesini yenilemek ya da kontrol etmek için aşağıdaki butona <a href=\"http://docs.formtools.org/userdoc2_1/?page=themes\">Form Araçları kullanıcı belgelerine</a> ekleyerek temaları hakkında bilgi almak için tıklayın .";
+$LANG["text_no_themes"] = "Tanımlanmış herhangi bir temalar zorunda değilsiniz. Tema listesini yenilemek ya da kontrol etmek için aşağıdaki butona <a href=\"https://docs.formtools.org/userdoc/themes/\">Form Araçları kullanıcı belgelerine</a> ekleyerek temaları hakkında bilgi almak için tıklayın .";
 $LANG["text_non_deletable_fields"] = "Bu alan Core komut dosyası tarafından kullanılan ve uyumsuzlukları neden olmadan düzenlenemez veya silinemez. Alan türü değişiklik yapmak istiyorsanız, bunun bir kopyasını yapmak ve kopya düzenleyin.";
 $LANG["text_option_list_group_explanation"] = "Bu seçilirse, bu seçenekleri grubuna sağlar. Grupları nasıl görüntülenir Bu seçenek listesini kullanarak alan türü bağlıdır.";
 $LANG["text_option_list_page"] = "Radyo düğmeleri, onay kutuları, dropdowns ve çoklu seçim açılır alanları, onlar bir veya daha fazla öğe seçebilirsiniz birden fazla seçenekleri ile kullanıcıya sunar. Form Araçları, bu Seçenek Listesi olarak bilinir. Genellikle, bu tarafından otomatik olarak oluşturulur <a href=\"{\$link}\">Ekle Başka Formu</a> işleminin, ancak form içerik değişiklikleri veya sadece dahili olarak kullanılan alanlar inşa eğer elle aşağıdaki seçenek listeleri ekleyebilir veya düzenleyebilirsiniz.";

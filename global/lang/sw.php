@@ -767,7 +767,7 @@ $LANG["text_add_form_field_types_multiple_fields_found6"] = "Your form is passwo
 $LANG["text_add_form_field_types_multiple_fields_found7"] = "In another tab / window of this browser, log into your form then click the Refresh Page button below to try to re-find the fields.";
 $LANG["text_add_form_field_types_multiple_fields_found8"] = "If none of the above solutions work, you may also want to try <a href=\"#\" onclick=\"{\$ONCLICK}\">manually uploading your forms for processing</a>.";
 $LANG["text_add_form_field_types_multiple_fields_found9"] = "There were multiple fields that couldn't be found in the form pages you specified. This is mostly likely caused by one of these:";
-$LANG["text_add_form_help_link"] = "If you run into any trouble during these steps, try reading our <a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\" target=\"_blank\">user documentation</a>.";
+$LANG["text_add_form_help_link"] = "If you run into any trouble during these steps, try reading our <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">user documentation</a>.";
 $LANG["text_add_form_step_1_text_1"] = "Kurasa zifuatazo itakuongoza kupitia hatua configure Fomu Tools kuhifadhi fomu yako redovisningar. Kabla ya kuendelea, tafadhali hakikisha kwamba:";
 $LANG["text_add_form_step_1_text_2"] = "fomu yako tayari imekuwa umba na ni kupatikana kupitia URL (localhost ni laini)";
 $LANG["text_add_form_step_1_text_3"] = "wanaweza hariri fomu yako";
@@ -847,7 +847,7 @@ $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">&quot;Can&#
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Access kukataliwa kwa user:&quot; ina</span> maana kwamba kuna tatizo na username yako / password mchanganyiko.";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access kukataliwa kwa user: ... na database ...&quot;</span> inamaanisha kuwa ingawa username na password yako wewe waliopata ni sahihi, ilikuwa kushindwa kuwaunganisha na kwamba database hasa kwa kuwa akaunti. Hii inaweza kumaanisha kwamba aidha jina Mbegu yako ni sahihi, au kwamba user akaunti hii si yanayohusiana na kwamba database.";
 $LANG["text_install_email_content_text"] = "Kuna mengi ya rasilimali kwenye tovuti yetu ili kukusaidia kupata kuanza, pamoja na nyaraka online wetu (http://docs.formtools.org) na tutorials (http://docs.formtools.org/tutorials). Ukikuta kupata kukwama au swali, pop na vikao wetu (http://forums.formtools.org) na kusema hello.";
-$LANG["text_install_form_tools_server_not_supported"] = "Sorry, Form Tools will not be able to run on your server. <a href=\"http://docs.formtools.org/userdoc2_1/?page=system_requirements\" target=\"_blank\">Please click here</a> for the minimum requirements.";
+$LANG["text_install_form_tools_server_not_supported"] = "Sorry, Form Tools will not be able to run on your server. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Please click here</a> for the minimum requirements.";
 $LANG["text_install_intro"] = "Karibu kwenye Fomu Tools ufungaji script! Tafadhali chagua lugha yako.";
 $LANG["text_install_system_check"] = "This page anaendesha vipimo chache mfumo wako kuhakikisha ni kuweza kukimbia Fomu Tools.";
 $LANG["text_internal_form_desc"] = "Internal forms exist only within Form Tools - not elsewhere on your site. Only Form Tools user accounts will have access to the form. Select this option if you don't have an existing form.";
@@ -870,7 +870,7 @@ $LANG["text_no_modules_found"] = "Hakuna modules walikuwa found. Kujaribu kupanu
 $LANG["text_no_recipients_added"] = "Hakuna wapokeaji wamekuwa aliongeza.";
 $LANG["text_no_search_results"] = "Hakuna matokeo na hili tafuta vigezo / View.";
 $LANG["text_no_submissions_found"] = "Sorry, no redovisningar walikuwa found.";
-$LANG["text_no_themes"] = "You do not have any themes defined. Click the button below to refresh your theme list, or check the <a href=\"http://docs.formtools.org/userdoc2_1/?page=themes\">Form Tools user documentation</a> for information about adding themes.";
+$LANG["text_no_themes"] = "You do not have any themes defined. Click the button below to refresh your theme list, or check the <a href=\"https://docs.formtools.org/userdoc/themes/\">Form Tools user documentation</a> for information about adding themes.";
 $LANG["text_non_deletable_fields"] = "This field is used by the Core script and cannot be edited or deleted without causing incompatibilities. If you wish to make changes to the field type, make a copy of it and edit the copy.";
 $LANG["text_option_list_group_explanation"] = "If this is selected, it lets to group your options. How the groups are displayed depends on the field type using this option list.";
 $LANG["text_option_list_page"] = "Radio buttons, checkboxes, dropdowns and multi-select dropdown fields all provide the user with multiple options from which they can select one or more items. In Form Tools, these are known as Option Lists. Generally, these are created automatically by the <a href=\"{\$link}\">Add External Form</a> process, but you can manually add or edit your option lists below if your form content changes or you construct fields that are only used internally.";

@@ -768,7 +768,7 @@ $LANG["text_add_form_field_types_multiple_fields_found6"] = "フォームは、�
 $LANG["text_add_form_field_types_multiple_fields_found7"] = "このブラウザの別タブ/ウィンドウで、フィールドを再度見つけることを試みるために、以下の[更新]ページのボタンをクリックしてフォームにログインします。";
 $LANG["text_add_form_field_types_multiple_fields_found8"] = "上記のソリューションの作業なしなら、あなたも試してみてください<a href=\"#\" onclick=\"{\$ONCLICK}\">手動で処理するために、フォームをアップロードする</a> 。";
 $LANG["text_add_form_field_types_multiple_fields_found9"] = "指定したフォームのページで見つけることができなかった複数のフィールドがあった。これは、通常、これらのいずれかが原因で発生します。";
-$LANG["text_add_form_help_link"] = "これらの手順中にトラブルに遭遇した場合、読み出すてみてください<a href=\"http://docs.formtools.org/userdoc2_1?page=add_form\" target=\"_blank\">ユーザーマニュアルを</a> 。";
+$LANG["text_add_form_help_link"] = "これらの手順中にトラブルに遭遇した場合、読み出すてみてください<a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">ユーザーマニュアルを</a> 。";
 $LANG["text_add_form_step_1_text_1"] = "次のページ設定フォームツールするための手順を介して、フォームの送信を格納するために導く。続行する前に、チェックしてくださいは：";
 $LANG["text_add_form_step_1_text_2"] = "フォームが既に作成されており、それはURL（localhostを介してアクセスすることが良いです）";
 $LANG["text_add_form_step_1_text_3"] = "あなたのフォームを編集することができます";
@@ -847,7 +847,7 @@ $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">&quot;ロ�
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Accessユーザーのため拒否されました：&quot;それ</span>はそちらにあなたのユーザ名/パスワードの組み合わせに問題があるということです。";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Accessのユーザーが拒否さ：...データベースに...&quot;</span>ただし、ユーザー名とパスワードが正しいこと指定されたパスワードは、そのアカウントでは、特定のデータベースに接続することができなかったということです。これは、いずれかのデータベース名、または間違っていますが、このユーザアカウントは、データベースに関連付けられていないことを意味することができます。";
 $LANG["text_install_email_content_text"] = "あるリソースの多くの当社のウェブサイト上で開始する、当社のオンラインマニュアル（http://docs.formtools.org）とチュートリアル（http://docs.formtools.org/tutorialsを含む）をお手伝いすること。もしあなたが動けなくなるか質問して、ポップアップフォーラム（http://forums.formtools.org）とあいさつを見つける。";
-$LANG["text_install_form_tools_server_not_supported"] = "申し訳ありませんが、フォームツールは、サーバ上で実行することができなくなります。 <a href=\"http://docs.formtools.org/userdoc2_1/?page=system_requirements\" target=\"_blank\">こちらをクリックしてください</a>最小要件のために。";
+$LANG["text_install_form_tools_server_not_supported"] = "申し訳ありませんが、フォームツールは、サーバ上で実行することができなくなります。 <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">こちらをクリックしてください</a>最小要件のために。";
 $LANG["text_install_intro"] = "ようこそフォームツールのインストールスクリプトに！あなたの言語を選択します。";
 $LANG["text_install_system_check"] = "このページはあなたのシステムは、フォームツールを実行することができるのを確保するためにいくつかのテストを実行します。";
 $LANG["text_internal_form_desc"] = "ではない別の場所であなたのサイトに - 内部のフォームは、フォームのツール内にのみ存在します。フォームツールのユーザーアカウントのみがフォームにアクセスできるようになります。既存のフォームを持っていない場合は、このオプションを選択します。";
@@ -870,7 +870,7 @@ $LANG["text_no_modules_found"] = "なしモジュールが見つかりません�
 $LANG["text_no_recipients_added"] = "いいえ受信者が追加されている。";
 $LANG["text_no_search_results"] = "この検索条件での検索結果/表示されます。";
 $LANG["text_no_submissions_found"] = "申し訳ありませんが、応募が発見された。";
-$LANG["text_no_themes"] = "あなたが定義されているテーマを持っていない。あなたのテーマのリストをリフレッシュするには、以下のボタンをクリック、またはチェック<a href=\"http://docs.formtools.org/userdoc2_1/?page=themes\">フォームツールのユーザーマニュアル</a>のテーマの追加については、を。";
+$LANG["text_no_themes"] = "あなたが定義されているテーマを持っていない。あなたのテーマのリストをリフレッシュするには、以下のボタンをクリック、またはチェック<a href=\"https://docs.formtools.org/userdoc/themes/\">フォームツールのユーザーマニュアル</a>のテーマの追加については、を。";
 $LANG["text_non_deletable_fields"] = "このフィールドは、コアのスクリプトによって使用され、互換性の問題を発生させることなく編集または削除することはできません。もしフィールドの型を変更したい場合は、それのコピーを作成し、そのコピーを編集します。";
 $LANG["text_option_list_group_explanation"] = "これが選択されている場合、それはあなたの選択肢をグループ化することができます。どのようにグループが表示されていると、このオプションのリストを使用してフィールドのタイプによって異なります。";
 $LANG["text_option_list_page"] = "ラジオボタン、チェックボックス、ドロップダウンと複数選択のドロップダウンフィールドは、すべてそれらが1つ以上のアイテムを選択できる複数のオプションをユーザーに提供します。フォームツールでは、これらのオプションリストとして知られています。一般に、これらはによって自動的に作成されている<a href=\"{\$link}\">追加の外部形式の</a>プロセスが、あなたのフォームの内容が変更またはあなたが内部でのみ使用されるフィールドを構築する場合は、手動で下記にオプションのリストを追加または編集できます。";
