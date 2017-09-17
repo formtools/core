@@ -657,7 +657,7 @@ class Views
                 $is_new_sort_group = (in_array($view_id, $new_groups)) ? "yes" : "no";
                 $db->query("
                     UPDATE {PREFIX}views
-                    SET	   view_order = :view_order
+                    SET	   view_order = :view_order,
                            group_id = :group_id,
                            is_new_sort_group = :is_new_sort_group
                     WHERE  view_id = :view_id
