@@ -1,8 +1,5 @@
 <?php
 
-error_reporting(2047);
-ini_set("display_errors", "1");
-
 // autoload external dependencies
 require_once(__DIR__ . "/../vendor/autoload.php");
 

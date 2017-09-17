@@ -46,7 +46,6 @@ class Translations
      */
     public function refreshLanguageList()
     {
-        $db = Core::$db;
         $LANG = Core::$L;
         $root_dir = Core::getRootDir();
 
@@ -64,28 +63,28 @@ class Translations
             closedir($handle);
         }
 
-        // sort the languages alphabetically
-        ksort($available_language_info);
+        $available_lang_str = Translations::getLangListAsString($available_language_info);
 
-        // now piece everything together in a single string for storing in the database
-        $available_languages = array();
-        while (list($key,$val) = each($available_language_info)) {
-            $available_languages[] = "$key,$val";
-        }
-        $available_language_str = join("|", $available_languages);
-
-        $db->query("
-            UPDATE {PREFIX}settings
-            SET    setting_value = :setting_value
-            WHERE  setting_name = 'available_languages'
-        ");
-        $db->bind("setting_value", $available_language_str);
-        $db->execute();
-
-        // update the values in sessions
-        Sessions::set("settings.available_languages", $available_language_str);
+        Settings::set(array("available_languages" => $available_lang_str), "core");
+        Sessions::set("settings.available_languages", $available_lang_str);
 
         return array(true, $LANG["notify_lang_list_updated"]);
+    }
+
+
+    // expects an hash of the form [[ar] => "Arabic", ...]
+    public static function getLangListAsString ($list) {
+
+        // sort the languages alphabetically
+        ksort($list);
+
+        // now piece everything together in a single delimited string
+        $available_languages = array();
+        while (list($key, $val) = each($list)) {
+            $available_languages[] = "$key,$val";
+        }
+
+        return join("|", $available_languages);
     }
 
 

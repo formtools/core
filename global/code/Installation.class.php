@@ -283,15 +283,23 @@ EOF;
         $rootURL = Core::getRootUrl();
         $rootDir = Core::getRootDir();
 
+        // store the list of languages as a string in settings
+        $list = Core::$translations->getList();
+        $lang_hash = array();
+        foreach ($list as $lang_info) {
+            $lang_hash[$lang_info->code] = $lang_info->lang;
+        }
+        $lang_string = Translations::getLangListAsString($lang_hash);
+
         // we add slashes since in PC paths like c:\www\whatever the \'s get lost en route
         $core_settings = array(
             "default_logout_url" => $rootURL,
             "file_upload_dir"    => addslashes($rootDir) . "/upload",
-            "file_upload_url"    => "$rootURL/upload"
+            "file_upload_url"    => "$rootURL/upload",
+            "available_languages" => $lang_string
         );
         Settings::set($core_settings, "core");
 
-        // TODO
         $export_manager_settings = array(
             "file_upload_dir" => addslashes($rootDir) . "/upload",
             "file_upload_url" => "$rootURL/upload"
