@@ -50,6 +50,7 @@ class Themes {
         $db = Core::$db;
 
         $db->query("SELECT * FROM {PREFIX}themes WHERE theme_id = :theme_id");
+        $db->bind("theme_id", $theme_id);
         $db->execute();
         $theme_info = $db->fetch();
 

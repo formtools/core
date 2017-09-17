@@ -1,5 +1,7 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Pages;
@@ -7,6 +9,7 @@ use FormTools\Themes;
 
 Core::init();
 Core::$user->checkAuth("admin");
+$LANG = Core::$L;
 
 $request = array_merge($_POST, $_GET);
 $theme_id = isset($request["theme_id"]) ? $request["theme_id"] : "";
