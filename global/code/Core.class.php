@@ -513,6 +513,16 @@ class Core {
         return self::$version;
     }
 
+    public static function getVersionString() {
+        $version = self::getCoreVersion();
+        $release_type = self::getReleaseType();
+        if ($release_type === "alpha" || $release_type == "beta") {
+            $release_date = self::getReleaseDate();
+            $version .= "-{$release_type}-{$release_date}";
+        }
+        return $version;
+    }
+
     public static function getReleaseDate() {
         return self::$releaseDate;
     }
