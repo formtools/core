@@ -12,13 +12,15 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("admin");
 
+error_reporting(2047);
+ini_set("display_errors", 1);
 
 $request = array_merge($_POST, $_GET);
 
 $success = true;
 $message = "";
-if (isset($request["install"])) {
-    list($success, $message) = Modules::installModule($request);
+if (isset($request["install"]) && is_numeric($request["install"])) {
+    list($success, $message) = Modules::installModule($request["install"]);
 }
 if (isset($request["enable_modules"])) {
     list($success, $message) = Modules::updateEnabledModules($request);

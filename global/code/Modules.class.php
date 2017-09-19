@@ -8,7 +8,7 @@
 
 namespace FormTools;
 
-use PDO;
+use PDO, PDOException;
 
 
 class Modules
@@ -56,8 +56,8 @@ class Modules
 
             $db->query("
                 INSERT INTO {PREFIX}modules (is_installed, is_enabled, origin_language, module_name,
-                  module_folder, version, author, author_email, author_link, description, module_date)
-                VALUES (:is_installed, :is_enabled, :origin_language, :module_name, :folder, :module_version,
+                  module_folder, module_namespace, version, author, author_email, author_link, description, module_date)
+                VALUES (:is_installed, :is_enabled, :origin_language, :module_name, :folder, :module_namespace, :module_version,
                   :author, :author_email, :author_link, :module_description, :module_date)
             ");
             $db->bindAll(array(
@@ -66,6 +66,7 @@ class Modules
                 "origin_language"    => $module_info["origin_language"],
                 "module_name"        => $lang_info["module_name"],
                 "folder"             => $module_folder,
+                "module_namespace"   => $module_info["namespace"],
                 "module_version"     => $module_info["version"],
                 "author"             => $module_info["author"],
                 "author_email"       => $module_info["author_email"],
@@ -135,8 +136,8 @@ class Modules
                     continue;
                 }
 
-                // check the required info file fields
-                $required_fields = array("author", "version", "date", "origin_language");
+                // check the required info file field
+                $required_fields = array("author", "version", "date", "origin_language", "namespace");
                 $all_found = true;
                 foreach ($required_fields as $field) {
                     if (empty($info[$field])) {
@@ -375,13 +376,18 @@ class Modules
         $module_folder = $module_info["module_folder"];
 
         $success = true;
-        $message = General::evalSmartyString($LANG["notify_module_installed"], array("link" => "$root_url/modules/$module_folder"));
+        $message = General::evalSmartyString($LANG["notify_module_installed"], array(
+            "link" => "$root_url/modules/$module_folder"
+        ));
 
         $has_custom_install_script = false;
 
+        // the module may or may not have an installation method
         if (is_file("$root_dir/modules/$module_folder/library.php")) {
-		    @include_once("$root_dir/modules/$module_folder/library.php");
-		    $install_function_name = "{$module_folder}__install";
+            include_once("$root_dir/modules/$module_folder/library.php");
+
+            $install_function_name = "{$module_folder}__install";
+
             if (function_exists($install_function_name)) {
                 $has_custom_install_script = true;
 
@@ -412,6 +418,7 @@ class Modules
                 "is_enabled" => "yes",
                 "module_id" => $module_id
             ));
+
             try {
                 $db->execute();
             } catch (PDOException $e) {
@@ -628,7 +635,7 @@ class Modules
         $module_folder = $module_info["module_folder"];
 
         if (empty($module_info)) {
-            return false;
+            return array(false, "");
         }
         $success = true;
 
@@ -636,6 +643,7 @@ class Modules
         if (is_file("$root_dir/modules/$module_folder/library.php")) {
             @include_once("$root_dir/modules/$module_folder/library.php");
             $uninstall_function_name = "{$module_folder}__uninstall";
+
             if (function_exists($uninstall_function_name)) {
                 $has_custom_uninstall_script = true;
 
@@ -966,6 +974,7 @@ class Modules
         $info["version"] = isset($values["version"]) ? $values["version"] : "";
         $info["date"] = isset($values["date"]) ? $values["date"] : "";
         $info["origin_language"] = isset($values["origin_language"]) ? $values["origin_language"] : "";
+        $info["namespace"] = isset($values["namespace"]) ? $values["namespace"] : "";
         $info["nav"] = isset($values["nav"]) ? $values["nav"] : array();
 
         return $info;

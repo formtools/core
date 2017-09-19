@@ -1,15 +1,15 @@
 <?php
 
+require_once("../../global/library.php");
+
 use FormTools\Core;
 use FormTools\Themes;
 use FormTools\Modules;
 use FormTools\Pages;
 
 Core::init();
-
-//require("../../global/session_start.php");
 Core::$user->checkAuth("admin");
-
+$LANG = Core::$L;
 
 $request = array_merge($_POST, $_GET);
 $module_info = Modules::getModule($request["module_id"]);

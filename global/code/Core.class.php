@@ -135,7 +135,7 @@ class Core {
      * testing your uninstallation function. Defaults to TRUE, but doesn't work on all systems: sometimes the PHP
      * doesn't have the permission to remove the folder.
      */
-    private static $deleteModuleFolderOnUninstallation = true;
+    private static $deleteModuleFolderOnUninstallation = false;
 
     /**
      * This setting lets you control the type of sessions the application uses. The default value is "database",
