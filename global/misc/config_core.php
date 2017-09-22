@@ -1344,13 +1344,6 @@ $STRUCTURE["tables"]["modules"] = array(
     "Default" => "no"
   ),
   array(
-    "Field"   => "is_premium",
-    "Type"    => "enum('yes','no')",
-    "Null"    => "NO",
-    "Key"     => "",
-    "Default" => "no"
-  ),
-  array(
     "Field"   => "module_key",
     "Type"    => "varchar(15)",
     "Null"    => "YES",

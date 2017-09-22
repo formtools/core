@@ -218,7 +218,7 @@ class Themes {
         $theme = (empty($theme)) ? Core::$user->getTheme() : $theme;
         $swatch = (empty($swatch)) ? Core::$user->getSwatch() : $swatch;
 
-        $smarty = Templates::getPreloadedSmarty($theme, $page_vars);
+        $smarty = Templates::getPageRenderSmarty($theme, $page_vars);
         $smarty->assign("swatch", $swatch);
 
         if (isset($page_vars["page_url"])) {
@@ -256,7 +256,7 @@ class Themes {
             $swatch = $settings["default_client_swatch"];
         }
 
-        $smarty = Templates::getPreloadedSmarty($theme, $page_vars);
+        $smarty = Templates::getPageRenderSmarty($theme, $page_vars);
         Sessions::setIfNotExists("account.is_logged_in", false);
         Sessions::setIfNotExists("account.account_type", "");
 

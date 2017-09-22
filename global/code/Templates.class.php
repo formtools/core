@@ -11,15 +11,18 @@
 
 namespace FormTools;
 
+use Smarty;
+
 
 class Templates
 {
 
     /**
      * Not a great name, but this is a helper method that returns a $smarty instance all prepped with the common
-     * data & settings used for a page render.
+     * data & settings used for a page render. For any other smarty usage, you don't need all the stuff this adds: just
+     * use getBasicSmarty().
      */
-    public static function getPreloadedSmarty($theme, $page_vars = array())
+    public static function getPageRenderSmarty($theme, $page_vars = array())
     {
         $LANG = Core::$L;
         $root_dir = Core::getRootDir();
@@ -112,6 +115,30 @@ class Templates
         return $smarty;
     }
 
+    public static function getBasicSmarty($theme)
+    {
+        $LANG = Core::$L;
+        $root_dir = Core::getRootDir();
+        $root_url = Core::getRootUrl();
+
+        $smarty = new Smarty();
+        $smarty->setTemplateDir("$root_dir/themes/$theme");
+        $smarty->addPluginsDir(array("$root_dir/global/smarty_plugins"));
+        $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
+
+        // check the compile directory has the write permissions
+        if (!is_writable($smarty->getCompileDir())) {
+            Errors::majorError("Either the theme cache folder doesn't have write-permissions, or your \$g_root_dir value is invalid. Please update the <b>{$smarty->compile_dir}</b> to have full read-write permissions (777 on unix).");
+            exit;
+        }
+
+        $smarty->assign("LANG", $LANG);
+        $smarty->assign("g_root_dir", $root_dir);
+        $smarty->assign("g_root_url", $root_url);
+        $smarty->setUseSubDirs(Core::shouldUseSmartySubDirs());
+
+        return $smarty;
+    }
 
     public static function hasRequiredParams($smarty, $allParams, $desiredParams)
     {

@@ -1,33 +1,34 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html dir="{$LANG.special_text_direction}">
 <head>
-  {if !$swatch}{assign var=swatch value="green"}{/if}
-  <title>{$head_title}</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <link rel="shortcut icon" href="{$theme_url}/images/favicon.ico">
-  {template_hook location="modules_head_top"}
-  <script>
-  //<![CDATA[
-  var g = {literal}{{/literal}
+    {if !$swatch}{assign var=swatch value="green"}{/if}
+    <title>{$head_title}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" href="{$theme_url}/images/favicon.ico">
+    {template_hook location="modules_head_top"}
+    <script>
+    //<![CDATA[
+    var g = {literal}{{/literal}
     root_url:       "{$g_root_url}",
     error_colours:  ["ffbfbf", "ffb5b5"],
     notify_colours: ["c6e2ff", "97c7ff"],
     js_debug:       {$g_js_debug}
-  {literal}}{/literal};
-  //]]>
-  </script>
-  <link type="text/css" rel="stylesheet" href="{$g_root_url}/global/css/main.css?v=20110802">
-  <link type="text/css" rel="stylesheet" href="{$theme_url}/css/styles.css?v=20110802">
-  <link type="text/css" rel="stylesheet" href="{$theme_url}/css/swatch_{$swatch}.css">
-  <link href="{$theme_url}/css/smoothness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"/>
-  <script src="{$g_root_url}/global/scripts/jquery.js"></script>
-  <script src="{$theme_url}/scripts/jquery-ui.js"></script>
-  <script src="{$g_root_url}/global/scripts/general.js?v=20110815"></script>
-  <script src="{$g_root_url}/global/scripts/rsv.js?v=20110802"></script>
-  {$head_string}
-  {$head_js}
-  {$head_css}
-  {template_hook location="modules_head_bottom"}
+    {literal}}{/literal};
+    //]]>
+    </script>
+    <link type="text/css" rel="stylesheet" href="{$g_root_url}/global/css/main.css?v=20110802">
+    <link type="text/css" rel="stylesheet" href="{$theme_url}/css/styles.css?v=20110802">
+    <link type="text/css" rel="stylesheet" href="{$theme_url}/css/swatch_{$swatch}.css">
+    <link href="{$theme_url}/css/smoothness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"/>
+    <script src="{$g_root_url}/global/scripts/jquery.js"></script>
+    <script src="{$theme_url}/scripts/jquery-ui.js"></script>
+    <script src="{$g_root_url}/global/scripts/general.js?v=20110815"></script>
+    <script src="{$g_root_url}/global/scripts/rsv.js?v=20110802"></script>
+    {css_files files=$css_files}
+    {$head_string}
+    {$head_js}
+    {$head_css}
+    {template_hook location="modules_head_bottom"}
 </head>
 <body>
 <div id="container">

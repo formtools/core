@@ -95,11 +95,10 @@ class General
         $db_name = Core::getDbName();
 
         $found = false;
-        $db->query("SHOW TABLES FROM :db_name");
-        $db->bind("db_name", $db_name);
+        $db->query("SHOW TABLES FROM $db_name");
         $db->execute();
-        foreach ($db->fetchAll() as $row) {
-            if ($row[0] == $table) {
+        foreach ($db->fetchAll(PDO::FETCH_COLUMN) as $curr_table) {
+            if ($curr_table == $table) {
                 $found = true;
                 break;
             }
@@ -331,7 +330,7 @@ END;
     {
         $theme = Core::$user->getTheme();
 
-        $smarty = Templates::getPreloadedSmarty($theme);
+        $smarty = Templates::getBasicSmarty($theme);
 
         foreach ($plugin_dirs as $dir) {
             $smarty->addPluginsDir($dir);
@@ -452,7 +451,7 @@ END;
         $theme = Core::$user->getTheme();
         $LANG = Core::$L;
 
-        $smarty = Templates::getPreloadedSmarty($theme);
+        $smarty = Templates::getBasicSmarty($theme);
         $smarty->assign("num_results", $num_results);
         $smarty->assign("num_per_page", $num_per_page);
         $smarty->assign("current_page", $current_page);
@@ -510,7 +509,7 @@ END;
             $theme = Sessions::get("account.theme");
         }
 
-        $smarty = Templates::getPreloadedSmarty($theme);
+        $smarty = Templates::getBasicSmarty($theme);
         $smarty->assign("num_results", $num_results);
         $smarty->assign("num_per_page", $num_per_page);
         $smarty->assign("current_page", $current_page);
