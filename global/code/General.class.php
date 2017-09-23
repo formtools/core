@@ -774,7 +774,10 @@ END;
      */
     public static function getDate($offset, $datetime, $format)
     {
-        global $LANG;
+        $LANG = Core::$L;
+        if (empty($offset)) {
+            $offset = 0;
+        }
 
         if (strlen($datetime) != 19) {
             return "";

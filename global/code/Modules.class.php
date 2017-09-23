@@ -56,8 +56,8 @@ class Modules
 
             $db->query("
                 INSERT INTO {PREFIX}modules (is_installed, is_enabled, origin_language, module_name,
-                  module_folder, module_namespace, version, author, author_email, author_link, description, module_date)
-                VALUES (:is_installed, :is_enabled, :origin_language, :module_name, :folder, :module_namespace, :module_version,
+                  module_folder, version, author, author_email, author_link, description, module_date)
+                VALUES (:is_installed, :is_enabled, :origin_language, :module_name, :folder, :module_version,
                   :author, :author_email, :author_link, :module_description, :module_date)
             ");
             $db->bindAll(array(
