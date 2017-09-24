@@ -26,6 +26,7 @@ require_once(__DIR__ . "/code/Hooks.class.php");
 require_once(__DIR__ . "/code/Installation.class.php");
 require_once(__DIR__ . "/code/ListGroups.class.php");
 require_once(__DIR__ . "/code/Menus.class.php");
+require_once(__DIR__ . "/code/Module.abstract.class.php");
 require_once(__DIR__ . "/code/Modules.class.php");
 require_once(__DIR__ . "/code/ModuleMenu.class.php");
 require_once(__DIR__ . "/code/OptionLists.class.php");

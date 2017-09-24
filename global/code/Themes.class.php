@@ -308,6 +308,8 @@ class Themes {
             $smarty->assign("hide_nav_menu", false);
         }
 
+        $smarty->assign("module_folder", $module_folder);
+
         extract(Hooks::processHookCalls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
 
         $smarty->display("$root_dir/modules/$module_folder/$template");

@@ -24,7 +24,8 @@
     <script src="{$theme_url}/scripts/jquery-ui.js"></script>
     <script src="{$g_root_url}/global/scripts/general.js?v=20110815"></script>
     <script src="{$g_root_url}/global/scripts/rsv.js?v=20110802"></script>
-    {css_files files=$css_files}
+    {css_files files=$css_files module_folder=$module_folder root_url=$g_root_url}
+    {js_files files=$js_files module_folder=$module_folder root_url=$g_root_url}
     {$head_string}
     {$head_js}
     {$head_css}

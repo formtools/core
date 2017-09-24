@@ -315,6 +315,8 @@ class Modules
     /**
      * Returns the contents of a module's language file for a particular language.
      *
+     * TODO deprecated. This should be available via the module class itself.
+     *
      * @param string $module_folder
      * @param string $language "en_us", "fr" etc.
      * @return array
@@ -791,19 +793,37 @@ class Modules
 
 
     /**
-     * Includes the module's library.php file.
+     * Handles initialization of a module page.
+     *  - Core::init()'s
+     *  - sets auth (param required for auth)
+     *  - instantiates the module's Module class and returns it
      */
-    public static function initModulePage()
+    public static function initModulePage($auth)
     {
+        Core::init();
         $root_dir = Core::getRootDir();
         $module_folder = self::getCurrentModuleFolder();
 
-        // if there's a library file defined, include it
-        if (is_file("$root_dir/modules/$module_folder/library.php")) {
-            require_once("$root_dir/modules/$module_folder/library.php");
+        if (!is_file("$root_dir/modules/$module_folder/library.php")) {
+            Errors::handleError("Error with $module_folder module. Missing library.php file.");
+            exit;
         }
+
+        require_once("$root_dir/modules/$module_folder/library.php");
+
+        Core::$user->checkAuth($auth);
+        $namespace = self::getModuleNamespace($module_folder);
+        $module_class = "FormTools\\Modules\\$namespace\\Module";
+
+        // return a newly minted instance of the module
+        return new $module_class(Core::$user->getLang());
     }
 
+    public static function getModuleNamespace($module_folder)
+    {
+        $upper_case = ucwords($module_folder, "_");
+        return str_replace("_", "", $upper_case);
+    }
 
     /**
      * Sets one or more module settings. This basically acts as a wrapper function for ft_set_settings,

@@ -84,6 +84,7 @@ class Pages
         "client_edit_submission" => "/clients/forms/edit_submission.php"
     );
 
+
     public static function getList () {
         return self::$pageList;
     }
