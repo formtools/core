@@ -147,8 +147,8 @@ class Database
         return $this->statement->fetch($fetch_style);
     }
 
-    public function fetchColumn($fetch_style = PDO::FETCH_ASSOC) {
-        return $this->statement->fetchColumn($fetch_style);
+    public function fetchColumn() {
+        return $this->statement->fetchColumn();
     }
 
     public function fetchAll($fetch_style = PDO::FETCH_ASSOC) {
@@ -169,5 +169,11 @@ class Database
 
     public function getInsertId() {
         return $this->dbh->lastInsertId();
+    }
+
+    public function getMySQLVersion() {
+        $this->query("SELECT VERSION()");
+        $this->execute();
+        return $this->fetchColumn();
     }
 }

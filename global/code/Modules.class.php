@@ -45,12 +45,10 @@ class Modules
 
         $modules = self::getUninstalledModules();
 
-        foreach ($modules as $module_folder => $row) {
-            $module_info = $row["module_info"];
-            $lang_info   = $row["lang_info"];
+        foreach ($modules as $module_folder => $module) {
 
             // convert the date into a MySQL datetime
-            list($year, $month, $day) = explode("-", $row["module_info"]["date"]);
+            list($year, $month, $day) = explode("-", $module->getDate());
             $timestamp = mktime(null, null, null, $month, $day, $year);
             $module_date = General::getCurrentDatetime($timestamp);
 
@@ -63,25 +61,28 @@ class Modules
             $db->bindAll(array(
                 "is_installed" => "no",
                 "is_enabled" => "no",
-                "origin_language"    => $module_info["origin_language"],
-                "module_name"        => $lang_info["module_name"],
+                "origin_language"    => $module->getOriginLang(),
+                "module_name"        => $module->getModuleName(),
                 "folder"             => $module_folder,
-                "module_namespace"   => $module_info["namespace"],
-                "module_version"     => $module_info["version"],
-                "author"             => $module_info["author"],
-                "author_email"       => $module_info["author_email"],
-                "author_link"        => $module_info["author_link"],
-                "module_description" => $lang_info["module_description"],
+                "module_version"     => $module->getVersion(),
+                "author"             => $module->getAuthor(),
+                "author_email"       => $module->getAuthorEmail(),
+                "author_link"        => $module->getAuthorLink(),
+                "module_description" => $module->getModuleDesc(),
                 "module_date"        => $module_date
             ));
             $db->execute();
             $module_id = $db->getInsertId();
 
             // now add any navigation links for this module
+            $lang_info = $module->getLangStrings();
+
             $order = 1;
-            while (list($lang_file_key, $info) = each($row["module_info"]["nav"])) {
+            $module_nav = $module->getModuleNav();
+            foreach ($module_nav as $lang_file_key => $info) {
                 $url        = $info[0];
                 $is_submenu = ($info[1]) ? "yes" : "no";
+
                 if (empty($lang_file_key) || empty($url)) {
                     continue;
                 }
@@ -124,45 +125,23 @@ class Modules
 
         $modules = array();
         while (($folder = readdir($dh)) !== false) {
+
             // if this module is already in the database, ignore it
             if (in_array($folder, $current_module_folders)) {
                 continue;
             }
 
-            if (is_dir("$modules_folder/$folder") && $folder != "." && $folder != "..") {
-                $info = self::getModuleInfoFileContents($folder);
-
-                if (empty($info)) {
-                    continue;
-                }
-
-                // check the required info file field
-                $required_fields = array("author", "version", "date", "origin_language", "namespace");
-                $all_found = true;
-                foreach ($required_fields as $field) {
-                    if (empty($info[$field])) {
-                        $all_found = false;
-                    }
-                }
-                if (!$all_found) {
-                    continue;
-                }
-
-                // now check the language file contains the two required fields: module_name and module_description
-                $lang_file = "$modules_folder/$folder/lang/{$info["origin_language"]}.php";
-                $lang_info = self::getModuleLangFileContents($lang_file);
-
-                // check the required language file fields
-                if ((!isset($lang_info["module_name"]) || empty($lang_info["module_name"])) ||
-                    (!isset($lang_info["module_description"]) || empty($lang_info["module_description"]))) {
-                    continue;
-                }
-
-                $modules[$folder] = array(
-                    "module_info" => $info,
-                    "lang_info" => $lang_info
-                );
+            if (!is_dir("$modules_folder/$folder") || $folder == "." || $folder == "..") {
+                continue;
             }
+
+            // try to instantiate the module
+            $module = self::instantiateModule($folder);
+            if (!$module) {
+                continue;
+            }
+
+            $modules[$folder] = $module;
         }
         closedir($dh);
 
@@ -200,11 +179,9 @@ class Modules
         $module_folder = $module_info["module_folder"];
         $current_db_version = $module_info["version"];
 
-        $latest_module_info = self::getModuleInfoFileContents($module_folder);
+        $module = self::instantiateModule($module_folder);
 
-        $actual_version = isset($latest_module_info["version"]) ? $latest_module_info["version"] : "";
-
-        return ($current_db_version != $actual_version);
+        return $current_db_version != $module->getVersion();
     }
 
 
@@ -216,61 +193,22 @@ class Modules
         $db = Core::$db;
         $LANG = Core::$L;
         $root_url = Core::getRootUrl();
-        $root_dir = Core::getRootDir();
 
         $module_info = self::getModule($module_id);
         $module_folder = $module_info["module_folder"];
-        $current_db_version = $module_info["version"];
+        $old_module_version = $module_info["version"];
 
-        $info = self::getModuleInfoFileContents($module_folder);
-        $new_version = $info["version"];
+        $module = self::instantiateModule($module_folder);
 
-        if ($current_db_version == $new_version) {
+        if ($old_module_version == $module->getVersion()) {
             return array(false, "");
         }
 
-        // if the module has its own upgrade function, call it. In Oct 2011, a BIG problem was identified
-        // in the way modules were being updated. For backward compatibility, the new upgrade function
-        // must be named [module folder]__update (not ...__upgrade). if the __update function is defined,
-        // it will be called instead of the older __upgrade one.
-        @include_once("$root_dir/modules/$module_folder/library.php");
-
-        // NEW "update" function
-        $update_function_name = "{$module_folder}__update";
-        if (function_exists($update_function_name)) {
-            list($success, $message) = $update_function_name($module_info, $info);
-            if (!$success) {
-                return array($success, $message);
-            }
-        } else {
-            // OLD "upgrade" function
-            $upgrade_function_name = "{$module_folder}__upgrade";
-            if (function_exists($upgrade_function_name)) {
-                $upgrade_function_name($current_db_version, $new_version);
-            }
-        }
-
-        // now, update the main module record
-
-        // we're assuming the module developer hasn't removed any of the required fields...
-
-        // now check the language file contains the two required fields: module_name and module_description
-        $lang_file = "$root_dir/modules/$module_folder/lang/{$info["origin_language"]}.php";
-        $lang_info = _ft_get_module_lang_file_contents($lang_file);
-
-        // check the required language file fields
-        if ((!isset($lang_info["module_name"]) || empty($lang_info["module_name"])) ||
-            (!isset($lang_info["module_description"]) || empty($lang_info["module_description"]))) {
-            return;
-        }
-
-        $module_date = $info["date"];
-        $nav                  = $info["nav"];
-
-        $module_description   = $lang_info["module_description"];
+        // run whatever upgrade method has been defined
+        $module->upgrade($old_module_version);
 
         // convert the date into a MySQL datetime
-        list($year, $month, $day) = explode("-", $module_date);
+        list($year, $month, $day) = explode("-", $module->getDate());
         $timestamp = mktime(null, null, null, $month, $day, $year);
         $module_datetime = General::getCurrentDatetime($timestamp);
 
@@ -282,27 +220,30 @@ class Modules
                    author = :author,
                    author_email = :author_email,
                    author_link = :author_link,
-                   description = '$module_description',
-                   module_date = '$module_datetime'
-            WHERE  module_id = $module_id
+                   description = :module_description,
+                   module_date = :module_datetime
+            WHERE  module_id = :module_id
         ");
         $db->bindAll(array(
-            "origin_language" => $info["origin_language"],
-            "module_name" => $lang_info["module_name"],
-            "module_version" => $info["version"],
-            "author" => $info["author"],
-            "author_email" => $info["author_email"],
-            "author_link" => $info["author_link"],
-            "module_date" => $module_date,
+            "origin_language" => $module->getOriginLang(),
+            "module_name" => $module->getModuleName(),
+            "module_version" => $module->getVersion(),
+            "author" => $module->getAuthor(),
+            "author_email" => $module->getAuthorEmail(),
+            "author_link" => $module->getAuthorLink(),
+            "module_description" => $module->getModuleDesc(),
+            "module_datetime" => $module_datetime,
+            "module_id" => $module_id
         ));
+        $db->execute();
 
         // remove and update the navigation links for this module
-        ModuleMenu::resetModuleNav($module_id, $nav);
+        ModuleMenu::resetModuleNav($module_id, $module->getModuleNav());
 
         // And we're done! inform the user that it's been upgraded
         $placeholders = array(
-            "module"  => $lang_info["module_name"],
-            "version" => $new_version,
+            "module"  => $module->getModuleName(),
+            "version" => $module->getVersion(),
             "link"    => "$root_url/modules/$module_folder"
         );
 
@@ -377,38 +318,23 @@ class Modules
         $module_info = self::getModule($module_id);
         $module_folder = $module_info["module_folder"];
 
-        $success = true;
-        $message = General::evalSmartyString($LANG["notify_module_installed"], array(
-            "link" => "$root_url/modules/$module_folder"
-        ));
+        require_once("$root_dir/modules/$module_folder/library.php");
 
-        $has_custom_install_script = false;
+        $module = self::instantiateModule($module_folder);
+        list ($success, $message) = $module->install($module_id);
 
-        // the module may or may not have an installation method
-        if (is_file("$root_dir/modules/$module_folder/library.php")) {
-            include_once("$root_dir/modules/$module_folder/library.php");
+        // get the module language file contents and store the info in the $LANG global for
+        // so it can be accessed by the installation script (TODO needed?)
+        $LANG[$module_folder] = $module->getLangStrings();
 
-            $install_function_name = "{$module_folder}__install";
-
-            if (function_exists($install_function_name)) {
-                $has_custom_install_script = true;
-
-                // get the module language file contents and store the info in the $LANG global for
-                // so it can be accessed by the installation script
-                $LANG[$module_folder] = self::getModuleLangFile($module_folder, Core::$user->getLang());
-                list($success, $custom_message) = $install_function_name($module_id);
-
-                // if there was a custom message returned (error or notification), overwrite the default
-                // message
-                if (!empty($custom_message)) {
-                    $message = $custom_message;
-                }
-            }
+        // if there is no custom installation message, use the default
+        if (empty($message)) {
+            $message = General::evalSmartyString($LANG["notify_module_installed"], array(
+                "link" => "$root_url/modules/$module_folder"
+            ));
         }
 
-        // if there wasn't a custom installation script, or there was and it was successfully run update the record in the
-        // module table to mark it as both is_installed and is_enabled
-        if (!$has_custom_install_script || ($has_custom_install_script && $success)) {
+        if ($success) {
             $db->query("
                 UPDATE {PREFIX}modules
                 SET    is_installed = :is_installed,
@@ -572,7 +498,6 @@ class Modules
 
         return $module_info;
     }
-
 
 
     /**
@@ -812,12 +737,36 @@ class Modules
         require_once("$root_dir/modules/$module_folder/library.php");
 
         Core::$user->checkAuth($auth);
+        return self::instantiateModule($module_folder);
+    }
+
+
+    public static function instantiateModule($module_folder)
+    {
+        $root_dir = Core::getRootDir();
+
+        if (!is_file("$root_dir/modules/$module_folder/library.php")) {
+            Errors::handleError("Error with $module_folder module. Missing library.php file.");
+            exit;
+        }
+        require_once("$root_dir/modules/$module_folder/library.php");
+
         $namespace = self::getModuleNamespace($module_folder);
         $module_class = "FormTools\\Modules\\$namespace\\Module";
 
+        $module = false;
         // return a newly minted instance of the module
-        return new $module_class(Core::$user->getLang());
+        try {
+            if (class_exists($module_class)) {
+                $module = new $module_class(Core::$user->getLang());
+            }
+        } catch (\Exception $e) {
+
+        }
+
+        return $module;
     }
+
 
     public static function getModuleNamespace($module_folder)
     {
@@ -877,7 +826,7 @@ class Modules
 
 
     /**
-     * This function is used throughout Form Tools to include all server-side resources from a module.
+     * This function is used by the Form Tools Core to include all server-side resources from a module.
      * All content in the global namespace is made available to the included files. It relies on the
      * modules having a certain file-folder structure, and imports the following information:
      *
@@ -970,7 +919,6 @@ class Modules
      * @param string $module_folder the module's folder name
      * @return array the module info file contents, or a blank array if there was any problem reading the
      *   file, or it didn't exist or had blank contents.
-     */
     private static function getModuleInfoFileContents($module_folder)
     {
         $root_dir = Core::getRootDir();
@@ -999,6 +947,7 @@ class Modules
 
         return $info;
     }
+    */
 
 
     /**

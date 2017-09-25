@@ -15,6 +15,8 @@ use ReflectionClass;
 abstract class Module {
 
     // REQUIRED
+    protected $moduleName;
+    protected $moduleDesc;
     protected $author;
     protected $authorEmail;
     protected $authorLink;
@@ -89,7 +91,7 @@ abstract class Module {
         return array(true, "");
     }
 
-    public static function upgrade() {
+    public static function upgrade($old_module_version) {
         return array(true, "");
     }
 
@@ -103,6 +105,14 @@ abstract class Module {
         $page_vars["css_files"] = self::getCSSFiles();
 
         Themes::displayModulePage($template, $page_vars);
+    }
+
+    public final function getModuleName() {
+        return $this->moduleName;
+    }
+
+    public final function getModuleDesc() {
+        return $this->moduleDesc;
     }
 
     public final function getAuthor() {
@@ -123,6 +133,10 @@ abstract class Module {
 
     public final function getVersion() {
         return $this->version;
+    }
+
+    public final function getOriginLang() {
+        return $this->originLanguage;
     }
 
     public final function getModuleNav() {

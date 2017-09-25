@@ -21,7 +21,7 @@ Themes::updateThemeList();
 
 Installation::installCoreFieldTypes();
 
-// now actually install
+// now actually install the modules
 Modules::installModules();
 
 // send "Welcome to Form Tools" email
