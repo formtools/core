@@ -232,10 +232,11 @@ class General
      * "g" namespace.
      *
      * @param array keys The $LANG keys
+     * @param array keys The content of $L (language file array for a specific module)
      * @param array keys The $L keys
      * @return string $js the javascript string (WITHOUT the <script> tags)
      */
-    public static function generateJsMessages($keys = array(), $module_keys = array())
+    public static function generateJsMessages($keys = array(), $L = array(), $module_keys = array())
     {
         $LANG = Core::$L;
 

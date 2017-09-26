@@ -722,6 +722,7 @@ class Modules
      *  - Core::init()'s
      *  - sets auth (param required for auth)
      *  - instantiates the module's Module class and returns it
+     * return Module
      */
     public static function initModulePage($auth)
     {

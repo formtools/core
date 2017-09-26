@@ -45,6 +45,9 @@ abstract class Module {
      * @var array
      */
     protected $L = array();
+
+    // internal
+    private $moduleFolder;
     private $currentLangFound;
 
 
@@ -61,6 +64,8 @@ abstract class Module {
 
         $currentLangFile = realpath($currClassFolder . "/../lang/{$lang}.php");
         $defaultLangFile = realpath($currClassFolder . "/../lang/{$this->originLanguage}.php");
+
+        $this->moduleFolder = basename(realpath($currClassFolder . "/../"));
 
         if (file_exists($currentLangFile)) {
             require_once($currentLangFile);
@@ -83,15 +88,15 @@ abstract class Module {
      * @return array [0] success / error
      * 				 [1] the error message, if there was a problem
      */
-    public static function install() {
+    public function install($module_id) {
         return array(true, "");
     }
 
-    public static function uninstall() {
+    public function uninstall($module_id) {
         return array(true, "");
     }
 
-    public static function upgrade($old_module_version) {
+    public function upgrade($old_module_version) {
         return array(true, "");
     }
 
@@ -143,12 +148,33 @@ abstract class Module {
         return $this->nav;
     }
 
+    public final function getModuleFolder() {
+        return $this->moduleFolder;
+    }
+
     /**
-     * Returns a list of all javascript files for this module.
+     * Returns a list of all javascript files for this module. The file paths may contain the following placeholders
+     * which will be replaced:
+     *    {FTROOT} - the Form Tools root URL
+     *    {FTVERSION} - the current Form Tools version
+     *    {MODULEVERSION} - the module version
+     *    {MODULEROOT} - the module root URL
      * @return array
      */
     public final function getJSFiles() {
-        return $this->jsFiles;
+        $files = array();
+        $root_url = Core::getRootUrl();
+        $ft_version = Core::getVersionString();
+        $module_root = "$root_url/modules/" . $this->getModuleFolder();
+
+        foreach ($this->jsFiles as $file) {
+            $files[] = str_replace(
+                array("{FTROOT}", "{FTVERSION}", "{MODULEVERSION}", "{MODULEROOT}"),
+                array($root_url, $ft_version, $this->getVersion(), $module_root),
+                $file
+            );
+        }
+        return $files;
     }
 
     /**
