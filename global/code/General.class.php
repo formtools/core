@@ -502,7 +502,6 @@ END;
     public static function getPageNav($num_results, $num_per_page, $current_page = 1, $pass_along_str = "",
         $page_str = "page", $theme = "", $settings = array())
     {
-        //global $g_max_nav_pages, $g_smarty_debug;
         $LANG = Core::$L;
 
         $current_page = ($current_page < 1) ? 1 : $current_page;
@@ -537,6 +536,7 @@ END;
         $total_pages = ceil($num_results / $num_per_page);
         $smarty->assign("viewing_range", $viewing_range);
         $smarty->assign("total_pages", $total_pages);
+        $smarty->assign("same_page", $_SERVER["PHP_SELF"]);
 
         // piece together additional query string values
         $smarty->assign("query_str", !empty($pass_along_str) ? "&{$pass_along_str}" : "");

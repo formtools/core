@@ -208,8 +208,9 @@ class Menus
         // if the Pages module is enabled, display any custom pages that have been defined. Only show the optgroup
         // if there's at least ONE page defined
         if (Modules::checkModuleEnabled("pages")) {
-            Modules::includeModule("pages");
-            $pages_info = pg_get_pages("all");
+            $module = Modules::includeModule("pages");
+
+            $pages_info = $module->getPages("all");
             $pages = $pages_info["results"];
 
             if (count($pages) > 0) {
@@ -217,7 +218,11 @@ class Menus
                 foreach ($pages as $page) {
                     $page_id = $page["page_id"];
                     $page_name = $page["page_name"];
-                    $select_lines[] = array("type" => "option", "k" => "page_{$page_id}", "v" => $page_name);
+                    $select_lines[] = array(
+                        "type" => "option",
+                        "k" => "page_{$page_id}",
+                        "v" => $page_name
+                    );
                 }
                 $select_lines[] = array("type" => "optgroup_close");
             }

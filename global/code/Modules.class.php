@@ -756,6 +756,7 @@ class Modules
         $module_class = "FormTools\\Modules\\$namespace\\Module";
 
         $module = false;
+
         // return a newly minted instance of the module
         try {
             if (class_exists($module_class)) {
@@ -852,25 +853,20 @@ class Modules
         $LANG = Core::$L;
         $root_dir = Core::getRootDir();
 
-        foreach ($GLOBALS as $key => $val) {
-            @eval("global \$$key;");
-        }
+        $module = self::instantiateModule($module_folder);
 
-        // code file
-        if (is_file("$root_dir/modules/$module_folder/library.php")) {
-            include_once("$root_dir/modules/$module_folder/library.php");
-        }
-
-        // Smarty resources
+        // include the smarty resources
         if (is_dir("$root_dir/modules/$module_folder/smarty")) {
             $smarty->setPluginsDir("$root_dir/modules/$module_folder/smarty_plugins");
         }
 
-        // load the language file into the $LANG var, under
-        $content = self::getModuleLangFile($module_folder, Core::$user->getLang());
-        $LANG[$module_folder] = $content;
+        // load the language file into the $LANG var
+//        $content = self::getModuleLangFile($module_folder, Core::$user->getLang());
+//        $LANG[$module_folder] = $content;
 
         extract(Hooks::processHookCalls("end", compact("module_folder"), array()), EXTR_OVERWRITE);
+
+        return $module;
     }
 
 

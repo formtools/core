@@ -295,8 +295,16 @@ class Themes {
             $js_messages = General::generateJsMessages($core_js_messages, $module_js_messages);
         }
 
-        if (!empty($page_vars["head_js"]) || !empty($js_messages)) {
-            $smarty->assign("head_js", "<script type=\"text/javascript\">\n//<![CDATA[\n{$page_vars["head_js"]}\n$js_messages\n//]]>\n</script>");
+        if ((isset($page_vars["head_js"]) && !empty($page_vars["head_js"])) || !empty($js_messages)) {
+            $js = "<script type=\"text/javascript\">";
+            if (!empty($page_vars["head_js"])) {
+                $js .= $page_vars["head_js"] . "\n";
+            }
+            if (!empty($js_messages)) {
+                $js .= $js_messages . "\n";
+            }
+            $js .= "\n</script>";
+            $smarty->assign("head_js", $js);
         }
 
         // if there's a Smarty folder, import any of its resources

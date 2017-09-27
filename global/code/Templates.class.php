@@ -144,8 +144,7 @@ class Templates
     {
         foreach ($desiredParams as $param) {
             if (!isset($allParams[$param]) || empty($allParams[$param])) {
-                $smarty->triggerError("assign: missing '$param' parameter.");
-                //throw new Exception("assign: missing '$param' parameter.");
+                echo "assign: missing '$param' parameter.";
                 return false;
             }
         }

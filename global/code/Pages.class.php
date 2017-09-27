@@ -84,6 +84,9 @@ class Pages
         "client_edit_submission" => "/clients/forms/edit_submission.php"
     );
 
+    public static function registerPage($key, $url) {
+        self::$pageList[$key] = $url;
+    }
 
     public static function getList () {
         return self::$pageList;

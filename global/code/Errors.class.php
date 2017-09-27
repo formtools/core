@@ -147,9 +147,9 @@ END;
 
         // this is for NEW installations. For new installations the $g_root_url isn't set, so we want to
         // redirect to the error page in the current form tools folder
-        if (!empty($root_url)) {
-            $root_url = "$root_url/";
-        }
+//        if (!empty($root_url)) {
+//            $root_url = "$root_url/";
+//        }
 
         Sessions::set("last_error", $error_message);
         Sessions::set("last_error_debug", $debug_details);

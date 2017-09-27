@@ -106,8 +106,27 @@ abstract class Module {
     public final function displayPage($template, $page_vars = array()) {
 
         // add in the JS and CSS files
-        $page_vars["js_files"] = self::getJSFiles();
-        $page_vars["css_files"] = self::getCSSFiles();
+        if (!isset($page_vars["js_files"])) {
+            $page_vars["js_files"] = array();
+        } else {
+            if (!is_array($page_vars["js_files"])) {
+                echo "Developer error: if defining a js_files page_vars property, it should be set to an array.";
+                $page_vars["js_files"] = array();
+            }
+        }
+
+        // add in the JS and CSS files
+        if (!isset($page_vars["css_files"])) {
+            $page_vars["css_files"] = array();
+        } else {
+            if (!is_array($page_vars["css_files"])) {
+                echo "Developer error: if defining a css_files page_vars property, it should be set to an array.";
+                $page_vars["css_files"] = array();
+            }
+        }
+
+        $page_vars["js_files"] = array_merge($page_vars["js_files"], self::getJSFiles());
+        $page_vars["css_files"] = array_merge($page_vars["css_files"], self::getCSSFiles());
 
         Themes::displayModulePage($template, $page_vars);
     }

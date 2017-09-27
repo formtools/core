@@ -7,7 +7,8 @@ use FormTools\Pages;
 use FormTools\Sessions;
 use FormTools\Themes;
 
-Core::startSessions();
+// TODO this needs to just start sessions. It'll break the install script when there are problems
+Core::init();
 
 $page_vars = array(
     "page_url"      => Pages::getPageUrl("error"),

@@ -11,7 +11,8 @@ use FormTools\Themes;
 $LANG = Core::$L;
 $req_password_special_chars = Core::getRequiredPasswordSpecialChars();
 
-
+$g_success = true;
+$g_message = "";
 if (isset($request["update"])) {
 	$request["page"] = "main";
 	list($g_success, $g_message) = Clients::updateClient($account_id, $request);
@@ -41,6 +42,8 @@ $conditional_rules = implode("\n", $conditional_validation);
 
 // compile header information
 $page_vars = array();
+$page_vars["g_success"] = $g_success;
+$page_vars["g_message"] = $g_message;
 $page_vars["head_title"] = General::evalSmartyString(Sessions::get("account.settings.page_titles"), array("page" => $LANG["phrase_login_info"]));
 $page_vars["page"]     = "main";
 $page_vars["tabs"]     = $tabs;

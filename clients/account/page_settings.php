@@ -11,6 +11,8 @@ use FormTools\Sessions;
 $LANG = Core::$L;
 
 $account_id = Sessions::get("account.account_id");
+$g_success = true;
+$g_message = "";
 if (isset($request["update_account_settings"])) {
 	$request["page"] = "settings";
 	list($g_success, $g_message) = Clients::updateClient($account_id, $request);
@@ -54,6 +56,8 @@ function validate_swatch() {
 END;
 
 $page_vars = array(
+    "g_success"   => $g_success,
+    "g_message"   => $g_message,
     "head_title"  => General::evalSmartyString(Sessions::get("account.settings.page_titles"), array("page" => $LANG["phrase_account_settings"])),
     "page"        => "settings",
     "text_date_formatting_link" => $text_date_formatting_link,
