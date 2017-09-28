@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Oho, tämä moduuli on jo asennettu!
 $LANG["notify_module_installed"] = "Moduuli on asennettu. <a href=\"{\$link}\">Napsauttamalla Valitse moduuli.</a>";
 $LANG["notify_module_list_updated"] = "Moduuli luettelo on päivitetty.";
 $LANG["notify_module_uninstalled"] = "Moduuli on poistettu.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Moduuli on poistettu. Huom: emme voi poistaa moduulin irti / modules kansioon - sinun täytyy poistaa manuaalisesti.";
 $LANG["notify_module_updated"] = "<b>{\$module}</b> moduuli on päivitetty <b>{\$version}</b>. <a href=\"{\$link}\">Klikkaa tästä valita moduulin</a> .";
 $LANG["notify_multi_field_selected"] = "Kenttä on valittu. <a href=\"#\" onclick=\"{\$onclick}\")\">Klikkaa tästä</a> jos haluat nähdä ja muokata alan vaihtoehtoja.";
 $LANG["notify_multi_field_updated"] = "Tämä kenttä on päivitetty. Sinulla on mahdollisuus määrittää alan määrittämisen jälkeen lomakkeen.";

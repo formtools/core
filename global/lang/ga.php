@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Oops, tá an modúl suiteáilte chea
 $LANG["notify_module_installed"] = "Tá an modúl curtha isteach. <a href=\"{\$link}\">Cliceáil anseo chun roghnú an mhodúil.</a>";
 $LANG["notify_module_list_updated"] = "Tá an liosta modúl tugtha cothrom le dáta.";
 $LANG["notify_module_uninstalled"] = "Tá an modúl a bhfuil suiteáilte.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Tá an modúl a bhfuil suiteáilte. Nóta: ní raibh muid ábalta a scriosadh as an modúl fillteán do / modúil - beidh ort é a scriosadh de láimh.";
 $LANG["notify_module_updated"] = "Tá an modúl <b>{\$module}</b> tugtha cothrom le dáta chun <b>{\$version}</b>. <a href=\"{\$link}\">Cliceáil anseo chun an roghnaigh an mhodúil</a> .";
 $LANG["notify_multi_field_selected"] = "Tá an réimse a roghnaíodh. <a href=\"#\" onclick=\"{\$onclick}\")\">Cliceáil anseo</a> chun amharc agus an réimse roghanna a athrú.";
 $LANG["notify_multi_field_updated"] = "Tá an réimse seo a thabhairt suas chun dáta. Beidh tú in ann a chumrú an réimse roghanna tar éis bhunú an bhfoirm.";

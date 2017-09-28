@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Úbbs, er þetta mát þegar uppsett
 $LANG["notify_module_installed"] = "Einingin hefur verið sett upp. <a href=\"{\$link}\">Smelltu hér til að velja mát.</a>";
 $LANG["notify_module_list_updated"] = "Einingin listi hefur verið uppfærður.";
 $LANG["notify_module_uninstalled"] = "Einingin hefur verið fjarlægð.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Einingin hefur verið fjarlægð. Ath: Við gátum ekki eytt mát frá / modules möppuna þína - þú verður að eyða honum handvirkt.";
 $LANG["notify_module_updated"] = "The <b>{\$module}</b> eining hefur verið uppfærð <b>{\$version}</b>. <a href=\"{\$link}\">Smelltu hér til að velja mát</a> .";
 $LANG["notify_multi_field_selected"] = "Á þessu sviði hefur verið valinn. <a href=\"#\" onclick=\"{\$onclick}\")\">Smelltu hér</a> til að skoða og breyta á sviði valkostum.";
 $LANG["notify_multi_field_updated"] = "Svæðið hefur verið uppfærður. Þú vilja vera fær til stilla á sviði valkosti eftir að setja upp mynd.";

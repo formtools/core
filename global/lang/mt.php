@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Oops, dan il-modulu huwa diġà inst
 $LANG["notify_module_installed"] = "Il-modulu ikun ġie installat. <a href=\"{\$link}\">Ikklikkja hawn biex jagħżel il-modulu.</a>";
 $LANG["notify_module_list_updated"] = "Il-lista modulu ġiet aġġornata.";
 $LANG["notify_module_uninstalled"] = "Il-modulu ġiet uninstalled.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Il-modulu ġiet uninstalled. Nota: ma stajna iħassar il-modulu minn folder tiegħek moduli / -, ser ikollok bżonn li titħassar manwalment.";
 $LANG["notify_module_updated"] = "Il-modulu <b>{\$module}</b> ġiet aġġornata biex <b>{\$version}</b>. <a href=\"{\$link}\">Ikklikkja hawn biex tagħżel il-modulu</a> .";
 $LANG["notify_multi_field_selected"] = "Il-qasam ġiet magħżula. <a href=\"#\" onclick=\"{\$onclick}\")\">Ikklikkja hawn</a> biex tara u jeditjaw l-għażliet qasam.";
 $LANG["notify_multi_field_updated"] = "Dan il-qasam ġiet aġġornata. Inti tkun kapaċi biex jiġi kkonfigurat l-għażliet qasam wara li tistabbilixxi l-formola.";

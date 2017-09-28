@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Oops, este módulo xa está instalad
 $LANG["notify_module_installed"] = "Este módulo foi instalado. <a href=\"{\$link}\">Prema aquí para seleccionar o módulo.</a>";
 $LANG["notify_module_list_updated"] = "A lista de módulos foi actualizada.";
 $LANG["notify_module_uninstalled"] = "Este módulo foi desinstalados.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Este módulo foi desinstalados. Nota: non se pode eliminar o módulo de carpeta modules / - precisarás para excluílo manualmente.";
 $LANG["notify_module_updated"] = "O módulo <b>{\$module}</b> foi actualizado para <b>{\$version}</b>. <a href=\"{\$link}\">Prema aquí para seleccionar o módulo</a> .";
 $LANG["notify_multi_field_selected"] = "O campo foi seleccionado. <a href=\"#\" onclick=\"{\$onclick}\")\">Clique aqui</a> para ver e editar as opcións de campo.";
 $LANG["notify_multi_field_updated"] = "Este campo foi actualizado. Será capaz de configurar as opcións de campo despois da creación do formulario.";

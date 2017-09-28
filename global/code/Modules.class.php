@@ -72,27 +72,6 @@ class Modules
                 "module_date"        => $module_date
             ));
             $db->execute();
-            $module_id = $db->getInsertId();
-
-            // now add any navigation links for this module
-            $lang_info = $module->getLangStrings();
-
-            $order = 1;
-            $module_nav = $module->getModuleNav();
-            foreach ($module_nav as $lang_file_key => $info) {
-                $url        = $info[0];
-                $is_submenu = ($info[1]) ? "yes" : "no";
-
-                if (empty($lang_file_key) || empty($url)) {
-                    continue;
-                }
-
-                // odd this. Why not just store the lang string in the DB? That way it'll be translated for each user...
-                $display_text = isset($lang_info[$lang_file_key]) ? $lang_info[$lang_file_key] : $LANG[$lang_file_key];
-
-                ModuleMenu::addMenuItem($module_id, $display_text, $url, $is_submenu, $order);
-                $order++;
-            }
         }
 
         return array(true, $LANG["notify_module_list_updated"]);
@@ -205,7 +184,7 @@ class Modules
         }
 
         // run whatever upgrade method has been defined
-        $module->upgrade($old_module_version);
+        $module->upgrade($module_id, $old_module_version);
 
         // convert the date into a MySQL datetime
         list($year, $month, $day) = explode("-", $module->getDate());
@@ -312,16 +291,16 @@ class Modules
     {
         $db = Core::$db;
         $LANG = Core::$L;
-        $root_dir = Core::getRootDir();
         $root_url = Core::getRootUrl();
 
         $module_info = self::getModule($module_id);
         $module_folder = $module_info["module_folder"];
 
-        require_once("$root_dir/modules/$module_folder/library.php");
-
         $module = self::instantiateModule($module_folder);
         list ($success, $message) = $module->install($module_id);
+
+        // now add any navigation links for this module
+        ModuleMenu::addMenuItems($module_id, $module);
 
         // get the module language file contents and store the info in the $LANG global for
         // so it can be accessed by the installation script (TODO needed?)
@@ -555,7 +534,6 @@ class Modules
     {
         $db = Core::$db;
         $LANG = Core::$L;
-        $delete_module_folder_on_uninstallation = Core::shouldDeleteFolderOnUninstallation();
         $root_dir = Core::getRootDir();
 
         $module_info = self::getModule($module_id);
@@ -564,89 +542,34 @@ class Modules
         if (empty($module_info)) {
             return array(false, "");
         }
-        $success = true;
 
-        $has_custom_uninstall_script = false;
-        if (is_file("$root_dir/modules/$module_folder/library.php")) {
-            @include_once("$root_dir/modules/$module_folder/library.php");
-            $uninstall_function_name = "{$module_folder}__uninstall";
+        $module = self::instantiateModule($module_folder);
+        list ($success, $message) = $module->uninstall($module_id);
 
-            if (function_exists($uninstall_function_name)) {
-                $has_custom_uninstall_script = true;
-
-                // get the module language file contents and store the info in the $LANG global for
-                // so it can be accessed by the uninstallation script
-                $LANG[$module_folder] = self::getModuleLangFile($module_folder, Core::$user->getLang());
-                list($success, $custom_message) = $uninstall_function_name($module_id);
-
-                // if there was a custom message returned (error or notification), overwrite the default
-                // message
-                if (!empty($custom_message)) {
-                    $message = $custom_message;
-                }
-            }
+        if (!$success) {
+            return array(false, $message);
         }
 
-        // finally, if there wasn't a custom uninstallation script, or there WAS and it was successfully
-        // run, remove the module record and any old database references
-        if (!$has_custom_uninstall_script || ($has_custom_uninstall_script && $success)) {
-            $db->query("
-                DELETE FROM {PREFIX}modules
-                WHERE module_id = $module_id
-            ");
-            $db->bind("module_id", $module_id);
-            $db->execute();
+        $db->query("
+            UPDATE {PREFIX}modules
+            SET    is_installed = 'no',
+                   is_enabled = 'no' 
+            WHERE  module_id = :module_id
+        ");
+        $db->bind("module_id", $module_id);
+        $db->execute();
 
-            ModuleMenu::clearModuleNav($module_id);
+        ModuleMenu::clearModuleNav($module_id);
 
-            // if this module was used in any menus, update them
-            $db->query("
-                SELECT DISTINCT menu_id
-                FROM   {PREFIX}menu_items
-                WHERE  page_identifier = :page_identifier
-            ");
-            $db->bind("page_identifier", "module_$module_id");
-            $db->execute();
+        // if this module was used in any menus, update them
+        Menus::removeModuleFromMenus($module_id);
 
-            $affected_menu_ids = array();
-            foreach ($db->fetchAll() as $row) {
-                $affected_menu_ids[] = $row["menu_id"];
-            }
-
-            if (!empty($affected_menu_ids)) {
-                $db->query("
-                    DELETE FROM {PREFIX}menu_items
-                    WHERE page_identifier = :page_identifier
-                ");
-                $db->bind("page_identifier", "module_$module_id");
-                $db->execute();
-
-                // now update the orders of all affected menus
-                foreach ($affected_menu_ids as $menu_id) {
-                    Menus::updateMenuOrder($menu_id);
-                }
-
-                // if rows were deleted, re-cache the admin menu and update the ordering of the admin account.
-                // ASSUMPTION: only administrator accounts can have modules as items (will need to update at some
-                // point soon, no doubt).
-                Menus::cacheAccountMenu(Sessions::get("account.account_id"));
-                Menus::updateMenuOrder(Sessions::get("account.menu_id"));
-            }
-
-            // delete any hooks registered by this module
-            Hooks::unregisterModuleHooks($module_folder);
-        }
+        // delete any hooks registered by this module
+        Hooks::unregisterModuleHooks($module_folder);
 
         // now delete the entire module folder
-        $deleted = false;
-        if ($delete_module_folder_on_uninstallation) {
-            $deleted = Files::deleteFolder("$root_dir/modules/$module_folder");
-        }
-        if ($deleted) {
-            $message = $LANG["notify_module_uninstalled"];
-        } else {
-            $message = $LANG["notify_module_uninstalled_files_not_deleted"];
-        }
+        $message = $LANG["notify_module_uninstalled"];
+
         extract(Hooks::processHookCalls("end", compact("module_id", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);

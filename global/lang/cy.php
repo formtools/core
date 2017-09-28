@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Wps, y modiwl hwn wedi&#39;i gosod y
 $LANG["notify_module_installed"] = "Mae&#39;r modiwl wedi eu gosod. <a href=\"{\$link}\">Cliciwch yma i ddewis y modiwl.</a>";
 $LANG["notify_module_list_updated"] = "Mae&#39;r rhestr modiwl wedi ei ddiweddaru.";
 $LANG["notify_module_uninstalled"] = "Mae&#39;r modiwl wedi bod uninstalled.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Mae&#39;r modiwl wedi bod uninstalled. Nodyn: Nid oedd yr ydym ddilea &#39;r modiwl o&#39;ch ffolder modiwlau / - bydd angen i chi ddileu llaw.";
 $LANG["notify_module_updated"] = "Mae&#39;r modiwl <b>{\$module}</b> wedi cael ei ddiweddaru i <b>{\$version}.</b> <a href=\"{\$link}\">Cliciwch yma i ddewis y modiwl</a> .";
 $LANG["notify_multi_field_selected"] = "Y cae wedi cael ei ddewis. <a href=\"#\" onclick=\"{\$onclick}\")\">Cliciwch yma</a> i weld a golygu yr opsiynau maes.";
 $LANG["notify_multi_field_updated"] = "Y maes hwn wedi cael ei ddiweddaru. Byddwch yn gallu ffurfweddu yr opsiynau maes ar ôl sefydlu&#39;r ffurflen.";

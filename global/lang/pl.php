@@ -1153,7 +1153,6 @@ $LANG["notify_module_already_installed"] = "Niestety, moduł ten jest już zains
 $LANG["notify_module_installed"] = "Moduł został zainstalowany. <a href=\"{\$link}\">Kliknij tutaj, aby wybrać moduł.</a>";
 $LANG["notify_module_list_updated"] = "Moduł lista została zaktualizowana.";
 $LANG["notify_module_uninstalled"] = "Moduł został odinstalowany.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Moduł został odinstalowany. Uwaga: nie możemy usunąć moduł z katalogu / modules - trzeba będzie go usunąć ręcznie.";
 $LANG["notify_module_updated"] = "<b>{\$module}</b> moduł został zaktualizowany do <b>{\$version}.</b> <a href=\"{\$link}\">Kliknij tutaj, aby wybrać moduł</a> .";
 $LANG["notify_multi_field_selected"] = "Pole zostało wybrane. <a href=\"#\" onclick=\"{\$onclick}\")\">Kliknij tutaj,</a> aby wyświetlić i edytować opcje dziedzinie.";
 $LANG["notify_multi_field_updated"] = "To pole zostało zaktualizowane. Będziesz mieć możliwość konfigurowania opcji pola po utworzeniu formy.";

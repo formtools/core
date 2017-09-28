@@ -1148,7 +1148,6 @@ $LANG["notify_module_already_installed"] = "عفوا ، تم بالفعل تثب
 $LANG["notify_module_installed"] = "وحدة تم تركيبها. <a href=\"{\$link}\">انقر هنا لتحديد وحدة.</a>";
 $LANG["notify_module_list_updated"] = "قائمة الوحدة قد تم تحديثه.";
 $LANG["notify_module_uninstalled"] = "ولقد تم تثبيت وحدة نمطية.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "ولقد تم تثبيت وحدة نمطية. ملاحظة : نحن لا يمكن حذف وحدة من جهاز / وحدات مجلد -- سوف تحتاج إلى حذفها يدويا.";
 $LANG["notify_module_updated"] = "وقد تم تحديث وحدة <b>{\$module}</b> إلى <b>{\$version}</b> <a href=\"{\$link}\">انقر هنا لاختيار وحدة</a> .";
 $LANG["notify_multi_field_selected"] = "الميدان تم اختيارها. <a href=\"#\" onclick=\"{\$onclick}\")\">اضغط هنا</a> لعرض وتحرير خيارات الحقل.";
 $LANG["notify_multi_field_updated"] = "هذا الحقل قد تم تحديثه. سوف تكون قادرة على تكوين خيارات الحقل بعد إعداد النموذج.";

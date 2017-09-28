@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Vaja, aquest mòdul ja està instal 
 $LANG["notify_module_installed"] = "El mòdul ha estat instal lat. <a href=\"{\$link}\">Feu clic aquí per seleccionar el mòdul.</a>";
 $LANG["notify_module_list_updated"] = "La llista de mòduls s&#39;ha actualitzat.";
 $LANG["notify_module_uninstalled"] = "El mòdul ha estat desinstal.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "El mòdul ha estat desinstal. Nota: No hem pogut eliminar el mòdul de la carpeta / modules - haureu d&#39;esborrar manualment.";
 $LANG["notify_module_updated"] = "El mòdul <b>{\$module}</b> ha estat actualitzada a <b>{\$version}</b>. <a href=\"{\$link}\">Feu clic aquí per seleccionar el mòdul</a> .";
 $LANG["notify_multi_field_selected"] = "El camp ha estat seleccionat. <a href=\"#\" onclick=\"{\$onclick}\")\">Feu clic aquí</a> per veure i editar les opcions de camp.";
 $LANG["notify_multi_field_updated"] = "Aquest camp ha estat actualitzat. Vostè podrà configurar les opcions de camp després de la creació de la forma.";

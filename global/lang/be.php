@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "На жаль, гэты модуль
 $LANG["notify_module_installed"] = "Гэты модуль быў усталяваны. <a href=\"{\$link}\">Націсніце тут, каб выбраць модуль.</a>";
 $LANG["notify_module_list_updated"] = "Модуль спіс быў абноўлены.";
 $LANG["notify_module_uninstalled"] = "Гэты модуль быў выдалены.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Гэты модуль быў выдалены. Заўвага: Мы не маглі выдаліць модуль з файла / папкі модуляў - вам неабходна выдаліць яго ўручную.";
 $LANG["notify_module_updated"] = "<b>{\$module</b> Модуль абноўлены да <b>{\$version}.</b> <a href=\"{\$link}\">Націсніце тут, каб выбраць модуль</a> .";
 $LANG["notify_multi_field_selected"] = "Вобласці былі абраныя. <a href=\"#\" onclick=\"{\$onclick}\")\">Націсніце тут,</a> каб прагледзець і адрэдагаваць поле варыянтаў.";
 $LANG["notify_multi_field_updated"] = "Гэтая вобласць была абноўлена. Вы зможаце наладзіць вобласці пасля стварэння формы.";

@@ -67,11 +67,12 @@ abstract class Module {
 
         $this->moduleFolder = basename(realpath($currClassFolder . "/../"));
 
+        // TODO this can't be a require_once for the install script instantiates the module multiple times
         if (file_exists($currentLangFile)) {
-            require_once($currentLangFile);
+            require($currentLangFile);
             $this->currentLangFound = true;
         } else if (file_exists($defaultLangFile)) {
-            require_once($defaultLangFile);
+            require($defaultLangFile);
             $this->currentLangFound = true;
         }
 
@@ -96,7 +97,7 @@ abstract class Module {
         return array(true, "");
     }
 
-    public function upgrade($old_module_version) {
+    public function upgrade($module_id, $old_module_version) {
         return array(true, "");
     }
 

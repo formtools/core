@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "ओह, इस मॉड्यूल
 $LANG["notify_module_installed"] = "मॉड्यूल स्थापित किया गया है. <a href=\"{\$link}\">लिए यहाँ क्लिक करें मॉड्यूल का चयन करें.</a>";
 $LANG["notify_module_list_updated"] = "मॉड्यूल सूची को अद्यतन किया गया है.";
 $LANG["notify_module_uninstalled"] = "मॉड्यूल की स्थापना रद्द हो गया है.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "मॉड्यूल की स्थापना रद्द हो गया है. ध्यान दें: हम अपने मॉड्यूल / modules फ़ोल्डर से हटा नहीं है - आप इसे मैन्युअल रूप से हटाने की आवश्यकता होगी सकती है.";
 $LANG["notify_module_updated"] = "मॉड्यूल <b>{\$module} {\$version}</b> अद्यतन किया गया है. <a href=\"{\$link}\">लिए यहाँ क्लिक करें मॉड्यूल का चयन करें</a> .";
 $LANG["notify_multi_field_selected"] = "क्षेत्र का चयन किया गया है. <a href=\"#\" onclick=\"{\$onclick}\")\">यहाँ क्लिक करें</a> देखने और क्षेत्र के विकल्प संपादित करें.";
 $LANG["notify_multi_field_updated"] = "इस क्षेत्र को अद्यतन किया गया है. आप विन्यस्त करने में सक्षम हो जाएगा ऊपर के फार्म स्थापित करने के बाद क्षेत्र के विकल्प.";

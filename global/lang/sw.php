@@ -1148,7 +1148,6 @@ $LANG["notify_module_already_installed"] = "Oops, this module is already install
 $LANG["notify_module_installed"] = "Ya moduli imewekwa. <a href=\"{\$link}\">Bonyeza hapa kuchagua moduli.</a>";
 $LANG["notify_module_list_updated"] = "Orodha ya moduli imekuwa updated.";
 $LANG["notify_module_uninstalled"] = "Ya moduli imekuwa uninstalled.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Ya moduli imekuwa uninstalled. Angalia: sisi hakuweza delete ya moduli wako / modules folder - utahitaji delete it manually.";
 $LANG["notify_module_updated"] = "The <b>{\$module}</b> module has been updated to <b>{\$version}</b>. <a href=\"{\$link}\">Click here to select the module</a>.";
 $LANG["notify_multi_field_selected"] = "Shamba imekuwa kuchaguliwa. <a href=\"#\" onclick=\"{\$onclick}\")\">Bonyeza hapa</a> kuangalia na hariri shambani chaguzi.";
 $LANG["notify_multi_field_updated"] = "Uwanja huu umekuwa updated. Utaweza kwa chaguzi configure shambani baada ya kuanzisha fomu.";

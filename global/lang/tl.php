@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Oops, ang module na ito ay naka-inst
 $LANG["notify_module_installed"] = "Ang module ay na-install. <a href=\"{\$link}\">Mag-click dito upang piliin ang module.</a>";
 $LANG["notify_module_list_updated"] = "Ang module na listahan ay na-update.";
 $LANG["notify_module_uninstalled"] = "Ang module ay maa-uninstall.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Ang module ay maa-uninstall. Tandaan: Hindi namin mai-tanggalin ang module na mula sa iyong / module folder - kailangan mong tanggalin ito nang mano-mano.";
 $LANG["notify_module_updated"] = "Ang <b>{\$module}</b> module ay na-update sa <b>{\$version}.</b> <a href=\"{\$link}\">Mag-click dito upang piliin ang</a> mga module.";
 $LANG["notify_multi_field_selected"] = "Ang patlang ay napili. <a href=\"#\" onclick=\"{\$onclick}\")\">Mag-click dito</a> upang tingnan at i-edit ang mga opsyon na patlang.";
 $LANG["notify_multi_field_updated"] = "Ang patlang na ito ay nai-update. Ikaw ay maaaring ma-i-configure ang patlang na opsiyon pagkatapos set up ng form.";

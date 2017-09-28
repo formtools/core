@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Oops, modul ini telah dipasang!";
 $LANG["notify_module_installed"] = "Modul tersebut telah dipasang. <a href=\"{\$link}\">Klik di sini untuk memilih modul.</a>";
 $LANG["notify_module_list_updated"] = "Senarai modul telah dikemaskini.";
 $LANG["notify_module_uninstalled"] = "Modul telah dihapuskan.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Modul telah dihapuskan. Nota: kami tidak boleh memadam modul daripada fail / folder modules - anda akan perlu memadam secara manual.";
 $LANG["notify_module_updated"] = "Modul <b>{\$module}</b> telah dikemaskini untuk <b>{\$version}.</b> <a href=\"{\$link}\">Klik di sini untuk memilih modul</a> .";
 $LANG["notify_multi_field_selected"] = "Padang telah dipilih. <a href=\"#\" onclick=\"{\$onclick}\")\">Klik di sini</a> untuk melihat dan mengedit pilihan gelanggang.";
 $LANG["notify_multi_field_updated"] = "Bidang ini telah dikemaskini. Anda akan dapat menetapkan opsyen gelanggang selepas membuat borang.";

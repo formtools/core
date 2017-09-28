@@ -429,8 +429,8 @@ class Menus
         // if the Pages module is enabled, display any custom pages that have been defined. Note: this would be better handled
         // in the hook added below
         if (Modules::checkModuleEnabled("pages")) {
-            Modules::includeModule("pages");
-            $pages_info = pg_get_pages("all");
+            $module = Modules::includeModule("pages");
+            $pages_info = $module->getPages("all");
             $pages = $pages_info["results"];
 
             $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["phrase_pages_module"]);
@@ -1046,4 +1046,39 @@ class Menus
         $db->execute();
     }
 
+
+    public static function removeModuleFromMenus($module_id)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT DISTINCT menu_id
+            FROM   {PREFIX}menu_items
+            WHERE  page_identifier = :page_identifier
+        ");
+        $db->bind("page_identifier", "module_$module_id");
+        $db->execute();
+
+        $affected_menu_ids = $db->fetchAll(PDO::FETCH_COLUMN);
+
+        if (!empty($affected_menu_ids)) {
+            $db->query("
+                DELETE FROM {PREFIX}menu_items
+                WHERE page_identifier = :page_identifier
+            ");
+            $db->bind("page_identifier", "module_$module_id");
+            $db->execute();
+
+            // now update the menu item list order
+            foreach ($affected_menu_ids as $menu_id) {
+                Menus::updateMenuOrder($menu_id);
+            }
+
+            // if rows were deleted, re-cache the admin menu and update the ordering of the admin account.
+            // ASSUMPTION: only administrator accounts can have modules as items (will need to update at some
+            // point soon, no doubt).
+            Menus::cacheAccountMenu(Sessions::get("account.account_id"));
+            Menus::updateMenuOrder(Sessions::get("account.menu_id"));
+        }
+    }
 }

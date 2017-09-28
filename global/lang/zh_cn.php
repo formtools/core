@@ -1152,7 +1152,6 @@ $LANG["notify_module_already_installed"] = "哎呀，这个模块已经安装！
 $LANG["notify_module_installed"] = "该模块已经安装。 <a href=\"{\$link}\">点击这里选择的模块</a> 。";
 $LANG["notify_module_list_updated"] = "该模块名单已更新。";
 $LANG["notify_module_uninstalled"] = "该模块已卸载。";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "该模块已卸载。注：我们不能删除您/模块的文件夹中的模块 - 您将需要手动删除。";
 $LANG["notify_module_updated"] = "<b>{\$module}</b>模块已更新<b>{\$version}。</b> <a href=\"{\$link}\">点击这里选择的模块</a> 。";
 $LANG["notify_multi_field_selected"] = "该油田已被选中。 <a href=\"#\" onclick=\"{\$onclick}\")\">点击这里</a>查看和编辑领域的选择。";
 $LANG["notify_multi_field_updated"] = "该字段已更新。您将可以配置后成立的形式在外地选择。";

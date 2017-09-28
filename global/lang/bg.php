@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Опа, този модул вече
 $LANG["notify_module_installed"] = "Модулът е инсталиран. <a href=\"{\$link}\">Щракнете тук, за да изберете модула.</a>";
 $LANG["notify_module_list_updated"] = "Модулът списък е актуализиран.";
 $LANG["notify_module_uninstalled"] = "Модулът е деинсталиран.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Модулът е деинсталиран. Забележка: не бихме могли да изтриете от вашата модул / модули папка - ти ще трябва да го изтриете ръчно.";
 $LANG["notify_module_updated"] = "<b>{\$module} {\$version}</b> модул е актуализиран. <a href=\"{\$link}\">Щракнете тук, за да изберете модула</a> .";
 $LANG["notify_multi_field_selected"] = "Полето е бил избран. <a href=\"#\" onclick=\"{\$onclick}\")\">Щракнете тук,</a> за да видите и редактирате областта опции.";
 $LANG["notify_multi_field_updated"] = "Това поле е била актуализирана. Вие ще можете да конфигурирате областта възможности след създаването на формата.";

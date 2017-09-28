@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Oi, šis modulis jau įdiegtas!";
 $LANG["notify_module_installed"] = "Modulis jau įdiegtas. <a href=\"{\$link}\">Spustelėkite čia norėdami pasirinkti modulį.</a>";
 $LANG["notify_module_list_updated"] = "Modulis sąrašas buvo atnaujintas.";
 $LANG["notify_module_uninstalled"] = "Modulis buvo pašalinta.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Modulis buvo pašalinta. Pastaba: mes negalime išbraukti iš savo modulio / modulių aplanką - jums reikės jį pašalinti rankiniu būdu.";
 $LANG["notify_module_updated"] = "<b>{\$module}</b> modulis buvo atnaujintas <b>{\$version}</b>. <a href=\"{\$link}\">Spustelėkite čia norėdami pasirinkti modulį</a> .";
 $LANG["notify_multi_field_selected"] = "Srityje buvo pasirinktas. <a href=\"#\" onclick=\"{\$onclick}\")\">Spustelėkite čia</a> norėdami peržiūrėti ir redaguoti srityje galimybes.";
 $LANG["notify_multi_field_updated"] = "Šis laukas buvo atnaujintas. Jūs galėsite konfigūruoti srityje po sukūrimo formą.";

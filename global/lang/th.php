@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "โอ๊ะโมดูลนี้
 $LANG["notify_module_installed"] = "โมดูล ได้ รับ การ ติด ตั้ง. <a href=\"{\$link}\">คลิก ที่ นี่ เพื่อ เลือก โมดูล.</a>";
 $LANG["notify_module_list_updated"] = "รายการ โมดูล ที่ ได้ รับ การ ปรับปรุง.";
 $LANG["notify_module_uninstalled"] = "โมดูล ได้ รับ การ ยกเลิก การ ติด ตั้ง.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "โมดูล ได้ รับ การ ยกเลิก การ ติด ตั้ง. หมายเหตุ: เรา ไม่ สามารถ ลบ โมดูล จาก / โฟลเดอร์ ของ โมดูล - คุณ จะ ต้อง ลบ ด้วย ตนเอง.";
 $LANG["notify_module_updated"] = "<b>โมดูลโมดูล {\$module</b> ได้รับการปรับปรุง <b>{\$version}</b> <a href=\"{\$link}\">คลิกที่นี่เพื่อเลือกโมดูล</a> .";
 $LANG["notify_multi_field_selected"] = "ฟิลด์ ที่ ถูก เลือก. <a href=\"#\" onclick=\"{\$onclick}\")\">คลิก ที่ นี่</a> เพื่อ ดู และ แก้ไข ตัว เลือก ฟิลด์.";
 $LANG["notify_multi_field_updated"] = "ฟิลด์ นี้ ได้ รับ การ ปรับปรุง. คุณ จะ สามารถ กำหนด ค่า ตัว เลือก ฟิลด์ หลังจาก ตั้ง ค่า รูป แบบ.";

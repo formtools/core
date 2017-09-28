@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Hopa, acest modul este deja instalat
 $LANG["notify_module_installed"] = "Modulul a fost instalat. <a href=\"{\$link}\">Click aici pentru a selecta modul.</a>";
 $LANG["notify_module_list_updated"] = "Lista Modulul a fost actualizat.";
 $LANG["notify_module_uninstalled"] = "Modulul a fost dezinstalat.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Modulul a fost dezinstalat. Notă: nu am putut şterge modulul de la folderul / module - va trebui să îl ştergeţi manual.";
 $LANG["notify_module_updated"] = "Modulul <b>{\$module}</b> a fost actualizat la <b>{\$version}.</b> <a href=\"{\$link}\">Faceţi clic aici pentru a selecta modul</a> .";
 $LANG["notify_multi_field_selected"] = "Domeniu a fost selectat. <a href=\"#\" onclick=\"{\$onclick}\")\">Click aici</a> pentru a vizualiza şi edita opţiunile de teren.";
 $LANG["notify_multi_field_updated"] = "Acest câmp a fost actualizat. Veţi putea să configuraţi opţiunile de teren, după înfiinţarea formular.";

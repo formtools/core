@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Hoppá, ez a modul már telepítve v
 $LANG["notify_module_installed"] = "A modul telepítése megtörtént. <a href=\"{\$link}\">kattintson ide, hogy jelölje ki a modult</a> .";
 $LANG["notify_module_list_updated"] = "A modul lista frissítve lett.";
 $LANG["notify_module_uninstalled"] = "A modul el lett távolítva.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "A modul el lett távolítva. Megjegyzés: nem sikerült törölni a modul a / modules mappába - lesz szükség-hoz töröl ez kézi.";
 $LANG["notify_module_updated"] = "A <b>{\$module}</b> frissítve lett a <b>{\$version}</b>. <a href=\"{\$link}\">kattintson ide, hogy kiválassza a modult</a> .";
 $LANG["notify_multi_field_selected"] = "A mező ki van jelölve. <a href=\"#\" onclick=\"{\$onclick}\")\">Kattintson ide</a> , hogy megtekintheti és szerkesztheti a lehetőségek terén.";
 $LANG["notify_multi_field_updated"] = "Ez a mező frissítésre került. Ön képes lesz beállítani területén lehetőség beállítása után az űrlapot.";

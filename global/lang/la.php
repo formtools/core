@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Uzmanību, šis modulis jau ir uzst�
 $LANG["notify_module_installed"] = "Modulis ir uzstādīts. <a href=\"{\$link}\">Klikšķiniet šeit, lai izvēlētos modulis.</a>";
 $LANG["notify_module_list_updated"] = "Modulis sarakstu ir atjaunota.";
 $LANG["notify_module_uninstalled"] = "Modulis ir atinstalēta.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Modulis ir atinstalēta. Piezīme: mēs nevarētu izdzēst modulis no sava / modules mapes - jums būs nepieciešams izdzēst manuāli.";
 $LANG["notify_module_updated"] = "<b>{\$module}</b> modulis ir atjaunināts līdz <b>{\$version}</b>. <a href=\"{\$link}\">Klikšķiniet šeit, lai izvēlētos moduli</a> .";
 $LANG["notify_multi_field_selected"] = "Lauks ir atlasīts. <a href=\"#\" onclick=\"{\$onclick}\")\">Klikšķiniet šeit,</a> lai apskatītu un rediģētu lauka variantiem.";
 $LANG["notify_multi_field_updated"] = "Šajā jomā ir atjaunota. Jums būs iespēja konfigurēt lauka iespējas pēc izveido formu.";

@@ -7,8 +7,8 @@
  *
  *   UNKNOWN errors:
  *     - majorError()    - a DB connection couldn't be made, the database is invalid (missing tables, etc.) or something
- *                         is fundamentally wrong. Just outputs whatever string is needed.
- *     - queryError()    - a connection was made but a core query (i.e. a query that the app depends on) failed. Outputs
+ *                         is fundamentally wrong. Just outputs a blank page with a message.
+ *     - queryError()    - a connection was made but a DB query (i.e. a query that the app depends on) failed. Outputs
  *                         details about the error (class, file, line number & error message).
  *
  *   KNOWN errors:
@@ -18,9 +18,6 @@
  * Other (less important) errors are handled individually by the calling code. They can do whatever they need to display
  * the error without breaking the user's flow, like showing a message in the current page.
  */
-
-
-// -------------------------------------------------------------------------------------------------
 
 
 namespace FormTools;
@@ -42,9 +39,9 @@ class Errors
 <html>
 <head>
   <title>Error</title>
-  <style type="text/css">
+  <style>
   h1 {
-    margin: 0px 0px 16px 0px;
+    margin: 0 0 16px 0px;
   }
   body {
     background-color: #f9f9f9;

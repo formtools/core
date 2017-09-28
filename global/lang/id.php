@@ -1151,7 +1151,6 @@ $LANG["notify_module_already_installed"] = "Ups, modul ini sudah terinstall!";
 $LANG["notify_module_installed"] = "Modul tersebut telah terinstal. <a href=\"{\$link}\">Klik di sini untuk memilih modul.</a>";
 $LANG["notify_module_list_updated"] = "Daftar modul telah diperbarui.";
 $LANG["notify_module_uninstalled"] = "Modul telah dihapus.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Modul telah dihapus. Catatan: kami tidak bisa menghapus modul dari file / folder modules - Anda akan perlu menghapus secara manual.";
 $LANG["notify_module_updated"] = "Modul <b>{\$module}</b> telah diperbarui untuk <b>{\$version}.</b> <a href=\"{\$link}\">Klik di sini untuk memilih modul</a> .";
 $LANG["notify_multi_field_selected"] = "Lapangan telah dipilih. <a href=\"#\" onclick=\"{\$onclick}\")\">Klik di sini</a> untuk melihat dan mengedit pilihan lapangan.";
 $LANG["notify_multi_field_updated"] = "Bidang ini telah diperbarui. Anda akan dapat mengkonfigurasi opsi lapangan setelah membuat formulir.";

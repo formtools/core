@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "죄송합니다,이 모듈이 이미
 $LANG["notify_module_installed"] = "모듈이 설치되었습니다. <a href=\"{\$link}\">여기를 클릭하여 모듈을 선택합니다.</a>";
 $LANG["notify_module_list_updated"] = "모듈 목록이 업데이 트되었습니다.";
 $LANG["notify_module_uninstalled"] = "모듈이 제거되었습니다.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "모듈이 제거되었습니다. 참고 : 귀하의 / 모듈 폴더에서 모듈을 삭제할 수없습니다 - 당신은 수동으로 삭제해야합니다.";
 $LANG["notify_module_updated"] = "<b>{\$module} 모듈</b> 모듈 <b>{\$version}</b> 업데이 트되었습니다 것은. <a href=\"{\$link}\">모듈을 선택하려면 여기를 클릭하십시오</a> .";
 $LANG["notify_multi_field_selected"] = "필드에 선정되었습니다. <a href=\"#\" onclick=\"{\$onclick}\")\">보시려면 여기를 클릭하십시오</a> 및 필드 옵션을 편집할 수있습니다.";
 $LANG["notify_multi_field_updated"] = "이 필드는 업데이 트되었습니다. 를 구성할 수있을 것입니다 양식 필드를 설정 후 옵션을 누릅니다.";

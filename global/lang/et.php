@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Oops, see moodul on juba paigaldatud
 $LANG["notify_module_installed"] = "Moodul on installitud. <a href=\"{\$link}\">Kliki siia, et valida moodul.</a>";
 $LANG["notify_module_list_updated"] = "Moodul nimekiri on uuendatud.";
 $LANG["notify_module_uninstalled"] = "Moodul on eemaldatud.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Moodul on eemaldatud. Märkus: me ei kustuta moodul oma / modules kausta - teil on vaja kustutada käsitsi.";
 $LANG["notify_module_updated"] = "<b>{\$module}</b> moodul on uuendatud <b>{\$version}</b>. <a href=\"{\$link}\">valimiseks klõpsake siia moodul</a> .";
 $LANG["notify_multi_field_selected"] = "Valdkonnas on valitud. <a href=\"#\" onclick=\"{\$onclick}\")\">Kliki siia,</a> et vaadata ja redigeerida valdkonna võimalusi.";
 $LANG["notify_multi_field_updated"] = "See väli on uuendatud. Teil on võimalik seadistada valdkonnas valikutest pärast loomise vorm.";

@@ -1150,7 +1150,6 @@ $LANG["notify_module_already_installed"] = "Ups, ovaj modul već instaliran!";
 $LANG["notify_module_installed"] = "Modul je instaliran. <a href=\"{\$link}\">Kliknite ovdje da biste odabrali modul.</a>";
 $LANG["notify_module_list_updated"] = "Modul Lista je ažurirana.";
 $LANG["notify_module_uninstalled"] = "Modul je deinstalirana.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Modul je deinstalirana. Napomena: nije moguće izbrisati iz svog modul / modules folder - trebate ga obrisati ručno.";
 $LANG["notify_module_updated"] = "<b>{\$module}</b> je ažuriran na <b>{\$version}.</b> <a href=\"{\$link}\">Kliknite ovdje da biste odabrali modul</a> .";
 $LANG["notify_multi_field_selected"] = "Polje je izabran. <a href=\"#\" onclick=\"{\$onclick}\")\">Kliknite ovdje</a> za pregled i uređivanje polje opcije.";
 $LANG["notify_multi_field_updated"] = "Ovo polje je ažuriran. Te moći konfigurirati opcije polje nakon postavljanja obrasca.";

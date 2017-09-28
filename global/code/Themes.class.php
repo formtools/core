@@ -215,8 +215,8 @@ class Themes {
      */
     public static function displayPage($template, $page_vars, $theme = "", $swatch = "")
     {
-        $theme = (empty($theme)) ? Core::$user->getTheme() : $theme;
-        $swatch = (empty($swatch)) ? Core::$user->getSwatch() : $swatch;
+        $theme = (empty($theme) && Core::isUserInitialized()) ? Core::$user->getTheme() : $theme;
+        $swatch = (empty($swatch) && Core::isUserInitialized()) ? Core::$user->getSwatch() : $swatch;
 
         $smarty = Templates::getPageRenderSmarty($theme, $page_vars);
         $smarty->assign("swatch", $swatch);
@@ -292,7 +292,7 @@ class Themes {
         if (isset($page_vars["js_messages"]) || isset($page_vars["module_js_messages"])) {
             $core_js_messages   = isset($page_vars["js_messages"]) ? $page_vars["js_messages"] : "";
             $module_js_messages = isset($page_vars["module_js_messages"]) ? $page_vars["module_js_messages"] : "";
-            $js_messages = General::generateJsMessages($core_js_messages, $module_js_messages);
+            $js_messages = General::generateJsMessages($core_js_messages, $module_lang_strings, $module_js_messages);
         }
 
         if ((isset($page_vars["head_js"]) && !empty($page_vars["head_js"])) || !empty($js_messages)) {

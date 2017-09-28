@@ -1152,7 +1152,6 @@ $LANG["notify_module_already_installed"] = "Oops, er denne modulen allerede inst
 $LANG["notify_module_installed"] = "Modulen er installert. <a href=\"{\$link}\">Klikk her for å velge modulen.</a>";
 $LANG["notify_module_list_updated"] = "Modulen listen er blitt oppdatert.";
 $LANG["notify_module_uninstalled"] = "Modulen er avinstallert.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Modulen er avinstallert. Merk: vi ikke kunne slette modulen fra / moduler folder - må du slette den manuelt.";
 $LANG["notify_module_updated"] = "Den <b>{\$module}</b> modulen har blitt oppdatert til <b>{\$version}.</b> <a href=\"{\$link}\">Klikk her for å velge modulen</a> .";
 $LANG["notify_multi_field_selected"] = "Feltet har blitt valgt. <a href=\"#\" onclick=\"{\$onclick}\")\">Klikk her for</a> å vise og redigere feltet alternativer.";
 $LANG["notify_multi_field_updated"] = "Dette feltet har blitt oppdatert. Du vil kunne konfigurere feltet alternativene etter at du har konfigurert skjemaet.";

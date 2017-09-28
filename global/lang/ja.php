@@ -1148,7 +1148,6 @@ $LANG["notify_module_already_installed"] = "おっと、このモジュールが
 $LANG["notify_module_installed"] = "モジュールがインストールされています。 <a href=\"{\$link}\">ここをクリックしモジュールを選択します</a> 。";
 $LANG["notify_module_list_updated"] = "モジュールのリストが更新されています。";
 $LANG["notify_module_uninstalled"] = "このモジュールはアンインストールされています。";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "このモジュールはアンインストールされています。注：お客様/ modulesフォルダからモジュールを削除することができませんでした - 手動で削除する必要があります。";
 $LANG["notify_module_updated"] = "<b>{\$module}は</b>モジュールが<b>{\$version}</b>に更新されました。 <a href=\"{\$link}\">モジュールを選択するにはここをクリックします</a> 。";
 $LANG["notify_multi_field_selected"] = "フィールドが選択されています。 <a href=\"#\" onclick=\"{\$onclick}\")\">ここをクリックし</a>表示するために、フィールドのオプションを編集します。";
 $LANG["notify_multi_field_updated"] = "このフィールドが更新されている。を設定することができるフォームを設定した後、フィールドのオプション。";

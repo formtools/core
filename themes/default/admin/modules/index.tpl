@@ -141,7 +141,9 @@
             {/if}
           </td>
           <td valign="top" class="del2" align="center">
-            <a href="#" onclick="return mm.uninstall_module({$module.module_id})">{$LANG.word_uninstall|upper}</a>
+            {if $module.is_installed == "yes"}
+              <a href="#" onclick="return mm.uninstall_module({$module.module_id})">{$LANG.word_uninstall|upper}</a>
+            {/if}
           </td>
         </tr>
 

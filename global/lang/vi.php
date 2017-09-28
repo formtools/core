@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Rất tiếc, mô-đun này đã đ�
 $LANG["notify_module_installed"] = "Module này đã được cài đặt <a href=\"{\$link}\">Click vào đây để chọn mô-đun..</a>";
 $LANG["notify_module_list_updated"] = "Danh sách mô-đun đã được cập nhật.";
 $LANG["notify_module_uninstalled"] = "Module này đã được gỡ cài đặt.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Module này đã được gỡ cài đặt. Lưu ý: chúng tôi không thể xóa các module từ thư mục modules / của bạn - bạn sẽ cần phải xóa nó bằng tay.";
 $LANG["notify_module_updated"] = "Các mô-đun <b>{\$module}</b> đã được cập nhật <b>{\$version}.</b> <a href=\"{\$link}\">Click vào đây để lựa chọn các mô-</a> đun .";
 $LANG["notify_multi_field_selected"] = "Lĩnh vực này đã được chọn. <a href=\"#\" onclick=\"{\$onclick}\")\">Click vào đây</a> để xem và chỉnh sửa các tuỳ chọn trường.";
 $LANG["notify_multi_field_updated"] = "Trường này đã được cập nhật. Bạn sẽ có thể cấu hình các trường tùy chọn sau khi thiết lập các biểu mẫu.";

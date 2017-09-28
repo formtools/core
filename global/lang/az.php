@@ -1148,7 +1148,6 @@ $LANG["notify_module_already_installed"] = "Oops, this module is already install
 $LANG["notify_module_installed"] = "The module has been installed. <a href=\"{\$link}\">Click here to select the module</a>.";
 $LANG["notify_module_list_updated"] = "The module list has been updated.";
 $LANG["notify_module_uninstalled"] = "The module has been uninstalled.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "The module has been uninstalled. Note: we could not delete the module from your /modules folder - you will need to delete it manually.";
 $LANG["notify_module_updated"] = "The <b>{\$module}</b> module has been updated to <b>{\$version}</b>. <a href=\"{\$link}\">Click here to select the module</a>.";
 $LANG["notify_multi_field_selected"] = "The field has been selected. <a href=\"#\" onclick=\"{\$onclick}\")\">Click here</a> to view and edit the field options.";
 $LANG["notify_multi_field_updated"] = "This field has been updated. You will be able to configure the field options after setting up the form.";

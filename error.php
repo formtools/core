@@ -7,8 +7,9 @@ use FormTools\Pages;
 use FormTools\Sessions;
 use FormTools\Themes;
 
-// TODO this needs to just start sessions. It'll break the install script when there are problems
-Core::init();
+Core::setHooksEnabled(false);
+Core::startSessions();
+Core::initSmarty();
 
 $page_vars = array(
     "page_url"      => Pages::getPageUrl("error"),
@@ -18,4 +19,5 @@ $page_vars = array(
     "error_debug"   => Sessions::getWithFallback("last_error_debug", "")
 );
 
+// TODO this method may require more things than we have available. See the installation
 Themes::displayPage("error.tpl", $page_vars);

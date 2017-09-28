@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Ups, se ta modul že nameščen!";
 $LANG["notify_module_installed"] = "Modul ni nameščen. <a href=\"{\$link}\">Kliknite tukaj, da izberete modul.</a>";
 $LANG["notify_module_list_updated"] = "Modul seznam je bil posodobljen.";
 $LANG["notify_module_uninstalled"] = "Modul je bil odstranjen.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Modul je bil odstranjen. Opomba: nismo mogli izbrisati iz svojega modula / modulov mapo - boste morali izbrisati ročno.";
 $LANG["notify_module_updated"] = "<b>{\$module}</b> modul je bil posodobljen za <b>{\$version}</b>. <a href=\"{\$link}\">Kliknite tukaj za izbiro modula</a> .";
 $LANG["notify_multi_field_selected"] = "Polje je bil izbran. <a href=\"#\" onclick=\"{\$onclick}\")\">Kliknite tukaj,</a> če si želite ogledati in urediti polje možnosti.";
 $LANG["notify_multi_field_updated"] = "To polje je bil posodobljen. Boste lahko nastavite polje možnosti, po odprtju obrazca.";

@@ -1148,7 +1148,6 @@ $LANG["notify_module_already_installed"] = "哎呀，這個模塊已經安裝！
 $LANG["notify_module_installed"] = "該模塊已經安裝。 <a href=\"{\$link}\">點擊這裡選擇的模塊</a> 。";
 $LANG["notify_module_list_updated"] = "該模塊名單已更新。";
 $LANG["notify_module_uninstalled"] = "該模塊已卸載。";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "該模塊已卸載。注：我們無法刪除從您的模塊 / modules文件夾 - 您將需要手動刪除。";
 $LANG["notify_module_updated"] = "在<b>{\$module}</b>模塊已更新為<b>{\$version}。</b> <a href=\"{\$link}\">點擊這裡選擇的模塊</a> 。";
 $LANG["notify_multi_field_selected"] = "該油田已被選中。 <a href=\"#\" onclick=\"{\$onclick}\")\">點擊這裡</a>查看和編輯領域的選擇。";
 $LANG["notify_multi_field_updated"] = "該字段已更新。您將可以配置實地查看後成立的表格。";

@@ -1156,7 +1156,6 @@ $LANG["notify_module_already_installed"] = "Hoppla, dieses Modul ist bereits ins
 $LANG["notify_module_installed"] = "Das Modul installiert wurde. <a href=\"{\$link}\">Klicken Sie hier, um das Modul auswählen.</a>";
 $LANG["notify_module_list_updated"] = "Das Modul wurde aktualisiert.";
 $LANG["notify_module_uninstalled"] = "Das Modul wurde deinstalliert.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Das Modul wurde deinstalliert. Hinweis: wir konnten nicht gelöscht werden das Modul von Ihrem / modules Ordner - Sie müssen sie manuell löschen.";
 $LANG["notify_module_updated"] = "Die <b>{\$module}</b> wurde an <b>{\$version}</b> aktualisiert. <a href=\"{\$link}\">Klicken Sie hier, um das Modul auswählen</a> .";
 $LANG["notify_multi_field_selected"] = "Das Feld ausgewählt wurde. <a href=\"#\" onclick=\"{\$onclick}\")\">Klicken Sie hier,</a> um anzuzeigen und zu bearbeiten Bereich Optionen.";
 $LANG["notify_multi_field_updated"] = "Dieses Feld ist aktualisiert worden. Sie können die Konfiguration der Bereich Optionen nach dem Einrichten des Formulars.";

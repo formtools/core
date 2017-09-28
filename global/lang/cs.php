@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "Jejda, je tento modul již nainstalo
 $LANG["notify_module_installed"] = "Modul byl instalován. <a href=\"{\$link}\">Klikněte zde pro výběr modulu.</a>";
 $LANG["notify_module_list_updated"] = "Modul seznam byl aktualizován.";
 $LANG["notify_module_uninstalled"] = "Modul has been uninstalled.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Modul has been uninstalled. Poznámka: nemohli jsme odstranit modul z / modules složka - budete muset odstranit ručně.";
 $LANG["notify_module_updated"] = "<b>{\$module}</b> Modul byl aktualizován na <b>{\$version}</b>. <a href=\"{\$link}\">Klikněte zde pro výběr modulu</a> .";
 $LANG["notify_multi_field_selected"] = "Pozemek byl vybrán. <a href=\"#\" onclick=\"{\$onclick}\")\">Klikněte zde</a> pro zobrazení a úpravy pole možností.";
 $LANG["notify_multi_field_updated"] = "Této oblasti byla aktualizována. Budete mít možnost konfigurovat pole možností po nastavení formuláře.";

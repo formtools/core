@@ -45,7 +45,8 @@ I don't see the point of non-unicode queries, so unless I hear otherwise it'll s
 - When creating a new form, the `Add Submission Button` setting would have a default label of `{$LANG.word_add_rightarrow}`.
 The idea here was that by entering language string placeholders, users logging into the interface with different languages would see that button label localized in their own country. Interesting idea, weird implementation! I'm now going to be setting that value (and others) to be in the current language - "Add &raquo;" for English, in this case. The fields can _still_ accept language placeholders for the tiny percentage of people that need this feature, but it'll be much clearer for the vast bulk of users that don't need this feature.
 - The core-field-types module has been incorporated into the Core code. The module no longer exists as a standalone.
-
+- The `$g_delete_module_folder_on_uninstallation` configuration option has been dropped. Now the uninstall step just 
+uninstalls the script. I'll add a separate UI option to allow you to try to remove the module files.
 
 ### Notes
 
@@ -54,3 +55,11 @@ command-line nonsense to get the script running. As such, I'm going to commit th
 and omit the _composer.lock_ file.
 - Keep the very un-OO user/administrator class code for 3.0. Will refactor that all anyway for user roles in 4.0.
 - combine all that displayPage/displayModulePage etc. code.
+
+### TOo fix:
+
+- Minor bug: I was logged in on the Edit Client
+page. I deleted the config file & reinstalled. After clicking the "login" button on the last page of the installation 
+process, it took me to the Edit Client page again throwing a bunch of errors.
+  -- installation should wipe out sessions on the first page, I think. 
+  -- check that page with passing invalid client IDs. Should fail gracefully.

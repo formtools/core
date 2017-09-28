@@ -153,6 +153,8 @@ class Core {
      * API settings.
      * These two settings are for the ft_api_display_captcha() function. See the API documentation for more
      * information on how that works.
+     *
+     * TODO move these to the API. That can still read the config file
      */
     private static $apiRecaptchaPublicKey  = "";
     private static $apiRecaptchaPrivateKey = "";
@@ -252,6 +254,7 @@ class Core {
      * @var User
      */
     public static $user;
+    private static $userInitialized = false;
 
     /**
      * The current version of the Form Tools Core.
@@ -266,7 +269,7 @@ class Core {
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20170924";
+    private static $releaseDate = "20170927";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
@@ -549,10 +552,6 @@ class Core {
         return self::$setSqlMode;
     }
 
-    public static function shouldDeleteFolderOnUninstallation() {
-        return self::$deleteModuleFolderOnUninstallation;
-    }
-
     public static function getDefaultLang() {
         return self::$defaultLang;
     }
@@ -664,10 +663,15 @@ class Core {
         return "$root_dir/global/api/api.php";
     }
 
+    public static function isUserInitialized () {
+        return self::$userInitialized;
+    }
+
     private static function initUser() {
         self::$user = new User();
         self::$currLang = self::$user->getLang();
         self::setCurrLang(self::$currLang);
+        self::$userInitialized = true;
     }
 
 }

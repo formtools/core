@@ -1154,7 +1154,6 @@ $LANG["notify_module_already_installed"] = "Oops, is deze module al geïnstallee
 $LANG["notify_module_installed"] = "De module is geïnstalleerd. <a href=\"{\$link}\">Klik hier om de module te selecteren.</a>";
 $LANG["notify_module_list_updated"] = "De module lijst is bijgewerkt.";
 $LANG["notify_module_uninstalled"] = "De module is verwijderd.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "De module is verwijderd. Opmerking: we niet konden verwijderen van de module van uw / modules map - moet u dit handmatig te verwijderen.";
 $LANG["notify_module_updated"] = "De <b>{\$module}</b> module is bijgewerkt om <b>{\$version}.</b> <a href=\"{\$link}\">Klik hier om de module te selecteren</a> .";
 $LANG["notify_multi_field_selected"] = "Het veld is geselecteerd. <a href=\"#\" onclick=\"{\$onclick}\")\">Klik hier om</a> te bekijken en te bewerken het veld opties.";
 $LANG["notify_multi_field_updated"] = "Dit veld is bijgewerkt. U kunt het configureren van het veld opties na de oprichting van het formulier.";

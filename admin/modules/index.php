@@ -12,9 +12,6 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("admin");
 
-error_reporting(2047);
-ini_set("display_errors", 1);
-
 $request = array_merge($_POST, $_GET);
 
 $success = true;

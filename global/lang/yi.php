@@ -1147,7 +1147,6 @@ $LANG["notify_module_already_installed"] = "אָאָפּס, דעם מאָדול�
 $LANG["notify_module_installed"] = "די מאָדולע האט מען אינסטאַלירן. <a href=\"{\$link}\">דריקט דאָ צו סעלעקטירן דעם מאָדולע.</a>";
 $LANG["notify_module_list_updated"] = "די מאָדולע רשימה איז געווארן אפדעיטעד.";
 $LANG["notify_module_uninstalled"] = "די מאָדולע איז געווארן ונינסטאַללעד.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "די מאָדולע איז געווארן ונינסטאַללעד. באַמערקונג: מיר קען נישט ויסמעקן די מאָדולע פֿון דיין / מאַדזשולז טעקע - איר וועט דאַרפֿן צו ויסמעקן עס מאַניואַלי.";
 $LANG["notify_module_updated"] = "די <b>{\$module}</b> מאָדולע איז דערהייַנטיקט צו <b>{\$version}.</b> <a href=\"{\$link}\">דריקט דאָ צו אויסקלייַבן דעם מאָדולע</a> .";
 $LANG["notify_multi_field_selected"] = "די פעלד איז געווארן סעלעקטעד. <a href=\"#\" onclick=\"{\$onclick}\")\">דריקט דאָ</a> צו זען און רעדאַגירן דעם פעלד אָפּציעס.";
 $LANG["notify_multi_field_updated"] = "דאָס פעלד איז געווארן אפדעיטעד. איר וועט זיין קענען צו קאַנפיגיער דעם פעלד אָפּציעס נאָך באַשטעטיקן זיך די פאָרעם.";

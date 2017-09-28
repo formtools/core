@@ -1152,7 +1152,6 @@ $LANG["notify_module_already_installed"] = "Üzgünüz, bu modül zaten yüklü!
 $LANG["notify_module_installed"] = "Modülü yüklendi. <a href=\"{\$link}\">Tıklayınız modülü seçin.</a>";
 $LANG["notify_module_list_updated"] = "Modül listesi güncellendi.";
 $LANG["notify_module_uninstalled"] = "Modülü kaldırıldı.";
-$LANG["notify_module_uninstalled_files_not_deleted"] = "Modülü kaldırıldı. Not: sizin / modules klasöründen modülü silinemedi - elle silmek gerekir.";
 $LANG["notify_module_updated"] = "<b>{\$module} {\$version}</b> modülü güncellendi. <a href=\"{\$link}\">modülü seçmek için burayı tıklayın</a> .";
 $LANG["notify_multi_field_selected"] = "Alanı seçildi. <a href=\"#\" onclick=\"{\$onclick}\")\">Burayı</a> görmek ve alan seçenekleri düzenleyin.";
 $LANG["notify_multi_field_updated"] = "Bu alan güncellendi. Yapılandırmak edebilecektir formu oluşturduktan sonra alan seçenekleri.";
