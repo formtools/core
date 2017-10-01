@@ -13,6 +13,10 @@ use PDO, PDOException;
 
 class Modules
 {
+    // rather than instantiate each module again and again as needed, this tracks the instances created. Use
+    // Modules::getModuleInstance()
+    private static $moduleInstances = array();
+
     /**
      * Retrieves the list of all modules currently in the database.
      *
@@ -115,7 +119,7 @@ class Modules
             }
 
             // try to instantiate the module
-            $module = self::instantiateModule($folder);
+            $module = self::getModuleInstance($folder);
             if (!$module) {
                 continue;
             }
@@ -158,7 +162,7 @@ class Modules
         $module_folder = $module_info["module_folder"];
         $current_db_version = $module_info["version"];
 
-        $module = self::instantiateModule($module_folder);
+        $module = self::getModuleInstance($module_folder);
 
         return $current_db_version != $module->getVersion();
     }
@@ -177,7 +181,7 @@ class Modules
         $module_folder = $module_info["module_folder"];
         $old_module_version = $module_info["version"];
 
-        $module = self::instantiateModule($module_folder);
+        $module = self::getModuleInstance($module_folder);
 
         if ($old_module_version == $module->getVersion()) {
             return array(false, "");
@@ -296,7 +300,7 @@ class Modules
         $module_info = self::getModule($module_id);
         $module_folder = $module_info["module_folder"];
 
-        $module = self::instantiateModule($module_folder);
+        $module = self::getModuleInstance($module_folder);
         list ($success, $message) = $module->install($module_id);
 
         // now add any navigation links for this module
@@ -534,7 +538,6 @@ class Modules
     {
         $db = Core::$db;
         $LANG = Core::$L;
-        $root_dir = Core::getRootDir();
 
         $module_info = self::getModule($module_id);
         $module_folder = $module_info["module_folder"];
@@ -543,7 +546,7 @@ class Modules
             return array(false, "");
         }
 
-        $module = self::instantiateModule($module_folder);
+        $module = self::getModuleInstance($module_folder);
         list ($success, $message) = $module->uninstall($module_id);
 
         if (!$success) {
@@ -566,6 +569,9 @@ class Modules
 
         // delete any hooks registered by this module
         Hooks::unregisterModuleHooks($module_folder);
+
+        // delete any module settings
+        Modules::deleteModuleSettings($module_info["module_folder"]);
 
         // now delete the entire module folder
         $message = $LANG["notify_module_uninstalled"];
@@ -661,9 +667,17 @@ class Modules
         require_once("$root_dir/modules/$module_folder/library.php");
 
         Core::$user->checkAuth($auth);
-        return self::instantiateModule($module_folder);
+        return self::getModuleInstance($module_folder);
     }
 
+    public static function getModuleInstance($module_folder) {
+        if (array_key_exists($module_folder, self::$moduleInstances)) {
+            return self::$moduleInstances[$module_folder];
+        } else {
+            self::$moduleInstances[$module_folder] = self::instantiateModule($module_folder);
+            return self::$moduleInstances[$module_folder];
+        }
+    }
 
     public static function instantiateModule($module_folder)
     {
@@ -776,7 +790,7 @@ class Modules
         $LANG = Core::$L;
         $root_dir = Core::getRootDir();
 
-        $module = self::instantiateModule($module_folder);
+        $module = self::getModuleInstance($module_folder);
 
         // include the smarty resources
         if (is_dir("$root_dir/modules/$module_folder/smarty")) {
@@ -830,44 +844,13 @@ class Modules
     }
 
 
-    // --------------------------------------------------------------------------------------------
+    public static function deleteModuleSettings($module_folder) {
+        $db = Core::$db;
 
-
-    /**
-     * A simple helper function to read the module's info file (module.php).
-     *
-     * @param string $module_folder the module's folder name
-     * @return array the module info file contents, or a blank array if there was any problem reading the
-     *   file, or it didn't exist or had blank contents.
-    private static function getModuleInfoFileContents($module_folder)
-    {
-        $root_dir = Core::getRootDir();
-        $file = "$root_dir/modules/$module_folder/module.php";
-
-        if (!is_file($file)) {
-            return array();
-        }
-
-        @include($file);
-        $v = get_defined_vars();
-
-        if (!isset($v["MODULE"])) {
-            return array();
-        }
-
-        $values = $v["MODULE"];
-        $info["author"] = isset($values["author"]) ? $values["author"] : "";
-        $info["author_email"] = isset($values["author_email"]) ? $values["author_email"] : "";
-        $info["author_link"] = isset($values["author_link"]) ? $values["author_link"] : "";
-        $info["version"] = isset($values["version"]) ? $values["version"] : "";
-        $info["date"] = isset($values["date"]) ? $values["date"] : "";
-        $info["origin_language"] = isset($values["origin_language"]) ? $values["origin_language"] : "";
-        $info["namespace"] = isset($values["namespace"]) ? $values["namespace"] : "";
-        $info["nav"] = isset($values["nav"]) ? $values["nav"] : array();
-
-        return $info;
+        $db->query("DELETE FROM {PREFIX}settings WHERE module = :module_folder");
+        $db->bind("module_folder", $module_folder);
+        $db->execute();
     }
-    */
 
 
     /**

@@ -35,7 +35,7 @@ class Errors
     );
 
     public static $headerHTML =<<< END
-<!DOCTYPE>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Error</title>

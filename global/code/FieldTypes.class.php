@@ -1594,4 +1594,121 @@ END;
 
         return $db->fetchAll();
     }
+
+    public static function addFieldTypeSetting($field_type_id, $field_label, $field_setting_identifier, $field_type,
+        $field_orientation, $default_value_type, $default_value, $list_order)
+    {
+        $db = Core::$db;
+
+        $db->query("
+                INSERT INTO {PREFIX}field_type_settings (field_type_id, field_label, field_setting_identifier,
+                  field_type, field_orientation, default_value_type, default_value, list_order)
+                VALUES (:field_type_id, :field_label, :field_setting_identifier, :field_type,
+                  :field_orientation, :default_value_type, :default_value, :list_order)
+            ");
+        $db->bindAll(array(
+            "field_type_id" => $field_type_id,
+            "field_label" => $field_label,
+            "field_setting_identifier" => $field_setting_identifier,
+            "field_type" => $field_type,
+            "field_orientation" => $field_orientation,
+            "default_value_type" => $default_value_type,
+            "default_value" => $default_value,
+            "list_order" => $list_order
+        ));
+        $db->execute();
+
+        return $db->getInsertId();
+    }
+
+    public static function addFieldTypeSettingOptions($options)
+    {
+        $db = Core::$db;
+
+        $query = "INSERT INTO {PREFIX}field_type_setting_options (setting_id, option_text, option_value, option_order, 
+            is_new_sort_group) VALUES (:setting_id, :option_text, :option_value, :option_order, :is_new_sort_group)";
+
+        foreach ($options as $option) {
+            $db->query($query);
+            $db->bindAll(array(
+                "setting_id" => $option["setting_id"],
+                "option_text" => $option["option_text"],
+                "option_value" => $option["option_value"],
+                "option_order" => $option["option_order"],
+                "is_new_sort_group" => $option["is_new_sort_group"]
+            ));
+            $db->execute();
+        }
+    }
+
+
+    /**
+     * Deletes a field type and resets any fields that were set to that type to a different one.
+     * @param $field_type_identifier_to_delete
+     * @param $field_type_identifier_replacement
+     */
+    public static function deleteFieldType($field_type_identifier_to_delete, $field_type_identifier_replacement)
+    {
+        $db = Core::$db;
+
+        $field_type_info = FieldTypes::getFieldTypeByIdentifier($field_type_identifier_to_delete);
+
+        if (!$field_type_info) {
+            return false;
+        }
+
+        $field_type_id = $field_type_info["field_type_id"];
+        $db->query("DELETE FROM {PREFIX}field_types WHERE field_type_id = :field_type_id");
+        $db->bind("field_type_id", $field_type_id);
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}field_type_settings WHERE field_type_id = :field_type_id");
+        $db->bind("field_type_id", $field_type_id);
+        $db->execute();
+
+        $setting_ids = array();
+        foreach ($field_type_info["settings"] as $setting_info) {
+            $setting_ids[] = $setting_info["setting_id"];
+        }
+
+        $setting_id_str = implode(",", $setting_ids);
+        $db->query("DELETE FROM {PREFIX}field_type_setting_options WHERE setting_id IN ($setting_id_str)");
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}field_settings WHERE setting_id IN ($setting_id_str)");
+        $db->execute();
+
+        $db->query("DELETE FROM {PREFIX}field_type_validation_rules WHERE field_type_id = :field_type_id");
+        $db->bind("field_type_id", $field_type_id);
+        $db->execute();
+
+        // delete all uses of this field's validation
+        $db->query("SELECT field_id FROM {PREFIX}form_fields WHERE field_type_id = :field_type_id");
+        $db->bind("field_type_id", $field_type_id);
+        $db->execute();
+        $field_ids = $db->fetchAll(PDO::FETCH_COLUMN);
+
+        if (!empty($field_ids)) {
+            $field_id_str = implode(",", $field_ids);
+            $db->query("DELETE FROM {PREFIX}field_validation WHERE field_id IN ($field_id_str)");
+            $db->execute();
+        }
+
+        $input_field_type_info = FieldTypes::getFieldTypeByIdentifier($field_type_identifier_replacement);
+        $input_field_type_id = $input_field_type_info["field_type_id"];
+
+        $db->query("
+            UPDATE {PREFIX}form_fields
+            SET field_type_id = :input_field_type_id
+            WHERE field_type_id = :field_type_id
+        ");
+        $db->bindAll(array(
+            "input_field_type_id" => $input_field_type_id,
+            "field_type_id" => $field_type_id
+        ));
+        $db->execute();
+
+        return true;
+    }
+
 }

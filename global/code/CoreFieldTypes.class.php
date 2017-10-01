@@ -153,8 +153,7 @@ class CoreFieldTypes
                 $option_info = $setting_info["options"][$j-1];
 
                 $db->query("
-                    INSERT INTO {PREFIX}field_type_setting_options (setting_id, option_text, option_value, option_order, 
-                        is_new_sort_group)
+                    INSERT INTO {PREFIX}field_type_setting_options (setting_id, option_text, option_value, option_order, is_new_sort_group)
                     VALUES (:setting_id, :option_text, :option_value, :option_order, :is_new_sort_group)
                 ");
                 $db->bindAll(array(

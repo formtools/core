@@ -7,3 +7,4 @@ global/config.php
 # temporary
 modules/system_check
 modules/pages
+modules/field_type_google_maps

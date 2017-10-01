@@ -6,7 +6,7 @@
 	{$LANG.text_ft_installed}
 </p>
 
-<form action="{$g_root_url}" method="post">
+<form action="{$g_root_url}" method="post" class="margin_bottom_large">
 	<input type="submit" value="{$LANG.text_log_in_to_ft}" />
 </form>
 

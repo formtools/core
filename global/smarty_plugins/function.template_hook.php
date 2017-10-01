@@ -18,5 +18,6 @@ function smarty_function_template_hook($params, &$smarty)
     if (!Templates::hasRequiredParams($smarty, $params, array("location"))) {
         return "";
     }
-    echo Hooks::processTemplateHookCalls($params["location"], $smarty->getTemplateVars(), $params);
+
+    Hooks::processTemplateHookCalls($params["location"], $smarty->getTemplateVars(), $params);
 }

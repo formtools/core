@@ -47,30 +47,29 @@ class Hooks {
 //                function_name = :function_name AND
 //                hook_function = :hook_function
 //            ");
+//            $db->bindAll(array(
+//                "hook_type" => $hook_type,
+//                "action_location" => $when,
+//                "module_folder" => $module_folder,
+//                "function_name" => $function_name,
+//                "hook_function" => $hook_function
+//            ));
+//            $db->execute();
+        }
+
+        try {
+            $db->query("
+                INSERT INTO {PREFIX}hook_calls (hook_type, action_location, module_folder, function_name, hook_function, priority)
+                VALUES (:hook_type, :action_location, :module_folder, :function_name, :hook_function, :priority)
+            ");
             $db->bindAll(array(
                 "hook_type" => $hook_type,
                 "action_location" => $when,
                 "module_folder" => $module_folder,
                 "function_name" => $function_name,
-                "hook_function" => $hook_function
+                "hook_function" => $hook_function,
+                "priority" => $priority
             ));
-//            $db->execute();
-        }
-
-        $db->query("
-            INSERT INTO {PREFIX}hook_calls (hook_type, action_location, module_folder, function_name, hook_function, priority)
-            VALUES (:hook_type, :when, :module_folder, :function_name, :hook_function, :priority)
-        ");
-        $db->bindAll(array(
-            "hook_type" => $hook_type,
-            "action_location" => $when,
-            "module_folder" => $module_folder,
-            "function_name" => $function_name,
-            "hook_function" => $hook_function,
-            "priority" => $priority
-        ));
-
-        try {
             $db->execute();
         } catch (PDOException $e) {
             return array(false, $e->getMessage());
@@ -157,10 +156,9 @@ class Hooks {
         $return_vals = array();
         foreach ($hooks as $hook_info) {
 
-            // this clause was added in 2.1 - it should have been included in 2.0.x, but it was missed. This prevents any hooks
-            // being processed for modules that are not enabled.
+            // this prevents any hooks being processed for modules that are not enabled
             $module_folder = $hook_info["module_folder"];
-            if (!ft_check_module_enabled($module_folder)) {
+            if (!Modules::checkModuleEnabled($module_folder)) {
                 continue;
             }
 
@@ -299,7 +297,7 @@ class Hooks {
         // extract the var passed from the calling function into the current scope
         foreach ($hooks as $hook_info) {
             $module_folder = $hook_info["module_folder"];
-            if (!ft_check_module_enabled($module_folder)) {
+            if (!Modules::checkModuleEnabled($module_folder)) {
                 continue;
             }
 
@@ -444,32 +442,24 @@ class Hooks {
 
     /**
      * This function called the template hooks and returns the generated HTML.
-     *
-     * @param string $module_folder
-     * @param string $hook_function
-     * @param string $hook_function
-     * @return string
      */
     private static function processTemplateHookCall($module_folder, $hook_function, $location, $template_vars, $all_template_hook_params = array())
     {
-        $root_dir = Core::getRootDir();
-        @include_once("$root_dir/modules/$module_folder/library.php");
+        $module = Modules::getModuleInstance($module_folder);
 
         // this is very unfortunate, but has to be done for backward compatibility. Up until July 2011, template hooks only ever
-        // needed the single "location" attribute + the template var information. But with the Data Visualization module, it needs to be more
-        // flexible. The generated hooks for each visualization can be used in pages generated in the Pages module, and we need to add a
-        // "height" and "width" attributes to the hook to permit the user to tinker around with the size (hardcoding the size of the
-        // visualization makes no sense, because it can be used in different contexts). But... to get that information to the template hook
-        // calls functions we CAN'T pass in an additional param, because it would break all hook call functions. So instead, we add the
-        // information into the $template_vars info for use by the hook call function. Boo!
+        // needed the single "location" attribute + the template var information. But with the Data Visualization module,
+        // it needs to be more flexible. The generated hooks for each visualization can be used in pages generated in
+        // the Pages module, and we need to add a "height" and "width" attributes to the hook to permit the user to tinker
+        // around with the size (hardcoding the size of the visualization makes no sense, because it can be used in different
+        // contexts). But... to get that information to the template hook calls functions we CAN'T pass in an additional param,
+        // because it would break all hook call functions. So instead, we add the information into the $template_vars info
+        // for use by the hook call function. Boo!
         $template_vars["form_tools_all_template_hook_params"] = $all_template_hook_params;
 
-        $html = "";
-        if (function_exists($hook_function)) {
-            $html = @$hook_function($location, $template_vars);
+        if (method_exists($module, $hook_function)) {
+            echo $module->{$hook_function}($location, $template_vars);
         }
-
-        return $html;
     }
 
 
