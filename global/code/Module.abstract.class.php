@@ -165,7 +165,14 @@ abstract class Module {
     }
 
     public final function getModuleNav() {
-        return $this->nav;
+        $module_folder = Core::getRootUrl() . "/modules/" . $this->getModuleFolder();
+
+        $nav = array();
+        foreach ($this->nav as $lang_key => $nav_item) {
+            $nav[$lang_key] = array("$module_folder/{$nav_item[0]}", $nav_item[1]);
+        }
+
+        return $nav;
     }
 
     public final function getModuleFolder() {

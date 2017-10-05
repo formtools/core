@@ -11,7 +11,6 @@ Core::init();
 Core::$user->checkAuth("admin");
 $LANG = Core::$L;
 
-$request = array_merge($_POST, $_GET);
 $theme_id = isset($request["theme_id"]) ? $request["theme_id"] : "";
 
 if (empty($theme_id)) {

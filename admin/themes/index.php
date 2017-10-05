@@ -12,9 +12,6 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("client");
 
-
-$request = array_merge($_POST, $_GET);
-
 // provides a way to manually override admin theme in case of disaster
 $success = true;
 $message = "";

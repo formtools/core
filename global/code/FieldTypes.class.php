@@ -955,7 +955,7 @@ END;
         $field_types   = $params["field_types"];
         $value         = $params["value"];
         $settings      = $params["settings"];
-        $context       = $params["context"];
+        $context       = isset($params["context"]) ? $params["context"] : "";
 
         // loop through the field types and store the one we're interested in in $field_type_info
         $field_type_info = array();

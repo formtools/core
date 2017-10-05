@@ -8,3 +8,4 @@ global/config.php
 modules/system_check
 modules/pages
 modules/field_type_google_maps
+modules/export_manager

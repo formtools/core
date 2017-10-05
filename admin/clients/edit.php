@@ -11,7 +11,6 @@ Core::$user->checkAuth("admin");
 
 $LANG = Core::$L;
 
-$request = array_merge($_POST, $_GET);
 $client_id = General::loadField("client_id", "curr_client_id", "");
 if (empty($client_id)) {
     General::redirect("index.php");

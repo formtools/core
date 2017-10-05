@@ -839,29 +839,21 @@ END;
         return $date_str;
     }
 
-
     /**
-     * Undoes the "helpfulness" of Magic Quotes.
+     * A helper function to return Form Tool's best guess at the timezone offset. First it checks
+     * sessions to see if a person's logged in; if so it uses that. If NOT, it pulls the default
+     * timezone offset value from settings.
      *
-     * @param mixed $input
-     * @return mixed
+     * @return string $timezone_offset
      */
-    public static function undoMagicQuotes($input)
+    public static function getCurrentTimezoneOffset()
     {
-        if (!get_magic_quotes_gpc()) {
-            return $input;
-        }
-
-        if (is_array($input)) {
-            $output = array();
-            foreach ($input as $k=>$i) {
-                $output[$k] = General::undoMagicQuotes($i);
-            }
+        if (Sessions::exists("account.timezone_offset")) {
+            $timezone_offset = Sessions::get("account.timezone_offset");
         } else {
-            $output = stripslashes($input);
+            $timezone_offset = Settings::get("timezone_offset");
         }
-
-        return $output;
+        return $timezone_offset;
     }
 
 

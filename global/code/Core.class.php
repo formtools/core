@@ -277,11 +277,6 @@ class Core {
     protected static $requiredPhpVersion = "5.3";
 
     /**
-     * The minimum required MySQL version needed to run Form Tools.
-     */
-    private static $requiredMysqlVersion = "4.1.2";
-
-    /**
      * Default values. These are use during installation when we have no idea what the user wants. For non-authenticated
      * people visiting the login/forget password pages, they'll get whatever theme & lang has been configured in the
      * database (I figure that's a bit more flexible putting it there than hardcoded in config file).

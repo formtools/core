@@ -58,3 +58,5 @@ require_once(__DIR__ . "/code/field_types/Radio.class.php");
 require_once(__DIR__ . "/code/field_types/Textarea.class.php");
 require_once(__DIR__ . "/code/field_types/Textbox.class.php");
 require_once(__DIR__ . "/code/field_types/Time.class.php");
+
+$request = array_merge($_POST, $_GET);

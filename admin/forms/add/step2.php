@@ -16,7 +16,6 @@ $LANG = Core::$L;
 $root_url = Core::getRootUrl();
 $form_id = General::loadField("form_id", "add_form_form_id", "");
 
-$request = array_merge($_POST, $_GET);
 $submission_type = General::loadField("submission_type", "submission_type");
 
 // the form may or may not be created in the DB at this point. If a user's coming back to this page to complete

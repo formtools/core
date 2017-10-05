@@ -9,8 +9,6 @@ use FormTools\OptionLists;
 Core::init();
 Core::$user->checkAuth("admin");
 
-
-$request = array_merge($_POST, $_GET);
 $LANG = Core::$L;
 
 $list_id = General::loadField("list_id", "option_list_id", "");

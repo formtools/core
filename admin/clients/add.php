@@ -12,8 +12,6 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("admin");
 
-
-$request = array_merge($_POST, $_GET);
 $post_values = array();
 
 $success = true;

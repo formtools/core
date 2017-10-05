@@ -297,12 +297,6 @@ EOF;
             "available_languages" => $lang_string
         );
         Settings::set($core_settings, "core");
-
-        $export_manager_settings = array(
-            "file_upload_dir" => addslashes($rootDir) . "/upload",
-            "file_upload_url" => "$rootURL/upload"
-        );
-        Settings::set($export_manager_settings, "export_manager");
     }
 
 

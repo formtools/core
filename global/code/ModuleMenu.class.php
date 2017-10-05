@@ -56,20 +56,22 @@ class ModuleMenu
     public static function addMenuItems($module_id, $module)
     {
         $LANG = Core::$L;
-        $lang_info = $module->getLangStrings();
+        $L = $module->getLangStrings();
 
         $order = 1;
         $module_nav = $module->getModuleNav();
-        foreach ($module_nav as $lang_file_key => $info) {
+
+
+        foreach ($module_nav as $lang_key => $info) {
             $url        = $info[0];
             $is_submenu = ($info[1]) ? "yes" : "no";
 
-            if (empty($lang_file_key) || empty($url)) {
+            if (empty($lang_key) || empty($url)) {
                 continue;
             }
 
             // odd this. Why not just store the lang string in the DB? That way it'll be translated for each user...
-            $display_text = isset($lang_info[$lang_file_key]) ? $lang_info[$lang_file_key] : $LANG[$lang_file_key];
+            $display_text = isset($L[$lang_key]) ? $L[$lang_key] : $LANG[$lang_key];
 
             ModuleMenu::addMenuItem($module_id, $display_text, $url, $is_submenu, $order);
             $order++;

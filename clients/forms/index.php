@@ -18,8 +18,6 @@ Core::init();
 Core::$user->checkAuth("client");
 $LANG = Core::$L;
 $root_url = Core::getRootUrl();
-
-$request = array_merge($_POST, $_GET);
 $account_id = Sessions::get("account.account_id");
 
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id

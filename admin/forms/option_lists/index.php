@@ -12,10 +12,7 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("admin");
 
-
 $option_list_page = General::loadField("page", "option_list_page", 1);
-
-$request = array_merge($_POST, $_GET);
 $num_option_lists_per_page = Sessions::get("settings.num_option_lists_per_page");
 
 $order = General::loadField("order", "option_list_order");

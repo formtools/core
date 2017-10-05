@@ -18,10 +18,10 @@ function smarty_function_edit_custom_field($params, &$smarty)
         return;
     }
 
-    $form_id     = $params["form_id"];
-    $field_info  = $params["field_info"];
+    $form_id = $params["form_id"];
+    $field_info = $params["field_info"];
     $field_types = $params["field_types"];
-    $settings    = $params["settings"];
+    $settings = $params["settings"];
     $submission_id = isset($params["submission_id"]) ? $params["submission_id"] : "";
 
     // loop through the field types and store the one we're interested in in $field_type_info
@@ -33,7 +33,6 @@ function smarty_function_edit_custom_field($params, &$smarty)
         }
     }
 
-    $edit = false;
     if ($field_info["is_editable"] == "no") {
         $markup_with_placeholders = trim($field_type_info["view_field_smarty_markup"]);
         if (empty($markup_with_placeholders)) {
@@ -41,35 +40,37 @@ function smarty_function_edit_custom_field($params, &$smarty)
             return;
         }
     } else {
-        $edit = true;
         $markup_with_placeholders = $field_type_info["edit_field_smarty_markup"];
     }
 
     // now construct all available placeholders
     $placeholders = array(
-        "FORM_ID"       => $form_id,
-        "VIEW_ID"       => $field_info["view_id"],
+        "FORM_ID" => $form_id,
+        "VIEW_ID" => $field_info["view_id"],
         "SUBMISSION_ID" => $submission_id,
-        "FIELD_ID"      => $field_info["field_id"],
-        "NAME"          => $field_info["field_name"],
-        "COLNAME"       => $field_info["col_name"],
-        "VALUE"         => isset($field_info["submission_value"]) ? $field_info["submission_value"] : "",
-        "SETTINGS"      => $settings,
-        "CONTEXTPAGE"   => "edit_submission",
-        "ACCOUNT_INFO"  => Sessions::getWithFallback("account", array()),
-        "g_root_url"    => $root_url,
-        "g_root_dir"    => $root_dir,
+        "FIELD_ID" => $field_info["field_id"],
+        "NAME" => $field_info["field_name"],
+        "COLNAME" => $field_info["col_name"],
+        "VALUE" => isset($field_info["submission_value"]) ? $field_info["submission_value"] : "",
+        "SETTINGS" => $settings,
+        "CONTEXTPAGE" => "edit_submission",
+        "ACCOUNT_INFO" => Sessions::getWithFallback("account", array()),
+        "g_root_url" => $root_url,
+        "g_root_dir" => $root_dir,
         "g_multi_val_delimiter" => $multi_val_delimiter
     );
 
     // add in all field type settings and their replacements
-    foreach ($field_type_info["settings"] as $setting_info) {
-        $curr_setting_id         = $setting_info["setting_id"];
-        $curr_setting_field_type = $setting_info["field_type"];
-        $default_value_type      = $setting_info["default_value_type"];
-        $value                   = $setting_info["default_value"];
-        $identifier              = $setting_info["field_setting_identifier"];
 
+    // Q: what does this do?
+    foreach ($field_type_info["settings"] as $setting_info) {
+        $curr_setting_id = $setting_info["setting_id"];
+        $curr_setting_field_type = $setting_info["field_type"];
+        $default_value_type = $setting_info["default_value_type"];
+        $value = $setting_info["default_value"];
+        $identifier = $setting_info["field_setting_identifier"];
+
+        // what does THIS do?
         foreach ($field_info["field_settings"] as $setting) {
             $found = false;
             while (list($setting_id, $setting_value) = each($setting)) {

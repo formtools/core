@@ -468,7 +468,7 @@ switch ($action) {
  * There are two ways to pass data to be returned by these requests in this file:
  * - pass a return_vals string with a `:` delimited key/value pairs
  * - pass a return_vars object
- * The first method shouldn't be used - it was pre-jQuery (!). But for now, this method just
+ *
  */
 function constructReturnValue ($data) {
     global $request;
@@ -486,5 +486,11 @@ function constructReturnValue ($data) {
         $obj_data_to_return = $request["return_vars"];
     }
 
-    return json_encode(array_merge($data_to_return, $obj_data_to_return, $data));
+    $return_info = array_merge($data_to_return, $obj_data_to_return);
+
+    // this is because if $data has numbers as the keys, array_merge appends them to the end and the keys are lost (sigh).
+    foreach ($data as $key => $value) {
+        $return_info[$key] = $value;
+    }
+    return json_encode($return_info);
 }

@@ -11,7 +11,6 @@ Core::$user->checkAuth("client");
 
 $LANG = Core::$L;
 
-$request = array_merge($_POST, $_GET);
 $account_id = Sessions::get("account.account_id");
 
 // store the current selected tab in memory

@@ -11,7 +11,6 @@ use FormTools\Sessions;
 Core::init();
 Core::$user->checkAuth("admin");
 
-$request = array_merge($_POST, $_GET);
 $form_id = General::loadField("form_id", "form_id", "");
 
 if (!Forms::checkFormExists($form_id)) {

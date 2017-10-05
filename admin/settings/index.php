@@ -9,8 +9,6 @@ use FormTools\Sessions;
 Core::init();
 Core::$user->checkAuth("admin");
 
-
-$request = array_merge($_POST, $_GET);
 $page = General::loadField("page", "settings_page", "main");
 
 // store the current selected tab in memory - except for pages which require additional

@@ -11,7 +11,6 @@ Core::init();
 Core::$user->checkAuth("admin");
 $LANG = Core::$L;
 
-$request = array_merge($_POST, $_GET);
 $module_info = Modules::getModule($request["module_id"]);
 
 // compile header information

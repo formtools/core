@@ -11,9 +11,6 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("admin");
 
-
-$request = array_merge($_POST, $_GET);
-
 $success = true;
 $message = "";
 if (isset($request["add_form"])) {

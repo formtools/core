@@ -21,8 +21,6 @@ Core::$user->checkAuth("admin");
 $root_url = Core::getRootUrl();
 $LANG = Core::$L;
 
-$request = array_merge($_POST, $_GET);
-
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
 $form_id = General::loadField("form_id", "curr_form_id");
 if (empty($form_id) || !is_numeric($form_id)) {
