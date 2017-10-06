@@ -644,19 +644,19 @@ class Administrator
             }
 
             // now loop through selected Views. Get View info
-            if (!isset($infohash["row_{$i}_selected_views"])) {
+            if (!isset($form_vals["row_{$i}_selected_views"])) {
                 continue;
             }
 
-            $client_form_views[$form_id] = $infohash["row_{$i}_selected_views"];
-            foreach ($infohash["row_{$i}_selected_views"] as $view_id) {
+            $client_form_views[$form_id] = $form_vals["row_{$i}_selected_views"];
+            foreach ($form_vals["row_{$i}_selected_views"] as $view_id) {
                 $db->query("SELECT access_type FROM {PREFIX}views WHERE view_id = :view_id");
                 $db->bind("view_id", $view_id);
                 $db->execute();
 
-                $view_info = $db->fetch();
+                $access_type = $db->fetch(PDO::FETCH_COLUMN);
 
-                if ($view_info["access_type"] != "public") {
+                if ($access_type != "public") {
                     $db->query("INSERT INTO {PREFIX}client_views (account_id, view_id) VALUES (:account_id, :view_id)");
                     $db->bindAll(array(
                         "account_id" => $account_id,
@@ -667,7 +667,7 @@ class Administrator
 
                 // if this View was previously an "admin" type, it no longer is! By adding this client to the View, it's now
                 // changed to a "private" access type
-                if ($view_info["access_type"] == "admin") {
+                if ($access_type == "admin") {
                     $db->query("UPDATE {PREFIX}views SET access_type = 'private' WHERE view_id = :view_id");
                     $db->bind("view_id", $view_id);
                     $db->execute();
@@ -713,6 +713,8 @@ class Administrator
                 }
             }
         }
+
+        return array(true, "");
     }
 
 }
