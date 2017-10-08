@@ -493,8 +493,8 @@ class Submissions {
         if ($submissions_to_delete == "all") {
             // get the list of searchable columns for this View. This is needed to ensure that get_search_submission_ids receives
             // the correct info to determine what submission IDs are appearing in this current search.
-            $searchable_columns = Views::getViewSearchableFields($view_id);
-            $submission_ids = Submissions::getSearchSubmissionIds($form_id, $view_id, "all", "submission_id-ASC", $search_fields, $searchable_columns);
+            $searchable_columns = ViewFields::getViewSearchableFields($view_id);
+            $submission_ids = Submissions::getSearchSubmissionIds($form_id, $view_id, "submission_id-ASC", $search_fields, $searchable_columns);
             $submission_ids = array_diff($submission_ids, $omit_list);
         } else {
             $submission_ids = $submissions_to_delete;
@@ -548,13 +548,11 @@ class Submissions {
             }
 
             if (!empty($file_fields_to_delete)) {
-                list($success, $file_delete_problems) = Files::deleteSubmissionFiles($form_id, $file_fields_to_delete, "Submissions::deleteSubmissions");
+                list($success, $file_delete_problems) = Files::deleteSubmissionFiles($form_id, $file_fields_to_delete);
             }
         }
 
-
-        // now delete the submission
-
+        // now delete the submissions
         $db->query("DELETE FROM {PREFIX}form_{$form_id} $where_clause");
         $db->execute();
 
@@ -795,7 +793,7 @@ class Submissions {
             exit;
         }
 
-        return $db->fetchAll();
+        return $db->fetchAll(PDO::FETCH_COLUMN);
     }
 
 
@@ -1063,13 +1061,13 @@ class Submissions {
                 WHERE  is_finalized = 'yes'
                 $filter_clause
             ");
+            $db->execute();
         } catch (PDOException $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
 
-        $view_num_results_info = $db->fetch();
-        $view_num_results = $view_num_results_info["c"];
+        $view_num_results = $db->fetch(PDO::FETCH_COLUMN);
 
         $return_hash["search_rows"]        = $search_result_rows;
         $return_hash["search_num_results"] = $search_num_results;

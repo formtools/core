@@ -313,6 +313,11 @@ class User
         }
     }
 
+    public function isAdmin()
+    {
+        return $this->accountType == "admin";
+    }
+
 
     /**
      * Verifies the user has permission to view the current page. It is used by feeding the minimum account type to

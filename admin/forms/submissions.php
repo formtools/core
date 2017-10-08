@@ -240,7 +240,6 @@ $select_all_submissions_returned = (Sessions::get("form_{$form_id}_select_all_su
 $preselected_subids = array();
 $all_submissions_selected_omit_list_str = "";
 if ($select_all_submissions_returned == "true") {
-    echo "..";
 	$all_submissions_selected_omit_list = Sessions::getWithFallback("form_{$form_id}_all_submissions_selected_omit_list", array());
 	$all_submissions_selected_omit_list_str = implode(",", $all_submissions_selected_omit_list);
 	$preselected_subids = array_diff($submission_ids, $all_submissions_selected_omit_list);
@@ -292,6 +291,7 @@ $page_vars = array(
     "grouped_views" => $grouped_views,
     "view_info"     => $view_info,
     "settings"      => $settings,
+    "pass_along_str" => "", // TODO
     "preselected_subids" => $preselected_subids,
     "results_per_page"   => $results_per_page,
     "display_fields"     => $display_fields,

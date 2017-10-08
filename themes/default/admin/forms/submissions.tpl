@@ -49,7 +49,6 @@
 
       <form action="{$same_page}" method="post" name="search_form" onsubmit="return rsv.validate(this, rules)">
         <input type="hidden" name="search" value="1" />
-        <input type="hidden" name="select_all" value="{if $curr_view_select_all == "yes"}1{/if}"  />
         <table cellspacing="0" cellpadding="0" id="search_form_table">
         <tr>
           <td class="blue" width="70">{$LANG.word_search}</td>

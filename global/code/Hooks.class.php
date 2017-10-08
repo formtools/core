@@ -147,10 +147,14 @@ class Hooks {
         }
 
         $backtrace = debug_backtrace();
+        $calling_class = $backtrace[1]["class"];
+        $calling_type = $backtrace[1]["type"]; // e.g. "::"
         $calling_function = $backtrace[1]["function"];
 
+        $full_method = "{$calling_class}{$calling_type}{$calling_function}";
+
         // get the hooks associated with this core function and event
-        $hooks = self::getHookCalls($event, "code", $calling_function);
+        $hooks = self::getHookCalls($event, "code", $full_method);
 
         // extract the var passed from the calling function into the current scope
         $return_vals = array();
@@ -533,13 +537,12 @@ class Hooks {
         $vars["form_tools_overridable_vars"] = $overridable_vars;
         $vars["form_tools_calling_function"] = $calling_function;
 
-        @include_once(realpath(__DIR__ . "/../../modules/$module_folder/library.php"));
-
-        if (!function_exists($hook_function)) {
+        $module = Modules::getModuleInstance($module_folder);
+        if (!$module || !method_exists($module, $hook_function)) {
             return $overridable_vars;
         }
 
-        $result = @$hook_function($vars);
+        $result = $module->$hook_function($vars);
         $updated_values = array();
         if (!empty($result)) {
             while (list($key, $value) = each($result)) {

@@ -504,7 +504,6 @@ class Modules
         return (!empty($result) && $result["is_enabled"] == "yes");
     }
 
-
     /**
      * Finds out if a module is available. By "available", we mean: has the files uploaded to the modules
      * folder and has a corresponding record in the modules table. It may not be installed/enabled.
@@ -527,6 +526,17 @@ class Modules
 
         return $result["c"] == 1;
     }
+
+    /**
+     * Convenience method.
+     * @param $module_folder
+     * @return bool
+     */
+    public static function checkModuleUsable($module_folder)
+    {
+        return self::checkModuleAvailable($module_folder) && self::checkModuleEnabled($module_folder);
+    }
+
 
 
     /**
@@ -787,7 +797,6 @@ class Modules
     public static function includeModule($module_folder)
     {
         $smarty = Core::$smarty;
-        $LANG = Core::$L;
         $root_dir = Core::getRootDir();
 
         $module = self::getModuleInstance($module_folder);
@@ -796,10 +805,6 @@ class Modules
         if (is_dir("$root_dir/modules/$module_folder/smarty")) {
             $smarty->setPluginsDir("$root_dir/modules/$module_folder/smarty_plugins");
         }
-
-        // load the language file into the $LANG var
-//        $content = self::getModuleLangFile($module_folder, Core::$user->getLang());
-//        $LANG[$module_folder] = $content;
 
         extract(Hooks::processHookCalls("end", compact("module_folder"), array()), EXTR_OVERWRITE);
 

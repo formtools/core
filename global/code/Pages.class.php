@@ -108,7 +108,7 @@ class Pages
     public static function constructPageURL($page_identifier, $custom_options = "", $args = array())
     {
         $url = "";
-        extract(Hooks::processHookCalls("start", compact("url", "pageIdentifier", "customOptions", "args"), array("url")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("start", compact("url", "page_identifier", "custom_options", "args"), array("url")), EXTR_OVERWRITE);
 
         if (!empty($url)) {
             return $url;

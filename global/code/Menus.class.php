@@ -205,29 +205,6 @@ class Menus
 
         $select_lines[] = array("type" => "optgroup_close");
 
-        // if the Pages module is enabled, display any custom pages that have been defined. Only show the optgroup
-        // if there's at least ONE page defined
-        if (Modules::checkModuleEnabled("pages")) {
-            $module = Modules::includeModule("pages");
-
-            $pages_info = $module->getPages("all");
-            $pages = $pages_info["results"];
-
-            if (count($pages) > 0) {
-                $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["phrase_pages_module"]);
-                foreach ($pages as $page) {
-                    $page_id = $page["page_id"];
-                    $page_name = $page["page_name"];
-                    $select_lines[] = array(
-                        "type" => "option",
-                        "k" => "page_{$page_id}",
-                        "v" => $page_name
-                    );
-                }
-                $select_lines[] = array("type" => "optgroup_close");
-            }
-        }
-
         extract(Hooks::processHookCalls("middle", compact("select_lines"), array("select_lines")), EXTR_OVERWRITE);
 
         $select_lines[] = array("type" => "select_close");
@@ -367,9 +344,9 @@ class Menus
         if ($is_building_menu) {
             if (!in_array("form_submissions", $omit_pages)) {
                 $select_lines[] = array(
-                "type" => "option",
-                "k" => "form_submissions",
-                "v" => $LANG["phrase_form_submissions"]
+                    "type" => "option",
+                    "k" => "form_submissions",
+                    "v" => $LANG["phrase_form_submissions"]
                 );
             }
             if (!in_array("edit_form", $omit_pages)) {
@@ -425,23 +402,6 @@ class Menus
             $select_lines[] = array("type" => "option", "k" => "module_{$module_id}", "v" => $module);
         }
         $select_lines[] = array("type" => "optgroup_close");
-
-        // if the Pages module is enabled, display any custom pages that have been defined. Note: this would be better handled
-        // in the hook added below
-        if (Modules::checkModuleEnabled("pages")) {
-            $module = Modules::includeModule("pages");
-            $pages_info = $module->getPages("all");
-            $pages = $pages_info["results"];
-
-            $select_lines[] = array("type" => "optgroup_open", "label" => $LANG["phrase_pages_module"]);
-            for ($i=0; $i<count($pages); $i++) {
-                $page_id = $pages[$i]["page_id"];
-                $page_name = $pages[$i]["page_name"];
-                $select_lines[] = array("type" => "option", "k" => "page_{$page_id}", "v" => $page_name);
-            }
-
-            $select_lines[] = array("type" => "optgroup_close");
-        }
 
         extract(Hooks::processHookCalls("middle", compact("select_lines"), array("select_lines")), EXTR_OVERWRITE);
 
