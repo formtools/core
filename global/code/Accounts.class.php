@@ -370,7 +370,7 @@ class Accounts
         $email_subject = trim(General::evalSmartyString($smarty_template_email_subject, $placeholders));
 
         // if Swift Mailer is enabled, send the emails with that. In case there's a problem sending the message with
-        // Swift, it falls back the default mail() function.
+        // Swift, it falls back the default mail() func
         $swift_mail_error = false;
         $swift_mail_enabled = Modules::checkModuleEnabled("swift_mailer");
         if ($swift_mail_enabled) {
@@ -382,8 +382,7 @@ class Accounts
                 // get the admin info. We'll use that info for the "from" and "reply-to" values. Note
                 // that we DON'T use that info for the regular mail() function. This is because retrieving
                 // the password is important functionality and we don't want to cause problems that could
-                // prevent the email being sent. Many servers don't all the 4th headers parameter of the mail()
-                // function
+                // prevent the email being sent. Many servers don't all the 4th headers parameter of the mail() func
                 $admin_info = Administrator::getAdminInfo();
                 $admin_email = $admin_info["email"];
 

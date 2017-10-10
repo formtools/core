@@ -111,7 +111,6 @@ class Hooks {
             self::findHooks("$ft_root/$file_or_folder", $ft_root, $component, $results);
         }
 
-
         self::clearHooks();
         self::addCodeHooks($results["code_hooks"]);
         self::addTemplateHooks($results["template_hooks"]);
@@ -379,13 +378,31 @@ class Hooks {
     private static function extractCodeHooks($filepath, $root_folder, $component)
     {
         $lines = file($filepath);
+
+        $current_namespace = "";
         $current_function = "";
+        $current_function_static = "";
         $found_hooks = array();
         $root_folder = preg_quote($root_folder);
 
         foreach ($lines as $line) {
-            if (preg_match("/^function\s([^(]*)/", $line, $matches)) {
+            if (preg_match("/^namespace\s(.*);/", $line, $matches)) {
+                $current_namespace = $matches[1];
+            }
+
+            if (preg_match("/\sfunction\s([^(]*)/", $line, $matches)) {
+
+                if (preg_match("/(\/\/).*function/", $line, $matches2)) {
+                    continue;
+                }
+
                 $current_function = $matches[1];
+
+                echo $current_function . "\n";
+                $current_function_static = false;
+                if (preg_match("/\sstatic\s/", $line, $static_matches)) {
+                    $current_function_static = true;
+                }
                 continue;
             }
 
@@ -408,9 +425,10 @@ class Hooks {
                 $overridable = explode(",", $overridable);
                 $file = preg_replace("%" . $root_folder . "%", "", $filepath);
 
+                $function_delim = ($current_function_static) ? "::" : "->";
                 $found_hooks[] = array(
                     "file"            => $file,
-                    "function_name"   => $current_function,
+                    "function_name"   => "{$current_namespace}{$function_delim}{$current_function}",
                     "action_location" => $action_location,
                     "params"          => $params,
                     "overridable"     => $overridable,

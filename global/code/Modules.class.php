@@ -221,7 +221,7 @@ class Modules
         $db->execute();
 
         // remove and update the navigation links for this module
-        ModuleMenu::resetModuleNav($module_id, $module->getModuleNav());
+        ModuleMenu::resetModuleNav($module_id, $module->getModuleNav(), $module->getLangStrings());
 
         // And we're done! inform the user that it's been upgraded
         $placeholders = array(

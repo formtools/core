@@ -7,7 +7,7 @@
 // -------------------------------------------------------------------------------------------------
 
 namespace FormTools;
-
+use PDO;
 
 class ListGroups {
 
@@ -19,7 +19,7 @@ class ListGroups {
         $db = Core::$db;
 
         if (empty($next_order)) {
-            $next_order = self::getNextListOrder();
+            $next_order = self::getNextListOrder($group_type);
         }
 
         $db->query("
@@ -44,17 +44,19 @@ class ListGroups {
     // list groups are ordered. This returns the next number, used when creating a new one.
     public static function getNextListOrder($group_type)
     {
-        Core::$db->query("
+        $db = Core::$db;
+
+        $db->query("
             SELECT list_order
             FROM   {PREFIX}list_groups
             WHERE  group_type = :group_type
             ORDER BY list_order 
             DESC LIMIT 1
         ");
-        Core::$db->bind("group_type", $group_type);
-        Core::$db->execute();
-        $result = Core::fetch();
-        return (!isset($result["list_order"])) ? 1 : $result["list_order"] + 1;
+        $db->bind("group_type", $group_type);
+        $db->execute();
+        $order = $db->fetch(PDO::FETCH_COLUMN);
+        return !isset($order) ? 1 : $order + 1;
     }
 
     public static function deleteListGroup($group_id)

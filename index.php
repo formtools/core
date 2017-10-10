@@ -5,6 +5,7 @@ require_once("global/library.php");
 use FormTools\Accounts;
 use FormTools\Core;
 use FormTools\General;
+use FormTools\Hooks;
 use FormTools\Installation;
 use FormTools\Pages;
 use FormTools\Settings;
@@ -12,6 +13,9 @@ use FormTools\Themes;
 
 Installation::checkInstalled("install/");
 Core::init();
+
+//Hooks::updateAvailableHooks();
+//exit;
 
 //$g_upgrade_info = ft_upgrade_form_tools();
 

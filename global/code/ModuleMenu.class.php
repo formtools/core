@@ -97,7 +97,7 @@ class ModuleMenu
     }
 
 
-    public static function resetModuleNav($module_id, $nav)
+    public static function resetModuleNav($module_id, $nav, $L)
     {
         $LANG = Core::$L;
 
@@ -111,7 +111,7 @@ class ModuleMenu
                 continue;
             }
 
-            $display_text = isset($lang_info[$lang_file_key]) ? $lang_info[$lang_file_key] : $LANG[$lang_file_key];
+            $display_text = isset($L[$lang_file_key]) ? $L[$lang_file_key] : $LANG[$lang_file_key];
             ModuleMenu::addMenuItem($module_id, $display_text, $url, $is_submenu, $order);
             $order++;
         }

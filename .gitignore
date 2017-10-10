@@ -10,3 +10,5 @@ modules/pages
 modules/field_type_google_maps
 modules/export_manager
 modules/report_builder
+modules/hooks_manager
+modules/field_type_tinymce
