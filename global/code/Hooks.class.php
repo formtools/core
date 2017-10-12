@@ -35,28 +35,6 @@ class Hooks {
     {
         $db = Core::$db;
 
-        // hmm! This whole $force_unique/$may_proceed thing wasn't fully implemented in 2.x - leaving be for now.
-        //$may_proceed = true;
-        if ($force_unique) {
-//            $db->query("
-//                SELECT count(*) as c
-//                FROM   {PREFIX}hook_calls
-//                WHERE  hook_type = :hook_type AND
-//                action_location = :action_location AND
-//                module_folder = :module_folder AND
-//                function_name = :function_name AND
-//                hook_function = :hook_function
-//            ");
-//            $db->bindAll(array(
-//                "hook_type" => $hook_type,
-//                "action_location" => $when,
-//                "module_folder" => $module_folder,
-//                "function_name" => $function_name,
-//                "hook_function" => $hook_function
-//            ));
-//            $db->execute();
-        }
-
         try {
             $db->query("
                 INSERT INTO {PREFIX}hook_calls (hook_type, action_location, module_folder, function_name, hook_function, priority)
@@ -154,6 +132,10 @@ class Hooks {
 
         // get the hooks associated with this core function and event
         $hooks = self::getHookCalls($event, "code", $full_method);
+
+//        if ($calling_function === "adminUpdateClient") {
+//            print_r($hooks);
+//        }
 
         // extract the var passed from the calling function into the current scope
         $return_vals = array();
@@ -272,12 +254,7 @@ class Hooks {
         ));
         $db->execute();
 
-        $results = array();
-        foreach ($db->fetchAll() as $row) {
-            $results[] = $row;
-        }
-
-        return $results;
+        return $db->fetchAll();
     }
 
 
@@ -380,6 +357,7 @@ class Hooks {
         $lines = file($filepath);
 
         $current_namespace = "";
+        $current_class = "";
         $current_function = "";
         $current_function_static = "";
         $found_hooks = array();
@@ -388,17 +366,18 @@ class Hooks {
         foreach ($lines as $line) {
             if (preg_match("/^namespace\s(.*);/", $line, $matches)) {
                 $current_namespace = $matches[1];
+                continue;
+            }
+            if (preg_match("/^class\s([^\s]+)/", $line, $matches)) {
+                $current_class = $matches[1];
+                continue;
             }
 
             if (preg_match("/\sfunction\s([^(]*)/", $line, $matches)) {
-
                 if (preg_match("/(\/\/).*function/", $line, $matches2)) {
                     continue;
                 }
-
                 $current_function = $matches[1];
-
-                echo $current_function . "\n";
                 $current_function_static = false;
                 if (preg_match("/\sstatic\s/", $line, $static_matches)) {
                     $current_function_static = true;
@@ -428,7 +407,7 @@ class Hooks {
                 $function_delim = ($current_function_static) ? "::" : "->";
                 $found_hooks[] = array(
                     "file"            => $file,
-                    "function_name"   => "{$current_namespace}{$function_delim}{$current_function}",
+                    "function_name"   => "{$current_namespace}\\{$current_class}{$function_delim}{$current_function}",
                     "action_location" => $action_location,
                     "params"          => $params,
                     "overridable"     => $overridable,
@@ -531,12 +510,7 @@ class Hooks {
         $db->bind("module_folder", $module_folder);
         $db->execute();
 
-        $results = array();
-        foreach ($db->fetchAll() as $row) {
-            $results[] = $row;
-        }
-
-        return $results;
+        return $db->fetchAll();
     }
 
 
@@ -561,6 +535,7 @@ class Hooks {
         }
 
         $result = $module->$hook_function($vars);
+
         $updated_values = array();
         if (!empty($result)) {
             while (list($key, $value) = each($result)) {

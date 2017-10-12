@@ -686,8 +686,6 @@ END;
         $now = date("U");
         $sessions_valid = true;
 
-        //  print_r($_SESSION["ft"]["account"]);
-
         // check to see if the session has timed-out
         if (Sessions::exists("account.last_activity_unixtime") && Sessions::exists("account.sessions_timeout")) {
             $sessions_timeout_mins = Sessions::get("account.sessions_timeout");
