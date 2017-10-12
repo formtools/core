@@ -330,24 +330,27 @@ class Hooks {
 
     private static function addTemplateHooks($template_hooks)
     {
-        Core::$db->beginTransaction();
+        $db = Core::$db;
+
+        $db->beginTransaction();
         foreach ($template_hooks as $hook_info) {
-            Core::$db->query("
+            $db->query("
                 INSERT INTO {PREFIX}hooks (hook_type, component, filepath, action_location, function_name, params, overridable)
                 VALUES (:hook_type, :component, :template, :location, '', '', '')
             ");
 
-            Core::$db->bindAll(array(
-                ":hook_type" => "template",
-                ":component" => $hook_info["component"],
-                ":template" => $hook_info["template"],
-                ":location" => $hook_info["location"]
+            $db->bindAll(array(
+                "hook_type" => "template",
+                "component" => $hook_info["component"],
+                "template" => $hook_info["template"],
+                "location" => $hook_info["location"]
             ));
+            $db->execute();
         }
         try {
-            Core::$db->processTransaction();
+            $db->processTransaction();
         } catch (PDOException $e) {
-            Core::$db->rollbackTransaction();
+            $db->rollbackTransaction();
         }
     }
 
@@ -420,7 +423,8 @@ class Hooks {
     }
 
 
-    private static function extractTemplateHooks($filepath, $root_folder, $component) {
+    private static function extractTemplateHooks($filepath, $root_folder, $component)
+    {
         $lines = file($filepath);
         $found_hooks = array();
         $root_folder = preg_quote($root_folder);
