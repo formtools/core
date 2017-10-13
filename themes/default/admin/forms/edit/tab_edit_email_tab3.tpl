@@ -20,10 +20,8 @@
         <textarea id="html_template" name="html_template" style="width: 100%; height: 300px">{$template_info.html_template}</textarea>
       </div>
       <script>
-        var html_editor = new CodeMirror.fromTextArea("html_template", {literal}{{/literal}
-        parserfile: ["parsexml.js"],
-        path: "{$g_root_url}/global/codemirror/js/",
-        stylesheet: "{$g_root_url}/global/codemirror/css/xmlcolors.css"
+        var html_editor = new CodeMirror.fromTextArea($("#html_template")[0], {literal}{{/literal}
+            mode: "smarty",
         {literal}});{/literal}
       </script>
     </td>
@@ -41,10 +39,8 @@
         <textarea id="text_template" name="text_template" style="width: 100%; height: 300px">{$template_info.text_template}</textarea>
       </div>
       <script>
-        var text_editor = new CodeMirror.fromTextArea("text_template", {literal}{{/literal}
-        parserfile: ["parsexml.js"],
-        path: "{$g_root_url}/global/codemirror/js/",
-        stylesheet: "{$g_root_url}/global/codemirror/css/xmlcolors.css"
+        var text_editor = new CodeMirror.fromTextArea($("#text_template")[0], {literal}{{/literal}
+            mode: "smarty"
         {literal}});{/literal}
       </script>
     </td>

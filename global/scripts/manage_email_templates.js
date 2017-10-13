@@ -14,12 +14,12 @@ emails_ns.select_template = function(format_type, row) {
     return;
   }
   if (format_type == "html") {
-    html_editor.setCode($("#" + format_type + "_" + row).val());
+    html_editor.setValue($("#" + format_type + "_" + row).val());
   }
   if (format_type == "text") {
-    text_editor.setCode($("#" + format_type + "_" + row).val());
+    text_editor.setValue($("#" + format_type + "_" + row).val());
   }
-}
+};
 
 
 /**
@@ -145,7 +145,7 @@ emails_ns.remove_recipient = function(num) {
 
   $("#recipient_" + num).html("").hide();
   return false;
-}
+};
 
 
 /**

@@ -285,7 +285,7 @@ class Hooks {
             // prefix was added to reduce the likelihood of naming conflicts with variables in any Form Tools page
             $template_vars["form_tools_hook_info"] = $hook_info;
 
-            self::processTemplateHookCall($hook_info["module_folder"], $hook_info["hook_function"], $location, $template_vars, $all_params);
+            self::processTemplateHookCall($module_folder, $hook_info["hook_function"], $location, $template_vars, $all_params);
         }
     }
 

@@ -102,8 +102,11 @@ $page_vars["test_email_data_source"] = $test_email_data_source;
 $page_vars["test_email_submission_id"] = $test_email_submission_id;
 $page_vars["registered_form_emails"] = Emails::getEmailFields($form_id);
 $page_vars["head_string"] =<<< END
+<link rel="stylesheet" href="$root_url/global/codemirror/lib/codemirror.css" type="text/css" />
 <script src="$root_url/global/scripts/manage_email_templates.js?v=3"></script>
-<script src="$root_url/global/codemirror/js/codemirror.js"></script>
+<script src="$root_url/global/codemirror/lib/codemirror.js"></script>
+<script src="$root_url/global/codemirror/mode/xml/xml.js"></script>
+<script src="$root_url/global/codemirror/mode/smarty/smarty.js"></script>
 END;
 
 $page_vars["head_js"] =<<< END
@@ -117,7 +120,15 @@ rsv.onCompleteHandler = function() {
 
 // log the total number of recipients
 $(function() {
-  ft.init_inner_tabs();
+
+  var onTabChange = function (tab) {
+    if (tab === 3) {
+      html_editor.refresh();
+      text_editor.refresh();
+    }
+  }
+
+  ft.init_inner_tabs(onTabChange);
   emails_ns.num_recipients = parseInt($('#num_recipients').val());
   emails_ns.recipient_num  = parseInt($('#num_recipients').val()) + 1;
 

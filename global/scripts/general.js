@@ -299,13 +299,17 @@ ft.change_inner_tab = function(tab, tabset_name) {
  * This should be explicitly called on any page that uses JS inner tabs. It initializes the
  * components, adding the appropriate JS events.
  */
-ft.init_inner_tabs = function() {
+ft.init_inner_tabs = function(callback) {
   $(".inner_tabset").each(function() {
     var tabset_name = $(this).attr("id");
     var row = 1;
     $(this).find(".tab_row div").each(function() {
       $(this).bind("click", { tab: row, tabset_name: tabset_name }, function(e) {
+        var tab = e.data.tab;
         ft.change_inner_tab(e.data.tab, e.data.tabset_name);
+        if (callback) {
+          callback(tab);
+        }
       });
       row++;
     });

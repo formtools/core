@@ -42,18 +42,15 @@ class Code
 
         <textarea id="{\$NAME}_id" name="{\$NAME}">{\$VALUE}</textarea>
   <script>
-  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea("{\$NAME}_id", 
-  {literal}{{/literal} height: "{\$SIZE_PX}px", path: "{\$g_root_url}/global/codemirror/js/",
+  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(document.getElementById("{\$NAME}_id"), 
+  {literal}{{/literal} height: "{\$SIZE_PX}px",
   readOnly: true,
   {if \$code_markup == "HTML" || \$code_markup == "XML"}
-    parserfile: ["parsexml.js"],
-    stylesheet: "{\$g_root_url}/global/codemirror/css/xmlcolors.css"
+    mode: "xml"
   {elseif \$code_markup == "CSS"}
-    parserfile: ["parsecss.js"],
-    stylesheet: "{\$g_root_url}/global/codemirror/css/csscolors.css"
+    mode: "css"
   {elseif \$code_markup == "JavaScript"}
-    parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
-    stylesheet: "{\$g_root_url}/global/codemirror/css/jscolors.css"
+    mode: "javascript"
   {/if}
   {literal}});{/literal}
   </script>
@@ -73,18 +70,14 @@ END;
 </div>
 
 <script>
-var code_mirror_{\$NAME} = new CodeMirror.fromTextArea("{\$NAME}_id", {literal}{{/literal}
+var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(document.getElementById("{\$NAME}_id"), {literal}{{/literal}
   height: "{\$height}px",
-  path:   "{\$g_root_url}/global/codemirror/js/",
   {if \$code_markup == "HTML" || \$code_markup == "XML"} 
-    parserfile: ["parsexml.js"],
-    stylesheet: "{\$g_root_url}/global/codemirror/css/xmlcolors.css"
+    mode: "xml"
   {elseif \$code_markup == "CSS"}
-    parserfile: ["parsecss.js"],
-    stylesheet: "{\$g_root_url}/global/codemirror/css/csscolors.css"
+    mode: "css"
   {elseif \$code_markup == "JavaScript"}
-    parserfile: ["tokenizejavascript.js", "parsejavascript.js"],
-    stylesheet: "{\$g_root_url}/global/codemirror/css/jscolors.css"
+    mode: "javascript"
   {/if}
   {literal}});{/literal}
 </script>

@@ -105,6 +105,9 @@ ol, ul {
   background-color: white;
 }
 
+.editor .CodeMirror {
+    max-height: 150px;
+}
 /* jQuery modal dialog style override */
 body .ui-widget-overlay {
   opacity: 0.4;

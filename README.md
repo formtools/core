@@ -56,10 +56,13 @@ and omit the _composer.lock_ file.
 - Keep the very un-OO user/administrator class code for 3.0. Will refactor that all anyway for user roles in 4.0.
 - combine all that displayPage/displayModulePage etc. code.
 
-### TOo fix:
+### To fix:
 
 - Minor bug: I was logged in on the Edit Client
 page. I deleted the config file & reinstalled. After clicking the "login" button on the last page of the installation 
 process, it took me to the Edit Client page again throwing a bunch of errors.
   -- installation should wipe out sessions on the first page, I think. 
   -- check that page with passing invalid client IDs. Should fail gracefully.
+
+### for upgrading
+- edit_submission_onload_resources setting in settings table was changed. 
