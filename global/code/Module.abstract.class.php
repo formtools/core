@@ -188,7 +188,8 @@ abstract class Module {
      *    {MODULEROOT} - the module root URL
      * @return array
      */
-    public final function getJSFiles() {
+    public final function getJSFiles()
+    {
         $files = array();
         $root_url = Core::getRootUrl();
         $ft_version = Core::getVersionString();
@@ -208,8 +209,21 @@ abstract class Module {
      * Returns a list of all javascript files for this module.
      * @return array
      */
-    public final function getCSSFiles() {
-        return $this->cssFiles;
+    public final function getCSSFiles()
+    {
+        $files = array();
+        $root_url = Core::getRootUrl();
+        $ft_version = Core::getVersionString();
+        $module_root = "$root_url/modules/" . $this->getModuleFolder();
+
+        foreach ($this->cssFiles as $file) {
+            $files[] = str_replace(
+                array("{FTROOT}", "{FTVERSION}", "{MODULEVERSION}", "{MODULEROOT}"),
+                array($root_url, $ft_version, $this->getVersion(), $module_root),
+                $file
+            );
+        }
+        return $files;
     }
 
     /**
