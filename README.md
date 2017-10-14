@@ -3,7 +3,7 @@
 This repo contains the source code for the Form Tools Core. The Core provides the minimal code needed to run Form Tools
 on your server. The `master` branch contains the ongoing work on Form Tools 3, currently in *alpha*. Check out the release sections for earlier, stable releases. 
 
-### Where we're at (Sept, 2017)
+### Where we're at (Oct, 2017)
 
 Earlier this year I returned to work on Form Tools after a long (4 year!) break. There have been a lot of changes made 
 to PHP and the various code dependencies that Form Tools relies on. The goal for the 3.0.0 rewrite is:
@@ -12,6 +12,9 @@ to PHP and the various code dependencies that Form Tools relies on. The goal for
 - Upgrade Smarty
 - Convert the codebase to object oriented
 - move database interaction to use PDO
+
+Right now it's well into the Alpha. The plan is to update all modules and the API for FT3 support and once everything
+is stable, go to Beta. At that stage I'll work on adding an upgrade path from FT2. 
  
 ### PHP version compatibility
 
