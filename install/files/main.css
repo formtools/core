@@ -137,10 +137,11 @@ ul.tips li {
 #account_section {
  	background-image: url(../../themes/default/images/account_section_bg_green.jpg);
 	background-repeat: repeat-x;
-	height:25px;
+	height: 25px;
 	padding-left: 12px;
 	padding-right: 12px;
-	color:white;
+	color: white;
+    padding-bottom: 4px;
 }
 #account_section a:link, #account_section a:visited {
   color: #f2f2f2;

@@ -386,15 +386,15 @@ $g_sql[] = "CREATE TABLE %PREFIX%settings (
 
 
 $resources = array(
-    '<script src="{$g_root_url}/global/codemirror/lib/codemirror.js"></script>',
-    '<script src="{$g_root_url}/global/codemirror/mode/xml/xml.js"></script>',
-    '<script src="{$g_root_url}/global/codemirror/mode/css/css.js"></script>',
-    '<script src="{$g_root_url}/global/codemirror/mode/javascript/javascript.js"></script>',
-    '<script src="{$g_root_url}/global/scripts/jquery-ui-timepicker-addon.js"></script>',
-    '<script src="{$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.pack.js"></script>',
-    '<link rel="stylesheet" href="{$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />'
+    "<script src=\"{\$g_root_url}/global/codemirror/lib/codemirror.js\"></script>",
+    "<script src=\"{\$g_root_url}/global/codemirror/mode/xml/xml.js\"></script>",
+    "<script src=\"{\$g_root_url}/global/codemirror/mode/css/css.js\"></script>",
+    "<script src=\"{\$g_root_url}/global/codemirror/mode/javascript/javascript.js\"></script>",
+    "<script src=\"{\$g_root_url}/global/scripts/jquery-ui-timepicker-addon.js\"></script>",
+    "<script src=\"{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.pack.js\"></script>",
+    "<link rel=\"stylesheet\" href=\"{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.css\" type=\"text/css\" media=\"screen\" />"
 );
-$edit_submission_onload_resources = implode("|", $resources);
+$edit_submission_onload_resources = "'" . implode("|", $resources) . "'";
 
 // changes per release
 $g_sql[] = "INSERT INTO %PREFIX%settings (setting_name, setting_value, module) VALUES ('program_version', '%FORMTOOLSVERSION%', 'core')";

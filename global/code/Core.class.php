@@ -131,13 +131,6 @@ class Core {
     private static $queryStrMultiValSeparator;
 
     /**
-     * For module developers. This prevents the code from automatically deleting your module folder when you're
-     * testing your uninstallation function. Defaults to TRUE, but doesn't work on all systems: sometimes the PHP
-     * doesn't have the permission to remove the folder.
-     */
-    private static $deleteModuleFolderOnUninstallation = false;
-
-    /**
      * This setting lets you control the type of sessions the application uses. The default value is "database",
      * but you can change it to "php" if you'd prefer to use PHP sessions. This applies to all users of the program.
      */
@@ -269,7 +262,7 @@ class Core {
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20171005";
+    private static $releaseDate = "20171014";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
