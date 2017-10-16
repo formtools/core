@@ -1231,8 +1231,6 @@ sf_ns.submit_form = function() {
     params["field_" + field_id + "_size"] = $("#field_" + field_id + "_size").val();
 
     if (sf_ns.is_option_list_field(field_type_id)) {
-      console.log(sf_ns);
-
       var num_options = field_info.option_list.length;
       params["field_" + field_id + "_num_options"] = num_options;
       for (var j=0; j<num_options; j++) {

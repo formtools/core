@@ -1657,13 +1657,12 @@ END;
         }
 
         $field_type_id = $field_type_info["field_type_id"];
+
         $db->query("DELETE FROM {PREFIX}field_types WHERE field_type_id = :field_type_id");
         $db->bind("field_type_id", $field_type_id);
         $db->execute();
 
-        $db->query("DELETE FROM {PREFIX}field_type_settings WHERE field_type_id = :field_type_id");
-        $db->bind("field_type_id", $field_type_id);
-        $db->execute();
+        self::deleteFieldTypeSettings($field_type_id);
 
         $setting_ids = array();
         foreach ($field_type_info["settings"] as $setting_info) {
@@ -1708,6 +1707,15 @@ END;
         $db->execute();
 
         return true;
+    }
+
+    public static function deleteFieldTypeSettings($field_type_id)
+    {
+        $db = Core::$db;
+
+        $db->query("DELETE FROM {PREFIX}field_type_settings WHERE field_type_id = :field_type_id");
+        $db->bind("field_type_id", $field_type_id);
+        $db->execute();
     }
 
 }
