@@ -16,3 +16,4 @@ modules/hooks_manager
 modules/field_type_tinymce
 modules/extended_client_fields
 modules/arbitrary_settings
+modules/data_visualization

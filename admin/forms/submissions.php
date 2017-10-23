@@ -178,7 +178,6 @@ foreach ($view_info["columns"] as $col_info) {
 	$display_fields[] = $data_to_merge;
 }
 
-
 // determine the sort order
 if (isset($_GET["order"])) {
     Sessions::set("view_{$view_id}_sort_order", $_GET["order"]);

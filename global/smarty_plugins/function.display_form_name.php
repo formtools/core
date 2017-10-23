@@ -1,5 +1,7 @@
 <?php
 
+use FormTools\Forms;
+
 /*
  * Smarty plugin
  * -------------------------------------------------------------
@@ -10,12 +12,13 @@
  */
 function smarty_function_display_form_name($params, &$smarty)
 {
-  $form_id = (isset($params["form_id"])) ? $params["form_id"] : "";
+    $form_id = (isset($params["form_id"])) ? $params["form_id"] : "";
 
-  if (empty($form_id))
-    return;
+    if (empty($form_id)) {
+        return "";
+    }
 
-  $form_info = Forms::getForm($form_id);
+    $form_info = Forms::getForm($form_id);
 
-  return $form_info["form_name"];
+    return $form_info["form_name"];
 }

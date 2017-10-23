@@ -80,7 +80,6 @@ $page = array(
     "login_heading" => sprintf("%s %s", $settings['program_name'], $LANG["word_administration"]),
     "username" => $username,
     "is_logged_in" => false,
-    "head_js" => "$(function() { document.login.username.focus(); });",
     "head_string" => "<noscript><style type=\"text/css\">.login_outer_table { display: none; }</style></noscript>",
     "upgrade_notification" => ""
 );

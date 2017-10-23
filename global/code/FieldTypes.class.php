@@ -914,6 +914,8 @@ END;
 
 
     /**
+     * TODO this method is far too complicated & it's central to the application. Refactor.
+     *
      * This should be the one and only place that actually generates the content for a field for it
      * to be viewed. This is used on the Submission Listing page, Edit Submission page (for viewable,
      * non-editable fields), in the Export Manager, in the Email Templates, and anywhere else that needs
@@ -942,8 +944,6 @@ END;
      */
     public static function generateViewableField($params)
     {
-        global $g_cache;
-
         $multi_val_delimiter = Core::getMultiFieldValDelimiter();
         $root_url = Core::getRootUrl();
         $root_dir = Core::getRootUrl();
@@ -972,9 +972,6 @@ END;
         if ($field_type_info["view_field_rendering_type"] == "none" || empty($markup_with_placeholders)) {
             $output = $value;
         } else {
-            $account_info = Sessions::getWithFallback("account", array());
-
-            // now construct all available placeholders
             $placeholders = array(
                 "FORM_ID"       => $form_id,
                 "SUBMISSION_ID" => $submission_id,
@@ -984,77 +981,20 @@ END;
                 "VALUE"         => $value,
                 "SETTINGS"      => $settings,
                 "CONTEXTPAGE"   => $context,
-                "ACCOUNT_INFO"  => $account_info,
+                "ACCOUNT_INFO"  => Sessions::getWithFallback("account", array()),
                 "g_root_url"    => $root_url,
                 "g_root_dir"    => $root_dir,
                 "g_multi_val_delimiter" => $multi_val_delimiter
             );
 
-            // add in all field type settings and their replacements
-            foreach ($field_type_info["settings"] as $setting_info) {
-                $curr_setting_id         = $setting_info["setting_id"];
-                $curr_setting_field_type = $setting_info["field_type"];
-                $default_value_type      = $setting_info["default_value_type"];
-                $value                   = $setting_info["default_value"];
-                $identifier              = $setting_info["field_setting_identifier"];
-
-                if (isset($field_info["field_settings"]) && !empty($field_info["field_settings"])) {
-                    $field_settings = $field_info["field_settings"];
-                    for ($i=0; $i<count($field_settings); $i++) {
-                        while (list($setting_id, $setting_value) = each($field_settings[$i])) {
-                            if ($setting_id == $curr_setting_id) {
-                                $value = $setting_value;
-                                break;
-                            }
-                        }
-                        reset($field_settings);
-                    }
-                }
-
-                // next, if the setting is dynamic, convert the stored value
-                if ($default_value_type == "dynamic") {
-                    // dynamic setting values should ALWAYS be of the form "setting_name,module_folder/'core'". If they're not, just ignore it
-                    $parts = explode(",", $value);
-                    if (count($parts) == 2) {
-                        $dynamic_setting_str = $value; // "setting_name,module_folder/'core'"
-                        if (!array_key_exists("dynamic_settings", $g_cache)) {
-                            $g_cache["dynamic_settings"] = array();
-                        }
-                        if (array_key_exists($dynamic_setting_str, $g_cache["dynamic_settings"])) {
-                            $value = $g_cache["dynamic_settings"][$dynamic_setting_str];
-                        } else {
-                            $value = Settings::get($parts[0], $parts[1]);
-                            $g_cache["dynamic_settings"][$dynamic_setting_str] = $value;
-                        }
-                    }
-                }
-
-                // if this setting type is a dropdown list and $value is non-empty, get the option list
-                if ($curr_setting_field_type == "option_list_or_form_field" && !empty($value)) {
-                    if (preg_match("/form_field:/", $value)) {
-                        $value = Submissions::getMappedFormFieldData($value);
-                    } else {
-                        $option_list_id = $value;
-
-                        if (!array_key_exists("option_lists", $g_cache)) {
-                            $g_cache["option_lists"] = array();
-                        }
-                        if (array_key_exists($option_list_id, $g_cache["option_lists"])) {
-                            $value = $g_cache["option_lists"][$option_list_id];
-                        } else {
-                            $value = OptionLists::getOptionList($option_list_id);
-                            $g_cache["option_lists"][$option_list_id] = $value;
-                        }
-                    }
-                }
-
-                $placeholders[$identifier] = $value;
-            }
+            // Field Types have an arbitrary number of settings specific to themselves. Get them and add the to the $placeholder hash
+            $setting_placeholders = self::getFieldTypeSettingPlaceholders($field_type_info["settings"], $field_info);
+            $placeholders = array_merge($placeholders, $setting_placeholders);
 
             if ($field_type_info["view_field_rendering_type"] == "php") {
                 list ($class_plus_namespace, $method) = explode("::", $field_type_info["view_field_php_function"]);
 
-                // if this is a module, include the module's library.php file so we have access to the class method
+                // TODO instantiate the module instead
                 if ($field_type_info["view_field_php_function_source"] != "core" && is_numeric($field_type_info["view_field_php_function_source"])) {
                     $module_folder = Modules::getModuleFolderFromModuleId($field_type_info["view_field_php_function_source"]);
                     @include_once("$root_dir/modules/$module_folder/library.php");
@@ -1280,8 +1220,6 @@ END;
 
     public static function displayFieldTypeCodeMarkup($placeholders)
     {
-//        print_r($placeholders);
-
         if ($placeholders["CONTEXTPAGE"] == "edit_submission")
         {
             $code_markup = $placeholders["code_markup"];
@@ -1718,4 +1656,72 @@ END;
         $db->execute();
     }
 
+
+    /**
+     * Used in generating the field for view/editing. Retrieves a hash of placeholder i
+     */
+    private static function getFieldTypeSettingPlaceholders($settings, $field_info)
+    {
+        $g_cache = array(); // TODO TMP
+        $placeholders = array();
+
+        foreach ($settings as $setting_info) {
+            $curr_setting_id         = $setting_info["setting_id"];
+            $curr_setting_field_type = $setting_info["field_type"];
+            $default_value_type      = $setting_info["default_value_type"];
+            $value                   = $setting_info["default_value"];
+            $identifier              = $setting_info["field_setting_identifier"];
+
+            if (isset($field_info["settings"]) && !empty($field_info["settings"])) {
+                while (list($setting_id, $setting_value) = each($field_info["settings"])) {
+                    if ($setting_id == $curr_setting_id) {
+                        $value = $setting_value;
+                        break;
+                    }
+                }
+            }
+
+            // if the setting is dynamic, convert the stored value
+            if ($default_value_type == "dynamic") {
+                // dynamic setting values should ALWAYS be of the form "setting_name,module_folder/'core'". If they're not, just ignore it
+                $parts = explode(",", $value);
+                if (count($parts) == 2) {
+                    $dynamic_setting_str = $value; // "setting_name,module_folder/'core'"
+                    if (!array_key_exists("dynamic_settings", $g_cache)) {
+                        $g_cache["dynamic_settings"] = array();
+                    }
+                    if (array_key_exists($dynamic_setting_str, $g_cache["dynamic_settings"])) {
+                        $value = $g_cache["dynamic_settings"][$dynamic_setting_str];
+                    } else {
+                        $value = Settings::get($parts[0], $parts[1]);
+                        $g_cache["dynamic_settings"][$dynamic_setting_str] = $value;
+                    }
+                }
+            }
+
+            // if this setting type is a dropdown list and $value is non-empty, get the option list
+            if ($curr_setting_field_type == "option_list_or_form_field" && !empty($value)) {
+
+                if (preg_match("/form_field:/", $value)) {
+                    $value = Submissions::getMappedFormFieldData($value);
+                } else {
+                    $option_list_id = $value;
+
+                    if (!array_key_exists("option_lists", $g_cache)) {
+                        $g_cache["option_lists"] = array();
+                    }
+                    if (array_key_exists($option_list_id, $g_cache["option_lists"])) {
+                        $value = $g_cache["option_lists"][$option_list_id];
+                    } else {
+                        $value = OptionLists::getOptionList($option_list_id);
+                        $g_cache["option_lists"][$option_list_id] = $value;
+                    }
+                }
+            }
+
+            $placeholders[$identifier] = $value;
+        }
+
+        return $placeholders;
+    }
 }

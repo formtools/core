@@ -28,7 +28,7 @@
         <table cellpadding="0" cellspacing="1">
         <tr>
           <td><label for="username">{$LANG.word_username}</label></td>
-          <td><input type="text" name="username" id="username" value="{$username}" /></td>
+          <td><input type="text" name="username" id="username" value="{$username}" autofocus /></td>
         </tr>
         <tr>
           <td><label for="password">{$LANG.word_password}</label></td>
