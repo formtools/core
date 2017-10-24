@@ -262,7 +262,7 @@ class Core {
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20171019";
+    private static $releaseDate = "20171023";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
