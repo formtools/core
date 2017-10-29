@@ -339,7 +339,7 @@ class Settings {
         Settings::set($settings);
 
         // check the folder was valid
-        list($is_valid_folder, $folder_message) = Files::checkUploadFolder($file_upload_dir);
+        list ($is_valid_folder, $folder_message) = Files::checkUploadFolder($file_upload_dir);
         if (!$is_valid_folder) {
             return array($is_valid_folder, $folder_message);
         }

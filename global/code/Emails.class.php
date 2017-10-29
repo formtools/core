@@ -322,7 +322,7 @@ class Emails {
             $sm_settings = Modules::getModuleSettings("", "swift_mailer");
 
             if ($sm_settings["swiftmailer_enabled"] == "yes") {
-                Modules::includeModule("swift_mailer");
+                $swift = Modules::getModuleInstance("swift_mailer");
 
                 // we deliberately ignore anything other than the specified recipient
                 $email_info["cc"]  = array();
@@ -330,7 +330,8 @@ class Emails {
                 $email_info["to"]  = array();
                 $email_info["to"][] = array("email" => $recipient);
 
-                return swift_send_email($email_info);
+                return $swift->sendEmail($email_info);
+
                 $continue = false;
             }
         }
@@ -1311,8 +1312,8 @@ class Emails {
             $sm_settings = Modules::getModuleSettings("", "swift_mailer");
 
             if (isset($sm_settings["swiftmailer_enabled"]) && $sm_settings["swiftmailer_enabled"] == "yes") {
-                Modules::includeModule("swift_mailer");
-                list($success, $message) = swift_send_email($email_components);
+                $swift = Modules::getModuleInstance("swift_mailer");
+                list ($success, $message) = $swift->sendEmail($email_components);
                 $continue = false;
             }
         }
@@ -1690,8 +1691,8 @@ class Emails {
                     $db->bind("submission_id", $test_email_submission_id);
                     $db->execute();
 
-                    $row = $db->fetch();
-                    if ($row[0] != 1) {
+                    $count = $db->fetch(PDO::FETCH_COLUMN);
+                    if ($count != 1) {
                         return array(false, $LANG["notify_submission_id_not_found"]);
                     } else {
                         $submission_id = $test_email_submission_id;

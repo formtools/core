@@ -377,7 +377,7 @@ class Accounts
             $sm_settings = Modules::getModuleSettings("", "swift_mailer");
 
             if ($sm_settings["swiftmailer_enabled"] == "yes") {
-                Modules::includeModule("swift_mailer");
+                $swift = Modules::getModuleInstance("swift_mailer");
 
                 // get the admin info. We'll use that info for the "from" and "reply-to" values. Note
                 // that we DON'T use that info for the regular mail() function. This is because retrieving
@@ -393,7 +393,8 @@ class Accounts
                 $email_info["from"]["email"] = $admin_email;
                 $email_info["subject"] = $email_subject;
                 $email_info["text_content"] = $email_content;
-                list($success, $sm_message) = swift_send_email($email_info);
+
+                list ($success, $sm_message) = $swift->sendEmail($email_info);
 
                 // if the email couldn't be sent, display the appropriate error message. Otherwise
                 // the default success message is used

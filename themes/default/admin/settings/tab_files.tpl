@@ -89,7 +89,7 @@
                 <label for="css">css</label><br />
               <input type="checkbox" name="file_upload_filetypes[]" value="js" id="js" {if "js"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="js">js</label><br />
-              <input type="checkbox" name="file_upload_filetypes[]" value="html,htm" id="html" {if "js"|in_array:$file_upload_filetypes}checked="checked"{/if} />
+              <input type="checkbox" name="file_upload_filetypes[]" value="html,htm" id="html" {if "html"|in_array:$file_upload_filetypes}checked="checked"{/if} />
                 <label for="html">htm / html</label>
             </td>
             <td valign="top" width="90" class="subpanel">

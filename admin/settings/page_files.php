@@ -10,7 +10,7 @@ use FormTools\Themes;
 $success = true;
 $message = "";
 if (isset($request["update_files"])) {
-    list($success, $message) = Settings::updateFileSettings($request);
+    list ($success, $message) = Settings::updateFileSettings($request);
 }
 $all_preset_types = array(
     "bmp","gif","jpg","jpeg","png","avi","mp3","mp4","css","js","htm","html","doc","rtf",
