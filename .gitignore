@@ -9,6 +9,7 @@ get_files.php
 # temporary
 modules/system_check
 modules/pages
+modules/field_type_file
 modules/field_type_google_maps
 modules/export_manager
 modules/report_builder

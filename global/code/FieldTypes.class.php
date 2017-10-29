@@ -10,8 +10,6 @@
  */
 
 
-// -------------------------------------------------------------------------------------------------
-
 namespace FormTools;
 
 use PDO, PDOException;
@@ -229,47 +227,6 @@ class FieldTypes {
 
         return $result["field_type_id"];
     }
-
-
-    /**
-     * Returns all info about a field type setting.
-     * @param integer $setting_id
-     *
-     * Not used.
-     */
-//    function ft_get_field_type_setting($setting_id)
-//    {
-//        $db = Core::$db;
-//
-//        $query = $db->query("
-//		SELECT *
-//		FROM   {PREFIX}field_type_settings
-//		WHERE  setting_id = $setting_id
-//	");
-//
-//        $options_query = $db->query("
-//		SELECT *
-//		FROM   {PREFIX}field_type_setting_options
-//		WHERE  setting_id = $setting_id
-//		ORDER BY option_order
-//	");
-//
-//        $options = array();
-//        while ($row = mysql_fetch_assoc($options_query))
-//        {
-//            $options[] = array(
-//            "option_text"       => $row["option_text"],
-//            "option_value"      => $row["option_value"],
-//            "option_order"      => $row["option_order"],
-//            "is_new_sort_group" => $row["is_new_sort_group"]
-//            );
-//        }
-//
-//        $info = mysql_fetch_assoc($query);
-//        $info["options"] = $options;
-//
-//        return $info;
-//    }
 
 
     /**
@@ -1724,4 +1681,30 @@ END;
 
         return $placeholders;
     }
+
+
+
+    /**
+     * Returns the field type ID by the field ID.
+     *
+     * @param integer $field_id
+     * @return integer the field ID
+     */
+    public static function getFieldTypeIdByFieldId($field_id)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT field_type_id
+            FROM   {PREFIX}form_fields
+            WHERE  field_id = :field_id
+        ");
+        $db->bind("field_id", $field_id);
+        $db->execute();
+
+        $field_type_id = $db->fetch(PDO::FETCH_COLUMN);
+
+        return (isset($field_type_id)) ? $field_type_id : "";
+    }
+
 }

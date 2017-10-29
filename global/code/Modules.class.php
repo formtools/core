@@ -51,7 +51,16 @@ class Modules
 
         foreach ($modules as $module_folder => $module) {
 
-            // convert the date into a MySQL datetime
+            // Abstract classes in PHP don't have the option to force properties being defined, so check for them here
+            if ($module->getModuleName() == "" ||
+                $module->getAuthor() == "" ||
+                $module->getAuthorEmail() == "" ||
+                $module->getAuthorLink() == "" ||
+                $module->getVersion() == "" ||
+                $module->getDate() == "") {
+                continue;
+            }
+
             list($year, $month, $day) = explode("-", $module->getDate());
             $timestamp = mktime(null, null, null, $month, $day, $year);
             $module_date = General::getCurrentDatetime($timestamp);

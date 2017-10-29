@@ -655,6 +655,10 @@ class Core {
         return self::$userInitialized;
     }
 
+    public static function getFilenameCharWhitelist () {
+        return self::$filenameCharWhitelist;
+    }
+
     private static function initUser() {
         self::$user = new User();
         self::$currLang = self::$user->getLang();

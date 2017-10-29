@@ -1237,7 +1237,7 @@ fields_ns.edit_option_list = function(setting_id) {
  * and tell it to create a new Option List & assign it to the current field ID.
  */
 fields_ns.create_new_option_list = function() {
-  window.location = "./option_lists/index.php?add_option_list=1&field_id=" + fields_ns.__current_field_id;
+  window.location = "../option_lists/index.php?add_option_list=1&field_id=" + fields_ns.__current_field_id;
   return false;
 }
 
