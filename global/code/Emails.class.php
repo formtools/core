@@ -131,8 +131,8 @@ class Emails {
             foreach ($email_template_info["recipients"] as $recipient) {
                 $recipient_user_type    = $recipient["recipient_user_type"];
                 $recipient_type         = $recipient["recipient_type"];
-                $account_id             = !empty($recipient["account_id"]) ? $recipient["account_id"] : "NULL";
-                $form_email_id          = !empty($recipient["form_email_id"]) ? $recipient["form_email_id"] : "NULL";
+                $account_id             = !empty($recipient["account_id"]) ? $recipient["account_id"] : null;
+                $form_email_id          = !empty($recipient["form_email_id"]) ? $recipient["form_email_id"] : null;
                 $custom_recipient_name  = $recipient["custom_recipient_name"];
                 $custom_recipient_email = $recipient["custom_recipient_email"];
 
@@ -897,22 +897,23 @@ class Emails {
         // "Main" tab
         $email_template_name   = $info["email_template_name"];
         $email_status          = $info["email_status"];
-        $view_mapping_type     = (isset($info["view_mapping_type"])) ? $info["view_mapping_type"] : "all";
         $email_event_trigger   = (isset($info["email_event_trigger"]) && !empty($info["email_event_trigger"])) ? join(",", $info["email_event_trigger"]) : "";
+        $view_mapping_type     = (isset($info["view_mapping_type"])) ? $info["view_mapping_type"] : "all";
         $include_on_edit_submission_page = (isset($info["include_on_edit_submission_page"])) ? $info["include_on_edit_submission_page"] : "no";
-        $limit_email_content_to_fields_in_view = (isset($info["limit_email_content_to_fields_in_view"]) && !empty($info["limit_email_content_to_fields_in_view"])) ? $info["limit_email_content_to_fields_in_view"] : "NULL";
+        $limit_email_content_to_fields_in_view = (isset($info["limit_email_content_to_fields_in_view"]) && !empty($info["limit_email_content_to_fields_in_view"])) ? $info["limit_email_content_to_fields_in_view"] : null;
 
-        $subject               = $info["subject"];
+        // Recipient's tab
         $email_from            = $info["email_from"];
         $custom_from_name      = isset($info["custom_from_name"]) ? $info["custom_from_name"] : "";
         $custom_from_email     = isset($info["custom_from_email"]) ? $info["custom_from_email"] : "";
         $email_reply_to        = $info["email_reply_to"];
         $custom_reply_to_name  = isset($info["custom_reply_to_name"]) ? $info["custom_reply_to_name"] : "";
         $custom_reply_to_email = isset($info["custom_reply_to_email"]) ? $info["custom_reply_to_email"] : "";
+        $subject               = $info["subject"];
 
         // figure out the email_from field details
-        $email_from_account_id    = "";
-        $email_from_form_email_id = "";
+        $email_from_account_id    = null;
+        $email_from_form_email_id = null;
         if (preg_match("/^client_account_id_(\d+)/", $email_from, $matches)) {
             $email_from_account_id = $matches[1];
             $email_from = "client";
@@ -922,8 +923,8 @@ class Emails {
         }
 
         // figure out the email_from field details
-        $email_reply_to_account_id = "";
-        $email_reply_to_form_email_id = "";
+        $email_reply_to_account_id = null;
+        $email_reply_to_form_email_id = null;
         if (preg_match("/^client_account_id_(\d+)/", $email_reply_to, $matches)) {
             $email_reply_to_account_id = $matches[1];
             $email_reply_to = "client";

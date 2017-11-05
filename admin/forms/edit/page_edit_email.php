@@ -12,7 +12,6 @@ use FormTools\Submissions;
 use FormTools\Themes;
 use FormTools\Views;
 
-
 $email_id = General::loadField("email_id", "email_id", "");
 
 $success = true;
@@ -25,7 +24,7 @@ $form_info      = Forms::getForm($form_id);
 $form_fields    = Fields::getFormFields($form_id);
 $columns        = Forms::getFormColumnNames($form_id);
 $template_info  = Emails::getEmailTemplate($email_id);
-$event_trigger_arr =  explode(",", $template_info["email_event_trigger"]);
+$event_trigger_arr = explode(",", $template_info["email_event_trigger"]);
 $template_info["email_event_trigger"] = $event_trigger_arr;
 $clients         = $form_info["client_info"];
 $admin_info      = Administrator::getAdminInfo();

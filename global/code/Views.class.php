@@ -320,7 +320,6 @@ class Views
         $db->bind("group_id", $group_id);
         $db->execute();
 
-        // first, delete all the Views
         foreach ($db->fetchAll(PDO::FETCH_COLUMN) as $view_id) {
             Views::deleteView($view_id);
         }
@@ -350,6 +349,8 @@ class Views
         Views::deleteClientViews($view_id);
         ViewTabs::deleteViewTabs($view_id);
         ViewFields::deleteViewFields($view_id);
+        ViewFilters::deleteViewFilters($view_id);
+        ViewColumns::deleteViewColumns($view_id);
         Views::deletePublicViewOmitList($view_id);
         ListGroups::deleteByGroupType("view_fields_$view_id");
 
