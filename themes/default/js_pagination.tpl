@@ -1,6 +1,6 @@
 {*
-  Template: dhtml_pagination.tpl
-  Purpose:  This is used to display DHTML navigation on certain pages; namely, the client list and the form
+  Template: js_pagination.tpl
+  Purpose:  This is used to display JS navigation on certain pages; namely, the client list and the form
             list in the admin pages.
 *}
 

@@ -1,4 +1,6 @@
 .idea*
+themes/classic_grey
+themes/deepblue
 themes/default/cache/*
 themes/cache
 .DS_Store

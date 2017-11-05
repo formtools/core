@@ -440,7 +440,7 @@ END;
      * text, enabling disabling the << and >> arrows, and storing the current page in sessions. This
      * function merely sets up the base HTML + JS.
      *
-     * This function uses a dhtml_pagination.tpl Smarty template file, found in the current theme's root
+     * This function uses a js_pagination.tpl Smarty template file, found in the current theme's root
      * folder.
      *
      * @param integer $num_results The total number of results found.
@@ -477,7 +477,7 @@ END;
         $smarty->assign("total_pages", ceil($num_results / $num_per_page));
 
         // now process the template and return the HTML
-        return $smarty->fetch(Themes::getSmartyTemplateWithFallback($theme, "dhtml_pagination.tpl"));
+        return $smarty->fetch(Themes::getSmartyTemplateWithFallback($theme, "js_pagination.tpl"));
     }
 
 

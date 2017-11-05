@@ -2995,7 +2995,7 @@ $FILES = array(
 	"themes/default/css/tabs.css",
 	"themes/default/css/views.css",
 	"themes/default/css/widgets.css",
-	"themes/default/dhtml_pagination.tpl",
+	"themes/default/js_pagination.tpl",
 	"themes/default/error.tpl",
 	"themes/default/footer.tpl",
 	"themes/default/forget_password.tpl",

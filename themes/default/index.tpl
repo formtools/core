@@ -1,4 +1,4 @@
-{include file="header.tpl"}
+{ft_include file="header.tpl"}
 
   <div class="title">{$login_heading}</div>
 
@@ -56,4 +56,4 @@
     </div>
   </noscript>
 
-{include file="footer.tpl"}
+{ft_include file="footer.tpl"}

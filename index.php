@@ -5,7 +5,6 @@ require_once("global/library.php");
 use FormTools\Accounts;
 use FormTools\Core;
 use FormTools\General;
-use FormTools\Hooks;
 use FormTools\Installation;
 use FormTools\Pages;
 use FormTools\Settings;
@@ -94,6 +93,5 @@ if (!isset($g_upgrade_info["message"]) && isset($_GET["message"])) {
     $page["success"] = false;
     $page["message"] = $message;
 }
-
 
 Themes::displayPage("index.tpl", $page, Core::$user->getTheme(), Core::$user->getSwatch());

@@ -463,7 +463,6 @@ class Modules
             }
         }
 
-        // add up the where clauses
         $where_clauses = array();
         if (!empty($keyword_clause)) $where_clauses[] = "($keyword_clause)";
         if (!empty($status_clause))  $where_clauses[] = "($status_clause)";
@@ -473,7 +472,6 @@ class Modules
             $where_clause = "";
         }
 
-        // get form info
         $db->query("
             SELECT *
             FROM   {PREFIX}modules
@@ -482,13 +480,7 @@ class Modules
        ");
         $db->execute();
 
-        // now retrieve the basic info (id, first and last name) about each client assigned to this form
-        $module_info = array();
-        foreach ($db->fetchAll() as $row) {
-            $module_info[] = $row;
-        }
-
-        return $module_info;
+        return $db->fetchAll();
     }
 
 

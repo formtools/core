@@ -7,7 +7,7 @@
   </tr>
   </table>
 
-  {include file='messages.tpl'}
+  {ft_include file='messages.tpl'}
 
   <div id="search_form" class=" margin_bottom_large">
     <form action="{$same_page}" method="post">
@@ -118,7 +118,10 @@
         {/if}
 
           <td class="pad_left_small pad_right_large" valign="top">
-            <div><span class="bold pad_right_large">{$module.module_name}</span> [<a href="about.php?module_id={$module.module_id}">{$LANG.word_about|upper}</a>]</div>
+            <div>
+                <span class="bold pad_right_large">{$module.module_name}</span>
+                [<a href="about.php?module_id={$module.module_id}">{$LANG.word_about|upper}</a>]
+            </div>
             <div class="medium_grey">{$module.description}</div>
           </td>
           <td valign="top" align="center">{$module.version}</td>

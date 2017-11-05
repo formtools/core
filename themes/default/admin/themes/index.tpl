@@ -7,7 +7,7 @@
   </tr>
   </table>
 
-  {include file='messages.tpl'}
+  {ft_include file='messages.tpl'}
 
   <div class="margin_bottom_large">
     {$LANG.text_theme_page_intro}
