@@ -511,7 +511,7 @@ $LANG["phrase_login_as_user"] = "Connectez-vous comme cet utilisateur";
 $LANG["phrase_login_info"] = "Login Info";
 $LANG["phrase_login_page"] = "Page de connexion";
 $LANG["phrase_login_panel_c"] = "Panneau de connexion:";
-$LANG["phrase_login_panel_leftarrows"] = "«Login Panel";
+$LANG["phrase_login_panel_leftarrows"] = "« Panneau de connexion";
 $LANG["phrase_login_password"] = "Login Mot de passe";
 $LANG["phrase_login_username"] = "Connexion Nom d&#39;utilisateur";
 $LANG["phrase_logo_link_url"] = "Logo du lien URL";
@@ -861,7 +861,7 @@ $LANG["text_last_modified_date_explanation_c"] = "La dernière fois que cet argu
 $LANG["text_limit_email_content_desc"] = "Cette option ne fonctionne que pour le HTML et le contenu du texte généré avec boucles Smarty.";
 $LANG["text_list_views_with_filters"] = "(listes seulement des vues avec un ou plusieurs filtres à définir)";
 $LANG["text_log_in_to_ft"] = "Connectez-vous à Form Tools";
-$LANG["text_login"] = "S&#39;il vous plaît connectez-vous ci-dessous pour accéder à la \$ () program_name Panneau d&#39;administration. Si vous avez oublié votre mot de passe, <a href=\"{\$forgot_password_link}\">cliquez ici.</a>";
+$LANG["text_login"] = "S&#39;il vous plaît connectez-vous ci-dessous pour accéder à la {\$program_name} Panneau d&#39;administration. Si vous avez oublié votre mot de passe, <a href=\"{\$forgot_password_link}\">cliquez ici.</a>";
 $LANG["text_login_info"] = "Conformément à votre demande, voici vos informations de connexion.";
 $LANG["text_name_of_form"] = "Le nom du formulaire.";
 $LANG["text_no_clients"] = "Il n'y a actuellement aucun gestionnaire dans la base de données. Pour ajouter un nouveau compte gestionnaire, cliquez sur le bouton Ajouter Gestionnaire ci-dessous.";

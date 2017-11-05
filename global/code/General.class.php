@@ -1247,5 +1247,30 @@ END;
     {
         return empty($var);
     }
+
+
+    /**
+     * Called on the index and forget pwd pages: detects if an ID has been passed, and if it's valid, uses that users
+     * UI language, theme and swatch.
+     *
+     * Frankly I don't like this at all: it's a (very small) security hole inasmuch as people can determine which
+     * accounts have different themes, swatches, languages. But it's a simple mechanism to allow the login page to
+     * show the right language, especially.
+     */
+    public static function getLoginOverrideId()
+    {
+        $id = General::loadField("id", "id", "");
+        if (!empty($id)) {
+            if (!is_numeric($id)) {
+                $id = "";
+            } else {
+                $info = Accounts::getAccountInfo($id);
+                if (isset($info["account_id"])) {
+                    Core::updateUser($info["ui_language"], $info["theme"], $info["swatch"]);
+                }
+            }
+        }
+        return $id;
+    }
 }
 

@@ -11,38 +11,24 @@ use FormTools\Settings;
 use FormTools\Themes;
 
 Core::init();
-$LANG = Core::$L;
 
 $settings = Settings::get();
-$theme = $settings['default_theme'];
 
 $admin_info = Administrator::getAdminInfo();
 $admin_email = $admin_info["email"];
 
-// if a user id is included in the query string, use it to determine the appearance of the
-// interface (including logo)
-//$id = General::loadField("id", "id", "");
-//
-//if (!empty($id)) {
-//    $info = Accounts::getAccountInfo($id);
-//
-//    if (!empty($info)) {
-//        $theme  = $info['theme'];
-//        $language = $info["ui_language"];
-//        include_once("global/lang/{$language}.php");
-//    }
-//}
+$id = General::getLoginOverrideId();
+
+$LANG = Core::$L;
 
 // if trying to send password
-$g_success = true;
-$g_message = "";
+$success = true;
+$message = "";
 if (isset($_POST) && !empty($_POST)) {
-    list($g_success, $g_message) = Accounts::sendPassword($_POST);
+    list ($success, $message) = Accounts::sendPassword($_POST);
 }
 
-$username = (isset($_POST["username"]) && !empty($_POST["username"])) ? $_POST["username"] : "";
-$username = General::stripChars($username);
-
+$username = General::stripChars((isset($_POST["username"]) && !empty($_POST["username"])) ? $_POST["username"] : "");
 $replacements = array("site_admin_email" => "<a href=\"mailto:$admin_email\">$admin_email</a>");
 
 $head_js =<<<END
@@ -53,15 +39,14 @@ END;
 
 $page_vars = array(
     "text_forgot_password" => General::evalSmartyString($LANG["text_forgot_password"], $replacements),
-    "g_success" => $g_success,
-    "g_message" => $g_message,
+    "g_success" => $success,
+    "g_message" => $message,
     "head_title" => $settings["program_name"],
     "page" => "forgot_password",
     "page_url" => Pages::getPageUrl("forgot_password"),
     "settings" => $settings,
     "username" => $username,
-    "head_js" => $head_js,
-    "query_params" => ""
+    "head_js" => $head_js
 );
 
-Themes::displayPage("forget_password.tpl", $page_vars, $theme);
+Themes::displayPage("forget_password.tpl", $page_vars, Core::$user->getTheme(), Core::$user->getSwatch());

@@ -19,3 +19,7 @@ modules/extended_client_fields
 modules/arbitrary_settings
 modules/data_visualization
 modules/swift_mailer
+modules/text_override
+modules/ip_security_check
+modules/client_audit
+

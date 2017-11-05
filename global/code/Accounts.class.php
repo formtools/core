@@ -171,18 +171,14 @@ class Accounts
 
         // also extract any account-specific settings from account_settings
         $db->query("
-            SELECT * 
+            SELECT setting_name, setting_value
             FROM {PREFIX}account_settings 
             WHERE account_id = :account_id
         ");
         $db->bind("account_id", $account_id);
         $db->execute();
 
-        $settings = array();
-        foreach ($db->fetchAll() as $row) {
-            $settings[$row["setting_name"]] = $row["setting_value"];
-        }
-        $account_info["settings"] = $settings;
+        $account_info["settings"] = $db->fetchAll(PDO::FETCH_KEY_PAIR);
 
         extract(Hooks::processHookCalls("main", compact("account_info"), array("account_info")), EXTR_OVERWRITE);
 
@@ -308,13 +304,8 @@ class Accounts
 
         extract(Hooks::processHookCalls("start", compact("info"), array("info")), EXTR_OVERWRITE);
 
-        $success = true;
-        $message = $LANG["notify_login_info_emailed"];
-
         if (!isset($info["username"]) || empty($info["username"])) {
-            $success = false;
-            $message = $LANG["validation_no_username_or_js"];
-            return array($success, $message);
+            return array(false, $LANG["validation_no_username_or_js"]);
         }
         $username = $info["username"];
 
@@ -328,9 +319,7 @@ class Accounts
 
         // not found
         if ($db->numRows() === 0) {
-            $success = false;
-            $message = $LANG["validation_account_not_recognized_info"];
-            return array($success, $message);
+            return array(false, $LANG["validation_account_not_recognized_info"]);
         }
 
         $account_info = $db->fetch();
@@ -338,9 +327,7 @@ class Accounts
 
         // one final check: confirm the email is defined & valid
         if (empty($email) || !General::isValidEmail($email)) {
-            $success = false;
-            $message = $LANG["validation_email_not_found_or_invalid"];
-            return array($success, $message);
+            return array(false, $LANG["validation_email_not_found_or_invalid"]);
         }
 
         $account_id   = $account_info["account_id"];
@@ -368,6 +355,9 @@ class Accounts
         );
         $smarty_template_email_subject = file_get_contents("$root_dir/global/emails/forget_password_subject.tpl");
         $email_subject = trim(General::evalSmartyString($smarty_template_email_subject, $placeholders));
+
+        $success = true;
+        $message = $LANG["notify_login_info_emailed"];
 
         // if Swift Mailer is enabled, send the emails with that. In case there's a problem sending the message with
         // Swift, it falls back the default mail() func
@@ -410,9 +400,7 @@ class Accounts
 
             // send email [note: the double quotes around the email recipient and content are intentional: some systems fail without it]
             if (!@mail("$email", $email_subject, $email_content)) {
-                $success = false;
-                $message = $LANG["notify_email_not_sent"];
-                return array($success, $message);
+                return array(false, $LANG["notify_email_not_sent"]);
             }
         }
 

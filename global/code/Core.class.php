@@ -659,6 +659,14 @@ class Core {
         return self::$filenameCharWhitelist;
     }
 
+    public static function updateUser($language, $theme, $swatch) {
+        self::$user->setLang($language);
+        self::$user->setTheme($theme);
+        self::$user->setSwatch($swatch);
+
+        self::setCurrLang($language);
+    }
+
     private static function initUser() {
         self::$user = new User();
         self::$currLang = self::$user->getLang();

@@ -237,6 +237,16 @@ abstract class Module {
     }
 
     /**
+     * Returns all or specific settings for the module.
+     * @param mixed $settings array of settings or single setting string, or nothing (returns all)
+     * @return array
+     */
+    public final function setSettings ($settings = "")
+    {
+        return Settings::set($settings, $this->moduleFolder);
+    }
+
+    /**
      * Returns the language strings
      * @return array
      */

@@ -8,7 +8,7 @@
     {$text_forgot_password}
   </div>
 
-  <form name="forget_password" action="{$same_page}{$query_params}" method="post"
+  <form name="forget_password" action="{$same_page}" method="post"
     onsubmit="return rsv.validate(this, rules)">
 
     <div class="login_panel">
@@ -26,7 +26,7 @@
   </form>
 
   <p>
-    <a href="index.php{$query_params}">{$LANG.phrase_login_panel_leftarrows}</a>
+    <a href="index.php">{$LANG.phrase_login_panel_leftarrows}</a>
   </p>
 
   <noscript>
