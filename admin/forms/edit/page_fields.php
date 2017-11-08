@@ -32,7 +32,7 @@ if (isset($request["num_fields_per_page"])) {
 }
 
 if (empty($num_fields_per_page)) {
-    Settings::set("admin_num_fields_per_page_{$form_id}", "all");
+    Settings::set(array("admin_num_fields_per_page_{$form_id}" => "all"));
 }
 
 $fields_page = General::loadField("fields_page", "fields_page", 1);

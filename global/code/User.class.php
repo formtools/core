@@ -50,7 +50,6 @@ class User
             $settings = Settings::get(array("default_theme", "default_client_swatch"));
             $this->theme  = $settings["default_theme"];
             $this->swatch = $settings["default_client_swatch"];
-
         } else {
             $this->isLoggedIn = true;
             $this->accountId = $account_id;

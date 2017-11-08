@@ -14,7 +14,7 @@
 namespace FormTools;
 
 
-use PDOException;
+use PDO, PDOException;
 
 
 class Settings {
@@ -76,20 +76,20 @@ class Settings {
         } else if (is_array($settings)) {
             $result = array();
 
-            foreach ($settings as $setting) {
+            foreach ($settings as $setting_name) {
                 $db->query("
                     SELECT setting_value
                     FROM   {PREFIX}settings
-                    WHERE  setting_name = :setting
+                    WHERE  setting_name = :setting_name
                     $and_module_clause
                 ");
-                $db->bind("setting", $setting);
+                $db->bind("setting_name", $setting_name);
                 if (!empty($module)) {
                     $db->bind("module", $module);
                 }
                 $db->execute();
-                $info = $db->fetch();
-                $result[$setting] = $info["setting_value"];
+
+                $result[$setting_name] = $db->fetch(PDO::FETCH_COLUMN);
             }
         }
 
@@ -100,6 +100,8 @@ class Settings {
      * Updates some setting values. If the setting doesn't exist, it creates it. In addition,
      * it updates the value(s) in the current user's sessions.
      *
+     * TODO this interface is pretty poor. Change this to Settings::set("key", "value") and add a Settings::setAll(array()) version.
+     *
      * @param array $settings a hash of setting name => setting value
      * @param string $module the module name
      */
@@ -108,10 +110,13 @@ class Settings {
         $db = Core::$db;
         $and_module_clause = (!empty($module)) ? "AND module = :module" : "";
 
+        if (!is_array($settings)) {
+            return;
+        }
         while (list($setting_name, $setting_value) = each($settings)) {
 
             $db->query("
-                SELECT count(*) as c
+                SELECT count(*)
                 FROM   {PREFIX}settings
                 WHERE  setting_name = :setting_name
                 $and_module_clause
@@ -127,23 +132,24 @@ class Settings {
                 return array(false, $e->getMessage());
             }
 
-            $info = $db->fetch();
-            if ($info["c"] == 0) {
+            if ($db->fetch(PDO::FETCH_COLUMN) == 0) {
                 if (!empty($module)) {
                     $query = "INSERT INTO {PREFIX}settings (setting_name, setting_value, module) VALUES (:setting_name, :setting_value, :module)";
                 } else {
                     $query = "INSERT INTO {PREFIX}settings (setting_name, setting_value) VALUES (:setting_name, :setting_value)";
                 }
             } else {
-                $query = "UPDATE {PREFIX}settings SET setting_value = :setting_value WHERE setting_name  = :setting_name $and_module_clause";
+                $query = "UPDATE {PREFIX}settings SET setting_value = :setting_value WHERE setting_name = :setting_name $and_module_clause";
             }
 
             $db->query($query);
             if (!empty($module)) {
                 $db->bind("module", $module);
             }
-            $db->bind("setting_value", $setting_value);
-            $db->bind("setting_name", $setting_name);
+            $db->bindAll(array(
+                "setting_value" => $setting_value,
+                "setting_name" => $setting_name
+            ));
             $db->execute();
 
             // TODO. This looks suspiciously like a bug... [a module could overwrite a core var]

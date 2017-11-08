@@ -36,7 +36,8 @@ is stable, go to Beta. At that stage I'll work on adding an upgrade path from FT
 
 Form Tools 3 looks virtually identical to 2 - the bulk of the changes are behind the scenes. But there *are* a few small visual/functional changes:
 
-- I dropping the `$g_unicode` for SQL queries which has been enabled by default since a very early version of Form Tools. 
+- I dropping the `$g_unicode` for SQL queries which has been enabled by default since a very early version of Form Tools.
+- `$dbSSLEnabled` was also dropped.
 I don't see the point of non-unicode queries, so unless I hear otherwise it'll stay removed.
 - All language files are now included in the main repo. "Get more..." link in the UI are removed. 
 - A lot of the internals have changed:

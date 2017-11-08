@@ -74,12 +74,6 @@ class Core {
     private static $dbPassword = "";
 
     /**
-     * This option allows you make a secure connection to the database server using the MYSQL_CLIENT_SSL
-     * flag.
-     */
-    private static $dbSSLEnabled = false;
-
-    /**
      * This value lets you define a custom database prefix for your Form Tools tables. This is handy if
      * Form Tools will be added to an existing database and you want to avoid table naming conflicts.
      */
@@ -262,7 +256,7 @@ class Core {
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20171029";
+    private static $releaseDate = "20171107";
 
     /**
      * The minimum required PHP version needed to run Form Tools.

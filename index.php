@@ -2,18 +2,18 @@
 
 require_once("global/library.php");
 
-use FormTools\Accounts;
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Installation;
 use FormTools\Pages;
 use FormTools\Settings;
 use FormTools\Themes;
+use FormTools\Upgrade;
 
 Installation::checkInstalled("install/");
 Core::init();
 
-//$g_upgrade_info = ft_upgrade_form_tools();
+$upgrade_info = Upgrade::upgrade();
 
 // only verify the core tables exist if there wasn't a problem upgrading
 //if (!($g_upgrade_info["upgraded"] && !$g_upgrade_info["success"])) {
@@ -54,44 +54,28 @@ $page = array(
     "login_heading" => sprintf("%s %s", $settings['program_name'], $LANG["word_administration"]),
     "username" => $username,
     "is_logged_in" => false,
-    "head_string" => "<noscript><style type=\"text/css\">.login_outer_table { display: none; }</style></noscript>",
-    "upgrade_notification" => ""
+    "head_string" => "<noscript><style type=\"text/css\">.login_outer_table { display: none; }</style></noscript>"
 );
 
-//if ($g_upgrade_info["upgraded"])
-//{
-//  if ($g_upgrade_info["success"])
-//  {
-//    $new_version = $settings["program_version"];
-//    if ($settings["release_type"] == "alpha")
-//      $new_version = "{$settings['program_version']}-alpha-{$settings['release_date']}";
-//    else if ($settings["release_type"] == "beta")
-//      $new_version = "{$settings['program_version']}-beta-{$settings['release_date']}";
-//
-//    $replacements = array("version" => $new_version);
-//    $page_vars["upgrade_notification"] = General::evalSmartyString($LANG["text_upgraded"], $replacements, $g_theme);
-//  }
-//  else
-//  {
-//  	$g_success = false;
-//  	$g_message = $g_upgrade_info["message"];
-//  }
-//}
-
-if (!isset($g_upgrade_info["message"]) && isset($_GET["message"])) {
-    $success = false;
-
-    if (array_key_exists($_GET["message"], $LANG)) {
-        $message = $LANG[$_GET["message"]];
-
-    // this provides a simple mechanism for module developers to output their own messages on the index
-    // page (e.g. if they're forbidding a user from logging in & need to notify them)
-    } else {
-        $message = strip_tags($_GET["message"]);
-    }
-
-    $page["success"] = false;
-    $page["message"] = $message;
+if ($upgrade_info["upgraded"]) {
+    $replacements = array("version" => Core::getVersionString());
+    $page["upgrade_notification"] = General::evalSmartyString($LANG["text_upgraded"], $replacements);
 }
+
+//if (!isset($g_upgrade_info["message"]) && isset($_GET["message"])) {
+//    $success = false;
+//
+//    if (array_key_exists($_GET["message"], $LANG)) {
+//        $message = $LANG[$_GET["message"]];
+//
+//    // this provides a simple mechanism for module developers to output their own messages on the index
+//    // page (e.g. if they're forbidding a user from logging in & need to notify them)
+//    } else {
+//        $message = strip_tags($_GET["message"]);
+//    }
+//
+//    $page["success"] = false;
+//    $page["message"] = $message;
+//}
 
 Themes::displayPage("index.tpl", $page, Core::$user->getTheme(), Core::$user->getSwatch());
