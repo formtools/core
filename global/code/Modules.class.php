@@ -8,7 +8,7 @@
 
 namespace FormTools;
 
-use PDO, PDOException;
+use PDO, PDOException, Exception;
 
 
 class Modules
@@ -127,13 +127,10 @@ class Modules
                 continue;
             }
 
-            // try to instantiate the module
-            $module = self::getModuleInstance($folder);
-            if (!$module) {
-                continue;
+            if (self::isValidModule($folder)) {
+                $modules[$folder] = self::getModuleInstance($folder);
             }
 
-            $modules[$folder] = $module;
         }
         closedir($dh);
 
@@ -670,6 +667,9 @@ class Modules
         $root_dir = Core::getRootDir();
         $module_folder = self::getCurrentModuleFolder();
 
+        // I get it. Within the installation, Core::init() hasn't been called, so any dependency that relies on it
+        // including the Templates::displayPage() CAN'T be called.
+
         if (!is_file("$root_dir/modules/$module_folder/library.php")) {
             Errors::handleError("Error with $module_folder module. Missing library.php file.");
             exit;
@@ -681,6 +681,7 @@ class Modules
         return self::getModuleInstance($module_folder);
     }
 
+    // should only be called after isValidModule() has been called  first
     public static function getModuleInstance($module_folder) {
         if (array_key_exists($module_folder, self::$moduleInstances)) {
             return self::$moduleInstances[$module_folder];
@@ -690,14 +691,11 @@ class Modules
         }
     }
 
+    // should only be called after isValidModule() has been called first
     public static function instantiateModule($module_folder)
     {
         $root_dir = Core::getRootDir();
 
-        if (!is_file("$root_dir/modules/$module_folder/library.php")) {
-            Errors::handleError("Error with $module_folder module. Missing library.php file.");
-            exit;
-        }
         require_once("$root_dir/modules/$module_folder/library.php");
 
         $namespace = self::getModuleNamespace($module_folder);
@@ -715,6 +713,28 @@ class Modules
         }
 
         return $module;
+    }
+
+    public static function isValidModule($module_folder)
+    {
+        $root_dir = Core::getRootDir();
+
+        // verify the library file exists
+        if (!is_file("$root_dir/modules/$module_folder/library.php")) {
+            return false;
+        }
+
+        require_once("$root_dir/modules/$module_folder/library.php");
+
+        // verify the class exists
+        $namespace = self::getModuleNamespace($module_folder);
+        $module_class = "FormTools\\Modules\\$namespace\\Module";
+
+        if (!class_exists($module_class)) {
+            return false;
+        }
+
+        return true;
     }
 
 

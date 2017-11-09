@@ -213,12 +213,13 @@ class Themes {
      * @param string $theme an optional parameter, letting you override the default theme
      * @param string $theme an optional parameter, letting you override the default swatch
      */
-    public static function displayPage($template, $page_vars, $theme = "", $swatch = "")
+    public static function displayPage($template, $page_vars, $theme = "default", $swatch = "")
     {
         $theme = (empty($theme) && Core::isUserInitialized()) ? Core::$user->getTheme() : $theme;
         $swatch = (empty($swatch) && Core::isUserInitialized()) ? Core::$user->getSwatch() : $swatch;
 
         $smarty = Templates::getPageRenderSmarty($theme, $page_vars);
+
         $smarty->assign("swatch", $swatch);
 
         if (isset($page_vars["page_url"])) {
@@ -242,7 +243,7 @@ class Themes {
      * @param array $page_vars a hash of information to display / provide to the template.
      * @param string $theme
      */
-    public static function displayModulePage($template, $page_vars = array(), $theme = "", $swatch = "")
+    public static function displayModulePage($template, $page_vars = array(), $theme = "default", $swatch = "")
     {
         $root_dir = Core::getRootDir();
         $module_folder = Modules::getCurrentModuleFolder();

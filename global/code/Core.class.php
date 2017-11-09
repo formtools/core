@@ -256,7 +256,7 @@ class Core {
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20171107";
+    private static $releaseDate = "20171108";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
@@ -288,6 +288,12 @@ class Core {
      * Used for caching data sets during large, repeat operations.
      */
     private static $cache = array();
+
+    /**
+     * Tracks whether sessions have been started or not.
+     * @var bool
+     */
+    private static $sessionsStarted = false;
 
     /**
      * Added in 2.3.0 to prevent hooks being executed during in the installation process, prior to the database being
@@ -394,6 +400,10 @@ class Core {
 
     public static function startSessions()
     {
+        if (self::$sessionsStarted) {
+            return;
+        }
+
         if (self::$sessionType == "database") {
             new DatabaseSessions(self::$db, self::$sessionSavePath);
         }
@@ -405,6 +415,8 @@ class Core {
         session_start();
         header("Cache-control: private");
         header("Content-Type: text/html; charset=utf-8");
+
+        self::$sessionsStarted = true;
     }
 
     /**

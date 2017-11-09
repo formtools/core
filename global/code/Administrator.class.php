@@ -285,46 +285,50 @@ class Administrator
             $swatch = $infohash["{$theme}_theme_swatches"];
         }
 
-        // if the password is defined, md5 it
-        $password_clause = (!empty($password)) ? "password = :password', " : "";
+        // if the password is defined, encode it
+        $password_clause = !empty($password) ? "password = :password, " : "";
         $enc_password = General::encode($password);
 
-        $db->query("
-            UPDATE  {PREFIX}accounts
-            SET     $password_clause
-                    first_name = :first_name,
-                    last_name = :last_name,
-                    email = :email,
-                    theme = :theme,
-                    swatch = :swatch,
-                    login_page = :login_page,
-                    logout_url = :logout_url,
-                    ui_language = :ui_language,
-                    timezone_offset = :timezone_offset,
-                    sessions_timeout = :sessions_timeout,
-                    date_format = :date_format,
-                    username = :username
-            WHERE   account_id = :account_id
-        ");
-        $db->bindAll(array(
-            "first_name" => $infohash["first_name"],
-            "last_name" => $infohash["last_name"],
-            "email" => $infohash["email"],
-            "theme" => $theme,
-            "swatch" => $swatch,
-            "login_page" => $infohash["login_page"],
-            "logout_url" => $infohash["logout_url"],
-            "ui_language" => $infohash["ui_language"],
-            "timezone_offset" => $infohash["timezone_offset"],
-            "sessions_timeout" => $infohash["sessions_timeout"],
-            "date_format" => $infohash["date_format"],
-            "username" => $infohash["username"],
-            "account_id" => $account_id
-        ));
-        if (!empty($password)) {
-            $db->bind("password", $enc_password);
+        try {
+            $db->query("
+                UPDATE  {PREFIX}accounts
+                SET     $password_clause
+                        first_name = :first_name,
+                        last_name = :last_name,
+                        email = :email,
+                        theme = :theme,
+                        swatch = :swatch,
+                        login_page = :login_page,
+                        logout_url = :logout_url,
+                        ui_language = :ui_language,
+                        timezone_offset = :timezone_offset,
+                        sessions_timeout = :sessions_timeout,
+                        date_format = :date_format,
+                        username = :username
+                WHERE   account_id = :account_id
+            ");
+            $db->bindAll(array(
+                "first_name" => $infohash["first_name"],
+                "last_name" => $infohash["last_name"],
+                "email" => $infohash["email"],
+                "theme" => $theme,
+                "swatch" => $swatch,
+                "login_page" => $infohash["login_page"],
+                "logout_url" => $infohash["logout_url"],
+                "ui_language" => $infohash["ui_language"],
+                "timezone_offset" => $infohash["timezone_offset"],
+                "sessions_timeout" => $infohash["sessions_timeout"],
+                "date_format" => $infohash["date_format"],
+                "username" => $username,
+                "account_id" => $account_id
+            ));
+            if (!empty($password)) {
+                $db->bind("password", $enc_password);
+            }
+            $db->execute();
+        } catch (PDOException $e) {
+            return array(false, "Error: " . $e->getMessage());
         }
-        $db->execute();
 
         // update the settings
         Sessions::set("settings", Settings::get());

@@ -7,6 +7,7 @@ use FormTools\Pages;
 use FormTools\Sessions;
 use FormTools\Themes;
 
+Core::init();
 Core::setHooksEnabled(false);
 Core::startSessions();
 Core::initSmarty();
