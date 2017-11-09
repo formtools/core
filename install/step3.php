@@ -1,7 +1,6 @@
 <?php
 
 require_once("../global/library.php");
-require_once("files/sql.php");
 
 use FormTools\Core;
 use FormTools\Database;
@@ -42,7 +41,7 @@ if (isset($_POST["create_database"])) {
 
         $existing_tables = General::getExistingTables($db, Core::getCoreTables(), $table_prefix);
 		if (empty($existing_tables)) {
-            list($success, $error) = Installation::createDatabase($db, $table_prefix, $g_sql);
+            list($success, $error) = Installation::createDatabase($db);
 			if ($success) {
                 General::redirect("step4.php");
 			}
