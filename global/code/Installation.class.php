@@ -1172,22 +1172,6 @@ END;
         return array(true, "");
     }
 
-
-    /**
-     * This function - called on all Form Tools page confirms the script has been installed. If it hasn't, it redirects
-     * the user to the installation script. As of 3.0 the user no longer needs to remove the /install folder.
-     */
-    public static function checkInstalled($redirect_url = "")
-    {
-        if (!Core::checkConfigFileExists() && realpath(__DIR__ . '/../../install')) {
-            if (empty($redirect_url)) {
-                $root_url = Core::getRootUrl();
-                $redirect_url = "$root_url/install/";
-            }
-            General::redirect($redirect_url);
-        }
-    }
-
     /**
      * Installs the core field types. From 2.1.5 up until 3.0.0, the core fields were in a separate module. As of
      * 3.0.0 they were moved to the Core.

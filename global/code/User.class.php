@@ -317,7 +317,6 @@ class User
         return $this->accountType == "admin";
     }
 
-
     /**
      * Verifies the user has permission to view the current page. It is used by feeding the minimum account type to
      * view the page - "client", will let administrators and clients view it, but "admin" will only let administrators.

@@ -371,9 +371,6 @@ class Core {
             self::initDatabase();
         }
 
-        // ensure the application has been installed
-        Installation::checkInstalled();
-
         self::initSmarty();
         if ($options["start_sessions"]) {
             self::startSessions();
