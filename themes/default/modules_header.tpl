@@ -34,6 +34,7 @@
 <body>
 <div id="container">
   <div id="header">
+    {if !$hide_header_bar}
     <div style="float:right">
       <table cellspacing="0" cellpadding="0" height="25">
       <tr>
@@ -57,9 +58,12 @@
       </tr>
       </table>
     </div>
+    {/if}
 
     <span style="float:left; padding-top: 8px; padding-right: 10px">
-      <a href="{$settings.logo_link}"><img src="{$theme_url}/images/logo_{$swatch}.jpg" border="0" width="220" height="61" /></a>
+      {if isset($settings.logo_link)}<a href="{$settings.logo_link}">{/if}
+        <img src="{$theme_url}/images/logo_{$swatch}.jpg" border="0" width="220" height="61" />
+      {if isset($settings.logo_link)}</a>{/if}
     </span>
   </div>
 
@@ -67,9 +71,8 @@
 
     <table cellspacing="0" cellpadding="0" width="100%">
     <tr>
-      {if !$hide_nav_menu}
       <td width="180" valign="top">
-
+        {if !$hide_nav_menu}
         <div id="left_nav">
           <div class="nav_heading">{$LANG.phrase_module_nav}</div>
           <div id="module_nav">
@@ -85,7 +88,7 @@
             {ft_include file="menu.tpl"}
           </div>
         </div>
+        {/if}
 
       </td>
-      {/if}
       <td valign="top">

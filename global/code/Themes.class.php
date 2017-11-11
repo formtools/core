@@ -207,13 +207,12 @@ class Themes {
      * handy!): it means that only the default theme needs to contain every file. Other themes can just define whatever
      * pages they want to override and omit the others.
      *
-     *
      * @param string $template the location of the template file, relative to the theme folder
      * @param array $page_vars a hash of information to provide to the template
      * @param string $theme an optional parameter, letting you override the default theme
      * @param string $theme an optional parameter, letting you override the default swatch
      */
-    public static function displayPage($template, $page_vars, $theme = "default", $swatch = "")
+    public static function displayPage($template, $page_vars, $theme = "", $swatch = "")
     {
         $theme = (empty($theme) && Core::isUserInitialized()) ? Core::$user->getTheme() : $theme;
         $swatch = (empty($swatch) && Core::isUserInitialized()) ? Core::$user->getSwatch() : $swatch;
@@ -243,7 +242,7 @@ class Themes {
      * @param array $page_vars a hash of information to display / provide to the template.
      * @param string $theme
      */
-    public static function displayModulePage($template, $page_vars = array(), $theme = "default", $swatch = "")
+    public static function displayModulePage($template, $page_vars = array(), $theme = "", $swatch = "")
     {
         $root_dir = Core::getRootDir();
         $module_folder = Modules::getCurrentModuleFolder();
@@ -315,6 +314,9 @@ class Themes {
 
         if (!isset($page_vars["hide_nav_menu"])) {
             $smarty->assign("hide_nav_menu", false);
+        }
+        if (!isset($page_vars["hide_header_bar"])) {
+            $smarty->assign("hide_header_bar", false);
         }
 
         $smarty->assign("module_folder", $module_folder);

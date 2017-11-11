@@ -268,8 +268,6 @@ class User
     {
         $root_url = Core::getRootUrl();
 
-        // $g_session_type;
-
         extract(Hooks::processHookCalls("main", array(), array()));
 
         // this ensures sessions are started

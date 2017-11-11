@@ -133,10 +133,6 @@ class Hooks {
         // get the hooks associated with this core function and event
         $hooks = self::getHookCalls($event, "code", $full_method);
 
-//        if ($calling_function === "adminUpdateClient") {
-//            print_r($hooks);
-//        }
-
         // extract the var passed from the calling function into the current scope
         $return_vals = array();
         foreach ($hooks as $hook_info) {

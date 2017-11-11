@@ -1,6 +1,7 @@
 .idea*
 themes/classic_grey
 themes/deepblue
+themes/ohcanada
 themes/default/cache/*
 themes/cache
 .DS_Store

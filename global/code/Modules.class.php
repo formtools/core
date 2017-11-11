@@ -661,7 +661,7 @@ class Modules
      *  - instantiates the module's Module class and returns it
      * return Module
      */
-    public static function initModulePage($auth)
+    public static function initModulePage($auth = "")
     {
         Core::init();
         $root_dir = Core::getRootDir();
@@ -677,7 +677,9 @@ class Modules
 
         require_once("$root_dir/modules/$module_folder/library.php");
 
-        Core::$user->checkAuth($auth);
+        if (!empty($auth)) {
+            Core::$user->checkAuth($auth);
+        }
         return self::getModuleInstance($module_folder);
     }
 
