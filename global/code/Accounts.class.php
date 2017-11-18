@@ -54,10 +54,7 @@ class Accounts
         $db->bind("account_id", $account_id);
         $db->execute();
 
-        $hash = array();
-        foreach ($db->fetchAll() as $row) {
-            $hash[$row['setting_name']] = $row["setting_value"];
-        }
+        $hash = $db->fetchAll(PDO::FETCH_KEY_PAIR);
 
         extract(Hooks::processHookCalls("main", compact("account_id", "hash"), array("hash")), EXTR_OVERWRITE);
 
@@ -82,7 +79,7 @@ class Accounts
 
             // find out if it already exists
             $db->query("
-                SELECT count(*) as c
+                SELECT count(*)
                 FROM   {PREFIX}account_settings
                 WHERE  setting_name = :setting_name AND
                        account_id = :account_id
@@ -92,9 +89,9 @@ class Accounts
                 "account_id" => $account_id
             ));
             $db->execute();
-            $info = $db->fetch();
+            $count = $db->fetch(PDO::FETCH_COLUMN);
 
-            if ($info["c"] == 0) {
+            if ($count == 0) {
                 $db->query("
                     INSERT INTO {PREFIX}account_settings (account_id, setting_name, setting_value)
                     VALUES (:account_id, :setting_name, :setting_value)
@@ -132,16 +129,14 @@ class Accounts
         }
 
         $db->query("
-            SELECT count(*) as c
+            SELECT count(*)
             FROM {PREFIX}accounts
             WHERE account_id = :account_id
         ");
         $db->bind("account_id", $account_id);
         $db->execute();
 
-        $result = $db->fetch();
-
-        return ($result["c"] == 1);
+        return $db->fetch(PDO::FETCH_COLUMN) === 1;
     }
 
 
@@ -204,9 +199,6 @@ class Accounts
         $last_passwords = (isset($account_settings["password_history"]) && !empty($account_settings["password_history"])) ?
             explode(",", $account_settings["password_history"]) : array();
 
-        //print_r($last_passwords);
-
-
         $is_found = false;
         for ($i=0; $i<$num_password_history; $i++) {
             if ($password == $last_passwords[$i]) {
@@ -262,7 +254,7 @@ class Accounts
         // now check the username isn't already taken
         try {
             $db->query("
-                SELECT count(*) as c
+                SELECT count(*)
                 FROM   {PREFIX}accounts
                 WHERE  username = :username
                 $clause
@@ -278,8 +270,7 @@ class Accounts
             exit;
         }
 
-        $result = $db->fetch(PDO::FETCH_NUM);
-        if ($result[0] > 0) {
+        if ($db->fetch(PDO::FETCH_COLUMN) > 0) {
             return array(false, $LANG["validation_username_taken"]);
         } else {
             return array(true, "");

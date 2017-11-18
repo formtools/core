@@ -8,7 +8,7 @@
 
 namespace FormTools;
 
-use PDOException;
+use PDO, PDOException;
 
 
 class Fields {
@@ -208,7 +208,6 @@ class Fields {
             $db->query("DELETE FROM {PREFIX}field_settings WHERE field_id IN ($in_clause)");
             $db->bindAll($in_params);
             $db->execute();
-
             $db->processTransaction();
 
         } catch (PDOException $e) {
@@ -518,12 +517,6 @@ class Fields {
 
         $info = $db->fetch();
 
-//echo "                SELECT *
-//                FROM   ft2_form_fields ff, ft2_field_types ft
-//                WHERE  ff.field_id = $field_id AND
-//                       ff.field_type_id = ft.field_type_id
-//";
-//
         if ($params["include_field_settings"]) {
             $info["settings"] = Fields::getFormFieldSettings($field_id, $params["evaluate_dynamic_settings"]);
         }
@@ -937,16 +930,14 @@ class Fields {
         $db = Core::$db;
 
         $db->query("
-            SELECT count(*) as c
+            SELECT count(*)
             FROM   {PREFIX}form_fields
-            WHERE  form_id = $form_id
+            WHERE  form_id = :form_id
         ");
         $db->bind("form_id", $form_id);
         $db->execute();
 
-        $info = $db->fetch();
-
-        return $info["c"];
+        return $db->fetch(PDO::FETCH_COLUMN);
     }
 
 
@@ -1078,7 +1069,7 @@ class Fields {
             SELECT fts.field_type_id, fs.field_id, fts.field_setting_identifier, fs.setting_value
             FROM   {PREFIX}field_type_settings fts, {PREFIX}field_settings fs
             WHERE  fts.setting_id = fs.setting_id AND
-                   fs.field_id = $field_id
+                   fs.field_id = :field_id
             ORDER BY fs.field_id
         ");
         $db->bind("field_id", $field_id);

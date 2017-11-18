@@ -321,7 +321,9 @@ switch ($action) {
 
 	case "get_upgrade_form_html":
 		$components = General::getFormtoolsInstalledComponents();
-		echo "<form action=\"http://www.formtools.org/upgrade.php\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
+
+        // https://www.formtools.org/upgrade.php
+		echo "<form action=\"http://localhost:8888/formtools-site/formtools.org/upgrade.php\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
 		while (list($key, $value) = each($components)) {
 			echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 		}

@@ -309,21 +309,22 @@ class Modules
         $module = self::getModuleInstance($module_folder);
         list ($success, $message) = $module->install($module_id);
 
-        // now add any navigation links for this module
-        ModuleMenu::addMenuItems($module_id, $module);
-
-        // get the module language file contents and store the info in the $LANG global for
-        // so it can be accessed by the installation script (TODO needed?)
-        $LANG[$module_folder] = $module->getLangStrings();
-
-        // if there is no custom installation message, use the default
-        if (empty($message)) {
-            $message = General::evalSmartyString($LANG["notify_module_installed"], array(
-                "link" => "$root_url/modules/$module_folder"
-            ));
-        }
-
         if ($success) {
+
+            // now add any navigation links for this module
+            ModuleMenu::addMenuItems($module_id, $module);
+
+            // get the module language file contents and store the info in the $LANG global for
+            // so it can be accessed by the installation script (TODO needed?)
+            $LANG[$module_folder] = $module->getLangStrings();
+
+            // if there is no custom installation message, use the default
+            if (empty($message)) {
+                $message = General::evalSmartyString($LANG["notify_module_installed"], array(
+                    "link" => "$root_url/modules/$module_folder"
+                ));
+            }
+
             $db->query("
                 UPDATE {PREFIX}modules
                 SET    is_installed = :is_installed,
@@ -340,6 +341,12 @@ class Modules
                 $db->execute();
             } catch (PDOException $e) {
                 return array(false, $e->getMessage());
+            }
+        } else {
+            if (!empty($message)) {
+                $message = $LANG["text_error_installing"] . " <b>$message</b>";
+            } else {
+                $message = $LANG["text_error_installing"];
             }
         }
 

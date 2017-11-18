@@ -8,6 +8,7 @@ class ComposerStaticInit23ec02de19cab55fede4f7ad522a9619
 {
     public static $files = array (
         'f084d01b0a599f67676cffef638aa95b' => __DIR__ . '/..' . '/smarty/smarty/libs/bootstrap.php',
+        '8cd2fca4db21bffce1ad0612f7caeec4' => __DIR__ . '/..' . '/ramsey/array_column/src/array_column.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

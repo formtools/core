@@ -40,12 +40,7 @@ class Emails {
             $db->bind("email_id", $row["email_id"]);
             $db->execute();
 
-            $results = $db->fetchAll();
-            $when_sent_view_ids = array();
-            foreach ($results as $result) {
-                $when_sent_view_ids[] = $result["view_id"];
-            }
-            $row["when_sent_view_ids"] = $when_sent_view_ids;
+            $row["when_sent_view_ids"] = $db->fetchAll(PDO::FETCH_COLUMN);
             $info[] = $row;
         }
 
@@ -225,11 +220,7 @@ class Emails {
         $db->bind("email_id", $email_id);
         $db->execute();
 
-        $view_ids = array();
-        foreach ($db->fetchAll() as $row) {
-            $view_ids[] = $row["view_id"];
-        }
-        $email_template["when_sent_view_ids"] = $view_ids;
+        $email_template["when_sent_view_ids"] = $db->fetchAll(PDO::FETCH_COLUMN);
 
         extract(Hooks::processHookCalls("end", compact("email_template"), array("email_template")), EXTR_OVERWRITE);
 
@@ -284,7 +275,7 @@ class Emails {
         }
 
         $return_hash["results"] = $email_info;
-        $return_hash["num_results"]  = $count_result["c"];
+        $return_hash["num_results"] = $count_result["c"];
 
         extract(Hooks::processHookCalls("end", compact("form_id", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
@@ -317,7 +308,6 @@ class Emails {
         $recipient = $info["test_email_recipient"];
 
         // if Swift Mailer is enabled, send the emails with that
-        $continue = true;
         if (Modules::checkModuleEnabled("swift_mailer")) {
             $sm_settings = Modules::getModuleSettings("", "swift_mailer");
 
@@ -331,13 +321,7 @@ class Emails {
                 $email_info["to"][] = array("email" => $recipient);
 
                 return $swift->sendEmail($email_info);
-
-                $continue = false;
             }
-        }
-
-        if (!$continue) {
-            return;
         }
 
         // construct the email headers
@@ -1326,10 +1310,8 @@ class Emails {
 
         $eol = Emails::getEmailEolChar();
 
-        $recipient_list = array();
-        foreach ($email_components["to"] as $to_info) {
-            $recipient_list[] = $to_info["recipient_line"];
-        }
+        $recipient_list = array_column($email_components["to"], "recipient_line");
+
         $to = join(", ", $recipient_list);
         $to = htmlspecialchars_decode($to);
 
@@ -1348,19 +1330,13 @@ class Emails {
             $headers .= "Reply-to: {$reply_to}$eol";
         }
         if (!empty($email_components["cc"])) {
-            $cc_list = array();
-            foreach ($email_components["cc"] as $cc_info) {
-                $cc_list[] = $cc_info["recipient_line"];
-            }
+            $cc_list = array_column($email_components["cc"], "recipient_line");
             $cc = join(", ", $cc_list);
             $cc = htmlspecialchars_decode($cc);
             $headers .= "Cc: {$cc}$eol";
         }
         if (!empty($email_components["bcc"])) {
-            $bcc_list = array();
-            foreach ($email_components["bcc"] as $bcc_info) {
-                $bcc_list[] = $bcc_info["recipient_line"];
-            }
+            $bcc_list = array_column($email_components["bcc"], "recipient_line");
             $bcc = join(", ", $bcc_list);
             $bcc = htmlspecialchars_decode($bcc);
             $headers .= "Bcc: {$bcc}$eol";

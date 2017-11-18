@@ -828,6 +828,7 @@ $LANG["text_email_template_text_1_c"] = "There has been a submission made throug
 $LANG["text_email_template_thanks"] = "Thanks for your submission!";
 $LANG["text_enter_license_key"] = "In order to install this module, you must enter your license key. You should have been emailed this key after purchasing the module. If you didn't receive it, you can always <a href=\"https://accounts.formtools.org\" target=\"_blank\">log into your Form Tools account</a> to track it down.";
 $LANG["text_error_message_to_show"] = "Error message to show if the field fails the validation";
+$LANG["text_error_installing"] = "There was a problem installing this module.";
 $LANG["text_external_form_desc"] = "External forms are forms that already exist on your website, or somewhere on the web. Select this option if you have your own form which you'd like to integrate with Form Tools.";
 $LANG["text_fields_tab_summary"] = "This page lists all of your form fields. To control how they appear when browsing submissions, see the <a href=\"{\$views_tab_link}\">Views tab</a>. Deleting a field on this page will delete it from all submissions, so please be careful!";
 $LANG["text_file_extension_info"] = "Enter file extensions separated with commas (e.g. jpg,gif,png) or leave blank to allow any file type.";

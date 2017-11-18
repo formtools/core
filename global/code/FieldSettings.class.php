@@ -3,6 +3,8 @@
 
 namespace FormTools;
 
+use PDO;
+
 
 class FieldSettings
 {
@@ -21,9 +23,8 @@ class FieldSettings
             "setting_id" => $setting_id
         ));
         $db->execute();
-        $result = $db->fetch();
 
-        return (isset($result["setting_value"])) ? $result["setting_value"] : "";
+        return $db->fetch(PDO::FETCH_COLUMN);
     }
 
     public static function addSetting($field_id, $setting_id, $setting_value)

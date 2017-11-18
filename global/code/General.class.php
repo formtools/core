@@ -591,13 +591,18 @@ END;
     {
         $db = Core::$db;
 
-        $db->query("
-            ALTER TABLE $table
-            CHANGE $old_col_name $new_col_name $col_type
-        ");
-        $db->execute();
+        try {
+            $db->query("
+                ALTER TABLE $table
+                CHANGE $old_col_name $new_col_name $col_type
+            ");
+            $db->execute();
+            extract(Hooks::processHookCalls("end", compact("table", "old_col_name", "new_col_name", "col_type"), array()), EXTR_OVERWRITE);
+        } catch (PDOException $e) {
+            return array(false, $e->getMessage());
+        }
 
-        extract(Hooks::processHookCalls("end", compact("table", "old_col_name", "new_col_name", "col_type"), array()), EXTR_OVERWRITE);
+        return array(true, "");
     }
 
 

@@ -143,12 +143,7 @@ class Clients {
         ");
         $db->execute();
 
-        $clients = array();
-        foreach ($db->fetchAll() as $client) {
-            $clients[] = $client;
-        }
-
-        return $clients;
+        return $db->fetchAll();
     }
 
 
@@ -160,11 +155,10 @@ class Clients {
     public static function getNumClients()
     {
         $db = Core::$db;
-        $db->query("SELECT count(*) as c FROM {PREFIX}accounts WHERE account_type = 'client'");
+        $db->query("SELECT count(*) FROM {PREFIX}accounts WHERE account_type = 'client'");
         $db->execute();
-        $result = $db->fetch();
 
-        return $result["c"];
+        return $db->fetch(PDO::FETCH_COLUMN);
     }
 
 
@@ -192,12 +186,7 @@ class Clients {
         foreach ($client_forms as $form_info) {
             $form_id = $form_info["form_id"];
             $views = Views::getFormViews($form_id, $account_id);
-
-            $view_ids = array();
-            foreach ($views as $view_info) {
-                $view_ids[] = $view_info["view_id"];
-            }
-            $info[$form_id] = $view_ids;
+            $info[$form_id] = array_column($views, "view_id");
         }
 
         extract(Hooks::processHookCalls("end", compact("account_id", "info"), array("info")), EXTR_OVERWRITE);

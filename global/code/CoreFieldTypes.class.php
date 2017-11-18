@@ -120,14 +120,14 @@ class CoreFieldTypes
                   :field_orientation, :default_value_type, :default_value, :list_order)
             ");
             $db->bindAll(array(
-                ":field_type_id" => $field_type_id,
-                ":field_label" => $setting_info["field_label"],
-                ":field_setting_identifier" => $setting_info["field_setting_identifier"],
-                ":field_type" => $setting_info["field_type"],
-                ":field_orientation" => $setting_info["field_orientation"],
-                ":default_value_type" => $setting_info["default_value_type"],
-                ":default_value" => $setting_info["default_value"],
-                ":list_order" => $i
+                "field_type_id" => $field_type_id,
+                "field_label" => $setting_info["field_label"],
+                "field_setting_identifier" => $setting_info["field_setting_identifier"],
+                "field_type" => $setting_info["field_type"],
+                "field_orientation" => $setting_info["field_orientation"],
+                "default_value_type" => $setting_info["default_value_type"],
+                "default_value" => $setting_info["default_value"],
+                "list_order" => $i
             ));
 
             try {

@@ -1185,8 +1185,6 @@ END;
 
             // TODO name not defined!
 
-            echo "...";
-
             $output =<<< END
 	<textarea id="{$name}_id" name="{$name}">{$value}</textarea>
 	<script>

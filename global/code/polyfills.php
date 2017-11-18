@@ -16,6 +16,23 @@ if (!function_exists("mb_strtoupper"))
     }
 }
 
+
+if (!function_exists("mb_strtoupper"))
+{
+    /**
+     * A fallback function for servers that don't include the mbstring PHP extension. Note:
+     * this function is NOT multi-byte; it can't be emulated without the extension. However,
+     * this will at least allow the user to use Form Tools without errors.
+     *
+     * @param string $str
+     * @return string the uppercased string
+     */
+    function mb_strtoupper($str)
+    {
+        return strtoupper($str);
+    }
+}
+
 if (!function_exists("mb_strtolower"))
 {
     /**

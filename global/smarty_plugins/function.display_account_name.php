@@ -21,6 +21,10 @@ function smarty_function_display_account_name($params, &$smarty)
 
     $account_info = Accounts::getAccountInfo($account_id);
 
+    if (empty($account_info)) {
+        return "Unknown";
+    }
+
     if ($format == "first_last") {
         $html = "{$account_info["first_name"]} {$account_info["last_name"]}";
     } else {

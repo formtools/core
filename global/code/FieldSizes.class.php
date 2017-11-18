@@ -8,6 +8,7 @@
 
 namespace FormTools;
 
+use PDO;
 
 class FieldSizes {
 
@@ -41,9 +42,9 @@ class FieldSizes {
         ");
         $db->bind("field_type_id", $field_type_id);
         $db->execute();
-        $result = $db->fetch();
+        $result = $db->fetch(PDO::FETCH_COLUMN);
 
-        return explode(",", $result["compatible_field_sizes"]);
+        return explode(",", $result);
     }
 
 

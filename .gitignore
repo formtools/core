@@ -25,4 +25,8 @@ modules/swift_mailer
 modules/text_override
 modules/ip_security_check
 modules/client_audit
-
+modules/hello_world
+modules/hello_tabs
+modules/hello_database
+modules/submission_pre_parser
+modules/form_builder
