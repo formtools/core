@@ -327,9 +327,9 @@ END;
      * @param string $theme
      * @return string a string containing the output of the eval()'d smarty template
      */
-    public static function evalSmartyString($placeholder_str, $placeholders = array(), $theme = "default", $plugin_dirs = array())
+    public static function evalSmartyString($placeholder_str, $placeholders = array(), $plugin_dirs = array())
     {
-        $smarty = Templates::getBasicSmarty($theme);
+        $smarty = Templates::getBasicSmarty("default");
 
         foreach ($plugin_dirs as $dir) {
             $smarty->addPluginsDir($dir);

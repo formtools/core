@@ -1,15 +1,9 @@
 <?php
 
-/**
- * The Account class. Added in 2.3.0; will replace the old accounts.php file.
- */
-
-
-// -------------------------------------------------------------------------------------------------
 
 namespace FormTools;
 
-use PDOException, PDO;
+use Exception, PDO;
 
 
 /**
@@ -265,7 +259,7 @@ class Accounts
             }
 
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }

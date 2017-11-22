@@ -15,7 +15,7 @@
 
 namespace FormTools;
 
-use PDOException;
+use Exception;
 
 
 class ViewFilters
@@ -127,6 +127,8 @@ class ViewFilters
     {
         $LANG = Core::$L;
         $debug_enabled = Core::isDebugEnabled();
+
+        print_r($info);
 
         // hmm... weird.
         $form_id = $info["form_id"];
@@ -280,7 +282,7 @@ class ViewFilters
                 // assumption... this doesn't run if an exception is thrown in the block above
                 $num_standard_filters++;
 
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 $errors[] = $e->getMessage();
             }
         }
@@ -363,7 +365,7 @@ class ViewFilters
             try {
                 $db->query("
                     INSERT INTO {PREFIX}view_filters (view_id, filter_type, field_id, operator, filter_values, filter_sql)
-                    VALUES      (:view_id, 'client_map', :field_id, :operator, :original_client_field, :sql)
+                    VALUES      (:view_id, 'client_map', :field_id, :operator, :filter_values, :filter_sql)
                 ");
 
                 $db->bindAll(array(
@@ -377,7 +379,7 @@ class ViewFilters
 
                 // assumption doesn't execute if exception above
                 $num_client_map_filters++;
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 $errors[] = $e->getMessage();
             }
         }
