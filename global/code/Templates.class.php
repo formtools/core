@@ -104,6 +104,7 @@ class Templates
         // if this page has been told to display a custom message, override g_success and g_message
         if (isset($_GET["message"])) {
             list($found, $s, $m) = General::displayCustomPageMessage($_GET["message"]);
+
             if ($found) {
                 $success = $s;
                 $message = $m;

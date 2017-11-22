@@ -872,7 +872,6 @@ class Forms
 
         // check the form ID is valid
         if (!self::checkFormExists($form_id, true)) {
-            echo "??$form_id";
             Errors::showErrorCode(Errors::$CODES["100"]);
         }
 
@@ -965,6 +964,7 @@ class Forms
         $FIELD_SIZES = FieldSizes::get();
 
         $form_fields = Fields::getFormFields($form_id);
+
         $query = "
             CREATE TABLE {PREFIX}form_$form_id (
             submission_id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -982,7 +982,7 @@ class Forms
             last_modified_date DATETIME NOT NULL,
             ip_address VARCHAR(15),
             is_finalized ENUM('yes','no') default 'yes')
-            DEFAULT CHARSET = $db_table_charset";
+            Engine=InnoDB DEFAULT CHARSET = $db_table_charset";
 
         try {
             $db->query($query);

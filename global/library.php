@@ -33,6 +33,7 @@ require_once(__DIR__ . "/code/OptionLists.class.php");
 require_once(__DIR__ . "/code/OmitLists.class.php");
 require_once(__DIR__ . "/code/Pages.class.php");
 require_once(__DIR__ . "/code/polyfills.php");
+require_once(__DIR__ . "/code/Schemas.class.php");
 require_once(__DIR__ . "/code/Sessions.class.php");
 require_once(__DIR__ . "/code/Settings.class.php");
 require_once(__DIR__ . "/code/Submissions.class.php");

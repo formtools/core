@@ -12,7 +12,7 @@
 
 namespace FormTools;
 
-use Smarty, PDO, PDOException;
+use Smarty, PDO, Exception;
 
 
 /**
@@ -77,7 +77,7 @@ class Installation
                 $db->execute();
             }
             $db->processTransaction();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $db->rollbackTransaction();
         }
     }
@@ -100,7 +100,7 @@ class Installation
         try {
             $dsn = sprintf("mysql:host=%s;port=%s;dbname=%s;charset=utf8", $hostname, $port, $db_name);
             new PDO($dsn, $username, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $placeholders = array("db_connection_error" => $e->getMessage());
             $error = self::evalSmartyString($LANG["notify_install_invalid_db_info"], $placeholders);
             return array(false, $error);
@@ -321,7 +321,7 @@ EOF;
                   setting_name varchar(255) NOT NULL,
                   setting_value mediumtext NOT NULL,
                   PRIMARY KEY  (account_id,setting_name)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -347,7 +347,7 @@ EOF;
                   password varchar(50) NOT NULL,
                   temp_reset_password varchar(50) NULL,
                   PRIMARY KEY (account_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -363,7 +363,7 @@ EOF;
                   account_id mediumint(8) unsigned NOT NULL,
                   form_id mediumint(8) unsigned NOT NULL,
                   PRIMARY KEY (account_id,form_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -372,7 +372,7 @@ EOF;
                   account_id mediumint(8) unsigned NOT NULL,
                   view_id mediumint(8) unsigned NOT NULL,
                   PRIMARY KEY (account_id,view_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -381,7 +381,7 @@ EOF;
                   email_id mediumint(8) unsigned NOT NULL,
                   view_id mediumint(8) unsigned NOT NULL,
                   PRIMARY KEY  (email_id,view_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -396,7 +396,7 @@ EOF;
                   custom_recipient_name varchar(200) default NULL,
                   custom_recipient_email varchar(200) default NULL,
                   PRIMARY KEY  (recipient_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -404,7 +404,7 @@ EOF;
                 CREATE TABLE {PREFIX}email_template_when_sent_views (
                   email_id mediumint(9) NOT NULL,
                   view_id mediumint(9) NOT NULL
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -433,7 +433,7 @@ EOF;
                   html_template mediumtext,
                   text_template mediumtext,
                   PRIMARY KEY (email_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -446,7 +446,7 @@ EOF;
                   option_name varchar(255) NOT NULL,
                   is_new_sort_group enum('yes', 'no') NOT NULL,
                   PRIMARY KEY (list_id, list_group_id, option_order)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -456,7 +456,7 @@ EOF;
                   setting_id mediumint(9) NOT NULL,
                   setting_value mediumtext,
                   PRIMARY KEY (field_id,setting_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -468,7 +468,7 @@ EOF;
                   option_order smallint(6) NOT NULL,
                   is_new_sort_group enum('yes','no') NOT NULL,
                   PRIMARY KEY  (setting_id,option_order)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -484,7 +484,7 @@ EOF;
                   default_value varchar(255) default NULL,
                   list_order smallint(6) NOT NULL,
                   PRIMARY KEY (setting_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -512,7 +512,7 @@ EOF;
                   resources_css mediumtext,
                   resources_js mediumtext,
                   PRIMARY KEY  (field_type_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -528,7 +528,7 @@ EOF;
                   default_error_message mediumtext NOT NULL,
                   list_order smallint(6) NOT NULL,
                   PRIMARY KEY (rule_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -538,7 +538,7 @@ EOF;
                   field_id mediumint(9) NOT NULL,
                   error_message mediumtext NOT NULL,
                   UNIQUE KEY rule_id (rule_id,field_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -550,7 +550,7 @@ EOF;
                   first_name_field_id mediumint(9) NULL,
                   last_name_field_id mediumint(9) NULL,
                   PRIMARY KEY (form_email_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -570,7 +570,7 @@ EOF;
                   is_new_sort_group enum('yes','no') NOT NULL default 'yes',
                   include_on_redirect enum('yes','no') NOT NULL default 'no',
                   PRIMARY KEY (field_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -593,7 +593,7 @@ EOF;
                   edit_submission_page_label text,
                   add_submission_button_label varchar(255) default '',
                   PRIMARY KEY (form_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -608,7 +608,7 @@ EOF;
                   params mediumtext,
                   overridable mediumtext,
                   PRIMARY KEY (id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -622,7 +622,7 @@ EOF;
                   hook_function varchar(255) NOT NULL,
                   priority tinyint(4) NOT NULL default '50',
                   PRIMARY KEY  (hook_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -634,7 +634,7 @@ EOF;
                   custom_data text NOT NULL,
                   list_order smallint(6) NOT NULL,
                   PRIMARY KEY (group_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -650,7 +650,7 @@ EOF;
                   is_new_sort_group enum('yes','no') NOT NULL default 'yes',
                   list_order smallint(5) unsigned default NULL,
                   PRIMARY KEY (menu_item_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -697,7 +697,7 @@ EOF;
                   menu varchar(255) NOT NULL,
                   menu_type enum('admin','client') NOT NULL default 'client',
                   PRIMARY KEY  (menu_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -715,7 +715,7 @@ EOF;
                   is_submenu enum('yes','no') NOT NULL default 'no',
                   list_order smallint(6) NOT NULL,
                   PRIMARY KEY  (menu_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -735,7 +735,7 @@ EOF;
                   description mediumtext NOT NULL,
                   module_date datetime NOT NULL,
                   PRIMARY KEY  (module_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -745,7 +745,7 @@ EOF;
                   form_url varchar(255) NOT NULL,
                   page_num tinyint(4) NOT NULL default '2',
                   PRIMARY KEY  (form_id, page_num)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -756,7 +756,7 @@ EOF;
                   default_value text NOT NULL,
                   list_order smallint(6) NOT NULL,
                   PRIMARY KEY (view_id,field_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -767,7 +767,7 @@ EOF;
                   is_grouped enum('yes','no') NOT NULL,
                   original_form_id mediumint(8) unsigned default NULL,
                   PRIMARY KEY (list_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -776,7 +776,7 @@ EOF;
                   form_id mediumint(8) unsigned NOT NULL,
                   account_id mediumint(8) unsigned NOT NULL,
                   PRIMARY KEY  (form_id,account_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -785,7 +785,7 @@ EOF;
                   view_id mediumint(8) unsigned NOT NULL,
                   account_id mediumint(8) unsigned NOT NULL,
                   PRIMARY KEY  (view_id,account_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -795,7 +795,7 @@ EOF;
                   session_data text NOT NULL,
                   expires int(11) NOT NULL default '0',
                   PRIMARY KEY (session_id)
-                ) DEFAULT CHARSET=latin1
+                ) ENGINE=InnoDB DEFAULT CHARSET=latin1
             ");
             $db->execute();
 
@@ -806,7 +806,7 @@ EOF;
                   setting_value text NOT NULL,
                   module varchar(100) NOT NULL default 'core',
                   PRIMARY KEY  (setting_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -960,7 +960,7 @@ END;
                   is_enabled enum('yes','no') NOT NULL default 'yes',
                   theme_version varchar(50) default NULL,
                   PRIMARY KEY (theme_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -977,7 +977,7 @@ END;
                   custom_width varchar(10) default NULL,
                   truncate enum('truncate','no_truncate') NOT NULL default 'truncate',
                   PRIMARY KEY  (view_id,field_id,list_order)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -991,7 +991,7 @@ END;
                   list_order smallint(5) unsigned default NULL,
                   is_new_sort_group enum('yes','no') NOT NULL,
                   PRIMARY KEY  (view_id,field_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -1005,7 +1005,7 @@ END;
                   filter_values mediumtext NOT NULL,
                   filter_sql mediumtext NOT NULL,
                   PRIMARY KEY  (filter_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -1015,7 +1015,7 @@ END;
                   tab_number tinyint(3) unsigned NOT NULL,
                   tab_label varchar(50) default NULL,
                   PRIMARY KEY  (view_id,tab_number)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
@@ -1037,12 +1037,12 @@ END;
                   has_client_map_filter enum('yes','no') NOT NULL default 'no',
                   has_standard_filter enum('yes','no') NOT NULL default 'no',
                   PRIMARY KEY  (view_id)
-                ) DEFAULT CHARSET=$charset
+                ) ENGINE=InnoDB DEFAULT CHARSET=$charset
             ");
             $db->execute();
 
             $db->processTransaction();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $db->rollbackTransaction();
             return array(false, $e->getMessage());
         }
@@ -1165,7 +1165,7 @@ END;
 
         try {
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return array(false, $e->getMessage());
         }
 
@@ -1201,7 +1201,7 @@ END;
         ));
         try {
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return array(false, "Problem inserting list group item #1: " . $e->getMessage());
         }
         $group1_id = $db->getInsertId();
@@ -1217,7 +1217,7 @@ END;
 
         try {
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             CoreFieldTypes::rollbackNewInstallation();
             return array(false, "Problem inserting list group item #2: " . $e->getMessage());
         }

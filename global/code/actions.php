@@ -167,7 +167,7 @@ switch ($action) {
 		$form_id  = Sessions::get("form_id");
 		$email_id = Sessions::get("email_id");
 		$info = Emails::getEmailComponents($form_id, "", $email_id, true, $request);
-		echo json_encode($info);
+		echo returnJSON($info);
 		break;
 
 	case "edit_submission_send_email":
@@ -230,7 +230,7 @@ switch ($action) {
 		$form_info = Forms::getForm($form_id);
 		if ($form_info["is_complete"] != 'yes') {
 			$response = Forms::finalizeForm($form_id);
-			echo json_encode($response);
+			echo returnJSON($response);
 		} else {
             echo constructReturnValue(array("success" => 1, "message" => ""));
 		}
@@ -470,9 +470,9 @@ switch ($action) {
  * There are two ways to pass data to be returned by these requests in this file:
  * - pass a return_vals string with a `:` delimited key/value pairs
  * - pass a return_vars object
- *
  */
-function constructReturnValue ($data) {
+function constructReturnValue ($data)
+{
     global $request;
 
     $data_to_return = array();
@@ -494,5 +494,13 @@ function constructReturnValue ($data) {
     foreach ($data as $key => $value) {
         $return_info[$key] = $value;
     }
-    return json_encode($return_info);
+
+    return returnJSON($return_info);
+}
+
+
+function returnJSON($php)
+{
+    header("Content-type: application/json");
+    return json_encode($php);
 }

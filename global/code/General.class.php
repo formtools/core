@@ -299,7 +299,7 @@ END;
             "change_temp_password"         => array(true, $LANG["notify_change_temp_password"]),
             "new_submission"               => array(true, $LANG["notify_new_submission_created"]),
             "notify_sessions_timeout"      => array(true, $LANG["notify_sessions_timeout"]),
-            "notify_no_views_assigned_to_client_form" => array(false, $LANG["notify_no_views_assigned_to_client_form"])
+            "notify_no_views_assigned_to_client_form" => array(false, $LANG["notify_no_views_assigned_to_client_form"]),
         );
 
         $found = false;
@@ -311,7 +311,7 @@ END;
             $g_message = $map[$flag][1];
         }
 
-        extract(Hooks::processHookCalls("end", compact("flag"), array("g_success", "g_message")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("flag"), array("found", "g_success", "g_message")), EXTR_OVERWRITE);
 
         return array($found, $g_success, $g_message);
     }
