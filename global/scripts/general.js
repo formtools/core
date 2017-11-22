@@ -922,6 +922,7 @@ ft.is_valid_url = function(url) {
 
 ft.check_ajax_response_permissions = function(json) {
   try {
+    json = JSON.parse(json);
     if (typeof json.ft_logout != undefined && json.ft_logout == 1) {
       ft.create_dialog({
         title:      "Sessions expired",

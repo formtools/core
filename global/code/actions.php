@@ -321,9 +321,7 @@ switch ($action) {
 
 	case "get_upgrade_form_html":
 		$components = General::getFormtoolsInstalledComponents();
-
-        // https://www.formtools.org/upgrade.php
-		echo "<form action=\"http://localhost:8888/formtools-site/formtools.org/upgrade.php\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
+		echo "<form action=\"https://www.formtools.org/upgrade.php\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
 		while (list($key, $value) = each($components)) {
 			echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 		}
@@ -501,6 +499,6 @@ function constructReturnValue ($data)
 
 function returnJSON($php)
 {
-    header("Content-type: application/json");
+    header("Content-Type: application/json");
     return json_encode($php);
 }

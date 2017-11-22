@@ -10,7 +10,7 @@
 
 namespace FormTools;
 
-use PDOException;
+use Exception;
 
 
 /**
@@ -65,7 +65,7 @@ class DatabaseSessions
                 "expiry_time" => time()
             ));
             $this->db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
@@ -105,7 +105,7 @@ class DatabaseSessions
                 "expiry_time" => time() + $lifeTime
             ));
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
 		    Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
 		    return false;
         }
