@@ -256,7 +256,7 @@ class Core {
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20171111";
+    private static $releaseDate = "20171122";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
@@ -635,6 +635,10 @@ class Core {
 
     public static function getQueryStrMultiValSeparator() {
         return self::$queryStrMultiValSeparator;
+    }
+
+    public static function getSessionType() {
+        return self::$sessionType;
     }
 
     public static function getSessionSavePath() {

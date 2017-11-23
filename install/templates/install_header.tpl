@@ -5,7 +5,7 @@
 	<script>
 		//<![CDATA[
 		var g = {literal}{}{/literal};
-		g.root_url = "{$g_root_url}";
+		g.root_url = "{$g_root_url|default:""}";
 		g.error_colours = ["ffbfbf", "ffeded"];
 		g.notify_colours = ["c6e2ff", "f2f8ff"];
 		//]]>

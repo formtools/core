@@ -2004,7 +2004,6 @@ $STRUCTURE["tables"]["view_tabs"] = array(
 );
 
 $FILES = array(
-	".gitignore",
 	"LICENSE.txt",
 	"README.md",
 	"admin/account/index.php",

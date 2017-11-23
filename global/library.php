@@ -3,6 +3,7 @@
 // autoload external dependencies
 require_once(__DIR__ . "/../vendor/autoload.php");
 
+// Form Tools classes / code
 require_once(__DIR__ . "/code/Accounts.class.php");
 require_once(__DIR__ . "/code/Administrator.class.php");
 require_once(__DIR__ . "/code/Clients.class.php");
@@ -60,4 +61,5 @@ require_once(__DIR__ . "/code/field_types/Textarea.class.php");
 require_once(__DIR__ . "/code/field_types/Textbox.class.php");
 require_once(__DIR__ . "/code/field_types/Time.class.php");
 
+// convenience var, used in various places where we don't care if the data arrived via the query string or a form post
 $request = array_merge($_POST, $_GET);
