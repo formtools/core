@@ -13,7 +13,7 @@
 
 namespace FormTools;
 
-use PDOException, PDO;
+use Exception, PDO;
 
 
 class Submissions {
@@ -202,7 +202,7 @@ class Submissions {
             try {
                 $db->query($query);
                 $db->execute();
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 $page_vars = array(
                     "message_type" => "error",
                     "error_code" => 304,
@@ -788,7 +788,7 @@ class Submissions {
                 ORDER BY $order_by
             ");
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
@@ -835,8 +835,15 @@ class Submissions {
         $field_settings = FieldTypes::getFormFieldFieldTypeSettings($field_ids, $form_fields);
 
         $now = General::getCurrentDatetime();
-        $query = array();
-        $query[] = "last_modified_date = '$now'";
+
+        $set_statements = array(
+            "last_modified_date = :last_modified_date"
+        );
+        $bindings = array(
+            "submission_id" => $submission_id,
+            "last_modified_date" => $now
+        );
+        $counter = 1;
 
         $file_fields = array();
         foreach ($form_fields as $row) {
@@ -869,7 +876,10 @@ class Submissions {
                     continue;
                 } else {
                     $value = Submissions::processFormField($file_data);
-                    $query[] = $row["col_name"] . " = '$value'";
+
+                    $set_statements[] = "{$row["col_name"]} = :col_{$counter}";
+                    $bindings["col_{$counter}"] = $value;
+                    $counter++;
                 }
             }
 
@@ -889,31 +899,38 @@ class Submissions {
                     "account_info" => Sessions::getWithFallback("account", array())
                 );
                 $value = Submissions::processFormField($data);
-                $query[] = $row["col_name"] . " = '$value'";
+
+                $set_statements[] = "{$row["col_name"]} = :col_{$counter}";
+                $bindings["col_{$counter}"] = $value;
+                $counter++;
             } else {
                 if (isset($infohash[$row["field_name"]])) {
                     if (is_array($infohash[$row["field_name"]])) {
-                        $query[] = $row["col_name"] . " = '" . implode("$multi_val_delimiter", $infohash[$row["field_name"]]) . "'";
+                        $value = implode("$multi_val_delimiter", $infohash[$row["field_name"]]);
                     } else {
-                        $query[] = $row["col_name"] . " = '" . $infohash[$row["field_name"]] . "'";
+                        $value = $infohash[$row["field_name"]];
                     }
                 } else {
-                    $query[] = $row["col_name"] . " = ''";
+                    $value = "";
                 }
+
+                $set_statements[] = "{$row["col_name"]} = :col_{$counter}";
+                $bindings["col_{$counter}"] = $value;
+                $counter++;
             }
         }
 
-        $set_query = join(",\n", $query);
+        $statements = join(",\n", $set_statements);
 
         try {
             $db->query("
                 UPDATE {PREFIX}form_{$form_id}
-                SET    $set_query
+                SET    $statements
                 WHERE  submission_id = :submission_id
             ");
-            $db->bind("submission_id", $submission_id);
+            $db->bindAll($bindings);
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
 
             // if there was a problem updating the submission, don't even bother calling the file upload hook. Just exit right away
             return array(false, $LANG["notify_submission_not_updated"]);
@@ -1028,7 +1045,7 @@ class Submissions {
                        $limit_clause
             ");
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
@@ -1046,7 +1063,7 @@ class Submissions {
                        $submission_id_clause
             ");
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
@@ -1056,13 +1073,13 @@ class Submissions {
         // (3) find out how many results should appear in the View, regardless of the current search criteria
         try {
             $db->query("
-                SELECT count(*) as c
+                SELECT count(*)
                 FROM   {PREFIX}form_{$form_id}
                 WHERE  is_finalized = 'yes'
                 $filter_clause
             ");
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
@@ -1194,7 +1211,7 @@ class Submissions {
             ");
             $db->bind("submission_id", $submission_id);
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return null;
         }
 
@@ -1244,7 +1261,7 @@ class Submissions {
                     ORDER BY $col_name $order
                 ");
                 $db->execute();
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
                 exit;
             }
@@ -1451,6 +1468,7 @@ class Submissions {
         if (!empty($view_filters)) {
             $filter_clause = "AND " . join(" AND ", $view_filters);
         }
+
         return $filter_clause;
     }
 
