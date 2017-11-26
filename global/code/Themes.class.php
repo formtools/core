@@ -242,10 +242,9 @@ class Themes {
      * @param array $page_vars a hash of information to display / provide to the template.
      * @param string $theme
      */
-    public static function displayModulePage($template, $page_vars = array(), $theme = "", $swatch = "")
+    public static function displayModulePage($module_folder, $template, $page_vars = array(), $theme = "", $swatch = "")
     {
         $root_dir = Core::getRootDir();
-        $module_folder = Modules::getCurrentModuleFolder();
 
         if (empty($theme) && (Sessions::exists("account.theme"))) {
             $theme  = Sessions::get("account.theme");

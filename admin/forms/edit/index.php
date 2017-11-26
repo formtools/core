@@ -124,4 +124,3 @@ if (isset($page_map[$page])) {
     $vals = Modules::moduleOverrideData("admin_edit_form_page_name_include", array("page_name" => "page_main.php"));
     require_once($vals["page_name"]);
 }
-

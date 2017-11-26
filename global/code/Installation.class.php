@@ -817,6 +817,7 @@ EOF;
 <script src="{\$g_root_url}/global/codemirror/mode/javascript/javascript.js"></script>
 <script src="{\$g_root_url}/global/scripts/jquery-ui-timepicker-addon.js"></script>
 <script src="{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" href="{\$g_root_url}/global/codemirror/lib/codemirror.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
 END;
 

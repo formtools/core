@@ -142,16 +142,6 @@ class Views
             $view_info = Views::getView($create_from_view_id);
 
             // Main View Settings
-            $access_type              = $view_info["access_type"];
-            $num_submissions_per_page = $view_info["num_submissions_per_page"];
-            $default_sort_field       = $view_info["default_sort_field"];
-            $default_sort_field_order = $view_info["default_sort_field_order"];
-            $may_add_submissions      = $view_info["may_add_submissions"];
-            $may_edit_submissions     = $view_info["may_edit_submissions"];
-            $may_delete_submissions   = $view_info["may_delete_submissions"];
-            $has_standard_filter      = $view_info["has_standard_filter"];
-            $has_client_map_filter    = $view_info["has_client_map_filter"];
-
             $db->query("
                 INSERT INTO {PREFIX}views (form_id, access_type, view_name, view_order, is_new_sort_group, group_id,
                     num_submissions_per_page, default_sort_field, default_sort_field_order, may_add_submissions, may_edit_submissions,
@@ -162,18 +152,18 @@ class Views
             ");
             $db->bindAll(array(
                 "form_id" => $form_id,
-                "access_type" => $access_type,
+                "access_type" => $view_info["access_type"],
                 "view_name" => $view_name,
                 "view_order" => $next_order,
                 "group_id" => $group_id,
-                "num_submissions_per_page" => $num_submissions_per_page,
-                "default_sort_field" => $default_sort_field,
-                "default_sort_field_order" => $default_sort_field_order,
-                "may_add_submissions" => $may_add_submissions,
-                "may_edit_submissions" => $may_edit_submissions,
-                "may_delete_submissions" => $may_delete_submissions,
-                "has_client_map_filter" => $has_client_map_filter,
-                "has_standard_filter" => $has_standard_filter
+                "num_submissions_per_page" => $view_info["num_submissions_per_page"],
+                "default_sort_field" => $view_info["default_sort_field"],
+                "default_sort_field_order" => $view_info["default_sort_field_order"],
+                "may_add_submissions" => $view_info["may_add_submissions"],
+                "may_edit_submissions" => $view_info["may_edit_submissions"],
+                "may_delete_submissions" => $view_info["may_delete_submissions"],
+                "has_client_map_filter" => $view_info["has_client_map_filter"],
+                "has_standard_filter" => $view_info["has_standard_filter"]
             ));
             $db->execute();
             $view_id = $db->getInsertId();
@@ -230,20 +220,24 @@ class Views
                     INSERT INTO {PREFIX}view_columns (view_id, field_id, list_order, is_sortable, auto_size, custom_width, truncate)
                     VALUES $view_column_insert_str
                 ");
+                $db->execute();
             }
 
             // View Filters
             foreach ($view_info["filters"] as $filter_info) {
-                $field_id      = $filter_info["field_id"];
-                $filter_type   = $filter_info["filter_type"];
-                $operator      = $filter_info["operator"];
-                $filter_values = $filter_info["filter_values"];
-                $filter_sql    = $filter_info["filter_sql"];
-
                 $db->query("
                     INSERT INTO {PREFIX}view_filters (view_id, filter_type, field_id, operator, filter_values, filter_sql)
-                    VALUES ($view_id, '$filter_type', $field_id, '$operator', '$filter_values', '$filter_sql')
+                    VALUES (:view_id, :filter_type, :field_id, :operator, :filter_values, :filter_sql)
                 ");
+                $db->bindAll(array(
+                    "view_id" => $view_id,
+                    "filter_type" => $filter_info["filter_type"],
+                    "field_id" => $filter_info["field_id"],
+                    "operator" => $filter_info["operator"],
+                    "filter_values" => $filter_info["filter_values"],
+                    "filter_sql" => $filter_info["filter_sql"]
+                ));
+                $db->execute();
             }
 
             // default submission values

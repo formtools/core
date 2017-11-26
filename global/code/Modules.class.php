@@ -674,9 +674,6 @@ class Modules
         $root_dir = Core::getRootDir();
         $module_folder = self::getCurrentModuleFolder();
 
-        // I get it. Within the installation, Core::init() hasn't been called, so any dependency that relies on it
-        // including the Templates::displayPage() CAN'T be called.
-
         if (!is_file("$root_dir/modules/$module_folder/library.php")) {
             Errors::handleError("Error with $module_folder module. Missing library.php file.");
             exit;

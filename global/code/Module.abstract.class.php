@@ -129,7 +129,7 @@ abstract class Module {
         $page_vars["js_files"] = array_merge($page_vars["js_files"], self::getJSFiles());
         $page_vars["css_files"] = array_merge($page_vars["css_files"], self::getCSSFiles());
 
-        Themes::displayModulePage($template, $page_vars);
+        Themes::displayModulePage($this->getModuleFolder(), $template, $page_vars);
     }
 
     public final function getModuleName() {
