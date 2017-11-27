@@ -123,7 +123,7 @@ if (Sessions::exists("new_search") && Sessions::get("new_search") == "yes") {
 list($prev_link_html, $search_results_link_html, $next_link_html) = Submissions::getPrevNextLinks($form_id, $view_id, $submission_id, "submissions.php");
 
 // construct the page label
-$submission_placeholders = General::getSubmissionPlaceholders($form_id, $submission_id);
+$submission_placeholders = General::getSubmissionPlaceholders($form_id, $submission_id, "edit_submission");
 $edit_submission_page_label = General::evalSmartyString($form_info["edit_submission_page_label"], $submission_placeholders);
 
 $validation_js = FieldValidation::generateSubmissionJsValidation($grouped_fields);

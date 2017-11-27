@@ -8,6 +8,8 @@ themes/cache
 global/config.php
 files.txt
 get_files.php
+upload/*
+!upload/index.html
 
 # temporary
 modules/system_check

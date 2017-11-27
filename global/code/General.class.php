@@ -1154,10 +1154,11 @@ END;
      *
      * @param integer $form_id
      * @param integer $submission_id
+     * @param string $context
      * @param array $client_info a hash of information about the appropriate user (optional)
      * @return array a hash of placeholders and their replacement values (e.g. $arr["FORMURL"] => 17)
      */
-    public static function getSubmissionPlaceholders($form_id, $submission_id, $client_info = "")
+    public static function getSubmissionPlaceholders($form_id, $submission_id, $context, $client_info = "")
     {
         $root_url = Core::getRootUrl();
 
@@ -1210,7 +1211,7 @@ END;
                     "field_info"    => $detailed_field_info,
                     "field_types"   => $field_types,
                     "settings"      => $settings,
-                    "context"       => "email_template"
+                    "context"       => $context
                 );
                 $value = FieldTypes::generateViewableField($params);
                 $placeholders["ANSWER_$field_name"] = $value;

@@ -424,7 +424,7 @@ class Emails {
         //    [FORMURL] =>
         //    [SUBMISSIONID] => 10
         //    [LOGINURL] => http://urlhere.com
-        $submission_placeholders = General::getSubmissionPlaceholders($form_id, $submission_id);
+        $submission_placeholders = General::getSubmissionPlaceholders($form_id, $submission_id, "email_template");
         $admin_info = Administrator::getAdminInfo();
 
         $updated_fields_for_email_template = array();

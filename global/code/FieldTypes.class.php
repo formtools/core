@@ -1181,15 +1181,15 @@ END;
         {
             $code_markup = $placeholders["code_markup"];
             $value       = $placeholders["VALUE"];
+            $name        = $placeholders["NAME"];
             $height      = $placeholders["height"];
 
-            // TODO name not defined!
-
             $output =<<< END
+<div class="cf_code_view">
 	<textarea id="{$name}_id" name="{$name}">{$value}</textarea>
 	<script>
 	var code_mirror_{$name} = new CodeMirror.fromTextArea(document.getElementById("{$name}_id"), {
-		height:   "{$height}px",
+		height: "{$height}px",
 		readOnly: true,
 		{if $code_markup == "HTML" || $code_markup == "XML"}
 		    mode: "xml"
@@ -1200,6 +1200,7 @@ END;
 		{/if}
 	});
 	</script>
+</div>
 END;
         } else {
             $output = strip_tags($placeholders["VALUE"]);

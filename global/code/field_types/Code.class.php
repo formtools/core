@@ -25,7 +25,7 @@ class Code
                 "view_field_smarty_markup"       => self::getViewField(),
                 "edit_field_smarty_markup"       => self::getEditField(),
                 "php_processing"                 => "",
-                "resources_css"                  => ".cf_view_markup_field {\r\n  margin: 0px;\r\n}",
+                "resources_css"                  => self::getCSS(),
                 "resources_js"                   => self::getJS()
             ),
 
@@ -38,23 +38,24 @@ class Code
     private static function getViewField()
     {
         $content =<<< END
-        {if \$CONTEXTPAGE == "edit_submission"}
+{if \$CONTEXTPAGE == "edit_submission"}
+<div class="cf_code_view">
+    <textarea id="{\$NAME}_id" name="{\$NAME}">kay{\$VALUE}</textarea>
+    <script>
+    var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(document.getElementById("{\$NAME}_id"), 
+    {literal}{{/literal} height: "{\$height}px",
+        readOnly: true,
+    {if \$code_markup == "HTML" || \$code_markup == "XML"}
+        mode: "xml"
+    {elseif \$code_markup == "CSS"}
+        mode: "css"
+    {elseif \$code_markup == "JavaScript"}
+        mode: "javascript"
+    {/if}
+    {literal}});{/literal}
+    </script>
+</div>
 
-        <textarea id="{\$NAME}_id" name="{\$NAME}">{\$VALUE}</textarea>
-  <script>
-  var code_mirror_{\$NAME} = new CodeMirror.fromTextArea(document.getElementById("{\$NAME}_id"), 
-  {literal}{{/literal} height: "{\$SIZE_PX}px",
-  readOnly: true,
-  {if \$code_markup == "HTML" || \$code_markup == "XML"}
-    mode: "xml"
-  {elseif \$code_markup == "CSS"}
-    mode: "css"
-  {elseif \$code_markup == "JavaScript"}
-    mode: "javascript"
-  {/if}
-  {literal}});{/literal}
-  </script>
-  
 {else}
   {\$VALUE|strip_tags}
 {/if}
@@ -114,6 +115,28 @@ cf_code.check_required = function() {
 END;
         return $js;
     }
+
+
+    private static function getCSS()
+    {
+        $css =<<< END
+.cf_view_markup_field {
+    margin: 0px;
+}
+.cf_code_view .CodeMirror {
+    background-color: transparent;
+    height: auto;
+}
+.cf_code_view .CodeMirror-scroll {
+    max-height: 300px;
+}
+.cf_code_view .CodeMirror-cursor { 
+    display: none !important;
+}
+END;
+        return $css;
+    }
+
 
     private static function getSettings()
     {

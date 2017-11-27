@@ -36,7 +36,14 @@ function smarty_function_edit_custom_field($params, &$smarty)
     if ($field_info["is_editable"] == "no") {
         $markup_with_placeholders = trim($field_type_info["view_field_smarty_markup"]);
         if (empty($markup_with_placeholders)) {
-            echo $field_info["submission_info"]["value"];
+
+            // TODO make sense of this. Both are required in different contexts
+            // - in form builder, review page - the latter is needed.
+            if (isset($field_info["submission_value"])) {
+                echo $field_info["submission_value"];
+            } else {
+                echo $field_info["submission_info"]["value"];
+            }
             return;
         }
     } else {
@@ -62,7 +69,6 @@ function smarty_function_edit_custom_field($params, &$smarty)
 
     // add in all field type settings and their replacements
 
-    // Q: what does this do?
     foreach ($field_type_info["settings"] as $setting_info) {
         $curr_setting_id = $setting_info["setting_id"];
         $curr_setting_field_type = $setting_info["field_type"];
