@@ -2869,7 +2869,6 @@ $FILES = array(
 	"global/smarty_plugins/modifier.hook_call_defined.php",
 	"index.php",
 	"install/files/main.css",
-	"install/files/validate.js",
 	"install/index.php",
 	"install/step2.php",
 	"install/step3.php",

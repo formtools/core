@@ -16,7 +16,6 @@
 	<link rel="stylesheet" type="text/css" href="files/main.css">
 	<script src="../global/scripts/general.js"></script>
 	<script src="../global/scripts/rsv.js"></script>
-	<script src="files/validate.js"></script>
 	{$head_js}
 </head>
 <body>
