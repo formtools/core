@@ -1148,7 +1148,7 @@ class Fields {
             if ($existing_form_field_info["is_system_field"] == "yes") {
                 $db->query("
                     UPDATE {PREFIX}form_fields
-                    SET    field_title = :display_name,
+                    SET    field_title = :field_title,
                            include_on_redirect = :include_on_redirect
                     WHERE  field_id = :field_id
                 ");
@@ -1567,9 +1567,9 @@ class Fields {
                 $db->bind("field_id", $field_id);
                 $db->execute();
 
-                foreach ($db->fetchAll() as $row) {
-                    $affected_views[] = $row["view_id"];
-                    ViewFields::deleteViewField($row["view_id"], $field_id);
+                $view_ids = $db->fetchAll(PDO::FETCH_COLUMN);
+                foreach ($view_ids as $view_id) {
+                    ViewFields::deleteViewField($view_id, $field_id);
                 }
 
                 $db->query("ALTER TABLE {PREFIX}form_$form_id DROP $drop_column");
