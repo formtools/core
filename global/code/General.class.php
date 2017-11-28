@@ -300,6 +300,7 @@ END;
             "new_submission"               => array(true, $LANG["notify_new_submission_created"]),
             "notify_sessions_timeout"      => array(true, $LANG["notify_sessions_timeout"]),
             "notify_no_views_assigned_to_client_form" => array(false, $LANG["notify_no_views_assigned_to_client_form"]),
+            "notify_no_account_id_in_sessions" => array(true, $LANG["notify_no_account_id_in_sessions"])
         );
 
         $found = false;

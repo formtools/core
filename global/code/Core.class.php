@@ -256,7 +256,7 @@ class Core {
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20171123";
+    private static $releaseDate = "20171127";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
@@ -400,11 +400,9 @@ class Core {
         if (self::$sessionsStarted) {
             return;
         }
-
         if (self::$sessionType == "database") {
             new DatabaseSessions(self::$db, self::$sessionSavePath);
         }
-
         if (!empty(self::$sessionSavePath)) {
             session_save_path(self::$sessionSavePath);
         }
