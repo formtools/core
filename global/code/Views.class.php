@@ -784,7 +784,9 @@ class Views
         }
 
         // lastly, add in any default values for new submissions
-        $db->query("DELETE FROM {PREFIX}new_view_submission_defaults WHERE view_id = $view_id");
+        $db->query("DELETE FROM {PREFIX}new_view_submission_defaults WHERE view_id = :view_id");
+        $db->bind("view_id", $view_id);
+        $db->execute();
 
         if (!empty($info["new_submissions"]) && $may_add_submissions == "yes") {
             $default_values = array_combine($info["new_submissions"], $info["new_submissions_vals"]);
