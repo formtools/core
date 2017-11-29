@@ -1074,17 +1074,22 @@ class Views
 
         // 2. create the View group and update the view record we just created (blurgh!)
         $db->query("
-            INSERT INTO {PREFIX}list_groups (group_type, group_name, list_order)
-            VALUES (:group_type, :group_name, 1)
+            INSERT INTO {PREFIX}list_groups (group_type, group_name, custom_data, list_order)
+            VALUES (:group_type, :group_name, :custom_data, 1)
         ");
         $db->bindAll(array(
             "group_type" => "form_{$form_id}_view_group",
-            "group_name" => $LANG["word_views"]
+            "group_name" => $LANG["word_views"],
+            "custom_data" => ""
         ));
         $db->execute();
         $group_id = $db->getInsertId();
 
-        $db->query("UPDATE {PREFIX}views SET group_id = :group_id WHERE view_id = :view_id");
+        $db->query("
+            UPDATE {PREFIX}views
+            SET group_id = :group_id
+            WHERE view_id = :view_id
+        ");
         $db->bindAll(array(
             "group_id" => $group_id,
             "view_id" => $view_id
