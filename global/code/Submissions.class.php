@@ -485,7 +485,7 @@ class Submissions {
      *               [0]: true/false (success / failure)<br/>
      *               [1]: message string<br/>
      */
-    public static function deleteSubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, $is_admin)
+    public static function deleteSubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields)
     {
         $db = Core::$db;
         $LANG = Core::$L;

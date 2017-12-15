@@ -32,3 +32,6 @@ modules/hello_tabs
 modules/hello_database
 modules/submission_pre_parser
 modules/form_builder
+modules/form_backup
+modules/submission_id_manager
+modules/js_error_logs

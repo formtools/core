@@ -172,7 +172,7 @@ class User
         $login_url = "$root_url{$login_url}";
 
         if (!$login_as_client) {
-            $this->updateLastLoggedIn();
+            $this->updateLastLoggedIn($account_info["account_id"]);
         }
 
         General::redirect($login_url);
@@ -225,9 +225,10 @@ class User
     /**
      * Updates the last logged in date for the currently logged in user.
      */
-    private function updateLastLoggedIn()
+    private function updateLastLoggedIn($account_id)
     {
         $db = Core::$db;
+
         $db->query("
             UPDATE {PREFIX}accounts
             SET    last_logged_in = :now
@@ -235,11 +236,10 @@ class User
         ");
         $db->bindAll(array(
             "now" => General::getCurrentDatetime(),
-            "account_id" => $this->accountId
+            "account_id" => $account_id
         ));
         $db->execute();
     }
-
 
     /**
      * Redirects a logged in user to their login page.

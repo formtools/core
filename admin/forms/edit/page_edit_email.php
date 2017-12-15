@@ -79,6 +79,7 @@ $page_vars["selected_when_sent_views"] = $selected_when_sent_views;
 $page_vars["admin_info"] = $admin_info;
 $page_vars["file_field_text"] = $file_field_text;
 $page_vars["columns"]    = $columns;
+$page_vars["edit_email_advanced_settings"] = Sessions::getWithFallback("edit_email_advanced_settings", "");
 $page_vars["js_messages"] = array("validation_invalid_email", "validation_no_custom_recipient_email",
 	"validation_no_test_email_recipient", "validation_no_test_email_submission_id", "word_cc_c", "word_bcc_c",
 	"word_from_c", "word_reply_to_c", "word_subject_c", "phrase_form_email_field_b_c", "phrase_form_email_fields",

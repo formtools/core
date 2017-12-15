@@ -12,7 +12,7 @@
         <td class="pad_left_small">{$LANG.phrase_last_logged_in}</td>
         <td class="pad_left_small medium_grey">
           {if $client_info.last_logged_in != ""}
-            {$client_info.last_logged_in|custom_format_date:$SESSION.account.timezone_offset:$SESSION.account.date_format}
+            {$client_info.last_logged_in|custom_format_date:$account.timezone_offset:$account.date_format}
           {else}
             {$LANG.word_never}
           {/if}

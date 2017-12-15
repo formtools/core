@@ -105,7 +105,7 @@ if (isset($_GET["delete"])) {
 			$submissions_to_delete = "all";
 			$omit_list = Sessions::get("form_{$form_id}_all_submissions_selected_omit_list");
 		}
-		list($g_success, $g_message) = Submissions::deleteSubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields, true);
+		list($g_success, $g_message) = Submissions::deleteSubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields);
 	}
 }
 

@@ -44,6 +44,9 @@ function smarty_function_forms_dropdown($params, &$smarty)
     $hide_incomplete_forms = (isset($params["hide_incomplete_forms"])) ? $params["hide_incomplete_forms"] : true;
     $omit_forms    = (isset($params["omit_forms"])) ? $params["omit_forms"] : array(); // a list of forms to omit from the list
 
+    // option to limit the forms to a particular status (online/offline). Pass empty string to return all
+    $form_status = (isset($params["form_status"])) ? $params["form_status"] : "online";
+
     // if this option is set, it only shows those form in the array
     $only_show_forms = (isset($params["only_show_forms"])) ? $params["only_show_forms"] : array();
 
@@ -51,7 +54,11 @@ function smarty_function_forms_dropdown($params, &$smarty)
     // rather than in a dropdown. Only compatible with the non-multiple dropdown list
     $display_single_form_as_text = (isset($params["display_single_form_as_text"])) ? $params["display_single_form_as_text"] : false;
 
-    $forms = Forms::getForms();
+    $forms = Forms::searchForms(array(
+        "is_admin" => true,
+        "status" => $form_status
+    ));
+
     $rows = array();
 
     foreach ($forms as $form_info) {

@@ -37,7 +37,7 @@
                 <a href="#" onclick="return emails_ns.toggle_advanced_settings()">{$LANG.phrase_advanced_settings_rightarrow}</a>
               </div>
 
-              <div {if !isset($SESSION.edit_email_advanced_settings) || $SESSION.edit_email_advanced_settings == "false"}style="display:none"{/if} id="advanced_settings">
+              <div {if $edit_email_advanced_settings == "false"}style="display:none"{/if} id="advanced_settings">
                 <table cellpadding="2" cellspacing="1" width="100%">
                 <tr>
                   <td valign="top" width="180">{$LANG.phrase_when_sent}</td>

@@ -189,7 +189,7 @@
             </td>
             <td class="pad_left_small">
               {if $client_info.last_logged_in != ""}
-               {$client_info.last_logged_in|custom_format_date:$SESSION.account.timezone_offset:$SESSION.account.date_format}
+               {$client_info.last_logged_in|custom_format_date:$account.timezone_offset:$account.date_format}
               {else}
                 <span class="medium_grey">{$LANG.word_never}</span>
               {/if}
