@@ -35,3 +35,5 @@ modules/form_builder
 modules/form_backup
 modules/submission_id_manager
 modules/js_error_logs
+modules/submission_history
+

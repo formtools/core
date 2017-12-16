@@ -3114,7 +3114,6 @@ $FILES = array(
 	"themes/default/tabset_open.tpl",
 	"themes/index.html",
 	"upload/index.html",
-	"upload/thumbs/emptyfile.txt",
 	"vendor/autoload.php",
 	"vendor/composer/ClassLoader.php",
 	"vendor/composer/LICENSE",

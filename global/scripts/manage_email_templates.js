@@ -462,15 +462,15 @@ emails_ns.check_one_main_recipient = function() {
  * This confirms that the user has entered at least one of the HTML and text templates.
  */
 emails_ns.check_one_template_defined = function() {
-  var html_template = html_editor.getCode();
+  var html_template = html_editor.getValue();
   html_template = $.trim(html_template);
-  var text_template = text_editor.getCode();
+  var text_template = text_editor.getValue();
   text_template = $.trim(text_template);
   if (html_template == "" && text_template == "") {
     return [[$('#html_template'), g.messages["validation_no_email_content"]]];
   }
   return true;
-}
+};
 
 
 emails_ns.onsubmit_check_email_settings = function(f) {
