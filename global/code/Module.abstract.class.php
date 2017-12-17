@@ -48,6 +48,7 @@ abstract class Module {
 
     // internal
     private $moduleFolder;
+    private $currentLang;
     private $currentLangFound;
 
 
@@ -57,6 +58,7 @@ abstract class Module {
      * $L is populated. ( parent::__construct(); )
      */
     public function __construct($lang) {
+        $this->currentLang = $lang;
 
         // a little magic to find the current instantiated class's folder
         $currClass = new ReflectionClass(get_class($this));
@@ -132,12 +134,14 @@ abstract class Module {
         Themes::displayModulePage($this->getModuleFolder(), $template, $page_vars);
     }
 
+    // note that this method and the following actually returns the values from the CURRENT LANG FILE, not the private
+    // var above. See thoughts: https://github.com/formtools/core/issues/82
     public final function getModuleName() {
-        return $this->moduleName;
+        return $this->L["module_name"];
     }
 
     public final function getModuleDesc() {
-        return $this->moduleDesc;
+        return $this->L["module_description"];
     }
 
     public final function getAuthor() {

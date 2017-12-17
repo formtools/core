@@ -47,6 +47,18 @@ $search_criteria = array(
 $num_modules = Modules::getModuleCount();
 $modules     = Modules::searchModules($search_criteria);
 
+// Hacky patch. Longer term plan, see: https://github.com/formtools/core/issues/82
+if (Core::$user->getLang() !== "en_us") {
+    $overridden_modules = array();
+    foreach ($modules as $module_info) {
+        $module = Modules::getModuleInstance($module_info["module_folder"]);
+        $module_info["module_name"] = $module->getModuleName();
+        $module_info["description"] = $module->getModuleDesc();
+        $overridden_modules[] = $module_info;
+    }
+    $modules = $overridden_modules;
+}
+
 $module_ids = array();
 foreach ($modules as $module_info) {
 	$module_ids[] = $module_info["module_id"];
