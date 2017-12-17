@@ -9,7 +9,8 @@
 namespace FormTools;
 use PDO;
 
-class ListGroups {
+class ListGroups
+{
 
     /**
      * Inserts a new list group.

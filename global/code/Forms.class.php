@@ -9,7 +9,7 @@
 namespace FormTools;
 
 
-use PDOException;
+use PDO, PDOException;
 
 
 class Forms
@@ -50,22 +50,20 @@ class Forms
             $db->bind("form_id", $form_id);
         }
         $db->execute();
+        $form_ids = $db->fetchAll(PDO::FETCH_COLUMN);
 
         // loop through all forms, extract the submission count and first submission date
-        foreach ($db->fetchAll() as $form_info) {
-            $form_id = $form_info["form_id"];
-
+        foreach ($form_ids as $form_id) {
             try {
                 $db->query("
-                    SELECT count(*) as c
+                    SELECT count(*) 
                     FROM   {PREFIX}form_$form_id
                     WHERE  is_finalized = 'yes'
                 ");
                 $db->execute();
-                $info = $db->fetch();
-                Sessions::set("form_{$form_id}_num_submissions", $info["c"]);
+                $count = $db->fetch(PDO::FETCH_COLUMN);
+                Sessions::set("form_{$form_id}_num_submissions", $count);
             } catch (PDOException $e) {
-
                 // need a softer error here. If the form table doesn't exist, we need to log the issue.
 //                Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
 //                exit;

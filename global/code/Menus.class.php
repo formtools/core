@@ -649,6 +649,7 @@ class Menus
                 "list_order" => $order,
                 "menu_item_id" => $menu_item["menu_item_id"]
             ));
+            $db->execute();
             $order++;
         }
 

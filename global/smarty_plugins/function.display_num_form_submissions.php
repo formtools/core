@@ -2,6 +2,7 @@
 
 use FormTools\Sessions;
 
+
 /**
  * Displays the number of form submissions for a particular form. Depends on the actual value being set in sessions
  * elsewhere. That value will depend on the user type, rights, etc. If the session value isn't set, it outputs "-".
