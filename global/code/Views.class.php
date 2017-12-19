@@ -771,7 +771,12 @@ class Views
                 $selected_user_ids = isset($info["selected_user_ids"]) ? $info["selected_user_ids"] : array();
                 Views::deleteClientViews($view_id);
                 foreach ($selected_user_ids as $client_id) {
-                    $db->query("INSERT INTO {PREFIX}client_views (account_id, view_id) VALUES ($client_id, $view_id)");
+                    $db->query("INSERT INTO {PREFIX}client_views (account_id, view_id) VALUES (:account_id, :view_id)");
+                    $db->bindAll(array(
+                        "account_id" => $client_id,
+                        "view_id" => $view_id
+                    ));
+                    $db->execute();
                 }
 
                 Views::deletePublicViewOmitList($view_id);
