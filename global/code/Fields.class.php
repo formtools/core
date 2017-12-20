@@ -1539,6 +1539,10 @@ class Fields {
             $db->bind("field_id", $field_id);
             $db->execute();
 
+            $db->query("DELETE FROM {PREFIX}field_validation WHERE field_id = :field_id");
+            $db->bind("field_id", $field_id);
+            $db->execute();
+
             if ($form_table_exists) {
                 $db->query("DELETE FROM {PREFIX}new_view_submission_defaults WHERE field_id = :field_id");
                 $db->bind("field_id", $field_id);
@@ -1572,6 +1576,7 @@ class Fields {
                     ViewFields::deleteViewField($view_id, $field_id);
                 }
 
+                // now actually remove the column from the table
                 $db->query("ALTER TABLE {PREFIX}form_$form_id DROP $drop_column");
                 $db->execute();
 
