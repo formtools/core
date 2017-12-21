@@ -1182,6 +1182,7 @@ class Forms
         // remove any field settings
         foreach ($form_fields as $field_info) {
             FieldSettings::deleteSettings($field_info["field_id"]);
+            FieldValidation::deleteValidation($field_info["field_id"]);
         }
 
         // as with many things in the script, potentially we need to return a vast range of information from this last function. But
