@@ -176,4 +176,27 @@ class Database
         $this->execute();
         return $this->fetchColumn();
     }
+
+    /**
+     * Convenience method for constructing PDO-friendly insert statements. This is passed a hash of
+     * column names to values and returns an array with two indexes:
+     *          [0] a comma delimited list of col names, like "mycol1, mycol2, mycol3"
+     *          [1] a command delimited list of placeholders for thos same columns, like ":mycol1, :mycol2, :mycol3"
+     * @param $hash array of columns => values
+     * @return array
+     */
+    public function getInsertStatementParams($hash)
+    {
+        $col_names = array();
+        $placeholders = array();
+        foreach ($hash as $col_name => $value) {
+            $col_names[] = $col_name;
+            $placeholders[] = ":{$col_name}";
+        }
+
+        $cols_str = join(", ", $col_names);
+        $placeholders = join(", ", $placeholders);
+
+        return array($cols_str, $placeholders);
+    }
 }
