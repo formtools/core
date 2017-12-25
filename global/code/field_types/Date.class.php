@@ -11,7 +11,7 @@ class Date
         return array(
             "field_type" => array(
                 "is_editable"                    => "no",
-                "non_editable_info"              => "'{\$LANG.text_non_deletable_fields}'",
+                "non_editable_info"              => "{\$LANG.text_non_deletable_fields}",
                 "managed_by_module_id"           => null,
                 "field_type_name"                => "{\$LANG.word_date}",
                 "field_type_identifier"          => "date",

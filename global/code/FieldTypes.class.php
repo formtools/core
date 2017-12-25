@@ -539,36 +539,39 @@ END;
      *
      * Not used.
      */
-//    function ft_get_field_type_usage($field_type_id)
-//    {
-//        global $g_table_prefix;
-//
-//        // grr! This should be a single query as the next
-//        $query = $db->query("SELECT DISTINCT form_id FROM {PREFIX}form_fields WHERE field_type_id = $field_type_id");
-//
-//        $info = array();
-//        while ($row = mysql_fetch_assoc($query))
-//        {
-//            $form_id = $row["form_id"];
-//
-//            $field_type_query = $db->query("
-//			SELECT count(*) as c
-//			FROM {PREFIX}form_fields
-//			WHERE form_id = $form_id AND
-//						field_type_id = $field_type_id
-//		");
-//            $result = mysql_fetch_assoc($field_type_query);
-//
-//            $info[] = array(
-//            "form_id"    => $form_id,
-//            "form_name"  => Forms::getFormName($form_id),
-//            "num_fields" => $result["c"]
-//            );
-//        }
-//
-//        return $info;
-//    }
+    public static function getFieldTypeUsage($field_type_id)
+    {
+        $db = Core::$db;
 
+        // grr! This should be a single query as the next
+        $db->query("SELECT DISTINCT form_id FROM {PREFIX}form_fields WHERE field_type_id = :field_type_id");
+        $db->bind("field_type_id", $field_type_id);
+        $db->execute();
+        $form_ids = $db->fetchAll(PDO::FETCH_COLUMN);
+
+        $info = array();
+        foreach ($form_ids as $form_id) {
+            $db->query("
+                SELECT count(*)
+                FROM {PREFIX}form_fields
+                WHERE form_id = :form_id AND
+                      field_type_id = :field_type_id
+            ");
+            $db->bindAll(array(
+                "form_id" => $form_id,
+                "field_type_id" => $field_type_id
+            ));
+            $db->execute();
+
+            $info[] = array(
+                "form_id"    => $form_id,
+                "form_name"  => Forms::getFormName($form_id),
+                "num_fields" => $db->fetch(PDO::FETCH_COLUMN)
+            );
+        }
+
+        return $info;
+    }
 
 
     /**
