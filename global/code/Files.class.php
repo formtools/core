@@ -9,7 +9,8 @@
 namespace FormTools;
 
 
-class Files {
+class Files
+{
 
     /**
      * Examines a folder to check (a) it exists and (b) it has correct permissions.
@@ -68,7 +69,8 @@ class Files {
         $success = true;
         $problems = array();
 
-        extract(Hooks::processHookCalls("start", compact("form_id", "file_field_info"), array("success", "problems")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("start", compact("form_id", "file_field_info"), array("success", "problems")),
+        EXTR_OVERWRITE);
 
         return array($success, $problems);
     }
@@ -150,7 +152,7 @@ class Files {
         $debug_enabled = Core::isDebugEnabled();
 
         $folder = rtrim(trim($folder), "/\\");
-        $url    = rtrim(trim($url), "/\\");
+        $url = rtrim(trim($url), "/\\");
 
         list($success) = Files::checkUploadFolder($folder);
         if (!$success) {
@@ -163,7 +165,7 @@ class Files {
         // create the temp file
         $test_file = "ft_" . date("U") . ".tmp";
 
-        if (($fh = fopen("$folder/$test_file", "w")) === FALSE) {
+        if (($fh = fopen("$folder/$test_file", "w")) === false) {
             return array(true, "Problem creating test file.");
         }
 
@@ -191,11 +193,11 @@ class Files {
             //   "404 Not Found" - Not a match
             if (preg_match("/404 Not Found/", $errors)) {
                 return array(false, $LANG["notify_folder_url_no_match"] . " $debug");
-            }
-
-            //   "Authorization Required"    - PHP isn't allowed to look at that URL (URL protected by a .htaccess probably)
-            else if (preg_match("/Authorization Required/", $errors)) {
-                return array(false, $LANG["notify_folder_url_no_access"] . " $debug");
+            } //   "Authorization Required"    - PHP isn't allowed to look at that URL (URL protected by a .htaccess probably)
+            else {
+                if (preg_match("/Authorization Required/", $errors)) {
+                    return array(false, $LANG["notify_folder_url_no_access"] . " $debug");
+                }
             }
 
             return array(false, $LANG["notify_folder_url_unknown_error"]);
@@ -237,9 +239,9 @@ class Files {
         }
 
         $field_info = Fields::getFormField($field_id);
-        $col_name   = $field_info["col_name"];
+        $col_name = $field_info["col_name"];
         $field_type = $field_info["field_type"];
-        $form_id    = $field_info["form_id"];
+        $form_id = $field_info["form_id"];
 
         if ($field_type != "file" && $field_type != "image") {
             return;
@@ -258,7 +260,7 @@ class Files {
 
         foreach ($db->fetchAll() as $row) {
             $submission_id = $row["submission_id"];
-            $filename      = $row[$col_name];
+            $filename = $row[$col_name];
 
             // if this is an image, the field actually contains up to THREE filenames (main image, main thumb, search
             // results thumb). Find the one we want to move and overwrite $filename
@@ -328,7 +330,6 @@ class Files {
             }
         }
     }
-
 
 
     /**
@@ -418,7 +419,7 @@ class Files {
             $handle = opendir($directory);
             while (false !== ($item = readdir($handle))) {
                 if ($item != '.' && $item != '..') {
-                    $path = $directory.'/'.$item;
+                    $path = $directory . '/' . $item;
                     if (is_dir($path)) {
                         Files::deleteFolder($path);
                     } else {
@@ -473,9 +474,9 @@ class Files {
 
                 $file_fields_to_delete[] = array(
                     "submission_id" => $submission_id,
-                    "field_id"      => $form_field_info["field_id"],
+                    "field_id" => $form_field_info["field_id"],
                     "field_type_id" => $form_field_info["field_type_id"],
-                    "filename"      => $filename
+                    "filename" => $filename
                 );
             }
         }
@@ -487,6 +488,5 @@ class Files {
 
         return $file_delete_problems;
     }
+
 }
-
-

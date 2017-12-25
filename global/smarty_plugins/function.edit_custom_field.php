@@ -39,7 +39,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
 
             // TODO make sense of this. Both are required in different contexts
             // - in form builder, review page - the latter is needed.
-            if (isset($field_info["submission_value"])) {
+            if (isset($field_info["submission_value"]) || is_null($field_info["submission_value"])) {
                 echo $field_info["submission_value"];
             } else {
                 echo $field_info["submission_info"]["value"];

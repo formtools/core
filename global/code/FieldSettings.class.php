@@ -52,4 +52,5 @@ class FieldSettings
         $db->bind("field_id", $field_id);
         $db->execute();
     }
+
 }

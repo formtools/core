@@ -447,12 +447,7 @@ class Fields {
     public static function deleteFormFields($form_id, $field_ids)
     {
         $LANG = Core::$L;
-
-        // default return values
-        $success = true;
-
-        // stores the field IDs that were deleted
-        $removed_field_ids = array();
+        $removed_fields = array();
 
         foreach ($field_ids as $field_id) {
             $field_id = trim($field_id);
@@ -465,21 +460,23 @@ class Fields {
                 continue;
             }
 
+            $field_map = Fields::getFieldColByFieldId($form_id, $field_id);
+
             self::deleteFormField($form_id, $field_id);
 
-            $removed_field_ids[] = $field_id;
+            $removed_fields[$field_id] = $field_map[$field_id];
         }
 
         // determine the return message
-        if (count($removed_field_ids) > 1) {
+        if (count($removed_fields) > 1) {
             $message = $LANG["notify_form_fields_removed"];
         } else {
             $message = $LANG["notify_form_field_removed"];
         }
 
-        extract(Hooks::processHookCalls("end", compact("deleted_field_info", "form_id", "field_ids", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("removed_fields", "form_id", "field_ids", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
 
-        return array($success, $message);
+        return array(true, $message);
     }
 
 
@@ -530,8 +527,6 @@ class Fields {
     /**
      * Adds new form field(s) to the database.
      *
-     * @param integer $infohash a hash containing the contents of the Edit Form Advanced -> Add Fields page.
-     * @param integer $form_id The unique form ID
      * @return array Returns array with indexes:<br/>
      *               [0]: true/false (success / failure)<br/>
      *               [1]: message string<br/>
@@ -665,7 +660,7 @@ class Fields {
      * Another getter function. This one finds out the column name for a field or fields,
      * based on their field IDs.
      *
-     * Bah! This should return a single bloody col_name string when passed a single field_id. Refactor!
+     * TODO Bah! This should return a single bloody col_name string when passed a single field_id. Refactor! +2
      *
      * @param integer $form_id
      * @param mixed $field_id_or_ids integer or array of integers (field IDs)

@@ -15,8 +15,8 @@ use FormTools\Templates;
  */
 function smarty_function_display_custom_field($params, &$smarty)
 {
-    // note that View ID is optional
-    if (!Templates::hasRequiredParams($smarty, $params, array("form_id", "submission_id", "field_info", "field_types", "settings"))) {
+    // note that View ID is optional; settings needs to be passed but can be empty
+    if (!Templates::hasRequiredParams($smarty, $params, array("form_id", "submission_id", "field_info", "field_types"))) {
         return;
     }
 

@@ -1546,7 +1546,7 @@ class Forms
             }
         }
         if (!empty($new_fields)) {
-            list($is_success, $error) = Fields::addFormFieldsAdvanced($form_id, $new_fields, $num_existing_fields+1);
+            list($is_success, $error) = Fields::addFormFieldsAdvanced($form_id, $new_fields);
 
             // if there was a problem adding any of the new fields, inform the user
             if (!$is_success) {
@@ -1559,8 +1559,11 @@ class Forms
         // needed at this stage (e.g. deleting the actual files that had been uploaded via the form). This occurs regardless
         // of whether the add fields step worked or not
         $deleted_field_ids = explode(",", $infohash["{$sortable_id}_sortable__deleted_rows"]);
+
         extract(Hooks::processHookCalls("delete_fields", compact("deleted_field_ids", "infohash", "form_id"), array()), EXTR_OVERWRITE);
+
         Fields::deleteFormFields($form_id, $deleted_field_ids);
+
         extract(Hooks::processHookCalls("end", compact("infohash", "field_info", "form_id"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);

@@ -137,32 +137,33 @@ class FieldTypes {
      * Returns all field type groups in the database (including ones with no field types in them). It
      * also returns a num_field_types key containing the number of field types in each group.
      * @return array [group ID] => group name
-     *
-     * Doesn't appear to be used.
      */
-//    public static function getFieldTypeGroups()
-//    {
-//        $db = Core::$db;
-//
-//        $db->query("
-//            SELECT *
-//            FROM   {PREFIX}list_groups
-//            WHERE  group_type = 'field_types'
-//            ORDER BY list_order
-//        ");
-//
-//        // inefficient
-//        $info = array();
-//        while ($row = mysql_fetch_assoc($query)) {
-//            $group_id = $row["group_id"];
-//            $count_query = $db->query("SELECT count(*) as c FROM {PREFIX}field_types WHERE group_id = $group_id");
-//            $result = mysql_fetch_assoc($count_query);
-//            $row["num_field_types"] = $result["c"];
-//            $info[] = $row;
-//        }
-//
-//        return $info;
-//    }
+    public static function getFieldTypeGroups()
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}list_groups
+            WHERE  group_type = 'field_types'
+            ORDER BY list_order
+        ");
+        $db->execute();
+        $rows = $db->fetchAll();
+
+        // inefficient
+        $info = array();
+        foreach ($rows as $row) {
+            $db->query("SELECT count(*) FROM {PREFIX}field_types WHERE group_id = :group_id");
+            $db->bind("group_id", $row["group_id"]);
+            $db->execute();
+
+            $row["num_field_types"] = $db->fetch(PDO::FETCH_COLUMN);
+            $info[] = $row;
+        }
+
+        return $info;
+    }
 
 
     /**
@@ -192,6 +193,7 @@ class FieldTypes {
     }
 
 
+    // TODO memoize this! Easy win.
     public static function getFieldTypeIdByIdentifier($identifier)
     {
         $db = Core::$db;
@@ -381,6 +383,35 @@ class FieldTypes {
         }
 
         return $info;
+    }
+
+
+    public static function getFieldTypeSetting($setting_id)
+    {
+        $db = Core::$db;
+
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}field_type_settings
+            WHERE setting_id = :setting_id
+        ");
+        $db->bind("setting_id", $setting_id);
+        $db->execute();
+
+        $setting = $db->fetch();
+
+        $db->query("
+            SELECT *
+            FROM   {PREFIX}field_type_setting_options
+            WHERE setting_id = :setting_id
+            ORDER BY option_order ASC
+        ");
+        $db->bind("setting_id", $setting_id);
+        $db->execute();
+
+        $setting["options"] = $db->fetchAll();
+
+        return $setting;
     }
 
 

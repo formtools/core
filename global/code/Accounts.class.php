@@ -411,6 +411,7 @@ class Accounts
         $db->execute();
     }
 
+
     public static function clearResetPassword($account_id)
     {
         $db = Core::$db;
