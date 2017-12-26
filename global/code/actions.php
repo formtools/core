@@ -23,7 +23,6 @@ use FormTools\Settings;
 use FormTools\Themes;
 use FormTools\Views;
 
-
 Core::initNoLogout();
 $root_url = Core::getRootUrl();
 $LANG = Core::$L;
