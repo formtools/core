@@ -205,8 +205,8 @@ EOF;
         $smarty->assign("LANG", $LANG);
         $smarty->assign("same_page", $_SERVER["PHP_SELF"]);
         $smarty->assign("dir", $LANG["special_text_direction"]);
-        $smarty->assign("g_success", ""); //$g_success);
-        $smarty->assign("g_message", ""); //$g_message);
+        $smarty->assign("g_success", "");
+        $smarty->assign("g_message", "");
         $smarty->assign("g_default_theme", Core::getDefaultTheme());
         $smarty->assign("version", $version);
 
