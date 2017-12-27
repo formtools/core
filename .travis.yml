@@ -15,6 +15,5 @@ services:
     - mysql
 
 before_install:
-    - echo "USE mysql;\nUPDATE user set password=PASSWORD('password') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root -p
-    - password
+    - echo "USE mysql;\n" | mysql -u root
     - mysql -e 'CREATE DATABASE formtools;'
