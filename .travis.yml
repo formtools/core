@@ -3,6 +3,8 @@ php:
     - 5.4
     - 7.1.9
 
+#dist: precise
+
 addons:
     sauce_connect:
         username: "benkeen"
@@ -13,5 +15,6 @@ services:
     - mysql
 
 before_install:
-    - echo "USE mysql;\nUPDATE user set password=PASSWORD('password') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root -p password
+    - echo "USE mysql;\nUPDATE user set password=PASSWORD('password') WHERE user='root';\nFLUSH PRIVILEGES;\n" | mysql -u root -p
+    - password
     - mysql -e 'CREATE DATABASE formtools;'
