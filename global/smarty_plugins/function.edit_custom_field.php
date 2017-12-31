@@ -14,7 +14,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
     $root_url = Core::getRootUrl();
     $multi_val_delimiter = Core::getMultiFieldValDelimiter();
 
-    if (!Templates::hasRequiredParams($smarty, $params, array("form_id", "field_info", "field_types", "settings"))) {
+    if (!Templates::hasRequiredParams($smarty, $params, array("form_id", "field_info", "field_types"))) {
         return;
     }
 

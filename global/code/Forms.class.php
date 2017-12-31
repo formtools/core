@@ -9,13 +9,14 @@
 namespace FormTools;
 
 
-use PDO, PDOException;
+use PDO, Exception;
 
 
 class Forms
 {
     /**
      * Returns all forms. Should only be called by adminstrators.
+     * *** N.B. This doesn't return offline forms. ***
      * @return array
      */
     public static function getForms()
@@ -63,7 +64,7 @@ class Forms
                 $db->execute();
                 $count = $db->fetch(PDO::FETCH_COLUMN);
                 Sessions::set("form_{$form_id}_num_submissions", $count);
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 // need a softer error here. If the form table doesn't exist, we need to log the issue.
 //                Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
 //                exit;

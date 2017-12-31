@@ -32,7 +32,7 @@
 <body>
 <div id="container">
   <div id="header">
-    {if $is_logged_in}
+    {if $is_logged_in && isset($settings.program_version)}
       <div style="float:right">
         <table cellspacing="0" cellpadding="0" height="25">
         <tr>
@@ -57,9 +57,9 @@
     {/if}
 
     <span style="float:left; padding-top: 8px; padding-right: 10px">
-      {if isset($settings) && $settings.logo_link}
+      {if isset($settings) && isset($settings.logo_link)}
         <a href="{$settings.logo_link}">{/if}<img src="{$theme_url}/images/logo_{$swatch}.jpg" border="0" width="220" height="61" />
-      {if isset($settings) && $settings.logo_link}</a>{/if}
+      {if isset($settings) && isset($settings.logo_link)}</a>{/if}
     </span>
   </div>
   <div id="content">

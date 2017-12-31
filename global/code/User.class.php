@@ -341,11 +341,14 @@ class User
         $account_id   = $this->accountId;
         $account_type = $this->accountType;
 
+        // This will all be refactored when we introduce role-based auth
+        // ----------------
         // some VERY complex logic here. The "user" account permission type is included so that people logged in
         // via the Submission Accounts can still view certain pages, e.g. pages with the Pages module. This checks that
         // IF the minimum account type of the page is a "user", it EITHER has the user account info set (i.e. the submission ID)
         // or it's a regular client or admin account with the account_id set. Crumby, but it'll have to suffice for now.
         if ($this->accountType == "user") {
+
             if ((!Sessions::exists("account.submission_id") || General::isEmpty(Sessions::get("account.submission_id"))) &&
                 General::isEmpty(Sessions::get("account.account_id"))) {
                 if ($auto_logout) {

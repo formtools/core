@@ -687,7 +687,7 @@ class Modules
         return self::getModuleInstance($module_folder);
     }
 
-    // should only be called after isValidModule() has been called  first
+    // should only be called after isValidModule() has been called first
     public static function getModuleInstance($module_folder) {
         if (array_key_exists($module_folder, self::$moduleInstances)) {
             return self::$moduleInstances[$module_folder];

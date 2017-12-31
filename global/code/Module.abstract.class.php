@@ -106,7 +106,7 @@ abstract class Module {
 
     // non-overridable getters
 
-    public final function displayPage($template, $page_vars = array()) {
+    public final function displayPage($template, $page_vars = array(), $theme = "", $swatch = "") {
 
         // add in the JS and CSS files
         if (!isset($page_vars["js_files"])) {
@@ -131,7 +131,7 @@ abstract class Module {
         $page_vars["js_files"] = array_merge($page_vars["js_files"], self::getJSFiles());
         $page_vars["css_files"] = array_merge($page_vars["css_files"], self::getCSSFiles());
 
-        Themes::displayModulePage($this->getModuleFolder(), $template, $page_vars);
+        Themes::displayModulePage($this->getModuleFolder(), $template, $page_vars, $theme, $swatch);
     }
 
     // note that this method and the following actually returns the values from the CURRENT LANG FILE, not the private

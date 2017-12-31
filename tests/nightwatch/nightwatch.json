@@ -12,9 +12,7 @@
     "log_path" : "",
     "port" : 4444,
     "cli_args" : {
-      "webdriver.chrome.driver" : "",
-      "webdriver.gecko.driver" : "",
-      "webdriver.edge.driver" : ""
+      "webdriver.chrome.driver" : "./drivers/chromedriver"
     }
   },
 

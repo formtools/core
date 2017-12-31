@@ -1194,7 +1194,11 @@ END;
             if (in_array($field_type_id, $file_field_type_ids)) {
                 $field_settings = Fields::getFieldSettings($field_id);
                 $placeholders["FILENAME_$field_name"] = $field_info["content"];
-                $placeholders["FILEURL_$field_name"]  = "{$field_settings["folder_url"]}/{$field_info["content"]}";
+
+                // not sure under what condition this value isn't set but it was throwing a notice on the edit submission page
+                if (isset($field_settings["folder_url"])) {
+                    $placeholders["FILEURL_$field_name"] = "{$field_settings["folder_url"]}/{$field_info["content"]}";
+                }
             } else {
                 $detailed_field_info = array();
                 foreach ($form_fields as $curr_field_info) {

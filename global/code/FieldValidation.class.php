@@ -272,8 +272,8 @@ class FieldValidation {
                 foreach ($field_info["validation"] as $rule_info) {
                     $rsv_rule = $rule_info["rsv_rule"];
                     $placeholders = array(
-                    "field"      => $field_title,
-                    "field_name" => $field_name
+                        "field"      => $field_title,
+                        "field_name" => $field_name
                     );
                     $message = General::evalSmartyString($rule_info["error_message"], $placeholders);
 
