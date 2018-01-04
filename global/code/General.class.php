@@ -397,12 +397,8 @@ END;
         if (!Core::isAPIAvailable()) {
             return;
         }
-
         include_once(Core::getAPIPath());
-        if (!isset($g_api_version) || empty($g_api_version)) {
-            return;
-        }
-        Settings::set(array("api_version" => $g_api_version));
+        Settings::set(array("api_version" => API::getVersion()));
     }
 
 

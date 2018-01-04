@@ -153,64 +153,58 @@ class Submissions {
         // now examine the contents of the POST/GET submission and get a list of those fields
         // which we're going to update
         $valid_form_fields = array();
-        while (list($form_field, $value) = each($form_data)) {
+        foreach ($form_data as $field_name => $value) {
+
             // if this field is included, store the value for adding to DB
-            if (array_key_exists($form_field, $custom_form_fields)) {
-                $curr_form_field = $custom_form_fields[$form_field];
-
-                $cleaned_value = $value;
-                if (is_array($value)) {
-                    if ($form_info["submission_strip_tags"] == "yes") {
-                        for ($i=0; $i<count($value); $i++)
-                            $value[$i] = strip_tags($value[$i]);
-                    }
-
-                    $cleaned_value = implode("$multi_val_delimiter", $value);
-                } else {
-                    if ($form_info["submission_strip_tags"] == "yes")
-                        $cleaned_value = strip_tags($value);
-                }
-
-                $valid_form_fields[$curr_form_field["col_name"]] = "'$cleaned_value'";
+            if (!array_key_exists($field_name, $custom_form_fields)) {
+                continue;
             }
+            $curr_form_field = $custom_form_fields[$field_name];
+
+            $cleaned_value = $value;
+            if (is_array($value)) {
+                if ($form_info["submission_strip_tags"] == "yes") {
+                    for ($i=0; $i<count($value); $i++) {
+                        $value[$i] = strip_tags($value[$i]);
+                    }
+                }
+                $cleaned_value = implode("$multi_val_delimiter", $value);
+            } else {
+                if ($form_info["submission_strip_tags"] == "yes") {
+                    $cleaned_value = strip_tags($value);
+                }
+            }
+
+            $valid_form_fields[$curr_form_field["col_name"]] = $cleaned_value;
         }
 
         $now = General::getCurrentDatetime();
-        $ip_address = $_SERVER["REMOTE_ADDR"];
 
-        $col_names = array_keys($valid_form_fields);
-        $col_names_str = join(", ", $col_names);
-        if (!empty($col_names_str)) {
-            $col_names_str .= ", ";
-        }
+        // now tack on the system fields
+        $valid_form_fields["submission_date"] = $now;
+        $valid_form_fields["last_modified_date"] = $now;
+        $valid_form_fields["ip_address"] = $_SERVER["REMOTE_ADDR"];
+        $valid_form_fields["is_finalized"] = "yes";
 
-        $col_values = array_values($valid_form_fields);
-        $col_values_str = join(", ", $col_values);
-        if (!empty($col_values_str)) {
-            $col_values_str .= ", ";
-        }
-
-        // build our query
-        $query = "
-            INSERT INTO {PREFIX}form_$form_id ($col_names_str submission_date, last_modified_date, ip_address, is_finalized)
-            VALUES ($col_values_str '$now', '$now', '$ip_address', 'yes')
-        ";
+        list ($col_names_str, $placeholders_str) = $db->getInsertStatementParams($valid_form_fields);
 
         // add the submission to the database (if form_tools_ignore_submission key isn't set by either the form or a module)
         $submission_id = "";
         if (!isset($form_data["form_tools_ignore_submission"])) {
             try {
-                $db->query($query);
+                $db->query("
+                    INSERT INTO {PREFIX}form_$form_id ($col_names_str)
+                    VALUES ($placeholders_str)
+                ");
+                $db->bindAll($valid_form_fields);
                 $db->execute();
             } catch (Exception $e) {
-                $page_vars = array(
+                Themes::displayPage("error.tpl", array(
                     "message_type" => "error",
                     "error_code" => 304,
                     "error_type" => "system",
-                    "debugging"=> "Failed query in <b>" . __CLASS__ . ", " . __FILE__ . "</b>, line " . __LINE__ .
-                    ": <i>" . nl2br($query) . "</i>", mysql_error()
-                );
-                Themes::displayPage("error.tpl", $page_vars);
+                    "debugging"=> "Failed query in <b>" . __CLASS__ . ", " . __FILE__ . "</b>, line " . __LINE__ . ", error: " . $e->getMessage()
+                ));
                 exit;
             }
 

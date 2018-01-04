@@ -154,14 +154,11 @@ class Sessions
 
     /**
      * Clears a key or keys.
-     * TODO
      * @param $key
      */
     public static function clear($key) {
         if (is_string($key)) {
             unset($_SESSION["ft"][$key]);
-        } else if (is_array($key)) {
-
         }
     }
 

@@ -884,27 +884,6 @@ END;
 
 
     /**
-     * Returns a list of field type IDs for date field types
-     * @return array $field_type_ids
-     *
-     * Not used.
-     */
-//    public static function ft_get_date_field_type_ids()
-//    {
-//        global $g_table_prefix;
-//
-//        $query = $db->query("SELECT field_type_id FROM {PREFIX}field_types WHERE is_date_field = 'yes'");
-//        $field_type_ids = array();
-//        while ($row = mysql_fetch_assoc($query))
-//        {
-//            $field_type_ids[] = $row["field_type_id"];
-//        }
-//
-//        return $field_type_ids;
-//    }
-
-
-    /**
      * TODO this method is far too complicated & it's central to the application. Refactor.
      *
      * This should be the one and only place that actually generates the content for a field for it

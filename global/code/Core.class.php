@@ -137,28 +137,6 @@ class Core {
     private static $sessionSavePath = "";
 
     /**
-     * API settings.
-     * These two settings are for the ft_api_display_captcha() function. See the API documentation for more
-     * information on how that works.
-     *
-     * TODO move these to the API. That can still read the config file
-     */
-    private static $apiRecaptchaPublicKey  = "";
-    private static $apiRecaptchaPrivateKey = "";
-    private static $apiDebug = true;
-
-    /**
-     * The default sessions timeout for the API. Default is 1 hour (3600 seconds)
-     */
-    private static $apiSessionsTimeout;
-
-    /**
-     * This is used by the ft_api_init_form_page() function when setting up the environment for the webpage;
-     * headers are sent with this charset.
-     */
-    private static $apiHeaderCharset = "utf-8";
-
-    /**
      * Used for the database charset. For rare cases, the utf8 character set isn't available, so this allows
      * them to change it and install the script.
      */
@@ -212,8 +190,27 @@ class Core {
 
     // -------------------------------------------------------------------------------------------------
 
+    // API settings.
 
-    // SECTION 2: internal settings. These can't be overridden.
+    private static $apiRecaptchaPublicKey  = "";
+    private static $apiRecaptchaPrivateKey = "";
+    private static $apiDebug = true;
+
+    /**
+     * The default sessions timeout for the API. Default is 1 hour (3600 seconds)
+     */
+    private static $apiSessionsTimeout;
+
+    /**
+     * This is used by the ft_api_init_form_page() function when setting up the environment for the webpage;
+     * headers are sent with this charset.
+     */
+    private static $apiHeaderCharset = "utf-8";
+
+
+    // -------------------------------------------------------------------------------------------------
+
+    // Internal settings. These can't be overridden.
 
     /**
      * The database instance automatically instantiated by Core::init(). This allows any code to just
@@ -395,7 +392,7 @@ class Core {
         }
     }
 
-    public static function startSessions()
+    public static function startSessions($context = "")
     {
         if (self::$sessionsStarted) {
             return;
@@ -407,9 +404,16 @@ class Core {
             session_save_path(self::$sessionSavePath);
         }
 
+        // Form Tools uses utf-8 for all headers; if the user is using this method in an API page they can choose to
+        // customize the header charset via $apiHeaderCharset
+        $header_charset = "utf-8";
+        if ($context == "api_form") {
+            $header_charset = self::getAPIHeaderCharset();
+        }
+
         session_start();
         header("Cache-control: private");
-        header("Content-Type: text/html; charset=utf-8");
+        header("Content-Type: text/html; charset=$header_charset");
 
         self::$sessionsStarted = true;
     }
@@ -458,6 +462,12 @@ class Core {
         self::$debugEnabled = isset($g_debug) ? $g_debug : false;
         self::$sessionType = isset($g_session_type) && in_array($g_session_type, array("php", "database")) ? $g_session_type : "php";
         self::$sessionSavePath = isset($g_session_save_path) ? $g_session_save_path : "";
+
+        // API settings
+        self::$apiDebug = isset($g_api_debug) ? $g_api_debug : false;
+        self::$apiRecaptchaPublicKey  = isset($g_api_recaptcha_public_key) ? $g_api_recaptcha_public_key : "";
+        self::$apiRecaptchaPrivateKey  = isset($g_api_recaptcha_private_key) ? $g_api_recaptcha_private_key : "";
+        self::$apiHeaderCharset = isset($g_api_header_charset) ? $g_api_header_charset : "utf-8";
         self::$apiSessionsTimeout = isset($g_api_sessions_timeout) ? $g_api_sessions_timeout : 3600;
     }
 
@@ -643,19 +653,6 @@ class Core {
         return self::$sessionSavePath;
     }
 
-    public static function getApiSessionsTimeout() {
-        return self::$apiSessionsTimeout;
-    }
-
-    public static function isAPIAvailable() {
-        return is_file(Core::getAPIPath());
-    }
-
-    public static function getAPIPath() {
-        $root_dir = Core::getRootDir();
-        return "$root_dir/global/api/api.php";
-    }
-
     public static function isUserInitialized () {
         return self::$userInitialized;
     }
@@ -671,6 +668,41 @@ class Core {
 
         self::setCurrLang($language);
     }
+
+
+    // API-related
+
+    public static function isAPIAvailable() {
+        return is_file(Core::getAPIPath());
+    }
+
+    public static function getAPIPath() {
+        $root_dir = Core::getRootDir();
+        return "$root_dir/global/api/API.class.php";
+    }
+
+    public static function isAPIDebugEnabled(){
+        return self::$apiDebug;
+    }
+
+    public static function getApiRecaptchaPublicKey() {
+        return self::$apiRecaptchaPublicKey;
+    }
+
+    public static function getAPIRecaptchaPrivateKey() {
+        return self::$apiRecaptchaPrivateKey;
+    }
+
+    public static function getAPIHeaderCharset() {
+        return self::$apiHeaderCharset;
+    }
+
+    public static function getAPISessionsTimeout() {
+        return self::$apiSessionsTimeout;
+    }
+
+
+    // private methods
 
     private static function initUser() {
         self::$user = new User();

@@ -195,8 +195,24 @@ class Database
         }
 
         $cols_str = join(", ", $col_names);
-        $placeholders = join(", ", $placeholders);
+        $placeholders_str = join(", ", $placeholders);
 
-        return array($cols_str, $placeholders);
+        return array($cols_str, $placeholders_str);
+    }
+
+    /**
+     * Returns a string of col1 = :col1, col2 = :col2 ... for an UPDATE statement.
+     * @param $hash
+     * @return string
+     */
+    public function getUpdateStatements($hash)
+    {
+        $col_names = array_keys($hash);
+        $update_statements = array();
+        foreach ($col_names as $col_name) {
+            $update_statements[] = "$col_name = :$col_name";
+        }
+
+        return implode(", ", $update_statements);
     }
 }
