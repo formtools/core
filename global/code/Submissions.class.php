@@ -179,11 +179,12 @@ class Submissions {
         }
 
         $now = General::getCurrentDatetime();
+        $ip_address = $_SERVER["REMOTE_ADDR"];
 
         // now tack on the system fields
         $valid_form_fields["submission_date"] = $now;
         $valid_form_fields["last_modified_date"] = $now;
-        $valid_form_fields["ip_address"] = $_SERVER["REMOTE_ADDR"];
+        $valid_form_fields["ip_address"] = $ip_address;
         $valid_form_fields["is_finalized"] = "yes";
 
         list ($col_names_str, $placeholders_str) = $db->getInsertStatementParams($valid_form_fields);
