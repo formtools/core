@@ -85,11 +85,11 @@ class ViewFilters
             // quotes, e.g. col_X = 'placeholder value here'
             // PDO handles escaping the broader values but not these
             $placeholders = array(
-                "account_id"   => addcslashes($account_info["account_id"], "'"),
-                "first_name"   => addcslashes($account_info["first_name"], "'"),
-                "last_name"    => addcslashes($account_info["last_name"], "'"),
-                "email"        => addcslashes($account_info["email"], "'"),
-                "settings__company_name" => addcslashes($account_info["settings"]["company_name"], "'")
+                "account_id"   => str_replace("'", "''", $account_info["account_id"]),
+                "first_name"   => str_replace("'", "''", $account_info["first_name"]),
+                "last_name"    => str_replace("'", "''", $account_info["last_name"]),
+                "email"        => str_replace("'", "''", $account_info["email"]),
+                "settings__company_name" => str_replace("'", "''", $account_info["settings"]["company_name"])
             );
         }
 
@@ -111,9 +111,6 @@ class ViewFilters
             } else {
                 // if this is a client account, evaluate the Client Map placeholders
                 if ($is_client_account) {
-
-                    // since the
-
                     $infohash[] = General::evalSmartyString($filter["filter_sql"], $placeholders);
                 }
             }

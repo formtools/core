@@ -194,7 +194,7 @@ class Core {
 
     private static $apiRecaptchaPublicKey  = "";
     private static $apiRecaptchaPrivateKey = "";
-    private static $apiDebug = true;
+    private static $apiDebug = false;
 
     /**
      * The default sessions timeout for the API. Default is 1 hour (3600 seconds)
@@ -681,8 +681,15 @@ class Core {
         return "$root_dir/global/api/API.class.php";
     }
 
-    public static function isAPIDebugEnabled(){
-        return self::$apiDebug;
+    /**
+     * The API debug setting is generally configured by adding a $g_api_debug=true var to your config.php file. But for
+     * API form integrations, users may prefer to do use it on a per-form basis. To do that, they can just add the
+     * same variable prior to instantiating the API/calling an old ft_api_* method.
+     * @return bool
+     */
+    public static function isAPIDebugEnabled() {
+        global $g_api_debug;
+        return (isset($g_api_debug)) ? $g_api_debug : self::$apiDebug;
     }
 
     public static function getApiRecaptchaPublicKey() {

@@ -1138,23 +1138,26 @@ class Submissions {
 
         $filter_sql = ViewFilters::getViewFilterSql($view_id);
 
-        if (empty($filter_sql))
+        if (empty($filter_sql)) {
             return true;
+        }
 
         $filter_sql_clause = join(" AND ", $filter_sql);
 
-        $db->query("
-            SELECT count(*) as c
-            FROM   {PREFIX}form_{$form_id}
-            WHERE  submission_id = :submission_id AND
-                   ($filter_sql_clause)
-        ");
-        $db->bind("submission_id", $submission_id);
-        $db->execute();
+        try {
+            $db->query("
+                SELECT count(*)
+                FROM   {PREFIX}form_{$form_id}
+                WHERE  submission_id = :submission_id AND
+                       ($filter_sql_clause)
+            ");
+            $db->bind("submission_id", $submission_id);
+            $db->execute();
+        } catch (Exception $e) {
+            return false;
+        }
 
-        $result = $db->fetch();
-
-        return $result["c"] == 1;
+        return $db->fetch(PDO::FETCH_COLUMN) == 1;
     }
 
 

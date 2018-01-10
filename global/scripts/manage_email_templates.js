@@ -405,7 +405,7 @@ emails_ns.delete_form_email_field_config = function(form_email_id) {
       {
         text:  g.messages["word_yes"],
         click: function() {
-          window.location = "edit.php?page=email_settings&delete_form_email_id=" + form_email_id;
+          window.location = "./?page=email_settings&delete_form_email_id=" + form_email_id;
         }
       },
       {
