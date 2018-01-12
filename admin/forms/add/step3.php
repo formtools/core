@@ -57,19 +57,20 @@ if (isset($_POST["refresh"]) && $form_info["is_initialized"] == "no") {
 	$message = $LANG["notify_no_test_submission"];
 }
 
-
 // compile the header information
-$page_vars["page"]     = "add_form3";
-$page_vars["g_success"] = $success;
-$page_vars["g_message"] = $message;
-$page_vars["page_url"] = Pages::getPageUrl("add_form3");
-$page_vars["head_title"] = "{$LANG['phrase_add_form']} - {$LANG["phrase_step_3"]}";
-$page_vars["form_id"] = $form_id;
-$page_vars["form_tag"] = $form_tag;
-$page_vars["form_info"] = $form_info;
-$page_vars["hidden_fields"] = $hidden_fields;
-$page_vars["direct_form_para_2"] = $direct_form_para_2;
-$page_vars["code_form_para_2"] = $code_form_para_2;
+$page_vars = array(
+    "page" => "add_form3",
+    "g_success" => $success,
+    "g_message" => $message,
+    "page_url" => Pages::getPageUrl("add_form3"),
+    "head_title" => "{$LANG['phrase_add_form']} - {$LANG["phrase_step_3"]}",
+    "form_id" => $form_id,
+    "form_tag" => $form_tag,
+    "form_info" => $form_info,
+    "hidden_fields" => $hidden_fields,
+    "direct_form_para_2" => $direct_form_para_2,
+    "code_form_para_2" => $code_form_para_2,
+);
 
 $current_section = (!empty($form_info["submission_type"])) ? "\"{$form_info["submission_type"]}\"" : "null";
 $page_vars["head_js"] =<<< END
@@ -109,6 +110,18 @@ page_ns.show_section = function(section) {
 }
 
 rsv.onCompleteHandler = function() { ft.select_all('selected_user_ids[]'); return true; }
+END;
+
+$page_vars["head_string"] =<<< END
+<link href="$root_url/global/codemirror/lib/codemirror.css" rel="stylesheet" type="text/css" />
+<script src="$root_url/global/codemirror/lib/codemirror.js"></script>
+<script src="$root_url/global/codemirror/mode/xml/xml.js"></script>
+<script src="$root_url/global/codemirror/mode/smarty/smarty.js"></script>
+<script src="$root_url/global/codemirror/mode/php/php.js"></script>
+<script src="$root_url/global/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script src="$root_url/global/codemirror/mode/css/css.js"></script>
+<script src="$root_url/global/codemirror/mode/javascript/javascript.js"></script>
+<script src="$root_url/global/codemirror/mode/clike/clike.js"></script>
 END;
 
 Themes::displayPage("admin/forms/add/step3.tpl", $page_vars);

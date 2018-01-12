@@ -28,14 +28,30 @@
     <p>
       {$LANG.text_add_form_step_5_para_1}
     </p>
-    <code><pre class="green">
-      &lt;input type="hidden" name="form_tools_initialize_form" value="1" /&gt;</pre></code>
+
+    <code id="highlight-code1" class="highlight-code"></code>
+
+    <script>
+    new CodeMirror($("#highlight-code1")[0], {literal}{{/literal}
+      mode: "xml",
+      readOnly: "nocursor",
+      value: '<input type="hidden" name="form_tools_initialize_form" value="1" />'
+    {literal}});{/literal}
+    </script>
 
     <p>
       {$LANG.text_add_form_step_5_para_5}
     </p>
-    <code><pre class="green">
-      $fields = ft_api_init_form_page({$form_id});</pre></code>
+
+      <code id="highlight-code2" class="highlight-code"></code>
+
+      <script>
+        new CodeMirror($("#highlight-code2")[0], {literal}{{/literal}
+          mode: "text/x-php",
+          readOnly: "nocursor",
+          value: '$fields = $api->initFormPage({$form_id});'
+        {literal}});{/literal}
+      </script>
 
     <p>
       {$LANG.text_add_form_step_5_para_2}

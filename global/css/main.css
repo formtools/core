@@ -124,10 +124,10 @@ body .ui-dialog .ui-dialog-title {
   background-image: url(../images/loading.gif);
 }
 .ui-dialog-buttonpane .ajax_activity {
-  margin: 4px 0px 0px 4px;
+  margin: 4px 0 0 4px;
 }
 body .ui-dialog .tabbed_dialog {
-  padding: 3px 1px 0px 1px;
+  padding: 3px 1px 0 1px;
 }
 .right {
   float: right;
@@ -152,4 +152,7 @@ table.padded_table td {
 }
 .req {
   color: red;
+}
+.highlight-code .CodeMirror {
+    height: auto;
 }

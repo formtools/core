@@ -72,16 +72,23 @@
     </p>
 
     <ul>
-      <li><a href="http://docs.formtools.org/tutorials/api_single_page_form/" target="_blank">{$LANG.phrase_adding_single_page_form}</a></li>
-      <li><a href="http://docs.formtools.org/tutorials/api_multi_page_form/" target="_blank">{$LANG.phrase_adding_multi_page_form}</a></li>
+      <li><a href="http://docs.formtools.org/tutorials/api_v2_single_page_form/" target="_blank">{$LANG.phrase_adding_single_page_form}</a></li>
+      <li><a href="http://docs.formtools.org/tutorials/api_v2_multi_page_form/" target="_blank">{$LANG.phrase_adding_multi_page_form}</a></li>
     </ul>
 
     <p>
       {$LANG.text_add_form_step_3_text_5}
     </p>
 
-    <code><pre class="green">
-    $fields = ft_api_init_form_page({$form_id}, "initialize");</pre></code>
+    <code id="highlight-code"></code>
+
+    <script>
+    var html_editor = new CodeMirror($("#highlight-code")[0], {literal}{{/literal}
+      mode: "text/x-php",
+      readOnly: "nocursor",
+      value: '$fields = $api->initFormPage({$form_id}, "initialize");'
+    {literal}});{/literal}
+    </script>
 
     <p>
       {$LANG.text_add_form_step_3_text_7}
