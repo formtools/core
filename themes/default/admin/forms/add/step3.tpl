@@ -80,7 +80,7 @@
       {$LANG.text_add_form_step_3_text_5}
     </p>
 
-    <code id="highlight-code"></code>
+    <code id="highlight-code" class="highlight-code"></code>
 
     <script>
     var html_editor = new CodeMirror($("#highlight-code")[0], {literal}{{/literal}
