@@ -92,13 +92,6 @@ class Core {
     private static $unicode = true;
 
     /**
-     * This setting should be enabled PRIOR to including this file in any external script (e.g. the API)
-     * that doesn't require the person to be logged into Form Tools. This lets you leverage the Form Tools
-     * functionality in the outside world without already being logged into Form Tools.
-     */
-    //private static $checkFTSessions = true;
-
-    /**
      * This is set to 1 by default (genuine errors only). Crank it up to 2047 to list every
      * last error/warning/notice that occurs.
      */
@@ -192,8 +185,9 @@ class Core {
 
     // API settings.
 
-    private static $apiRecaptchaPublicKey  = "";
-    private static $apiRecaptchaPrivateKey = "";
+    private static $apiRecaptchaSiteKey  = "";
+    private static $apiRecaptchaSecretKey = "";
+    private static $apiRecaptchaLang = "";
     private static $apiDebug = false;
 
     /**
@@ -465,8 +459,9 @@ class Core {
 
         // API settings
         self::$apiDebug = isset($g_api_debug) ? $g_api_debug : false;
-        self::$apiRecaptchaPublicKey  = isset($g_api_recaptcha_public_key) ? $g_api_recaptcha_public_key : "";
-        self::$apiRecaptchaPrivateKey  = isset($g_api_recaptcha_private_key) ? $g_api_recaptcha_private_key : "";
+        self::$apiRecaptchaSiteKey = isset($g_api_recaptcha_site_key) ? $g_api_recaptcha_site_key : "";
+        self::$apiRecaptchaSecretKey = isset($g_api_recaptcha_secret_key) ? $g_api_recaptcha_secret_key : "";
+        self::$apiRecaptchaLang = isset($g_api_recaptcha_lang) ? $g_api_recaptcha_lang : "en";
         self::$apiHeaderCharset = isset($g_api_header_charset) ? $g_api_header_charset : "utf-8";
         self::$apiSessionsTimeout = isset($g_api_sessions_timeout) ? $g_api_sessions_timeout : 3600;
     }
@@ -692,12 +687,16 @@ class Core {
         return (isset($g_api_debug)) ? $g_api_debug : self::$apiDebug;
     }
 
-    public static function getApiRecaptchaPublicKey() {
-        return self::$apiRecaptchaPublicKey;
+    public static function getApiRecaptchaSiteKey() {
+        return self::$apiRecaptchaSiteKey;
     }
 
-    public static function getAPIRecaptchaPrivateKey() {
-        return self::$apiRecaptchaPrivateKey;
+    public static function getAPIRecaptchaSecretKey() {
+        return self::$apiRecaptchaSecretKey;
+    }
+
+    public static function getAPIRecaptchaLang() {
+        return self::$apiRecaptchaLang;
     }
 
     public static function getAPIHeaderCharset() {
