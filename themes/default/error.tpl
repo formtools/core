@@ -63,7 +63,7 @@
             <span class="green">{$LANG.word_user}</span>
           {/if}<br />
         <b>{$LANG.phrase_code_c} #{$error_code}</b> &#8212;
-        <a href="https://docs.formtools.org/api/index.php?page=error_codes#{$error_code}" target="_blank" />{$LANG.phrase_error_learn_more}</a>
+        <a href="https://docs.formtools.org/api/v2/error_codes/#{$error_code}" target="_blank" />{$LANG.phrase_error_learn_more}</a>
       </p>
     {/if}
 

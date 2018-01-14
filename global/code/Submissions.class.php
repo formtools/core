@@ -25,11 +25,9 @@ class Submissions {
     {
         $db = Core::$db;
         $LANG = Core::$L;
+        $api_enabled = Core::isAPIAvailable();
         $multi_val_delimiter = Core::getMultiFieldValDelimiter();
         $query_str_multi_val_separator = Core::getQueryStrMultiValSeparator();
-
-        // $g_query_str_multi_val_separator,
-        global $g_api_version, $g_api_recaptcha_private_key;
 
         // ensure the incoming values are escaped
         $form_id = $form_data["form_tools_form_id"];
@@ -83,21 +81,19 @@ class Submissions {
 
         // was there a reCAPTCHA response? If so, a recaptcha was just submitted. This generally implies the
         // form page included the API, so check it was entered correctly. If not, return the user to the webpage
-        if (isset($g_api_version) && isset($form_data["recaptcha_response_field"])) {
-            $recaptcha_challenge_field = $form_data["recaptcha_challenge_field"];
-            $recaptcha_response_field  = $form_data["recaptcha_response_field"];
+        if (isset($api_enabled) && isset($form_data["g-recaptcha-response"])) {
 
-            require_once(__DIR__ . "/global/api/recaptchalib.php");
+            $api = new API(array("init_core" => false));
+            $api->includeRecaptchaLib();
+            $resp = $api->validateRecaptcha($form_data["g-recaptcha-response"]);
 
-            $resp = recaptcha_check_answer($g_api_recaptcha_private_key, $_SERVER["REMOTE_ADDR"], $recaptcha_challenge_field, $recaptcha_response_field);
+            if (!$resp->isSuccess()) {
 
-            if ($resp->is_valid) {
-                $passes_captcha = true;
-            } else {
-                // since we need to pass all the info back to the form page we do it by storing the data in sessions. Enable 'em.
-                //@ft_api_start_sessions();
+                // since we need to pass all the info back to the form page we do it by storing the data in sessions.
+                // Ensure they're enabled.
+                Core::startSessions("api_form");
                 $_SESSION["form_tools_form_data"] = $form_data;
-                $_SESSION["form_tools_form_data"]["api_recaptcha_error"] = $resp->error;
+                $_SESSION["form_tools_form_data"]["api_recaptcha_error"] = $resp->getErrorCodes();
 
                 // if there's a form_tools_form_url specified, redirect to that
                 if (isset($form_data["form_tools_form_url"])) {
