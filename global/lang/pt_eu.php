@@ -1149,6 +1149,7 @@ $LANG["notify_invalid_session_values_re_login"] = "An error occurred: there are 
 $LANG["notify_invalid_upload_folder"] = "The upload folder is either invalid or is not writable.";
 $LANG["notify_lang_list_updated"] = "A lista de idiomas disponíveis foi actualizada.";
 $LANG["notify_login_info_emailed"] = "A sua informação de login foi-lhe por email.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Oops, this module is already installed!";
 $LANG["notify_module_installed"] = "The module has been installed. <a href=\"{\$link}\">Click here to select the module</a>.";
 $LANG["notify_module_list_updated"] = "The module list has been updated.";

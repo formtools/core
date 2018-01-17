@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Virhe: joitakin olematonta ta
 $LANG["notify_invalid_upload_folder"] = "Lataa kansio on joko virheellinen tai ei ole kirjoitettavissa.";
 $LANG["notify_lang_list_updated"] = "Käytettävissä käyttöliittymän kieli luettelo on päivitetty.";
 $LANG["notify_login_info_emailed"] = "Kirjautumistietojasi on sähköpostiisi.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Oho, tämä moduuli on jo asennettu!";
 $LANG["notify_module_installed"] = "Moduuli on asennettu. <a href=\"{\$link}\">Napsauttamalla Valitse moduuli.</a>";
 $LANG["notify_module_list_updated"] = "Moduuli luettelo on päivitetty.";

@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Egy hiba történt: van néh�
 $LANG["notify_invalid_upload_folder"] = "A feltöltési mappa érvénytelen vagy nem írható.";
 $LANG["notify_lang_list_updated"] = "A rendelkezésre álló nyelvek listája UI frissítésre került.";
 $LANG["notify_login_info_emailed"] = "A bejelentkezési adatokat nem elküldjük Önnek.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Hoppá, ez a modul már telepítve van!";
 $LANG["notify_module_installed"] = "A modul telepítése megtörtént. <a href=\"{\$link}\">kattintson ide, hogy jelölje ki a modult</a> .";
 $LANG["notify_module_list_updated"] = "A modul lista frissítve lett.";

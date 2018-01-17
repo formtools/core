@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Адбылася памылк
 $LANG["notify_invalid_upload_folder"] = "Загрузіць папкі некарэктна ці не падтрымлівае запісу.";
 $LANG["notify_lang_list_updated"] = "Даступных моў інтэрфейсу спіс быў абноўлены.";
 $LANG["notify_login_info_emailed"] = "Лагін Ваша інфармацыя была па электроннай пошце.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "На жаль, гэты модуль ужо ўстаноўлены!";
 $LANG["notify_module_installed"] = "Гэты модуль быў усталяваны. <a href=\"{\$link}\">Націсніце тут, каб выбраць модуль.</a>";
 $LANG["notify_module_list_updated"] = "Модуль спіс быў абноўлены.";

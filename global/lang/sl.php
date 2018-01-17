@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Prišlo je do napake: obstaja
 $LANG["notify_invalid_upload_folder"] = "Upload mapa je neveljaven ali ni mogoče pisati.";
 $LANG["notify_lang_list_updated"] = "Voljo jezik uporabniškega vmesnika seznam je bil posodobljen.";
 $LANG["notify_login_info_emailed"] = "Vaše podatke za prijavo je bil po e-pošti vam.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Ups, se ta modul že nameščen!";
 $LANG["notify_module_installed"] = "Modul ni nameščen. <a href=\"{\$link}\">Kliknite tukaj, da izberete modul.</a>";
 $LANG["notify_module_list_updated"] = "Modul seznam je bil posodobljen.";

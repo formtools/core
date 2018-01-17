@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "เกิด ข้อ ผิ
 $LANG["notify_invalid_upload_folder"] = "โฟลเดอร์ อัพโหลด มี ทั้ง ถูก ต้อง หรือ ไม่ สามารถ เขียน ได้.";
 $LANG["notify_lang_list_updated"] = "ที่ มี ราย ชื่อ ภาษา UI ได้ รับ การ ปรับปรุง.";
 $LANG["notify_login_info_emailed"] = "ข้อมูล การ เข้า สู่ ระบบ ของ คุณ ไป ถึง คุณ.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "โอ๊ะโมดูลนี้ติดตั้งอยู่แล้ว!";
 $LANG["notify_module_installed"] = "โมดูล ได้ รับ การ ติด ตั้ง. <a href=\"{\$link}\">คลิก ที่ นี่ เพื่อ เลือก โมดูล.</a>";
 $LANG["notify_module_list_updated"] = "รายการ โมดูล ที่ ได้ รับ การ ปรับปรุง.";

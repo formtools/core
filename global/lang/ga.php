@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Tharla earráid: tá roinnt n
 $LANG["notify_invalid_upload_folder"] = "Is é an fillteán a uaslódáil neamhbhailí ceachtar bhfuil nó nach bhfuil inscríofa.";
 $LANG["notify_lang_list_updated"] = "Tá an liosta teanga atá ar fáil Chomhéadain tugtha cothrom le dáta.";
 $LANG["notify_login_info_emailed"] = "Tá do faisnéis logáil isteach ar ríomhphost duit.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Oops, tá an modúl suiteáilte cheana féin!";
 $LANG["notify_module_installed"] = "Tá an modúl curtha isteach. <a href=\"{\$link}\">Cliceáil anseo chun roghnú an mhodúil.</a>";
 $LANG["notify_module_list_updated"] = "Tá an liosta modúl tugtha cothrom le dáta.";

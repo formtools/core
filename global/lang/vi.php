@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Một lỗi đã xảy ra: c�
 $LANG["notify_invalid_upload_folder"] = "Thư mục tải lên là hoặc không hợp lệ hoặc không ghi.";
 $LANG["notify_lang_list_updated"] = "Các giao diện có sẵn danh sách ngôn ngữ đã được cập nhật.";
 $LANG["notify_login_info_emailed"] = "Thông tin đăng nhập của bạn đã được gửi đến bạn.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Rất tiếc, mô-đun này đã được cài đặt!";
 $LANG["notify_module_installed"] = "Module này đã được cài đặt <a href=\"{\$link}\">Click vào đây để chọn mô-đun..</a>";
 $LANG["notify_module_list_updated"] = "Danh sách mô-đun đã được cập nhật.";

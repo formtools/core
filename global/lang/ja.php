@@ -1144,6 +1144,7 @@ $LANG["notify_invalid_session_values_re_login"] = "エラーが発生しまし�
 $LANG["notify_invalid_upload_folder"] = "アップロード先のフォルダのいずれかが無効であるか、または書き込めません。";
 $LANG["notify_lang_list_updated"] = "利用可能なUI言語のリストが更新されています。";
 $LANG["notify_login_info_emailed"] = "お客様のログイン情報をメールで送信されている。";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "おっと、このモジュールがすでにインストールされています！";
 $LANG["notify_module_installed"] = "モジュールがインストールされています。 <a href=\"{\$link}\">ここをクリックしモジュールを選択します</a> 。";
 $LANG["notify_module_list_updated"] = "モジュールのリストが更新されています。";

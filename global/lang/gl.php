@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Houbo un erro: hai algunhas i
 $LANG["notify_invalid_upload_folder"] = "O directorio de subida non é válido ou non é gravadora.";
 $LANG["notify_lang_list_updated"] = "A listaxe de idiomas dispoñibles UI foi actualizado.";
 $LANG["notify_login_info_emailed"] = "A súa información de login foi enviada para vostede.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Oops, este módulo xa está instalado!";
 $LANG["notify_module_installed"] = "Este módulo foi instalado. <a href=\"{\$link}\">Prema aquí para seleccionar o módulo.</a>";
 $LANG["notify_module_list_updated"] = "A lista de módulos foi actualizada.";

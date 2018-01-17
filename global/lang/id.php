@@ -1147,6 +1147,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Sebuah kesalahan terjadi: ada
 $LANG["notify_invalid_upload_folder"] = "Folder upload entah valid atau tidak dapat ditulis.";
 $LANG["notify_lang_list_updated"] = "UI yang tersedia dalam daftar bahasa yang telah diperbarui.";
 $LANG["notify_login_info_emailed"] = "Informasi login Anda telah diemail ke Anda.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Ups, modul ini sudah terinstall!";
 $LANG["notify_module_installed"] = "Modul tersebut telah terinstal. <a href=\"{\$link}\">Klik di sini untuk memilih modul.</a>";
 $LANG["notify_module_list_updated"] = "Daftar modul telah diperbarui.";

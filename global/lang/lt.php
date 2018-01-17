@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Įvyko klaida: kai kurios jų
 $LANG["notify_invalid_upload_folder"] = "Upload kataloge yra neteisingi arba nėra įrašomas.";
 $LANG["notify_lang_list_updated"] = "Rasti sąsajos kalbą sąrašas buvo atnaujintas.";
 $LANG["notify_login_info_emailed"] = "Jūsų prisijungimo informacija buvo išsiųsta elektroniniu paštu.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Oi, šis modulis jau įdiegtas!";
 $LANG["notify_module_installed"] = "Modulis jau įdiegtas. <a href=\"{\$link}\">Spustelėkite čia norėdami pasirinkti modulį.</a>";
 $LANG["notify_module_list_updated"] = "Modulis sąrašas buvo atnaujintas.";

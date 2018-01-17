@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "एक त्रुटि ह
 $LANG["notify_invalid_upload_folder"] = "अपलोड फ़ोल्डर या तो अमान्य है या नहीं है writable.";
 $LANG["notify_lang_list_updated"] = "उपलब्ध UI भाषा सूची अद्यतन किया गया है.";
 $LANG["notify_login_info_emailed"] = "अपनी प्रवेश जानकारी आपको ईमेल कर दी गई है.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "ओह, इस मॉड्यूल पहले से स्थापित है!";
 $LANG["notify_module_installed"] = "मॉड्यूल स्थापित किया गया है. <a href=\"{\$link}\">लिए यहाँ क्लिक करें मॉड्यूल का चयन करें.</a>";
 $LANG["notify_module_list_updated"] = "मॉड्यूल सूची को अद्यतन किया गया है.";

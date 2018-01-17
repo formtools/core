@@ -1144,6 +1144,7 @@ $LANG["notify_invalid_session_values_re_login"] = "發生錯誤：有一些不�
 $LANG["notify_invalid_upload_folder"] = "上載文件夾是無效或不可寫。";
 $LANG["notify_lang_list_updated"] = "現有的用戶界面語言的名單已更新。";
 $LANG["notify_login_info_emailed"] = "您的登錄信息已發送給您。";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "哎呀，這個模塊已經安裝！";
 $LANG["notify_module_installed"] = "該模塊已經安裝。 <a href=\"{\$link}\">點擊這裡選擇的模塊</a> 。";
 $LANG["notify_module_list_updated"] = "該模塊名單已更新。";

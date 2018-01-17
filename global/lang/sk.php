@@ -1147,6 +1147,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Došlo k chybe: existuje neja
 $LANG["notify_invalid_upload_folder"] = "Nahrať zložka je buď neplatné, alebo nedá zapisovať.";
 $LANG["notify_lang_list_updated"] = "Jazyk používateľského rozhrania sú k dispozícii zoznam bol aktualizovaný.";
 $LANG["notify_login_info_emailed"] = "Svoje prihlasovacie údaje boli zaslané.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Jejda, je tento modul už nainštalovaný!";
 $LANG["notify_module_installed"] = "Modul bol inštalovaný. <a href=\"{\$link}\">Kliknite tu pre výber modulu.</a>";
 $LANG["notify_module_list_updated"] = "Modul zoznam bol aktualizovaný.";

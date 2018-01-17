@@ -1145,6 +1145,7 @@ $LANG["notify_invalid_session_values_re_login"] = "خطا رخ داده است :
 $LANG["notify_invalid_upload_folder"] = "پوشه آپلود شده است یا اشتباه است یا قابل نوشتن نیست.";
 $LANG["notify_lang_list_updated"] = "در دسترس زبان رابط لیست به روز شده است.";
 $LANG["notify_login_info_emailed"] = "اطلاعات ورود شما به شما ایمیل فرستاده شده است.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "اوه ، این ماژول در حال حاضر نصب شده!";
 $LANG["notify_module_installed"] = "ماژول نصب شده است. <a href=\"{\$link}\">اینجا را کلیک کنید تا این ماژول را انتخاب کنید.</a>";
 $LANG["notify_module_list_updated"] = "لیست ماژول به روز شده است.";

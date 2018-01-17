@@ -1144,6 +1144,7 @@ $LANG["notify_invalid_session_values_re_login"] = "An error occured: kuna baadhi
 $LANG["notify_invalid_upload_folder"] = "The upload folder aidha ni batili au si writable.";
 $LANG["notify_lang_list_updated"] = "Lugha ya inapatikana UI orodha imekuwa updated.";
 $LANG["notify_login_info_emailed"] = "Habari login yako imekuwa Emailed kwenu.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Oops, this module is already installed!";
 $LANG["notify_module_installed"] = "Ya moduli imewekwa. <a href=\"{\$link}\">Bonyeza hapa kuchagua moduli.</a>";
 $LANG["notify_module_list_updated"] = "Orodha ya moduli imekuwa updated.";

@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "אַ פֿעלער אַקער�
 $LANG["notify_invalid_upload_folder"] = "די צופֿעליקער טעקע איז אָדער פאַרקריפּלט אָדער איז נישט ווריטאַבלע.";
 $LANG["notify_lang_list_updated"] = "די בארעכטיגט וי שפּראַך רשימה איז געווארן אפדעיטעד.";
 $LANG["notify_login_info_emailed"] = "דיין לאָגין אינפֿאָרמאַציע איז געווארן ימיילד צו איר.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "אָאָפּס, דעם מאָדולע איז שוין אינסטאַלירן!";
 $LANG["notify_module_installed"] = "די מאָדולע האט מען אינסטאַלירן. <a href=\"{\$link}\">דריקט דאָ צו סעלעקטירן דעם מאָדולע.</a>";
 $LANG["notify_module_list_updated"] = "די מאָדולע רשימה איז געווארן אפדעיטעד.";

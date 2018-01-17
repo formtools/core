@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "May naganap na error: may ila
 $LANG["notify_invalid_upload_folder"] = "Ang mga mag-upload ng folder ay alinman sa mga hindi balidong o hindi writable.";
 $LANG["notify_lang_list_updated"] = "Ang mga magagamit na UI listahan ng mga wika ay na-update.";
 $LANG["notify_login_info_emailed"] = "Ang iyong login impormasyon ay ipinadala sa iyo.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Oops, ang module na ito ay naka-install na!";
 $LANG["notify_module_installed"] = "Ang module ay na-install. <a href=\"{\$link}\">Mag-click dito upang piliin ang module.</a>";
 $LANG["notify_module_list_updated"] = "Ang module na listahan ay na-update.";

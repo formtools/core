@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "A apărut o eroare: există �
 $LANG["notify_invalid_upload_folder"] = "Pliant upload este fie invalid sau nu este de inscripţionare.";
 $LANG["notify_lang_list_updated"] = "Lista disponibilă limba interfeţei utilizator a fost actualizat.";
 $LANG["notify_login_info_emailed"] = "Informaţiile dvs. de conectare a fost trimis prin e pentru tine.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Hopa, acest modul este deja instalat!";
 $LANG["notify_module_installed"] = "Modulul a fost instalat. <a href=\"{\$link}\">Click aici pentru a selecta modul.</a>";
 $LANG["notify_module_list_updated"] = "Lista Modulul a fost actualizat.";

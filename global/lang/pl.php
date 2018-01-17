@@ -1149,6 +1149,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Wystąpił błąd: istnieje k
 $LANG["notify_invalid_upload_folder"] = "Upload folderu jest nieprawidłowa lub nie jest zapisywalny.";
 $LANG["notify_lang_list_updated"] = "Listy dostępnych języków interfejsu użytkownika został zaktualizowany.";
 $LANG["notify_login_info_emailed"] = "Twoje dane logowania zostały przesłane w e-mailu do Ciebie.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Niestety, moduł ten jest już zainstalowany!";
 $LANG["notify_module_installed"] = "Moduł został zainstalowany. <a href=\"{\$link}\">Kliknij tutaj, aby wybrać moduł.</a>";
 $LANG["notify_module_list_updated"] = "Moduł lista została zaktualizowana.";

@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "오류가 발생했습니다 
 $LANG["notify_invalid_upload_folder"] = "업로드 폴더 중 하나가 잘못되었거나 쓰기 권한이없습니다.";
 $LANG["notify_lang_list_updated"] = "해당 UI 언어 목록을 업데이 트되었습니다.";
 $LANG["notify_login_info_emailed"] = "귀하의 로그인 정보를 당신에게 이메일로 전송되었습니다.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "죄송합니다,이 모듈이 이미 설치되어 있습니다!";
 $LANG["notify_module_installed"] = "모듈이 설치되었습니다. <a href=\"{\$link}\">여기를 클릭하여 모듈을 선택합니다.</a>";
 $LANG["notify_module_list_updated"] = "모듈 목록이 업데이 트되었습니다.";

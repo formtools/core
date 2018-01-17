@@ -1150,6 +1150,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Er is een fout opgetreden: er
 $LANG["notify_invalid_upload_folder"] = "De upload map is ongeldig of is niet beschrijfbaar.";
 $LANG["notify_lang_list_updated"] = "De beschikbare talen zijn bijgewerkt.";
 $LANG["notify_login_info_emailed"] = "Uw login informatie is per email naar u verzonden";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Oops, is deze module al geïnstalleerd!";
 $LANG["notify_module_installed"] = "De module is geïnstalleerd. <a href=\"{\$link}\">Klik hier om de module te selecteren.</a>";
 $LANG["notify_module_list_updated"] = "De module lijst is bijgewerkt.";

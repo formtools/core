@@ -1148,6 +1148,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Det oppstod en feil: det er n
 $LANG["notify_invalid_upload_folder"] = "Opplastingen mappen er enten ugyldig eller ikke er skrivbar.";
 $LANG["notify_lang_list_updated"] = "De tilgjengelige UI språket listen har blitt oppdatert.";
 $LANG["notify_login_info_emailed"] = "Påloggingsinformasjonen din er sendt til deg.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Oops, er denne modulen allerede installert!";
 $LANG["notify_module_installed"] = "Modulen er installert. <a href=\"{\$link}\">Klikk her for å velge modulen.</a>";
 $LANG["notify_module_list_updated"] = "Modulen listen er blitt oppdatert.";

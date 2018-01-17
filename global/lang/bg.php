@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Възникна грешка
 $LANG["notify_invalid_upload_folder"] = "Качването папка или е болен или не се записва.";
 $LANG["notify_lang_list_updated"] = "Наличните език интерфейс списък е актуализиран.";
 $LANG["notify_login_info_emailed"] = "Вашата информация за вход е по емайл.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Опа, този модул вече е инсталиран!";
 $LANG["notify_module_installed"] = "Модулът е инсталиран. <a href=\"{\$link}\">Щракнете тук, за да изберете модула.</a>";
 $LANG["notify_module_list_updated"] = "Модулът списък е актуализиран.";

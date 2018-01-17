@@ -1148,6 +1148,7 @@ $LANG["notify_invalid_session_values_re_login"] = "发生错误：有一些不�
 $LANG["notify_invalid_upload_folder"] = "上载文件夹是无效或不可写。";
 $LANG["notify_lang_list_updated"] = "语系表单已更新。";
 $LANG["notify_login_info_emailed"] = "您的登录资料已经电邮给您。";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "哎呀，这个模块已经安装！";
 $LANG["notify_module_installed"] = "该模块已经安装。 <a href=\"{\$link}\">点击这里选择的模块</a> 。";
 $LANG["notify_module_list_updated"] = "该模块名单已更新。";

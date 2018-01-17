@@ -1148,6 +1148,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Se produjo un error: hay algu
 $LANG["notify_invalid_upload_folder"] = "La carpeta de carga no es válida o no permite la escritura.";
 $LANG["notify_lang_list_updated"] = "La lista de idiomas disponibles para la Interfaz de Usuario ha sido actualizada.";
 $LANG["notify_login_info_emailed"] = "La información necesaria para que ingreses al sistema te ha sido enviada por correo electrónico.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Vaya, este módulo ya está instalado!";
 $LANG["notify_module_installed"] = "El módulo ha sido instalado. <a href=\"{\$link}\">Haz clic aquí para seleccionar el módulo.</a>";
 $LANG["notify_module_list_updated"] = "La lista de módulos ha sido actualizada.";

@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Ġara żball: hemm xi ineżis
 $LANG["notify_invalid_upload_folder"] = "Il-folder upload huwa jew hija invalida jew ma writable.";
 $LANG["notify_lang_list_updated"] = "Il-lista disponibbli lingwa UI ġiet aġġornata.";
 $LANG["notify_login_info_emailed"] = "Informazzjoni login tiegħek ġie emailed lilek.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Oops, dan il-modulu huwa diġà installat!";
 $LANG["notify_module_installed"] = "Il-modulu ikun ġie installat. <a href=\"{\$link}\">Ikklikkja hawn biex jagħżel il-modulu.</a>";
 $LANG["notify_module_list_updated"] = "Il-lista modulu ġiet aġġornata.";

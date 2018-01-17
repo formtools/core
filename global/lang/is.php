@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Villa kom upp: Það eru sumi
 $LANG["notify_invalid_upload_folder"] = "Hlaða mappa er annað hvort öryrki eða ekki skrifanleg.";
 $LANG["notify_lang_list_updated"] = "Í boði UI tungumál listi hefur verið uppfærður.";
 $LANG["notify_login_info_emailed"] = "Innskráning þínar hafa verið sendar til þín.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Úbbs, er þetta mát þegar uppsett!";
 $LANG["notify_module_installed"] = "Einingin hefur verið sett upp. <a href=\"{\$link}\">Smelltu hér til að velja mát.</a>";
 $LANG["notify_module_list_updated"] = "Einingin listi hefur verið uppfærður.";

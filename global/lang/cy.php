@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Digwyddodd gwall: mae yna rai
 $LANG["notify_invalid_upload_folder"] = "&#39;R folder lanlwytho naill ai yn annilys neu os nad yw&#39;n Ysgrifenadwy.";
 $LANG["notify_lang_list_updated"] = "Mae&#39;r rhestr ar gael UI iaith wedi ei ddiweddaru.";
 $LANG["notify_login_info_emailed"] = "Eich gwybodaeth mewngofnodi wedi cael ei e-bostio i chi.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Wps, y modiwl hwn wedi&#39;i gosod yn barod!";
 $LANG["notify_module_installed"] = "Mae&#39;r modiwl wedi eu gosod. <a href=\"{\$link}\">Cliciwch yma i ddewis y modiwl.</a>";
 $LANG["notify_module_list_updated"] = "Mae&#39;r rhestr modiwl wedi ei ddiweddaru.";

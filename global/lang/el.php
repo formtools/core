@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Παρουσιάστηκε σ
 $LANG["notify_invalid_upload_folder"] = "Το upload φάκελος είτε είναι άκυρο ή δεν είναι εγγράψιμο.";
 $LANG["notify_lang_list_updated"] = "Ο κατάλογος διατίθεται γλώσσα UI έχει ενημερωθεί.";
 $LANG["notify_login_info_emailed"] = "Πληροφορίες σύνδεσής σας έχει αποσταλεί με email.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Ωχ, αυτή η ενότητα είναι ήδη εγκατεστημένο!";
 $LANG["notify_module_installed"] = "Η μονάδα έχει εγκατασταθεί. <a href=\"{\$link}\">Κάντε κλικ εδώ για να επιλέξετε τη μονάδα.</a>";
 $LANG["notify_module_list_updated"] = "Η ενότητα κατάλογος έχει ενημερωθεί.";

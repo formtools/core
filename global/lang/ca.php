@@ -1143,6 +1143,7 @@ $LANG["notify_invalid_session_values_re_login"] = "S&#39;ha produït un error: h
 $LANG["notify_invalid_upload_folder"] = "La carpeta de càrrega no és vàlida o no pot escriure.";
 $LANG["notify_lang_list_updated"] = "La llista d&#39;idiomes disponibles d&#39;interfície d&#39;usuari ha estat actualitzat.";
 $LANG["notify_login_info_emailed"] = "El seu inici de sessió ha estat enviat per correu electrònic.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Vaja, aquest mòdul ja està instal lat!";
 $LANG["notify_module_installed"] = "El mòdul ha estat instal lat. <a href=\"{\$link}\">Feu clic aquí per seleccionar el mòdul.</a>";
 $LANG["notify_module_list_updated"] = "La llista de mòduls s&#39;ha actualitzat.";

@@ -1147,6 +1147,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Ett fel uppstod: det förekom
 $LANG["notify_invalid_upload_folder"] = "Uppladdningskatalogen är antingen ogiltig eller så är den inte skrivbar.";
 $LANG["notify_lang_list_updated"] = "Listan över tillgängliga språk för användargränssnittet har uppdaterats.";
 $LANG["notify_login_info_emailed"] = "Din inloggningsinformation har skickats till dig.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Oj, den här modulen är redan installerad!";
 $LANG["notify_module_installed"] = "Modulen har installerats. <a href=\"{\$link}\">Klicka här för att välja modulen</a>.";
 $LANG["notify_module_list_updated"] = "Modullistan har uppdaterats.";

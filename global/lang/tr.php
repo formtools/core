@@ -1148,6 +1148,7 @@ $LANG["notify_invalid_session_values_re_login"] = "Bir hata oluştu: bazı sivil
 $LANG["notify_invalid_upload_folder"] = "Upload klasörü ya geçersiz ya da yazılabilir değil.";
 $LANG["notify_lang_list_updated"] = "Mevcut UI dil listesinden güncellendi.";
 $LANG["notify_login_info_emailed"] = "Giriş bilgilerinizi size e-postayla olmuştur.";
+$LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
 $LANG["notify_module_already_installed"] = "Üzgünüz, bu modül zaten yüklü!";
 $LANG["notify_module_installed"] = "Modülü yüklendi. <a href=\"{\$link}\">Tıklayınız modülü seçin.</a>";
 $LANG["notify_module_list_updated"] = "Modül listesi güncellendi.";
