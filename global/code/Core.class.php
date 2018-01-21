@@ -337,6 +337,8 @@ class Core {
         "view_tabs"
     );
 
+    private static $upgradeUrl = "https://formtools.org/upgrade.php";
+
     /**
      * Initializes the Core singleton for use throughout Form Tools.
      *   - sets up PDO database connection available through Core::$db
@@ -705,6 +707,10 @@ class Core {
 
     public static function getAPISessionsTimeout() {
         return self::$apiSessionsTimeout;
+    }
+
+    public static function getUpgradeUrl() {
+        return self::$upgradeUrl;
     }
 
 

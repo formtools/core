@@ -319,8 +319,9 @@ switch ($action) {
 		break;
 
 	case "get_upgrade_form_html":
+	    $upgrade_url = Core::getUpgradeUrl();
 		$components = General::getFormtoolsInstalledComponents();
-		echo "<form action=\"https://www.formtools.org/upgrade.php\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
+		echo "<form action=\"$upgrade_url\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
 		while (list($key, $value) = each($components)) {
 			echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 		}

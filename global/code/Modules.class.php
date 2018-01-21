@@ -714,7 +714,7 @@ class Modules
             if (class_exists($module_class)) {
                 $module = new $module_class(Core::$user->getLang());
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
         }
 
