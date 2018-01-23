@@ -69,11 +69,12 @@ $module_ids_in_page = implode(",", $module_ids);
 $updated_modules = array();
 foreach ($modules as $module_info) {
 	$module_id = $module_info["module_id"];
+    $module_folder = $module_info["module_folder"];
 	$curr_module = $module_info;
 
 	// wedge in a check to confirm the module is valid. The most likely scenario is that the user upgraded the Core
     // to FT3, but failed to update the modules. In that case the modules won't be valid
-	$is_valid = Modules::isValidModule($module_id);
+	$is_valid = Modules::isValidModule($module_folder);
     $curr_module["is_valid"] = $is_valid;
 	if ($is_valid) {
         $curr_module["needs_upgrading"] = Modules::moduleNeedsUpgrading($module_id);

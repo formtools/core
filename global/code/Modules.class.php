@@ -46,6 +46,7 @@ class Modules
     {
         $db = Core::$db;
         $LANG = Core::$L;
+        $root_dir = Core::getRootDir();
 
         $modules = self::getUninstalledModules();
 
@@ -85,6 +86,25 @@ class Modules
                 "module_date"        => $module_date
             ));
             $db->execute();
+        }
+
+        // also, parse the existing modules and see if any folders have been removed altogether
+        $modules = self::getList();
+        foreach ($modules as $module_info) {
+            if ($module_info["is_installed"] === "yes") {
+                continue;
+            }
+            $module_folder = $module_info["module_folder"];
+
+            // here the module is NOT installed and the folder doesn't even exist. So remove it from the DB.
+            if (!file_exists("$root_dir/modules/$module_folder")) {
+                $db->query("
+                    DELETE FROM {PREFIX}modules
+                    WHERE module_id = :module_id
+                ");
+                $db->bind("module_id", $module_info["module_id"]);
+                $db->execute();
+            }
         }
 
         return array(true, $LANG["notify_module_list_updated"]);
@@ -543,7 +563,6 @@ class Modules
     }
 
 
-
     /**
      * Uninstalls a module from the database.
      *
@@ -561,11 +580,16 @@ class Modules
             return array(false, "");
         }
 
-        $module = self::getModuleInstance($module_folder);
-        list ($success, $message) = $module->uninstall($module_id);
+        $success = true;
 
-        if (!$success) {
-            return array(false, $message);
+        // attempt to uninstall it
+        if (self::isValidModule($module_folder)) {
+            $module = self::getModuleInstance($module_folder);
+            list ($success, $message) = $module->uninstall($module_id);
+
+            if (!$success) {
+                return array(false, $message);
+            }
         }
 
         $db->query("
