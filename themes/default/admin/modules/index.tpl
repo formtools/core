@@ -122,20 +122,43 @@
                 <span class="bold pad_right_large">{$module.module_name}</span>
                 [<a href="about.php?module_id={$module.module_id}">{$LANG.word_about|upper}</a>]
             </div>
-            <div class="medium_grey">{$module.description}</div>
-          </td>
-          <td valign="top" align="center">{$module.version}</td>
-          <td valign="top" align="center" {if $module.is_installed == "yes"}class="check_area"{/if}>
-            {if $module.is_installed == "no"}
-              <input type="hidden" class="module_id" value="{$module.module_id}" />
-              <input type="hidden" class="module_folder" value="{$module.module_folder}" />
-              <a href="{$same_page}?install={$module.module_id}">{$LANG.word_install|upper}</a>
+            {if $module.module_folder === "core_field_types"}
+                <div class="error">
+                    <div style="padding: 8px">
+                        This module is no longer needed in Form Tools 3.
+                        Please uninstall the module, then delete the <b>{$g_root_dir}/modules/core_field_types/</b>
+                        folder on your server.
+                    </div>
+                </div>
             {else}
-              <input type="checkbox" name="is_enabled[]" value="{$module.module_id}" {if $module.is_enabled == 'yes'}checked{/if} />
+                {if !$module.is_valid}
+                    <div class="error">
+                        <div style="padding: 8px">
+                            This module is not compatible with Form
+                            Tools 3. Please update it to the latest version.
+                        </div>
+                    </div>
+                {else}
+                    <div class="medium_grey">{$module.description}</div>
+                {/if}
             {/if}
           </td>
           <td valign="top" align="center">
-            {if $module.is_enabled == "yes"}
+              {if $module.is_valid}{$module.version}{/if}
+          </td>
+          <td valign="top" align="center" {if $module.is_installed == "yes"}class="check_area"{/if}>
+            {if $module.is_valid}
+              {if $module.is_installed == "no"}
+                <input type="hidden" class="module_id" value="{$module.module_id}" />
+                <input type="hidden" class="module_folder" value="{$module.module_folder}" />
+                <a href="{$same_page}?install={$module.module_id}">{$LANG.word_install|upper}</a>
+              {else}
+                <input type="checkbox" name="is_enabled[]" value="{$module.module_id}" {if $module.is_enabled == 'yes'}checked{/if} />
+              {/if}
+            {/if}
+          </td>
+          <td valign="top" align="center">
+            {if $module.is_enabled == "yes" && $module.is_valid}
               {if $module.needs_upgrading}
                 <a href="{$same_page}?upgrade={$module_id}">{$LANG.word_upgrade|upper}</a>
               {else}

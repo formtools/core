@@ -604,6 +604,36 @@ END;
 
 
     /**
+     * Oddly, MySQL doesn't have a DELETE COLUMN IF EXISTS option, so this fudges it. Should be called within a
+     * try-catch in case the table name being passed is invalid.
+     *
+     * @param $table
+     * @param $column
+     */
+    public static function deleteColumnIfExists($table, $column)
+    {
+        $db = Core::$db;
+
+        $db->query("SHOW COLUMNS FROM {PREFIX}$table");
+        $db->execute();
+        $columns = $db->fetchAll();
+
+        $exists = false;
+        foreach ($columns as $column_info) {
+            if ($column_info["Field"] === $column) {
+                $exists = true;
+                break;
+            }
+        }
+
+        if ($exists) {
+            $db->query("ALTER TABLE {PREFIX}$table DROP COLUMN $column");
+            $db->execute();
+        }
+    }
+
+
+    /**
      * Figures out an SQL LIMIT clause, based on page number & num per page.
      *
      * @param integer $page_num

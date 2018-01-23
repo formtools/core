@@ -13,15 +13,11 @@ if (!Core::checkConfigFileExists()) {
     General::redirect("install/");
 }
 Core::init();
+$LANG = Core::$L;
 
 $upgrade_info = Upgrade::upgrade();
 
-// only verify the core tables exist if there wasn't a problem upgrading
-//if (!($g_upgrade_info["upgraded"] && !$g_upgrade_info["success"])) {
-//    General::verifyCoreTablesExist();
-//}
-
-// if this user is already logged in, redirect them to their specified login page
+// if this user is already logged in, redirect them to their own login page
 if (Core::$user->isLoggedIn()) {
     Core::$user->redirectToLoginPage();
 }
@@ -35,7 +31,6 @@ if (isset($_POST["username"]) && !empty($_POST["username"])) {
 }
 
 $username = General::stripChars((isset($_POST["username"]) && !empty($_POST["username"])) ? $_POST["username"] : "");
-$LANG = Core::$L;
 
 $replacements = array(
     "program_name"         => $settings["program_name"],
@@ -61,22 +56,11 @@ $page = array(
 if ($upgrade_info["upgraded"]) {
     $replacements = array("version" => Core::getVersionString());
     $page["upgrade_notification"] = General::evalSmartyString($LANG["text_upgraded"], $replacements);
+} else {
+    if (!$upgrade_info["success"]) {
+        $page["success"] = false;
+        $page["message"] = $upgrade_info["error_msg"];
+    }
 }
-
-//if (!isset($g_upgrade_info["message"]) && isset($_GET["message"])) {
-//    $success = false;
-//
-//    if (array_key_exists($_GET["message"], $LANG)) {
-//        $message = $LANG[$_GET["message"]];
-//
-//    // this provides a simple mechanism for module developers to output their own messages on the index
-//    // page (e.g. if they're forbidding a user from logging in & need to notify them)
-//    } else {
-//        $message = strip_tags($_GET["message"]);
-//    }
-//
-//    $page["success"] = false;
-//    $page["message"] = $message;
-//}
 
 Themes::displayPage("index.tpl", $page, Core::$user->getTheme(), Core::$user->getSwatch());
