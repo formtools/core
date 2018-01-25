@@ -998,10 +998,11 @@ class Fields {
      */
     public static function getExtendedFieldSettings($field_id, $setting_id = "", $convert_dynamic_values = false)
     {
-        // get whatever custom settings are defined for this field
+        // get whatever custom settings are defined for this field. These are settings that the user has overridden
+        // in the Edit Field dialog
         $custom_settings = Fields::getFormFieldSettings($field_id);
 
-        // now get a list of all available settings for this field type
+        // now get a list of all settings defined for this field type
         $field_type_id = FieldTypes::getFieldTypeId($field_id);
         $field_type_settings = FieldTypes::getFieldTypeSettings($field_type_id);
 
@@ -1015,12 +1016,12 @@ class Fields {
             $uses_default  = true;
             $setting_value_type = $curr_setting["default_value_type"];
             $setting_value      = $curr_setting["default_value"];
+
+            // if the user's specified a custom value for this field, return that value
             if (array_key_exists($curr_setting_id, $custom_settings)) {
                 $uses_default  = false;
                 $setting_value = $custom_settings[$curr_setting_id];
-            }
-
-            if ($convert_dynamic_values && $setting_value_type == "dynamic") {
+            } else if ($convert_dynamic_values && $setting_value_type == "dynamic") {
                 $parts = explode(",", $setting_value);
                 if (count($parts) == 2) {
                     $setting_value = Settings::get($parts[0], $parts[1]);
@@ -1248,8 +1249,7 @@ class Fields {
         //                      when the user checked the "Use Default Value" for all fields on the tab & the tab
         //                      doesn't contain an option list or form field
         //  3. an array of values
-        if (isset($tab_info["tab2"]) && $tab_info["tab2"] != "null")
-        {
+        if (isset($tab_info["tab2"]) && $tab_info["tab2"] != "null") {
             $info = is_array($tab_info["tab2"]) ? $tab_info["tab2"] : array();
 
             // since the second tab is being updated, we can rely on all the latest & greatest values being passed
@@ -1264,7 +1264,8 @@ class Fields {
             }
 
             $new_settings = array();
-            while (list($setting_name, $setting_value) = each($setting_hash)) {
+            foreach ($setting_hash as $setting_name => $setting_value) {
+
                 // ignore the additional field ID and field order rows that are custom to Option List / Form Field types. They'll
                 // be handled below
                 if (preg_match("/edit_field__setting_(\d)+_field_id/", $setting_name) || preg_match("/edit_field__setting_(\d)+_field_order/", $setting_name)) {
@@ -1274,6 +1275,8 @@ class Fields {
                 // TODO BUG. newlines aren't surviving this... why was it added? double quotes? single quotes? [3.0.0 - used to include ft_sanitize]
                 $setting_value = stripslashes($setting_value);
                 $setting_id    = preg_replace("/edit_field__setting_/", "", $setting_name);
+
+                // TODO another bug. The setting value starting with "ft" is special?!? There can be arbitrary fields with text in them...!
 
                 // if this field is being mapped to a form field, we serialize the form ID, field ID and order into a single var and
                 // give it a "form_field:" prefix, so we know exactly what the data contains & we can select the appropriate form ID
