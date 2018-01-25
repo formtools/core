@@ -1773,7 +1773,7 @@ class Forms
             $old_field_size      = (isset($post["old_field_{$field_id}_size"])) ? $post["old_field_{$field_id}_size"] : "";
             $old_col_name        = (isset($post["old_col_{$field_id}_name"])) ? $post["old_col_{$field_id}_name"] : "";
             $data_type           = (isset($post["field_{$field_id}_data_type"])) ? $post["field_{$field_id}_data_type"] : "";
-            $is_system_field     = (in_array($field_id, $post["system_fields"])) ? "yes" : "no";
+            $is_system_field     = (isset($post["system_fields"]) && in_array($field_id, $post["system_fields"])) ? "yes" : "no";
 
             // this is only sent for non-system fields
             $field_type_id       = isset($post["field_{$field_id}_type_id"]) ? $post["field_{$field_id}_type_id"] : "";
