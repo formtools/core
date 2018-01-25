@@ -266,4 +266,10 @@ abstract class Module {
         return $this->currentLangFound;
     }
 
+    /**
+     * Helper method to clear the current module's hooks.
+     */
+    public final function clearHooks() {
+        Hooks::unregisterModuleHooks($this->moduleFolder);
+    }
 }
