@@ -400,9 +400,9 @@ class ViewFilters
         foreach ($values_arr as $value) {
 
             // if this is a LIKE operator (not_like, like), wrap the value in %..%
-            $escaped_value = $value;
+            $escaped_value = str_replace("'", "''", $value);
             if ($operator == "like" || $operator == "not_like") {
-                $escaped_value = "%$value%";
+                $escaped_value = "%$escaped_value%";
             }
 
             $trimmed_value = trim($value);
