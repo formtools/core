@@ -1239,7 +1239,7 @@ class Fields {
         // if any of the database column names just changed we need to update any View filters that relied on them
         if (!empty($db_col_name_changes)) {
             foreach ($db_col_name_changes as $field_id) {
-                Fields::updateFieldFilters($field_id);
+                ViewFilters::updateFieldFilters($field_id);
             }
         }
 
@@ -1341,73 +1341,6 @@ class Fields {
         extract(Hooks::processHookCalls("end", compact("field_id"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);
-    }
-
-
-    /**
-     * This update any filter SQL for a single field ID. This is called whenever the administrator changes
-     * one or more database column names (e.g. using the "Smart Fill" option). It ensures data integrity
-     * for the View filters.
-     *
-     * @param integer $field_id
-     * @param array $info
-     */
-    public static function updateFieldFilters($field_id)
-    {
-        $db = Core::$db;
-
-        // get any filters that are associated with this field
-        $db->query("SELECT * FROM {PREFIX}view_filters WHERE field_id = :field_id");
-        $db->bind("field_id", $field_id);
-        $db->execute();
-
-        // get form field
-        $field_info = Fields::getFormField($field_id, array("include_field_type_info" => true));
-        $col_name      = $field_info["col_name"];
-
-        // loop through all of the affected filters & update the SQL
-        foreach ($db->fetchAll() as $filter_info) {
-            $filter_id     = $filter_info["filter_id"];
-            $filter_values = $filter_info["filter_values"];
-            $operator      = $filter_info["operator"];
-
-            if ($field_info["is_date_field"] == "yes") {
-                $sql_operator = ($operator == "after") ? ">" : "<";
-                $sql = "$col_name $sql_operator '$filter_values'";
-            } else {
-                $sql_operator = "";
-                switch ($operator) {
-                    case "equals":     $sql_operator = "LIKE ";    $join = " OR ";  break;
-                    case "not_equals": $sql_operator = "NOT LIKE"; $join = " AND "; break;
-                    case "like":       $sql_operator = "LIKE";     $join = " OR ";  break;
-                    case "not_like":   $sql_operator = "NOT LIKE"; $join = " AND "; break;
-                }
-                $sql_statements_arr = array();
-                $values_arr = explode("|", $filter_values);
-
-                foreach ($values_arr as $value) {
-                    // if this is a LIKE operator (not_like, like), wrap the value in %..%
-                    if ($operator == "like" || $operator == "not_like") {
-                        $value = "%$value%";
-                    }
-                    $sql_statements_arr[] = "$col_name $sql_operator '$value'";
-                }
-
-                $sql = join($join, $sql_statements_arr);
-            }
-            $sql = "(" . addslashes($sql) . ")";
-
-            $db->query("
-                UPDATE {PREFIX}view_filters
-                SET    filter_sql = :sql
-                WHERE  filter_id = :filter_id
-            ");
-            $db->bindAll(array(
-                "filter_sql" => $sql,
-                "filter_id" => $filter_id
-            ));
-            $db->execute();
-        }
     }
 
 

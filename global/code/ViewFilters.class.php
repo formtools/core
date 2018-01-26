@@ -3,14 +3,22 @@
 /**
  * Code related to View filters.
  *
+ * DB view_filters DB structure:
+ *   -- Standard filter:
+ *        filter_values stores the string the user entered in the UI
+ *        filter_sql looks like (col_name = 'Arbitrary string'), or if they enter a string like "one|two", it
+ *                   would be: (col_name = 'one' OR col_name = 'two')
+ *   -- Client Map filter:
+ *        filter_values stores the field in the user's table that's being mapped to. Note, this can include
+ *                   fields defined in the Extended Client Fields module
+ *        filter_sql looks like (col_name = '$company_name'). Where col_name is the field in the current form,
+ *               and $company_name is just the company_name field in variable format.
+ *
  * @copyright Benjamin Keen 2017
  * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 3-0-x
- * @subpackage ViewFields
+ * @subpackage ViewFilters
  */
-
-
-// ---------------------------------------------------------------------------------------------------------------------
 
 
 namespace FormTools;
@@ -192,97 +200,33 @@ class ViewFilters
             $field_id = $info["standard_filter_{$i}_field_id"];
             $col_name = $field_columns[$field_id]["col_name"];
 
-            // date field
+            // date fields need special SQL
             if ($field_columns[$field_id]["is_date_field"] == "yes") {
                 $values   = $info["standard_filter_{$i}_filter_date_values"];
                 $operator = $info["standard_filter_{$i}_operator_date"];
-
-                // build the SQL statement
                 $sql_operator = ($operator == "after") ? ">" : "<";
                 $sql = "$col_name $sql_operator '$values'";
             } else {
                 $values   = $info["standard_filter_{$i}_filter_values"];
                 $operator = $info["standard_filter_{$i}_operator"];
-
-                // build the SQL statement(s)
-                $sql_operator = "";
-                switch ($operator) {
-                    case "equals":
-                        $sql_operator = "=";
-                        $null_test = "IS NULL";
-                        $join = " OR ";
-                        break;
-                    case "not_equals":
-                        $sql_operator = "!=";
-                        $null_test = "IS NOT NULL";
-                        $join = " AND ";
-                        break;
-                    case "like":
-                        $sql_operator = "LIKE";
-                        $null_test = "IS NULL";
-                        $join = " OR ";
-                        break;
-                    case "not_like":
-                        $sql_operator = "NOT LIKE";
-                        $null_test = "IS NOT NULL";
-                        $join = " AND ";
-                        break;
-                }
-
-                $sql_statements_arr = array();
-                $values_arr = explode("|", $values);
-
-                foreach ($values_arr as $value) {
-
-                    // if this is a LIKE operator (not_like, like), wrap the value in %..%
-                    $escaped_value = $value;
-                    if ($operator == "like" || $operator == "not_like") {
-                        $escaped_value = "%$value%";
-                    }
-
-                    $trimmed_value = trim($value);
-
-                    // NOT LIKE and != need to be handled separately. By default, Form Tools sets new blank field values to NULL.
-                    // But SQL queries that test for != "Yes" or NOT LIKE "Yes" should intuitively return ALL results without
-                    // "Yes" - and that includes NULL values. So, we need to add an additional check to also return null values
-                    if ($operator == "not_like" || $operator == "not_equals") {
-                        // empty string being searched AGAINST; i.e. checking the field is NOT empty or LIKE empty
-                        if (empty($trimmed_value)) {
-                            $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' AND $col_name IS NOT NULL";
-                        } else {
-                            $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name IS NULL";
-                        }
-                    } else {
-                        // if the value is EMPTY, we need to add an additional IS NULL / IS NOT NULL check
-                        if (empty($trimmed_value)) {
-                            $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name $null_test";
-                        } else {
-                            $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value'";
-                        }
-                    }
-                }
-
-                $sql = join($join, $sql_statements_arr);
+                $sql = self::getStandardFilterSql($col_name, $values, $operator);
             }
-            $sql = "(" . addslashes($sql) . ")";
 
             try {
                 $db->query("
                     INSERT INTO {PREFIX}view_filters (view_id, filter_type, field_id, operator, filter_values, filter_sql)
-                    VALUES      ($view_id, 'standard', $field_id, '$operator', '$values', '$sql')
+                    VALUES (:view_id, 'standard', :field_id, :operator, :filter_values, :filter_sql)
                 ");
                 $db->bindAll(array(
                     "view_id" => $view_id,
                     "field_id" => $field_id,
                     "operator" => $operator,
                     "filter_values" => $values,
-                    "filter_sql" => $sql
+                    "filter_sql" => "($sql)"
                 ));
                 $db->execute();
 
-                // assumption... this doesn't run if an exception is thrown in the block above
                 $num_standard_filters++;
-
             } catch (Exception $e) {
                 $errors[] = $e->getMessage();
             }
@@ -331,42 +275,15 @@ class ViewFilters
             $field_id     = $info["client_map_filter_{$i}_field_id"];
             $operator     = $info["client_map_filter_{$i}_operator"];
             $client_field = $info["client_map_filter_{$i}_client_field"];
-
-            // build the SQL statement(s)
-            $sql_operator = "";
-            switch ($operator) {
-                case "equals":
-                    $sql_operator = "=";
-                    break;
-                case "not_equals":
-                    $sql_operator = "!=";
-                    break;
-                case "like":
-                    $sql_operator = "LIKE";
-                    break;
-                case "not_like":
-                    $sql_operator = "NOT LIKE";
-                    break;
-            }
-
             $col_name = $field_columns[$field_id]["col_name"];
             $original_client_field = $client_field;
 
-            // now we're going to build the actual SQL query that contains the Smarty placeholders for the account info.
-            // first, convert the client field name to a Smarty variable.
-            $sql_client_field = "{\$$client_field}";
-
-            // second, if this is a LIKE operator (not_like, like), wrap the value even further with a %...%
-            if ($operator == "like" || $operator == "not_like") {
-                $sql_client_field = "%$sql_client_field%";
-            }
-
-            $sql = "($col_name $sql_operator '$sql_client_field')";
+            $filter_sql = self::getClientMapFilterSql($col_name, $client_field, $operator);
 
             try {
                 $db->query("
                     INSERT INTO {PREFIX}view_filters (view_id, filter_type, field_id, operator, filter_values, filter_sql)
-                    VALUES      (:view_id, 'client_map', :field_id, :operator, :filter_values, :filter_sql)
+                    VALUES (:view_id, 'client_map', :field_id, :operator, :filter_values, :filter_sql)
                 ");
 
                 $db->bindAll(array(
@@ -374,11 +291,10 @@ class ViewFilters
                     "field_id" => $field_id,
                     "operator" => $operator,
                     "filter_values" => $original_client_field,
-                    "filter_sql" => $sql
+                    "filter_sql" => $filter_sql
                 ));
                 $db->execute();
 
-                // assumption doesn't execute if exception above
                 $num_client_map_filters++;
             } catch (Exception $e) {
                 $errors[] = $e->getMessage();
@@ -391,7 +307,11 @@ class ViewFilters
             $has_client_map_filter = "yes";
         }
 
-        $db->query("UPDATE {PREFIX}views SET has_client_map_filter = :has_client_map_filter WHERE view_id = :view_id");
+        $db->query("
+            UPDATE {PREFIX}views
+            SET has_client_map_filter = :has_client_map_filter
+            WHERE view_id = :view_id
+        ");
         $db->bindAll(array(
             "has_client_map_filter" => $has_client_map_filter,
             "view_id" => $view_id
@@ -399,6 +319,145 @@ class ViewFilters
         $db->execute();
 
         return $errors;
+    }
+
+
+    /**
+     * This update any filter SQL for a single field ID. This is called whenever the administrator changes one or more
+     * database column names (e.g. using the "Smart Fill" option). It ensures data integrity for the View filters.
+     *
+     * @param integer $field_id
+     * @param array $info
+     */
+    public static function updateFieldFilters($field_id)
+    {
+        $db = Core::$db;
+
+        // get any filters that are associated with this field
+        $db->query("SELECT * FROM {PREFIX}view_filters WHERE field_id = :field_id");
+        $db->bind("field_id", $field_id);
+        $db->execute();
+        $filters = $db->fetchAll();
+
+        // get the latest form field info
+        $field_info = Fields::getFormField($field_id, array("include_field_type_info" => true));
+        $col_name = $field_info["col_name"];
+
+        // loop through all of the affected filters & update the SQL
+        foreach ($filters as $filter_info) {
+            $filter_type   = $filter_info["filter_type"];
+            $filter_values = $filter_info["filter_values"];
+            $operator      = $filter_info["operator"];
+
+            if ($field_info["is_date_field"] == "yes") {
+                $sql_operator = ($operator == "after") ? ">" : "<";
+                $sql = "$col_name $sql_operator '$filter_values'";
+            } else {
+                if ($filter_type == "standard") {
+                    $sql = self::getStandardFilterSql($col_name, $filter_values, $operator);
+                } else {
+                    $sql = self::getClientMapFilterSql($col_name, $filter_values, $operator);
+                }
+            }
+
+            $db->query("
+                UPDATE {PREFIX}view_filters
+                SET    filter_sql = :filter_sql
+                WHERE  filter_id = :filter_id
+            ");
+            $db->bindAll(array(
+                "filter_sql" => "($sql)",
+                "filter_id" => $filter_info["filter_id"]
+            ));
+            $db->execute();
+        }
+    }
+
+
+    private static function getStandardFilterSql($col_name, $values, $operator)
+    {
+        if ($operator == "equals") {
+            $sql_operator = "=";
+            $null_test = "IS NULL";
+            $join = " OR ";
+        } else if ($operator == "not_equals") {
+            $sql_operator = "!=";
+            $null_test = "IS NOT NULL";
+            $join = " AND ";
+        } else if ($operator == "like") {
+            $sql_operator = "LIKE";
+            $null_test = "IS NULL";
+            $join = " OR ";
+        } else {  // not_like
+            $sql_operator = "NOT LIKE";
+            $null_test = "IS NOT NULL";
+            $join = " AND ";
+        }
+
+        $sql_statements_arr = array();
+        $values_arr = explode("|", $values);
+
+        foreach ($values_arr as $value) {
+
+            // if this is a LIKE operator (not_like, like), wrap the value in %..%
+            $escaped_value = $value;
+            if ($operator == "like" || $operator == "not_like") {
+                $escaped_value = "%$value%";
+            }
+
+            $trimmed_value = trim($value);
+
+            // NOT LIKE and != need to be handled separately. By default, Form Tools sets new blank field values to NULL.
+            // But SQL queries that test for != "Yes" or NOT LIKE "Yes" should intuitively return ALL results without
+            // "Yes" - and that includes NULL values. So, we need to add an additional check to also return null values
+            if ($operator == "not_like" || $operator == "not_equals") {
+                // empty string being searched AGAINST; i.e. checking the field is NOT empty or LIKE empty
+                if (empty($trimmed_value)) {
+                    $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' AND $col_name IS NOT NULL";
+                } else {
+                    $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name IS NULL";
+                }
+            } else {
+                // if the value is EMPTY, we need to add an additional IS NULL / IS NOT NULL check
+                if (empty($trimmed_value)) {
+                    $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name $null_test";
+                } else {
+                    $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value'";
+                }
+            }
+        }
+
+        return implode($join, $sql_statements_arr);
+    }
+
+
+    private static function getClientMapFilterSql($col_name, $client_field, $operator)
+    {
+        $map = array(
+            "equals" => "=",
+            "not_equals" => "!=",
+            "like" => "LIKE",
+            "not_like" => "NOT LIKE"
+        );
+
+        // should never occur
+        if (!array_key_exists($operator, $map)) {
+            return "";
+        }
+
+        $sql_operator = $map[$operator];
+
+        // now we're going to build the actual SQL query that contains the Smarty placeholders for the account info.
+        // first, convert the client field name to a Smarty variable
+        $sql_client_field = "{\$$client_field}";
+
+        // second, if this is a LIKE operator (not_like, like), wrap the value even further with a %...%
+        if ($operator == "like" || $operator == "not_like") {
+            $sql_client_field = "%$sql_client_field%";
+        }
+
+        // no escaping is needed, note
+        return "($col_name $sql_operator '$sql_client_field')";
     }
 
 }

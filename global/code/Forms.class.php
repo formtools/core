@@ -1871,19 +1871,14 @@ class Forms
             $field_id = $curr_field_info["field_id"];
 
             try {
-                $db->beginTransaction();
-
-                $old_col_name   = $curr_field_info["old_col_name"];
-                $new_col_name   = $curr_field_info["col_name"];
+                $old_col_name = $curr_field_info["old_col_name"];
+                $new_col_name = $curr_field_info["col_name"];
                 if ($curr_field_info["col_name_changed"] == "yes" || $curr_field_info["field_size_changed"] == "yes") {
                     $new_field_size_sql = $FIELD_SIZES[$curr_field_info["field_size"]]["sql"];
 
                     // first update the actual table column
                     General::alterTableColumn($table_name, $old_col_name, $new_col_name, $new_field_size_sql);
                 }
-
-                // if any of the database column names just changed we need to update any View filters that relied on them
-                Fields::updateFieldFilters($field_id);
 
                 Fields::updateFormField(array(
                     "field_id" => $field_id,
@@ -1899,10 +1894,12 @@ class Forms
                     "field_type_id" => $curr_field_info["field_type_id"]
                 ));
 
-                $db->processTransaction();
-            } catch (PDOException $e) {
-                $db->rollbackTransaction();
+                // if any of the database column names just changed we need to update any View filters that relied on them
+                if ($curr_field_info["col_name_changed"] == "yes") {
+                    ViewFilters::updateFieldFilters($field_id);
+                }
 
+            } catch (Exception $e) {
                 $message = $LANG["validation_db_not_updated_invalid_input"];
                 if ($debug_enabled) {
                     $message .= " \"" . $e->getMessage() . "\""; // TODO
