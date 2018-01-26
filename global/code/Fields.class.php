@@ -1272,34 +1272,30 @@ class Fields {
                     continue;
                 }
 
-                // TODO BUG. newlines aren't surviving this... why was it added? double quotes? single quotes? [3.0.0 - used to include ft_sanitize]
-                $setting_value = stripslashes($setting_value);
-                $setting_id    = preg_replace("/edit_field__setting_/", "", $setting_name);
-
-                // TODO another bug. The setting value starting with "ft" is special?!? There can be arbitrary fields with text in them...!
+                $setting_id = preg_replace("/edit_field__setting_/", "", $setting_name);
 
                 // if this field is being mapped to a form field, we serialize the form ID, field ID and order into a single var and
                 // give it a "form_field:" prefix, so we know exactly what the data contains & we can select the appropriate form ID
                 // and not Option List ID on re-editing. This keeps everything pretty simple, rather than spreading the data amongst
                 // multiple fields
+                // TODO the setting value starting with "ft" is special?! There can be arbitrary fields with text in them...
                 if (preg_match("/^ft/", $setting_value)) {
                     $setting_value = preg_replace("/^ft/", "", $setting_value);
                     $setting_value = "form_field:$setting_value|" . $setting_hash["edit_field__setting_{$setting_id}_field_id"] . "|"
                         . $setting_hash["edit_field__setting_{$setting_id}_field_order"];
                 }
 
-                $new_settings[] = "($field_id, $setting_id, '$setting_value')";
+                $new_settings[] = array(
+                    "field_id" => $field_id,
+                    "setting_id" => $setting_id,
+                    "setting_value" => $setting_value
+                );
             }
 
             if (!empty($new_settings)) {
-                $new_settings_str = implode(",", $new_settings);
-                $db->query("
-                    INSERT INTO {PREFIX}field_settings (field_id, setting_id, setting_value)
-                    VALUES $new_settings_str
-                ");
-
                 try {
-                    $db->execute();
+                    $cols = array("field_id", "setting_id", "setting_value");
+                    $db->insertQueryMultiple("field_settings", $cols, $new_settings);
                 } catch (PDOException $e) {
                     return array(false, $LANG["phrase_query_problem"] . ", " . $e->getMessage());
                 }
