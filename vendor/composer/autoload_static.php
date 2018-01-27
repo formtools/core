@@ -4,11 +4,11 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit23ec02de19cab55fede4f7ad522a9619
+class ComposerStaticInit1a46ade0ea0a16b38d3f50f2876bd346
 {
     public static $files = array (
-        'f084d01b0a599f67676cffef638aa95b' => __DIR__ . '/..' . '/smarty/smarty/libs/bootstrap.php',
         '8cd2fca4db21bffce1ad0612f7caeec4' => __DIR__ . '/..' . '/ramsey/array_column/src/array_column.php',
+        'f084d01b0a599f67676cffef638aa95b' => __DIR__ . '/..' . '/smarty/smarty/libs/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -28,8 +28,8 @@ class ComposerStaticInit23ec02de19cab55fede4f7ad522a9619
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit23ec02de19cab55fede4f7ad522a9619::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit23ec02de19cab55fede4f7ad522a9619::$prefixDirsPsr4;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1a46ade0ea0a16b38d3f50f2876bd346::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1a46ade0ea0a16b38d3f50f2876bd346::$prefixDirsPsr4;
 
         }, null, ClassLoader::class);
     }
