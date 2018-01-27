@@ -11,3 +11,13 @@ modules/*
 !modules/index.html
 global/api/*
 !global/api/index.html
+
+# vendor folder dev dependencies. Only whitelist specific dependencies
+vendor/*
+!vendor/bin/validate-json
+!vendor/composer
+!vendor/justinrainbow
+!vendor/ramsey
+!vendor/smarty
+!vendor/autoload.php
+

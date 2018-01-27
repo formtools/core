@@ -770,8 +770,9 @@ class Modules
 
     public static function getModuleNamespace($module_folder)
     {
-        $upper_case = ucwords($module_folder, "_");
-        return str_replace("_", "", $upper_case);
+        $no_underscores = str_replace("_", " ", $module_folder);
+        $upper_case = ucwords($no_underscores);
+        return str_replace(" ", "", $upper_case);
     }
 
     /**

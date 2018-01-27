@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" bootstrap="tests/autoload.php">
+    <testsuites>
+        <testsuite name="PHP Unit Tests">
+            <directory>./tests/phpunit</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <ini name="display_errors" value="true" />
+    </php>
+</phpunit>
