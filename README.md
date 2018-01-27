@@ -1,5 +1,7 @@
 # Form Tools Core
 
+[![Build Status](https://travis-ci.org/formtools/core.svg?branch=master)](https://travis-ci.org/formtools/core)
+
 This repo contains the source code for the Form Tools Core. The Core provides the minimal code needed to run Form Tools
 on your server. The `master` branch contains the ongoing work on Form Tools 3, currently in *alpha*. Check out the
 release sections for earlier, stable releases. 
