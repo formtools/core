@@ -14,8 +14,7 @@
 
 namespace FormTools;
 
-use PDO;
-use PDOException;
+use PDO, Exception;
 
 
 class General
@@ -595,7 +594,7 @@ END;
             ");
             $db->execute();
             extract(Hooks::processHookCalls("end", compact("table", "old_col_name", "new_col_name", "col_type"), array()), EXTR_OVERWRITE);
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return array(false, $e->getMessage());
         }
 
@@ -676,7 +675,7 @@ END;
      *   4. "" - the empty string gets returned if none of the above methods apply. In this case, the user will
      *      have to manually upload copies of the files which are then created locally for parsing.
      *
-     * TODO. There's a potentially bug with this function, which I haven't been able to solve for both PHP 4 & 5:
+     * TODO. There's potentially bug with this function, which I haven't been able to solve for both PHP 4 & 5:
      * if the URL is invalid, file_get_contents can timeout with a fatal error. To reduce the likelihood of this
      * occurring, Step 2 of the Add Form process requires the user to have confirmed each of the form URLs.
      * Nevertheless, this needs to be addressed at some point.
@@ -755,7 +754,7 @@ END;
         try {
             $db->execute();
             return array(true, "");
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return array(false, $e->getMessage());
         }
     }
