@@ -12,7 +12,7 @@
 
 namespace FormTools;
 
-use PDO, PDOException;
+use PDO, Exception;
 
 
 class FieldTypes {
@@ -1551,6 +1551,7 @@ END;
     public static function deleteFieldTypeSettingsByFieldTypeId($field_type_id)
     {
         $db = Core::$db;
+
         $db->query("
             SELECT setting_id
             FROM   {PREFIX}field_type_settings
@@ -1558,7 +1559,7 @@ END;
         ");
         $db->bind("field_type_id", $field_type_id);
         $db->execute();
-        $setting_ids = $db->fetch(PDO::FETCH_COLUMN);
+        $setting_ids = $db->fetchAll(PDO::FETCH_COLUMN);
 
         self::deleteFieldTypeSettings($setting_ids);
     }
@@ -1571,7 +1572,7 @@ END;
      * @param integer $field_type_id
      * @param string $setting_id_list comma delimited list of setting IDs
      */
-    public static function deleteFieldTypeSettings($setting_ids)
+    public static function deleteFieldTypeSettings($setting_ids = array())
     {
         $db = Core::$db;
 

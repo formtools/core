@@ -92,6 +92,7 @@ class Database
 
         $table_name = $this->table_prefix . $table;
         $query = "INSERT INTO $table_name (" . implode(",", $cols ) . ") VALUES " . implode(',', $question_marks);
+
         $this->statement = $this->dbh->prepare($query);
 
         return $this->statement->execute($insert_values);
