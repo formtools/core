@@ -1548,6 +1548,52 @@ END;
     }
 
 
+    public static function deleteFieldTypeSettingsByFieldTypeId($field_type_id)
+    {
+        $db = Core::$db;
+        $db->query("
+            SELECT setting_id
+            FROM   {PREFIX}field_type_settings
+            WHERE  field_type_id = :field_type_id 
+        ");
+        $db->bind("field_type_id", $field_type_id);
+        $db->execute();
+        $setting_ids = $db->fetch(PDO::FETCH_COLUMN);
+
+        self::deleteFieldTypeSettings($setting_ids);
+    }
+
+
+    /**
+     * Deletes a field type setting. It also updates all existing form fields that were referencing
+     * this setting to remove the dependant data.
+     *
+     * @param integer $field_type_id
+     * @param string $setting_id_list comma delimited list of setting IDs
+     */
+    public static function deleteFieldTypeSettings($setting_ids)
+    {
+        $db = Core::$db;
+
+        foreach ($setting_ids as $setting_id) {
+            if (empty($setting_id) || !is_numeric($setting_id)) {
+                continue;
+            }
+
+            $db->query("DELETE FROM {PREFIX}field_settings WHERE setting_id = :setting_id");
+            $db->bind("setting_id", $setting_id);
+            $db->execute();
+
+            $db->query("DELETE FROM {PREFIX}field_type_settings WHERE setting_id = :setting_id");
+            $db->bind("setting_id", $setting_id);
+            $db->execute();
+
+            $db->query("DELETE FROM {PREFIX}field_type_setting_options WHERE setting_id = :setting_id");
+            $db->bind("setting_id", $setting_id);
+            $db->execute();
+        }
+    }
+
     /**
      * Deletes a field type and resets any fields that were set to that type to a different one.
      * @param $field_type_identifier_to_delete
@@ -1569,7 +1615,7 @@ END;
         $db->bind("field_type_id", $field_type_id);
         $db->execute();
 
-        self::deleteFieldTypeSettings($field_type_id);
+        self::deleteFieldTypeSettingsByFieldTypeId($field_type_id);
 
         $setting_ids = array();
         foreach ($field_type_info["settings"] as $setting_info) {
@@ -1614,15 +1660,6 @@ END;
         $db->execute();
 
         return true;
-    }
-
-    public static function deleteFieldTypeSettings($field_type_id)
-    {
-        $db = Core::$db;
-
-        $db->query("DELETE FROM {PREFIX}field_type_settings WHERE field_type_id = :field_type_id");
-        $db->bind("field_type_id", $field_type_id);
-        $db->execute();
     }
 
 

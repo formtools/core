@@ -810,16 +810,7 @@ EOF;
             ");
             $db->execute();
 
-            $edit_submission_onload_resources =<<< END
-<script src="{\$g_root_url}/global/codemirror/lib/codemirror.js"></script>
-<script src="{\$g_root_url}/global/codemirror/mode/xml/xml.js"></script>
-<script src="{\$g_root_url}/global/codemirror/mode/css/css.js"></script>
-<script src="{\$g_root_url}/global/codemirror/mode/javascript/javascript.js"></script>
-<script src="{\$g_root_url}/global/scripts/jquery-ui-timepicker-addon.js"></script>
-<script src="{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
-<link rel="stylesheet" href="{\$g_root_url}/global/codemirror/lib/codemirror.css" type="text/css" media="screen" />
-<link rel="stylesheet" href="{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
-END;
+            $edit_submission_onload_resources = self::getEditSubmissionOnloadResources();
 
             $edit_submission_shared_resources_js =<<< END
 $(function() {
@@ -1284,6 +1275,23 @@ END;
         }
 
         return array(true, "");
+    }
+
+
+    // changed in 3.0.0. Moved to separate method so the upgrade script can call it
+    public static function getEditSubmissionOnloadResources()
+    {
+        $resources = <<< END
+<script src="{\$g_root_url}/global/codemirror/lib/codemirror.js"></script>
+<script src="{\$g_root_url}/global/codemirror/mode/xml/xml.js"></script>
+<script src="{\$g_root_url}/global/codemirror/mode/css/css.js"></script>
+<script src="{\$g_root_url}/global/codemirror/mode/javascript/javascript.js"></script>
+<script src="{\$g_root_url}/global/scripts/jquery-ui-timepicker-addon.js"></script>
+<script src="{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<link rel="stylesheet" href="{\$g_root_url}/global/codemirror/lib/codemirror.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="{\$g_root_url}/global/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
+END;
+        return $resources;
     }
 }
 

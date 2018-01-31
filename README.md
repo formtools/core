@@ -66,23 +66,16 @@ The fields can _still_ accept language placeholders for the tiny percentage of p
 be much clearer for the vast bulk of users that don't need this feature.
 - The `$g_delete_module_folder_on_uninstallation` configuration option has been dropped. Now the uninstall step just 
 uninstalls the script. I'll add a separate UI option to allow you to try to remove the module files.
-
-### Notes
-
-- Composer is great, but I still want to distribute Form Tools in _packages_ and not require users to have to do any 
-command-line nonsense to get the script running. As such, the repo includes the _vendor/_ folder with all dependencies.
-- Keep the very un- user/administrator class code for 3.0. Will refactor that all anyway for user roles in 4.0.
-- combine all that displayPage/displayModulePage etc. code.
+- FT now users Composer. Composer is great, but I still want to distribute Form Tools in _packages_ and not require users 
+to have to do any command-line nonsense to get the script running. As such, the repo includes the _vendor/_ folder with
+all production dependencies. 
 
 ### To fix:
 
 - Minor bug: I was logged in on the Edit Client
 page. I deleted the config file & reinstalled. After clicking the "login" button on the last page of the installation 
 process, it took me to the Edit Client page again throwing a bunch of errors.
-  -- installation should wipe out sessions on the first page, I think. 
-  -- check that page with passing invalid client IDs. Should fail gracefully.
 
-### For Upgrading
-- edit_submission_onload_resources setting in settings table was changed. 
-- Hooks Manager will need a full mapping of old to new methods. 
-- TinyMCE module needs some work. See comment in its upgrade method
+## Testing
+
+Check out TESTING.md.
