@@ -1306,5 +1306,27 @@ END;
         }
         return $id;
     }
-}
 
+
+    /**
+     * Compares two versions to see if a version is earlier than a target version. Used to determine whether or not
+     * to trigger upgrading for modules/the Core.
+     */
+    public static function isVersionEarlierThan($version, $target_version) {
+        if ($version === $target_version) {
+            return false;
+        }
+
+        list($major, $minor, $version_bugfix) = explode(".", $version);
+        $version_major = $major * 1000000;
+        $version_minor = $minor * 1000;
+        $version_num = $version_major + $version_minor + $version_bugfix;
+
+        list($target_major, $target_minor, $target_bugfix) = explode(".", $target_version);
+        $target_version_major = $target_major * 1000000;
+        $target_version_minor = $target_minor * 1000;
+        $target_version_num = $target_version_major + $target_version_minor + $target_bugfix;
+
+        return $version_num < $target_version_num;
+    }
+}

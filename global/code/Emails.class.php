@@ -1288,8 +1288,7 @@ class Emails {
             return array(false, "Email components not returned properly (Emails::getEmailComponents).");
         }
 
-        extract(Hooks::processHookCalls("start", compact("form_id", "submission_id", "email_id", "email_components"),
-            array("email_components")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("start", compact("form_id", "submission_id", "email_id", "email_components"), array("email_components")), EXTR_OVERWRITE);
 
         // if Swift Mailer is enabled, send the emails with that
         $continue = true;

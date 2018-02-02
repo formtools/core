@@ -270,12 +270,6 @@ class User
 
         extract(Hooks::processHookCalls("main", array(), array()));
 
-        // this ensures sessions are started
-//        if ($g_session_type == "database") {
-//            $sess = new SessionManager();
-//        }
-//        @session_start();
-
         // first, if $_SESSION["ft"]["admin"] is set, it is an administrator logging out, so just redirect them
         // back to the admin pages
         if (Sessions::exists("admin")) {
@@ -336,7 +330,7 @@ class User
         $boot_out_user = false;
         $message_flag = "";
 
-        extract(Hooks::processHookCalls("end", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("start", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
 
         $account_id   = $this->accountId;
         $account_type = $this->accountType;
