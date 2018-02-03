@@ -26,7 +26,8 @@ Form Tools 2 was the production version from May 2014 onwards. It only supports 
 - Everything up to *Form Tools Core 2.2.7* supports PHP 4.3 - 5.x.
 - *Form Tools Core 3.0.0* supports PHP 5.3 and later.
 
-## Tests
+
+### Tests
 
 Check out TESTS.md.
 
