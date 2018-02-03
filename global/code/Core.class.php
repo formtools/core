@@ -276,11 +276,6 @@ class Core {
     private static $benchmarkStart     = "";
 
     /**
-     * Used for caching data sets during large, repeat operations.
-     */
-    private static $cache = array();
-
-    /**
      * Tracks whether sessions have been started or not.
      * @var bool
      */

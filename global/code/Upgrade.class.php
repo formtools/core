@@ -16,6 +16,11 @@ class Upgrade
         $success = true;
         $error_msg = "";
 
+        // any time the version changes, update the list of hooks in the DB
+        if ($current_version_date > $last_version_date_in_db) {
+            Hooks::updateAvailableHooks();
+        }
+
         // if the files have been updated but the DB is older, the user is upgrading
         if ($current_version_date > $last_version_date_in_db) {
             if ($current_version_date <= 20180128) {
