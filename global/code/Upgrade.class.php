@@ -23,7 +23,7 @@ class Upgrade
 
         // if the files have been updated but the DB is older, the user is upgrading
         if ($current_version_date > $last_version_date_in_db) {
-            if ($current_version_date <= 20180128) {
+            if ($current_version_date <= 20180204) {
                 list ($success, $error_msg) = self::upgradeTo3_0_0();
             }
 
@@ -48,8 +48,7 @@ class Upgrade
 
 
     /**
-     * Handles upgrading from FT2 2.2.5, 2.2.6 or 2.2.7 to 3.0.0. FT3 didn't introduce many database changes, just
-     * fixed a couple of bugs, which is why this is so short.
+     * Handles upgrading from FT2 2.2.5, 2.2.6 or 2.2.7 to 3.0.0.
      *
      * These methods can safely be executed multiple times (but should still only fire once).
      */
@@ -69,6 +68,9 @@ class Upgrade
             Settings::set(array(
                 "edit_submission_onload_resources" => Installation::getEditSubmissionOnloadResources()
             ), "core");
+
+            // reset all core field types to their factory defaults
+            FieldTypes::resetFieldTypes();
 
         } catch (Exception $e) {
             $success = false;

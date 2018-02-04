@@ -1757,4 +1757,91 @@ END;
         return (isset($field_type_id)) ? $field_type_id : "";
     }
 
+
+    public static function resetFieldTypes()
+    {
+        self::resetFieldTypeByIdentifier("checkboxes");
+        self::resetFieldTypeByIdentifier("code_markup");
+        self::resetFieldTypeByIdentifier("date");
+        self::resetFieldTypeByIdentifier("dropdown");
+        self::resetFieldTypeByIdentifier("multi_select_dropdown");
+        self::resetFieldTypeByIdentifier("password");
+        self::resetFieldTypeByIdentifier("phone");
+        self::resetFieldTypeByIdentifier("radio_buttons");
+        self::resetFieldTypeByIdentifier("textarea");
+        self::resetFieldTypeByIdentifier("textbox");
+        self::resetFieldTypeByIdentifier("time");
+    }
+
+    /**
+     * Updates an existing field type in the database. Used in upgrading to ensure a field type is up to the latest
+     * specs. Note: this only updates the field_types record in the DB right now and not the settings & setting options.
+     * That can be added as need be.
+     * @param $identifier
+     */
+    public static function resetFieldTypeByIdentifier ($identifier)
+    {
+        $db = Core::$db;
+
+        $id_to_class_map = array(
+            "checkboxes" => "Checkbox",
+            "code_markup" => "Code",
+            "date" => "Date",
+            "dropdown" => "Dropdown",
+            "multi_select_dropdown" => "MultiSelect",
+            "password" => "Password",
+            "phone" => "Phone",
+            "radio_buttons" => "Radio",
+            "textarea" => "Textarea",
+            "textbox" => "Textbox",
+            "time" => "Time"
+        );
+
+        $class_name = $id_to_class_map[$identifier];
+        $module_class = "FormTools\\FieldTypes\\$class_name";
+
+        $field_type_data = $module_class::get();
+        $field_type = $field_type_data["field_type"];
+
+        $db->query("
+            UPDATE {PREFIX}field_types
+            SET    is_editable = :is_editable,
+                   non_editable_info = :non_editable_info,
+                   managed_by_module_id = :managed_by_module_id,
+                   field_type_name = :field_type_name,
+                   is_file_field = :is_file_field,
+                   is_date_field = :is_date_field,
+                   raw_field_type_map = :raw_field_type_map,
+                   compatible_field_sizes = :compatible_field_sizes,
+                   view_field_rendering_type = :view_field_rendering_type,
+                   view_field_php_function_source = :view_field_php_function_source,
+                   view_field_php_function = :view_field_php_function,
+                   view_field_smarty_markup = :view_field_smarty_markup,
+                   edit_field_smarty_markup = :edit_field_smarty_markup,
+                   php_processing = :php_processing,
+                   resources_css = :resources_css,
+                   resources_js = :resources_js
+            WHERE field_type_identifier = :field_type_identifier
+        ");
+        $db->bindAll(array(
+            "is_editable" => $field_type["is_editable"],
+            "non_editable_info" => $field_type["non_editable_info"],
+            "managed_by_module_id" => $field_type["managed_by_module_id"],
+            "field_type_name" => $field_type["field_type_name"],
+            "is_file_field" => $field_type["is_file_field"],
+            "is_date_field" => $field_type["is_date_field"],
+            "raw_field_type_map" => $field_type["raw_field_type_map"],
+            "compatible_field_sizes" => $field_type["compatible_field_sizes"],
+            "view_field_rendering_type" => $field_type["view_field_rendering_type"],
+            "view_field_php_function_source" => $field_type["view_field_php_function_source"],
+            "view_field_php_function" => $field_type["view_field_php_function"],
+            "view_field_smarty_markup" => $field_type["view_field_smarty_markup"],
+            "edit_field_smarty_markup" => $field_type["edit_field_smarty_markup"],
+            "php_processing" => $field_type["php_processing"],
+            "resources_css" => $field_type["resources_css"],
+            "resources_js" => $field_type["resources_js"],
+            "field_type_identifier" => $identifier
+        ));
+        $db->execute();
+    }
 }
