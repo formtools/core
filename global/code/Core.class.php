@@ -242,12 +242,12 @@ class Core {
     /**
      * The release type: alpha, beta or main
      */
-    private static $releaseType = "alpha";
+    private static $releaseType = "beta";
 
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20180204";
+    private static $releaseDate = "20180206";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
@@ -365,7 +365,10 @@ class Core {
         }
 
         self::initUser();
-        self::enableDebugging();
+
+        if (self::$debugEnabled) {
+            self::enableDebugging();
+        }
 
         // optionally enable benchmarking. Dev-only feature to confirm pages aren't taking too long to load
         if (self::$enableBenchmarking) {
