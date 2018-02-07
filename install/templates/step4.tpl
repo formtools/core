@@ -10,7 +10,12 @@
 		{$LANG.text_install_create_config_file}
 	</div>
 
-	<textarea name="content" id="config_file_contents" readonly>{$config_file}</textarea>
+	<textarea name="content" class="config_file_contents" id="cfc" readonly>{$config_file}</textarea>
+    <script>
+      new CodeMirror.fromTextArea(document.getElementById("cfc"), {literal}{{/literal}
+        mode: "php"
+          {literal}});{/literal}
+    </script>
 
 	<form name="display_config_content_form" action="{$same_page}" method="post">
 		<p>
@@ -40,8 +45,12 @@
 	</p>
 
 	<form name="display_config_content_form" action="{$same_page}" method="post">
-		<textarea name="content" id="config_file_contents">{$config_file}</textarea>
-
+		<textarea name="content" class="config_file_contents" id="cfc_not_generated">{$config_file}</textarea>
+        <script>
+        new CodeMirror.fromTextArea(document.getElementById("cfc_not_generated"), {literal}{{/literal}
+            mode: "php"
+        {literal}});{/literal}
+        </script>
 		<p>
 			<input type="submit" name="check_config_contents" value="{$LANG.word_continue_rightarrow}" />
 		</p>

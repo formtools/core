@@ -138,9 +138,6 @@ class Installation
      */
     public static function displayPage($template, $page_vars)
     {
-        $release_type = Core::getReleaseType();
-        $release_date = Core::getReleaseDate();
-        $version      = Core::getCoreVersion();
         $LANG = Core::$L;
 
         clearstatcache();
@@ -150,50 +147,8 @@ class Installation
         // always try to set the cache folder to 777
         @chmod($cache_folder, 0777);
 
-        if ($release_type == "alpha") {
-            $version .= "-alpha-$release_date";
-        } else if ($release_type == "beta") {
-            $version .= "-beta-$release_date";
-        }
-
         if (!is_readable("$cache_folder/") || !is_writable("$cache_folder/")) {
-            echo <<< EOF
-<html>
-<head>
-<link rel="stylesheet" type="text/css" href="files/main.css">
-</head>
-<body>
-
-<div id="container">
-  <div id="header">
-
-    <div style="float:right">
-      <table cellspacing="0" cellpadding="0" height="25">
-      <tr>
-        <td><img src="images/account_section_left.jpg" border="0" /></td>
-        <td id="account_section">
-          <b>{$version}</b>
-        </td>
-        <td><img src="images/account_section_right.jpg" border="0" /></td>
-      </tr>
-      </table>
-    </div>
-
-    <span style="float:left; padding-top: 8px; padding-right: 10px">
-      <a href="https://formtools.org" class="no_border"><img src="../themes/default/images/logo_green.jpg" border="0" height="61" /></a>
-    </span>
-  </div>
-  <div id="content">
-
-    <div class="notify">
-      {$LANG["text_default_theme_cache_folder_not_writable"]}
-    </div>
-
-  </div>
-</div>
-</body>
-</html>
-EOF;
+            self::displayUnwriteableCacheFolderPage();
             exit;
         }
 
@@ -208,7 +163,7 @@ EOF;
         $smarty->assign("g_success", "");
         $smarty->assign("g_message", "");
         $smarty->assign("g_default_theme", Core::getDefaultTheme());
-        $smarty->assign("version", $version);
+        $smarty->assign("version", Core::getVersionString());
 
         // check the "required" vars are at least set so they don't produce warnings when smarty debug is enabled
         if (!isset($page_vars["head_string"])) $page_vars["head_string"] = "";
@@ -239,6 +194,50 @@ EOF;
         $smarty->display(realpath(__DIR__ . "/../../install/$template"));
     }
 
+
+    public static function displayUnwriteableCacheFolderPage ()
+    {
+        $LANG = Core::$L;
+        $version = Core::getVersionString();
+
+        echo <<< END
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="files/main.css">
+</head>
+<body>
+
+<div id="container">
+    <div id="header">
+    
+        <div style="float:right">
+            <table cellspacing="0" cellpadding="0" height="25">
+            <tr>
+                <td><img src="../themes/default/images/account_section_left_green.jpg" border="0" /></td>
+                <td id="account_section">
+                    <b>{$version}</b>
+                </td>
+                <td><img src="../themes/default/images/account_section_right_green.jpg" border="0" /></td>
+            </tr>
+            </table>
+        </div>
+    
+        <span style="float:left; padding-top: 8px; padding-right: 10px">
+            <a href="https://formtools.org" class="no_border"><img src="../themes/default/images/logo_green.jpg" border="0" height="61" /></a>
+        </span>
+    </div>
+    <div id="content">    
+        <div class="notify">
+            {$LANG["text_default_theme_cache_folder_not_writable"]}
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+END;
+        exit;
+    }
 
     /**
      * This is sent at the very last step. It emails the administrator a short welcome email containing their

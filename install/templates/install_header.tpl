@@ -17,6 +17,7 @@
 	<script src="../global/scripts/general.js"></script>
 	<script src="../global/scripts/rsv.js"></script>
 	{$head_js}
+    {$head_string}
 </head>
 <body>
 <div id="container">

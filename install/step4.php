@@ -39,4 +39,16 @@ $page = array(
     "config_file_generated" => $config_file_generated
 );
 
+$page["head_string"] =<<< END
+<link href="../global/codemirror/lib/codemirror.css" rel="stylesheet" type="text/css" />
+<script src="../global/codemirror/lib/codemirror.js"></script>
+<script src="../global/codemirror/mode/xml/xml.js"></script>
+<script src="../global/codemirror/mode/smarty/smarty.js"></script>
+<script src="../global/codemirror/mode/php/php.js"></script>
+<script src="../global/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script src="../global/codemirror/mode/css/css.js"></script>
+<script src="../global/codemirror/mode/javascript/javascript.js"></script>
+<script src="../global/codemirror/mode/clike/clike.js"></script>
+END;
+
 Installation::displayPage("templates/step4.tpl", $page);

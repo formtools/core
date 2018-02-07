@@ -4,8 +4,8 @@ html {
 }
 body, html {
   height: 100%;
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
   background-color: #ffffff;
 }
 body {
@@ -64,7 +64,7 @@ a.no_border:link, a.no_border:visited {
 .clear_right { clear: right; }
 
 img { border: none; }
-form { margin: 0px; }
+form { margin: 0; }
 
 .rsvErrorField {
   background-color: #990000;
@@ -94,7 +94,7 @@ form { margin: 0px; }
   background-color: #f9f9f9;
   border: 1px #dddddd solid;
   text-align: center;
-  margin: 10px 0px;
+  margin: 10px 0;
 }
 
 /*-------------- page titles ---------------*/
@@ -144,8 +144,8 @@ form { margin: 0px; }
 }
 /* prevents rich-text fields from having their <p> tags */
 .list_table th, .submissions_table p {
-  margin: 0px;
-  padding: 0px;
+  margin: 0;
+  padding: 0;
 }
 .list_table th.over, .submissions_table th.over, th.sortable_col :hover {
   background-image: url(../images/list_table_heading_over.jpg);
@@ -157,7 +157,7 @@ form { margin: 0px; }
   vertical-align: top;
 }
 .submissions_table td {
-  padding: 0px 2px;
+  padding: 0 2px;
 }
 .submissions_table td .truncate {
   text-overflow: ellipsis;
@@ -174,7 +174,7 @@ form { margin: 0px; }
   text-decoration: none;
   display: block;
   white-space: nowrap;
-  padding: 0px 3px;
+  padding: 0 3px;
 }
 .submissions_table th:hover a {
   color: #ffffee;
@@ -229,7 +229,7 @@ form { margin: 0px; }
 .list_table td.edit {
   text-align: center;
   background: transparent url(../images/edit.png) no-repeat center 1px;
-  padding: 0px 0px;
+  padding: 0 0;
 }
 .list_table td.edit a {
   width: 18px;
@@ -310,7 +310,7 @@ form { margin: 0px; }
   font-weight: bold;
 }
 .ul_no_indent {
-  padding-left: 0px;
+  padding-left: 0;
   margin-left: 20px;
 }
 .highlighted_text {
@@ -373,8 +373,8 @@ form { margin: 0px; }
 .module_section h2 {
   font: 11px/20px Verdana,sans-serif;
   color: #777777;
-  margin: 0px;
-  padding: 2px 0px;
+  margin: 0;
+  padding: 2px 0;
   font-style: italic;
 }
 .module_section .module_link {
@@ -421,7 +421,7 @@ form { margin: 0px; }
 }
 .edit_submission h3 {
   border-bottom: 1px solid #cccccc;
-  margin: 0px 0px 8px 0px;
+  margin: 0 0 8px 0;
   color: #4B6C4E;
   font-size: 8pt;
   letter-spacing: 1px;
@@ -450,11 +450,11 @@ form { margin: 0px; }
 }
 .form_info_link a {
   display: block;
-  padding: 0px 44px 0px 14px;
+  padding: 0 44px 0 14px;
 }
 .loading_small {
   background-image: url(../../../global/images/loading_small.gif);
-  margin: 3px 0px;
+  margin: 3px 0;
   height: 16px;
   width: 16px;
 }

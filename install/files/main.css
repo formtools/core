@@ -17,8 +17,8 @@ table, caption, tbody, tfoot, thead, tr, th, td {
 html { overflow: -moz-scrollbars-vertical; }
 body, html {
 	height: 100%;
-	margin: 0px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 	background-color: #ffffff;
 }
 body {
@@ -28,11 +28,11 @@ body {
 	text-align: center;
 }
 body, table, td, div, span, div, p, input, select, textarea, option {
-  font: 11px Verdana, sans-serif;
-  color: #333333;
+    font: 11px Verdana, sans-serif;
+    color: #333333;
 }
 body, table, td, span, div, p {
-  line-height: 20px;
+    line-height: 20px;
 }
 #container {
 	width: 950px;
@@ -40,25 +40,25 @@ body, table, td, span, div, p {
 	margin: 0 auto;
 }
 #header {
-  height: 72px;
-  position: relative;
-  text-align: center;
-  width: 950px;
+    height: 72px;
+    position: relative;
+    text-align: center;
+    width: 950px;
 }
 #footer {
-	margin-top: 30px;
-  border-top: 1px dotted #cccccc;
-  padding: 6px 0px;
-  text-align: justify;
+    margin-top: 30px;
+    border-top: 1px dotted #cccccc;
+    padding: 6px 0;
+    text-align: justify;
 }
 ul {
-	margin: 0px;
-  padding-left: 16px;
+    margin: 0;
+    padding-left: 16px;
 }
 #footer ul {
-  list-style: none;
-	margin: 0px;
-  padding: 0px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 #footer ul li {
   float: left;
@@ -66,18 +66,18 @@ ul {
   border-right: 1px solid #cccccc;
 }
 #footer ul li.colN {
-	border-right: 0px;
+	border-right: 0;
 }
 #footer ul li a {
-  color: #0066cc;
-  display: block;
+    color: #0066cc;
+    display: block;
 }
 #footer ul li a:hover {
-	border-bottom: 0px;
+	border-bottom: 0;
 	color: #990000;
 }
 #content {
-  margin: 24px 10px 0px 10px;
+    margin: 24px 10px 0 10px;
 }
 a:link, a:visited {
 	color: #008800;
@@ -101,7 +101,6 @@ a.no_border:link, a.no_border:visited { border-bottom: none; outline: none; }
 .nav_current .delim {
 	color: #999999;
 }
-
 .nav_remaining { color: #777777; }
 .orange { color: orange; }
 .green { color: green; }
@@ -125,10 +124,9 @@ table.info td {
 	border: 1px solid #009900;
 	padding: 5px;
 }
-
 ul.tips {
 	padding-left: 16px;
-	margin-left: 0px;
+	margin-left: 0;
 }
 ul.tips li {
 	font-size: 8pt;
@@ -138,75 +136,76 @@ ul.tips li {
  	background-image: url(../../themes/default/images/account_section_bg_green.jpg);
 	background-repeat: repeat-x;
 	height: 25px;
-	padding-left: 12px;
-	padding-right: 12px;
 	color: white;
-    padding-bottom: 4px;
+    padding: 1px 12px 0 12px;
 }
 #account_section a:link, #account_section a:visited {
-  color: #f2f2f2;
-  text-decoration: none;
+    color: #f2f2f2;
+    text-decoration: none;
 }
 #nav_items {
-  border-right: 1px dotted #dddddd;
-  margin: 0px 5px 0px 12px;
-  float: left;
-  width: 192px;
+    border-right: 1px dotted #dddddd;
+    margin: 0 5px 0 12px;
+    float: left;
+    width: 192px;
 }
 #main {
-  float: right;
-  width: 690px;
-  margin-right: 10px;
+    float: right;
+    width: 690px;
+    margin-right: 10px;
 }
 #nav_items div {
-  line-height: 24px;
-  border-top: 1px solid transparent;
-	border-bottom: 1px solid transparent;
-	padding-left: 2px;
+    line-height: 24px;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    padding-left: 2px;
 }
 .margin_right {
-  margin-right: 6px;
+    margin-right: 6px;
 }
 .margin_bottom_large {
-  margin-bottom: 8px;
+    margin-bottom: 8px;
 }
 h1 {
-  font-size: 1.8em;
-  font-weight: normal;
-  padding: 6px 12px 10px;
-  border-bottom: 1px dotted #cccccc;
-  font-family: Verdana,sans-serif;
+    font-size: 1.8em;
+    font-weight: normal;
+    padding: 6px 12px 10px;
+    border-bottom: 1px dotted #cccccc;
+    font-family: Verdana,sans-serif;
 }
 h2 {
-  color: #006600;
-  font: 15px/18px Verdana,sans-serif;
-  margin: 0px;
-  padding: 0px;
+    color: #006600;
+    font: 15px/18px Verdana,sans-serif;
+    margin: 0;
+    padding: 0;
 }
 h3 {
-  font-size: 10pt;
-  color: #006600;
-  margin-top: 0px;
+    font-size: 10pt;
+    color: #006600;
+    margin-top: 0;
 }
 .label {
-  color: #666666;
+    color: #666666;
 }
 #existing_tables {
-  border: 1px solid #cccccc;
-  height: 250px;
-  overflow-y: scroll;
+    border: 1px solid #cccccc;
+    height: 250px;
+    overflow-y: scroll;
 }
-#config_file_contents {
-  width: 100%;
-  height: 260px;
-  background-color: #ffffff;
-  color: #555555;
-  line-height: 12pt;
-  padding: 5px;
-  border: 1px solid #aaaaaa;
+.config_file_contents {
+    width: 100%;
+    background-color: #ffffff;
+    color: #555555;
+    line-height: 12pt;
+    padding: 5px;
+}
+body .CodeMirror {
+    border: 1px solid #aaaaaa;
+    height: 310px;
+    padding: 6px;
 }
 .clear {
-  clear: both;
+    clear: both;
 }
 .delim {
 	color: #aaaaaa;
@@ -215,50 +214,46 @@ h3 {
   border-bottom: 1px dotted #cccccc;
 }
 .warning {
-	margin: 8px 0px 0px 0px;
-	color: #990000;
-  padding: 8px;
-  border: 1px solid #cc0000;
-  background-color: #fffffcc;
+    margin: 8px 0 0 0;
+    color: #990000;
+    padding: 8px;
+    border: 1px solid #cc0000;
+    background-color: #ffffcc;
 }
 .panel {
-  border: 1px solid #cccccc;
-  padding: 8px;
-  background-color: #f2f2f2;
-  margin-top: 16px;
+    border: 1px solid #cccccc;
+    padding: 8px;
+    background-color: #f2f2f2;
+    margin-top: 16px;
 }
 .hidden {
-  display: none;
+    display: none;
 }
 .popup_type_error {
-	width: 48px;
-	height: 48px;
-  background-image: url(../../global/images/error.png);
-  margin-right: 8px;
-  float: left;
+    width: 48px;
+    height: 48px;
+    background-image: url(../../global/images/error.png);
+    margin-right: 8px;
+    float: left;
 }
 #verify_license_key_loading {
-  display: none;
-  float: right;
-  width: 32px;
-  height: 32px;
-  background-image: url(../../global/images/loading.gif);
+    display: none;
+    float: right;
+    width: 32px;
+    height: 32px;
+    background-image: url(../../global/images/loading.gif);
 }
 span.fail {
-  margin-left: 10px;
-  background-color: #aa0000;
-  padding: 1px 10px;
-  color: white;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
+    margin-left: 10px;
+    background-color: #aa0000;
+    padding: 1px 10px;
+    color: white;
+    border-radius: 4px;
 }
 span.pass {
-  margin-left: 10px;
-  background-color: green;
-  padding: 1px 10px;
-  color: white;
-  border-radius: 4px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
+    margin-left: 10px;
+    background-color: green;
+    padding: 1px 10px;
+    color: white;
+    border-radius: 4px;
 }
