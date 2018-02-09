@@ -1076,7 +1076,9 @@ END;
             }
         }
 
-        $root_url = preg_replace("/\/install\/step4\.php$/", "", "http://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
+        $protocol = ($_SERVER["HTTPS"] == "on") ? "https" : "http";
+
+        $root_url = preg_replace("/\/install\/step4\.php$/", "", "$protocol://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
         $root_dir = preg_replace("/.install$/", "", $installationFolder);
         $root_dir = preg_replace("/\\\/", "\\\\\\", $root_dir);
 

@@ -112,34 +112,28 @@
             {assign var='recipient_type_str' value=""}
           {/if}
 
-          {if $recipient.recipient_user_type == "admin"}
-            <div id="recipient_{$count}">
+          <div id="recipient_{$count}">
+            {if $recipient.recipient_user_type == "admin"}
               {$admin_info.first_name} {$admin_info.last_name} &lt;{$admin_info.email}&gt;{$recipient_type_str}&nbsp;
               <a href="#" onclick="return emails_ns.remove_recipient({$count})">[x]</a>
               <input type="hidden" name="recipients[]" value="{$count}" />
               <input type="hidden" name="recipient_{$count}_user_type" value="admin" />
               <input type="hidden" id="recipient_{$count}_type" name="recipient_{$count}_type" value="{$recipient_type}" />
-            </div>
-          {elseif $recipient.recipient_user_type == "form_email_field"}
-            <div id="recipient_{$count}">
+            {elseif $recipient.recipient_user_type == "form_email_field"}
               {$LANG.phrase_form_email_field_b_c} {$recipient.final_recipient}{$recipient_type_str}&nbsp;
               <a href="#" onclick="return emails_ns.remove_recipient({$count})">[x]</a>
               <input type="hidden" name="recipients[]" value="{$count}" />
               <input type="hidden" name="recipient_{$count}_user_type" value="form_email_field" />
-              <input type="hidden" name="recipient_{$count}_form_email_id" value="{$recipient.form_email_id}	" />
+              <input type="hidden" name="recipient_{$count}_form_email_id" value="{$recipient.form_email_id}" />
               <input type="hidden" id="recipient_{$count}_type" name="recipient_{$count}_type" value="{$recipient.recipient_type}" />
-            </div>
-          {elseif $recipient.recipient_user_type == "client"}
-            <div id="recipient_{$count}">
+            {elseif $recipient.recipient_user_type == "client"}
               {$recipient.first_name} {$recipient.last_name} &lt;{$recipient.email}&gt;{$recipient_type_str}&nbsp;
               <a href="#" onclick="return emails_ns.remove_recipient({$count})">[x]</a>
               <input type="hidden" name="recipients[]" value="{$count}" />
               <input type="hidden" name="recipient_{$count}_user_type" value="client" />
               <input type="hidden" id="recipient_{$count}_type" name="recipient_{$count}_type" value="{$recipient.recipient_type}" />
               <input type="hidden" name="recipient_{$count}_account_id" value="{$recipient.account_id}" />
-            </div>
-          {elseif $recipient.recipient_user_type == "custom"}
-            <div id="recipient_{$count}">
+            {elseif $recipient.recipient_user_type == "custom"}
               {$recipient.custom_recipient_name} &lt;{$recipient.custom_recipient_email}&gt;{$recipient_type_str}&nbsp;
               <a href="#" onclick="return emails_ns.remove_recipient({$count})">[x]</a>
               <input type="hidden" name="recipients[]" value="{$count}" />
@@ -147,8 +141,8 @@
               <input type="hidden" name="recipient_{$count}_type" id="recipient_{$count}_type" value="{$recipient.recipient_type}" />
               <input type="hidden" name="recipient_{$count}_name" value="{$recipient.custom_recipient_name|escape}" />
               <input type="hidden" name="recipient_{$count}_email" value="{$recipient.custom_recipient_email|escape}" />
-            </div>
-          {/if}
+            {/if}
+          </div>
         {/foreach}
       </div>
 
