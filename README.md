@@ -9,16 +9,15 @@ release sections for earlier, stable releases.
 
 ### Form Tools 3
 
-Form Tools 3 (2018) was a complete rewrite of the codebase. Form Tools started back in 2004 and this is the third 
-(and hardest!) rewrite. The broader goal was to simply modernize the script, but specifically: to allow it to run on PHP 7,
-use PDO, update all lib dependencies up to date, introduce tests and pave the way for upcoming changes and features. 
+Form Tools 3 (2018) was a complete rewrite of the application. Form Tools started back in 2004 and this is the third 
+(and hardest!) rewrite. The broader goal was to simply modernize the script, but there were also some specific goals:un on PHP 7, use PDO, update all lib dependencies up to date, introduce tests and pave the way for upcoming changes and features. 
 
-Currently Form Tools 3 is in alpha and will be headed to beta in the next few days.
+Currently Form Tools 3 is in beta, but it's looking pretty solid. That said - more testing the better! Please report anything you find. 
 
 
 ### Form Tools 2
 
-Form Tools 2 was the production version from May 2014 onwards. It only supports PHP 4.3 - PHP 5.
+Form Tools 2 was the production version from 2010 onwards. I took a long, 4-year break to work on other projects, but returned to the Form Tools world in 2016 to revamp the site and code. Form Tools 2 was entirely functional code; FT3 converted everything to object-oriented, because I found it was simply too hard to organize a large codebase without more structure provided by the language.
 
 
 ### PHP version support
@@ -29,7 +28,7 @@ Form Tools 2 was the production version from May 2014 onwards. It only supports 
 
 ### Tests
 
-Check out TESTS.md.
+Check out TESTS.md. Still in its infancy, but we're getting there.
 
 
 ### Documentation
