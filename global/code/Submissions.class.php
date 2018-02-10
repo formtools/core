@@ -492,6 +492,12 @@ class Submissions {
         }
 
         $submissions_to_delete = $submission_ids;
+
+        // if a user is refreshing the page after a delete request, this will be empty
+        if (empty($submission_ids)) {
+            return array(false, "");
+        }
+
         extract(Hooks::processHookCalls("start", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("submission_ids")), EXTR_OVERWRITE);
 
         $form_info = Forms::getForm($form_id);
