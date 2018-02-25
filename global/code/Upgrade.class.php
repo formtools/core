@@ -23,7 +23,7 @@ class Upgrade
 
         // if the files have been updated but the DB is older, the user is upgrading
         if ($current_version_date > $last_version_date_in_db) {
-            if ($current_version_date <= 20180204) {
+            if ($current_version_date <= 20180224) {
                 list ($success, $error_msg) = self::upgradeTo3_0_0();
             }
 
