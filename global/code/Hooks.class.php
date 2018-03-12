@@ -492,7 +492,7 @@ class Hooks {
     }
 
     /**
-     * Returns all modules associated with a particular module ordered by priority.
+     * Returns all hook calls associated with a particular module ordered by priority.
      *
      * @param string $module_folder
      * @return array

@@ -795,7 +795,7 @@ class Submissions {
 
 
     /**
-     * Updates an individual form submission. Called by both clients and administrator.
+     * Updates an individual form submission.
      *
      * @param array $infohash This parameter should be a hash (e.g. $_POST or $_GET) containing the
      *             various fields from the update submission page. The contents of it change for each
