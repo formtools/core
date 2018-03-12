@@ -8,7 +8,7 @@
 
 namespace FormTools;
 
-use Smarty, PDO, PDOException;
+use Smarty, PDO, Exception;
 
 
 class Emails {
@@ -148,7 +148,7 @@ class Emails {
                 ));
                 try {
                     $db->execute();
-                } catch (PDOException $e) {
+                } catch (Exception $e) {
                     Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
                     exit;
                 }
@@ -809,7 +809,7 @@ class Emails {
             $db->execute();
             extract(Hooks::processHookCalls("end", compact("form_id", "infohash"), array()), EXTR_OVERWRITE);
             return array(true, $LANG["notify_email_fields_updated"]);
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return array(false, $LANG["notify_email_fields_not_updated"]);
         }
     }

@@ -14,7 +14,7 @@
 
 namespace FormTools;
 
-use PDO, PDOException;
+use PDO, Exception;
 
 
 class Database
@@ -47,7 +47,7 @@ class Database
         try {
             $dsn = sprintf("mysql:host=%s;port=%s;dbname=%s;charset=utf8", $hostname, $port, $db_name);
             $this->dbh = new PDO($dsn, $username, $password, $options);
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $this->error = $e->getMessage();
         }
 

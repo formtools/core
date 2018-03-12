@@ -8,7 +8,7 @@
 
 namespace FormTools;
 
-use PDO, PDOException, Exception;
+use PDO, Exception;
 
 
 class Modules
@@ -359,7 +359,7 @@ class Modules
 
             try {
                 $db->execute();
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 return array(false, $e->getMessage());
             }
         } else {

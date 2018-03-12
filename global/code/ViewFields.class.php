@@ -14,7 +14,7 @@
 
 namespace FormTools;
 
-use PDO, PDOException;
+use PDO, Exception;
 
 
 class ViewFields
@@ -309,7 +309,7 @@ class ViewFields
                     "list_order" => $row["list_order"]
                 ));
                 $db->execute();
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
                 exit;
             }

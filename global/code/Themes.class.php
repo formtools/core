@@ -13,7 +13,7 @@
 
 namespace FormTools;
 
-use PDOException;
+use Exception;
 
 
 class Themes {
@@ -121,7 +121,7 @@ class Themes {
 
         try {
             $db->processTransaction();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return array(false, $e->getMessage());
         }
 

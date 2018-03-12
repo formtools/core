@@ -20,7 +20,7 @@
 
 namespace FormTools;
 
-use PDO, PDOException;
+use PDO, Exception;
 
 
 class OptionLists {

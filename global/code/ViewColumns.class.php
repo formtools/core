@@ -3,7 +3,7 @@
 
 namespace FormTools;
 
-use PDO, PDOException;
+use PDO, Exception;
 
 
 class ViewColumns
@@ -95,7 +95,7 @@ class ViewColumns
         try {
             $cols = array("view_id", "field_id", "list_order", "is_sortable", "auto_size", "custom_width", "truncate");
             $db->insertQueryMultiple("view_columns", $cols, $data);
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }

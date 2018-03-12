@@ -11,7 +11,7 @@
 
 namespace FormTools;
 
-use PDOException, PDO;
+use Exception, PDO;
 
 
 class Administrator
@@ -326,7 +326,7 @@ class Administrator
                 $db->bind("password", $enc_password);
             }
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return array(false, "Error: " . $e->getMessage());
         }
 
@@ -478,7 +478,7 @@ class Administrator
         ));
         try {
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $message = $LANG["notify_client_account_not_updated"];
             if ($debug_enabled) {
                 $message .= "<br/>Error: " . $e->getMessage();
@@ -551,7 +551,7 @@ class Administrator
 
         try {
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $message = $LANG["notify_client_account_not_updated"];
             if ($debug_enabled) {
                 $message .= "<br/>Error: " . $e->getMessage();

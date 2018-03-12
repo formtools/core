@@ -14,7 +14,7 @@
 namespace FormTools;
 
 
-use PDO, PDOException;
+use PDO, Exception;
 
 
 class Settings {
@@ -128,7 +128,7 @@ class Settings {
 
             try {
                 $db->execute();
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 return array(false, $e->getMessage());
             }
 

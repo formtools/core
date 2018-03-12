@@ -8,7 +8,7 @@
 
 namespace FormTools;
 
-use PDO, PDOException;
+use PDO, Exception;
 
 
 class Fields {
@@ -204,13 +204,12 @@ class Fields {
         try {
             Fields::deleteAllFormFields($form_id);
 
-            // now delete any associated settings
             $db->query("DELETE FROM {PREFIX}field_settings WHERE field_id IN ($in_clause)");
             $db->bindAll($in_params);
             $db->execute();
             $db->processTransaction();
 
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $db->rollbackTransaction();
         }
     }
@@ -1156,7 +1155,7 @@ class Fields {
 
                 try {
                     $db->execute();
-                } catch (PDOException $e) {
+                } catch (Exception $e) {
                     return array(false, $LANG["phrase_query_problem"] . $e->getMessage());
                 }
 
@@ -1296,7 +1295,7 @@ class Fields {
                 try {
                     $cols = array("field_id", "setting_id", "setting_value");
                     $db->insertQueryMultiple("field_settings", $cols, $new_settings);
-                } catch (PDOException $e) {
+                } catch (Exception $e) {
                     return array(false, $LANG["phrase_query_problem"] . ", " . $e->getMessage());
                 }
             }
@@ -1436,7 +1435,7 @@ class Fields {
 
         try {
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }
@@ -1526,7 +1525,7 @@ class Fields {
 
             $db->processTransaction();
 
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $db->rollbackTransaction();
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
         }

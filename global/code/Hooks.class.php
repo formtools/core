@@ -9,7 +9,7 @@
 
 namespace FormTools;
 
-use PDOException;
+use Exception;
 
 
 class Hooks {
@@ -49,7 +49,7 @@ class Hooks {
                 "priority" => $priority
             ));
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return array(false, $e->getMessage());
         }
 
@@ -319,7 +319,7 @@ class Hooks {
 
         try {
             $db->processTransaction();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $db->rollbackTransaction();
         }
     }
@@ -345,7 +345,7 @@ class Hooks {
         }
         try {
             $db->processTransaction();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $db->rollbackTransaction();
         }
     }

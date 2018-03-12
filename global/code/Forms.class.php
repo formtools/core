@@ -897,7 +897,7 @@ class Forms
             $order2 = Fields::addFormFileFields($form_id, $_FILES, $order);
             Fields::addSystemFields($form_id, $textbox_field_type_id, $order2);
             $db->processTransaction();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             $db->rollbackTransaction();
             Errors::showErrorCode(Errors::$CODES["103"], $e->getMessage());
         }
@@ -934,7 +934,7 @@ class Forms
         try {
             Core::$db->execute();
             return true;
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -986,7 +986,7 @@ class Forms
         try {
             $db->query($query);
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return array(
                 "success" => "0",
                 "message" => $LANG["notify_create_form_failure"],
@@ -1010,7 +1010,7 @@ class Forms
 
         try {
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return array(
                 "success"   => "0",
                 "sql_error" => $e->getMessage()
@@ -1244,7 +1244,7 @@ class Forms
 
         try {
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             return array(false, $LANG["notify_form_not_updated_notify_admin"]);
         }
 
@@ -1382,7 +1382,7 @@ class Forms
             ));
 
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             Errors::queryError(__CLASS__ , __FILE__, __LINE__, $e->getMessage());
             exit;
         }

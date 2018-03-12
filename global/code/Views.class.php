@@ -14,7 +14,7 @@
 
 namespace FormTools;
 
-use PDO, PDOException;
+use PDO, Exception;
 
 
 class Views
@@ -480,7 +480,7 @@ class Views
                                $filter_clause
                     ");
                     $db->execute();
-                } catch (PDOException $e) {
+                } catch (Exception $e) {
                     Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
                     exit;
                 }
@@ -510,7 +510,7 @@ class Views
                 WHERE  form_id = $form_id
                 ORDER BY view_order
             ");
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
             exit;
         }

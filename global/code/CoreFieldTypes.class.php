@@ -18,7 +18,7 @@
 
 namespace FormTools;
 
-use PDOException;
+use Exception;
 
 // down the road these should all extend an abstract class, with all the content standardized
 use FormTools\FieldTypes\Checkbox;
@@ -101,7 +101,7 @@ class CoreFieldTypes
 
         try {
             $db->execute();
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             CoreFieldTypes::rollbackNewInstallation();
             return array(false, "Failed to insert field type $field_type_identifier: " . $e->getMessage());
         }
@@ -132,7 +132,7 @@ class CoreFieldTypes
 
             try {
                 $db->execute();
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 CoreFieldTypes::rollbackNewInstallation();
                 return array(false, "Failed to insert setting {$setting_info["field_setting_identifier"]}: " . $e->getMessage());
             }
@@ -166,7 +166,7 @@ class CoreFieldTypes
 
                 try {
                     $db->execute();
-                } catch (PDOException $e) {
+                } catch (Exception $e) {
                     CoreFieldTypes::rollbackNewInstallation();
                     return array(false, "Failed to insert setting option {$setting_info["field_setting_identifier"]}, {$option_info["option_text"]}: " . $e->getMessage());
                 }
@@ -196,7 +196,7 @@ class CoreFieldTypes
 
             try {
                 $db->execute();
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 CoreFieldTypes::rollbackNewInstallation();
                 return array(false, "Failed to insert validation rule {$rule_info["rule_label"]}: " . $e->getMessage());
             }

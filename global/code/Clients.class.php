@@ -8,7 +8,7 @@
 
 namespace FormTools;
 
-use PDOException, PDO;
+use Exception, PDO;
 
 
 class Clients {
@@ -62,7 +62,6 @@ class Clients {
     public static function deleteClient($account_id)
     {
         $db = Core::$db;
-        $db->beginTransaction();
 
         $db->query("DELETE FROM {PREFIX}accounts WHERE account_id = :account_id");
         $db->bind("account_id", $account_id);
@@ -91,8 +90,6 @@ class Clients {
 
         OmitLists::deleteFormOmitListByAccountId($account_id);
         OmitLists::deleteViewOmitListByAccountId($account_id);
-
-        $db->processTransaction();
 
         $success = true;
         $message = Core::$L["notify_account_deleted"];
@@ -514,7 +511,7 @@ class Clients {
             if (!empty($info["password"])) {
                 Accounts::clearResetPassword($account_id);
             }
-        } catch (PDOException $e) {
+        } catch (Exception $e) {
             Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
         }
     }
@@ -599,7 +596,7 @@ class Clients {
 
             try {
                 $db->execute();
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
                 exit;
             }

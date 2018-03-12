@@ -3,7 +3,7 @@
 namespace FormTools;
 
 
-use PDO, PDOException;
+use PDO, Exception;
 
 
 class Menus
@@ -693,7 +693,7 @@ class Menus
                     "account_id" => $client_id
                 ));
                 $db->execute();
-            } catch (PDOException $e) {
+            } catch (Exception $e) {
                 Errors::queryError(__CLASS__, __FILE__, __LINE__, $e->getMessage());
                 exit;
             }
