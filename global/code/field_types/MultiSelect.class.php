@@ -36,13 +36,13 @@ END;
   {foreach from=\$contents.options item=curr_group_info name=group}
     {assign var=group_info value=\$curr_group_info.group_info}
     {assign var=options value=\$curr_group_info.options}
-    {if \$group_info.group_name}
+    {if array_key_exists("group_name", \$group_info) && !empty(\$group_info["name"])}
     <optgroup label="{\$group_info.group_name|escape}">
     {/if}
     {foreach from=\$options item=option name=row}
       <option value="{\$option.option_value}" {if \$option.option_value|in_array:\$vals}selected{/if}>{\$option.option_name}</option>
     {/foreach}
-    {if \$group_info.group_name}
+    {if array_key_exists("group_name", \$group_info) && !empty(\$group_info["name"])}
     </optgroup>
     {/if}
   {/foreach}

@@ -150,13 +150,13 @@ END;
         "settings" => array(
 
             // Height
-        array(
-        "field_label"              => "{\$LANG.word_height}",
-        "field_setting_identifier" => "height",
-        "field_type"               => "select",
-        "field_orientation"        => "na",
-        "default_value_type"       => "static",
-        "default_value"            => "cf_size_small",
+            array(
+                "field_label"              => "{\$LANG.word_height}",
+                "field_setting_identifier" => "height",
+                "field_type"               => "select",
+                "field_orientation"        => "na",
+                "default_value_type"       => "static",
+                "default_value"            => "cf_size_small",
 
         "options" => array(
         array(

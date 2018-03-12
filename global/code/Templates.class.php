@@ -42,6 +42,9 @@ class Templates
 
         $smarty->assign("LANG", $LANG);
         $smarty->setUseSubDirs(Core::shouldUseSmartySubDirs());
+        $smarty->setDebugging(Core::isSmartyDebugEnabled());
+        $smarty->setErrorReporting(Core::getDefaultErrorReporting());
+
         $smarty->assign("g_debug", Core::isDebugEnabled());
         $smarty->assign("g_root_dir", $root_dir);
         $smarty->assign("g_root_url", $root_url);
@@ -53,7 +56,6 @@ class Templates
         $smarty->assign("is_logged_in", Core::$user->isLoggedIn());
         $smarty->assign("account_type", Core::$user->getAccountType());
         $smarty->assign("g_js_debug", Core::isJsDebugEnabled() ? "true" : "false");
-        $smarty->debugging = Core::isSmartyDebugEnabled();
 
         $smarty->assign("g_hide_upgrade_link", Core::shouldHideUpgradeLink());
         $smarty->assign("images_url", "$root_url/themes/$theme/images");

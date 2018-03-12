@@ -34,8 +34,8 @@ END;
   {foreach from=\$contents.options item=curr_group_info name=group}
     {assign var=group_info value=\$curr_group_info.group_info}
     {assign var=options value=\$curr_group_info.options}
-    {if \$group_info.group_name}
-    <div class="cf_option_list_group_label">{\$group_info.group_name}</div>
+    {if array_key_exists("group_name", \$group_info) && !empty(\$group_info["name"])}
+      <div class="cf_option_list_group_label">{\$group_info.group_name}</div>
     {/if}
     {if \$is_in_columns}<div class="{\$formatting}">{/if}
     
