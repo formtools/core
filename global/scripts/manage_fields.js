@@ -1626,6 +1626,8 @@ fields_ns.validate_field = function () {
 		var form_field = $.trim($("#edit_field__field_name").val());
 		if (form_field == "") {
 			errors.push(["#edit_field__field_name", "validation_no_form_field_single"]);
+		} else if (form_field.match(/[^0-9a-zA-Z_]/)) {
+			errors.push(["#edit_field__field_name", "validation_invalid_form_field_names"]);
 		}
 		var db_column = $.trim($("#edit_field__db_column").val());
 		if (db_column == "") {
