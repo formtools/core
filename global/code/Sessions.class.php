@@ -22,7 +22,7 @@ class Sessions
             return $_SESSION["ft"];
         }
 
-        $parts = mb_split("\.", $key);
+        $parts = explode(".", $key);
         $ref = &$_SESSION["ft"];
         foreach ($parts as $section) {
             $ref = &$ref[$section];
@@ -51,7 +51,7 @@ class Sessions
      */
     public static function set($key, $value)
     {
-        $parts = mb_split("\.", $key);
+        $parts = explode(".", $key);
         if (!isset($_SESSION["ft"])) {
             $_SESSION["ft"] = array();
         }
@@ -95,7 +95,7 @@ class Sessions
         }
 
         // TODO test!
-        $parts = mb_split("\.", $key);
+        $parts = explode(".", $key);
         $exists = false;
         $temp = &$_SESSION["ft"];
         foreach ($parts as $section) {
@@ -132,7 +132,7 @@ class Sessions
         }
 
         // TODO test!!!
-        $parts = mb_split("\.", $key);
+        $parts = explode(".", $key);
         $exists = false;
         $temp = &$_SESSION["ft"];
         foreach ($parts as $section) {
