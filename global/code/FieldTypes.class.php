@@ -593,6 +593,7 @@ END;
         $mapped = array();
         while (list($raw_field_type, $field_type_label) = each(self::$rawFieldTypes)) {
             $curr_mapped_field_types = array();
+
             foreach ($field_types as $field_type_info) {
                 if ($field_type_info["raw_field_type_map"] != $raw_field_type) {
                     continue;

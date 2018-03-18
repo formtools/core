@@ -143,10 +143,12 @@ class CoreFieldTypes
             if ($use_for_option_list_map) {
                 $db->query("
                     UPDATE {PREFIX}field_types
-                    SET    raw_field_type_map_multi_select_id = $setting_id
+                    SET    raw_field_type_map_multi_select_id = :raw_field_type_map_multi_select_id
                     WHERE  field_type_id = :field_type_id
                 ");
+                $db->bind("raw_field_type_map_multi_select_id", $setting_id);
                 $db->bind("field_type_id", $field_type_id);
+                $db->execute();
             }
 
             for ($j=1; $j<=count($setting_info["options"]); $j++) {

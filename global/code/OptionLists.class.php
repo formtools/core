@@ -708,7 +708,7 @@ class OptionLists {
 
             $db->query("
                 INSERT INTO {PREFIX}option_lists (option_list_name, is_grouped, original_form_id)
-                VALUES (:option_list_name, 'no', :form_id)
+                VALUES (:option_list_name, 'no', :original_form_id)
             ");
             $db->bindAll(array(
                 "option_list_name" => $option_list_name,
