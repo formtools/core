@@ -131,17 +131,17 @@ class Submissions {
 
             if ($field_info["is_file_field"] == "no") {
                 $custom_form_fields[$field_name] = array(
-                "field_id"    => $field_id,
-                "col_name"    => $field_info["col_name"],
-                "field_title" => $field_info["field_title"],
-                "include_on_redirect" => $field_info["include_on_redirect"],
-                "field_type_id" => $field_info["field_type_id"],
-                "is_date_field" => $field_info["is_date_field"]
+                    "field_id"    => $field_id,
+                    "col_name"    => $field_info["col_name"],
+                    "field_title" => $field_info["field_title"],
+                    "include_on_redirect" => $field_info["include_on_redirect"],
+                    "field_type_id" => $field_info["field_type_id"],
+                    "is_date_field" => $field_info["is_date_field"]
                 );
             } else {
                 $file_fields[] = array(
-                "field_id"   => $field_id,
-                "field_info" => $field_info
+                    "field_id"   => $field_id,
+                    "field_info" => $field_info
                 );
             }
         }

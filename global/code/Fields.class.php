@@ -1187,7 +1187,12 @@ class Fields {
                     "col_name" => $col_name,
                     "field_id" => $field_id
                 ));
-                $db->execute();
+
+                try {
+                    $db->execute();
+                } catch (Exception $e) {
+                    return array(false, $LANG["phrase_query_problem"] . $e->getMessage());
+                }
 
                 // if the column name or field size just changed, we need to "physically" update the form's database table
                 // If this fails, we rollback both the field TYPE and the field size.
@@ -1220,7 +1225,12 @@ class Fields {
                             "col_name" => $old_col_name,
                             "field_id" => $field_id
                         ));
-                        $db->execute();
+
+                        try {
+                            $db->execute();
+                        } catch (Exception $e) {
+                            return array(false, $LANG["phrase_query_problem"] . $e->getMessage());
+                        }
 
                         return array(false, $LANG["phrase_query_problem"] . $err_message);
                     }

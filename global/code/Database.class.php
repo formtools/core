@@ -65,6 +65,16 @@ class Database
         $this->statement = $this->dbh->prepare($query);
     }
 
+    public static function placeholders($text, $count = 0, $separator = ",") {
+        $result = array();
+        if ($count > 0) {
+            for ($i=0; $i<$count; $i++) {
+                $result[] = $text;
+            }
+        }
+        return implode($separator, $result);
+    }
+
     /**
      * Another convenience function to abstract away PDO's awful insert-multiple syntax and actually execute the
      * query as well. Does the same thing as a query() and an execute().
@@ -74,19 +84,9 @@ class Database
      */
     public function insertQueryMultiple($table, $cols, $data)
     {
-        function placeholders($text, $count = 0, $separator = ",") {
-            $result = array();
-            if ($count > 0) {
-                for ($i=0; $i<$count; $i++) {
-                    $result[] = $text;
-                }
-            }
-            return implode($separator, $result);
-        }
-
         $insert_values = array();
         foreach ($data as $d) {
-            $question_marks[] = '('  . placeholders('?', sizeof($d)) . ')';
+            $question_marks[] = '('  . self::placeholders('?', sizeof($d)) . ')';
             $insert_values = array_merge($insert_values, array_values($d));
         }
 
