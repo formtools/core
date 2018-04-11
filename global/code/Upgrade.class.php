@@ -23,11 +23,13 @@ class Upgrade
 
         // if the files have been updated but the DB is older, the user is upgrading
         if ($current_version_date > $last_version_date_in_db) {
-            if ($current_version_date <= 20180318) {
+
+            if ($current_version_date <= 20180410) {
                 list ($success, $error_msg) = self::upgradeTo3_0_0();
 
                 // additional patch for old alpha/beta versions. This is benign & can be executed multiple times
                 self::patchFieldTypeOptionListSettingMapping();
+                self::fixEuropeanDateFormat();
             }
 
             if ($success) {
@@ -118,5 +120,18 @@ class Upgrade
             $db->bind("field_type_id", $field_type["field_type_id"]);
             $db->execute();
         }
+    }
+
+    private static function fixEuropeanDateFormat()
+    {
+        $db = Core::$db;
+
+        $db->query("
+            UPDATE {PREFIX}field_type_setting_options
+            SET    option_text = '30. 08. 2011',
+                   option_value = 'dd. mm. yy'
+            WHERE  option_text = '30. 08. 2011.' AND option_value = 'dd. mm. yy.'
+        ");
+        $db->execute();
     }
 }

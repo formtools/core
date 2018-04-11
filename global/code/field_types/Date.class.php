@@ -92,8 +92,8 @@ class Date
                         "is_new_sort_group" => "yes"
                     ),
                     array(
-                        "option_text"       => "30. 08. 2011.",
-                        "option_value"      => "dd. mm. yy.",
+                        "option_text"       => "30. 08. 2011",
+                        "option_value"      => "dd. mm. yy",
                         "is_new_sort_group" => "yes"
                     ),
                     array(
@@ -122,8 +122,8 @@ class Date
                         "is_new_sort_group" => "yes"
                     ),
                     array(
-                        "option_text"       => "30. 08. 2011. 20:00",
-                        "option_value"      => "datetime:dd. mm. yy.|hh:mm",
+                        "option_text"       => "30. 08. 2011 20:00",
+                        "option_value"      => "datetime:dd. mm. yy|hh:mm",
                         "is_new_sort_group" => "yes"
                     )
                 )
@@ -187,8 +187,8 @@ class Date
     {\$VALUE|custom_format_date:\$tzo:"D M j, Y"}
   {elseif \$display_format == "DD, MM d, yy"}
     {\$VALUE|custom_format_date:\$tzo:"l M j, Y"}
-  {elseif \$display_format == "dd. mm. yy."}
-    {\$VALUE|custom_format_date:\$tzo:"d. m. Y."}
+  {elseif \$display_format == "dd. mm. yy"}
+    {\$VALUE|custom_format_date:\$tzo:"d. m. Y"}
   {elseif \$display_format == "datetime:dd/mm/yy|h:mm TT|ampm`true"}
     {\$VALUE|custom_format_date:\$tzo:"d/m/Y g:i A"}
   {elseif \$display_format == "datetime:mm/dd/yy|h:mm TT|ampm`true"}
@@ -199,8 +199,8 @@ class Date
     {\$VALUE|custom_format_date:\$tzo:"Y-m-d H:i"}
   {elseif \$display_format == "datetime:yy-mm-dd|hh:mm:ss|showSecond`true"}
     {\$VALUE|custom_format_date:\$tzo:"Y-m-d H:i:s"}
-  {elseif \$display_format == "datetime:dd. mm. yy.|hh:mm"}
-    {\$VALUE|custom_format_date:\$tzo:"d. m. Y. H:i"}
+  {elseif \$display_format == "datetime:dd. mm. yy|hh:mm"}
+    {\$VALUE|custom_format_date:\$tzo:"d. m. Y H:i"}
   {/if}
 {/if}
 {/strip}
@@ -236,8 +236,8 @@ END;
     {assign var=val value=\$VALUE|custom_format_date:\$tzo:"D M j, Y"}
   {elseif \$display_format == "DD, MM d, yy"}
     {assign var=val value=\$VALUE|custom_format_date:\$tzo:"l M j, Y"}
-  {elseif \$display_format == "dd. mm. yy."}
-    {assign var=val value=\$VALUE|custom_format_date:\$tzo:"d. m. Y."}
+  {elseif \$display_format == "dd. mm. yy"}
+    {assign var=val value=\$VALUE|custom_format_date:\$tzo:"d. m. Y"}
   {elseif \$display_format == "datetime:dd/mm/yy|h:mm TT|ampm`true"}
     {assign var=val value=\$VALUE|custom_format_date:\$tzo:"d/m/Y g:i A"}
   {elseif \$display_format == "datetime:mm/dd/yy|h:mm TT|ampm`true"}
@@ -248,8 +248,8 @@ END;
     {assign var=val value=\$VALUE|custom_format_date:\$tzo:"Y-m-d H:i"}
   {elseif \$display_format == "datetime:yy-mm-dd|hh:mm:ss|showSecond`true"}
     {assign var=val value=\$VALUE|custom_format_date:\$tzo:"Y-m-d H:i:s"}
-  {elseif \$display_format == "datetime:dd. mm. yy.|hh:mm"}
-    {assign var=val value=\$VALUE|custom_format_date:\$tzo:"d. m. Y. H:i"}
+  {elseif \$display_format == "datetime:dd. mm. yy|hh:mm"}
+    {assign var=val value=\$VALUE|custom_format_date:\$tzo:"d. m. Y H:i"}
   {/if}
 {/if}
 
@@ -284,14 +284,14 @@ if (empty(\$date)) {
       case "datetime:dd/mm/yy|h:mm TT|ampm`true":
         \$date = substr(\$date, 3, 2) . "/" . substr(\$date, 0, 2) . "/" . substr(\$date, 6);
         break;
-      case "datetime:dd. mm. yy.|hh:mm":
+      case "datetime:dd. mm. yy|hh:mm":
         \$date = substr(\$date, 4, 2) . "/" . substr(\$date, 0, 2) . "/" . substr(\$date, 8, 4) . " " . substr(\$date, 14);
         break;
     }
   } else {
     if (\$display_format == "dd/mm/yy") {
       \$date = substr(\$date, 3, 2) . "/" . substr(\$date, 0, 2) . "/" . substr(\$date, 6);
-    } else if (\$display_format == "dd. mm. yy.") {
+    } else if (\$display_format == "dd. mm. yy") {
       \$parts = explode(" ", \$date);
       \$date = trim(\$parts[1], ".") . "/" . trim(\$parts[0], ".") . "/" . trim(\$parts[2], ".");
     }
