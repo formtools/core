@@ -328,15 +328,13 @@ class Emails {
         $eol = Emails::getEmailEolChar();
 
         $from = "";
-        if (isset($email_info["from"]) && !empty($email_info["from"])) {
-            $from = (is_array($email_info["from"])) ? join(", ", $email_info["from"]) : $email_info["from"];
-            $from = htmlspecialchars_decode($from);
+        if (isset($email_info["from"]["email"]) && !empty($email_info["from"]["email"])) {
+            $from = htmlspecialchars_decode($email_info["from"]["email"]);
         }
 
         $reply_to = "";
-        if (isset($email_info["reply_to"]) && !empty($email_info["reply_to"])) {
-            $reply_to = (is_array($email_info["reply_to"])) ? join(", ", $email_info["reply_to"]) : $email_info["reply_to"];
-            $reply_to = htmlspecialchars_decode($reply_to);
+        if (isset($email_info["reply_to"]["email"]) && !empty($email_info["reply_to"]["email"])) {
+            $reply_to = htmlspecialchars_decode($email_info["reply_to"]["email"]);
         }
 
         // as with Swift Mailer, we deliberately ignore anything other than the specified recipient
