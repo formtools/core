@@ -242,12 +242,12 @@ class Core {
     /**
      * The release type: alpha, beta or main
      */
-    private static $releaseType = "beta";
+    private static $releaseType = "main";
 
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20180410";
+    private static $releaseDate = "20180413";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
