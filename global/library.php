@@ -3,6 +3,7 @@
 // autoload external dependencies
 require_once(__DIR__ . "/../vendor/autoload.php");
 
+
 // Form Tools classes / code
 require_once(__DIR__ . "/code/Accounts.class.php");
 require_once(__DIR__ . "/code/Administrator.class.php");
@@ -10,6 +11,7 @@ require_once(__DIR__ . "/code/Clients.class.php");
 require_once(__DIR__ . "/code/Constants.class.php");
 require_once(__DIR__ . "/code/Core.class.php");
 require_once(__DIR__ . "/code/CoreFieldTypes.class.php");
+require_once(__DIR__ . "/code/CurlTransport.class.php");
 require_once(__DIR__ . "/code/Database.class.php");
 require_once(__DIR__ . "/code/DatabaseSessions.class.php");
 require_once(__DIR__ . "/code/Emails.class.php");
@@ -34,6 +36,7 @@ require_once(__DIR__ . "/code/OptionLists.class.php");
 require_once(__DIR__ . "/code/OmitLists.class.php");
 require_once(__DIR__ . "/code/Pages.class.php");
 require_once(__DIR__ . "/code/polyfills.php");
+require_once(__DIR__ . "/code/RequestsTransport.interface.php");
 require_once(__DIR__ . "/code/Schemas.class.php");
 require_once(__DIR__ . "/code/Sessions.class.php");
 require_once(__DIR__ . "/code/Settings.class.php");
