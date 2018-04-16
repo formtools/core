@@ -3,27 +3,34 @@
 [![Build Status](https://travis-ci.org/formtools/core.svg?branch=master)](https://travis-ci.org/formtools/core)
 
 This repo contains the source code for the Form Tools Core. The Core provides the minimal code needed to run Form Tools
-on your server. The `master` branch contains the ongoing work on Form Tools 3, currently in *beta*. Check out the
-release sections for earlier, stable releases.
+on your server. 
 
+### Branches 
+
+- The `master` branch contains the Form Tools 3.0.x code. It will remain 
+- `3.1` contains the work for the next (3.1) major release.
+
+Check out the release sections for earlier, stable releases.
 
 ### Form Tools 3
 
-Form Tools 3 (2018) was a complete rewrite of the application. Form Tools started back in 2004 and this is the third 
-(and hardest!) rewrite. The broader goal was to simply modernize the script, but there were also some specific goals:un on PHP 7, use PDO, update all lib dependencies up to date, introduce tests and pave the way for upcoming changes and features. 
-
-Currently Form Tools 3 is in beta, but it's looking pretty solid. That said - more testing the better! Please report anything you find. 
-
+Form Tools 3 (2018) was a complete rewrite of the application. Form Tools started back in 2004 and this was the third 
+(and hardest!) rewrite. The broader goal was to simply modernize the script, but there were also some specific goals: run on PHP 7, use PDO, update all lib dependencies up to date, introduce tests and pave the way for upcoming changes and features. 
 
 ### Form Tools 2
 
-Form Tools 2 was the production version from 2010 onwards. I took a long, 4-year break to work on other projects, but returned to the Form Tools world in 2016 to revamp the site and code. Form Tools 2 was entirely functional code; FT3 converted everything to object-oriented, because I found it was simply too hard to organize a large codebase without more structure provided by the language.
-
+Form Tools 2 was the production version from 2010-18 onwards. I took a long, 4-year break to work on other projects, but returned to the Form Tools world in 2016 to revamp the site and code. Form Tools 2 is entirely functional code; FT3 converted everything to object-oriented.
 
 ### PHP version support
 
 - Everything up to *Form Tools Core 2.2.7* supports PHP 4.3 - 5.x.
 - *Form Tools Core 3.0.0* supports PHP 5.3 and later.
+
+### Upcoming versions
+
+- `3.1` - rewriting the installation/upgrade code so that there's no longer hardcoded bundles of the Form Tools script including those modules/themes we choose, but instead you select whatever components your want during the installation, or later on. 
+- `3.2` - revamping the UI. Totally new design, upgrading all the front-end code (i.e. moving to React)
+- `3.3` - revamping the user permissions to make it roles-based and not have hardcoded "admin" and "client" accounts like now.
 
 
 ### Tests
