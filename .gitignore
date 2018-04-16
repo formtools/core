@@ -10,6 +10,8 @@ modules/*
 !modules/index.html
 global/api/*
 !global/api/index.html
+themes/default/cache/*
+!themes/default/cache/index.html
 
 # vendor folder dev dependencies. Only whitelist specific dependencies
 vendor/*

@@ -40,21 +40,26 @@
 	<div id="content">
 		<h1>{$LANG.word_installation}</h1>
 		<div id="nav_items">
-			<div class="{if $step == 1}nav_current{else}nav_visited{/if}">1 <span class="delim">-</span> {$LANG.word_welcome}</div>
+			<div class="{if $step == 1}nav_current{else}nav_visited{/if}">
+                1. {$LANG.word_welcome}
+            </div>
 			<div class="{if $step == 2}nav_current{elseif $step < 2}nav_remaining{else}nav_visited{/if}">
-				2 <span class="delim">-</span> {$LANG.phrase_system_check}
+				2. {$LANG.phrase_system_check}
 			</div>
 			<div class="{if $step == 3}nav_current{elseif $step < 3}nav_remaining{else}nav_visited{/if}">
-				3 <span class="delim">-</span> {$LANG.phrase_create_database_tables}
+				3. {$LANG.phrase_create_database_tables}
 			</div>
 			<div class="{if $step == 4}nav_current{elseif $step < 4}nav_remaining{else}nav_visited{/if}">
-				4 <span class="delim">-</span> {$LANG.phrase_create_config_file}
+				4. {$LANG.phrase_create_config_file}
 			</div>
 			<div class="{if $step == 5}nav_current{elseif $step < 5}nav_remaining{else}nav_visited{/if}">
-				5 <span class="delim">-</span> {$LANG.phrase_create_admin_account}
+				5. {$LANG.phrase_create_admin_account}
 			</div>
-			<div class="{if $step == 6}nav_current{elseif $step < 6}nav_remaining{else}nav_visited{/if}">
-				6 <span class="delim">-</span> {$LANG.phrase_clean_up}
+            <div class="{if $step == 6}nav_current{elseif $step < 6}nav_remaining{else}nav_visited{/if}">
+                6. {$LANG.phrase_choose_components}
+            </div>
+			<div class="{if $step == 7}nav_current{elseif $step < 7}nav_remaining{else}nav_visited{/if}">
+				7. {$LANG.phrase_clean_up}
 			</div>
 		</div>
 		<div id="main">
