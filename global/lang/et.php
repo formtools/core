@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Vältida taaskasutamise # viimane paro
 $LANG["phrase_previous_field"] = "«eelmine valdkonnas";
 $LANG["phrase_previous_page"] = "Eelmine lehekülg";
 $LANG["phrase_previous_view"] = "«Eelmine View";
-$LANG["phrase_problems_questions_forum"] = "Probleemid / Küsimused? Külasta meie foorumites";
 $LANG["phrase_program_name"] = "Programmi nimi";
 $LANG["phrase_public_form_omit_list"] = "Avalik vorm jätta nimekiri";
 $LANG["phrase_public_view_omit_list"] = "Avalik Vaata jätta nimekiri";

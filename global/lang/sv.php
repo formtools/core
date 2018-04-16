@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Förhindra återanvändning av # senas
 $LANG["phrase_previous_field"] = "« föregående fält";
 $LANG["phrase_previous_page"] = "Föregående sida";
 $LANG["phrase_previous_view"] = "« Föregående vy";
-$LANG["phrase_problems_questions_forum"] = "Problem / frågor? Besök våra forum";
 $LANG["phrase_program_name"] = "Programnamn";
 $LANG["phrase_public_form_omit_list"] = "Publik lista över utelämnade formulär";
 $LANG["phrase_public_view_omit_list"] = "Publik lista över utelämnade vyer";

@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "# 마지막으로 암호를 방지 재
 $LANG["phrase_previous_field"] = "«이전 필드";
 $LANG["phrase_previous_page"] = "이전 페이지";
 $LANG["phrase_previous_view"] = "«이전보기";
-$LANG["phrase_problems_questions_forum"] = "문제 / 질문이 있으십니까? 우리 포럼을 방문하십시오";
 $LANG["phrase_program_name"] = "프로그램 이름";
 $LANG["phrase_public_form_omit_list"] = "공공 양식을 생략리스트";
 $LANG["phrase_public_view_omit_list"] = "공공 생략리스트보기";

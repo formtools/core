@@ -613,7 +613,6 @@ $LANG["phrase_prevent_password_reuse"] = "منع إعادة استخدام كل�
 $LANG["phrase_previous_field"] = "«الحقل السابق";
 $LANG["phrase_previous_page"] = "الصفحة السابقة";
 $LANG["phrase_previous_view"] = "«السابقة الشخصي";
-$LANG["phrase_problems_questions_forum"] = "مشاكل / أسئلة؟ زيارة المنتديات";
 $LANG["phrase_program_name"] = "اسم البرنامج";
 $LANG["phrase_public_form_omit_list"] = "نموذج العامة بحذف قائمة";
 $LANG["phrase_public_view_omit_list"] = "الجمهور مشاهدة بحذف قائمة";

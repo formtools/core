@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Voorkom die gebruik van re-wagwoorde #
 $LANG["phrase_previous_field"] = "«vorige veld";
 $LANG["phrase_previous_page"] = "Vorige Bladsy";
 $LANG["phrase_previous_view"] = "«Vorige View";
-$LANG["phrase_problems_questions_forum"] = "Probleme / vrae? Besoek ons ​​forums";
 $LANG["phrase_program_name"] = "Program Naam";
 $LANG["phrase_public_form_omit_list"] = "Openbare Vorm Hide Lys";
 $LANG["phrase_public_view_omit_list"] = "Openbare View Hide Lys";

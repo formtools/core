@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Prevenirea re-utilizarea de parole # u
 $LANG["phrase_previous_field"] = "domeniul «precedenta";
 $LANG["phrase_previous_page"] = "Previous Page";
 $LANG["phrase_previous_view"] = "«Vezi precedentă";
-$LANG["phrase_problems_questions_forum"] = "Probleme / Intrebari? Vizitaţi forumurile noastre";
 $LANG["phrase_program_name"] = "Numele programului";
 $LANG["phrase_public_form_omit_list"] = "Publică Form Omiterea Lista de";
 $LANG["phrase_public_view_omit_list"] = "View Public Omiterea Lista de";

@@ -617,7 +617,6 @@ $LANG["phrase_prevent_password_reuse"] = "# Son şifre önlemek yeniden kullanı
 $LANG["phrase_previous_field"] = "«önceki alana";
 $LANG["phrase_previous_page"] = "Önceki Sayfa";
 $LANG["phrase_previous_view"] = "«Önceki Görünümü";
-$LANG["phrase_problems_questions_forum"] = "Sorunlar / Sorular? Forumları ziyaret et";
 $LANG["phrase_program_name"] = "Program Adı";
 $LANG["phrase_public_form_omit_list"] = "Kamu Formu Gözardı Listesi";
 $LANG["phrase_public_view_omit_list"] = "Kamu Profili Gözardı Listesi";

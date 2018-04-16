@@ -614,7 +614,6 @@ $LANG["phrase_prevent_password_reuse"] = "جلوگیری از استفاده م�
 $LANG["phrase_previous_field"] = "«قبلی زمینه";
 $LANG["phrase_previous_page"] = "صفحه قبل";
 $LANG["phrase_previous_view"] = "«قبلی نمایش";
-$LANG["phrase_problems_questions_forum"] = "مشکلات / سوالات؟ بازدید از انجمن های ما";
 $LANG["phrase_program_name"] = "نام برنامه";
 $LANG["phrase_public_form_omit_list"] = "عمومی فرم لیست از قلم انداختن";
 $LANG["phrase_public_view_omit_list"] = "مشاهده اطلاعات عمومی از قلم انداختن فهرست";

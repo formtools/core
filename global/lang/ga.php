@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Cosc a chur ar ath-úsáid an focal fa
 $LANG["phrase_previous_field"] = "réimse roimhe «";
 $LANG["phrase_previous_page"] = "Page Roimhe Seo";
 $LANG["phrase_previous_view"] = "«Dé Amharc";
-$LANG["phrase_problems_questions_forum"] = "Fadhbanna / Ceisteanna? Tabhair cuairt ar ár fóraim";
 $LANG["phrase_program_name"] = "Ainm an Chláir";
 $LANG["phrase_public_form_omit_list"] = "Foirm Poiblí fhágáil ar lár Liosta";
 $LANG["phrase_public_view_omit_list"] = "Poiblí Féach ar fhágáil ar lár Liosta";

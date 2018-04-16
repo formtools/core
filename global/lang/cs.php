@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Předcházet re-použití # posledníh
 $LANG["phrase_previous_field"] = "«předchozí pole";
 $LANG["phrase_previous_page"] = "Předchozí strana";
 $LANG["phrase_previous_view"] = "«Předchozí Zobrazit";
-$LANG["phrase_problems_questions_forum"] = "Problémy / dotazy? Navštivte naše fórum";
 $LANG["phrase_program_name"] = "Název programu";
 $LANG["phrase_public_form_omit_list"] = "Forma veřejné Vynechte Seznam";
 $LANG["phrase_public_view_omit_list"] = "Zobrazit veřejný Vynechte Seznam";

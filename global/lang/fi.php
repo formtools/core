@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Estä uudelleenkäyttö # viimeksi sal
 $LANG["phrase_previous_field"] = "«edellinen kenttä";
 $LANG["phrase_previous_page"] = "Edellinen sivu";
 $LANG["phrase_previous_view"] = "«Edellinen Näytä";
-$LANG["phrase_problems_questions_forum"] = "Ongelmat / kysymykset? Vieraile foorumit";
 $LANG["phrase_program_name"] = "Ohjelman nimi";
 $LANG["phrase_public_form_omit_list"] = "Julkiset Lomake jätetään väliin List";
 $LANG["phrase_public_view_omit_list"] = "Julkiset View poissulje List";

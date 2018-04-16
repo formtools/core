@@ -613,7 +613,6 @@ $LANG["phrase_prevent_password_reuse"] = "防止再次使用的＃最後密碼";
 $LANG["phrase_previous_field"] = "«前場";
 $LANG["phrase_previous_page"] = "上一頁";
 $LANG["phrase_previous_view"] = "«之前查看";
-$LANG["phrase_problems_questions_forum"] = "問題 /問題？訪問我們的論壇";
 $LANG["phrase_program_name"] = "程序名稱";
 $LANG["phrase_public_form_omit_list"] = "公佈形式省略名單";
 $LANG["phrase_public_view_omit_list"] = "公眾的視野省略名單";

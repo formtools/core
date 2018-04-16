@@ -616,7 +616,6 @@ $LANG["phrase_prevent_password_reuse"] = "Mencegah penggunaan ulang password ter
 $LANG["phrase_previous_field"] = "«sebelumnya lapangan";
 $LANG["phrase_previous_page"] = "Previous Page";
 $LANG["phrase_previous_view"] = "«Prev View";
-$LANG["phrase_problems_questions_forum"] = "Masalah / Pertanyaan? Kunjungi forum kami";
 $LANG["phrase_program_name"] = "Nama Program";
 $LANG["phrase_public_form_omit_list"] = "Formulir publik menghilangkan List";
 $LANG["phrase_public_view_omit_list"] = "Publik Lihat menghilangkan List";

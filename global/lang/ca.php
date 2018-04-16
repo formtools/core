@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "re-Evitar l&#39;ús de contrasenyes p�
 $LANG["phrase_previous_field"] = "camp anterior «";
 $LANG["phrase_previous_page"] = "Pàgina anterior";
 $LANG["phrase_previous_view"] = "«Anterior Veure";
-$LANG["phrase_problems_questions_forum"] = "Problemes / preguntes? Visita els nostres fòrums";
 $LANG["phrase_program_name"] = "Nom del Programa";
 $LANG["phrase_public_form_omit_list"] = "Forma públic Evita Llista";
 $LANG["phrase_public_view_omit_list"] = "De Vista Pública Evita la llista";

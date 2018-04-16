@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Újbóli felhasználásának megakadá
 $LANG["phrase_previous_field"] = "«Előző mezőben";
 $LANG["phrase_previous_page"] = "Előző oldal";
 $LANG["phrase_previous_view"] = "«Előző megtekintése";
-$LANG["phrase_problems_questions_forum"] = "Problémák / Kérdések? Látogasson el fórumok";
 $LANG["phrase_program_name"] = "Program neve";
 $LANG["phrase_public_form_omit_list"] = "Nyilvános forma elhagyása listája";
 $LANG["phrase_public_view_omit_list"] = "Nyilvános megtekintése elhagyása listája";

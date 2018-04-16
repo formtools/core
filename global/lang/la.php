@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Novērst atkalizmantošanu # pēdējā
 $LANG["phrase_previous_field"] = "«iepriekšējā laukā";
 $LANG["phrase_previous_page"] = "Iepriekšējā lapa";
 $LANG["phrase_previous_view"] = "«Prev Apskatīt";
-$LANG["phrase_problems_questions_forum"] = "Problēmas / Jautājumi? Apmeklējiet mūsu forumu";
 $LANG["phrase_program_name"] = "Programmas nosaukums";
 $LANG["phrase_public_form_omit_list"] = "Valsts Form Izlaist saraksts";
 $LANG["phrase_public_view_omit_list"] = "Valsts View Izlaist saraksts";

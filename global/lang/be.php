@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Прадухіленні паўтор�
 $LANG["phrase_previous_field"] = "«Папярэдняе поле";
 $LANG["phrase_previous_page"] = "Папярэдняя старонка";
 $LANG["phrase_previous_view"] = "«Папярэдняе Паглядзець";
-$LANG["phrase_problems_questions_forum"] = "Праблемы / Пытанні? Наведайце нашы форумы";
 $LANG["phrase_program_name"] = "Назва праграмы";
 $LANG["phrase_public_form_omit_list"] = "Апусціць грамадская форма Спіс";
 $LANG["phrase_public_view_omit_list"] = "Гледжання грамадскасці апусціць Спіс";

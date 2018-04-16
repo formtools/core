@@ -617,7 +617,6 @@ $LANG["phrase_prevent_password_reuse"] = "防止再次使用的＃最后密码";
 $LANG["phrase_previous_field"] = "«前场";
 $LANG["phrase_previous_page"] = "上一页";
 $LANG["phrase_previous_view"] = "«之前查看";
-$LANG["phrase_problems_questions_forum"] = "问题/问题？访问我们的论坛";
 $LANG["phrase_program_name"] = "系统名称";
 $LANG["phrase_public_form_omit_list"] = "公布形式省略名单";
 $LANG["phrase_public_view_omit_list"] = "公众的视野省略名单";

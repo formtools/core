@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Ngăn chặn tái sử dụng mật kh
 $LANG["phrase_previous_field"] = "«trước trường";
 $LANG["phrase_previous_page"] = "Trước Trang";
 $LANG["phrase_previous_view"] = "«Trước Xem";
-$LANG["phrase_problems_questions_forum"] = "Vấn đề / câu hỏi? Các diễn đàn của chúng tôi";
 $LANG["phrase_program_name"] = "Tên chương trình";
 $LANG["phrase_public_form_omit_list"] = "Hình thức bỏ qua Danh sách công cộng";
 $LANG["phrase_public_view_omit_list"] = "Xem danh sách bỏ qua công cộng";

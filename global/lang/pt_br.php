@@ -617,7 +617,6 @@ $LANG["phrase_prevent_password_reuse"] = "Evite re-utilização das últimas # s
 $LANG["phrase_previous_field"] = "&laquo; campo anterior";
 $LANG["phrase_previous_page"] = "Página Anterior";
 $LANG["phrase_previous_view"] = "&laquo; prev View";
-$LANG["phrase_problems_questions_forum"] = "Problems / Questions? Visit our forums";
 $LANG["phrase_program_name"] = "Nome do Programa";
 $LANG["phrase_public_form_omit_list"] = "Lista de omissão de Formulários Públicos";
 $LANG["phrase_public_view_omit_list"] = "Lista de omissão de Visualizações Públicas";

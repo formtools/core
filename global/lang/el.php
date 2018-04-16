@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Αποφεύγεται η εκ νέο�
 $LANG["phrase_previous_field"] = "«προηγούμενο πεδίο";
 $LANG["phrase_previous_page"] = "Προηγούμενη Σελίδα";
 $LANG["phrase_previous_view"] = "«Προηγούμενη View";
-$LANG["phrase_problems_questions_forum"] = "Προβλήματα / Ερωτήσεις; Επισκεφτείτε φόρουμ μας";
 $LANG["phrase_program_name"] = "Όνομα προγράμματος";
 $LANG["phrase_public_form_omit_list"] = "Δημόσια Έντυπο Παραλείψτε Κατάλογος";
 $LANG["phrase_public_view_omit_list"] = "Δημόσια Προβολή Παραλείψτε Κατάλογος";

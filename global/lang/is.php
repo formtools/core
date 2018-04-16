@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Koma í veg fyrir endurnotkun # síðu
 $LANG["phrase_previous_field"] = "«Fyrri sviði";
 $LANG["phrase_previous_page"] = "Previous Page";
 $LANG["phrase_previous_view"] = "«Fyrri View";
-$LANG["phrase_problems_questions_forum"] = "Vandamál / spurningar? Heimsókn ráðstefnur okkar";
 $LANG["phrase_program_name"] = "Program Name";
 $LANG["phrase_public_form_omit_list"] = "Almenn Form sleppt List";
 $LANG["phrase_public_view_omit_list"] = "Almenn View sleppt List";

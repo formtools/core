@@ -613,7 +613,6 @@ $LANG["phrase_prevent_password_reuse"] = "＃最後のパスワードの防止�
 $LANG["phrase_previous_field"] = "«前のフィールド";
 $LANG["phrase_previous_page"] = "前のページへ";
 $LANG["phrase_previous_view"] = "«前のビュー";
-$LANG["phrase_problems_questions_forum"] = "問題/質問？私たちのフォーラムをご覧ください";
 $LANG["phrase_program_name"] = "プログラム名";
 $LANG["phrase_public_form_omit_list"] = "公共のフォームを除外リスト";
 $LANG["phrase_public_view_omit_list"] = "公開プロフィールを省略一覧";

@@ -616,7 +616,6 @@ $LANG["phrase_prevent_password_reuse"] = "Predchádzať re-použitie # posledné
 $LANG["phrase_previous_field"] = "«Predchádzajúce pole";
 $LANG["phrase_previous_page"] = "Predchádzajúca strana";
 $LANG["phrase_previous_view"] = "«Predchádzajúci Zobraziť";
-$LANG["phrase_problems_questions_forum"] = "Problémy / otázky? Navštívte naše fórum";
 $LANG["phrase_program_name"] = "Názov programu";
 $LANG["phrase_public_form_omit_list"] = "Forma verejnej Vynechajte Zoznam";
 $LANG["phrase_public_view_omit_list"] = "Zobraziť verejný Vynechajte Zoznam";

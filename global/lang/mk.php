@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Спречување на повтор
 $LANG["phrase_previous_field"] = "«претходни поле";
 $LANG["phrase_previous_page"] = "Previous Page";
 $LANG["phrase_previous_view"] = "«Претходна ги";
-$LANG["phrase_problems_questions_forum"] = "Проблеми / Прашања? Посетете го нашиот форум";
 $LANG["phrase_program_name"] = "Име на програмата";
 $LANG["phrase_public_form_omit_list"] = "Те молам без јавен Образец Листа";
 $LANG["phrase_public_view_omit_list"] = "Види јавен Те молам без Листа";

@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "mill-ġdid Prevenzjoni ta &#39;użu ta
 $LANG["phrase_previous_field"] = "qasam preċedenti «";
 $LANG["phrase_previous_page"] = "Previous Page";
 $LANG["phrase_previous_view"] = "«Prev Ara";
-$LANG["phrase_problems_questions_forum"] = "Problemi / Mistoqsijiet? Żur fora tagħna";
 $LANG["phrase_program_name"] = "Isem Program";
 $LANG["phrase_public_form_omit_list"] = "Pubbliku Form Tagħtix List";
 $LANG["phrase_public_view_omit_list"] = "View Public Tagħtix List";

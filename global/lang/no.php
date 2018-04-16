@@ -617,7 +617,6 @@ $LANG["phrase_prevent_password_reuse"] = "Hindre gjenbruk av # sist passord";
 $LANG["phrase_previous_field"] = "«forrige felt";
 $LANG["phrase_previous_page"] = "Forrige Side";
 $LANG["phrase_previous_view"] = "«Forrige Vis";
-$LANG["phrase_problems_questions_forum"] = "Problemer / Spørsmål? Besøk våre fora";
 $LANG["phrase_program_name"] = "Program Navn";
 $LANG["phrase_public_form_omit_list"] = "Offentlig Form Utelat List";
 $LANG["phrase_public_view_omit_list"] = "Offentlig View Utelat List";

@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "פאַרהיטן שייַעך-נוצן
 $LANG["phrase_previous_field"] = "«פֿריִער פעלד";
 $LANG["phrase_previous_page"] = "פֿריִער Page";
 $LANG["phrase_previous_view"] = "«פֿריִערדיקע View";
-$LANG["phrase_problems_questions_forum"] = "פּראָבלעמס / פֿראגן? באַזוכן אונדזער גרופּעס";
 $LANG["phrase_program_name"] = "פּראָגראַם נעמען";
 $LANG["phrase_public_form_omit_list"] = "פובליק פאָרם אָמיט רשימה";
 $LANG["phrase_public_view_omit_list"] = "פובליק View אָמיט רשימה";

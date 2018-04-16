@@ -615,7 +615,6 @@ $LANG["phrase_prevent_password_reuse"] = "Spriječiti ponovno korištenje # pro�
 $LANG["phrase_previous_field"] = "«prethodna polje";
 $LANG["phrase_previous_page"] = "Previous Page";
 $LANG["phrase_previous_view"] = "«Prethodna Prikaži";
-$LANG["phrase_problems_questions_forum"] = "Problemi / pitanja? Posjetite naše forume";
 $LANG["phrase_program_name"] = "Naziv programa";
 $LANG["phrase_public_form_omit_list"] = "Javna Obrazac Izvor: List";
 $LANG["phrase_public_view_omit_list"] = "View Public Izvor: List";

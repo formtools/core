@@ -132,16 +132,16 @@ ul.tips li {
 	font-size: 8pt;
 	line-height: 16px;
 }
-#account_section {
- 	background-image: url(../../themes/default/images/account_section_bg_green.jpg);
-	background-repeat: repeat-x;
-	height: 25px;
-	color: white;
-    padding: 1px 12px 0 12px;
+#version-block {
+    float: right;
+    background-image: url(../../themes/default/images/account_section_bg_green.jpg);
+    background-repeat: repeat-x;
+    display: flex;
 }
-#account_section a:link, #account_section a:visited {
-    color: #f2f2f2;
-    text-decoration: none;
+#version-block span {
+    color: white;
+    font-weight: bold;
+    padding: 3px 12px 0;
 }
 #nav_items {
     border-right: 1px dotted #dddddd;

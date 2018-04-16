@@ -22,16 +22,10 @@
 <body>
 <div id="container">
 	<div id="header">
-		<div style="float:right">
-			<table cellspacing="0" cellpadding="0" height="25">
-				<tr>
-					<td><img src="../themes/default/images/account_section_left_green.jpg" border="0" /></td>
-					<td id="account_section">
-						<b>{$version}</b>
-					</td>
-					<td><img src="../themes/default/images/account_section_right_green.jpg" border="0" /></td>
-				</tr>
-			</table>
+		<div id="version-block">
+            <img src="../themes/default/images/account_section_left_green.jpg" border="0" />
+            <span id="account_section"><b>{$version}</b></span>
+            <img src="../themes/default/images/account_section_right_green.jpg" border="0" />
 		</div>
     <span style="float:left; padding-top: 8px; padding-right: 10px">
       <a href="http://www.formtools.org" class="no_border"><img src="../themes/default/images/logo_green.jpg" border="0" height="61" /></a>

@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Atal ail-ddefnyddio cyfrineiriau diwet
 $LANG["phrase_previous_field"] = "maes «previous";
 $LANG["phrase_previous_page"] = "Tudalen Blaenorol";
 $LANG["phrase_previous_view"] = "«Cynt View";
-$LANG["phrase_problems_questions_forum"] = "Problemau / Cwestiynau? Ewch i&#39;n fforymau";
 $LANG["phrase_program_name"] = "Enw Rhaglen";
 $LANG["phrase_public_form_omit_list"] = "Ffurflen Cyhoeddus hepgor Rhestr";
 $LANG["phrase_public_view_omit_list"] = "Cyhoeddus Gweld hepgor Rhestr";

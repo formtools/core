@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Maiwasan ang muling-paggamit ng # huli
 $LANG["phrase_previous_field"] = "«nakaraang field";
 $LANG["phrase_previous_page"] = "Previous Page";
 $LANG["phrase_previous_view"] = "«Nkrn View";
-$LANG["phrase_problems_questions_forum"] = "Problema / Questions? Bisitahin ang aming forum";
 $LANG["phrase_program_name"] = "Pangalan ng Programa";
 $LANG["phrase_public_form_omit_list"] = "Pampublikong Form ligtaan Listahan";
 $LANG["phrase_public_view_omit_list"] = "Pampublikong View ligtaan Listahan";

@@ -612,7 +612,6 @@ $LANG["phrase_prevent_password_reuse"] = "Išvengti pakartotinio naudojimo # pas
 $LANG["phrase_previous_field"] = "«ankstesnis laukas";
 $LANG["phrase_previous_page"] = "Ankstesnis";
 $LANG["phrase_previous_view"] = "«Ankstesnė Peržiūrėti";
-$LANG["phrase_problems_questions_forum"] = "Problemos / Klausimai? Aplankykite mūsų forumuose";
 $LANG["phrase_program_name"] = "Programos pavadinimas";
 $LANG["phrase_public_form_omit_list"] = "Viešieji forma Praleisti sąrašą";
 $LANG["phrase_public_view_omit_list"] = "Visuomenės Žiūrėti Praleisti sąrašą";
