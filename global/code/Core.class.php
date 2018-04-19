@@ -180,6 +180,13 @@ class Core {
      */
     private static $maxFormFields = "";
 
+    /**
+     * The folder of the Form Tools data source, used to get component and compatibility versions for installation
+     * and upgrading.
+     * @var string
+     */
+    private static $formToolsDataSource = "https://localhost:8888/formtools-site/formtools.org/feeds/source";
+
 
     // -------------------------------------------------------------------------------------------------
 
@@ -332,7 +339,7 @@ class Core {
         "view_tabs"
     );
 
-    private static $upgradeUrl = "https://formtools.org/upgrade.php";
+//    private static $upgradeUrl = "https://formtools.org/upgrade.php";
 
     /**
      * Initializes the Core singleton for use throughout Form Tools.
@@ -707,10 +714,9 @@ class Core {
         return self::$apiSessionsTimeout;
     }
 
-    public static function getUpgradeUrl() {
-        return self::$upgradeUrl;
+    public static function getFormToolsDataSource () {
+        return self::$formToolsDataSource;
     }
-
 
     // private methods
 
