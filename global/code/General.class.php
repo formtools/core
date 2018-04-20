@@ -1329,4 +1329,15 @@ END;
 
         return $version_num < $target_version_num;
     }
+
+
+    /**
+     * A not-perfect way to determine if the user's environment is secure or not. Technically the secure port may be
+     * something other than 443, but this covers the bulk of scenarios. Used in the installation script.
+     * @return bool
+     */
+    public static function isSecure() {
+        return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
+    }
+
 }

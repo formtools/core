@@ -1076,7 +1076,7 @@ END;
             }
         }
 
-        $protocol = ($_SERVER["HTTPS"] == "on") ? "https" : "http";
+        $protocol = General::isSecure() ? "https" : "http";
 
         $root_url = preg_replace("/\/install\/step4\.php$/", "", "$protocol://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
         $root_dir = preg_replace("/.install$/", "", $installationFolder);
