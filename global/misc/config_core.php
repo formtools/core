@@ -2005,7 +2005,6 @@ $STRUCTURE["tables"]["view_tabs"] = array(
 
 $FILES = array(
 	"LICENSE.txt",
-	"README.md",
 	"admin/account/index.php",
 	"admin/clients/add.php",
 	"admin/clients/edit.php",
@@ -2057,7 +2056,6 @@ $FILES = array(
 	"clients/forms/edit_submission.php",
 	"clients/forms/index.php",
 	"clients/index.php",
-	"composer.json",
 	"error.php",
 	"forget_password.php",
 	"global/code/Accounts.class.php",
