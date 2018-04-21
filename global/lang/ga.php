@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Ní chiallaíonn sé seo go bhfuil réimse 
 $LANG["notify_no_fields_in_tab"] = "Ní dhéanann an cluaisín bhfuil aon réimsí.";
 $LANG["notify_no_option_lists"] = "Níl aon rogha atá sainithe liostaí. Cliceáil ar an gcnaipe seo thíos a chruthú ceann nua.";
 $LANG["notify_no_test_submission"] = "Nach bhfuil Foirm Uirlisí fuair aighneacht tástáil rathúil go fóill.";
-$LANG["notify_no_user_email_fields_configured"] = "Nóta: más mian leat ríomhphost a sheoladh chuig aon seoladh ríomhphoist san áireamh gur i bhfoirm, caithfidh tú an chéad a <a href=\"{\$same_page}?page=email_settings\">chumrú na réimsí ríomhphost fhoirm.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Nóta: más mian leat ríomhphost a sheoladh chuig aon seoladh ríomhphoist san áireamh gur i bhfoirm, caithfidh tú an chéad a <a href=\"?page=email_settings\">chumrú na réimsí ríomhphost fhoirm.</a>";
 $LANG["notify_no_views"] = "Ní bheidh ar do fhoirm ar bith Tuairimí ar bun! Beidh ort amháin ar a laghad Féach d&#39;fhonn a bhainistiú do shonraí fhoirm.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Dealraíonn sé nach bhfuil do chuntas úsáideora sannta chuig aon Radhairc bhfoirm, mar sin ní bheidh tú in ann a fheiceáil aon sonraí. Déan teagmháil leis an riarthóir chun cabhair a thuilleadh.";
 $LANG["notify_no_views_defined"] = "Ní gá duit aon Radhairc sainithe. Ní bheidh tú in ann féachaint ar an bhfoirm seo mura gcuirtear in aighneachtaí amháin ar a laghad View cruthaithe. Cliceáil ar an gcnaipe seo thíos a chruthú ar an Féach ar réamhshocraithe.";

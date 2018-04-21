@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Hierdie veld tipe bevat nie enige ekstra in
 $LANG["notify_no_fields_in_tab"] = "Hierdie blad het nog geen velde bevat nie.";
 $LANG["notify_no_option_lists"] = "Daar is geen opsie lyste gedefinieer. Klik op die knoppie hieronder om &#39;n nuwe een te skep.";
 $LANG["notify_no_test_submission"] = "Vorm Tools het nie ontvang &#39;n suksesvolle toets voorlegging nie.";
-$LANG["notify_no_user_email_fields_configured"] = "Nota: As jy wil stuur &#39;n e-pos aan enige e-pos adres wat in die vorm ingesluit, moet jy eers na <a href=\"{\$same_page}?page=email_settings\">die instel van die vorm e-pos velde.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Nota: As jy wil stuur &#39;n e-pos aan enige e-pos adres wat in die vorm ingesluit, moet jy eers na <a href=\"?page=email_settings\">die instel van die vorm e-pos velde.</a>";
 $LANG["notify_no_views"] = "Jou vorm nie &#39;n databasis opgestel! Jy sal ten minste een View nodig het om jou vorm data te bestuur.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Dit blyk dat jou rekening is nie verantwoordelik is vir enige vorm Aansigte, so jy sal nie in staat wees om te sien enige data. Kontak asseblief die bestuurder vir verdere hulp.";
 $LANG["notify_no_views_defined"] = "Jy het nie &#39;n databasis gedefinieer. Jy sal nie in staat wees om hierdie vorm se voorleggings te sien nie, tensy daar ten minste een View is geskep. Klik op die knoppie hieronder om die standaard te skep.";

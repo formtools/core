@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Ez a mező típusa nem tartalmaz semmilyen 
 $LANG["notify_no_fields_in_tab"] = "Ez a lap nem tartalmaz olyan mezőket.";
 $LANG["notify_no_option_lists"] = "Nincs lehetőség listák meg. Kattintson az alábbi gombra hozzon létre egy újat.";
 $LANG["notify_no_test_submission"] = "Eszközök formában nem kapott sikeres tesztet még benyújtását.";
-$LANG["notify_no_user_email_fields_configured"] = "Megjegyzés: ha ön akar-hoz küld egy e-mailt, hogy olyan e-mail címét, hogy benne volt a formában, akkor először meg kell <a href=\"{\$same_page}?page=email_settings\">állítani az e-mail formájában mezőket</a> .";
+$LANG["notify_no_user_email_fields_configured"] = "Megjegyzés: ha ön akar-hoz küld egy e-mailt, hogy olyan e-mail címét, hogy benne volt a formában, akkor először meg kell <a href=\"?page=email_settings\">állítani az e-mail formájában mezőket</a> .";
 $LANG["notify_no_views"] = "A forma nem rendelkezik Views létre! Szükséged lesz legalább egy nézet kezelése érdekében az űrlap adatait.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Úgy tűnik, hogy a felhasználói fiók nem rendeltek semmilyen formában nézetek, így nem fogja látni semmilyen adatot. Kérjük, forduljon a rendszergazda számára további segítséget.";
 $LANG["notify_no_views_defined"] = "Ön nincs Views meg. Ön nem tudja megtekinteni az alábbi űrlapot állításaival, ha legalább az egyik nézet jön létre. Kattintson az alábbi gombra létre az alapértelmezett nézet.";

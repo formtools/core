@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "See väli tüüp ei sisalda mingeid täiend
 $LANG["notify_no_fields_in_tab"] = "See kaart ei sisalda mis tahes valdkonnas.";
 $LANG["notify_no_option_lists"] = "Puuduvad võimalus määratletud loetelud. Klikka allolevale nupule, et luua uus.";
 $LANG["notify_no_test_submission"] = "Vorm Vahendid ei ole saanud edukas katse esitamiseks veel.";
-$LANG["notify_no_user_email_fields_configured"] = "Märkus: Kui soovite saata e-posti tahes e-posti aadress, mis oli lisatud vormi, tuleb esmalt <a href=\"{\$same_page}?page=email_settings\">seadistada vormi emaili väljad.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Märkus: Kui soovite saata e-posti tahes e-posti aadress, mis oli lisatud vormi, tuleb esmalt <a href=\"?page=email_settings\">seadistada vormi emaili väljad.</a>";
 $LANG["notify_no_views"] = "Teie vorm ei ole Vaatamisi loodud! Sa vajad vähemalt ühte Vaata, et juhtida oma vormi andmeid.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Tundub, et teie kasutaja konto ei ole ühelegi vormivaadetega, nii et sa ei saa näha kõiki andmeid. Palun kontakteeru administraatoriga edasi aidata.";
 $LANG["notify_no_views_defined"] = "Sa ei pea kõik seisukohad määratletud. Sa ei saa vaadata seda vormi väidetele kui vähemalt üks View on loodud. Klikka allolevale nupule, et luua vaikimisi View.";

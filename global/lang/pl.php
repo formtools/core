@@ -1168,7 +1168,7 @@ $LANG["notify_no_field_settings"] = "Ten typ pola nie zawiera żadnych dodatkowy
 $LANG["notify_no_fields_in_tab"] = "Ta karta nie zawiera żadnych pól.";
 $LANG["notify_no_option_lists"] = "Nie ma opcji listy określone. Kliknij przycisk, aby utworzyć nowy.";
 $LANG["notify_no_test_submission"] = "Rodzaj Narzędzia nie otrzymała skuteczne złożenie testowa.";
-$LANG["notify_no_user_email_fields_configured"] = "Uwaga: jeśli chcesz wysłać e-maila pod dowolny adres, jaki był zawarty w formie, trzeba najpierw <a href=\"{\$same_page}?page=email_settings\">skonfigurować pola formularza e-mail.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Uwaga: jeśli chcesz wysłać e-maila pod dowolny adres, jaki był zawarty w formie, trzeba najpierw <a href=\"?page=email_settings\">skonfigurować pola formularza e-mail.</a>";
 $LANG["notify_no_views"] = "Formularza nie ma żadnych Wyświetleń skonfigurować! Będziesz potrzebował co najmniej jednego Zobacz w celu zarządzania danymi formularz.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Wydaje się, że konto użytkownika nie została przypisana do każdego wyświetleń formie, więc nie będziesz mógł zobaczyć danych. Prosimy o kontakt z administratorem w celu uzyskania dalszej pomocy.";
 $LANG["notify_no_views_defined"] = "Nie masz żadnych Wyświetleń zdefiniowane. Nie będziesz mógł zobaczyć formularza zgłoszenia, chyba że co najmniej jeden View jest tworzone. Kliknij przycisk, aby utworzyć widok domyślny.";

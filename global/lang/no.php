@@ -1167,7 +1167,7 @@ $LANG["notify_no_field_settings"] = "Dette feltet typen inneholder ikke noen eks
 $LANG["notify_no_fields_in_tab"] = "Denne kategorien inneholder ingen felt.";
 $LANG["notify_no_option_lists"] = "Det finnes ingen alternativ lister definert. Klikk på knappen nedenfor for å opprette en ny.";
 $LANG["notify_no_test_submission"] = "Form Tools har ikke mottatt en vellykket test underkastelse ennå.";
-$LANG["notify_no_user_email_fields_configured"] = "Merk: Dersom du ønsker å sende en e-post til den e-postadressen som ble inkludert i skjemaet, må du først <a href=\"{\$same_page}?page=email_settings\">konfigurere skjemaet e-feltene.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Merk: Dersom du ønsker å sende en e-post til den e-postadressen som ble inkludert i skjemaet, må du først <a href=\"?page=email_settings\">konfigurere skjemaet e-feltene.</a>";
 $LANG["notify_no_views"] = "Skjemaet har ingen Views satt opp! Du trenger minst én visning for å administrere dine skjemadata.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Det ser ut til at din brukerkonto har ikke blitt tildelt noen form Views, så du vil ikke kunne se noen data. Ta kontakt med administrator for ytterligere hjelp.";
 $LANG["notify_no_views_defined"] = "Du har ingen Views definert. Du vil ikke kunne se dette skjemaet anførsler mindre minst én View er opprettet. Klikk på knappen nedenfor for å opprette standard View.";

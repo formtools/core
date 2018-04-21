@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Este tipo de campo non contén os axustes e
 $LANG["notify_no_fields_in_tab"] = "Esta guía non contén todos os campos.";
 $LANG["notify_no_option_lists"] = "Non hai posibilidade de listas definidas. Prema no botón de abaixo para crear un novo.";
 $LANG["notify_no_test_submission"] = "Formulario de ferramentas non recibiu unha presentación proba exitoso aínda.";
-$LANG["notify_no_user_email_fields_configured"] = "Nota: se quere enviar un correo electrónico para calquera enderezo de correo-e que se incluíu no formulario, vostede primeiro que <a href=\"{\$same_page}?page=email_settings\">configurar os campos de correo-e forma.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Nota: se quere enviar un correo electrónico para calquera enderezo de correo-e que se incluíu no formulario, vostede primeiro que <a href=\"?page=email_settings\">configurar os campos de correo-e forma.</a>";
 $LANG["notify_no_views"] = "O seu formulario non ten ningún Views set up! Vai ter polo menos unha vista, a fin de xestionar datos do seu formulario.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Semella que a súa conta de usuario non teña sido atribuído a calquera visto formulario, así que non será capaz de ver todos os datos. Por favor, contacte co administrador para máis axuda.";
 $LANG["notify_no_views_defined"] = "Non ten ningún Views definido. Non será capaz de ver presentacións deste xeito, a non ser que, polo menos, unha View é creado. Prema no botón de abaixo para crear a vista por defecto.";

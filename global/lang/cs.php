@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Tento typ pole neobsahuje žádná další 
 $LANG["notify_no_fields_in_tab"] = "Tato záložka neobsahuje žádné pole.";
 $LANG["notify_no_option_lists"] = "Nejsou žádné možnosti seznamy definované. Klikněte na tlačítko níže pro vytvoření nového.";
 $LANG["notify_no_test_submission"] = "Formulář Nástroje neobdržel úspěšný test podání dosud.";
-$LANG["notify_no_user_email_fields_configured"] = "Poznámka: Chcete-li poslat e-mail na libovolnou e-mailovou adresu, která byla zahrnuta v podobě, musíte nejprve <a href=\"{\$same_page}?page=email_settings\">nakonfigurovat pole formulář e-mail.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Poznámka: Chcete-li poslat e-mail na libovolnou e-mailovou adresu, která byla zahrnuta v podobě, musíte nejprve <a href=\"?page=email_settings\">nakonfigurovat pole formulář e-mail.</a>";
 $LANG["notify_no_views"] = "Formulář nemá žádné Zobrazení nastavení! Budete potřebovat alespoň jeden pohled, aby ke správě dat formuláře.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Zdá se, že váš uživatelský účet nebylo přiděleno žádné formě zobrazení, takže nebudete mít možnost vidět žádná data. Prosím kontaktujte správce pro další pomoc.";
 $LANG["notify_no_views_defined"] = "Nemáte nějaké názory, definované. Nebudete moci prohlížet tuto formu tvrzení, pokud alespoň jeden pohled je vytvořen. Klikněte na tlačítko níže pro vytvoření výchozí zobrazení.";

@@ -1167,7 +1167,7 @@ $LANG["notify_no_field_settings"] = "Ce type de champ ne contient pas de paramè
 $LANG["notify_no_fields_in_tab"] = "Cet onglet ne contient pas de champs.";
 $LANG["notify_no_option_lists"] = "Il n&#39;y a pas l&#39;option des listes définies. Cliquez sur le bouton ci-dessous pour créer un nouveau.";
 $LANG["notify_no_test_submission"] = "Outils de formulaire n&#39;a pas reçu une demande d&#39;essai réussi pour le moment.";
-$LANG["notify_no_user_email_fields_configured"] = "Note: si vous voulez envoyer un e-mail à n&#39;importe quelle adresse e-mail qui a été inclus dans le formulaire, vous devez d&#39;abord <a href=\"{\$same_page}?page=email_settings\">configurer les champs de formulaire d&#39;email.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Note: si vous voulez envoyer un e-mail à n&#39;importe quelle adresse e-mail qui a été inclus dans le formulaire, vous devez d&#39;abord <a href=\"?page=email_settings\">configurer les champs de formulaire d&#39;email.</a>";
 $LANG["notify_no_views"] = "Votre formulaire n&#39;a pas Vues mettre en place! Vous aurez besoin d&#39;au moins une vue afin de gérer les données de votre formulaire.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Il semble que votre compte d&#39;utilisateur n&#39;a pas été confiée à aucun Vues forme, ainsi vous ne serez pas en mesure de voir toutes les données. S&#39;il vous plaît contactez l&#39;administrateur pour plus d&#39;aide.";
 $LANG["notify_no_views_defined"] = "Vous n&#39;avez pas vues définies. Vous ne serez pas en mesure de consulter les mémoires ce formulaire, sauf si au moins une vue est créée. Cliquez sur le bouton ci-dessous pour créer la vue par défaut.";

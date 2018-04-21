@@ -1167,7 +1167,7 @@ $LANG["notify_no_field_settings"] = "此字段类型不包含任何额外的设�
 $LANG["notify_no_fields_in_tab"] = "此标签不包含任何字段。";
 $LANG["notify_no_option_lists"] = "有没有定义的选项列出。点击下面的按钮来创建一个新的。";
 $LANG["notify_no_test_submission"] = "表格工具还没有收到提交的尚未成功的测试。";
-$LANG["notify_no_user_email_fields_configured"] = "注意：如果你想发送电子邮件到任何电子邮件地址是在形式列入其中，您首先需要<a href=\"{\$same_page}?page=email_settings\">配置形式的电子邮件域</a> 。";
+$LANG["notify_no_user_email_fields_configured"] = "注意：如果你想发送电子邮件到任何电子邮件地址是在形式列入其中，您首先需要<a href=\"?page=email_settings\">配置形式的电子邮件域</a> 。";
 $LANG["notify_no_views"] = "你的表单没有设立任何意见！您将需要至少有一个视图，以管理您的表单数据。";
 $LANG["notify_no_views_assigned_to_client_form"] = "看来，您的用户帐户没有被分配到任何形式的意见，所以你将无法看到任何数据。请向管理员进一步帮助。";
 $LANG["notify_no_views_defined"] = "您没有定义任何意见。您将无法查看这种形式的意见书，除非至少有一个视图创建。点击下面的按钮来创建默认视图。";

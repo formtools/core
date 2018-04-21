@@ -1166,7 +1166,7 @@ $LANG["notify_no_field_settings"] = "Denna fälttyp innehåller inga extra inst�
 $LANG["notify_no_fields_in_tab"] = "Denna flik innehåller inga fält.";
 $LANG["notify_no_option_lists"] = "Det finns inga alternativlistor definierade. Klicka på knappen nedan för att skapa en ny.";
 $LANG["notify_no_test_submission"] = "Form Tools har ännu inte tagit emot något lyckat testinskick.";
-$LANG["notify_no_user_email_fields_configured"] = "Obs: Om du vill skicka ett e-brev till en e-postadress som ingick i formuläret, måste du först <a href=\"{\$same_page}?page=email_settings\">konfigurera formulärets e-postfält.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Obs: Om du vill skicka ett e-brev till en e-postadress som ingick i formuläret, måste du först <a href=\"?page=email_settings\">konfigurera formulärets e-postfält.</a>";
 $LANG["notify_no_views"] = "Formuläret har inga Vyer inställda! Du behöver minst en vy för att kunna hantera dina formulärdata.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Det verkar inte som att ditt användarkonto har blivit tilldelat någon formulärvy än, och därför kan du inte se någon data. Vänligen kontakta administratören för hjälp.";
 $LANG["notify_no_views_defined"] = "Du har inga Vyer definierade. Du kommer inte att kunna se detta formulärs inskick om inte minst en vy skapas. Klicka på knappen här nere för att skapa standardvyn.";

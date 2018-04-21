@@ -1163,7 +1163,7 @@ $LANG["notify_no_field_settings"] = "此字段類型不包含任何額外的設�
 $LANG["notify_no_fields_in_tab"] = "此標籤不包含任何字段。";
 $LANG["notify_no_option_lists"] = "有沒有選項列表定義。點擊下面的按鈕來創建一個新的。";
 $LANG["notify_no_test_submission"] = "表格工具還沒有收到提交的尚未成功的測試。";
-$LANG["notify_no_user_email_fields_configured"] = "注意：如果你想發送電子郵件到任何電子郵件地址被列入表格，您首先需要<a href=\"{\$same_page}?page=email_settings\">配置形式的電子郵件域</a> 。";
+$LANG["notify_no_user_email_fields_configured"] = "注意：如果你想發送電子郵件到任何電子郵件地址被列入表格，您首先需要<a href=\"?page=email_settings\">配置形式的電子郵件域</a> 。";
 $LANG["notify_no_views"] = "您的窗體不會有任何意見成立了！您將需要至少一個 View，以管理您的表單數據。";
 $LANG["notify_no_views_assigned_to_client_form"] = "看來，您的用戶帳戶沒有被分配到任何形式的意見，所以你將無法看到任何數據。請聯繫管理員進一步幫助。";
 $LANG["notify_no_views_defined"] = "您沒有任何意見確定。您將無法查看這種形式的意見，除非至少有一個創建視圖。點擊下面的按鈕創建默認視圖。";

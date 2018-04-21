@@ -1163,7 +1163,7 @@ $LANG["notify_no_field_settings"] = "このフィールドタイプは、余分�
 $LANG["notify_no_fields_in_tab"] = "このタブには任意のフィールドが含まれていません。";
 $LANG["notify_no_option_lists"] = "定義されたオプションリストがありません。新しいものを作成するには、下記のボタンをクリックしてください。";
 $LANG["notify_no_test_submission"] = "フォームツールはまだテストが成功した提出を受けていない。";
-$LANG["notify_no_user_email_fields_configured"] = "注：場合は、フォームに記載されたすべての電子メールアドレスに電子メールを送信したい場合は、最初の<a href=\"{\$same_page}?page=email_settings\">設定</a>に<a href=\"{\$same_page}?page=email_settings\">あるフォームを電子メールフィールド</a>が必要。";
+$LANG["notify_no_user_email_fields_configured"] = "注：場合は、フォームに記載されたすべての電子メールアドレスに電子メールを送信したい場合は、最初の設定に<a href=\"?page=email_settings\">あるフォームを電子メールフィールド</a>が必要。";
 $LANG["notify_no_views"] = "フォームは、セットアップされたビューを持っていません！あなたのフォームデータを管理するために少なくとも1つのビューが必要になります。";
 $LANG["notify_no_views_assigned_to_client_form"] = "これは、ユーザーアカウントのすべてのフォームを再生するので、任意のデータを参照することができなくなりますが割り当てられていないようです。してください。より詳細なヘルプについては、管理者にお問い合わせください。";
 $LANG["notify_no_views_defined"] = "任意のビューが定義されていません。あなたは、少なくとも1つのビューが作成されていない限り、このフォームの送信を表示することができなくなります。デフォルトのビューを作成するには下のボタンをクリックしてください。";

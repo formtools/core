@@ -1168,7 +1168,7 @@ $LANG["notify_no_field_settings"] = "Dieser Feldtyp enthält keine zusätzlichen
 $LANG["notify_no_fields_in_tab"] = "Diese Registerkarte enthält keine Felder aus.";
 $LANG["notify_no_option_lists"] = "Es gibt keine Möglichkeit, Listen definiert. Klicken Sie auf die Schaltfläche unten, um eine neue zu erstellen.";
 $LANG["notify_no_test_submission"] = "Werkzeuge nicht erhalten hat einen erfolgreichen Test Vorlage an.";
-$LANG["notify_no_user_email_fields_configured"] = "Hinweis: Wenn Sie eine E-Mail an alle E-Mail-Adresse, die in Form aufgenommen wurde senden möchten, müssen Sie zuerst die <a href=\"{\$same_page}?page=email_settings\">Konfiguration des E-Mail-Formular Felder.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Hinweis: Wenn Sie eine E-Mail an alle E-Mail-Adresse, die in Form aufgenommen wurde senden möchten, müssen Sie zuerst die <a href=\"?page=email_settings\">Konfiguration des E-Mail-Formular Felder.</a>";
 $LANG["notify_no_views"] = "Ihre Form hat keine Ansichten einrichten! Sie müssen mindestens eine Ansicht, um Ihre Form zu verwalten.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Es scheint, dass Ihr Benutzerkonto hat nicht zu irgendeiner Form Views zugeordnet wurde, so dass Sie nicht in der Lage, alle Daten zu sehen. Bitte kontaktieren Sie den Administrator für weitere Hilfe.";
 $LANG["notify_no_views_defined"] = "Sie haben noch keine Views definiert. Sie werden nicht in der Lage sein, diese Form des Vorbringens nur anzeigen, wenn mindestens eine Ansicht erstellt wird. Klicken Sie auf die Schaltfläche unten, um die Standard-Ansicht erstellen.";

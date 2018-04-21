@@ -1163,7 +1163,7 @@ $LANG["notify_no_field_settings"] = "This field type doesn't contain any extra s
 $LANG["notify_no_fields_in_tab"] = "Tab hii haina zina nyanja yoyote.";
 $LANG["notify_no_option_lists"] = "There are no option lists defined. Click the button below to create a new one.";
 $LANG["notify_no_test_submission"] = "Fomu Tools har inte alipata mtihani kufanikiwa kuwasilisha bado.";
-$LANG["notify_no_user_email_fields_configured"] = "Angalia: kama unataka kutuma barua pepe email address yoyote kwamba alikuwa included katika fomu, unaweza kwanza haja <a href=\"{\$same_page}?page=email_settings\">configure fomu email mashamba.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Angalia: kama unataka kutuma barua pepe email address yoyote kwamba alikuwa included katika fomu, unaweza kwanza haja <a href=\"?page=email_settings\">configure fomu email mashamba.</a>";
 $LANG["notify_no_views"] = "Your form doesn't have any Views set up! You will need at least one View in order to manage your form data.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Inaonekana kwamba user akaunti yako haijawahi kupewa fomu Views yoyote, hivyo hawataweza kuona data yoyote. Tafadhali wasiliana na msimamizi kwa msaada zaidi.";
 $LANG["notify_no_views_defined"] = "You don't have any Views defined. You will not be able to view this form's submissions unless at least one View is created. Click the button below to create the default View.";

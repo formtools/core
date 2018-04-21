@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "이 필드 유형은 추가 설정이 포�
 $LANG["notify_no_fields_in_tab"] = "이 탭은 모든 필드가 포함되어 있지 않습니다.";
 $LANG["notify_no_option_lists"] = "정의된 옵션 목록이 없습니다. 새로 만들 아래의 버튼을 클릭하십시오.";
 $LANG["notify_no_test_submission"] = "양식 도구는 아직 성공적으로 테스트를 제출받지 못했다.";
-$LANG["notify_no_user_email_fields_configured"] = "참고 : 만약 당신이 양식에 포함된 모든 이메일 주소로 이메일을 보내려면, 먼저 <a href=\"{\$same_page}?page=email_settings\">구성하는 양식을 이메일 입력란에</a> 필요합니다.";
+$LANG["notify_no_user_email_fields_configured"] = "참고 : 만약 당신이 양식에 포함된 모든 이메일 주소로 이메일을 보내려면, 먼저 <a href=\"?page=email_settings\">구성하는 양식을 이메일 입력란에</a> 필요합니다.";
 $LANG["notify_no_views"] = "당신의 양식은 어떤보기가 설정되지 않습니다! 당신은 폼 데이터를 관리하기 위해 적어도 하나의보기가 필요합니다.";
 $LANG["notify_no_views_assigned_to_client_form"] = "그것은 사용자 계정에 어떠한 형태의 조회, 그래서 당신은 모든 데이터를 볼 수 없을 것입니다 할당되지 않은 경우에 나타납니다. 자세한 도움을 관리자에게 문의하십시오.";
 $LANG["notify_no_views_defined"] = "당신은 어떤보기가 정의한하지 않습니다. 하나 이상의보기가 생성하지 않는 한이 양식의 제출을​​ 볼 수 없습니다. 기본보기를 생성하려면 아래 버튼을 클릭하십시오.";

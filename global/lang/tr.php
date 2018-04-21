@@ -1167,7 +1167,7 @@ $LANG["notify_no_field_settings"] = "Bu alan türü herhangi bir ekstra ayarlar�
 $LANG["notify_no_fields_in_tab"] = "Bu sekme tüm alanları içermez.";
 $LANG["notify_no_option_lists"] = "Tanımlanan herhangi bir seçenek listeleri vardır. Yeni bir tane oluşturmak için aşağıdaki butona tıklayın.";
 $LANG["notify_no_test_submission"] = "Form Araçlar henüz başarılı bir sınav teslim almamış.";
-$LANG["notify_no_user_email_fields_configured"] = "Not: Eğer bu formu dahil olan herhangi bir e-posta adresine bir e-posta göndermek isterseniz, öncelikle <a href=\"{\$same_page}?page=email_settings\">yapılandırmak</a> için <a href=\"{\$same_page}?page=email_settings\">e-posta formu alanlar</a> gerekir.";
+$LANG["notify_no_user_email_fields_configured"] = "Not: Eğer bu formu dahil olan herhangi bir e-posta adresine bir e-posta göndermek isterseniz, öncelikle yapılandırmak için <a href=\"?page=email_settings\">e-posta formu alanlar</a> gerekir.";
 $LANG["notify_no_views"] = "Formunuz herhangi bir Görüntüleme kadar yok! Form verilerini yönetmek için en az bir Görünüm gerekecektir.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Bu kullanıcı hesabını herhangi bir biçimde Views, böylece herhangi bir veri görmek mümkün olmayacaktır atanmış görünüyor. Daha fazla yardım için yöneticinize başvurun.";
 $LANG["notify_no_views_defined"] = "Herhangi bir Görüntüleme tanımlanan sahip değilsiniz. Bu sürece en az bir Görünüm oluşturulan bu formu görüşleri görüntülemek mümkün olmayacaktır. Varsayılan Görünümü oluşturmak için aşağıdaki butona tıklayın.";

@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Ta tip polja ne vsebuje nobenih dodatnih na
 $LANG["notify_no_fields_in_tab"] = "Ta zavihek ne vsebuje polj.";
 $LANG["notify_no_option_lists"] = "Ni možnosti seznami, določeni. Kliknite spodnji gumb, da ustvarite novega.";
 $LANG["notify_no_test_submission"] = "Obrazec Tools ni prejela še test uspešno oddajo.";
-$LANG["notify_no_user_email_fields_configured"] = "Opomba: če želite poslati e-pošto za katero koli e-poštni naslov, ki je bila vključena v obliki, morate najprej <a href=\"{\$same_page}?page=email_settings\">nastaviti polja email obrazca.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Opomba: če želite poslati e-pošto za katero koli e-poštni naslov, ki je bila vključena v obliki, morate najprej <a href=\"?page=email_settings\">nastaviti polja email obrazca.</a>";
 $LANG["notify_no_views"] = "Vaš obrazec nima Views ustanovi! Potrebovali boste vsaj en pogled, da bi upravljanje podatkov obrazca.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Zdi se, da je vaš uporabniški račun še ni bil dodeljen v kakršni koli obliki Pogledi, zato ne boste mogli videti nobenih podatkov. Obrnite se na skrbnika za nadaljnjo pomoč.";
 $LANG["notify_no_views_defined"] = "Nimate vsa mnenja, opredeljene. Ne boste mogli ogledati ta obrazec za vloge, razen če se ustvari vsaj en pogled. Kliknite na gumb spodaj za privzeti pogled.";

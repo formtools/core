@@ -1167,7 +1167,7 @@ $LANG["notify_no_field_settings"] = "Dette felt typen indeholder ingen ekstra in
 $LANG["notify_no_fields_in_tab"] = "Denne fane indeholder ikke nogen områder.";
 $LANG["notify_no_option_lists"] = "Der er ingen mulighed definerede lister. Klik på knappen nedenfor for at oprette en ny.";
 $LANG["notify_no_test_submission"] = "Form Tools har ikke modtaget en vellykket test indsendelse endnu.";
-$LANG["notify_no_user_email_fields_configured"] = "Bemærk: Hvis du ønsker at sende en e-mail til en e-mail-adresse, der var inkluderet i den form, skal du først <a href=\"{\$same_page}?page=email_settings\">konfigurere den form e-mail felter.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Bemærk: Hvis du ønsker at sende en e-mail til en e-mail-adresse, der var inkluderet i den form, skal du først <a href=\"?page=email_settings\">konfigurere den form e-mail felter.</a>";
 $LANG["notify_no_views"] = "Din form ikke har nogen Visninger sat op! Du skal bruge mindst en visning for at styre din formular data.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Det ser ud til, at din brugerkonto ikke har fået tildelt nogen form meninger, så du vil ikke kunne se nogen data. Kontakt venligst administratoren for at få yderligere hjælp.";
 $LANG["notify_no_views_defined"] = "Du behøver ikke have nogen Visninger defineret. Du vil ikke være i stand til at se denne form, har hævdet, medmindre mindst en View er oprettet. Klik på knappen nedenfor for at oprette standard-visning.";

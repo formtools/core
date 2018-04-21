@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Medan jenis ini tidak mengandungi apa-apa t
 $LANG["notify_no_fields_in_tab"] = "Tab ini tidak mengandungi bidang.";
 $LANG["notify_no_option_lists"] = "Terdapat tiada pilihan menyenaraikan ditakrifkan. Klik butang di bawah untuk mencipta yang baru.";
 $LANG["notify_no_test_submission"] = "Borang Alatan belum menerima pengajuan uji belum berjaya.";
-$LANG["notify_no_user_email_fields_configured"] = "Nota: jika anda ingin menghantar email kepada alamat email yang dimasukkan dalam bentuk, pertama anda perlu <a href=\"{\$same_page}?page=email_settings\">mengkonfigurasikan bentuk bidang email.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Nota: jika anda ingin menghantar email kepada alamat email yang dimasukkan dalam bentuk, pertama anda perlu <a href=\"?page=email_settings\">mengkonfigurasikan bentuk bidang email.</a>";
 $LANG["notify_no_views"] = "Borang anda tidak mempunyai apa-apa Views ditubuhkan! Anda akan memerlukan sekurang-kurangnya satu View untuk menguruskan data borang anda.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Nampaknya akaun pengguna anda belum ditugaskan Views bentuk apapun, sehingga anda tidak akan dapat melihat data apapun. Sila hubungi pentadbir untuk bantuan lebih lanjut.";
 $LANG["notify_no_views_defined"] = "Anda tidak mempunyai apa-apa Views ditakrifkan. Anda tidak akan dapat melihat penyerahan borang ini melainkan jika sekurang-kurangnya satu View diwujudkan. Klik butang di bawah untuk mencipta View lalai.";

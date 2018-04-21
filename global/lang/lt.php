@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Šioje srityje nėra jokių papildomų nust
 $LANG["notify_no_fields_in_tab"] = "Šioje kortelėje nėra jokių laukų.";
 $LANG["notify_no_option_lists"] = "Yra Galimybė nepateikti jokių apibrėžti sąrašai. Paspauskite mygtuką žemiau, norėdami sukurti naują.";
 $LANG["notify_no_test_submission"] = "Forma Įrankiai negavo sėkmingas bandymas pateikti dar.";
-$LANG["notify_no_user_email_fields_configured"] = "Pastaba: Jei norite išsiųsti laišką į elektroninio pašto adreso, kuris buvo įtrauktas į formą, pirmiausia jūs turite <a href=\"{\$same_page}?page=email_settings\">sukonfigūruoti formos laukelius.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Pastaba: Jei norite išsiųsti laišką į elektroninio pašto adreso, kuris buvo įtrauktas į formą, pirmiausia jūs turite <a href=\"?page=email_settings\">sukonfigūruoti formos laukelius.</a>";
 $LANG["notify_no_views"] = "Jūsų formoje nėra, bet Peržiūrėjo! Jums reikės bent vieną Peržiūrėti siekiant valdyti savo formos duomenis.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Atrodo, kad jūsų vartotojo sąskaita nebuvo priskirti prie jokių parodymų forma, todėl jūs negalėsite matyti jokių duomenų. Prašome kreiptis dėl papildomos pagalbos administratorius.";
 $LANG["notify_no_views_defined"] = "Jūs neturite, bet Peržiūrėjo apibrėžta. Jūs negalėsite peržiūrėti šios formos pateikimo, išskyrus atvejus, kai yra sukurta bent viena Peržiūrėti. Norėdami sukurti numatytąjį rodinį, spustelėkite žemiau esantį mygtuką.";

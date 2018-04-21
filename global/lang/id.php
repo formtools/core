@@ -1166,7 +1166,7 @@ $LANG["notify_no_field_settings"] = "Jenis bidang ini tidak berisi pengaturan ta
 $LANG["notify_no_fields_in_tab"] = "Tab ini tidak berisi bidang.";
 $LANG["notify_no_option_lists"] = "Tidak ada pilihan daftar ditetapkan. Klik tombol di bawah ini untuk membuat yang baru.";
 $LANG["notify_no_test_submission"] = "Formulir Peralatan belum menerima pengajuan uji belum berhasil.";
-$LANG["notify_no_user_email_fields_configured"] = "Catatan: jika Anda ingin mengirim email ke alamat email yang dimasukkan dalam bentuk, pertama anda perlu <a href=\"{\$same_page}?page=email_settings\">mengkonfigurasi bentuk bidang email.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Catatan: jika Anda ingin mengirim email ke alamat email yang dimasukkan dalam bentuk, pertama anda perlu <a href=\"?page=email_settings\">mengkonfigurasi bentuk bidang email.</a>";
 $LANG["notify_no_views"] = "Formulir Anda tidak memiliki Views mengatur! Anda akan membutuhkan setidaknya satu Lihat untuk mengelola data formulir Anda.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Tampaknya account pengguna Anda belum ditugaskan Views bentuk apapun, sehingga Anda tidak akan dapat melihat data apapun. Silahkan hubungi administrator untuk bantuan lebih lanjut.";
 $LANG["notify_no_views_defined"] = "Anda tidak memiliki Dilihat didefinisikan. Anda tidak akan dapat melihat kiriman ini form kecuali setidaknya satu Lihat dibuat. Klik tombol di bawah ini untuk membuat View default.";

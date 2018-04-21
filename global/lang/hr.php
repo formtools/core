@@ -1165,7 +1165,7 @@ $LANG["notify_no_field_settings"] = "Ova vrsta polje ne sadrži nikakve dodatne 
 $LANG["notify_no_fields_in_tab"] = "Ova kartica ne sadrži polja.";
 $LANG["notify_no_option_lists"] = "Nema mogućnosti liste definirana. Kliknite gumb ispod kako bi stvorili novu.";
 $LANG["notify_no_test_submission"] = "Obrazac Alati nije dobio uspješan test podnošenje još.";
-$LANG["notify_no_user_email_fields_configured"] = "Napomena: ako želite to poslati elektronička pošta to bilo koji e-mail adresu koja je bila uključena u obliku, najprije morate <a href=\"{\$same_page}?page=email_settings\">konfigurirati polja obrasca e-pošte.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Napomena: ako želite to poslati elektronička pošta to bilo koji e-mail adresu koja je bila uključena u obliku, najprije morate <a href=\"?page=email_settings\">konfigurirati polja obrasca e-pošte.</a>";
 $LANG["notify_no_views"] = "Vaš oblik nema Pregleda postaviti! Trebat će vam barem jedan pogled, kako bi se upravljanje Vašim podataka obrasca.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Čini se da je Vaš korisnički račun nije dodijeljen bilo kojem obliku, Views, tako da nećete biti u mogućnosti vidjeti sve podatke. Molimo kontaktirajte administratora za daljnje pomoći.";
 $LANG["notify_no_views_defined"] = "Vi nemate Pregleda definirani. Nećete moći vidjeti ovaj oblik tvrdnje osim ako barem jedan Pregled je stvorio. Kliknite gumb ispod kako bi stvorili zadani prikaz.";

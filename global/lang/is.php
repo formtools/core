@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Þessi reitur tegund inniheldur engin auka 
 $LANG["notify_no_fields_in_tab"] = "Þessi flipi hjartarskinn ekki innihalda allir reitir.";
 $LANG["notify_no_option_lists"] = "Það eru ekki valkostur listum skilgreind. Smelltu á hnappinn hér fyrir neðan til að búa til nýjan.";
 $LANG["notify_no_test_submission"] = "Form Tools hefur ekki fengið vel próf uppgjöf enn.";
-$LANG["notify_no_user_email_fields_configured"] = "Ath: Ef þú vilt senda tölvupóst á hvaða netfang sem var innifalin í formi, þarftu fyrst að <a href=\"{\$same_page}?page=email_settings\">stilla póstinn mynd reitina.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Ath: Ef þú vilt senda tölvupóst á hvaða netfang sem var innifalin í formi, þarftu fyrst að <a href=\"?page=email_settings\">stilla póstinn mynd reitina.</a>";
 $LANG["notify_no_views"] = "Formi þinn styður ekki hafa allir Views sett upp! Þú þarft að minnsta kosti einn View í því skyni að stjórna mynda gögnunum.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Það virðist sem notandi hefur ekki verið úthlutað hvaða formi Views, þannig að þú munt ekki geta séð nein gögn. Vinsamlegast hafðu samband við kerfisstjóra fyrir frekari aðstoð.";
 $LANG["notify_no_views_defined"] = "Þú ert ekki með neina Views skilgreind. Þú munt ekki hægt að skoða skráningar þetta eyðublað er nema að minnsta kosti eitt View er stofnaður. Smelltu á hnappinn hér fyrir neðan til að búa til the vanræksla Skoða.";

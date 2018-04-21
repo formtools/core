@@ -1167,7 +1167,7 @@ $LANG["notify_no_field_settings"] = "Este tipo de campo no contiene ninguna conf
 $LANG["notify_no_fields_in_tab"] = "Esta pestaña no contiene ningún campo.";
 $LANG["notify_no_option_lists"] = "No hay opción de listas definidas. Haga clic en el botón de abajo para crear una nueva.";
 $LANG["notify_no_test_submission"] = "Form Tools no ha recibido ningún envío de prueba con éxito todavía.";
-$LANG["notify_no_user_email_fields_configured"] = "Nota: si deseas enviar un correo electrónico a cualquier dirección de correo electrónico que haya sido incluida en el formulario, primero debes <a href=\"{\$same_page}?page=email_settings\">configurar los campos de correo electrónico del formulario .</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Nota: si deseas enviar un correo electrónico a cualquier dirección de correo electrónico que haya sido incluida en el formulario, primero debes <a href=\"?page=email_settings\">configurar los campos de correo electrónico del formulario .</a>";
 $LANG["notify_no_views"] = "Su forma no tiene ningún Vistas creado! Usted necesitará por lo menos una vista con el fin de gestionar los datos del formulario.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Parece que tu cuenta de usuario no tiene asignada ninguna vista de formulario, por lo que no podrás ver dato alguno. Contacta al administrador para obtener ayuda.";
 $LANG["notify_no_views_defined"] = "Usted no tiene los puntos de vista definido. Usted no será capaz de ver las presentaciones de este formulario a menos que una vista se crea. Haga clic en el botón de abajo para crear la vista por defecto.";

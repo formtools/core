@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Tämä kenttä tyyppi ei sisällä mitään
 $LANG["notify_no_fields_in_tab"] = "Tämä välilehti ei sisällä yhtään kenttää.";
 $LANG["notify_no_option_lists"] = "Ei ole olemassa vaihtoehtoa määrittelemät luettelot. Klikkaa alla olevaa painiketta luo uusi.";
 $LANG["notify_no_test_submission"] = "Form Tools ei ole vielä saanut onnistunutta testilähetystä.";
-$LANG["notify_no_user_email_fields_configured"] = "Huomaa: Jos haluat lähettää sähköpostia johonkin sähköpostiosoitteeseen, joka on mukana muodossa, sinun on ensin <a href=\"{\$same_page}?page=email_settings\">määritettävä muodossa sähköpostin kentät.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Huomaa: Jos haluat lähettää sähköpostia johonkin sähköpostiosoitteeseen, joka on mukana muodossa, sinun on ensin <a href=\"?page=email_settings\">määritettävä muodossa sähköpostin kentät.</a>";
 $LANG["notify_no_views"] = "Lomake ei ole mitään mielipidettä perustettu! Tarvitset vähintään yksi näkymä, jotta hallita lomaketietoja.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Näyttää siltä, että käyttäjätiliäsi ei ole yhdistetty mihinkään näkymään, joten et näe mitään tietoja. Ota yhteyttä järjestelmänvalvojaan saadaksesi apua.";
 $LANG["notify_no_views_defined"] = "Sinulla ei ole mitään mielipidettä määritelty. Et voi katsella tätä lomaketta väittää, ellei vähintään yksi näkymä on luotu. Klikkaa alla olevaa painiketta luoda oletusnäkymään.";

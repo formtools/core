@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Aquest tipus de camp no conté cap configur
 $LANG["notify_no_fields_in_tab"] = "Aquesta fitxa no conté cap camp.";
 $LANG["notify_no_option_lists"] = "No hi ha opció de llistes definides. Feu clic al botó de sota per crear una nova.";
 $LANG["notify_no_test_submission"] = "Formulari d&#39;eines no ha rebut una petició de prova amb èxit encara.";
-$LANG["notify_no_user_email_fields_configured"] = "Nota: Si vol enviar un correu electrònic a qualsevol adreça de correu electrònic que va ser inclòs en el formulari, primer ha de <a href=\"{\$same_page}?page=email_settings\">configurar els camps del formulari de correu electrònic.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Nota: Si vol enviar un correu electrònic a qualsevol adreça de correu electrònic que va ser inclòs en el formulari, primer ha de <a href=\"?page=email_settings\">configurar els camps del formulari de correu electrònic.</a>";
 $LANG["notify_no_views"] = "La seva forma no té cap Vistes creat! Vostè necessitarà almenys una vista per tal de gestionar les dades del formulari.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Sembla que al teu compte d&#39;usuari no s&#39;ha assignat als punts de vista manera, pel que no serà capaç de veure les dades. Poseu-vos en contacte amb l&#39;administrador per obtenir més ajuda.";
 $LANG["notify_no_views_defined"] = "No té els punts de vista definit. No serà capaç de veure les presentacions d&#39;aquest formulari a menys que una vista es crea. Feu clic al botó de sota per crear la vista per defecte.";

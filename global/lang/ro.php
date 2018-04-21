@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Acest tip de câmp nu conţine nici o setă
 $LANG["notify_no_fields_in_tab"] = "Aceasta fila nu conţine nici o câmpuri.";
 $LANG["notify_no_option_lists"] = "Nu există nici o opţiune liste de definit. Faceţi clic pe butonul de mai jos pentru a crea unul nou.";
 $LANG["notify_no_test_submission"] = "Formular de Instrumente nu a primit o prezentare a testat cu succes încă.";
-$LANG["notify_no_user_email_fields_configured"] = "Notă: Dacă doriţi să trimiteţi un e-mail la orice adresă de e-mail care a fost inclus în formă, mai întâi trebuie să <a href=\"{\$same_page}?page=email_settings\">configuraţi câmpurile formularul de e-mail.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Notă: Dacă doriţi să trimiteţi un e-mail la orice adresă de e-mail care a fost inclus în formă, mai întâi trebuie să <a href=\"?page=email_settings\">configuraţi câmpurile formularul de e-mail.</a>";
 $LANG["notify_no_views"] = "Formă dvs. nu are nici Vizualizari instituit! Veti avea nevoie de cel putin un Vizualizare în scopul de a gestiona datele de formular.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Se pare că contul dvs. de utilizator nu a fost repartizat pe oricare Vizualizari forma, astfel încât nu veţi putea vedea orice date. Vă rugăm să contactaţi administratorul pentru ajutor suplimentar.";
 $LANG["notify_no_views_defined"] = "Nu aveţi nici Vizualizari definit. Nu veţi putea vedea observaţiile acest formular cu excepţia cazului în cel puţin una View este creat. Faceţi clic pe butonul de mai jos pentru a crea vizualizarea implicită.";

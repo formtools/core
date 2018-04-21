@@ -1167,7 +1167,7 @@ $LANG["notify_no_field_settings"] = "Questo tipo di campo non contiene ulteriori
 $LANG["notify_no_fields_in_tab"] = "Questa linguetta non contiene alcun campo.";
 $LANG["notify_no_option_lists"] = "Non ci sono opzione elenchi definiti. Fare clic sul pulsante qui sotto per crearne uno nuovo.";
 $LANG["notify_no_test_submission"] = "Strumenti di forma non ha ricevuto una comunicazione di successo prova ancora.";
-$LANG["notify_no_user_email_fields_configured"] = "Nota: se si desidera inviare una mail a qualsiasi indirizzo di posta elettronica che è stato incluso nella forma, è necessario prima <a href=\"{\$same_page}?page=email_settings\">configurare i campi modulo e-mail.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Nota: se si desidera inviare una mail a qualsiasi indirizzo di posta elettronica che è stato incluso nella forma, è necessario prima <a href=\"?page=email_settings\">configurare i campi modulo e-mail.</a>";
 $LANG["notify_no_views"] = "Il modulo non ha nessun Visite creato! Avrete bisogno di almeno un Vista in modo da gestire i dati del modulo.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Sembra che l&#39;account utente non è stato assegnato a qualsiasi forma Viste, quindi non sarà in grado di visualizzare tutti i dati. Si prega di contattare l&#39;amministratore per ulteriori informazioni.";
 $LANG["notify_no_views_defined"] = "Non è necessario alcun Visto definito. Non sarà in grado di visualizzare affermazioni di tale modulo, a meno che almeno uno View è creato. Clicca sul bottone qui sotto per creare la visualizzazione di default.";

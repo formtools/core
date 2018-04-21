@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Uri ng patlang na ito ay hindi naglalaman n
 $LANG["notify_no_fields_in_tab"] = "Ang tab na ito ay hindi naglalaman ng anumang larangan.";
 $LANG["notify_no_option_lists"] = "May ay walang pagpipilian listahan tinukoy. I-click ang pindutan sa ibaba upang lumikha ng isang bagong isa.";
 $LANG["notify_no_test_submission"] = "Form Kasangkapan ay hindi natanggap ang isang matagumpay na ang pagsumite ng pagsubok pa.";
-$LANG["notify_no_user_email_fields_configured"] = "Tandaan: kung nais mong magpadala ng email sa anumang email address na iyon ay kasama sa form, kailangan mo munang <a href=\"{\$same_page}?page=email_settings\">i-configure ang form sa mga patlang ng email.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Tandaan: kung nais mong magpadala ng email sa anumang email address na iyon ay kasama sa form, kailangan mo munang <a href=\"?page=email_settings\">i-configure ang form sa mga patlang ng email.</a>";
 $LANG["notify_no_views"] = "Ang iyong form ay hindi anumang Views set up! Kakailanganin mo ang hindi bababa sa isang View upang pamahalaan ang iyong data sa form.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Lumalabas na ang iyong user account ay hindi pa naka-assign sa anumang Views form, kaya hindi mo magagawang makita ang anumang data. Mangyaring makipag-ugnay sa administrator para sa karagdagang tulong.";
 $LANG["notify_no_views_defined"] = "Wala kang anumang Views tinukoy. Ikaw ay hindi magagawang upang tingnan ang mga submissions ang form na ito maliban kung hindi bababa sa isa View ay nilikha. I-click ang pindutan sa ibaba upang lumikha ng default Tingnan.";

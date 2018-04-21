@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Dan it-tip il-qasam ma jkunx fihom xi setti
 $LANG["notify_no_fields_in_tab"] = "Dan tab ma fihiex l-oqsma.";
 $LANG["notify_no_option_lists"] = "M&#39;hemm l-ebda għażla listi definiti. Ikklikkja l-buttuna hawn taħt biex toħloq waħda ġdida.";
 $LANG["notify_no_test_submission"] = "Formola Għodod ma jkunx irċieva sottomissjoni test b&#39;suċċess s&#39;issa.";
-$LANG["notify_no_user_email_fields_configured"] = "Nota: jekk inti trid tibgħat email lil xi indirizz email li kienet inkluża fil-formola, inti l-ewwel jeħtieġ li <a href=\"{\$same_page}?page=email_settings\">jiġi kkonfigurat l-oqsma email formola.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Nota: jekk inti trid tibgħat email lil xi indirizz email li kienet inkluża fil-formola, inti l-ewwel jeħtieġ li <a href=\"?page=email_settings\">jiġi kkonfigurat l-oqsma email formola.</a>";
 $LANG["notify_no_views"] = "Formola tiegħek ma jkollu ebda Views stabbilit! Ikollok bżonn mill-inqas wieħed Ara sabiex ġestjoni tad-data formola tiegħek.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Jidher li l-kont ta &#39;utent tiegħek ma ġiex assenjat lil xi Views forma, allura inti mhux se tkun tista&#39; tara l-ebda data. Jekk jogħġbok ikkuntattja l-amministratur għall-għajnuna ulterjuri.";
 $LANG["notify_no_views_defined"] = "Inti ma għandekx xi Views definiti. Inti mhux se jkunu jistgħu jaraw din il-formola ta &#39;sottomissjonijiet sakemm mill-inqas wieħed Ara hija maħluqa. Ikklikkja l-buttuna hawn taħt biex joħolqu l-Ara default.";

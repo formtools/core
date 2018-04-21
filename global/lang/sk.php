@@ -1166,7 +1166,7 @@ $LANG["notify_no_field_settings"] = "Tento typ poľa neobsahuje žiadne ďalšie
 $LANG["notify_no_fields_in_tab"] = "Táto záložka neobsahuje žiadne polia.";
 $LANG["notify_no_option_lists"] = "Nie sú žiadne možnosti zoznamy definované. Kliknite na tlačidlo nižšie pre vytvorenie nového.";
 $LANG["notify_no_test_submission"] = "Formulár Nástroje nedostal úspešný test podania doteraz.";
-$LANG["notify_no_user_email_fields_configured"] = "Poznámka: Ak chcete poslať e-mail na ľubovoľnú e-mailovú adresu, ktorá bola zahrnutá v podobe, musíte najskôr <a href=\"{\$same_page}?page=email_settings\">nakonfigurovať poľa formulár e-mail.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Poznámka: Ak chcete poslať e-mail na ľubovoľnú e-mailovú adresu, ktorá bola zahrnutá v podobe, musíte najskôr <a href=\"?page=email_settings\">nakonfigurovať poľa formulár e-mail.</a>";
 $LANG["notify_no_views"] = "Formulár nemá žiadne Zobrazenie nastavení! Budete potrebovať aspoň jeden pohľad, aby k správe dát formulára.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Zdá sa, že váš užívateľský účet nebolo pridelené žiadne forme zobrazenia, takže nebudete mať možnosť vidieť žiadne dáta. Prosím kontaktujte správcu pre ďalšiu pomoc.";
 $LANG["notify_no_views_defined"] = "Nemáte nejaké názory, definované. Nebudete môcť prezerať túto formu tvrdenie, ak aspoň jeden pohľad je vytvorený. Kliknite na tlačidlo nižšie pre vytvorenie predvolené zobrazenie.";

@@ -1169,7 +1169,7 @@ $LANG["notify_no_field_settings"] = "Dit veld soort bevat geen extra instellinge
 $LANG["notify_no_fields_in_tab"] = "Dit tabblad bevat geen velden.";
 $LANG["notify_no_option_lists"] = "Er zijn geen optie lijsten gedefinieerd. Klik op de onderstaande knop om een ​​nieuwe aan te maken.";
 $LANG["notify_no_test_submission"] = "Vorm Tools heeft ontvangen een succesvolle test indiening nog niet.";
-$LANG["notify_no_user_email_fields_configured"] = "Opmerking: als u een email sturen naar een e-mailadres dat is opgenomen in de vorm, moet u eerst <a href=\"{\$same_page}?page=email_settings\">het configureren van de e-mail formulier velden.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Opmerking: als u een email sturen naar een e-mailadres dat is opgenomen in de vorm, moet u eerst <a href=\"?page=email_settings\">het configureren van de e-mail formulier velden.</a>";
 $LANG["notify_no_views"] = "Uw formulier heeft geen Bekeken opgezet! U moet ten minste een View in om uw formulier gegevens te beheren.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Het lijkt erop dat uw gebruikersaccount niet is toegewezen aan elke vorm bekeken, zodat u niet in staat zullen zijn om alle gegevens te zien. Neem contact op met de beheerder voor verdere hulp.";
 $LANG["notify_no_views_defined"] = "Je hebt geen Bekeken gedefinieerd. U zult niet in staat zijn om dit formulier betoog te bekijken, tenzij ten minste een View wordt gemaakt. Klik op de onderstaande knop om de standaardweergave te creëren.";

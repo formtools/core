@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Šī lauka tips nesatur papildu iestatījum
 $LANG["notify_no_fields_in_tab"] = "Šajā cilnē nesatur laukus.";
 $LANG["notify_no_option_lists"] = "Nav iespējas noteiktie saraksti. Noklikšķiniet pogu zemāk, lai izveidotu jaunu.";
 $LANG["notify_no_test_submission"] = "Form Tools nav saņēmusi Veiksmīgs tests iesniegšanas yet.";
-$LANG["notify_no_user_email_fields_configured"] = "Piezīme: Ja Jūs vēlaties nosūtīt e-pastu uz jebkuru e-pasta adresi, kas ir iekļauts formu, vispirms ir nepieciešams <a href=\"{\$same_page}?page=email_settings\">konfigurēt veidlapu email laukus.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Piezīme: Ja Jūs vēlaties nosūtīt e-pastu uz jebkuru e-pasta adresi, kas ir iekļauts formu, vispirms ir nepieciešams <a href=\"?page=email_settings\">konfigurēt veidlapu email laukus.</a>";
 $LANG["notify_no_views"] = "Jūsu veidlapa nav neviena Views izveidotas! Jums būs nepieciešams vismaz viens skats, lai pārvaldītu jūsu veidlapu datus.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Šķiet, ka Jūsu lietotāja konts nav piešķirta nekāda veida viedokļus, lai jūs nevarēsiet redzēt datus. Lūdzu, sazinieties ar administratoru, lai iegūtu papildu palīdzību.";
 $LANG["notify_no_views_defined"] = "Jums nav neviena Views definēti. Jūs nevarēsiet Lai skatītu šo veidlapu apgalvojumiem, ja vismaz viens skats ir izveidots. Noklikšķiniet pogu zemāk, lai izveidotu noklusējuma skatu.";

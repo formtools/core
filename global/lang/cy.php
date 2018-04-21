@@ -1162,7 +1162,7 @@ $LANG["notify_no_field_settings"] = "Nid yw&#39;r math hwn maes yn cynnwys unrhy
 $LANG["notify_no_fields_in_tab"] = "Nid yw hyn tab yn cynnwys unrhyw feysydd.";
 $LANG["notify_no_option_lists"] = "Nid oes unrhyw opsiwn rhestrau diffiniedig. Cliciwch ar y botwm isod i greu un newydd.";
 $LANG["notify_no_test_submission"] = "Nid yw Ffurflen Offer wedi derbyn cyflwyniad prawf llwyddiannus eto.";
-$LANG["notify_no_user_email_fields_configured"] = "Sylwer: os ydych chi am anfon e-bost at unrhyw cyfeiriad e-bost sy&#39;n ei gynnwys yn y ffurflen, angen i chi <a href=\"{\$same_page}?page=email_settings\">ffurfweddu&#39;r meysydd ffurflen e-bost.</a>";
+$LANG["notify_no_user_email_fields_configured"] = "Sylwer: os ydych chi am anfon e-bost at unrhyw cyfeiriad e-bost sy&#39;n ei gynnwys yn y ffurflen, angen i chi <a href=\"?page=email_settings\">ffurfweddu&#39;r meysydd ffurflen e-bost.</a>";
 $LANG["notify_no_views"] = "Nid yw eich ffurflen oes gan unrhyw Golygfeydd sefydlu! Bydd angen o leiaf un View er mwyn rheoli eich data ffurflen.";
 $LANG["notify_no_views_assigned_to_client_form"] = "Mae&#39;n ymddangos nad yw eich cyfrif defnyddiwr wedi&#39;i neilltuo i unrhyw Views ffurf, felly ni fyddwch yn gallu gweld unrhyw ddata. Cysylltwch â&#39;r gweinyddwr am gymorth pellach.";
 $LANG["notify_no_views_defined"] = "Nid oes gennych unrhyw sylwadau diffiniedig. Ni fyddwch yn gallu gweld cyflwyniadau ffurflen hon oni bai o leiaf un View cael ei chreu. Cliciwch ar y botwm isod i greu&#39;r View diofyn.";
