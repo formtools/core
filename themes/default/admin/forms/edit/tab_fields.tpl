@@ -97,7 +97,7 @@
                     <li class="col1 sort_col">{$count+$order_start_number}</li>
                     <li class="col2">
                         <input type="text" name="field_{$field_id}_display_name" id="field_{$field_id}_display_name"
-                               value="{$field.field_title|escape}" class="display_text"/>
+                               value="{$field.field_title|escape}" class="display_text" maxlength="100" />
                     </li>
                     <li class="splitter"></li>
                     <li class="col3 scrollable">
@@ -107,7 +107,7 @@
                                     <span class="pad_left_small medium_grey">{$LANG.word_na}</span>
                                 {else}
                                     <input type="text" name="field_{$field_id}_name" id="field_{$field_id}_name"
-                                           value="{$field.field_name}"
+                                           value="{$field.field_name}" maxlength="255"
                                            class="field_names"/>
                                 {/if}
                             </li>
@@ -167,7 +167,7 @@
                                     <span class="pad_left_small medium_grey system_field_db_column">{$field.col_name}</span>
                                 {else}
                                     <input type="hidden" name="old_col_{$field_id}_name" id="old_col_{$field_id}_name"
-                                           value="{$field.col_name}"/>
+                                           value="{$field.col_name}" />
                                     <input type="text" name="col_{$field_id}_name" id="col_{$field_id}_name"
                                            class="db_column" value="{$field.col_name}" maxlength="64"/>
                                 {/if}
@@ -300,14 +300,14 @@
                             <td width="180"><label for="edit_field__display_text">{$LANG.phrase_display_text}</label>
                             </td>
                             <td>
-                                <input type="text" id="edit_field__display_text" name="edit_field__display_text"/>
+                                <input type="text" id="edit_field__display_text" name="edit_field__display_text" maxlength="100" />
                             </td>
                         </tr>
                         <tr>
                             <td><label for="edit_field__field_name">{$LANG.phrase_form_field}</label></td>
                             <td>
                                 <div class="edit_field__non_system"><input type="text" id="edit_field__field_name"
-                                                                           name="edit_field__field_name"/></div>
+                                                                           name="edit_field__field_name" maxlength="255" /></div>
                                 <div class="edit_field__system medium_grey">{$LANG.word_na}</div>
                             </td>
                         </tr>
