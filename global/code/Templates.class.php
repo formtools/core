@@ -11,7 +11,7 @@
 
 namespace FormTools;
 
-use Smarty;
+use Smarty, SmartyBC;
 
 
 class Templates
@@ -124,7 +124,7 @@ class Templates
         $root_dir = Core::getRootDir();
         $root_url = Core::getRootUrl();
 
-        $smarty = new Smarty();
+        $smarty = Core::useSmartyBC() ? new SmartyBC() : new Smarty();
         $smarty->setTemplateDir("$root_dir/themes/$theme");
         $smarty->addPluginsDir(array("$root_dir/global/smarty_plugins"));
         $smarty->setCompileDir("$root_dir/themes/$theme/cache/");

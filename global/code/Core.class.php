@@ -25,7 +25,7 @@
 
 namespace FormTools;
 
-use Smarty;
+use Smarty, SmartyBC;
 
 
 class Core {
@@ -201,6 +201,14 @@ class Core {
      */
     private static $apiHeaderCharset = "utf-8";
 
+
+    /**
+     * Added in 3.0.1, the $g_use_smarty_bc setting in the /global/config.php file makes Form Tools use the
+     * SmartyBC (Backward-Compatibility) class rather than Smarty. Handy if you need {php} tags within your
+     * Smarty content.
+     * @var bool
+     */
+    private static $useSmartyBC = false;
 
     // -------------------------------------------------------------------------------------------------
 
@@ -456,6 +464,7 @@ class Core {
         self::$debugEnabled = isset($g_debug) ? $g_debug : false;
         self::$sessionType = isset($g_session_type) && in_array($g_session_type, array("php", "database")) ? $g_session_type : "php";
         self::$sessionSavePath = isset($g_session_save_path) ? $g_session_save_path : "";
+        self::$useSmartyBC = isset($g_use_smarty_bc) ? $g_use_smarty_bc : false;
 
         // API settings
         self::$apiDebug = isset($g_api_debug) ? $g_api_debug : false;
@@ -475,7 +484,7 @@ class Core {
     }
 
     public static function initSmarty() {
-        self::$smarty = new Smarty();
+        self::$smarty = (self::useSmartyBC()) ? new SmartyBC() : new Smarty();
     }
 
     /**
@@ -709,6 +718,10 @@ class Core {
 
     public static function getUpgradeUrl() {
         return self::$upgradeUrl;
+    }
+
+    public static function useSmartyBC() {
+        return self::$useSmartyBC;
     }
 
 
