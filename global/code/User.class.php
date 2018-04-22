@@ -365,11 +365,12 @@ class User
             $db->query("
                 SELECT count(*) as c
                 FROM {PREFIX}accounts
-                WHERE account_id = :account_id AND password = :password
+                WHERE account_id = :account_id AND (password = :password OR temp_reset_password = :temp_reset_password)
             ");
             $db->bindAll(array(
                 "account_id" => $account_id,
-                "password" => Sessions::get("account.password")
+                "password" => Sessions::get("account.password"),
+                "temp_reset_password" => Sessions::get("account.password")
             ));
             $db->execute();
             $info = $db->fetch();
