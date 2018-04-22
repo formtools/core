@@ -245,7 +245,7 @@ class Core {
     /**
      * The current version of the Form Tools Core.
      */
-    private static $version = "3.0.0";
+    private static $version = "3.0.1";
 
     /**
      * The release type: alpha, beta or main
@@ -255,7 +255,7 @@ class Core {
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20180413";
+    private static $releaseDate = "20180421";
 
     /**
      * The minimum required PHP version needed to run Form Tools.

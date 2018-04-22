@@ -10,6 +10,7 @@ class Upgrade
     public static function upgrade()
     {
         $current_version_date = Core::getReleaseDate();
+        $last_version_in_db = Settings::get("program_version");
         $last_version_date_in_db = Settings::get("release_date");
 
         $is_upgraded = false;
@@ -18,16 +19,12 @@ class Upgrade
 
         // any time the version changes, update the list of hooks in the DB
         if ($current_version_date > $last_version_date_in_db) {
+
+            // always re-parse the database to get the latest list of hooks
             Hooks::updateAvailableHooks();
-        }
 
-        // if the files have been updated but the DB is older, the user is upgrading
-        if ($current_version_date > $last_version_date_in_db) {
-
-            if ($current_version_date <= 20180410) {
-                list ($success, $error_msg) = self::upgradeTo3_0_0();
-
-                // additional patch for old alpha/beta versions. This is benign & can be executed multiple times
+            if (General::isVersionEarlierThan($last_version_in_db, "3.0.1")) {
+                list ($success, $error_msg) = self::upgradeTo3_0_1();
                 self::patchFieldTypeOptionListSettingMapping();
                 self::fixEuropeanDateFormat();
             }
@@ -53,11 +50,11 @@ class Upgrade
 
 
     /**
-     * Handles upgrading from FT2 2.2.5, 2.2.6 or 2.2.7 to 3.0.0.
+     * Handles upgrading from FT2 2.2.5, 2.2.6 or 2.2.7 to 3.0.0/3.0.1.
      *
      * These methods can safely be executed multiple times (but should still only fire once).
      */
-    private static function upgradeTo3_0_0()
+    private static function upgradeTo3_0_1()
     {
         $db = Core::$db;
 
