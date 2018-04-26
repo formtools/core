@@ -19,7 +19,7 @@ Form Tools 3 (2018) was a complete rewrite of the application. Form Tools starte
 
 ### Form Tools 2
 
-Form Tools 2 was the production version from 2010-18 onwards. I took a long, 4-year break to work on other projects, but returned to the Form Tools world in 2016 to revamp the site and code. Form Tools 2 is entirely functional code; FT3 converted everything to object-oriented.
+Form Tools 2 was the production version from 2010-2018. I took a long, 4-year break during that time to work on other projects, but returned to the Form Tools world in 2016 to revamp the site and code. Form Tools 2 is entirely functional code; FT3 converted everything to object-oriented.
 
 ### PHP version support
 
