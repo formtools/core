@@ -413,16 +413,16 @@ class ViewFilters
             if ($operator == "not_like" || $operator == "not_equals") {
                 // empty string being searched AGAINST; i.e. checking the field is NOT empty or LIKE empty
                 if (empty($trimmed_value)) {
-                    $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' AND $col_name IS NOT NULL";
+                    $sql_statements_arr[] = "($col_name $sql_operator '$escaped_value' AND $col_name IS NOT NULL)";
                 } else {
-                    $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name IS NULL";
+                    $sql_statements_arr[] = "($col_name $sql_operator '$escaped_value' OR $col_name IS NULL)";
                 }
             } else {
                 // if the value is EMPTY, we need to add an additional IS NULL / IS NOT NULL check
                 if (empty($trimmed_value)) {
-                    $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value' OR $col_name $null_test";
+                    $sql_statements_arr[] = "($col_name $sql_operator '$escaped_value' OR $col_name $null_test)";
                 } else {
-                    $sql_statements_arr[] = "$col_name $sql_operator '$escaped_value'";
+                    $sql_statements_arr[] = "($col_name $sql_operator '$escaped_value')";
                 }
             }
         }
