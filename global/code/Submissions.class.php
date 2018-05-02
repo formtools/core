@@ -314,12 +314,27 @@ class Submissions {
         $now = General::getCurrentDatetime();
         $ip  = $_SERVER["REMOTE_ADDR"];
 
-        // if the administrator has specified any default values for submissions created through this View
         $default_insert_pairs = array(
-            "submission_date"    => $now,
-            "last_modified_date" => $now,
-            "ip_address"         => $ip,
-            "is_finalized"       => ($is_finalized) ? "yes" : "no"
+            array(
+                "placeholder" => ":submission_date",
+                "col_name" => "submission_date",
+                "value" => $now
+            ),
+            array(
+                "placeholder" => ":last_modified_date",
+                "col_name" => "last_modified_date",
+                "value" => $now
+            ),
+            array(
+                "placeholder" => ":ip_address",
+                "col_name" => "ip_address",
+                "value" => $ip
+            ),
+            array(
+                "placeholder" => ":is_finalized",
+                "col_name" => "is_finalized",
+                "value" => ($is_finalized) ? "yes" : "no"
+            )
         );
 
         $special_defaults = Views::getNewViewSubmissionDefaults($view_id);
@@ -334,18 +349,29 @@ class Submissions {
             $field_ids = array_keys($field_id_to_value_map);
             $field_id_to_column_name_map = Fields::getFieldColByFieldId($form_id, $field_ids);
 
-            while (list($field_id, $col_name) = each($field_id_to_column_name_map)) {
-                $default_insert_pairs[$col_name] = $field_id_to_value_map[$field_id];
+            foreach ($field_id_to_column_name_map as $field_id => $col_name) {
+                $default_insert_pairs[] = array(
+                    "placeholder" => ":{$col_name}",
+                    "col_name" => $col_name,
+                    "value" => $field_id_to_value_map[$field_id]
+                );
             }
         }
 
-        $col_names  = implode(", ", array_keys($default_insert_pairs));
-        $col_values = "'" . implode("', '", array_values($default_insert_pairs)) . "'";
+        $col_names  = implode(", ", array_column($default_insert_pairs, "col_name"));
+        $placeholders = implode(", ", array_column($default_insert_pairs, "placeholder"));
+
+        // create a map of placeholder => value
+        $values = array();
+        foreach ($default_insert_pairs as $row) {
+            $values[$row["placeholder"]] = $row["value"];
+        }
 
         $db->query("
             INSERT INTO {PREFIX}form_{$form_id} ($col_names)
-            VALUES ($col_values)
+            VALUES ($placeholders)
         ");
+        $db->bindAll($values);
         $db->execute();
 
         $new_submission_id = $db->getInsertId();
