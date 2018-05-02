@@ -797,19 +797,22 @@ class Views
         if (!empty($info["new_submissions"]) && $may_add_submissions == "yes") {
             $default_values = array_combine($info["new_submissions"], $info["new_submissions_vals"]);
 
-            $insert_statements = array();
             $order = 1;
             while (list($field_id, $value) = each($default_values)) {
-                $insert_statements[] = "($view_id, $field_id, '$value', $order)";
+                $db->query("
+                    INSERT INTO {PREFIX}new_view_submission_defaults (view_id, field_id, default_value, list_order)
+                    VALUES (:view_id, :field_id, :default_value, :list_order)
+                ");
+                $db->bindAll(array(
+                    "view_id" => $view_id,
+                    "field_id" => $field_id,
+                    "default_value" => $value,
+                    "list_order" => $order
+                ));
+                $db->execute();
+
                 $order++;
             }
-            $insert_statement_str = implode(",\n", $insert_statements);
-
-            $db->query("
-                INSERT INTO {PREFIX}new_view_submission_defaults (view_id, field_id, default_value, list_order)
-                VALUES $insert_statement_str
-            ");
-            $db->execute();
         }
     }
 
