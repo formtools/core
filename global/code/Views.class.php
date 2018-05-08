@@ -437,7 +437,12 @@ class Views
 
         $client_ids = (isset($info["selected_client_ids"])) ? $info["selected_client_ids"] : array();
         foreach ($client_ids as $account_id) {
-            $db->query("INSERT INTO {PREFIX}public_view_omit_list (view_id, account_id) VALUES ($view_id, $account_id)");
+            $db->query("INSERT INTO {PREFIX}public_view_omit_list (view_id, account_id) VALUES (:view_id, :account_id)");
+            $db->bindAll(array(
+                "view_id" => $view_id,
+                "account_id" => $account_id
+            ));
+            $db->execute();
         }
 
         return array(true, $LANG["notify_public_view_omit_list_updated"]);
