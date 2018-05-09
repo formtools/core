@@ -4,6 +4,11 @@
 
 {include file='messages.tpl'}
 
+<p>
+    Welcome to Form Tools! The next few pages installs the script on your server. You can start by choosing the
+    primary language for this Form Tools installation.
+</p>
+
 <form action="{$same_page}" method="post">
 	<table cellspacing="0" cellpadding="0">
 		<tr>

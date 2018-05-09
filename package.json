@@ -1,0 +1,27 @@
+{
+  "name": "formtools",
+  "version": "1.0.0",
+  "description": "The Form Tools core. ",
+  "main": "scripts-src/index.jsx",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/formtools/core.git"
+  },
+  "author": "Ben Keen <ben.keen@gmail.com>",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/formtools/core/issues"
+  },
+  "homepage": "https://github.com/formtools/core#readme",
+  "devDependencies": {
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "webpack": "^4.8.1"
+  }
+}
