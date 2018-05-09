@@ -5,7 +5,7 @@
     <div id="component-table"></div>
 
     <script>
-    React.render(FT.ChooseComponents, document.getElementById('component-table'));
+    React.render(FT.CompatibleComponentsContainer, document.getElementById('component-table'));
     </script>
 
 {include file="../../install/templates/install_footer.tpl"}

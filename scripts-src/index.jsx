@@ -1,5 +1,10 @@
-import { ChooseComponents } from './components/CompatibleComponents';
+import { CompatibleComponentsContainer } from './containers/CompatibleComponents';
 
+// initialize the store here
+
+// run init.jsx to get the data prereqs for all pages
+
+// expose whatever we want on the FT global object
 window.FT = {
-	CompatibleComponents
+	CompatibleComponentsContainer
 };
