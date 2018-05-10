@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import PropTypes from 'prop-types';
 
 
 const ComponentRow = (props) => {
@@ -14,6 +14,9 @@ const ComponentRow = (props) => {
 					{props.desc}
 				</div>
 			</td>
+			<td>
+				<a href="">Changelog</a>
+			</td>
 		</tr>
 	)
 };
@@ -26,10 +29,16 @@ const ComponentRow = (props) => {
 class CompatibleComponents extends Component {
 
 	render () {
-		const { api, modules, themes } = this.props;
+		const { api, modules, themes, initialized, dataLoaded, dataLoadError, error, onDownload } = this.props;
+
+		if (!initialized || !dataLoaded) {
+			return null; // show loading spinner
+		}
+
+		// could possibly re-use this EXACT component on the upgrade page........
 
 		return (
-			<div>
+			<form onSubmit={() => onDownload()}>
 				<input type="text" placeholder="Filter results" />
 
 				<div>API</div>
@@ -48,14 +57,20 @@ class CompatibleComponents extends Component {
 				</table>
 
 				<p>
-					<input type="button" value="Download" />
+					<input type="submit" value="Continue" />
 				</p>
-			</div>
+			</form>
 		);
 	}
 }
 CompatibleComponents.propTypes = {
+	initialized: PropTypes.bool,
+	dataLoaded: PropTypes.bool,
+	dataLoadError: PropTypes.bool,
+	error: PropTypes.string,
+	searchFilter: PropTypes.string,
 	i18n: PropTypes.object,
+	constants: PropTypes.object,
 	api: PropTypes.object,
 	modules: PropTypes.array,
 	themes: PropTypes.array,

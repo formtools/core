@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { actions, component } from '../components/CompatibleComponents';
+import { actions } from '../components/CompatibleComponents';
 
 
 class CompatibleComponentsContainer extends Component {
@@ -9,7 +9,9 @@ class CompatibleComponentsContainer extends Component {
 		this.props.dispatch(actions.getCompatibleComponents());
 	}
 	render () {
-
+		return (
+			<div></div>
+		);
 	}
 }
 

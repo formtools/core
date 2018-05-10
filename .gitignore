@@ -21,4 +21,4 @@ vendor/*
 !vendor/ramsey
 !vendor/smarty
 !vendor/autoload.php
-
+scripts/
