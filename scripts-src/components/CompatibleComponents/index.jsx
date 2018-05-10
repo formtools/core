@@ -1,9 +1,9 @@
-import component from './component';
+import CompatibleComponents from './component';
 import actions from './actions';
 import reducers from './reducers';
 
 export {
-	component,
+	CompatibleComponents,
 	actions,
 	reducers
 };
