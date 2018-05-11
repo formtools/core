@@ -163,7 +163,7 @@ class Core {
      * Added in 2.1.0 and enabled by default. This overrides the default SQL mode for any query, to prevent
      * problems that may arise due to MySQL strict mode being on.
      */
-    private static $setSqlMode = true;
+    private static $setSqlMode;
 
     /**
      * This hides the upgrade link in the administrator's UI.
@@ -450,7 +450,7 @@ class Core {
         self::$dbPassword  = (isset($g_db_password)) ? $g_db_password : null;
         self::$dbTablePrefix = (isset($g_table_prefix)) ? $g_table_prefix : null;
         self::$unicode    = (isset($g_unicode)) ? $g_unicode : null;
-        self::$setSqlMode = (isset($g_set_sql_mode)) ? $g_set_sql_mode : null;
+        self::$setSqlMode = (isset($g_set_sql_mode)) ? $g_set_sql_mode : true;
         self::$hideUpgradeLink = (isset($g_hide_upgrade_link)) ? $g_hide_upgrade_link : false;
         self::$enableBenchmarking = (isset($g_enable_benchmarking)) ? $g_enable_benchmarking : false;
         self::$jsDebugEnabled = isset($g_js_debug) ? $g_js_debug : false;
