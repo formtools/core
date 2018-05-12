@@ -2,24 +2,22 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
-const ComponentRow = (props) => {
-	return (
-		<tr>
-			<td>
-				<input type="checkbox" checked={props.selected} onClick={() => props.toggleRow(props.id)} />
-			</td>
-			<td>
-				{props.name} <b>{props.version}</b>
-				<div>
-					{props.desc}
-				</div>
-			</td>
-			<td>
-				<a href="">Changelog</a>
-			</td>
-		</tr>
-	)
-};
+const ComponentRow = (props) => (
+	<tr>
+		<td>
+			<input type="checkbox" checked={props.selected} onClick={() => props.toggleRow(props.id)} />
+		</td>
+		<td>
+			{props.module_name} <b>{props.version.version}</b>
+			<div>
+				{props.desc}
+			</div>
+		</td>
+		<td>
+			<a href="">Changelog</a>
+		</td>
+	</tr>
+);
 
 
 /**
@@ -29,32 +27,32 @@ const ComponentRow = (props) => {
 class CompatibleComponents extends Component {
 
 	render () {
-		const { api, modules, themes, initialized, dataLoaded, dataLoadError, error, onDownload } = this.props;
+		const { api, modules, themes, initialized, dataLoaded, dataLoadError, error, onSubmit } = this.props;
 
-		if (!initialized || !dataLoaded) {
-			return null; // show loading spinner
-		}
+//		if (!initialized || !dataLoaded) {
+//			return null; // show loading spinner
+//		}
 
 		// could possibly re-use this EXACT component on the upgrade page........
 
 		return (
-			<form onSubmit={() => onDownload()}>
+			<form onSubmit={() => onSubmit()}>
 				<input type="text" placeholder="Filter results" />
 
-				<div>API</div>
-				<table>
-					<ComponentRow {...api} />
-				</table>
+				{/*<div>API</div>*/}
+				{/*<table>*/}
+					{/*<ComponentRow {...api} />*/}
+				{/*</table>*/}
 
 				<div>Modules</div>
-				<table>
-					{modules.forEach((module) => <ComponentRow {...module} />)}
+				<table className="list_table">
+					{modules.map((module) => <ComponentRow {...module} />)}
 				</table>
 
-				<div>Themes</div>
-				<table>
-					{themes.forEach((theme) => <ComponentRow {...theme} />)}
-				</table>
+				{/*<div>Themes</div>*/}
+				{/*<table>*/}
+					{/*{themes.forEach((theme) => <ComponentRow {...theme} />)}*/}
+				{/*</table>*/}
 
 				<p>
 					<input type="submit" value="Continue" />
@@ -64,6 +62,7 @@ class CompatibleComponents extends Component {
 	}
 }
 CompatibleComponents.propTypes = {
+	onSubmit: PropTypes.func.isRequired,
 	initialized: PropTypes.bool,
 	dataLoaded: PropTypes.bool,
 	dataLoadError: PropTypes.bool,
@@ -74,7 +73,6 @@ CompatibleComponents.propTypes = {
 	api: PropTypes.object,
 	modules: PropTypes.array,
 	themes: PropTypes.array,
-	onDownload: PropTypes.func.isRequired
 };
 
 export default CompatibleComponents;

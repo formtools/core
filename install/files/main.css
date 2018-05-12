@@ -233,13 +233,6 @@ body .CodeMirror {
     margin-right: 8px;
     float: left;
 }
-#verify_license_key_loading {
-    display: none;
-    float: right;
-    width: 32px;
-    height: 32px;
-    background-image: url(../../global/images/loading.gif);
-}
 span.fail {
     margin-left: 10px;
     background-color: #aa0000;

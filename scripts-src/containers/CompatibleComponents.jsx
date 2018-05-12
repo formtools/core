@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { actions, reducers, CompatibleComponents } from '../components/CompatibleComponents';
+import { actions, CompatibleComponents } from '../components/CompatibleComponents';
 import { Provider, connect } from 'react-redux';
 import store from '../store';
 
@@ -8,25 +8,29 @@ class CompatibleComponentsContainer extends Component {
 
 	// the moment the component mounts we make a request for the component data
 	componentWillMount () {
-		//this.props.dispatch(actions.getCompatibleComponents());
+		this.props.getCompatibleComponents();
 	}
+
 	render () {
 		return (
-			<CompatibleComponents {...props} />
+			<CompatibleComponents {...this.props} />
 		);
 	}
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state) => ({
+	initialized: false,
+	modules: state.compatibleComponents.modules
+});
 
-};
-
-const mapDispatchToProps = (state) => {
-
-};
+const mapDispatchToProps = (dispatch) => ({
+	getCompatibleComponents: () => dispatch(actions.getCompatibleComponents()),
+	onSubmit: () => dispatch(actions.downloadCompatibleComponents())
+});
 
 const ConnectedCompatibleComponentsContainer = connect(
-	mapStateToProps
+	mapStateToProps,
+	mapDispatchToProps
 )(CompatibleComponentsContainer);
 
 export default (

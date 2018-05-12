@@ -1,6 +1,6 @@
 import CompatibleComponents from './component';
-import actions from './actions';
-import reducers from './reducers';
+import * as actions from './actions';
+import * as reducers from './reducers';
 
 export {
 	CompatibleComponents,
