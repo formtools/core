@@ -37,9 +37,14 @@ class Database
         if (version_compare(PHP_VERSION, '5.3.6', '<')) {
             $attrInitCommands[] = "Names utf8";
         }
-        if (Core::shouldSetSqlMode()) {
+
+        $use_strict_mode = Core::getSqlStrictMode();
+        if ($use_strict_mode == "off") {
             $attrInitCommands[] = "SQL_MODE=''";
+        } else if ($use_strict_mode == "on") {
+            $attrInitCommands[] = "SQL_MODE='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION'";
         }
+
         if (!empty($attrInitCommands)) {
             $options[PDO::MYSQL_ATTR_INIT_COMMAND] = "SET " . implode(",", $attrInitCommands);
         }

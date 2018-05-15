@@ -67,9 +67,6 @@ a.no_border:link, a.no_border:visited { border-bottom: none; outline: none; }
 	border-bottom: 1px solid #cccccc;
 	background-color: #efefef;
 }
-.nav_current .delim {
-	color: #999999;
-}
 .nav_remaining { color: #777777; }
 .orange { color: orange; }
 .green { color: green; }

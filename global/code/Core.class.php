@@ -161,9 +161,16 @@ class Core {
 
     /**
      * Added in 2.1.0 and enabled by default. This overrides the default SQL mode for any query, to prevent
-     * problems that may arise due to MySQL strict mode being on.
+     * problems that may arise due to MySQL strict mode being on. This was deprecated in 3.0.2; use $g_sql_strict_mode
+     * instead
      */
-    private static $setSqlMode = true;
+    private static $setSqlMode;
+
+    /**
+     * Defines the SQL strict mode for queries. Added in 3.0.2; replaces the older $g_set_sql_mode setting.
+     * @var string "on", "off", "default"
+     */
+    private static $sqlStrictMode;
 
     /**
      * This hides the upgrade link in the administrator's UI.
@@ -179,6 +186,13 @@ class Core {
      * Limits the number of fields that can be stored for a form.
      */
     private static $maxFormFields = "";
+
+    /**
+     * The folder of the Form Tools data source, used to get component and compatibility versions for installation
+     * and upgrading.
+     * @var string
+     */
+    private static $formToolsDataSource = "http://localhost:8888/formtools-site/formtools.org/feeds/source";
 
 
     // -------------------------------------------------------------------------------------------------
@@ -245,17 +259,17 @@ class Core {
     /**
      * The current version of the Form Tools Core.
      */
-    private static $version = "3.0.1";
+    private static $version = "3.1.0";
 
     /**
      * The release type: alpha, beta or main
      */
-    private static $releaseType = "main";
+    private static $releaseType = "alpha";
 
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20180421";
+    private static $releaseDate = "20180514";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
@@ -340,7 +354,7 @@ class Core {
         "view_tabs"
     );
 
-    private static $upgradeUrl = "https://formtools.org/upgrade.php";
+//    private static $upgradeUrl = "https://formtools.org/upgrade.php";
 
     /**
      * Initializes the Core singleton for use throughout Form Tools.
@@ -451,6 +465,7 @@ class Core {
         self::$dbTablePrefix = (isset($g_table_prefix)) ? $g_table_prefix : null;
         self::$unicode    = (isset($g_unicode)) ? $g_unicode : null;
         self::$setSqlMode = (isset($g_set_sql_mode)) ? $g_set_sql_mode : null;
+        self::$sqlStrictMode = (isset($g_sql_strict_mode)) ? $g_sql_strict_mode : "off";
         self::$hideUpgradeLink = (isset($g_hide_upgrade_link)) ? $g_hide_upgrade_link : false;
         self::$enableBenchmarking = (isset($g_enable_benchmarking)) ? $g_enable_benchmarking : false;
         self::$jsDebugEnabled = isset($g_js_debug) ? $g_js_debug : false;
@@ -551,8 +566,11 @@ class Core {
         return self::$unicode;
     }
 
-    public static function shouldSetSqlMode() {
-        return self::$setSqlMode;
+    public static function getSqlStrictMode() {
+        if (self::$setSqlMode) {
+            return "off";
+        }
+        return self::$sqlStrictMode;
     }
 
     public static function getDefaultLang() {
@@ -716,14 +734,13 @@ class Core {
         return self::$apiSessionsTimeout;
     }
 
-    public static function getUpgradeUrl() {
-        return self::$upgradeUrl;
+    public static function getFormToolsDataSource () {
+        return self::$formToolsDataSource;
     }
 
     public static function useSmartyBC() {
         return self::$useSmartyBC;
     }
-
 
     // private methods
 

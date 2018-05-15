@@ -406,12 +406,12 @@ class Administrator
         $rules[] = "if:password!=,same_as,password,password_2,{$LANG["validation_passwords_different"]}";
 
         $account_settings = Accounts::getAccountSettings($account_id);
-        if ($account_settings["min_password_length"] != "" && !empty($form_vals["password"])) {
+        if ($account_settings["min_password_length"] != "" && !General::isEmpty($form_vals["password"])) {
             $rule = General::evalSmartyString($LANG["validation_client_password_too_short"], array("number" => $account_settings["min_password_length"]));
             $rules[] = "length>={$account_settings["min_password_length"]},password,$rule";
         }
 
-        if (!empty($form_vals["password"])) {
+        if (!General::isEmpty($form_vals["password"])) {
             $required_password_chars = explode(",", $account_settings["required_password_chars"]);
             if (in_array("uppercase", $required_password_chars)) {
                 $rules[] = "reg_exp,password,[A-Z],{$LANG["validation_client_password_missing_uppercase"]}";
@@ -435,7 +435,7 @@ class Administrator
             $errors[] = $problem;
         }
 
-        if (!empty($form_vals["password"])) {
+        if (!General::isEmpty($form_vals["password"])) {
             // check the password isn't already in password history (if relevant)
             if (!empty($account_settings["num_password_history"])) {
                 $encrypted_password = General::encode($form_vals["password"]);
@@ -455,7 +455,7 @@ class Administrator
 
         // if the password is defined, md5 it
         $password = $form_vals['password'];
-        $password_sql = (!empty($password)) ? "password = '" . General::encode($password) . "', " : "";
+        $password_sql = (!General::isEmpty($password)) ? "password = '" . General::encode($password) . "', " : "";
 
         // execute the query
         $db->query("

@@ -87,9 +87,8 @@ class User
         $account_info = Accounts::getAccountByUsername($username);
         $account_settings = Accounts::getAccountSettings($account_info["account_id"]);
 
-
         if (!$login_as_client) {
-            if (empty($password)) {
+            if (General::isEmpty($password)) {
                 return $LANG["validation_no_password"];
             }
             if ($account_info["account_status"] == "disabled") {

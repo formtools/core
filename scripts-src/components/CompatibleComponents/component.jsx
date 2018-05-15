@@ -17,7 +17,6 @@ const ComponentRow = ({ selected, name, folder, desc, version, toggleRow }) => (
 	</tr>
 );
 
-
 /**
  * Used in the installation script to display a full list of all compatible components, grouped by type,
  * with a simple searching.
@@ -69,7 +68,7 @@ CompatibleComponents.propTypes = {
 	constants: PropTypes.object,
 	api: PropTypes.object,
 	modules: PropTypes.array,
-	themes: PropTypes.array,
+	themes: PropTypes.array
 };
 
 export default CompatibleComponents;

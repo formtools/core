@@ -33,14 +33,12 @@ const store = initStore({
 
 	// every page that contains any React code needs things like the i18n, constants etc. loaded. This section
 	// is populate by init.jsx in the parent folder. All top-level connected components in the page call init.
-/*
 	initialized: false,
 	errorInitializing: false,
 	isAuthenticated: false,
 	userInfo: {},
 	i18n: {},
 	constants: {},
-*/
 
 	// used for installation + upgrades. This contains all compatible component versions for the user's current
 	// Core version

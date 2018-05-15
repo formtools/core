@@ -888,7 +888,7 @@ class Emails {
         $email_from            = $info["email_from"];
         $custom_from_name      = isset($info["custom_from_name"]) ? $info["custom_from_name"] : "";
         $custom_from_email     = isset($info["custom_from_email"]) ? $info["custom_from_email"] : "";
-        $email_reply_to        = $info["email_reply_to"];
+        $email_reply_to        = !empty($info["email_reply_to"]) ? $info["email_reply_to"] : null;
         $custom_reply_to_name  = isset($info["custom_reply_to_name"]) ? $info["custom_reply_to_name"] : "";
         $custom_reply_to_email = isset($info["custom_reply_to_email"]) ? $info["custom_reply_to_email"] : "";
         $subject               = $info["subject"];

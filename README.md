@@ -7,17 +7,13 @@ on your server.
 
 ### Branches 
 
-- The `master` branch contains the Form Tools 3.0.x code. It will remain 
-- `3.1` contains the work for the next (3.1) major release.
+- The `master` branch contains the latest work being done on 3.1. `master` is not production ready.
+- `3.0.x` contains the tip of the 3.0 releases. This is entirely for bug fixes. 
 
-Check out the release sections for earlier, stable releases.
-
-### Form Tools 3
+### Form Tools History
 
 Form Tools 3 (2018) was a complete rewrite of the application. Form Tools started back in 2004 and this was the third 
-(and hardest!) rewrite. The broader goal was to simply modernize the script, but there were also some specific goals: run on PHP 7, use PDO, update all lib dependencies up to date, introduce tests and pave the way for upcoming changes and features. 
-
-### Form Tools 2
+(and hardest!) rewrite. The goal was to modernize the script: to run on PHP 7, use PDO, update all lib dependencies, introduce tests and pave the way for upcoming changes and features.
 
 Form Tools 2 was the production version from 2010-2018. I took a long, 4-year break during that time to work on other projects, but returned to the Form Tools world in 2016 to revamp the site and code. Form Tools 2 is entirely functional code; FT3 converted everything to object-oriented.
 
@@ -32,6 +28,17 @@ Form Tools 2 was the production version from 2010-2018. I took a long, 4-year br
 - `3.2` - revamping the UI. Totally new design, upgrading all the front-end code (i.e. moving to React)
 - `3.3` - revamping the user permissions to make it roles-based and not have hardcoded "admin" and "client" accounts like now.
 
+### Next Version notes
+
+3.1 will be introducing a few changes that anticipate 3.2. A lot of the UI is a very old, using jQuery and jQuery UI 
+to provide interactivity. 3.1 is adding in React, Redux, and a standard node build process using webpack. At this stage
+I'm not totally sure how much of the interface will be converted to use React, but I do want to have it available for the 
+(many!) pages in the interface that are interaction heavy. 
+
+Up until now, the packaging process for Form Tools has been pretty much a simple matter of removing the odd file, then 
+it up. This will change with 3.1. Now we're adding in source code that needs bundling, minification - i.e. a modern build
+process - the packaging process will be handled by webpack. Again, I'm not 100% sure about what form this will take at 
+this moment, but I have some ideas.   
 
 ### Tests
 
