@@ -332,6 +332,7 @@ $LANG["phrase_change_login_info"] = "Change Login Information";
 $LANG["phrase_characters_limit_p"] = "characters limit.";
 $LANG["phrase_check_db_settings_try_again"] = "Please double-check your database settings and click the Continue button again.";
 $LANG["phrase_check_url"] = "Check URL";
+$LANG["phrase_choose_components"] = "Choose Components";
 $LANG["phrase_clean_up"] = "Clean Up";
 $LANG["phrase_clear_omit_list"] = "Clear Omit List";
 $LANG["phrase_client_account_settings"] = "Client Account Settings";

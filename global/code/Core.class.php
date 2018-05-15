@@ -187,6 +187,13 @@ class Core {
      */
     private static $maxFormFields = "";
 
+    /**
+     * The folder of the Form Tools data source, used to get component and compatibility versions for installation
+     * and upgrading.
+     * @var string
+     */
+    private static $formToolsDataSource = "http://localhost:8888/formtools-site/formtools.org/feeds/source";
+
 
     // -------------------------------------------------------------------------------------------------
 
@@ -252,17 +259,17 @@ class Core {
     /**
      * The current version of the Form Tools Core.
      */
-    private static $version = "3.0.2";
+    private static $version = "3.1.0";
 
     /**
      * The release type: alpha, beta or main
      */
-    private static $releaseType = "main";
+    private static $releaseType = "alpha";
 
     /**
      * The release date: YYYYMMDD
      */
-    private static $releaseDate = "20180513";
+    private static $releaseDate = "20180514";
 
     /**
      * The minimum required PHP version needed to run Form Tools.
@@ -347,7 +354,7 @@ class Core {
         "view_tabs"
     );
 
-    private static $upgradeUrl = "https://formtools.org/upgrade.php";
+//    private static $upgradeUrl = "https://formtools.org/upgrade.php";
 
     /**
      * Initializes the Core singleton for use throughout Form Tools.
@@ -727,14 +734,13 @@ class Core {
         return self::$apiSessionsTimeout;
     }
 
-    public static function getUpgradeUrl() {
-        return self::$upgradeUrl;
+    public static function getFormToolsDataSource () {
+        return self::$formToolsDataSource;
     }
 
     public static function useSmartyBC() {
         return self::$useSmartyBC;
     }
-
 
     // private methods
 

@@ -5,3 +5,8 @@ README.md export-ignore
 composer.lock export-ignore
 composer.json export-ignore
 phpunit.xml export-ignore
+package.json export-ignore
+node_modules/ export-ignore
+scripts-src export-ignore
+webpack.config.js export-ignore
+scripts-src export-ignore
