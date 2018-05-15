@@ -7,17 +7,13 @@ on your server.
 
 ### Branches 
 
-- The `master` branch contains the Form Tools 3.0.x code. It will remain 
-- `3.1` contains the work for the next (3.1) major release.
+- The `master` branch contains the latest work being done on 3.1. `master` is not production ready.
+- `3.0.x` contains the tip of the 3.0 releases. This is entirely for bug fixes. 
 
-Check out the release sections for earlier, stable releases.
-
-### Form Tools 3
+### Form Tools History
 
 Form Tools 3 (2018) was a complete rewrite of the application. Form Tools started back in 2004 and this was the third 
-(and hardest!) rewrite. The broader goal was to simply modernize the script, but there were also some specific goals: run on PHP 7, use PDO, update all lib dependencies up to date, introduce tests and pave the way for upcoming changes and features. 
-
-### Form Tools 2
+(and hardest!) rewrite. The goal was to modernize the script: to run on PHP 7, use PDO, update all lib dependencies, introduce tests and pave the way for upcoming changes and features.
 
 Form Tools 2 was the production version from 2010-2018. I took a long, 4-year break during that time to work on other projects, but returned to the Form Tools world in 2016 to revamp the site and code. Form Tools 2 is entirely functional code; FT3 converted everything to object-oriented.
 
