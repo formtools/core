@@ -1943,6 +1943,7 @@ class Forms
         $db->query("SELECT * FROM {PREFIX}forms WHERE form_id = :form_id");
         $db->bind("form_id", $form_id);
         $db->execute();
+
         return $db->fetch();
     }
 }

@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import CompatibleComponentsContainer from './containers/CompatibleComponents';
-
-// run init.jsx to get the data prereqs for all pages
+import './core/init';
 
 // expose whatever we want
 window.ReactDOM = ReactDOM;

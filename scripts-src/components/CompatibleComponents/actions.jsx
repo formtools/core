@@ -6,7 +6,6 @@ export const downloadCompatibleComponents = () => ({ type: DOWNLOAD_COMPATIBLE_C
 export const COMPATIBLE_COMPONENTS_LOADED = 'COMPATIBLE_COMPONENTS_LOADED';
 export const getCompatibleComponents = () => {
 	return function (dispatch, getState) {
-
 		// construct URL from constants pulled from getState
 
 		fetch('http://localhost:8888/formtools-site/formtools.org/feeds/source/core-3.1.0.json')

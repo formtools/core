@@ -5,14 +5,12 @@ import PropTypes from 'prop-types';
 // used for theme and module rows
 const ComponentRow = ({ selected, name, folder, desc, version, toggleRow }) => (
 	<tr>
-		<td width="30">
+		<td width="30" align="center">
 			<input type="checkbox" checked={selected} onClick={() => toggleRow(folder)} />
 		</td>
 		<td>
-			{name} <a href=""><b>{version.version}</b></a>
-			<p>
-				{desc}
-			</p>
+			<b>{name}</b> <a href=""><b>{version.version}</b></a>
+			<div>{desc}</div>
 		</td>
 	</tr>
 );
@@ -30,20 +28,38 @@ class CompatibleComponents extends Component {
 //		if (!initialized || !dataLoaded) {
 //			return null; // show loading spinner
 //		}
+
 		// could probably re-use this EXACT component on the upgrade page
 
 		return (
 			<form onSubmit={() => onSubmit()}>
-				<div>API</div>
+				<br />
 
-				<div>Themes</div>
-				<table>
-				{themes.forEach((theme) => <ComponentRow key={theme.folder} {...theme} />)}
+				<h3>API</h3>
+
+				<div>
+					<input type="checkbox" /> The API (Application Programming Interface) is for developers who wish
+					to submit their form data or interact with Form Tools programmatically.
+				</div>
+
+				<br />
+
+				<h3>Themes</h3>
+
+				<table className="list_table">
+					<tbody>
+					{themes.map((theme) => <ComponentRow key={theme.folder} {...theme} />)}
+					</tbody>
 				</table>
 
-				<input type="text" placeholder="Filter results" value={searchFilter} onChange={(e) => onSearchFilter(e.target.value)}/>
+				<br />
 
-				<div>Modules</div>
+				<div style={{ float: 'right', marginTop: 10 }}>
+					<input type="text" placeholder="Filter results" value={searchFilter} onChange={(e) => onSearchFilter(e.target.value)} />
+				</div>
+
+				<h3>Modules</h3>
+
 				<table className="list_table">
 					<tbody>
 					{modules.map((module) => <ComponentRow key={module.folder} {...module} />)}

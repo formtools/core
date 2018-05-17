@@ -1,17 +1,11 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
 import { actions, selectors, CompatibleComponents } from '../components/CompatibleComponents';
 import { Provider, connect } from 'react-redux';
 import { createSelector } from 'reselect';
-=======
-import { actions, reducers, CompatibleComponents } from '../components/CompatibleComponents';
-import { Provider, connect } from 'react-redux';
->>>>>>> 3a620d4b5cf0f858ffe4b80c13798d2b8f561eab
-import store from '../store';
+import store from '../core/store';
 
 
 class CompatibleComponentsContainer extends Component {
-<<<<<<< HEAD
 	componentWillMount () {
 		this.props.getCompatibleComponents();
 	}
@@ -19,21 +13,10 @@ class CompatibleComponentsContainer extends Component {
 	render () {
 		return (
 			<CompatibleComponents {...this.props} />
-=======
-
-	// the moment the component mounts we make a request for the component data
-	componentWillMount () {
-		//this.props.dispatch(actions.getCompatibleComponents());
-	}
-	render () {
-		return (
-			<CompatibleComponents {...props} />
->>>>>>> 3a620d4b5cf0f858ffe4b80c13798d2b8f561eab
 		);
 	}
 }
 
-<<<<<<< HEAD
 const mapStateToProps = (state) => ({
 	initialized: false,
 	api: state.compatibleComponents.api,
@@ -48,21 +31,10 @@ const mapDispatchToProps = (dispatch) => ({
 	onSubmit: () => dispatch(actions.downloadCompatibleComponents())
 });
 
+
 const ConnectedCompatibleComponentsContainer = connect(
 	mapStateToProps,
 	mapDispatchToProps
-=======
-const mapStateToProps = (state) => {
-
-};
-
-const mapDispatchToProps = (state) => {
-
-};
-
-const ConnectedCompatibleComponentsContainer = connect(
-	mapStateToProps
->>>>>>> 3a620d4b5cf0f858ffe4b80c13798d2b8f561eab
 )(CompatibleComponentsContainer);
 
 export default (
