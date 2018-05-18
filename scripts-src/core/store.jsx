@@ -36,7 +36,7 @@ const store = initStore({
 
 	// every page that contains any React code needs things like the i18n, constants etc. loaded. This section
 	// is populate by init.jsx in the parent folder. All top-level connected components in the page call init
-	init: {
+	init: { // prereqs?
 		initialized: false,
 		errorInitializing: false,
 		isAuthenticated: false,
@@ -44,7 +44,8 @@ const store = initStore({
 		i18n: {},
 		constants: {
 			root_url: null,
-			root_dir: null
+			root_dir: null,
+			data_source_url: null
 		},
 	},
 
@@ -59,8 +60,6 @@ const store = initStore({
 		api: {},
 		modules: [],
 		themes: [],
-
-		selected: C.PRESELECTED_COMPONENTS,
 
 		// separate request per component, loaded on-demand
 		componentChangelogs: {},

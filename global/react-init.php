@@ -15,7 +15,9 @@ $data = array(
     "i18n" => Core::$L,
     "constants" => array(
         "root_dir" => Core::getRootDir(),
-        "root_url" => Core::getRootUrl()
+        "root_url" => Core::getRootUrl(),
+        "data_source_url" => Core::getFormToolsDataSource(),
+        "core_version" => Core::getCoreVersion()
     )
 );
 if ($data["is_logged_in"]) {

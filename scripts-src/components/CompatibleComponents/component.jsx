@@ -22,12 +22,14 @@ const ComponentRow = ({ selected, name, folder, desc, version, toggleRow }) => (
 class CompatibleComponents extends Component {
 
 	render () {
-		const { searchFilter, onSearchFilter, api, modules, themes, selected, initialized, dataLoaded, dataLoadError, error,
+		const { initialized, dataLoaded, dataLoadError, error, searchFilter, onSearchFilter, api, modules, themes, selected,
 			onSubmit } = this.props;
 
-//		if (!initialized || !dataLoaded) {
-//			return null; // show loading spinner
-//		}
+		if (!initialized || !dataLoaded) {
+			return null;
+		} else if (dataLoadError) {
+			return <p>Error loading... {error}</p>;
+		}
 
 		// could probably re-use this EXACT component on the upgrade page
 
@@ -82,7 +84,7 @@ CompatibleComponents.propTypes = {
 	searchFilter: PropTypes.string,
 	i18n: PropTypes.object,
 	constants: PropTypes.object,
-	api: PropTypes.object,
+	//api: PropTypes.object,
 	modules: PropTypes.array,
 	themes: PropTypes.array
 };

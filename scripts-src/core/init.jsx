@@ -10,10 +10,9 @@ export const getInitializationData = () => {
 	fetch('../global/react-init.php')
 		.then((response) => response.json())
 		.then((json) => {
-			console.log("data: ", json);
 			store.dispatch({
 				type: actions.INIT_DATA_LOADED,
-				data: json
+				...json
 			});
 		}).catch((e) => store.dispatch({ // TODO check
 			type: actions.INIT_DATA_ERROR_LOADING,

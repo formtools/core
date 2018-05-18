@@ -6,8 +6,11 @@ import store from '../core/store';
 
 
 class CompatibleComponentsContainer extends Component {
-	componentWillMount () {
-		this.props.getCompatibleComponents();
+
+	componentWillUpdate (nextProps) {
+		if (nextProps.initialized && !this.props.initialized) {
+			this.props.getCompatibleComponents();
+		}
 	}
 
 	render () {
@@ -18,7 +21,8 @@ class CompatibleComponentsContainer extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	initialized: false,
+	initialized: state.init.initialized,
+	dataLoaded: state.compatibleComponents.loaded,
 	api: state.compatibleComponents.api,
 	themes: state.compatibleComponents.themes,
 	modules: selectors.getVisibleModules(state)
@@ -26,8 +30,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	getCompatibleComponents: () => dispatch(actions.getCompatibleComponents()),
-	onSearchFilter: (str) => dispatch(actions.updateSearchFilter(str)),
-	toggleRow: (id) => dispatch(actions.toggleRow(id)),
+	updateSearchFilter: (str) => dispatch(actions.updateSearchFilter(str)),
+	toggleAPI: (folder) => dispatch(actions.toggleAPI(folder)),
+	toggleModule: (folder) => dispatch(actions.toggleModule(folder)),
+	toggleTheme: (folder) => dispatch(actions.toggleTheme(folder)),
 	onSubmit: () => dispatch(actions.downloadCompatibleComponents())
 });
 
