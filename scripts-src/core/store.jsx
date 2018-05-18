@@ -2,7 +2,7 @@ import thunk from 'redux-thunk';
 import { reducers } from '../components/CompatibleComponents';
 import * as coreReducers from './reducers';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import C from './constants';
+
 
 function initStore (initialState) {
 	let middleware = [thunk];
@@ -58,17 +58,19 @@ const store = initStore({
 		searchFilter: '',
 		core: {},
 		api: {},
-		modules: [],
-		themes: [],
+		modules: {},
+		visibleModulesByFolder: [],
+		themes: {},
+		visibleThemesByFolder: [],
 
 		// separate request per component, loaded on-demand
-		componentChangelogs: {},
+		componentChangelogs: {}
+	},
 
-		// in case the user's core version is out of date, this contains the list of components that are compatible
-		// with the latest version of the core. This info is automatically downloaded via a second request if there's a
-		// new core available
-		latest: {},
-	}
+	// in case the user's core version is out of date, this contains the list of components that are compatible
+	// with the latest version of the core. This info is automatically downloaded via a second request if there's a
+	// new core available
+	//latestCompatibleComponents: {},
 });
 
 export default store;

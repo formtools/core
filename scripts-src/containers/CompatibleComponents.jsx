@@ -24,7 +24,7 @@ const mapStateToProps = (state) => ({
 	initialized: state.init.initialized,
 	dataLoaded: state.compatibleComponents.loaded,
 	api: state.compatibleComponents.api,
-	themes: state.compatibleComponents.themes,
+	themes: selectors.getVisibleThemes(state),
 	modules: selectors.getVisibleModules(state)
 });
 

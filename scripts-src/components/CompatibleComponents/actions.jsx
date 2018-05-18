@@ -19,7 +19,7 @@ export const getCompatibleComponents = () => {
 					modules: json.modules,
 					themes: json.themes
 				});
-			}).catch(() => dispatch(compatibleComponentsLoadError()))
+			}).catch((e) => dispatch(compatibleComponentsLoadError(e)))
 	};
 };
 
@@ -36,10 +36,13 @@ export const TOGGLE_API = 'TOGGLE_API';
 export const toggleAPI = () => ({ type: TOGGLE_API });
 
 export const TOGGLE_MODULE = 'TOGGLE_MODULE';
-export const toggleModule = (folder) => ({
-	type: TOGGLE_MODULE,
-	folder
-});
+export const toggleModule = (folder) => {
+	console.log('toggling.');
+	return {
+		type: TOGGLE_MODULE,
+		folder
+	}
+};
 
 export const TOGGLE_THEME = 'TOGGLE_THEME';
 export const toggleTheme = (folder) => ({

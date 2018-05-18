@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
-// used for theme and module rows
 const ComponentRow = ({ selected, name, folder, desc, version, toggleRow }) => (
 	<tr>
 		<td width="30" align="center">
 			<input type="checkbox" checked={selected} onClick={() => toggleRow(folder)} />
 		</td>
 		<td>
-			<b>{name}</b> <a href=""><b>{version.version}</b></a>
+			<b>{name}</b> <a href=""><b>{version}</b></a>
 			<div>{desc}</div>
 		</td>
 	</tr>
@@ -22,8 +21,8 @@ const ComponentRow = ({ selected, name, folder, desc, version, toggleRow }) => (
 class CompatibleComponents extends Component {
 
 	render () {
-		const { initialized, dataLoaded, dataLoadError, error, searchFilter, onSearchFilter, api, modules, themes, selected,
-			onSubmit } = this.props;
+		const { initialized, dataLoaded, dataLoadError, error, searchFilter, onSearchFilter, api, modules, themes,
+			onSubmit, toggleAPI, toggleTheme, toggleModule } = this.props;
 
 		if (!initialized || !dataLoaded) {
 			return null;
@@ -31,18 +30,25 @@ class CompatibleComponents extends Component {
 			return <p>Error loading... {error}</p>;
 		}
 
-		// could probably re-use this EXACT component on the upgrade page
-
 		return (
 			<form onSubmit={() => onSubmit()}>
 				<br />
 
 				<h3>API</h3>
 
-				<div>
-					<input type="checkbox" /> The API (Application Programming Interface) is for developers who wish
-					to submit their form data or interact with Form Tools programmatically.
-				</div>
+				<table className="list_table">
+					<tbody>
+						<tr>
+							<td width="30" align="center">
+								<input type="checkbox" checked={api.selected} onChange={toggleAPI} />
+							</td>
+							<td>
+								The API (Application Programming Interface) is for developers who wish to submit their
+								form data or interact with Form Tools programmatically.
+							</td>
+						</tr>
+					</tbody>
+				</table>
 
 				<br />
 
@@ -50,7 +56,16 @@ class CompatibleComponents extends Component {
 
 				<table className="list_table">
 					<tbody>
-					{themes.map((theme) => <ComponentRow key={theme.folder} {...theme} />)}
+					{themes.map((theme) => (
+						<ComponentRow key={theme.folder}
+							name={theme.name}
+							folder={theme.folder}
+							desc={theme.desc}
+							version={theme.version}
+							selected={theme.selected}
+							toggleRow={toggleTheme}
+						/>
+					))}
 					</tbody>
 				</table>
 
@@ -64,7 +79,16 @@ class CompatibleComponents extends Component {
 
 				<table className="list_table">
 					<tbody>
-					{modules.map((module) => <ComponentRow key={module.folder} {...module} />)}
+					{modules.map((module) => (
+						<ComponentRow key={module.folder}
+							  name={module.name}
+							  folder={module.folder}
+							  desc={module.desc}
+							  version={module.version}
+							  selected={module.selected}
+							  toggleRow={toggleModule}
+						/>
+					))}
 					</tbody>
 				</table>
 
@@ -76,17 +100,17 @@ class CompatibleComponents extends Component {
 	}
 }
 CompatibleComponents.propTypes = {
-	onSubmit: PropTypes.func.isRequired,
-	initialized: PropTypes.bool,
-	dataLoaded: PropTypes.bool,
-	dataLoadError: PropTypes.bool,
-	error: PropTypes.string,
-	searchFilter: PropTypes.string,
-	i18n: PropTypes.object,
-	constants: PropTypes.object,
-	//api: PropTypes.object,
-	modules: PropTypes.array,
-	themes: PropTypes.array
+//	onSubmit: PropTypes.func.isRequired,
+//	initialized: PropTypes.bool,
+//	dataLoaded: PropTypes.bool,
+//	dataLoadError: PropTypes.bool,
+//	error: PropTypes.string,
+//	searchFilter: PropTypes.string,
+//	i18n: PropTypes.object,
+//	constants: PropTypes.object,
+//	//api: PropTypes.object,
+//	modules: PropTypes.array,
+//	themes: PropTypes.array
 };
 
 export default CompatibleComponents;
