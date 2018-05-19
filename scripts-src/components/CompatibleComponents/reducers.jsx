@@ -16,9 +16,11 @@ const compatibleComponents = (state = {
 
 	switch (action.type) {
 
+		// converts the list of modules and themes to an object with (unique) folder names as keys
 		case actions.COMPATIBLE_COMPONENTS_LOADED:
 			const modules = {};
 			const visibleModulesByFolder = [];
+
 			action.modules.forEach(({ name, desc, folder, repo, version }) => {
 				modules[folder] = {
 					name, desc, folder, repo,
@@ -33,36 +35,39 @@ const compatibleComponents = (state = {
 			action.themes.forEach(({ name, desc, folder, repo, version }) => {
 				themes[folder] = {
 					name, desc, folder, repo,
-					version: version.version,
-					selected: C.PRESELECTED_THEMES.indexOf(folder) !== -1
+					version: version.version
 				};
 				visibleThemesByFolder.push(folder);
 			});
 
 			return Object.assign({}, state, {
 				loaded: true,
-				api: {
-					selected: true
-				},
 				modules,
 				visibleModulesByFolder,
+				selectedModuleFolders: C.PRESELECTED_MODULES,
 				themes,
-				visibleThemesByFolder
+				visibleThemesByFolder,
+				selectedThemeFolders: C.PRESELECTED_THEMES
 			});
 
+		// updating the search filter also updates the list of visible modules by folder
 		case actions.UPDATE_SEARCH_FILTER:
 			const re = new RegExp(action.searchFilter.toLowerCase());
 
-			const sortedFilteredModules = modules.filter((item) => {
-				return re.test(item.name.toLowerCase()) || re.test(item.desc.toLowerCase());
-			}).sort((a) => {
-				// return matches on the module name first
-				return (re.test(a.name.toLowerCase())) ? -1 : 1;
-			}).map((module) => module.folder);
+			const sortedFilteredModules = Object.keys(state.modules)
+				.map(id => state.modules[id])
+				.filter((item) => {
+					return re.test(item.name.toLowerCase()) || re.test(item.desc.toLowerCase());
+				})
+				.sort((a) => {
+					// return matches on the module name first
+					return (re.test(a.name.toLowerCase())) ? -1 : 1;
+				})
+				.map((module) => module.folder);
 
 			return Object.assign({}, state, {
 				searchFilter: action.searchFilter,
-				visibleModules: sortedFilteredModules
+				visibleModulesByFolder: sortedFilteredModules
 			});
 
 		case actions.TOGGLE_API:

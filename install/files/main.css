@@ -224,3 +224,8 @@ span.pass {
     color: white;
     border-radius: 4px;
 }
+
+h3 {
+    font-weight: normal;
+    color: #444444;
+}

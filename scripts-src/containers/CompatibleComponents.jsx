@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { actions, selectors, CompatibleComponents } from '../components/CompatibleComponents';
 import { Provider, connect } from 'react-redux';
 import { createSelector } from 'reselect';
+import init from '../components/Init';
+import { actions, selectors, CompatibleComponents } from '../components/CompatibleComponents';
 import store from '../core/store';
 
 
@@ -24,13 +25,14 @@ const mapStateToProps = (state) => ({
 	initialized: state.init.initialized,
 	dataLoaded: state.compatibleComponents.loaded,
 	api: state.compatibleComponents.api,
+	i18n: init.selectors.getI18n(state),
 	themes: selectors.getVisibleThemes(state),
 	modules: selectors.getVisibleModules(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	getCompatibleComponents: () => dispatch(actions.getCompatibleComponents()),
-	updateSearchFilter: (str) => dispatch(actions.updateSearchFilter(str)),
+	onSearchFilter: (str) => dispatch(actions.updateSearchFilter(str)),
 	toggleAPI: (folder) => dispatch(actions.toggleAPI(folder)),
 	toggleModule: (folder) => dispatch(actions.toggleModule(folder)),
 	toggleTheme: (folder) => dispatch(actions.toggleTheme(folder)),

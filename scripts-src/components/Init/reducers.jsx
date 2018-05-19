@@ -1,6 +1,18 @@
 import * as actions from './actions';
 
-export const init = (state = {}, action) => {
+
+export const init = (state = {
+	initialized: false,
+	errorInitializing: false,
+	isAuthenticated: false,
+	userInfo: {},
+	i18n: {},
+	constants: {
+		root_url: null,
+		root_dir: null,
+		data_source_url: null
+	}
+}, action) => {
 
 	if (action.type === actions.INIT_DATA_LOADED) {
 		const { i18n, is_logged_in, constants } = action;

@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 
-const ComponentRow = ({ selected, name, folder, desc, version, toggleRow }) => (
+const ComponentRow = ({ selected, name, folder, desc, version, disabled, toggleRow }) => (
 	<tr>
 		<td width="30" align="center">
-			<input type="checkbox" checked={selected} onClick={() => toggleRow(folder)} />
+			<input type="checkbox" checked={selected} onChange={() => toggleRow(folder)} disabled={disabled} />
 		</td>
 		<td>
 			<b>{name}</b> <a href=""><b>{version}</b></a>
@@ -13,6 +13,10 @@ const ComponentRow = ({ selected, name, folder, desc, version, toggleRow }) => (
 		</td>
 	</tr>
 );
+ComponentRow.defaultProps = {
+	disabled: false,
+	toggleRow: () => {}
+};
 
 /**
  * Used in the installation script to display a full list of all compatible components, grouped by type,
@@ -22,7 +26,7 @@ class CompatibleComponents extends Component {
 
 	render () {
 		const { initialized, dataLoaded, dataLoadError, error, searchFilter, onSearchFilter, api, modules, themes,
-			onSubmit, toggleAPI, toggleTheme, toggleModule } = this.props;
+			onSubmit, toggleAPI, toggleTheme, toggleModule, i18n } = this.props;
 
 		if (!initialized || !dataLoaded) {
 			return null;
@@ -44,7 +48,7 @@ class CompatibleComponents extends Component {
 							</td>
 							<td>
 								The API (Application Programming Interface) is for developers who wish to submit their
-								form data or interact with Form Tools programmatically.
+								form data programmatically, or access the database through their own code.
 							</td>
 						</tr>
 					</tbody>
@@ -52,10 +56,16 @@ class CompatibleComponents extends Component {
 
 				<br />
 
-				<h3>Themes</h3>
+				<h3>{i18n.word_themes}</h3>
 
 				<table className="list_table">
 					<tbody>
+
+					<ComponentRow
+						name="Default theme" // localize
+						desc="The default theme, bundled with all Form Tools installation. "
+						disabled={true} selected={true} />
+
 					{themes.map((theme) => (
 						<ComponentRow key={theme.folder}
 							name={theme.name}
@@ -72,8 +82,10 @@ class CompatibleComponents extends Component {
 				<br />
 
 				<div style={{ float: 'right', marginTop: 10 }}>
-					<input type="text" placeholder="Filter results" value={searchFilter} onChange={(e) => onSearchFilter(e.target.value)} />
+					<input type="text" placeholder="Filter results" value={searchFilter}
+						onChange={(e) => onSearchFilter(e.target.value)} />
 				</div>
+
 
 				<h3>Modules</h3>
 
