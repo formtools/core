@@ -1,4 +1,4 @@
-import store from "../../core/store";
+import store from '../../store';
 
 export const INIT_DATA_LOADED = 'INIT_DATA_LOADED';
 export const INIT_DATA_ERROR_LOADING = 'INIT_DATA_ERROR_LOADING';

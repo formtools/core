@@ -4,32 +4,17 @@ import * as actions from './actions';
 export const init = (state = {
 	initialized: false,
 	errorInitializing: false,
-	isAuthenticated: false,
-	userInfo: {},
-	i18n: {},
-	constants: {
-		root_url: null,
-		root_dir: null,
-		data_source_url: null
-	}
+	isAuthenticated: false
 }, action) => {
 
 	if (action.type === actions.INIT_DATA_LOADED) {
-		const { i18n, is_logged_in, constants } = action;
-
 		return Object.assign({}, state, {
 			initialized: true,
-			i18n: i18n,
-			isAuthenticated: is_logged_in,
-			constants: {
-				root_url: constants.root_url,
-				root_dir: constants.root_dir,
-				data_source_url: constants.data_source_url,
-				core_version: constants.core_version
-			}
+			isAuthenticated: actions.is_logged_in
 		});
 	} else if (action.type === actions.INIT_DATA_ERROR_LOADING) {
 		return Object.assign({}, state, {
+			initialized: true,
 			errorInitializing: false
 		});
 	} else {

@@ -16,7 +16,7 @@ const compatibleComponents = (state = {
 
 	switch (action.type) {
 
-		// converts the list of modules and themes to an object with (unique) folder names as keys
+		// converts the list of modules and themes to an object 	with (unique) folder names as keys
 		case actions.COMPATIBLE_COMPONENTS_LOADED:
 			const modules = {};
 			const visibleModulesByFolder = [];
@@ -92,6 +92,4 @@ const compatibleComponents = (state = {
 	}
 };
 
-export {
-	compatibleComponents
-};
+export default compatibleComponents;

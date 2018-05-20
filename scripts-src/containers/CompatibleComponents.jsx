@@ -22,9 +22,9 @@ class CompatibleComponentsContainer extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	initialized: state.init.initialized,
-	dataLoaded: state.compatibleComponents.loaded,
-	api: state.compatibleComponents.api,
+	initialized: init.selectors.getInitialized(state),
+	dataLoaded: selectors.isDataLoaded(state),
+	api: selectors.getAPI(state),
 	i18n: init.selectors.getI18n(state),
 	themes: selectors.getVisibleThemes(state),
 	modules: selectors.getVisibleModules(state)

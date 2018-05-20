@@ -1,6 +1,6 @@
 import thunk from 'redux-thunk';
-import { reducers } from '../components/CompatibleComponents';
-import { reducers as coreReducers } from '../components/Init';
+import reducers from '../components/compatibleComponents';
+
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 
 
@@ -16,16 +16,10 @@ function initStore (initialState) {
 		}
 	}
 
-	console.log({
-		...reducers,
-		...coreReducers
-	});
+	console.log(reducers);
 
 	const store = createStore(
-		combineReducers({
-			...reducers,
-			...coreReducers
-		}),
+		combineReducers(reducers),
 		initialState,
 		composeEnhancers(
 			applyMiddleware(...middleware),
@@ -45,6 +39,8 @@ const store = initStore({
 //	init: { // prereqs?
 //		initialized: false,
 //		errorInitializing: false,
+//	},
+//
 //		isAuthenticated: false,
 //		userInfo: {},
 //		i18n: {},
@@ -53,8 +49,7 @@ const store = initStore({
 //			root_dir: null,
 //			data_source_url: null
 //		},
-//	},
-//
+
 //	// used for installation + upgrades. This contains all compatible component versions for the user's current
 //	// Core version
 //	compatibleComponents: {
