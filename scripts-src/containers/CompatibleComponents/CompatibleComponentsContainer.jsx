@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Provider, connect } from 'react-redux';
-import { createSelector } from 'reselect';
 import store from '../../core/store';
 import * as coreSelectors from '../../core/selectors';
 import * as actions from './actions';

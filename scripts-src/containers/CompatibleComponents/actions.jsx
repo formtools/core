@@ -38,7 +38,6 @@ export const toggleAPI = () => ({ type: TOGGLE_API });
 
 export const TOGGLE_MODULE = 'TOGGLE_MODULE';
 export const toggleModule = (folder) => {
-	console.log('toggling.');
 	return {
 		type: TOGGLE_MODULE,
 		folder

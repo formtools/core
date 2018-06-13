@@ -78,17 +78,52 @@ export default (state = {
 			});
 
 		case actions.TOGGLE_MODULE:
-//			const index = state.modules.findIndex((i) => i.folder === action.folder);
-//			list.splice(index, 1, action.object)
-//			return state.set('list_of_objects', list)
-
-			break;
+			return {
+				selectedModuleFolders: selectedModulesReducer(state.selectedModuleFolders, action),
+				...state
+			};
 
 		case actions.TOGGLE_THEME:
-			break;
-
+			return {
+				themes: themesReducer(state.themes, action),
+				...state
+			};
 	}
 
 	return state;
 };
+
+const selectedModulesReducer = (state = [], action) => {
+	if (action.type === actions.TOGGLE_MODULE) {
+		if (state.includes(action.folder)) {
+			return helpers.removeFromArray(state, action.folder);
+		} else {
+			return [...state, action.folder];
+		}
+	}
+	return state;
+};
+
+const themesReducer = (state = {}, action) => {
+	if (action === actions.TOGGLE_MODULE) {
+		return {
+			...state,
+			[action.folder]: {
+				selected: !state[action.folder].selected,
+				...state[action.folder]
+			},
+		}
+	}
+	return state;
+};
+
+
+
+
+
+
+
+
+
+
 
