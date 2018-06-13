@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Provider, connect } from 'react-redux';
 import { createSelector } from 'reselect';
-import init from '../components/Init';
-import { actions, selectors, CompatibleComponents } from '../components/CompatibleComponents';
-import store from '../core/store';
+import store from '../../core/store';
+import * as coreSelectors from '../../core/selectors';
+import * as actions from './actions';
+import * as selectors from './selectors';
+import CompatibleComponents from '../../components/CompatibleComponents';
 
 
 class CompatibleComponentsContainer extends Component {
-
 	componentWillUpdate (nextProps) {
 		if (nextProps.initialized && !this.props.initialized) {
 			this.props.getCompatibleComponents();
@@ -22,10 +23,10 @@ class CompatibleComponentsContainer extends Component {
 }
 
 const mapStateToProps = (state) => ({
-	initialized: init.selectors.getInitialized(state),
+	initialized: coreSelectors.getInitialized(state),
 	dataLoaded: selectors.isDataLoaded(state),
 	api: selectors.getAPI(state),
-	i18n: init.selectors.getI18n(state),
+	i18n: coreSelectors.getI18n(state),
 	themes: selectors.getVisibleThemes(state),
 	modules: selectors.getVisibleModules(state)
 });

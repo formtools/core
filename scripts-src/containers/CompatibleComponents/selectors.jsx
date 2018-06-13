@@ -1,4 +1,4 @@
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
 
 export const isDataLoaded = (state) => state.compatibleComponents.dataLoaded;
 export const getSearchFilter = (state) => state.compatibleComponents.searchFilter;

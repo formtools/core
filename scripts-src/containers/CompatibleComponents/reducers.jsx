@@ -1,7 +1,7 @@
 import * as actions from './actions';
 import C from '../../core/constants';
 
-const compatibleComponents = (state = {
+export default compatibleComponents = (state = {
 	loaded: false,
 	errorLoading: false,
 	error: '',
@@ -91,5 +91,3 @@ const compatibleComponents = (state = {
 			return state;
 	}
 };
-
-export default compatibleComponents;
