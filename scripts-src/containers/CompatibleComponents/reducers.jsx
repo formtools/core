@@ -1,7 +1,7 @@
 import * as actions from './actions';
 import C from '../../core/constants';
 
-export default compatibleComponents = (state = {
+export default (state = {
 	loaded: false,
 	errorLoading: false,
 	error: '',
@@ -87,7 +87,8 @@ export default compatibleComponents = (state = {
 		case actions.TOGGLE_THEME:
 			break;
 
-		default:
-			return state;
 	}
+
+	return state;
 };
+

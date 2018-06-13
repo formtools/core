@@ -11,8 +11,10 @@ export const getInitializationData = () => {
 				type: INIT_DATA_LOADED,
 				...json
 			});
-		}).catch((e) => store.dispatch({ // TODO check
-			type: INIT_DATA_ERROR_LOADING,
-			error: e
-		}));
+		}).catch((e) => {
+			store.dispatch({
+				type: INIT_DATA_ERROR_LOADING,
+				error: e
+			});
+		});
 };

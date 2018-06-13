@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 
-export const isDataLoaded = (state) => state.compatibleComponents.dataLoaded;
+export const isDataLoaded = (state) => state.compatibleComponents.loaded;
 export const getSearchFilter = (state) => state.compatibleComponents.searchFilter;
 export const getModules = (state) => state.compatibleComponents.modules;
 export const getThemes = (state) => state.compatibleComponents.themes;

@@ -14,7 +14,6 @@ class CompatibleComponentsContainer extends Component {
 			this.props.getCompatibleComponents();
 		}
 	}
-
 	render () {
 		return (
 			<CompatibleComponents {...this.props} />

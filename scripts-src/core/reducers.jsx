@@ -1,20 +1,26 @@
 import * as actions from './actions';
 
-export const constants = (state = {}, action) => {
-	if (action.type === actions.INIT_DATA_LOADING) {
+export const constants = (state = {
+	root_url: null,
+	root_dir: null,
+	data_source_url: null,
+	core_version: null
+}, action) => {
+	if (action.type === actions.INIT_DATA_LOADED) {
 		return {
-			root_url: constants.root_url,
-			root_dir: constants.root_dir,
-			data_source_url: constants.data_source_url,
-			core_version: constants.core_version
+			root_url: action.constants.root_url,
+			root_dir: action.constants.root_dir,
+			data_source_url: action.constants.data_source_url,
+			core_version: action.constants.core_version
 		};
 	}
 	return state;
 };
 
+// userInfo may or may not be defined, depending on if the user is logged in or not
 export const userInfo = (state = {}, action) => {
 	if (action.type === actions.INIT_DATA_LOADED) {
-		return action.userInfo;
+		return action.userInfo ? action.userInfo : {};
 	}
 	return state;
 };

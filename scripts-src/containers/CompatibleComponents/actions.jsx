@@ -7,8 +7,9 @@ export const COMPATIBLE_COMPONENTS_LOADED = 'COMPATIBLE_COMPONENTS_LOADED';
 export const getCompatibleComponents = () => {
 	return function (dispatch, getState) {
 		const state = getState();
-		const base_url = state.init.constants.data_source_url;
-		const core_version = state.init.constants.core_version;
+
+		const base_url = state.constants.data_source_url;
+		const core_version = state.constants.core_version;
 
 		fetch(`${base_url}/core-${core_version}.json`)
 			.then((response) => response.json())

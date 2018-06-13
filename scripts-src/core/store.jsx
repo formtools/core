@@ -16,16 +16,14 @@ function initStore (initialState) {
 		}
 	}
 
-	console.log(Object.assign({},
+
+	const allReducers = Object.assign({},
 		{ compatibleComponents },
 		coreReducers
-	));
+	);
 
 	const store = createStore(
-		combineReducers({
-			compatibleComponents,
-			...coreReducers
-		}),
+		combineReducers(allReducers),
 		initialState,
 		composeEnhancers(
 			applyMiddleware(...middleware),
