@@ -1,7 +1,7 @@
 import thunk from 'redux-thunk';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import * as coreReducers from './reducers';
-import compatibleComponentsReducers from '../containers/CompatibleComponents/reducers';
+import compatibleComponentsReducer from '../containers/CompatibleComponents/reducers';
 
 
 function initStore (initialState) {
@@ -17,7 +17,7 @@ function initStore (initialState) {
 	}
 
 	const allReducers = Object.assign({},
-		{ compatibleComponents: compatibleComponentsReducers },
+		{ compatibleComponents: compatibleComponentsReducer },
 		coreReducers
 	);
 
