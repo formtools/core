@@ -7,6 +7,8 @@ export const getThemes = (state) => state.compatibleComponents.themes;
 export const getVisibleModulesByFolder = (state) => state.compatibleComponents.visibleModulesByFolder;
 export const getVisibleThemesByFolder = (state) => state.compatibleComponents.visibleThemesByFolder;
 export const getAPI = (state) => state.compatibleComponents.api;
+export const getSelectedModuleFolders = (state) => state.compatibleComponents.selectedModuleFolders;
+export const getSelectedThemeFolders = (state) => state.compatibleComponents.selectedThemeFolders;
 
 export const getVisibleModules = createSelector(
 	getVisibleModulesByFolder,

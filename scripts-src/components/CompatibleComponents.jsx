@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-//import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
 
 const ComponentRow = ({ selected, name, folder, desc, version, disabled, toggleRow }) => (
@@ -26,7 +26,7 @@ class CompatibleComponents extends Component {
 
 	render () {
 		const { initialized, dataLoaded, dataLoadError, error, searchFilter, onSearchFilter, api, modules, themes,
-			onSubmit, toggleAPI, toggleTheme, toggleModule, i18n } = this.props;
+			onSubmit, toggleAPI, toggleTheme, toggleModule, i18n, selectedModuleFolders, selectedThemeFolders } = this.props;
 
 		if (!initialized || !dataLoaded) {
 			return null;
@@ -72,7 +72,7 @@ class CompatibleComponents extends Component {
 							folder={theme.folder}
 							desc={theme.desc}
 							version={theme.version}
-							selected={theme.selected}
+							selected={selectedThemeFolders.includes(theme.folder)}
 							toggleRow={toggleTheme}
 						/>
 					))}
@@ -97,7 +97,7 @@ class CompatibleComponents extends Component {
 							  folder={module.folder}
 							  desc={module.desc}
 							  version={module.version}
-							  selected={module.selected}
+							  selected={selectedModuleFolders.includes(module.folder)}
 							  toggleRow={toggleModule}
 						/>
 					))}
@@ -122,7 +122,9 @@ CompatibleComponents.propTypes = {
 //	constants: PropTypes.object,
 //	//api: PropTypes.object,
 //	modules: PropTypes.array,
-//	themes: PropTypes.array
+//	themes: PropTypes.array,
+	selectedModuleFolders: PropTypes.array,
+	selectedThemeFolders: PropTypes.array,
 };
 
 export default CompatibleComponents;

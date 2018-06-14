@@ -1,5 +1,6 @@
 import * as actions from './actions';
 import C from '../../core/constants';
+import { removeFromArray } from '../../core/helpers';
 
 export default (state = {
 	loaded: false,
@@ -24,8 +25,7 @@ export default (state = {
 			action.modules.forEach(({ name, desc, folder, repo, version }) => {
 				modules[folder] = {
 					name, desc, folder, repo,
-					version: version.version,
-					selected: C.PRESELECTED_MODULES.indexOf(folder) !== -1
+					version: version.version
 				};
 				visibleModulesByFolder.push(folder);
 			});
@@ -43,10 +43,10 @@ export default (state = {
 			return Object.assign({}, state, {
 				loaded: true,
 				modules,
-				visibleModulesByFolder,
-				selectedModuleFolders: C.PRESELECTED_MODULES,
 				themes,
 				visibleThemesByFolder,
+				visibleModulesByFolder,
+				selectedModuleFolders: C.PRESELECTED_MODULES,
 				selectedThemeFolders: C.PRESELECTED_THEMES
 			});
 
@@ -79,14 +79,14 @@ export default (state = {
 
 		case actions.TOGGLE_MODULE:
 			return {
-				selectedModuleFolders: selectedModulesReducer(state.selectedModuleFolders, action),
-				...state
+				...state,
+				selectedModuleFolders: selectedModulesReducer(state.selectedModuleFolders, action)
 			};
 
 		case actions.TOGGLE_THEME:
 			return {
-				themes: themesReducer(state.themes, action),
-				...state
+				...state,
+				themes: themesReducer(state.themes, action)
 			};
 	}
 
@@ -96,7 +96,7 @@ export default (state = {
 const selectedModulesReducer = (state = [], action) => {
 	if (action.type === actions.TOGGLE_MODULE) {
 		if (state.includes(action.folder)) {
-			return helpers.removeFromArray(state, action.folder);
+			return removeFromArray(state, action.folder);
 		} else {
 			return [...state, action.folder];
 		}

@@ -26,7 +26,9 @@ const mapStateToProps = (state) => ({
 	api: selectors.getAPI(state),
 	i18n: coreSelectors.getI18n(state),
 	themes: selectors.getVisibleThemes(state),
-	modules: selectors.getVisibleModules(state)
+	modules: selectors.getVisibleModules(state),
+	selectedModuleFolders: selectors.getSelectedModuleFolders(state),
+	selectedThemeFolders: selectors.getSelectedThemeFolders(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
