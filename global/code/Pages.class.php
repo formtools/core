@@ -190,7 +190,7 @@ class Pages
         $url = self::$pageList[$page_identifier];
 
         $query_pairs = array();
-        while (list($key, $value) = each($params)) {
+        foreach ($params as $key => $value) {
             $query_pairs[] = "$key=$value";
         }
 

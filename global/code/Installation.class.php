@@ -1023,6 +1023,7 @@ END;
                   default_sort_field varchar(255) NOT NULL default 'submission_date',
                   default_sort_field_order enum('asc','desc') NOT NULL default 'desc',
                   may_add_submissions enum('yes','no') NOT NULL DEFAULT 'yes',
+                  may_copy_submissions enum('yes','no') NOT NULL DEFAULT 'no',
                   may_edit_submissions enum('yes','no') NOT NULL default 'yes',
                   may_delete_submissions enum('yes','no') NOT NULL default 'yes',
                   has_client_map_filter enum('yes','no') NOT NULL default 'no',
