@@ -215,8 +215,9 @@ class Menus
             switch ($line["type"]) {
                 case "select_open":
                     $attribute_str = "";
-                    while (list($key, $value) = each($attributes))
-                        $attribute_str .= " $key=\"$value\"";
+					foreach ($attributes as $key => $value) {
+						$attribute_str .= " $key=\"$value\"";
+					}
                     $dd .= "<select $attribute_str>";
                     break;
                 case "select_close":
@@ -426,8 +427,9 @@ class Menus
             switch ($line["type"]) {
                 case "select_open":
                     $attribute_str = "";
-                    while (list($key, $value) = each($attributes))
-                        $attribute_str .= " $key=\"$value\"";
+                    foreach ($attributes as $key => $value) {
+						$attribute_str .= " $key=\"$value\"";
+					}
                     $dd .= "<select $attribute_str>";
                     break;
                 case "select_close":

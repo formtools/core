@@ -196,7 +196,7 @@ $page_vars["js_messages"] = array("word_remove", "validation_no_tabs_defined", "
 	"phrase_add_fields", "phrase_create_group", "word_cancel", "word_yes", "word_no", "phrase_auto_size", "word_width_c");
 
 $field_type_map_lines = array();
-while(list($field_type_id, $field_type_name) = each($field_types)) {
+foreach ($field_types as $field_type_id => $field_type_name) {
 	$field_type_map_lines[] = "  \"ft{$field_type_id}\": \"$field_type_name\"";
 }
 

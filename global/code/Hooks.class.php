@@ -85,7 +85,7 @@ class Hooks {
             "template_hooks" => array()
         );
 
-        while (list($file_or_folder, $component) = each($hook_locations)) {
+		foreach ($hook_locations as $file_or_folder => $component) {
             self::findHooks("$ft_root/$file_or_folder", $ft_root, $component, $results);
         }
 
@@ -538,7 +538,7 @@ class Hooks {
 
         $updated_values = array();
         if (!empty($result)) {
-            while (list($key, $value) = each($result)) {
+			foreach ($result as $key => $value) {
                 if (in_array($key, $overridable_vars)) {
                     $updated_values[$key] = $value;
                 }

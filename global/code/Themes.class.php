@@ -169,7 +169,8 @@ class Themes {
             $swatches = "";
             if ($theme_uses_swatches == "yes") {
                 $swatch_info = array();
-                while (list($key, $value) = each($info["theme_swatches"])) {
+
+				foreach ($info["theme_swatches"] as $key => $value) {
                     $swatch_info[] = "$key,$value";
                 }
                 $swatches = implode("|", $swatch_info);

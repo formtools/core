@@ -224,7 +224,7 @@ class FieldValidation {
         }
 
         $curr_js = array("{$namespace}.field_validation = {};");
-        while (list($field_type_id, $rules) = each($grouped_rules)) {
+		foreach ($grouped_rules as $field_type_id => $rules) {
             $curr_js[] = "{$namespace}.field_validation[\"field_type_{$field_type_id}\"] = [";
             $curr_rules = array();
             foreach ($rules as $rule_info) {

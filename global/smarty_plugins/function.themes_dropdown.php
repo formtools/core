@@ -38,7 +38,7 @@ function smarty_function_themes_dropdown($params, &$smarty)
     );
 
     $attribute_str = "";
-    while (list($key, $value) = each($attributes)) {
+	foreach ($attributes as $key => $value) {
         if (!empty($value)) {
             $attribute_str .= " $key=\"$value\"";
         }
@@ -65,7 +65,7 @@ function smarty_function_themes_dropdown($params, &$smarty)
 
     // now generate swatch dropdowns for all themes that have them. This is by far the simplest solution,
     // since there will always be very few themes and even fewer that have
-    while (list($theme_folder, $swatches) = each($swatch_info)) {
+	foreach ($swatch_info as $theme_folder => $swatches) {
         $classes = array("{$params["name_id"]}_swatches");
         if ($theme_folder != $default_value) {
             $classes[] = "hidden";

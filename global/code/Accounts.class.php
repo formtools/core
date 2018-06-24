@@ -69,7 +69,7 @@ class Accounts
 
         extract(Hooks::processHookCalls("start", compact("account_id", "settings"), array("settings")), EXTR_OVERWRITE);
 
-        while (list($setting_name, $setting_value) = each($settings)) {
+		foreach ($settings as $setting_name => $setting_value) {
 
             // find out if it already exists
             $db->query("

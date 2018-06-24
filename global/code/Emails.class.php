@@ -442,7 +442,7 @@ class Emails {
 
         $updated_fields_for_email_template = array();
         foreach ($fields_for_email_template as $field_info) {
-            while (list($placeholder, $value) = each($submission_placeholders)) {
+			foreach ($submission_placeholders as $placeholder => $value) {
                 if ($placeholder != "ANSWER_{$field_info["field_name"]}") {
                     continue;
                 }
@@ -488,7 +488,7 @@ class Emails {
             }
 
             $smarty->assign("eval_str", $templates["text"]);
-            while (list($key, $value) = each($submission_placeholders)) {
+			foreach ($submission_placeholders as $key => $value) {
                 $smarty->assign($key, $value);
             }
             reset($submission_placeholders);
@@ -505,7 +505,7 @@ class Emails {
             }
 
             $smarty->assign("eval_str", $templates["html"]);
-            while (list($key, $value) = each($submission_placeholders)) {
+			foreach ($submission_placeholders as $key => $value) {
                 // convert any newlines chars to page breaks for any answer fields. Hmm...
                 if (strpos($key, "ANSWER_") === 0) {
                     $value = nl2br($value);
@@ -1528,7 +1528,7 @@ class Emails {
 
         // see if there are any filename placeholders (i.e. uploaded files in this submission)
         $file_field_name_to_filename_hash = array();
-        while (list($placeholder, $value) = each($submission_placeholders)) {
+		foreach ($submission_placeholders as $placeholder => $value) {
             if (!preg_match("/^FILENAME_/", $placeholder)) {
                 continue;
             }

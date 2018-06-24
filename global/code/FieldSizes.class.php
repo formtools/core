@@ -84,7 +84,7 @@ class FieldSizes {
         $LANG = Core::$L;
 
         $js_rows = array();
-        while (list($key, $info) = each(self::$fieldSizes)) {
+		foreach (self::$fieldSizes as $key => $info) {
             $js_rows[] = "  \"$key\": \"" . $LANG[$info["lang_key"]] . "\"";
         }
         reset(self::$fieldSizes);

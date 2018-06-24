@@ -80,7 +80,7 @@ class Translations
 
         // now piece everything together in a single delimited string
         $available_languages = array();
-        while (list($key, $val) = each($list)) {
+        foreach ($list as $key => $val) {
             $available_languages[] = "$key,$val";
         }
 
