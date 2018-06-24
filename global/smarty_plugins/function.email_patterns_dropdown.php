@@ -46,7 +46,7 @@ function smarty_function_email_patterns_dropdown($params, &$smarty)
              <option value=\"\">{$LANG["phrase_please_select"]}</option>";
 
     $count = 1;
-    while (list($key, $patterns) = each($optgroups)) {
+	foreach ($optgroups as $key => $patterns) {
         $html .= "<optgroup label=\"$key\">";
 
         foreach ($patterns as $pattern_info) {

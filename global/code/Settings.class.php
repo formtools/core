@@ -113,8 +113,8 @@ class Settings {
         if (!is_array($settings)) {
             return;
         }
-        while (list($setting_name, $setting_value) = each($settings)) {
 
+		foreach ($settings as $setting_name => $setting_value) {
             $db->query("
                 SELECT count(*)
                 FROM   {PREFIX}settings

@@ -806,7 +806,7 @@ class Views
             $default_values = array_combine($info["new_submissions"], $info["new_submissions_vals"]);
 
             $order = 1;
-            while (list($field_id, $value) = each($default_values)) {
+            foreach ($default_values as $field_id => $value) {
                 $db->query("
                     INSERT INTO {PREFIX}new_view_submission_defaults (view_id, field_id, default_value, list_order)
                     VALUES (:view_id, :field_id, :default_value, :list_order)

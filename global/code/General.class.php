@@ -337,7 +337,7 @@ END;
 
         $smarty->assign("eval_str", $placeholder_str);
         if (!empty($placeholders)) {
-            while (list($key, $value) = each($placeholders)) {
+			foreach ($placeholders as $key => $value) {
                 $smarty->assign($key, $value);
             }
         }

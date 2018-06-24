@@ -40,7 +40,7 @@ function smarty_function_form_view_fields_dropdown($params, &$smarty)
     );
 
     $attribute_str = "";
-    while (list($key, $value) = each($attributes)) {
+	foreach ($attributes as $key => $value) {
         if (!empty($value)) {
             $attribute_str .= " $key=\"$value\"";
         }

@@ -104,7 +104,7 @@ class ModuleMenu
         ModuleMenu::clearModuleNav($module_id);
 
         $order = 1;
-        while (list($lang_file_key, $info) = each($nav)) {
+		foreach ($nav as $lang_file_key => $info) {
             $url        = $info[0];
             $is_submenu = ($info[1]) ? "yes" : "no";
             if (empty($lang_file_key) || empty($url)) {

@@ -29,7 +29,7 @@ function smarty_function_menus_dropdown($params, &$smarty)
     );
 
 	$attribute_str = "";
-    while (list($key, $value) = each($attributes)) {
+	foreach ($attributes as $key => $value) {
         if (!empty($value)) {
             $attribute_str .= " $key=\"$value\"";
         }

@@ -79,7 +79,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
         // what does THIS do?
         foreach ($field_info["field_settings"] as $setting) {
             $found = false;
-            while (list($setting_id, $setting_value) = each($setting)) {
+			foreach ($setting as $setting_id => $setting_value) {
                 if ($setting_id == $curr_setting_id) {
                     $value = $setting_value;
                     break;

@@ -1104,7 +1104,7 @@ class Forms
                 $field_type_id_to_option_list_map[$field_type_info["field_type_id"]] = $field_type_info["raw_field_type_map_multi_select_id"];
             }
 
-            while (list($field_id, $option_list_info) = each($option_lists)) {
+			foreach ($option_lists as $field_id => $option_list_info) {
                 $list_id = OptionLists::createUniqueOptionList($form_id, $option_list_info);
                 $raw_field_type_map_multi_select_id = $field_type_id_to_option_list_map[$option_list_info["field_type_id"]];
                 if (is_numeric($list_id)) {

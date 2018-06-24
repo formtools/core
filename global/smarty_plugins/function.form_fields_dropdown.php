@@ -36,8 +36,8 @@ function smarty_function_form_fields_dropdown($params, &$smarty)
     );
 
     $attribute_str = "";
-    while (list($key, $value) = each($attributes)) {
-        if (!empty($value)) {
+	foreach ($attributes as $key => $value) {
+		if (!empty($value)) {
             $attribute_str .= " $key=\"$value\"";
         }
     }
@@ -49,7 +49,7 @@ function smarty_function_form_fields_dropdown($params, &$smarty)
         $rows[] = "<option value=\"{$blank_option_value}\">$blank_option_text</option>";
     }
 
-    while (list($col_name, $display_text) = each($column_info)) {
+	foreach ($column_info as $col_name => $display_text) {
         if ($display_column_names) {
             $display_text = $col_name;
         }

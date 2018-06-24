@@ -11,32 +11,33 @@
  */
 function smarty_function_dropdown($params, &$smarty)
 {
-  global $LANG;
+	global $LANG;
 
-  $options       = $params["options"];
-  $default_value = (isset($params["default"])) ? $params["default"] : "";
-  $blank_option_text  = (isset($params["blank_option_text"])) ? $params["blank_option_text"] : $LANG["phrase_please_select"];
+	$options = $params["options"];
+	$default_value = (isset($params["default"])) ? $params["default"] : "";
+	$blank_option_text = (isset($params["blank_option_text"])) ? $params["blank_option_text"] : $LANG["phrase_please_select"];
 
-  $attributes = array(
-    "id"       => isset($params["id"]) ? $params["id"] : "",
-    "name"     => isset($params["name"]) ? $params["name"] : "",
-    "tabindex" => isset($params["tabindex"]) ? $params["tabindex"] : ""
-      );
+	$attributes = array(
+		"id" => isset($params["id"]) ? $params["id"] : "",
+		"name" => isset($params["name"]) ? $params["name"] : "",
+		"tabindex" => isset($params["tabindex"]) ? $params["tabindex"] : ""
+	);
 
-  $attribute_str = "";
-  while (list($key, $value) = each($attributes))
-  {
-    if (!empty($value))
-      $attribute_str .= " $key=\"$value\"";
-  }
+	$attribute_str = "";
+	foreach ($attributes as $key => $value) {
+		if (!empty($value)) {
+			$attribute_str .= " $key=\"$value\"";
+		}
+	}
 
-  $rows = array();
-  $rows[] = "<option value=\"\">$blank_option_text</option>";
+	$rows = array();
+	$rows[] = "<option value=\"\">$blank_option_text</option>";
 
-  while (list($value, $text) = each($options))
-    $rows[] = "<option value=\"$value\" " . (($default_value == $value) ? "selected" : "") . ">$text</option>";
+	foreach ($options as $value => $text) {
+		$rows[] = "<option value=\"$value\" " . (($default_value == $value) ? "selected" : "") . ">$text</option>";
+	}
 
-  $dd = "<select $attribute_str>" . join("\n", $rows) . "</select>";
+	$dd = "<select $attribute_str>" . join("\n", $rows) . "</select>";
 
-  return $dd;
+	return $dd;
 }

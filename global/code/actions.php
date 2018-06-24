@@ -322,7 +322,7 @@ switch ($action) {
 	    $upgrade_url = Core::getUpgradeUrl();
 		$components = General::getFormtoolsInstalledComponents();
 		echo "<form action=\"$upgrade_url\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
-		while (list($key, $value) = each($components)) {
+		foreach ($components as $key => $value) {
 			echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
 		}
 		echo "</form>";

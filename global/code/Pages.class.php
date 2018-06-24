@@ -161,7 +161,7 @@ class Pages
 
         if (!empty($args)) {
             $params = array();
-            while (list($key, $value) = each($args)) {
+            foreach ($args as $key => $value) {
                 $params[] = "$key=$value";
             }
             if (strpos("?", $url) === false) {

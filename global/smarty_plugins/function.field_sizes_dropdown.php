@@ -50,7 +50,7 @@ function smarty_function_field_sizes_dropdown($params, &$smarty)
             echo "<input type=\"hidden\" name=\"{$params["name"]}\" value=\"{$available_field_type_sizes[0]}\" />";
         } else {
             $html = "<select $attribute_str>";
-			while (list($key, $info) = each($field_sizes)) {
+			foreach ($field_sizes as $key => $info) {
 				$lang_key = $info["lang_key"];
 				if (in_array($key, $available_field_type_sizes)) {
                     $html .= "<option value=\"$key\"" . (in_array($key,
@@ -62,7 +62,7 @@ function smarty_function_field_sizes_dropdown($params, &$smarty)
         }
     } else {
         $html = "<select $attribute_str>";
-        while (list($key, $info) = each($field_sizes)) {
+		foreach ($field_sizes as $key => $info) {
             $lang_key = $info["lang_key"];
             $html .= "<option value=\"$key\"" . (in_array($key, $default_values) ? " selected" : "") . ">{$LANG[$lang_key]}</option>";
         }

@@ -112,7 +112,7 @@ $page_field_types = FieldTypes::get(true, $page_field_type_ids);
 $view_tabs = ViewTabs::getViewTabs($view_id, true);
 $same_page = General::getCleanPhpSelf();
 $tabs      = array();
-while (list($key, $value) = each($view_tabs)) {
+foreach ($view_tabs as $key => $value) {
 	$tabs[$key] = array(
 		"tab_label" => $value["tab_label"],
 		"tab_link"  => "{$same_page}?tab=$key&form_id=$form_id&submission_id=$submission_id"

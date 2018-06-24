@@ -591,7 +591,7 @@ END;
         $field_types = FieldTypes::get();
 
         $mapped = array();
-        while (list($raw_field_type, $field_type_label) = each(self::$rawFieldTypes)) {
+		foreach (self::$rawFieldTypes as $raw_field_type => $field_type_label) {
             $curr_mapped_field_types = array();
 
             foreach ($field_types as $field_type_info) {
@@ -1338,7 +1338,7 @@ END;
 
         // now convert the info into a simple JS object. We could have done it above, but this keeps it simple.
         $js_lines = array();
-        while (list($setting_id, $characteristic_ids) = each($setting_ids_to_characteristic_ids)) {
+		foreach ($setting_ids_to_characteristic_ids as $setting_id => $characteristic_ids) {
             $js_lines[] = "s{$setting_id}:[" . implode(",", $characteristic_ids) . "]";
         }
         $js = "{" . implode(",", $js_lines) . "}";
@@ -1681,7 +1681,7 @@ END;
             $identifier              = $setting_info["field_setting_identifier"];
 
             if (isset($field_info["settings"]) && !empty($field_info["settings"])) {
-                while (list($setting_id, $setting_value) = each($field_info["settings"])) {
+				foreach ($field_info["settings"] as $setting_id => $setting_value) {
                     if ($setting_id == $curr_setting_id) {
                         $value = $setting_value;
                         break;

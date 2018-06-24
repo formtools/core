@@ -250,7 +250,7 @@ class Fields {
         $db = Core::$db;
         $multi_val_delimiter = Core::getMultiFieldValDelimiter();
 
-        while (list($key, $value) = each($form_data)) {
+		foreach ($form_data as $key => $value) {
 
             // if the value is an array, it's either a checkbox field or a multi-select field. Separate the values
             // with the delimiter
@@ -283,7 +283,7 @@ class Fields {
         $LANG = Core::$L;
 
         // TODO: "8" is very magical
-        while (list($key) = each($file_data)) {
+		foreach ($file_data as $key => $value) {
             $db->query("
                 INSERT INTO {PREFIX}form_fields (form_id, field_name, field_type_id, is_system_field,
                   field_test_value, data_type, list_order)
