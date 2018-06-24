@@ -727,9 +727,10 @@ class Views
         $default_sort_field       = $info["default_sort_field"];
         $default_sort_field_order = $info["default_sort_field_order"];
         $access_type              = $info["access_type"];
-        $may_delete_submissions   = $info["may_delete_submissions"];
         $may_add_submissions      = $info["may_add_submissions"];
+		$may_copy_submissions      = $info["may_copy_submissions"];
         $may_edit_submissions     = isset($info["may_edit_submissions"]) ? "yes" : "no"; // (checkbox field)
+		$may_delete_submissions   = $info["may_delete_submissions"];
 
         // do a little error checking on the num submissions field. If it's invalid, just set to to 10 without
         // informing them - it's not really necessary, I don't think
@@ -744,9 +745,10 @@ class Views
                    num_submissions_per_page = :num_submissions_per_page,
                    default_sort_field = :default_sort_field,
                    default_sort_field_order = :default_sort_field_order,
-                   may_delete_submissions = :may_delete_submissions,
-                   may_edit_submissions = :may_edit_submissions,
                    may_add_submissions = :may_add_submissions
+                   may_copy_submissions = :may_copy_submissions,
+                   may_edit_submissions = :may_edit_submissions,
+                   may_delete_submissions = :may_delete_submissions,                   
             WHERE  view_id = :view_id
         ");
         $db->bindAll(array(
@@ -755,9 +757,10 @@ class Views
             "num_submissions_per_page" => $num_submissions_per_page,
             "default_sort_field" => $default_sort_field,
             "default_sort_field_order" => $default_sort_field_order,
-            "may_delete_submissions" => $may_delete_submissions,
+			"may_add_submissions" => $may_add_submissions,
+			"may_copy_submissions" => $may_copy_submissions,
             "may_edit_submissions" => $may_edit_submissions,
-            "may_add_submissions" => $may_add_submissions,
+			"may_delete_submissions" => $may_delete_submissions,
             "view_id" => $view_id
         ));
         $db->execute();
