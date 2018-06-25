@@ -102,8 +102,8 @@
             {/if}
             {if $view_info.may_copy_submissions == "yes"}
                 <span class="button_separator">|</span>
-                <input type="button" value="{eval var=$LANG.word_copy}"
-                       onclick="return ms.copy_submission({$submission_id})"/>
+                <input type="button" value="{$LANG.word_copy}"
+                       onclick="window.location='?form_id={$form_id}&amp;copy_submission={$submission_id}'" />
             {/if}
         </div>
     </form>

@@ -1450,33 +1450,64 @@ class Submissions {
 		unset($columns["submission_id"]);
 
 		$col_names = array_keys($columns);
-		$col_name_str = implode(", ", $col_names);
 
 		$success = true;
-		$message = "";
 		try {
+
+			$submission_id_map = array();
 			foreach ($submission_ids as $submission_id) {
-				$db->query("
-					INSERT INTO {PREFIX}form_{$form_id}($col_name_str)
-					SELECT $col_name_str FROM {PREFIX}form_{$form_id} 
-					WHERE submission_id = :submission_id
-				");
-				$db->bind("submission_id", $submission_id);
-				$db->execute();
+				General::copyTableRow("{PREFIX}form_{$form_id}", $col_names, "submission_id", $submission_id);
+				$submission_id_map[$submission_id] = $db->getInsertId();
 			}
+
+			extract(Hooks::processHookCalls("end", compact("form_id", "submission_id_map"), array()), EXTR_OVERWRITE);
 
 			$num_submissions = count($submission_ids);
 			if ($num_submissions === 1) {
-				$submission_id = $db->getInsertId();
+				$submission_id = $submission_id_map[$submission_ids[0]];
 				$message = "The submission has been copied. <a href=\"edit_submission.php?submission_id={$submission_id}\">Click here to edit the new submission.</a>";
 			} else {
 				$message = "$num_submissions submissions have been copied.";
 			}
 		} catch (Exception $e) {
 			$success = false;
+			$message = $e->getMessage();
 		}
 
 		return array($success, $message);
+	}
+
+
+	public static function copySubmission($form_id, $submission_id)
+	{
+		$db = Core::$db;
+
+		$columns = Forms::getFormColumnNames($form_id);
+		$columns["is_finalized"] = true;
+		unset($columns["submission_id"]);
+
+		$col_names = array_keys($columns);
+
+		$success = true;
+		$new_submission_id = "";
+		try {
+			General::copyTableRow("{PREFIX}form_{$form_id}", $col_names, "submission_id", $submission_id);
+			$new_submission_id = $db->getInsertId();
+
+			$submission_id_map = array(
+				"$submission_id" => $new_submission_id
+			);
+
+			extract(Hooks::processHookCalls("end", compact("form_id", "submission_id_map"), array()), EXTR_OVERWRITE);
+
+			$message = "A copy has been made of the submission. You can edit it below.";
+
+		} catch (Exception $e) {
+			$success = false;
+			$message = $e->getMessage();
+		}
+
+		return array($success, $message, $new_submission_id);
 	}
 
 

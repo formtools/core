@@ -159,6 +159,11 @@ ms.copy_submissions = function () {
     window.location = '?copy_submissions';
 };
 
+// called on the Edit Submission page
+ms.copy_submission = function (submission_id) {
+    window.location = '?copy_submissions';
+};
+
 
 /**
  * Called on page load, it ensures that the selected / unselected rows have the appropriate class,
