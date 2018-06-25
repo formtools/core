@@ -97,11 +97,9 @@ if (isset($_GET["delete"])) {
 		foreach ($ids as $id)
 			list($g_success, $g_message) = Submissions::deleteSubmission($form_id, $view_id, $id, true);
 	} else {
-	    $session_key = "form_{$form_id}_select_all_submissions";
-		$delete_all = Sessions::exists($session_key) && Sessions::get("form_{$form_id}_select_all_submissions") == 1;
 		$submissions_to_delete = Sessions::get("form_{$form_id}_selected_submissions");
 		$omit_list = array();
-		if ($delete_all) {
+		if (Submissions::isAllSelected($form_id)) {
 			$submissions_to_delete = "all";
 			$omit_list = Sessions::get("form_{$form_id}_all_submissions_selected_omit_list");
 		}

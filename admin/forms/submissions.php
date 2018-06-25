@@ -81,9 +81,7 @@ if ($is_resetting_search || $has_search_info_for_other_form) {
 
 	// only empty the memory of selected submission ID info if the user just reset the search
 	if ($is_resetting_search) {
-	    Sessions::set("form_{$form_id}_selected_submissions", array());
-        Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
-        Sessions::set("form_{$form_id}_select_all_submissions", "");
+		Submissions::clearSelected($form_id);
 	}
 }
 $search_fields = array(
@@ -94,6 +92,16 @@ $search_fields = array(
 
 $success = true;
 $message = "";
+
+if (isset($_GET["copy_submissions"]) && $view_info["may_copy_submissions"] == "yes") {
+	list($submissions_to_delete, $omit_list) = Submissions::getSelectedSubmissions($form_id);
+	if (!empty($submissions_to_delete)) {
+		list($success, $message) = Submissions::copySubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields);
+		Submissions::clearSelected($form_id);
+	}
+}
+
+
 if (isset($_GET["delete"])) {
 	// if delete actually a value, it's being fed a submission ID from the edit submission page
 	// in order to delete it
@@ -103,14 +111,7 @@ if (isset($_GET["delete"])) {
 			list($success, $message) = Submissions::deleteSubmission($form_id, $view_id, $id, true);
 		}
 	} else {
-	    $all_selected_key = "form_{$form_id}_select_all_submissions";
-		$delete_all = Sessions::exists($all_selected_key) && Sessions::get($all_selected_key) == 1;
-		$submissions_to_delete = Sessions::get("form_{$form_id}_selected_submissions");
-		$omit_list = array();
-		if ($delete_all) {
-			$submissions_to_delete = "all";
-			$omit_list = Sessions::get("form_{$form_id}_all_submissions_selected_omit_list");
-		}
+		list ($submissions_to_delete, $omit_list) = Submissions::getSelectedSubmissions($form_id);
 		list($success, $message) = Submissions::deleteSubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields);
 	}
 }
@@ -233,7 +234,7 @@ for ($i=0; $i<count($search_rows); $i++) {
 $submission_id_str = implode(",", $submission_ids);
 
 // set as STRING for used in JS below
-$select_all_submissions_returned = (Sessions::get("form_{$form_id}_select_all_submissions") == "1") ? "true" : "false";
+$select_all_submissions_returned = Submissions::isAllSelected($form_id) ? "true" : "false";
 
 // figure out which submissions should be selected on page load
 $preselected_subids = array();
@@ -309,7 +310,8 @@ $page_vars["js_messages"] = array(
 	"phrase_select_all_X_results", "phrase_select_all_on_page", "phrase_all_X_results_selected",
 	"phrase_row_selected", "phrase_rows_selected", "confirm_delete_submissions_on_other_pages",
 	"confirm_delete_submissions_on_other_pages2", "word_yes", "word_no", "phrase_please_confirm",
-	"validation_please_enter_search_keyword", "notify_invalid_search_dates"
+	"validation_please_enter_search_keyword", "notify_invalid_search_dates",
+	"validation_select_submissions_to_copy"
 );
 $page_vars["head_string"] =<<< END
 <link rel="stylesheet" href="../../global/css/ui.daterangepicker.css" type="text/css" />
