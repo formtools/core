@@ -28,6 +28,20 @@ if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
     General::redirect("edit/?page=views&form_id=$form_id&message=no_views");
 }
 
+$view_info = Views::getView($view_id);
+$success = true;
+$message = "";
+
+if ($view_info["may_copy_submissions"] == "yes" && isset($_GET["copy_submission"]) && is_numeric($_GET["copy_submission"])) {
+
+	// TODO security. Check the user isn't copying a submission that they don't have access to in the current View
+
+	list($success, $message, $new_submission_id) = Submissions::copySubmission($form_id, $_GET["copy_submission"]);
+	if ($success) {
+		$request["submission_id"] = $new_submission_id;
+	}
+}
+
 $submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";
 if (empty($submission_id)) {
     General::redirect("submissions.php");
@@ -41,10 +55,9 @@ Sessions::set("last_link_page_{$form_id}",  "edit");
 // determine whether the page contains any editable fields
 $editable_field_ids = ViewFields::getEditableViewFields($view_id);
 
+
 // update the submission
 $failed_validation = false;
-$success = true;
-$message = "";
 if (isset($_POST) && !empty($_POST)) {
     Sessions::set("new_search", "yes");
 	$request["view_id"] = $view_id;
@@ -60,7 +73,6 @@ if (isset($_POST) && !empty($_POST)) {
 }
 
 $form_info = Forms::getForm($form_id);
-$view_info = Views::getView($view_id);
 
 // this is crumby
 $has_tabs = false;

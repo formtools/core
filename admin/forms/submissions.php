@@ -101,7 +101,6 @@ if (isset($_GET["copy_submissions"]) && $view_info["may_copy_submissions"] == "y
 	}
 }
 
-
 if (isset($_GET["delete"])) {
 	// if delete actually a value, it's being fed a submission ID from the edit submission page
 	// in order to delete it

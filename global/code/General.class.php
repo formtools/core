@@ -1340,4 +1340,26 @@ END;
         return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443;
     }
 
+	/**
+	 * Helper method to make a copy of a row in a database table. Note: this requires the table to have a single
+	 * primary key, such as an auto-increment.
+	 * @param $table_name
+	 * @param $col_names
+	 * @param $primary_key_col_name
+	 * @param $primary_key_value
+	 */
+    public static function copyTableRow($table_name, $col_names, $primary_key_col_name, $primary_key_value)
+	{
+		$db = Core::$db;
+
+		$col_name_str = implode(", ", $col_names);
+
+		$db->query("INSERT INTO $table_name ($col_name_str)
+			SELECT $col_name_str FROM $table_name 
+			WHERE $primary_key_col_name = :primary_key
+		");
+		$db->bind("primary_key", $primary_key_value);
+		$db->execute();
+	}
+
 }
