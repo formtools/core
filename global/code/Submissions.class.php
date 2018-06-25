@@ -494,10 +494,9 @@ class Submissions {
      * indicating which files caused problems.
      *
      * @param integer $form_id the unique form ID
-     * @param mixed $delete_ids a single submission ID / an array of submission IDs / "all". This column
+	 * @param integer $view_id the unique view ID
+     * @param mixed $submissions_to_delete a single submission ID / an array of submission IDs / "all". This column
      *               determines which submissions will be deleted
-     * @param integer $view_id (optional) this is only needed if $delete_ids is set to "all". With the advent
-     *               of Views, it needs to know which submissions to delete.
      * @return array returns array with indexes:<br/>
      *               [0]: true/false (success / failure)<br/>
      *               [1]: message string<br/>
@@ -818,6 +817,35 @@ class Submissions {
 
         return $db->fetchAll(PDO::FETCH_COLUMN);
     }
+
+
+    public static function isAllSelected($form_id)
+	{
+		$all_selected_key = "form_{$form_id}_select_all_submissions";
+		return Sessions::exists($all_selected_key) && Sessions::get($all_selected_key) == 1;
+	}
+
+
+	public static function getSelectedSubmissions($form_id)
+	{
+		$submissions_to_delete = Sessions::get("form_{$form_id}_selected_submissions");
+		$omit_list = array();
+
+		if (Submissions::isAllSelected($form_id)) {
+			$submissions_to_delete = "all";
+			$omit_list = Sessions::get("form_{$form_id}_all_submissions_selected_omit_list");
+		}
+
+		return array($submissions_to_delete, $omit_list);
+	}
+
+
+	public static function clearSelected($form_id)
+	{
+		Sessions::set("form_{$form_id}_selected_submissions", array());
+		Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
+		Sessions::set("form_{$form_id}_select_all_submissions", "");
+	}
 
 
     /**
@@ -1402,6 +1430,54 @@ class Submissions {
 
         return array($previous_link_html, $search_results_link_html, $next_link_html);
     }
+
+
+    public static function copySubmissions($form_id, $view_id, $submissions_to_copy, $omit_list, $search_fields)
+	{
+		$db = Core::$db;
+
+		// construct a list of all the actual submission IDs we want to copy
+		if ($submissions_to_copy == "all") {
+			$searchable_columns = ViewFields::getViewSearchableFields($view_id);
+			$submission_ids = Submissions::getSearchSubmissionIds($form_id, $view_id, "submission_id-ASC", $search_fields, $searchable_columns);
+			$submission_ids = array_diff($submission_ids, $omit_list);
+		} else {
+			$submission_ids = $submissions_to_copy;
+		}
+
+		$columns = Forms::getFormColumnNames($form_id);
+		$columns["is_finalized"] = true;
+		unset($columns["submission_id"]);
+
+		$col_names = array_keys($columns);
+		$col_name_str = implode(", ", $col_names);
+
+		$success = true;
+		$message = "";
+		try {
+			foreach ($submission_ids as $submission_id) {
+				$db->query("
+					INSERT INTO {PREFIX}form_{$form_id}($col_name_str)
+					SELECT $col_name_str FROM {PREFIX}form_{$form_id} 
+					WHERE submission_id = :submission_id
+				");
+				$db->bind("submission_id", $submission_id);
+				$db->execute();
+			}
+
+			$num_submissions = count($submission_ids);
+			if ($num_submissions === 1) {
+				$submission_id = $db->getInsertId();
+				$message = "The submission has been copied. <a href=\"edit_submission.php?submission_id={$submission_id}\">Click here to edit the new submission.</a>";
+			} else {
+				$message = "$num_submissions submissions have been copied.";
+			}
+		} catch (Exception $e) {
+			$success = false;
+		}
+
+		return array($success, $message);
+	}
 
 
     // -----------------------------------------------------------------------------------------------------------------
