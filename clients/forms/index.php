@@ -89,13 +89,25 @@ $search_fields = array(
 	"search_keyword" => General::loadField("search_keyword", "search_keyword", "")
 );
 
+$success = true;
+$message = "";
+
+if (isset($_GET["copy_submissions"]) && $view_info["may_copy_submissions"] == "yes") {
+	list($submissions_to_delete, $omit_list) = Submissions::getSelectedSubmissions($form_id);
+	if (!empty($submissions_to_delete)) {
+		list($success, $message) = Submissions::copySubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields);
+		Submissions::clearSelected($form_id);
+	}
+}
+
 if (isset($_GET["delete"])) {
 	// if delete actually a value, it's being fed a submission ID from the edit submission page
 	// in order to delete it
 	if (!empty($_GET["delete"])) {
 		$ids = explode(",", $_GET["delete"]);
-		foreach ($ids as $id)
-			list($g_success, $g_message) = Submissions::deleteSubmission($form_id, $view_id, $id, true);
+		foreach ($ids as $id) {
+			list($success, $message) = Submissions::deleteSubmission($form_id, $view_id, $id, true);
+		}
 	} else {
 		$submissions_to_delete = Sessions::get("form_{$form_id}_selected_submissions");
 		$omit_list = array();
@@ -103,7 +115,7 @@ if (isset($_GET["delete"])) {
 			$submissions_to_delete = "all";
 			$omit_list = Sessions::get("form_{$form_id}_all_submissions_selected_omit_list");
 		}
-		list($g_success, $g_message) = Submissions::deleteSubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields);
+		list($success, $message) = Submissions::deleteSubmissions($form_id, $view_id, $submissions_to_delete, $omit_list, $search_fields);
 	}
 }
 
@@ -273,6 +285,8 @@ foreach ($shared_resources_array as $resource) {
 }
 
 $page_vars = array(
+	"g_success" => $success,
+    "g_message" => $message,
     "page"     => "client_forms",
     "page_url" => Pages::getPageUrl("client_form_submissions", array("form_id" => $form_id)),
     "head_title"  => $LANG["word_submissions"],
@@ -303,7 +317,8 @@ $page_vars["js_messages"] = array(
 	"confirm_delete_submission", "confirm_delete_submissions", "phrase_select_all_X_results",
 	"phrase_select_all_on_page", "phrase_all_X_results_selected", "phrase_row_selected", "phrase_rows_selected",
 	"confirm_delete_submissions_on_other_pages", "confirm_delete_submissions_on_other_pages2",
-	"word_yes", "word_no", "phrase_please_confirm", "validation_please_enter_search_keyword", "notify_invalid_search_dates"
+	"word_yes", "word_no", "phrase_please_confirm", "validation_please_enter_search_keyword", "notify_invalid_search_dates",
+	"validation_select_submissions_to_copy"
 );
 $page_vars["head_string"] =<<< END
 <link rel="stylesheet" href="../../global/css/ui.daterangepicker.css" type="text/css" />
