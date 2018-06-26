@@ -1435,6 +1435,7 @@ class Submissions {
     public static function copySubmissions($form_id, $view_id, $submissions_to_copy, $omit_list, $search_fields)
 	{
 		$db = Core::$db;
+		$L = Core::$L;
 
 		// construct a list of all the actual submission IDs we want to copy
 		if ($submissions_to_copy == "all") {
@@ -1465,9 +1466,11 @@ class Submissions {
 			$num_submissions = count($submission_ids);
 			if ($num_submissions === 1) {
 				$submission_id = $submission_id_map[$submission_ids[0]];
-				$message = "The submission has been copied. <a href=\"edit_submission.php?submission_id={$submission_id}\">Click here to edit the new submission.</a>";
+				$message = "{$L["notify_submission_copied"]} <a href=\"edit_submission.php?submission_id={$submission_id}\">{$L["notify_click_to_edit_new_submission"]}</a>";
 			} else {
-				$message = "$num_submissions submissions have been copied.";
+				$message = General::evalSmartyString($L["notify_submissions_copied"], array(
+					"num_submissions" => $num_submissions
+				));
 			}
 		} catch (Exception $e) {
 			$success = false;
@@ -1481,6 +1484,7 @@ class Submissions {
 	public static function copySubmission($form_id, $submission_id)
 	{
 		$db = Core::$db;
+		$L = Core::$L;
 
 		$columns = Forms::getFormColumnNames($form_id);
 		$columns["is_finalized"] = true;
@@ -1500,7 +1504,7 @@ class Submissions {
 
 			extract(Hooks::processHookCalls("end", compact("form_id", "submission_id_map"), array()), EXTR_OVERWRITE);
 
-			$message = "A copy has been made of the submission. You can edit it below.";
+			$message = $L["notify_submission_copied_edit"];
 
 		} catch (Exception $e) {
 			$success = false;

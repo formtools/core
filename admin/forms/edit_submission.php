@@ -33,9 +33,6 @@ $success = true;
 $message = "";
 
 if ($view_info["may_copy_submissions"] == "yes" && isset($_GET["copy_submission"]) && is_numeric($_GET["copy_submission"])) {
-
-	// TODO security. Check the user isn't copying a submission that they don't have access to in the current View
-
 	list($success, $message, $new_submission_id) = Submissions::copySubmission($form_id, $_GET["copy_submission"]);
 	if ($success) {
 		$request["submission_id"] = $new_submission_id;

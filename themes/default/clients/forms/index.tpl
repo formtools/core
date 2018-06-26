@@ -174,20 +174,25 @@
 
                 {template_hook location="client_submission_listings_buttons1"}
 
-                {if $view_info.may_delete_submissions == "yes"}
-                    <input type="button" value="{$LANG.word_delete}" class="red" onclick="ms.delete_submissions()"/>
-                {/if}
-                {template_hook location="client_submission_listings_buttons2"}
                 <input type="button" id="select_button" value="{$LANG.phrase_select_all_on_page}"
                        onclick="ms.select_all_on_page();"/>
                 <input type="button" id="unselect_button" value="{$LANG.phrase_unselect_all}"
                        onclick="ms.unselect_all()"/>
-                {template_hook location="client_submission_listings_buttons3"}
 
+                <span class="button_separator">|</span>
+
+                {template_hook location="client_submission_listings_buttons2"}
+
+                {if $view_info.may_delete_submissions == "yes"}
+                    <input type="button" value="{$LANG.word_delete}" class="red" onclick="ms.delete_submissions()"/>
+                {/if}
                 {if $view_info.may_add_submissions == "yes" && $form_info.is_active == "yes"}
                     <input type="button" id="add_submission" value="{eval var=$form_info.add_submission_button_label}"
                            onclick="window.location='{$same_page}?add_submission'"/>
                 {/if}
+
+                {template_hook location="client_submission_listings_buttons3"}
+
                 {if $view_info.may_copy_submissions == "yes"}
                     <input type="button" id="copy_submissions" value="{$LANG.word_copy}"
                            onclick="return ms.copy_submissions()" />
