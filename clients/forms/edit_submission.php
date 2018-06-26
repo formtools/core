@@ -26,10 +26,6 @@ $account_id = Sessions::get("account.account_id");
 $request = array_merge($_GET, $_POST);
 $form_id = General::loadField("form_id", "curr_form_id");
 $view_id = General::loadField("view_id", "form_{$form_id}_view_id");
-$submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";
-if (empty($submission_id)) {
-    General::redirect("index.php");
-}
 
 $tab_number = General::loadField("tab", "view_{$view_id}_current_tab", 1);
 $grouped_views = Views::getGroupedViews($form_id, array(
@@ -38,11 +34,35 @@ $grouped_views = Views::getGroupedViews($form_id, array(
     "account_id" => $account_id
 ));
 
+if (isset($_GET["copy_submission"]) && is_numeric($_GET["copy_submission"])) {
+	$submission_id = $_GET["copy_submission"];
+} else {
+	$submission_id = isset($request["submission_id"]) ? $request["submission_id"] : "";
+}
+
+if (empty($submission_id)) {
+	General::redirect("index.php");
+}
+
 // check the current client is permitted to view this information!
 General::checkClientMayView($account_id, $form_id, $view_id);
 if (!Submissions::checkViewContainsSubmission($form_id, $view_id, $submission_id)) {
     General::redirect("index.php");
 }
+
+$form_info = Forms::getForm($form_id);
+$view_info = Views::getView($view_id);
+
+$success = false;
+$message = "";
+
+if ($view_info["may_copy_submissions"] == "yes" && isset($_GET["copy_submission"]) && is_numeric($_GET["copy_submission"])) {
+	list($success, $message, $new_submission_id) = Submissions::copySubmission($form_id, $_GET["copy_submission"]);
+	if ($success) {
+		$submission_id = $new_submission_id;
+	}
+}
+
 
 // store this submission ID
 Sessions::set("last_submission_id", $submission_id);
@@ -51,20 +71,17 @@ Sessions::set("last_submission_id", $submission_id);
 // for the update function and to determine whether the page contains any editable fields
 $editable_field_ids = ViewFields::getEditableViewFields($view_id);
 
-$g_success = false;
-$g_message = "";
-
 // handle POST requests
 $failed_validation = false;
 if (isset($_POST) && !empty($_POST)) {
 	// add the view ID to the request hash, for use by the ft_update_submission function
 	$request["view_id"] = $view_id;
 	$request["editable_field_ids"] = $editable_field_ids;
-	list($g_success, $g_message) = Submissions::updateSubmission($form_id, $submission_id, $request);
+	list($success, $message) = Submissions::updateSubmission($form_id, $submission_id, $request);
 
 	// if there was any problem udpating this submission, make a special note of it: we'll use that info to merge the current POST request
 	// info with the original field values to ensure the page contains the latest data (i.e. for cases where they fail server-side validation)
-	if (!$g_success) {
+	if (!$success) {
 		$failed_validation = true;
 	}
 
@@ -72,9 +89,6 @@ if (isset($_POST) && !empty($_POST)) {
 	// are cached. Any time the data changes, the submission may then belong to different Views, so we need to re-cache it
     Sessions::set("new_search", "yes");
 }
-
-$form_info = Forms::getForm($form_id);
-$view_info = Views::getView($view_id);
 
 // this is crumby
 $has_tabs = false;
@@ -163,8 +177,8 @@ EOF;
 $page_vars = array(
     "page"   => "client_edit_submission",
     "page_url" => Pages::getPageUrl("client_edit_submission"),
-    "g_success" => $g_success,
-    "g_message" => $g_message,
+    "g_success" => $success,
+    "g_message" => $message,
     "tabs" => $tabs,
     "form_info"   => $form_info,
     "grouped_views" => $grouped_views,

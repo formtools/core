@@ -91,6 +91,15 @@
                 <input type="button" value="{eval var=$form_info.add_submission_button_label}"
                        onclick="window.location='index.php?form_id={$form_id}&add_submission'"/>
             {/if}
+
+            {if $view_info.may_copy_submissions == "yes"}
+                {if !($view_info.may_add_submissions == "yes" && $form_info.is_active == "yes")}
+                <span class="button_separator">|</span>
+                {/if}
+                <input type="button" value="{$LANG.word_copy}"
+                       onclick="window.location='?form_id={$form_id}&amp;copy_submission={$submission_id}'" />
+            {/if}
+
         </div>
     </form>
 
