@@ -1,4 +1,4 @@
-<?php
+	<?php
 
 
 $LANG = array();
@@ -55,7 +55,7 @@ $LANG["word_complete"] = "COMPLETO";
 $LANG["word_configuration"] = "Configuração";
 $LANG["word_content"] = "Conteúdo";
 $LANG["word_continue_rightarrow"] = "Continue »";
-$LANG["word_copy"] = "";
+$LANG["word_copy"] = "cópia de";
 $LANG["word_custom"] = "Personalizado";
 $LANG["word_data"] = "Data";
 $LANG["word_data"] = "Data";
@@ -525,7 +525,7 @@ $LANG["phrase_max_file_size"] = "Max File Size";
 $LANG["phrase_max_length"] = "Comprimento Max";
 $LANG["phrase_max_length_words_chars"] = "- Comprimento Max (palavras / caracteres)";
 $LANG["phrase_may_add_submissions"] = "Pode adicionar Submissões";
-$LANG["phrase_may_copy_submissions"] = "Can copy submissions";
+$LANG["phrase_may_copy_submissions"] = "Pode copiar envios";
 $LANG["phrase_may_delete_submissions"] = "Pode excluir inscrições";
 $LANG["phrase_medium_150px"] = "Médio (150px)";
 $LANG["phrase_medium_200px"] = "Médio (200px)";
