@@ -1045,7 +1045,7 @@ $LANG["validation_passwords_different"] = "Assegure-se de que as palavras passe 
 $LANG["validation_please_enter_search_date_range"] = "Insira um período de pesquisa por datas.";
 $LANG["validation_please_enter_search_keyword"] = "Digite uma palavra-chave para pesquisar.";
 $LANG["validation_select_field_type"] = "Please select a field type.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Por favor, selecione os envios que você gostaria de copiar.";
 $LANG["validation_select_submissions_to_delete"] = "Seleccione as inscrições que gostaria de excluir.";
 $LANG["validation_smart_fill_cannot_fill"] = "Sorry, we could not fill this field.";
 $LANG["validation_smart_fill_invalid_field_type"] = "We were unable to locate a field, but it is not a dropdown, checkbox or radio group.";
@@ -1094,7 +1094,7 @@ $LANG["notify_client_account_updated"] = "A conta de cliente foi actualizada com
 $LANG["notify_client_menu_deleted"] = "The client menu has been deleted.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "The menu has been deleted, but the following client accounts now no longer have a menu! You need to update the following accounts: ";
 $LANG["notify_client_menu_updated"] = "The client menu has been updated.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Clique aqui para editar o novo envio.";
 $LANG["notify_deleted_menu_already_assigned"] = "Sorry, the menu you just tried to delete is already being used by the clients listed below. In order to delete the menu you will first need to assign the clients to other menus. Click on the client name to edit that individual account, or assign all accounts to a different menu using the dropdown below.";
 $LANG["notify_disabled_theme_already_assigned"] = "Sorry, one of the themes you just disabled are already being used by the following client accounts. In order to disable the theme you will first need to assign each client to another theme. Click on the client name to edit that individual account, or assign all accounts to a theme using the dropdown below.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Click here</a> to specify which form fields are email fields, so you can target them in your email templates.";

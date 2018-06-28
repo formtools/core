@@ -1040,7 +1040,7 @@ $LANG["validation_passwords_different"] = "してくださいパスワードが�
 $LANG["validation_please_enter_search_date_range"] = "してください検索の日付範囲を選択します。";
 $LANG["validation_please_enter_search_keyword"] = "してください検索キーワードを入力します。";
 $LANG["validation_select_field_type"] = "してください]フィールドのタイプを選択します。";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "コピーしたい投稿を選択してください。";
 $LANG["validation_select_submissions_to_delete"] = "してください削除するようになるこれらの提出を選択します。";
 $LANG["validation_smart_fill_cannot_fill"] = "申し訳ありませんが、このフィールドを埋めることはできなかった。";
 $LANG["validation_smart_fill_invalid_field_type"] = "我々のフィールドを見つけることができませんでしたが、それはドロップダウンリスト、チェックボックスまたはラジオグループではありません。";
@@ -1089,7 +1089,7 @@ $LANG["notify_client_account_updated"] = "クライアントのアカウント�
 $LANG["notify_client_menu_deleted"] = "クライアントのメニューが削除されています。";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "メニューには、削除されている次のクライアントのアカウントはもはやメニューを持って！次のアカウントを更新する必要があります：";
 $LANG["notify_client_menu_updated"] = "クライアントのメニューを更新しています。";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "新しい投稿を編集するには、ここをクリックしてください。";
 $LANG["notify_deleted_menu_already_assigned"] = "申し訳ありませんが、メニューを使用するだけで削除しようとしましたがすでにクライアントは次のとおりで使用されています。ために、まず、他のメニューにクライアントに割り当てる必要があるメニューを削除する。クライアント名をクリックすると、個々のアカウントを編集したり、別のメニューの下のドロップダウンリストを使用して、すべてのアカウントに割り当てます。";
 $LANG["notify_disabled_theme_already_assigned"] = "申し訳ありませんが、1つだけ無効にしたテーマは、既に次のクライアントのアカウントで使用されている。ために、まず別のテーマが各クライアントに割り当てることが必要となるテーマを無効にします。クライアント名をクリックすると、個々のアカウントを編集するかをテーマに、以下のドロップダウンリストを使用して、すべてのアカウントに割り当てます。";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">ここをクリックして</a>フォームフィールドは、電子メールフィールドなので、あなたの電子メールテンプレートでそれらをターゲットにできるかを指定する。";

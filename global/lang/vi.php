@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Hãy bảo đảm rằng mật khẩu
 $LANG["validation_please_enter_search_date_range"] = "Vui lòng chọn phạm vi ngày tìm kiếm.";
 $LANG["validation_please_enter_search_keyword"] = "Hãy nhập từ khóa tìm kiếm.";
 $LANG["validation_select_field_type"] = "Hãy lựa chọn một loại trường.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Vui lòng chọn những nội dung gửi mà bạn muốn sao chép.";
 $LANG["validation_select_submissions_to_delete"] = "Hãy lựa chọn những bản đệ trình mà bạn muốn xóa.";
 $LANG["validation_smart_fill_cannot_fill"] = "Xin lỗi, chúng tôi không thể điền vào trường này.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Chúng tôi không thể xác định vị trí một lĩnh vực, nhưng nó không phải là một thả xuống, hộp hoặc nhóm phát thanh.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Các tài khoản khách hàng đã đ
 $LANG["notify_client_menu_deleted"] = "Trình đơn khách hàng đã bị xóa.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Menu này đã bị xoá, nhưng các tài khoản khách hàng sau đây bây giờ không còn có một trình đơn! Bạn cần phải cập nhật các tài khoản sau đây:";
 $LANG["notify_client_menu_updated"] = "Trình đơn khách hàng đã được cập nhật.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Nhấp vào đây để chỉnh sửa bài gửi mới.";
 $LANG["notify_deleted_menu_already_assigned"] = "Xin lỗi, trình đơn bạn chỉ cố gắng để xóa đang được sử dụng bởi các khách hàng được liệt kê dưới đây. Để xóa menu trước tiên bạn sẽ cần phải chỉ định các khách hàng đến các menu khác. Nhấp vào tên của khách hàng để chỉnh sửa tài khoản cá nhân, hoặc chỉ định tất cả các tài khoản khác nhau vào một trình đơn thả xuống bằng cách sử dụng dưới đây.";
 $LANG["notify_disabled_theme_already_assigned"] = "Xin lỗi, một trong những chủ đề mà bạn vừa bị vô hiệu hoá đã được sử dụng bởi các tài khoản khách hàng sau đây. Để vô hiệu hóa những chủ đề trước tiên bạn sẽ cần phải chỉ định mỗi khách hàng đến chủ đề khác. Nhấp vào tên của khách hàng để chỉnh sửa tài khoản cá nhân, hoặc chỉ định tất cả tài khoản cho một chủ đề bằng cách sử dụng thả xuống dưới đây.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Click</a> vào <a href=\"edit.php?page=email_settings\">đây</a> để xác định các lĩnh vực hình thức là những lĩnh vực email, vì vậy bạn có thể nhắm mục tiêu trong các mẫu email của bạn.";

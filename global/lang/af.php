@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Maak seker dat die wagwoorde is diese
 $LANG["validation_please_enter_search_date_range"] = "Kies die soektog datum bereik.";
 $LANG["validation_please_enter_search_keyword"] = "Gee die soektog navraag.";
 $LANG["validation_select_field_type"] = "Kies &#39;n veld intik.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Kies asseblief die voorleggings wat u graag wil kopieer.";
 $LANG["validation_select_submissions_to_delete"] = "Please select dié voorleggings wat jy wil verwyder.";
 $LANG["validation_smart_fill_cannot_fill"] = "Jammer, ons kan vul hierdie veld nie.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Ons was nie in staat om &#39;n veld, maar dit is nie&#39; n uitvou, boks of radio-groep.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Rekening van die kliënt is suksesvol 
 $LANG["notify_client_menu_deleted"] = "Die kliënt spyskaart is verwyder.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Die spyskaart is verwyder, maar die volgende kliënte rekeninge nou nie meer &#39;n spyskaart! Jy moet werk die volgende rekening:";
 $LANG["notify_client_menu_updated"] = "Die kliënt-menu has been updated.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Klik hier om die nuwe voorlegging te wysig.";
 $LANG["notify_deleted_menu_already_assigned"] = "Jammer, die menu wat jy nou net probeer om te verwyder is reeds in gebruik deur die kliënte hieronder gelys. Om te verwyder die spyskaart sal jy eers moet toewys die kliënte na ander spyskaarte. Klik op die kliënt naam te wysig dat individuele rekening, of toewys alle rekeninge na &#39;n ander spyskaart met behulp van die dropdown hieronder.";
 $LANG["notify_disabled_theme_already_assigned"] = "Jammer, een van die temas wat jy nou afgeskakel is reeds gebruik word deur die volgende kliënte rekeninge. Met die oog op die aanskakel van die tema wat jy sal die eerste keer nodig om elke kliënt toewys aan &#39;n ander tema. Klik op die kliënt naam te wysig dat individuele rekening, of toewys alle rekeninge na &#39;n tema met behulp van die dropdown hieronder.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klik hier</a> om te spesifiseer watter vorm velde is e-pos velde, dus kan jy hulle in jou e-pos templates teiken.";

@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Mangyaring siguraduhin na ang mga pas
 $LANG["validation_please_enter_search_date_range"] = "Mangyaring piliin ang paghahanap na saklaw ng petsa.";
 $LANG["validation_please_enter_search_keyword"] = "Mangyaring ipasok ang mga search keyword na ito.";
 $LANG["validation_select_field_type"] = "Mangyaring pumili ng isang uri ng larangan.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Pakipili ang mga pagsusumite na nais mong kopyahin.";
 $LANG["validation_select_submissions_to_delete"] = "Mangyaring pumili ng mga submissions na nais mong tanggalin.";
 $LANG["validation_smart_fill_cannot_fill"] = "Paumanhin, hindi namin maaaring punan ang patlang na ito.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Hindi namin nagawang hanapin ng isang patlang, ngunit ito ay hindi isang dropdown, checkbox sa radyo o grupo.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Ang client account ay matagumpay na na
 $LANG["notify_client_menu_deleted"] = "Ang client menu ay tinanggal na.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Ang menu ay tinanggal na, ngunit ang mga sumusunod na mga client account na ngayon hindi na magkaroon ng isang menu! Kailangan mong i-update ang mga sumusunod na account:";
 $LANG["notify_client_menu_updated"] = "Ang client menu ay na-update.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Mag-click dito upang i-edit ang bagong pagsusumite.";
 $LANG["notify_deleted_menu_already_assigned"] = "Paumanhin, menu ng ka makatarungan tried tanggalin ay ginagamit na ng mga kliyente na nakalista sa ibaba. Upang tanggalin ang menu ay kailangan mo munang magtalaga ng mga kliyente sa iba pang mga menu. I-click ang pangalan ng client na i-edit na ang indibidwal na mga account, o magtalaga ng lahat ng mga account sa isang iba&#39;t ibang mga menu ng paggamit ng dropdown sa ibaba.";
 $LANG["notify_disabled_theme_already_assigned"] = "Paumanhin, isa sa mga themes ka na lamang ng kapansanan ay ginagamit na sa pamamagitan ng mga sumusunod na mga client account. Upang hindi paganahin ang tema ay kailangan mo munang magtalaga ng bawat isa nang client sa ibang tema. I-click ang pangalan ng client na i-edit na ang indibidwal na mga account, o magtalaga ng lahat ng mga account sa isang tema gamit ang dropdown sa ibaba.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Mag-</a> click dito upang tukuyin kung aling mga form na mga patlang ang mga email na patlang, kaya maaari mong i-target ang mga ito sa iyong mga template ng email.";

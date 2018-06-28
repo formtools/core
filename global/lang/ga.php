@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Déan cinnte an focal faire mar an gc
 $LANG["validation_please_enter_search_date_range"] = "Roghnaigh an raon dáta cuardaigh.";
 $LANG["validation_please_enter_search_keyword"] = "Cuir isteach an eochairfhocal cuardaigh.";
 $LANG["validation_select_field_type"] = "Roghnaigh cineál réimse.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Roghnaigh na haighneachtaí sin ar mhaith leat cóip a dhéanamh.";
 $LANG["validation_select_submissions_to_delete"] = "Roghnaigh na haighneachtaí ar mhaith leat a scriosadh.";
 $LANG["validation_smart_fill_cannot_fill"] = "Tá brón orm, ní raibh muid ábalta a líonadh sa réimse seo.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Bhí muid in ann a aimsiú ar réimse, ach nach bhfuil sé ar dropdown, ticbhosca nó grúpa raidió.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Tá an cuntas cliant tugtha cothrom le
 $LANG["notify_client_menu_deleted"] = "Tá an roghchlár cliant scriosadh.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Tá an roghchlár a scriosadh, ach na cuntais seo a leanas cliant anois a thuilleadh a bheith roghchlár! Ní mór duit a thabhairt suas chun dáta na cuntais seo a leanas:";
 $LANG["notify_client_menu_updated"] = "Tá an roghchlár cliant tugtha cothrom le dáta.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Cliceáil anseo chun an t-aighneacht nua a eagrú.";
 $LANG["notify_deleted_menu_already_assigned"] = "Tá brón orainn, an roghchlár a rinne tú ach go scriosadh é á úsáid cheana féin ag na cliaint atá liostaithe thíos. D&#39;fhonn a scriosadh roghchlár beidh ort ar dtús chun na cliaint a shannadh do biachláir eile. Cliceáil ar an ainm cliant a chur in eagar go cuntas ar leith, nó ar na cuntais go léir a shannadh go roghchlár éagsúla ag baint úsáide as an dropdown thíos.";
 $LANG["notify_disabled_theme_already_assigned"] = "Tá brón orainn, ceann de na téamaí faoi mhíchumas tú díreach á n-úsáid cheana féin ag an gcliant cuntais seo a leanas. D&#39;fhonn a dhíchumasú an téama, beidh ort an chéad do gach cliant a shannadh do téama eile. Cliceáil ar an ainm cliant a chur in eagar go cuntas ar leith, nó ar na cuntais go léir a shannadh ar an téama úsáid a bhaint as an dropdown thíos.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Cliceáil anseo</a> a shonrú a bhfuil réimsí bhfoirm páirceanna r-phost, ionas gur féidir leat díriú orthu i do teimpléid ríomhphost.";

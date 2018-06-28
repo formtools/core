@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Varmista, että salasanat ovat samat.
 $LANG["validation_please_enter_search_date_range"] = "Valitse hakuun ajanjaksoon.";
 $LANG["validation_please_enter_search_keyword"] = "Syötä Hakusana.";
 $LANG["validation_select_field_type"] = "Valitse Kentän tyyppi.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Valitse ne kommentit, jotka haluat kopioida.";
 $LANG["validation_select_submissions_to_delete"] = "Valitse ne väitteet, jonka haluat poistaa.";
 $LANG["validation_smart_fill_cannot_fill"] = "Olemme pahoillamme, emme voi täyttää tällä alalla.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Emme pystyneet paikantamaan kenttään, mutta se ei ole avattavaa, valintaruutu tai radio-ryhmä.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Asiakkaan tili on päivitetty.";
 $LANG["notify_client_menu_deleted"] = "Asiakas valikko on poistettu.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Valikko on poistettu, mutta seuraavat asiakastileihin nyt ei enää ole valikossa! Sinun täytyy päivittää seuraavat tilit:";
 $LANG["notify_client_menu_updated"] = "Asiakas-valikko on päivitetty.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Napsauta tätä, jos haluat muokata uutta lähetystä.";
 $LANG["notify_deleted_menu_already_assigned"] = "Anteeksi, valikon juuri yrittänyt poistaa jo käyttävät asiakkaat alla. Jotta voidaan poistaa valikosta sinun täytyy ensin siirtää asiakkaiden muihin valikoihin. Klikkaa asiakkaan nimi muokata, että henkilökohtaisen tilin tai siirtää kaikki tilit eri valikossa avattavaa alla.";
 $LANG["notify_disabled_theme_already_assigned"] = "Anteeksi, yksi aiheista juuri vammaiset ovat jo käytössä seuraavat asiakastileihin. Jotta voidaan poistaa teema sinun täytyy ensin määrittää kullekin asiakkaalle toisen teeman. Klikkaa asiakkaan nimi muokata, että henkilökohtaisen tilin tai siirtää kaikki tilit teeman avulla avattavaa alla.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klikkaa tästä</a> yksilöidä, mitkä lomakkeen kentät ovat sähköposti kenttiä, joten voit kohdistaa ne sähköpostiisi malleja.";

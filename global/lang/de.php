@@ -1044,7 +1044,7 @@ $LANG["validation_passwords_different"] = "Die Passwörter sind nicht identisch.
 $LANG["validation_please_enter_search_date_range"] = "Bitte geben Sie den Zeitraum an in dem gesucht werden soll.";
 $LANG["validation_please_enter_search_keyword"] = "Bitte geben Sie das Schlüsselwort für die Suche ein.";
 $LANG["validation_select_field_type"] = "Bitte wählen Sie einen Feldtyp.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Bitte wählen Sie die Einsendungen aus, die Sie kopieren möchten.";
 $LANG["validation_select_submissions_to_delete"] = "Bitte selektieren Sie die Eingänge, die Sie löschen wollen.";
 $LANG["validation_smart_fill_cannot_fill"] = "Leider konnten wir nicht füllen diesem Bereich.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Wir waren nicht in der Lage, um ein Feld zu finden, aber es ist nicht ein Dropdown, Checkbox oder Radio-Gruppe.";
@@ -1093,7 +1093,7 @@ $LANG["notify_client_account_updated"] = "Die Client-Konto wurde erfolgreich akt
 $LANG["notify_client_menu_deleted"] = "Die Client-Menü wurde gelöscht.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Das Menü wurde gestrichen, aber die folgenden Client-Konten jetzt nicht mehr über ein Menü! Sie müssen die folgenden Konten zu aktualisieren:";
 $LANG["notify_client_menu_updated"] = "Die Client-Menü wurde aktualisiert.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Klicken Sie hier, um die neue Einreichung zu bearbeiten.";
 $LANG["notify_deleted_menu_already_assigned"] = "Sorry, das Menü, das Sie gerade versucht zu löschen, ist bereits von den Clients verwendet werden unten aufgeführt. Um das Menü zu löschen, müssen Sie zunächst für die Kunden zu anderen Menüs zuweisen. Klicken Sie auf den Client-Namen zu berücksichtigen, dass einzelne, zu bearbeiten oder weisen alle Konten in ein anderes Menü mittels der Dropdown unten.";
 $LANG["notify_disabled_theme_already_assigned"] = "Sorry, sind eines der Themen, die Sie gerade deaktiviert bereits durch die folgenden Client-Konten verwendet werden. Um das Thema zu deaktivieren, müssen Sie zunächst für jeden Kunden zu einem anderen Thema zuzuordnen. Klicken Sie auf den Client-Namen zu berücksichtigen, dass einzelne, zu bearbeiten oder weisen alle Konten zu einem Thema mittels der Dropdown unten.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klicken Sie hier,</a> um festzulegen, welche Formularfelder E-Mail-Felder sind, so können Sie diese in Ihrer E-Mail-Vorlagen Ziel.";

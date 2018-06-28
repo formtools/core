@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Убедитесь, что парол
 $LANG["validation_please_enter_search_date_range"] = "Пожалуйста, выберите поиск по диапазону дат.";
 $LANG["validation_please_enter_search_keyword"] = "Пожалуйста, введите ключевое слово поиска.";
 $LANG["validation_select_field_type"] = "Пожалуйста, выберите тип поля.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Выберите те материалы, которые вы хотели бы скопировать.";
 $LANG["validation_select_submissions_to_delete"] = "Пожалуйста, выберите этих материалов вы хотели бы удалить.";
 $LANG["validation_smart_fill_cannot_fill"] = "К сожалению, мы не смогли заполнить этой области.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Нам не удалось найти поле, но это не раскрывающийся, флажок или радио-группы.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Учетной записи клиен
 $LANG["notify_client_menu_deleted"] = "Клиент меня была удалена.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Меню был удален, но следующие счета клиент уже не имеют меню! Вам необходимо обновить следующие счета:";
 $LANG["notify_client_menu_updated"] = "Клиент меня была обновлена.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Нажмите здесь, чтобы изменить новое представление.";
 $LANG["notify_deleted_menu_already_assigned"] = "Извините, меня только что пытались удалить уже используется клиентами, перечисленных ниже. Для того, чтобы удалить меню вы в первую очередь необходимо назначить клиентам другие меню. Нажмите на имя клиента, чтобы править, что индивидуальный счет, или присвоить все счета на другой меню с помощью выпадающего ниже.";
 $LANG["notify_disabled_theme_already_assigned"] = "К сожалению, одной из тем, вы просто отключена уже используются следующие счета клиента. Для того чтобы отключить тему вы будете в первую очередь необходимо назначить каждому клиенту, чтобы другая тема. Нажмите на имя клиента, чтобы править, что индивидуальный счет, или присвоить все счета на тему, используя выпадающий ниже.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Нажмите здесь,</a> чтобы указать, какие поля формы электронной почты поля, так что вы можете нацелить их в шаблонах электронной почты.";

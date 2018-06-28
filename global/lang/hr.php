@@ -1042,7 +1042,7 @@ $LANG["validation_passwords_different"] = "Molimo provjerite lozinka su isti.";
 $LANG["validation_please_enter_search_date_range"] = "Molimo odaberite raspon datuma za pretraživanje.";
 $LANG["validation_please_enter_search_keyword"] = "Unesite ključne riječi za pretraživanje.";
 $LANG["validation_select_field_type"] = "Molimo Vas odaberite vrstu polja.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Odaberite one podneske koje želite kopirati.";
 $LANG["validation_select_submissions_to_delete"] = "Molimo Vas da odaberete one podnesaka želite izbrisati.";
 $LANG["validation_smart_fill_cannot_fill"] = "Nažalost, nismo mogli popuniti ovo polje.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Nismo bili u mogućnosti locirati polja, ali nije dropdown, kućicu ili radio grupe.";
@@ -1091,7 +1091,7 @@ $LANG["notify_client_account_updated"] = "Račun klijenta je uspješno ažuriran
 $LANG["notify_client_menu_deleted"] = "Klijent meni je bila izbrisana.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Meni je izbrisati, ali sljedeće račune klijenata sada više nemaju izbornik! Morate ažurirati sljedeće račune:";
 $LANG["notify_client_menu_updated"] = "Klijent meni je obnovljeno.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Kliknite ovdje da biste uredili novi podnesak.";
 $LANG["notify_deleted_menu_already_assigned"] = "Žao nam je, meni se samo pokušao to izbrisati već se koristi od strane klijenata navedene u nastavku. Kako bi izbrisali izbornik najprije morate dodijeliti korisnicima na druge izbornike. Kliknite na ime za uređivanje klijenta da pojedini račun ili dodijeliti sve račune u različitim pomoću padajućeg izbornika u nastavku.";
 $LANG["notify_disabled_theme_already_assigned"] = "Nažalost, jedan od teme samo s invaliditetom već se koristi u sljedećim računa klijenta. Kako bi onemogućili temu najprije morate dodijeliti svakom klijentu na drugu temu. Kliknite na ime za uređivanje klijenta da pojedini račun ili dodijeliti sve račune na temu koristeći padajući ispod.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Kliknite ovdje</a> da biste odredili koji je oblik polja su e-mail polja, tako da ih možete ciljati u vašem e-mail predložaka.";

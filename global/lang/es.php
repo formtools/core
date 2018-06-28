@@ -1044,7 +1044,7 @@ $LANG["validation_passwords_different"] = "Por favor revisa que ambas contraseñ
 $LANG["validation_please_enter_search_date_range"] = "Por favor especifica el rango de fechas a buscar.";
 $LANG["validation_please_enter_search_keyword"] = "Por favor especifica la palabra clave a buscar.";
 $LANG["validation_select_field_type"] = "Por favor, selecciona un tipo de campo.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Seleccione los envíos que desea copiar.";
 $LANG["validation_select_submissions_to_delete"] = "Por favor selecciona los envíos que deseas eliminar.";
 $LANG["validation_smart_fill_cannot_fill"] = "Lo sentimos, no pudimos llenar este campo.";
 $LANG["validation_smart_fill_invalid_field_type"] = "No hemos podido localizar un campo, pero no es un menú desplegable, casilla de verificación o grupo selección.";
@@ -1093,7 +1093,7 @@ $LANG["notify_client_account_updated"] = "La cuenta de cliente ha sido actualiza
 $LANG["notify_client_menu_deleted"] = "El menú de cliente se ha eliminado.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "El menú ha sido eliminado, ¡pero las cuentas de cliente listadas aquí ya no tienen un menú! Es necesario actualizar las siguientes cuentas:";
 $LANG["notify_client_menu_updated"] = "El menú de cliente ha sido actualizado.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Haga clic aquí para editar la nueva presentación.";
 $LANG["notify_deleted_menu_already_assigned"] = "Lo sentimos, el menú que intentaste borrar ya está siendo utilizado por los clientes listados a continuación. Para poder eliminar el menú debes primero asignar los clientes a otros menús. Haz clic en el nombre del cliente para modificar una cuenta de manera individual, o asigna todas las cuentas a un menú diferente utilizando el menú desplegable que ves a continuación.";
 $LANG["notify_disabled_theme_already_assigned"] = "Lo sentimos, uno de los temas que acabas de inhabilitar ya está siendo utilizado por las cuentas de cliente listadas a continuación. Para poder desactivar el tema debes primero asignar cada cliente a algún otro tema. Haz clic en el nombre del cliente para modificar una cuenta de manera individual, o asigna todas las cuentas a otro tema usando el menú desplegable que ves a continuación.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Haga clic aquí</a> para especificar los campos del formulario son campos de correo electrónico, para que pueda atacarlos en sus plantillas de correo electrónico.";

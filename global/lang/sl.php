@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Prosim poskrbi, da bosta gesli enaki.
 $LANG["validation_please_enter_search_date_range"] = "Prosimo, izberite časovno obdobje iskanja.";
 $LANG["validation_please_enter_search_keyword"] = "Prosim vnesi iskano geslo.";
 $LANG["validation_select_field_type"] = "Prosim izberi vrsto polja.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Izberite tiste predloge, ki jih želite kopirati.";
 $LANG["validation_select_submissions_to_delete"] = "Prosimo, izberite tiste vloge, ki jo želite izbrisati.";
 $LANG["validation_smart_fill_cannot_fill"] = "Žal nismo mogli izpolniti to polje.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Nismo mogli najti polje, vendar ni dropdown, polje ali skupino radio.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Uporabniški račun je uspešno posodo
 $LANG["notify_client_menu_deleted"] = "Uporabniški meni je izbrisan.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Meni je bil izbrisan, ampak naslednje račune strank sedaj nimajo več meni! Morate posodobiti naslednje račune:";
 $LANG["notify_client_menu_updated"] = "Uporabniški meni je posodobljen.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Kliknite tukaj, da uredite novo oddajo.";
 $LANG["notify_deleted_menu_already_assigned"] = "Žal, meni, ki ga pravkar poskušali izbrisati že uporabljajo spodaj navedene stranke. Za brisanje meni, ki ga bo najprej treba dodeliti strankam na druge menije. Kliknite na ime stranke, da uredite, da se posamezni račun, ali dodeliti vseh računov za drug meni z uporabo menija spodaj.";
 $LANG["notify_disabled_theme_already_assigned"] = "Žal mi je, ena od tem, ki ste jo pravkar invalidi se že uporabljajo naslednje račune strank. Da bi onemogočili temo boste morali najprej dodeliti vsaki stranki na drugo temo. Kliknite na ime stranke, da uredite, da se posamezni račun, ali dodeliti vseh računov za temo z uporabo menija spodaj.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Kliknite tukaj</a> določiti, katere oblike polja email polja, tako da jih lahko ciljno v vaš e-poštni predloge.";

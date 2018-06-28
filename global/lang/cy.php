@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Gwnewch yn siwr y passwords yr un fat
 $LANG["validation_please_enter_search_date_range"] = "Dewiswch y chwiliad ystod dyddiadau.";
 $LANG["validation_please_enter_search_keyword"] = "Rhowch y gair allweddol chwilio.";
 $LANG["validation_select_field_type"] = "Dewiswch fath maes.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Dewiswch y cyflwyniadau hynny yr hoffech eu copïo.";
 $LANG["validation_select_submissions_to_delete"] = "Dewiswch y rhai sylwadau yr hoffech eu dileu.";
 $LANG["validation_smart_fill_cannot_fill"] = "Mae&#39;n ddrwg gennym, nid oeddem yn gallu llenwi&#39;r maes hwn.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Nid oeddem yn gallu ddod o hyd i maes, ond nid yw&#39;n gwymplen, blwch neu grwp radio.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Mae&#39;r cyfrif cleient wedi cael ei 
 $LANG["notify_client_menu_deleted"] = "Mae&#39;r fwydlen cleient wedi ei ddileu.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Mae&#39;r fwydlen wedi ei ddileu, ond y cyfrifon cleient canlynol yn awr bellach heb ddewislen! Mae angen i chi ddiweddaru cyfrifon canlynol:";
 $LANG["notify_client_menu_updated"] = "Mae&#39;r fwydlen cleient wedi ei ddiweddaru.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Cliciwch yma i olygu'r cyflwyniad newydd.";
 $LANG["notify_deleted_menu_already_assigned"] = "Mae&#39;n ddrwg gennym, y ddewislen &#39;ch jyst ceisio dileu eisoes yn cael ei defnyddio gan y cleientiaid a restrir isod. Er mwyn dileu y fwydlen bydd angen i chi neilltuo y cleientiaid i bwydlenni eraill. Cliciwch ar enw&#39;r cleient i olygu bod cyfrif unigol, neu neilltuo pob cyfrif i bwydlen wahanol ddefnyddio&#39;r gwymplen isod.";
 $LANG["notify_disabled_theme_already_assigned"] = "Mae&#39;n ddrwg gennym, un o&#39;r themâu &#39;ch jyst anabl eisoes yn cael eu defnyddio gan y cyfrifon cleient canlynol. Er mwyn analluogi y thema, bydd angen i chi neilltuo bob cleient i thema arall. Cliciwch ar enw&#39;r cleient i olygu bod cyfrif unigol, neu neilltuo pob cyfrif i thema ddefnyddio&#39;r gwymplen isod.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Cliciwch yma</a> i nodi pa feysydd ffurflen mae caeau e-bost, er mwyn i chi eu targedu yn eich templedi e-bost.";

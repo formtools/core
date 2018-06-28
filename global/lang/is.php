@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Vinsamlegast gakktu úr skugga um að
 $LANG["validation_please_enter_search_date_range"] = "Veldu dagsetningu leit tímabil.";
 $LANG["validation_please_enter_search_keyword"] = "Vinsamlegast sláðu inn leitar leitarorð.";
 $LANG["validation_select_field_type"] = "Vinsamlegast veldu reit tegund.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Vinsamlegast veldu þær sendingar sem þú vilt afrita.";
 $LANG["validation_select_submissions_to_delete"] = "Vinsamlegast veldu þá uppgjöf sem þú vilt eyða.";
 $LANG["validation_smart_fill_cannot_fill"] = "Því miður gátum við ekki að fylla út þennan reit.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Við gátum að finna á sviði, en það er ekki í listanum, stöðva eða útvarp hóp.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "The viðskiptavinur reikningur hefur v
 $LANG["notify_client_menu_deleted"] = "Viðskiptavinurinn matseðill hefur verið eytt.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Í valmyndinni hefur verið eytt, en eftirfarandi viðskiptavinareikninga nú ekki lengur hafa valmynd! Þú þarft að uppfæra eftirfarandi reikninga:";
 $LANG["notify_client_menu_updated"] = "The viðskiptavinur matseðill hefur verið uppfærður.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Klik di sini untuk mengedit pengajuan baru....";
 $LANG["notify_deleted_menu_already_assigned"] = "Því miður, valmyndinni þú reyndir bara að eyða nú þegar verið notað af viðskiptavinunum hér að neðan. Til að eyða valmyndinni þú verður fyrst að úthluta viðskiptavinum öðrum valmyndum. Smelltu á nafn viðskiptavinar til að breyta því að einstaklingur reikning, eða setja alla reikninga til mismunandi matseðill með listanum hér að neðan.";
 $LANG["notify_disabled_theme_already_assigned"] = "Því miður, er ein af þeim þemum sem þú bara slökkt þegar verið notaður af eftirfarandi viðskiptavinareikninga. Til að slökkva á þema sem þú verður fyrst að setja hvern viðskiptavin í annað þema. Smelltu á nafn viðskiptavinar til að breyta því að einstaklingur reikning, eða setja alla reikninga til að þema með listanum hér að neðan.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Smelltu hér</a> til að skilgreina hvaða formi sviðum eru tölvupósti sviðum, svo þú getur miðað þá í sniðmát netfangið þitt.";

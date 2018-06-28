@@ -1046,7 +1046,7 @@ $LANG["validation_passwords_different"] = "Se assegure de que as senhas são id�
 $LANG["validation_please_enter_search_date_range"] = "Entre com período de busca por datas.";
 $LANG["validation_please_enter_search_keyword"] = "Digite uma palavra-chave para buscar.";
 $LANG["validation_select_field_type"] = "Please select a field type.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Por favor, selecione os envios que você gostaria de copiar.";
 $LANG["validation_select_submissions_to_delete"] = "Selecione as inscrições que você gostaria de excluir.";
 $LANG["validation_smart_fill_cannot_fill"] = "Sorry, we could not fill this field.";
 $LANG["validation_smart_fill_invalid_field_type"] = "We were unable to locate a field, but it is not a dropdown, checkbox or radio group.";
@@ -1095,7 +1095,7 @@ $LANG["notify_client_account_updated"] = "A conta de cliente foi atualizada com 
 $LANG["notify_client_menu_deleted"] = "O menu do cliente foi excluído.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "O menu foi excluído, mas as contas do cliente a seguir já não têm um menu! Você precisa atualizar as seguintes contas:";
 $LANG["notify_client_menu_updated"] = "O menu do cliente foi atualizado.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Clique aqui para editar o novo envio.";
 $LANG["notify_deleted_menu_already_assigned"] = "Desculpe, no menu que você acabou de tentar apagar já está sendo usado pelos clientes listados abaixo. A fim de eliminar o menu você primeiro precisa atribuir aos clientes outros menus. Clique sobre o nome do cliente para editar a conta individual, ou atribuir todas as contas para um menu diferente usando a lista suspensa abaixo.";
 $LANG["notify_disabled_theme_already_assigned"] = "Desculpe, um dos temas que você acabou de desabilitar está sendo usadas pelas contas dos seguintes cliente. Para desativar o tema terá primeiro de atribuir a cada cliente outro tema. Clique sobre o nome do cliente para editar a conta individual, ou atribuir todas as contas de um tema usando a lista suspensa abaixo.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Click here</a> to specify which form fields are email fields, so you can target them in your email templates.";

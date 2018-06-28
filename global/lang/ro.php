@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Vă rugăm asiguraţi-vă că parolel
 $LANG["validation_please_enter_search_date_range"] = "Vă rugăm să selectaţi intervalul de căutare dată.";
 $LANG["validation_please_enter_search_keyword"] = "Vă rugăm să introduceţi cuvinte cheie de căutare.";
 $LANG["validation_select_field_type"] = "Vă rugăm să selectaţi un tip de teren.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Selectați acele depuneri pe care doriți să le copiați.";
 $LANG["validation_select_submissions_to_delete"] = "Vă rugăm să selectaţi acele propunerile pe care doriţi să o ştergeţi.";
 $LANG["validation_smart_fill_cannot_fill"] = "Ne pare rău, nu am putut umple acest domeniu.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Noi am fost în imposibilitatea de a localiza un câmp, dar nu este un dropdown, caseta de selectare sau un grup de radio.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Cont de client a fost actualizate cu s
 $LANG["notify_client_menu_deleted"] = "Meniul clientul a fost şters.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Meniul a fost eliminat, dar următoarele conturi de client acum nu mai au un meniu! Ai nevoie de a actualiza următoarele conturi:";
 $LANG["notify_client_menu_updated"] = "Meniul Clientul a fost actualizat.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Faceți clic aici pentru a edita noua transmisie.";
 $LANG["notify_deleted_menu_already_assigned"] = "Ne pare rău, meniul pe care tocmai aţi încercat să ştergeţi este deja utilizat de clienti enumerate mai jos. În scopul de a şterge meniul va trebui mai întâi să se atribuie clientilor la alte meniuri. Faceţi clic pe numele clientului pentru a edita acest cont individual, sau atribuie toate conturile la un meniu diferite, folosind meniul derulant de mai jos.";
 $LANG["notify_disabled_theme_already_assigned"] = "Ne pare rău, una din temele pe care tocmai aţi cu handicap sunt deja utilizate de conturi de client de mai jos. În scopul de a nu fi de acord cu tema va trebui mai întâi să se atribuie fiecare client la un alt temă. Faceţi clic pe numele clientului pentru a edita acest cont individual, sau toate conturile pentru a atribui o temă folosind dropdown de mai jos.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Click aici</a> pentru a specifica care câmpurile de formular sunt câmpuri de e-mail, astfel încât aveţi posibilitatea să le ţintă, în şabloane e-mail.";

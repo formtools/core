@@ -1046,7 +1046,7 @@ $LANG["validation_passwords_different"] = "Beide wachtwoorden dienen gelijk te z
 $LANG["validation_please_enter_search_date_range"] = "Vul AUB de zoek datumbereik in.";
 $LANG["validation_please_enter_search_keyword"] = "Vul AUB het zoek trefwoord in.";
 $LANG["validation_select_field_type"] = "Selecteer een veldtype.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Selecteer de inzendingen die u wilt kopiëren.";
 $LANG["validation_select_submissions_to_delete"] = "Selecteer AUB de inzendingen die u wenst te verwijderen.";
 $LANG["validation_smart_fill_cannot_fill"] = "Sorry, we kunnen niet vullen dit gebied.";
 $LANG["validation_smart_fill_invalid_field_type"] = "We waren niet in staat om een veld te vinden, maar het is niet een dropdown, checkbox of radio-groep.";
@@ -1095,7 +1095,7 @@ $LANG["notify_client_account_updated"] = "Het client-account is succesvol bijgew
 $LANG["notify_client_menu_deleted"] = "De cliënt menu is verwijderd.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Het menu is verwijderd, maar de volgende klantaccounts nu niet meer over een menu! Je moet het bijwerken van de volgende rekeningen:";
 $LANG["notify_client_menu_updated"] = "De klant menu is bijgewerkt.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Klik hier om de nieuwe inzending te bewerken.";
 $LANG["notify_deleted_menu_already_assigned"] = "Sorry, het menu dat u probeerde te verwijderen wordt al gebruikt door de klanten hieronder opgesomd. Om het menu te verwijderen zal je eerst moeten de klanten toe te wijzen aan andere menu&#39;s. Klik op de naam van cliënt te bewerken dat individuele rekening, of alle accounts toewijzen aan een ander menu met behulp van de keuzelijst hieronder.";
 $LANG["notify_disabled_theme_already_assigned"] = "Sorry, een van de thema&#39;s die u zojuist met een handicap reeds gebruikt door de volgende klantaccounts. Om uit te schakelen het thema zal je eerst moet elke client toewijzen aan een ander thema. Klik op de naam van cliënt te bewerken dat de individuele rekening, of alle accounts toewijzen aan een thema met behulp van de keuzelijst hieronder.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klik hier</a> om aan te geven welke vorm velden zijn e-mail velden, zodat u ze kunt richten op uw e-mail templates.";

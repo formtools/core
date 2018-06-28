@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "कृपया सुनिश्च
 $LANG["validation_please_enter_search_date_range"] = "कृपया खोज तिथि सीमा चुनें.";
 $LANG["validation_please_enter_search_keyword"] = "कृपया खोज कीवर्ड दर्ज करें.";
 $LANG["validation_select_field_type"] = "कृपया एक क्षेत्र प्रकार का चयन करें.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "कृपया उन सबमिशन का चयन करें जिन्हें आप कॉपी करना चाहते हैं।";
 $LANG["validation_select_submissions_to_delete"] = "कृपया उन प्रस्तुतियाँ आप नष्ट करना चाहते हैं को चुनें.";
 $LANG["validation_smart_fill_cannot_fill"] = "क्षमा करें, हम इस क्षेत्र को भरने नहीं कर सका.";
 $LANG["validation_smart_fill_invalid_field_type"] = "हम एक क्षेत्र का पता लगाने में असमर्थ रहे थे, लेकिन यह एक ड्रॉपडाउन, चेकबॉक्स या रेडियो समूह नहीं है.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "ग्राहक खाते को
 $LANG["notify_client_menu_deleted"] = "ग्राहक मेनू हटा दिया गया है.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "मेनू हटा दिया गया है, लेकिन निम्नलिखित ग्राहक खातों अब नहीं रह गया एक मेनू है! आप निम्नलिखित लेखा अद्यतन करने की आवश्यकता है:";
 $LANG["notify_client_menu_updated"] = "ग्राहक मेनू अद्यतन किया गया है.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "नया सबमिशन संपादित करने के लिए यहां क्लिक करें।";
 $LANG["notify_deleted_menu_already_assigned"] = "क्षमा करें, मेनू तुम बस को नष्ट करने की कोशिश की पहले से ही नीचे सूचीबद्ध ग्राहकों द्वारा किया जा रहा है. आदेश में मेनू आपको पहले दूसरे मेनू के लिए ग्राहकों को प्रदान की आवश्यकता होगी नष्ट करने के लिए. ग्राहक के नाम पर क्लिक करें कि व्यक्तिगत खाते, या संपादित करने के लिए एक अलग से नीचे ड्रॉपडाउन मेनू का उपयोग कर के सभी खातों आवंटित.";
 $LANG["notify_disabled_theme_already_assigned"] = "क्षमा करें, आप केवल विकलांग विषयों में से एक पहले से ही निम्न ग्राहक खातों के द्वारा की जा रही थी. के क्रम में विषय आपको सबसे पहले एक और विषय के लिए एक ग्राहक प्रदान की आवश्यकता होगी अक्षम है. ग्राहक के नाम पर क्लिक करें कि व्यक्तिगत खाते, संपादित करने के लिए या एक से नीचे ड्रॉपडाउन प्रयोग विषय पर सभी खातों आवंटित.";
 $LANG["notify_edit_email_fields_link"] = "जो प्रपत्र फ़ील्ड ईमेल क्षेत्र हैं, तो आप उन्हें अपने ईमेल टेम्पलेट्स में लक्षित कर सकते हैं निर्दिष्ट करने के लिए <a href=\"edit.php?page=email_settings\">यहाँ क्लिक करें</a> .";

@@ -1041,7 +1041,7 @@ $LANG["validation_passwords_different"] = "Var noga med att båda lösenorden sk
 $LANG["validation_please_enter_search_date_range"] = "Ange datumområde för sökningen.";
 $LANG["validation_please_enter_search_keyword"] = "Ange nyckelordet för sökningen.";
 $LANG["validation_select_field_type"] = "Välj en fälttyp.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Var god välj de inlägg som du vill kopiera.";
 $LANG["validation_select_submissions_to_delete"] = "Välj de inskick som du vill ta bort.";
 $LANG["validation_smart_fill_cannot_fill"] = "Tyvärr så kunde vi inte fylla i detta fält.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Vi kunde inte lokalisera ett fält, men det är inte en rullgardinsmeny, kryssruta eller radiogrupp.";
@@ -1091,7 +1091,7 @@ $LANG["notify_client_account_updated"] = "Klientkontot har uppdaterats!";
 $LANG["notify_client_menu_deleted"] = "Klientmenyn har tagits bort.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Menyn har tagits bort, men följande klientkonton har inte längre någon meny! Du behöver uppdatera följande konton:";
 $LANG["notify_client_menu_updated"] = "Klientmenyn har uppdaterats.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Klicka här för att redigera det nya inlägget.";
 $LANG["notify_deleted_menu_already_assigned"] = "Tyvärr så används den meny du försöker ta bort av andra klienter som listas nedan. För att ta bort menyn måste du först koppla dessa klienter till andra menyer. Klicka på en klients namn för att ändra det kontot, eller tilldela alla konton en annan meny samtidigt via rullgardinsmenyn nedan.";
 $LANG["notify_disabled_theme_already_assigned"] = "Tyvärr så används ett av de teman du vill ta bort av andra klientkonton. Du ser dem listade nedan. För att stänga av temat för dem måste du först koppla ett annat tema till dem. Antingen individuellt genom att klicka på klientnamnet eller alla på en gång med samma tema genom att välja ett från rullgardinsmenyn nedan.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klicka här</a> för att ange vilka formulärfält som är e-postfält, så att du kan använda dig av dem i dina e-postmallar.";

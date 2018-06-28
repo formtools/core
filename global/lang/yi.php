@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "ביטע מאַכן זיכער די �
 $LANG["validation_please_enter_search_date_range"] = "ביטע סעלעקטירן דעם זוכן טאָג קייט.";
 $LANG["validation_please_enter_search_keyword"] = "ביטע אַרייַן די זוך קיווערד.";
 $LANG["validation_select_field_type"] = "ביטע סעלעקטירן אַ פעלד טיפּ.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "ביטע אויסקלייַבן די סאַבמישאַנז איר וואָלט ווי צו צייכענען.";
 $LANG["validation_select_submissions_to_delete"] = "ביטע סעלעקטירן יענע סאַבמישאַנז איר וואָלט ווי צו ויסמעקן.";
 $LANG["validation_smart_fill_cannot_fill"] = "זייַט מוחל, מיר קען נישט אָנהערן דעם פעלד.";
 $LANG["validation_smart_fill_invalid_field_type"] = "מיר האָט ניט געקענט צו געפינען אַ פעלד, אָבער דאָס איז נישט אַ דראָפּדאָוון, טשעקקבאָקס אָדער ראַדיאָ גרופּע.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "דער קליענט קאָנטע אי�
 $LANG["notify_client_menu_deleted"] = "דער קליענט מעניו איז געווארן אויסגעמעקט.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "די מעניו איז געווארן אויסגעמעקט, אָבער די פאלגענדע קליענט אַקאַונץ איצט קיין לאָנגער האָבן אַ מעניו! איר דאַרפֿן צו דערהייַנטיקן די פאלגענדע אַקאַונץ:";
 $LANG["notify_client_menu_updated"] = "דער קליענט מעניו איז געווארן אפדעיטעד.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "דריקט דאָ צו רעדאַגירן די נייַ סאַבמישאַן.";
 $LANG["notify_deleted_menu_already_assigned"] = "אנטשולדיגט, &quot;די מעניו איר פּונקט טרייד צו ויסמעקן איז שוין בעינג גענוצט דורך די קלייאַנץ ליסטעד אונטן. אויף כּדי צו ויסמעקן די מעניו איר וועט ערשט דאַרפֿן צו באַשטימען דעם קלייאַנץ צו אנדערע מעניוז. קליקט אויף דעם קליענט נאָמען צו ענדערן אַז פּערזענלעך אקאונט, אָדער באַשטימען אַלע אַקאַונץ צו אַ אַנדערע מעניו מיט די דראָפּדאָוון אונטן.";
 $LANG["notify_disabled_theme_already_assigned"] = "אנטשולדיגט, איינער פון די טימז איר פּונקט פאַרקריפּלט זענען שוין בעינג גענוצט דורך די פאלגענדע קליענט אַקאַונץ. אויף כּדי צו דיסייבאַל די טעמע איר וועט ערשט דאַרפֿן צו באַשטימען יעדער קליענט צו אַנדערער טעמע. קליקט אויף דעם קליענט נאָמען צו ענדערן אַז פּערזענלעך אקאונט, אָדער באַשטימען אַלע אַקאַונץ צו אַ טעמע ניצן די דראָפּדאָוון אונטן.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">דריקט דאָ</a> צו ספּעציפיצירן וועלכע פֿאָרמירן פעלדער זענען email פעלדער, אַזוי איר קענען ציל זיי אין אייער email טעמפּלאַטעס.";
