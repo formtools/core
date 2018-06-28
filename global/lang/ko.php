@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "제발 비밀 번호 동일해야합�
 $LANG["validation_please_enter_search_date_range"] = "제발 검색 기간을 선택합니다.";
 $LANG["validation_please_enter_search_keyword"] = "제발 검색 키워드를 입력하십시오.";
 $LANG["validation_select_field_type"] = "제발 필드 유형을 선택합니다.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "복사하려는 제출물을 선택하십시오.";
 $LANG["validation_select_submissions_to_delete"] = "제발 삭제하고자하는 해당 제출을 선택합니다.";
 $LANG["validation_smart_fill_cannot_fill"] = "죄송합니다, 우리는이 필드를 채울 수없습니다.";
 $LANG["validation_smart_fill_invalid_field_type"] = "우리는 필드를 찾을 수없습니다,하지만, 드롭 다운, 체크 박스 또는 라디오 그룹이없습니다.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "고객 계정이 성공적으로 업�
 $LANG["notify_client_menu_deleted"] = "클라이언트는 메뉴가 삭제되었습니다.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "메뉴에서 삭제되었습니다하지만 다음과 같은 클라이언트 계정은 이제 더 이상 메뉴! 다음과 같은 계정을 업데이 트해야합니다 :";
 $LANG["notify_client_menu_updated"] = "클라이언트는 메뉴가 업데이 트되었습니다.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "여기를 클릭하여 새 제출물을 편집하십시오.";
 $LANG["notify_deleted_menu_already_assigned"] = "죄송합니다, 그냥 메뉴에서 삭제했지만 이미 클라이언트가 아래에 나열된 사용되고있다. 위해서는 먼저 다른 메뉴로 고객을 할당해야합니다 메뉴에서 삭제합니다. 클라이언트 이름을 클릭하여 개인 계정을 편집하거나 다른 메뉴 아래의 드롭 다운 메뉴를 사용하는 모든 계정을 지정할 수있습니다.";
 $LANG["notify_disabled_theme_already_assigned"] = "미안 해요, 당신은 단지 하나의 장애 테마는 이미 다음과 같은 클라이언트 계정에 의해 사용되고있습니다. 위해서는 먼저 다른 테마를 각 클라이언트에 할당해야합니다 테마를 해제합니다. 클라이언트 이름을 클릭하여 개인 계정을 수정하거나 주제 아래 드롭 다운 메뉴를 사용하는 모든 계정을 지정할 수있습니다.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">여기를 클릭하십시오</a> 양식 필드 이메일 필드되므로, 귀하의 이메일 템플릿에서 그들을 타겟팅할 수 지정할 수 있습니다.";

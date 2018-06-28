@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Palun veenduge, et paroolid on samad.
 $LANG["validation_please_enter_search_date_range"] = "Palun vali otsingu kuupäeva vahemik.";
 $LANG["validation_please_enter_search_keyword"] = "Palun sisestage otsingusõna.";
 $LANG["validation_select_field_type"] = "Palun valige kirjuta.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Palun valige need esildised, mida soovite kopeerida.";
 $LANG["validation_select_submissions_to_delete"] = "Palun valige neid nõudmisi, mida soovite kustutada.";
 $LANG["validation_smart_fill_cannot_fill"] = "Vabandame, kuid me ei suutnud täita selles valdkonnas.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Me ei suutnud leida valdkonnas, kuid see ei ole siin omaette, ruut või raadio grupp.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Kliendi konto on edukalt uuendatud.";
 $LANG["notify_client_menu_deleted"] = "Kliendi menüüst on välja jäetud.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Menüüst on välja jäetud, kuid pärast kliendi kontod nüüd ei pea enam menüüst! Teil on vaja ajakohastada järgmised kontod:";
 $LANG["notify_client_menu_updated"] = "Kliendi menüü on uuendatud.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Uus esituse muutmiseks klõpsake siin.";
 $LANG["notify_deleted_menu_already_assigned"] = "Vabandame, menüüs ainult proovinud kustutada, on juba mida kliendid on loetletud allpool. Et kustutada menüüs teile esmalt vaja määrata klientidele teiste menüüsid. Klõpsake kliendi nime muuta, et konkreetse konto või määrata kõikide kontode erinevas menüüs kasutades rippmenüüst allpool.";
 $LANG["notify_disabled_theme_already_assigned"] = "Vabandust, üks teemadele sa just puudega on juba kasutusel järgmise kliendi kontod. Et kustutada teema teile esmalt vaja määrata igale kliendile teise teema. Klõpsake kliendi nime muuta, et konkreetse konto või määrata kõikide kontode teema kasutades rippmenüüst allpool.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Vajuta siia</a> , et määrata, millised väljad on e-posti väljad, siis võite suunata neid oma e-posti malle.";

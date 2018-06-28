@@ -1040,7 +1040,7 @@ $LANG["validation_passwords_different"] = "Tafadhali hakikisha ya lösenord ni s
 $LANG["validation_please_enter_search_date_range"] = "Tafadhali chagua tarehe tafuta mbalimbali.";
 $LANG["validation_please_enter_search_keyword"] = "Tafadhali kuingia search keyword.";
 $LANG["validation_select_field_type"] = "Tafadhali chagua aina shamba.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Tafadhali chagua maoni hayo ungependa kuipiga.";
 $LANG["validation_select_submissions_to_delete"] = "Tafadhali chagua wale redovisningar ungependa delete.";
 $LANG["validation_smart_fill_cannot_fill"] = "Sorry, sisi hakuweza kujaza uwanja huu.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Sisi walikuwa hawawezi Locate shamba, lakini siyo dropdown, redio checkbox au kikundi.";
@@ -1089,7 +1089,7 @@ $LANG["notify_client_account_updated"] = "Akaunti ya mteja imekuwa mafanikio upd
 $LANG["notify_client_menu_deleted"] = "Menu mteja imekuwa ilifutwa.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "The menu imekuwa kuchapa lakini mteja zifuatazo akaunti sasa hawana orodha! Unahitaji update akaunti zifuatazo:";
 $LANG["notify_client_menu_updated"] = "Menu mteja imekuwa updated.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Bonyeza hapa ili uhariri kuwasilisha mpya.";
 $LANG["notify_deleted_menu_already_assigned"] = "Samahani, menu wewe tu walijaribu delete tayari kutumiwa na wateja zilizoorodheshwa hapa chini. Ili delete the menu wewe kwanza hawawajui haja ya wateja wengine menus. Bonyeza kwenye jina mteja hariri kwamba akaunti ya mtu binafsi, au hawawajui akaunti yote tofauti kutumia dropdown menu chini.";
 $LANG["notify_disabled_theme_already_assigned"] = "Sorry, mmoja wa walemavu mandhari wewe tu tayari zinatumiwa na mteja zifuatazo akaunti. Ili Disable temat utakuwa unahitaji kwanza hawawajui kila mteja mwingine temat. Bonyeza kwenye jina mteja hariri kwamba akaunti ya mtu binafsi, au hawawajui akaunti wote kwa kutumia kaulimbiu dropdown chini.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Click here</a> to specify which form fields are email fields, so you can target them in your email templates.";

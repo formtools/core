@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Prašome įsitikinti, kad slaptažod�
 $LANG["validation_please_enter_search_date_range"] = "Prašome pasirinkti paieškos dat.";
 $LANG["validation_please_enter_search_keyword"] = "Prašome įvesti paieškos žodį.";
 $LANG["validation_select_field_type"] = "Prašome pasirinkti lauko tipo.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Pasirinkite tas pastabas, kurias norėtumėte kopijuoti.";
 $LANG["validation_select_submissions_to_delete"] = "Prašome pasirinkti šias pastabas norite ištrinti.";
 $LANG["validation_smart_fill_cannot_fill"] = "Atsiprašome, mes negalime užpildyti šį lauką.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Mums nepavyko rasti lauke, tačiau tai ne meniu, varnelę ar radijo grupė.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Kliento sąskaitą buvo sėkmingai atn
 $LANG["notify_client_menu_deleted"] = "Klientų meniu buvo ištrintas.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Meniu buvo panaikinta, tačiau šių klientų sąskaitose dabar nebeturi meniu! Jums reikia atnaujinti šias sąskaitas:";
 $LANG["notify_client_menu_updated"] = "Klientų meniu buvo atnaujintas.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Spustelėkite čia, jei norite redaguoti naują pateikimą.";
 $LANG["notify_deleted_menu_already_assigned"] = "Atsiprašome, meniu tiesiog bandė naikinti jau naudojasi klientai žemiau. Siekiant panaikinti meniu pirmiausia reikia priskirti klientams kitas meniu. Spauskite ant kliento pavadinimą pakeisti, kad atskiros sąskaitos, ar priskirti visas sąskaitas į kitą meniu, naudojant žemiau esančio sąrašo intervalo.";
 $LANG["notify_disabled_theme_already_assigned"] = "Atsiprašome, viena iš temų, kurią ką tik neįgalieji jau naudojamas po klientų sąskaitas. Norėdami išjungti tema jums pirmiausia reikia priskirti kiekvienam klientui į kitą temą. Spauskite ant kliento pavadinimą pakeisti, kad atskiros sąskaitos, ar perleisti visas sąskaitas su tema, naudojant žemiau esančio sąrašo intervalo.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Spauskite čia norėdami</a> nurodyti formos laukus elektroniniu paštu srityse, todėl jūs galite nukreipti juos į savo elektroninio pašto šablonus.";

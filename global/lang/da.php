@@ -1044,7 +1044,7 @@ $LANG["validation_passwords_different"] = "Vær venligst sikker på at passwords
 $LANG["validation_please_enter_search_date_range"] = "Angiv venligst dato søge området.";
 $LANG["validation_please_enter_search_keyword"] = "Angiv venligst søge nøgleordet.";
 $LANG["validation_select_field_type"] = "Vælg et felt type.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Vælg venligst de indlæg, du gerne vil kopiere.";
 $LANG["validation_select_submissions_to_delete"] = "Vælg venligst de henvendelser du ønsker at slette.";
 $LANG["validation_smart_fill_cannot_fill"] = "Desværre kunne vi ikke udfylde dette felt.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Vi var ikke i stand til at finde et felt, men det er ikke en dropdown, checkhæfte eller radio gruppe.";
@@ -1093,7 +1093,7 @@ $LANG["notify_client_account_updated"] = "Klient kontoen er blevet opdateret.";
 $LANG["notify_client_menu_deleted"] = "Kunden menuen er blevet slettet.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Menuen er blevet slettet, men følgende kundekonti nu ikke længere har en menu! Du skal opdatere følgende regnskaber:";
 $LANG["notify_client_menu_updated"] = "Kunden menuen er blevet opdateret.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Klik her for at redigere det nye indlæg.";
 $LANG["notify_deleted_menu_already_assigned"] = "Beklager, men den menu, du netop har forsøgt at slette allerede bruges af kunderne, der er anført nedenfor. For at slette den menu, du vil først nødt til at tildele klienter til andre menuer. Klik på kundens navn for at redigere, at individuelle hensyn, eller overdrage samtlige konti til en anden menu ved hjælp af dropdown nedenfor.";
 $LANG["notify_disabled_theme_already_assigned"] = "Beklager, men et af de temaer, du lige har deaktiveret bliver allerede brugt af følgende kundekonti. For at deaktivere det tema, du vil først nødt til at tildele hver klient til et andet tema. Klik på kundens navn for at redigere, at individuelle hensyn, eller overdrage samtlige konti til et tema ved hjælp af dropdown nedenfor.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klik her for</a> at angive, hvilke formularfelter er e-mail felter, så du kan målrette dem i din e-mail skabeloner.";

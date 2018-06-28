@@ -1044,7 +1044,7 @@ $LANG["validation_passwords_different"] = "Kontroller at passordene er de samme.
 $LANG["validation_please_enter_search_date_range"] = "Velg søk datoperiode.";
 $LANG["validation_please_enter_search_keyword"] = "Fyll inn søkeord.";
 $LANG["validation_select_field_type"] = "Velg et felt type.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Vennligst velg de innleveringene du vil kopiere.";
 $LANG["validation_select_submissions_to_delete"] = "Velg de anførsler du ønsker å slette.";
 $LANG["validation_smart_fill_cannot_fill"] = "Beklager, vi kunne ikke fylle dette feltet.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Vi kunne ikke finne et felt, men det er ikke en dropdown, sjekkheftet eller radio gruppe.";
@@ -1093,7 +1093,7 @@ $LANG["notify_client_account_updated"] = "Klienten din er oppdatert.";
 $LANG["notify_client_menu_deleted"] = "Klienten menyen har blitt slettet.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Menyen har blitt slettet, men følgende kundekontoer nå ikke lenger har en meny! Du må oppdatere følgende kontoer:";
 $LANG["notify_client_menu_updated"] = "Klienten menyen har blitt oppdatert.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Klikk her for å redigere det nye innlegget.";
 $LANG["notify_deleted_menu_already_assigned"] = "Beklager, menyen du bare prøvde å slette allerede brukes av klientene nedenfor. For å slette menyen må du først tildele klientene til andre menyer. Klikk på klienten for å redigere den enkelte konto, eller tildele alle kontoene til en annen ved hjelp av rullegardinmenyen nedenfor.";
 $LANG["notify_disabled_theme_already_assigned"] = "Beklager, en av de temaene du nettopp ufør allerede brukes av følgende kundekontoer. For å deaktivere temaet må du først tildele hver kunde til et annet tema. Klikk på klienten for å redigere den enkelte konto, eller tildele alle kontoene til et tema ved hjelp av rullegardinmenyen nedenfor.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klikk her for</a> å angi hvilke skjemafelt er e-felt, slik at du kan målrette dem i e-maler.";

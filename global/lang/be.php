@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Пераканайцеся, што п
 $LANG["validation_please_enter_search_date_range"] = "Калі ласка, выберыце пошук па дыяпазоне дат.";
 $LANG["validation_please_enter_search_keyword"] = "Калі ласка, увядзіце ключавое слова пошуку.";
 $LANG["validation_select_field_type"] = "Калі ласка, абярыце тып поля.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Калі ласка, абярыце тыя ўяўленні, якія вы хацелі скапіяваць.";
 $LANG["validation_select_submissions_to_delete"] = "Калi ласка, выбярыце гэтых матэрыялаў вы хацелі б выдаліць.";
 $LANG["validation_smart_fill_cannot_fill"] = "На жаль, мы не змаглі запоўніць гэтай галіне.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Нам не ўдалося знайсці поле, але гэта не раскрываюцца, сьцяжок або радыё-групы.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Ўліковага запісу клі
 $LANG["notify_client_menu_deleted"] = "Кліент мяне была выдаленая.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Меню быў выдалены, але наступныя рахункі кліент ўжо не маюць меню! Вам неабходна абнавіць наступныя рахункі:";
 $LANG["notify_client_menu_updated"] = "Кліент мяне была абноўлена.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Націсніце тут, каб змяніць новае ўяўленне.";
 $LANG["notify_deleted_menu_already_assigned"] = "Прабачце, мяне толькі што спрабавалі выдаліць ўжо выкарыстоўваецца кліентамі, пералічаных ніжэй. Для таго, каб выдаліць меню вы ў першую чаргу неабходна прызначыць кліентам іншыя меню. Націсніце на імя кліента, каб рэдагаваць, што індывідуальны рахунак, або прысвоіць ўсе рахункі на іншы меню з дапамогай выпадальнага ніжэй.";
 $LANG["notify_disabled_theme_already_assigned"] = "На жаль, адной з тэм, вы проста адключаная ўжо выкарыстоўваюцца наступныя рахунку кліента. Для таго каб адключыць тэму вы будзеце ў першую чаргу неабходна прызначыць кожнаму кліенту, каб іншая тэма. Націсніце на імя кліента, каб рэдагаваць, што індывідуальны рахунак, або прысвоіць ўсе рахункі на тэму, выкарыстоўваючы які прыпадае ніжэй.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Націсніце тут,</a> каб паказаць, якія палі формы электроннай пошты поля, так што вы можаце нацэліць іх у шаблонах электроннай пошты.";

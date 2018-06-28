@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Kérjük, ellenőrizze, hogy a jelsz�
 $LANG["validation_please_enter_search_date_range"] = "Kérjük, válassza ki a keresési dátumtartományt.";
 $LANG["validation_please_enter_search_keyword"] = "Kérjük, adja meg a keresési kulcsszót.";
 $LANG["validation_select_field_type"] = "Kérjük, válassza ki a mező típusát.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Válassza ki azokat a beadványokat, amelyeket másolni szeretne.";
 $LANG["validation_select_submissions_to_delete"] = "Kérjük, válassza ki az észrevételeket szeretné törölni.";
 $LANG["validation_smart_fill_cannot_fill"] = "Sajnáljuk, de nem tudta kitölteni ezt a területen.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Nem tudtuk megtalálni a területen, de ez nem egy legördülő, jelölőnégyzetet vagy rádiós csoport.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Az ügyfél számlát frissítése sik
 $LANG["notify_client_menu_deleted"] = "Az ügyfél menü törölték.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "A menü törölték, de a következő ügyfél-számlák most már nem a menüt! Frissíteni kell a következő számlákban szerepelnek:";
 $LANG["notify_client_menu_updated"] = "Az ügyfél menü frissült.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Kattintson ide az új beadvány szerkesztéséhez.";
 $LANG["notify_deleted_menu_already_assigned"] = "Sajnáljuk, a menüben csak próbált törölni már most is használják az ügyfelek az alább felsorolt. Annak érdekében, hogy törölje a menüben először kell hozzá az ügyfelek az egyéb menüket. Kattintson az ügyfél nevére szerkeszteni, hogy az egyéni számlára, vagy a hozzá minden fiók egy másik menü segítségével legördülő alul.";
 $LANG["notify_disabled_theme_already_assigned"] = "Sajnáljuk, az egyik téma az imént fogyatékkal már használják a következő ügyfél számlákat. Annak érdekében, hogy tiltsa le a témát először kell rendelni minden ügyfél egy másik téma. Kattintson az ügyfél nevére szerkeszteni, hogy az egyéni számlára, vagy kiosztja az összes beszámolót egy témát használja a legördülő alul.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Kattintson ide</a> , hogy meghatározza, hogy milyen formában mezők email mezőket, így hogy azokat az e-mail sablonok.";

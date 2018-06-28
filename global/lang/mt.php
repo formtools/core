@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Jekk jogħġbok kun żgur li l-passwo
 $LANG["validation_please_enter_search_date_range"] = "Jekk jogħġbok agħżel il-firxa data tfittxija.";
 $LANG["validation_please_enter_search_keyword"] = "Jekk jogħġbok ikteb l-keyword search.";
 $LANG["validation_select_field_type"] = "Jekk jogħġbok agħżel it-tip il-qasam.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Jekk jogħġbok agħżel dawk is-sottomissjonijiet li tixtieq kopja.";
 $LANG["validation_select_submissions_to_delete"] = "Jekk jogħġbok agħżel dawk is-sottomissjonijiet tixtieq tħassar.";
 $LANG["validation_smart_fill_cannot_fill"] = "Jiddispjacini, aħna ma stajniex timla dan il-qasam.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Aħna ma konniex kapaċi jsibu qasam, iżda mhuwiex dropdown, Checkbox jew grupp tar-radju.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Il-kont klijent ġie aġġornat b&#39;
 $LANG["notify_client_menu_deleted"] = "Il-menu klijent ġie mħassar.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Il-menu ġiet imħassra, imma l-kontijiet tal-klijenti li ġejjin issa m&#39;għadx għandhom menu! Ikollok bżonn li taġġorna l-kontijiet li ġejjin:";
 $LANG["notify_client_menu_updated"] = "Il-menu klijent ġiet aġġornata.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Ikklikkja hawn biex teditja s-sottomissjoni ġdida.";
 $LANG["notify_deleted_menu_already_assigned"] = "Jiddispjacini, il-menu inti biss ippruvaw biex titħassar diġà qed jintużaw mill-klijenti elenkati hawn taħt. Sabiex jitħassar il-menu ser ikollok l-ewwel ħtieġa li jiġu assenjati l-klijenti għall-menus oħra. Ikklikkja fuq l-isem li jeditjaw il-klijent f&#39;dak il-kont individwali, jew jassenja l-kontijiet kollha li f&#39;menu differenti bl-użu dropdown hawn taħt.";
 $LANG["notify_disabled_theme_already_assigned"] = "Jiddispjacini, waħda mit-temi inti biss b&#39;diżabilità diġà qed jintużaw mill-kontijiet tal-klijenti li ġejjin. Sabiex jiskonnettja t-tema ser ikollok l-ewwel ħtieġa li jassenja kull klijent għall-ieħor tema. Ikklikkja fuq l-isem li jeditjaw il-klijent f&#39;dak il-kont individwali, jew jassenja l-kontijiet kollha ma &#39;tema bl-użu dropdown hawn taħt.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Ikklikkja hawn</a> biex jispeċifikaw liema oqsma forma huma oqsma email, sabiex inti tista &#39;mira fil templates email tiegħek.";

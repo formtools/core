@@ -1044,7 +1044,7 @@ $LANG["validation_passwords_different"] = "Lütfen şifreler aynı olduğundan e
 $LANG["validation_please_enter_search_date_range"] = "Lütfen arama tarih aralığını giriniz.";
 $LANG["validation_please_enter_search_keyword"] = "Lütfen arama anahtar kelimesini giriniz.";
 $LANG["validation_select_field_type"] = "Lütfen bir alan türü seçin.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Lütfen kopyalamak istediğiniz gönderileri seçin.";
 $LANG["validation_select_submissions_to_delete"] = "Lütfen silmek istiyorsunuz o gönderimler seçin.";
 $LANG["validation_smart_fill_cannot_fill"] = "Maalesef, bu alanı doldurmak couldn&#39;t.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Bir alan bulmak koyamadık, ama açılan, onay kutusu veya radyo grubu değildir.";
@@ -1093,7 +1093,7 @@ $LANG["notify_client_account_updated"] = "Müşteri hesabı başarıyla güncell
 $LANG["notify_client_menu_deleted"] = "Istemci menüsü silindi.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Menü, ancak silindi aşağıdaki müşteri hesaplarını şimdi artık bir menü var! Aşağıdaki hesaplar güncellemeniz gerekir:";
 $LANG["notify_client_menu_updated"] = "Istemci menüsü güncellendi.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Yeni gönderimi düzenlemek için buraya tıklayın.";
 $LANG["notify_deleted_menu_already_assigned"] = "Üzgünüz, menü sadece silmek için çalıştı zaten müşteriler aşağıda listelenen tarafından kullanılıyor. Amacıyla öncelikle diğer menülere müşterilerine atamak gerekir menü silmek için. Müşteri adına tıklayın tek tek hesabı düzenlemek için veya farklı bir menü altında açılan kullanarak tüm hesapları atayın.";
 $LANG["notify_disabled_theme_already_assigned"] = "Üzgünüz, bir sadece özürlü temalar zaten şu müşteri hesaplarını tarafından kullanılmaktadır. Amacıyla öncelikle başka bir temaya her istemci atamak gerekecektir tema devre dışı bırakmak için. Müşteri adına tıklayın tek tek hesap, düzenlemek veya bir tema altında açılan kullanarak tüm hesapları atayın.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Tıklayın</a> form alanlarını e-posta alanlarını, bu nedenle e-posta şablonları onları hedef belirtmek için.";

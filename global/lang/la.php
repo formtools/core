@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Lūdzu, pārliecinieties, paroles nav
 $LANG["validation_please_enter_search_date_range"] = "Lūdzu izvēlieties meklēšanas datumu diapazonu.";
 $LANG["validation_please_enter_search_keyword"] = "Lūdzu ievadiet meklēšanas atslēgvārdu.";
 $LANG["validation_select_field_type"] = "Lūdzu izvēlieties lauka tips.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Lūdzu, atlasiet tos iesniegumus, kurus vēlaties kopēt.";
 $LANG["validation_select_submissions_to_delete"] = "Lūdzu, izvēlieties šo iesniegto vēlaties dzēst.";
 $LANG["validation_smart_fill_cannot_fill"] = "Atvainojiet, mēs nevarējām aizpildītu šo lauku.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Mēs nevarējām atrast jomā, bet tas nav nolaižamajā, izvēles rūtiņa vai radio grupai.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Klienta konts ir veiksmīgi atjauninā
 $LANG["notify_client_menu_deleted"] = "Klients izvēlne ir izdzēsts.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Izvēlne tika svītrots, taču pēc klienta kontiem, tagad vairs nav menu! Jums nepieciešams atjaunināt šādus kontus:";
 $LANG["notify_client_menu_updated"] = "Klients izvēlne ir atjaunota.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Noklikšķiniet šeit, lai rediģētu jauno iesniegumu.";
 $LANG["notify_deleted_menu_already_assigned"] = "Atvainojiet, izvēlnes jūs vienkārši mēģinājis izdzēst jau tiek izmantota ar klientiem, kas uzskaitīti turpmāk. Lai izdzēstu menu jums vispirms ir nepieciešams piešķirt klientiem citās izvēlnēs. Noklikšķiniet uz klienta vārda rediģēt šo individuālo kontu, vai arī nodot visu kontu citā izvēlnē, izmantojot nolaižamo zemāk.";
 $LANG["notify_disabled_theme_already_assigned"] = "Žēl, viena no tēmām, kuru tikko invalīdu jau izmanto šādu klientu kontiem. Lai atspējotu tēma jums vispirms ir nepieciešams piešķirt katram klientam uz citu tēmu. Noklikšķiniet uz klienta vārda rediģēt šo individuālo kontu, vai arī nodot visu kontu tēmu, izmantojot nolaižamo zemāk.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Noklikšķiniet šeit,</a> lai norādītu, kurus veido lauki ir e-pasta lauki, lai jūs varat mērķēt tos jūsu e-pasta veidnes.";

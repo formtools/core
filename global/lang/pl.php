@@ -1045,7 +1045,7 @@ $LANG["validation_passwords_different"] = "Proszę się upewnić czy hasła są 
 $LANG["validation_please_enter_search_date_range"] = "Wybierz zakres dat wyszukiwania.";
 $LANG["validation_please_enter_search_keyword"] = "Wprowadź słowa kluczowe.";
 $LANG["validation_select_field_type"] = "Proszę wybrać typ pola.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Wybierz te zgłoszenia, które chcesz skopiować.";
 $LANG["validation_select_submissions_to_delete"] = "Proszę wybrać te wnioski chcesz usunąć.";
 $LANG["validation_smart_fill_cannot_fill"] = "Niestety, nie możemy wypełnić tego pola.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Nie udało nam się znaleźć pole, ale nie jest rozwijane, pola wyboru lub grupy radiowej.";
@@ -1094,7 +1094,7 @@ $LANG["notify_client_account_updated"] = "Konto klienta zostało zaktualizowane.
 $LANG["notify_client_menu_deleted"] = "Menu klienta została usunięta.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Menu zostało usunięte, ale po kontach klientów już nie ma menu! Musisz uaktualnić następujące rachunki:";
 $LANG["notify_client_menu_updated"] = "Menu klienta zostało zaktualizowane.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Kliknij tutaj, aby edytować nowe zgłoszenie.";
 $LANG["notify_deleted_menu_already_assigned"] = "Niestety, menu po prostu próbował usunąć jest już wykorzystywany przez klientów wymienionych poniżej. Aby usunąć menu, trzeba najpierw przypisać klientów do innych menu. Kliknij na nazwę klienta, aby edytować, że indywidualne konta lub przypisanie wszystkich kont do innego menu, za pomocą rozwijanej poniżej.";
 $LANG["notify_disabled_theme_already_assigned"] = "Niestety, jeden z tematów po prostu wyłączone są już używane przez następujących kont klientów. Aby wyłączyć temat trzeba najpierw przypisać każdego klienta do innego tematu. Kliknij na nazwę klienta, aby edytować, że indywidualne konta lub przypisać wszystkie rachunki do tematu przy użyciu poniższej listy rozwijanej.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Kliknij tutaj,</a> aby określić, które pola formularza są email pola, więc można kierować ich w szablony e-mail.";

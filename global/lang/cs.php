@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Ujistěte se, že hesla jsou stejné.
 $LANG["validation_please_enter_search_date_range"] = "Vyberte časové období hledání.";
 $LANG["validation_please_enter_search_keyword"] = "Prosím, zadejte hledané slovo.";
 $LANG["validation_select_field_type"] = "Vyberte prosím typ pole.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Vyberte prosím ty příspěvky, které chcete kopírovat.";
 $LANG["validation_select_submissions_to_delete"] = "Prosím, vyberte ty, co tvrdí, který chcete smazat.";
 $LANG["validation_smart_fill_cannot_fill"] = "Omlouváme se, ale nemohli jsme vyplnění této oblasti.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Nepodařilo se nám najít pole, ale to není rozbalovací, zaškrtávací políčko nebo radio skupiny.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Klientský účet byl úspěšně aktu
 $LANG["notify_client_menu_deleted"] = "Klient menu byla smazána.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "V menu byl zrušen, ale tyto účty nyní již nemají menu! Musíte aktualizovat tyto účty:";
 $LANG["notify_client_menu_updated"] = "Klient nabídka byla aktualizována.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Klikněte zde pro úpravu nového podání.";
 $LANG["notify_deleted_menu_already_assigned"] = "Omlouváme se, menu, které se pokusil odstranit se již používají klienti uvedených níže. Za účelem odstranění nabídky, budete muset nejprve přiřadit klienty do jiných nabídkách. Klikněte na jméno klienta, který chcete upravit individuální účet, nebo postoupit všechny účty na jinou pomocí rozbalovací menu níže.";
 $LANG["notify_disabled_theme_already_assigned"] = "Je nám líto, jsou jedním z témat, které jste právě zdravotním postižením již používány tímto klientských účtů. S cílem oslabit motiv, který bude muset nejprve přiřadit každému klientovi k jinému tématu. Klikněte na jméno klienta, který chcete upravit individuální účet, nebo postoupit všechny účty na téma pomocí rozbalovací níže.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klikněte zde</a> určit, které pole formuláře jsou pole e-mail, takže cíl je ve vaší e-mailové šablony.";

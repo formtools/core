@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Pastikan password yang sama.";
 $LANG["validation_please_enter_search_date_range"] = "Sila pilih rentang tarikh carian.";
 $LANG["validation_please_enter_search_keyword"] = "Sila masukkan kata kunci carian.";
 $LANG["validation_select_field_type"] = "Sila pilih jenis gelanggang.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Sila pilih penyerahan yang ingin disalin.";
 $LANG["validation_select_submissions_to_delete"] = "Sila pilih yang pengajuan ingin anda hapus.";
 $LANG["validation_smart_fill_cannot_fill"] = "Maaf, kami tidak boleh mengisi bidang ini.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Kami tidak dapat menemukan sebuah gelanggang, tapi itu bukan dropdown, kumpulan kotak semakan atau radio.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "Akaun klien telah berjaya dikemaskini.
 $LANG["notify_client_menu_deleted"] = "Menu pelanggan telah dihapuskan.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Menu telah dihapuskan, tapi akaun pelanggan seterusnya sekarang tidak lagi mempunyai menu! Anda perlu mengemaskini akaun berikut:";
 $LANG["notify_client_menu_updated"] = "Menu pelanggan telah dikemaskini.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Klik di sini untuk mengedit penyerahan baru.";
 $LANG["notify_deleted_menu_already_assigned"] = "Maaf, menu anda hanya cuba untuk menghapuskan yang sudah digunakan oleh pelanggan di bawah ini. Untuk memadam menu pertama anda perlu untuk menetapkan klien ke menu yang lain. Klik pada nama pelanggan untuk mengedit akaun individu, atau menetapkan semua akaun anda menu yang berbeza dengan menggunakan menu dropdown di bawah ini.";
 $LANG["notify_disabled_theme_already_assigned"] = "Maaf, salah satu tema yang baru saja anda sudah dinyahdayakan digunakan oleh akaun pelanggan seterusnya. Dalam rangka untuk mematikan tema pertama anda perlu untuk menetapkan setiap pelanggan untuk tema lain. Klik pada nama pelanggan untuk mengedit akaun individu, atau menetapkan semua akaun kepada satu tema menggunakan menu dropdown di bawah ini.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klik di sini</a> untuk menentukan medan borang bidang e-mel, jadi anda boleh sasaran mereka dalam template e-mel anda.";

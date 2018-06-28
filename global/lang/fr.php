@@ -1044,7 +1044,7 @@ $LANG["validation_passwords_different"] = "Merci de vous assurer que les mots de
 $LANG["validation_please_enter_search_date_range"] = "Merci d'indiquer la période de recherche.";
 $LANG["validation_please_enter_search_keyword"] = "Merci d'indiquer le mot à rechercher.";
 $LANG["validation_select_field_type"] = "S&#39;il vous plaît sélectionner un type de champ.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Veuillez sélectionner les soumissions que vous souhaitez copier.";
 $LANG["validation_select_submissions_to_delete"] = "Merci d'indiquer les lignes de soumission que vous souhaitez supprimer.";
 $LANG["validation_smart_fill_cannot_fill"] = "Désolé, nous ne pourrions pas remplir ce champ.";
 $LANG["validation_smart_fill_invalid_field_type"] = "Nous n&#39;avons pas pu trouver un terrain, mais ce n&#39;est pas une liste déroulante, case à cocher ou un groupe de radio.";
@@ -1093,7 +1093,7 @@ $LANG["notify_client_account_updated"] = "Le compte gestionnaire a bien été mi
 $LANG["notify_client_menu_deleted"] = "Le menu du client a été supprimée.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "Le menu a été supprimé, mais les comptes des clients suivants ne disposent plus de un menu! Vous devez mettre à jour les comptes suivants:";
 $LANG["notify_client_menu_updated"] = "Le menu du client a été mis à jour.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Cliquez ici pour modifier la nouvelle soumission.";
 $LANG["notify_deleted_menu_already_assigned"] = "Désolé, le menu que vous venez juste essayé de supprimer est déjà utilisé par les clients de la liste ci-dessous. Afin de supprimer le menu, vous devez d&#39;abord assigner les clients à d&#39;autres menus. Cliquez sur le nom du client de modifier ce compte individuel, ou de céder tous les comptes à un menu différent en utilisant le menu déroulant ci-dessous.";
 $LANG["notify_disabled_theme_already_assigned"] = "Désolé, l&#39;un des thèmes que vous venez de handicapés sont déjà utilisées par les comptes des clients suivants. Pour désactiver le thème que vous aurez d&#39;abord besoin d&#39;assigner à chaque client d&#39;un autre thème. Cliquez sur le nom du client de modifier ce compte individuel, ou de céder tous les comptes à un thème en utilisant le menu déroulant ci-dessous.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Cliquez ici</a> pour spécifier les champs du formulaire sont les champs e-mail, vous pouvez donc les cibler dans vos modèles de courrier électronique.";

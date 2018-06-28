@@ -1039,7 +1039,7 @@ $LANG["validation_passwords_different"] = "Assegureu-vos que les contrasenyes s�
 $LANG["validation_please_enter_search_date_range"] = "Si us plau, el període de temps de cerca.";
 $LANG["validation_please_enter_search_keyword"] = "Si us plau, introduïu la paraula clau de cerca.";
 $LANG["validation_select_field_type"] = "Si us plau, seleccioneu un tipus de camp.";
-$LANG["validation_select_submissions_to_copy"] = "";
+$LANG["validation_select_submissions_to_copy"] = "Seleccioneu aquells enviaments que vulgueu copiar.";
 $LANG["validation_select_submissions_to_delete"] = "Si us plau, seleccioneu les propostes que li agradaria eliminar.";
 $LANG["validation_smart_fill_cannot_fill"] = "Ho sentim, no podem posar en aquest camp.";
 $LANG["validation_smart_fill_invalid_field_type"] = "No hem pogut localitzar un camp, però no és un menú desplegable, quadre de verificació o d&#39;un grup de ràdio.";
@@ -1088,7 +1088,7 @@ $LANG["notify_client_account_updated"] = "El compte de client s&#39;ha actualitz
 $LANG["notify_client_menu_deleted"] = "El menú del client s&#39;ha eliminat.";
 $LANG["notify_client_menu_deleted_orphaned_accounts"] = "El menú ha estat eliminat, però els comptes de client següents ja no tenen un menú! Cal actualitzar les següents comptes:";
 $LANG["notify_client_menu_updated"] = "El menú del client ha estat actualitzat.";
-$LANG["notify_click_to_edit_new_submission"] = "Click here to edit the new submission.";
+$LANG["notify_click_to_edit_new_submission"] = "Feu clic aquí per editar la nova presentació.";
 $LANG["notify_deleted_menu_already_assigned"] = "Ho sentim, el menú que només va tractar d&#39;esborrar ja està sent utilitzat pels clients esmentats a continuació. Per tal d&#39;eliminar el menú que primer haurà d&#39;assignar als clients a altres menús. Feu clic al nom del client per modificar aquest compte individual, o assignar tots els comptes a un menú diferent utilitzant el menú desplegable a continuació.";
 $LANG["notify_disabled_theme_already_assigned"] = "Ho sentim, un dels temes que acaba de discapacitats ja estan sent utilitzats pels comptes de client següent. Per tal de desactivar el tema que primer haurà d&#39;assignar a cada client a un altre tema. Feu clic al nom del client per modificar aquest compte individual, o assignar tots els comptes a un tema usant el menú desplegable a continuació.";
 $LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Feu clic aquí</a> per especificar els camps del formulari són camps de correu electrònic, perquè pugui atacar a les seves plantilles de correu electrònic.";
