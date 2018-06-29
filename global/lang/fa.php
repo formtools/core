@@ -1188,8 +1188,8 @@ $LANG["notify_smart_fill_files_uploaded_successfully"] = "فایل (های) با
 $LANG["notify_smart_fill_submitted"] = "فرم شده است را مشاهده کنید. با توجه به اندازه فرم شما و تعداد گزینه های زمینه ، این ممکن است کمی طول می کشد.";
 $LANG["notify_smart_fill_upload_fields_fail"] = "با عرض پوزش ، یک یا چند فایل که وارد کرده اید نمی تواند ارسال شده. شما باید در این مرحله و پیکربندی زمینه های دستی را به صرف نظر کنید.";
 $LANG["notify_submission_and_files_deleted"] = "تسلیم و هر نوع فایل (های) مرتبط با آن را با موفقیت حذف شد.";
-$LANG["notify_submission_copied"] = "The submission has been copied.";
-$LANG["notify_submission_copied_edit"] = "The submission has been copied. You can edit it below.";
+$LANG["notify_submission_copied"] = "تسلیم کپی شده است";
+$LANG["notify_submission_copied_edit"] = "تسلیم کپی شده است شما می توانید آن را در زیر ویرایش کنید.";
 $LANG["notify_submission_deleted"] = "ارسال با موفقیت حذف شد.";
 $LANG["notify_submission_deleted_with_problems"] = "ارسال ، حذف شد اما مشکلات زیر به هنگام تلاش برای حذف فایل زیر را (ها) مواجه شدند :";
 $LANG["notify_submission_id_not_found"] = "شناسه تسلیم یافت نشد.";
@@ -1197,7 +1197,7 @@ $LANG["notify_submission_no_field_id"] = "ارسال این زمینه شناس�
 $LANG["notify_submission_not_updated"] = "ارسال مقالات به روز نشد.";
 $LANG["notify_submission_updated_file_problems"] = "ارسال مقالات شما ، به روز شده بود اما فایل زیر را (ها) مشکل داشت :";
 $LANG["notify_submissions_and_files_deleted"] = "مطلب و مقاله و هر نوع فایل (های) در ارتباط با آنها را با موفقیت حذف شد.";
-$LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> submissions have been copied.";
+$LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> ارسال شده کپی شده اند";
 $LANG["notify_submissions_deleted"] = "مطلب و مقاله با موفقیت حذف شد.";
 $LANG["notify_submissions_deleted_with_problems"] = "مطلب و مقاله ، حذف شده بودند ، اما مشکلات زیر به هنگام تلاش برای حذف فایل زیر را (ها) مواجه شدند :";
 $LANG["notify_test_email_not_sent"] = "ایمیل آزمایشی شما نمیتواند فرستاده شد.";

@@ -1187,8 +1187,8 @@ $LANG["notify_smart_fill_files_uploaded_successfully"] = "ملف (ق) تم تح�
 $LANG["notify_smart_fill_submitted"] = "النموذج الذي تم تقديمه. اعتمادا على حجم النموذج الخاص بك وعدد من الخيارات الميدان ، وهذا قد يستغرق بعض الوقت.";
 $LANG["notify_smart_fill_upload_fields_fail"] = "آسف ، واحد أو أكثر من الملفات التي قمت بإدخالها لا يمكن تحميلها. سوف تحتاج إلى تخطي هذه الخطوة وتكوين الحقول يدويا.";
 $LANG["notify_submission_and_files_deleted"] = "وتقديم أي ملف (ق) المرتبطة به حذفت بنجاح.";
-$LANG["notify_submission_copied"] = "The submission has been copied.";
-$LANG["notify_submission_copied_edit"] = "The submission has been copied. You can edit it below.";
+$LANG["notify_submission_copied"] = "تم نسخ التقديم.";
+$LANG["notify_submission_copied_edit"] = "تم نسخ التقديم. يمكنك تحريره أدناه.";
 $LANG["notify_submission_deleted"] = "تقديم حذفت بنجاح.";
 $LANG["notify_submission_deleted_with_problems"] = "تقديم حذفت ، ولكن المشاكل التالية ووجهت عند محاولة حذف الملف التالي (ق) :";
 $LANG["notify_submission_id_not_found"] = "معرف لم يتم العثور على تقديمها.";
@@ -1196,7 +1196,7 @@ $LANG["notify_submission_no_field_id"] = "هذا التقديم الميداني
 $LANG["notify_submission_not_updated"] = "ويمكن تقديم لم يتم تحديثه.";
 $LANG["notify_submission_updated_file_problems"] = "تقريركم تم تحديثها ، ولكن الملف التالي (ق) لديه مشاكل :";
 $LANG["notify_submissions_and_files_deleted"] = "التقديمات وأي ملف (ق) يرتبط بهم حذفت بنجاح.";
-$LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> submissions have been copied.";
+$LANG["notify_submissions_copied"] = " تم نسخ <b>{\$num_submissions}</b> التقديمات.";
 $LANG["notify_submissions_deleted"] = "التقديمات حذفت بنجاح.";
 $LANG["notify_submissions_deleted_with_problems"] = "التقديمات تم حذفها ، ولكن المشاكل التالية ووجهت عند محاولة حذف الملف التالي (ق) :";
 $LANG["notify_test_email_not_sent"] = "قد أسفر الاختبار لا يمكن إرسال البريد الإلكتروني.";
