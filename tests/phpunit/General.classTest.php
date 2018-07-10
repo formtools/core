@@ -114,5 +114,27 @@ class GeneralTest extends TestCase
         $this->assertEquals(General::isVersionEarlierThan("40.0.4", "4.0.8"), false);
     }
 
+    // General::arrayRemoveByValue
+	public function testArrayRemoveByValueRemovesSingleValue() {
+    	$data = array(
+    		"why",
+			"hello",
+			"world"
+		);
+		$this->assertEquals(General::arrayRemoveByValue($data, "hello"), array(
+			"why", "world"
+		));
+	}
+
+	public function testArrayRemoveByValueRemovesSingleValueIsCaseSensitive() {
+		$data = array(
+			"why",
+			"hello",
+			"world"
+		);
+		$this->assertEquals(General::arrayRemoveByValue($data, "Hello"), array(
+			"why", "hello", "world"
+		));
+	}
 }
 

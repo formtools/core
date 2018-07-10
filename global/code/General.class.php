@@ -990,6 +990,18 @@ END;
         return $updated_array;
     }
 
+	/**
+	 * Helper function to remove an item from an array. Bizarre PHP doesn't have a pre-baked method for this.
+	 * @param $array
+	 * @param $value
+	 * @return mixed
+	 */
+    public static function arrayRemoveByValue($array, $value) {
+		if (in_array($value, $array)) {
+			array_splice($array, array_search($value, $array), 1);
+		}
+		return $array;
+	}
 
     /**
      * A multibyte version of str_split. Splits a string into chunks and returns the pieces in

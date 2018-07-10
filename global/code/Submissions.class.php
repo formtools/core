@@ -1617,7 +1617,7 @@ class Submissions {
      *
      * @param integer $form_id
      * @param array $search_fields
-     * @param array $columns the View columns that have been marked as "is_searchable"
+     * @param array $searchable_columns the View columns that have been marked as "is_searchable"
      * @return string
      */
     private static function getSearchSubmissionsSearchWhereClause($form_id, $search_fields, $searchable_columns)
@@ -1653,6 +1653,14 @@ class Submissions {
                         $clauses[] = "$col_name LIKE '%$search_keyword%'";
                     }
                 } else if (is_array($searchable_columns)) {
+
+                	// Core bug #252: only search on datetime fields if it's a numeric value; there's a MySQL bug that
+					// gets thrown about collations if the user enters a utf-8 char
+					if (preg_match("/[^0-9\:\-]/", $search_keyword)) {
+						$searchable_columns = General::arrayRemoveByValue($searchable_columns, "submission_date");
+						$searchable_columns = General::arrayRemoveByValue($searchable_columns, "last_modified_date");
+					}
+
                     foreach ($searchable_columns as $col_name) {
                         $clauses[] = "$col_name LIKE '%$search_keyword%'";
                     }

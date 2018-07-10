@@ -370,7 +370,7 @@ sortable_ns.sortable_submit = function(form_el) {
     // technically, we could have separate sortables in multiple forms on the page (even though we don't do this yet)
     // so just in case, check that this current sortable is part of the form being submitted. If not, ignore the sucker
     if ($(form_el).find("#" + sortable_id).length == 0) {
-      alert("This sortable is not in the form. Please report this problem in the forums.");
+      alert("This sortable is not in the form. Please report this problem.");
       continue;
     }
 
