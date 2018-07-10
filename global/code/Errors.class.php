@@ -79,19 +79,19 @@ END;
         $footer = self::$footerHTML;
 
         echo <<< END
-  {$header}
-  <h1>Uh-oh.</h1>
-  <p>
-    The system encountered a serious database error. This should not occur. Please report these details
-    in the Form Tools forums.
-  </p>
-  <ul>
-    <li>Class: {$class}</li>
-    <li>File: {$file}</li>
-    <li>Line: {$line}</li>
-    <li>Error: {$error}</li>
-  </ul>
-  {$footer}
+	{$header}
+	<h1>Uh-oh.</h1>
+	<p>
+		The system encountered a serious database error. This should not occur. Please report these details
+		on <a href="https://github.com/formtools/core/issues">github</a>.
+	</p>
+	<ul>
+		<li>Class: {$class}</li>
+		<li>File: {$file}</li>
+		<li>Line: {$line}</li>
+		<li>Error: {$error}</li>
+	</ul>
+{$footer}
 END;
         exit;
     }
