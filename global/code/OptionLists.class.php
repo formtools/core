@@ -239,9 +239,16 @@ class OptionLists {
         $list_id = $db->getInsertId();
 
         if ($is_grouped == "no") {
-            ListGroups::addListGroup("option_list_{$list_id}", "", 1);
-        } else {
+			$new_list_group_info = ListGroups::addListGroup("option_list_{$list_id}", "", 1);
+			$new_list_group_id = $new_list_group_info["group_id"];
 
+			$option_order = 1;
+			foreach ($field_options[0]["options"] as $opt) {
+				FieldOptions::addFieldOption($list_id, $new_list_group_id, $option_order, $opt["option_value"],
+					$opt["option_name"], $opt["is_new_sort_group"]);
+				$option_order++;
+			}
+        } else {
             // add the option groups and their field options
             $order = 1;
             foreach ($field_options as $grouped_option_info) {
