@@ -851,7 +851,7 @@ $LANG["text_install_db_tables_error_tip_1"] = "<span class=\"green\">“未知�
 $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">“无法连接插座通过”本地MySQL服务器</span>意味着数据库主机领域再次不正确。";
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">“访问用户被拒绝：”</span>意思是指您的用户名/密码组合的问题。";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">“访问用户被拒绝：数据库... ...”</span>的意思是，虽然您的用户名和密码，您提供的是正确的，它无法连接到该帐户与特定的数据库。这意味着，要么你的数据库的名称不正确，或该用户帐户不与该数据库关联的。";
-$LANG["text_install_email_content_text"] = "有我们的网站上大量的资源来帮助您开始使用，包括我们的联机文档（http://docs.formtools.org）和教程（http://docs.formtools.org/tutorials）。如果您发现您遇到问题或有问题，通过我们的论坛（http://forums.formtools.org）和打招呼流行。";
+$LANG["text_install_email_content_text"] = "我们的网站上有大量资源可以帮助您入门，包括我们的在线文档（https://docs.formtools.org）和教程（https://docs.formtools.org/tutorials）。 如果您发现卡住或有疑问，请在github上提问（https://github.com/formtools/core/issues/）。";
 $LANG["text_install_form_tools_server_not_supported"] = "对不起，表格工具将不能够运行您的服务器上<a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">，请点击</a>这里的最低要求。";
 $LANG["text_install_intro"] = "欢迎表格工具安装脚本！请选择您的语言。";
 $LANG["text_install_system_check"] = "这页你的系统上运行，以确保它能够运行中一些测试工具。";

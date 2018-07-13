@@ -846,7 +846,7 @@ $LANG["text_install_db_tables_error_tip_1"] = "<span class=\"green\">&quot;알 �
 $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">&quot;로컬 MySQL 서버 소켓&quot;을 통해 연결할 수없습니다</span> 호스트 이름 필드에 데이터베이스의 의미를 다시 잘못된 것입니다.";
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;사용자에 대한 액세스가 거부되었습니다 :&quot;거기에</span> 귀하의 사용자 이름 / 암호 조합에 문제가있는 것을 의미합니다.";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;사용자에 대한 액세스가 거부되었습니다 : ... 데이터베이스에 ...&quot;비록</span> 귀하의 사용자 이름과 비밀 번호가 정확한지 공급 즉, 그 계정에 특정 데이터베이스에 연결하지 못했습니다 의미합니다. 이것도 당신의 데이터베이스 이름, 또는 올바르지 않습니다이 사용자 계정은 데이터베이스와 연결되어 있지 않습니다 의미할 수있습니다.";
-$LANG["text_install_email_content_text"] = "거기에 많은 자원을 우리의 웹사이트에 당신을 시작하는 우리의 온라인 설명서 (http://docs.formtools.org) 및 튜토리얼 (http://docs.formtools.org/tutorials) 등 도움을주기 위해서. 만약 당신이 박히면서이나 질문이 있으시면, 저희 포럼에 오신걸 팝업 (http://forums.formtools.org) 및 안부 인사를 찾는다.";
+$LANG["text_install_email_content_text"] = "온라인 문서 (https://docs.formtools.org) 및 자습서 (https://docs.formtools.org/tutorials)를 비롯하여 시작에 도움이되는 많은 정보가 웹 사이트에 있습니다. 문제가 있거나 질문이있는 경우 github (https://github.com/formtools/core/issues/)에서 질문하십시오.";
 $LANG["text_install_form_tools_server_not_supported"] = "죄송합니다, 양식 도구는 서버에서 실행하실 수 없습니다. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">여기를 클릭하십시오</a> 최소 요구 사항.";
 $LANG["text_install_intro"] = "에 오신 것을 환영 폼 도구를 설치하는 스크립트! 언어를 선택해주십시오.";
 $LANG["text_install_system_check"] = "이 페이지는 귀하의 시스템을 사용하면 양식 도구를 실행할 수의 보장에 관한 몇 가지 검사를 실행합니다.";

@@ -847,7 +847,7 @@ $LANG["text_install_db_tables_error_tip_1"] = "<span class=\"green\">&quot;不�
 $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">&quot;ローカルのMySQLサーバへのソケット&quot;を介して接続することはできません</span>データベースのホスト名フィールドの意味を再度間違っています。";
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Accessユーザーのため拒否されました：&quot;それ</span>はそちらにあなたのユーザ名/パスワードの組み合わせに問題があるということです。";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Accessのユーザーが拒否さ：...データベースに...&quot;</span>ただし、ユーザー名とパスワードが正しいこと指定されたパスワードは、そのアカウントでは、特定のデータベースに接続することができなかったということです。これは、いずれかのデータベース名、または間違っていますが、このユーザアカウントは、データベースに関連付けられていないことを意味することができます。";
-$LANG["text_install_email_content_text"] = "あるリソースの多くの当社のウェブサイト上で開始する、当社のオンラインマニュアル（http://docs.formtools.org）とチュートリアル（http://docs.formtools.org/tutorialsを含む）をお手伝いすること。もしあなたが動けなくなるか質問して、ポップアップフォーラム（http://forums.formtools.org）とあいさつを見つける。";
+$LANG["text_install_email_content_text"] = "Googleのオンラインドキュメント（https://docs.formtools.org）やチュートリアル（https://docs.formtools.org/tutorials）をはじめ、弊社のWebサイトには多くのリソースが用意されています。 立ち往生したり、質問がある場合は、github（https://github.com/formtools/core/issues/）で質問してください。";
 $LANG["text_install_form_tools_server_not_supported"] = "申し訳ありませんが、フォームツールは、サーバ上で実行することができなくなります。 <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">こちらをクリックしてください</a>最小要件のために。";
 $LANG["text_install_intro"] = "ようこそフォームツールのインストールスクリプトに！あなたの言語を選択します。";
 $LANG["text_install_system_check"] = "このページはあなたのシステムは、フォームツールを実行することができるのを確保するためにいくつかのテストを実行します。";

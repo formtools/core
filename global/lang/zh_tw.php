@@ -847,7 +847,7 @@ $LANG["text_install_db_tables_error_tip_1"] = "<span class=\"green\">“未知�
 $LANG["text_install_db_tables_error_tip_2"] = "<span class=\"green\">“無法連接到本地MySQL服務器通過插座”</span>是指數據庫主機領域再次不正確。";
 $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">“拒絕訪問用戶：”</span>是指有一個問題，您的用戶名/密碼組合。";
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">“拒絕訪問用戶：數據庫... ...”</span>的意思是，雖然您的用戶名和密碼，您提供的是正確的，它無法連接到特定的數據庫，該帳戶。這意味著，要么你的數據庫的名稱不正確，或該用戶帳戶不關聯的數據庫。";
-$LANG["text_install_email_content_text"] = "有大量的資源在我們的網站，以幫助您開始，包括我們的聯機文檔（http://docs.formtools.org）和教程（http://docs.formtools.org/tutorials）。如果您發現您遇到問題或有問題，我們的流行音樂論壇（http://forums.formtools.org）和打招呼。";
+$LANG["text_install_email_content_text"] = "我們的網站上有大量資源可以幫助您入門，包括我們的在線文檔（https://docs.formtools.org）和教程（https://docs.formtools.org/tutorials）。 如果您發現卡住或有疑問，請在github上提問（https://github.com/formtools/core/issues/）。";
 $LANG["text_install_form_tools_server_not_supported"] = "對不起，表格工具將無法在服務器上運行。 <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">請點擊這裡</a>的最低要求。";
 $LANG["text_install_intro"] = "歡迎表格工具安裝腳本！請選擇您的語言。";
 $LANG["text_install_system_check"] = "本頁面運行幾個測試你的系統，以確保它能夠運行表格工具。";
