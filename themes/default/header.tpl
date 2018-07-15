@@ -36,7 +36,7 @@
       <div style="float:right">
         <table cellspacing="0" cellpadding="0" height="25">
         <tr>
-          <td><img src="{$theme_url}/images/account_section_left_{$swatch}.jpg" border="0" /></td>
+          <td><img src="{$theme_url}/images/account_section_left_{$swatch}2x.png" border="0" height="25" width="8" /></td>
           <td id="account_section">
             {if $settings.release_type == "alpha"}
               <b>{$settings.program_version}-alpha-{$settings.release_date}</b>
@@ -50,15 +50,15 @@
               <a href="#" onclick="return ft.check_updates()" class="update_link">{$LANG.word_update}</a>
             {/if}
           </td>
-          <td><img src="{$theme_url}/images/account_section_right_{$swatch}.jpg" border="0" /></td>
+          <td><img src="{$theme_url}/images/account_section_right_{$swatch}2x.png" border="0" height="25" width="8" /></td>
         </tr>
         </table>
       </div>
     {/if}
 
-    <span style="float:left; padding-top: 8px; padding-right: 10px">
+    <span style="float:left; padding-top: 4px">
       {if isset($settings) && isset($settings.logo_link)}
-        <a href="{$settings.logo_link}">{/if}<img src="{$theme_url}/images/logo_{$swatch}.jpg" border="0" width="220" height="61" />
+        <a href="{$settings.logo_link}">{/if}<img src="{$theme_url}/images/logo_{$swatch}2x.png" border="0" width="220" height="67" />
       {if isset($settings) && isset($settings.logo_link)}</a>{/if}
     </span>
   </div>
