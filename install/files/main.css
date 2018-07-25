@@ -1,164 +1,229 @@
-html { overflow: -moz-scrollbars-vertical; }
+html {
+    overflow: -moz-scrollbars-vertical;
+}
+
 body, html {
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	background-color: #ffffff;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
 }
+
 body {
-	background-image: url(../../themes/default/images/top_row_green.jpg);
-	background-repeat: repeat-x;
-	background-position: center top;
-	text-align: center;
+    background-image: url(../../themes/default/images/top_row_green2x.png);
+    background-size: 1px 275px;
+    background-repeat: repeat-x;
+    background-position: center top;
+    text-align: center;
 }
+
 body, table, td, div, span, div, p, input, select, textarea, option {
     font: 11px Verdana, sans-serif;
     color: #333333;
 }
+
 body, table, td, span, div, p {
     line-height: 20px;
 }
+
 #container {
-	width: 950px;
-	text-align:left;
-	margin: 0 auto;
+    width: 950px;
+    text-align: left;
+    margin: 0 auto;
 }
+
 #header {
     height: 72px;
     position: relative;
     text-align: center;
     width: 950px;
 }
+
 #footer {
     margin-top: 30px;
     border-top: 1px dotted #cccccc;
     padding: 6px 0;
     text-align: justify;
 }
+
 #footer ul {
     list-style: none;
     margin: 0;
     padding: 0;
 }
+
 #footer ul li {
-  float: left;
-  padding: 0px 20px;
-  border-right: 1px solid #cccccc;
+    float: left;
+    padding: 0px 20px;
+    border-right: 1px solid #cccccc;
 }
+
 #footer ul li.colN {
-	border-right: 0;
+    border-right: 0;
 }
+
 #footer ul li a {
     color: #0066cc;
     display: block;
 }
-#footer ul li a:hover {
-	border-bottom: 0;
-	color: #990000;
-}
-a.no_border:link, a.no_border:visited { border-bottom: none; outline: none; }
-.rsvErrorField { background-color: #990000; color: white; }
 
-.nav_visited { color: #aaaaaa; }
-#nav_items div.nav_current {
-	font-weight: bold;
-	color: green;
-	border-top: 1px solid #cccccc;
-	border-bottom: 1px solid #cccccc;
-	background-color: #efefef;
+#footer ul li a:hover {
+    border-bottom: 0;
+    color: #990000;
 }
-.nav_remaining { color: #777777; }
-.orange { color: orange; }
-.green { color: green; }
-.dark_green { color: #003300; }
-.red { color: #cc0000; }
-.purple { color: purple; }
-.bold { font-weight: bold; }
-.burgundy { color: #bb0000; }
+
+a.no_border:link, a.no_border:visited {
+    border-bottom: none;
+    outline: none;
+}
+
+.rsvErrorField {
+    background-color: #990000;
+    color: white;
+}
+
+#nav_items div.nav_current {
+    font-weight: bold;
+    color: green;
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    background-color: #efefef;
+}
+
+.nav_remaining {
+    color: #777777;
+}
+
+.orange {
+    color: orange;
+}
+
+.green {
+    color: green;
+}
+
+.dark_green {
+    color: #003300;
+}
+
+.red {
+    color: #cc0000;
+}
+
+.purple {
+    color: purple;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.burgundy {
+    color: #bb0000;
+}
 
 table.info td {
-	border-bottom: 1px solid #efefef;
+    border-bottom: 1px solid #efefef;
 }
+
 .error {
-	color: black;
-	background-color: #FFEDED;
-	border: 1px solid #cc0000;
+    color: black;
+    background-color: #FFEDED;
+    border: 1px solid #cc0000;
 }
+
 .notify {
-	color: #00aa00;
-	background-color: #ffffdd;
-	border: 1px solid #009900;
-	padding: 5px;
+    color: #00aa00;
+    background-color: #ffffdd;
+    border: 1px solid #009900;
+    padding: 5px;
 }
+
 ul.tips {
-	padding-left: 16px;
-	margin-left: 0;
+    padding-left: 16px;
+    margin-left: 0;
 }
+
 ul.tips li {
-	font-size: 8pt;
-	line-height: 16px;
+    font-size: 8pt;
+    line-height: 16px;
 }
+
 #version-block {
     float: right;
-    background-image: url(../../themes/default/images/account_section_bg_green.jpg);
-    background-repeat: repeat-x;
     display: flex;
 }
-#version-block span {
+
+#version-block div {
     color: white;
     font-weight: bold;
-    padding: 3px 12px 0;
+    padding: 2px 12px 0;
 }
+
+#account_section {
+    background-color: #1f4f26;
+}
+
 #nav_items {
     border-right: 1px dotted #dddddd;
     margin: 0 5px 0 12px;
     float: left;
     width: 192px;
 }
+
 #main {
     float: right;
     width: 680px;
     padding-left: 10px;
     margin-right: 10px;
 }
+
 #nav_items div {
     line-height: 24px;
     border-top: 1px solid transparent;
     border-bottom: 1px solid transparent;
     padding-left: 2px;
 }
+
 .margin_right {
     margin-right: 6px;
 }
+
 .margin_bottom_large {
     margin-bottom: 8px;
 }
+
 h1 {
     font-size: 1.8em;
     font-weight: normal;
     padding: 6px 12px 10px;
     border-bottom: 1px dotted #cccccc;
-    font-family: Verdana,sans-serif;
+    font-family: Verdana, sans-serif;
 }
+
 h2 {
     color: #006600;
-    font: 15px/18px Verdana,sans-serif;
+    font: 15px/18px Verdana, sans-serif;
     margin: 0;
     padding: 0;
 }
+
 h3 {
     font-size: 10pt;
     color: #006600;
     margin-top: 0;
 }
+
 .label {
     color: #666666;
 }
+
 #existing_tables {
     border: 1px solid #cccccc;
     height: 250px;
     overflow-y: scroll;
 }
+
 .config_file_contents {
     width: 100%;
     background-color: #ffffff;
@@ -166,20 +231,25 @@ h3 {
     line-height: 12pt;
     padding: 5px;
 }
+
 body .CodeMirror {
     border: 1px solid #aaaaaa;
     height: 310px;
     padding: 6px;
 }
+
 .clear {
     clear: both;
 }
+
 .delim {
-	color: #aaaaaa;
+    color: #aaaaaa;
 }
+
 .divider {
-  border-bottom: 1px dotted #cccccc;
+    border-bottom: 1px dotted #cccccc;
 }
+
 .warning {
     margin: 8px 0 0 0;
     color: #990000;
@@ -187,15 +257,18 @@ body .CodeMirror {
     border: 1px solid #cc0000;
     background-color: #ffffcc;
 }
+
 .panel {
     border: 1px solid #cccccc;
     padding: 8px;
     background-color: #f2f2f2;
     margin-top: 16px;
 }
+
 .hidden {
     display: none;
 }
+
 .popup_type_error {
     width: 48px;
     height: 48px;
@@ -203,6 +276,7 @@ body .CodeMirror {
     margin-right: 8px;
     float: left;
 }
+
 #verify_license_key_loading {
     display: none;
     float: right;
@@ -210,6 +284,7 @@ body .CodeMirror {
     height: 32px;
     background-image: url(../../global/images/loading.gif);
 }
+
 span.fail {
     margin-left: 10px;
     background-color: #aa0000;
@@ -217,6 +292,7 @@ span.fail {
     color: white;
     border-radius: 4px;
 }
+
 span.pass {
     margin-left: 10px;
     background-color: green;

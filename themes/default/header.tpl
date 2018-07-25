@@ -55,7 +55,7 @@
         <span style="float:left; padding-top: 4px">
       {if isset($settings) && isset($settings.logo_link)}
             <a href="{$settings.logo_link}">{/if}<img src="{$theme_url}/images/logo_{$swatch}2x.png" border="0"
-                                                      width="220" height="67"/>
+                                                      width="220" height="67" />
                 {if isset($settings) && isset($settings.logo_link)}</a>{/if}
     </span>
     </div>
