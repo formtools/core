@@ -106,6 +106,26 @@ class General
     }
 
 
+	public static function checkDbTableFieldExists($table, $column)
+	{
+		$db = Core::$db;
+
+		$db->query("SHOW COLUMNS FROM {PREFIX}$table");
+		$db->execute();
+		$columns = $db->fetchAll();
+
+		$exists = false;
+		foreach ($columns as $column_info) {
+			if ($column_info["Field"] === $column) {
+				$exists = true;
+				break;
+			}
+		}
+
+		return $exists;
+	}
+
+
     /**
      * Helper function to convert a MySQL datetime to a unix timestamp.
      *
@@ -613,19 +633,7 @@ END;
     {
         $db = Core::$db;
 
-        $db->query("SHOW COLUMNS FROM {PREFIX}$table");
-        $db->execute();
-        $columns = $db->fetchAll();
-
-        $exists = false;
-        foreach ($columns as $column_info) {
-            if ($column_info["Field"] === $column) {
-                $exists = true;
-                break;
-            }
-        }
-
-        if ($exists) {
+        if (General::checkDbTableFieldExists($table, $column)) {
             $db->query("ALTER TABLE {PREFIX}$table DROP COLUMN $column");
             $db->execute();
         }

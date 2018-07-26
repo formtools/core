@@ -29,6 +29,10 @@ class Upgrade
                 self::fixEuropeanDateFormat();
             }
 
+			if (General::isVersionEarlierThan($last_version_in_db, "3.0.4")) {
+            	self::addCopySubmissionField();
+			}
+
             if ($success) {
                 Settings::set(array(
                     "release_date" => $current_version_date,
@@ -131,4 +135,21 @@ class Upgrade
         ");
         $db->execute();
     }
+
+    // fix for missing may_copy_submissions DB field in 3.0.3
+    public static function addCopySubmissionField()
+	{
+		$db = Core::$db;
+
+		if (!General::checkDbTableFieldExists("views", "may_copy_submissions")) {
+			try {
+				$db->query("
+					ALTER TABLE {PREFIX}views ADD may_copy_submissions ENUM('yes','no') NOT NULL DEFAULT 'no' AFTER may_add_submissions
+				");
+				$db->execute();
+			} catch (Exception $e) {
+
+			}
+		}
+	}
 }
