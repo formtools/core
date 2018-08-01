@@ -32,7 +32,7 @@ Right now only the unit tests are running on travis. But the goal is to add in s
 
 ### PHPUnit 
 
-Requirements: PHP 7. 
+Requirements: PHP 7 has to be running on your machine's command line.
 
 - Check out the repo and navigate to the root.
 - Run `composer install`  

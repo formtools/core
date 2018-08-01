@@ -183,7 +183,7 @@ class Submissions {
         $valid_form_fields["ip_address"] = $ip_address;
         $valid_form_fields["is_finalized"] = "yes";
 
-        list ($col_names_str, $placeholders_str) = $db->getInsertStatementParams($valid_form_fields);
+        list ($col_names_str, $placeholders_str, $valid_form_fields) = $db->getInsertStatementParams($valid_form_fields);
 
         // add the submission to the database (if form_tools_ignore_submission key isn't set by either the form or a module)
         $submission_id = "";
