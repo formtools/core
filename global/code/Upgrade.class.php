@@ -33,6 +33,11 @@ class Upgrade
             	self::addCopySubmissionField();
 			}
 
+			// Fix for https://github.com/formtools/core/issues/272
+			if (General::isVersionEarlierThan($last_version_in_db, "3.0.5")) {
+				FieldTypes::resetFieldTypes();
+			}
+
             if ($success) {
                 Settings::set(array(
                     "release_date" => $current_version_date,
@@ -85,6 +90,7 @@ class Upgrade
 
         return array($success, $error_msg);
     }
+
 
     /**
      * FT3 alpha/betas were failing to map the ID of the field type setting ID for select/checkboxes/multi-select/radios
