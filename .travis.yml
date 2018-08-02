@@ -1,6 +1,6 @@
 language: php
 php:
-    - 7.1.9
+    - 7.1.12
 
 #dist: precise
 
