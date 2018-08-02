@@ -16,3 +16,6 @@ php:
 #before_install:
 #    - echo "USE mysql;\n" | mysql -u root
 #    - mysql -e 'CREATE DATABASE formtools;'
+
+scripts:
+  ./vendor/bin/phpunit
