@@ -17,5 +17,8 @@ php:
 #    - echo "USE mysql;\n" | mysql -u root
 #    - mysql -e 'CREATE DATABASE formtools;'
 
-scripts:
-  ./vendor/bin/phpunit
+before_install:
+  - travis_retry composer self-update
+  - composer install
+
+scripts: phpunit
