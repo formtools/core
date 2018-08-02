@@ -1,19 +1,18 @@
 language: php
 php:
-    - 5.4
-#    - 7.1.9
+    - 7.1.9
 
 #dist: precise
 
-addons:
-    sauce_connect:
-        username: "benkeen"
-    jwt:
-        secure: "CPw+HDifCCBOtciOW5k7fxbgcowTpyJ+eEApddekn0reTByQDdx8yxhj/NegLouuI+gE3nMtDiFbo9I0Vd5+ZGkHwHAB7IXO/CMdui5fjSVaELSfTMKOcb1yvB69NewZ4OEKKleIamJoQYlZ67xFa9Vr7BnR3GJUhIWA0jMuJSw="
+#addons:
+#    sauce_connect:
+#        username: "benkeen"
+#    jwt:
+#        secure: "CPw+HDifCCBOtciOW5k7fxbgcowTpyJ+eEApddekn0reTByQDdx8yxhj/NegLouuI+gE3nMtDiFbo9I0Vd5+ZGkHwHAB7IXO/CMdui5fjSVaELSfTMKOcb1yvB69NewZ4OEKKleIamJoQYlZ67xFa9Vr7BnR3GJUhIWA0jMuJSw="
 
-services:
-    - mysql
-
-before_install:
-    - echo "USE mysql;\n" | mysql -u root
-    - mysql -e 'CREATE DATABASE formtools;'
+#services:
+#    - mysql
+#
+#before_install:
+#    - echo "USE mysql;\n" | mysql -u root
+#    - mysql -e 'CREATE DATABASE formtools;'
