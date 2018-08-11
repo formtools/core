@@ -5,15 +5,21 @@ php:
 
 #dist: precise
 
-addons:
-    sauce_connect:
-        username: "benkeen"
-    jwt:
-        secure: "CPw+HDifCCBOtciOW5k7fxbgcowTpyJ+eEApddekn0reTByQDdx8yxhj/NegLouuI+gE3nMtDiFbo9I0Vd5+ZGkHwHAB7IXO/CMdui5fjSVaELSfTMKOcb1yvB69NewZ4OEKKleIamJoQYlZ67xFa9Vr7BnR3GJUhIWA0jMuJSw="
+# addons:
+#     sauce_connect:
+#         username: "benkeen"
+#     jwt:
+#         secure: "CPw+HDifCCBOtciOW5k7fxbgcowTpyJ+eEApddekn0reTByQDdx8yxhj/NegLouuI+gE3nMtDiFbo9I0Vd5+ZGkHwHAB7IXO/CMdui5fjSVaELSfTMKOcb1yvB69NewZ4OEKKleIamJoQYlZ67xFa9Vr7BnR3GJUhIWA0jMuJSw="
 
-services:
-    - mysql
+# services:
+#     - mysql
+
+# before_install:
+#     - echo "USE mysql;\n" | mysql -u root
+#     - mysql -e 'CREATE DATABASE formtools;'
 
 before_install:
-    - echo "USE mysql;\n" | mysql -u root
-    - mysql -e 'CREATE DATABASE formtools;'
+  - travis_retry composer self-update
+  - composer install
+
+scripts: phpunit
