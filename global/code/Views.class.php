@@ -582,8 +582,12 @@ class Views
         $db->bind("view_id", $view_id);
         $db->execute();
 
-        return $db->fetchAll();
-    }
+        $results = $db->fetchAll();
+
+        extract(Hooks::processHookCalls("end", compact("results"), array("results")), EXTR_OVERWRITE);
+
+        return $results;
+	}
 
 
     /**
