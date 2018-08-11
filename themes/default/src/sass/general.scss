@@ -108,9 +108,11 @@ form {
     padding: 0 5px;
 }
 
-#account_section a:link, #account_section a:visited {
-    color: #f2f2f2;
-    text-decoration: none;
+#account_section {
+	a:link, a:visited {
+		color: #f2f2f2;
+		text-decoration: none;	
+	}
 }
 
 .lang_field_full {
@@ -129,23 +131,22 @@ form {
 }
 
 /*-------------- page titles ---------------*/
+
 .title {
     padding-bottom: 5px;
-    font: 17.6px/20px Verdana, sans-serif;
-}
-
-.title span.identifier {
-    font-size: 17.6px;
-    font-family: Verdana, sans-serif;
-    line-height: 11px;
-}
-
-.title a:link, .title a:visited {
-    text-decoration: none;
-}
-
-.title a:hover {
-    border-bottom: 1px solid #336699;
+	font: 17.6px/20px Verdana, sans-serif;
+	
+	span.identifier {
+		font-size: 17.6px;
+		font-family: Verdana, sans-serif;
+		line-height: 11px;
+	}	
+	a:link, a:visited {
+		text-decoration: none;
+	}	
+	a:hover {
+		border-bottom: 1px solid #336699;
+	}	
 }
 
 .subtitle {
@@ -167,6 +168,7 @@ form {
 }
 
 /*-------------- list tables ---------------*/
+
 .list_table, .submissions_table {
     border: 1px solid #dddddd;
     border-spacing: 1px;
@@ -201,23 +203,26 @@ form {
     vertical-align: top;
 }
 
-.submissions_table td {
-    padding: 0 2px;
+.submissions_table {
+	td {
+		padding: 0 2px;		
+		.truncate {
+			text-overflow: ellipsis;
+			-o-text-overflow: ellipsis;
+			white-space: nowrap;
+			overflow: hidden;
+		}		
+		.truncate_no_fixed_width {
+			overflow: hidden;
+			height: 20px;
+		}		
+	}
 }
 
-.submissions_table td .truncate {
-    text-overflow: ellipsis;
-    -o-text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
-
-.submissions_table td .truncate_no_fixed_width {
-    overflow: hidden;
-    height: 20px;
-}
-
-.list_table th a:link, .list_table th a:visited, .submissions_table th a:link, .submissions_table th a:visited {
+.list_table th a:link,
+.list_table th a:visited,
+.submissions_table th a:link,
+.submissions_table th a:visited {
     color: white;
     text-decoration: none;
     display: block;
@@ -246,87 +251,76 @@ form {
     background-image: url(../images/list_table_heading.jpg);
 }
 
-.submissions_table tr {
-    height: 20px;
-    cursor: pointer;
+.submissions_table {
+	tr {
+		height: 20px;
+		cursor: pointer;	
+	}
+	td {
+		vertical-align: top;
+	}	
 }
 
-.submissions_table td {
-    vertical-align: top;
+.list_table {
+	.del2 {
+		background-image: url(../images/delete_bg.jpg);
+		a:link, a:visited {
+			color: white;
+		}		
+		a:hover {
+			color: orange;
+		}		
+	}
+
+	td.del {
+		background: url("../images/delete.png") no-repeat scroll 2px 3px transparent;
+		text-align: center;
+		width: 18px;
+		height: 20px;
+		a {
+			display: block;
+			height: 18px;
+		}		
+		&:hover {
+			background: transparent url(../images/delete.png) no-repeat -22px 3px;
+		}
+	}	
+	td.edit, th.edit {
+		width: 18px;
+		height: 18px;
+	}
+	td.edit {
+		text-align: center;
+		background: transparent url(../images/edit.png) no-repeat center 1px;
+		padding: 0 0;
+		a {
+			width: 18px;
+			height: 18px;
+			display: block;
+		}		
+	}
+	td.center, th.center {
+		text-align: center;
+	}	
 }
 
-.list_table .del2 {
-    background-image: url(../images/delete_bg.jpg);
-}
-
-.list_table .del2 a:link, .list_table .del2 a:visited {
-    color: white;
-}
-
-.list_table .del2 a:hover {
-    color: orange;
-}
-
-.list_table td.del {
-    background: url("../images/delete.png") no-repeat scroll 2px 3px transparent;
-    text-align: center;
-    width: 18px;
-    height: 20px;
-}
-
-.list_table td.del a {
-    display: block;
-    height: 18px;
-}
-
-.list_table td.del:hover {
-    background: transparent url(../images/delete.png) no-repeat -22px 3px;
-}
-
-.list_table td.edit, .list_table th.edit {
-    width: 18px;
-    height: 18px;
-}
-
-.list_table td.edit {
-    text-align: center;
-    background: transparent url(../images/edit.png) no-repeat center 1px;
-    padding: 0 0;
-}
-
-.list_table td.edit a {
-    width: 18px;
-    height: 18px;
-    display: block;
-}
-
-.list_table td.center, .list_table th.center {
-    text-align: center;
-}
 
 /*----------------- UI messages ------------------*/
-#ft_message {
-}
-
-#ft_message_inner {
-}
 
 .notify {
     border: 1px solid #0058db;
-    background-color: #f2f8ff;
-}
-
-.notify div {
-    color: #0058db;
+	background-color: #f2f8ff;
+	div {
+		color: #0058db;
+	}	
 }
 
 .error {
     border: 1px solid #cc0000;
-    background-color: #ffeded;
-}
-
-.error div {
-    color: #aa0000;
+	background-color: #ffeded;
+	div {
+		color: #aa0000;
+	}	
 }
 
 .errorField {
@@ -463,46 +457,45 @@ form {
     margin-top: 12px;
     border: 1px solid #999999;
     display: inline-block;
-    position: relative;
+	position: relative;
+	
+	h2 {
+		font: 11px/20px Verdana, sans-serif;
+		color: #777777;
+		margin: 0;
+		padding: 2px 0;
+		font-style: italic;
+	}	
+
+	.module_link {
+		width: 16px;
+		height: 16px;
+		background-image: url(../images/utilities_small.png);
+		position: absolute;
+		right: 3px;
+		top: 3px;
+
+		a {
+			display: block;
+			width: 16px;
+			height: 16px;
+		}			
+	}	
 }
 
-.module_section h2 {
-    font: 11px/20px Verdana, sans-serif;
-    color: #777777;
-    margin: 0;
-    padding: 2px 0;
-    font-style: italic;
-}
-
-.module_section .module_link {
-    width: 16px;
-    height: 16px;
-    background-image: url(../images/utilities_small.png);
-    position: absolute;
-    right: 3px;
-    top: 3px;
-}
-
-.module_section .module_link a {
-    display: block;
-    width: 16px;
-    height: 16px;
-}
-
-.export_manager_module table tr {
-    height: 23px;
-}
-
-.export_manager_module .icon {
-    padding-right: 6px;
-}
-
-.export_manager_module .export_group_name {
-    padding-right: 10px;
-}
-
-.export_manager_module .target_content {
-    padding-right: 10px;
+.export_manager_module {
+	table tr {
+		height: 23px;
+	}
+	.icon {
+		padding-right: 6px;
+	}	
+	.export_group_name {
+		padding-right: 10px;
+	}
+	.target_content {
+		padding-right: 10px;
+	}		
 }
 
 /* ...??? */
@@ -521,18 +514,16 @@ form {
 
 .edit_submission {
     width: 100%;
-}
-
-.edit_submission h3 {
-    border-bottom: 1px solid #cccccc;
-    margin: 0 0 8px 0;
-    color: #4B6C4E;
-    font-size: 8pt;
-    letter-spacing: 1px;
-}
-
-.edit_submission .list_table {
-    margin-bottom: 14px;
+	h3 {
+		border-bottom: 1px solid #cccccc;
+		margin: 0 0 8px 0;
+		color: #4B6C4E;
+		font-size: 8pt;
+		letter-spacing: 1px;
+	}
+	.list_table {
+		margin-bottom: 14px;
+	}	
 }
 
 .num_submissions_box {
@@ -553,12 +544,11 @@ form {
 }
 
 .form_info_link {
-    position: relative;
-}
-
-.form_info_link a {
-    display: block;
-    padding: 0 44px 0 14px;
+	position: relative;
+	a {
+		display: block;
+		padding: 0 44px 0 14px;
+	}	
 }
 
 .loading_small {

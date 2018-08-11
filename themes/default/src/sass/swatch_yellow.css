@@ -1,72 +1,73 @@
 /**
  * Custom styles for the yellow swatch.
  */
+
 body {
-    background-image: url(../images/top_row_yellow2x.png);
-    background-size: 1px 275px;
+	background-image: url(../images/top_row_yellow2x.png);
+	background-size: 1px 275px;
 }
 
 #account_section {
-    background-color: #585858;
+	background-color: #585858;
 }
 
 a:link, a:visited {
-    color: #008800;
+	color: #008800;
 }
 
 a:hover {
-    color: #990000;
+	color: #990000;
 }
 
 .title {
-    color: #2e6932;
+	color: #2e6932;
 }
 
 .subtitle {
-    color: #4B6C4E;
+	color: #4B6C4E;
 }
 
 .main_tabset li.selected a {
-    color: green;
+	color: green;
 }
 
 .edit_submission h3 {
-    color: #4B6C4E;
+	color: #4B6C4E;
 }
 
 body .sortable div.row_content .system_field li {
-    background-color: #C6F1C9;
+	background-color: #C6F1C9;
 }
 
 .sortable .rows div.row_content .system_field li .scroll-content li {
-    background-color: #ddf7df;
+	background-color: #ddf7df;
 }
 
 .nav_link_submenu a:link, .nav_link_submenu a:visited {
-    color: #789078;
+	color: #789078;
 }
 
 .nav_link a:hover, .nav_link_submenu a:hover {
-    color: #000000;
-    background-color: #f6dc00;
+	color: #000000;
+	background-color: #f6dc00;
 }
 
 .sortable_group_header, .sortable_group_footer {
-    background-color: #e4e3de;
+	background-color: #e4e3de;
 }
 
 tr.selected_row_color {
-    background-color: #f6dc00;
+	background-color: #f6dc00;
 }
 
 body .ui-widget-header {
-    background: url(../images/popup_header_bg_green.png) repeat-x scroll 50% 50%;
+	background: url(../images/popup_header_bg_green.png) repeat-x scroll 50% 50%;
 }
 
 .inner_tabset .tab_row div.selected {
-    color: #6e6200;
+	color: #6e6200;
 }
 
 .sortable_group_header .sort:hover {
-    background-color: #d2d0c5;
+	background-color: #d2d0c5;
 }
