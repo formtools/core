@@ -565,6 +565,9 @@ class Views
      * created with the View. This was added to solve a problem where submissions were created in a View where
      * that new submission wouldn't meet the criteria for inclusion. But beyond that, this is a handy feature to
      * cut down on configuration time for new data sets.
+	 * 
+	 * N.B. The Submission Pre-Parser relies heavily on this method and the format of the data returned, so 
+	 * if refactoring check that too.
      *
      * @param $view_id
      * @return array
@@ -584,7 +587,7 @@ class Views
 
         $results = $db->fetchAll();
 
-        extract(Hooks::processHookCalls("end", compact("results"), array("results")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("results", "view_id"), array("results")), EXTR_OVERWRITE);
 
         return $results;
 	}
