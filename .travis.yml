@@ -4,6 +4,6 @@ php:
 
 before_install:
   - travis_retry composer self-update
-  - composer install
+  - composer install --ignore-platform-reqs
 
 scripts: phpunit
