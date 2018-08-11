@@ -913,6 +913,7 @@ $LANG["validation_client_password_missing_special_char"] = "De klant wachtwoord 
 $LANG["validation_client_password_missing_uppercase"] = "De klant wachtwoord moet ten minste een hoofdletter.";
 $LANG["validation_client_password_too_short"] = "De klant wachtwoord moet tenminste <b>{\$number}</b> tekens lang zijn.";
 $LANG["validation_col_name_is_reserved_word"] = "Sorry, deze database kolom naam is een gereserveerde werk in MySQL. Gelieve hernoemen it!";
+$LANG["validation_db_name"] = "Databasenamen mogen geen punten of schuine strepen bevatten.";
 $LANG["validation_db_not_updated_invalid_input"] = "De database kon niet worden bijgewerkt. Controleer AUB de of de ingevoerde waarden correct zijn.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Sorry, moet de standaard beheerder en opdrachtgever thema&#39;s <b>altijd</b> worden ingeschakeld.";
 $LANG["validation_default_phone_num_required"] = "Vul het volledige telefoonnummer van de &lt;b&gt; { \$ field} &lt;/ b&gt; veld - alleen cijfers.";

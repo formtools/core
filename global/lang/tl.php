@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Ang client password 
 $LANG["validation_client_password_missing_uppercase"] = "Ang client password ay dapat maglaman ng hindi bababa sa isang uppercase sulat.";
 $LANG["validation_client_password_too_short"] = "Ang client password ay kailangang hindi bababa sa <b>{\$number}</b> character ang haba.";
 $LANG["validation_col_name_is_reserved_word"] = "Paumanhin, ang database ng pangalan ng hanay ay isang reserved trabaho sa MySQL. Mangyari lamang na palitan ang pangalan nito!";
+$LANG["validation_db_name"] = "Ang mga pangalan ng database ay hindi maaaring maglaman ng mga panahon o slashes.";
 $LANG["validation_db_not_updated_invalid_input"] = "Ang database ay hindi maaaring-update. Mangyaring suriin upang makita ang halaga na iyong ipinasok ay balido.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Paumanhin, ang default na administrador at client tema na dapat <b>palaging</b> naka-enable.";
 $LANG["validation_default_phone_num_required"] = "Mangyaring punan ang buong numero ng telepono para sa &lt;b&gt; { \$ patlang} &lt;/ b&gt; na patlang - numero lamang.";

@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Ο κωδικός π
 $LANG["validation_client_password_missing_uppercase"] = "Ο κωδικός πρόσβασης πελάτης πρέπει να περιέχει τουλάχιστον ένα κεφαλαίο γράμμα.";
 $LANG["validation_client_password_too_short"] = "Ο κωδικός πρόσβασης πελάτης πρέπει να είναι τουλάχιστον <b>{\$number}</b> χαρακτήρες.";
 $LANG["validation_col_name_is_reserved_word"] = "Συγγνώμη, αυτό το όνομα στήλης βάση δεδομένων είναι αποκλειστικά εργασία σε MySQL. Παρακαλώ μετονομασία!";
+$LANG["validation_db_name"] = "Τα ονόματα βάσεων δεδομένων δεν μπορούν να περιέχουν περιόδους ή καμπύλες.";
 $LANG["validation_db_not_updated_invalid_input"] = "Η βάση δεδομένων δεν μπορεί να ενημερωθεί. Ελέγξτε για να δείτε τις τιμές που δώσατε είναι έγκυρη.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Λυπούμαστε, ο διαχειριστής προεπιλογή και θέματα πελάτη πρέπει <b>πάντοτε</b> να είναι ενεργοποιημένα.";
 $LANG["validation_default_phone_num_required"] = "Παρακαλούμε συμπληρώστε τον πλήρη αριθμό τηλεφώνου για την &lt;b&gt; { \$ τομέα} &lt;/ b&gt; - μόνο αριθμούς.";

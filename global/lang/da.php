@@ -911,6 +911,7 @@ $LANG["validation_client_password_missing_special_char"] = "Klienten password sk
 $LANG["validation_client_password_missing_uppercase"] = "Klienten password skal indeholde mindst ét stort bogstav.";
 $LANG["validation_client_password_too_short"] = "Klienten adgangskode skal være mindst <b>{\$number}</b> tegn.";
 $LANG["validation_col_name_is_reserved_word"] = "Beklager, denne database kolonne navn er et reserveret arbejde i MySQL. Please omdøbe det!";
+$LANG["validation_db_name"] = "Databasenavne må ikke indeholde perioder eller skråstreger.";
 $LANG["validation_db_not_updated_invalid_input"] = "Databasen kunne ikke opdateres. Check venligst om værdierne du skrev er gyldige.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Beklager, skal standard administrator og klient temaer <b>altid</b> være aktiveret.";
 $LANG["validation_default_phone_num_required"] = "Udfyld det fulde telefonnummer på den &lt;b&gt; { \$ felt} &lt;/ b&gt; - numre.";

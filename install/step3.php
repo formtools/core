@@ -66,15 +66,26 @@ $page = array(
     "g_table_prefix" => $table_prefix
 );
 
-$page["head_js"] =<<<EOF
+$page["head_js"] =<<<END
 var rules = [];
 rules.push("required,g_db_hostname,{$LANG["validation_no_db_hostname"]}");
 rules.push("required,g_db_name,{$LANG["validation_no_db_name"]}");
+rules.push("function,checkValidDbName");
 rules.push("required,g_db_username,{$LANG["validation_no_db_username"]}");
 rules.push("required,g_table_prefix,{$LANG["validation_no_table_prefix"]}");
 rules.push("is_alpha,g_table_prefix,{$LANG["validation_invalid_table_prefix"]}");
 rsv.displayType = "alert-all";
 rsv.errorTextIntro = "{$LANG["phrase_error_text_intro"]}";
-EOF;
+
+function checkValidDbName() {
+	var field = $('input[name=g_db_name]')
+
+	if (/[.\\/\\\\]/.test(field.val())) {
+		return [[field[0], "{$LANG["validation_db_name"]}"]];
+	}
+
+	return true;
+}
+END;
 
 Installation::displayPage("templates/step3.tpl", $page);

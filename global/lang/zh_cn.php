@@ -911,6 +911,7 @@ $LANG["validation_client_password_missing_special_char"] = "客户端的密码�
 $LANG["validation_client_password_missing_uppercase"] = "客户端的密码必须至少包含一个大写字母。";
 $LANG["validation_client_password_too_short"] = "客户端的密码需要至少<b>{\$number}</b>个字符。";
 $LANG["validation_col_name_is_reserved_word"] = "很抱歉，此数据库列名称是在MySQL中保留工作。请重命名它！";
+$LANG["validation_db_name"] = "数据库名称不能包含句点或斜杠。";
 $LANG["validation_db_not_updated_invalid_input"] = "数据库无法更新。请检查您的数值是否有效。";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "很抱歉，默认的管理员和客户端的主题必须<b>始终</b>启用。";
 $LANG["validation_default_phone_num_required"] = "请填写完整的电话号码&lt;B&gt; { \$ FIELD} &lt;/ b&gt;栏 - 数字。";

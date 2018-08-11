@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Az ügyfél jelszav�
 $LANG["validation_client_password_missing_uppercase"] = "Az ügyfél jelszavát tartalmaznia kell legalább egy nagybetűt.";
 $LANG["validation_client_password_too_short"] = "Az ügyfél jelszavát kell legalább <b>{\$number}</b> karakter hosszú.";
 $LANG["validation_col_name_is_reserved_word"] = "Elnézést, ez az adatbázis oszlop név fenntartott munka MySQL. Kérem, nevezze meg!";
+$LANG["validation_db_name"] = "Az adatbázisnevek nem tartalmazhatnak periódusokat vagy sávokat.";
 $LANG["validation_db_not_updated_invalid_input"] = "Az adatbázist nem lehet frissíteni. Kérjük, ellenőrizze, hogy a beírt értékek érvényesek.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Sajnáljuk, az alapértelmezett kezelő és ügyfél témák <b>mindig</b> bekapcsolva.";
 $LANG["validation_default_phone_num_required"] = "Kérjük, töltse ki a teljes telefonszámát a &lt;b&gt; { \$ területén} &lt;/ b&gt; területen - csak számok.";

@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "דער קליענט 
 $LANG["validation_client_password_missing_uppercase"] = "דער קליענט שפּריכוואָרט מוזן אַנטהאַלטן בייַ מינדסטער איין ופּפּערקאַסע בריוו.";
 $LANG["validation_client_password_too_short"] = "דער קליענט שפּריכוואָרט דאַרף צו זייַן בייַ מינדסטער <b>{\$number}</b> אותיות לאַנג.";
 $LANG["validation_col_name_is_reserved_word"] = "אנטשולדיגט, דער דאַטאַבייס זייל נאָמען איז אַ אייַזען אַרבעט אין מיסקל. ביטע רענאַמע עס!";
+$LANG["validation_db_name"] = "דאַטאַבאַסע נעמען קענען נישט אַנטהאַלטן פּיריאַדז אָדער סלאַשעס.";
 $LANG["validation_db_not_updated_invalid_input"] = "די דאַטאַבייס קען נישט ווערן אפדעיטעד. ביטע טשעק צו זען די וואַלועס איר ענטערד זייַנען גילטיק.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "אנטשולדיגט, דער פעליקייט אַדמיניסטראַטאָר און קליענט טימז דאַרף <b>שטענדיק</b> זיין ינייבאַלד.";
 $LANG["validation_default_phone_num_required"] = "ביטע פּלאָמבירן אין די פול טעלעפאָן נומער פֿאַר די &lt;b&gt; { \$ פעלד} &lt;/ b&gt; פעלד - נומערן נאָר.";

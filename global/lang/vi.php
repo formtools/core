@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Các mật khẩu kh
 $LANG["validation_client_password_missing_uppercase"] = "Các mật khẩu khách hàng phải có ít nhất một ký tự hoa.";
 $LANG["validation_client_password_too_short"] = "Các mật khẩu khách hàng cần phải được ít nhất <b>{\$number}</b> ký tự.";
 $LANG["validation_col_name_is_reserved_word"] = "Xin lỗi, tên này cột cơ sở dữ liệu là một việc làm thuộc vào MySQL. Xin hãy đổi tên nó!";
+$LANG["validation_db_name"] = "Tên cơ sở dữ liệu không được chứa dấu chấm hoặc dấu gạch chéo.";
 $LANG["validation_db_not_updated_invalid_input"] = "Cơ sở dữ liệu có thể không được cập nhật. Xin hãy kiểm tra xem các giá trị bạn nhập vào là hợp lệ.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Xin lỗi, người quản trị mặc định và chủ đề của khách hàng <b>luôn luôn</b> phải được kích hoạt.";
 $LANG["validation_default_phone_num_required"] = "Xin vui lòng điền vào số điện thoại đầy đủ &lt;b&gt; { \$ lĩnh vực} &lt;/ b&gt; - số.";

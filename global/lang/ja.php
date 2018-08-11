@@ -907,6 +907,7 @@ $LANG["validation_client_password_missing_special_char"] = "クライアント�
 $LANG["validation_client_password_missing_uppercase"] = "クライアントのパスワードは少なくとも1つの大文字を含める必要があります。";
 $LANG["validation_client_password_too_short"] = "クライアントのパスワードは長い文字<b>{\$number}</b>になる、少なくとも。";
 $LANG["validation_col_name_is_reserved_word"] = "申し訳ありませんが、このデータベースの列名をMySQLでの予約作業です。してください名前を変更します！";
+$LANG["validation_db_name"] = "データベース名にピリオドやスラッシュを含めることはできません。";
 $LANG["validation_db_not_updated_invalid_input"] = "データベースの更新ができませんでした。してください入力された値を確認するチェックが有効です。";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "申し訳ありませんが、デフォルトの管理者およびクライアントのテーマ<b>は</b> 、 <b>常に</b>有効にする必要があります。";
 $LANG["validation_default_phone_num_required"] = "数字のみ - ある[&lt;b&gt; { \$フィールド} &lt;/ b&gt;のフィールドの完全な電話番号を記入してください。";

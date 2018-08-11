@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Viðskiptavinurinn l
 $LANG["validation_client_password_missing_uppercase"] = "Viðskiptavinurinn lykilorð verða að innihalda að minnsta kosti einn hástafi bréf.";
 $LANG["validation_client_password_too_short"] = "Viðskiptavinurinn lykilorð þarf að vera að minnsta kosti <b>{\$number}</b> stafir að lengd.";
 $LANG["validation_col_name_is_reserved_word"] = "Því miður, þessi dálkur gagnasafn nafn er áskilinn vinna í MySQL. Vinsamlegast endurnefna það!";
+$LANG["validation_db_name"] = "Gagnasafn heiti getur ekki innihaldið tímabil eða rista.";
 $LANG["validation_db_not_updated_invalid_input"] = "Gagnagrunnurinn gæti ekki verið uppfærð. Vinsamlegast athugaðu að sjá þau gildi sem þú slóst inn eru í gildi.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Því miður verður sjálfgefna stjórnandi og viðskiptavinur þema <b>alltaf að</b> vera virkt.";
 $LANG["validation_default_phone_num_required"] = "Vinsamlegast fyllið í fullri Símanúmer fyrir &lt;b&gt; { \$ sviði} &lt;/ b&gt; sviði - númer eini.";

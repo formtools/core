@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "O contrasinal do cli
 $LANG["validation_client_password_missing_uppercase"] = "O contrasinal do cliente debe conter polo menos unha letra maiúscula.";
 $LANG["validation_client_password_too_short"] = "O contrasinal do cliente debe ser polo menos <b>{\$number}</b> caracteres.";
 $LANG["validation_col_name_is_reserved_word"] = "Sentímolo, o nome da columna na base de datos é un traballo reservado no MySQL Por favor, sona-lo!";
+$LANG["validation_db_name"] = "";
 $LANG["validation_db_not_updated_invalid_input"] = "A base de datos non puido ser actualizado. Por favor, verifique se os valores indicados son válidos.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Sentímolo, o administrador estándar e temas cliente debe ser <b>sempre</b> habilitado.";
 $LANG["validation_default_phone_num_required"] = "Por favor, enche o número de teléfono completo para o &lt;b&gt; { \$ campo} &lt;/ b&gt; campo - só números.";

@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Asiakkaan salasana o
 $LANG["validation_client_password_missing_uppercase"] = "Asiakkaan salasana on oltava vähintään yksi iso kirjain.";
 $LANG["validation_client_password_too_short"] = "Asiakkaan salasana on vähintään <b>{\$number}</b> merkkiä pitkä.";
 $LANG["validation_col_name_is_reserved_word"] = "Tietokannassa on jo tällä nimellä oleva sarake. Ole hyvä ja nimeä se uudelleen.";
+$LANG["validation_db_name"] = "Tietokannan nimet eivät voi sisältää kausia tai viivoja.";
 $LANG["validation_db_not_updated_invalid_input"] = "Tietokantaa ei voitu päivittää. Tarkista antamasi tiedot.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Järjestelmänvalvojan oletusteema tulee <b>aina</b> olla käytettävissä.";
 $LANG["validation_default_phone_num_required"] = "Täytä koko puhelinnumero &lt;b&gt; { \$ kenttä} &lt;/ b&gt; kenttä - numeroita.";

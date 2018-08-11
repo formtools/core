@@ -909,6 +909,7 @@ $LANG["validation_client_password_missing_special_char"] = "Lozinka klijent mora
 $LANG["validation_client_password_missing_uppercase"] = "Lozinka klijent mora sadržavati barem jedno slovo veliko.";
 $LANG["validation_client_password_too_short"] = "Klijent lozinku treba biti najmanje <b>{\$number}</b> znakova.";
 $LANG["validation_col_name_is_reserved_word"] = "Nažalost, ovaj naziv baze podataka stupac rezerviran rad u MySQL. Molimo preimenovati!";
+$LANG["validation_db_name"] = "";
 $LANG["validation_db_not_updated_invalid_input"] = "Baza podataka nije mogao biti ažuriran. Molimo provjerite vrijednosti koje ste unijeli su važeće.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Na žalost, zadanim administrator i klijent teme <b>uvijek</b> mora biti omogućena.";
 $LANG["validation_default_phone_num_required"] = "Molimo Vas da ispunite u punom telefonski broj za &lt;b&gt; { \$ polje} &lt;/ b&gt; - samo brojevi.";

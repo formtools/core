@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Die kliënt wagwoord
 $LANG["validation_client_password_missing_uppercase"] = "Die kliënt wagwoord moet ten minste &#39;n hoofletter.";
 $LANG["validation_client_password_too_short"] = "Die kliënt moet word wagwoord ten minste <b>{\$number}</b> karakters lank wees.";
 $LANG["validation_col_name_is_reserved_word"] = "Jammer, hierdie databasis kolom naam is &#39;n voorbehou werk in MySQL. Please rename it!";
+$LANG["validation_db_name"] = "Databasis name kan nie periodes of strepies bevat nie.";
 $LANG["validation_db_not_updated_invalid_input"] = "Die databasis kon nie opgedateer word nie. Maak seker om te sien die waardes wat jy ingetik het, is geldig.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Jammer, moet die standaard-administrateur en kliënt temas <b>altyd</b> aangeskakel word.";
 $LANG["validation_default_phone_num_required"] = "Vul in die volle telefoonnommer vir die &lt;b&gt; { \$ veld} &lt;/ b&gt; - getalle.";

@@ -911,6 +911,7 @@ $LANG["validation_client_password_missing_special_char"] = "La contraseña de cl
 $LANG["validation_client_password_missing_uppercase"] = "La contraseña de cliente debe contener al menos una letra mayúscula.";
 $LANG["validation_client_password_too_short"] = "La contraseña de cliente necesita ser por lo menos <b>{\$number}</b> caracteres.";
 $LANG["validation_col_name_is_reserved_word"] = "Lo sentimos, este nombre de columna de base de datos es un trabajo reservado en MySQL. Por favor, cambie su nombre!";
+$LANG["validation_db_name"] = "Los nombres de las bases de datos no pueden contener puntos o barras.";
 $LANG["validation_db_not_updated_invalid_input"] = "La base de datos no pudo ser actualizada. Favor de verificar que los valores ingresados son correctos.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Lo sentimos, el administrador por defecto y los temas cliente <b>siempre</b> debe estar activado.";
 $LANG["validation_default_phone_num_required"] = "Por favor, rellene el número de teléfono completo para el &lt;b&gt; { \$ campo} &lt;/ b&gt; - sólo números.";

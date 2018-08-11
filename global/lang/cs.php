@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Klient Heslo musí o
 $LANG["validation_client_password_missing_uppercase"] = "Klient Heslo musí obsahovat alespoň jedno velké písmeno.";
 $LANG["validation_client_password_too_short"] = "Klient Heslo musí být alespoň <b>{\$number}</b> znaků.";
 $LANG["validation_col_name_is_reserved_word"] = "Omlouváme se, tato databáze název sloupce je vyhrazena práce v MySQL. Prosím přejmenujte jej!";
+$LANG["validation_db_name"] = "Názvy databází nemohou obsahovat období nebo lomítka.";
 $LANG["validation_db_not_updated_invalid_input"] = "Databáze by mohla být aktualizována. Prosím, zkontrolujte, hodnoty, které jste zadali, jsou platné.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Je nám líto, musí výchozí správce a klientských témata <b>vždy</b> povoleny.";
 $LANG["validation_default_phone_num_required"] = "Vyplňte, prosím, celé telefonní číslo do pole <b>{\$field}</b> - pouze čísla.";

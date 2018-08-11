@@ -907,6 +907,7 @@ $LANG["validation_client_password_missing_special_char"] = "客戶端的密碼�
 $LANG["validation_client_password_missing_uppercase"] = "客戶端的密碼必須至少包含一個大寫字母。";
 $LANG["validation_client_password_too_short"] = "客戶端的密碼需要至少<b>{\$number}</b>個字符。";
 $LANG["validation_col_name_is_reserved_word"] = "很抱歉，此數據庫列名稱是在MySQL中保留工作。請重命名它！";
+$LANG["validation_db_name"] = "數據庫名稱不能包含句點或斜杠。";
 $LANG["validation_db_not_updated_invalid_input"] = "該數據庫無法更新。請檢查您輸入的值是有效的。";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "很抱歉，默認的管理員和客戶端的主題必須<b>始終</b>啟用。";
 $LANG["validation_default_phone_num_required"] = "請填寫完整的電話號碼 &lt;B&gt; { \$ FIELD} &lt;/ b&gt;欄 - 數字。";
