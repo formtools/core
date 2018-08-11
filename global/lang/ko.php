@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "클라이언트는 <
 $LANG["validation_client_password_missing_uppercase"] = "고객의 비밀 번호는 적어도 하나의 대문자 문자를 포함해야합니다.";
 $LANG["validation_client_password_too_short"] = "클라이언트 암호 길이 할 최소한 <b>{\$number}</b>";
 $LANG["validation_col_name_is_reserved_word"] = "죄송합니다,이 데이터베이스의 열 이름을 MySQL에서 예약된 작업입니다. 제발 이름을 바꿉니다!";
+$LANG["validation_db_name"] = "데이터베이스 이름에는 마침표 나 슬래시를 사용할 수 없습니다.";
 $LANG["validation_db_not_updated_invalid_input"] = "데이터베이스를 업데이트할 수없습니다. 입력한 값이 유효한지 확인합니다.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "죄송합니다, 기본적으로 관리자와 클라이언트의 <b>테마는 항상</b> 활성화되어 있어야합니다.";
 $LANG["validation_default_phone_num_required"] = "숫자 -의 &lt;b&gt; { \$ 분야} &lt;/ b&gt; 필드의 전체 전화 번호를 기입하여주십시오.";

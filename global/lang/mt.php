@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Il-password klijent 
 $LANG["validation_client_password_missing_uppercase"] = "Il-password klijent għandu jkun fiha ittra kapitali mill-inqas wieħed.";
 $LANG["validation_client_password_too_short"] = "Il-password klijent teħtieġ li tkun mill-inqas <b>{\$number}</b> karattri.";
 $LANG["validation_col_name_is_reserved_word"] = "Jiddispjacini, dan l-isem kolonna database hija xogħol riservat fil MySQL. Jekk jogħġbok semmi mill-ġdid it!";
+$LANG["validation_db_name"] = "L-ismijiet tad-database ma jistgħux jinkludu perjodi jew slashes.";
 $LANG["validation_db_not_updated_invalid_input"] = "Id-database ma jkunx jista &#39;jiġi aġġornat. Jekk jogħġbok iċċekkja biex tara l-valuri li tkun daħħalt huma validi.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Jiddispjacini, l-amministratur default u t-temi klijent irid <b>dejjem</b> ikunu jistgħu.";
 $LANG["validation_default_phone_num_required"] = "Jekk jogħġbok imla n-numru tat-telefon sħiħa għall-&lt;b&gt; { \$ qasam} &lt;/ b&gt; qasam - numri biss.";

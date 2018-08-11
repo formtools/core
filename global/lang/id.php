@@ -910,6 +910,7 @@ $LANG["validation_client_password_missing_special_char"] = "Password klien harus
 $LANG["validation_client_password_missing_uppercase"] = "Password klien harus mengandung setidaknya satu huruf besar.";
 $LANG["validation_client_password_too_short"] = "Password klien harus setidaknya <b>{\$number}</b> karakter.";
 $LANG["validation_col_name_is_reserved_word"] = "Maaf, nama kolom database ini adalah sebuah karya cipta di MySQL. Silakan ubah nama itu!";
+$LANG["validation_db_name"] = "Nama database tidak boleh berisi titik atau garis miring.";
 $LANG["validation_db_not_updated_invalid_input"] = "Basis data tidak dapat diperbarui. Periksa untuk melihat nilai-nilai yang Anda masukkan valid.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Maaf, default administrator dan tema klien harus <b>selalu</b> diaktifkan.";
 $LANG["validation_default_phone_num_required"] = "Silahkan mengisi nomor telepon penuh untuk &lt;b&gt; { \$ bidang} &lt;/ b&gt; - angka saja.";

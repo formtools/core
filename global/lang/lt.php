@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Kliento slaptažodis
 $LANG["validation_client_password_missing_uppercase"] = "Kliento slaptažodis turi būti bent vienas didžiąja raide.";
 $LANG["validation_client_password_too_short"] = "Kliento slaptažodis turi būti <b{\$number}</b> simbolių ilgio.";
 $LANG["validation_col_name_is_reserved_word"] = "Atsiprašome, šios duomenų bazės stulpelio pavadinimas yra saugomos darbą MySQL. Prašome pervadint jį!";
+$LANG["validation_db_name"] = "Duomenų bazių pavadinimuose negali būti periodų ar susiaurėjimų.";
 $LANG["validation_db_not_updated_invalid_input"] = "Duomenų bazės negali būti atnaujintas. Patikrinkite vertybės įvedėte, yra neteisingas.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Atsiprašome, bet pagal nutylėjimą administratorius ir klientų temos <b>visuomet</b> turi būti įjungtas.";
 $LANG["validation_default_phone_num_required"] = "Prašome užpildyti visą telefono numerį &lt;b&gt; { \$ srityje} &lt;/ b&gt; - numeriai.";

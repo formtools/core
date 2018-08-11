@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Parola clientului tr
 $LANG["validation_client_password_missing_uppercase"] = "Parola clientului trebuie să conţină cel puţin o literă majusculă.";
 $LANG["validation_client_password_too_short"] = "Parola clientului trebuie să fie de cel puţin <b>( \$ număr)</b> caractere.";
 $LANG["validation_col_name_is_reserved_word"] = "Ne pare rău, acest nume în baza de date coloană este o lucrare rezervată în MySQL. Vă rugăm să redenumiţi-o!";
+$LANG["validation_db_name"] = "Numele de bază de date nu pot conține perioade sau tăieturi.";
 $LANG["validation_db_not_updated_invalid_input"] = "Baza de date nu a putut fi actualizat. Vă rugăm să verificaţi pentru a vedea valorile le-aţi introdus sunt valide.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Ne pare rău, administratorul implicit şi teme de clientul trebuie să fie <b>întotdeauna</b> activat.";
 $LANG["validation_default_phone_num_required"] = "Vă rugăm să completaţi numărul de telefon complet pentru &lt;b&gt; { \$ domeniul} &lt;/ b&gt; - numai numere.";

@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Kliendi salasõna pe
 $LANG["validation_client_password_missing_uppercase"] = "Kliendi salasõna peab sisaldama vähemalt ühe suurtäheliseks.";
 $LANG["validation_client_password_too_short"] = "Kliendi parool peab olema vähemalt <b>{\$number}</b> tähemärki.";
 $LANG["validation_col_name_is_reserved_word"] = "Vabandame, see andmebaasi veerg nimi on reserveeritud tööd MySQL. Palun nimetada seda!";
+$LANG["validation_db_name"] = "Andmebaasi nimed ei tohi sisaldada perioodi ega kaldkriipsu.";
 $LANG["validation_db_not_updated_invalid_input"] = "Andmebaasi ei saa uuendada. Palun vaadata, väärtused sisestatud kehtivad.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Vabandame, vaikimisi administraatori ja kliendi teemad tuleb <b>alati</b> sisse lülitatud.";
 $LANG["validation_default_phone_num_required"] = "Palun täitke täis telefoninumber &lt;b&gt; { \$ valdkonnas} &lt;/ b&gt; field - ainult numbreid.";

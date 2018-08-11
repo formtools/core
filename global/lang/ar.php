@@ -907,6 +907,7 @@ $LANG["validation_client_password_missing_special_char"] = "العميل يجب 
 $LANG["validation_client_password_missing_uppercase"] = "ويجب أن تحتوي كلمة السر عميل واحد على الأقل رسالة كبيرة.";
 $LANG["validation_client_password_too_short"] = "كلمة المرور العميل يجب أن يكون على الأقل <b>{\$number}</b> حرفا.";
 $LANG["validation_col_name_is_reserved_word"] = "آسف ، وقاعدة البيانات هذه اسم العمود هو عمل محفوظة في الخلية. يرجى تسميته!";
+$LANG["validation_db_name"] = "لا يمكن أن تحتوي أسماء قواعد البيانات على نقاط أو علامات مائلة.";
 $LANG["validation_db_not_updated_invalid_input"] = "ويمكن أن لا يتم تحديث قاعدة البيانات. الرجاء التحقق لمعرفة القيم التي أدخلتها صحيحة.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "آسف ، يجب أن المسؤول الافتراضي والمواضيع العميل أن يكون <b>دائما</b> ممكنا.";
 $LANG["validation_default_phone_num_required"] = "يرجى ملء في رقم الهاتف الكامل ل&lt;B&gt;{ \$ الحقل} &lt;/ B&gt; الميدان -- الأرقام فقط.";

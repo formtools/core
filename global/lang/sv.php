@@ -908,6 +908,7 @@ $LANG["validation_client_password_missing_special_char"] = "Kundens lösenord m�
 $LANG["validation_client_password_missing_uppercase"] = "Kundens lösenord måste innehålla minst en stor bokstav.";
 $LANG["validation_client_password_too_short"] = "Kundens lösenord måste minst innehålla <b>{\$number}</b> tecken.";
 $LANG["validation_col_name_is_reserved_word"] = "Tyvärr, det här kolumnnamnet i databasen är reserverat för MySQL. Välj ett annat i stället!";
+$LANG["validation_db_name"] = "Databasnamn kan inte innehålla perioder eller snedstreck.";
 $LANG["validation_db_not_updated_invalid_input"] = "Databasen kunde inte uppdateras. Kontrollera att värdena du angav är giltiga.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Tyvärr, de förvalda administratörs- och klientteman måste <strong>alltid</strong> vara påslaget.";
 $LANG["validation_default_phone_num_required"] = "Fyll i det fullständiga telefonnumret i fältet <b>{\$field}</ b> - endast siffror.";

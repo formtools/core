@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "La contrasenya de cl
 $LANG["validation_client_password_missing_uppercase"] = "La contrasenya de client ha de contenir almenys una lletra majúscula.";
 $LANG["validation_client_password_too_short"] = "La contrasenya de client necessita ser com a mínim <b>{\$number}</b> caràcters.";
 $LANG["validation_col_name_is_reserved_word"] = "Ho sentim, aquest nom de columna de base de dades és un treball reservat en MySQL. Si us plau, canvieu el seu nom!";
+$LANG["validation_db_name"] = "Els noms de la base de dades no poden contenir períodes ni barres.";
 $LANG["validation_db_not_updated_invalid_input"] = "La base de dades no pot ser actualitzat. Comproveu els valors introduïts són vàlids.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Ho sentim, l&#39;administrador per defecte i els temes client <b>sempre</b> ha d&#39;estar activat.";
 $LANG["validation_default_phone_num_required"] = "Si us plau, ompli el número de telèfon complet per al &lt;b&gt; { \$ camp} &lt;/ b&gt; - només números.";

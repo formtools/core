@@ -23,6 +23,7 @@ vendor/*
 !vendor/bin/validate-json
 !vendor/composer
 !vendor/justinrainbow
+!vendor/myclabs
 !vendor/ramsey
 !vendor/smarty
 !vendor/autoload.php

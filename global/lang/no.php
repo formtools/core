@@ -911,6 +911,7 @@ $LANG["validation_client_password_missing_special_char"] = "Kunden Passordet må
 $LANG["validation_client_password_missing_uppercase"] = "Kunden Passordet må inneholde minst én stor bokstav.";
 $LANG["validation_client_password_too_short"] = "Klienten passord må være minst <b>{\$number}</b> tegn.";
 $LANG["validation_col_name_is_reserved_word"] = "Beklager, denne databasen kolonnenavn en reservert arbeid i MySQL. Vennligst endre navn på den!";
+$LANG["validation_db_name"] = "";
 $LANG["validation_db_not_updated_invalid_input"] = "Databasen kunne ikke bli oppdatert. Vennligst sjekk for å se verdiene du har oppgitt er gyldige.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Beklager, må standard administrator og klient temaer <b>alltid</b> være aktivert.";
 $LANG["validation_default_phone_num_required"] = "Vennligst fyll i full telefonnummer for &lt;b&gt; { \$ feltet} &lt;/ b&gt; - bare tall.";

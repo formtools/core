@@ -911,6 +911,7 @@ $LANG["validation_client_password_missing_special_char"] = "La password del clie
 $LANG["validation_client_password_missing_uppercase"] = "La password del client deve contenere almeno una lettera maiuscola.";
 $LANG["validation_client_password_too_short"] = "La password client deve essere di almeno <b>{\$number}</b> caratteri.";
 $LANG["validation_col_name_is_reserved_word"] = "Spiacenti, il nome di questa colonna del database è riservato al sistema MySQL. Per favore, rinominatela!";
+$LANG["validation_db_name"] = "I nomi dei database non possono contenere punti o barre.";
 $LANG["validation_db_not_updated_invalid_input"] = "Non è stato possibile aggiornare il database. Vi preghiamo di controllare se i valori immessi sono validi.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Spiacenti, i temi di base per l'amministratore e il cliente devono <b>sempre</b> essere attivati.";
 $LANG["validation_default_phone_num_required"] = "Si prega di compilare il numero di telefono completo per il &lt;b&gt; { \$ campo} &lt;/ b&gt; - solo numeri.";

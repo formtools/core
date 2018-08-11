@@ -907,6 +907,7 @@ $LANG["validation_client_password_missing_special_char"] = "The client password 
 $LANG["validation_client_password_missing_uppercase"] = "The client password must contain at least one uppercase letter.";
 $LANG["validation_client_password_too_short"] = "The client password needs to be at least <b>{\$number}</b> characters long.";
 $LANG["validation_col_name_is_reserved_word"] = "Sorry, this database column jina ni kazi reserved MySQL. Please rename it!";
+$LANG["validation_db_name"] = "Majina ya data haziwezi kuwa na vipindi au kupungua.";
 $LANG["validation_db_not_updated_invalid_input"] = "The database hakuweza uppdateras. Tafadhali kuangalia kuona maadili wewe aliingia ni halali.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Sorry, the default administrator na mteja mandhari <b>lazima</b> iwe enabled.";
 $LANG["validation_default_phone_num_required"] = "Please fill in the full telephone number for the &lt;b&gt;{\$field}&lt;/b&gt; field - numbers only.";

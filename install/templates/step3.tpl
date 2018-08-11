@@ -70,7 +70,7 @@
 			</tr>
 			<tr>
 				<td class="label">{$LANG.phrase_database_name}</td>
-				<td><input type="text" size="20" name="g_db_name" value="{$g_db_name}" /></td>
+				<td><input type="text" size="20" name="g_db_name" value="{$g_db_name}" maxlength="64" /></td>
 			</tr>
 			<tr>
 				<td class="label">{$LANG.word_port}</td>

@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Klienta parole jāsa
 $LANG["validation_client_password_missing_uppercase"] = "Klienta parole ir jābūt vismaz vienu lielo burtu.";
 $LANG["validation_client_password_too_short"] = "Klienta parole ir jābūt vismaz <b>{\$number}</b> rakstzīmes garš.";
 $LANG["validation_col_name_is_reserved_word"] = "Atvainojiet, šī datubāze kolonnas nosaukuma ir rezervēts darbu MySQL. Lūdzu pārdēvēt to!";
+$LANG["validation_db_name"] = "Datubāzes nosaukumos nedrīkst būt periodi vai slikti.";
 $LANG["validation_db_not_updated_invalid_input"] = "Datubāzes nevar atjaunināt. Lūdzu pārbaudiet, vērtības ievadījāt ir derīgas.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Atvainojiet, noklusējuma administratora un klientu tēmas <b>vienmēr</b> ir iespējots.";
 $LANG["validation_default_phone_num_required"] = "Lūdzu, aizpildiet pilnu tālruņa numuru &lt;b&gt; { \$ lauka} &lt;/ b&gt; - numuriem.";

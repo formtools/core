@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "cliant Ní mór foca
 $LANG["validation_client_password_missing_uppercase"] = "Caithfidh an focal faire cliant beidh ar a laghad litir amháin sa chás uachtair.";
 $LANG["validation_client_password_too_short"] = "riachtanais cliant faire ar an a bheith ar a laghad, <b>{\$number}</b> carachtair fada.";
 $LANG["validation_col_name_is_reserved_word"] = "Tá brón orainn, tá ainm an gcolún ar bhunachar sonraí ar obair áirithe i MySQL. Athainmnigh é!";
+$LANG["validation_db_name"] = "Os nomes da base de datos non poden conter períodos nin barras.";
 $LANG["validation_db_not_updated_invalid_input"] = "Níorbh fhéidir an bunachar sonraí a thabhairt cothrom le dáta. Seiceáil le do thoil chun an doiciméad a luachanna a d&#39;iontráil tú bailí.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Tá brón orainn, ní mór an riarthóir réamhshocraithe agus téamaí cliant a chumasú <b>i gcónaí.</b>";
 $LANG["validation_default_phone_num_required"] = "Líon isteach an uimhir theileafóin iomlán don &lt;b&gt; { \$ réimse} &lt;/ b&gt; réimse - uimhreacha amháin.";

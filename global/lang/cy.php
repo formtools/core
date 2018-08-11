@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "cleient Rhaid passwo
 $LANG["validation_client_password_missing_uppercase"] = "Rhaid i&#39;r cyfrinair cleient yn cynnwys o leiaf un llythyr priflythyren.";
 $LANG["validation_client_password_too_short"] = "Y cyfrinair cleient angen i fod o leiaf <b>{\$number}</b> o gymeriadau.";
 $LANG["validation_col_name_is_reserved_word"] = "Mae&#39;n ddrwg gennym, y gronfa ddata hon enw golofn yn gweithio gadw mewn MySQL. Ei ail-enwi os gwelwch yn dda!";
+$LANG["validation_db_name"] = "Ni all enwau cronfa ddata gynnwys cyfnodau neu slashes.";
 $LANG["validation_db_not_updated_invalid_input"] = "Nid oedd y gronfa ddata yn cael ei ddiweddaru. Gwiriwch i weld y gwerthoedd a roddwyd yn ddilys.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Mae&#39;n ddrwg gennym, mae&#39;n rhaid i&#39;r gweinyddwr diofyn a themâu cleient <b>bob amser yn</b> cael eu galluogi.";
 $LANG["validation_default_phone_num_required"] = "Llenwch y rhif ffôn llawn ar gyfer y &lt;b&gt; { \$ maes} &lt;/ b&gt; cae - rhifau yn unig.";

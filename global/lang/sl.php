@@ -906,6 +906,7 @@ $LANG["validation_client_password_missing_special_char"] = "Varovanec parola mor
 $LANG["validation_client_password_missing_uppercase"] = "Odjemalec Geslo mora vsebovati vsaj eno veliko črko.";
 $LANG["validation_client_password_too_short"] = "Varovanec parola mora biti najmanj <b>{\$number}</b> znakov.";
 $LANG["validation_col_name_is_reserved_word"] = "Žal, to ime stolpec baze podatkov je rezervirano delo v MySQL. Please rename it!";
+$LANG["validation_db_name"] = "Imena baze podatkov ne smejo vsebovati obdobij ali poševnic.";
 $LANG["validation_db_not_updated_invalid_input"] = "Baze podatkov ni bilo mogoče posodobiti. Prosimo, preverite, vrednosti, ki ste jih vnesli, so veljavne.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Oprostite, mora privzeti upravitelj in teme stranko <b>vedno</b> omogočen.";
 $LANG["validation_default_phone_num_required"] = "Prosimo, da izpolnite celotno telefonsko številko za &lt;b&gt; { \$ polje} &lt;/ b&gt; - samo številke.";

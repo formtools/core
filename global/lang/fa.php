@@ -908,6 +908,7 @@ $LANG["validation_client_password_missing_special_char"] = "رمز عبور مش
 $LANG["validation_client_password_missing_uppercase"] = "مشتری کلمه عبور باید حداقل 1 حرف بزرگ باشد.";
 $LANG["validation_client_password_too_short"] = "رمز عبور مشتری باید حداقل <b>{\$number}</b> کاراکتر باشد.";
 $LANG["validation_col_name_is_reserved_word"] = "با عرض پوزش ، این پایگاه داده نام ستون است در MySQL کار محفوظ است. لطفا آن را تغییر نام دهید!";
+$LANG["validation_db_name"] = "نام بانک اطلاعاتی نمی تواند شامل دوره ها یا خطوط خالی باشد.";
 $LANG["validation_db_not_updated_invalid_input"] = "پایگاه داده به روز نشد. لطفا برای دیدن مقادیر معتبر هستند که وارد کرده اید.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "با عرض پوزش ، مدیر پیش فرض ها و تم ها مشتری <b>همیشه</b> باید فعال باشد.";
 $LANG["validation_default_phone_num_required"] = "لطفا را پر کنید شماره تلفن کامل برای &lt;B&gt;{ \$ میدان} &lt;/ B&gt; زمینه -- تعداد تنها.";

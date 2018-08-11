@@ -911,6 +911,7 @@ $LANG["validation_client_password_missing_special_char"] = "İstemci şifre içe
 $LANG["validation_client_password_missing_uppercase"] = "İstemci şifre en az bir büyük harf içermelidir.";
 $LANG["validation_client_password_too_short"] = "Müşteri şifresini uzun karakterler)<b>{\$number}</b> olmak en az.";
 $LANG["validation_col_name_is_reserved_word"] = "Maalesef, bu veritabanı sütun adı MySQL ayrılmış bir çalışmadır. Lütfen yeniden adlandırın!";
+$LANG["validation_db_name"] = "Veritabanı adları periyot veya eğik çizgi içeremez.";
 $LANG["validation_db_not_updated_invalid_input"] = "Veritabanı güncellendi olamazdı. Lütfen girdiğiniz değerleri kontrol edin geçerlidir.";
 $LANG["validation_default_admin_and_client_themes_not_enabled"] = "Üzgünüz, varsayılan yönetici ve istemci temalar <b>her zaman</b> etkin olmalıdır.";
 $LANG["validation_default_phone_num_required"] = "Numaraları sadece &lt;b&gt; { \$ alan} &lt;/ b&gt; alanına tam telefon numarasını doldurunuz.";
