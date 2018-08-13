@@ -1,30 +1,5 @@
-html {
-	overflow: -moz-scrollbars-vertical;
-}
+@import "variables";
 
-body, html {
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	background-color: #ffffff;
-}
-
-body {
-	background-image: url(../../themes/default/images/top_row_green2x.png);
-	background-size: 1px 275px;
-	background-repeat: repeat-x;
-	background-position: center top;
-	text-align: center;
-}
-
-body, table, td, div, span, div, p, input, select, textarea, option {
-	font: 11px Verdana, sans-serif;
-	color: #333333;
-}
-
-body, table, td, span, div, p {
-	line-height: 20px;
-}
 
 #container {
 	width: 950px;

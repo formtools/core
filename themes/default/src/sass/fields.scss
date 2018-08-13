@@ -1,3 +1,6 @@
+@import "variables";
+
+
 .scroll-pane {
 	overflow: auto;
 	width: 423px;
@@ -101,7 +104,7 @@ body .scroll-bar-wrap {
 }
 
 body .edit_fields {
-	background: transparent url(../images/fields_table_bg.png) repeat-y;
+	background: transparent url(#{$images-dir}/fields_table_bg.png) repeat-y;
 	.col3 {
 		width: 424px;
 	}

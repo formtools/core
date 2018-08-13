@@ -1,5 +1,7 @@
-/* sortable Views page */
+@import "variables";
 
+
+/* sortable Views page */
 .view_list .header_row .col2 {
 	font-weight: normal;
 }
@@ -46,25 +48,25 @@
 }
 
 .view_list .header_row .col5 div {
-	background: transparent url(../images/columns.png) no-repeat center center;
+	background: transparent url(#{$images-dir}/columns.png) no-repeat center center;
 	width: 35px;
 	height: 20px;
 }
 
 .view_list .header_row .col6 div {
-	background: transparent url(../images/fields.png) no-repeat center center;
+	background: transparent url(#{$images-dir}/fields.png) no-repeat center center;
 	width: 35px;
 	height: 20px;
 }
 
 .view_list .header_row .col7 div {
-	background: transparent url(../images/tabs.png) no-repeat center center;
+	background: transparent url(#{$images-dir}/tabs.png) no-repeat center center;
 	width: 35px;
 	height: 20px;
 }
 
 .view_list .header_row .col8 div {
-	background: transparent url(../images/filter.png) no-repeat center center;
+	background: transparent url(#{$images-dir}/filter.png) no-repeat center center;
 	width: 35px;
 	height: 20px;
 }

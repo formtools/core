@@ -18,7 +18,6 @@
     </script>
     <link type="text/css" rel="stylesheet" href="{$g_root_url}/global/css/main.css?v=3_0_3">
     <link type="text/css" rel="stylesheet" href="{$theme_url}/css/styles.css?v=3_0_3">
-    <link type="text/css" rel="stylesheet" href="{$theme_url}/css/swatch_{$swatch}.css?v=3_0_3">
     <link href="{$theme_url}/css/smoothness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"/>
     <script src="{$g_root_url}/global/scripts/jquery.js"></script>
     <script src="{$theme_url}/scripts/jquery-ui.js"></script>
@@ -31,7 +30,8 @@
     {$head_css}
     {template_hook location="modules_head_bottom"}
 </head>
-<body>
+<body class="swatch-{$swatch}">
+
 <div id="container">
     <div id="header">
         {if !$hide_header_bar}

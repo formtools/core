@@ -1,3 +1,6 @@
+@import "variables";
+
+
 html {
     overflow-y: scroll;
     overflow-x: auto;
@@ -176,7 +179,7 @@ form {
 }
 
 .list_table th, .submissions_table th {
-    background-image: url(../images/list_table_heading.jpg);
+    background-image: url(#{$images-dir}/list_table_heading.jpg);
     color: white;
     height: 18px;
     text-align: center;
@@ -192,7 +195,7 @@ form {
 }
 
 .list_table th.over, .submissions_table th.over, th.sortable_col :hover {
-    background-image: url(../images/list_table_heading_over.jpg);
+    background-image: url(#{$images-dir}/list_table_heading_over.jpg);
 }
 
 .list_table th td {
@@ -248,7 +251,7 @@ form {
 }
 
 .list_table tr th table tr td {
-    background-image: url(../images/list_table_heading.jpg);
+    background-image: url(#{$images-dir}/list_table_heading.jpg);
 }
 
 .submissions_table {
@@ -263,7 +266,7 @@ form {
 
 .list_table {
 	.del2 {
-		background-image: url(../images/delete_bg.jpg);
+		background-image: url(#{$images-dir}/delete_bg.jpg);
 		a:link, a:visited {
 			color: white;
 		}		
@@ -282,7 +285,7 @@ form {
 			height: 18px;
 		}		
 		&:hover {
-			background: transparent url(../images/delete.png) no-repeat -22px 3px;
+			background: transparent url(#{$images-dir}/delete.png) no-repeat -22px 3px;
 		}
 	}	
 	td.edit, th.edit {
@@ -291,7 +294,7 @@ form {
 	}
 	td.edit {
 		text-align: center;
-		background: transparent url(../images/edit.png) no-repeat center 1px;
+		background: transparent url(#{$images-dir}/edit.png) no-repeat center 1px;
 		padding: 0 0;
 		a {
 			width: 18px;

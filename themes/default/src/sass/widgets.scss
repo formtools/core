@@ -1,5 +1,7 @@
-/* jQuery dialog styles */
+@import "variables";
 
+
+/* jQuery dialog styles */
 body .ui-widget-header span {
 	color: white;
 }
@@ -7,7 +9,6 @@ body .ui-widget-header span {
 body .ui-daterangepicker .ui-widget-header {
 	background-image: none;
 	background-color: #dddddd;
-	/* 3b7d40 */
 }
 
 body .ui-daterangepicker .ui-widget-header span {
@@ -68,15 +69,15 @@ body .ui-daterangepicker ul li a {
 }
 
 .popup_type_warning {
-	background-image: url(../../../global/images/alert.png);
+	background-image: url(#{$global-images-dir}/alert.png);
 }
 
 .popup_type_error {
-	background-image: url(../../../global/images/error.png);
+	background-image: url(#{$global-images-dir}/error.png);
 }
 
 .popup_type_info {
-	background-image: url(../../../global/images/info.png);
+	background-image: url(#{$global-images-dir}/info.png);
 }
 
 .ui-widget-header span.edit_field_title_field_type {
