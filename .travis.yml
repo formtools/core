@@ -1,6 +1,5 @@
 language: php
 php:
-    - 5.4
     - 7.1.9
 
 before_install:
