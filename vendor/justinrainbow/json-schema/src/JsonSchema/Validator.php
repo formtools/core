@@ -11,6 +11,8 @@ namespace JsonSchema;
 
 use JsonSchema\Constraints\BaseConstraint;
 use JsonSchema\Constraints\Constraint;
+use JsonSchema\Exception\InvalidConfigException;
+use JsonSchema\SchemaStorage;
 
 /**
  * A JsonSchema Constraint

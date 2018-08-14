@@ -13,6 +13,7 @@ use JsonSchema\Entity\JsonPointer;
 use JsonSchema\Exception\InvalidArgumentException;
 use JsonSchema\Exception\InvalidSchemaException;
 use JsonSchema\Exception\RuntimeException;
+use JsonSchema\SchemaStorage;
 use JsonSchema\Validator;
 
 /**

@@ -10,6 +10,9 @@
 namespace JsonSchema\Constraints;
 
 use JsonSchema\Entity\JsonPointer;
+use JsonSchema\SchemaStorage;
+use JsonSchema\Uri\UriRetriever;
+use JsonSchema\UriRetrieverInterface;
 
 /**
  * The Base Constraints, all Validators should extend this class
