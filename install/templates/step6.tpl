@@ -1,7 +1,5 @@
 {include file="../../install/templates/install_header.tpl"}
 
-    <h2>{$LANG.phrase_choose_components}</h2>
-
     <div id="component-table"></div>
 
     <script>
