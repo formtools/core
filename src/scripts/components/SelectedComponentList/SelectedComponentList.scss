@@ -1,0 +1,20 @@
+h4 {
+  margin: 0;
+  font-size: 12px;
+  color: #555555;
+}
+tbody {
+  border-bottom: 1px solid #efefef;
+  display: block;
+  margin: 3px 0;
+  width: 100%;
+}
+.desc {
+  color: #999999;
+}
+
+.componentList {
+  :global(.badge) {
+    margin-right: 10px;
+  }
+}

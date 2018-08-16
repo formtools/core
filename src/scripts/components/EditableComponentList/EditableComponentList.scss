@@ -1,0 +1,17 @@
+.pills {
+  margin: 15px 0 10px;
+  padding: 0;
+
+  li {
+    display: inline-block;
+    background-color: #efefef;
+    padding: 2px 6px;
+    margin-right: 6px;
+    border-radius: 3px;
+
+    &.selected {
+      background-color: green;
+      color: white;
+    }
+  }
+}

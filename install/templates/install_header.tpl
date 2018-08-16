@@ -10,17 +10,17 @@
         g.notify_colours = ["c6e2ff", "f2f8ff"];
         //]]>
     </script>
-	
-	<!-- TODO bundle these -->
+
+	<!-- TODO bundle global -->
     <script src="../global/scripts/jquery.js"></script>
-    <script src="../themes/default/scripts/jquery-ui-1.8.6.custom.min.js"></script>
-    <link href="../themes/default/css/smoothness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"/>
-
-    <link rel="stylesheet" type="text/css" href="../themes/default/dist/css/styles.css?v={$version}">
-
-	<!-- bundle these too -->
     <script src="../global/scripts/general.js"></script>
     <script src="../global/scripts/rsv.js"></script>
+
+    <script src="../themes/default/scripts/jquery-ui-1.8.6.custom.min.js"></script>
+
+    <!-- these too -->
+    <link href="../themes/default/dist/css/smoothness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="../themes/default/dist/css/styles.css?v={$version}">
 
     {$head_js}
     {$head_string}
