@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import * as helpers from '../../core/helpers';
 import ComponentList from '../ComponentList/ComponentList';
 import EditableComponentList from '../EditableComponentList/EditableComponentList';
 import styles from './CompatibleComponents.scss';
@@ -27,7 +28,7 @@ class CompatibleComponents extends Component {
 				<p>
 					<input type="button" onClick={onEditComponentList} value="Customize" />
                     <span className={styles.delimiter}>|</span>
-					<input type="button" value="Continue" />
+					<input type="button" value={helpers.decodeEntities(i18n.word_continue_rightarrow)} />
 				</p>
 			</div>
 		);
@@ -54,9 +55,9 @@ class CompatibleComponents extends Component {
                     selectedThemeFolders={selectedThemeFolders} />
 
                 <p>
-                    <input type="button" onClick={(e) => { e.preventDefault(); onCancelEditComponentList(); }} value={i18n.word_cancel} />
-                    <span className={styles.delimiter}>|</span>
                     <input type="button" value={i18n.phrase_save_changes} />
+                    <span className={styles.delimiter}>|</span>
+                    <input type="button" onClick={(e) => { e.preventDefault(); onCancelEditComponentList(); }} value={i18n.word_cancel} />
                 </p>
             </div>
         );

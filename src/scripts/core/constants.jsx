@@ -1,6 +1,5 @@
 
-// TODO urgh. Nuisance, but this should be returned with the request.... meaning we need to stash that info in the CMS
-// and associate it with the core version record. Laaaaame.
+// TODO this will be returned with the initial request to get the component list - CMS needs to be updated first
 export default {
 	PRESELECTED_MODULES: [
 		'export_manager',
@@ -9,7 +8,8 @@ export default {
 		'data_visualization',
 		'swift_mailer',
 		'system_check',
-		'field_type_tinymce'
+		'field_type_tinymce',
+        'field_type_file'
 	],
 	PRESELECTED_THEMES: [
 		'classicgrey'

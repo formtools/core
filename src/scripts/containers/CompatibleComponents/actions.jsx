@@ -27,23 +27,12 @@ export const getCompatibleComponents = () => {
 export const COMPATIBLE_COMPONENTS_LOAD_ERROR = 'COMPATIBLE_COMPONENTS_LOAD_ERROR';
 export const compatibleComponentsLoadError = () => ({ type: COMPATIBLE_COMPONENTS_LOAD_ERROR });
 
-
 export const TOGGLE_API = 'TOGGLE_API';
 export const TOGGLE_MODULE = 'TOGGLE_MODULE';
 export const TOGGLE_THEME = 'TOGGLE_THEME';
 const toggleAPI = () => ({ type: TOGGLE_API });
-
-const toggleModule = (folder) => {
-	return {
-		type: TOGGLE_MODULE,
-		folder
-	}
-};
-
-const toggleTheme = (folder) => ({
-	type: TOGGLE_THEME,
-	folder
-});
+const toggleModule = (folder) => ({ type: TOGGLE_MODULE, folder });
+const toggleTheme = (folder) => ({ type: TOGGLE_THEME, folder });
 
 export const toggleComponent = (componentTypeSection, folder) => {
     if (componentTypeSection === 'modules') {

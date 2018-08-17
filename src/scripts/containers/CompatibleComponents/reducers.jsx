@@ -55,13 +55,13 @@ export default (state = {
 		case actions.TOGGLE_MODULE:
 			return {
 				...state,
-				selectedModuleFolders: selectedModulesReducer(state.selectedModuleFolders, action)
+				selectedModuleFolders: selectedComponentsReducer(state.selectedModuleFolders, action.folder)
 			};
 
 		case actions.TOGGLE_THEME:
 			return {
 				...state,
-				themes: themesReducer(state.themes, action)
+				selectedThemeFolders: selectedComponentsReducer(state.selectedThemeFolders, action.folder)
 			};
 
 		case actions.EDIT_SELECTED_COMPONENT_LIST:
@@ -86,36 +86,13 @@ export default (state = {
 	return state;
 };
 
-const selectedModulesReducer = (state = [], action) => {
-	if (action.type === actions.TOGGLE_MODULE) {
-		if (state.includes(action.folder)) {
-			return removeFromArray(state, action.folder);
-		} else {
-			return [...state, action.folder];
-		}
-	}
-	return state;
+const selectedComponentsReducer = (state = [], folder) => {
+    if (state.includes(folder)) {
+        return removeFromArray(state, folder);
+    } else {
+        return [...state, folder];
+    }
 };
-
-const themesReducer = (state = {}, action) => {
-	if (action === actions.TOGGLE_MODULE) {
-		return {
-			...state,
-			[action.folder]: {
-				selected: !state[action.folder].selected,
-				...state[action.folder]
-			},
-		}
-	}
-	return state;
-};
-
-
-
-
-
-
-
 
 
 
