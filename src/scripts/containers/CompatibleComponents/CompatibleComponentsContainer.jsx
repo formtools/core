@@ -26,13 +26,12 @@ const mapStateToProps = (state) => ({
 	isEditing: selectors.isEditing(state),
 	api: selectors.getAPI(state),
 	i18n: coreSelectors.getI18n(state),
-	// themes: selectors.getVisibleThemes(state),
-
-	modules: selectors.getVisibleModules(state),
-
-	selectedComponents: selectors.getSelectedComponents(state)
-	// selectedModuleFolders: selectors.getSelectedModuleFolders(state),
-	// selectedThemeFolders: selectors.getSelectedThemeFolders(state)
+	allThemes: selectors.getThemesArray(state),
+	allModules: selectors.getModulesArray(state),
+    selectedComponents: selectors.getSelectedComponents(state),
+    selectedComponentTypeSection: selectors.getSelectedComponentTypeSection(state),
+	selectedModuleFolders: selectors.getSelectedModuleFolders(state),
+	selectedThemeFolders: selectors.getSelectedThemeFolders(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -40,10 +39,8 @@ const mapDispatchToProps = (dispatch) => ({
     onCancelEditComponentList: () => dispatch(actions.cancelEditSelectedComponentList()),
 	saveSelectedComponentList: () => dispatch(actions.saveSelectedComponentList()),
 	getCompatibleComponents: () => dispatch(actions.getCompatibleComponents()),
-	onSearchFilter: (str) => dispatch(actions.updateSearchFilter(str)),
-	toggleAPI: (folder) => dispatch(actions.toggleAPI(folder)),
-	toggleModule: (folder) => dispatch(actions.toggleModule(folder)),
-	toggleTheme: (folder) => dispatch(actions.toggleTheme(folder)),
+    toggleComponent: (componentTypeSection, folder) => dispatch(actions.toggleComponent(componentTypeSection, folder)),
+    onSelectComponentTypeSection: (section) => dispatch(actions.selectComponentTypeSection(section)),
 	onSubmit: () => dispatch(actions.downloadCompatibleComponents())
 });
 

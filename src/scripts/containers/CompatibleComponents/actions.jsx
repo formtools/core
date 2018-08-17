@@ -27,28 +27,33 @@ export const getCompatibleComponents = () => {
 export const COMPATIBLE_COMPONENTS_LOAD_ERROR = 'COMPATIBLE_COMPONENTS_LOAD_ERROR';
 export const compatibleComponentsLoadError = () => ({ type: COMPATIBLE_COMPONENTS_LOAD_ERROR });
 
-export const UPDATE_SEARCH_FILTER = 'UPDATE_SEARCH_FILTER';
-export const updateSearchFilter = (str) => ({
-	type: UPDATE_SEARCH_FILTER,
-	searchFilter: str
-});
 
 export const TOGGLE_API = 'TOGGLE_API';
-export const toggleAPI = () => ({ type: TOGGLE_API });
-
 export const TOGGLE_MODULE = 'TOGGLE_MODULE';
-export const toggleModule = (folder) => {
+export const TOGGLE_THEME = 'TOGGLE_THEME';
+const toggleAPI = () => ({ type: TOGGLE_API });
+
+const toggleModule = (folder) => {
 	return {
 		type: TOGGLE_MODULE,
 		folder
 	}
 };
 
-export const TOGGLE_THEME = 'TOGGLE_THEME';
-export const toggleTheme = (folder) => ({
+const toggleTheme = (folder) => ({
 	type: TOGGLE_THEME,
 	folder
 });
+
+export const toggleComponent = (componentTypeSection, folder) => {
+    if (componentTypeSection === 'modules') {
+        return toggleModule(folder);
+    } else if (componentTypeSection === 'themes') {
+        return toggleTheme(folder);
+    } else {
+        return toggleAPI();
+    }
+};
 
 export const EDIT_SELECTED_COMPONENT_LIST = 'EDIT_SELECTED_COMPONENT_LIST';
 export const editSelectedComponentList = () => ({ type: EDIT_SELECTED_COMPONENT_LIST });
@@ -58,3 +63,9 @@ export const saveSelectedComponentList = () => ({ type: SAVE_SELECTED_COMPONENT_
 
 export const CANCEL_EDIT_SELECTED_COMPONENT_LIST = 'CANCEL_EDIT_SELECTED_COMPONENT_LIST';
 export const cancelEditSelectedComponentList = () => ({ type: CANCEL_EDIT_SELECTED_COMPONENT_LIST });
+
+export const SELECT_COMPONENT_TYPE_SECTION = 'SELECT_COMPONENT_TYPE_SECTION';
+export const selectComponentTypeSection = (section) => ({
+    type: 'SELECT_COMPONENT_TYPE_SECTION',
+    section
+});

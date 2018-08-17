@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SelectedComponentList from '../SelectedComponentList/SelectedComponentList';
+import ComponentList from '../ComponentList/ComponentList';
 import EditableComponentList from '../EditableComponentList/EditableComponentList';
 import styles from './CompatibleComponents.scss';
 
@@ -22,7 +22,7 @@ class CompatibleComponents extends Component {
 					needs.
 				</p>
 
-				<SelectedComponentList components={selectedComponents} i18n={i18n} />
+				<ComponentList components={selectedComponents} i18n={i18n} isEditing={false} />
 
 				<p>
 					<input type="button" onClick={onEditComponentList} value="Customize" />
@@ -34,7 +34,8 @@ class CompatibleComponents extends Component {
 	}
 
 	getEditableComponentList () {
-        const { onCancelEditComponentList, modules } = this.props;
+        const { onCancelEditComponentList, selectedComponentTypeSection, allModules, allThemes,
+            onSelectComponentTypeSection, selectedModuleFolders, selectedThemeFolders, toggleComponent, i18n } = this.props;
 
         return (
             <div>
@@ -43,16 +44,20 @@ class CompatibleComponents extends Component {
                 </h2>
 
                 <EditableComponentList
-                    selected="modules"
-                    modules={modules}
-                />
+                    selectedComponentTypeSection={selectedComponentTypeSection}
+                    onSelectComponentSection={onSelectComponentTypeSection}
+                    toggleComponent={toggleComponent}
+                    modules={allModules}
+                    themes={allThemes}
+                    i18n={i18n}
+                    selectedModuleFolders={selectedModuleFolders}
+                    selectedThemeFolders={selectedThemeFolders} />
 
                 <p>
-                    <input type="button" onClick={(e) => { e.preventDefault(); onCancelEditComponentList(); }} value="Cancel" />
+                    <input type="button" onClick={(e) => { e.preventDefault(); onCancelEditComponentList(); }} value={i18n.word_cancel} />
                     <span className={styles.delimiter}>|</span>
-                    <input type="button" value="Save Changes" />
+                    <input type="button" value={i18n.phrase_save_changes} />
                 </p>
-
             </div>
         );
 	}
@@ -67,98 +72,9 @@ class CompatibleComponents extends Component {
 		}
 
 		return (isEditing) ? this.getEditableComponentList() : this.getSelectedComponentList();
-
-		// return (
-		// 	<form onSubmit={() => onSubmit()}>
-		// 		<br />
-
-		// 		<h3>API</h3>
-
-		// 		<table className="list_table">
-		// 			<tbody>
-		// 				<tr>
-		// 					<td width="30" align="center">
-		// 						<input type="checkbox" checked={api.selected} onChange={toggleAPI} />
-		// 					</td>
-		// 					<td>
-		// 						The API (Application Programming Interface) is for developers who wish to submit their
-		// 						form data programmatically or access the Form Tools database and methods through their
-		// 				own code.
-		// 					</td>
-		// 				</tr>
-		// 			</tbody>
-		// 		</table>
-
-		// 		<br />
-
-		// 		<h3>{i18n.word_themes}</h3>
-
-		// 		<table className="list_table">
-		// 			<tbody>
-
-		// 			<EditableComponentRow
-		// 				name="Default theme" // localize
-		// 				desc="The default theme, bundled with all Form Tools installation. "
-		// 				disabled={true} selected={true} />
-
-		// 			{themes.map((theme) => (
-		// 				<ComponentRow
-		// 					key={theme.folder}
-		// 					name={theme.name}
-		// 					folder={theme.folder}
-		// 					desc={theme.desc}
-		// 					version={theme.version}
-		// 					selected={selectedThemeFolders.includes(theme.folder)}
-		// 					toggleRow={toggleTheme}
-		// 				/>
-		// 			))}
-		// 			</tbody>
-		// 		</table>
-
-		// 		<br />
-
-		// 		<div style={{ float: 'right', marginTop: 10 }}>
-		// 			<input type="text" placeholder="Filter results" value={searchFilter}
-		// 				onChange={(e) => onSearchFilter(e.target.value)} />
-		// 		</div>
-
-
-		// 		<h3>Modules</h3>
-
-		// 		<table className="list_table">
-		// 			<tbody>
-		// 			{modules.map((module) => (
-		// 				<EditableComponentRow key={module.folder}
-		// 					  name={module.name}
-		// 					  folder={module.folder}
-		// 					  desc={module.desc}
-		// 					  version={module.version}
-		// 					  selected={selectedModuleFolders.includes(module.folder)}
-		// 					  toggleRow={toggleModule}
-		// 				/>
-		// 			))}
-		// 			</tbody>
-		// 		</table>
-
-		// 		<p>
-		// 			<input type="submit" value="Continue" />
-		// 		</p>
-		// 	</form>
-		// );
 	}
 }
 CompatibleComponents.propTypes = {
-//	onSubmit: PropTypes.func.isRequired,
-//	initialized: PropTypes.bool,
-//	dataLoaded: PropTypes.bool,
-//	dataLoadError: PropTypes.bool,
-//	error: PropTypes.string,
-//	searchFilter: PropTypes.string,
-//	i18n: PropTypes.object,
-//	constants: PropTypes.object,
-//	//api: PropTypes.object,
-//	modules: PropTypes.array,
-//	themes: PropTypes.array,
 	selectedModuleFolders: PropTypes.array,
 	selectedThemeFolders: PropTypes.array,
 };

@@ -1,27 +1,33 @@
 import { createSelector } from 'reselect';
 
 export const isDataLoaded = (state) => state.compatibleComponents.loaded;
-export const getSearchFilter = (state) => state.compatibleComponents.searchFilter;
 export const getModules = (state) => state.compatibleComponents.modules;
 export const getThemes = (state) => state.compatibleComponents.themes;
-export const getVisibleModulesByFolder = (state) => state.compatibleComponents.visibleModulesByFolder;
-//export const getVisibleThemesByFolder = (state) => state.compatibleComponents.visibleThemesByFolder;
 export const getAPI = (state) => state.compatibleComponents.api;
 export const getSelectedModuleFolders = (state) => state.compatibleComponents.selectedModuleFolders;
 export const getSelectedThemeFolders = (state) => state.compatibleComponents.selectedThemeFolders;
 export const isEditing = (state) => state.compatibleComponents.isEditing;
+export const getSelectedComponentTypeSection = (state) => state.compatibleComponents.selectedComponentTypeSection;
 
-export const getVisibleModules = createSelector(
-	getVisibleModulesByFolder,
-	getModules,
-	(folders, modules) => folders.map((folder) => modules[folder])
+// generic selector
+const convertHashToArray = (hash) => {
+    const arr = [];
+    for (let prop in hash) {
+        arr.push(hash[prop]);
+    }
+    return arr;
+};
+
+// converts the hash of modules to an array
+export const getModulesArray = createSelector(
+    getModules,
+    convertHashToArray
 );
 
-// export const getVisibleThemes = createSelector(
-// 	getVisibleThemesByFolder,
-// 	getThemes,
-// 	(folders, themes) => folders.map((folder) => themes[folder])
-// );
+export const getThemesArray = createSelector(
+    getThemes,
+    convertHashToArray
+);
 
 const getSelectedModules = createSelector(
 	getSelectedModuleFolders,

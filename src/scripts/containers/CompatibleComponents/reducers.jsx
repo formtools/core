@@ -7,70 +7,42 @@ export default (state = {
 	errorLoading: false,
 	error: '',
 	isEditing: false,
-	searchFilter: '',
 	core: {},
 	api: {},
 	modules: {},
-	visibleModulesByFolder: [],
 	themes: {},
-	visibleThemesByFolder: [],
+    selectedComponentTypeSection: 'modules',
     selectedModuleFolders: [],
     selectedThemeFolders: []
 }, action) => {
 
 	switch (action.type) {
 
-		// converts the list of modules and themes to an object 	with (unique) folder names as keys
+		// converts the list of modules and themes to an object with (unique) folder names as keys
 		case actions.COMPATIBLE_COMPONENTS_LOADED:
 			const modules = {};
-			const visibleModulesByFolder = [];
 
 			action.modules.forEach(({ name, desc, folder, repo, version }) => {
 				modules[folder] = {
 					name, desc, folder, repo,
 					version: version.version
 				};
-				visibleModulesByFolder.push(folder);
 			});
 
 			const themes = {};
-			const visibleThemesByFolder = [];
 			action.themes.forEach(({ name, desc, folder, repo, version }) => {
 				themes[folder] = {
 					name, desc, folder, repo,
 					version: version.version
 				};
-				visibleThemesByFolder.push(folder);
 			});
 
 			return Object.assign({}, state, {
 				loaded: true,
 				modules,
 				themes,
-				visibleThemesByFolder,
-				visibleModulesByFolder,
 				selectedModuleFolders: C.PRESELECTED_MODULES,
 				selectedThemeFolders: C.PRESELECTED_THEMES
-			});
-
-		// updating the search filter also updates the list of visible modules by folder
-		case actions.UPDATE_SEARCH_FILTER:
-			const re = new RegExp(action.searchFilter.toLowerCase());
-
-			const sortedFilteredModules = Object.keys(state.modules)
-				.map(id => state.modules[id])
-				.filter((item) => {
-					return re.test(item.name.toLowerCase()) || re.test(item.desc.toLowerCase());
-				})
-				.sort((a) => {
-					// return matches on the module name first
-					return (re.test(a.name.toLowerCase())) ? -1 : 1;
-				})
-				.map((module) => module.folder);
-
-			return Object.assign({}, state, {
-				searchFilter: action.searchFilter,
-				visibleModulesByFolder: sortedFilteredModules
 			});
 
 		case actions.TOGGLE_API:
@@ -103,6 +75,12 @@ export default (state = {
 				...state,
 				isEditing: false
 			};
+
+        case actions.SELECT_COMPONENT_TYPE_SECTION:
+            return {
+                ...state,
+                selectedComponentTypeSection: action.section
+            };
 	}
 
 	return state;
