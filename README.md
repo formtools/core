@@ -8,7 +8,7 @@ on your server.
 ### Branches 
 
 - The `master` branch contains the latest work being done on 3.1. `master` is not production ready.
-- `3.0.x` contains the tip of the 3.0 releases. This is entirely for bug fixes. 
+- `3.0.x` (3.0.1, 3.0.2, 3.0.3...) contain the tip of the various releases, but they're tagged and put into final releases when complete. Still, handy place to get the latest 3.0.x version if you need it. 
 
 ### Form Tools History
 
