@@ -1,3 +1,5 @@
+import { allModulesSelected } from "./selectors";
+
 export const DOWNLOAD_COMPATIBLE_COMPONENTS = 'DOWNLOAD_COMPATIBLE_COMPONENTS';
 export const downloadCompatibleComponents = () => ({ type: DOWNLOAD_COMPATIBLE_COMPONENTS });
 
@@ -58,3 +60,17 @@ export const selectComponentTypeSection = (section) => ({
     type: 'SELECT_COMPONENT_TYPE_SECTION',
     section
 });
+
+export const SELECT_ALL_MODULES = 'SELECT_ALL_MODULES';
+export const DESELECT_ALL_MODULES = 'DESELECT_ALL_MODULES';
+export const toggleAllModulesSelected = () => {
+    return (dispatch, getState) => {
+        const allSelected = allModulesSelected(getState());
+
+        console.log('all selected?', allSelected);
+
+        dispatch({
+            type: allSelected ? DESELECT_ALL_MODULES : SELECT_ALL_MODULES
+        });
+    };
+};

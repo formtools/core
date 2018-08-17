@@ -1,6 +1,6 @@
 import * as actions from './actions';
 import C from '../../core/constants';
-import { removeFromArray } from '../../core/helpers';
+import { convertHashToArray, removeFromArray } from '../../core/helpers';
 
 export default (state = {
 	loaded: false,
@@ -63,6 +63,18 @@ export default (state = {
 				...state,
 				selectedThemeFolders: selectedComponentsReducer(state.selectedThemeFolders, action.folder)
 			};
+
+        case actions.SELECT_ALL_MODULES:
+            return {
+                ...state,
+                selectedModuleFolders: convertHashToArray(state.modules).map((module) => module.folder)
+            };
+
+        case actions.DESELECT_ALL_MODULES:
+            return {
+                ...state,
+                selectedModuleFolders: []
+            };
 
 		case actions.EDIT_SELECTED_COMPONENT_LIST:
 			return {

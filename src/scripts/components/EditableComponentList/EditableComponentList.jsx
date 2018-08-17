@@ -24,6 +24,21 @@ class EditableComponentList extends Component
         );
     }
 
+    getSelectAllModulesCheckbox () {
+        const { selectedComponentTypeSection, allModulesSelected, toggleAllModulesSelected, i18n } = this.props;
+
+        if (selectedComponentTypeSection !== 'modules') {
+            return null;
+        }
+
+        return (
+            <div className={styles.selectAllRow}>
+                <input type="checkbox" id="selectAllModules" checked={allModulesSelected} onChange={toggleAllModulesSelected} />
+                <label htmlFor="selectAllModules">{i18n.phrase_select_all}</label>
+            </div>
+        )
+    }
+
     render () {
         const { selectedComponentTypeSection, modules, themes, selectedModuleFolders,
             selectedThemeFolders, toggleComponent, i18n } = this.props;
@@ -53,6 +68,8 @@ class EditableComponentList extends Component
                         {this.getAPIIcon()}
                     </li>
                 </ul>
+
+                {this.getSelectAllModulesCheckbox()}
 
                 <ComponentList
                     components={components}

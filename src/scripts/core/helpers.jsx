@@ -23,3 +23,12 @@ export const decodeEntities = (() => {
 
     return decodeHTMLEntities;
 })();
+
+
+export const convertHashToArray = (hash) => {
+    const arr = [];
+    for (let prop in hash) {
+        arr.push(hash[prop]);
+    }
+    return arr;
+};

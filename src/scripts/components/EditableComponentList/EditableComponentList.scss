@@ -30,3 +30,14 @@
     }
   }
 }
+
+.selectAllRow {
+  border-bottom: 1px solid #cccccc;
+  margin: 2px 0 6px 0;
+  padding: 4px 0;
+  color: #666666;
+
+  input {
+    margin: 0 7px;
+  }
+}

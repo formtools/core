@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { convertHashToArray } from '../../core/helpers';
 
 export const isDataLoaded = (state) => state.compatibleComponents.loaded;
 export const getModules = (state) => state.compatibleComponents.modules;
@@ -8,15 +9,6 @@ export const getSelectedModuleFolders = (state) => state.compatibleComponents.se
 export const getSelectedThemeFolders = (state) => state.compatibleComponents.selectedThemeFolders;
 export const isEditing = (state) => state.compatibleComponents.isEditing;
 export const getSelectedComponentTypeSection = (state) => state.compatibleComponents.selectedComponentTypeSection;
-
-// generic selector
-const convertHashToArray = (hash) => {
-    const arr = [];
-    for (let prop in hash) {
-        arr.push(hash[prop]);
-    }
-    return arr;
-};
 
 // converts the hash of modules to an array
 export const getModulesArray = createSelector(
@@ -67,3 +59,9 @@ export const getSelectedComponents = (state) => {
 
 	return components;
 };
+
+export const allModulesSelected = createSelector(
+    getModulesArray,
+    getSelectedModuleFolders,
+    (modules, folders) => modules.length === folders.length
+);
