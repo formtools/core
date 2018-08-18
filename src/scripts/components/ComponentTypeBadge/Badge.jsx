@@ -6,7 +6,7 @@ const labelMap = {
     api: 'API'
 };
 
-const Badge = ({ type, i18n, className }) => (
+const Badge = ({ type, i18n }) => (
     <span className={`badge ${styles.badge} ${styles[type]}`}>
         {i18n[labelMap[type]]}
     </span>

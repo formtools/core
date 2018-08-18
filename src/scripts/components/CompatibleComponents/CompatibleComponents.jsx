@@ -37,7 +37,7 @@ class CompatibleComponents extends Component {
 	getEditableComponentList () {
         const { onCancelEditComponentList, selectedComponentTypeSection, allModules, allThemes, allModulesSelected,
             onSelectComponentTypeSection, selectedModuleFolders, selectedThemeFolders, toggleComponent,
-            toggleAllModulesSelected, i18n } = this.props;
+            toggleAllModulesSelected, api, i18n } = this.props;
 
         return (
             <div>
@@ -51,6 +51,7 @@ class CompatibleComponents extends Component {
                     toggleComponent={toggleComponent}
                     modules={allModules}
                     themes={allThemes}
+                    api={api}
                     i18n={i18n}
                     selectedModuleFolders={selectedModuleFolders}
                     selectedThemeFolders={selectedThemeFolders}

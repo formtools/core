@@ -40,7 +40,7 @@ class EditableComponentList extends Component
     }
 
     render () {
-        const { selectedComponentTypeSection, modules, themes, selectedModuleFolders,
+        const { selectedComponentTypeSection, modules, themes, api, selectedModuleFolders,
             selectedThemeFolders, toggleComponent, i18n } = this.props;
 
         let components = modules;
@@ -50,6 +50,8 @@ class EditableComponentList extends Component
             selectedComponents = selectedThemeFolders;
         } else if (selectedComponentTypeSection === 'api') {
             components = [];
+
+            console.log(api);
         }
 
         return (
