@@ -32,7 +32,8 @@ const mapStateToProps = (state) => ({
     selectedComponentTypeSection: selectors.getSelectedComponentTypeSection(state),
 	selectedModuleFolders: selectors.getSelectedModuleFolders(state),
 	selectedThemeFolders: selectors.getSelectedThemeFolders(state),
-    allModulesSelected: selectors.allModulesSelected(state)
+    allModulesSelected: selectors.allModulesSelected(state),
+    isAPISelected: selectors.isAPISelected(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

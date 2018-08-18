@@ -13,13 +13,18 @@ export default (state = {
 	themes: {},
     selectedComponentTypeSection: 'modules',
     selectedModuleFolders: [],
-    selectedThemeFolders: []
+    selectedThemeFolders: [],
+    apiSelected: false,
+
+    // any time the user clicks "Customize" we stash the last config here, in case they cancel their changes and
+    // want to revert
+    lastSavedComponents: {}
 }, action) => {
 
 	switch (action.type) {
 
 		// converts the list of modules and themes to an object with (unique) folder names as keys
-		case actions.COMPATIBLE_COMPONENTS_LOADED:
+        case actions.COMPATIBLE_COMPONENTS_LOADED:
 			const modules = {};
 
 			action.modules.forEach(({ name, desc, folder, repo, version }) => {
@@ -37,20 +42,29 @@ export default (state = {
 				};
 			});
 
+            let api = {};
+            if (action.api.length) {
+                api = {
+                    ...action.api[0],
+                    name: 'API',
+                    folder: 'api'
+                };
+            }
+
 			return Object.assign({}, state, {
 				loaded: true,
 				modules,
 				themes,
-				selectedModuleFolders: C.PRESELECTED_MODULES,
+                api,
+                selectedModuleFolders: C.PRESELECTED_MODULES,
 				selectedThemeFolders: C.PRESELECTED_THEMES
 			});
 
 		case actions.TOGGLE_API:
-			return Object.assign({}, state, {
-				api: Object.assign({}, state.api, {
-					selected: !state.api.selected
-				})
-			});
+            return {
+                ...state,
+                apiSelected: !state.apiSelected
+            };
 
 		case actions.TOGGLE_MODULE:
 			return {
@@ -79,14 +93,28 @@ export default (state = {
 		case actions.EDIT_SELECTED_COMPONENT_LIST:
 			return {
 				...state,
-				isEditing: true
+				isEditing: true,
+                lastSavedComponents: {
+				    selectedModuleFolders: state.selectedModuleFolders,
+                    selectedThemeFolders: state.selectedThemeFolders,
+                    apiSelected: state.apiSelected
+                }
 			};
 
 		case actions.CANCEL_EDIT_SELECTED_COMPONENT_LIST:
 			return {
 				...state,
-				isEditing: false
+				isEditing: false,
+                selectedModuleFolders: state.lastSavedComponents.selectedModuleFolders,
+                selectedThemeFolders: state.lastSavedComponents.selectedThemeFolders,
+                apiSelected: state.lastSavedComponents.apiSelected
 			};
+
+        case actions.SAVE_SELECTED_COMPONENT_LIST:
+            return {
+                ...state,
+                isEditing: false
+            };
 
         case actions.SELECT_COMPONENT_TYPE_SECTION:
             return {

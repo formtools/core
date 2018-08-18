@@ -19,8 +19,14 @@ class EditableComponentList extends Component
     }
 
     getAPIIcon () {
+        const { isAPISelected, selectedComponentTypeSection } = this.props;
+        if (!isAPISelected) {
+            return null;
+        }
+
+        const color = (selectedComponentTypeSection === 'api') ? '#ffffff' : '#999999';
         return (
-            <Checkmark size={15} color="#999999" style={{ marginLeft: 4, verticalAlign: 'sub' }} />
+            <Checkmark size={15} color={color} style={{ marginLeft: 4, verticalAlign: 'sub' }} />
         );
     }
 
@@ -41,7 +47,7 @@ class EditableComponentList extends Component
 
     render () {
         const { selectedComponentTypeSection, modules, themes, api, selectedModuleFolders,
-            selectedThemeFolders, toggleComponent, i18n } = this.props;
+            selectedThemeFolders, toggleComponent, isAPISelected, i18n } = this.props;
 
         let components = modules;
         let selectedComponents = selectedModuleFolders;
@@ -49,9 +55,8 @@ class EditableComponentList extends Component
             components = themes;
             selectedComponents = selectedThemeFolders;
         } else if (selectedComponentTypeSection === 'api') {
-            components = [];
-
-            console.log(api);
+            components = [api];
+            selectedComponents = isAPISelected ? ['api'] : [];
         }
 
         return (

@@ -20,7 +20,15 @@ class ComponentList extends Component {
             const checked = selectedComponents.indexOf(component.folder) !== -1;
             return <input type="checkbox" checked={checked} onChange={() => toggleComponent(component.folder)} />
         } else {
-            return <Badge type={component.type} i18n={i18n} />;
+            let label = '';
+            if (component.type === 'module') {
+                label = i18n.word_module;
+            } else if (component.type === 'theme') {
+                label = i18n.word_theme;
+            } else {
+                label = 'API';
+            }
+            return <Badge type={component.type} label={label} />;
         }
     }
 

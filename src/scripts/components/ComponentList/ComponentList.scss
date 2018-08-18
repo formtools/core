@@ -9,6 +9,10 @@ tr {
   margin: 3px 0;
   width: 100%;
 }
+table tbody tr:last-child {
+  border-bottom: 0;
+}
+
 .desc {
   color: #999999;
 }
