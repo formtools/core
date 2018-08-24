@@ -20,7 +20,8 @@ export const getCompatibleComponents = () => {
 					type: COMPATIBLE_COMPONENTS_LOADED,
 					api: json.api,
 					modules: json.modules,
-					themes: json.themes
+					themes: json.themes,
+                    default_components: json.default_components
 				});
 			}).catch((e) => dispatch(compatibleComponentsLoadError(e)))
 	};
@@ -66,9 +67,6 @@ export const DESELECT_ALL_MODULES = 'DESELECT_ALL_MODULES';
 export const toggleAllModulesSelected = () => {
     return (dispatch, getState) => {
         const allSelected = allModulesSelected(getState());
-
-        console.log('all selected?', allSelected);
-
         dispatch({
             type: allSelected ? DESELECT_ALL_MODULES : SELECT_ALL_MODULES
         });

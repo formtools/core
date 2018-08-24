@@ -1,5 +1,4 @@
 import * as actions from './actions';
-import C from '../../core/constants';
 import { convertHashToArray, removeFromArray } from '../../core/helpers';
 
 export default (state = {
@@ -51,13 +50,17 @@ export default (state = {
                 };
             }
 
+            const preselected_modules = action.default_components.modules.map((module) => module.folder);
+            const preselected_themes = action.default_components.themes.map((theme) => theme.folder);
+
 			return Object.assign({}, state, {
 				loaded: true,
 				modules,
 				themes,
                 api,
-                selectedModuleFolders: C.PRESELECTED_MODULES,
-				selectedThemeFolders: C.PRESELECTED_THEMES
+                apiSelected: action.default_components.api !== null,
+                selectedModuleFolders: preselected_modules,
+				selectedThemeFolders: preselected_themes
 			});
 
 		case actions.TOGGLE_API:
