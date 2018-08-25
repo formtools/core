@@ -50,15 +50,16 @@ export default (state = {
                 };
             }
 
-            const preselected_modules = action.default_components.modules.map((module) => module.folder);
-            const preselected_themes = action.default_components.themes.map((theme) => theme.folder);
+            // only preselect modules and themes that ARE in fact in the available module/theme list
+            const preselected_modules = action.default_components.modules.filter((module) => modules.hasOwnProperty(module));
+            const preselected_themes = action.default_components.themes.filter((theme) => themes.hasOwnProperty(theme));
 
 			return Object.assign({}, state, {
 				loaded: true,
 				modules,
 				themes,
                 api,
-                apiSelected: action.default_components.api !== null,
+                apiSelected: action.default_components.api,
                 selectedModuleFolders: preselected_modules,
 				selectedThemeFolders: preselected_themes
 			});
@@ -136,7 +137,3 @@ const selectedComponentsReducer = (state = [], folder) => {
         return [...state, folder];
     }
 };
-
-
-
-
