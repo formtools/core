@@ -13,7 +13,7 @@ export const getCompatibleComponents = () => {
 		const base_url = state.constants.data_source_url;
 		const core_version = state.constants.core_version;
 
-		fetch(`${base_url}/core-${core_version}.json`)
+		fetch(`${base_url}/core/${core_version}.json`)
 			.then((response) => response.json())
 			.then((json) => {
 				dispatch({
