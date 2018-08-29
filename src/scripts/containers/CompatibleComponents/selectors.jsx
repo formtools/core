@@ -7,8 +7,8 @@ export const getThemes = (state) => state.compatibleComponents.themes;
 export const getSelectedModuleFolders = (state) => state.compatibleComponents.selectedModuleFolders;
 export const getSelectedThemeFolders = (state) => state.compatibleComponents.selectedThemeFolders;
 export const isEditing = (state) => state.compatibleComponents.isEditing;
+export const showComponentInfoModal = (state) => state.compatibleComponents.showComponentInfoModal;
 export const getSelectedComponentTypeSection = (state) => state.compatibleComponents.selectedComponentTypeSection;
-
 export const getAPI = (state) => state.compatibleComponents.api;
 export const isAPISelected = (state) => state.compatibleComponents.apiSelected;
 

@@ -1,11 +1,15 @@
 import * as actions from './actions';
 import { convertHashToArray, removeFromArray } from '../../core/helpers';
+import {CLOSE_COMPONENT_CHANGELOG_MODAL} from "./actions";
 
 export default (state = {
 	loaded: false,
 	errorLoading: false,
 	error: '',
 	isEditing: false,
+    showComponentInfoModal: false,
+    componentInfoModalComponent: '', // { type: 'module' | theme | api | core, folder: '' }
+    componentChangelog: {}, // component_folder => { versions: [], isLoading: true|false }
 	core: {},
 	api: {},
 	modules: {},
@@ -125,7 +129,20 @@ export default (state = {
                 ...state,
                 selectedComponentTypeSection: action.section
             };
+
+        case actions.SHOW_COMPONENT_CHANGELOG_MODAL:
+            return {
+                ...state,
+                showComponentInfoModal: true
+            };
+
+        case actions.CLOSE_COMPONENT_CHANGELOG_MODAL:
+            return {
+                ...state,
+                showComponentInfoModal: false
+            };
 	}
+
 
 	return state;
 };

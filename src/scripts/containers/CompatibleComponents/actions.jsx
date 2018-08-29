@@ -72,3 +72,24 @@ export const toggleAllModulesSelected = () => {
         });
     };
 };
+
+
+export const SHOW_COMPONENT_CHANGELOG_MODAL = 'SHOW_COMPONENT_CHANGELOG_MODAL';
+export const showComponentInfo = (componentType, component, version) => {
+
+    return (dispatch, getState) => {
+        // first we show a modal with a loading spinner + whatever info we have at our disposal
+
+        dispatch({
+            type: SHOW_COMPONENT_CHANGELOG_MODAL
+        });
+    }
+
+    // then we request the content from the server (or just load from memory)
+
+    //
+};
+
+
+export const CLOSE_COMPONENT_CHANGELOG_MODAL = 'CLOSE_COMPONENT_CHANGELOG_MODAL';
+export const closeComponentInfo = () => ({ type: CLOSE_COMPONENT_CHANGELOG_MODAL });

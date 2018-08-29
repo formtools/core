@@ -4,14 +4,6 @@ import styles from './ComponentList.scss';
 
 
 class ComponentList extends Component {
-    constructor (props) {
-        super(props);
-        this.viewChangelog = this.viewChangelog.bind(this);
-    }
-
-    viewChangelog () {
-        const { getChangelog } = this.props;
-    }
 
     getFirstColumn (component) {
         const { isEditing, i18n, selectedComponents, toggleComponent } = this.props;
@@ -33,7 +25,7 @@ class ComponentList extends Component {
     }
 
     render () {
-    	const { components } = this.props;
+    	const { components, onShowComponentInfo } = this.props;
 
         return (
             <table className={styles.componentList}>
@@ -48,7 +40,7 @@ class ComponentList extends Component {
                         </td>
                         <td width="200">{component.version}</td>
                         <td width="200" align="right">
-                            <a href="#" onClick={(e) => { e.preventDefault(); this.viewChangelog(component); }}>About</a>
+                            <a href="#" onClick={(e) => { e.preventDefault(); onShowComponentInfo(component); }}>About</a>
                         </td>
                     </tr>
                 ))}

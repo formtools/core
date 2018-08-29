@@ -4,26 +4,54 @@ import * as helpers from '../../core/helpers';
 import ComponentList from '../ComponentList/ComponentList';
 import EditableComponentList from '../EditableComponentList/EditableComponentList';
 import styles from './CompatibleComponents.scss';
-
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 class CompatibleComponents extends Component {
 
+    getComponentInfoModal () {
+        const { isShowingComponentInfoModal, onCloseComponentInfo } = this.props;
+
+        const style = {
+            top: '50%',
+            left: '50%',
+            width: 600,
+            height: 400,
+            transform: 'translate(-50%, -$50%)'
+        };
+
+        return (
+            <Dialog
+                open={isShowingComponentInfoModal}
+                onClose={onCloseComponentInfo}>
+                <div style={style}>
+                    ...!
+                </div>
+            </Dialog>
+        );
+    }
+
 	getSelectedComponentList () {
-		const { onEditComponentList, selectedComponents, i18n } = this.props;
+		const { onEditComponentList, onShowComponentInfo, selectedComponents, i18n } = this.props;
 
 		return (
 			<div>
 				<h2>
 					Selected Components
 				</h2>
-
 				<p>
 					We recommend the following components that are useful for the majority of Form Tools installations.
 					Click customize to see what other components exist, and tailor your installation to your own
 					needs.
 				</p>
 
-				<ComponentList components={selectedComponents} i18n={i18n} isEditing={false} />
+                {this.getComponentInfoModal()}
+
+				<ComponentList components={selectedComponents} i18n={i18n} isEditing={false}
+                    onShowComponentInfo={onShowComponentInfo} />
 
 				<p>
 					<input type="button" onClick={onEditComponentList} value="Customize" />

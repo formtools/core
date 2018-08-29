@@ -24,6 +24,7 @@ const mapStateToProps = (state) => ({
 	initialized: coreSelectors.getInitialized(state),
 	dataLoaded: selectors.isDataLoaded(state),
 	isEditing: selectors.isEditing(state),
+    isShowingComponentInfoModal: selectors.showComponentInfoModal(state),
 	api: selectors.getAPI(state),
 	i18n: coreSelectors.getI18n(state),
 	allThemes: selectors.getThemesArray(state),
@@ -33,7 +34,7 @@ const mapStateToProps = (state) => ({
 	selectedModuleFolders: selectors.getSelectedModuleFolders(state),
 	selectedThemeFolders: selectors.getSelectedThemeFolders(state),
     allModulesSelected: selectors.allModulesSelected(state),
-    isAPISelected: selectors.isAPISelected(state)
+    isAPISelected: selectors.isAPISelected(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -44,6 +45,8 @@ const mapDispatchToProps = (dispatch) => ({
     toggleComponent: (componentTypeSection, folder) => dispatch(actions.toggleComponent(componentTypeSection, folder)),
     onSelectComponentTypeSection: (section) => dispatch(actions.selectComponentTypeSection(section)),
     toggleAllModulesSelected: () => dispatch(actions.toggleAllModulesSelected()),
+    onShowComponentInfo: () => dispatch(actions.showComponentInfo()), // TODO rename
+    onCloseComponentInfo: () => dispatch(actions.closeComponentInfo()),
 	onSubmit: () => dispatch(actions.downloadCompatibleComponents())
 });
 
