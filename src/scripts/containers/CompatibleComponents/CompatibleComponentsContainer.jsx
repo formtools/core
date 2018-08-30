@@ -35,6 +35,7 @@ const mapStateToProps = (state) => ({
 	selectedThemeFolders: selectors.getSelectedThemeFolders(state),
     allModulesSelected: selectors.allModulesSelected(state),
     isAPISelected: selectors.isAPISelected(state),
+    modalInfo: selectors.getComponentInfoModalInfo(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -45,7 +46,7 @@ const mapDispatchToProps = (dispatch) => ({
     toggleComponent: (componentTypeSection, folder) => dispatch(actions.toggleComponent(componentTypeSection, folder)),
     onSelectComponentTypeSection: (section) => dispatch(actions.selectComponentTypeSection(section)),
     toggleAllModulesSelected: () => dispatch(actions.toggleAllModulesSelected()),
-    onShowComponentInfo: () => dispatch(actions.showComponentInfo()), // TODO rename
+    onShowComponentInfo: (componentInfo) => dispatch(actions.showComponentInfo(componentInfo)), // TODO rename
     onCloseComponentInfo: () => dispatch(actions.closeComponentInfo()),
 	onSubmit: () => dispatch(actions.downloadCompatibleComponents())
 });

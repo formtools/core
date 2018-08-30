@@ -1,4 +1,4 @@
-import styles from './badge.scss';
+import styles from './Badge.scss';
 
 const Badge = ({ type, label }) => (
     <span className={`badge ${styles.badge} ${styles[type]}`}>

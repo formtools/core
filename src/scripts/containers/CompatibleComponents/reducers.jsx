@@ -1,6 +1,6 @@
 import * as actions from './actions';
 import { convertHashToArray, removeFromArray } from '../../core/helpers';
-import {CLOSE_COMPONENT_CHANGELOG_MODAL} from "./actions";
+
 
 export default (state = {
 	loaded: false,
@@ -8,12 +8,13 @@ export default (state = {
 	error: '',
 	isEditing: false,
     showComponentInfoModal: false,
-    componentInfoModalComponent: '', // { type: 'module' | theme | api | core, folder: '' }
+    componentInfoModalContent: '', // { type: 'module' | theme | api | core, folder: '' }
     componentChangelog: {}, // component_folder => { versions: [], isLoading: true|false }
 	core: {},
 	api: {},
 	modules: {},
 	themes: {},
+    changelogs: {}, // populated on demand when a user clicks the About link for a component
     selectedComponentTypeSection: 'modules',
     selectedModuleFolders: [],
     selectedThemeFolders: [],
@@ -133,13 +134,25 @@ export default (state = {
         case actions.SHOW_COMPONENT_CHANGELOG_MODAL:
             return {
                 ...state,
-                showComponentInfoModal: true
+                showComponentInfoModal: true,
+                componentInfoModalContent: {
+                    componentType: action.payload.componentType,
+                    folder: action.payload.folder
+                }
             };
 
         case actions.CLOSE_COMPONENT_CHANGELOG_MODAL:
             return {
                 ...state,
                 showComponentInfoModal: false
+            };
+
+        case actions.COMPONENT_HISTORY_LOADED:
+            const updatedChangelogs = { ...state.changelogs };
+            updatedChangelogs[action.payload.folder] = action.payload.versions;
+            return {
+                ...state,
+                changelogs: updatedChangelogs
             };
 	}
 

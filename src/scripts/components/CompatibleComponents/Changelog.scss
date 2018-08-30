@@ -1,0 +1,16 @@
+.changelog {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+
+  .colVersion {
+    width: 80px;
+  }
+  .colReleaseDate {
+    width: 180px;
+  }
+  .colGithubMilestone {
+    width: 30px;
+  }
+}

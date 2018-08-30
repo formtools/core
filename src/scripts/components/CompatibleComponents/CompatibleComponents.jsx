@@ -4,34 +4,23 @@ import * as helpers from '../../core/helpers';
 import ComponentList from '../ComponentList/ComponentList';
 import EditableComponentList from '../EditableComponentList/EditableComponentList';
 import styles from './CompatibleComponents.scss';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import ScrollableDialog from '../Dialogs/ScrollableDialog';
+import Changelog from './Changelog';
+
 
 class CompatibleComponents extends Component {
 
-    getComponentInfoModal () {
-        const { isShowingComponentInfoModal, onCloseComponentInfo } = this.props;
-
-        const style = {
-            top: '50%',
-            left: '50%',
-            width: 600,
-            height: 400,
-            transform: 'translate(-50%, -$50%)'
-        };
-
+    getModal () {
+        const { isShowingComponentInfoModal, onCloseComponentInfo, modalInfo, i18n } = this.props;
         return (
-            <Dialog
+            <ScrollableDialog
                 open={isShowingComponentInfoModal}
-                onClose={onCloseComponentInfo}>
-                <div style={style}>
-                    ...!
-                </div>
-            </Dialog>
-        );
+                onClose={onCloseComponentInfo}
+                isLoading={!modalInfo.loaded}
+                title={modalInfo.title}
+                desc={modalInfo.desc}
+                content={<Changelog data={modalInfo.data} />} />
+        )
     }
 
 	getSelectedComponentList () {
@@ -48,7 +37,7 @@ class CompatibleComponents extends Component {
 					needs.
 				</p>
 
-                {this.getComponentInfoModal()}
+                {this.getModal()}
 
 				<ComponentList components={selectedComponents} i18n={i18n} isEditing={false}
                     onShowComponentInfo={onShowComponentInfo} />
@@ -72,6 +61,8 @@ class CompatibleComponents extends Component {
                 <h2>
 					Selected Components &raquo; Customize
                 </h2>
+
+                {this.getModal()}
 
                 <EditableComponentList
                     selectedComponentTypeSection={selectedComponentTypeSection}

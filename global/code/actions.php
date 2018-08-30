@@ -55,12 +55,6 @@ if (!$permission_check["has_permission"]) {
 }
 
 switch ($action) {
-
-	//
-	case "get_component_info":
-
-		break;
-
 	case "test_folder_permissions":
 		list($success, $message) = Files::checkUploadFolder($request["file_upload_dir"]);
 		$success = ($success) ? 1 : 0;

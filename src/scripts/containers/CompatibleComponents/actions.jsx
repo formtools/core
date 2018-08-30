@@ -1,4 +1,5 @@
-import { allModulesSelected } from "./selectors";
+import * as selectors from "./selectors";
+import store from "../../core/store";
 
 export const DOWNLOAD_COMPATIBLE_COMPONENTS = 'DOWNLOAD_COMPATIBLE_COMPONENTS';
 export const downloadCompatibleComponents = () => ({ type: DOWNLOAD_COMPATIBLE_COMPONENTS });
@@ -66,28 +67,56 @@ export const SELECT_ALL_MODULES = 'SELECT_ALL_MODULES';
 export const DESELECT_ALL_MODULES = 'DESELECT_ALL_MODULES';
 export const toggleAllModulesSelected = () => {
     return (dispatch, getState) => {
-        const allSelected = allModulesSelected(getState());
+        const allSelected = selectors.allModulesSelected(getState());
         dispatch({
             type: allSelected ? DESELECT_ALL_MODULES : SELECT_ALL_MODULES
         });
     };
 };
 
-
 export const SHOW_COMPONENT_CHANGELOG_MODAL = 'SHOW_COMPONENT_CHANGELOG_MODAL';
-export const showComponentInfo = (componentType, component, version) => {
 
+// folder is the theme/module folder, or "core" or "api"
+export const showComponentInfo = ({ componentType, folder }) => {
     return (dispatch, getState) => {
-        // first we show a modal with a loading spinner + whatever info we have at our disposal
+        const changelogs = selectors.getChangelogs(getState());
+
+        if (!changelogs.hasOwnProperty(folder)) {
+            queryComponentInfo(componentType, folder);
+        }
 
         dispatch({
-            type: SHOW_COMPONENT_CHANGELOG_MODAL
+            type: SHOW_COMPONENT_CHANGELOG_MODAL,
+            payload: {
+                componentType,
+                folder
+            }
         });
     }
+};
 
-    // then we request the content from the server (or just load from memory)
 
-    //
+// pings the server to get the component history for the Core, API, module or theme
+export const COMPONENT_HISTORY_LOADED = 'COMPONENT_HISTORY_LOADED';
+const queryComponentInfo = (componentType, folder) => {
+    var url = `../global/code/actions-react.php?action=get_component_info&type=${componentType}&component=${folder}`;
+
+    fetch(url)
+        .then((response) => response.json())
+        .then((json) => {
+            store.dispatch({
+                type: COMPONENT_HISTORY_LOADED,
+                payload: {
+                    folder,
+                    versions: json.versions
+                }
+            });
+        }).catch((e) => {
+            // store.dispatch({
+            //     type: INIT_DATA_ERROR_LOADING,
+            //     error: e
+            // });
+        });
 };
 
 

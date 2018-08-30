@@ -17,8 +17,10 @@ class ComponentList extends Component {
                 label = i18n.word_module;
             } else if (component.type === 'theme') {
                 label = i18n.word_theme;
-            } else {
+            } else if (component.type === 'api') {
                 label = 'API';
+            } else {
+                label = 'Core';
             }
             return <Badge type={component.type} label={label} />;
         }
@@ -40,7 +42,11 @@ class ComponentList extends Component {
                         </td>
                         <td width="200">{component.version}</td>
                         <td width="200" align="right">
-                            <a href="#" onClick={(e) => { e.preventDefault(); onShowComponentInfo(component); }}>About</a>
+                            <a href="#" onClick={(e) => { e.preventDefault(); onShowComponentInfo({
+                                componentType: component.type,
+                                folder: component.folder,
+                                version: component.version
+                            }); }}>About</a>
                         </td>
                     </tr>
                 ))}

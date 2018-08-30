@@ -1,3 +1,6 @@
+import moment from 'moment';
+
+
 
 export const removeFromArray = (array, targetItem) => {
 	return array.filter((item) => item !== targetItem);
@@ -31,4 +34,9 @@ export const convertHashToArray = (hash) => {
         arr.push(hash[prop]);
     }
     return arr;
+};
+
+
+export const formatDatetime = (date, format = "MMM D, YYYY h:mm A") => {
+    return moment(date).format(format);
 };
