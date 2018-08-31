@@ -101,6 +101,8 @@ export const getComponentInfoModalInfo = createSelector(
 
         const modalInfo = {
             title: '',
+            type: componentType,
+            folder,
             loaded: changelogLoaded,
             prevLinkEnabled: true,
             nextLinkEnabled: true
@@ -150,6 +152,7 @@ export const getComponentInfoModalInfo = createSelector(
         return modalInfo;
     }
 );
+
 
 export const getPrevNextComponent = createSelector(
     getComponentInfoModalContent,

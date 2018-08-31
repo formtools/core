@@ -6,8 +6,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
 import * as helpers from '../../core/helpers';
 import styles from './ScrollableDialog.scss';
+import { Book } from '../Icons/Icons';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 class ScrollableDialog extends Component {
@@ -20,7 +23,7 @@ class ScrollableDialog extends Component {
         scroll: 'paper'
     };
 
-    // N.B. This component is always rendered to allow the clean fade in and out, so this is misleading
+    // N.B. This component is always rendered to allow the clean fade in and out, so this is misleading note
     componentWillMount () {
         document.addEventListener('keydown', this.onKeypress);
     }
@@ -62,10 +65,19 @@ class ScrollableDialog extends Component {
                 <DialogContent className={styles.componentDesc}><div dangerouslySetInnerHTML={{ __html: this.props.desc }} /></DialogContent>
             );
         }
+        return null;
     }
 
     render () {
-        const { open, onClose, prevLinkEnabled, nextLinkEnabled, onPrevNext, isLoading, i18n } = this.props;
+        const { open, onClose, prevLinkEnabled, nextLinkEnabled, onPrevNext, isLoading, hasDocLink, docLink, i18n } = this.props;
+
+        const iconButtonProps = {
+            className: styles.docButtonLink
+        };
+        if (hasDocLink) {
+            iconButtonProps.target = '_blank';
+            iconButtonProps.href = docLink;
+        }
 
         return (
             <Dialog className={styles.dialog}
@@ -75,7 +87,16 @@ class ScrollableDialog extends Component {
                 scroll={this.state.scroll}
                 maxWidth="md"
                 aria-labelledby="scroll-dialog-title">
-                <DialogTitle id="scroll-dialog-title">{this.props.title}</DialogTitle>
+
+                <DialogTitle id="scroll-dialog-title">
+                    {this.props.title}
+                    <Tooltip title="View documentation" placement="left">
+                        <IconButton {...iconButtonProps}>
+                            <Book color="#999999" />
+                        </IconButton>
+                    </Tooltip>
+                </DialogTitle>
+
                 {this.getDesc()}
                 <DialogContent classes={{ root: isLoading ? styles.contentRoot : null }}>{this.getContent()}</DialogContent>
                 <DialogActions className={styles.buttonRow}>

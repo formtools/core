@@ -12,6 +12,17 @@ class CompatibleComponents extends Component {
 
     getModal () {
         const { isShowingComponentInfoModal, onCloseComponentInfo, onPrevNext, modalInfo, i18n } = this.props;
+        const hasDocLink = modalInfo.type !== 'theme';
+        let docLink = null;
+        if (hasDocLink) {
+            if (modalInfo.type === 'module') {
+                docLink = `https://docs.formtools.org/modules/${modalInfo.folder}/`;
+            } else if (modalInfo.type === 'api') {
+                docLink = `https://docs.formtools.org/api/v2/`;
+            } else if (modalInfo.type === 'core') {
+                docLink = 'https://docs.formtools.org/';
+            }
+        }
 
         return (
             <ScrollableDialog
@@ -24,6 +35,8 @@ class CompatibleComponents extends Component {
                 nextLinkEnabled={modalInfo.nextLinkEnabled}
                 onPrevNext={onPrevNext}
                 content={<Changelog data={modalInfo.data} />}
+                hasDocLink={hasDocLink}
+                docLink={docLink}
                 i18n={i18n} />
         )
     }

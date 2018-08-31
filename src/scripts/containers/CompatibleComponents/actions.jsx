@@ -142,3 +142,4 @@ export const onPrevNext = (dir) => {
         }
     };
 };
+
