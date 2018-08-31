@@ -34,7 +34,8 @@ export default (state = {
 			action.modules.forEach(({ name, desc, folder, repo, version }) => {
 				modules[folder] = {
 					name, desc, folder, repo,
-					version: version.version
+					version: version.version,
+                    type: 'module'
 				};
 			});
 
@@ -42,7 +43,8 @@ export default (state = {
 			action.themes.forEach(({ name, desc, folder, repo, version }) => {
 				themes[folder] = {
 					name, desc, folder, repo,
-					version: version.version
+					version: version.version,
+                    type: 'theme'
 				};
 			});
 
@@ -51,6 +53,7 @@ export default (state = {
                 api = {
                     name: 'API',
                     folder: 'api',
+                    type: 'api',
                     version: action.api[0].version,
                     release_date: action.api[0].release_date
                 };

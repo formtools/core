@@ -47,7 +47,7 @@ class EditableComponentList extends Component
 
     render () {
         const { selectedComponentTypeSection, modules, themes, api, selectedModuleFolders,
-            selectedThemeFolders, toggleComponent, isAPISelected, i18n } = this.props;
+            selectedThemeFolders, toggleComponent, isAPISelected, onShowComponentInfo, i18n } = this.props;
 
         let components = modules;
         let selectedComponents = selectedModuleFolders;
@@ -82,7 +82,8 @@ class EditableComponentList extends Component
                     components={components}
                     selectedComponents={selectedComponents}
                     toggleComponent={(folder) => toggleComponent(selectedComponentTypeSection, folder)}
-                    isEditing={true} />
+                    isEditing={true}
+                    onShowComponentInfo={onShowComponentInfo} />
             </div>
         );
     }

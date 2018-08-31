@@ -59,7 +59,7 @@ class CompatibleComponents extends Component {
 	getEditableComponentList () {
         const { onCancelEditComponentList, selectedComponentTypeSection, allModules, allThemes, allModulesSelected,
             onSelectComponentTypeSection, selectedModuleFolders, selectedThemeFolders, toggleComponent,
-            toggleAllModulesSelected, api, isAPISelected, saveSelectedComponentList, i18n } = this.props;
+            toggleAllModulesSelected, api, isAPISelected, saveSelectedComponentList, onShowComponentInfo, i18n } = this.props;
 
         return (
             <div>
@@ -81,7 +81,8 @@ class CompatibleComponents extends Component {
                     selectedThemeFolders={selectedThemeFolders}
                     isAPISelected={isAPISelected}
                     allModulesSelected={allModulesSelected}
-                    toggleAllModulesSelected={toggleAllModulesSelected} />
+                    toggleAllModulesSelected={toggleAllModulesSelected}
+                    onShowComponentInfo={onShowComponentInfo} />
 
                 <p>
                     <input type="button" value={i18n.phrase_save_changes} onClick={saveSelectedComponentList}/>

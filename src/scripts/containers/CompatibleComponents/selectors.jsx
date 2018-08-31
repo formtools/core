@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { convertHashToArray } from '../../core/helpers';
-import {getConstants} from "../../core/selectors";
+import { getConstants } from "../../core/selectors";
 
 export const isDataLoaded = (state) => state.compatibleComponents.loaded;
 export const getModules = (state) => state.compatibleComponents.modules;
@@ -42,7 +42,6 @@ const getSelectedThemes = createSelector(
 // convenience method to return a flat, ordered array of all selected components in a standardized structure. Used on
 // the non-editable list
 export const getSelectedComponents = (state) => {
-
     var constants = getConstants(state);
 	const components = [{
 	    folder: 'core',
@@ -94,8 +93,9 @@ export const getComponentInfoModalInfo = createSelector(
     getThemes,
     getChangelogs,
     isEditing,
+    getSelectedComponentTypeSection,
     getSelectedComponents,
-    (componentInfoModalContent, core, api, modules, themes, changelogs, isEditing, selectedComponents) => {
+    (componentInfoModalContent, core, api, modules, themes, changelogs, isEditing, selectedComponentTypeSection, selectedComponents) => {
         const { componentType, folder } = componentInfoModalContent;
         const changelogLoaded = changelogs.hasOwnProperty(folder);
 
@@ -114,20 +114,35 @@ export const getComponentInfoModalInfo = createSelector(
             modalInfo.desc = themes[folder].desc;
         } else if (componentType === 'api') {
             modalInfo.title = 'API';
-            modalInfo.desc = core.desc;
+            modalInfo.desc = api.desc;
         } else if (componentType === 'core') {
             modalInfo.title = 'Form Tools Core';
             modalInfo.desc = core.desc;
-            modalInfo.prevLinkEnabled = false; // the core is always listed first. Bit of a hack, but simple.
         }
 
+        let list = [];
         if (isEditing) {
+            let listMap = {
+                modules: modules,
+                themes: themes
+            };
 
-            // if this is the last selected item, nextLinkEnabled is false
-        } else {
-            if (selectedComponents.length === 0 || selectedComponents[selectedComponents.length-1].folder === folder) {
-                modalInfo.nextLinkEnabled = false;
+            if (listMap.hasOwnProperty(selectedComponentTypeSection)) {
+                list = convertHashToArray(listMap[selectedComponentTypeSection]);
+            } else {
+                list = [{ folder: 'api'}];
             }
+        } else {
+            list = selectedComponents;
+        }
+
+
+        const index = list.findIndex(i => i.folder === folder);
+        if (index === 0) {
+            modalInfo.prevLinkEnabled = false;
+        }
+        if (list.length === 1 || list[list.length-1].folder === folder) {
+            modalInfo.nextLinkEnabled = false;
         }
 
         modalInfo.data = changelogLoaded ? changelogs[folder] : [];
@@ -138,36 +153,48 @@ export const getComponentInfoModalInfo = createSelector(
 
 export const getPrevNextComponent = createSelector(
     getComponentInfoModalContent,
-    getCore,
+    getSelectedComponentTypeSection,
     getAPI,
-    getModules,
-    getThemes,
+    getModulesArray,
+    getThemesArray,
     isEditing,
     getSelectedComponents,
-    (componentInfoModalContent, core, api, modules, themes, isEditing, selectedComponents) => {
+    (componentInfoModalContent, editingComponentTypeSection, api, modules, themes, isEditing, selectedComponents) => {
         const prevNext = {
             prev: null,
             next: null
         };
 
+        let list = [];
         if (isEditing) {
-            // TODO
+            let listMap = {
+                modules: modules,
+                themes: themes
+            };
+            if (listMap.hasOwnProperty(editingComponentTypeSection)) {
+                list = listMap[editingComponentTypeSection];
+            } else {
+                list = [{ folder: 'api' }];
+            }
         } else {
-            const index = selectedComponents.findIndex(i => i.folder === componentInfoModalContent.folder);
-            if (index > 0) {
-                const prev = selectedComponents[index-1];
-                prevNext.prev = {
-                    componentType: prev.type,
-                    folder: prev.folder
-                };
-            }
-            if (index < selectedComponents.length - 1) {
-                const next = selectedComponents[index+1];
-                prevNext.next = {
-                    componentType: next.type,
-                    folder: next.folder
-                };
-            }
+            list = selectedComponents;
+        }
+
+        const index = list.findIndex(i => i.folder === componentInfoModalContent.folder);
+
+        if (index > 0) {
+            const prev = list[index-1];
+            prevNext.prev = {
+                componentType: prev.type,
+                folder: prev.folder
+            };
+        }
+        if (index < list.length - 1) {
+            const next = list[index+1];
+            prevNext.next = {
+                componentType: next.type,
+                folder: next.folder
+            };
         }
 
         return prevNext;
