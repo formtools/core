@@ -3,35 +3,12 @@ import PropTypes from 'prop-types';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
 import CircularProgress from '@material-ui/core/CircularProgress';
-
-
-const styles = {
-    root: {
-        textAlign: 'left'
-    },
-    avatar: {
-        backgroundColor: blue[100],
-        color: blue[600],
-    },
-    highlight: {
-        backgroundColor: '#e0e9ff',
-        border: '1px solid #0099cc',
-        padding: 15,
-        borderRadius: 4,
-        color: '#0099cc',
-        margin: '0 20px 5px 20px',
-        flex: '1 0 auto'
-    },
-    nav: {
-        width: '100%'
-    }
-};
+import * as helpers from '../../core/helpers';
+import styles from './ScrollableDialog.scss';
+import Fade from '@material-ui/core/Fade';
 
 
 class ScrollableDialog extends Component {
@@ -41,32 +18,46 @@ class ScrollableDialog extends Component {
 
     getContent () {
         const { isLoading, content } = this.props;
+
         if (isLoading) {
-            return <CircularProgress />;
+            return (
+                <CircularProgress style={{ color: '#21aa1e' }} size={50} thickness={3} />
+            );
         }
 
         return content;
     }
 
+    getDesc () {
+        if (!this.props.isLoading) {
+            return (
+                <DialogContent className={styles.componentDesc}><div dangerouslySetInnerHTML={{ __html: this.props.desc }} /></DialogContent>
+            );
+        }
+    }
+
     render () {
-        const { open, onClose, title, desc } = this.props;
+        const { open, onClose, prevLinkEnabled, nextLinkEnabled, onPrevNext, isLoading, i18n } = this.props;
+
         return (
-            <Dialog style={styles.root}
+            <Dialog className={styles.dialog}
                 open={open}
+                classes={{ paper: styles.paper }}
                 onClose={onClose}
                 scroll={this.state.scroll}
                 maxWidth="md"
                 aria-labelledby="scroll-dialog-title">
-
-                <DialogTitle id="scroll-dialog-title">
-                    {title}
-                </DialogTitle>
-                <DialogContent style={styles.highlight}>{desc}</DialogContent>
-                <DialogContent>{this.getContent()}</DialogContent>
-                <DialogActions>
-                    <div style={styles.nav}>
-                        <Button onClick={onClose} color="primary">&laquo; Prev</Button>
-                        <Button onClick={onClose} color="primary">Next &raquo;</Button>
+                <DialogTitle id="scroll-dialog-title">{this.props.title}</DialogTitle>
+                {this.getDesc()}
+                <DialogContent classes={{ root: isLoading ? styles.contentRoot : null }}>{this.getContent()}</DialogContent>
+                <DialogActions className={styles.buttonRow}>
+                    <div className={styles.prevNextNav}>
+                        <Button onClick={() => onPrevNext('prev')} color="primary" disabled={!prevLinkEnabled}>
+                            <span>&laquo; Prev</span>
+                        </Button>
+                        <Button onClick={() => onPrevNext('next')} color="primary" disabled={!nextLinkEnabled}>
+                            <span>Next &raquo;</span>
+                        </Button>
                     </div>
                     <Button onClick={onClose} color="primary">Close</Button>
                 </DialogActions>
@@ -85,5 +76,4 @@ ScrollableDialog.propTypes = {
     onPrevNextClick: PropTypes.func
 };
 
-
-export default withStyles(styles)(ScrollableDialog);
+export default ScrollableDialog;

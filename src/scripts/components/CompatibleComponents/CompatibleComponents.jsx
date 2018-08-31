@@ -11,7 +11,8 @@ import Changelog from './Changelog';
 class CompatibleComponents extends Component {
 
     getModal () {
-        const { isShowingComponentInfoModal, onCloseComponentInfo, modalInfo, i18n } = this.props;
+        const { isShowingComponentInfoModal, onCloseComponentInfo, onPrevNext, modalInfo, i18n } = this.props;
+
         return (
             <ScrollableDialog
                 open={isShowingComponentInfoModal}
@@ -19,7 +20,11 @@ class CompatibleComponents extends Component {
                 isLoading={!modalInfo.loaded}
                 title={modalInfo.title}
                 desc={modalInfo.desc}
-                content={<Changelog data={modalInfo.data} />} />
+                prevLinkEnabled={modalInfo.prevLinkEnabled}
+                nextLinkEnabled={modalInfo.nextLinkEnabled}
+                onPrevNext={onPrevNext}
+                content={<Changelog data={modalInfo.data} />}
+                i18n={i18n} />
         )
     }
 

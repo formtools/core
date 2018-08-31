@@ -99,7 +99,7 @@ export const showComponentInfo = ({ componentType, folder }) => {
 // pings the server to get the component history for the Core, API, module or theme
 export const COMPONENT_HISTORY_LOADED = 'COMPONENT_HISTORY_LOADED';
 const queryComponentInfo = (componentType, folder) => {
-    var url = `../global/code/actions-react.php?action=get_component_info&type=${componentType}&component=${folder}`;
+    const url = `../global/code/actions-react.php?action=get_component_info&type=${componentType}&component=${folder}`;
 
     fetch(url)
         .then((response) => response.json())
@@ -108,10 +108,12 @@ const queryComponentInfo = (componentType, folder) => {
                 type: COMPONENT_HISTORY_LOADED,
                 payload: {
                     folder,
+                    desc: json.hasOwnProperty('desc') ? json.desc : null,
                     versions: json.versions
                 }
             });
         }).catch((e) => {
+            // TODO
             // store.dispatch({
             //     type: INIT_DATA_ERROR_LOADING,
             //     error: e
@@ -122,3 +124,21 @@ const queryComponentInfo = (componentType, folder) => {
 
 export const CLOSE_COMPONENT_CHANGELOG_MODAL = 'CLOSE_COMPONENT_CHANGELOG_MODAL';
 export const closeComponentInfo = () => ({ type: CLOSE_COMPONENT_CHANGELOG_MODAL });
+
+
+export const onPrevNext = (dir) => {
+    return (dispatch, getState) => {
+        const prevNext = selectors.getPrevNextComponent(getState());
+
+        if ((dir === 'prev' && prevNext.prev === null) ||
+            (dir === 'next' && prevNext.next === null)) {
+            return;
+        }
+
+        if (dir === 'prev') {
+            dispatch(showComponentInfo({ ...prevNext.prev }));
+        } else {
+            dispatch(showComponentInfo({ ...prevNext.next }));
+        }
+    };
+};

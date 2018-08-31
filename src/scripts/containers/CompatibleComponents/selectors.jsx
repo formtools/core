@@ -114,8 +114,10 @@ export const getComponentInfoModalInfo = createSelector(
             modalInfo.desc = theme[folder].desc;
         } else if (componentType === 'api') {
             modalInfo.title = 'API';
+            modalInfo.desc = core.desc;
         } else if (componentType === 'core') {
             modalInfo.title = 'Form Tools Core';
+            modalInfo.desc = core.desc;
             modalInfo.prevLinkEnabled = false; // the core is always listed first. Bit of a hack, but simple.
         }
 
@@ -123,7 +125,7 @@ export const getComponentInfoModalInfo = createSelector(
 
             // if this is the last selected item, nextLinkEnabled is false
         } else {
-            if (selectedComponents.length === 0 || selectedComponents[selectedComponents.length].folder === folder) {
+            if (selectedComponents.length === 0 || selectedComponents[selectedComponents.length-1].folder === folder) {
                 modalInfo.nextLinkEnabled = false;
             }
         }
@@ -131,5 +133,43 @@ export const getComponentInfoModalInfo = createSelector(
         modalInfo.data = changelogLoaded ? changelogs[folder] : [];
 
         return modalInfo;
+    }
+);
+
+export const getPrevNextComponent = createSelector(
+    getComponentInfoModalContent,
+    getCore,
+    getAPI,
+    getModules,
+    getThemes,
+    isEditing,
+    getSelectedComponents,
+    (componentInfoModalContent, core, api, modules, themes, isEditing, selectedComponents) => {
+        const prevNext = {
+            prev: null,
+            next: null
+        };
+
+        if (isEditing) {
+            // TODO
+        } else {
+            const index = selectedComponents.findIndex(i => i.folder === componentInfoModalContent.folder);
+            if (index > 0) {
+                const prev = selectedComponents[index-1];
+                prevNext.prev = {
+                    componentType: prev.type,
+                    folder: prev.folder
+                };
+            }
+            if (index < selectedComponents.length - 1) {
+                const next = selectedComponents[index+1];
+                prevNext.next = {
+                    componentType: next.type,
+                    folder: next.folder
+                };
+            }
+        }
+
+        return prevNext;
     }
 );

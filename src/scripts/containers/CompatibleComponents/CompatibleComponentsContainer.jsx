@@ -48,6 +48,7 @@ const mapDispatchToProps = (dispatch) => ({
     toggleAllModulesSelected: () => dispatch(actions.toggleAllModulesSelected()),
     onShowComponentInfo: (componentInfo) => dispatch(actions.showComponentInfo(componentInfo)), // TODO rename
     onCloseComponentInfo: () => dispatch(actions.closeComponentInfo()),
+    onPrevNext: (dir) => dispatch(actions.onPrevNext(dir)),
 	onSubmit: () => dispatch(actions.downloadCompatibleComponents())
 });
 

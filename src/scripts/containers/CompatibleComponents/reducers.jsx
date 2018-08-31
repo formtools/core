@@ -49,9 +49,10 @@ export default (state = {
             let api = {};
             if (action.api.length) {
                 api = {
-                    ...action.api[0],
                     name: 'API',
-                    folder: 'api'
+                    folder: 'api',
+                    version: action.api[0].version,
+                    release_date: action.api[0].release_date
                 };
             }
 
@@ -150,10 +151,18 @@ export default (state = {
         case actions.COMPONENT_HISTORY_LOADED:
             const updatedChangelogs = { ...state.changelogs };
             updatedChangelogs[action.payload.folder] = action.payload.versions;
-            return {
+
+            const newState = {
                 ...state,
                 changelogs: updatedChangelogs
             };
+
+            if (action.payload.folder === 'core') {
+                newState.core = { desc: action.payload.desc };
+            } else if (action.payload.folder === 'api') {
+                newState.api.desc = action.payload.desc;
+            }
+            return newState;
 	}
 
 
