@@ -8,13 +8,41 @@ import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as helpers from '../../core/helpers';
 import styles from './ScrollableDialog.scss';
-import Fade from '@material-ui/core/Fade';
 
 
 class ScrollableDialog extends Component {
+    constructor (props) {
+        super(props);
+        this.onKeypress = this.onKeypress.bind(this);
+    }
+
     state = {
         scroll: 'paper'
     };
+
+    // N.B. This component is always rendered to allow the clean fade in and out, so this is misleading
+    componentWillMount () {
+        document.addEventListener('keydown', this.onKeypress);
+    }
+
+    componentWillUnmount () {
+        document.removeEventListener('keydown', this.onKeypress);
+    }
+
+    onKeypress (e) {
+        e = e || window.event;
+
+        const { open, onPrevNext } = this.props;
+        if (!open) {
+            return;
+        }
+
+        if (e.keyCode === 39) {
+            onPrevNext('next');
+        } else if (e.keyCode === 37) {
+            onPrevNext('prev');
+        }
+    }
 
     getContent () {
         const { isLoading, content } = this.props;

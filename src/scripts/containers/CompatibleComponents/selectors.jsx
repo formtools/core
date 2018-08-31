@@ -109,9 +109,9 @@ export const getComponentInfoModalInfo = createSelector(
         if (componentType === 'module') {
             modalInfo.title = modules[folder].name;
             modalInfo.desc = modules[folder].desc;
-        } else if (componentType === 'module') {
+        } else if (componentType === 'theme') {
             modalInfo.title = themes[folder].name;
-            modalInfo.desc = theme[folder].desc;
+            modalInfo.desc = themes[folder].desc;
         } else if (componentType === 'api') {
             modalInfo.title = 'API';
             modalInfo.desc = core.desc;
