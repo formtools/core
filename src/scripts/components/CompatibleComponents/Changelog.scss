@@ -1,16 +1,22 @@
 .changelog {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
   width: 100%;
 
   .colVersion {
     width: 80px;
+    white-space: nowrap;
   }
   .colReleaseDate {
     width: 180px;
+    white-space: nowrap;
+  }
+  .colDesc {
+    max-width: 99%;
   }
   .colGithubMilestone {
     width: 30px;
+    white-space: nowrap;
   }
+}
+.githubIcon {
+  float: right;
 }
