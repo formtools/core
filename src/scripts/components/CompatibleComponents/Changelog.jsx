@@ -10,13 +10,13 @@ import VersionBadge from './VersionBadge';
 
 const Changelog = ({ data, i18n }) => {
 
-    const getGithubIcon = (githubMilestone) => {
-        if (!githubMilestone) {
+    const getGithubIcon = (data) => {
+        if (data.github_milestone === null) {
             return null;
         }
         return (
             <Tooltip title="View full changes on github" placement="left">
-                <IconButton className={styles.githubIcon} href={githubMilestone}>
+                <IconButton className={styles.githubIcon} href={data.github_milestone}>
                     <Github color="#999999"/>
                 </IconButton>
             </Tooltip>
@@ -39,7 +39,7 @@ const Changelog = ({ data, i18n }) => {
                     <td className={styles.colReleaseDate}>{formatDatetime(release_date)}</td>
                     <td className={styles.colDesc}>
                         {desc}
-                        {getGithubIcon(data.github_milestone)}
+                        {getGithubIcon(data)}
                     </td>
                 </tr>
             ))}
