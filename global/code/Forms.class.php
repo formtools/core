@@ -15,7 +15,7 @@ use PDO, Exception;
 class Forms
 {
 	/**
-	 * Returns all forms. Should only be called by adminstrators.
+	 * Returns all forms. Should only be called by administrators.
 	 * *** N.B. This doesn't return offline forms. ***
 	 * @return array
 	 */
