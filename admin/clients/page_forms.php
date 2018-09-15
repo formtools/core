@@ -13,11 +13,14 @@ use FormTools\Views;
 $success = true;
 $message = "";
 if (isset($_POST["update_client"])) {
-    list($success, $message) = Administrator::adminUpdateClient($request, 3);
+	list($success, $message) = Administrator::adminUpdateClient($request, 3);
 }
 
 $client_info = Accounts::getAccountInfo($client_id);
-$forms = Forms::getForms(); // all forms in the database, regardless of permission type
+$forms = Forms::searchForms(array(
+	"is_admin" => true,
+	"status" => ""
+));
 
 $forms_js_rows = array();
 $forms_js_rows[] = "var page_ns = {}";
@@ -28,8 +31,8 @@ $form_views_js_info = array("page_ns.form_views = []");
 foreach ($forms as $form_info) {
 	// ignore those forms that aren't set up
 	if ($form_info["is_complete"] == "no") {
-        continue;
-    }
+		continue;
+	}
 
 	$form_id = $form_info["form_id"];
 	$form_name = htmlspecialchars($form_info["form_name"]);
@@ -39,7 +42,7 @@ foreach ($forms as $form_info) {
 
 	$v = array();
 	foreach ($form_views["results"] as $form_view) {
-		$view_id   = $form_view["view_id"];
+		$view_id = $form_view["view_id"];
 		$view_name = htmlspecialchars($form_view["view_name"]);
 		$v[] = "[$view_id, \"$view_name\"]";
 	}
@@ -58,7 +61,13 @@ foreach ($forms as $form_info) {
 	$all_form_views[$form_id] = Views::getFormViews($form_id);
 }
 
-$client_forms = Forms::searchForms(array("account_id" => $client_id, "is_admin" => true));
+$client_forms = Forms::searchForms(array(
+	"account_id" => $client_id,
+	"is_admin" => true,
+	"status" => ""
+));
+
+
 $updated_client_forms = array();
 foreach ($client_forms as $form_info) {
 	$form_id = $form_info["form_id"];
@@ -74,18 +83,18 @@ $page_vars["page"] = "forms";
 $page_vars["g_success"] = $success;
 $page_vars["g_message"] = $message;
 $page_vars["page_url"] = Pages::getPageUrl("edit_client_forms", array("client_id" => $client_id));
-$page_vars["head_title"]   = "{$LANG["phrase_edit_client"]} - {$LANG["word_forms"]}";
-$page_vars["client_info"]    = $client_info;
-$page_vars["forms"]          = $forms;
-$page_vars["client_forms"]   = $updated_client_forms;
+$page_vars["head_title"] = "{$LANG["phrase_edit_client"]} - {$LANG["word_forms"]}";
+$page_vars["client_info"] = $client_info;
+$page_vars["forms"] = $forms;
+$page_vars["client_forms"] = $updated_client_forms;
 $page_vars["all_form_views"] = $all_form_views;
-$page_vars["client_id"]      = $client_id;
-$page_vars["js_messages"]    = array(
-    "word_delete", "phrase_please_select", "phrase_please_select_form", "word_add_uc_rightarrow",
+$page_vars["client_id"] = $client_id;
+$page_vars["js_messages"] = array(
+	"word_delete", "phrase_please_select", "phrase_please_select_form", "word_add_uc_rightarrow",
 	"word_remove_uc_leftarrow", "phrase_form_already_selected"
 );
-$page_vars["head_string"]    = "<script type=\"text/javascript\" src=\"$root_url/global/scripts/manage_client_forms.js\"></script>";
-$page_vars["head_js"] =<<< END
+$page_vars["head_string"] = "<script type=\"text/javascript\" src=\"$root_url/global/scripts/manage_client_forms.js\"></script>";
+$page_vars["head_js"] = <<< END
 $forms_js
 $form_views_js
 END;

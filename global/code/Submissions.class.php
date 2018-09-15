@@ -1632,7 +1632,7 @@ class Submissions {
         $clean_search_fields = $search_fields;
         $search_field   = $clean_search_fields["search_field"];
         $search_date    = $clean_search_fields["search_date"];
-        $search_keyword = $clean_search_fields["search_keyword"];
+        $search_keyword = str_replace("'", "''", $clean_search_fields["search_keyword"]);
 
         // search field can either be "all" or a database column name. "submission_date" and "last_modified_date"
         // have special meanings, since they allow for keyword searching within specific date ranges
