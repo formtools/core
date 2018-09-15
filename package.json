@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "dev": "webpack --config ./webpack.config.js --mode=development --watch",
+    "start": "webpack --config ./webpack.config.js --mode=development --watch",
     "build": "webpack --config ./webpack.config.js --mode=production"
   },
   "repository": {

@@ -1,22 +1,41 @@
 .changelog {
   width: 100%;
 
+  .row {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #efefef;
+  }
+
+  .rowHeader div {
+    font-weight: bold;
+    padding: 6px 0;
+  }
+
   .colVersion {
-    width: 80px;
     white-space: nowrap;
+    flex: 0 0 80px;
+    padding: 8px 0 10px;
   }
+
   .colReleaseDate {
-    width: 180px;
     white-space: nowrap;
+    flex: 0 0 120px;
+    padding: 8px 0 10px;
   }
+
   .colDesc {
-    max-width: 99%;
+    flex: 1;
+    padding: 8px 0 10px;
   }
-  .colGithubMilestone {
-    width: 30px;
-    white-space: nowrap;
+
+  .colGithubLink {
+    flex: 0 0 40px;
+    padding-top: 3px;
   }
 }
+
+
 .githubIcon {
   float: right;
 }

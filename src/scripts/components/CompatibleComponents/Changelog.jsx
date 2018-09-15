@@ -3,48 +3,53 @@ import PropTypes from 'prop-types';
 import styles from './Changelog.scss';
 import { formatDatetime } from '../../core/helpers';
 import { Github } from '../Icons/Icons';
+import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 import VersionBadge from './VersionBadge';
 
+const SmallIconButton = withStyles({
+	root: {
+		height: 32,
+		width: 32
+	}
+})(IconButton);
 
 const Changelog = ({ data, i18n }) => {
 
-    const getGithubIcon = (data) => {
-        if (data.github_milestone === null) {
+    const getGithubIcon = (github_milestone) => {
+        if (github_milestone === null) {
             return null;
         }
+
         return (
             <Tooltip title="View full changes on github" placement="left">
-                <IconButton className={styles.githubIcon} href={data.github_milestone}>
-                    <Github color="#999999"/>
-                </IconButton>
+                <SmallIconButton className={styles.githubIcon} href={data.github_milestone}>
+                    <Github color="#999999" />
+                </SmallIconButton>
             </Tooltip>
         );
     };
 
     return (
-        <table className={styles.changelog}>
-            <tbody>
-            <tr>
-                <th className={styles.colVersion}>Version</th>
-                <th className={styles.colReleaseDate}>Release Date</th>
-                <th className={styles.colDesc}>Release Notes</th>
-            </tr>
-            {data.map(({version, release_date, desc}, i) => (
-                <tr key={i}>
-                    <td className={styles.colVersion}>
+        <div className={styles.changelog}>
+            <div className={`${styles.row} ${styles.rowHeader}`}>
+                <div className={styles.colVersion}>Version</div>
+                <div className={styles.colReleaseDate}>Release Date</div>
+                <div className={styles.colDesc}>Release Notes</div>
+	            <div className={styles.colGithubLink} />
+            </div>
+            {data.map(({version, release_date, desc, github_milestone}, i) => (
+                <div className={styles.row} key={i}>
+                    <div className={styles.colVersion}>
                         <VersionBadge label={version}/>
-                    </td>
-                    <td className={styles.colReleaseDate}>{formatDatetime(release_date)}</td>
-                    <td className={styles.colDesc}>
-                        {desc}
-                        {getGithubIcon(data)}
-                    </td>
-                </tr>
+                    </div>
+                    <div className={styles.colReleaseDate}>{formatDatetime(release_date, 'MMM D, YYYY')}</div>
+                    <div className={styles.colDesc}>{desc}</div>
+	                <div className={styles.colGithubLink}>{getGithubIcon(github_milestone)}</div>
+                </div>
             ))}
-            </tbody>
-        </table>
+        </div>
     );
 };
 
