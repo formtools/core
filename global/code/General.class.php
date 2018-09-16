@@ -23,6 +23,7 @@ class General
      * Helper function that's used on Step 2 to confirm that the Core Field Types module folder exists.
      *
      * @param string $module_folder
+	 * @return boolean
      */
     public static function checkModuleAvailable($module_folder)
     {
@@ -1380,6 +1381,15 @@ END;
 		");
 		$db->bind("primary_key", $primary_key_value);
 		$db->execute();
+	}
+
+	/**
+	 * Quick helper to determine if Curl is available.
+	 * @return bool
+	 */
+	public static function curlEnabled()
+	{
+		return function_exists('curl_version');
 	}
 
 }

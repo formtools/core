@@ -11,7 +11,7 @@ require_once(__DIR__ . "/code/Clients.class.php");
 require_once(__DIR__ . "/code/Constants.class.php");
 require_once(__DIR__ . "/code/Core.class.php");
 require_once(__DIR__ . "/code/CoreFieldTypes.class.php");
-require_once(__DIR__ . "/code/CurlTransport.class.php");
+require_once(__DIR__ . "/code/Curl.class.php");
 require_once(__DIR__ . "/code/Database.class.php");
 require_once(__DIR__ . "/code/DatabaseSessions.class.php");
 require_once(__DIR__ . "/code/Emails.class.php");
