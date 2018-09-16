@@ -139,7 +139,7 @@ class Themes {
         $root_dir = Core::getRootDir();
         $themes_folder = "$root_dir/themes";
         $dh = opendir($themes_folder);
-#
+
         // if we couldn't open the themes folder, it probably doesn't exist
         if (!$dh) {
             return array(); // TODO
@@ -177,10 +177,11 @@ class Themes {
             }
 
             // try to set the cache folder as writable
-            if (!is_writable("$themes_folder/$folder/cache/")) {
-                @chmod("$themes_folder/$folder/cache/", 0777);
+			$cache_dir = Core::getCacheDir();
+            if (!is_writable($cache_dir)) {
+                @chmod($cache_dir, 0777);
             }
-            $cache_folder_writable = (is_writable("$themes_folder/$folder/cache/")) ? "yes" : "no";
+            $cache_folder_writable = (is_writable($cache_dir)) ? "yes" : "no";
 
 
             $theme_data[] = array(

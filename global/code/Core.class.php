@@ -363,6 +363,13 @@ class Core
 	public static $tempCache = array();
 
 	/**
+	 * Form Tools 3.1.0 combined all cache folders to a single configurable location. All themes use this location
+	 * to generate the temp files.
+	 * @var
+	 */
+	public static $cacheDir;
+
+	/**
 	 * Initializes the Core singleton for use throughout Form Tools.
 	 *   - sets up PDO database connection available through Core::$db
 	 *   - starts sessions
@@ -466,6 +473,7 @@ class Core
 
 		self::$rootURL = (isset($g_root_url)) ? $g_root_url : null;
 		self::$rootDir = (isset($g_root_dir)) ? $g_root_dir : null;
+		self::$cacheDir = (isset($g_cache_dir)) ? $g_cache_dir : "cache";
 		self::$dbHostname = (isset($g_db_hostname)) ? $g_db_hostname : null;
 		self::$dbName = (isset($g_db_name)) ? $g_db_name : null;
 		self::$dbPort = (isset($g_db_port)) ? $g_db_port : null;
@@ -819,6 +827,11 @@ class Core
 	public static function setTempCacheHash($value)
 	{
 		self::$tempCache = $value;
+	}
+
+	public static function getCacheDir ()
+	{
+		return self::$rootDir . "/" .self::$cacheDir;
 	}
 
 	// private methods

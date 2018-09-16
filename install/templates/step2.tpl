@@ -78,10 +78,10 @@
 	</tr>
 	<tr>
 		<td class="bold">
-			/themes/{$g_default_theme}/cache/
+			/cache/
 		</td>
 		<td align="center">
-			{if $default_theme_cache_dir_writable}
+			{if $cache_dir_writable}
 				<span class="green">{$LANG.word_pass|upper}</span>
 			{else}
 				<span class="red">{$LANG.word_fail|upper}</span>

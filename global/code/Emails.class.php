@@ -389,7 +389,6 @@ class Emails {
     {
         $LANG = Core::$L;
         $root_dir = Core::getRootDir();
-        $default_theme = Core::getDefaultTheme();
 
         $email_template = self::getEmailTemplate($email_id);
 
@@ -473,7 +472,7 @@ class Emails {
 
         $smarty = Core::useSmartyBC() ? new SmartyBC() : new Smarty();
         $smarty->setTemplateDir("$root_dir/global/smarty_plugins/");
-        $smarty->setCompileDir("$root_dir/themes/$default_theme/cache/");
+        $smarty->setCompileDir(Core::getCacheDir());
         $smarty->assign("LANG", $LANG);
         $smarty->assign("fields", $fields_for_email_template);
 

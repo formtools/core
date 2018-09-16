@@ -32,7 +32,7 @@ class Templates
 
         $smarty->setTemplateDir("$root_dir/themes/$theme");
         $smarty->addPluginsDir(array("$root_dir/global/smarty_plugins"));
-        $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
+        $smarty->setCompileDir(Core::getCacheDir());
 
         // check the compile directory has the write permissions
         if (!is_writable($smarty->getCompileDir())) {
@@ -127,7 +127,7 @@ class Templates
         $smarty = Core::useSmartyBC() ? new SmartyBC() : new Smarty();
         $smarty->setTemplateDir("$root_dir/themes/$theme");
         $smarty->addPluginsDir(array("$root_dir/global/smarty_plugins"));
-        $smarty->setCompileDir("$root_dir/themes/$theme/cache/");
+        $smarty->setCompileDir(Core::getCacheDir());
 
         // check the compile directory has the write permissions
         if (!is_writable($smarty->getCompileDir())) {

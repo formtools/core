@@ -1,11 +1,7 @@
 .idea*
-themes/default/cache/*.tpl.php
 themes/classic_grey
-themes/classic_grey/cache/*.tpl.php
 themes/deepblue
-themes/deepblue/cache/*.tpl.php
 themes/ohcanada
-themes/ohcanada/cache/*.tpl.php
 .DS_Store
 global/config.php
 upload/*
@@ -14,8 +10,8 @@ modules/*
 !modules/index.html
 global/api/*
 !global/api/index.html
-themes/default/cache/*
-!themes/default/cache/index.html
+cache/*
+!cache/index.html
 node_modules/
 
 # vendor folder dev dependencies. Only whitelist specific dependencies

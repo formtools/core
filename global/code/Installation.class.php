@@ -110,13 +110,13 @@ class Installation
     }
 
 
-    public static function evalSmartyString($placeholder_str, $placeholders = array(), $theme = "default")
+    public static function evalSmartyString($placeholder_str, $placeholders = array())
     {
         $LANG = Core::$L;
 
         $smarty = new Smarty();
         $smarty->setTemplateDir("../global/smarty_plugins/");
-        $smarty->setCompileDir("../../themes/$theme/cache/");
+        $smarty->setCompileDir("../../cache/");
 
         $smarty->assign("eval_str", $placeholder_str);
         if (!empty($placeholders)) {
@@ -142,7 +142,7 @@ class Installation
 
         clearstatcache();
         $theme_folder = realpath(__DIR__ . "/../../themes/default/");
-        $cache_folder = "$theme_folder/cache/";
+        $cache_folder = Core::getCacheDir();
 
         // always try to set the cache folder to 777
         @chmod($cache_folder, 0777);

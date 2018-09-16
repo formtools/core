@@ -58,19 +58,10 @@
               {/if}
               {if $theme_info.author}<div>{$LANG.word_author_c} {$theme_info.author}</div>{/if}
               {if $theme_info.description}<p>{$theme_info.description}</p>{/if}
-              {if !$theme_info.cache_folder_writable}
-                <div class="error">
-                  <div style="padding: 6px">
-                    {eval_smarty_string placeholder_str=$LANG.notify_theme_cache_folder_not_writable
-                      folder="`$g_root_dir`/themes/`$theme_info.theme_folder`/cache/"}
-                  </div>
-                </div>
-              {/if}
             </td>
             <td valign="top" align="center" class="check_area">
               <input type="checkbox" name="is_enabled[]" value="{$theme_info.theme_folder}"
-                {if $theme_info.is_enabled == 'yes'}checked="checked"{/if}
-                {if !$theme_info.cache_folder_writable}disabled="disabled"{/if} />
+                {if $theme_info.is_enabled == 'yes'}checked="checked"{/if} />
             </td>
           </tr>
         {/foreach}

@@ -13,7 +13,7 @@ Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultL
 
 // folder permissions
 $upload_folder_writable = is_writable(realpath("../upload"));
-$default_theme_cache_dir_writable = is_writable(realpath("../themes/default/cache"));
+$cache_dir_writable = is_writable(realpath("../cache"));
 
 $page = array(
     "step" => 2,
@@ -24,7 +24,7 @@ $page = array(
     "suhosin_loaded" => extension_loaded("suhosin"),
     "sessions_loaded" => extension_loaded("session"),
     "upload_folder_writable" => $upload_folder_writable,
-    "default_theme_cache_dir_writable" => $default_theme_cache_dir_writable,
+    "cache_dir_writable" => $cache_dir_writable,
     "js_messages" => array(
         "word_error", "validation_incomplete_license_keys", "notify_invalid_license_keys",
         "word_close", "word_invalid", "word_verified", "word_continue"

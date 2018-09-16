@@ -15,7 +15,7 @@ use FormTools\Templates;
  *           attributes, e.g.
  *
  *       {eval_smarty_string placeholder_str=$LANG.notify_theme_cache_folder_not_writable
- *         folder="{$g_root_dir}/themes/{$theme_info.theme_folder}/cache/"}
+ *         folder="{$g_root_dir}/cache/"}
  * -------------------------------------------------------------
  */
 function smarty_function_eval_smarty_string($params, &$smarty)
