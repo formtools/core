@@ -1,7 +1,6 @@
 const path = require('path');
 const autoprefixer = require('autoprefixer');
-const helpers = require('./build/helpers');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 
 const devMode = process.env.NODE_ENV !== 'production';
 
@@ -35,7 +34,7 @@ const coreJS = {
 						options: {
 							sourceMap: devMode,
 							plugins: () => [
-								require('autoprefixer')({
+								autoprefixer({
 									browsers: [
 										'ie >= 11',
 										'edge >= 12',

@@ -89,9 +89,6 @@ class Themes {
         $db = Core::$db;
         $LANG = Core::$L;
 
-        // get the existing themes
-//        $current_themes = self::getList();
-
         // empty the themes table
         self::emptyThemesTable();
 
@@ -103,7 +100,7 @@ class Themes {
                 INSERT INTO {PREFIX}themes (theme_folder, theme_name, uses_swatches, swatches, author, theme_link, 
                   description, is_enabled, theme_version)
                 VALUES (:folder, :theme_name, :theme_uses_swatches, :swatches, :theme_author, :theme_link, 
-                  :theme_description, :cache_folder_writable, :theme_version)
+                  :theme_description, :theme_version)
             ");
             $db->bindAll(array(
                 "folder" => $theme_info["theme_folder"],
@@ -113,7 +110,6 @@ class Themes {
                 "theme_author" => $theme_info["theme_author"],
                 "theme_link" => $theme_info["theme_link"],
                 "theme_description" => $theme_info["theme_description"],
-                "cache_folder_writable" => $theme_info["cache_folder_writable"],
                 "theme_version" => $theme_info["theme_version"]
             ));
             $db->execute();
@@ -176,14 +172,6 @@ class Themes {
                 $swatches = implode("|", $swatch_info);
             }
 
-            // try to set the cache folder as writable
-			$cache_dir = Core::getCacheDir();
-            if (!is_writable($cache_dir)) {
-                @chmod($cache_dir, 0777);
-            }
-            $cache_folder_writable = (is_writable($cache_dir)) ? "yes" : "no";
-
-
             $theme_data[] = array(
                 "theme_folder" => $folder,
                 "theme_name" => $info["theme_name"],
@@ -192,8 +180,7 @@ class Themes {
                 "theme_description" => $info["theme_description"],
                 "theme_version" => $info["theme_version"],
                 "theme_uses_swatches" => $info["theme_uses_swatches"],
-                "swatches" => $swatches,
-                "cache_folder_writable" => $cache_folder_writable
+                "swatches" => $swatches
             );
         }
         closedir($dh);

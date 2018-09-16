@@ -48,7 +48,7 @@ rules.push("required,username,{$LANG["validation_no_username"]}");
 rules.push("is_alpha,username,{$LANG['validation_invalid_admin_username']}");
 rules.push("required,password,{$LANG["validation_no_password"]}");
 rules.push("required,password_2,{$LANG["validation_no_second_password"]}");
-rules.push("same_as,password,password_2,{$LANG["validation_passwords_different"]}")
+rules.push("same_as,password,password_2,{$LANG["validation_passwords_different"]}");
 
 rsv.displayType = "alert-all";
 rsv.errorTextIntro = "{$LANG["phrase_error_text_intro"]}";

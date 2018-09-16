@@ -38,6 +38,10 @@ class Upgrade
 				FieldTypes::resetFieldTypes();
 			}
 
+			if (General::isVersionEarlierThan($last_version_in_db, "3.1.0")) {
+            	self::removeThemeCacheFolderWritableField();
+			}
+
             if ($success) {
                 Settings::set(array(
                     "release_date" => $current_version_date,
@@ -142,8 +146,13 @@ class Upgrade
         $db->execute();
     }
 
+    private static function removeThemeCacheFolderWritableField()
+	{
+		General::deleteColumnIfExists("themes", "is_premium");
+	}
+
     // fix for missing may_copy_submissions DB field in 3.0.3
-    public static function addCopySubmissionField()
+    private static function addCopySubmissionField()
 	{
 		$db = Core::$db;
 
