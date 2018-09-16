@@ -4,16 +4,19 @@ import * as helpers from '../../core/helpers';
 import ComponentList from '../ComponentList/ComponentList';
 import EditableComponentList from '../EditableComponentList/EditableComponentList';
 import styles from './CompatibleComponents.scss';
-import ScrollableDialog from '../Dialogs/ScrollableDialog';
+import ComponentDialog from '../Dialogs/ComponentDialog';
 import Changelog from './Changelog';
 
 
 class CompatibleComponents extends Component {
 
     getModal () {
-        const { isShowingComponentInfoModal, onCloseComponentInfo, onPrevNext, modalInfo, i18n } = this.props;
+        const { isShowingComponentInfoModal, onCloseComponentInfo, onPrevNext, isEditing, modalInfo,
+	        toggleComponent, selectedComponentTypeSection, i18n } = this.props;
         const hasDocLink = modalInfo.type !== 'theme';
         let docLink = null;
+
+        // feels like this should be provided by the data source. If not, maybe put this info in the selector?
         if (hasDocLink) {
             if (modalInfo.type === 'module') {
                 docLink = `https://docs.formtools.org/modules/${modalInfo.folder}/`;
@@ -25,12 +28,15 @@ class CompatibleComponents extends Component {
         }
 
         return (
-            <ScrollableDialog
+            <ComponentDialog
                 open={isShowingComponentInfoModal}
                 onClose={onCloseComponentInfo}
+                toggleComponent={() => toggleComponent(selectedComponentTypeSection, modalInfo.folder)}
                 isLoading={!modalInfo.loaded}
+                isEditing={isEditing}
                 title={modalInfo.title}
                 desc={modalInfo.desc}
+                isSelected={modalInfo.isSelected}
                 prevLinkEnabled={modalInfo.prevLinkEnabled}
                 nextLinkEnabled={modalInfo.nextLinkEnabled}
                 onPrevNext={onPrevNext}
@@ -46,13 +52,9 @@ class CompatibleComponents extends Component {
 
 		return (
 			<div>
-				<h2>
-					Selected Components
-				</h2>
+				<h2>{i18n.phrase_selected_components}</h2>
 				<p>
-					We recommend the following components that are useful for the majority of Form Tools installations.
-					Click customize to see what other components exist, and tailor your installation to your own
-					needs.
+					{i18n.text_selected_components_info}
 				</p>
 
                 {this.getModal()}
@@ -61,7 +63,7 @@ class CompatibleComponents extends Component {
                     onShowComponentInfo={onShowComponentInfo} />
 
 				<p>
-					<input type="button" onClick={onEditComponentList} value="Customize" />
+					<input type="button" onClick={onEditComponentList} value={i18n.word_customize} />
                     <span className={styles.delimiter}>|</span>
 					<input type="button" value={helpers.decodeEntities(i18n.word_continue_rightarrow)} />
 				</p>
@@ -77,7 +79,7 @@ class CompatibleComponents extends Component {
         return (
             <div>
                 <h2>
-					Selected Components &raquo; Customize
+	                {i18n.phrase_selected_components} &raquo; {i18n.word_customize}
                 </h2>
 
                 {this.getModal()}

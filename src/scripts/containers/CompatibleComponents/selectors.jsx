@@ -104,6 +104,7 @@ export const getComponentInfoModalInfo = createSelector(
             type: componentType,
             folder,
             loaded: changelogLoaded,
+	        isSelected: selectedComponents.find((row) => row.folder === folder) !== undefined,
             prevLinkEnabled: true,
             nextLinkEnabled: true
         };
@@ -137,7 +138,6 @@ export const getComponentInfoModalInfo = createSelector(
         } else {
             list = selectedComponents;
         }
-
 
         const index = list.findIndex(i => i.folder === folder);
         if (index === 0) {

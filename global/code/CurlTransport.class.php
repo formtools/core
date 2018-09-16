@@ -28,16 +28,16 @@ class CurlTransport
 //            return true;
 //        }
 
-        $ch = curl_init($url);
-
-        // Configuring curl options
-        $options = array(
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_HTTPHEADER => array("Content-type: application/json")
-        );
-
-        curl_setopt_array( $ch, $options );
-
-        return curl_exec($ch); // Getting jSON result string
+//        $ch = curl_init($url);
+//
+//        // Configuring curl options
+//        $options = array(
+//            CURLOPT_RETURNTRANSFER => true,
+//            CURLOPT_HTTPHEADER => array("Content-type: application/json")
+//        );
+//
+//        curl_setopt_array( $ch, $options );
+//
+//        return curl_exec($ch); // Getting jSON result string
     }
 }

@@ -23,7 +23,7 @@ const Changelog = ({ data, i18n }) => {
         }
 
         return (
-            <Tooltip title="View full changes on github" placement="left">
+            <Tooltip title={i18n.phrase_view_changes_on_github} placement="left">
                 <SmallIconButton className={styles.githubIcon} href={data.github_milestone}>
                     <Github color="#999999" />
                 </SmallIconButton>
@@ -34,9 +34,9 @@ const Changelog = ({ data, i18n }) => {
     return (
         <div className={styles.changelog}>
             <div className={`${styles.row} ${styles.rowHeader}`}>
-                <div className={styles.colVersion}>Version</div>
-                <div className={styles.colReleaseDate}>Release Date</div>
-                <div className={styles.colDesc}>Release Notes</div>
+                <div className={styles.colVersion}>{i18n.word_version}</div>
+                <div className={styles.colReleaseDate}>{i18n.phrase_release_date}</div>
+                <div className={styles.colDesc}>{i18n.phrase_release_notes}</div>
 	            <div className={styles.colGithubLink} />
             </div>
             {data.map(({version, release_date, desc, github_milestone}, i) => (

@@ -1,9 +1,6 @@
 import * as selectors from "./selectors";
 import store from "../../core/store";
 
-export const DOWNLOAD_COMPATIBLE_COMPONENTS = 'DOWNLOAD_COMPATIBLE_COMPONENTS';
-export const downloadCompatibleComponents = () => ({ type: DOWNLOAD_COMPATIBLE_COMPONENTS });
-
 export const COMPATIBLE_COMPONENTS_LOADED = 'COMPATIBLE_COMPONENTS_LOADED';
 
 
@@ -142,4 +139,23 @@ export const onPrevNext = (dir) => {
         }
     };
 };
+
+
+
+export const DOWNLOAD_COMPATIBLE_COMPONENTS = 'DOWNLOAD_COMPATIBLE_COMPONENTS';
+export const downloadCompatibleComponents = () => ({
+	//type: DOWNLOAD_COMPATIBLE_COMPONENTS,
+
+	/*
+	get list from client
+
+	for each item return response to client:
+	- DOWNLOADING_RESOURCE
+	- RESOURCE_DOWNLOADED
+	- RESOURCE_UNZIPPED
+
+	*/
+
+
+});
 

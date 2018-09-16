@@ -1,34 +1,9 @@
 <?php
 
-require_once(realpath(__DIR__ . "/../global/library.php"));
+use FormTools\Packages;
 
-ob_start();
-ob_flush();
-flush();
+require_once("../global/library.php");
 
-$url = "https://github.com/formtools/core/archive/3.0.0.zip";
-$file = __DIR__ . "/target/file.zip";
+$url = "http://localhost:8888/formtools-site/cdn.formtools.org/modules/arbitrary_settings-2.0.2.zip";
 
-
-function progress($resource, $downloadSize, $downloaded, $uploadSize, $uploaded)
-{
-//    echo "$resource, $downloadSize, $downloaded, $uploadSize, $uploaded";
-
-    if ($downloadSize > 0) {
-        echo $downloaded / $downloadSize * 100;
-    }
-
-    ob_flush();
-    flush();
-    sleep(1);
-}
-
-
-FormTools\CurlTransport::request($url, $file, array(
-    "progress" => "progress"
-));
-
-echo "Complete";
-
-ob_flush();
-flush();
+print_r(Packages::downloadComponentZip($url));
