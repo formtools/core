@@ -3,7 +3,7 @@
 /**
  * General methods. Added in 2.3.0 - will replace the older genera.php file.
  *
- * @copyright Benjamin Keen 2017
+ * @copyright Benjamin Keen 2018
  * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 2-3-x
  * @subpackage Database

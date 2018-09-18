@@ -7,10 +7,13 @@ use FormTools\Hooks;
 use FormTools\Installation;
 use FormTools\Modules;
 use FormTools\Sessions;
+use FormTools\Settings;
 use FormTools\Themes;
 
 Core::setHooksEnabled(false);
 Core::initNoLogout();
+
+Installation::checkInstallationComplete();
 
 // the home-stretch! populate the hooks table
 Hooks::updateAvailableHooks();
@@ -24,8 +27,10 @@ Installation::installCoreFieldTypes();
 // now actually install the modules
 Modules::installModules();
 
+Settings::set(array("installation_complete" => "yes"), "core");
+
 // send "Welcome to Form Tools" email
-if (Sessions::exists("email_notification_sent")) {
+if (!Sessions::exists("install_email_notification_sent")) {
 	$email    = Sessions::get("install_email");
 	$username = Sessions::get("install_username");
 

@@ -14,7 +14,7 @@
  *          - Core::$user (current user)
  *          - Core::$L (language strings for current user)
  *
- * @copyright Benjamin Keen 2017
+ * @copyright Benjamin Keen 2018
  * @author Benjamin Keen <ben.keen@gmail.com>
  * @version 3.0.x
  * @package 3-0-x
@@ -253,7 +253,7 @@ class Core
 	/**
 	 * The current version of the Form Tools Core.
 	 */
-	private static $version = "3.0.7";
+	private static $version = "3.0.8";
 
 	/**
 	 * The release type: alpha, beta or main
@@ -263,7 +263,7 @@ class Core
 	/**
 	 * The release date: YYYYMMDD
 	 */
-	private static $releaseDate = "20180913";
+	private static $releaseDate = "20180917";
 
 	/**
 	 * The minimum required PHP version needed to run Form Tools.

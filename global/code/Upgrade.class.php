@@ -38,6 +38,10 @@ class Upgrade
 				FieldTypes::resetFieldTypes();
 			}
 
+			if (General::isVersionEarlierThan($last_version_in_db, "3.0.8")) {
+				Settings::set(array("installation_complete" => "yes"), "core");
+			}
+
             if ($success) {
                 Settings::set(array(
                     "release_date" => $current_version_date,

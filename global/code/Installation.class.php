@@ -3,7 +3,7 @@
 /**
  * The installation class. Added in 3.0.0.
  *
- * @copyright Benjamin Keen 2017
+ * @copyright Benjamin Keen 2018
  * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 3-0-x
  * @subpackage Installation
@@ -1272,7 +1272,7 @@ END;
         }
         list($success, $error) = CoreFieldTypes::installFieldType("code_markup", $group2_id);
         if (!$success) {
-            CoreFieldTypes::rollbackNewInstallation();;
+            CoreFieldTypes::rollbackNewInstallation();
             return array($success, $error);
         }
 
@@ -1295,5 +1295,31 @@ END;
 END;
         return $resources;
     }
+
+
+    /**
+     * Helper method to determine if the installation has already been completed and redirect to the login page if so.
+     */
+    public static function checkInstallationComplete()
+	{
+		$config_file_exists = Core::checkConfigFileExists();
+		$installation_complete = false;
+
+		if ($config_file_exists) {
+			try {
+				include(Core::getConfigFilePath());
+				$port = isset($g_db_port) ? $g_db_port : null;
+				$db = new Database($g_db_hostname, $g_db_name, $port, $g_db_username, $g_db_password, $g_table_prefix);
+				$db->query("SELECT setting_value FROM {PREFIX}settings WHERE setting_name = 'installation_complete'");
+				$db->execute();
+				$installation_complete = $db->fetch(PDO::FETCH_COLUMN) == "yes";
+			} catch (Exception $e) {}
+		}
+
+		if ($config_file_exists && $installation_complete) {
+			header("location: ../");
+			exit;
+		}
+	}
 }
 

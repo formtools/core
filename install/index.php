@@ -14,6 +14,8 @@ use FormTools\Sessions;
 Core::setHooksEnabled(false);
 Core::startSessions();
 
+Installation::checkInstallationComplete();
+
 // note we reset sessions here. This prevents weird things happening when a new installation is taking place
 // while an old orphaned FT session exists, containing who-knows-what
 Sessions::clearAll();

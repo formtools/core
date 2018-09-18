@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @copyright Benjamin Keen 2017
+ * @copyright Benjamin Keen 2018
  * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 3-0-x
  * @subpackage Templates

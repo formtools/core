@@ -7,7 +7,7 @@
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * General Public License included in this zipfile for more details.
  *
- * @copyright Benjamin Keen 2017
+ * @copyright Benjamin Keen 2018
  * @author Benjamin Keen <ben.keen@gmail.com>
  * @version 3.0.x
  * @package 3-0-x

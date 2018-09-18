@@ -14,7 +14,7 @@
  *        filter_sql looks like (col_name = '$company_name'). Where col_name is the field in the current form,
  *               and $company_name is just the company_name field in variable format.
  *
- * @copyright Benjamin Keen 2017
+ * @copyright Benjamin Keen 2018
  * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 3-0-x
  * @subpackage ViewFilters

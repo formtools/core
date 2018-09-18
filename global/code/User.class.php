@@ -4,7 +4,7 @@
  * Contains methods for the current logged in user: admin or client. Submission Accounts are handled entirely
  * via that module.
  *
- * @copyright Benjamin Keen 2017
+ * @copyright Benjamin Keen 2018
  * @author Benjamin Keen <ben.keen@gmail.com>
  * @package 3-0-x
  * @subpackage User
