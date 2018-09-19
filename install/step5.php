@@ -10,6 +10,9 @@ use FormTools\Sessions;
 Core::setHooksEnabled(false);
 Core::loadConfigFile();
 Core::startSessions();
+
+Installation::checkInstallationComplete();
+
 Core::initSmarty();
 Core::initDatabase();
 Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));

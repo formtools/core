@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * General code related to the user accounts. See Clients.class.php for client account-specific code, and
+ * Administrator.class.php for administrator code. Accounts and permissions are slated to be refactored in Form Tool 3.3.
+ *
+ * @copyright Benjamin Keen 2018
+ * @author Benjamin Keen <ben.keen@gmail.com>
+ * @package 3-0-x
+ * @subpackage Accounts
+ */
 
 namespace FormTools;
 

@@ -1,10 +1,13 @@
 <?php
 
 /**
- * Clients.
+ * Code related to the user accounts.
+ *
+ * @copyright Benjamin Keen 2018
+ * @author Benjamin Keen <ben.keen@gmail.com>
+ * @package 3-0-x
+ * @subpackage Clients
  */
-
-// -------------------------------------------------------------------------------------------------
 
 namespace FormTools;
 

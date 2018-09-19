@@ -8,6 +8,9 @@ use FormTools\Installation;
 
 Core::setHooksEnabled(false);
 Core::startSessions();
+
+Installation::checkInstallationComplete();
+
 Core::initSmarty();
 Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));
 

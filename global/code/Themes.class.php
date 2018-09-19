@@ -5,9 +5,9 @@
  * This file defines all methods relating to Form Tools themes. Note: the Theme setting tab/page
  * is updated via Settings::updateThemeSettings.
  *
- * @copyright Benjamin Keen 2017
+ * @copyright Benjamin Keen 2018
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @package 3-0-x
+ * @package 3-1-x
  * @subpackage Themes
  */
 

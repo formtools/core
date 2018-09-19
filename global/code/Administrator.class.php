@@ -1,13 +1,14 @@
 <?php
 
+
 /**
  * Administrator-related functionality.
  *
- * This class will be changed. I'm going to make this class a singleton that inherits the methods of User &
- * instantiated instead of User in Core. It opens up the possibility of other user types (Submission Accounts...?).
+ * @copyright Benjamin Keen 2018
+ * @author Benjamin Keen <ben.keen@gmail.com>
+ * @package 3-0-x
+ * @subpackage Administrator
  */
-
-// ---------------------------------------------------------------------------------------------------------------------
 
 namespace FormTools;
 

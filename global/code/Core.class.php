@@ -14,10 +14,10 @@
  *          - Core::$user (current user)
  *          - Core::$L (language strings for current user)
  *
- * @copyright Benjamin Keen 2017
+ * @copyright Benjamin Keen 2018
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @version 3.0.x
- * @package 3-0-x
+ * @version 3.1.x
+ * @package 3-1-x
  */
 
 

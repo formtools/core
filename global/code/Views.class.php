@@ -4,9 +4,9 @@
  * This file contains all top-level methods relating to form Views. See the other View*.class.php files for more
  * specific things within Views (ViewFields, ViewFilters).
  *
- * @copyright Benjamin Keen 2017
+ * @copyright Benjamin Keen 2018
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @package 3-0-x
+ * @package 3-1-x
  * @subpackage Views
  */
 
@@ -565,8 +565,8 @@ class Views
      * created with the View. This was added to solve a problem where submissions were created in a View where
      * that new submission wouldn't meet the criteria for inclusion. But beyond that, this is a handy feature to
      * cut down on configuration time for new data sets.
-	 * 
-	 * N.B. The Submission Pre-Parser relies heavily on this method and the format of the data returned, so 
+	 *
+	 * N.B. The Submission Pre-Parser relies heavily on this method and the format of the data returned, so
 	 * if refactoring check that too.
      *
      * @param $view_id

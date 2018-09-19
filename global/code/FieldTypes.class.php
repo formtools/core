@@ -4,9 +4,9 @@
  * This file contains all functions relating to the field types (select, radios etc). Added in 2.1.0
  * with the addition of Custom Fields.
  *
- * @copyright Benjamin Keen 2017
+ * @copyright Benjamin Keen 2018
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @package 3-0-x
+ * @package 3-1-x
  */
 
 
