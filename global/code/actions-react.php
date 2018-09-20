@@ -58,6 +58,9 @@ switch ($_GET["action"]) {
 
 		$data = json_decode(Request::getUrl($url));
 		break;
+
+	case "":
+		break;
 }
 
 
