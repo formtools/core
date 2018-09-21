@@ -57,8 +57,7 @@ switch ($_GET["action"]) {
 				break;
 		}
 
-		//$data = json_decode(Request::getUrl($url));
-		$data = Request::getUrl($url);
+		$data = json_decode(Request::getUrl($url));
 		break;
 
 	// these methods can only be called during an installation

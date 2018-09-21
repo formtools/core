@@ -24,6 +24,7 @@ $page = array(
     "valid_php_version" => Core::isValidPHPVersion(),
     "pdo_available" => extension_loaded("PDO"),
     "pdo_mysql_available" => extension_loaded("pdo_mysql"),
+    "ziparchive_available" => class_exists("ZipArchive"),
     "suhosin_loaded" => extension_loaded("suhosin"),
     "sessions_loaded" => extension_loaded("session"),
     "upload_folder_writable" => $upload_folder_writable,

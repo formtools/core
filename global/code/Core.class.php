@@ -193,7 +193,7 @@ class Core
 	 * and upgrading.
 	 * @var string
 	 */
-	private static $formToolsDataSource = "http://localhost:8888/formtools-site/cdn.formtools.org/feeds";
+	private static $formToolsDataSource = "http://localhost:8888/formtools-site/cdn.formtools.org";
 
 
 	// -------------------------------------------------------------------------------------------------

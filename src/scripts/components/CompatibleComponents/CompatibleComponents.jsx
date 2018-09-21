@@ -40,7 +40,7 @@ class CompatibleComponents extends Component {
                 prevLinkEnabled={modalInfo.prevLinkEnabled}
                 nextLinkEnabled={modalInfo.nextLinkEnabled}
                 onPrevNext={onPrevNext}
-                content={<Changelog data={modalInfo.data} />}
+                content={<Changelog data={modalInfo.data} i18n={i18n} />}
                 hasDocLink={hasDocLink}
                 docLink={docLink}
                 i18n={i18n} />
@@ -48,7 +48,7 @@ class CompatibleComponents extends Component {
     }
 
 	getSelectedComponentList () {
-		const { onEditComponentList, onShowComponentInfo, selectedComponents, i18n } = this.props;
+		const { onEditComponentList, onShowComponentInfo, selectedComponents, onSubmit, i18n } = this.props;
 
 		return (
 			<div>
@@ -65,7 +65,7 @@ class CompatibleComponents extends Component {
 				<p>
 					<input type="button" onClick={onEditComponentList} value={i18n.word_customize} />
                     <span className={styles.delimiter}>|</span>
-					<input type="button" value={helpers.decodeEntities(i18n.word_continue_rightarrow)} />
+					<input type="button" onClick={onSubmit} value={helpers.decodeEntities(i18n.word_continue_rightarrow)} />
 				</p>
 			</div>
 		);

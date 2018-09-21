@@ -35,6 +35,23 @@
             {/if}
 		</td>
 	</tr>
+    <tr>
+        <td valign="top">ZipArchive available</td>
+        <td valign="top" class="bold">
+            {if $ziparchive_available}
+                {$LANG.word_yes}
+            {else}
+                {$LANG.word_no}
+            {/if}
+        </td>
+        <td valign="top" align="center">
+            {if $pdo_available}
+                <span class="green">{$LANG.word_pass|upper}</span>
+            {else}
+                <span class="red">{$LANG.word_fail|upper}</span>
+            {/if}
+        </td>
+    </tr>
 	<tr>
 		<td valign="top">MySQL available</td>
 		<td valign="top" class="bold">{$LANG.word_yes}</td>
@@ -90,13 +107,13 @@
 	</tr>
 </table>
 
-{if !$valid_php_version || !$pdo_available || !$pdo_mysql_available || !$sessions_loaded}
+{if !$valid_php_version || !$pdo_available || !$pdo_mysql_available || !$ziparchive_available || !$sessions_loaded}
 
 	<p class="error" style="padding: 6px">
 		{$LANG.text_install_form_tools_server_not_supported}
 	</p>
 
-{elseif !$upload_folder_writable || !$default_theme_cache_dir_writable}
+{elseif !$upload_folder_writable || !$cache_dir_writable}
 
 	<p class="error" style="padding: 6px">
         Please ensure the required folders have write permissions. See the

@@ -11,7 +11,7 @@ export const getCompatibleComponents = () => {
 		const base_url = state.constants.data_source_url;
 		const core_version = state.constants.core_version;
 
-		fetch(`${base_url}/core/${core_version}.json`)
+		fetch(`${base_url}/feeds/core/${core_version}.json`)
 			.then((response) => response.json())
 			.then((json) => {
 				dispatch({
@@ -143,8 +143,15 @@ export const onPrevNext = (dir) => {
 
 
 export const DOWNLOAD_COMPATIBLE_COMPONENTS = 'DOWNLOAD_COMPATIBLE_COMPONENTS';
-export const downloadCompatibleComponents = () => ({
+export const downloadCompatibleComponents = () => {
 	//type: DOWNLOAD_COMPATIBLE_COMPONENTS,
+
+	return (dispatch, getState) => {
+		const selectedComponents = selectors.getSelectedComponents(getState());
+		console.log(selectedComponents[1]);
+
+
+	};
 
 	/*
 	get list from client
@@ -155,7 +162,41 @@ export const downloadCompatibleComponents = () => ({
 	- RESOURCE_UNZIPPED
 
 	*/
+};
 
 
-});
+const downloadAndUnpackComponent = (url, componentType) => {
+//	const url = `../global/code/actions-react.php?action=get_component_info&type=${componentType}&url=${folder}`;
+
+	fetch(url)
+		.then((response) => response.json())
+		.then((json) => {
+			// store.dispatch({
+			// 	type: COMPONENT_HISTORY_LOADED,
+			// 	payload: {
+			// 		folder,
+			// 		desc: json.hasOwnProperty('desc') ? json.desc : null,
+			// 		versions: json.versions
+			// 	}
+			// });
+		}).catch((e) => {
+		// TODO
+		// store.dispatch({
+		//     type: INIT_DATA_ERROR_LOADING,
+		//     error: e
+		// });
+	});
+};
+
+
+
+
+
+
+
+
+
+
+
+
 
