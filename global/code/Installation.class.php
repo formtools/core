@@ -142,12 +142,12 @@ class Installation
 
         clearstatcache();
         $theme_folder = realpath(__DIR__ . "/../../themes/default/");
-        $cache_folder = Core::getCacheDir();
+        $cache_folder = realpath(__DIR__ . "/../../cache/");
 
         // always try to set the cache folder to 777
         @chmod($cache_folder, 0777);
 
-        if (!is_readable("$cache_folder/") || !is_writable("$cache_folder/")) {
+        if (!is_readable($cache_folder) || !is_writable($cache_folder)) {
             self::displayUnwriteableCacheFolderPage();
             exit;
         }
@@ -201,33 +201,30 @@ class Installation
         $version = Core::getVersionString();
 
         echo <<< END
+<!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="files/main.css">
+	<link rel="stylesheet" type="text/css" href="../themes/default/dist/css/styles.css">
 </head>
 <body>
 
+<body class="swatch-green">
+
 <div id="container">
     <div id="header">
-    
-        <div style="float:right">
-            <table cellspacing="0" cellpadding="0" height="25">
-            <tr>
-                <td><img src="../themes/default/images/account_section_left_green.jpg" border="0" /></td>
-                <td id="account_section">
-                    <b>{$version}</b>
-                </td>
-                <td><img src="../themes/default/images/account_section_right_green.jpg" border="0" /></td>
-            </tr>
-            </table>
+        <div id="version-block">
+            <img src="../themes/default/images/account_section_left_green2x.png" border="0" width="8" height="25"/>
+            <div id="account_section">{$version}</div>
+            <img src="../themes/default/images/account_section_right_green2x.png" border="0" width="8" height="25"/>
         </div>
-    
-        <span style="float:left; padding-top: 8px; padding-right: 10px">
-            <a href="https://formtools.org" class="no_border"><img src="../themes/default/images/logo_green.jpg" border="0" height="61" /></a>
+        <span style="float:left; padding-top: 4px">
+            <a href="http://www.formtools.org" class="no_border">
+                <img src="../themes/default/images/logo_green2x.png" border="0" width="220" height="67" />
+            </a>
         </span>
     </div>
-    <div id="content">    
-        <div class="notify">
+    <div id="content">
+         <div class="notify">
             {$LANG["text_default_theme_cache_folder_not_writable"]}
         </div>
     </div>
@@ -1296,7 +1293,7 @@ END;
         return $resources;
     }
 
-    
+
 	/**
 	 * Helper method to determine if the installation has already been completed and redirect to the login page if so.
 	 */

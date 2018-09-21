@@ -6,40 +6,127 @@ namespace FormTools;
 class Packages
 {
 	// $url = "http://localhost:8888/formtools-site/cdn.formtools.org/modules/arbitrary_settings-2.0.2.zip";
-	public static function downloadAndUnpack($url)
+
+	/**
+	 * Downloads a component and unpacks it at the appropriate location.
+	 * - cleans up after itself, deleting any downloaded zipfiles and un
+	 * - will REMOVE any previous version of the component being downloaded. To be safe, it backs up the old
+	 * folder before removing by adding a BACKUP- prefix. If the new component is properly installed the BACKUP- folder
+	 * is removed.
+	 *
+	 * @param $url
+	 * @param $component_type "theme", "module", "core" or "api"
+	 * @return array
+	 */
+	public static function downloadAndUnpack($url, $component_type)
 	{
 		$cache_dir = Core::getCacheDir();
-		$modules_folder = Core::getRootDir() . "/modules";
+		$target_folder = Core::getRootDir();
 
-		//$zipfile_name = basename($url);
-		list($module_folder, $module_version) = explode("-", basename($url, ".zip"));
+		if ($component_type == "module") {
+			$target_folder .= "/modules";
+		}  else if ($component_type == "theme") {
+			$target_folder .= "/themes";
+		} else if ($component_type == "api") {
+			$target_folder .= "/global/api";
+		} else {
+			return array(
+				"success" => false,
+				"log" => array("Invalid component type passed to Packages::downloadAndUnpack()")
+			);
+		}
+
+		list($component_folder, $component_version) = explode("-", basename($url, ".zip"));
 
 		if (General::curlEnabled()) {
-
-			// download the file
 			$result = Curl::downloadFile($url, $cache_dir);
+
+			if (!$result["success"]) {
+				return $result;
+			}
+
+			$log = $result["log"];
 			$downloaded_zipfile = $result["file_path"];
 
 			// unzip it to the modules folder
+			$log[] = "unzipping $downloaded_zipfile";
 			$zip = new ZipArchive;
 			$res = $zip->open($downloaded_zipfile);
+
 			if ($res === true) {
-				$github_repo_name = "module-{$module_folder}";
+				$log[] = "unzipping complete";
+
+				// the unzipped content will have the content within a folder with the same name as the repo, plus the version number
+				if ($component_type === "module") {
+					$unzipped_folder_name = "module-{$component_folder}-{$component_version}";
+				} else if ($component_type == "theme") {
+					$unzipped_folder_name = "theme-{$component_folder}-{$component_version}";
+				} else {
+					$unzipped_folder_name = "api-{$component_version}";
+				}
 
 				// just in case, remove any orphaned previous unzipped folder
-				if (file_exists("$modules_folder/$github_repo_name")) {
-					unlink("$modules_folder/$github_repo_name");
+				if (file_exists("$target_folder/$unzipped_folder_name")) {
+					unlink("$target_folder/$unzipped_folder_name");
+					$log[] = "remove previous undeleted unzip folder: $target_folder/$unzipped_folder_name";
 				}
 
-				$zip->extractTo($modules_folder);
+				$log[] = "extracting to $target_folder";
+
+				$zip->extractTo($target_folder);
 				$zip->close();
 
-				// rename the folder to the final module name
-				if (rename("$modules_folder/module-={$module_folder}-{$module_version}", "$modules_folder/$module_folder")) {
-					@unlink("$cache_dir/$downloaded_zipfile");
+				// backup the old component folder if it exists
+				if (file_exists("$target_folder/$component_folder")) {
+					$log[] = "existing component folder already exists";
+					if (rename("$target_folder/$component_folder", "$target_folder/BACKUP-{$component_folder}")) {
+						$log[] = "existing component folder backed up to $target_folder/BACKUP-{$component_folder}";
+					} else {
+						$log[] = "unable to back up $target_folder/BACKUP-{$component_folder}";
+						return array(
+							"success" => false,
+							"log" => $log
+						);
+					}
 				}
+
+				if (rename("$target_folder/$unzipped_folder_name", "$target_folder/$component_folder")) {
+					$log[] = "new component folder created: $target_folder/$component_folder";
+					if (unlink("$cache_dir/$downloaded_zipfile")) {
+						$log[] = "$cache_dir/$downloaded_zipfile cache file removed";
+					} else {
+						$log[] = "error removing cache file $cache_dir/$downloaded_zipfile";
+					}
+				}
+			} else {
+				$log[] = "error unzipping";
+
+				return array(
+					"success" => false,
+					"log" => $log
+				);
 			}
 		}
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

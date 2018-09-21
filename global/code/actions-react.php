@@ -7,6 +7,7 @@
 require_once("../library.php");
 
 use FormTools\Core;
+use FormTools\Packages;
 use FormTools\Request;
 
 Core::init();
@@ -56,10 +57,15 @@ switch ($_GET["action"]) {
 				break;
 		}
 
-		$data = json_decode(Request::getUrl($url));
+		//$data = json_decode(Request::getUrl($url));
+		$data = Request::getUrl($url);
 		break;
 
-	case "":
+	// these methods can only be called during an installation
+	case "installation_download_single_component":
+		$url = $_GET["url"];
+		$component_type = $_GET["component_type"];
+		$data = Packages::downloadAndUnpack($url, $component_type);
 		break;
 }
 

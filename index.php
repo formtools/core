@@ -12,6 +12,7 @@ use FormTools\Upgrade;
 if (!Core::checkConfigFileExists()) {
     General::redirect("install/");
 }
+
 Core::init();
 $LANG = Core::$L;
 

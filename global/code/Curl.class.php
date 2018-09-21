@@ -25,7 +25,6 @@ class Curl
 				$log[] = "unable to remove old $filename file from $target_folder. Aborting";
 				return array(
 					"success" => false,
-					"message" => "",
 					"log" => $log
 				);
 			}
@@ -39,7 +38,6 @@ class Curl
 			$log[] = "unable to create a $filename file in $target_folder.";
 			return array(
 				"success" => false,
-				"message" => "",
 				"log" => $log
 			);
 		}
@@ -54,7 +52,6 @@ class Curl
 			$log[] = "curl error: " . curl_error($ch);
 			return array(
 				"success" => false,
-				"message" => "",
 				"log" => $log
 			);
 		}
