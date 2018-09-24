@@ -108,13 +108,29 @@ class CompatibleComponents extends Component {
         );
 	}
 
+	getDownloadingPage () {
+    	const { i18n } = this.props;
+
+    	return (
+			<div>
+				<h2>
+					{i18n.phrase_selected_components} &raquo; {i18n.word_customize}
+				</h2>
+
+				<blockquote><pre>...</pre></blockquote>
+			</div>
+		);
+	}
+
 	render () {
-		const { initialized, dataLoaded, dataLoadError, error, isEditing } = this.props;
+		const { initialized, dataLoaded, dataLoadError, error, isEditing, isDownloading } = this.props;
 
 		if (!initialized || !dataLoaded) {
 			return null;
 		} else if (dataLoadError) {
 			return <p>Error loading... {error}</p>;
+		} else if (isDownloading) {
+			return this.getDownloadingPage()
 		}
 
 		return (isEditing) ? this.getEditableComponentList() : this.getSelectedComponentList();

@@ -44,16 +44,16 @@ switch ($_GET["action"]) {
 		$url = Core::getFormToolsDataSource();
 		switch ($_GET["type"]) {
 			case "core":
-				$url .= "/core/core.json";
+				$url .= "/feeds/core/core.json";
 				break;
 			case "api":
-				$url .= "/api/api.json";
+				$url .= "/feeds/api/api.json";
 				break;
 			case "module":
-				$url .= "/modules/{$_GET["component"]}.json";
+				$url .= "/feeds/modules/{$_GET["component"]}.json";
 				break;
 			case "theme":
-				$url .= "/themes/{$_GET["component"]}.json";
+				$url .= "/feeds/themes/{$_GET["component"]}.json";
 				break;
 		}
 
@@ -62,8 +62,13 @@ switch ($_GET["action"]) {
 
 	// these methods can only be called during an installation
 	case "installation_download_single_component":
-		$url = $_GET["url"];
-		$component_type = $_GET["component_type"];
+		$url = urldecode($_GET["url"]);
+		$component_type = $_GET["type"];
+
+		$data = array(
+			"url" => $url,
+			"type" => $component_type
+		);
 		$data = Packages::downloadAndUnpack($url, $component_type);
 		break;
 }

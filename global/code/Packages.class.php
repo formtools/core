@@ -50,7 +50,7 @@ class Packages
 
 			// unzip it to the modules folder
 			$log[] = "unzipping $downloaded_zipfile";
-			$zip = new ZipArchive;
+			$zip = new \ZipArchive;
 			$res = $zip->open($downloaded_zipfile);
 
 			if ($res === true) {
@@ -92,12 +92,18 @@ class Packages
 
 				if (rename("$target_folder/$unzipped_folder_name", "$target_folder/$component_folder")) {
 					$log[] = "new component folder created: $target_folder/$component_folder";
-					if (unlink("$cache_dir/$downloaded_zipfile")) {
-						$log[] = "$cache_dir/$downloaded_zipfile cache file removed";
+					if (unlink("$downloaded_zipfile")) {
+						$log[] = "$downloaded_zipfile cache file removed";
 					} else {
-						$log[] = "error removing cache file $cache_dir/$downloaded_zipfile";
+						$log[] = "error removing cache file $downloaded_zipfile";
 					}
 				}
+
+				return array(
+					"success" => true,
+					"log" => $log
+				);
+
 			} else {
 				$log[] = "error unzipping";
 

@@ -1,5 +1,6 @@
 import * as actions from './actions';
 import { convertHashToArray, removeFromArray } from '../../core/helpers';
+import { START_DOWNLOAD_COMPATIBLE_COMPONENTS } from "./actions";
 
 
 export default (state = {
@@ -7,6 +8,7 @@ export default (state = {
 	errorLoading: false,
 	error: '',
 	isEditing: false,
+	isDownloading: false,
     showComponentInfoModal: false,
     componentInfoModalContent: '', // { type: 'module' | theme | api | core, folder: '' }
     componentChangelog: {}, // component_folder => { versions: [], isLoading: true|false }
@@ -18,7 +20,11 @@ export default (state = {
     selectedComponentTypeSection: 'modules',
     selectedModuleFolders: [],
     selectedThemeFolders: [],
-    apiSelected: false,
+	apiSelected: false,
+
+	// populated the moment the user proceeds to the download step. This is a 1-level deep object of property names:
+	// api, theme_[theme folder], module_[module folder] with each value containing an object of { success: false|true, log: [] }
+	downloadedComponents: {},
 
     // any time the user clicks "Customize" we stash the last config here, in case they cancel their changes and
     // want to revert
@@ -121,6 +127,13 @@ export default (state = {
                 selectedModuleFolders: state.lastSavedComponents.selectedModuleFolders,
                 selectedThemeFolders: state.lastSavedComponents.selectedThemeFolders,
                 apiSelected: state.lastSavedComponents.apiSelected
+			};
+
+		case actions.START_DOWNLOAD_COMPATIBLE_COMPONENTS:
+			return {
+				...state,
+				isDownloading: true,
+				componentList: action.payload.componentList
 			};
 
         case actions.SAVE_SELECTED_COMPONENT_LIST:

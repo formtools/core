@@ -1,5 +1,6 @@
-import * as selectors from "./selectors";
-import store from "../../core/store";
+import * as selectors from './selectors';
+import * as generalSelectors from '../../core/selectors';
+import store from '../../core/store';
 
 export const COMPATIBLE_COMPONENTS_LOADED = 'COMPATIBLE_COMPONENTS_LOADED';
 
@@ -141,36 +142,60 @@ export const onPrevNext = (dir) => {
 };
 
 
-
-export const DOWNLOAD_COMPATIBLE_COMPONENTS = 'DOWNLOAD_COMPATIBLE_COMPONENTS';
+export const START_DOWNLOAD_COMPATIBLE_COMPONENTS = 'START_DOWNLOAD_COMPATIBLE_COMPONENTS';
 export const downloadCompatibleComponents = () => {
-	//type: DOWNLOAD_COMPATIBLE_COMPONENTS,
 
 	return (dispatch, getState) => {
-		const selectedComponents = selectors.getSelectedComponents(getState());
-		console.log(selectedComponents[1]);
+		const state = getState();
+		const selectedComponents = selectors.getSelectedComponents(state);
+		const constants = generalSelectors.getConstants(state);
 
+		let componentList = {};
+		selectedComponents.forEach((item) => {
+			if (item.type === 'core') {
+				componentList.api = { downloaded: false, log: [] };
+			} else if (item.type === 'module') {
+				componentList[`module_${item.folder}`] = { downloaded: false, log: [] };
+			} else if (item.type === 'theme') {
+				componentList[`theme_${item.folder}`] = { downloaded: false, log: [] };
+			}
+		});
 
+		dispatch({
+			type: START_DOWNLOAD_COMPATIBLE_COMPONENTS,
+			payload: { componentList }
+		});
+
+		// for the moment, just fire off requests for EVERYTHING...
+		selectedComponents.forEach((item) => {
+			if (item.type === 'core') {
+				return;
+			}
+
+			let zipfile_url = '';
+			if (item.type === 'api') {
+				zipfile_url = `${constants.data_source_url}/api/${item.version}.zip`;
+			} else if (item.type === 'module') {
+				zipfile_url = `${constants.data_source_url}/modules/${item.folder}-${item.version}.zip`;
+			} else if (item.type === 'theme') {
+				zipfile_url = `${constants.data_source_url}/themes/${item.folder}-${item.version}.zip`;
+			}
+
+			downloadAndUnpackComponent(zipfile_url, item.type);
+		});
 	};
-
-	/*
-	get list from client
-
-	for each item return response to client:
-	- DOWNLOADING_RESOURCE
-	- RESOURCE_DOWNLOADED
-	- RESOURCE_UNZIPPED
-
-	*/
 };
 
 
 const downloadAndUnpackComponent = (url, componentType) => {
-//	const url = `../global/code/actions-react.php?action=get_component_info&type=${componentType}&url=${folder}`;
+	let cleanUrl = encodeURIComponent(url);
+	const actions_url = `../global/code/actions-react.php?action=installation_download_single_component&type=${componentType}&url=${cleanUrl}`;
 
-	fetch(url)
+	fetch(actions_url)
 		.then((response) => response.json())
 		.then((json) => {
+			console.log(json);
+
 			// store.dispatch({
 			// 	type: COMPONENT_HISTORY_LOADED,
 			// 	payload: {
@@ -180,7 +205,6 @@ const downloadAndUnpackComponent = (url, componentType) => {
 			// 	}
 			// });
 		}).catch((e) => {
-		// TODO
 		// store.dispatch({
 		//     type: INIT_DATA_ERROR_LOADING,
 		//     error: e
