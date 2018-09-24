@@ -136,9 +136,5 @@ class CompatibleComponents extends Component {
 		return (isEditing) ? this.getEditableComponentList() : this.getSelectedComponentList();
 	}
 }
-CompatibleComponents.propTypes = {
-	selectedModuleFolders: PropTypes.array,
-	selectedThemeFolders: PropTypes.array,
-};
 
 export default CompatibleComponents;

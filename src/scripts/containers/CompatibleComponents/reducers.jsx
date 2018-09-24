@@ -1,6 +1,5 @@
 import * as actions from './actions';
 import { convertHashToArray, removeFromArray } from '../../core/helpers';
-import { START_DOWNLOAD_COMPATIBLE_COMPONENTS } from "./actions";
 
 
 export default (state = {

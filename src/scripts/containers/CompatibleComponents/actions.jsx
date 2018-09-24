@@ -166,7 +166,7 @@ export const downloadCompatibleComponents = () => {
 			payload: { componentList }
 		});
 
-		// for the moment, just fire off requests for EVERYTHING...
+		// TODO for the moment, just fire off requests for EVERYTHING
 		selectedComponents.forEach((item) => {
 			if (item.type === 'core') {
 				return;

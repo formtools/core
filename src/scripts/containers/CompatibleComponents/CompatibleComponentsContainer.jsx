@@ -24,7 +24,7 @@ const mapStateToProps = (state) => ({
 	initialized: coreSelectors.getInitialized(state),
 	dataLoaded: selectors.isDataLoaded(state),
 	isEditing: selectors.isEditing(state),
-	isDownloading: selectors.isDownloaded(state),
+	isDownloading: selectors.isDownloading(state),
     isShowingComponentInfoModal: selectors.showComponentInfoModal(state),
 	api: selectors.getAPI(state),
 	i18n: coreSelectors.getI18n(state),

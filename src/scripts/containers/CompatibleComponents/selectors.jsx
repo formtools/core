@@ -6,7 +6,7 @@ export const isDataLoaded = (state) => state.compatibleComponents.loaded;
 export const getModules = (state) => state.compatibleComponents.modules;
 export const getThemes = (state) => state.compatibleComponents.themes;
 export const isAPISelected = (state) => state.compatibleComponents.apiSelected;
-export const isDownloaded = (state) => state.compatibleComponents.isDownloaded;
+export const isDownloading = (state) => state.compatibleComponents.isDownloading;
 export const getSelectedModuleFolders = (state) => state.compatibleComponents.selectedModuleFolders;
 export const getSelectedThemeFolders = (state) => state.compatibleComponents.selectedThemeFolders;
 export const isEditing = (state) => state.compatibleComponents.isEditing;
