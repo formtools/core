@@ -1290,6 +1290,7 @@ $LANG["phrase_view_changes_on_github"] = "View full changes on github";
 $LANG["phrase_release_date"] = "Release Date";
 $LANG["phrase_release_notes"] = "Release Notes";
 $LANG["word_customize"] = "Customize";
+$LANG["word_installing"] = "Installing";
 
 $LANG["text_selected_components_info"] = "We recommend the following components that are useful for the majority of Form Tools installations. Click customize to see what other components exist, and tailor your installation to your own needs.";
 

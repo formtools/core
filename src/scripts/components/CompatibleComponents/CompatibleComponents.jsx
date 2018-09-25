@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import * as helpers from '../../core/helpers';
 import ComponentList from '../ComponentList/ComponentList';
 import EditableComponentList from '../EditableComponentList/EditableComponentList';
 import styles from './CompatibleComponents.scss';
 import ComponentDialog from '../Dialogs/ComponentDialog';
 import Changelog from './Changelog';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 class CompatibleComponents extends Component {
@@ -110,14 +110,22 @@ class CompatibleComponents extends Component {
 
 	getDownloadingPage () {
     	const { i18n } = this.props;
+		const spinnerStyles = {
+			color: '#21aa1e',
+			margin: '-3px 0 0 10px',
+			float: 'right'
+		};
 
     	return (
 			<div>
 				<h2>
-					{i18n.phrase_selected_components} &raquo; {i18n.word_customize}
+					{i18n.phrase_selected_components} &raquo; {i18n.word_installing}
 				</h2>
 
-				<blockquote><pre>...</pre></blockquote>
+				<p style={{ display: 'inline-block' }}>
+					<CircularProgress style={spinnerStyles} size={30} thickness={3} />
+					Downloading <b>N</b> of <b>N</b> components. Please wait.
+				</p>
 			</div>
 		);
 	}

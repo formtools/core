@@ -166,50 +166,46 @@ export const downloadCompatibleComponents = () => {
 			payload: { componentList }
 		});
 
-		// TODO for the moment, just fire off requests for EVERYTHING
 		selectedComponents.forEach((item) => {
 			if (item.type === 'core') {
 				return;
 			}
-
-			let zipfile_url = '';
-			if (item.type === 'api') {
-				zipfile_url = `${constants.data_source_url}/api/${item.version}.zip`;
-			} else if (item.type === 'module') {
-				zipfile_url = `${constants.data_source_url}/modules/${item.folder}-${item.version}.zip`;
-			} else if (item.type === 'theme') {
-				zipfile_url = `${constants.data_source_url}/themes/${item.folder}-${item.version}.zip`;
-			}
-
-			downloadAndUnpackComponent(zipfile_url, item.type);
+			downloadAndUnpackComponent(item, constants.data_source_url);
 		});
 	};
 };
 
 
-const downloadAndUnpackComponent = (url, componentType) => {
-	let cleanUrl = encodeURIComponent(url);
-	const actions_url = `../global/code/actions-react.php?action=installation_download_single_component&type=${componentType}&url=${cleanUrl}`;
+export const COMPONENT_DOWNLOAD_UNPACK_RESPONSE = 'COMPONENT_DOWNLOAD_UNPACK_RESPONSE';
+const downloadAndUnpackComponent = (item, data_source_url) => {
+	let zipfile_url = '';
+	if (item.type === 'api') {
+		zipfile_url = `${data_source_url}/api/${item.version}.zip`;
+	} else if (item.type === 'module') {
+		zipfile_url = `${data_source_url}/modules/${item.folder}-${item.version}.zip`;
+	} else if (item.type === 'theme') {
+		zipfile_url = `${data_source_url}/themes/${item.folder}-${item.version}.zip`;
+	}
+	let cleanUrl = encodeURIComponent(zipfile_url);
+
+	const actions_url = `../global/code/actions-react.php?action=installation_download_single_component&type=${item.type}&url=${cleanUrl}`;
 
 	fetch(actions_url)
 		.then((response) => response.json())
 		.then((json) => {
-			console.log(json);
-
-			// store.dispatch({
-			// 	type: COMPONENT_HISTORY_LOADED,
-			// 	payload: {
-			// 		folder,
-			// 		desc: json.hasOwnProperty('desc') ? json.desc : null,
-			// 		versions: json.versions
-			// 	}
-			// });
+			store.dispatch({
+				type: COMPONENT_DOWNLOAD_UNPACK_RESPONSE,
+				payload: {
+					...json,
+					folder: item.folder
+				}
+			});
 		}).catch((e) => {
 		// store.dispatch({
 		//     type: INIT_DATA_ERROR_LOADING,
 		//     error: e
 		// });
-	});
+		});
 };
 
 
