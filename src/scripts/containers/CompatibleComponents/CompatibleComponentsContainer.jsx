@@ -36,7 +36,9 @@ const mapStateToProps = (state) => ({
 	selectedThemeFolders: selectors.getSelectedThemeFolders(state),
     allModulesSelected: selectors.allModulesSelected(state),
     isAPISelected: selectors.isAPISelected(state),
-    modalInfo: selectors.getComponentInfoModalInfo(state)
+    modalInfo: selectors.getComponentInfoModalInfo(state),
+	numDownloaded: selectors.getNumDownloaded(state),
+	totalNumToDownload: selectors.getTotalNumToDownload(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -6,6 +6,7 @@ import styles from './CompatibleComponents.scss';
 import ComponentDialog from '../Dialogs/ComponentDialog';
 import Changelog from './Changelog';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import * as selectors from "../../containers/CompatibleComponents/selectors";
 
 
 class CompatibleComponents extends Component {
@@ -109,7 +110,7 @@ class CompatibleComponents extends Component {
 	}
 
 	getDownloadingPage () {
-    	const { i18n } = this.props;
+    	const { i18n, numDownloaded, totalNumToDownload } = this.props;
 		const spinnerStyles = {
 			color: '#21aa1e',
 			margin: '-3px 0 0 10px',
@@ -122,10 +123,11 @@ class CompatibleComponents extends Component {
 					{i18n.phrase_selected_components} &raquo; {i18n.word_installing}
 				</h2>
 
-				<p style={{ display: 'inline-block' }}>
+				<div style={{ display: 'inline-block' }}>
 					<CircularProgress style={spinnerStyles} size={30} thickness={3} />
-					Downloading <b>N</b> of <b>N</b> components. Please wait.
-				</p>
+					Downloading <b>{numDownloaded}</b> of <b>{totalNumToDownload}</b> components. Please wait.
+				</div>
+
 			</div>
 		);
 	}

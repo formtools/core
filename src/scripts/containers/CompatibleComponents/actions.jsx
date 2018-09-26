@@ -1,5 +1,6 @@
 import * as selectors from './selectors';
 import * as generalSelectors from '../../core/selectors';
+import * as helpers from './helpers';
 import store from '../../core/store';
 
 export const COMPATIBLE_COMPONENTS_LOADED = 'COMPATIBLE_COMPONENTS_LOADED';
@@ -153,12 +154,9 @@ export const downloadCompatibleComponents = () => {
 		let componentList = {};
 		selectedComponents.forEach((item) => {
 			if (item.type === 'core') {
-				componentList.api = { downloaded: false, log: [] };
-			} else if (item.type === 'module') {
-				componentList[`module_${item.folder}`] = { downloaded: false, log: [] };
-			} else if (item.type === 'theme') {
-				componentList[`theme_${item.folder}`] = { downloaded: false, log: [] };
+				return;
 			}
+			componentList[helpers.getComponentIdentifier(item.folder, item.type)] = { downloaded: false, log: [] };
 		});
 
 		dispatch({
@@ -197,7 +195,8 @@ const downloadAndUnpackComponent = (item, data_source_url) => {
 				type: COMPONENT_DOWNLOAD_UNPACK_RESPONSE,
 				payload: {
 					...json,
-					folder: item.folder
+					folder: item.folder,
+					type: item.type
 				}
 			});
 		}).catch((e) => {

@@ -16,6 +16,7 @@ export const getAPI = (state) => state.compatibleComponents.api;
 export const getCore = (state) => state.compatibleComponents.core;
 export const getChangelogs = (state) => state.compatibleComponents.changelogs;
 export const getComponentInfoModalContent = (state) => state.compatibleComponents.componentInfoModalContent; // TODO rename
+export const getDownloadedComponents = (state) => state.compatibleComponents.downloadedComponents;
 
 // converts the hash of modules to an array
 export const getModulesArray = createSelector(
@@ -204,3 +205,18 @@ export const getPrevNextComponent = createSelector(
         return prevNext;
     }
 );
+
+
+// used to show the "downloaded `N` of ..."
+export const getNumDownloaded = createSelector(
+	getDownloadedComponents,
+	(components) => Object.keys(components).filter((key) => components[key].downloaded).length
+);
+
+// used to show the "downloaded ... of `N`"
+export const getTotalNumToDownload = createSelector(
+	getDownloadedComponents,
+	(components) => Object.keys(components).length
+);
+
+

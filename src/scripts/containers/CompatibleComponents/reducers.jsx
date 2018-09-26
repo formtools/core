@@ -1,6 +1,6 @@
 import * as actions from './actions';
+import * as helpers from './helpers';
 import { convertHashToArray, removeFromArray } from '../../core/helpers';
-import { COMPONENT_DOWNLOAD_UNPACK_RESPONSE } from "./actions";
 
 
 export default (state = {
@@ -138,11 +138,13 @@ export default (state = {
 
 		case actions.COMPONENT_DOWNLOAD_UNPACK_RESPONSE:
 			const downloadedComponents = { ...state.downloadedComponents };
-			console.log(downloadedComponents);
+			const componentId = helpers.getComponentIdentifier(action.payload.folder, action.payload.type);
+			downloadedComponents[componentId].downloaded = action.payload.success;
+			downloadedComponents[componentId].log = action.payload.log;
 
-			console.log(action);
 			return {
-				...state
+				...state,
+				downloadedComponents
 			};
 
         case actions.SAVE_SELECTED_COMPONENT_LIST:
