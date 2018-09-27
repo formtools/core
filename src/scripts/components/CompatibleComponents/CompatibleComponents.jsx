@@ -123,11 +123,10 @@ class CompatibleComponents extends Component {
 					{i18n.phrase_selected_components} &raquo; {i18n.word_installing}
 				</h2>
 
-				<div style={{ display: 'inline-block' }}>
+				<div style={{ display: 'inline-block', padding: '12px 0' }}>
 					<CircularProgress style={spinnerStyles} size={30} thickness={3} />
 					Downloading <b>{numDownloaded}</b> of <b>{totalNumToDownload}</b> components. Please wait.
 				</div>
-
 			</div>
 		);
 	}
