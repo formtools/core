@@ -1,6 +1,5 @@
-const fs = require('fs');
 const sass = require('node-sass');
- 
+
 module.exports = function (grunt) {
 	var config = {
 		sass: {

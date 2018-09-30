@@ -1,1 +1,0 @@
-{$LANG.phrase_new_ft_installation}
