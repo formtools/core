@@ -22,5 +22,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^6.5"
+  },
+  "config": {
+    "vendor-dir": "src/vendor"
   }
 }

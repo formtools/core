@@ -34,7 +34,6 @@ module.exports = function (grunt) {
 						'**',
 						'!**/*.scss', // sass files are built separately
 						'!react/**',
-						'!composer.*',
 						'!themes/default/sass/**'
 					],
 					dest: 'dist',
