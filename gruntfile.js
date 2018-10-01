@@ -1,7 +1,8 @@
 const sass = require('node-sass');
 
 module.exports = function (grunt) {
-	var config = {
+
+	const config = {
 		sass: {
 			options: {
 				implementation: sass,
@@ -18,6 +19,51 @@ module.exports = function (grunt) {
 			css: {
 				files: ['**/*.scss'],
 				tasks: ['sass']
+			},
+			src: {
+				files: ['src/**'],
+				tasks: ['sync']
+			}
+		},
+
+		sync: {
+			main: {
+				files: [{
+					cwd: 'src',
+					src: [
+						'**',
+						'!**/*.scss', // sass files are built separately
+						'!react/**',
+						'!composer.*',
+						'!themes/default/sass/**'
+					],
+					dest: 'dist',
+				}],
+				verbose: true
+			}
+		},
+
+		run: {
+			webpack_dev: {
+				cmd: 'npm',
+				args: [
+					'start'
+				]
+			},
+			webpack_prod: {
+				cmd: 'npm',
+				args: [
+					'build'
+				]
+			}
+		},
+
+		concurrent: {
+			watchers: {
+				options: {
+					logConcurrentOutput: true
+				},
+				tasks: ['watch', 'run:webpack_dev']
 			}
 		}
 	};
@@ -26,5 +72,9 @@ module.exports = function (grunt) {
 
 	require('load-grunt-tasks')(grunt);
 
-	grunt.registerTask('default', ['watch']);
+
+	grunt.registerTask('default', ['concurrent:watchers']);
+
+	// builds everything in the dist folder
+	grunt.registerTask('prod', ['sync', 'sass', 'run:webpack_prod']);
 };

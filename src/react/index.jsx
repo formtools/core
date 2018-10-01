@@ -6,9 +6,9 @@ import CompatibleComponentsContainer from './containers/CompatibleComponents/Com
 // boot 'er up
 coreActions.getInitializationData();
 
-// expose whatever we want
 window.React = React;
 window.ReactDOM = ReactDOM;
 window.FT = {
 	CompatibleComponentsContainer
 };
+

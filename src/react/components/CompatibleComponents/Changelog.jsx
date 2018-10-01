@@ -12,7 +12,8 @@ const SmallIconButton = withStyles({
 	root: {
 		height: 32,
 		width: 32
-	}
+	},
+	color: 'red'
 })(IconButton);
 
 const Changelog = ({ data, i18n }) => {

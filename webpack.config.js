@@ -5,7 +5,7 @@ const autoprefixer = require('autoprefixer');
 const devMode = process.env.NODE_ENV !== 'production';
 
 const coreJS = {
-	entry: './src/scripts/index.jsx',
+	entry: './src/react/index.jsx',
 	output: {
 		path: path.resolve(__dirname, 'dist/scripts'),
 		filename: 'bundle.js'

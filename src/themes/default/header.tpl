@@ -7,14 +7,14 @@
     <link rel="shortcut icon" href="{$theme_url}/images/favicon.ico">
     {template_hook location="head_top"}
     <script>
-        //<![CDATA[
-        var g = {literal}{{/literal}
-            root_url: "{$g_root_url}",
-            error_colours: ["ffbfbf", "ffb5b5"],
-            notify_colours: ["c6e2ff", "97c7ff"],
-            js_debug: {$g_js_debug}
-            {literal}}{/literal};
-        //]]>
+		//<![CDATA[
+		var g = {literal}{{/literal}
+			root_url: "{$g_root_url}",
+			error_colours: ["ffbfbf", "ffb5b5"],
+			notify_colours: ["c6e2ff", "97c7ff"],
+			js_debug: {$g_js_debug}
+        {literal}}{/literal};
+		//]]>
     </script>
     <link type="text/css" rel="stylesheet" href="{$g_root_url}/global/css/main.css?v=3_0_3">
     <link type="text/css" rel="stylesheet" href="{$theme_url}/dist/css/styles.css?v={$version}">
@@ -56,7 +56,7 @@
         <span style="float:left; padding-top: 4px">
       {if isset($settings) && isset($settings.logo_link)}
             <a href="{$settings.logo_link}">{/if}<img src="{$theme_url}/images/logo_{$swatch}2x.png" border="0"
-                                                      width="220" height="67" />
+                                                      width="220" height="67"/>
                 {if isset($settings) && isset($settings.logo_link)}</a>{/if}
     </span>
     </div>
