@@ -11,4 +11,3 @@ window.ReactDOM = ReactDOM;
 window.FT = {
 	CompatibleComponentsContainer
 };
-

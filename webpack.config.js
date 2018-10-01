@@ -7,7 +7,7 @@ const devMode = process.env.NODE_ENV !== 'production';
 const coreJS = {
 	entry: './src/react/index.jsx',
 	output: {
-		path: path.resolve(__dirname, 'dist/scripts'),
+		path: path.resolve(__dirname, 'dist/global/scripts'),
 		filename: 'bundle.js'
 	},
 	module: {

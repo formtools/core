@@ -10,7 +10,7 @@ module.exports = function (grunt) {
 			},
 			dist: {
 				files: {
-					'themes/default/dist/css/styles.css': 'themes/default/src/sass/index.scss',
+					'dist/themes/default/dist/css/styles.css': 'src/themes/default/src/sass/index.scss',
 				}
 			}
 		},
@@ -72,7 +72,7 @@ module.exports = function (grunt) {
 	require('load-grunt-tasks')(grunt);
 
 
-	grunt.registerTask('default', ['concurrent:watchers']);
+	grunt.registerTask('default', ['sync', 'concurrent:watchers']);
 
 	// builds everything in the dist folder
 	grunt.registerTask('prod', ['sync', 'sass', 'run:webpack_prod']);

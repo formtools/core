@@ -16,7 +16,7 @@ $root_url = Core::getRootUrl();
 $page = array(
     "step" => 6,
     "g_root_url" => Core::getRootUrl(),
-    "head_string" => "<script src=\"{$root_url}/dist/scripts/bundle.js\"></script>"
+    "head_string" => "<script src=\"{$root_url}/dist/global/scripts/bundle.js\"></script>"
 );
 
 Installation::displayPage("templates/step6.tpl", $page);

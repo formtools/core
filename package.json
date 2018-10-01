@@ -1,8 +1,7 @@
 {
   "name": "formtools",
   "version": "1.0.0",
-  "description": "The Form Tools core. ",
-  "main": "scripts-src/index.jsx",
+  "description": "The Form Tools core bundling/packaging project.",
   "directories": {
     "test": "tests"
   },
