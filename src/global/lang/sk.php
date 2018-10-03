@@ -1096,7 +1096,7 @@ $LANG["notify_client_menu_updated"] = "Klient ponuka bola aktualizovaná.";
 $LANG["notify_click_to_edit_new_submission"] = "Ak chcete upraviť nové odoslanie, kliknite sem.";
 $LANG["notify_deleted_menu_already_assigned"] = "Ospravedlňujeme sa, menu, ktoré sa pokúsil odstrániť sa už používajú klienti uvedených nižšie. Pre odstránenie ponuky, budete musieť najprv priradiť klientov do iných ponukách. Kliknite na meno klienta, ktorý chcete upraviť individuálny účet, alebo postúpiť všetky účty na inú pomocou rozbaľovacie menu nižšie.";
 $LANG["notify_disabled_theme_already_assigned"] = "Je nám ľúto, sú jedným z tém, ktoré ste práve zdravotným postihnutím už používajú takto klientskych účtov. S cieľom oslabiť motív, ktorý bude musieť najprv priradiť každému klientovi k inej téme. Kliknite na meno klienta, ktorý chcete upraviť individuálny účet, alebo postúpiť všetky účty na tému pomocou rozbaľovaciu nižšie.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Kliknite tu</a> určiť, ktoré polia formulára sú polia e-mail, takže cieľ je vo vašej e-mailovej šablóny.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Kliknite tu</a> určiť, ktoré polia formulára sú polia e-mail, takže cieľ je vo vašej e-mailovej šablóny.";
 $LANG["notify_edit_field_new_field"] = "<b>Jedná sa o novú oblasť.</b> Budete musieť aktualizovať na hlavnú stránku skôr, ako budú môcť plne upraviť túto oblasť.";
 $LANG["notify_edit_option_list_after_save"] = "Musíte vybrať možnosť zoznam a potom na Uložiť zmeny, ako budú môcť upraviť.";
 $LANG["notify_email_field_config_deleted"] = "Konfiguráciu e-mailu bola vymazaná.";

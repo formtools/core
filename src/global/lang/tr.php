@@ -1097,7 +1097,7 @@ $LANG["notify_client_menu_updated"] = "Istemci menüsü güncellendi.";
 $LANG["notify_click_to_edit_new_submission"] = "Yeni gönderimi düzenlemek için buraya tıklayın.";
 $LANG["notify_deleted_menu_already_assigned"] = "Üzgünüz, menü sadece silmek için çalıştı zaten müşteriler aşağıda listelenen tarafından kullanılıyor. Amacıyla öncelikle diğer menülere müşterilerine atamak gerekir menü silmek için. Müşteri adına tıklayın tek tek hesabı düzenlemek için veya farklı bir menü altında açılan kullanarak tüm hesapları atayın.";
 $LANG["notify_disabled_theme_already_assigned"] = "Üzgünüz, bir sadece özürlü temalar zaten şu müşteri hesaplarını tarafından kullanılmaktadır. Amacıyla öncelikle başka bir temaya her istemci atamak gerekecektir tema devre dışı bırakmak için. Müşteri adına tıklayın tek tek hesap, düzenlemek veya bir tema altında açılan kullanarak tüm hesapları atayın.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Tıklayın</a> form alanlarını e-posta alanlarını, bu nedenle e-posta şablonları onları hedef belirtmek için.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Tıklayın</a> form alanlarını e-posta alanlarını, bu nedenle e-posta şablonları onları hedef belirtmek için.";
 $LANG["notify_edit_field_new_field"] = "<b>Bu yeni bir alan.</b> Tam bu alanı düzenlemek önce ana sayfa güncellemeniz gerekir.";
 $LANG["notify_edit_option_list_after_save"] = "Bir Seçenek Listesi seçin ve daha sonra düzenlemek için önce Değişiklikleri Kaydet gerekir.";
 $LANG["notify_email_field_config_deleted"] = "E-posta yapılandırma silindi.";

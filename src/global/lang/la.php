@@ -1092,7 +1092,7 @@ $LANG["notify_client_menu_updated"] = "Klients izvēlne ir atjaunota.";
 $LANG["notify_click_to_edit_new_submission"] = "Noklikšķiniet šeit, lai rediģētu jauno iesniegumu.";
 $LANG["notify_deleted_menu_already_assigned"] = "Atvainojiet, izvēlnes jūs vienkārši mēģinājis izdzēst jau tiek izmantota ar klientiem, kas uzskaitīti turpmāk. Lai izdzēstu menu jums vispirms ir nepieciešams piešķirt klientiem citās izvēlnēs. Noklikšķiniet uz klienta vārda rediģēt šo individuālo kontu, vai arī nodot visu kontu citā izvēlnē, izmantojot nolaižamo zemāk.";
 $LANG["notify_disabled_theme_already_assigned"] = "Žēl, viena no tēmām, kuru tikko invalīdu jau izmanto šādu klientu kontiem. Lai atspējotu tēma jums vispirms ir nepieciešams piešķirt katram klientam uz citu tēmu. Noklikšķiniet uz klienta vārda rediģēt šo individuālo kontu, vai arī nodot visu kontu tēmu, izmantojot nolaižamo zemāk.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Noklikšķiniet šeit,</a> lai norādītu, kurus veido lauki ir e-pasta lauki, lai jūs varat mērķēt tos jūsu e-pasta veidnes.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Noklikšķiniet šeit,</a> lai norādītu, kurus veido lauki ir e-pasta lauki, lai jūs varat mērķēt tos jūsu e-pasta veidnes.";
 $LANG["notify_edit_field_new_field"] = "<b>Šis ir jauns lauks.</b> Jums būs nepieciešams atjaunināt galveno lapu pirms to var pilnībā labot šajā jomā.";
 $LANG["notify_edit_option_list_after_save"] = "Jums ir jāizvēlas variants saraksts un pēc tam saglabājiet izmaiņas, pirms to var rediģēt.";
 $LANG["notify_email_field_config_deleted"] = "E-pasts konfigurācija ir izdzēsts.";

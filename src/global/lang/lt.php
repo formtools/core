@@ -1092,7 +1092,7 @@ $LANG["notify_client_menu_updated"] = "Klientų meniu buvo atnaujintas.";
 $LANG["notify_click_to_edit_new_submission"] = "Spustelėkite čia, jei norite redaguoti naują pateikimą.";
 $LANG["notify_deleted_menu_already_assigned"] = "Atsiprašome, meniu tiesiog bandė naikinti jau naudojasi klientai žemiau. Siekiant panaikinti meniu pirmiausia reikia priskirti klientams kitas meniu. Spauskite ant kliento pavadinimą pakeisti, kad atskiros sąskaitos, ar priskirti visas sąskaitas į kitą meniu, naudojant žemiau esančio sąrašo intervalo.";
 $LANG["notify_disabled_theme_already_assigned"] = "Atsiprašome, viena iš temų, kurią ką tik neįgalieji jau naudojamas po klientų sąskaitas. Norėdami išjungti tema jums pirmiausia reikia priskirti kiekvienam klientui į kitą temą. Spauskite ant kliento pavadinimą pakeisti, kad atskiros sąskaitos, ar perleisti visas sąskaitas su tema, naudojant žemiau esančio sąrašo intervalo.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Spauskite čia norėdami</a> nurodyti formos laukus elektroniniu paštu srityse, todėl jūs galite nukreipti juos į savo elektroninio pašto šablonus.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Spauskite čia norėdami</a> nurodyti formos laukus elektroniniu paštu srityse, todėl jūs galite nukreipti juos į savo elektroninio pašto šablonus.";
 $LANG["notify_edit_field_new_field"] = "<b>Tai nauja sritis.</b> Jums reikės atnaujinti pagrindinį puslapį prieš gali visiškai pakeisti šioje srityje.";
 $LANG["notify_edit_option_list_after_save"] = "Jūs turite pasirinkti pasirinkimo sąrašas ir tada išsaugokite pakeitimus prieš ją redaguoti.";
 $LANG["notify_email_field_config_deleted"] = "Pašto adresą buvo ištrintas.";

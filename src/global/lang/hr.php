@@ -1095,7 +1095,7 @@ $LANG["notify_client_menu_updated"] = "Klijent meni je obnovljeno.";
 $LANG["notify_click_to_edit_new_submission"] = "Kliknite ovdje da biste uredili novi podnesak.";
 $LANG["notify_deleted_menu_already_assigned"] = "Žao nam je, meni se samo pokušao to izbrisati već se koristi od strane klijenata navedene u nastavku. Kako bi izbrisali izbornik najprije morate dodijeliti korisnicima na druge izbornike. Kliknite na ime za uređivanje klijenta da pojedini račun ili dodijeliti sve račune u različitim pomoću padajućeg izbornika u nastavku.";
 $LANG["notify_disabled_theme_already_assigned"] = "Nažalost, jedan od teme samo s invaliditetom već se koristi u sljedećim računa klijenta. Kako bi onemogućili temu najprije morate dodijeliti svakom klijentu na drugu temu. Kliknite na ime za uređivanje klijenta da pojedini račun ili dodijeliti sve račune na temu koristeći padajući ispod.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Kliknite ovdje</a> da biste odredili koji je oblik polja su e-mail polja, tako da ih možete ciljati u vašem e-mail predložaka.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Kliknite ovdje</a> da biste odredili koji je oblik polja su e-mail polja, tako da ih možete ciljati u vašem e-mail predložaka.";
 $LANG["notify_edit_field_new_field"] = "<b>To je novo područje.</b> Morat ćete ažurirati na glavnu stranicu prije nego bitak u mogućnosti da u potpunosti urediti to područje.";
 $LANG["notify_edit_option_list_after_save"] = "Morate odabrati Popis opciju, a zatim Spremi promjene prije nego bitak u mogućnosti to urediti.";
 $LANG["notify_email_field_config_deleted"] = "E-mail konfiguracija je bila izbrisana.";

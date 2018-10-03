@@ -1092,7 +1092,7 @@ $LANG["notify_client_menu_updated"] = "Menu pelanggan telah dikemaskini.";
 $LANG["notify_click_to_edit_new_submission"] = "Klik di sini untuk mengedit penyerahan baru.";
 $LANG["notify_deleted_menu_already_assigned"] = "Maaf, menu anda hanya cuba untuk menghapuskan yang sudah digunakan oleh pelanggan di bawah ini. Untuk memadam menu pertama anda perlu untuk menetapkan klien ke menu yang lain. Klik pada nama pelanggan untuk mengedit akaun individu, atau menetapkan semua akaun anda menu yang berbeza dengan menggunakan menu dropdown di bawah ini.";
 $LANG["notify_disabled_theme_already_assigned"] = "Maaf, salah satu tema yang baru saja anda sudah dinyahdayakan digunakan oleh akaun pelanggan seterusnya. Dalam rangka untuk mematikan tema pertama anda perlu untuk menetapkan setiap pelanggan untuk tema lain. Klik pada nama pelanggan untuk mengedit akaun individu, atau menetapkan semua akaun kepada satu tema menggunakan menu dropdown di bawah ini.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klik di sini</a> untuk menentukan medan borang bidang e-mel, jadi anda boleh sasaran mereka dalam template e-mel anda.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Klik di sini</a> untuk menentukan medan borang bidang e-mel, jadi anda boleh sasaran mereka dalam template e-mel anda.";
 $LANG["notify_edit_field_new_field"] = "<b>Ini adalah satu bidang yang</b> baru . Anda akan perlu untuk mengemaskini laman utama sebelum dapat mengedit bidang ini sepenuhnya.";
 $LANG["notify_edit_option_list_after_save"] = "Anda mesti memilih Senarai Pilihan dan kemudian Simpan Perubahan sebelum dapat mengedit.";
 $LANG["notify_email_field_config_deleted"] = "Konfigurasi emel yang telah dihapuskan.";

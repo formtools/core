@@ -1092,7 +1092,7 @@ $LANG["notify_client_menu_updated"] = "Az ügyfél menü frissült.";
 $LANG["notify_click_to_edit_new_submission"] = "Kattintson ide az új beadvány szerkesztéséhez.";
 $LANG["notify_deleted_menu_already_assigned"] = "Sajnáljuk, a menüben csak próbált törölni már most is használják az ügyfelek az alább felsorolt. Annak érdekében, hogy törölje a menüben először kell hozzá az ügyfelek az egyéb menüket. Kattintson az ügyfél nevére szerkeszteni, hogy az egyéni számlára, vagy a hozzá minden fiók egy másik menü segítségével legördülő alul.";
 $LANG["notify_disabled_theme_already_assigned"] = "Sajnáljuk, az egyik téma az imént fogyatékkal már használják a következő ügyfél számlákat. Annak érdekében, hogy tiltsa le a témát először kell rendelni minden ügyfél egy másik téma. Kattintson az ügyfél nevére szerkeszteni, hogy az egyéni számlára, vagy kiosztja az összes beszámolót egy témát használja a legördülő alul.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Kattintson ide</a> , hogy meghatározza, hogy milyen formában mezők email mezőket, így hogy azokat az e-mail sablonok.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Kattintson ide</a> , hogy meghatározza, hogy milyen formában mezők email mezőket, így hogy azokat az e-mail sablonok.";
 $LANG["notify_edit_field_new_field"] = "<b>Ez egy új terület.</b> Meg kell frissíteni a főoldalra mielőtt képes teljes mértékben módosítani ezen a területen.";
 $LANG["notify_edit_option_list_after_save"] = "Ki kell választani egy opciós lista, majd a Változások mentése előtt, hogy képes szerkeszteni.";
 $LANG["notify_email_field_config_deleted"] = "Az email funkció törölve lett.";

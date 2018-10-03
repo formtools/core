@@ -1092,7 +1092,7 @@ $LANG["notify_client_menu_updated"] = "The viðskiptavinur matseðill hefur veri
 $LANG["notify_click_to_edit_new_submission"] = "Klik di sini untuk mengedit pengajuan baru....";
 $LANG["notify_deleted_menu_already_assigned"] = "Því miður, valmyndinni þú reyndir bara að eyða nú þegar verið notað af viðskiptavinunum hér að neðan. Til að eyða valmyndinni þú verður fyrst að úthluta viðskiptavinum öðrum valmyndum. Smelltu á nafn viðskiptavinar til að breyta því að einstaklingur reikning, eða setja alla reikninga til mismunandi matseðill með listanum hér að neðan.";
 $LANG["notify_disabled_theme_already_assigned"] = "Því miður, er ein af þeim þemum sem þú bara slökkt þegar verið notaður af eftirfarandi viðskiptavinareikninga. Til að slökkva á þema sem þú verður fyrst að setja hvern viðskiptavin í annað þema. Smelltu á nafn viðskiptavinar til að breyta því að einstaklingur reikning, eða setja alla reikninga til að þema með listanum hér að neðan.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Smelltu hér</a> til að skilgreina hvaða formi sviðum eru tölvupósti sviðum, svo þú getur miðað þá í sniðmát netfangið þitt.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Smelltu hér</a> til að skilgreina hvaða formi sviðum eru tölvupósti sviðum, svo þú getur miðað þá í sniðmát netfangið þitt.";
 $LANG["notify_edit_field_new_field"] = "<b>Þetta er ný sviði.</b> Þú þarft að uppfæra aðalsíðuna áður að vera fær um að fullu breytt þessu sviði.";
 $LANG["notify_edit_option_list_after_save"] = "Þú verður að velja valkost Listi og þá Vista breytingar áður en hægt að breyta því.";
 $LANG["notify_email_field_config_deleted"] = "Netfangið stillingar hefur verið eytt.";

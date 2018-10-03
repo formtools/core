@@ -1098,7 +1098,7 @@ $LANG["notify_client_menu_updated"] = "Menu klienta zostało zaktualizowane.";
 $LANG["notify_click_to_edit_new_submission"] = "Kliknij tutaj, aby edytować nowe zgłoszenie.";
 $LANG["notify_deleted_menu_already_assigned"] = "Niestety, menu po prostu próbował usunąć jest już wykorzystywany przez klientów wymienionych poniżej. Aby usunąć menu, trzeba najpierw przypisać klientów do innych menu. Kliknij na nazwę klienta, aby edytować, że indywidualne konta lub przypisanie wszystkich kont do innego menu, za pomocą rozwijanej poniżej.";
 $LANG["notify_disabled_theme_already_assigned"] = "Niestety, jeden z tematów po prostu wyłączone są już używane przez następujących kont klientów. Aby wyłączyć temat trzeba najpierw przypisać każdego klienta do innego tematu. Kliknij na nazwę klienta, aby edytować, że indywidualne konta lub przypisać wszystkie rachunki do tematu przy użyciu poniższej listy rozwijanej.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Kliknij tutaj,</a> aby określić, które pola formularza są email pola, więc można kierować ich w szablony e-mail.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Kliknij tutaj,</a> aby określić, które pola formularza są email pola, więc można kierować ich w szablony e-mail.";
 $LANG["notify_edit_field_new_field"] = "<b>Jest to nowe pole.</b> Musisz aktualizacja strony głównej, zanim będzie mógł w pełni edycję tego pola.";
 $LANG["notify_edit_option_list_after_save"] = "Należy wybrać opcję Lista, a następnie Zapisz zmiany, zanim będzie mógł go edytować.";
 $LANG["notify_email_field_config_deleted"] = "E-mail konfiguracja została usunięta.";

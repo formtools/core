@@ -1097,7 +1097,7 @@ $LANG["notify_client_menu_updated"] = "Kunden menuen er blevet opdateret.";
 $LANG["notify_click_to_edit_new_submission"] = "Klik her for at redigere det nye indlæg.";
 $LANG["notify_deleted_menu_already_assigned"] = "Beklager, men den menu, du netop har forsøgt at slette allerede bruges af kunderne, der er anført nedenfor. For at slette den menu, du vil først nødt til at tildele klienter til andre menuer. Klik på kundens navn for at redigere, at individuelle hensyn, eller overdrage samtlige konti til en anden menu ved hjælp af dropdown nedenfor.";
 $LANG["notify_disabled_theme_already_assigned"] = "Beklager, men et af de temaer, du lige har deaktiveret bliver allerede brugt af følgende kundekonti. For at deaktivere det tema, du vil først nødt til at tildele hver klient til et andet tema. Klik på kundens navn for at redigere, at individuelle hensyn, eller overdrage samtlige konti til et tema ved hjælp af dropdown nedenfor.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klik her for</a> at angive, hvilke formularfelter er e-mail felter, så du kan målrette dem i din e-mail skabeloner.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Klik her for</a> at angive, hvilke formularfelter er e-mail felter, så du kan målrette dem i din e-mail skabeloner.";
 $LANG["notify_edit_field_new_field"] = "<b>Dette er et nyt felt.</b> Du skal opdatere den vigtigste side før at være i stand til fuldt ud at redigere dette felt.";
 $LANG["notify_edit_option_list_after_save"] = "Du skal vælge en indstilling List og derefter gemme ændringerne, før de kan redigere det.";
 $LANG["notify_email_field_config_deleted"] = "Den e-mail-konfigurationen er blevet slettet.";

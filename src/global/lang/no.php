@@ -1097,7 +1097,7 @@ $LANG["notify_client_menu_updated"] = "Klienten menyen har blitt oppdatert.";
 $LANG["notify_click_to_edit_new_submission"] = "Klikk her for å redigere det nye innlegget.";
 $LANG["notify_deleted_menu_already_assigned"] = "Beklager, menyen du bare prøvde å slette allerede brukes av klientene nedenfor. For å slette menyen må du først tildele klientene til andre menyer. Klikk på klienten for å redigere den enkelte konto, eller tildele alle kontoene til en annen ved hjelp av rullegardinmenyen nedenfor.";
 $LANG["notify_disabled_theme_already_assigned"] = "Beklager, en av de temaene du nettopp ufør allerede brukes av følgende kundekontoer. For å deaktivere temaet må du først tildele hver kunde til et annet tema. Klikk på klienten for å redigere den enkelte konto, eller tildele alle kontoene til et tema ved hjelp av rullegardinmenyen nedenfor.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klikk her for</a> å angi hvilke skjemafelt er e-felt, slik at du kan målrette dem i e-maler.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Klikk her for</a> å angi hvilke skjemafelt er e-felt, slik at du kan målrette dem i e-maler.";
 $LANG["notify_edit_field_new_field"] = "<b>Dette er et nytt felt.</b> Du må oppdatere hovedsiden før han ble forhindret i å fullt redigere dette feltet.";
 $LANG["notify_edit_option_list_after_save"] = "Du må velge et alternativ List og deretter Lagre endringer før du kan redigere den.";
 $LANG["notify_email_field_config_deleted"] = "Den e-konfigurasjon har blitt slettet.";

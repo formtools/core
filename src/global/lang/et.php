@@ -1092,7 +1092,7 @@ $LANG["notify_client_menu_updated"] = "Kliendi menüü on uuendatud.";
 $LANG["notify_click_to_edit_new_submission"] = "Uus esituse muutmiseks klõpsake siin.";
 $LANG["notify_deleted_menu_already_assigned"] = "Vabandame, menüüs ainult proovinud kustutada, on juba mida kliendid on loetletud allpool. Et kustutada menüüs teile esmalt vaja määrata klientidele teiste menüüsid. Klõpsake kliendi nime muuta, et konkreetse konto või määrata kõikide kontode erinevas menüüs kasutades rippmenüüst allpool.";
 $LANG["notify_disabled_theme_already_assigned"] = "Vabandust, üks teemadele sa just puudega on juba kasutusel järgmise kliendi kontod. Et kustutada teema teile esmalt vaja määrata igale kliendile teise teema. Klõpsake kliendi nime muuta, et konkreetse konto või määrata kõikide kontode teema kasutades rippmenüüst allpool.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Vajuta siia</a> , et määrata, millised väljad on e-posti väljad, siis võite suunata neid oma e-posti malle.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Vajuta siia</a> , et määrata, millised väljad on e-posti väljad, siis võite suunata neid oma e-posti malle.";
 $LANG["notify_edit_field_new_field"] = "<b>See on uus valdkonnas.</b> Sul on vaja ajakohastada pealehel enne kui nad saavad täielikult muuta selles valdkonnas.";
 $LANG["notify_edit_option_list_after_save"] = "Tuleb valida variant List ja seejärel Save Changes enne kui nad saavad seda muuta.";
 $LANG["notify_email_field_config_deleted"] = "Meilisätteid on kustutatud.";
