@@ -1093,7 +1093,7 @@ $LANG["notify_client_menu_updated"] = "客戶端菜單已被更新。";
 $LANG["notify_click_to_edit_new_submission"] = "點擊此處編輯新的提交。";
 $LANG["notify_deleted_menu_already_assigned"] = "對不起，剛才的菜單試圖刪除已經被客戶使用下面列出。為了刪除菜單中，您首先需要客戶指定的其他菜單。點擊客戶端的名稱修改，個人帳戶，所有帳戶或指定一個不同的使用下拉菜單下面。";
 $LANG["notify_disabled_theme_already_assigned"] = "很抱歉，其中一個主題，您只需殘疾人士已被用於下列客戶帳戶。要禁用的主題你首先需要每個客戶端分配到另一個主題。點擊客戶端的名稱修改，個人帳戶，或分配到所有帳戶使用下拉主題下面。";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">點擊這裡</a>可以指定哪些表單域是電子郵件領域，所以你可以針對他們在您的電子郵件模板。";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">點擊這裡</a>可以指定哪些表單域是電子郵件領域，所以你可以針對他們在您的電子郵件模板。";
 $LANG["notify_edit_field_new_field"] = "<b>這是一個新的領域</b> 。您將需要更新的主頁，然後才能充分編輯此字段。";
 $LANG["notify_edit_option_list_after_save"] = "你必須選擇一個選項列表，然後保存更改，然後才能進行編輯。";
 $LANG["notify_email_field_config_deleted"] = "該電子郵件配置已被刪除。";

@@ -298,7 +298,9 @@ $page_vars = array(
     "order" => $order,
     "field_types" => $field_types,
     "has_searchable_field" => $has_searchable_field,
-    "notify_view_missing_columns_admin_fix" => General::evalSmartyString($LANG["notify_view_missing_columns_admin_fix"], array("LINK" => "edit/?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2")),
+    "notify_view_missing_columns_admin_fix" => General::evalSmartyString($LANG["notify_view_missing_columns_admin_fix"], array(
+    	"LINK" => "edit/?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2"
+	)),
     "curr_search_fields" => Sessions::get("current_search.search_fields"),
     "pagination" => General::getPageNav($search_num_results, $results_per_page, $current_page, "")
 );

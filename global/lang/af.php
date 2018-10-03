@@ -1092,7 +1092,7 @@ $LANG["notify_client_menu_updated"] = "Die kliënt-menu has been updated.";
 $LANG["notify_click_to_edit_new_submission"] = "Klik hier om die nuwe voorlegging te wysig.";
 $LANG["notify_deleted_menu_already_assigned"] = "Jammer, die menu wat jy nou net probeer om te verwyder is reeds in gebruik deur die kliënte hieronder gelys. Om te verwyder die spyskaart sal jy eers moet toewys die kliënte na ander spyskaarte. Klik op die kliënt naam te wysig dat individuele rekening, of toewys alle rekeninge na &#39;n ander spyskaart met behulp van die dropdown hieronder.";
 $LANG["notify_disabled_theme_already_assigned"] = "Jammer, een van die temas wat jy nou afgeskakel is reeds gebruik word deur die volgende kliënte rekeninge. Met die oog op die aanskakel van die tema wat jy sal die eerste keer nodig om elke kliënt toewys aan &#39;n ander tema. Klik op die kliënt naam te wysig dat individuele rekening, of toewys alle rekeninge na &#39;n tema met behulp van die dropdown hieronder.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klik hier</a> om te spesifiseer watter vorm velde is e-pos velde, dus kan jy hulle in jou e-pos templates teiken.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Klik hier</a> om te spesifiseer watter vorm velde is e-pos velde, dus kan jy hulle in jou e-pos templates teiken.";
 $LANG["notify_edit_field_new_field"] = "<b>Dit is &#39;n nuwe veld.</b> Jy sal moet die hoof bladsy voordat dit ten volle te kan wysig hierdie veld te werk.";
 $LANG["notify_edit_option_list_after_save"] = "Jy moet &#39;n opsie lys kies en dan Stoor Veranderinge voordat hy in staat is om dit te wysig.";
 $LANG["notify_email_field_config_deleted"] = "Die e-pos verstellings is verwyder.";

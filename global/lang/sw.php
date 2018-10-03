@@ -1093,7 +1093,7 @@ $LANG["notify_client_menu_updated"] = "Menu mteja imekuwa updated.";
 $LANG["notify_click_to_edit_new_submission"] = "Bonyeza hapa ili uhariri kuwasilisha mpya.";
 $LANG["notify_deleted_menu_already_assigned"] = "Samahani, menu wewe tu walijaribu delete tayari kutumiwa na wateja zilizoorodheshwa hapa chini. Ili delete the menu wewe kwanza hawawajui haja ya wateja wengine menus. Bonyeza kwenye jina mteja hariri kwamba akaunti ya mtu binafsi, au hawawajui akaunti yote tofauti kutumia dropdown menu chini.";
 $LANG["notify_disabled_theme_already_assigned"] = "Sorry, mmoja wa walemavu mandhari wewe tu tayari zinatumiwa na mteja zifuatazo akaunti. Ili Disable temat utakuwa unahitaji kwanza hawawajui kila mteja mwingine temat. Bonyeza kwenye jina mteja hariri kwamba akaunti ya mtu binafsi, au hawawajui akaunti wote kwa kutumia kaulimbiu dropdown chini.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Click here</a> to specify which form fields are email fields, so you can target them in your email templates.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Click here</a> to specify which form fields are email fields, so you can target them in your email templates.";
 $LANG["notify_edit_field_new_field"] = "<b>This is a new field</b>. You will need to update the main page before being able to fully edit this field.";
 $LANG["notify_edit_option_list_after_save"] = "You must select an Option List and then Save Changes before being able to edit it.";
 $LANG["notify_email_field_config_deleted"] = "Configuration ya barua pepe imekuwa ilifutwa.";

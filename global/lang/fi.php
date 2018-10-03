@@ -1092,7 +1092,7 @@ $LANG["notify_client_menu_updated"] = "Asiakas-valikko on päivitetty.";
 $LANG["notify_click_to_edit_new_submission"] = "Napsauta tätä, jos haluat muokata uutta lähetystä.";
 $LANG["notify_deleted_menu_already_assigned"] = "Anteeksi, valikon juuri yrittänyt poistaa jo käyttävät asiakkaat alla. Jotta voidaan poistaa valikosta sinun täytyy ensin siirtää asiakkaiden muihin valikoihin. Klikkaa asiakkaan nimi muokata, että henkilökohtaisen tilin tai siirtää kaikki tilit eri valikossa avattavaa alla.";
 $LANG["notify_disabled_theme_already_assigned"] = "Anteeksi, yksi aiheista juuri vammaiset ovat jo käytössä seuraavat asiakastileihin. Jotta voidaan poistaa teema sinun täytyy ensin määrittää kullekin asiakkaalle toisen teeman. Klikkaa asiakkaan nimi muokata, että henkilökohtaisen tilin tai siirtää kaikki tilit teeman avulla avattavaa alla.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klikkaa tästä</a> yksilöidä, mitkä lomakkeen kentät ovat sähköposti kenttiä, joten voit kohdistaa ne sähköpostiisi malleja.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Klikkaa tästä</a> yksilöidä, mitkä lomakkeen kentät ovat sähköposti kenttiä, joten voit kohdistaa ne sähköpostiisi malleja.";
 $LANG["notify_edit_field_new_field"] = "<b>Tämä on uusi kenttä.</b> Sinun tulee päivittää etusivulle ennen kuin ne voivat täydellisesti muuttaa kentän.";
 $LANG["notify_edit_option_list_after_save"] = "Sinun tulee valita vaihtoehto luettelosta ja valitse Tallenna muutokset ennen kuin hän voi muokata sitä.";
 $LANG["notify_email_field_config_deleted"] = "Sähköpostin kokoonpano on poistettu.";

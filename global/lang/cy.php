@@ -1092,7 +1092,7 @@ $LANG["notify_client_menu_updated"] = "Mae&#39;r fwydlen cleient wedi ei ddiwedd
 $LANG["notify_click_to_edit_new_submission"] = "Cliciwch yma i olygu'r cyflwyniad newydd.";
 $LANG["notify_deleted_menu_already_assigned"] = "Mae&#39;n ddrwg gennym, y ddewislen &#39;ch jyst ceisio dileu eisoes yn cael ei defnyddio gan y cleientiaid a restrir isod. Er mwyn dileu y fwydlen bydd angen i chi neilltuo y cleientiaid i bwydlenni eraill. Cliciwch ar enw&#39;r cleient i olygu bod cyfrif unigol, neu neilltuo pob cyfrif i bwydlen wahanol ddefnyddio&#39;r gwymplen isod.";
 $LANG["notify_disabled_theme_already_assigned"] = "Mae&#39;n ddrwg gennym, un o&#39;r themâu &#39;ch jyst anabl eisoes yn cael eu defnyddio gan y cyfrifon cleient canlynol. Er mwyn analluogi y thema, bydd angen i chi neilltuo bob cleient i thema arall. Cliciwch ar enw&#39;r cleient i olygu bod cyfrif unigol, neu neilltuo pob cyfrif i thema ddefnyddio&#39;r gwymplen isod.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Cliciwch yma</a> i nodi pa feysydd ffurflen mae caeau e-bost, er mwyn i chi eu targedu yn eich templedi e-bost.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Cliciwch yma</a> i nodi pa feysydd ffurflen mae caeau e-bost, er mwyn i chi eu targedu yn eich templedi e-bost.";
 $LANG["notify_edit_field_new_field"] = "<b>Mae hwn yn faes newydd.</b> Bydd angen i chi ddiweddaru y brif dudalen cyn gallu llawn golygu y maes hwn.";
 $LANG["notify_edit_option_list_after_save"] = "Rhaid i chi ddewis Rhestr Opsiwn ac yna Cadw Newidiadau cyn gallu ei olygu.";
 $LANG["notify_email_field_config_deleted"] = "Mae&#39;r ffurfweddiad e-bost wedi ei ddileu.";

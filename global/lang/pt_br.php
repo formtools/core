@@ -1099,7 +1099,7 @@ $LANG["notify_client_menu_updated"] = "O menu do cliente foi atualizado.";
 $LANG["notify_click_to_edit_new_submission"] = "Clique aqui para editar o novo envio.";
 $LANG["notify_deleted_menu_already_assigned"] = "Desculpe, no menu que você acabou de tentar apagar já está sendo usado pelos clientes listados abaixo. A fim de eliminar o menu você primeiro precisa atribuir aos clientes outros menus. Clique sobre o nome do cliente para editar a conta individual, ou atribuir todas as contas para um menu diferente usando a lista suspensa abaixo.";
 $LANG["notify_disabled_theme_already_assigned"] = "Desculpe, um dos temas que você acabou de desabilitar está sendo usadas pelas contas dos seguintes cliente. Para desativar o tema terá primeiro de atribuir a cada cliente outro tema. Clique sobre o nome do cliente para editar a conta individual, ou atribuir todas as contas de um tema usando a lista suspensa abaixo.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Click here</a> to specify which form fields are email fields, so you can target them in your email templates.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Click here</a> to specify which form fields are email fields, so you can target them in your email templates.";
 $LANG["notify_edit_field_new_field"] = "<b>This is a new field</b>. You will need to update the main page before being able to fully edit this field.";
 $LANG["notify_edit_option_list_after_save"] = "You must select an Option List and then Save Changes before being able to edit it.";
 $LANG["notify_email_field_config_deleted"] = "The email configuration has been deleted.";

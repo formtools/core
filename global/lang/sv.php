@@ -1095,7 +1095,7 @@ $LANG["notify_client_menu_updated"] = "Klientmenyn har uppdaterats.";
 $LANG["notify_click_to_edit_new_submission"] = "Klicka här för att redigera det nya inlägget.";
 $LANG["notify_deleted_menu_already_assigned"] = "Tyvärr så används den meny du försöker ta bort av andra klienter som listas nedan. För att ta bort menyn måste du först koppla dessa klienter till andra menyer. Klicka på en klients namn för att ändra det kontot, eller tilldela alla konton en annan meny samtidigt via rullgardinsmenyn nedan.";
 $LANG["notify_disabled_theme_already_assigned"] = "Tyvärr så används ett av de teman du vill ta bort av andra klientkonton. Du ser dem listade nedan. För att stänga av temat för dem måste du först koppla ett annat tema till dem. Antingen individuellt genom att klicka på klientnamnet eller alla på en gång med samma tema genom att välja ett från rullgardinsmenyn nedan.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klicka här</a> för att ange vilka formulärfält som är e-postfält, så att du kan använda dig av dem i dina e-postmallar.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Klicka här</a> för att ange vilka formulärfält som är e-postfält, så att du kan använda dig av dem i dina e-postmallar.";
 $LANG["notify_edit_field_new_field"] = "<b>Detta är ett nytt fält.</b> Du behöver uppdatera huvudsidan innan du helt kan redigera detta fält.";
 $LANG["notify_edit_option_list_after_save"] = "Du måste välja en Alternativlista och sedan Spara ändringarna innan du kan redigera den.";
 $LANG["notify_email_field_config_deleted"] = "E-postkonfigurationen har tagits bort.";

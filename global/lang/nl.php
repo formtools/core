@@ -1099,7 +1099,7 @@ $LANG["notify_client_menu_updated"] = "De klant menu is bijgewerkt.";
 $LANG["notify_click_to_edit_new_submission"] = "Klik hier om de nieuwe inzending te bewerken.";
 $LANG["notify_deleted_menu_already_assigned"] = "Sorry, het menu dat u probeerde te verwijderen wordt al gebruikt door de klanten hieronder opgesomd. Om het menu te verwijderen zal je eerst moeten de klanten toe te wijzen aan andere menu&#39;s. Klik op de naam van cliënt te bewerken dat individuele rekening, of alle accounts toewijzen aan een ander menu met behulp van de keuzelijst hieronder.";
 $LANG["notify_disabled_theme_already_assigned"] = "Sorry, een van de thema&#39;s die u zojuist met een handicap reeds gebruikt door de volgende klantaccounts. Om uit te schakelen het thema zal je eerst moet elke client toewijzen aan een ander thema. Klik op de naam van cliënt te bewerken dat de individuele rekening, of alle accounts toewijzen aan een thema met behulp van de keuzelijst hieronder.";
-$LANG["notify_edit_email_fields_link"] = "<a href=\"edit.php?page=email_settings\">Klik hier</a> om aan te geven welke vorm velden zijn e-mail velden, zodat u ze kunt richten op uw e-mail templates.";
+$LANG["notify_edit_email_fields_link"] = "<a href=\"?page=email_settings\">Klik hier</a> om aan te geven welke vorm velden zijn e-mail velden, zodat u ze kunt richten op uw e-mail templates.";
 $LANG["notify_edit_field_new_field"] = "<b>Dit is een nieuw veld.</b> U moet naar de hoofdpagina voordat ze volledig kunnen bewerken op dit terrein te werken.";
 $LANG["notify_edit_option_list_after_save"] = "U moet een lijst met opties te selecteren en vervolgens op Wijzigingen opslaan alvorens te kunnen bewerken.";
 $LANG["notify_email_field_config_deleted"] = "De e-mail configuratie is verwijderd.";
