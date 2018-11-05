@@ -478,7 +478,7 @@ class Forms
 		foreach ($client_ids as $client_id) {
 			$db->query("
                 INSERT INTO {PREFIX}client_forms (account_id, form_id)
-                VALUES (:client_id, :form_id)
+                VALUES (:account_id, :form_id)
             ");
 			$db->bindAll(array(
 				"account_id" => $client_id,
