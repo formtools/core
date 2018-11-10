@@ -5,6 +5,9 @@
   "directories": {
     "test": "tests"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "start": "webpack --config ./webpack.config.js --mode=development --watch",
     "build": "webpack --config ./webpack.config.js --mode=production"
