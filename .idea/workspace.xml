@@ -17,20 +17,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name=".gitattributes" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitattributes">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" column="19" lean-forward="true" selection-start-line="1" selection-start-column="6" selection-end-line="1" selection-end-column="19" />
-            </state>
-          </provider>
+      <file leaf-file-name="test.whatever" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cache/test.whatever">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file leaf-file-name="error.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/error.php">
+          <provider selected="true" editor-type-id="text-editor" />
         </entry>
       </file>
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="30">
-              <caret line="2" column="21" lean-forward="true" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
+              <caret line="2" column="17" lean-forward="true" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -187,6 +188,11 @@
               <item name="core3.1" type="b2602c69:ProjectViewProjectNode" />
               <item name="core3.1" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="core3.1" type="b2602c69:ProjectViewProjectNode" />
+              <item name="core3.1" type="462c0819:PsiDirectoryNode" />
+              <item name="cache" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -258,12 +264,12 @@
       <workItem from="1537422191197" duration="24918000" />
       <workItem from="1538237632199" duration="1430000" />
       <workItem from="1538282721958" duration="7823000" />
-      <workItem from="1540953597770" duration="7359000" />
+      <workItem from="1540953597770" duration="7536000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="263823000" />
+    <option name="totallyTimeSpent" value="264000000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="0" />
@@ -333,8 +339,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/install/templates/step2.tpl" />
-    <entry file="file://$PROJECT_DIR$/install/step2.php" />
     <entry file="file://$PROJECT_DIR$/src/scripts/core/reducers.jsx" />
     <entry file="file://$PROJECT_DIR$/global/code/Core.class.php" />
     <entry file="file://$PROJECT_DIR$/src/scripts/components/CompatibleComponents/Changelog.jsx" />
@@ -541,10 +545,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cache/test.whatever">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/error.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
-          <caret line="2" column="21" lean-forward="true" selection-start-line="2" selection-start-column="21" selection-end-line="2" selection-end-column="21" />
+          <caret line="2" column="17" lean-forward="true" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
         </state>
       </provider>
     </entry>
