@@ -1,31 +1,34 @@
-## Development 
+## Form Tools Development 
 
-> This PAGE is still in development! The irony! I'm in the midst of updating the whole build and dev process for Form Tools 3.1, so this is in flux.  
-
-Form Tools 3.1 (still in development) adds in Sass, React, JSX, webpack, grunt and some other goodies commonly used  
+Form Tools 3.1 (still in development) added Sass, React, JSX, webpack, grunt and some other goodies commonly used  
 in any modern web developer's toolkit. Up until this version there really WAS no local development process: you just 
-cloned the repo and booted it up in your browser. That was super easy but denied me all the useful tools and benefits 
-of a proper build process, so as of 3.1 this has greatly changed. 
+cloned the repo and booted it up in your browser. This is because Form Tools has always primarily been a PHP application; 
+the front end was very basic.   
 
-Now the repo is divided into the standard `src` / `dist` folder arrangement (only src is checked into the repo); 
-all source code is found in `src` and the `dist` folder contains the build artifacts: minimized files, generated CSS,
-bundles and so on.
+So anyway, the old "process" was super simple but no longer possible now we need to update the front end tools, so it's 
+changed quite a bit with 3.1.  
 
-The section below explains how to set up your dev environment, but here's a few high level notes first. 
-- the `src` folder contains the source code. Only ever edit stuff the source code in there. 
-- a `dist` folder is created by the build process (see below). This is always prod-ready. The release packages from
-FT 3.1 and later contain the _content of the dist folder only_. 
-
+The repo files are now grouped into the standard `src` / `dist` folder arrangement (only src is checked into the repo); 
+all source code is found in `src` and build artifacts are found in `dist`: minimized files, generated CSS,
+bundles and so on. Since PHP isn't really affected by any of this, it's found in both. There's a grunt command (see below)
+that generates your dist folder: for PHP and other file, it simply copies them over from src to dist. Other files are 
+actually processed and generated into dist. 
 
 
 ### Setting up dev environment
 
-To develop Form Tools locally you need to be running *node*, *yarn*, *grunt*, plus you need a server running `PHP 5.3` or 
-later with `PDO` and `MySQL`. For the server stuff, MAMP/LAMP/WAMP is your friend:
+To develop Form Tools locally you need to be running *Node* and *npm*, *yarn*, *grunt*, plus you need a server running 
+`PHP 5.3` or later with `PDO` and `MySQL`. Necessary minimum versions:
+
+- Node >= 8.11.3
+- Yarn (anything pretty new)
+- PHP 5.3
+
+For the server stuff, MAMP/LAMP/WAMP is your friend:
 - Windows: http://www.wampserver.com/en/
 - Mac: https://www.mamp.info/en/
 
-They're preconfigured Apache, PHP, MySQL servers. PDO comes installed by default in any modern PHP setup so it's almost
+These are preconfigured Apache, PHP, MySQL servers. PDO comes installed by default in any modern PHP setup so it's almost
 certainly just there already. If you're not sure it's available, just assume it is: when you first install 
 Form Tools locally the installation script will whine at you if it's not. 
 
@@ -43,7 +46,6 @@ git clone https://github.com/formtools/core.git
 ```
 
 Next, in your terminal, navigate to the downloaded folder and run:
-
 
 ```
 yarn install
@@ -65,6 +67,18 @@ http://localhost:8888/core/dist
 ```
 
 
-### Creating prod bundles
+### Creating prod bundle process
 
-This is something only done internally.
+This is something only done by me. Nuisance is that npm doesn't have support for the exact process, so it's currently 
+manual. See: https://stackoverflow.com/questions/38935176/how-to-npm-publish-specific-folder-but-as-package-root
+
+I'll automate it when it becomes annoying / error prone. But for now...
+
+1. Check the version and release date have been updated in `Core.class.php`
+2. Generate the prod version with `grunt prod`
+3. Make a copy of the `dist` folder somewhere.
+4. Switch to the release branch `git pull release`. 
+5. Wipe out all the old files (not .gitignore, .gitattributes)
+6. Copy in the new files & commit them.
+7. Go to github & make the new release. 
+8. Add the new version in the Form Tools CMS.
