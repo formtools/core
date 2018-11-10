@@ -1,0 +1,19 @@
+{
+  "name": "formtools",
+  "version": "1.0.0",
+  "description": "Form Tools release branch.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/formtools/core.git"
+  },
+  "author": "Ben Keen",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/formtools/core/issues"
+  },
+  "homepage": "https://github.com/formtools/core#readme"
+}
