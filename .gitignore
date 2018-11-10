@@ -1,1 +1,3 @@
 .DS_Store
+src/cache/*
+!src/cache/index.html
