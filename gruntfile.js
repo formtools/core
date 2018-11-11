@@ -10,7 +10,7 @@ module.exports = function (grunt) {
 			},
 			dist: {
 				files: {
-					'dist/themes/default/dist/css/styles.css': 'src/themes/default/src/sass/index.scss',
+					'dist/themes/default/css/styles.css': 'src/themes/default/sass/index.scss',
 				}
 			}
 		},
@@ -39,6 +39,33 @@ module.exports = function (grunt) {
 					dest: 'dist',
 				}],
 				verbose: true
+			}
+		},
+
+		uglify: {
+			installation_bundles: {
+				files: {
+					'dist/global/scripts/installation-bundle.js': [
+						'src/global/scripts/jquery.js',
+						'src/global/scripts/general.js',
+						'src/global/scripts/rsv.js',
+						'src/global/scripts/jquery-ui-1.8.6.custom.min.js'
+					]
+				}
+			}
+		},
+
+		cssmin: {
+			// options: {
+			// 	mergeIntoShorthands: false
+			// },
+			target: {
+				files: {
+					'dist/themes/default/css/installation-bundle.css': [
+						'src/themes/default/css/smoothness/jquery-ui-1.8.6.custom.css',
+						'dist/themes/default/css/styles.css'
+					]
+				}
 			}
 		},
 
@@ -71,7 +98,7 @@ module.exports = function (grunt) {
 
 	require('load-grunt-tasks')(grunt);
 
-	grunt.registerTask('default', ['sync', 'concurrent:watchers']);
+	grunt.registerTask('default', ['sync', 'sass', 'concurrent:watchers']);
 
 	// builds everything in the dist folder
 	grunt.registerTask('prod', ['sync', 'sass', 'run:webpack_prod']);

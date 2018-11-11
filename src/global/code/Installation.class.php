@@ -138,6 +138,8 @@ class Installation
      */
     public static function displayPage($template, $page_vars)
     {
+    	global $g_env;
+
         $LANG = Core::$L;
 
         clearstatcache();
@@ -160,6 +162,7 @@ class Installation
         $smarty->assign("LANG", $LANG);
         $smarty->assign("same_page", $_SERVER["PHP_SELF"]);
         $smarty->assign("dir", $LANG["special_text_direction"]);
+		$smarty->assign("g_env", $g_env);
         $smarty->assign("g_success", "");
         $smarty->assign("g_message", "");
         $smarty->assign("g_default_theme", Core::getDefaultTheme());
