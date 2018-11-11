@@ -2,3 +2,13 @@
   color: #999999;
   margin: 0 8px;
 }
+
+.downloadLog {
+  background-color: #111111;
+  color: #00aa00;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px;
+  white-space: pre-wrap;
+}

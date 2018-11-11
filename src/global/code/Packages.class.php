@@ -28,7 +28,7 @@ class Packages
 		}  else if ($component_type == "theme") {
 			$target_folder .= "/themes";
 		} else if ($component_type == "api") {
-			$target_folder .= "/global/api";
+			$target_folder .= "/global";
 		} else {
 			return array(
 				"success" => false,
@@ -90,6 +90,7 @@ class Packages
 					}
 				}
 
+				// rename the folder to its final correct name
 				if (rename("$target_folder/$unzipped_folder_name", "$target_folder/$component_folder")) {
 					$log[] = "new component folder created: $target_folder/$component_folder";
 					if (unlink("$downloaded_zipfile")) {

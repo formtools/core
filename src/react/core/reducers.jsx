@@ -53,13 +53,13 @@ export const init = (state = {
 	}
 };
 
-export const downloads = (state = {
-	isDownloading: false,
-	core: null,
-	api: null,
-	modules: null,
-	themes: null
-}, action) => {
-
-	return state;
-};
+// export const downloads = (state = {
+// 	isDownloading: false,
+// 	core: null,
+// 	api: null,
+// 	modules: null,
+// 	themes: null
+// }, action) => {
+//
+// 	return state;
+// };

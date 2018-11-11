@@ -60,7 +60,7 @@ switch ($_GET["action"]) {
 		$data = json_decode(Request::getUrl($url));
 		break;
 
-	// these methods can only be called during an installation
+	// these methods can only be called during an installation (TODO: security?)
 	case "installation_download_single_component":
 		$url = urldecode($_GET["url"]);
 		$component_type = $_GET["type"];

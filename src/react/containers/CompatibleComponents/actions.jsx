@@ -174,7 +174,7 @@ export const downloadCompatibleComponents = () => {
 };
 
 
-export const COMPONENT_DOWNLOAD_UNPACK_RESPONSE = 'COMPONENT_DOWNLOAD_UNPACK_RESPONSE';
+export const COMPONENT_DOWNLOAD_UNPACK_RESPONSE = 'COMPONENT_DOWNLOAD_UNPACK_RESPONSE'; // TODO rename... SUCCESS/ERROR ?
 const downloadAndUnpackComponent = (item, data_source_url) => {
 	let zipfile_url = '';
 	if (item.type === 'api') {

@@ -25,6 +25,7 @@ const mapStateToProps = (state) => ({
 	dataLoaded: selectors.isDataLoaded(state),
 	isEditing: selectors.isEditing(state),
 	isDownloading: selectors.isDownloading(state),
+	downloadComplete: selectors.downloadComplete(state),
     isShowingComponentInfoModal: selectors.showComponentInfoModal(state),
 	api: selectors.getAPI(state),
 	i18n: coreSelectors.getI18n(state),
@@ -38,7 +39,8 @@ const mapStateToProps = (state) => ({
     isAPISelected: selectors.isAPISelected(state),
     modalInfo: selectors.getComponentInfoModalInfo(state),
 	numDownloaded: selectors.getNumDownloaded(state),
-	totalNumToDownload: selectors.getTotalNumToDownload(state)
+	totalNumToDownload: selectors.getTotalNumToDownload(state),
+	downloadLog: selectors.getDownloadLog(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

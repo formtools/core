@@ -6,7 +6,6 @@ import styles from './CompatibleComponents.scss';
 import ComponentDialog from '../Dialogs/ComponentDialog';
 import Changelog from './Changelog';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import * as selectors from "../../containers/CompatibleComponents/selectors";
 
 
 class CompatibleComponents extends Component {
@@ -109,37 +108,42 @@ class CompatibleComponents extends Component {
         );
 	}
 
-	getDownloadingPage () {
-    	const { i18n, numDownloaded, totalNumToDownload } = this.props;
+	getDownloadPage () {
+    	const { i18n, numDownloaded, totalNumToDownload, downloadLog, downloadComplete } = this.props;
 		const spinnerStyles = {
 			color: '#21aa1e',
 			margin: '-3px 0 0 10px',
 			float: 'right'
 		};
 
-    	return (
+		const loadingSpinner = (!downloadComplete) ? null :
+			<div style={{ display: 'inline-block', padding: '12px 0' }}>
+				<CircularProgress style={spinnerStyles} size={30} thickness={3} />
+				Downloading <b>{numDownloaded}</b> of <b>{totalNumToDownload}</b> components. Please wait.
+			</div>;
+
+		return (
 			<div>
 				<h2>
 					{i18n.phrase_selected_components} &raquo; {i18n.word_installing}
 				</h2>
 
-				<div style={{ display: 'inline-block', padding: '12px 0' }}>
-					<CircularProgress style={spinnerStyles} size={30} thickness={3} />
-					Downloading <b>{numDownloaded}</b> of <b>{totalNumToDownload}</b> components. Please wait.
-				</div>
+				{loadingSpinner}
+
+				<div className={styles.downloadLog}>{downloadLog}</div>
 			</div>
 		);
 	}
 
 	render () {
-		const { initialized, dataLoaded, dataLoadError, error, isEditing, isDownloading } = this.props;
+		const { initialized, dataLoaded, dataLoadError, error, isEditing, isDownloading, downloadComplete } = this.props;
 
 		if (!initialized || !dataLoaded) {
 			return null;
 		} else if (dataLoadError) {
 			return <p>Error loading... {error}</p>;
-		} else if (isDownloading) {
-			return this.getDownloadingPage()
+		} else if (isDownloading || downloadComplete) {
+			return this.getDownloadPage()
 		}
 
 		return (isEditing) ? this.getEditableComponentList() : this.getSelectedComponentList();

@@ -56,9 +56,6 @@ module.exports = function (grunt) {
 		},
 
 		cssmin: {
-			// options: {
-			// 	mergeIntoShorthands: false
-			// },
 			target: {
 				files: {
 					'dist/themes/default/css/installation-bundle.css': [

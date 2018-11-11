@@ -7,6 +7,7 @@ export const getModules = (state) => state.compatibleComponents.modules;
 export const getThemes = (state) => state.compatibleComponents.themes;
 export const isAPISelected = (state) => state.compatibleComponents.apiSelected;
 export const isDownloading = (state) => state.compatibleComponents.isDownloading;
+export const downloadComplete = (state) => state.compatibleComponents.downloadComplete;
 export const getSelectedModuleFolders = (state) => state.compatibleComponents.selectedModuleFolders;
 export const getSelectedThemeFolders = (state) => state.compatibleComponents.selectedThemeFolders;
 export const isEditing = (state) => state.compatibleComponents.isEditing;
@@ -17,6 +18,22 @@ export const getCore = (state) => state.compatibleComponents.core;
 export const getChangelogs = (state) => state.compatibleComponents.changelogs;
 export const getComponentInfoModalContent = (state) => state.compatibleComponents.componentInfoModalContent; // TODO rename
 export const getDownloadedComponents = (state) => state.compatibleComponents.downloadedComponents;
+
+
+export const getDownloadLog = (state) => {
+	const components = state.compatibleComponents.downloadedComponents;
+	let log = '';
+	Object.keys(components).forEach((component) => {
+		if (log !== '') {
+			log += '\n____________________________\n';
+		}
+
+		if (components[component].log.length > 0) {
+			log += components[component].log.join('\n');
+		}
+	});
+	return log;
+};
 
 // converts the hash of modules to an array
 export const getModulesArray = createSelector(

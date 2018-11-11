@@ -9,6 +9,7 @@ export default (state = {
 	error: '',
 	isEditing: false,
 	isDownloading: false,
+	downloadComplete: false,
     showComponentInfoModal: false,
     componentInfoModalContent: '', // { type: 'module' | theme | api | core, folder: '' }
     componentChangelog: {}, // component_folder => { versions: [], isLoading: true|false }
@@ -23,7 +24,8 @@ export default (state = {
 	apiSelected: false,
 
 	// populated the moment the user proceeds to the download step. This is a 1-level deep object of property names:
-	// api, theme_[theme folder], module_[module folder] with each value containing an object of { success: false|true, log: [] }
+	// api, theme_[theme folder], module_[module folder] with each value containing an object of
+	// { downloaded: false|true, log: [] }
 	downloadedComponents: {},
 
     // any time the user clicks "Customize" we stash the last config here, in case they cancel their changes and
@@ -142,9 +144,16 @@ export default (state = {
 			downloadedComponents[componentId].downloaded = action.payload.success;
 			downloadedComponents[componentId].log = action.payload.log;
 
+			// if all components are downloaded, flag the downloaded process as complete
+			let allDownloaded = Object.keys(downloadedComponents).every((component) => {
+				return downloadedComponents[component].downloaded;
+			});
+
 			return {
 				...state,
-				downloadedComponents
+				downloadedComponents,
+				isDownloading: !allDownloaded,
+				downloadComplete: allDownloaded
 			};
 
         case actions.SAVE_SELECTED_COMPONENT_LIST:

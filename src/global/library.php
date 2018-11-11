@@ -71,4 +71,4 @@ $request = array_merge($_POST, $_GET);
 // added in 3.1.0. Passed to templates to know whether to load bundled or unbundled resources. Note: this wasn't added
 // to Core / config.php so it can be used for the installation process. Unless you've actually checked out the repo
 // and are in development mode DON'T change this. It WILL break things.
-$g_env = "prod";
+$g_env = "dev";
