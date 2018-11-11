@@ -14,7 +14,7 @@
 	}
 	li {
 		float: left;
-	}			
+	}
 }
 
 .sortable ul.header_row li.col0 {
@@ -240,16 +240,12 @@ body .sortable .rows div.row_content .edit_row_hover li.col0 {
 
 .sortable_group_header {
 	background-color: #d5edd7;
-	-moz-border-radius-topleft: 6px;
-	-moz-border-radius-topright: 6px;
 	border-top-left-radius: 6px;
 	border-top-right-radius: 6px;
 }
 
 .sortable_group_footer {
 	background-color: #d5edd7;
-	-moz-border-radius-bottomleft: 6px;
-	-moz-border-radius-bottomright: 6px;
 	border-bottom-left-radius: 6px;
 	border-bottom-right-radius: 6px;
 	height: 20px;

@@ -7,8 +7,6 @@
 	border: 1px solid #999999;
 	background-color: #ffffcc;
 	text-align: center;
-	-webkit-border-radius: 6px;
-	-moz-border-radius: 6px;
 	border-radius: 6px;
 }
 
@@ -20,13 +18,13 @@
 		width: 355px;
 		input {
 			width: 349px;
-		}		
+		}
 	}
 	.col3 {
 		width: 100px;
 		input {
 			width: 98px;
-		}		
+		}
 	}
 }
 
@@ -34,11 +32,11 @@
 
 .add_form_step4 {
 	.col1 {
-		color: #666666;		
+		color: #666666;
 	}
 	.col2 {
 		width: 193px;
-	}	
+	}
 	.rows .col2 {
 		padding-left: 3px;
 		width: 190px;
@@ -48,7 +46,7 @@
 	}
 	.rows .col3 input {
 		width: 195px;
-	}	
+	}
 	.col4 {
 		width: 266px;
 	}
@@ -58,7 +56,7 @@
 	}
 	.col5 {
 		width: 18px;
-	}	
+	}
 }
 
 /* add external form step 5 */
@@ -68,14 +66,14 @@
 		width: 261px;
 		input {
 			width: 255px;
-		}		
+		}
 	}
 	.col3 {
 		width: 261px;
 		input {
 			width: 255px;
-		}		
-	}	
+		}
+	}
 }
 
 .multi_page_form_list {
@@ -84,14 +82,14 @@
 		width: 317px;
 		input {
 			width: 311px;
-		}		
+		}
 	}
 	.col3 {
 		width: 100px;
 		input {
 			width: 98px;
-		}		
-	}	
+		}
+	}
 }
 
 .new_submission_default_vals {
@@ -105,8 +103,6 @@
 .placeholders_section {
 	padding: 6px;
 	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
 	background-color: #efefef;
 	float: right;
 	margin-left: 6px;
@@ -116,7 +112,7 @@
 	}
 	img {
 		float: right;
-	}	
+	}
 }
 
 .placeholders_link {

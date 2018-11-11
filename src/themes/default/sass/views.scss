@@ -19,7 +19,7 @@
 
 .view_list .header_row .col3 {
 	width: 239px;
-	padding-left: 0px;
+	padding-left: 0;
 }
 
 .view_list .col3 {
@@ -79,7 +79,7 @@
 
 .edit_view_fields .header_row .col2 {
 	width: 251px;
-	padding-left: 0px;
+	padding-left: 0;
 }
 
 .edit_view_fields .col2 {
@@ -90,7 +90,7 @@
 
 .edit_view_fields .header_row .col3 {
 	width: 175px;
-	padding-left: 0px;
+	padding-left: 0;
 }
 
 .edit_view_fields .col3 {
@@ -130,15 +130,15 @@
 
 .view_fields_list {
 	border: 1px solid #cccccc;
-	border-bottom: 0px;
+	border-bottom: 0;
 	height: 220px;
 	overflow-y: scroll;
 }
 
 .view_fields_list ul {
 	list-style: none;
-	margin: 0px;
-	padding-left: 0px;
+	margin: 0;
+	padding-left: 0;
 }
 
 .view_fields_list ul li {

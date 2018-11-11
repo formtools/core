@@ -37,8 +37,6 @@ input[type=text], input[type=password], textarea {
     border-bottom: 2px #f1f4f7 solid;
     padding: 1px;
     border-radius: 2px;
-    -moz-border-radius: 2px;
-    -webkit-border-radius: 2px;
 }
 
 #container {
@@ -114,7 +112,7 @@ form {
 #account_section {
 	a:link, a:visited {
 		color: #f2f2f2;
-		text-decoration: none;	
+		text-decoration: none;
 	}
 }
 
@@ -125,8 +123,6 @@ form {
 .footer {
     padding: 4px;
     border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
     background-color: #f9f9f9;
     border: 1px #dddddd solid;
     text-align: center;
@@ -138,18 +134,18 @@ form {
 .title {
     padding-bottom: 5px;
 	font: 17.6px/20px Verdana, sans-serif;
-	
+
 	span.identifier {
 		font-size: 17.6px;
 		font-family: Verdana, sans-serif;
 		line-height: 11px;
-	}	
+	}
 	a:link, a:visited {
 		text-decoration: none;
-	}	
+	}
 	a:hover {
 		border-bottom: 1px solid #336699;
-	}	
+	}
 }
 
 .subtitle {
@@ -208,22 +204,22 @@ form {
 
 .submissions_table {
 	td {
-		padding: 0 2px;		
+		padding: 0 2px;
 		.truncate {
 			text-overflow: ellipsis;
 			-o-text-overflow: ellipsis;
 			white-space: nowrap;
 			overflow: hidden;
-		}		
+		}
 		.truncate_no_fixed_width {
 			overflow: hidden;
 			height: 20px;
-		}		
+		}
 	}
 }
 
-.list_table th a:link,
-.list_table th a:visited,
+body .list_table th a:link,
+body .list_table th a:visited,
 .submissions_table th a:link,
 .submissions_table th a:visited {
     color: white;
@@ -257,11 +253,11 @@ form {
 .submissions_table {
 	tr {
 		height: 20px;
-		cursor: pointer;	
+		cursor: pointer;
 	}
 	td {
 		vertical-align: top;
-	}	
+	}
 }
 
 .list_table {
@@ -269,10 +265,10 @@ form {
 		background-image: url(#{$images-dir}/delete_bg.jpg);
 		a:link, a:visited {
 			color: white;
-		}		
+		}
 		a:hover {
 			color: orange;
-		}		
+		}
 	}
 
 	td.del {
@@ -283,11 +279,11 @@ form {
 		a {
 			display: block;
 			height: 18px;
-		}		
+		}
 		&:hover {
 			background: transparent url(#{$images-dir}/delete.png) no-repeat -22px 3px;
 		}
-	}	
+	}
 	td.edit, th.edit {
 		width: 18px;
 		height: 18px;
@@ -300,11 +296,11 @@ form {
 			width: 18px;
 			height: 18px;
 			display: block;
-		}		
+		}
 	}
 	td.center, th.center {
 		text-align: center;
-	}	
+	}
 }
 
 
@@ -315,7 +311,7 @@ form {
 	background-color: #f2f8ff;
 	div {
 		color: #0058db;
-	}	
+	}
 }
 
 .error {
@@ -323,7 +319,7 @@ form {
 	background-color: #ffeded;
 	div {
 		color: #aa0000;
-	}	
+	}
 }
 
 .errorField {
@@ -452,8 +448,6 @@ form {
 }
 
 .module_section {
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
     border-radius: 6px;
     background-color: #e6f5ff;
     padding: 2px 8px 8px 8px;
@@ -461,14 +455,14 @@ form {
     border: 1px solid #999999;
     display: inline-block;
 	position: relative;
-	
+
 	h2 {
 		font: 11px/20px Verdana, sans-serif;
 		color: #777777;
 		margin: 0;
 		padding: 2px 0;
 		font-style: italic;
-	}	
+	}
 
 	.module_link {
 		width: 16px;
@@ -482,8 +476,8 @@ form {
 			display: block;
 			width: 16px;
 			height: 16px;
-		}			
-	}	
+		}
+	}
 }
 
 .export_manager_module {
@@ -492,13 +486,13 @@ form {
 	}
 	.icon {
 		padding-right: 6px;
-	}	
+	}
 	.export_group_name {
 		padding-right: 10px;
 	}
 	.target_content {
 		padding-right: 10px;
-	}		
+	}
 }
 
 /* ...??? */
@@ -526,7 +520,7 @@ form {
 	}
 	.list_table {
 		margin-bottom: 14px;
-	}	
+	}
 }
 
 .num_submissions_box {
@@ -536,7 +530,6 @@ form {
     font-family: arial;
     width: 26px;
     height: 10px;
-    -moz-border-radius: 3px;
     border-radius: 3px;
     line-height: 12px;
     padding-bottom: 1px;
@@ -551,7 +544,7 @@ form {
 	a {
 		display: block;
 		padding: 0 44px 0 14px;
-	}	
+	}
 }
 
 .loading_small {
@@ -574,7 +567,6 @@ a.show_form {
     display: inline-block;
     height: 23px;
     border-radius: 4px;
-    -moz-border-radius: 4px;
 }
 
 .views_dropdown select {
@@ -597,8 +589,6 @@ a.show_form {
     background-color: #f2f2f2;
     border: 1px solid #dddddd;
     border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
     text-align: center;
 }
 

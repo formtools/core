@@ -30,7 +30,7 @@ div#left_nav {
 		padding-top: 2px;
 		padding-bottom: 2px;
 		color: #555555;
-	}	
+	}
 }
 
 .nav_link_submenu {
@@ -41,7 +41,7 @@ div#left_nav {
 		text-decoration: none;
 		padding-left: 10px;
 		padding-top: 2px;
-		padding-bottom: 2px;	
+		padding-bottom: 2px;
 	}
 }
 
@@ -56,14 +56,14 @@ div#left_nav {
 	a {
 		color: black;
 		text-decoration: none;
-	}	
+	}
 }
 
 table.add_form_nav {
 	td {
 		width: 16%;
 		text-align: center;
-		line-height: 15px;	
+		line-height: 15px;
 
 		&.selected {
 			background-color: #007700;
@@ -76,8 +76,8 @@ table.add_form_nav {
 				color: white;
 				display: block;
 				padding: 1px;
-			}			
-		}		
+			}
+		}
 
 		&.unselected {
 			background-color: #ffffff;
@@ -85,7 +85,7 @@ table.add_form_nav {
 			border-top: 1px solid #cccccc;
 			border-bottom: 1px solid #cccccc;
 			border-right: 1px solid #cccccc;
-		}		
+		}
 	}
 }
 
@@ -100,12 +100,11 @@ table.add_form_nav {
 
 		&.no_link {
 			padding: 2px 8px;
-		}			
+		}
 
 		a {
 			padding: 2px 8px;
 			background-color: #efefef;
-			-moz-border-radius: 3px;
 			border-radius: 3px;
 			color: #333333;
 
@@ -113,9 +112,9 @@ table.add_form_nav {
 				background-color: #0b4a04;
 				color: white;
 				text-decoration: none;
-			}			
-		}		
-	}	
+			}
+		}
+	}
 }
 
 /* for nav pagination */
@@ -126,13 +125,13 @@ div#list_nav {
 
 	span {
 		font-size: 11pt;
-	}	
+	}
 }
 
 #list_nav {
 	a:visited, a:link {
 		text-decoration: none
-	}	
+	}
 	a:hover {
 		text-decoration: underline;
 		color: orange;

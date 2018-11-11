@@ -6,20 +6,15 @@
 
 	li {
 		float: left;
-		height: 26px;
 		margin-right: 1px;
 		background-color: #efefef;
 		min-width: 96px;
 		border-top: 1px solid #cfcfcf;
 		border-left: 1px solid #cfcfcf;
 		border-right: 1px solid #cfcfcf;
-		-webkit-border-top-left-radius: 8px;
-		-webkit-border-top-right-radius: 8px;
-		-moz-border-radius-topleft: 8px;
-		-moz-border-radius-topright: 8px;
 		border-top-left-radius: 8px;
 		border-top-right-radius: 8px;
-		white-space: no-wrap;
+		white-space: nowrap;
 		height: 22px;
 		text-align: center;
 
@@ -27,19 +22,19 @@
 			padding: 1px 6px 0px;
 			display: block;
 			color: #555555;
-		}		
+		}
 
 		&.selected {
 			border-bottom: 1px solid #ffffff;
 			background-color: white;
 			margin-bottom: -1px;
-		}		
-	}	
+		}
+	}
 
 	a:hover {
 		text-decoration: none;
 		color: #0b4a03;
-	}	
+	}
 }
 
 .tab_content {
@@ -62,7 +57,7 @@
 			float: left;
 			text-align: center;
 			cursor: pointer;
-		}		
+		}
 
 		div.selected {
 			background-color: white;
@@ -70,19 +65,19 @@
 			a {
 				display: block;
 				text-decoration: none;
-			}			
+			}
 		}
-		
+
 	}
 	.threeCols div {
 		width: 33.33%;
 	}
 	.fourCols div {
 		width: 25%;
-	}		
+	}
 	.fiveCols div {
 		width: 20%;
-	}	
+	}
 }
 
 .inner_tab_content {
