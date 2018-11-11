@@ -8,8 +8,8 @@ class Packages
 	// $url = "http://localhost:8888/formtools-site/cdn.formtools.org/modules/arbitrary_settings-2.0.2.zip";
 
 	/**
-	 * Downloads a component and unpacks it at the appropriate location.
-	 * - cleans up after itself, deleting any downloaded zipfiles and un
+	 * Downloads a single component and unpacks it at the appropriate location.
+	 * - cleans up after itself, deleting any downloaded zipfiles
 	 * - will REMOVE any previous version of the component being downloaded. To be safe, it backs up the old
 	 * folder before removing by adding a BACKUP- prefix. If the new component is properly installed the BACKUP- folder
 	 * is removed.
@@ -54,7 +54,6 @@ class Packages
 			$res = $zip->open($downloaded_zipfile);
 
 			if ($res === true) {
-				$log[] = "unzipping complete";
 
 				// the unzipped content will have the content within a folder with the same name as the repo, plus the version number
 				if ($component_type === "module") {
@@ -77,10 +76,13 @@ class Packages
 				$zip->close();
 
 				// backup the old component folder if it exists
+				$backup_folder = "$target_folder/BACKUP-{$component_folder}";
+
 				if (file_exists("$target_folder/$component_folder")) {
 					$log[] = "existing component folder already exists";
-					if (rename("$target_folder/$component_folder", "$target_folder/BACKUP-{$component_folder}")) {
-						$log[] = "existing component folder backed up to $target_folder/BACKUP-{$component_folder}";
+					if (rename("$target_folder/$component_folder", $backup_folder)) {
+						$log[] = "existing component folder backed up to $backup_folder";
+						chmod($backup_folder, 0777);
 					} else {
 						$log[] = "unable to back up $target_folder/BACKUP-{$component_folder}";
 						return array(
@@ -90,11 +92,24 @@ class Packages
 					}
 				}
 
+				clearstatcache();
+
 				// rename the folder to its final correct name
 				if (rename("$target_folder/$unzipped_folder_name", "$target_folder/$component_folder")) {
 					$log[] = "new component folder created: $target_folder/$component_folder";
-					if (unlink("$downloaded_zipfile")) {
+
+					if (unlink($downloaded_zipfile)) {
 						$log[] = "$downloaded_zipfile cache file removed";
+
+						// now remove the backup folder
+						if (file_exists($backup_folder)) {
+							if (Files::deleteFolder($backup_folder)) {
+								$log[] = "backup folder removed: $backup_folder";
+							} else {
+								$log[] = "Error removing backup folder";
+							}
+						}
+
 					} else {
 						$log[] = "error removing cache file $downloaded_zipfile";
 					}

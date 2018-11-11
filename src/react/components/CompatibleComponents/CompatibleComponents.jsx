@@ -52,7 +52,7 @@ class CompatibleComponents extends Component {
 
 		return (
 			<div>
-				<h2>{i18n.phrase_selected_components}</h2>
+				<h2>{i18n.phrase_choose_components}</h2>
 				<p>
 					{i18n.text_selected_components_info}
 				</p>
@@ -79,7 +79,7 @@ class CompatibleComponents extends Component {
         return (
             <div>
                 <h2>
-	                {i18n.phrase_selected_components} &raquo; {i18n.word_customize}
+	                {i18n.phrase_choose_components} &raquo; {i18n.word_customize}
                 </h2>
 
                 {this.getModal()}
@@ -109,28 +109,45 @@ class CompatibleComponents extends Component {
 	}
 
 	getDownloadPage () {
-    	const { i18n, numDownloaded, totalNumToDownload, downloadLog, downloadComplete } = this.props;
+    	const { i18n, numDownloaded, totalNumToDownload, downloadLog, downloadComplete, showDetailedDownloadLog,
+	        toggleShowDetailedDownloadLog } = this.props;
 		const spinnerStyles = {
 			color: '#21aa1e',
 			margin: '-3px 0 0 10px',
 			float: 'right'
 		};
 
-		const loadingSpinner = (!downloadComplete) ? null :
-			<div style={{ display: 'inline-block', padding: '12px 0' }}>
-				<CircularProgress style={spinnerStyles} size={30} thickness={3} />
-				Downloading <b>{numDownloaded}</b> of <b>{totalNumToDownload}</b> components. Please wait.
-			</div>;
+		const loadingSpinner = (downloadComplete) ? null : <CircularProgress style={spinnerStyles} size={30} thickness={3} />;
+		const continueButton = (!downloadComplete) ? null :
+			<p>
+				<input type="button" value={helpers.decodeEntities(i18n.word_continue_rightarrow)} />
+			</p>;
 
 		return (
 			<div>
 				<h2>
-					{i18n.phrase_selected_components} &raquo; {i18n.word_installing}
+					{i18n.phrase_choose_components} &raquo; {i18n.word_installing}
 				</h2>
 
-				{loadingSpinner}
+				<div style={{ display: 'inline-block', padding: '12px 0' }}>
+					{loadingSpinner}
+					Downloaded <b>{numDownloaded}</b> of <b>{totalNumToDownload}</b> components.
+				</div>
 
-				<div className={styles.downloadLog}>{downloadLog}</div>
+
+				<div className={styles.downloadLogContainer}>
+					<div className={styles.downloadLogHeader}>
+						<h3>Download Log</h3>
+						<div>
+							<input type="checkbox" id="showDetailedLog" checked={showDetailedDownloadLog}
+								onChange={toggleShowDetailedDownloadLog} />
+							<label htmlFor="showDetailedLog">Show detailed log</label>
+						</div>
+					</div>
+					<div className={styles.downloadLog} dangerouslySetInnerHTML={{ __html: downloadLog }}></div>
+				</div>
+
+				{continueButton}
 			</div>
 		);
 	}

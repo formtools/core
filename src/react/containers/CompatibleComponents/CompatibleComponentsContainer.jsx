@@ -25,6 +25,7 @@ const mapStateToProps = (state) => ({
 	dataLoaded: selectors.isDataLoaded(state),
 	isEditing: selectors.isEditing(state),
 	isDownloading: selectors.isDownloading(state),
+	showDetailedDownloadLog: selectors.showDetailedDownloadLog(state),
 	downloadComplete: selectors.downloadComplete(state),
     isShowingComponentInfoModal: selectors.showComponentInfoModal(state),
 	api: selectors.getAPI(state),
@@ -53,6 +54,7 @@ const mapDispatchToProps = (dispatch) => ({
     toggleAllModulesSelected: () => dispatch(actions.toggleAllModulesSelected()),
     onShowComponentInfo: (componentInfo) => dispatch(actions.showComponentInfo(componentInfo)), // TODO rename
     onCloseComponentInfo: () => dispatch(actions.closeComponentInfo()),
+	toggleShowDetailedDownloadLog: () => dispatch(actions.toggleShowDetailedDownloadLog()),
     onPrevNext: (dir) => dispatch(actions.onPrevNext(dir)),
 	onSubmit: () => dispatch(actions.downloadCompatibleComponents())
 });

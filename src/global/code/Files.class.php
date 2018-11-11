@@ -403,23 +403,21 @@ class Files
      * This function deletes a folder and all containing files. If it's unable to delete ANYTHING - file or folder,
      * it halts immediately and returns false.
      *
-     * This also sucks. This has failed to properly delete module folders since 2.0.0.
-     *
      * @param string $folder
      * @return boolean
      */
-    public static function deleteFolder($directory)
+    public static function deleteFolder($folder)
     {
-        if (substr($directory, -1) == '/') {
-            $directory = substr($directory, 0, -1);
+        if (substr($folder, -1) == '/') {
+			$folder = substr($folder, 0, -1);
         }
-        if (!file_exists($directory) || !is_dir($directory)) {
+        if (!file_exists($folder) || !is_dir($folder)) {
             return false;
-        } elseif (is_readable($directory)) {
-            $handle = opendir($directory);
+        } elseif (is_readable($folder)) {
+            $handle = opendir($folder);
             while (false !== ($item = readdir($handle))) {
                 if ($item != '.' && $item != '..') {
-                    $path = $directory . '/' . $item;
+                    $path = $folder . '/' . $item;
                     if (is_dir($path)) {
                         Files::deleteFolder($path);
                     } else {
@@ -428,7 +426,7 @@ class Files
                 }
             }
             closedir($handle);
-            if (!rmdir($directory)) {
+            if (!rmdir($folder)) {
                 return false;
             }
         }

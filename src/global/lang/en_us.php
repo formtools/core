@@ -1279,9 +1279,7 @@ $LANG["processing_no_post_vars"] = "process.php is not receiving any data. Note:
 $LANG["processing_no_redirect_url"] = "The submission was processed correctly, but you haven't specified a redirect URL for this form! Edit your form in the Form Tools UI and add the redirect URL.";
 
 
-
 // 3.1 new additions
-$LANG["phrase_selected_components"] = "Selected Components";
 $LANG["phrase_install_component"] = "Install component";
 $LANG["phrase_view_documentation"] = "View documentation";
 $LANG["phrase_prev_arrow"] = "&laquo; Prev";

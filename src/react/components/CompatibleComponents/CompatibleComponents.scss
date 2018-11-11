@@ -6,9 +6,34 @@
 .downloadLog {
   background-color: #111111;
   color: #00aa00;
-  max-height: 200px;
+  max-height: 350px;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 12px;
-  white-space: pre-wrap;
+}
+
+.downloadLogContainer {
+  background-color: #333333;
+  color: #999999;
+  font-size: 12px;
+  border-radius: 3px 3px 0 0;
+
+  :global(h3) {
+    margin: 0;
+    color: #ffffcc;
+    font-size: 12px;
+  }
+}
+
+.downloadLogHeader {
+  display: flex;
+  padding: 1px 10px;
+
+  > h3 {
+    flex: 1;
+  }
+  > div {
+    flex: 0 0 auto;
+    color: #efefef;
+  }
 }

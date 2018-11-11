@@ -8,8 +8,6 @@ export default (state = {
 	errorLoading: false,
 	error: '',
 	isEditing: false,
-	isDownloading: false,
-	downloadComplete: false,
     showComponentInfoModal: false,
     componentInfoModalContent: '', // { type: 'module' | theme | api | core, folder: '' }
     componentChangelog: {}, // component_folder => { versions: [], isLoading: true|false }
@@ -22,6 +20,11 @@ export default (state = {
     selectedModuleFolders: [],
     selectedThemeFolders: [],
 	apiSelected: false,
+
+	// Downloading
+	isDownloading: false,
+	downloadComplete: false,
+	showDetailedDownloadLog: false,
 
 	// populated the moment the user proceeds to the download step. This is a 1-level deep object of property names:
 	// api, theme_[theme folder], module_[module folder] with each value containing an object of
@@ -141,13 +144,15 @@ export default (state = {
 		case actions.COMPONENT_DOWNLOAD_UNPACK_RESPONSE:
 			const downloadedComponents = { ...state.downloadedComponents };
 			const componentId = helpers.getComponentIdentifier(action.payload.folder, action.payload.type);
-			downloadedComponents[componentId].downloaded = action.payload.success;
+			downloadedComponents[componentId].downloadSuccess = action.payload.success;
 			downloadedComponents[componentId].log = action.payload.log;
 
 			// if all components are downloaded, flag the downloaded process as complete
 			let allDownloaded = Object.keys(downloadedComponents).every((component) => {
-				return downloadedComponents[component].downloaded;
+				return downloadedComponents[component].downloadSuccess !== null;
 			});
+
+			// TODO need to add another flag here asking if the whole process was success or not
 
 			return {
 				...state,
@@ -199,6 +204,12 @@ export default (state = {
                 newState.api.desc = action.payload.desc;
             }
             return newState;
+
+		case actions.TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG:
+			return {
+				...state,
+				showDetailedDownloadLog: !state.showDetailedDownloadLog
+			};
 	}
 
 

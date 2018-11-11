@@ -11,9 +11,9 @@ import VersionBadge from './VersionBadge';
 const SmallIconButton = withStyles({
 	root: {
 		height: 32,
-		width: 32
-	},
-	color: 'red'
+		width: 32,
+		padding: 4
+	}
 })(IconButton);
 
 const Changelog = ({ data, i18n }) => {

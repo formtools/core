@@ -30,28 +30,30 @@ class ComponentList extends Component {
     	const { components, onShowComponentInfo } = this.props;
 
         return (
-            <table className={styles.componentList}>
-                <tbody>
-                {components.map((component, index) => (
-                    <tr className={styles.tr} key={index}>
-                        <td width="55">
-                            {this.getFirstColumn(component)}
-                        </td>
-                        <td width="220">
-                            <h4 className={styles.h4}>{component.name}</h4>
-                        </td>
-                        <td width="200">{component.version}</td>
-                        <td width="200" align="right">
-                            <a href="#" onClick={(e) => { e.preventDefault(); onShowComponentInfo({
-                                componentType: component.type,
-                                folder: component.folder,
-                                version: component.version
-                            }); }}>About</a>
-                        </td>
-                    </tr>
-                ))}
-                </tbody>
-            </table>
+        	<div style={{ maxHeight: 350, overflowX: 'scroll' }}>
+	            <table className={styles.componentList}>
+	                <tbody>
+	                {components.map((component, index) => (
+	                    <tr className={styles.tr} key={index}>
+	                        <td width="55">
+	                            {this.getFirstColumn(component)}
+	                        </td>
+	                        <td width="220">
+	                            <h4 className={styles.h4}>{component.name}</h4>
+	                        </td>
+	                        <td width="200">{component.version}</td>
+	                        <td width="200" align="right">
+	                            <a href="#" onClick={(e) => { e.preventDefault(); onShowComponentInfo({
+	                                componentType: component.type,
+	                                folder: component.folder,
+	                                version: component.version
+	                            }); }}>About</a>
+	                        </td>
+	                    </tr>
+	                ))}
+	                </tbody>
+	            </table>
+	        </div>
         );
     }
 }

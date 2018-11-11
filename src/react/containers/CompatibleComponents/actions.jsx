@@ -156,7 +156,10 @@ export const downloadCompatibleComponents = () => {
 			if (item.type === 'core') {
 				return;
 			}
-			componentList[helpers.getComponentIdentifier(item.folder, item.type)] = { downloaded: false, log: [] };
+			componentList[helpers.getComponentIdentifier(item.folder, item.type)] = {
+				downloadSuccess: null, // set to true/false depending on whether the component was successfully updated
+				log: []
+			};
 		});
 
 		dispatch({
@@ -208,14 +211,5 @@ const downloadAndUnpackComponent = (item, data_source_url) => {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
+export const TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG = 'TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG';
+export const toggleShowDetailedDownloadLog = () => ({ type: TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG });

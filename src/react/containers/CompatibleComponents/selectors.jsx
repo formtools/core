@@ -6,8 +6,7 @@ export const isDataLoaded = (state) => state.compatibleComponents.loaded;
 export const getModules = (state) => state.compatibleComponents.modules;
 export const getThemes = (state) => state.compatibleComponents.themes;
 export const isAPISelected = (state) => state.compatibleComponents.apiSelected;
-export const isDownloading = (state) => state.compatibleComponents.isDownloading;
-export const downloadComplete = (state) => state.compatibleComponents.downloadComplete;
+
 export const getSelectedModuleFolders = (state) => state.compatibleComponents.selectedModuleFolders;
 export const getSelectedThemeFolders = (state) => state.compatibleComponents.selectedThemeFolders;
 export const isEditing = (state) => state.compatibleComponents.isEditing;
@@ -17,19 +16,41 @@ export const getAPI = (state) => state.compatibleComponents.api;
 export const getCore = (state) => state.compatibleComponents.core;
 export const getChangelogs = (state) => state.compatibleComponents.changelogs;
 export const getComponentInfoModalContent = (state) => state.compatibleComponents.componentInfoModalContent; // TODO rename
+
+// downloading
+export const isDownloading = (state) => state.compatibleComponents.isDownloading;
+export const downloadComplete = (state) => state.compatibleComponents.downloadComplete;
+export const showDetailedDownloadLog = (state) => state.compatibleComponents.showDetailedDownloadLog;
 export const getDownloadedComponents = (state) => state.compatibleComponents.downloadedComponents;
 
 
 export const getDownloadLog = (state) => {
 	const components = state.compatibleComponents.downloadedComponents;
+	const showDetailedDownloadLog = state.compatibleComponents.showDetailedDownloadLog;
+
 	let log = '';
 	Object.keys(components).forEach((component) => {
-		if (log !== '') {
-			log += '\n____________________________\n';
+
+		// if we don't have a response for this particular component, show nothing
+		// TODO need to keep order too.
+		if (components[component].downloadSuccess === null) {
+			return;
 		}
 
-		if (components[component].log.length > 0) {
-			log += components[component].log.join('\n');
+		if (log !== '') {
+			log += '<br />____________________________<br />';
+		}
+
+		log += `<h2>${component}</h2>`;
+
+		if (showDetailedDownloadLog && components[component].log.length > 0) {
+			log += components[component].log.join('<br />');
+		}
+
+		if (components[component].downloadSuccess) {
+			log += '<div><b>✓ Downloaded</b></div>';
+		} else {
+			log += '<div><b>Download Problem</b></div>';
 		}
 	});
 	return log;
@@ -227,7 +248,7 @@ export const getPrevNextComponent = createSelector(
 // used to show the "downloaded `N` of ..."
 export const getNumDownloaded = createSelector(
 	getDownloadedComponents,
-	(components) => Object.keys(components).filter((key) => components[key].downloaded).length
+	(components) => Object.keys(components).filter((key) => components[key].downloadSuccess !== null).length
 );
 
 // used to show the "downloaded ... of `N`"
@@ -235,5 +256,4 @@ export const getTotalNumToDownload = createSelector(
 	getDownloadedComponents,
 	(components) => Object.keys(components).length
 );
-
 
