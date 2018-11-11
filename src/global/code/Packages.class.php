@@ -92,8 +92,6 @@ class Packages
 					}
 				}
 
-				clearstatcache();
-
 				// rename the folder to its final correct name
 				if (rename("$target_folder/$unzipped_folder_name", "$target_folder/$component_folder")) {
 					$log[] = "new component folder created: $target_folder/$component_folder";
@@ -130,25 +128,5 @@ class Packages
 			}
 		}
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

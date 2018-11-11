@@ -14,3 +14,21 @@ export const getComponentIdentifier = (folder, componentType) => {
 	}
 	return id;
 };
+
+
+/**
+ * Converts the identifier back into a human friendly component name.
+ */
+export const getComponentNameFromIdentifier = (identifier, modules, themes) => {
+	let name = '';
+	if (identifier === 'api') {
+		name = 'API'
+	} else if (/^module_/.test(identifier)) {
+		const module_folder = identifier.replace(/^module_/, '');
+		name = modules[module_folder].name;
+	} else if (/^theme_/.test(identifier)) {
+		const theme_folder = identifier.replace(/^theme_/, '');
+		name = themes[theme_folder].name;
+	}
+	return name;
+};

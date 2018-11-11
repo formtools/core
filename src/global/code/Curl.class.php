@@ -57,8 +57,7 @@ class Curl
 		}
 
 		$status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-
-		$log[] = "curl complete. Status code: $status_code";
+		$log[] = "curl status code: $status_code";
 
 		curl_close($ch);
 		fclose($fp);

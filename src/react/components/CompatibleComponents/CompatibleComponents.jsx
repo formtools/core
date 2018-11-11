@@ -120,7 +120,8 @@ class CompatibleComponents extends Component {
 		const loadingSpinner = (downloadComplete) ? null : <CircularProgress style={spinnerStyles} size={30} thickness={3} />;
 		const continueButton = (!downloadComplete) ? null :
 			<p>
-				<input type="button" value={helpers.decodeEntities(i18n.word_continue_rightarrow)} />
+				<input type="button" value={helpers.decodeEntities(i18n.word_continue_rightarrow)}
+					onClick={() => { window.location='step7.php'; }} />
 			</p>;
 
 		return (
@@ -134,14 +135,13 @@ class CompatibleComponents extends Component {
 					Downloaded <b>{numDownloaded}</b> of <b>{totalNumToDownload}</b> components.
 				</div>
 
-
 				<div className={styles.downloadLogContainer}>
 					<div className={styles.downloadLogHeader}>
 						<h3>Download Log</h3>
 						<div>
 							<input type="checkbox" id="showDetailedLog" checked={showDetailedDownloadLog}
 								onChange={toggleShowDetailedDownloadLog} />
-							<label htmlFor="showDetailedLog">Show detailed log</label>
+							<label htmlFor="showDetailedLog">Show details</label>
 						</div>
 					</div>
 					<div className={styles.downloadLog} dangerouslySetInnerHTML={{ __html: downloadLog }}></div>

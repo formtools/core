@@ -39,8 +39,8 @@ if (Sessions::exists("install_email_notification_sent")) {
 }
 
 $page = array(
-    "step" => 6,
+    "step" => 7,
     "g_root_url" => Core::getRootUrl()
 );
 
-Installation::displayPage("templates/step6.tpl", $page);
+Installation::displayPage("templates/step7.tpl", $page);

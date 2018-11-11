@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { convertHashToArray } from '../../core/helpers';
 import { getConstants } from "../../core/selectors";
+import { getComponentNameFromIdentifier } from './helpers';
 
 export const isDataLoaded = (state) => state.compatibleComponents.loaded;
 export const getModules = (state) => state.compatibleComponents.modules;
@@ -25,32 +26,35 @@ export const getDownloadedComponents = (state) => state.compatibleComponents.dow
 
 
 export const getDownloadLog = (state) => {
-	const components = state.compatibleComponents.downloadedComponents;
-	const showDetailedDownloadLog = state.compatibleComponents.showDetailedDownloadLog;
+
+	const components = getDownloadedComponents(state);
+	const showDetails = showDetailedDownloadLog(state);
+	const modules = getModules(state);
+	const themes = getThemes(state);
 
 	let log = '';
 	Object.keys(components).forEach((component) => {
 
-		// if we don't have a response for this particular component, show nothing
-		// TODO need to keep order too.
+		// if we don't have a response for this particular component, show nothing...
 		if (components[component].downloadSuccess === null) {
 			return;
 		}
 
 		if (log !== '') {
-			log += '<br />____________________________<br />';
+			log += '<hr size="1">';
 		}
 
-		log += `<h2>${component}</h2>`;
+		const componentName = getComponentNameFromIdentifier(component, modules, themes);
+		log += `<h2>${componentName}</h2>`;
 
-		if (showDetailedDownloadLog && components[component].log.length > 0) {
+		if (showDetails && components[component].log.length > 0) {
 			log += components[component].log.join('<br />');
 		}
 
 		if (components[component].downloadSuccess) {
-			log += '<div><b>✓ Downloaded</b></div>';
+			log += '<div class="downloadSuccess">✓ Downloaded</div>';
 		} else {
-			log += '<div><b>Download Problem</b></div>';
+			log += '<div class="downloadError">✗ Download Problem</div>';
 		}
 	});
 	return log;

@@ -5,11 +5,29 @@
 
 .downloadLog {
   background-color: #111111;
-  color: #00aa00;
+  color: #999999;
   max-height: 350px;
   overflow-y: auto;
   overflow-x: hidden;
   padding: 12px;
+
+  :global(.downloadSuccess) {
+    color: #00aa00;
+    font-weight: bold;
+  }
+  :global(.downloadError) {
+    color: red;
+    font-weight: bold;
+  }
+
+  hr {
+    border-color: #888888;
+    margin: 10px 0;
+  }
+
+  :global(h2) {
+    margin-bottom: 3px;
+  }
 }
 
 .downloadLogContainer {
