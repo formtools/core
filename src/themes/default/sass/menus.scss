@@ -1,36 +1,36 @@
 /* the edit menu sortable list */
 
 .edit_menu {
-	.col2 {
-		width: 176px;
-		select {
-			width: 174px;
-		}		
-	}
-	.col3 {
-		width: 172px;
-		input {
-			width: 165px;
-		}		
-	}	
-	.header_row .col3 {
-		width: 171px;
-	}
-	.col4 {
-		width: 197px;
-		select {
-			width: 99%;
-		}		
-	}		
-	.rows .col4 {
-		width: 193px;
-		padding-left: 3px;
-	}	
-	.col5 {
-		width: 78px;
-		text-align: center;
-	}	
-	li.col6 {
-		width: 70px;
-	}
+  .col2 {
+    width: 176px;
+    select {
+      width: 174px;
+    }
+  }
+  .col3 {
+    width: 172px;
+    input {
+      width: 165px;
+    }
+  }
+  .header_row .col3 {
+    width: 171px;
+  }
+  .col4 {
+    width: 197px;
+    select {
+      width: 99%;
+    }
+  }
+  .rows .col4 {
+    width: 193px;
+    padding-left: 3px;
+  }
+  .col5 {
+    width: 78px;
+    text-align: center;
+  }
+  li.col6 {
+    width: 70px;
+  }
 }

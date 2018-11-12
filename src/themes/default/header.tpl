@@ -35,7 +35,7 @@
 <div id="container">
     <div id="header">
         {if $is_logged_in && isset($settings.program_version)}
-            <div style="float:right; display: flex">
+            <div id="version-block">
                 <img src="{$theme_url}/images/account_section_left_{$swatch}2x.png" border="0" height="25" width="8"/>
                 <div id="account_section">
                     {if $settings.release_type == "alpha"}

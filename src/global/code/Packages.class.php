@@ -64,7 +64,7 @@ class Packages
 					$unzipped_folder_name = "api-{$component_version}";
 				}
 
-				// just in case, remove any orphaned previous unzipped folder
+				// just in case, remove any previous unzipped folder
 				if (file_exists("$target_folder/$unzipped_folder_name")) {
 					unlink("$target_folder/$unzipped_folder_name");
 					$log[] = "remove previous undeleted unzip folder: $target_folder/$unzipped_folder_name";
