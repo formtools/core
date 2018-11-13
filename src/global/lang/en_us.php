@@ -1289,6 +1289,7 @@ $LANG["phrase_release_date"] = "Release Date";
 $LANG["phrase_release_notes"] = "Release Notes";
 $LANG["word_customize"] = "Customize";
 $LANG["word_installing"] = "Installing";
-
 $LANG["text_selected_components_info"] = "We recommend the following components that are useful for the majority of Form Tools installations. Click customize to see what other components exist, and tailor your installation to your own needs.";
+$LANG["phrase_downloaded_X_of_Y"] = "Downloaded {0} of {1} components.";
+$LANG["phrase_show_details"] = "Show details";
 

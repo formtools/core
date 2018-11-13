@@ -124,15 +124,20 @@ class CompatibleComponents extends Component {
 					onClick={() => { window.location='step7.php'; }} />
 			</p>;
 
+		const downloadedMsg = helpers.replacePlaceholders(i18n.phrase_downloaded_X_of_Y, [
+			`<b>${numDownloaded}</b>`,
+			`<b>${totalNumToDownload}</b>`
+		]);
+
 		return (
 			<div>
 				<h2>
 					{i18n.phrase_choose_components} &raquo; {i18n.word_installing}
 				</h2>
 
-				<div style={{ display: 'inline-block', padding: '12px 0' }}>
+				<div style={{ display: 'inline-block', padding: '12px 0', height: 25 }}>
 					{loadingSpinner}
-					Downloaded <b>{numDownloaded}</b> of <b>{totalNumToDownload}</b> components.
+					<span dangerouslySetInnerHTML={{ __html: downloadedMsg }} />
 				</div>
 
 				<div className={styles.downloadLogContainer}>
@@ -141,7 +146,7 @@ class CompatibleComponents extends Component {
 						<div>
 							<input type="checkbox" id="showDetailedLog" checked={showDetailedDownloadLog}
 								onChange={toggleShowDetailedDownloadLog} />
-							<label htmlFor="showDetailedLog">Show details</label>
+							<label htmlFor="showDetailedLog">{i18n.phrase_show_details}</label>
 						</div>
 					</div>
 					<div className={styles.downloadLog} dangerouslySetInnerHTML={{ __html: downloadLog }}></div>

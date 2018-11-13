@@ -40,3 +40,18 @@ export const convertHashToArray = (hash) => {
 export const formatDatetime = (date, format = "MMM D, YYYY h:mm A") => {
     return moment(date).format(format);
 };
+
+
+/**
+ * Useful localization
+ * @param str the raw string containing placeholders.
+ * @param replacementStrings array of strings. Index 0 will replace {0}, index 1 will replace {1} etc.
+ */
+export const replacePlaceholders = (str, replacementStrings) => {
+	let updatedStr = str;
+	replacementStrings.forEach((currStr, index) => {
+		const regex = new RegExp('\\{' + index + '\\}', 'g');
+		updatedStr = updatedStr.replace(regex, currStr);
+	});
+	return updatedStr;
+};
