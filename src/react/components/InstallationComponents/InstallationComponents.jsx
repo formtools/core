@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import * as helpers from '../../core/helpers';
+import * as helpers from '../../helpers';
 import ComponentList from '../ComponentList/ComponentList';
 import EditableComponentList from '../EditableComponentList/EditableComponentList';
-import styles from './CompatibleComponents.scss';
+import styles from './InstallationComponents.scss';
 import ComponentDialog from '../Dialogs/ComponentDialog';
 import Changelog from './Changelog';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
-class CompatibleComponents extends Component {
+class InstallationComponents extends Component {
 
     getModal () {
         const { isShowingComponentInfoModal, onCloseComponentInfo, onPrevNext, isEditing, modalInfo,
@@ -172,4 +172,4 @@ class CompatibleComponents extends Component {
 	}
 }
 
-export default CompatibleComponents;
+export default InstallationComponents;

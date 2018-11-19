@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Changelog.scss';
-import { formatDatetime } from '../../core/helpers';
+import { formatDatetime } from '../../helpers';
 import { Github } from '../Icons/Icons';
 import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';

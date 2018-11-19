@@ -1,9 +1,9 @@
 import * as actions from './actions';
 import * as helpers from './helpers';
-import { convertHashToArray, removeFromArray } from '../../core/helpers';
+import { convertHashToArray, removeFromArray } from '../../helpers';
 
 
-export default (state = {
+export default function reducer (state = {
 	loaded: false,
 	errorLoading: false,
 	error: '',
@@ -34,7 +34,7 @@ export default (state = {
     // any time the user clicks "Customize" we stash the last config here, in case they cancel their changes and
     // want to revert
     lastSavedComponents: {}
-}, action) => {
+}, action) {
 
 	switch (action.type) {
 

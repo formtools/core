@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
-import { convertHashToArray } from '../../core/helpers';
-import { getConstants } from "../../core/selectors";
+import { convertHashToArray } from '../../helpers';
+import { selectors as constantSelectors } from '../constants';
 import { getComponentNameFromIdentifier } from './helpers';
 
 export const isDataLoaded = (state) => state.compatibleComponents.loaded;
@@ -16,7 +16,7 @@ export const getSelectedComponentTypeSection = (state) => state.compatibleCompon
 export const getAPI = (state) => state.compatibleComponents.api;
 export const getCore = (state) => state.compatibleComponents.core;
 export const getChangelogs = (state) => state.compatibleComponents.changelogs;
-export const getComponentInfoModalContent = (state) => state.compatibleComponents.componentInfoModalContent; // TODO rename
+export const getComponentInfoModalContent = (state) => state.compatibleComponents.componentInfoModalContent;
 
 // downloading
 export const isDownloading = (state) => state.compatibleComponents.isDownloading;
@@ -26,7 +26,6 @@ export const getDownloadedComponents = (state) => state.compatibleComponents.dow
 
 
 export const getDownloadLog = (state) => {
-
 	const components = getDownloadedComponents(state);
 	const showDetails = showDetailedDownloadLog(state);
 	const modules = getModules(state);
@@ -86,7 +85,7 @@ const getSelectedThemes = createSelector(
 // convenience method to return a flat, ordered array of all selected components in a standardized structure. Used on
 // the non-editable list
 export const getSelectedComponents = (state) => {
-    var constants = getConstants(state);
+    var constants = constantSelectors.getConstants(state);
 	const components = [{
 	    folder: 'core',
         name: 'Core',
