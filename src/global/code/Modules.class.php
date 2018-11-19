@@ -563,15 +563,16 @@ class Modules
     }
 
 
-    /**
-     * Uninstalls a module from the database.
-     *
-     * @param integer $module_id
-     */
+	/**
+	 * Uninstalls a module. Deletes it from the database and as of 3.1, tries to remove the files as well.
+	 * @param $module_id
+	 * @return array
+	 */
     public static function uninstallModule($module_id)
     {
         $db = Core::$db;
         $LANG = Core::$L;
+        $root_dir = Core::getRootDir();
 
         $module_info = self::getModule($module_id);
         $module_folder = $module_info["module_folder"];
@@ -592,15 +593,6 @@ class Modules
             }
         }
 
-        $db->query("
-            UPDATE {PREFIX}modules
-            SET    is_installed = 'no',
-                   is_enabled = 'no' 
-            WHERE  module_id = :module_id
-        ");
-        $db->bind("module_id", $module_id);
-        $db->execute();
-
         ModuleMenu::clearModuleNav($module_id);
 
         // if this module was used in any menus, update them
@@ -613,6 +605,12 @@ class Modules
         Modules::deleteModuleSettings($module_info["module_folder"]);
 
         // now delete the entire module folder
+		Files::deleteFolder("$root_dir/modules/$module_folder");
+
+		$db->query("DELETE FROM {PREFIX}modules WHERE module_id = :module_id");
+		$db->bind("module_id", $module_id);
+		$db->execute();
+
         $message = $LANG["notify_module_uninstalled"];
 
         extract(Hooks::processHookCalls("end", compact("module_id", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
@@ -621,12 +619,12 @@ class Modules
     }
 
 
-    /**
-     * Since it's often more convenient to identify modules by its unique folder name, this function is
-     * provided to find the module ID. If not found, returns the empty string.
-     *
-     * @param string $module_folder
-     */
+	/**
+	 * Since it's often more convenient to identify modules by folder name, this function finds the module ID. If not
+	 * found, returns the empty string.
+	 * @param $module_id
+	 * @return string
+	 */
     public static function getModuleFolderFromModuleId($module_id)
     {
         $db = Core::$db;
