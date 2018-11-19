@@ -1,6 +1,3 @@
-import store from "../index";
-
-
 const actions = {
 	INIT_DATA_LOADED: 'INIT_DATA_LOADED',
 	INIT_DATA_ERROR_LOADING: 'INIT_DATA_ERROR_LOADING'
@@ -29,7 +26,7 @@ const reducer = (state = {
 };
 
 
-export const getInitializationData = () => {
+export const getInitializationData = (store) => {
 	fetch('../global/code/actions-react.php?action=init')
 		.then((response) => response.json())
 		.then((json) => {
@@ -38,11 +35,11 @@ export const getInitializationData = () => {
 				...json
 			});
 		}).catch((e) => {
-		store.dispatch({
-			type: actions.INIT_DATA_ERROR_LOADING,
-			error: e
+			store.dispatch({
+				type: actions.INIT_DATA_ERROR_LOADING,
+				error: e
+			});
 		});
-	});
 };
 
 
@@ -53,7 +50,7 @@ const actionCreators = {
 
 const selectors = {
 	getInitialized: (state) => state.init.initialized
-} ;
+};
 
 
 export {

@@ -4,8 +4,8 @@ import store from '../../store';
 import { selectors as initSelectors } from '../../store/init';
 import { selectors as i18nSelectors } from '../../store/i18n';
 import {
-	actions as compatibleComponentsActions,
-	selectors as compatibleComponentsSelectors
+	actionCreators,
+	selectors
 } from '../../store/compatibleComponents';
 
 import CompatibleComponents from '../../components/InstallationComponents/InstallationComponents';
@@ -31,40 +31,40 @@ const mapStateToProps = (state) => ({
 	i18n: i18nSelectors.getI18n(state),
 
 	// compatible components
-	dataLoaded: compatibleComponentsSelectors.isDataLoaded(state),
-	isEditing: compatibleComponentsSelectors.isEditing(state),
-	isDownloading: compatibleComponentsSelectors.isDownloading(state),
-	showDetailedDownloadLog: compatibleComponentsSelectors.showDetailedDownloadLog(state),
-	downloadComplete: compatibleComponentsSelectors.downloadComplete(state),
-    isShowingComponentInfoModal: compatibleComponentsSelectors.showComponentInfoModal(state),
-	api: compatibleComponentsSelectors.getAPI(state),
-	allThemes: compatibleComponentsSelectors.getThemesArray(state),
-	allModules: compatibleComponentsSelectors.getModulesArray(state),
-    selectedComponents: compatibleComponentsSelectors.getSelectedComponents(state),
-    selectedComponentTypeSection: compatibleComponentsSelectors.getSelectedComponentTypeSection(state),
-	selectedModuleFolders: compatibleComponentsSelectors.getSelectedModuleFolders(state),
-	selectedThemeFolders: compatibleComponentsSelectors.getSelectedThemeFolders(state),
-    allModulesSelected: compatibleComponentsSelectors.allModulesSelected(state),
-    isAPISelected: compatibleComponentsSelectors.isAPISelected(state),
-    modalInfo: compatibleComponentsSelectors.getComponentInfoModalInfo(state),
-	numDownloaded: compatibleComponentsSelectors.getNumDownloaded(state),
-	totalNumToDownload: compatibleComponentsSelectors.getTotalNumToDownload(state),
-	downloadLog: compatibleComponentsSelectors.getDownloadLog(state)
+	dataLoaded: selectors.isDataLoaded(state),
+	isEditing: selectors.isEditing(state),
+	isDownloading: selectors.isDownloading(state),
+	showDetailedDownloadLog: selectors.showDetailedDownloadLog(state),
+	downloadComplete: selectors.downloadComplete(state),
+    isShowingComponentInfoModal: selectors.showComponentInfoModal(state),
+	api: selectors.getAPI(state),
+	allThemes: selectors.getThemesArray(state),
+	allModules: selectors.getModulesArray(state),
+    selectedComponents: selectors.getSelectedComponents(state),
+    selectedComponentTypeSection: selectors.getSelectedComponentTypeSection(state),
+	selectedModuleFolders: selectors.getSelectedModuleFolders(state),
+	selectedThemeFolders: selectors.getSelectedThemeFolders(state),
+    allModulesSelected: selectors.allModulesSelected(state),
+    isAPISelected: selectors.isAPISelected(state),
+    modalInfo: selectors.getComponentInfoModalInfo(state),
+	numDownloaded: selectors.getNumDownloaded(state),
+	totalNumToDownload: selectors.getTotalNumToDownload(state),
+	downloadLog: selectors.getDownloadLog(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	onEditComponentList: () => dispatch(compatibleComponentsActions.editSelectedComponentList()),
-    onCancelEditComponentList: () => dispatch(compatibleComponentsActions.cancelEditSelectedComponentList()),
-	saveSelectedComponentList: () => dispatch(compatibleComponentsActions.saveSelectedComponentList()),
-	getCompatibleComponents: () => dispatch(compatibleComponentsActions.getCompatibleComponents()),
-    toggleComponent: (componentTypeSection, folder) => dispatch(compatibleComponentsActions.toggleComponent(componentTypeSection, folder)),
-    onSelectComponentTypeSection: (section) => dispatch(compatibleComponentsActions.selectComponentTypeSection(section)),
-    toggleAllModulesSelected: () => dispatch(compatibleComponentsActions.toggleAllModulesSelected()),
-    onShowComponentInfo: (componentInfo) => dispatch(compatibleComponentsActions.showComponentInfo(componentInfo)), // TODO rename
-    onCloseComponentInfo: () => dispatch(compatibleComponentsActions.closeComponentInfo()),
-	toggleShowDetailedDownloadLog: () => dispatch(compatibleComponentsActions.toggleShowDetailedDownloadLog()),
-    onPrevNext: (dir) => dispatch(compatibleComponentsActions.onPrevNext(dir)),
-	onSubmit: () => dispatch(compatibleComponentsActions.downloadCompatibleComponents())
+	onEditComponentList: () => dispatch(actionCreators.editSelectedComponentList()),
+    onCancelEditComponentList: () => dispatch(actionCreators.cancelEditSelectedComponentList()),
+	saveSelectedComponentList: () => dispatch(actionCreators.saveSelectedComponentList()),
+	getCompatibleComponents: () => dispatch(actionCreators.getCompatibleComponents()),
+    toggleComponent: (componentTypeSection, folder) => dispatch(actionCreators.toggleComponent(componentTypeSection, folder)),
+    onSelectComponentTypeSection: (section) => dispatch(actionCreators.selectComponentTypeSection(section)),
+    toggleAllModulesSelected: () => dispatch(actionCreators.toggleAllModulesSelected()),
+    onShowComponentInfo: (componentInfo) => dispatch(actionCreators.showComponentInfo(componentInfo)), // TODO rename
+    onCloseComponentInfo: () => dispatch(actionCreators.closeComponentInfo()),
+	toggleShowDetailedDownloadLog: () => dispatch(actionCreators.toggleShowDetailedDownloadLog()),
+    onPrevNext: (dir) => dispatch(actionCreators.onPrevNext(dir)),
+	onSubmit: () => dispatch(actionCreators.downloadCompatibleComponents())
 });
 
 const ConnectedCompatibleComponentsContainer = connect(
