@@ -1,0 +1,57 @@
+.delimiter {
+  color: #999999;
+  margin: 0 8px;
+}
+
+.downloadLog {
+  background-color: #111111;
+  color: #999999;
+  max-height: 350px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px;
+
+  :global(.downloadSuccess) {
+    color: #00aa00;
+    font-weight: bold;
+  }
+  :global(.downloadError) {
+    color: red;
+    font-weight: bold;
+  }
+
+  hr {
+    border-color: #888888;
+    margin: 10px 0;
+  }
+
+  :global(h2) {
+    margin-bottom: 3px;
+  }
+}
+
+.downloadLogContainer {
+  background-color: #333333;
+  color: #999999;
+  font-size: 12px;
+  border-radius: 3px 3px 0 0;
+
+  :global(h3) {
+    margin: 0;
+    color: #ffffcc;
+    font-size: 12px;
+  }
+}
+
+.downloadLogHeader {
+  display: flex;
+  padding: 1px 10px;
+
+  > h3 {
+    flex: 1;
+  }
+  > div {
+    flex: 0 0 auto;
+    color: #efefef;
+  }
+}

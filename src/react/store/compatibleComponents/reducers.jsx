@@ -1,4 +1,4 @@
-import * as actions from './actions';
+import { actions } from './actions';
 import * as helpers from './helpers';
 import { convertHashToArray, removeFromArray } from '../../helpers';
 

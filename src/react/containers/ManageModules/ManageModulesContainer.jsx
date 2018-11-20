@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
-// import { Provider, connect } from 'react-redux';
-// import store from '../../core/store';
-// import { selectors as coreSelectors } from '../../core/store/init';
-//
+import { Provider, connect } from 'react-redux';
+import store from '../../core/store';
+import { selectors as coreSelectors } from '../../core/store/init';
+
 // import * as actions from './actions';
 // import * as selectors from './selectors';
 // import InstallationComponents from '../../components/InstallationComponents/InstallationComponents';
 //
 //
-// class ManageModulesContainer extends Component {
-// 	componentWillUpdate (nextProps) {
-// 		if (nextProps.initialized && !this.props.initialized) {
-// 			this.props.getCompatibleComponents();
-// 		}
-// 	}
-// 	render () {
-// 		return (
-// 			<CompatibleComponents {...this.props} />
-// 		);
-// 	}
-// }
-//
+
+class ManageModulesContainer extends Component {
+	componentWillUpdate (nextProps) {
+		if (nextProps.initialized && !this.props.initialized) {
+			this.props.getCompatibleComponents();
+		}
+	}
+	render () {
+		return (
+			<CompatibleComponents {...this.props} />
+		);
+	}
+}
+
 // const mapStateToProps = (state) => ({
 // 	initialized: initSelectors.getInitialized(state),
 //
