@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { Provider, connect } from 'react-redux';
-import store from '../../core/store';
-import { selectors as coreSelectors } from '../../core/store/init';
+import store from '../../store';
+import { selectors as initSelectors } from '../../store/init';
 
 // import * as actions from './actions';
 // import * as selectors from './selectors';
 // import InstallationComponents from '../../components/InstallationComponents/InstallationComponents';
-//
-//
 
 class ManageModulesContainer extends Component {
 	componentWillUpdate (nextProps) {
@@ -17,14 +15,14 @@ class ManageModulesContainer extends Component {
 	}
 	render () {
 		return (
-			<CompatibleComponents {...this.props} />
+			<div>...</div>
 		);
 	}
 }
 
-// const mapStateToProps = (state) => ({
-// 	initialized: initSelectors.getInitialized(state),
-//
+const mapStateToProps = (state) => ({
+	initialized: initSelectors.getInitialized(state),
+
 // 	dataLoaded: selectors.isDataLoaded(state),
 // 	isEditing: selectors.isEditing(state),
 // 	isDownloading: selectors.isDownloading(state),
@@ -45,9 +43,9 @@ class ManageModulesContainer extends Component {
 // 	numDownloaded: selectors.getNumDownloaded(state),
 // 	totalNumToDownload: selectors.getTotalNumToDownload(state),
 // 	downloadLog: selectors.getDownloadLog(state)
-// });
-//
-// const mapDispatchToProps = (dispatch) => ({
+});
+
+const mapDispatchToProps = (dispatch) => ({
 // 	onEditComponentList: () => dispatch(actions.editSelectedComponentList()),
 //     onCancelEditComponentList: () => dispatch(actions.cancelEditSelectedComponentList()),
 // 	saveSelectedComponentList: () => dispatch(actions.saveSelectedComponentList()),
@@ -60,20 +58,15 @@ class ManageModulesContainer extends Component {
 // 	toggleShowDetailedDownloadLog: () => dispatch(actions.toggleShowDetailedDownloadLog()),
 //     onPrevNext: (dir) => dispatch(actions.onPrevNext(dir)),
 // 	onSubmit: () => dispatch(actions.downloadCompatibleComponents())
-// });
-//
-// const ConnectedCompatibleComponentsContainer = connect(
-// 	mapStateToProps,
-// 	mapDispatchToProps
-// )(CompatibleComponentsContainer);
+});
 
-// export default (
-// 	<Provider store={store}>
-// 		<ConnectedCompatibleComponentsContainer />
-// 	</Provider>
-// );
+const ConnectedManageModulesContainer = connect(
+	mapStateToProps,
+	mapDispatchToProps
+)(ManageModulesContainer);
 
 export default (
-	<div></div>
+	<Provider store={store}>
+		<ConnectedManageModulesContainer />
+	</Provider>
 );
-

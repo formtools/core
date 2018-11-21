@@ -102,6 +102,10 @@ foreach ($updated_modules as $module_info) {
 $modules = array_merge($sorted_modules, $installed_modules);
 $LANG = Core::$L;
 
+//$data = array(
+//	"modules" => Modules::getList()
+//);
+
 $page_vars = array(
     "page"        => "modules",
     "g_success"   => $success,
@@ -109,6 +113,7 @@ $page_vars = array(
     "page_url"    => Pages::getPageUrl("modules"),
     "head_title"  => $LANG["word_modules"],
     "modules"     => $modules,
+//    "js_modules"  => $js_modules,
     "num_modules" => $num_modules,
     "order"       => $order,
     "search_criteria" => $search_criteria,

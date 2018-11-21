@@ -7,6 +7,7 @@
 require_once("../library.php");
 
 use FormTools\Core;
+use FormTools\Modules;
 use FormTools\Packages;
 use FormTools\Request;
 
@@ -60,7 +61,7 @@ switch ($_GET["action"]) {
 		$data = json_decode(Request::getUrl($url));
 		break;
 
-	// these methods can only be called during an installation (TODO: security?)
+	// these methods can only be called during an installation (TODO: security)
 	case "installation_download_single_component":
 		$url = urldecode($_GET["url"]);
 		$component_type = $_GET["type"];
