@@ -18,7 +18,7 @@ Form Tools is a data management script written in PHP and MySQL. You install it 
 
 Form Tools is modular. It's split up into separate pieces (the Core, API, modules and themes) so you can install only what you need and not get cluttered up with superfluous functionality. This repo contains the source code for the _Form Tools Core_. The Core contains the minimal code needed to run Form Tools on your server.
 
-Currently the [main download package](https://formtools.org/download/) is built up of a set of components that we think will help you get the most out of the script. This will be changing in 3.1 (see below) where you can choose the components you want, right in the installation process.
+The [main Form Tools download package](https://formtools.org/download/) is composed of hand-picked components that we think will help you get the most out of the script. This will be changing in 3.1 (see below): from that version on, we'll just supply recommendations, and you can choose the components you want during the installation process.
 
 *PHP version support*
 
