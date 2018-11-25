@@ -2,6 +2,18 @@
 
 [![Build Status](https://travis-ci.org/formtools/core.svg?branch=master)](https://travis-ci.org/formtools/core)
 
+- [About](#about)
+- [Getting Help](#help)
+- [Branches](#branches)
+- [Upcoming Versions](#upcoming)
+- [Tests](#tests)
+- [Local Development](#development)
+- [Useful links](#links)
+
+
+<a name="about"></a>
+## About 
+
 This repo contains the source code for the Form Tools Core. The Core provides the minimal code needed to run Form Tools
 on your server. 
 
@@ -20,13 +32,27 @@ functional code; FT3 converted everything to object-oriented.
 
 Like the project? :star: the repo! Or [donate](https://formtools.org/donate/). Or both!
 
+<a name="help"></a>
+## Getting help
+
+Form Tools has some pretty extensive [documentation](https://docs.formtools.org) - that's the place to start. But for specific questions, feel free to open an issue on this repo. Please note that I'm only one guy, so I respond when I can. 
+
+
+<a name="branches"></a>
 ## Branches 
 
 - The `master` branch contains the latest work being done on 3.1. `master` is not production ready.
 - `3.0.x` (3.0.1, 3.0.2, 3.0.3...) contain the tip of the various releases, but they're tagged and put into final
 releases when complete. Still, handy place to get the latest 3.0.x version if you need it. 
 
-### Upcoming versions
+
+<a name="upcoming"></a>
+## Upcoming versions
+
+See the following post for details about the upcoming roadmap.
+https://formtools.org/wordpress/?p=802
+
+Summary:
 
 - `3.1` - rewriting the installation/upgrade code so that there's no longer hardcoded bundles of the Form Tools script
 including those modules/themes we choose, but instead you select whatever components your want during the installation, 
@@ -36,26 +62,25 @@ or later on.
 now.
 
 
+<a href="tests"></a>
 ### Tests
 
-Check out TESTS.md. Still in its infancy, but we're getting there.
+Check out TESTS.md. Still in its infancy, but we're getting there. With the addition of the new React code in 3.1 we'll be testing the client side code a lot more. 
 
 
-### Documentation
-
-- [https://docs.formtools.org/](https://docs.formtools.org/)
-
-
+<a href="development"></a>
 ### Local Development
+
 
 See the [Development](DEVELOPMENT.md) page for details on how to get Form Tools running locally for development.
 
-
-### Other Links
+<a name="links"></a>
+## Useful Links
 
 - [formtools.org](https://formtools.org/)
-- [Twitter feed](https://twitter.com/formtools/)
-- [Available Form Tools modules](https://modules.formtools.org/)
+- [Twitter feed (day to day news)](https://twitter.com/formtools/)
+- [Documentation](https://docs.formtools.org)
+- [Form Tools modules](https://modules.formtools.org/)
 - [About Form Tools modules](https://docs.formtools.org/userdoc/modules/) 
 - [Installation instructions](https://docs.formtools.org/userdoc/modules/installing/)
 - [Upgrading](https://docs.formtools.org/userdoc/modules/upgrading/)
