@@ -18,6 +18,8 @@ functional code; FT3 converted everything to object-oriented.
 - Everything up to *Form Tools Core 2.2.7* supports PHP 4.3 - 5.x.
 - Form Tools Core 3.0.0 supports PHP 5.3 and later.
 
+Like the project? :star: the repo! Or [donate](https://formtools.org/donate/). Or both!
+
 ## Branches 
 
 - The `master` branch contains the latest work being done on 3.1. `master` is not production ready.
