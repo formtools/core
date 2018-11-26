@@ -10,7 +10,7 @@
     </script>
 
 	{if $g_env === "prod"}
-        <script src="../global/scripts/installation-bundle.js"></script>
+        <script src="../global/scripts/bundle.js"></script>
         <link href="../themes/default/css/installation-bundle.css" rel="stylesheet" type="text/css" />
     {else}
         <script src="../global/scripts/jquery.js"></script>

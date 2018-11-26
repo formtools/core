@@ -1,6 +1,6 @@
 import thunk from 'redux-thunk';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import * as compatibleComponents from './compatibleComponents';
+import * as compatibleComponents from './components';
 import * as constants from './constants';
 import * as userInfo from './userInfo';
 import * as i18n from './i18n';
@@ -20,7 +20,7 @@ function initStore (initialState) {
 	}
 
 	const allReducers = Object.assign({},
-		{ compatibleComponents: compatibleComponents.reducer },
+		{ components: compatibleComponents.reducer },
 		{ constants: constants.reducer },
 		{ i18n: i18n.reducer },
 		{ userInfo: userInfo.reducer },

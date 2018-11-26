@@ -21,7 +21,10 @@ export const actions = {
 	CLOSE_COMPONENT_CHANGELOG_MODAL: 'CLOSE_COMPONENT_CHANGELOG_MODAL',
 	START_DOWNLOAD_COMPATIBLE_COMPONENTS: 'START_DOWNLOAD_COMPATIBLE_COMPONENTS',
 	COMPONENT_DOWNLOAD_UNPACK_RESPONSE: 'COMPONENT_DOWNLOAD_UNPACK_RESPONSE', // TODO rename: SUCCESS/ERROR ?
-	TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG: 'TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG'
+	TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG: 'TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG',
+
+	INSTALLED_MODULES_LOADED: 'INSTALLED_MODULES_LOADED',
+	INSTALLED_MODULES_ERROR_LOADING: 'INSTALLED_MODULES_ERROR_LOADING'
 };
 
 
@@ -216,9 +219,27 @@ const downloadAndUnpackComponent = (item, data_source_url) => {
 
 const toggleShowDetailedDownloadLog = () => ({ type: actions.TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG });
 
+
+const getInstalledModules = () => {
+	fetch(`${g.root_url}/global/code/actions-react.php?action=get_installed_modules`)
+		.then((response) => response.json())
+		.then((json) => {
+			store.dispatch({
+				type: actions.INSTALLED_MODULES_LOADED,
+				...json
+			});
+		}).catch((e) => {
+		store.dispatch({
+			type: actions.INSTALLED_MODULES_ERROR_LOADING,
+			error: e
+		});
+	});
+};
+
+
 export const actionCreators = {
 	getCompatibleComponents,
-	compatibleComponentsLoadError,
+	//compatibleComponentsLoadError,
 	toggleComponent,
 	editSelectedComponentList,
 	saveSelectedComponentList,
@@ -229,5 +250,6 @@ export const actionCreators = {
 	closeComponentInfo,
 	onPrevNext,
 	downloadCompatibleComponents,
-	toggleShowDetailedDownloadLog
+	toggleShowDetailedDownloadLog,
+	getInstalledModules
 };

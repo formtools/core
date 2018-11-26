@@ -1,4 +1,4 @@
-import * as helpers from '../helpers.jsx';
+import * as helpers from '../helpers';
 
 
 describe('replacePlaceholders', () => {

@@ -3,7 +3,7 @@ import { Provider, connect } from 'react-redux';
 import store from '../../store';
 import { selectors as initSelectors } from '../../store/init';
 import { selectors as i18nSelectors } from '../../store/i18n';
-import { actionCreators, selectors } from '../../store/compatibleComponents';
+import { actionCreators, selectors } from '../../store/components';
 import InstallationComponents from '../../components/InstallationComponents/InstallationComponents';
 
 

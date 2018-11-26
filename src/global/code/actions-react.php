@@ -72,6 +72,15 @@ switch ($_GET["action"]) {
 		);
 		$data = Packages::downloadAndUnpack($url, $component_type);
 		break;
+
+	case "admin_get_modules":
+		if (!Core::$user->isLoggedIn() || !Core::$user->isAdmin()) {
+			$data = array("error" => "no_access");
+			return;
+		}
+		$data = Modules::getList();
+		break;
+
 }
 
 

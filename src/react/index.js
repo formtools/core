@@ -5,7 +5,7 @@ import InstallationComponentsContainer from './containers/InstallationComponents
 import ManageModulesContainer from './containers/ManageModules/ManageModulesContainer';
 import store from './store';
 
-// boot 'er up
+// boot 'er up. The initialization data is required on every page (i18n, user info, etc)
 actionCreators.getInitializationData(store);
 
 window.React = React;

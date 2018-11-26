@@ -461,14 +461,14 @@ class Core
 	}
 
 	/**
-	 * Loads the user's config file. If successful, it updates the various private member vars
-	 * with whatever's been defined.
+	 * Loads the user's config file. If successful, it updates the various private member vars with whatever has
+	 * been defined.
 	 * @access private
 	 */
 	public static function loadConfigFile()
 	{
 		if (self::checkConfigFileExists()) {
-			require_once(self::getConfigFilePath());
+			require(self::getConfigFilePath());
 		}
 
 		self::$rootURL = (isset($g_root_url)) ? $g_root_url : null;

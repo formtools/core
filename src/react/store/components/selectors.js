@@ -16,7 +16,7 @@ export const getSelectedComponentTypeSection = (state) => state.compatibleCompon
 export const getAPI = (state) => state.compatibleComponents.api;
 export const getCore = (state) => state.compatibleComponents.core;
 export const getChangelogs = (state) => state.compatibleComponents.changelogs;
-export const getComponentInfoModalContent = (state) => state.compatibleComponents.componentInfoModalContent;
+export const getInfoModal = (state) => state.compatibleComponents.infoModal;
 
 // downloading
 export const isDownloading = (state) => state.compatibleComponents.isDownloading;
@@ -129,7 +129,7 @@ export const allModulesSelected = createSelector(
  * }
  */
 export const getComponentInfoModalInfo = createSelector(
-    getComponentInfoModalContent,
+    getInfoModal,
     getCore,
     getAPI,
     getModules,
@@ -138,8 +138,8 @@ export const getComponentInfoModalInfo = createSelector(
     isEditing,
     getSelectedComponentTypeSection,
     getSelectedComponents,
-    (componentInfoModalContent, core, api, modules, themes, changelogs, isEditing, selectedComponentTypeSection, selectedComponents) => {
-        const { componentType, folder } = componentInfoModalContent;
+    (infoModal, core, api, modules, themes, changelogs, isEditing, selectedComponentTypeSection, selectedComponents) => {
+        const { componentType, folder } = infoModal;
         const changelogLoaded = changelogs.hasOwnProperty(folder);
 
         const modalInfo = {
@@ -198,14 +198,14 @@ export const getComponentInfoModalInfo = createSelector(
 
 
 export const getPrevNextComponent = createSelector(
-    getComponentInfoModalContent,
+    getInfoModal,
     getSelectedComponentTypeSection,
     getAPI,
     getModulesArray,
     getThemesArray,
     isEditing,
     getSelectedComponents,
-    (componentInfoModalContent, editingComponentTypeSection, api, modules, themes, isEditing, selectedComponents) => {
+    (infoModal, editingComponentTypeSection, api, modules, themes, isEditing, selectedComponents) => {
         const prevNext = {
             prev: null,
             next: null
@@ -226,7 +226,7 @@ export const getPrevNextComponent = createSelector(
             list = selectedComponents;
         }
 
-        const index = list.findIndex(i => i.folder === componentInfoModalContent.folder);
+        const index = list.findIndex(i => i.folder === infoModal.folder);
 
         if (index > 0) {
             const prev = list[index-1];

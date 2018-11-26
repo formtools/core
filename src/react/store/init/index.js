@@ -1,3 +1,4 @@
+/* lint g:global */
 const actions = {
 	INIT_DATA_LOADED: 'INIT_DATA_LOADED',
 	INIT_DATA_ERROR_LOADING: 'INIT_DATA_ERROR_LOADING'
@@ -27,7 +28,7 @@ const reducer = (state = {
 
 
 export const getInitializationData = (store) => {
-	fetch('../global/code/actions-react.php?action=init')
+	fetch(`${g.root_url}/global/code/actions-react.php?action=init`)
 		.then((response) => response.json())
 		.then((json) => {
 			store.dispatch({

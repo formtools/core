@@ -4,13 +4,13 @@ import store from '../../store';
 import { selectors as initSelectors } from '../../store/init';
 
 // import * as actions from './actions';
-// import * as selectors from './selectors';
 // import InstallationComponents from '../../components/InstallationComponents/InstallationComponents';
 
 class ManageModulesContainer extends Component {
+
 	componentWillUpdate (nextProps) {
 		if (nextProps.initialized && !this.props.initialized) {
-			this.props.getCompatibleComponents();
+			this.props.getInstalledModules();
 		}
 	}
 	render () {
@@ -47,9 +47,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 // 	onEditComponentList: () => dispatch(actions.editSelectedComponentList()),
-//     onCancelEditComponentList: () => dispatch(actions.cancelEditSelectedComponentList()),
+//  onCancelEditComponentList: () => dispatch(actions.cancelEditSelectedComponentList()),
 // 	saveSelectedComponentList: () => dispatch(actions.saveSelectedComponentList()),
-// 	getCompatibleComponents: () => dispatch(actions.getCompatibleComponents()),
+	getInstalledModules: () => dispatch(actions.getInstalledModules()),
 //     toggleComponent: (componentTypeSection, folder) => dispatch(actions.toggleComponent(componentTypeSection, folder)),
 //     onSelectComponentTypeSection: (section) => dispatch(actions.selectComponentTypeSection(section)),
 //     toggleAllModulesSelected: () => dispatch(actions.toggleAllModulesSelected()),

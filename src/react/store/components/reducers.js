@@ -9,19 +9,23 @@ export default function reducer (state = {
 	error: '',
 	isEditing: false,
     showComponentInfoModal: false,
-    componentInfoModalContent: '', // { type: 'module' | theme | api | core, folder: '' }
-    componentChangelog: {}, // component_folder => { versions: [], isLoading: true|false }
+
+	// current content of the info modal
+	infoModal: '', // { type: 'module' | theme | api | core, folder: '' }
+	changelogs: {}, // populated on demand when a user clicks the About link for a component
+
+	// these contain the full list of COMPATIBLE components/core - not what's currently installed/selected
 	core: {},
 	api: {},
 	modules: {},
 	themes: {},
-    changelogs: {}, // populated on demand when a user clicks the About link for a component
-    selectedComponentTypeSection: 'modules',
+
+    selectedComponentTypeSection: 'modules', // installation only... where should this go?
+
     selectedModuleFolders: [],
     selectedThemeFolders: [],
 	apiSelected: false,
 
-	// Downloading
 	isDownloading: false,
 	downloadComplete: false,
 	showDetailedDownloadLog: false,
@@ -34,6 +38,7 @@ export default function reducer (state = {
     // any time the user clicks "Customize" we stash the last config here, in case they cancel their changes and
     // want to revert
     lastSavedComponents: {}
+
 }, action) {
 
 	switch (action.type) {
@@ -177,7 +182,7 @@ export default function reducer (state = {
             return {
                 ...state,
                 showComponentInfoModal: true,
-                componentInfoModalContent: {
+                infoModal: {
                     componentType: action.payload.componentType,
                     folder: action.payload.folder
                 }
@@ -211,7 +216,6 @@ export default function reducer (state = {
 				showDetailedDownloadLog: !state.showDetailedDownloadLog
 			};
 	}
-
 
 	return state;
 };
