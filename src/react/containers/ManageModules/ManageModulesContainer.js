@@ -10,7 +10,7 @@ class ManageModulesContainer extends Component {
 
 	componentWillUpdate (nextProps) {
 		if (nextProps.initialized && !this.props.initialized) {
-			this.props.getInstalledModules();
+			this.props.getInstalledComponents();
 		}
 	}
 	render () {
@@ -49,7 +49,7 @@ const mapDispatchToProps = (dispatch) => ({
 // 	onEditComponentList: () => dispatch(actions.editSelectedComponentList()),
 //  onCancelEditComponentList: () => dispatch(actions.cancelEditSelectedComponentList()),
 // 	saveSelectedComponentList: () => dispatch(actions.saveSelectedComponentList()),
-	getInstalledModules: () => dispatch(actions.getInstalledModules()),
+	getInstalledComponents: () => dispatch(actionCreators.getInstalledComponents()),
 //     toggleComponent: (componentTypeSection, folder) => dispatch(actions.toggleComponent(componentTypeSection, folder)),
 //     onSelectComponentTypeSection: (section) => dispatch(actions.selectComponentTypeSection(section)),
 //     toggleAllModulesSelected: () => dispatch(actions.toggleAllModulesSelected()),

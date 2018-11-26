@@ -220,8 +220,8 @@ const downloadAndUnpackComponent = (item, data_source_url) => {
 const toggleShowDetailedDownloadLog = () => ({ type: actions.TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG });
 
 
-const getInstalledModules = () => {
-	fetch(`${g.root_url}/global/code/actions-react.php?action=get_installed_modules`)
+const getInstalledComponents = () => {
+	fetch(`${g.root_url}/global/code/actions-react.php?action=get_installed_components`)
 		.then((response) => response.json())
 		.then((json) => {
 			store.dispatch({
@@ -251,5 +251,5 @@ export const actionCreators = {
 	onPrevNext,
 	downloadCompatibleComponents,
 	toggleShowDetailedDownloadLog,
-	getInstalledModules
+	getInstalledComponents
 };
