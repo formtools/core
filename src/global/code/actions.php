@@ -318,16 +318,6 @@ switch ($action) {
 		}
 		break;
 
-	case "get_upgrade_form_html":
-	    $upgrade_url = Core::getUpgradeUrl();
-		$components = General::getFormtoolsInstalledComponents();
-		echo "<form action=\"$upgrade_url\" id=\"upgrade_form\" method=\"post\" target=\"_blank\">";
-		foreach ($components as $key => $value) {
-			echo "<input type=\"hidden\" name=\"$key\" value=\"$value\" />\n";
-		}
-		echo "</form>";
-		break;
-
 	case "get_extended_field_settings":
 		$field_id      = $request["field_id"];
 		$field_type_id = $request["field_type_id"];

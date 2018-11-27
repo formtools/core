@@ -1138,61 +1138,6 @@ END;
 
 
     /**
-     * This was added in 2.1.0. and replaces ft_build_and_cache_upgrade_info() which really wasn't necessary.
-     * It returns a hash of information to pass in a hidden form when the user clicks "Update".
-     */
-    public static function getFormtoolsInstalledComponents()
-    {
-        $core_version = Core::getCoreVersion();
-        $release_date = Core::getReleaseDate();
-        $release_type = Core::getReleaseType();
-
-        $settings = Settings::get();
-
-        // a hash storing the installed component info
-        $components = array();
-
-        $version = $core_version;
-        if ($release_type == "alpha") {
-            $version = "{$core_version}-alpha-{$release_date}";
-        } else if ($release_type == "beta") {
-            $version = "{$core_version}-beta-{$release_date}";
-        }
-
-        $components["m"]   = $version;
-        $components["rt"]  = $release_type;
-        $components["rd"]  = $release_date;
-        $components["api"] = $settings["api_version"];
-
-        // not sure about this, but I've added it for backward compatibility, just in case...
-        if ($release_type == "beta") {
-            $components["beta"] = "yes";
-            $components["bv"] = $version;
-        }
-
-        // get the theme info
-        $themes = Themes::getList();
-        $count = 1;
-        foreach ($themes as $theme_info) {
-            $components["t{$count}"]  = $theme_info["theme_folder"];
-            $components["tv{$count}"] = $theme_info["theme_version"];
-            $count++;
-        }
-
-        // get the module info
-        $modules = Modules::getList();
-        $count = 1;
-        foreach ($modules as $module_info) {
-            $components["m{$count}"]  = $module_info["module_folder"];
-            $components["mv{$count}"] = $module_info["version"];
-            $count++;
-        }
-
-        return $components;
-    }
-
-
-    /**
      * Generates the placeholders for a particular form submission. This is used in the email templates, and here and there
      * for providing placeholder functionality to fields (like the "Edit Submission Label" textfield for a form, where they can
      * enter placeholders populated here).
