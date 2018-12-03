@@ -27,7 +27,7 @@ const mapStateToProps = (state) => ({
 	i18n: i18nSelectors.getI18n(state),
 
 	// compatible components
-	dataLoaded: selectors.isDataLoaded(state),
+	dataLoaded: selectors.isCompatibleComponentsDataLoaded(state),
 	isEditing: selectors.isEditing(state),
 	isDownloading: selectors.isDownloading(state),
 	showDetailedDownloadLog: selectors.showDetailedDownloadLog(state),

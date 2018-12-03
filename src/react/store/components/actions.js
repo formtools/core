@@ -194,16 +194,17 @@ const downloadCompatibleComponents = () => {
 };
 
 
-
 const downloadAndUnpackComponent = (item, data_source_url) => {
-	let zipfile_url = '';
+	let folder = '';
+
 	if (item.type === 'api') {
-		zipfile_url = `${data_source_url}/api/${item.version}.zip`;
+		folder = 'api';
 	} else if (item.type === 'module') {
-		zipfile_url = `${data_source_url}/modules/${item.folder}-${item.version}.zip`;
+		folder = 'modules';
 	} else if (item.type === 'theme') {
-		zipfile_url = `${data_source_url}/themes/${item.folder}-${item.version}.zip`;
+		folder = 'themes';
 	}
+	const zipfile_url = `${data_source_url}/${folder}/${item.folder}-${item.version}.zip`;
 	let cleanUrl = encodeURIComponent(zipfile_url);
 
 	const actions_url = `../global/code/actions-react.php?action=installation_download_single_component&type=${item.type}&url=${cleanUrl}`;

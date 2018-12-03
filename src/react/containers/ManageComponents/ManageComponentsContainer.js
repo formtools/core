@@ -9,6 +9,7 @@ class ManageComponentsContainer extends Component {
 	componentWillUpdate (nextProps) {
 		if (nextProps.initialized && !this.props.initialized) {
 			this.props.getInstalledComponents();
+			this.props.getCompatibleComponents();
 		}
 	}
 	render () {
@@ -22,8 +23,10 @@ const mapStateToProps = (state) => ({
 	initialized: initSelectors.getInitialized(state)
 });
 
+
 const mapDispatchToProps = (dispatch) => ({
 	getInstalledComponents: () => actionCreators.getInstalledComponents(),
+	getCompatibleComponents: () => dispatch(actionCreators.getCompatibleComponents())
 });
 
 const ConnectedManageModulesContainer = connect(

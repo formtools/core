@@ -3,7 +3,7 @@ import { convertHashToArray } from '../../helpers';
 import { selectors as constantSelectors } from '../constants';
 import { getComponentNameFromIdentifier } from './helpers';
 
-export const isDataLoaded = (state) => state.components.loaded;
+export const isCompatibleComponentsDataLoaded = (state) => state.components.compatibleComponentsLoaded;
 export const isEditing = (state) => state.components.isEditing;
 export const showInfoModal = (state) => state.components.showInfoModal; // TODO rename
 export const getInfoModal = (state) => state.components.infoModal;

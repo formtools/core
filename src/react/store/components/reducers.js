@@ -4,7 +4,8 @@ import { convertHashToArray, removeFromArray } from '../../helpers';
 
 
 export default function reducer (state = {
-	loaded: false,
+	compatibleComponentsLoaded: false,
+	installedComponentsLoaded: false,
 	errorLoading: false,
 	error: '',
 	isEditing: false,
@@ -98,7 +99,7 @@ export default function reducer (state = {
 			const preselected_themes = payload.default_components.themes.filter((theme) => themes.hasOwnProperty(theme));
 
 			return Object.assign({}, state, {
-				loaded: true,
+				compatibleComponentLoaded: true,
 				compatibleComponents: {
 					...state.compatibleComponents,
 					[payload.coreVersion]: {
