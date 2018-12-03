@@ -119,8 +119,13 @@ export default function reducer (state = {
 			};
 
 		case actions.INSTALLED_COMPONENTS_LOADED:
-			console.log(actions);
-			break;
+			return {
+				...state,
+				installedCore: payload.components.core,
+				installedAPI: payload.components.api,
+				installedModules: payload.components.modules,
+				installedThemes: payload.components.themes
+			};
 
 		case actions.TOGGLE_API:
 			return {

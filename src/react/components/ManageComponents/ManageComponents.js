@@ -4,14 +4,13 @@ import ComponentList from '../ComponentList/ComponentList';
 import EditableComponentList from '../EditableComponentList/EditableComponentList';
 import styles from './InstallationComponents.scss';
 import ComponentDialog from '../Dialogs/ComponentDialog';
-import Changelog from './Changelog';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 /**
  * Used on the main Modules page within Form Tools to let administrators add, update and remove modules.
  */
-class ManageModules extends Component {
+class ManageComponents extends Component {
 
     getModal () {
         const { isShowingComponentInfoModal, onCloseComponentInfo, onPrevNext, isEditing, modalInfo,
@@ -162,4 +161,4 @@ class ManageModules extends Component {
 	}
 }
 
-export default ManageModules;
+export default ManageComponents;

@@ -237,14 +237,16 @@ const getInstalledComponents = () => {
 		.then((json) => {
 			store.dispatch({
 				type: actions.INSTALLED_COMPONENTS_LOADED,
-				...json
+				payload: {
+					components: json
+				}
 			});
 		}).catch((e) => {
-		store.dispatch({
-			type: actions.INSTALLED_MODULES_ERROR_LOADING, // TODO
-			error: e
+			store.dispatch({
+				type: actions.INSTALLED_MODULES_ERROR_LOADING, // TODO
+				error: e
+			});
 		});
-	});
 };
 
 export const actionCreators = {

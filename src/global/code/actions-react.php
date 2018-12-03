@@ -7,9 +7,11 @@
 require_once("../library.php");
 
 use FormTools\Core;
+use FormTools\General;
 use FormTools\Modules;
 use FormTools\Packages;
 use FormTools\Request;
+use FormTools\Themes;
 
 Core::init();
 
@@ -80,7 +82,25 @@ switch ($_GET["action"]) {
 			$data = array("error" => "no_access");
 			return;
 		}
-		$data = Modules::getList();
+
+		$api_info = array(
+			"installed" => false
+		);
+
+		$api_available = Core::isAPIAvailable();
+		if ($api_available) {
+			$api_info = array(
+				"installed" => true,
+				"version" => General::getApiVersion()
+			);
+		}
+
+		$data = array(
+			"core" => Core::getCoreVersion(),
+			"api" => $api_info,
+			"themes" => Themes::getList(),
+			"modules" => Modules::getList()
+		);
 		break;
 
 }

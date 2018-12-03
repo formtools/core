@@ -19,14 +19,11 @@ Show
 <input type="checkbox" /> Show uninstalled components
 
 <br />
-<br />
-
 
 <div id="manage-components"></div>
 
-
 <script>
-	ReactDOM.render(FT.ManageModulesContainer, document.getElementById('manage-components'));
+	ReactDOM.render(FT.ManageComponentsContainer, document.getElementById('manage-components'));
 </script>
 
 {ft_include file='footer.tpl'}
