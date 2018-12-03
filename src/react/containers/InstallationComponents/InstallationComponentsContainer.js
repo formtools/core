@@ -33,7 +33,7 @@ const mapStateToProps = (state) => ({
 	showDetailedDownloadLog: selectors.showDetailedDownloadLog(state),
 	downloadComplete: selectors.downloadComplete(state),
     isShowingComponentInfoModal: selectors.showInfoModal(state),
-	api: selectors.getAPI(state),
+	api: selectors.getCompatibleAPI(state),
 	allThemes: selectors.getCompatibleThemesArray(state),
 	allModules: selectors.getCompatibleModulesArray(state),
     selectedComponents: selectors.getSelectedComponents(state),

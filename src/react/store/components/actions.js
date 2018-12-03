@@ -55,7 +55,6 @@ const getCompatibleComponents = () => {
 					}
 				});
 			}).catch((e) => {
-				console.log(e);
 				dispatch(compatibleComponentsLoadError(e));
 			});
 	};
@@ -119,8 +118,6 @@ const showComponentInfo = ({ componentType, folder }) => {
 
 
 // pings the server to get the component history for the Core, API, module or theme
-
-
 const queryComponentInfo = (componentType, folder) => {
     const url = `../global/code/actions-react.php?action=get_component_info&type=${componentType}&component=${folder}`;
 

@@ -8,8 +8,11 @@ export default function reducer (state = {
 	errorLoading: false,
 	error: '',
 	isEditing: false,
-    showInfoModal: false,
+	showInfoModal: false,
+
+	// TODO currentCoreVersion ? selectedCoreVersion? targetCoreVersion?
 	coreVersion: null,
+	coreDesc: '',
 
 	// current content of the info modal
 	infoModal: '', // { type: 'module' | theme | api | core, folder: '' }
@@ -25,14 +28,15 @@ export default function reducer (state = {
 	compatibleComponents: {},
 
 	// the currently installed component details
+	installedCore: {},
 	installedAPI: {},
 	installedModules: {},
 	installedThemes: {},
 
 	// the selected components. These depend on the actual compatibleComponents for the core version
-    selectedComponentTypeSection: 'modules', // TODO change to array, so we can reuse for Update page
-    selectedModuleFolders: [],
-    selectedThemeFolders: [],
+	selectedComponentTypeSection: 'modules', // TODO change to array, so we can reuse for Update page
+	selectedModuleFolders: [],
+	selectedThemeFolders: [],
 	apiSelected: false,
 	coreSelected: false,
 
@@ -46,9 +50,9 @@ export default function reducer (state = {
 	// { downloadSuccess: null|false|true, log: [] }
 	downloadedComponents: {},
 
-    // any time the user clicks "Customize" we stash the last config here, in case they cancel their changes and
-    // want to revert
-    lastSavedComponents: {}
+	// any time the user clicks "Customize" we stash the last config here, in case they cancel their changes and
+	// want to revert
+	lastSavedComponents: {}
 
 }, action) {
 
@@ -64,7 +68,7 @@ export default function reducer (state = {
 				modules[folder] = {
 					name, desc, folder, repo,
 					version: version.version,
-                    type: 'module'
+					type: 'module'
 				};
 			});
 
@@ -73,24 +77,25 @@ export default function reducer (state = {
 				themes[folder] = {
 					name, desc, folder, repo,
 					version: version.version,
-                    type: 'theme'
+					type: 'theme'
 				};
 			});
 
-            let api = {};
-            if (payload.api.length) {
-                api = {
-                    name: 'API',
-                    folder: 'api',
-                    type: 'api',
-                    version: payload.api[0].version,
-                    release_date: payload.api[0].release_date
-                };
-            }
+			let api = {};
+			if (payload.api.length) {
+				api = {
+					name: 'API',
+					folder: 'api',
+					type: 'api',
+					desc: payload.api[0].desc,
+					version: payload.api[0].version,
+					release_date: payload.api[0].release_date
+				};
+			}
 
-            // only preselect modules and themes that ARE in fact in the available module/theme list
-            const preselected_modules = payload.default_components.modules.filter((module) => modules.hasOwnProperty(module));
-            const preselected_themes = payload.default_components.themes.filter((theme) => themes.hasOwnProperty(theme));
+			// only preselect modules and themes that ARE in fact in the available module/theme list
+			const preselected_modules = payload.default_components.modules.filter((module) => modules.hasOwnProperty(module));
+			const preselected_themes = payload.default_components.themes.filter((theme) => themes.hasOwnProperty(theme));
 
 			return Object.assign({}, state, {
 				loaded: true,
@@ -102,8 +107,8 @@ export default function reducer (state = {
 						api
 					}
 				},
-                apiSelected: payload.default_components.api,
-                selectedModuleFolders: preselected_modules,
+				apiSelected: payload.default_components.api,
+				selectedModuleFolders: preselected_modules,
 				selectedThemeFolders: preselected_themes
 			});
 
@@ -112,17 +117,16 @@ export default function reducer (state = {
 				...state,
 				coreVersion: payload.coreVersion
 			};
-			break;
 
 		case actions.INSTALLED_COMPONENTS_LOADED:
 			console.log(actions);
 			break;
 
 		case actions.TOGGLE_API:
-            return {
-                ...state,
-                apiSelected: !state.apiSelected
-            };
+			return {
+				...state,
+				apiSelected: !state.apiSelected
+			};
 
 		case actions.TOGGLE_MODULE:
 			return {
@@ -136,36 +140,37 @@ export default function reducer (state = {
 				selectedThemeFolders: selectedComponentsReducer(state.selectedThemeFolders, action.folder)
 			};
 
-        case actions.SELECT_ALL_MODULES:
-            return {
-                ...state,
-                selectedModuleFolders: convertHashToArray(state.modules).map((module) => module.folder)
-            };
+		case actions.SELECT_ALL_MODULES:
+			const moduleList = state.compatibleComponents[state.coreVersion].modules;
+			return {
+				...state,
+				selectedModuleFolders: convertHashToArray(moduleList).map((module) => module.folder)
+			};
 
-        case actions.DESELECT_ALL_MODULES:
-            return {
-                ...state,
-                selectedModuleFolders: []
-            };
+		case actions.DESELECT_ALL_MODULES:
+			return {
+				...state,
+				selectedModuleFolders: []
+			};
 
 		case actions.EDIT_SELECTED_COMPONENT_LIST:
 			return {
 				...state,
 				isEditing: true,
-                lastSavedComponents: {
-				    selectedModuleFolders: state.selectedModuleFolders,
-                    selectedThemeFolders: state.selectedThemeFolders,
-                    apiSelected: state.apiSelected
-                }
+				lastSavedComponents: {
+					selectedModuleFolders: state.selectedModuleFolders,
+					selectedThemeFolders: state.selectedThemeFolders,
+					apiSelected: state.apiSelected
+				}
 			};
 
 		case actions.CANCEL_EDIT_SELECTED_COMPONENT_LIST:
 			return {
 				...state,
 				isEditing: false,
-                selectedModuleFolders: state.lastSavedComponents.selectedModuleFolders,
-                selectedThemeFolders: state.lastSavedComponents.selectedThemeFolders,
-                apiSelected: state.lastSavedComponents.apiSelected
+				selectedModuleFolders: state.lastSavedComponents.selectedModuleFolders,
+				selectedThemeFolders: state.lastSavedComponents.selectedThemeFolders,
+				apiSelected: state.lastSavedComponents.apiSelected
 			};
 
 		case actions.START_DOWNLOAD_COMPATIBLE_COMPONENTS:
@@ -195,49 +200,49 @@ export default function reducer (state = {
 				downloadComplete: allDownloaded
 			};
 
-        case actions.SAVE_SELECTED_COMPONENT_LIST:
-            return {
-                ...state,
-                isEditing: false
-            };
+		case actions.SAVE_SELECTED_COMPONENT_LIST:
+			return {
+				...state,
+				isEditing: false
+			};
 
-        case actions.SELECT_COMPONENT_TYPE_SECTION:
-            return {
-                ...state,
-                selectedComponentTypeSection: action.section
-            };
+		case actions.SELECT_COMPONENT_TYPE_SECTION:
+			return {
+				...state,
+				selectedComponentTypeSection: action.section
+			};
 
-        case actions.SHOW_COMPONENT_CHANGELOG_MODAL:
-            return {
-                ...state,
-                showInfoModal: true,
-                infoModal: {
-                    componentType: action.payload.componentType,
-                    folder: action.payload.folder
-                }
-            };
+		case actions.SHOW_COMPONENT_CHANGELOG_MODAL:
+			return {
+				...state,
+				showInfoModal: true,
+				infoModal: {
+					componentType: action.payload.componentType,
+					folder: action.payload.folder
+				}
+			};
 
-        case actions.CLOSE_COMPONENT_CHANGELOG_MODAL:
-            return {
-                ...state,
-	            showInfoModal: false
-            };
+		case actions.CLOSE_COMPONENT_CHANGELOG_MODAL:
+			return {
+				...state,
+				showInfoModal: false
+			};
 
-        case actions.COMPONENT_HISTORY_LOADED:
-            const updatedChangelogs = { ...state.changelogs };
-            updatedChangelogs[action.payload.folder] = action.payload.versions;
+		case actions.COMPONENT_HISTORY_LOADED:
+			const updatedChangelogs = { ...state.changelogs };
+			updatedChangelogs[payload.folder] = payload.versions;
 
-            const newState = {
-                ...state,
-                changelogs: updatedChangelogs
-            };
+			const newState = {
+				...state,
+				changelogs: updatedChangelogs
+			};
 
-            if (action.payload.folder === 'core') {
-                newState.core = { desc: action.payload.desc };
-            } else if (action.payload.folder === 'api') {
-                newState.api.desc = action.payload.desc;
-            }
-            return newState;
+			// the Core and API descriptions
+			if (action.payload.folder === 'core') {
+				newState.coreDesc = payload.desc;
+			}
+
+			return newState;
 
 		case actions.TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG:
 			return {
@@ -250,9 +255,9 @@ export default function reducer (state = {
 };
 
 const selectedComponentsReducer = (state = [], folder) => {
-    if (state.includes(folder)) {
-        return removeFromArray(state, folder);
-    } else {
-        return [...state, folder];
-    }
+	if (state.includes(folder)) {
+		return removeFromArray(state, folder);
+	} else {
+		return [...state, folder];
+	}
 };

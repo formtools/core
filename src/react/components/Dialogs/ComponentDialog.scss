@@ -1,5 +1,9 @@
 .dialog {
   text-align: left;
+
+  :global(h2) {
+    color: black;
+  }
 }
 
 div.componentDesc {

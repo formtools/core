@@ -9,11 +9,10 @@ export const showInfoModal = (state) => state.components.showInfoModal; // TODO 
 export const getInfoModal = (state) => state.components.infoModal;
 export const getChangelogs = (state) => state.components.changelogs;
 export const getCoreVersion = (state) => state.components.coreVersion;
-
+export const getCoreDesc = (state) => state.components.coreDesc;
 const getCompatibleComponents = (state) => state.components.compatibleComponents;
 
 
-// gets the list of compatible modules for the current selected core version
 export const getCompatibleModules = createSelector(
 	getCoreVersion,
 	getCompatibleComponents,
@@ -36,8 +35,16 @@ export const getCompatibleThemes = createSelector(
 	}
 );
 
-export const getAPI = (state) => state.components.api;
-export const getCore = (state) => state.components.core;
+export const getCompatibleAPI = createSelector(
+	getCoreVersion,
+	getCompatibleComponents,
+	(coreVersion, compatibleComponents) => {
+		if (!coreVersion || !compatibleComponents.hasOwnProperty(coreVersion)) {
+			return {};
+		}
+		return compatibleComponents[coreVersion].api
+	}
+);
 
 // selected
 export const isAPISelected = (state) => state.components.apiSelected;
@@ -123,7 +130,7 @@ export const getSelectedComponents = (state) => {
 
     if (isAPISelected(state)) {
 		components.push({
-            ...getAPI(state),
+            ...getCompatibleAPI(state),
             type: 'api'
         });
 	}
@@ -158,15 +165,15 @@ export const allModulesSelected = createSelector(
  */
 export const getComponentInfoModalInfo = createSelector(
     getInfoModal,
-    getCore,
-    getAPI,
+    getCoreDesc,
+    getCompatibleAPI,
 	getCompatibleModules,
 	getCompatibleThemes,
     getChangelogs,
     isEditing,
     getSelectedComponentTypeSection,
     getSelectedComponents,
-    (infoModal, core, api, modules, themes, changelogs, isEditing, selectedComponentTypeSection, selectedComponents) => {
+    (infoModal, coreDesc, api, modules, themes, changelogs, isEditing, selectedComponentTypeSection, selectedComponents) => {
         const { componentType, folder } = infoModal;
         const changelogLoaded = changelogs.hasOwnProperty(folder);
 
@@ -190,8 +197,8 @@ export const getComponentInfoModalInfo = createSelector(
             modalInfo.title = 'API';
             modalInfo.desc = api.desc;
         } else if (componentType === 'core') {
-            modalInfo.title = 'Form Tools Core';
-            modalInfo.desc = core.desc;
+            modalInfo.title = 'Form Tools Core'; // TODO
+            modalInfo.desc = coreDesc;
         }
 
         let list = [];
@@ -228,7 +235,7 @@ export const getComponentInfoModalInfo = createSelector(
 export const getPrevNextComponent = createSelector(
     getInfoModal,
     getSelectedComponentTypeSection,
-    getAPI,
+    getCompatibleAPI,
     getCompatibleModulesArray,
 	getCompatibleThemesArray,
     isEditing,
