@@ -5,6 +5,7 @@ import store from '../../store';
 
 
 export const actions = {
+	SET_CORE_VERSION: 'SET_CORE_VERSION',
 	COMPATIBLE_COMPONENTS_LOADED: 'COMPATIBLE_COMPONENTS_LOADED',
 	COMPATIBLE_COMPONENTS_LOAD_ERROR: 'COMPATIBLE_COMPONENTS_LOAD_ERROR',
 	TOGGLE_API: 'TOGGLE_API',
@@ -23,35 +24,48 @@ export const actions = {
 	COMPONENT_DOWNLOAD_UNPACK_RESPONSE: 'COMPONENT_DOWNLOAD_UNPACK_RESPONSE', // TODO rename: SUCCESS/ERROR ?
 	TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG: 'TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG',
 
-	INSTALLED_MODULES_LOADED: 'INSTALLED_MODULES_LOADED',
-	INSTALLED_MODULES_ERROR_LOADING: 'INSTALLED_MODULES_ERROR_LOADING'
+	INSTALLED_COMPONENTS_LOADED: 'INSTALLED_COMPONENTS_LOADED',
+	INSTALLED_COMPONENTS_ERROR_LOADING: 'INSTALLED_COMPONENTS_ERROR_LOADING'
 };
 
 
+/**
+ * Gets the full list of compatible components for a particular core version.
+ * @return {Function}
+ */
 const getCompatibleComponents = () => {
 	return function (dispatch, getState) {
 		const state = getState();
 		const base_url = state.constants.data_source_url;
 		const core_version = state.constants.core_version;
 
+		dispatch(setCoreVersion(core_version));
+
 		fetch(`${base_url}/feeds/core/${core_version}.json`)
 			.then((response) => response.json())
 			.then((json) => {
 				dispatch({
 					type: actions.COMPATIBLE_COMPONENTS_LOADED,
-					api: json.api,
-					modules: json.modules,
-					themes: json.themes,
-                    default_components: json.default_components
+					payload: {
+						coreVersion: core_version, // TODO convert everything to camel
+						api: json.api,
+						modules: json.modules,
+						themes: json.themes,
+						default_components: json.default_components
+					}
 				});
-			}).catch((e) => dispatch(compatibleComponentsLoadError(e)))
+			}).catch((e) => {
+				console.log(e);
+				dispatch(compatibleComponentsLoadError(e));
+			});
 	};
 };
 
 const compatibleComponentsLoadError = () => ({ type: actions.COMPATIBLE_COMPONENTS_LOAD_ERROR });
-const toggleAPI = () => ({ type: TOGGLE_API });
+const toggleAPI = () => ({ type: actions.TOGGLE_API });
 const toggleModule = (folder) => ({ type: actions.TOGGLE_MODULE, folder });
 const toggleTheme = (folder) => ({ type: actions.TOGGLE_THEME, folder });
+const setCoreVersion = (coreVersion) => ({ type: actions.SET_CORE_VERSION, payload: { coreVersion }});
 
 const toggleComponent = (componentTypeSection, folder) => {
     if (componentTypeSection === 'modules') {
@@ -225,19 +239,19 @@ const getInstalledComponents = () => {
 		.then((response) => response.json())
 		.then((json) => {
 			store.dispatch({
-				type: actions.INSTALLED_MODULES_LOADED,
+				type: actions.INSTALLED_COMPONENTS_LOADED,
 				...json
 			});
 		}).catch((e) => {
 		store.dispatch({
-			type: actions.INSTALLED_MODULES_ERROR_LOADING,
+			type: actions.INSTALLED_MODULES_ERROR_LOADING, // TODO
 			error: e
 		});
 	});
 };
 
-
 export const actionCreators = {
+	setCoreVersion,
 	getCompatibleComponents,
 	//compatibleComponentsLoadError,
 	toggleComponent,

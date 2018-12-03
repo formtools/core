@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { Provider, connect } from 'react-redux';
 import store from '../../store';
 import { selectors as initSelectors } from '../../store/init';
+import { actionCreators } from '../../store/components/actions';
 
-// import * as actions from './actions';
 // import InstallationComponents from '../../components/InstallationComponents/InstallationComponents';
 
 class ManageModulesContainer extends Component {
 
 	componentWillUpdate (nextProps) {
+		console.log(nextProps);
+
 		if (nextProps.initialized && !this.props.initialized) {
 			this.props.getInstalledComponents();
 		}
@@ -31,8 +33,8 @@ const mapStateToProps = (state) => ({
 //     isShowingComponentInfoModal: selectors.showComponentInfoModal(state),
 // 	api: selectors.getAPI(state),
 // 	i18n: coreSelectors.getI18n(state),
-// 	allThemes: selectors.getThemesArray(state),
-// 	allModules: selectors.getModulesArray(state),
+// 	allThemes: selectors.getCompatibleThemesArray(state),
+// 	allModules: selectors.getCompatibleModulesArray(state),
 //     selectedComponents: selectors.getSelectedComponents(state),
 //     selectedComponentTypeSection: selectors.getSelectedComponentTypeSection(state),
 // 	selectedModuleFolders: selectors.getSelectedModuleFolders(state),

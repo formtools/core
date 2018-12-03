@@ -19,6 +19,8 @@ $data = array(
 
 switch ($_GET["action"]) {
 	case "init":
+
+		// TODO CAMEL! All Camel now.
 		$data = array(
 			"is_logged_in" => Core::$user->isLoggedIn(),
 			"i18n" => Core::$L,
@@ -73,7 +75,7 @@ switch ($_GET["action"]) {
 		$data = Packages::downloadAndUnpack($url, $component_type);
 		break;
 
-	case "admin_get_modules":
+	case "get_installed_components":
 		if (!Core::$user->isLoggedIn() || !Core::$user->isAdmin()) {
 			$data = array("error" => "no_access");
 			return;

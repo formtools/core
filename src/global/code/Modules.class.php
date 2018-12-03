@@ -40,7 +40,9 @@ class Modules
 
 
     /**
-     * Updates the list of modules in the database by examining the contents of the /modules folder.
+     * Updated in 3.1.0 to be always called on the Modules page to show the latest modules. With 3.1 the new Update
+	 * page handles downloading, installing + upgrading all components, including the Core. So for most usages this
+	 * method shouldn't be necessary: that
      */
     public static function updateModuleList()
     {
@@ -48,8 +50,8 @@ class Modules
         $LANG = Core::$L;
         $root_dir = Core::getRootDir();
 
+        // 1. check for new module folders
         $modules = self::getUninstalledModules();
-
         foreach ($modules as $module_folder => $module) {
 
             // Abstract classes in PHP don't have the option to force properties being defined, so check for them here
@@ -88,7 +90,7 @@ class Modules
             $db->execute();
         }
 
-        // also, parse the existing modules and see if any folders have been removed altogether
+        // 2. check for removed folders
         $modules = self::getList();
         foreach ($modules as $module_info) {
             if ($module_info["is_installed"] === "yes") {

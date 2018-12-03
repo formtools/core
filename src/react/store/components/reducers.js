@@ -8,31 +8,42 @@ export default function reducer (state = {
 	errorLoading: false,
 	error: '',
 	isEditing: false,
-    showComponentInfoModal: false,
+    showInfoModal: false,
+	coreVersion: null,
 
 	// current content of the info modal
 	infoModal: '', // { type: 'module' | theme | api | core, folder: '' }
-	changelogs: {}, // populated on demand when a user clicks the About link for a component
 
-	// these contain the full list of COMPATIBLE components/core - not what's currently installed/selected
-	core: {},
-	api: {},
-	modules: {},
-	themes: {},
+	// populated on demand when a user clicks the About link for a component. This always contains the latest + greatest
+	// data for a component - it's not affected by anything else in the UI
+	changelogs: {},
 
-    selectedComponentTypeSection: 'modules', // installation only... where should this go?
+	// compatible components grouped by core version. The installation script only ever needs the list of
+	// compatible components for the Core version being installed, but for the Update page within Form Tools
+	// need to get both the current + soon-to-be-upgraded-to core version compatibility list to ensure nothing gets
+	// borked when they upgrade
+	compatibleComponents: {},
 
+	// the currently installed component details
+	installedAPI: {},
+	installedModules: {},
+	installedThemes: {},
+
+	// the selected components. These depend on the actual compatibleComponents for the core version
+    selectedComponentTypeSection: 'modules', // TODO change to array, so we can reuse for Update page
     selectedModuleFolders: [],
     selectedThemeFolders: [],
 	apiSelected: false,
+	coreSelected: false,
 
+	// download status data
 	isDownloading: false,
 	downloadComplete: false,
 	showDetailedDownloadLog: false,
 
 	// populated the moment the user proceeds to the download step. This is a 1-level deep object of property names:
 	// api, theme_[theme folder], module_[module folder] with each value containing an object of
-	// { downloaded: false|true, log: [] }
+	// { downloadSuccess: null|false|true, log: [] }
 	downloadedComponents: {},
 
     // any time the user clicks "Customize" we stash the last config here, in case they cancel their changes and
@@ -41,13 +52,15 @@ export default function reducer (state = {
 
 }, action) {
 
+	const payload = action.payload;
+
 	switch (action.type) {
 
 		// converts the list of modules and themes to an object with (unique) folder names as keys
-        case actions.COMPATIBLE_COMPONENTS_LOADED:
-			const modules = {};
+		case actions.COMPATIBLE_COMPONENTS_LOADED:
 
-			action.modules.forEach(({ name, desc, folder, repo, version }) => {
+			const modules = {};
+			payload.modules.forEach(({ name, desc, folder, repo, version }) => {
 				modules[folder] = {
 					name, desc, folder, repo,
 					version: version.version,
@@ -56,7 +69,7 @@ export default function reducer (state = {
 			});
 
 			const themes = {};
-			action.themes.forEach(({ name, desc, folder, repo, version }) => {
+			payload.themes.forEach(({ name, desc, folder, repo, version }) => {
 				themes[folder] = {
 					name, desc, folder, repo,
 					version: version.version,
@@ -65,29 +78,45 @@ export default function reducer (state = {
 			});
 
             let api = {};
-            if (action.api.length) {
+            if (payload.api.length) {
                 api = {
                     name: 'API',
                     folder: 'api',
                     type: 'api',
-                    version: action.api[0].version,
-                    release_date: action.api[0].release_date
+                    version: payload.api[0].version,
+                    release_date: payload.api[0].release_date
                 };
             }
 
             // only preselect modules and themes that ARE in fact in the available module/theme list
-            const preselected_modules = action.default_components.modules.filter((module) => modules.hasOwnProperty(module));
-            const preselected_themes = action.default_components.themes.filter((theme) => themes.hasOwnProperty(theme));
+            const preselected_modules = payload.default_components.modules.filter((module) => modules.hasOwnProperty(module));
+            const preselected_themes = payload.default_components.themes.filter((theme) => themes.hasOwnProperty(theme));
 
 			return Object.assign({}, state, {
 				loaded: true,
-				modules,
-				themes,
-                api,
-                apiSelected: action.default_components.api,
+				compatibleComponents: {
+					...state.compatibleComponents,
+					[payload.coreVersion]: {
+						modules,
+						themes,
+						api
+					}
+				},
+                apiSelected: payload.default_components.api,
                 selectedModuleFolders: preselected_modules,
 				selectedThemeFolders: preselected_themes
 			});
+
+		case actions.SET_CORE_VERSION:
+			return {
+				...state,
+				coreVersion: payload.coreVersion
+			};
+			break;
+
+		case actions.INSTALLED_COMPONENTS_LOADED:
+			console.log(actions);
+			break;
 
 		case actions.TOGGLE_API:
             return {
@@ -181,7 +210,7 @@ export default function reducer (state = {
         case actions.SHOW_COMPONENT_CHANGELOG_MODAL:
             return {
                 ...state,
-                showComponentInfoModal: true,
+                showInfoModal: true,
                 infoModal: {
                     componentType: action.payload.componentType,
                     folder: action.payload.folder
@@ -191,7 +220,7 @@ export default function reducer (state = {
         case actions.CLOSE_COMPONENT_CHANGELOG_MODAL:
             return {
                 ...state,
-                showComponentInfoModal: false
+	            showInfoModal: false
             };
 
         case actions.COMPONENT_HISTORY_LOADED:

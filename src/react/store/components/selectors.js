@@ -3,33 +3,60 @@ import { convertHashToArray } from '../../helpers';
 import { selectors as constantSelectors } from '../constants';
 import { getComponentNameFromIdentifier } from './helpers';
 
-export const isDataLoaded = (state) => state.compatibleComponents.loaded;
-export const getModules = (state) => state.compatibleComponents.modules;
-export const getThemes = (state) => state.compatibleComponents.themes;
-export const isAPISelected = (state) => state.compatibleComponents.apiSelected;
+export const isDataLoaded = (state) => state.components.loaded;
+export const isEditing = (state) => state.components.isEditing;
+export const showInfoModal = (state) => state.components.showInfoModal; // TODO rename
+export const getInfoModal = (state) => state.components.infoModal;
+export const getChangelogs = (state) => state.components.changelogs;
+export const getCoreVersion = (state) => state.components.coreVersion;
 
-export const getSelectedModuleFolders = (state) => state.compatibleComponents.selectedModuleFolders;
-export const getSelectedThemeFolders = (state) => state.compatibleComponents.selectedThemeFolders;
-export const isEditing = (state) => state.compatibleComponents.isEditing;
-export const showComponentInfoModal = (state) => state.compatibleComponents.showComponentInfoModal;
-export const getSelectedComponentTypeSection = (state) => state.compatibleComponents.selectedComponentTypeSection;
-export const getAPI = (state) => state.compatibleComponents.api;
-export const getCore = (state) => state.compatibleComponents.core;
-export const getChangelogs = (state) => state.compatibleComponents.changelogs;
-export const getInfoModal = (state) => state.compatibleComponents.infoModal;
+const getCompatibleComponents = (state) => state.components.compatibleComponents;
+
+
+// gets the list of compatible modules for the current selected core version
+export const getCompatibleModules = createSelector(
+	getCoreVersion,
+	getCompatibleComponents,
+	(coreVersion, compatibleComponents) => {
+		if (!coreVersion || !compatibleComponents.hasOwnProperty(coreVersion)) {
+			return {};
+		}
+		return compatibleComponents[coreVersion].modules
+	}
+);
+
+export const getCompatibleThemes = createSelector(
+	getCoreVersion,
+	getCompatibleComponents,
+	(coreVersion, compatibleComponents) => {
+		if (!coreVersion || !compatibleComponents.hasOwnProperty(coreVersion)) {
+			return {};
+		}
+		return compatibleComponents[coreVersion].themes
+	}
+);
+
+export const getAPI = (state) => state.components.api;
+export const getCore = (state) => state.components.core;
+
+// selected
+export const isAPISelected = (state) => state.components.apiSelected;
+export const getSelectedModuleFolders = (state) => state.components.selectedModuleFolders;
+export const getSelectedThemeFolders = (state) => state.components.selectedThemeFolders;
+export const getSelectedComponentTypeSection = (state) => state.components.selectedComponentTypeSection;
 
 // downloading
-export const isDownloading = (state) => state.compatibleComponents.isDownloading;
-export const downloadComplete = (state) => state.compatibleComponents.downloadComplete;
-export const showDetailedDownloadLog = (state) => state.compatibleComponents.showDetailedDownloadLog;
-export const getDownloadedComponents = (state) => state.compatibleComponents.downloadedComponents;
+export const isDownloading = (state) => state.components.isDownloading;
+export const downloadComplete = (state) => state.components.downloadComplete;
+export const showDetailedDownloadLog = (state) => state.components.showDetailedDownloadLog;
+export const getDownloadedComponents = (state) => state.components.downloadedComponents;
 
 
 export const getDownloadLog = (state) => {
 	const components = getDownloadedComponents(state);
 	const showDetails = showDetailedDownloadLog(state);
-	const modules = getModules(state);
-	const themes = getThemes(state);
+	const modules = getCompatibleModules(state);
+	const themes = getCompatibleThemes(state);
 
 	let log = '';
 	Object.keys(components).forEach((component) => {
@@ -50,6 +77,7 @@ export const getDownloadLog = (state) => {
 			log += components[component].log.join('<br />');
 		}
 
+		// TODO localization
 		if (components[component].downloadSuccess) {
 			log += '<div class="downloadSuccess">✓ Downloaded</div>';
 		} else {
@@ -60,25 +88,25 @@ export const getDownloadLog = (state) => {
 };
 
 // converts the hash of modules to an array
-export const getModulesArray = createSelector(
-    getModules,
+export const getCompatibleModulesArray = createSelector(
+	getCompatibleModules,
     convertHashToArray
 );
 
-export const getThemesArray = createSelector(
-    getThemes,
+export const getCompatibleThemesArray = createSelector(
+	getCompatibleThemes,
     convertHashToArray
 );
 
 const getSelectedModules = createSelector(
 	getSelectedModuleFolders,
-	getModules,
+	getCompatibleModules,
     (folders, modules) => folders.map((folder) => modules[folder])
 );
 
 const getSelectedThemes = createSelector(
     getSelectedThemeFolders,
-    getThemes,
+	getCompatibleThemes,
     (folders, themes) => folders.map((folder) => themes[folder])
 );
 
@@ -112,7 +140,7 @@ export const getSelectedComponents = (state) => {
 };
 
 export const allModulesSelected = createSelector(
-    getModulesArray,
+    getCompatibleModulesArray,
     getSelectedModuleFolders,
     (modules, folders) => modules.length === folders.length
 );
@@ -132,8 +160,8 @@ export const getComponentInfoModalInfo = createSelector(
     getInfoModal,
     getCore,
     getAPI,
-    getModules,
-    getThemes,
+	getCompatibleModules,
+	getCompatibleThemes,
     getChangelogs,
     isEditing,
     getSelectedComponentTypeSection,
@@ -201,8 +229,8 @@ export const getPrevNextComponent = createSelector(
     getInfoModal,
     getSelectedComponentTypeSection,
     getAPI,
-    getModulesArray,
-    getThemesArray,
+    getCompatibleModulesArray,
+	getCompatibleThemesArray,
     isEditing,
     getSelectedComponents,
     (infoModal, editingComponentTypeSection, api, modules, themes, isEditing, selectedComponents) => {

@@ -12,6 +12,8 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("admin");
 
+Modules::updateModuleList();
+
 $success = true;
 $message = "";
 if (isset($request["install"]) && is_numeric($request["install"])) {
@@ -19,9 +21,6 @@ if (isset($request["install"]) && is_numeric($request["install"])) {
 }
 if (isset($request["enable_modules"])) {
     list($success, $message) = Modules::updateEnabledModules($request);
-}
-if (isset($request["refresh_module_list"])) {
-    list($success, $message) = Modules::updateModuleList();
 }
 if (isset($request["uninstall"])) {
     list($success, $message) = Modules::uninstallModule($request["uninstall"]);

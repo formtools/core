@@ -105,7 +105,7 @@
                         <a href="{$same_page}?{$sort_order}">{$LANG.word_enabled} {$up_down}</a>
                     </th>
                     <th width="70">{$LANG.word_select|upper}</th>
-                    <th width="70" class="del2">{$LANG.word_uninstall|upper}</th>
+                    <th class="del"></th>
                 </tr>
             {/if}
 
@@ -164,10 +164,9 @@
                     {/if}
                 {/if}
             </td>
-            <td valign="top" class="del2" align="center">
+            <td valign="top" class="del" align="center">
                 {if $module.is_installed == "yes"}
-                    <a href="#"
-                       onclick="return mm.uninstall_module({$module.module_id})">{$LANG.word_uninstall|upper}</a>
+                    <a href="#" onclick="return mm.uninstall_module({$module.module_id})" title="{$LANG.word_uninstall}"></a>
                 {/if}
             </td>
             </tr>
@@ -186,23 +185,11 @@
 
         <p>
             <input type="submit" name="enable_modules" value="{$LANG.word_update}"/>
-            <input type="button" onclick="window.location='{$same_page}?refresh_module_list'" class="blue"
-                   value="{$LANG.phrase_refresh_module_list|escape}"/>
+            <input type="button" onclick="window.location='../update.php'" class="blue" value="Add / Upgrade Modules" />
         </p>
 
     </form>
-    <div id="premium_module_dialog" class="hidden">
-        <span class="popup_icon popup_type_info"></span>
-        <div class="margin_bottom_large">
-            {$LANG.text_enter_license_key}
-        </div>
-        <div class="license_key_panel">
-            <span class="margin_right_large">{$LANG.phrase_license_key}</span>
-            <input type="text" id="key_section1" maxlength="4" value=""/>-<input type="text" id="key_section2"
-                                                                                 maxlength="4" value=""/>-<input
-                    type="text" id="key_section3" maxlength="4" value=""/>
-        </div>
-    </div>
+
 {/if}
 
 {ft_include file='footer.tpl'}
