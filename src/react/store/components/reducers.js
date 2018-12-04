@@ -35,7 +35,7 @@ export default function reducer (state = {
 	installedThemes: {},
 
 	// the selected components. These depend on the actual compatibleComponents for the core version
-	selectedComponentTypeSection: 'modules', // TODO change to array, so we can reuse for Update page
+	selectedComponentTypeSections: ['modules'],
 	selectedModuleFolders: [],
 	selectedThemeFolders: [],
 	apiSelected: false,
@@ -212,10 +212,12 @@ export default function reducer (state = {
 				isEditing: false
 			};
 
+		// selects a single component type section, overwriting any previous: used for the installation script where
+		// you can only select a single section at once
 		case actions.SELECT_COMPONENT_TYPE_SECTION:
 			return {
 				...state,
-				selectedComponentTypeSection: action.section
+				selectedComponentTypeSections: [payload.section]
 			};
 
 		case actions.SHOW_COMPONENT_CHANGELOG_MODAL:

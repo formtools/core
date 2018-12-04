@@ -4,6 +4,7 @@ import ComponentList from '../ComponentList/ComponentList';
 import { Checkmark } from '../Icons/Icons';
 
 
+// displays an editable list of components for a single section ('modules', 'themes' etc)
 class EditableComponentList extends Component
 {
     constructor (props) {
@@ -24,7 +25,7 @@ class EditableComponentList extends Component
             return null;
         }
 
-        const color = (selectedComponentTypeSection === 'api') ? '#ffffff' : '#999999';
+        const color = selectedComponentTypeSection === 'api' ? '#ffffff' : '#999999';
         return (
             <Checkmark size={15} color={color} style={{ marginLeft: 4, verticalAlign: 'sub' }} />
         );
@@ -62,15 +63,15 @@ class EditableComponentList extends Component
         return (
             <div>
                 <ul className={styles.pills} onClick={this.showSection}>
-                    <li className={selectedComponentTypeSection === 'modules' ? styles.selected : ''} data-section="modules">
+                    <li className={(selectedComponentTypeSection === 'modules') ? styles.selected : ''} data-section="modules">
                         {i18n.word_modules}
                         <span>{selectedModuleFolders.length}</span>
                     </li>
-                    <li className={selectedComponentTypeSection === 'themes' ? styles.selected : ''} data-section="themes">
+                    <li className={(selectedComponentTypeSection === 'themes') ? styles.selected : ''} data-section="themes">
                         {i18n.word_themes}
                         <span>{selectedThemeFolders.length}</span>
                     </li>
-                    <li className={selectedComponentTypeSection === 'api' ? styles.selected : ''} data-section="api">
+                    <li className={(selectedComponentTypeSection === 'api') ? styles.selected : ''} data-section="api">
                         API
                         {this.getAPIIcon()}
                     </li>

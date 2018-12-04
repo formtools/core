@@ -12,11 +12,12 @@ class InstallationComponents extends Component {
 
     getModal () {
         const { isShowingComponentInfoModal, onCloseComponentInfo, onPrevNext, isEditing, modalInfo,
-	        toggleComponent, selectedComponentTypeSection, i18n } = this.props;
+	        toggleComponent, selectedComponentTypeSections, i18n } = this.props;
         const hasDocLink = modalInfo.type !== 'theme';
         let docLink = null;
 
-        // feels like this should be provided by the data source. If not, maybe put this info in the selector?
+        // feels like this should be provided by the data source. If not, maybe put this info in the selector? Store?
+	    // Multiple components could use this info
         if (hasDocLink) {
             if (modalInfo.type === 'module') {
                 docLink = `https://docs.formtools.org/modules/${modalInfo.folder}/`;
@@ -31,7 +32,7 @@ class InstallationComponents extends Component {
             <ComponentDialog
                 open={isShowingComponentInfoModal}
                 onClose={onCloseComponentInfo}
-                toggleComponent={() => toggleComponent(selectedComponentTypeSection, modalInfo.folder)}
+                toggleComponent={() => toggleComponent(selectedComponentTypeSections[0], modalInfo.folder)}
                 isLoading={!modalInfo.loaded}
                 isEditing={isEditing}
                 title={modalInfo.title}
@@ -72,7 +73,7 @@ class InstallationComponents extends Component {
 	}
 
 	getEditableComponentList () {
-        const { onCancelEditComponentList, selectedComponentTypeSection, allModules, allThemes, allModulesSelected,
+        const { onCancelEditComponentList, selectedComponentTypeSections, allModules, allThemes, allModulesSelected,
             onSelectComponentTypeSection, selectedModuleFolders, selectedThemeFolders, toggleComponent,
             toggleAllModulesSelected, api, isAPISelected, saveSelectedComponentList, onShowComponentInfo, i18n } = this.props;
 
@@ -85,7 +86,7 @@ class InstallationComponents extends Component {
                 {this.getModal()}
 
                 <EditableComponentList
-                    selectedComponentTypeSection={selectedComponentTypeSection}
+                    selectedComponentTypeSection={selectedComponentTypeSections[0]}
                     onSelectComponentSection={onSelectComponentTypeSection}
                     toggleComponent={toggleComponent}
                     modules={allModules}

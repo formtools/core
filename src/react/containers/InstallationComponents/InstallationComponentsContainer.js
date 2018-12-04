@@ -37,7 +37,7 @@ const mapStateToProps = (state) => ({
 	allThemes: selectors.getCompatibleThemesArray(state),
 	allModules: selectors.getCompatibleModulesArray(state),
     selectedComponents: selectors.getSelectedComponents(state),
-    selectedComponentTypeSection: selectors.getSelectedComponentTypeSection(state),
+    selectedComponentTypeSections: selectors.getSelectedComponentTypeSections(state),
 	selectedModuleFolders: selectors.getSelectedModuleFolders(state),
 	selectedThemeFolders: selectors.getSelectedThemeFolders(state),
     allModulesSelected: selectors.allModulesSelected(state),

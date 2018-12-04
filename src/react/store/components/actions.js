@@ -84,7 +84,9 @@ const cancelEditSelectedComponentList = () => ({ type: actions.CANCEL_EDIT_SELEC
 
 const selectComponentTypeSection = (section) => ({
     type: actions.SELECT_COMPONENT_TYPE_SECTION,
-    section
+	payload: {
+		section
+	}
 });
 
 const toggleAllModulesSelected = () => {

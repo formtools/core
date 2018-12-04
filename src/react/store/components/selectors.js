@@ -50,7 +50,7 @@ export const getCompatibleAPI = createSelector(
 export const isAPISelected = (state) => state.components.apiSelected;
 export const getSelectedModuleFolders = (state) => state.components.selectedModuleFolders;
 export const getSelectedThemeFolders = (state) => state.components.selectedThemeFolders;
-export const getSelectedComponentTypeSection = (state) => state.components.selectedComponentTypeSection;
+export const getSelectedComponentTypeSections = (state) => state.components.selectedComponentTypeSections;
 
 // downloading
 export const isDownloading = (state) => state.components.isDownloading;
