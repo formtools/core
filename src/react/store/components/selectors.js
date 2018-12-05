@@ -4,6 +4,7 @@ import { selectors as constantSelectors } from '../constants';
 import { getComponentNameFromIdentifier } from './helpers';
 
 export const isCompatibleComponentsDataLoaded = (state) => state.components.compatibleComponentsLoaded;
+export const isInstalledComponentsLoaded = (state) => state.components.installedComponentsLoaded;
 export const isEditing = (state) => state.components.isEditing;
 export const showInfoModal = (state) => state.components.showInfoModal; // TODO rename
 export const getInfoModal = (state) => state.components.infoModal;
@@ -171,9 +172,9 @@ export const getComponentInfoModalInfo = createSelector(
 	getCompatibleThemes,
     getChangelogs,
     isEditing,
-    getSelectedComponentTypeSection,
+    getSelectedComponentTypeSections,
     getSelectedComponents,
-    (infoModal, coreDesc, api, modules, themes, changelogs, isEditing, selectedComponentTypeSection, selectedComponents) => {
+    (infoModal, coreDesc, api, modules, themes, changelogs, isEditing, selectedComponentTypeSections, selectedComponents) => {
         const { componentType, folder } = infoModal;
         const changelogLoaded = changelogs.hasOwnProperty(folder);
 
@@ -208,8 +209,8 @@ export const getComponentInfoModalInfo = createSelector(
                 themes: themes
             };
 
-            if (listMap.hasOwnProperty(selectedComponentTypeSection)) {
-                list = convertHashToArray(listMap[selectedComponentTypeSection]);
+            if (listMap.hasOwnProperty(selectedComponentTypeSections[0])) {
+                list = convertHashToArray(listMap[selectedComponentTypeSections[0]]);
             } else {
                 list = [{ folder: 'api'}];
             }
@@ -234,13 +235,13 @@ export const getComponentInfoModalInfo = createSelector(
 
 export const getPrevNextComponent = createSelector(
     getInfoModal,
-    getSelectedComponentTypeSection,
+    getSelectedComponentTypeSections,
     getCompatibleAPI,
     getCompatibleModulesArray,
 	getCompatibleThemesArray,
     isEditing,
     getSelectedComponents,
-    (infoModal, editingComponentTypeSection, api, modules, themes, isEditing, selectedComponents) => {
+    (infoModal, editingComponentTypeSections, api, modules, themes, isEditing, selectedComponents) => {
         const prevNext = {
             prev: null,
             next: null
@@ -252,8 +253,8 @@ export const getPrevNextComponent = createSelector(
                 modules: modules,
                 themes: themes
             };
-            if (listMap.hasOwnProperty(editingComponentTypeSection)) {
-                list = listMap[editingComponentTypeSection];
+            if (listMap.hasOwnProperty(editingComponentTypeSections[0])) {
+                list = listMap[editingComponentTypeSections[0]];
             } else {
                 list = [{ folder: 'api' }];
             }

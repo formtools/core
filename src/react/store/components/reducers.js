@@ -99,7 +99,7 @@ export default function reducer (state = {
 			const preselected_themes = payload.default_components.themes.filter((theme) => themes.hasOwnProperty(theme));
 
 			return Object.assign({}, state, {
-				compatibleComponentLoaded: true,
+				compatibleComponentsLoaded: true,
 				compatibleComponents: {
 					...state.compatibleComponents,
 					[payload.coreVersion]: {
@@ -122,6 +122,7 @@ export default function reducer (state = {
 		case actions.INSTALLED_COMPONENTS_LOADED:
 			return {
 				...state,
+				installedComponentsLoaded: true,
 				installedCore: payload.components.core,
 				installedAPI: payload.components.api,
 				installedModules: payload.components.modules,

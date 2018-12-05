@@ -7,19 +7,6 @@
     </tr>
 </table>
 
-
-Show
-<input type="button" value="Modules" />
-<input type="button" value="Themes" />
-<input type="button" value="API" />
-<input type="button" value="Core" />
-
-|
-
-<input type="checkbox" /> Show uninstalled components
-
-<br />
-
 <div id="manage-components"></div>
 
 <script>
