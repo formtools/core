@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './EditableComponentList.scss';
 import ComponentList from '../ComponentList/ComponentList';
 import { Checkmark } from '../Icons/Icons';
-
+import { Pills, Pill } from '../Pills/Pills.component';
 
 // displays an editable list of components for a single section ('modules', 'themes' etc)
 class EditableComponentList extends Component
@@ -62,20 +62,20 @@ class EditableComponentList extends Component
 
         return (
             <div>
-                <ul className={styles.pills} onClick={this.showSection}>
-                    <li className={(selectedComponentTypeSection === 'modules') ? styles.selected : ''} data-section="modules">
-                        {i18n.word_modules}
-                        <span>{selectedModuleFolders.length}</span>
-                    </li>
-                    <li className={(selectedComponentTypeSection === 'themes') ? styles.selected : ''} data-section="themes">
-                        {i18n.word_themes}
-                        <span>{selectedThemeFolders.length}</span>
-                    </li>
-                    <li className={(selectedComponentTypeSection === 'api') ? styles.selected : ''} data-section="api">
-                        API
-                        {this.getAPIIcon()}
-                    </li>
-                </ul>
+	            <Pills onClick={this.showSection} selected={[selectedComponentTypeSection]}>
+		            <Pill id="modules">
+			            {i18n.word_modules}
+			            <span>{selectedModuleFolders.length}</span>
+		            </Pill>
+		            <Pill id="themes">
+			            {i18n.word_themes}
+			            <span>{selectedThemeFolders.length}</span>
+		            </Pill>
+		            <Pill id="api">
+			            API
+			            {this.getAPIIcon()}
+		            </Pill>
+	            </Pills>
 
                 {this.getSelectAllModulesCheckbox()}
 
