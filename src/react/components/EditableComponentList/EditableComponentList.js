@@ -4,6 +4,7 @@ import ComponentList from '../ComponentList/ComponentList';
 import { Checkmark } from '../Icons/Icons';
 import { Pills, Pill } from '../Pills/Pills.component';
 
+
 // displays an editable list of components for a single section ('modules', 'themes' etc)
 class EditableComponentList extends Component
 {

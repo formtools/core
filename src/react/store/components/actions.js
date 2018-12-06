@@ -15,6 +15,7 @@ export const actions = {
 	SAVE_SELECTED_COMPONENT_LIST: 'SAVE_SELECTED_COMPONENT_LIST',
 	CANCEL_EDIT_SELECTED_COMPONENT_LIST: 'CANCEL_EDIT_SELECTED_COMPONENT_LIST',
 	SELECT_COMPONENT_TYPE_SECTION: 'SELECT_COMPONENT_TYPE_SECTION',
+	TOGGLE_COMPONENT_TYPE_SECTION: 'TOGGLE_COMPONENT_TYPE_SECTION',
 	SELECT_ALL_MODULES: 'SELECT_ALL_MODULES',
 	DESELECT_ALL_MODULES: 'DESELECT_ALL_MODULES',
 	SHOW_COMPONENT_CHANGELOG_MODAL: 'SHOW_COMPONENT_CHANGELOG_MODAL',
@@ -84,6 +85,13 @@ const cancelEditSelectedComponentList = () => ({ type: actions.CANCEL_EDIT_SELEC
 
 const selectComponentTypeSection = (section) => ({
     type: actions.SELECT_COMPONENT_TYPE_SECTION,
+	payload: {
+		section
+	}
+});
+
+const toggleComponentTypeSection = (section) => ({
+	type: actions.TOGGLE_COMPONENT_TYPE_SECTION,
 	payload: {
 		section
 	}
@@ -245,10 +253,10 @@ const getInstalledComponents = () => {
 				}
 			});
 		}).catch((e) => {
-			store.dispatch({
-				type: actions.INSTALLED_MODULES_ERROR_LOADING, // TODO
-				error: e
-			});
+			// store.dispatch({
+			// 	type: actions.INSTALLED_MODULES_ERROR_LOADING, // TODO
+			// 	error: e
+			// });
 		});
 };
 
@@ -261,6 +269,7 @@ export const actionCreators = {
 	saveSelectedComponentList,
 	cancelEditSelectedComponentList,
 	selectComponentTypeSection,
+	toggleComponentTypeSection,
 	toggleAllModulesSelected,
 	showComponentInfo,
 	closeComponentInfo,

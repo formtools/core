@@ -221,6 +221,18 @@ export default function reducer (state = {
 				selectedComponentTypeSections: [payload.section]
 			};
 
+		case actions.TOGGLE_COMPONENT_TYPE_SECTION:
+			const updatedSections = state.selectedComponentTypeSections;
+			if (updatedSections.indexOf(payload.section) === -1) {
+				updatedSections.push(payload.section);
+			} else {
+				//updatedSection.
+			}
+			return {
+				...state,
+				selectedComponentTypeSections: updatedSections
+			};
+
 		case actions.SHOW_COMPONENT_CHANGELOG_MODAL:
 			return {
 				...state,
