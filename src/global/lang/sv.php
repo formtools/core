@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Kolumn(er)";
 $LANG["word_complete"] = "Klar";
 $LANG["word_configuration"] = "Inställning";
 $LANG["word_content"] = "Innehåll";
+$LANG["word_continue"] = "Fortsätt";
 $LANG["word_continue_rightarrow"] = "Fortsätt »";
 $LANG["word_copy"] = "Kopiera";
 $LANG["word_custom"] = "Anpassad";

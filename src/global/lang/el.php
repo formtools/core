@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Στήλη (ες)";
 $LANG["word_complete"] = "Ολοκλήρωση";
 $LANG["word_configuration"] = "Διαμόρφωση";
 $LANG["word_content"] = "Περιεχόμενο";
+$LANG["word_continue"] = "Να συνεχίσει";
 $LANG["word_continue_rightarrow"] = "Συνέχεια »";
 $LANG["word_copy"] = "αντίγραφο";
 $LANG["word_custom"] = "Έθιμο";

@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Colún (í)";
 $LANG["word_complete"] = "Críochnaithe";
 $LANG["word_configuration"] = "Cumraíocht";
 $LANG["word_content"] = "Sásta";
+$LANG["word_continue"] = "Leanúint ar aghaidh";
 $LANG["word_continue_rightarrow"] = "Lean »";
 $LANG["word_copy"] = "Cóip";
 $LANG["word_custom"] = "Custam";

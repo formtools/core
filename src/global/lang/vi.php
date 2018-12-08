@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Cột (s)";
 $LANG["word_complete"] = "Hoàn thành";
 $LANG["word_configuration"] = "Cấu hình";
 $LANG["word_content"] = "Nội dung";
+$LANG["word_continue"] = "Tiếp tục";
 $LANG["word_continue_rightarrow"] = "Tiếp tục »";
 $LANG["word_copy"] = "Sao chép";
 $LANG["word_custom"] = "Phong tục";

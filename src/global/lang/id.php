@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Kolom (s)";
 $LANG["word_complete"] = "LENGKAP";
 $LANG["word_configuration"] = "Pengaturan";
 $LANG["word_content"] = "Isi";
+$LANG["word_continue"] = "Terus";
 $LANG["word_continue_rightarrow"] = "Lanjutkan »";
 $LANG["word_copy"] = "Salinan";
 $LANG["word_custom"] = "Kustom";

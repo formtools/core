@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Stupac (a)";
 $LANG["word_complete"] = "POTPUN";
 $LANG["word_configuration"] = "Konfiguracija";
 $LANG["word_content"] = "Sadržaj";
+$LANG["word_continue"] = "Nastaviti";
 $LANG["word_continue_rightarrow"] = "Nastavak »";
 $LANG["word_copy"] = "Kopirati";
 $LANG["word_custom"] = "Prilagođen";

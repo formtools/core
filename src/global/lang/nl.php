@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Kolom (men)";
 $LANG["word_complete"] = "COMPLEET";
 $LANG["word_configuration"] = "Configuratie";
 $LANG["word_content"] = "Inhoud";
+$LANG["word_continue"] = "Volgende";
 $LANG["word_continue_rightarrow"] = "Volgende &raquo;";
 $LANG["word_copy"] = "Kopiëren";
 $LANG["word_custom"] = "Eigen";

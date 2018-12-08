@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "열 (S)";
 $LANG["word_complete"] = "완료";
 $LANG["word_configuration"] = "구성";
 $LANG["word_content"] = "내용";
+$LANG["word_continue"] = "잇다";
 $LANG["word_continue_rightarrow"] = "계속»";
 $LANG["word_copy"] = "부";
 $LANG["word_custom"] = "사용자 지정";

@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Sütun (lar)";
 $LANG["word_complete"] = "TAMAMLANMIŞ";
 $LANG["word_configuration"] = "Yapılandırma";
 $LANG["word_content"] = "Içerik";
+$LANG["word_continue"] = "Devam et";
 $LANG["word_continue_rightarrow"] = "Devam »";
 $LANG["word_copy"] = "Kopya";
 $LANG["word_custom"] = "Özel";

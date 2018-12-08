@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "列（S）";
 $LANG["word_complete"] = "完成";
 $LANG["word_configuration"] = "配置";
 $LANG["word_content"] = "內容";
+$LANG["word_continue"] = "繼續";
 $LANG["word_continue_rightarrow"] = "繼續 »";
 $LANG["word_copy"] = "複製";
 $LANG["word_custom"] = "風俗";

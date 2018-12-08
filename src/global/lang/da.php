@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Kolonne (r)";
 $LANG["word_complete"] = "FÆRDIG";
 $LANG["word_configuration"] = "Configuration";
 $LANG["word_content"] = "Indhold";
+$LANG["word_continue"] = "Blive ved";
 $LANG["word_continue_rightarrow"] = "Fortsæt »";
 $LANG["word_copy"] = "Kopi";
 $LANG["word_custom"] = "Tilrettet";

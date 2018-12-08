@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "स्तंभ ()";
 $LANG["word_complete"] = "पूरा";
 $LANG["word_configuration"] = "विन्यास";
 $LANG["word_content"] = "सामग्री";
+$LANG["word_continue"] = "जारी रहना";
 $LANG["word_continue_rightarrow"] = "जारी रखें »";
 $LANG["word_copy"] = "प्रतिलिपि";
 $LANG["word_custom"] = "प्रथा";

@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Coloana (e)";
 $LANG["word_complete"] = "Complete";
 $LANG["word_configuration"] = "De configurare";
 $LANG["word_content"] = "Conţinut";
+$LANG["word_continue"] = "Continua";
 $LANG["word_continue_rightarrow"] = "Continuare »";
 $LANG["word_copy"] = "Copie";
 $LANG["word_custom"] = "Obicei";

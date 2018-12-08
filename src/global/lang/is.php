@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Column (s)";
 $LANG["word_complete"] = "Complete";
 $LANG["word_configuration"] = "Stillingar";
 $LANG["word_content"] = "Innihald";
+$LANG["word_continue"] = "Haltu áfram";
 $LANG["word_continue_rightarrow"] = "Áfram »";
 $LANG["word_copy"] = "Afrita";
 $LANG["word_custom"] = "Venja";

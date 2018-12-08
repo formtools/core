@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Haligi (s)";
 $LANG["word_complete"] = "Kumpletuhin";
 $LANG["word_configuration"] = "Pagsasaayos";
 $LANG["word_content"] = "Nilalaman";
+$LANG["word_continue"] = "Magpatuloy";
 $LANG["word_continue_rightarrow"] = "Magpatuloy »";
 $LANG["word_copy"] = "Kopya";
 $LANG["word_custom"] = "Pasadya";

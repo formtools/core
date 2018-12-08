@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Sloupec (s)";
 $LANG["word_complete"] = "Kompletní";
 $LANG["word_configuration"] = "Konfigurace";
 $LANG["word_content"] = "Obsah";
+$LANG["word_continue"] = "Pokračovat";
 $LANG["word_continue_rightarrow"] = "Pokračovat »";
 $LANG["word_copy"] = "Kopírovat";
 $LANG["word_custom"] = "Vlastní";

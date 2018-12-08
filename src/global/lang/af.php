@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Kolom (s)";
 $LANG["word_complete"] = "Voltooi";
 $LANG["word_configuration"] = "Opset";
 $LANG["word_content"] = "Inhoud";
+$LANG["word_continue"] = "Aanhou";
 $LANG["word_continue_rightarrow"] = "Verder »";
 $LANG["word_copy"] = "Kopie";
 $LANG["word_custom"] = "Gewoonte";

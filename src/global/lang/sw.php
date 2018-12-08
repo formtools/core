@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Column(s)";
 $LANG["word_complete"] = "Complete";
 $LANG["word_configuration"] = "Configuration";
 $LANG["word_content"] = "Yaliyomo";
+$LANG["word_continue"] = "Kuendelea";
 $LANG["word_continue_rightarrow"] = "Kuendelea »";
 $LANG["word_copy"] = "Nakala";
 $LANG["word_custom"] = "Desturi";

@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "זייַל (s)";
 $LANG["word_complete"] = "גאַנץ";
 $LANG["word_configuration"] = "קאָנפיגוראַטיאָן";
 $LANG["word_content"] = "אינהאַלט";
+$LANG["word_continue"] = "Continue";
 $LANG["word_continue_rightarrow"] = "געדויערן »";
 $LANG["word_copy"] = "Copy";
 $LANG["word_custom"] = "פירונג";

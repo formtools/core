@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Column(s)";
 $LANG["word_complete"] = "Complete";
 $LANG["word_configuration"] = "Configuration";
 $LANG["word_content"] = "Content";
+$LANG["word_continue"] = "Davam edin";
 $LANG["word_continue_rightarrow"] = "Continue &raquo;";
 $LANG["word_copy"] = "Kopyala";
 $LANG["word_custom"] = "Custom";

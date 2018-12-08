@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "ستون (ها)";
 $LANG["word_complete"] = "کامل";
 $LANG["word_configuration"] = "تنظیمات";
 $LANG["word_content"] = "مطالب و محتوا";
+$LANG["word_continue"] = "ادامه هید";
 $LANG["word_continue_rightarrow"] = "ادامه »";
 $LANG["word_copy"] = "کپی کنید";
 $LANG["word_custom"] = "ویژه";

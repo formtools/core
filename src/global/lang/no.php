@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Column (s)";
 $LANG["word_complete"] = "FERDIG";
 $LANG["word_configuration"] = "Konfigurasjon";
 $LANG["word_content"] = "Innhold";
+$LANG["word_continue"] = "Fortsett";
 $LANG["word_continue_rightarrow"] = "Fortsett &raquo;";
 $LANG["word_copy"] = "Kopiere";
 $LANG["word_custom"] = "Egendefinert";

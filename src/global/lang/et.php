@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Kolonn (id)";
 $LANG["word_complete"] = "Täielik";
 $LANG["word_configuration"] = "Konfiguratsioon";
 $LANG["word_content"] = "Sisu";
+$LANG["word_continue"] = "Jätka";
 $LANG["word_continue_rightarrow"] = "Jätka »";
 $LANG["word_copy"] = "Kopeeri";
 $LANG["word_custom"] = "Tava";

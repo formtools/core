@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Oszlop (ok)";
 $LANG["word_complete"] = "Kész";
 $LANG["word_configuration"] = "Konfiguráció";
 $LANG["word_content"] = "Tartalom";
+$LANG["word_continue"] = "Folytatni";
 $LANG["word_continue_rightarrow"] = "Folytatás »";
 $LANG["word_copy"] = "Másolat";
 $LANG["word_custom"] = "Egyedi";

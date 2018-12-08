@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Stĺpec (s)";
 $LANG["word_complete"] = "DOKONČENÉ";
 $LANG["word_configuration"] = "Konfigurácia";
 $LANG["word_content"] = "Obsah";
+$LANG["word_continue"] = "Pokračovať";
 $LANG["word_continue_rightarrow"] = "Pokračovať »";
 $LANG["word_copy"] = "Kópie";
 $LANG["word_custom"] = "Vlastné";

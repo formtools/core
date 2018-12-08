@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Colofn (au)";
 $LANG["word_complete"] = "Cwblhau";
 $LANG["word_configuration"] = "Ffurfweddu";
 $LANG["word_content"] = "Cynnwys";
+$LANG["word_continue"] = "Parhau";
 $LANG["word_continue_rightarrow"] = "Parhau »";
 $LANG["word_copy"] = "Copi";
 $LANG["word_custom"] = "Custom";

@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Kolonna (i)";
 $LANG["word_complete"] = "Tlesti";
 $LANG["word_configuration"] = "Konfigurazzjoni";
 $LANG["word_content"] = "Kuntent";
+$LANG["word_continue"] = "Kompli";
 $LANG["word_continue_rightarrow"] = "Kompli »";
 $LANG["word_copy"] = "Kopja";
 $LANG["word_custom"] = "Drawwa";

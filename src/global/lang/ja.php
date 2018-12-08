@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "列（複数可）";
 $LANG["word_complete"] = "完了";
 $LANG["word_configuration"] = "構成";
 $LANG["word_content"] = "内容";
+$LANG["word_continue"] = "持続する";
 $LANG["word_continue_rightarrow"] = "続行»";
 $LANG["word_copy"] = "コピー";
 $LANG["word_custom"] = "風習";

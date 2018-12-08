@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Колона (и)";
 $LANG["word_complete"] = "Целосно";
 $LANG["word_configuration"] = "Конфигурација";
 $LANG["word_content"] = "Содржина";
+$LANG["word_continue"] = "Продолжи";
 $LANG["word_continue_rightarrow"] = "Продолжи »";
 $LANG["word_copy"] = "Копирај";
 $LANG["word_custom"] = "Обичај";

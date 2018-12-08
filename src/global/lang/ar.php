@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "العمود (ق)";
 $LANG["word_complete"] = "كامل";
 $LANG["word_configuration"] = "التكوين";
 $LANG["word_content"] = "محتوى";
+$LANG["word_continue"] = "استمر";
 $LANG["word_continue_rightarrow"] = "تواصل »";
 $LANG["word_copy"] = "نسخ";
 $LANG["word_custom"] = "مخصص";

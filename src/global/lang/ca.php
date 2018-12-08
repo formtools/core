@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Columna (s)";
 $LANG["word_complete"] = "Completa";
 $LANG["word_configuration"] = "Configuració";
 $LANG["word_content"] = "Contingut";
+$LANG["word_continue"] = "Continua";
 $LANG["word_continue_rightarrow"] = "Continua »";
 $LANG["word_copy"] = "Copia";
 $LANG["word_custom"] = "Costum";

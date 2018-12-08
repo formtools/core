@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "คอลัมน์ (s)";
 $LANG["word_complete"] = "เสร็จสมบูรณ์";
 $LANG["word_configuration"] = "การกำหนดค่า";
 $LANG["word_content"] = "เนื้อหา";
+$LANG["word_continue"] = "ต่อ";
 $LANG["word_continue_rightarrow"] = "»ต่อไป";
 $LANG["word_copy"] = "สำเนา";
 $LANG["word_custom"] = "กำหนดเอง";

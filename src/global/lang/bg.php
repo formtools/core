@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Колона (а)";
 $LANG["word_complete"] = "Пълна";
 $LANG["word_configuration"] = "Конфигурация";
 $LANG["word_content"] = "Съдържание";
+$LANG["word_continue"] = "продължи";
 $LANG["word_continue_rightarrow"] = "Продължи »";
 $LANG["word_copy"] = "копие";
 $LANG["word_custom"] = "Обичай";

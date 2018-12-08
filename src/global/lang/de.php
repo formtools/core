@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Spalten";
 $LANG["word_complete"] = "Fertig";
 $LANG["word_configuration"] = "Konfiguration";
 $LANG["word_content"] = "Inhalt";
+$LANG["word_continue"] = "Fortsetzen";
 $LANG["word_continue_rightarrow"] = "Fortsetzen »";
 $LANG["word_copy"] = "Kopieren";
 $LANG["word_custom"] = "Benutzerdefiniert";

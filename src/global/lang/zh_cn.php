@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "列（S）";
 $LANG["word_complete"] = "完成";
 $LANG["word_configuration"] = "配置";
 $LANG["word_content"] = "内容";
+$LANG["word_continue"] = "继续";
 $LANG["word_continue_rightarrow"] = "继续»";
 $LANG["word_copy"] = "复制";
 $LANG["word_custom"] = "自定义";

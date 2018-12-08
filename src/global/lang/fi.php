@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Sarake (s)";
 $LANG["word_complete"] = "Valmis";
 $LANG["word_configuration"] = "Asetukset";
 $LANG["word_content"] = "Sisältö";
+$LANG["word_continue"] = "Jatkaa";
 $LANG["word_continue_rightarrow"] = "Jatka »";
 $LANG["word_copy"] = "Kopio";
 $LANG["word_custom"] = "Muokattu";

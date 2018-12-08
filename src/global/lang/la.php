@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Column (s)";
 $LANG["word_complete"] = "Complete";
 $LANG["word_configuration"] = "Konfigurācija";
 $LANG["word_content"] = "Saturs";
+$LANG["word_continue"] = "Turpināt";
 $LANG["word_continue_rightarrow"] = "Turpināt »";
 $LANG["word_copy"] = "Kopēt";
 $LANG["word_custom"] = "Paradums";

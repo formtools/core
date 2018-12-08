@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Stulpelyje (-iai)";
 $LANG["word_complete"] = "Complete";
 $LANG["word_configuration"] = "Konfigūracija";
 $LANG["word_content"] = "Turinys";
+$LANG["word_continue"] = "Tęsti";
 $LANG["word_continue_rightarrow"] = "Toliau »";
 $LANG["word_copy"] = "Kopijuoti";
 $LANG["word_custom"] = "Paprotys";

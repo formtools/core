@@ -55,6 +55,7 @@ $LANG["word_columns_sp"] = "Column (s)";
 $LANG["word_complete"] = "Dokončaj";
 $LANG["word_configuration"] = "Nastavitve";
 $LANG["word_content"] = "Vsebina";
+$LANG["word_continue"] = "Naprej";
 $LANG["word_continue_rightarrow"] = "Naprej &raquo;";
 $LANG["word_copy"] = "Kopirati";
 $LANG["word_custom"] = "Navada";
