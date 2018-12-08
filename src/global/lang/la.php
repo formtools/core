@@ -1267,4 +1267,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Forma Tools nevar noteikt, kur 
 $LANG["processing_no_post_vars"] = "process.php nesaņem datus. Piezīme: šo skriptu nevar tikt iekrautas tieši jūsu pārlūkprogrammā. <br /> Pārliecinieties, ka jūsu veidlapu nosūtot pa pastu.";
 $LANG["processing_no_redirect_url"] = "Iesniegšana ir apstrādāti pareizi, bet jums nav noteikts novirzīšanas URL šo formu! Rediģēt jūsu veidlapas forma Rīki UI un pievienot novirzīšanas URL.";
 
-?>
+$LANG["word_port"] = "Osta";

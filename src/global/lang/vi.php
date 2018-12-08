@@ -1267,4 +1267,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Mẫu cụ không thể xác đ
 $LANG["processing_no_post_vars"] = "process.php là không nhận được bất kỳ dữ liệu. Lưu ý: kịch bản này không thể được tải trực tiếp trong trình duyệt của bạn. <br /> Hãy chắc chắn rằng mẫu của bạn được gửi qua POST.";
 $LANG["processing_no_redirect_url"] = "Trình này được xử lý đúng, nhưng bạn chưa chỉ định một URL chuyển hướng cho các hình thức này! Hiệu chỉnh hình thức của bạn trong Tools Mẫu giao diện và thêm URL chuyển hướng.";
 
-?>
+$LANG["word_port"] = "Hải cảng";

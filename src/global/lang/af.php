@@ -1267,4 +1267,6 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Vorm gereedskap is nie in staat
 $LANG["processing_no_post_vars"] = "process.php is nie ontvang van enige inligting. Nota: Hierdie script kan nie direk gelaai word in jou browser. <br /> Maak seker dat jou vorm is die stuur via die POS.";
 $LANG["processing_no_redirect_url"] = "Die voorlegging is korrek verwerk, maar jy het nie gespesifiseer nie &#39;n deurwysing URL vir hierdie vorm! Verander jou vorm in die vorm Tools UI en voeg die redirect URL in.";
 
-?>
+
+$LANG["word_port"] = "Port";
+

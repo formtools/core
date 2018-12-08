@@ -1275,4 +1275,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Forma Tools è in grado di dete
 $LANG["processing_no_post_vars"] = "process.php non sta ricevendo alcun dato. Nota: questo script non può essere caricato direttamente nel vostro browser.<b />Sinceratevi che il vostro modulo effettui l'invio via POST.";
 $LANG["processing_no_redirect_url"] = "L'invio è stato elaborato correttamente, ma non avete specificato un URL di reindirizzamento di questo modulo! Modificate il modulo nell'IU di Form Tools, aggiungendo l'URL di reindirizzamento.";
 
-?>
+$LANG["word_port"] = "Porta";

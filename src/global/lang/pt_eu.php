@@ -1276,4 +1276,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Form Tools is unable to determi
 $LANG["processing_no_post_vars"] = "process.php is not receiving any data. Note: this script cannot be loaded directly in your browser.<br />Make sure your form is sending via POST.";
 $LANG["processing_no_redirect_url"] = "The submission was processed correctly, but you haven't specified a redirect URL for this form! Edit your form in the Form Tools UI and add the redirect URL.";
 
-?>
+$LANG["word_port"] = "Porta";

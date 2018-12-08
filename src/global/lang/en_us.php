@@ -125,7 +125,6 @@ $LANG["word_image"] = "Image";
 $LANG["word_incomplete"] = "Incomplete";
 $LANG["word_install"] = "Install";
 $LANG["word_installation"] = "Installation";
-$LANG["word_invalid"] = "Invalid";
 $LANG["word_internal"] = "Internal";
 $LANG["word_language"] = "Language";
 $LANG["word_large"] = "Large";

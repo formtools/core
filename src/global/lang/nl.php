@@ -1275,4 +1275,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Vorm Tools is niet in staat om 
 $LANG["processing_no_post_vars"] = "process.php ontvangt geen gegevens. Let op: dit script kan niet rechtstreeks worden geladen in uw browser. <br /> Zorg ervoor dat uw formulier verzenden via POST.";
 $LANG["processing_no_redirect_url"] = "De inzending was goed verwerkt, maar je hebt niet opgegeven een redirect URL voor dit formulier! Bewerk uw formulier in de vorm Extra UI en voeg de redirect URL.";
 
-?>
+$LANG["word_port"] = "Haven";

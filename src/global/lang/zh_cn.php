@@ -1275,4 +1275,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "表格工具是无法确定在�
 $LANG["processing_no_post_vars"] = "process.php没有收到任何数据。注意：这个脚本不能直接在浏览器中加载。 <br />确保您的表单通过POST发送。";
 $LANG["processing_no_redirect_url"] = "提交正确处理，但你有没有这种形式指定重定向URL！编辑表单，在“表格工具的用户界面和添加重定向​​URL。";
 
-?>
+$LANG["word_port"] = "港口";

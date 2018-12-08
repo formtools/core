@@ -1275,4 +1275,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Rodzaj narzędzi nie jest w sta
 $LANG["processing_no_post_vars"] = "process.php nie odbiera żadnych danych. Uwaga: ten skrypt nie mogą być ładowane bezpośrednio w przeglądarce. <br /> Upewnij się, że formularz wysyła pocztą.";
 $LANG["processing_no_redirect_url"] = "Zgłoszenie zostało poprawnie przetworzone, ale nie określono adresu URL przekierowania do tej formie! Edycja formularza w interfejsie Narzędzia Forma i dodać przekierowanie URL.";
 
-?>
+$LANG["word_port"] = "Port";

@@ -1267,4 +1267,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Obrazec Tools ne more ugotoviti
 $LANG["processing_no_post_vars"] = "process.php ne prejema nobenih podatkov. Opomba: ta scenarij ni mogoče naložiti neposredno v svojem brskalniku. <br /> Poskrbite, da vaš obrazec se pošilja preko POST.";
 $LANG["processing_no_redirect_url"] = "Predložitev je predelano pravilno, vendar ga niso natančno navedli, preusmeritev URL za ta obrazec! Urejanje obliki v obrazcu Orodja vmesnik in dodate preusmeritve URL.";
 
-?>
+$LANG["word_port"] = "Pristanišče";

@@ -1267,4 +1267,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Tá Foirm Uirlisí ann chun a c
 $LANG["processing_no_post_vars"] = "Ní process.php éis aon sonraí. Nóta: Script seo nach féidir a luchtú go díreach i do bhrabhsálaí. <br /> Déan cinnte go bhfuil d&#39;fhoirm a sheoladh tríd an bpost.";
 $LANG["processing_no_redirect_url"] = "Bhí a phróiseáil an aighneacht i gceart, ach nach bhfuil tú sonraithe URL athdhíriú chun an fhoirm seo! Cuir d&#39;fhoirm an Uirlisí Foirm Chomhéadain agus an URL a athdhíriú leis.";
 
-?>
+$LANG["word_port"] = "Port";

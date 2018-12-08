@@ -1267,4 +1267,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Forma Įrankiai negali nustatyt
 $LANG["processing_no_post_vars"] = "process.php negauna jokių duomenų. Pastaba: Šis scenarijus gali būti pakraunami tiesiai savo naršyklėje. <br /> Įsitikinkite, kad jūsų formą siųsti per POST.";
 $LANG["processing_no_redirect_url"] = "Pateikimo buvo tvarkomi teisingai, tačiau jūs nenurodėte nukreipti adresą į šią formą! Įveskite savo forma, forma Priemonės sąsaja ir pridėti URL peradresavimo.";
 
-?>
+$LANG["word_port"] = "Uostas";

@@ -1271,4 +1271,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Formulir Tools ini tidak dapat 
 $LANG["processing_no_post_vars"] = "process.php tidak menerima data apapun. Catatan: script ini tidak dapat diambil secara langsung di browser Anda. <br /> Pastikan formulir Anda mengirimkan melalui POST.";
 $LANG["processing_no_redirect_url"] = "Pengajuan itu diproses dengan benar, tetapi Anda tidak menentukan sebuah URL redirect formulir ini! Edit formulir di Formulir Peralatan UI dan tambahkan URL redirect.";
 
-?>
+$LANG["word_port"] = "Pelabuhan";

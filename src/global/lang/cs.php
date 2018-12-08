@@ -1267,4 +1267,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Nástroje forma není schopen u
 $LANG["processing_no_post_vars"] = "process.php není poskytována žádná data. Poznámka: tento skript nelze načíst přímo ve vašem prohlížeči. <br /> Ujistěte se, že forma je zaslání poštou.";
 $LANG["processing_no_redirect_url"] = "Podání bylo zpracováno správně, ale nebyla zadána přesměrování URL tohoto formuláře! Upravte si formulář ve formuláři Nástroje UI a přidat přesměrování URL.";
 
-?>
+$LANG["word_port"] = "Přístav";

@@ -1267,4 +1267,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Vorm Tools ei suuda otsustada, 
 $LANG["processing_no_post_vars"] = "process.php ei ole saanud mingeid andmeid. Märkus: see skript ei saa laadida otse brauseris. <br /> Veenduge, et vorm on saatmine posti teel.";
 $LANG["processing_no_redirect_url"] = "Esitamine on töödeldud nõuetekohaselt, kuid te ei ole määratletud URL-i jaoks selle vormi! Muuda oma vormi vorm Vahendid UI ja lisada URL-i.";
 
-?>
+$LANG["word_port"] = "Sadam";

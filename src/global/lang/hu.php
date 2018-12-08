@@ -1267,4 +1267,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Formában Tools nem tudja megha
 $LANG["processing_no_post_vars"] = "process.php nem kap semmilyen adatot. Megjegyzés: ez a script nem tölthető be közvetlenül a böngészőben. <br /> Győződjön meg róla, hogy a nyomtatványt küld POST-on keresztül.";
 $LANG["processing_no_redirect_url"] = "A beadvány feldolgozása helyesen, de nem adtunk meg egy redirect URL-t az alábbi űrlapot! Edit űrlapot a Forma Eszközök és UI hozzá az átirányítás URL-t.";
 
-?>
+$LANG["word_port"] = "Kikötő";

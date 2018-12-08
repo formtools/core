@@ -1267,4 +1267,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Formular de Instrumente nu este
 $LANG["processing_no_post_vars"] = "prelucrare.php nu primeşte nici de date. Notă: acest script nu pot fi încărcate direct în browser-ul dumneavoastră. <br /> Asiguraţi-vă că formularul este de a trimite prin posta.";
 $LANG["processing_no_redirect_url"] = "Prezentarea a fost procesat corect, dar nu aţi specificat o adresă URL de redirecţionare pentru acest formular! Editare forma dvs. în Instrumente Forma UI şi adăugaţi adresa URL de redirecţionare.";
 
-?>
+$LANG["word_port"] = "Port";

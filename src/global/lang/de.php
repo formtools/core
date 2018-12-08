@@ -1274,4 +1274,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Form Tools ist nicht in der Lag
 $LANG["processing_no_post_vars"] = "process.php empfängt keine Daten. Achtung: Dieses Skript kann nicht direkt im Browser geladen werden. Stellen Sie sicher, dass Ihr Formular die Daten mit der POST-Methode sendet.";
 $LANG["processing_no_redirect_url"] = "The submission was processed correctly, but you haven't specified a redirect URL for this form! Edit your form in the Form Tools UI and add the redirect URL.";
 
-?>
+$LANG["word_port"] = "Hafen";
