@@ -147,6 +147,12 @@ export const getSelectedComponents = (state) => {
 	return components;
 };
 
+export const getSelectedComponentForSelectedSections = createSelector(
+	getSelectedComponents,
+	getSelectedComponentTypeSections,
+	(components, sections) => components.filter((component) => sections.indexOf(component.type) !== -1)
+);
+
 export const allModulesSelected = createSelector(
     getCompatibleModulesArray,
     getSelectedModuleFolders,

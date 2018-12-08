@@ -113,9 +113,10 @@ $page_vars = array(
     "search_criteria" => $search_criteria,
     "module_ids_in_page" => $module_ids_in_page,
     "pagination" => General::getJsPageNav(count($modules), Sessions::get("settings.num_modules_per_page"), 1),
-    "js_messages" => array("validation_modules_search_no_status", "phrase_please_enter_license_key", "word_yes", "word_no",
-	"phrase_please_confirm", "confirm_uninstall_module", "word_close", "word_verify", "notify_invalid_license_key",
-	"notify_license_key_no_longer_valid", "notify_unknown_error"),
+    "js_messages" => array(
+    	"validation_modules_search_no_status", "word_yes", "word_no", "phrase_please_confirm",
+		"confirm_uninstall_module", "word_close", "word_verify", "notify_unknown_error"
+	),
     "head_string" => "<script src=\"../../global/scripts/manage_modules.js\"></script>"
 );
 

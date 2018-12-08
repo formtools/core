@@ -1,4 +1,7 @@
+const lineByLine = require('n-readlines');
 const sass = require('node-sass');
+const pkg = require('./package.json');
+
 
 module.exports = function (grunt) {
 
@@ -95,7 +98,58 @@ module.exports = function (grunt) {
 
 	require('load-grunt-tasks')(grunt);
 
+
+	const getLocaleFileStrings = (locale) => {
+		const en_us_lines = new lineByLine(`./src/global/lang/${locale}.php`);
+		let line;
+		let regex = /^\$LANG\["(.*)"\]\s*=\s*"(.*)";\s*$/;
+
+		const map = {};
+		while (line = en_us_lines.next()) {
+			const lineString = line.toString('utf8');
+			if (/^\$LANG\[/.test(lineString)) {
+				let match = lineString.match(regex);
+				if (match !== null) {
+					map[match[1]] = match[2];
+				}
+			}
+		}
+		return map;
+	};
+
 	grunt.registerTask('default', ['sync', 'sass', 'concurrent:watchers']);
+
+
+	grunt.registerTask('parseI18n', () => {
+		const stringsByLocale = {};
+		pkg.locales.forEach((locale) => {
+			stringsByLocale[locale] = getLocaleFileStrings(locale);
+		});
+
+		const langs = Object.keys(stringsByLocale);
+
+		// see what strings are not found in lang files OTHER than English
+		let count = 0;
+		console.log('\nEnglish strings missing from other lang files:\n-------------------------------------------\n');
+		Object.keys(stringsByLocale['en_us']).forEach((key) => {
+			const missing = [];
+			langs.forEach((locale) => {
+				if (!stringsByLocale[locale][key]) {
+					missing.push(locale);
+				}
+			});
+			if (missing.length > 0) {
+				count++;
+				console.log(`${key}\n   -missing from: ${missing.join(', ')}\n`);
+			}
+		});
+
+		if (count > 0) {
+			console.log(`-- MISSING ${count}`);
+		} else {
+			console.log('All good!');
+		}
+	});
 
 	// builds everything in the dist folder
 	grunt.registerTask('prod', ['sync', 'sass', 'run:webpack_prod']);

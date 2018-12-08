@@ -185,7 +185,7 @@
 
         <p>
             <input type="submit" name="enable_modules" value="{$LANG.word_update}"/>
-            <input type="button" onclick="window.location='../update.php'" class="blue" value="Add / Upgrade Modules" />
+            <input type="button" onclick="window.location='../update.php?section=module'" class="blue" value="Add / Upgrade Modules" />
         </p>
 
     </form>

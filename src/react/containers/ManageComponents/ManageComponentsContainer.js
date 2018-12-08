@@ -11,23 +11,25 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import ManageComponents from "../../components/ManageComponents/ManageComponents";
 
 
-// TODO problem! Not sodding updating!
 class ManageComponentsContainer extends Component {
 	constructor (props) {
 		super(props);
+
+		// display all sections as selected by default, but check query string to see if a specific section should be
+		// displayed alone
+		const urlParams = new URLSearchParams(location.search);
+		const selectedSection = urlParams.get('section');
+		props.selectComponentTypeSections(selectedSection ? [selectedSection] : ['module', 'theme', 'api', 'core']);
 	}
 
-	getSnapshotBeforeUpdate (prevProps) {
-		console.log('will update');
+	componentDidUpdate (prevProps) {
 		if (!prevProps.initialized && this.props.initialized) {
 			this.props.getInstalledComponents();
-			this.props.getCompatibleComponents();
+			this.props.getManageComponentsList();
 		}
 	}
 
 	render () {
-		console.log('.');
-
 		if (!this.props.isLoaded) {
 			return (
 				<CircularProgress style={{ color: '#21aa1e', marginTop: 20 }} size={30} thickness={3} />
@@ -44,13 +46,15 @@ const mapStateToProps = (state) => ({
 	initialized: initSelectors.getInitialized(state),
 	isLoaded: selectors.isLoaded(state),
 	i18n: i18nSelectors.getI18n(state),
-	selectedComponentTypeSections: componentSelectors.getSelectedComponentTypeSections(state)
+	selectedComponentTypeSections: componentSelectors.getSelectedComponentTypeSections(state),
+	selectedComponents: componentSelectors.getSelectedComponentForSelectedSections(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	getInstalledComponents: () => actionCreators.getInstalledComponents(),
-	getCompatibleComponents: () => dispatch(actionCreators.getCompatibleComponents()),
-	toggleComponentTypeSection: (section) => dispatch(actionCreators.toggleComponentTypeSection(section))
+	getManageComponentsList: () => dispatch(actionCreators.getManageComponentsList()),
+	toggleComponentTypeSection: (section) => dispatch(actionCreators.toggleComponentTypeSection(section)),
+	selectComponentTypeSections: (sections) => dispatch(actionCreators.selectComponentTypeSections(sections)),
 });
 
 const ConnectedManageModulesContainer = connect(

@@ -3,7 +3,7 @@ import Badge from '../ComponentTypeBadge/Badge';
 import styles from './ComponentList.scss';
 
 
-class ComponentList extends Component {
+class UpgradeComponentList extends Component {
 
     getFirstColumn (component) {
         const { isEditing, i18n, selectedComponents, toggleComponent } = this.props;
@@ -32,22 +32,36 @@ class ComponentList extends Component {
         return (
         	<div style={{ maxHeight: 350, overflowX: 'scroll' }}>
 	            <table className={styles.componentList}>
+		            <thead>
+			            <tr className={styles.tr}>
+							<th width="25" />
+				            <th width="55">Type</th>
+				            <th width="220">Component</th>
+				            <th width="180">Your Version</th>
+				            <th width="180">Newer Version</th>
+				            <th width="50" align="right">Info</th>
+			            </tr>
+		            </thead>
 	                <tbody>
 	                {components.map((component, index) => (
 	                    <tr className={styles.tr} key={index}>
+		                    <td width="25">
+			                    <input type="checkbox" />
+		                    </td>
 	                        <td width="55">
 	                            {this.getFirstColumn(component)}
 	                        </td>
 	                        <td width="220">
 	                            <h4 className={styles.h4}>{component.name}</h4>
 	                        </td>
-	                        <td width="200">{component.version}</td>
-	                        <td width="200" align="right">
+	                        <td width="180">{component.version}</td>
+		                    <td width="180">??</td>
+	                        <td width="50" align="right">
 	                            <a href="#" onClick={(e) => { e.preventDefault(); showInfoModal({
 	                                componentType: component.type,
 	                                folder: component.folder,
 	                                version: component.version
-	                            }); }}>About</a>
+	                            }); }}>Info</a>
 	                        </td>
 	                    </tr>
 	                ))}
@@ -58,4 +72,4 @@ class ComponentList extends Component {
     }
 }
 
-export default ComponentList;
+export default UpgradeComponentList;

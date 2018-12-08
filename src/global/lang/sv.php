@@ -41,6 +41,7 @@ $LANG["word_bottom"] = "Nedre";
 $LANG["word_cancel"] = "Avbryt";
 $LANG["word_cc_c"] = "Kopia till:";
 $LANG["word_center"] = "Centrera";
+$LANG["word_characters"] = "Tecken";
 $LANG["word_checkboxes"] = "Kryssrutor";
 $LANG["word_checklist"] = "Checklista";
 $LANG["word_client"] = "Klient";
@@ -499,7 +500,6 @@ $LANG["phrase_last_modified"] = "Senast ändrad";
 $LANG["phrase_last_modified_date"] = "Senaste ändringsdatum";
 $LANG["phrase_last_name"] = "Efternamn";
 $LANG["phrase_letters_only"] = "Endast bokstäver";
-$LANG["phrase_license_key"] = "Licensnyckel";
 $LANG["phrase_limit_email_content"] = "Begränsa e-postinnehåll till fält i vyn";
 $LANG["phrase_loading_ellipsis"] = "Laddar...";
 $LANG["phrase_log_in"] = "Logga in";
@@ -605,7 +605,6 @@ $LANG["phrase_phone_number_format"] = "Telefonnummers format";
 $LANG["phrase_php_ini_max_allowed_upload_size_c"] = "Maximalt tillåten filstorlek vid uppladdning enligt php.ini";
 $LANG["phrase_php_version"] = "PHP-version";
 $LANG["phrase_please_confirm"] = "Vänligen bekräfta";
-$LANG["phrase_please_enter_license_key"] = "Skriv in din licensnyckel";
 $LANG["phrase_please_select"] = "Vänligen välj";
 $LANG["phrase_please_select_form"] = "Välj ett formulär";
 $LANG["phrase_prev_client"] = "« Föregående klient";
@@ -791,9 +790,7 @@ $LANG["text_add_form_step_5_para_3"] = "Om du vill finjustera ditt formulär med
 $LANG["text_add_form_step_5_para_4"] = "Eftersom ditt formulär innehåller filuppladdningsfält så behöver du ställa in varje fält för att specificera uppladdningskatalogen, vilka filer som tillåts och maxstorleken. Detta kan göras via e <a href=\"{\$editformlink}\"><strong>Visningsfliken</strong></a> på formulärets redigeringssida.";
 $LANG["text_add_form_step_5_para_5"] = "Om inskicket gjordes med hjälp av API:et så ska du nu ändra raden <strong>ft_api_init_form_page</strong> på första sidan av ditt formulär till:";
 $LANG["text_add_submission_button"] = "Knappen Lägg till inskick visas bara i vyer som har alternativet \"Kan lägga till inskick\" angivet som  \"Ja \".";
-$LANG["text_admin_email_placeholder_info"] = "Detta är e-postadressen till Form Tools administratör som definierats i kontoinställningarna. E-postadressen visas bara som text så om du vill göra en HTML-länk av den behöver du baka in den i en <a>-tagg på det här viset:<br />
-<strong>&lt;a href=\"mailto:{\$ADMINEMAIL}\"&gt;{\$ADMINEMAIL}&lt;/a&gt;</strong>
-";
+$LANG["text_admin_email_placeholder_info"] = "Detta är e-postadressen till Form Tools administratör som definierats i kontoinställningarna. E-postadressen visas bara som text så om du vill göra en HTML-länk av den behöver du baka in den i en <a>-tagg på det här viset:<br /> <strong>&lt;a href=\"mailto:{\$ADMINEMAIL}\"&gt;{\$ADMINEMAIL}&lt;/a&gt;</strong>";
 $LANG["text_also_default_login_page_theme"] = "(också förvalt tema för inloggningssidan)";
 $LANG["text_choose_form_type"] = "Först, välj din formulärtyp.";
 $LANG["text_client_form_page"] = "Den här sidan listar alla formulär och vyer som associeras till denna klient. Ett tips: för att klienten ska kunna se inskicken från ett formulär så måste de associeras till minst en vy.";
@@ -1065,8 +1062,7 @@ $LANG["confirm_delete_submission"] = "Är du säker på att du vill ta bort dett
 $LANG["confirm_delete_submission_file"] = "Är du säker på att du vill ta bort denna fil?";
 $LANG["confirm_delete_submissions"] = "Är du säker på att du vill ta bort dessa inskick?";
 $LANG["confirm_delete_submissions_on_other_pages"] = "<strong>Varning!</strong>Du har valt <strong>{\$num_selected_on_page}</strong>  inskick på den här sidan och <strong>{\$num_selected_on_other_pages}</strong> på andra sidor. Välj ett av följande alternativ:<div class=\"margin_top_large\"><input type=\"button\" value=\"Ta bort alla valda inskick\" {\$delete_all_submissions_onclick} /> <input type=\"button\" value=\"Ta bara bort valda inskick på denna sida\" {\$delete_submissions_on_page_onclick} /> <input type=\"button\" value=\"Avbryt\" onclick=\"return ft.hide_message('ft_message')\" /></div>";
-$LANG["confirm_delete_submissions_on_other_pages2"] = "<strong>Varning!</strong> Du har inte valt några inskick på den här sidan, men du har valt {\$num_selected_on_other_pages} på andra sidor. Du behöver bekräfta att du vill ta bort dessa inskick.
-<div class=\"margin_top_large\"><input type=\"button\" value=\"Ta bort alla valda inskick\" {\$delete_all_submissions_onclick} /> <input type=\"button\" value=\"Avbryt\" onclick=\"return ft.hide_message('ft_message')\" /></div>";
+$LANG["confirm_delete_submissions_on_other_pages2"] = "<strong>Varning!</strong> Du har inte valt några inskick på den här sidan, men du har valt {\$num_selected_on_other_pages} på andra sidor. Du behöver bekräfta att du vill ta bort dessa inskick.<div class=\"margin_top_large\"><input type=\"button\" value=\"Ta bort alla valda inskick\" {\$delete_all_submissions_onclick} /> <input type=\"button\" value=\"Avbryt\" onclick=\"return ft.hide_message('ft_message')\" /></div>";
 $LANG["confirm_delete_view"] = "Är du säker på att du vill ta bort denna vy?";
 $LANG["confirm_refresh_page"] = "Är du säker på att du vill ladda om sidan? Detta innebär att du tappar bort alla ev ändringar som du har gjort på sidan.";
 $LANG["confirm_save_change_before_redirect"] = "Ett eller flera fält har uppdaterats. Vill du spara ändringarna innan omdirigering?";
@@ -1115,8 +1111,7 @@ $LANG["notify_field_updated"] = "Fältet har uppdaterats.";
 $LANG["notify_file_deleted"] = "Filen har tagits bort.";
 $LANG["notify_file_not_deleted_no_exist"] = "Filen har inte tagits bort eftersom den inte kunde hittas på den förväntade platsen. <a href=\"#\" onclick=\"{\$js_link}\">Klicka här</a> för att strunta i det här meddelandet och bara ta bort referensen till filen i databasen.";
 $LANG["notify_file_not_deleted_permissions"] = "Filen har inte tagits bort då den har felaktiga filrättigheter. <a href=\"#\" onclick=\"{\$js_link}\">Klicka här</a> för att strunta i det här meddelandet och bara ta bort referensen till filen i databasen.";
-$LANG["notify_file_not_deleted_unknown_error"] = "Ett okänt fel uppstod när vi försökte ta bort den här filen.
-<a href=\"#\" onclick=\"{\$js_link}\">Klicka här</a> för att strunta i det här meddelandet och bara ta bort referensen till filen i databasen.";
+$LANG["notify_file_not_deleted_unknown_error"] = "Ett okänt fel uppstod när vi försökte ta bort den här filen. <a href=\"#\" onclick=\"{\$js_link}\">Klicka här</a> för att strunta i det här meddelandet och bara ta bort referensen till filen i databasen.";
 $LANG["notify_file_not_uploaded"] = "Filen kunde inte laddas upp.";
 $LANG["notify_file_too_large"] = "Den här filen är för stor. Filen är på {\$FILESIZE} KB, men den största tillåtna filstorleken för uppladdning är {\$MAXFILESIZE} KB.";
 $LANG["notify_file_uploaded"] = "Filen har laddats upp!";
@@ -1144,7 +1139,6 @@ $LANG["notify_install_no_db_connection"] = "Kontrollera databasnamnet och inlogg
 $LANG["notify_internal_form_created"] = "Formuläret har skapats! Du kan konfigurera ditt formulär genom dessa flikar.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Kontoinformationen som lagrats i sessioner är ogiltig. Vänligen logga in igen här nedan.";
 $LANG["notify_invalid_field_upload_folder"] = "Det här fältets uppladdningskatalog är antingen ogiltig eller så är den inte skrivbar.";
-$LANG["notify_invalid_license_key"] = "Tyvärr verkar det inte vara en giltig licensnyckel. Försök skriva in den igen.";
 $LANG["notify_invalid_permissions"] = "Du har inte tillräckliga rättigheter för att komma åt denna sida. Du har därför loggats ut!";
 $LANG["notify_invalid_search_dates"] = "Använd datumväljaren för att ange ett giltigt datum.";
 $LANG["notify_invalid_session_values_re_login"] = "Ett fel uppstod: det förekommer några oväntade eller icke-existerande värden i din inloggningssession. Vänligen logga in igen och försök på nytt.";

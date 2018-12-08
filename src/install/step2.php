@@ -30,8 +30,7 @@ $page = array(
     "upload_folder_writable" => $upload_folder_writable,
     "cache_dir_writable" => $cache_dir_writable,
     "js_messages" => array(
-        "word_error", "validation_incomplete_license_keys", "notify_invalid_license_keys",
-        "word_close", "word_invalid", "word_verified", "word_continue"
+        "word_error", "validation_incomplete_license_keys", "word_close", "word_invalid", "word_verified", "word_continue"
     )
 );
 

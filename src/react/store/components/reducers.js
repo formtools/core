@@ -18,7 +18,7 @@ export default function reducer (state = {
 	// current content of the info modal
 	infoModal: '', // { type: 'module' | theme | api | core, folder: '' }
 
-	// populated on demand when a user clicks the About link for a component. This always contains the latest + greatest
+	// populated when a user clicks the About link for a component. This always contains the latest + greatest
 	// data for a component - it's not affected by anything else in the UI
 	changelogs: {},
 
@@ -35,7 +35,7 @@ export default function reducer (state = {
 	installedThemes: {},
 
 	// the selected components. These depend on the actual compatibleComponents for the core version
-	selectedComponentTypeSections: ['modules'],
+	selectedComponentTypeSections: [], // 'core', 'api', 'module', 'theme'
 	selectedModuleFolders: [],
 	selectedThemeFolders: [],
 	apiSelected: false,
@@ -58,7 +58,6 @@ export default function reducer (state = {
 }, action) {
 
 	const payload = action.payload;
-
 	switch (action.type) {
 
 		// converts the list of modules and themes to an object with (unique) folder names as keys
@@ -94,10 +93,6 @@ export default function reducer (state = {
 				};
 			}
 
-			// only preselect modules and themes that ARE in fact in the available module/theme list
-			const preselected_modules = payload.default_components.modules.filter((module) => modules.hasOwnProperty(module));
-			const preselected_themes = payload.default_components.themes.filter((theme) => themes.hasOwnProperty(theme));
-
 			return Object.assign({}, state, {
 				compatibleComponentsLoaded: true,
 				compatibleComponents: {
@@ -107,11 +102,19 @@ export default function reducer (state = {
 						themes,
 						api
 					}
-				},
-				apiSelected: payload.default_components.api,
-				selectedModuleFolders: preselected_modules,
-				selectedThemeFolders: preselected_themes
+				}
 			});
+
+		case actions.INIT_SELECTED_COMPONENTS:
+			return {
+				...state,
+				//selectedComponentTypeSections: payload.selectedComponentTypeSections,
+				coreSelected: payload.coreSelected,
+				apiSelected: payload.apiSelected,
+				selectedModuleFolders: payload.selectedModuleFolders,
+				selectedThemeFolders: payload.selectedThemeFolders
+			};
+
 
 		case actions.SET_CORE_VERSION:
 			return {
@@ -221,12 +224,18 @@ export default function reducer (state = {
 				selectedComponentTypeSections: [payload.section]
 			};
 
+		case actions.SELECT_COMPONENT_TYPE_SECTIONS:
+			return {
+				...state,
+				selectedComponentTypeSections: payload.sections
+			};
+
 		case actions.TOGGLE_COMPONENT_TYPE_SECTION:
-			const updatedSections = state.selectedComponentTypeSections;
+			let updatedSections = [...state.selectedComponentTypeSections];
 			if (updatedSections.indexOf(payload.section) === -1) {
 				updatedSections.push(payload.section);
 			} else {
-				//updatedSection.
+				updatedSections = updatedSections.filter((item) => item !== payload.section);
 			}
 			return {
 				...state,
@@ -251,7 +260,10 @@ export default function reducer (state = {
 
 		case actions.COMPONENT_HISTORY_LOADED:
 			const updatedChangelogs = { ...state.changelogs };
-			updatedChangelogs[payload.folder] = payload.versions;
+			updatedChangelogs[payload.folder] = {
+				loadSuccess: payload.loadSuccess,
+				versions: payload.versions
+			};
 
 			const newState = {
 				...state,

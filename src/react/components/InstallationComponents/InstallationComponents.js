@@ -11,7 +11,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 class InstallationComponents extends Component {
 
     getModal () {
-        const { isShowingComponentInfoModal, onCloseComponentInfo, onPrevNext, isEditing, modalInfo,
+        const { isShowingComponentInfoModal, closeInfoModal, onPrevNext, isEditing, modalInfo,
 	        toggleComponent, selectedComponentTypeSections, i18n } = this.props;
         const hasDocLink = modalInfo.type !== 'theme';
         let docLink = null;
@@ -28,10 +28,12 @@ class InstallationComponents extends Component {
             }
         }
 
+        const changelog = <Changelog loadSuccess={modalInfo.data.loadSuccess} data={modalInfo.data.versions} i18n={i18n} />;
+
         return (
             <ComponentDialog
                 open={isShowingComponentInfoModal}
-                onClose={onCloseComponentInfo}
+                onClose={closeInfoModal}
                 toggleComponent={() => toggleComponent(selectedComponentTypeSections[0], modalInfo.folder)}
                 isLoading={!modalInfo.loaded}
                 isEditing={isEditing}
@@ -41,7 +43,7 @@ class InstallationComponents extends Component {
                 prevLinkEnabled={modalInfo.prevLinkEnabled}
                 nextLinkEnabled={modalInfo.nextLinkEnabled}
                 onPrevNext={onPrevNext}
-                content={<Changelog data={modalInfo.data} i18n={i18n} />}
+                content={changelog}
                 hasDocLink={hasDocLink}
                 docLink={docLink}
                 i18n={i18n} />
@@ -49,7 +51,7 @@ class InstallationComponents extends Component {
     }
 
 	getSelectedComponentList () {
-		const { onEditComponentList, onShowComponentInfo, selectedComponents, onSubmit, i18n } = this.props;
+		const { onEditComponentList, showInfoModal, selectedComponents, onSubmit, i18n } = this.props;
 
 		return (
 			<div>
@@ -61,7 +63,7 @@ class InstallationComponents extends Component {
                 {this.getModal()}
 
 				<ComponentList components={selectedComponents} i18n={i18n} isEditing={false}
-                    onShowComponentInfo={onShowComponentInfo} />
+                    showInfoModal={showInfoModal} />
 
 				<p>
 					<input type="button" onClick={onEditComponentList} value={i18n.word_customize} />
@@ -75,7 +77,7 @@ class InstallationComponents extends Component {
 	getEditableComponentList () {
         const { onCancelEditComponentList, selectedComponentTypeSections, allModules, allThemes, allModulesSelected,
             onSelectComponentTypeSection, selectedModuleFolders, selectedThemeFolders, toggleComponent,
-            toggleAllModulesSelected, api, isAPISelected, saveSelectedComponentList, onShowComponentInfo, i18n } = this.props;
+            toggleAllModulesSelected, api, isAPISelected, saveSelectedComponentList, showInfoModal, i18n } = this.props;
 
         return (
             <div>
@@ -98,7 +100,7 @@ class InstallationComponents extends Component {
                     isAPISelected={isAPISelected}
                     allModulesSelected={allModulesSelected}
                     toggleAllModulesSelected={toggleAllModulesSelected}
-                    onShowComponentInfo={onShowComponentInfo} />
+                    showInfoModal={showInfoModal} />
 
                 <p>
                     <input type="button" value={i18n.phrase_save_changes} onClick={saveSelectedComponentList}/>

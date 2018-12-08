@@ -39,6 +39,14 @@ class Packages
 		list($component_folder, $component_version) = explode("-", basename($url, ".zip"));
 
 		if (General::curlEnabled()) {
+
+			if (!Curl::urlExists($url)) {
+				return array(
+					"success" => false,
+					"log" => "Zipfile not found at url: $url"
+				);
+			}
+
 			$result = Curl::downloadFile($url, $cache_dir);
 
 			if (!$result["success"]) {
@@ -119,7 +127,39 @@ class Packages
 				);
 
 			} else {
-				$log[] = "error unzipping";
+				$error = "error unzipping: ";
+
+				switch ($res) {
+					case \ZipArchive::ER_EXISTS:
+						$error .= "file already exists";
+						break;
+					case \ZipArchive::ER_INCONS:
+						$error .= "zip file inconsistent";
+						break;
+					case \ZipArchive::ER_INVAL:
+						$error .= "invalid argument";
+						break;
+					case \ZipArchive::ER_MEMORY:
+						$error .= "malloc failure";
+						break;
+					case \ZipArchive::ER_NOENT:
+						$error .= "no such file";
+						break;
+					case \ZipArchive::ER_NOZIP:
+						$error .= "not a zip archive";
+						break;
+					case \ZipArchive::ER_OPEN:
+						$error .= "can't open file";
+						break;
+					case \ZipArchive::ER_READ:
+						$error .= "read error";
+						break;
+					case \ZipArchive::ER_SEEK:
+						$error .= "seek error";
+						break;
+				}
+
+				$log[] = $error;
 
 				return array(
 					"success" => false,

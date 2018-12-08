@@ -16,7 +16,7 @@ const SmallIconButton = withStyles({
 	}
 })(IconButton);
 
-const Changelog = ({ data, i18n }) => {
+const Changelog = ({ data, loadSuccess, i18n }) => {
 
     const getGithubIcon = (github_milestone) => {
         if (github_milestone === null) {
@@ -31,6 +31,14 @@ const Changelog = ({ data, i18n }) => {
             </Tooltip>
         );
     };
+
+    if (!loadSuccess) {
+    	return (
+    	    <p>
+				There was a problem loading the changelog history. Try again later.
+	        </p>
+	    );
+    }
 
     return (
         <div className={styles.changelog}>

@@ -10,7 +10,7 @@ import InstallationComponents from '../../components/InstallationComponents/Inst
 class InstallationComponentsContainer extends Component {
 	componentWillUpdate (nextProps) {
 		if (nextProps.initialized && !this.props.initialized) {
-			this.props.getCompatibleComponents();
+			this.props.getInstallationComponentList();
 		}
 	}
 	render () {
@@ -49,15 +49,15 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+	getInstallationComponentList: () => dispatch(actionCreators.getInstallationComponentList()),
 	onEditComponentList: () => dispatch(actionCreators.editSelectedComponentList()),
     onCancelEditComponentList: () => dispatch(actionCreators.cancelEditSelectedComponentList()),
 	saveSelectedComponentList: () => dispatch(actionCreators.saveSelectedComponentList()),
-	getCompatibleComponents: () => dispatch(actionCreators.getCompatibleComponents()),
     toggleComponent: (componentTypeSection, folder) => dispatch(actionCreators.toggleComponent(componentTypeSection, folder)),
     onSelectComponentTypeSection: (section) => dispatch(actionCreators.selectComponentTypeSection(section)),
     toggleAllModulesSelected: () => dispatch(actionCreators.toggleAllModulesSelected()),
-    onShowComponentInfo: (componentInfo) => dispatch(actionCreators.showComponentInfo(componentInfo)), // TODO rename
-    onCloseComponentInfo: () => dispatch(actionCreators.closeComponentInfo()),
+    showInfoModal: (componentInfo) => dispatch(actionCreators.showInfoModal(componentInfo)),
+    closeInfoModal: () => dispatch(actionCreators.closeInfoModal()),
 	toggleShowDetailedDownloadLog: () => dispatch(actionCreators.toggleShowDetailedDownloadLog()),
     onPrevNext: (dir) => dispatch(actionCreators.onPrevNext(dir)),
 	onSubmit: () => dispatch(actionCreators.downloadCompatibleComponents())

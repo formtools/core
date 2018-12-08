@@ -34,4 +34,4 @@ mm.uninstall_module = function (module_id) {
 			}]
 	});
 	return false;
-}
+};

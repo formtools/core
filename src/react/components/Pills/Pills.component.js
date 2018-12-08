@@ -10,7 +10,6 @@ export class Pills extends Component {
 		this.onPillClick = this.onPillClick.bind(this);
 	}
 
-
 	onPillClick (e) {
 		const li = e.target.closest('li');
 		if (li) {

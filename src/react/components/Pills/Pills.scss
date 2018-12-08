@@ -1,5 +1,5 @@
 .pills {
-  margin: 15px 0 10px;
+  margin: 0;
   padding: 0;
 
   li {
@@ -9,6 +9,7 @@
     margin-right: 6px;
     border-radius: 3px;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 
     &.selected {
       background-color: #0078cc;

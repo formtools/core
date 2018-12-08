@@ -62,7 +62,7 @@ switch ($_GET["action"]) {
 				break;
 		}
 
-		$data = json_decode(Request::getUrl($url));
+		$data = Request::getJsonFileFromUrl($url);
 		break;
 
 	// these methods can only be called during an installation (TODO: security)

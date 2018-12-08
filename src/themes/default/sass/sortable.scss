@@ -167,16 +167,28 @@ body .sortable li.rowN {
 
 /* URGH! */
 
-body .sortable .rows .delete_row_hover li, .list_table tr.delete_row_hover, .list_table tr.delete_row_hover td {
-  background-color: #770000;
-  color: #ffffff;
+body .sortable .rows .delete_row_hover li,
+.list_table tr.delete_row_hover {
+  &, td, p {
+    background-color: #770000;
+    color: #ffffff;
+  }
 }
 
-body .sortable .rows div.delete_row_hover li ul.scroll-content li, body .sortable .rows div.row_content .delete_row_hover li .scroll-content li {
+body .sortable .rows div.delete_row_hover li ul.scroll-content li,
+body .sortable .rows div.row_content .delete_row_hover li .scroll-content li {
   background-color: #881f1f;
 }
 
-body .sortable .rows .delete_row_hover li, body .sortable .rows .delete_row_hover span, body .sortable .rows .delete_row_hover a, .list_table tr.delete_row_hover a, .list_table tr.delete_row_hover span {
+
+body .sortable .rows .delete_row_hover {
+  li, span, a {
+    color: #ffffff;
+  }
+}
+
+.list_table tr.delete_row_hover a,
+.list_table tr.delete_row_hover span {
   color: #ffffff;
 }
 
