@@ -117,18 +117,9 @@ module.exports = function (grunt) {
 		return map;
 	};
 
-	grunt.registerTask('default', ['sync', 'sass', 'concurrent:watchers']);
-
-
-	grunt.registerTask('parseI18n', () => {
-		const stringsByLocale = {};
-		pkg.locales.forEach((locale) => {
-			stringsByLocale[locale] = getLocaleFileStrings(locale);
-		});
-
+	const findStringsInEnFileMissingFromOtherLangFiles = (stringsByLocale) => {
 		const langs = Object.keys(stringsByLocale);
 
-		// see what strings are not found in lang files OTHER than English
 		let count = 0;
 		console.log('\nEnglish strings missing from other lang files:\n-------------------------------------------\n');
 		Object.keys(stringsByLocale['en_us']).forEach((key) => {
@@ -145,10 +136,41 @@ module.exports = function (grunt) {
 		});
 
 		if (count > 0) {
-			console.log(`-- MISSING ${count}`);
+			console.log(`-- MISSING ${count}\n`);
 		} else {
-			console.log('All good!');
+			console.log('All good!\n');
 		}
+	};
+
+	const findStringsInOtherFilesNotInEnFile = (stringsByLocale) => {
+		const langs = Object.keys(stringsByLocale);
+		const en = stringsByLocale['en_us'];
+
+		langs.filter((lang) => lang !== 'en_us').forEach((lang) => {
+			const extra = [];
+			Object.keys(stringsByLocale[lang]).forEach((key) => {
+				if (!en[key]) {
+					extra.push(key);
+				}
+			});
+
+			if (extra.length) {
+				console.log(`${lang} file contains unused strings: \n-- ${extra.join('\n-- ')}\n`);
+			}
+		});
+	};
+
+
+	grunt.registerTask('default', ['sync', 'sass', 'concurrent:watchers']);
+
+	grunt.registerTask('parseI18n', () => {
+		const stringsByLocale = {};
+		pkg.locales.forEach((locale) => {
+			stringsByLocale[locale] = getLocaleFileStrings(locale);
+		});
+
+		findStringsInEnFileMissingFromOtherLangFiles(stringsByLocale);
+		findStringsInOtherFilesNotInEnFile(stringsByLocale);
 	});
 
 	// builds everything in the dist folder
