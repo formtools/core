@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Tabs ir atjaunoti.";
 $LANG["notify_form_updated"] = "Veidlapa ir veiksmīgi atjaunināts.";
 $LANG["notify_form_views_updated"] = "Veidlapa Views ir atjaunoti.";
 $LANG["notify_install_invalid_db_info"] = "Atvainojiet, mēs nevarējām izveidot savienojumu ar datu bāzi izmantojot informāciju, kas jums sniedz. Kļūdas ziņojums datu bāzē atpakaļ, ir: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Lūdzu, pārbaudiet savu datu bāzes nosaukumu un pieteikšanās informāciju. Kaut gan mēs varējām izveidot savienojumu ar datu bāzi, uzņēmējas, mēs nevarējām izveidot savienojumu ar datu bāzi. Kļūdas ziņojums datu bāzē atpakaļ, ir: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Jūsu veidlapa ir izveidots! Jūs varat konfigurēt veidā, izmantojot šīs cilnes.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Konta informācija glabājas sesijām ir nederīgs. Lūdzu, piesakieties atkal tālāk.";
 $LANG["notify_invalid_field_upload_folder"] = "Šī lauka upload mape ir vai nu par spēkā neesošu, vai tas nav rakstāms.";

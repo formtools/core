@@ -1141,7 +1141,6 @@ $LANG["notify_form_tabs_updated"] = "As guias foram atualizadas.";
 $LANG["notify_form_updated"] = "O formulário foi atualizado com sucesso.";
 $LANG["notify_form_views_updated"] = "The form Views have been updated.";
 $LANG["notify_install_invalid_db_info"] = "Desculpe, não foi possível se conectar ao banco de dados usando as informações fornecidas. A mensagem de erro do banco de dados retornou {\$db_connection_error}";
-$LANG["notify_install_no_db_connection"] = "Verifique o nome do banco de dados e informações de login. Embora nós fomos capazes de se conectar ao host do banco de dados, não pôde se conectar ao banco de dados. A mensagem de erro do banco de dados retornou: {\$db_select_error}";
 $LANG["notify_internal_form_created"] = "Your form has been created! You can configure your form through these tabs.";
 $LANG["notify_invalid_account_information_in_sessions"] = "As informações da conta guardados em sessões não é válido. Faça o login novamente abaixo.";
 $LANG["notify_invalid_field_upload_folder"] = "A pasta de upload deste campo é inválido ou não é gravável.";

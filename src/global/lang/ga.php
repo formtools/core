@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "An Cluaisíní tugtha cothrom le dáta.";
 $LANG["notify_form_updated"] = "Tá an fhoirm a thabhairt suas chun dáta go rathúil.";
 $LANG["notify_form_views_updated"] = "An fhoirm Tuairimí tugtha cothrom le dáta.";
 $LANG["notify_install_invalid_db_info"] = "Tá brón orainn, bhí muid in ann ceangal leis an mbunachar sonraí ag baint úsáide as an eolas ar fáil duit. Is é an teachtaireacht earráide an bunachar sonraí ar ais: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Déan seiceáil ar do ainm mbunachar sonraí agus faisnéis logáil isteach. Cé go raibh muid ábalta le ceangal leis an ósta bunachar sonraí, ní raibh muid ábalta ceangal a dhéanamh leis an mbunachar sonraí. Is é an teachtaireacht earráide an bunachar sonraí ar ais: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Tá d&#39;fhoirm cruthaithe! Is féidir leat a chumrú d&#39;fhoirm trí na tabs.";
 $LANG["notify_invalid_account_information_in_sessions"] = "An fhaisnéis arna stóráil áireamh i seisiúin a neamhbhailí. Le do thoil, logáil isteach arís thíos.";
 $LANG["notify_invalid_field_upload_folder"] = "Tá an réimse seo ar fhillteán upload neamhbhailí ceachtar bhfuil nó nach bhfuil inscríofa.";

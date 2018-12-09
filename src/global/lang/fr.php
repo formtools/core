@@ -1141,7 +1141,6 @@ $LANG["notify_form_tabs_updated"] = "Les onglets ont été mis à jour.";
 $LANG["notify_form_updated"] = "Le formualire a bien été mis à jour.";
 $LANG["notify_form_views_updated"] = "Les vues du formulaire ont été mis à jour.";
 $LANG["notify_install_invalid_db_info"] = "Désolé, nous n&#39;avons pas pu vous connecter à la base de données en utilisant les informations fournies. Le message d&#39;erreur renvoyé est la base de données: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "S&#39;il vous plaît vérifiez votre nom base de données et informations de connexion. Même si nous étions capable de se connecter à l&#39;hôte de base de données, nous n&#39;avons pas pu vous connecter à la base de données. Le message d&#39;erreur renvoyé est la base de données: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Votre formulaire a été créé! Vous pouvez configurer votre formulaire par le biais de ces onglets.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Les informations de compte stockés dans les sessions n&#39;est pas valide. S&#39;il vous plaît vous connecter à nouveau ci-dessous.";
 $LANG["notify_invalid_field_upload_folder"] = "Dossier de téléchargement de ce champ n&#39;est pas valide ou n&#39;est pas inscriptible.";

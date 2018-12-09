@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Filele au fost actualizate.";
 $LANG["notify_form_updated"] = "Formularul a fost actualizat cu succes.";
 $LANG["notify_form_views_updated"] = "Vizualizări formă au fost actualizate.";
 $LANG["notify_install_invalid_db_info"] = "Ne pare rău, nu am putut să se conecteze la baza de date folosind informatiile pe care le furnizate. Mesaj de eroare returnat în baza de date este: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Vă rugăm să verificaţi numele dvs. în baza de date şi de autentificare. Cu toate că noi am fost capabil să se conecteze la baza de date gazdă, nu am putut conecta la baza de date. Mesaj de eroare returnat în baza de date este: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Formularul dvs. a fost creat! Puteţi configura formularul prin intermediul acestor file.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Informaţii de cont stocate în sesiuni este invalid. Vă rugăm să vă conecta din nou de mai jos.";
 $LANG["notify_invalid_field_upload_folder"] = "Pliant Acest câmp a lui încărcaţi este fie invalid sau nu este de inscripţionare.";

@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Välilehdet on päivitetty.";
 $LANG["notify_form_updated"] = "Lomake on päivitetty onnistuneesti.";
 $LANG["notify_form_views_updated"] = "Muodostamaan käsitys on päivitetty.";
 $LANG["notify_install_invalid_db_info"] = "Valitettavasti emme voineet muodostaa yhteyden tietokantaan käyttäen tietoja annoit. Virheilmoitus tietokanta palautettujen: <i>(\$ db_connection_error)</i>";
-$LANG["notify_install_no_db_connection"] = "Tarkista tietokannan nimi ja kirjautumistiedot. Vaikka saimme yhteyden tietokantaan isäntä, emme voineet yhteyttä tietokantaan. Virheilmoitus tietokanta palautettujen: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Lomake on luotu! Voit määrittää lomakkeen kautta näihin välilehtiin.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Tilin tiedot tallennetaan istunnoissa ei kelpaa. Kirjaudu uudelleen alla.";
 $LANG["notify_invalid_field_upload_folder"] = "Tämän kentän ladata kansio on joko virheellinen tai ei ole kirjoitettavissa.";

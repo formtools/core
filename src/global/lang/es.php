@@ -1141,7 +1141,6 @@ $LANG["notify_form_tabs_updated"] = "Las pestañas han sido actualizadas.";
 $LANG["notify_form_updated"] = "El formulario ha sido actualizado con éxito.";
 $LANG["notify_form_views_updated"] = "Los puntos de vista forma se han actualizado.";
 $LANG["notify_install_invalid_db_info"] = "Lo sentimos, no fue posible la conexión con la base de datos usando la información que has suministrado. El mensaje de error que la base de datos retorna es: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Por favor comprueba el nombre de la base de datos y la información de acceso. A pesar de que fue posible la conexión con el servidor de la base de datos, no fue posible la conexión a la base de datos misma. El mensaje de error que la base de datos retorna es: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Su formulario ha sido creado! Usted puede configurar su forma a través de estas fichas.";
 $LANG["notify_invalid_account_information_in_sessions"] = "La información de cuenta almacenada en las sesiones no es válida. Por favor inicia sesión de nuevo a continuación.";
 $LANG["notify_invalid_field_upload_folder"] = "La carpeta de carga de este campo no es válida o no permite la escritura.";

@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Ang mga tab na ito ay na-update.";
 $LANG["notify_form_updated"] = "Ang form ay matagumpay na na-update.";
 $LANG["notify_form_views_updated"] = "Ang mga form Pananaw ay na-update.";
 $LANG["notify_install_invalid_db_info"] = "Paumanhin, hindi namin nagawang kumonekta sa database ng paggamit ng impormasyon na iyong ibinibigay. Ang mensahe ng error ang database ng bumalik ay: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Mangyaring suriin ang iyong database ng pangalan at impormasyon sa login. Kahit na kami ay makakapag-kumonekta sa host ng database, hindi namin maaaring kumonekta sa database. Ang mensahe ng error ang database ng bumalik ay: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Ang iyong form ay nagawa na! Maaari mong i-configure ang iyong form sa pamamagitan ng mga tab na ito.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Ang impormasyon sa account na naka-imbak sa mga sesyon ay hindi wasto. Mangyaring mag-log in muli sa ibaba.";
 $LANG["notify_invalid_field_upload_folder"] = "Mag-upload ng folder na ito patlang na ito ay alinman sa mga hindi balidong o hindi writable.";

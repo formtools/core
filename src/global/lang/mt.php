@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Il-Korpi għal Valutazzjoni Teknika ġew a�
 $LANG["notify_form_updated"] = "Il-formola ġiet aġġornata b&#39;suċċess.";
 $LANG["notify_form_views_updated"] = "Il-formola Views ġew aġġornati.";
 $LANG["notify_install_invalid_db_info"] = "Jiddispjacini, konna kapaċi li jgħaqqdu l-database jużaw l-informazzjoni li inti fornuta. Il-messaġġ ta &#39;żball-database huwa ritornat: <i>{\$db_connection_error})</i>";
-$LANG["notify_install_no_db_connection"] = "Jekk jogħġbok iċċekkja database ismek u login informazzjoni. Għalkemm konna kapaċi li jgħaqqdu lill-ospitanti database, aħna ma stajniex tikkonnettja mal-database. Il-messaġġ ta &#39;żball-database huwa ritornat: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Formola tiegħek ġie maħluq! Tista &#39;jiġi kkonfigurat l-formola tiegħek permezz ta&#39; dawn tabs.";
 $LANG["notify_invalid_account_information_in_sessions"] = "L-informazzjoni maħżuna fil-kont sessjonijiet huwa invalidu. Jekk jogħġbok login għal darb&#39;oħra &#39;l isfel.";
 $LANG["notify_invalid_field_upload_folder"] = "Upload folder Dan il-qasam huwa jew hija invalida jew ma writable.";

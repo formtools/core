@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Kortelės buvo atnaujintos.";
 $LANG["notify_form_updated"] = "Forma buvo sėkmingai atnaujintas.";
 $LANG["notify_form_views_updated"] = "Forma Peržiūrėjo buvo atnaujintas.";
 $LANG["notify_install_invalid_db_info"] = "Deja, mums nepavyko prisijungti prie duomenų bazės, naudojant informaciją, kurią pateikti. Klaidos pranešimas yra grąžinama bazėje: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Prašome patikrinti savo duomenų bazės pavadinimą ir prisijungimo informacija. Nors mums pavyko prisijungti prie duomenų bazės šeimininke, mums nepavyko prisijungti prie duomenų bazės. Klaidos pranešimas yra grąžinama bazėje: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Savo forma buvo sukurta! Jūs galite sukonfigūruoti savo formos per šiuos skirtukus.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Sąskaitos informacija saugoma sesija yra neteisingas. Prašome prisijungti iš naujo žemiau.";
 $LANG["notify_invalid_field_upload_folder"] = "Šis laukas yra įkėlimo kataloge yra neteisingi arba nėra įrašomas.";

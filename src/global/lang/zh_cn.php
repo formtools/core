@@ -1141,7 +1141,6 @@ $LANG["notify_form_tabs_updated"] = "该标签已更新。";
 $LANG["notify_form_updated"] = "您的表格已成功更新。";
 $LANG["notify_form_views_updated"] = "窗体视图已更新。";
 $LANG["notify_install_invalid_db_info"] = "很抱歉，我们无法连接到数据库使用您提供的资料。此错误信息的数据库返回的是<i>：{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "请检查您的数据库的名称和登录信息。虽然我们能够连接到数据库的东道主，我们无法连接到数据库。此错误信息的数据库返回的是<i>：{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "你的形式已建立！通过这些选项卡，您可以配置您的表单。";
 $LANG["notify_invalid_account_information_in_sessions"] = "该帐户的信息存储在会议上是无效的。请再次登录以下。";
 $LANG["notify_invalid_field_upload_folder"] = "此字段的上传文件夹是无效或不可写。";

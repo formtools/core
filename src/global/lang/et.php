@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Klapid on uuendatud.";
 $LANG["notify_form_updated"] = "Vorm on edukalt uuendatud.";
 $LANG["notify_form_views_updated"] = "Vorm Vaatamisi on ajakohastatud.";
 $LANG["notify_install_invalid_db_info"] = "Vabandust, me ei suutnud ühendada andmebaasi, kasutades teavet, mida tarnitakse. Veateate andmebaasi tagastatud: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Palun kontrollige oma andmebaasi nime ja logini informatsioonile. Kuigi oleme suutnud ühendada andmebaasi serveri, me ei saanud ühendust andmebaasiga. Veateate andmebaasi tagastatud: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Teie vorm on valmis! Saate konfigureerida oma vormi kaudu neid sakke.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Kontole salvestatud teave istungid on kehtetu. Palun logige uuesti alla.";
 $LANG["notify_invalid_field_upload_folder"] = "See väli on upload kaust on kas vigane või ei ole kirjutatav.";

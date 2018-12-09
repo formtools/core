@@ -1141,7 +1141,6 @@ $LANG["notify_form_tabs_updated"] = "De tabbladen zijn bijgewerkt.";
 $LANG["notify_form_updated"] = "Het formulier is succesvol bijgewerkt.";
 $LANG["notify_form_views_updated"] = "De vorm Views zijn bijgewerkt.";
 $LANG["notify_install_invalid_db_info"] = "Sorry, we waren niet in staat om verbinding met de database met behulp van de informatie die u verstrekt. De foutmelding de database terug is: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Controleer uw database naam en login informatie. Hoewel we in staat waren om verbinding met de database host, konden we geen verbinding met de database. De foutmelding de database terug is: <i>{\$db_select_error})</i>";
 $LANG["notify_internal_form_created"] = "Uw formulier is gemaakt! U kunt uw formulier door middel van deze tabbladen.";
 $LANG["notify_invalid_account_information_in_sessions"] = "De account informatie die is opgeslagen in sessies is ongeldig. Gelieve in te loggen opnieuw hieronder.";
 $LANG["notify_invalid_field_upload_folder"] = "Upload map Dit veld is ongeldig of is niet beschrijfbaar.";

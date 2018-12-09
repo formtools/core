@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "탭이 업데이 트되었습니다.";
 $LANG["notify_form_updated"] = "양식이 성공적으로 업데이 트되었습니다.";
 $LANG["notify_form_views_updated"] = "양식보기가 업데이 트되었습니다.";
 $LANG["notify_install_invalid_db_info"] = "죄송합니다, 우리는 데이터베이스에 제공한 정보를 사용하여 연결할 수없습니다. 데이터베이스 오류 메시지가 반환됩니다 : <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "귀하의 데이터베이스 이름과 로그인 정보를 확인하시기 바랍니다. 비록 우리가 데이터베이스를 호스트에 연결할 수있다면, 우리는 데이터베이스에 연결하지 못했습니다. 데이터베이스 오류 메시지가 반환됩니다 : <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "당신의 양식이 만들어졌습니다! 당신은이 탭을 통해 양식을 구성할 수 있습니다.";
 $LANG["notify_invalid_account_information_in_sessions"] = "계정 정보를 세션에 저장이 잘못되었습니다. 잠시 후 다시 아래에서 로그 인해주세요.";
 $LANG["notify_invalid_field_upload_folder"] = "이 필드의 업로드 폴더 중 하나가 잘못되었거나 쓰기 권한이없습니다.";

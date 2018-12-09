@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Kartice so bile posodobljene.";
 $LANG["notify_form_updated"] = "Obrazec je bil uspešno posodobljen.";
 $LANG["notify_form_views_updated"] = "Obrazec Ogledov so bile posodobljene.";
 $LANG["notify_install_invalid_db_info"] = "Oprostite, nismo mogli povezati z bazo podatkov z informacijami, ki ste. Napaki zbirke je vrnil: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Prosimo, preverite vaše ime zbirke podatkov in podatke za prijavo. Čeprav smo lahko povežete z bazo podatkov gostitelja, nismo mogli povezati z bazo podatkov. Napaki zbirke je vrnil: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Vaš obrazec je bil ustvarjen! Lahko nastavite svoj obrazec s pomočjo teh kartic.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Računu informacije, shranjene na sejah, je neveljavna. Znova se prijavite spodaj.";
 $LANG["notify_invalid_field_upload_folder"] = "To polje je upload mapa je neveljaven ali ni mogoče pisati.";

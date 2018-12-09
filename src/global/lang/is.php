@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "The flipa hefur verið uppfærð.";
 $LANG["notify_form_updated"] = "Formið hefur verið uppfærður.";
 $LANG["notify_form_views_updated"] = "Form Views hafa verið uppfærðar.";
 $LANG["notify_install_invalid_db_info"] = "Því miður gátum við ekki að tengja við gagnagrunn með þeim upplýsingum sem þú fylgir. The villuboð gagnagrunn sem skilað er: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Athugaðu gagnasafn nafn og tenging upplýsingar. Þó við gátum til að tengja við gagnagrunn gestgjafi var ekki hægt að tengja við gagnagrunn. The villuboð gagnagrunn sem skilað er: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Mynd þín hefur verið búið til! Hægt er að stilla mynd í gegnum þessa flipa.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Reikningurinn upplýsingar sem geymdar eru á fundum er ógilt. Vinsamlegast skráðu þig inn aftur hér að neðan.";
 $LANG["notify_invalid_field_upload_folder"] = "Senda möppu Þessi reitur er annað hvort öryrki eða ekki skrifanleg.";

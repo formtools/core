@@ -1137,7 +1137,6 @@ $LANG["notify_form_tabs_updated"] = "該標籤已更新。";
 $LANG["notify_form_updated"] = "有關表格已成功更新。";
 $LANG["notify_form_views_updated"] = "該表格的觀點一直在更新。";
 $LANG["notify_install_invalid_db_info"] = "很抱歉，我們無法連接到數據庫使用您提供的資料。此錯誤信息的數據庫返回的是<i>：{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "請檢查您的數據庫的名稱和登錄信息。雖然我們能夠連接到數據庫的東道主，我們無法連接到數據庫。此錯誤信息的數據庫返回的是<i>：{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "你的形式已建立！您可以配置形式，通過這些選項卡。";
 $LANG["notify_invalid_account_information_in_sessions"] = "該帳戶的信息存儲在會議上是無效的。請再次登錄以下。";
 $LANG["notify_invalid_field_upload_folder"] = "此字段的上傳文件夾是無效或不可寫。";

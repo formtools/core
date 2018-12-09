@@ -1141,7 +1141,6 @@ $LANG["notify_form_tabs_updated"] = "Os separadores foram atualizados.";
 $LANG["notify_form_updated"] = "O formulário foi atualizado com sucesso.";
 $LANG["notify_form_views_updated"] = "Modos de Exibição forma foram atualizados.";
 $LANG["notify_install_invalid_db_info"] = "Desculpe, não foi possível conectar ao banco de dados usando as informações fornecidas. A mensagem de erro do banco de dados retornado é: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Por favor, verifique o nome do banco de dados e informações de login. Embora nós fomos capazes de conectar para hospedar o banco de dados, que não pôde se conectar ao banco de dados. A mensagem de erro do banco de dados retornado é: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Seu formulário foi criado! Você pode configurar o formulário através destas guias.";
 $LANG["notify_invalid_account_information_in_sessions"] = "As informações de conta armazenadas em sessões é inválido. Faça o login novamente abaixo.";
 $LANG["notify_invalid_field_upload_folder"] = "Pasta de upload Este campo é inválido ou não é gravável.";

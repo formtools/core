@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Les fitxes han estat actualitzats.";
 $LANG["notify_form_updated"] = "El formulari s&#39;ha actualitzat correctament.";
 $LANG["notify_form_views_updated"] = "Els punts de vista manera s&#39;han actualitzat.";
 $LANG["notify_install_invalid_db_info"] = "Ho sentim, no hem pogut connectar amb la base de dades amb la informació que subministra. El missatge d&#39;error de la base de dades retornat és: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Si us plau, comproveu el nom de base de dades i la informació d&#39;accés. Tot i que van ser capaços de connectar amb el host de base de dades, no es podria connectar a la base de dades. El missatge d&#39;error de la base de dades retornat és: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "El seu formulari ha estat creat! Vostè pot configurar la seva forma a través d&#39;aquestes fitxes.";
 $LANG["notify_invalid_account_information_in_sessions"] = "La informació de compte emmagatzemada en les sessions no és vàlid. Registreu-vos-ho més endavant.";
 $LANG["notify_invalid_field_upload_folder"] = "Carpeta de càrrega d&#39;aquest camp no és vàlida o no pot escriure.";

@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Die tabs is opgedateer.";
 $LANG["notify_form_updated"] = "Die vorm is opgedateer.";
 $LANG["notify_form_views_updated"] = "Die vorm databasis is opgedateer.";
 $LANG["notify_install_invalid_db_info"] = "Jammer, kon ons nie &#39;n verbinding met die databasis met behulp van die inligting wat jy verskaf het. Die boodskap van die databasis teruggestuur word: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Maak seker jou naam databasis en teken inligting. Hoewel ons in staat was om verbinding met die databasis gasheer, kan ons verbinding met die databasis nie. Die boodskap van die databasis teruggestuur word: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Jou vorm is geskep! Jy kan die vorm instel deur hierdie tabs.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Die rekening inligting gestoor in sessies is ongeldig. Teken asseblief weer hieronder.";
 $LANG["notify_invalid_field_upload_folder"] = "Hierdie veld se oplaai gids is ongeldig of kan nie verander word.";

@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Y tabiau wedi cael eu diweddaru.";
 $LANG["notify_form_updated"] = "Y ffurflen wedi ei ddiweddaru yn llwyddiannus.";
 $LANG["notify_form_views_updated"] = "Barn ffurflen wedi eu diweddaru.";
 $LANG["notify_install_invalid_db_info"] = "Mae&#39;n ddrwg gennym, nid oeddem yn gallu cysylltu at y gronfa ddata gan ddefnyddio&#39;r wybodaeth a ddarparwyd. Mae&#39;r neges gwall y gronfa ddata wedi dod o hyd yn: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Gwiriwch eich enw mewngofnodi cronfa ddata a gwybodaeth. Er ein bod yn gallu er mwyn cysylltu i&#39;r gwesteiwr gronfa ddata, nid oeddem yn gallu cysylltu at y gronfa ddata. Mae&#39;r neges gwall y gronfa ddata wedi dod o hyd yn: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Mae eich ffurflen wedi cael ei greu! Gallwch ffurfweddu eich ffurflen drwy&#39;r tabiau.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Mae&#39;r wybodaeth cyfrif ei storio mewn sesiynau yn annilys. Mewngofnodwch eto isod.";
 $LANG["notify_invalid_field_upload_folder"] = "Folder maes hwn yn lanlwytho naill ai yn annilys neu os nad yw&#39;n Ysgrifenadwy.";

@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Tab telah dikemaskini.";
 $LANG["notify_form_updated"] = "Bentuk telah berjaya dikemaskini.";
 $LANG["notify_form_views_updated"] = "Views borang telah dikemaskini.";
 $LANG["notify_install_invalid_db_info"] = "Maaf, kami tidak dapat melakukan koneksi ke database dengan menggunakan maklumat yang disediakan. Mesej kesalahan database semula adalah: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Sila semak nama database anda dan login. Walaupun kami dapat terhubung ke database tuan rumah, kami tidak bisa koneksi ke database. Mesej kesalahan database semula adalah: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Borang anda telah dibuka! Anda boleh mengkonfigurasi borang anda melalui tab ini.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Maklumat akaun yang disimpan dalam sesi tidak sah. Sila log in lagi di bawah ini.";
 $LANG["notify_invalid_field_upload_folder"] = "Bidang ini yang meng-upload folder entah sah atau tidak boleh ditulis.";

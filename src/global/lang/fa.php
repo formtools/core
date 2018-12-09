@@ -1138,7 +1138,6 @@ $LANG["notify_form_tabs_updated"] = "زبانه ها به روز شدهاند.";
 $LANG["notify_form_updated"] = "این فرم با موفقیت به روزآوری شده است.";
 $LANG["notify_form_views_updated"] = "نمایش ها فرم به روز شده اند.";
 $LANG["notify_install_invalid_db_info"] = "با عرض پوزش ، ما نتوانستیم برای اتصال به پایگاه داده با استفاده از اطلاعات شما می شوند. پیغام خطا پایگاه برگردانده می شود : <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "لطفا نام پایگاه داده ها و اطلاعات خود وارد شوید. اگر چه ما قادر به اتصال به میزبان پایگاه داده ، ما نمی تواند اتصال به پایگاه داده باشد. پیغام خطا پایگاه برگردانده می شود : <i>(\$ db_select_error)</i>";
 $LANG["notify_internal_form_created"] = "فرم شما ساخته شد! شما می توانید فرم خود را از طریق این زبانه پیکربندی کنید.";
 $LANG["notify_invalid_account_information_in_sessions"] = "اطلاعات حساب ذخیره شده در جلسات نامعتبر است. لطفا در زیر را دوباره وارد شوید.";
 $LANG["notify_invalid_field_upload_folder"] = "پوشه آپلود این فیلد است یا اشتباه است یا قابل نوشتن نیست.";

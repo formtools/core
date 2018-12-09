@@ -1141,7 +1141,6 @@ $LANG["notify_form_tabs_updated"] = "Le schede sono state aggiornate.";
 $LANG["notify_form_updated"] = "L'aggiornamento di questo modulo ha avuto successo.";
 $LANG["notify_form_views_updated"] = "Visto il modulo sono stati aggiornati.";
 $LANG["notify_install_invalid_db_info"] = "Ci dispiace, non siamo riusciti a connettersi al database utilizzando le informazioni fornite. Il messaggio di errore del database restituito è: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Si prega di controllare il nome del database e le informazioni di login. Anche se siamo stati in grado di connettersi al database host, non siamo riusciti a connettersi al database. Il messaggio di errore del database restituito è: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Il modulo è stato creato! È possibile configurare il modulo attraverso queste schede.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Le informazioni sull&#39;account memorizzate in sessioni non è valido. Si prega di accedere nuovamente al di sotto.";
 $LANG["notify_invalid_field_upload_folder"] = "Cartella upload Questo campo è valido o non è scrivibile.";

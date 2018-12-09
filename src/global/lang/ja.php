@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "タブが更新されている。";
 $LANG["notify_form_updated"] = "フォームが正常に更新されています。";
 $LANG["notify_form_views_updated"] = "フォームのビューが更新されました。";
 $LANG["notify_install_invalid_db_info"] = "申し訳ありませんが、データベースを提供された情報を使用して接続することができませんでした。データベースに返されるエラーメッセージが表示されます<i>：{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "あなたのデータベース名とログイン情報をご確認ください。ただし、我々はデータベースのホストに接続することができた、我々のデータベースに接続できませんでした。データベースに返されるエラーメッセージが表示されます<i>：{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "フォームが作成されました！あなたがこれらのタブを使用してフォームを構成することができます。";
 $LANG["notify_invalid_account_information_in_sessions"] = "アカウント情報をセッションに格納さが無効です。もう一度下でログインします。";
 $LANG["notify_invalid_field_upload_folder"] = "このフィールドのロード先のフォルダのいずれかが無効であるか、または書き込めません。";

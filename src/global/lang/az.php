@@ -1137,7 +1137,6 @@ $LANG["notify_form_tabs_updated"] = "The tabs have been updated.";
 $LANG["notify_form_updated"] = "The form has been successfully updated.";
 $LANG["notify_form_views_updated"] = "The form Views have been updated.";
 $LANG["notify_install_invalid_db_info"] = "Sorry, we were unable to connect to the database using the information you supplied. The error message the database returned is: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Please check your database name and login information. Although we were able to connect to the database host, we could not connect to the database. The error message the database returned is: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Your form has been created! You can configure your form through these tabs.";
 $LANG["notify_invalid_account_information_in_sessions"] = "The account information stored in sessions is invalid. Please log in again below.";
 $LANG["notify_invalid_field_upload_folder"] = "This field's upload folder is either invalid or is not writable.";

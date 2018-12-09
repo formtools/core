@@ -1141,7 +1141,6 @@ $LANG["notify_form_tabs_updated"] = "Sekmeler güncellendi.";
 $LANG["notify_form_updated"] = "Form başarıyla güncellendi.";
 $LANG["notify_form_views_updated"] = "Formu Görüntüleme güncellendi.";
 $LANG["notify_install_invalid_db_info"] = "Üzgünüz, veritabanı size verilen bilgileri kullanarak bağlanmak için koyamadık. Veritabanı geri hata mesajı: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Lütfen veritabanı adını ve giriş bilgilerinizi kontrol edin. Her ne kadar veritabanı ana bilgisayara bağlanmak için başardık, biz veritabanına bağlanamadı. Veritabanı geri hata mesajı: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Formunuz yaratıldı! Bu sekmeler aracılığıyla formu yapılandırabilirsiniz.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Hesap bilgileri oturumları saklanır geçersiz. Lütfen tekrar aşağıda giriş yapın.";
 $LANG["notify_invalid_field_upload_folder"] = "Bu alanın yükleme klasöründe ya geçersiz ya da yazılabilir değil.";

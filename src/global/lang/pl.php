@@ -1141,7 +1141,6 @@ $LANG["notify_form_tabs_updated"] = "Karty zostały zaktualizowane.";
 $LANG["notify_form_updated"] = "Formularz został zaktualizowany.";
 $LANG["notify_form_views_updated"] = "Wyświetleń postaci zostały zaktualizowane.";
 $LANG["notify_install_invalid_db_info"] = "Niestety, nie udało nam się połączyć z bazą danych przy użyciu informacji dostarczonych. Komunikat o błędzie w bazie zwróciło to: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Proszę sprawdzić nazwę bazy danych i informacji logowania. Mimo że byliśmy w stanie połączyć się z hostem bazy danych, nie może połączyć się z bazą danych. Komunikat o błędzie w bazie zwróciło to: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Formularz został stworzony! Możesz skonfigurować formularz za pośrednictwem tych kart.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Informacje o kontach przechowywane w sesji jest nieprawidłowy. Zaloguj się ponownie poniżej.";
 $LANG["notify_invalid_field_upload_folder"] = "To pole jest upload folderu jest nieprawidłowa lub nie jest zapisywalny.";

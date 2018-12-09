@@ -1141,7 +1141,6 @@ $LANG["notify_form_tabs_updated"] = "Fanene har blitt oppdatert.";
 $LANG["notify_form_updated"] = "Skjemaet er oppdatert.";
 $LANG["notify_form_views_updated"] = "Skjemaet Views har blitt oppdatert.";
 $LANG["notify_install_invalid_db_info"] = "Beklager, men vi kan ikke koble til databasen ved hjelp av informasjonen du har oppgitt. Feilmeldingen databasen tilbake er: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Vennligst sjekk database navn og påloggingsinformasjon. Selv om vi var i stand til å koble til databasen vert, vi kunne ikke koble til databasen. Feilmeldingen databasen tilbake er: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Skjemaet har blitt opprettet! Du kan konfigurere form gjennom disse kategoriene.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Kontoen informasjon lagret i økter er ugyldig. Logg inn på nytt under.";
 $LANG["notify_invalid_field_upload_folder"] = "Dette feltet er upload mappe enten er ugyldig eller ikke er skrivbar.";

@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Flikarna har uppdaterats.";
 $LANG["notify_form_updated"] = "Formuläret har uppdaterats!";
 $LANG["notify_form_views_updated"] = "Formulärvyerna har uppdaterats.";
 $LANG["notify_install_invalid_db_info"] = "Tyvärr så kunde vi inte koppla upp oss mot databasen med den information du angav. Felmeddelandet vi fick tillbaka var: <em>{\$db_connection_error}</em>";
-$LANG["notify_install_no_db_connection"] = "Kontrollera databasnamnet och inloggningsinformationen. Även om vi kunde koppla upp oss mot databasens värd så kunde vi inte etablera en koppling till själva databasen. Felmeddelandet som databasen skickade tillbaka var: <em>{\$db_select_error}</em>";
 $LANG["notify_internal_form_created"] = "Formuläret har skapats! Du kan konfigurera ditt formulär genom dessa flikar.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Kontoinformationen som lagrats i sessioner är ogiltig. Vänligen logga in igen här nedan.";
 $LANG["notify_invalid_field_upload_folder"] = "Det här fältets uppladdningskatalog är antingen ogiltig eller så är den inte skrivbar.";

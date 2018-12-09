@@ -1139,7 +1139,6 @@ $LANG["notify_form_tabs_updated"] = "Kartice su ažurirane.";
 $LANG["notify_form_updated"] = "Obrazac je uspješno ažuriran.";
 $LANG["notify_form_views_updated"] = "Obrazac Pregleda su ažurirani.";
 $LANG["notify_install_invalid_db_info"] = "Nažalost, nismo mogli spojiti na bazu podataka koristeći informacije koje ste dobili. Poruka o pogrešci baze podataka vraćen je: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Molim Vas provjerite tvoj naziv baze podataka i podatke za prijavu. Iako nismo bili u mogućnosti spojiti na bazu podataka domaćin, nismo mogli spojiti na bazu podataka. Poruka o pogrešci baze podataka vraćen je: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Tvoj oblik je stvoren! Možete konfigurirati svoj oblik kroz ove kartice.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Obzir podatke pohranjene na sjednicama je neispravno. Molimo, prijavite se opet ispod.";
 $LANG["notify_invalid_field_upload_folder"] = "Ovo polje je učitati mapu ili je neispravna ili nije writable.";

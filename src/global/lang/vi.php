@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Các tab đã được cập nhật.";
 $LANG["notify_form_updated"] = "Hình thức này đã được cập nhật thành công.";
 $LANG["notify_form_views_updated"] = "Lượt xem mẫu đã được cập nhật.";
 $LANG["notify_install_invalid_db_info"] = "Xin lỗi, chúng tôi không thể kết nối với cơ sở dữ liệu bằng cách sử dụng những thông tin bạn cung cấp. Các thông báo lỗi cơ sở dữ liệu trả về là: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Vui lòng kiểm tra tên cơ sở dữ liệu và thông tin đăng nhập của bạn. Mặc dù chúng tôi đã có thể kết nối với máy chủ cơ sở dữ liệu, chúng tôi không thể kết nối với cơ sở dữ liệu. Các thông báo lỗi cơ sở dữ liệu trả về là: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Hình thức của bạn đã được tạo ra! Bạn có thể cấu hình mẫu của bạn thông qua các tab này.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Các thông tin tài khoản được lưu giữ trong các buổi là không hợp lệ. Xin đăng nhập ngay dưới đây.";
 $LANG["notify_invalid_field_upload_folder"] = "Thư mục tải lên của lĩnh vực này là hoặc không hợp lệ hoặc không ghi.";

@@ -1137,7 +1137,6 @@ $LANG["notify_form_tabs_updated"] = "Ya tabs wamekuwa updated.";
 $LANG["notify_form_updated"] = "Fomu imekuwa mafanikio updated.";
 $LANG["notify_form_views_updated"] = "The form Views have been updated.";
 $LANG["notify_install_invalid_db_info"] = "Sorry, sisi hawakuweza kuwaunganisha na kutumia habari Mbegu wewe hutolewa. Ujumbe wa kosa database akarudi ni: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Please check your database login jina na habari. Ingawa tuliweza kuwaunganisha kwa mwenyeji Mbegu, sisi hawakuweza kuwaunganisha na database. Ujumbe wa kosa database akarudi ni: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Your form has been created! You can configure your form through these tabs.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Akaunti kuhifadhiwa katika vikao vya habari ni invalid. Please log in tena chini.";
 $LANG["notify_invalid_field_upload_folder"] = "Uwanja huu&#39;s upload folder aidha ni batili au si writable.";

@@ -1140,7 +1140,6 @@ $LANG["notify_form_tabs_updated"] = "Karty boli aktualizované.";
 $LANG["notify_form_updated"] = "Formulár bol úspešne aktualizovaný.";
 $LANG["notify_form_views_updated"] = "Zobrazení formulára boli aktualizované.";
 $LANG["notify_install_invalid_db_info"] = "Ospravedlňujeme sa, sme neboli schopní sa pripojiť k databáze na základe informácií, ktoré sa dodáva. Chybe databázy vrátil je: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Skontrolujte prosím svoje meno databázy a prihlasovacie informácie. I keď sme boli schopní sa pripojiť k databáze hostiteľa, ale nemohli sme sa pripojiť k databáze. Chybe databázy vrátil je: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Formulár bol vytvorený! Môžete si nastaviť podobe prostredníctvom týchto kariet.";
 $LANG["notify_invalid_account_information_in_sessions"] = "V úvahy informácie uložené v sedenie je neplatný. Prihláste sa opäť nižšie.";
 $LANG["notify_invalid_field_upload_folder"] = "Toto pole je presúvať zložky je buď neplatné, alebo nedá zapisovať.";

@@ -1140,7 +1140,6 @@ $LANG["notify_form_tabs_updated"] = "Tab telah diperbarui.";
 $LANG["notify_form_updated"] = "Bentuk telah berhasil diperbarui.";
 $LANG["notify_form_views_updated"] = "Views bentuk telah diperbarui.";
 $LANG["notify_install_invalid_db_info"] = "Maaf, kami tidak dapat melakukan koneksi ke database dengan menggunakan informasi yang disediakan. Pesan kesalahan database kembali adalah: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Silahkan periksa nama database Anda dan login. Meskipun kami dapat terhubung ke database tuan rumah, kami tidak bisa koneksi ke database. Pesan kesalahan database kembali adalah: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Formulir Anda telah diciptakan! Anda dapat mengkonfigurasi formulir Anda melalui tab.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Informasi account yang disimpan dalam sesi tidak valid. Silakan log in lagi di bawah ini.";
 $LANG["notify_invalid_field_upload_folder"] = "Bidang ini yang meng-upload folder entah valid atau tidak dapat ditulis.";

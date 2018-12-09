@@ -1141,7 +1141,6 @@ $LANG["notify_form_tabs_updated"] = "Fanerne er blevet opdateret.";
 $LANG["notify_form_updated"] = "Formularen er blevet opdateret.";
 $LANG["notify_form_views_updated"] = "Skemaet synspunkter er blevet opdateret.";
 $LANG["notify_install_invalid_db_info"] = "Beklager, men vi var ude af stand til at forbinde til databasen ved hjælp af de oplysninger, du har angivet. Fejlmeddelelsen databasen tilbage er: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Tjek venligst din database navn og login-oplysninger. Selv om vi var i stand til at forbinde til databasen vært, kunne vi ikke forbinde til databasen. Fejlmeddelelsen databasen tilbage er: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Din form er blevet oprettet! Du kan konfigurere din form gennem disse faner.";
 $LANG["notify_invalid_account_information_in_sessions"] = "De kontooplysninger opbevares i sessioner er ugyldig. Log ind igen nedenfor.";
 $LANG["notify_invalid_field_upload_folder"] = "Dette felt er upload mappe er enten ugyldig eller ikke skrivbar.";

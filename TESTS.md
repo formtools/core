@@ -32,6 +32,19 @@ Requirements: PHP 7 has to be running on your machine's command line.
 - Run `composer install`  
 - Run `vendor/bin/phpunit`
 
+
+#### Test lang file content 
+
+To verify the lang files are in sync and all contain the same set of keys, in your dev environment run the following
+command: 
+
+```
+grunt parseI18n
+```
+
+That outputs details about missing strings found in the `en_us.php` but not in other files, plus any superfluous ones
+found in other lang files but not in the English source file.
+
 ----------------
 
 ### Selenium

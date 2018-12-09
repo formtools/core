@@ -1136,7 +1136,6 @@ $LANG["notify_form_tabs_updated"] = "Os separadores foron actualizados.";
 $LANG["notify_form_updated"] = "O formulario foi actualizado correctamente.";
 $LANG["notify_form_views_updated"] = "Modos de Vista forma foron actualizados.";
 $LANG["notify_install_invalid_db_info"] = "Sentímolo, non se pode conectar á base de datos utilizando a información proporcionada. A mensaxe de erro da base de datos de retorno é: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Por favor, verifique o nome da base de datos e información de login. Aínda que nós fomos capaces de conectarse a hospedar o banco de datos, que non puido conectar á base de datos. A mensaxe de erro da base de datos de retorno é: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "O seu formulario foi creado! Pode configurar o formulario a través destas guías.";
 $LANG["notify_invalid_account_information_in_sessions"] = "A información de conta almacenadas en sesións non é válido. Faga o login de novo embaixo.";
 $LANG["notify_invalid_field_upload_folder"] = "Cartafol de subida Este campo non é válido ou non é gravadora.";
