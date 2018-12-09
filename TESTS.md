@@ -39,7 +39,7 @@ To verify the lang files are in sync and all contain the same set of keys, in yo
 command: 
 
 ```
-grunt parseI18n
+grunt i18n
 ```
 
 That outputs details about missing strings found in the `en_us.php` but not in other files, plus any superfluous ones

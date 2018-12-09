@@ -1,6 +1,23 @@
+const fs = require('fs');
 const lineByLine = require('n-readlines');
 const sass = require('node-sass');
 const pkg = require('./package.json');
+
+
+const walk = (dir) => {
+	let results = [];
+	const list = fs.readdirSync(dir);
+	list.forEach((file) => {
+		file = dir + '/' + file;
+		const stat = fs.statSync(file);
+		if (stat && stat.isDirectory()) {
+			results = results.concat(walk(file));
+		} else {
+			results.push(file);
+		}
+	});
+	return results;
+};
 
 
 module.exports = function (grunt) {
@@ -117,11 +134,11 @@ module.exports = function (grunt) {
 		return map;
 	};
 
-	const findStringsInEnFileMissingFromOtherLangFiles = (stringsByLocale) => {
+	const findStringsInEnFileMissingFromOtherLangFiles = (results, stringsByLocale) => {
 		const langs = Object.keys(stringsByLocale);
 
 		let count = 0;
-		console.log('\nEnglish strings missing from other lang files:\n-------------------------------------------\n');
+		results.lines.push('\nEnglish strings missing from other lang files:\n-------------------------------------------');
 		Object.keys(stringsByLocale['en_us']).forEach((key) => {
 			const missing = [];
 			langs.forEach((locale) => {
@@ -131,18 +148,21 @@ module.exports = function (grunt) {
 			});
 			if (missing.length > 0) {
 				count++;
-				console.log(`${key}\n   -missing from: ${missing.join(', ')}\n`);
+				results.lines.push(`${key}\n   -missing from: ${missing.join(', ')}`);
 			}
 		});
 
 		if (count > 0) {
-			console.log(`-- MISSING ${count}\n`);
+			results.error = true;
+			results.lines.push(`-- MISSING ${count}`);
 		} else {
-			console.log('All good!\n');
+			results.lines.push('All good!\n');
 		}
+
+		return results;
 	};
 
-	const findStringsInOtherFilesNotInEnFile = (stringsByLocale) => {
+	const findStringsInOtherFilesNotInEnFile = (results, stringsByLocale) => {
 		const langs = Object.keys(stringsByLocale);
 		const en = stringsByLocale['en_us'];
 
@@ -155,24 +175,98 @@ module.exports = function (grunt) {
 			});
 
 			if (extra.length) {
-				console.log(`${lang} file contains unused strings: \n-- ${extra.join('\n-- ')}\n`);
+				results.error = true;
+				results.lines.push(`${lang} file contains unused strings: \n-- ${extra.join('\n-- ')}`);
 			}
 		});
+
+		return results;
 	};
 
 
-	grunt.registerTask('default', ['sync', 'sass', 'concurrent:watchers']);
+	const parseCodebaseToFindUnusedStrings = (results, en) => {
+		let missingKeys = Object.keys(en);
 
-	grunt.registerTask('parseI18n', () => {
+		const ignoreFolders = [
+			'src/global/lang/',
+			'src/global/vendor/',
+			'dist/',
+			'node_modules/',
+			'src/modules/'
+		];
+
+		const files = walk('./src');
+		files.forEach((file) => {
+
+			for (let i=0; i<ignoreFolders.length; i++) {
+				const re = new RegExp(ignoreFolders[i]);
+				if (re.test(file)) {
+					return;
+				}
+			}
+
+			const lines = new lineByLine(file);
+			let line;
+			while (line = lines.next()) {
+				line.toString('ascii');
+
+				// loop through all keys that still haven't been found yet and remove any that are found on the row
+				let updatedKeys = [];
+				missingKeys.forEach((key) => {
+					const regex = new RegExp(key);
+
+					// very kludgy, but the only place Form Tools uses dynamic keys is for dates: ignore all those keys
+					if (!(/^date_/.test(key)) && !regex.test(line)) {
+						updatedKeys.push(key);
+					}
+				});
+
+				missingKeys = updatedKeys;
+			}
+		});
+
+		if (missingKeys.length > 0) {
+			results.error = true;
+			results.lines.push(`\nUNUSED KEYS: ${missingKeys.join('\n  --')}`);
+		}
+	};
+
+	grunt.registerTask('i18n', () => {
 		const stringsByLocale = {};
 		pkg.locales.forEach((locale) => {
 			stringsByLocale[locale] = getLocaleFileStrings(locale);
 		});
 
-		findStringsInEnFileMissingFromOtherLangFiles(stringsByLocale);
-		findStringsInOtherFilesNotInEnFile(stringsByLocale);
+		let results = {
+			error: false,
+			lines: []
+		};
+		findStringsInEnFileMissingFromOtherLangFiles(results, stringsByLocale);
+		findStringsInOtherFilesNotInEnFile(results, stringsByLocale);
+		parseCodebaseToFindUnusedStrings(results, stringsByLocale['en_us']);
+
+		// actually halt the grunt process if there are errors
+		const output = results.lines.join('\n');
+		if (results.error) {
+			grunt.fail.fatal(output);
+		} else {
+			grunt.log.write(output);
+		}
 	});
 
-	// builds everything in the dist folder
-	grunt.registerTask('prod', ['sync', 'sass', 'run:webpack_prod']);
+	// helper methods to operate on all lang files at once
+	grunt.registerTask('removeI18nKey', () => {});
+	grunt.registerTask('addI18nKey', () => {});
+	grunt.registerTask('sortI18nKeys', () => {});
+
+
+	// for local dev work. All you need to do is run `grunt`: that creates a dist/ folder containing all the built code,
+	// plus sets up watchers to copy over changed files, generate sass and the webpack bundles. Be sure to load up the
+	// dist folder in your browser
+	grunt.registerTask('default', ['sync', 'sass', 'concurrent:watchers']);
+
+
+	// builds everything into the dist folder
+	grunt.registerTask('prod', ['i18n', 'sync', 'sass', 'run:webpack_prod']);
+
 };

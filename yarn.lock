@@ -4405,6 +4405,11 @@ liftoff@~2.5.0:
     rechoir "^0.6.2"
     resolve "^1.1.7"
 
+line-reader@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/line-reader/-/line-reader-0.4.0.tgz#17e44818da0ac335675ba300954f94ef670e66fd"
+  integrity sha1-F+RIGNoKwzVnW6MAlU+U72cOZv0=
+
 livereload-js@^2.3.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/livereload-js/-/livereload-js-2.4.0.tgz#447c31cf1ea9ab52fc20db615c5ddf678f78009c"
