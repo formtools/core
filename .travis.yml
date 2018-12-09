@@ -3,7 +3,12 @@ php:
     - 7.1.12
 
 before_install:
+  - yarn install
+  - yarn add global grunt-cli
   - travis_retry composer self-update
   - composer install --ignore-platform-reqs
+
+install:
+  - grunt
 
 scripts: phpunit
