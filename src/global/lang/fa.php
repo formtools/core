@@ -25,21 +25,17 @@ $LANG["word_add_uc_rightarrow"] = "افزودن »";
 $LANG["word_administration"] = "مدیریت";
 $LANG["word_administrator"] = "مدیر";
 $LANG["word_after"] = "بعد";
-$LANG["word_all"] = "همه";
 $LANG["word_aquamarine"] = "زمرد کبود";
 $LANG["word_asc"] = "صعودی";
 $LANG["word_author"] = "نویسنده";
 $LANG["word_author_c"] = "نویسنده :";
 $LANG["word_back_leftarrow"] = "«بازگشت";
-$LANG["word_basic"] = "پایه";
 $LANG["word_bcc_c"] = "رونوشت پنهان :";
 $LANG["word_before"] = "قبل";
 $LANG["word_benefits"] = "امتیازها";
 $LANG["word_blue"] = "آبی";
-$LANG["word_bottom"] = "پایین";
 $LANG["word_cancel"] = "انصراف";
 $LANG["word_cc_c"] = "رونوشت :";
-$LANG["word_center"] = "مرکز";
 $LANG["word_characters"] = "شخصیت ها";
 $LANG["word_checkboxes"] = "انتخاب باکسها";
 $LANG["word_checklist"] = "فهرست";
@@ -66,10 +62,8 @@ $LANG["word_desc"] = "نزولی";
 $LANG["word_desc"] = "نزولی";
 $LANG["word_direct"] = "مستقیم";
 $LANG["word_disabled"] = "غیرفعال";
-$LANG["word_display"] = "نمایش";
 $LANG["word_documentation"] = "مستندات";
 $LANG["word_done"] = "انجام شده";
-$LANG["word_download"] = "دانلود";
 $LANG["word_drawbacks"] = "اشکال";
 $LANG["word_dropdown"] = "لیست";
 $LANG["word_edit"] = "اصلاح";
@@ -81,10 +75,7 @@ $LANG["word_enabled"] = "کوکی ها";
 $LANG["word_equals"] = "تساوی";
 $LANG["word_error"] = "خطا";
 $LANG["word_error_c"] = "خطا :";
-$LANG["word_errors"] = "خطاها";
 $LANG["word_examples_c"] = "مثالها :";
-$LANG["word_excel"] = "اکسل";
-$LANG["word_expert"] = "کارشناس";
 $LANG["word_external"] = "خارجی";
 $LANG["word_fail"] = "شکست";
 $LANG["word_field"] = "فیلد";
@@ -99,7 +90,6 @@ $LANG["word_filters_sp"] = "فیلتر (ها)";
 $LANG["word_for"] = "برای";
 $LANG["word_form"] = "فره";
 $LANG["word_form_c"] = "فرم:";
-$LANG["word_form_sp"] = "فرم (ها)";
 $LANG["word_formatting"] = "قالب بندی";
 $LANG["word_forms"] = "فرمها";
 $LANG["word_found"] = "یافت نشد";
@@ -108,19 +98,14 @@ $LANG["word_from_c"] = "از :";
 $LANG["word_general"] = "عمومی";
 $LANG["word_green"] = "سبز";
 $LANG["word_grey"] = "خاکستری";
-$LANG["word_headers"] = "سرآیندها";
 $LANG["word_height"] = "ارتفاع";
-$LANG["word_help"] = "کمک";
 $LANG["word_hidden"] = "پنهان";
-$LANG["word_hide"] = "مخفی";
 $LANG["word_highlight"] = "نماد";
 $LANG["word_horizontal"] = "افقی";
 $LANG["word_hour"] = "ساعت";
 $LANG["word_hours"] = "ساعت قبل";
 $LANG["word_html"] = "HTML";
 $LANG["word_id"] = "شناسه";
-$LANG["word_ignore"] = "نادیده گرفتن";
-$LANG["word_ignore"] = "نادیده گرفتن";
 $LANG["word_image"] = "تصویر";
 $LANG["word_incomplete"] = "ناقص";
 $LANG["word_install"] = "نصب";
@@ -128,7 +113,6 @@ $LANG["word_installation"] = "نصب";
 $LANG["word_internal"] = "داخلی";
 $LANG["word_language"] = "زبان";
 $LANG["word_large"] = "بزرگ";
-$LANG["word_left"] = "چپ";
 $LANG["word_like"] = "شبیه";
 $LANG["word_login"] = "ورود";
 $LANG["word_logo"] = "نشان";
@@ -165,18 +149,15 @@ $LANG["word_other"] = "سایر";
 $LANG["word_other_c"] = "دیگر :";
 $LANG["word_page"] = "صفحه";
 $LANG["word_page_c"] = "صفحه :";
-$LANG["word_pages"] = "تعداد صفحات";
 $LANG["word_pass"] = "رمز عبور";
 $LANG["word_password"] = "گذر واژه";
 $LANG["word_password_c"] = "گذر واژه:";
 $LANG["word_pending"] = "در انتظار";
 $LANG["word_permissions"] = "دسترسی ها";
 $LANG["word_previous_leftarrow"] = "«قبلی";
-$LANG["word_print"] = "نسخه قابل چاپ";
 $LANG["word_private"] = "خصوصی";
 $LANG["word_public"] = "عمومی";
 $LANG["word_purple"] = "رنگ ارغوانی";
-$LANG["word_range"] = "محدوده";
 $LANG["word_recipient"] = "گیرنده";
 $LANG["word_recipient_sp"] = "دریافت کننده (ها)";
 $LANG["word_red"] = "قرمز";
@@ -187,16 +168,13 @@ $LANG["word_reply_to_c"] = "پاسخ به :";
 $LANG["word_required"] = "ضروری";
 $LANG["word_reset"] = "بازنشانی";
 $LANG["word_resolved"] = "حل و فصل";
-$LANG["word_right"] = "حق";
 $LANG["word_row"] = "ردیف";
 $LANG["word_search"] = "جستجو";
 $LANG["word_searchable"] = "جستجو";
 $LANG["word_select"] = "انتخاب";
-$LANG["word_selected"] = "انتخاب";
 $LANG["word_setting"] = "تنظیمات";
 $LANG["word_settings"] = "تنظیمات";
 $LANG["word_show"] = "نمایش";
-$LANG["word_simple"] = "ساده";
 $LANG["word_size"] = "اندازه";
 $LANG["word_skipped"] = "توقف عملیات";
 $LANG["word_small"] = "کوچک";
@@ -225,8 +203,6 @@ $LANG["word_time"] = "زمان";
 $LANG["word_tiny"] = "کوچک";
 $LANG["word_tips"] = "راهنمایی";
 $LANG["word_today"] = "امروز";
-$LANG["word_toolbar"] = "نوار ابزار";
-$LANG["word_top"] = "بالا";
 $LANG["word_truncate_q"] = "کوتاه؟";
 $LANG["word_uninstall"] = "عزل";
 $LANG["word_unknown"] = "ناشناخته";
@@ -251,7 +227,6 @@ $LANG["word_web"] = "وب سایت";
 $LANG["word_welcome"] = "خوش آمدید!";
 $LANG["word_width_c"] = "عرض :";
 $LANG["word_words"] = "واژه ها";
-$LANG["word_wysiwyg"] = "WYSIWYG";
 $LANG["word_yellow"] = "زرد";
 $LANG["word_yes"] = "بله";
 
@@ -272,7 +247,6 @@ $LANG["phrase_4_columns"] = "4 ستون";
 $LANG["phrase_50_per_page"] = "50 در هر صفحه";
 $LANG["phrase_accepting_submissions"] = "(پذیرش مطلب و مقاله)";
 $LANG["phrase_access_admin_account_c"] = "شما می توانید حساب دولت شما در اینجا دسترسی داشته باشید :";
-$LANG["phrase_access_type"] = "نوع دسترسی";
 $LANG["phrase_account_info"] = "اطلاعات حساب";
 $LANG["phrase_account_settings"] = "تنظیمات حساب کاربری";
 $LANG["phrase_action_needed"] = "عمل مورد نیاز";
@@ -306,7 +280,6 @@ $LANG["phrase_all_fields_displayed"] = "همه فیلدها نمایش داده 
 $LANG["phrase_all_statuses"] = "همه statuses";
 $LANG["phrase_all_submissions"] = "همه مطلب و مقاله";
 $LANG["phrase_allow_fields_edited"] = "اجازه دادن به زمینه ویرایش باشد";
-$LANG["phrase_allow_toolbar_resizing"] = "نوارابزار اجازه تغییر اندازه عکس چندگانه";
 $LANG["phrase_alphanumeric"] = "عدد و الفبایی (AZ ، 0-9)";
 $LANG["phrase_api_version"] = "API نسخه";
 $LANG["phrase_apply_timezone_offset"] = "درخواست منطقه زمانی افست";
@@ -355,7 +328,6 @@ $LANG["phrase_confirm_folder_url_match"] = "تکرار آدرس پوشه - تط�
 $LANG["phrase_connect_rows"] = "اتصال ردیف";
 $LANG["phrase_copy_email_settings_from"] = "تنظیمات ایمیل کپی از...";
 $LANG["phrase_copy_settings_from"] = "کپی برداری از تنظیمات...";
-$LANG["phrase_core_field_types"] = "هسته انواع رشته";
 $LANG["phrase_core_fields"] = "زمینه های اصلی";
 $LANG["phrase_core_version"] = "هسته نسخه";
 $LANG["phrase_create_account"] = "ایجاد حساب کاربری";
@@ -399,7 +371,6 @@ $LANG["phrase_default_value"] = "مقدار پیش فرض";
 $LANG["phrase_default_values"] = "مقادیر پیش فرض";
 $LANG["phrase_default_values_new_submissions"] = "مقادیر پیش فرض برای ارسالی جدید";
 $LANG["phrase_delete_field"] = "حذف فیلد";
-$LANG["phrase_delete_file"] = "حذف فایل";
 $LANG["phrase_delete_form"] = "حذف فرم";
 $LANG["phrase_delete_row"] = "حذفسطر";
 $LANG["phrase_delete_uploaded_fields_with_submission"] = "پاک کردن فایل های مربوط به زمانی که ارسال حذف";
@@ -430,7 +401,6 @@ $LANG["phrase_error_occurred_c"] = "خطای زیر رخ داده است :";
 $LANG["phrase_error_text_intro"] = "لطفا خطای زیر (ها) و resubmit ثابت :";
 $LANG["phrase_errors_learn_more"] = "کلیک کنید ، در کدهای خطا برای یادگیری بیشتر.";
 $LANG["phrase_event_trigger"] = "رویداد تریگر";
-$LANG["phrase_example_editor"] = "ویرایشگر مثال در موضوع";
 $LANG["phrase_external_form"] = "فرم خارجی";
 $LANG["phrase_external_form_info"] = "اطلاعات فرم های خارجی";
 $LANG["phrase_external_your_own_form"] = "خارجی (شکل خود را)";
@@ -536,14 +506,12 @@ $LANG["phrase_month_to_date"] = "ماه تا به امروز";
 $LANG["phrase_multi_select"] = "چند را انتخاب کنید";
 $LANG["phrase_multi_select_dropdown"] = "چند کشویی را انتخاب کنید";
 $LANG["phrase_multiple_fields_found"] = "چندگانه زمینه پیدا نشد!";
-$LANG["phrase_mysql_version"] = "MySQL نسخه";
 $LANG["phrase_name_or_last_name"] = "نام / نام خانوادگی";
 $LANG["phrase_new_blank_email"] = "جدید خالی ایمیل";
 $LANG["phrase_new_blank_option_list"] = "فهرست گزینه خالی جدید";
 $LANG["phrase_new_blank_view"] = "جدید خالی نمایش";
 $LANG["phrase_new_ft_installation"] = "ابزار جدید فرم نصب";
 $LANG["phrase_new_option_list"] = "فهرست گزینه جدید";
-$LANG["phrase_new_page"] = "صفحه جدید";
 $LANG["phrase_new_password"] = "کلمه عبور جدید";
 $LANG["phrase_new_password_reenter"] = "کلمه عبور جدید (لطفا دوباره وارد کنید)";
 $LANG["phrase_new_view"] = "نمایش جدید";
@@ -553,7 +521,6 @@ $LANG["phrase_next_field"] = "»فیلد بعدی";
 $LANG["phrase_next_form"] = "فرم بعدی »";
 $LANG["phrase_next_view"] = "نمایش بعدی »";
 $LANG["phrase_no_clients"] = "بدون مشتریان";
-$LANG["phrase_no_forms"] = "بدون اشکال";
 $LANG["phrase_no_limit"] = "هیچ محدودیتی";
 $LANG["phrase_no_offset"] = "بدون انحراف";
 $LANG["phrase_no_option_lists_available"] = "هیچ گزینه لیست موجود است.";
@@ -561,7 +528,6 @@ $LANG["phrase_no_views"] = "بدون پروفایل";
 $LANG["phrase_no_views_with_filters_p"] = "(بدون نمایش ها تعریف شده با فیلتر)";
 $LANG["phrase_none_not_recommended"] = "هیچ کدام (توصیه نمی شود)";
 $LANG["phrase_not_assigned_to_option_list"] = "این فیلد به لیست انتخاب قرار گرفتند.";
-$LANG["phrase_not_entered_yet"] = "وارد نشده هنوز";
 $LANG["phrase_not_equal"] = "ندارد برابر";
 $LANG["phrase_not_found"] = "یافت نشد!";
 $LANG["phrase_not_like"] = "دوست ندارد";
@@ -578,11 +544,9 @@ $LANG["phrase_num_rows"] = "سطرها #";
 $LANG["phrase_numbers_only"] = "تعداد فقط";
 $LANG["phrase_often_localhost"] = "(که اغلب به &quot;localhost&quot;)";
 $LANG["phrase_on_form_submission"] = "در فرم ارسال مقاله";
-$LANG["phrase_one_by_one"] = "یک به یک";
 $LANG["phrase_one_char_number"] = "حداقل یکی از شخصیت ها شماره (0-9) است";
 $LANG["phrase_one_char_upper"] = "حداقل یکی از شخصیت ها بزرگ است";
 $LANG["phrase_one_special_char"] = "حداقل یکی از <b>{\$chars}</b>";
-$LANG["phrase_one_submission_per_page"] = "یک ارسال در هر صفحه";
 $LANG["phrase_only_specific_clients_have_access"] = "(فقط مشتریان خاص دسترسی دارند)";
 $LANG["phrase_open_form_in_dialog"] = "فرم باز در پنجره محاوره ای";
 $LANG["phrase_open_form_in_new_tab_or_win"] = "باز کردن این فرم را در یک پنجره تب جدید /";
@@ -591,7 +555,6 @@ $LANG["phrase_option_list_name"] = "لیست انتخاب نام";
 $LANG["phrase_option_list_or_contents"] = "فهرست انتخاب / مطالب";
 $LANG["phrase_option_lists"] = "لیست انتخابهای";
 $LANG["phrase_page_titles"] = "عنوان صفحه";
-$LANG["phrase_pages_module"] = "تعداد صفحات ماژول";
 $LANG["phrase_pass_on"] = "در رمز عبور";
 $LANG["phrase_password_min"] = "باید حداقل<b>{\$length}</b> را وارد نمایید ب کاراکتر.";
 $LANG["phrase_password_one_number"] = "باید حداقل یک شماره (0-9) باشد.";
@@ -599,7 +562,6 @@ $LANG["phrase_password_one_uppercase"] = "باید حداقل یک حرف بزر
 $LANG["phrase_password_requirements_c"] = "الزامات رمز عبور :";
 $LANG["phrase_password_reset"] = "بازیابی کلمه عبور";
 $LANG["phrase_password_special_char"] = "باید حداقل یکی از شخصیت های زیر است : <b>{\$chars}</b> شامل";
-$LANG["phrase_path_info_location"] = "مسیر اطلاعات مکان";
 $LANG["phrase_permissions_other_settings"] = "ویرایش / تنظیمات دیگر";
 $LANG["phrase_permitted_file_types"] = "نوع فایل های مجاز";
 $LANG["phrase_phone_number"] = "شماره تلفن";
@@ -627,12 +589,10 @@ $LANG["phrase_redirect_url"] = "تغییر مسیر آدرس";
 $LANG["phrase_refresh_list"] = "بازآوریفهرست";
 $LANG["phrase_refresh_module_list"] = "فهرست تازه کردن ماژول";
 $LANG["phrase_refresh_page"] = "تازه کردن صفحه";
-$LANG["phrase_refresh_theme_list"] = "تازه کردن فهرست تم ها";
 $LANG["phrase_register_new_email"] = "ثبت نام جدید ایمیل";
 $LANG["phrase_remaining_characters"] = "باقی مانده کاراکتر";
 $LANG["phrase_remaining_words"] = "باقی مانده کلمات";
 $LANG["phrase_remove_tabs"] = "چوبالفها حذف";
-$LANG["phrase_required_field"] = "اجباری";
 $LANG["phrase_required_password_chars"] = "شخصیت های مورد نیاز رمز عبور";
 $LANG["phrase_resend_test_submission"] = "ارسال نامه تست ارسال مقاله";
 $LANG["phrase_return_form_list"] = "بازگشت به فرم فهرست";
@@ -657,7 +617,6 @@ $LANG["phrase_setting_value"] = "تعیین ارزش";
 $LANG["phrase_setup_options"] = "گزینه های راه اندازی";
 $LANG["phrase_show_all"] = "نمایش همه";
 $LANG["phrase_show_form"] = "نمایش فرم";
-$LANG["phrase_show_path_information"] = "نشان دادن مسیر اطلاعات";
 $LANG["phrase_size_large"] = "بزرگ (متن)";
 $LANG["phrase_size_medium"] = "متوسط (&lt;= 256 کاراکتر)";
 $LANG["phrase_size_small"] = "کوچک (&lt;= 20 کاراکتر)";
@@ -692,7 +651,6 @@ $LANG["phrase_system_check"] = "سیستم چک";
 $LANG["phrase_system_fields_no_validation"] = "شما ممکن است اعتبار سنجی در زمینه های سیستم اضافه نمی کند.";
 $LANG["phrase_system_time_offset"] = "سیستم انحراف زمانی";
 $LANG["phrase_tab_label"] = "برگه لیبل";
-$LANG["phrase_table_format"] = "قالب جدول";
 $LANG["phrase_test_folder_permissions"] = "تست مجوزها پوشه";
 $LANG["phrase_test_submission"] = "تست ارسال مقاله";
 $LANG["phrase_test_submission_3"] = "3. تست ارسال مقاله";
@@ -705,15 +663,12 @@ $LANG["phrase_theme_description"] = "توضیحات تم";
 $LANG["phrase_theme_info"] = "تم اطلاعات";
 $LANG["phrase_tiny_30px"] = "کوچک (30px)";
 $LANG["phrase_tiny_50px"] = "کوچک (50px)";
-$LANG["phrase_toolbar_alignment"] = "نوارابزار تراز";
-$LANG["phrase_toolbar_location"] = "نوارابزار محل سکونت";
 $LANG["phrase_total_results_c"] = "نتایج : مجموع :";
 $LANG["phrase_type_c"] = "نوع خطا :";
 $LANG["phrase_unselect_all"] = "عدمگزینشهمه";
 $LANG["phrase_update_accounts"] = "به روز رسانی حساب";
 $LANG["phrase_update_email_template"] = "به روز رسانی پست الکترونیک الگو";
 $LANG["phrase_update_field"] = "به روز رسانی فیلد";
-$LANG["phrase_update_order"] = "ترتیب بروز رسانی";
 $LANG["phrase_update_view"] = "نمایش بروز رسانی";
 $LANG["phrase_upload_file"] = "آپلود فایل";
 $LANG["phrase_upload_files"] = "آپلود فایلها";
@@ -811,7 +766,6 @@ $LANG["text_default_theme_cache_folder_not_writable"] = "قبل از ادامه 
 $LANG["text_default_values_in_view"] = "این بخش اختیاری است. ارسالی های ایجاد شده با این دیدگاه ، مقادیر پیش فرض مشخص شده در اینجا باشد.";
 $LANG["text_delete_all_forms"] = "من می خواهم به پاک کردن همه فایل ها است که از طریق این فرم ارسال شد";
 $LANG["text_delete_form_warning"] = "آیا مطمئن هستید که می خواهید پاک کنید این فرم را؟ این عمل قابل بازگشت نیست. همه داده خواهد شد برای همیشه از دست داده!";
-$LANG["text_delete_view_submissions"] = "این امر ، تعیین یا نه مردم می توانند ارسالی زمانی که دسترسی این دیدگاه حذف.";
 $LANG["text_edit_admin_menu_page"] = "شما نمی توانید منوی خود را ویرایش کنید. به شما اطمینان همیشه دسترسی به تمام قابلیت ها در دسترس است در داخل فرم ابزار ، صفحههای زیر ضروری هستند : فرم ها ، مشتریان ، شما در حساب ، ماژول ها ، تنظیمات و خروج.";
 $LANG["text_edit_client_menu_page"] = "در این بخش به شما امکان سفارشی کردن ناوبری ستون سمت چپ را برای هر کاربر. شما نمی توانید ایجاد کنید به عنوان مشتری بسیاری از منوها به طور دلخواه و اختصاص دادن هر حساب را به یکی از آنها را. به طور پیش فرض دو منوها : یکی برای شما ، مدیریت ، و یکی برای همه حساب های مشتری وجود دارد. حساب کاربری مدیر ممکن است حذف شده اما بار ندارد.";
 $LANG["text_edit_tab_summary"] = "اگر می خواهید به گروه زمینه های این نمایش را به زبانه ، فقط نام زبانه های زیر را وارد کنید. پس از شما انجام می شود ، زبانه مناسب برای گروه زمینه هر یک را <a href=\"#\" onclick=\"return ft.change_inner_tab(2, 5)\">انتخاب کنید</a> در تب زمینه.";
@@ -822,7 +776,6 @@ $LANG["text_email_template_tab"] = "در این بخش به شما امکان ت
 $LANG["text_email_template_text_1"] = "شده است وجود دارد ساخته شده را از طریق فرم ارسال مقالات خود ، {\$FORMNAME}.";
 $LANG["text_email_template_text_1_c"] = "شده است وجود دارد ساخته شده را از طریق فرم ارسال مقالات خود ، {\$FORMNAME} :";
 $LANG["text_email_template_thanks"] = "برای تشکر از ارسال شما!";
-$LANG["text_enter_license_key"] = "به منظور نصب این ماژول ، شما باید کلید مجوز خود را وارد کنید. شما باید این کلید را پس از خرید ماژول ایمیل فرستاده شده است. اگر شما آن را دریافت نمی ، شما همیشه می <a href=\"http://accounts.formtools.org\" target=\"_blank\">توانید به صورت حساب خود را ابزارهای ورود</a> به آن را پیگیری کردن.";
 $LANG["text_error_message_to_show"] = "پیام خطا نشان می دهد اگر زمینه با شکست مواجه اعتبار";
 $LANG["text_external_form_desc"] = "فرم های خارج از اشکال که در حال حاضر در وب سایت خود را ، و یا در جایی بر روی وب وجود دارد. این گزینه را انتخاب کنید اگر شما از شکل خود را که شما می خواهم برای ادغام با ابزار فرم.";
 $LANG["text_fields_tab_summary"] = "این صفحه لیست تمام فرم شما است. برای کنترل آنها ظاهر می شود زمانی که ارسالی مرور ، نگاه <a href=\"{\$views_tab_link}\">کنید به زبانه</a> نمایش ها. حذف یک فیلد را در این صفحه آن را از تمام ارسالی حذف ، بنابراین مراقب باشید!";
@@ -849,7 +802,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;دس�
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;دسترسی غیر ممکن برای کاربر :...... را به پایگاه داده&quot;</span> بدین معناست که اگر چه نام کاربری و رمز عبور خود را به شما عرضه درست است ، آن را قادر به اتصال به پایگاه داده است که با آن حساب خاص. این معنی است که می توانید یا نام پایگاه داده شما نادرست باشد ، و یا که این حساب کاربری که با آن پایگاه اطلاعاتی نمی دهد.";
 $LANG["text_install_email_content_text"] = "منابع زیادی در وب سایت ما برای کمک به شما برای شروع کار، از جمله مستندات آنلاین ما (https://docs.formtools.org) و آموزش (https://docs.formtools.org/tutorials) وجود دارد. اگر متوجه شدید که گیر کرده یا سوال دارید، از github سوال کنید (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "با عرض پوزش ، ابزار فرم خواهد شد قادر به بر روی سرور خود اجرا <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">کنید ، لطفا اینجا را</a> کلیک کنید برای حداقل مورد نیاز.";
-$LANG["text_install_intro"] = "خوش آمدید به فرم اسکریپت نصب ابزار! لطفا زبان خود را انتخاب کنید.";
 $LANG["text_install_system_check"] = "این صفحه اجرا می شود چند آزمایش بر روی سیستم شما برای اطمینان از آن قادر به اجرای ابزار فرم.";
 $LANG["text_internal_form_desc"] = "فرم های داخلی وجود دارد تنها در داخل ابزار فرم -- و نه در جای دیگر در سایت شما. تنها ابزار فرم حساب های کاربری به فرم دسترسی داشته باشد. این گزینه را انتخاب کنید اگر شما یک فرم های موجود را ندارد.";
 $LANG["text_internal_form_intro"] = "با استفاده از فرم زیر برای ایجاد یک فرم جدید داخلی. تمام تنظیمات مربوط به ، از جمله تعداد و محتوای فیلد های فرم را می توان بعد از تغییر و پیکربندی.";
@@ -1110,12 +1062,7 @@ $LANG["notify_field_changes_saved"] = "تغییرات مربوط به رشته �
 $LANG["notify_field_options_smart_filled"] = "گزینه های این زمینه خود شده اند هوشمند پر.";
 $LANG["notify_field_selected"] = "زمینه بوده است انتخاب شده است. <a href=\"#\" onclick=\"{\$onclick}\">اینجا را کلیک کنید</a> برای بازگشت به لیست رشته اصلی.";
 $LANG["notify_field_updated"] = "این فیلد به روز شده است.";
-$LANG["notify_file_deleted"] = "فایل حذف شده است.";
-$LANG["notify_file_not_deleted_no_exist"] = "فایل پاک نشده است زیرا در آن نشانی از مکان انتظار می رود وجود ندارد. <a href=\"#\" onclick=\"{\$js_link}\">اینجا را کلیک کنید</a> جهت نادیده گرفتن این خطا را حذف و تنها مرجع از پایگاه داده باشد.";
-$LANG["notify_file_not_deleted_permissions"] = "فایل پاک نشده است زیرا دارای مجوز اشتباه است. <a href=\"#\" onclick=\"{\$js_link}\">اینجا را کلیک کنید</a> جهت نادیده گرفتن این خطا را حذف و تنها مرجع از پایگاه داده باشد.";
-$LANG["notify_file_not_deleted_unknown_error"] = "خطای ناشناخته بود که سعی در حذف این فایل وجود دارد. <a href=\"#\" onclick=\"{\$js_link}\">اینجا را کلیک کنید</a> جهت نادیده گرفتن این خطا را حذف و تنها مرجع از پایگاه داده باشد.";
 $LANG["notify_file_not_uploaded"] = "نمی تواند فایل ارسال شده.";
-$LANG["notify_file_too_large"] = "این فایل بیش از حد بزرگ است. فایل بود { \$ اندازه فایل} کیلو بایت ، اما حداکثر مجاز اندازه فایل آپلود { \$ MAXFILESIZE} KB.";
 $LANG["notify_file_uploaded"] = "فایل با موفقیت ارسال شد.";
 $LANG["notify_filters_not_updated"] = "خطا بود به روز رسانی این فیلتر تسلیم مشتری وجود دارد.";
 $LANG["notify_filters_updated"] = "فیلتر تسلیم را برای این مشتری به روز شده است.";
@@ -1139,15 +1086,12 @@ $LANG["notify_form_views_updated"] = "نمایش ها فرم به روز شده 
 $LANG["notify_install_invalid_db_info"] = "با عرض پوزش ، ما نتوانستیم برای اتصال به پایگاه داده با استفاده از اطلاعات شما می شوند. پیغام خطا پایگاه برگردانده می شود : <i>{\$db_connection_error}</i>";
 $LANG["notify_internal_form_created"] = "فرم شما ساخته شد! شما می توانید فرم خود را از طریق این زبانه پیکربندی کنید.";
 $LANG["notify_invalid_account_information_in_sessions"] = "اطلاعات حساب ذخیره شده در جلسات نامعتبر است. لطفا در زیر را دوباره وارد شوید.";
-$LANG["notify_invalid_field_upload_folder"] = "پوشه آپلود این فیلد است یا اشتباه است یا قابل نوشتن نیست.";
 $LANG["notify_invalid_permissions"] = "شما اجازه دسترسی به این صفحه را ندارید. شما خارج شده اند.";
 $LANG["notify_invalid_search_dates"] = "لطفا با استفاده از datepicker یک تاریخ معتبر یا تاریخ را وارد کنید.";
-$LANG["notify_invalid_session_values_re_login"] = "خطا رخ داده است : بعضی از غیر موجود وجود دارد یا ارزش های غیر منتظره در جلسه است. لطفا دوباره وارد شوید و سعی کنید در این دوباره.";
 $LANG["notify_invalid_upload_folder"] = "پوشه آپلود شده است یا اشتباه است یا قابل نوشتن نیست.";
 $LANG["notify_lang_list_updated"] = "در دسترس زبان رابط لیست به روز شده است.";
 $LANG["notify_login_info_emailed"] = "اطلاعات ورود شما به شما ایمیل فرستاده شده است.";
 $LANG["notify_max_forms_reached"] = "Sorry, you've reached the maximum number of forms you are permitted to store with this account (<b>{\$max_forms}</b>). In order to store other forms, you will need to delete one of the existing ones.";
-$LANG["notify_module_already_installed"] = "اوه ، این ماژول در حال حاضر نصب شده!";
 $LANG["notify_module_installed"] = "ماژول نصب شده است. <a href=\"{\$link}\">اینجا را کلیک کنید تا این ماژول را انتخاب کنید.</a>";
 $LANG["notify_module_list_updated"] = "لیست ماژول به روز شده است.";
 $LANG["notify_module_uninstalled"] = "ماژول بوده است uninstalled.";
@@ -1172,10 +1116,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "به نظر می رسد که
 $LANG["notify_no_views_defined"] = "شما لازم نیست که هر گونه نمایش ها تعریف شده است. شما نمی قادر خواهد بود برای دیدن ارسالی این فرم ، مگر اینکه حداقل یک مشاهده ایجاد شده است. روی دکمه زیر کلیک کنید مشاهده پیش فرض برای ایجاد کنید.";
 $LANG["notify_option_list_deleted"] = "فهرست اختیار (Options) حذف شده است.";
 $LANG["notify_option_list_updated"] = "فهرست اختیار (Options) به روز شده است.";
-$LANG["notify_page_added"] = "صفحه تا به آن اضافه شده است.";
-$LANG["notify_page_not_added"] = "صفحه نمی تواند اضافه شده است.";
-$LANG["notify_page_updated"] = "صفحه به روز شده است.";
-$LANG["notify_problem_upgrading"] = "There was a problem upgrading to &lt;b&gt;{\$version}&lt;/b&gt;:";
 $LANG["notify_public_form_omit_list_updated"] = "حذف کردن لیست مشتری برای این فرم به روز شده است.";
 $LANG["notify_public_view_omit_list_updated"] = "حذف کردن لیست مشتری برای این نمایش به روز شده است.";
 $LANG["notify_required_admin_pages"] = "صفحات زیر را در منوی مدیر سایت مورد نیاز هستند : <b>{\$remaining_pages}.</b>";
@@ -1191,9 +1131,7 @@ $LANG["notify_submission_copied_edit"] = "تسلیم کپی شده است شما
 $LANG["notify_submission_deleted"] = "ارسال با موفقیت حذف شد.";
 $LANG["notify_submission_deleted_with_problems"] = "ارسال ، حذف شد اما مشکلات زیر به هنگام تلاش برای حذف فایل زیر را (ها) مواجه شدند :";
 $LANG["notify_submission_id_not_found"] = "شناسه تسلیم یافت نشد.";
-$LANG["notify_submission_no_field_id"] = "ارسال این زمینه شناسه یافت نشد.";
 $LANG["notify_submission_not_updated"] = "ارسال مقالات به روز نشد.";
-$LANG["notify_submission_updated_file_problems"] = "ارسال مقالات شما ، به روز شده بود اما فایل زیر را (ها) مشکل داشت :";
 $LANG["notify_submissions_and_files_deleted"] = "مطلب و مقاله و هر نوع فایل (های) در ارتباط با آنها را با موفقیت حذف شد.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> ارسال شده کپی شده اند";
 $LANG["notify_submissions_deleted"] = "مطلب و مقاله با موفقیت حذف شد.";
@@ -1202,14 +1140,12 @@ $LANG["notify_test_email_not_sent"] = "ایمیل آزمایشی شما نمیت
 $LANG["notify_theme_cache_folder_not_writable"] = "پوشه کش این موضوع است که قابل نوشتن نیست. به منظور فعال کردن این موضوع ، <b>{\$folder}</b>باید پوشه را کامل خواندن و نوشتن مجوز.";
 $LANG["notify_theme_list_updated"] = "لیست تم ها به روز شده است.";
 $LANG["notify_themes_settings_updated"] = "تم تنظیمات شما به روز شدهاند.";
-$LANG["notify_unsupported_file_extension"] = "این فایل دارای فرمت فایل پشتیبانی نشده.";
 $LANG["notify_view_deleted"] = "نمایش حذف شده است.";
 $LANG["notify_view_group_deleted"] = "گروه مشاهده شده است حذف شده است.";
 $LANG["notify_view_missing_columns"] = "اوه! با عرض پوزش ، این نمایش بوده است نه به طور کامل راه اندازی رتبهدهی نشده است.";
 $LANG["notify_view_missing_columns_admin_fix"] = "<a href=\"{\$LINK}\">اینجا را کلیک کنید</a> تا مشخص کنید که کدام زمینه باید به عنوان ستون ها در این صفحه ظاهر می شود.";
 $LANG["notify_view_updated"] = "مشاهده به روز شده است.";
 $LANG["notify_your_email_sent"] = "ایمیل شما با موفقیت ارسال می شود.";
-$LANG["phrase_upgrade_problem_link"] = "Please &lt;a href=&quot;{\$link}&quot;&gt;visit this page&lt;/a&gt; regarding failed upgrades.";
 
 
 // Category: Dates
