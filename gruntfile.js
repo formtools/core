@@ -251,6 +251,9 @@ module.exports = function (grunt) {
 		const ignoreFolders = [
 			'src/global/lang/',
 			'src/global/vendor/',
+			'src/global/codemirror/',
+			'src/global/fancybox/',
+			'src/global/images/',
 			'dist/',
 			'node_modules/',
 			'src/modules/'
@@ -264,6 +267,10 @@ module.exports = function (grunt) {
 				if (re.test(file)) {
 					return;
 				}
+			}
+
+			if (!(/[php|txt|tpl|html|js]$/.test(file))) {
+				return;
 			}
 
 			const lines = new lineByLine(file);
