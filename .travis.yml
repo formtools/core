@@ -9,6 +9,6 @@ before_install:
   - composer install --ignore-platform-reqs
 
 install:
-  - grunt
+  - grunt prod
 
 scripts: phpunit
