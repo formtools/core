@@ -131,11 +131,51 @@ module.exports = function (grunt) {
 					updatedFileLines.push(lineString);
 				}
 			}
-
-			// now update the file
 			fs.writeFileSync(file, updatedFileLines.join('\n'));
 		});
 	};
+
+
+	const addKeyToI18nFiles = (key) => {
+		const en = getLocaleFileStrings('en_us');
+
+		if (!en[key]) {
+			grunt.fail.fatal('First add the key to the en_us.php file then re-run this command.');
+		}
+
+		pkg.locales.filter((locale) => locale !== 'en_us').forEach((locale) => {
+			const file = `./src/global/lang/${locale}.php`;
+			const lines = new lineByLine(file);
+
+			let line;
+			let regex = new RegExp(`^\\$LANG\\["${key}"\\]`);
+			let found = false;
+			let updatedLines = [];
+
+			while (line = lines.next()) {
+				const lineString = line.toString('utf8');
+				if (regex.test(lineString)) {
+					found = true;
+				}
+				updatedLines.push(lineString);
+			}
+
+			if (!found) {
+				updatedLines.push(`$LANG["${key}"] = "${en[key]}";`);
+				fs.writeFileSync(file, updatedLines.join('\n'));
+				grunt.log.writeln(`${key} added to ${locale} file.`);
+			} else {
+				grunt.log.writeln(`${key} already found in ${locale} file.`);
+			}
+		});
+
+	};
+
+
+	const sortI18nFiles = () => {
+
+	};
+
 
 	const getLocaleFileStrings = (locale) => {
 		const en_us_lines = new lineByLine(`./src/global/lang/${locale}.php`);
@@ -283,8 +323,19 @@ module.exports = function (grunt) {
 		}
 		removeKeyFromI18nFiles(grunt.option('key'));
 	});
-	grunt.registerTask('addI18nKey', () => {});
-	grunt.registerTask('sortI18nKeys', () => {});
+
+	// assumes the key already exists in en_us.php
+	grunt.registerTask('addI18nKey', () => {
+		const key = grunt.option('key') || null;
+		if (!key) {
+			grunt.fail.fatal("Please enter a key to add. Format: `grunt addI18nKey --key=word_hello");
+		}
+		addKeyToI18nFiles(key);
+	});
+
+	grunt.registerTask('sortI18nKeys', () => {
+
+	});
 
 
 	// for local dev work. All you need to do is run `grunt`: that creates a dist/ folder containing all the built code,

@@ -1202,3 +1202,22 @@ $LANG["processing_no_post_vars"] = "process.php не отримує ніяких
 $LANG["processing_no_redirect_url"] = "Це подання було оброблено правильно, але ви не вказали URL переадресації для цієї форми! Изменить свою анкету у формі інструментів для користувача інтерфейсу і додати URL переадресації.";
 
 $LANG["word_port"] = "Порт";
+$LANG["phrase_choose_components"] = "Choose Components";
+$LANG["phrase_view_field_group"] = "View Field Group";
+$LANG["text_error_installing"] = "There was a problem installing this module.";
+$LANG["text_limit_fields_info"] = "You have used <span id=\"curr_field_count\" class=\"medium_grey italic bold\"></span> of <span id=\"max_field_count\" class=\"medium_grey italic bold\"></span> permitted fields.";
+$LANG["notify_create_form_failure"] = "The SQL query to create the form has failed. The most common cause is that your form has exceeded the maximum row size permitted by MySQL for VARCHAR fields. If the database error displayed below indicates this, try changing some of your \"Medium\" fields to \"Large\". On most environments, you can have no more than 50 or so fields with \"Medium\" size.";
+$LANG["notify_suhosin_installed"] = "Warning: the <b>Suhosin PHP extension</b> is installed on your server. This may cause problems with your forms on your site. <a href=\"https://docs.formtools.org/installation/suhosin/\" target=\"_blank\">Click here</a> for more information.";
+$LANG["phrase_install_component"] = "Install component";
+$LANG["phrase_view_documentation"] = "View documentation";
+$LANG["phrase_prev_arrow"] = "&laquo; Prev";
+$LANG["phrase_next_arrow"] = "Next &raquo;";
+$LANG["phrase_view_changes_on_github"] = "View full changes on github";
+$LANG["phrase_release_date"] = "Release Date";
+$LANG["phrase_release_notes"] = "Release Notes";
+$LANG["word_customize"] = "Customize";
+$LANG["word_installing"] = "Installing";
+$LANG["text_selected_components_info"] = "We recommend the following components that are useful for the majority of Form Tools installations. Click customize to see what other components exist, and tailor your installation to your own needs.";
+$LANG["phrase_downloaded_X_of_Y"] = "Downloaded {0} of {1} components.";
+$LANG["phrase_show_details"] = "Show details";
+$LANG["confirm_uninstall_theme"] = "Are you sure you want to uninstall this theme? Anyone currently using this theme will be reassigned to the default theme.";
