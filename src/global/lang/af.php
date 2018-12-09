@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Voeg »";
 $LANG["word_add_uc_rightarrow"] = "ADD »";
 $LANG["word_administration"] = "Administrasie";
 $LANG["word_administrator"] = "Administrator";
-$LANG["word_advanced"] = "Gevorderde";
 $LANG["word_after"] = "Na";
 $LANG["word_all"] = "alles";
 $LANG["word_aquamarine"] = "Aquamarine";
@@ -1268,4 +1267,3 @@ $LANG["processing_no_redirect_url"] = "Die voorlegging is korrek verwerk, maar j
 
 
 $LANG["word_port"] = "Port";
-

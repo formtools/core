@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Add &raquo;";
 $LANG["word_add_uc_rightarrow"] = "ADD &raquo;";
 $LANG["word_administration"] = "Administration";
 $LANG["word_administrator"] = "Administrator";
-$LANG["word_advanced"] = "Advanced";
 $LANG["word_after"] = "After";
 $LANG["word_all"] = "all";
 $LANG["word_aquamarine"] = "Aquamarine";

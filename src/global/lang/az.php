@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Add &raquo;";
 $LANG["word_add_uc_rightarrow"] = "ADD &raquo;";
 $LANG["word_administration"] = "İdarə";
 $LANG["word_administrator"] = "İdarəçi";
-$LANG["word_advanced"] = "Ətraflı";
 $LANG["word_after"] = "Sonrakı";
 $LANG["word_all"] = "hamsını";
 $LANG["word_aquamarine"] = "Aquamarine";

@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Tambah »";
 $LANG["word_add_uc_rightarrow"] = "ADD »";
 $LANG["word_administration"] = "Pentadbiran";
 $LANG["word_administrator"] = "Administrator";
-$LANG["word_advanced"] = "Advanced";
 $LANG["word_after"] = "Selepas";
 $LANG["word_all"] = "semua";
 $LANG["word_aquamarine"] = "Aquamarine";

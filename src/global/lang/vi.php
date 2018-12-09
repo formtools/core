@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Thêm »";
 $LANG["word_add_uc_rightarrow"] = "ADD »";
 $LANG["word_administration"] = "Hành chính";
 $LANG["word_administrator"] = "Quản trị viên";
-$LANG["word_advanced"] = "Nâng cao";
 $LANG["word_after"] = "Sau khi";
 $LANG["word_all"] = "tất cả";
 $LANG["word_aquamarine"] = "Lục ngọc";

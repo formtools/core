@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "추가»";
 $LANG["word_add_uc_rightarrow"] = "ADD가»";
 $LANG["word_administration"] = "행정";
 $LANG["word_administrator"] = "관리자";
-$LANG["word_advanced"] = "고급";
 $LANG["word_after"] = "이후";
 $LANG["word_all"] = "모두";
 $LANG["word_aquamarine"] = "남옥";

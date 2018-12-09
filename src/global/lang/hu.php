@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Add »";
 $LANG["word_add_uc_rightarrow"] = "Hozzáad »";
 $LANG["word_administration"] = "Adminisztráció";
 $LANG["word_administrator"] = "Adminisztrátor";
-$LANG["word_advanced"] = "Speciális";
 $LANG["word_after"] = "Után";
 $LANG["word_all"] = "minden";
 $LANG["word_aquamarine"] = "Akvamarin";

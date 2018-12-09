@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Engadir »";
 $LANG["word_add_uc_rightarrow"] = "Engadir »";
 $LANG["word_administration"] = "Administración";
 $LANG["word_administrator"] = "Administrador";
-$LANG["word_advanced"] = "Advanced";
 $LANG["word_after"] = "Despois";
 $LANG["word_all"] = "todos";
 $LANG["word_aquamarine"] = "Auga-mariña";

@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Ekle »";
 $LANG["word_add_uc_rightarrow"] = "ekle »";
 $LANG["word_administration"] = "Yönetici";
 $LANG["word_administrator"] = "Yönetici";
-$LANG["word_advanced"] = "Gelişmiş";
 $LANG["word_after"] = "Sonra";
 $LANG["word_all"] = "tümü";
 $LANG["word_aquamarine"] = "Akuamarin";

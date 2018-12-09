@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "לייג »";
 $LANG["word_add_uc_rightarrow"] = "לייגן »";
 $LANG["word_administration"] = "אַדמיניסטראַציע";
 $LANG["word_administrator"] = "אַדמיניסטראַטאָר";
-$LANG["word_advanced"] = "אַוואַנסירטע";
 $LANG["word_after"] = "נאָך";
 $LANG["word_all"] = "אַלע";
 $LANG["word_aquamarine"] = "אַקוואַמאַרינע";

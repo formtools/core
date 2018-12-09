@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Ychwanegu »";
 $LANG["word_add_uc_rightarrow"] = "ADD »";
 $LANG["word_administration"] = "Gweinyddu";
 $LANG["word_administrator"] = "Gweinyddwr";
-$LANG["word_advanced"] = "Uwch";
 $LANG["word_after"] = "Ar ôl";
 $LANG["word_all"] = "holl";
 $LANG["word_aquamarine"] = "Aquamarine";

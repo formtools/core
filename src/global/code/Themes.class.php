@@ -200,6 +200,8 @@ class Themes {
      */
     public static function displayPage($template, $page_vars, $theme = "", $swatch = "")
     {
+    	// special_form_tools
+
         $theme = (empty($theme) && Core::isUserInitialized()) ? Core::$user->getTheme() : $theme;
         $swatch = (empty($swatch) && Core::isUserInitialized()) ? Core::$user->getSwatch() : $swatch;
 

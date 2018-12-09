@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Tilføj »";
 $LANG["word_add_uc_rightarrow"] = "TILFØJ &raquo;";
 $LANG["word_administration"] = "Administration";
 $LANG["word_administrator"] = "Administrator";
-$LANG["word_advanced"] = "Avanceret";
 $LANG["word_after"] = "Efter";
 $LANG["word_all"] = "alt";
 $LANG["word_aquamarine"] = "Akvamarin";

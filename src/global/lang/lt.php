@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Pridėti »";
 $LANG["word_add_uc_rightarrow"] = "Pridėti »";
 $LANG["word_administration"] = "Administracija";
 $LANG["word_administrator"] = "Administratorius";
-$LANG["word_advanced"] = "Detaliai";
 $LANG["word_after"] = "Po";
 $LANG["word_all"] = "visi";
 $LANG["word_aquamarine"] = "Akvamarinas";

@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Cuir »";
 $LANG["word_add_uc_rightarrow"] = "ADD »";
 $LANG["word_administration"] = "Riarachán";
 $LANG["word_administrator"] = "Riarthóir";
-$LANG["word_advanced"] = "Ard -";
 $LANG["word_after"] = "Tar éis";
 $LANG["word_all"] = "go léir";
 $LANG["word_aquamarine"] = "Aquamarine";

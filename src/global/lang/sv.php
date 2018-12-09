@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Lägg till »";
 $LANG["word_add_uc_rightarrow"] = "Lägg till »";
 $LANG["word_administration"] = "Administration";
 $LANG["word_administrator"] = "Administratör";
-$LANG["word_advanced"] = "Avancerad";
 $LANG["word_after"] = "Efter";
 $LANG["word_all"] = "alla";
 $LANG["word_aquamarine"] = "Akvamarin";

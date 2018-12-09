@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "जोड़ें »";
 $LANG["word_add_uc_rightarrow"] = "जोड़ें »";
 $LANG["word_administration"] = "प्रशासन";
 $LANG["word_administrator"] = "व्यवस्थापक";
-$LANG["word_advanced"] = "उन्नत";
 $LANG["word_after"] = "बाद में";
 $LANG["word_all"] = "सब";
 $LANG["word_aquamarine"] = "अक्वामरीन";

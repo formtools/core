@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Bæta við »";
 $LANG["word_add_uc_rightarrow"] = "ADD »";
 $LANG["word_administration"] = "Administration";
 $LANG["word_administrator"] = "Administrator";
-$LANG["word_advanced"] = "Advanced";
 $LANG["word_after"] = "Eftir";
 $LANG["word_all"] = "allur";
 $LANG["word_aquamarine"] = "Glær eða blágrænn eðalsteinn";

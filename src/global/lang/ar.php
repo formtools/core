@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "إضافة »";
 $LANG["word_add_uc_rightarrow"] = "إضافة »";
 $LANG["word_administration"] = "الادارة";
 $LANG["word_administrator"] = "مسؤول";
-$LANG["word_advanced"] = "متقدمة";
 $LANG["word_after"] = "بعد";
 $LANG["word_all"] = "كل";
 $LANG["word_aquamarine"] = "زبرجد";

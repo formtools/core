@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Pievienot »";
 $LANG["word_add_uc_rightarrow"] = "Pievienot »";
 $LANG["word_administration"] = "Administrācija";
 $LANG["word_administrator"] = "Administrator";
-$LANG["word_advanced"] = "Advanced";
 $LANG["word_after"] = "Pēc";
 $LANG["word_all"] = "viss";
 $LANG["word_aquamarine"] = "Akvamarīns";

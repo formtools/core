@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Toe te voegen »";
 $LANG["word_add_uc_rightarrow"] = "TOEVOEGEN &raquo;";
 $LANG["word_administration"] = "Administratie";
 $LANG["word_administrator"] = "Administrator";
-$LANG["word_advanced"] = "Geavanceerd";
 $LANG["word_after"] = "Na";
 $LANG["word_all"] = "alles";
 $LANG["word_aquamarine"] = "Aquamarijn";

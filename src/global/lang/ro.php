@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Adaugă »";
 $LANG["word_add_uc_rightarrow"] = "Adăugaţi »";
 $LANG["word_administration"] = "Administrare";
 $LANG["word_administrator"] = "Administrator";
-$LANG["word_advanced"] = "Avansat";
 $LANG["word_after"] = "Dupa";
 $LANG["word_all"] = "toţi";
 $LANG["word_aquamarine"] = "Acvamarin";

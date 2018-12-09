@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Додај »";
 $LANG["word_add_uc_rightarrow"] = "ДОДАЈ »";
 $LANG["word_administration"] = "Администрација";
 $LANG["word_administrator"] = "Администратор";
-$LANG["word_advanced"] = "Напредна";
 $LANG["word_after"] = "Након";
 $LANG["word_all"] = "све";
 $LANG["word_aquamarine"] = "Аквамарин";

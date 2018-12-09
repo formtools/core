@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Προσθήκη »";
 $LANG["word_add_uc_rightarrow"] = "ADD »";
 $LANG["word_administration"] = "Διοίκηση";
 $LANG["word_administrator"] = "Διαχειριστής";
-$LANG["word_advanced"] = "Σύνθετη";
 $LANG["word_after"] = "Μετά";
 $LANG["word_all"] = "όλα";
 $LANG["word_aquamarine"] = "Aquamarine";

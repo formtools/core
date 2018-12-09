@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Afegir »";
 $LANG["word_add_uc_rightarrow"] = "Afegir »";
 $LANG["word_administration"] = "Administració";
 $LANG["word_administrator"] = "Administrador";
-$LANG["word_advanced"] = "Avançada";
 $LANG["word_after"] = "Després de";
 $LANG["word_all"] = "tot";
 $LANG["word_aquamarine"] = "Aguamarina";
@@ -1267,4 +1266,3 @@ $LANG["processing_no_post_vars"] = "process.php no està rebent les dades. Nota:
 $LANG["processing_no_redirect_url"] = "La presentació va ser processat correctament, però no ha especificat una URL de redireccionament d&#39;aquesta manera! Modificar el formulari en la interfície d&#39;usuari d&#39;eines de formulari i afegir la URL de redireccionament.";
 
 $LANG["word_port"] = "Port";
-

@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Lisää »";
 $LANG["word_add_uc_rightarrow"] = "LISÄÄ &raquo;";
 $LANG["word_administration"] = "Järjestelmänvalvonta";
 $LANG["word_administrator"] = "Järjestelmänvalvoja";
-$LANG["word_advanced"] = "Lisäominaisuudet";
 $LANG["word_after"] = "Jälkeen";
 $LANG["word_all"] = "kaikki";
 $LANG["word_aquamarine"] = "Akvamariini";

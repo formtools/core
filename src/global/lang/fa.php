@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "اضافه کردن »";
 $LANG["word_add_uc_rightarrow"] = "افزودن »";
 $LANG["word_administration"] = "مدیریت";
 $LANG["word_administrator"] = "مدیر";
-$LANG["word_advanced"] = "پیشرفته";
 $LANG["word_after"] = "بعد";
 $LANG["word_all"] = "همه";
 $LANG["word_aquamarine"] = "زمرد کبود";

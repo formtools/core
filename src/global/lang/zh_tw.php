@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "添加»";
 $LANG["word_add_uc_rightarrow"] = "地址»";
 $LANG["word_administration"] = "管理";
 $LANG["word_administrator"] = "管理員";
-$LANG["word_advanced"] = "高級";
 $LANG["word_after"] = "之後";
 $LANG["word_all"] = "全部";
 $LANG["word_aquamarine"] = "海藍寶石";

@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "เพิ่ม »";
 $LANG["word_add_uc_rightarrow"] = "»เพิ่ม";
 $LANG["word_administration"] = "การจัดการระบบ";
 $LANG["word_administrator"] = "ผู้ดูแลระบบ";
-$LANG["word_advanced"] = "ขั้นสูง";
 $LANG["word_after"] = "หลังจาก";
 $LANG["word_all"] = "ทั้งหมด";
 $LANG["word_aquamarine"] = "พลอยสีฟ้า";

@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Pridanie »";
 $LANG["word_add_uc_rightarrow"] = "ADD »";
 $LANG["word_administration"] = "Administrácia";
 $LANG["word_administrator"] = "Administrator";
-$LANG["word_advanced"] = "Rozšírené";
 $LANG["word_after"] = "Potom";
 $LANG["word_all"] = "všetko";
 $LANG["word_aquamarine"] = "Akvamarín";

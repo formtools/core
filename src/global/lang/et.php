@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Lisa »";
 $LANG["word_add_uc_rightarrow"] = "Veel »";
 $LANG["word_administration"] = "Administratsioon";
 $LANG["word_administrator"] = "Administraator";
-$LANG["word_advanced"] = "Advanced";
 $LANG["word_after"] = "Pärast";
 $LANG["word_all"] = "kõik";
 $LANG["word_aquamarine"] = "Akvamariin";

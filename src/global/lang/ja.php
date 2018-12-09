@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "追加»";
 $LANG["word_add_uc_rightarrow"] = "追加»";
 $LANG["word_administration"] = "管理";
 $LANG["word_administrator"] = "管理者";
-$LANG["word_advanced"] = "先進的な";
 $LANG["word_after"] = "〜の後で";
 $LANG["word_all"] = "すべての";
 $LANG["word_aquamarine"] = "アクアマリン";

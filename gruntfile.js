@@ -116,6 +116,27 @@ module.exports = function (grunt) {
 	require('load-grunt-tasks')(grunt);
 
 
+	const removeKeyFromI18nFiles = (key) => {
+		pkg.locales.forEach((locale) => {
+			const file = `./src/global/lang/${locale}.php`;
+			const lines = new lineByLine(file);
+
+			let line;
+			let regex = /^\$LANG\["(.*)"\]\s*=/;
+			let updatedFileLines = [];
+			while (line = lines.next()) {
+				const lineString = line.toString('utf8');
+				let match = lineString.match(regex);
+				if (match === null || match[1] !== key) {
+					updatedFileLines.push(lineString);
+				}
+			}
+
+			// now update the file
+			fs.writeFileSync(file, updatedFileLines.join('\n'));
+		});
+	};
+
 	const getLocaleFileStrings = (locale) => {
 		const en_us_lines = new lineByLine(`./src/global/lang/${locale}.php`);
 		let line;
@@ -227,7 +248,7 @@ module.exports = function (grunt) {
 
 		if (missingKeys.length > 0) {
 			results.error = true;
-			results.lines.push(`\nUNUSED KEYS: ${missingKeys.join('\n  --')}`);
+			results.lines.push(`\nUNUSED KEYS:\n${missingKeys.join('\n  --')}`);
 		}
 	};
 
@@ -255,7 +276,13 @@ module.exports = function (grunt) {
 	});
 
 	// helper methods to operate on all lang files at once
-	grunt.registerTask('removeI18nKey', () => {});
+	grunt.registerTask('removeI18nKey', () => {
+		const key = grunt.option('key') || null;
+		if (!key) {
+			grunt.fail.fatal("Please enter a key to remove. Format: `grunt removeI18nKey --key=word_goodbye");
+		}
+		removeKeyFromI18nFiles(grunt.option('key'));
+	});
 	grunt.registerTask('addI18nKey', () => {});
 	grunt.registerTask('sortI18nKeys', () => {});
 

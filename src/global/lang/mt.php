@@ -24,7 +24,6 @@ $LANG["word_add_rightarrow"] = "Żid »";
 $LANG["word_add_uc_rightarrow"] = "ADD »";
 $LANG["word_administration"] = "Amministrazzjoni";
 $LANG["word_administrator"] = "Amministratur";
-$LANG["word_advanced"] = "Advanced";
 $LANG["word_after"] = "Wara";
 $LANG["word_all"] = "kollha";
 $LANG["word_aquamarine"] = "Aquamarine";
