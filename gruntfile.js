@@ -173,7 +173,19 @@ module.exports = function (grunt) {
 
 
 	const sortI18nFiles = () => {
+		pkg.locales.forEach((locale) => {
+			const data = getLocaleFileStrings(locale);
+			const file = `./src/global/lang/${locale}.php`;
 
+			const sortedKeys = Object.keys(data).sort();
+
+			let lines = [];
+			sortedKeys.forEach((key) => {
+				lines.push(`$LANG["${key}"] = "${data[key]}";`);
+			});
+
+			fs.writeFileSync(file, '<?php\n\n$LANG = array();\n\n' + lines.join('\n'));
+		});
 	};
 
 
@@ -340,10 +352,7 @@ module.exports = function (grunt) {
 		addKeyToI18nFiles(key);
 	});
 
-	grunt.registerTask('sortI18nKeys', () => {
-
-	});
-
+	grunt.registerTask('sortI18nFiles', sortI18nFiles);
 
 	// for local dev work. All you need to do is run `grunt`: that creates a dist/ folder containing all the built code,
 	// plus sets up watchers to copy over changed files, generate sass and the webpack bundles. Be sure to load up the
