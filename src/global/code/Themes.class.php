@@ -18,7 +18,8 @@ use Exception;
 
 class Themes {
 
-    public static function getList($enabled_only = false) {
+    public static function getList($enabled_only = false)
+	{
         $db = Core::$db;
         $enabled_only_clause = ($enabled_only) ? "WHERE is_enabled = 'yes'" : "";
 
@@ -395,6 +396,41 @@ class Themes {
 
         return $swatch_list_str;
     }
+
+
+    public static function uninstallTheme($theme_id)
+	{
+		$db = Core::$db;
+
+		$root_dir = Core::getRootDir();
+		$theme_info = self::getTheme($theme_id);
+		$theme_folder = $theme_info["theme_folder"];
+
+		if (empty($theme_folder) || $theme_folder == 'default') {
+			return array(false, "...");
+		}
+
+		$accounts = Accounts::getAccountsByTheme($theme_folder);
+
+		if (!Files::deleteFolder("$root_dir/themes/$theme_folder")) {
+			return array(false, "THere was a problem deleting the theme folder.");
+		}
+
+		$account_ids = array();
+		foreach ($accounts as $account_info) {
+			$account_ids[] = $account_info["account_id"];
+		}
+
+		$db->query("
+			UPDATE {PREFIX}accounts
+			SET  theme = 'default'
+			WHERE account_id IN (:account_ids)
+		");
+		$db->bind("account_ids", $account_ids);
+		$db->execute();
+
+		return array(true, "The theme has been uninstalled.");
+	}
 
 
     // --------------------------------------------------------------------------------------------

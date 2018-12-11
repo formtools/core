@@ -1191,3 +1191,7 @@ $LANG["word_width_c"] = "width:";
 $LANG["word_words"] = "Words";
 $LANG["word_yellow"] = "Yellow";
 $LANG["word_yes"] = "Yes";
+
+
+$LANG["phrase_check_for_updates"] = "Check for updates";
+$LANG["phrase_add_upgrade_themes"] = "Add / Upgrade Themes";

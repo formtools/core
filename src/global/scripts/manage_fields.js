@@ -12,16 +12,16 @@ $(function () {
 	var handleHelper = fields_ns.scrollbars.find(".ui-slider-handle").mousedown(function () {
 		fields_ns.scrollbars.width(handleHelper.width());
 	})
-	.mouseup(function () {
-		fields_ns.scrollbars.width("100%");
-	})
-	.append("<span class='ui-icon ui-icon-grip-dotted-vertical'></span>").wrap("<div class='ui-handle-helper-parent'></div>").parent();
+		.mouseup(function () {
+			fields_ns.scrollbars.width("100%");
+		})
+		.append("<span class='ui-icon ui-icon-grip-dotted-vertical'></span>").wrap("<div class='ui-handle-helper-parent'></div>").parent();
 
 	// change overflow to hidden now that sliders handles the scrolling
 	scroll_panes.css("overflow", "hidden");
 
 	// size scrollbars and handle proportionally to scroll distance
-	function size_scrollbars() {
+	function size_scrollbars () {
 		var remainder = scroll_content.width() - scroll_panes.width();
 		var proportion = remainder / scroll_content.width();
 		var handle_size = scroll_panes.width() - (proportion * scroll_panes.width());
@@ -143,7 +143,7 @@ $(function () {
 	// was simplified in 2.1.4 so that any change ANYWHERE, resubmits everything. It was getting absurdly complicated.
 	$(".inner_tab_content").bind("change", function (e) {
 		if (typeof fields_ns.memory["field_" + fields_ns.__current_field_id] == 'undefined') {
-			fields_ns.memory["field_" + fields_ns.__current_field_id] = {tab1: null, tab2: null, tab3: null};
+			fields_ns.memory["field_" + fields_ns.__current_field_id] = { tab1: null, tab2: null, tab3: null };
 			fields_ns.memory.changed_field_ids.push(fields_ns.__current_field_id);
 		}
 		fields_ns.memory["field_" + fields_ns.__current_field_id].tab1 = $("#edit_field_form_tab1").serializeArray();
@@ -174,9 +174,9 @@ $(function () {
 			$("#edit_field__form_options").show();
 
 			if (fields_ns.form_fields["form_" + form_id] == undefined) {
-				fields_ns.load_form_fields({form_id: form_id});
+				fields_ns.load_form_fields({ form_id: form_id });
 			} else {
-				fields_ns.generate_form_fields_section({form_id: form_id});
+				fields_ns.generate_form_fields_section({ form_id: form_id });
 			}
 		}
 	});
@@ -194,7 +194,7 @@ $(function () {
 		url: g.root_url + "/global/code/actions.php",
 		type: "POST",
 		dataType: "json",
-		data: {action: "get_option_lists"},
+		data: { action: "get_option_lists" },
 		success: fields_ns.get_option_lists_response,
 		error: ft.error_handler
 	});
@@ -204,7 +204,7 @@ $(function () {
 		url: g.root_url + "/global/code/actions.php",
 		type: "POST",
 		dataType: "json",
-		data: {action: "get_form_list"},
+		data: { action: "get_form_list" },
 		success: fields_ns.get_form_list_response,
 		error: ft.error_handler
 	});
@@ -250,7 +250,7 @@ var fields_ns = {
 	// this is used to store the contents of the Edit Field popup as the user navigates from field to field. It
 	// works by keeping track of ALL changed fields, and only when the user clicks the "Save Changes" field
 	// does it actually do an Ajax request to save the contents & update the main page
-	memory: {changed_field_ids: []},
+	memory: { changed_field_ids: [] },
 
 	// used to solve a nagging asynchronous problem on page load: when a user clicks from the Option Lists page (or other pages)
 	// to edit the field immediately on page load. In that scenario, the extended field setting info can load before to the
@@ -399,13 +399,13 @@ fields_ns.add_fields = function (e) {
 		if (group) {
 			html += new_row_html;
 		} else {
-			var new_row_node = sortable_ns.get_sortable_row_markup({row_group: new_row_html});
+			var new_row_node = sortable_ns.get_sortable_row_markup({ row_group: new_row_html });
 			fragment.appendChild(new_row_node[0]);
 		}
 	}
 
 	if (group) {
-		var grouped_row_nodes = sortable_ns.get_sortable_row_markup({row_group: html});
+		var grouped_row_nodes = sortable_ns.get_sortable_row_markup({ row_group: html });
 		fragment = grouped_row_nodes[0];
 	}
 
@@ -520,13 +520,13 @@ fields_ns.smart_fill = function () {
 
 					// if it's a reserved word, or already taken, add an numeric suffix
 					var is_invalid = $.inArray(new_db_col_name.toUpperCase(), page_ns.reserved_words) != -1 ||
-					$.inArray(new_db_col_name, inserted_db_col_names) != -1;
+						$.inArray(new_db_col_name, inserted_db_col_names) != -1;
 					var suffix = 2;
 					var test_name = null;
 					while (is_invalid) {
 						test_name = new_db_col_name + suffix;
 						is_invalid = $.inArray(test_name.toUpperCase(), page_ns.reserved_words) != -1 ||
-						$.inArray(test_name, inserted_db_col_names) != -1;
+							$.inArray(test_name, inserted_db_col_names) != -1;
 						if (!is_invalid) {
 							break;
 						}
@@ -672,16 +672,16 @@ fields_ns._is_valid_db_column_name = function (col_name, col_name_list) {
 	col_name_list.push("ip_address");
 	col_name_list.push("is_finalized");
 
-	var return_info = {success: true, error: ""}
+	var return_info = { success: true, error: "" }
 	var db_column_name = $.trim(col_name);
 	if (db_column_name == "") {
-		return_info = {success: false, error: g.messages["validation_no_column_name"]};
+		return_info = { success: false, error: g.messages["validation_no_column_name"] };
 	} else if (db_column_name.match(/\W/)) {
-		return_info = {success: false, error: g.messages["validation_invalid_column_name"]};
+		return_info = { success: false, error: g.messages["validation_invalid_column_name"] };
 	} else if ($.inArray(db_column_name.toUpperCase(), page_ns.reserved_words) != -1) {
-		return_info = {success: false, error: g.messages["validation_col_name_is_reserved_word"]};
+		return_info = { success: false, error: g.messages["validation_col_name_is_reserved_word"] };
 	} else if ($.inArray(db_column_name, col_name_list) != -1) {
-		return_info = {success: false, error: g.messages["validation_no_two_column_names"]};
+		return_info = { success: false, error: g.messages["validation_no_two_column_names"] };
 	}
 
 	return return_info;
@@ -861,7 +861,7 @@ fields_ns.edit_field = function (row_group) {
 			]
 		});
 	} else {
-		$("#edit_field_template").dialog({title: title});
+		$("#edit_field_template").dialog({ title: title });
 	}
 }
 
@@ -917,7 +917,7 @@ fields_ns.init_field_settings_tab = function (field_type_id, field_id) {
 				url: g.root_url + "/global/code/actions.php",
 				type: "POST",
 				dataType: "json",
-				data: {field_id: field_id, field_type_id: field_type_id, action: "get_extended_field_settings"},
+				data: { field_id: field_id, field_type_id: field_type_id, action: "get_extended_field_settings" },
 				success: fields_ns.load_field_settings_response,
 				error: ft.error_handler
 			});
@@ -961,17 +961,17 @@ fields_ns.generate_field_type_markup = function (field_id, field_type_id, field_
 		// all fields are disabled by default. Once the Ajax call to load the values for the actual field
 		// has completed, they are enabled & the Ajax loading icon is hidden to signify readiness
 		html = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" class=\"check_areas\">"
-		+ "<tr>"
-		+ "<th width=\"200\" class=\"underline medium_grey\">" + g.messages["word_setting"] + "</th>"
-		+ "<th width=\"150\" align=\"center\" class=\"underline medium_grey\">" + g.messages["phrase_use_default_value_q"] + "</th>"
-		+ "<th class=\"underline medium_grey\">" + g.messages["word_value"] + "</th>"
-		+ "</tr>";
+			+ "<tr>"
+			+ "<th width=\"200\" class=\"underline medium_grey\">" + g.messages["word_setting"] + "</th>"
+			+ "<th width=\"150\" align=\"center\" class=\"underline medium_grey\">" + g.messages["phrase_use_default_value_q"] + "</th>"
+			+ "<th class=\"underline medium_grey\">" + g.messages["word_value"] + "</th>"
+			+ "</tr>";
 
 		for (var i = 0; i < field_settings.length; i++) {
 			var info = field_settings[i];
 			html += "<tr>"
-			+ "<td>" + info.field_label + "</td>"
-			+ "<td class=\"check_area\" align=\"center\">";
+				+ "<td>" + info.field_label + "</td>"
+				+ "<td class=\"check_area\" align=\"center\">";
 
 			var display_use_default_checkbox = true;
 			if (info.field_type == "option_list_or_form_field") {
@@ -982,7 +982,7 @@ fields_ns.generate_field_type_markup = function (field_id, field_type_id, field_
 			// absence of a custom value, it will use the default
 			if (display_use_default_checkbox) {
 				html += "<input type=\"checkbox\" class=\"use_default\" "
-				+ "id=\"edit_field__use_default_value_" + info.setting_id + "\" checked />";
+					+ "id=\"edit_field__use_default_value_" + info.setting_id + "\" checked />";
 			} else {
 				html += "<span class=\"light_grey\">&#8212;</span>";
 			}
@@ -992,12 +992,12 @@ fields_ns.generate_field_type_markup = function (field_id, field_type_id, field_
 			switch (info.field_type) {
 				case "textbox":
 					html += "<input type=\"text\" name=\"edit_field__setting_" + info.setting_id + "\" id=\"edit_field__setting_" + info.setting_id + "\" value=\"" + info.default_value + "\" "
-					+ "disabled style=\"width: 100%\" class=\"light_grey\" />";
+						+ "disabled style=\"width: 100%\" class=\"light_grey\" />";
 					break;
 
 				case "textarea":
 					html += "<textarea name=\"edit_field__setting_" + info.setting_id + "\" id=\"edit_field__setting_" + info.setting_id + "\" disabled style=\"width:100%; height: 80px\" class=\"light_grey\">"
-					+ info.default_value + "</textarea>";
+						+ info.default_value + "</textarea>";
 					break;
 
 				case "select":
@@ -1019,8 +1019,8 @@ fields_ns.generate_field_type_markup = function (field_id, field_type_id, field_
 						var opt = info.options[j];
 						var checked = (opt.value == info.default_value) ? "checked" : "";
 						html += "<input type=\"checkbox\" name=\"edit_field__setting_" + info.setting_id + "\" id=\"edit_field__setting_" + info.setting_id + "_" + j + "\" "
-						+ "name=\"edit_field__setting_" + info.setting_id + "\" class=\"light_grey\" value=\"" + opt.value + "\" " + checked + " disabled>"
-						+ "<label for=\"edit_field__setting_" + info.setting_id + "_" + j + "\">" + opt.text + "</label>";
+							+ "name=\"edit_field__setting_" + info.setting_id + "\" class=\"light_grey\" value=\"" + opt.value + "\" " + checked + " disabled>"
+							+ "<label for=\"edit_field__setting_" + info.setting_id + "_" + j + "\">" + opt.text + "</label>";
 					}
 					break;
 
@@ -1032,8 +1032,8 @@ fields_ns.generate_field_type_markup = function (field_id, field_type_id, field_
 						var opt = info.options[j];
 						var checked = (opt.value == info.default_value) ? "checked" : "";
 						html += "<input type=\"radio\" name=\"edit_field__setting_" + info.setting_id + "\" id=\"edit_field__setting_" + info.setting_id + "_" + j + "\" "
-						+ "name=\"edit_field__setting_" + info.setting_id + "\" class=\"light_grey\" value=\"" + opt.value + "\" " + checked + " disabled>"
-						+ "<label for=\"edit_field__setting_" + info.setting_id + "_" + j + "\">" + opt.text + "</label>";
+							+ "name=\"edit_field__setting_" + info.setting_id + "\" class=\"light_grey\" value=\"" + opt.value + "\" " + checked + " disabled>"
+							+ "<label for=\"edit_field__setting_" + info.setting_id + "_" + j + "\">" + opt.text + "</label>";
 					}
 					break;
 
@@ -1139,11 +1139,11 @@ fields_ns._generate_option_list_markup = function (setting_id, default_value) {
 
 	if (option_list_html == "" && forms_html == "") {
 		return g.messages["phrase_no_option_lists_available"]
-		+ "<div><a href=\"#\" onclick=\"return fields_ns.create_new_option_list()\">" + g.messages["phrase_create_new_option_list"] + "</a></div>";
+			+ "<div><a href=\"#\" onclick=\"return fields_ns.create_new_option_list()\">" + g.messages["phrase_create_new_option_list"] + "</a></div>";
 	}
 
 	var html = "<select class=\"option_list_or_form_field\" name=\"edit_field__setting_" + setting_id + "\" id=\"edit_field__setting_" + setting_id + "\">"
-	+ "<option value=\"\">" + g.messages["phrase_please_select"] + "</option>\n";
+		+ "<option value=\"\">" + g.messages["phrase_please_select"] + "</option>\n";
 
 	if (option_list_html) {
 		html += "<optgroup id=\"edit_field__option_lists\" label=\"" + g.messages["phrase_available_option_lists"] + "\">" + option_list_html + "</optgroup>";
@@ -1154,10 +1154,10 @@ fields_ns._generate_option_list_markup = function (setting_id, default_value) {
 
 	var option_list_options_hidden = (option_list_selected) ? "" : " style=\"display:none\"";
 	html += "</select>"
-	+ "<div id=\"edit_field__option_list_options\"" + option_list_options_hidden + ">"
-	+ "<a href=\"#\" onclick=\"return fields_ns.edit_option_list(" + setting_id + ")\">" + g.messages["phrase_edit_option_list"] + "</a> | "
-	+ "<a href=\"#\" onclick=\"return fields_ns.create_new_option_list()\">" + g.messages["phrase_create_new_option_list"] + "</a>"
-	+ "</div>";
+		+ "<div id=\"edit_field__option_list_options\"" + option_list_options_hidden + ">"
+		+ "<a href=\"#\" onclick=\"return fields_ns.edit_option_list(" + setting_id + ")\">" + g.messages["phrase_edit_option_list"] + "</a> | "
+		+ "<a href=\"#\" onclick=\"return fields_ns.create_new_option_list()\">" + g.messages["phrase_create_new_option_list"] + "</a>"
+		+ "</div>";
 
 	var forms_hidden = (forms_selected) ? "" : " style=\"display:none\"";
 
@@ -1204,7 +1204,7 @@ fields_ns.edit_option_list = function (setting_id) {
 								form_id: page_ns.form_id,
 								action: "update_form_fields",
 								data: fields_ns.memory,
-								return_vars: {url: edit_option_list_url}
+								return_vars: { url: edit_option_list_url }
 							},
 							type: "POST",
 							dataType: "json",
@@ -1306,7 +1306,7 @@ fields_ns.display_field_settings = function (field_type_id, settings, validation
 
 		// tab 2
 		if (typeof fields_ns.memory["field_" + fields_ns.__current_field_id].tab2 != 'undefined' &&
-		fields_ns.memory["field_" + fields_ns.__current_field_id].tab2 != null) {
+			fields_ns.memory["field_" + fields_ns.__current_field_id].tab2 != null) {
 			var unsaved_changes = fields_ns.memory["field_" + fields_ns.__current_field_id].tab2;
 			var updated_settings = [];
 			for (var i = 0; i < settings.length; i++) {
@@ -1526,7 +1526,7 @@ fields_ns.save_changes = function () {
 
 	$.ajax({
 		url: g.root_url + "/global/code/actions.php",
-		data: {form_id: page_ns.form_id, action: "update_form_fields", data: fields_ns.memory},
+		data: { form_id: page_ns.form_id, action: "update_form_fields", data: fields_ns.memory },
 		type: "POST",
 		dataType: "json",
 		success: fields_ns.save_changes_response,
@@ -1731,7 +1731,7 @@ fields_ns.generate_form_fields_section = function (params) {
 	});
 
 	var field_dd = "<select name=\"edit_field__setting_" + setting_id + "_field_id\">"
-	+ "<option value=\"\">" + g.messages["phrase_please_select"] + "</option>";
+		+ "<option value=\"\">" + g.messages["phrase_please_select"] + "</option>";
 
 	$.each(fields, function (value, text) {
 		var selected = (value.toString() == params.field_id.toString()) ? " selected" : "";
@@ -1740,17 +1740,17 @@ fields_ns.generate_form_fields_section = function (params) {
 	field_dd += "</select>";
 
 	var html = "<table class=\"grey_box\">"
-	+ "<tr>"
-	+ "<td width=\"100\">" + g.messages["phrase_select_field"] + "</td>"
-	+ "<td>" + field_dd + "</td>"
-	+ "</tr>"
-	+ "<tr>"
-	+ "<td>" + g.messages["word_order"] + "</td>"
-	+ "<td><select name=\"edit_field__setting_" + setting_id + "_field_order\">"
-	+ "<option value=\"ASC\"" + ((params.field_order == "ASC") ? " selected" : "") + ">ASC</option>"
-	+ "<option value=\"DESC\"" + ((params.field_order == "DESC") ? " selected" : "") + ">DESC</option>"
-	+ "</select></td>"
-	+ "</tr>";
+		+ "<tr>"
+		+ "<td width=\"100\">" + g.messages["phrase_select_field"] + "</td>"
+		+ "<td>" + field_dd + "</td>"
+		+ "</tr>"
+		+ "<tr>"
+		+ "<td>" + g.messages["word_order"] + "</td>"
+		+ "<td><select name=\"edit_field__setting_" + setting_id + "_field_order\">"
+		+ "<option value=\"ASC\"" + ((params.field_order == "ASC") ? " selected" : "") + ">ASC</option>"
+		+ "<option value=\"DESC\"" + ((params.field_order == "DESC") ? " selected" : "") + ">DESC</option>"
+		+ "</select></td>"
+		+ "</tr>";
 
 	$("#edit_field__form_options").html(html);
 }
@@ -1785,7 +1785,7 @@ fields_ns.check_shared_characteristics = function () {
 		return;
 	}
 	if (typeof page_ns.field_settings["field_type_" + curr_ft_id] == "undefined" ||
-	typeof page_ns.field_settings["field_type_" + last_ft_id] == "undefined") {
+		typeof page_ns.field_settings["field_type_" + last_ft_id] == "undefined") {
 		return;
 	}
 
@@ -1855,21 +1855,21 @@ fields_ns.generate_field_type_validation_table = function (field_type_id) {
 		html = "<span class=\"medium_grey\"><i>" + g.messages["phrase_field_type_no_validation"] + "</span>";
 	} else {
 		html += "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">"
-		+ "<tr>"
-		+ "<td width=\"20\"></td>"
-		+ "<td width=\"180\" class=\"medium_grey\"><i>" + g.messages["phrase_validation_rule"] + "</i></td>"
-		+ "<td class=\"medium_grey\"><i>" + g.messages["text_error_message_to_show"] + "</i></td>"
-		+ "</tr>";
+			+ "<tr>"
+			+ "<td width=\"20\"></td>"
+			+ "<td width=\"180\" class=\"medium_grey\"><i>" + g.messages["phrase_validation_rule"] + "</i></td>"
+			+ "<td class=\"medium_grey\"><i>" + g.messages["text_error_message_to_show"] + "</i></td>"
+			+ "</tr>";
 
 		var rules = page_ns.field_validation["field_type_" + field_type_id];
 		for (var i = 0; i < rules.length; i++) {
 			var rule_id = rules[i].rule_id;
 			var label = rules[i].label;
 			html += "<tr>"
-			+ "<td><input type=\"checkbox\" name=\"edit_field__v_" + rule_id + "\" id=\"edit_field__v_" + rule_id + "\" class=\"v_checked\" /></td>"
-			+ "<td><label for=\"edit_field__v_" + rule_id + "\">" + label + "</label></td>"
-			+ "<td><input type=\"text\" id=\"edit_field__v_" + rule_id + "_message\" name=\"edit_field__v_" + rule_id + "_message\" class=\"validation_error_message light_grey\" disabled=\"disabled\" /></td>"
-			+ "</tr>"
+				+ "<td><input type=\"checkbox\" name=\"edit_field__v_" + rule_id + "\" id=\"edit_field__v_" + rule_id + "\" class=\"v_checked\" /></td>"
+				+ "<td><label for=\"edit_field__v_" + rule_id + "\">" + label + "</label></td>"
+				+ "<td><input type=\"text\" id=\"edit_field__v_" + rule_id + "_message\" name=\"edit_field__v_" + rule_id + "_message\" class=\"validation_error_message light_grey\" disabled=\"disabled\" /></td>"
+				+ "</tr>"
 		}
 
 		html += "</table>";

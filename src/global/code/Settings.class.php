@@ -373,8 +373,6 @@ class Settings {
     {
         $LANG = Core::$L;
         $db = Core::$db;
-        $root_url = Core::getRootUrl();
-        $root_dir = Core::getRootDir();
 
         // lots to validate! First, check the default admin & client themes have been entered
         $rules = array();
@@ -382,17 +380,15 @@ class Settings {
         $rules[] = "required,default_client_theme,{$LANG["validation_no_default_client_theme"]}";
         $errors = validate_fields($infohash, $rules);
 
-        if (!isset($infohash["is_enabled"])) {
+        if (!isset($infohash["enabled_themes"])) {
             $errors[] = $LANG["validation_no_enabled_themes"];
         }
-
         if (!empty($errors)) {
             return array(false, General::getErrorListHTML($errors));
         }
 
-        $enabled_themes = $infohash["is_enabled"];
-
         // next, check that both the admin and default client themes are enabled
+		$enabled_themes       = $infohash["enabled_themes"];
         $admin_theme          = $infohash["admin_theme"];
         $default_client_theme = $infohash["default_client_theme"];
 
@@ -400,80 +396,11 @@ class Settings {
             return array(false, $LANG["validation_default_admin_and_client_themes_not_enabled"]);
         }
 
-        // lastly, if there are already client accounts assigned to disabled themes, we need to sort it out.
-        // We handle it the same way as deleting the client menus: if anyone is assigned to this theme,
-        // we generate a list of their names, each a link to their account page (in a _blank link). We
-        // then inform the user of what's going on, and underneath the name list, give them the option of
-        // assigning ALL affected accounts to another (enabled) theme.
-        $theme_clauses = array();
-        foreach ($enabled_themes as $theme) {
-            $theme_clauses[] = "theme != '$theme'";
-        }
-        $theme_clause = join(" AND ", $theme_clauses);
-
-        $db->query("
-            SELECT account_id, first_name, last_name
-            FROM   {PREFIX}accounts
-            WHERE  $theme_clause
-        ");
-        $db->execute();
-        $client_info = $db->fetch();
-
-        // TODO MOVE! Single responsibility, Ben!
-        if (!empty($client_info))
-        {
-            $message = $LANG["notify_disabled_theme_already_assigned"];
-            $placeholder_str = $LANG["phrase_assign_all_listed_client_accounts_to_theme"];
-
-            $themes = Themes::getList(true);
-            $dd = "<select id=\"mass_update_client_theme\">";
-
-            foreach ($themes as $theme) {
-                $dd .= "<option value=\"{$theme["theme_id"]}\">{$theme["theme_name"]}</option>";
-            }
-            $dd .= "</select>";
-
-            // a bit bad (hardcoded HTML!), but organize the account list in 3 columns
-            $client_links_table = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n<tr>";
-            $num_affected_clients = count($client_info);
-            for ($i=0; $i<$num_affected_clients; $i++) {
-                $account_info = $client_info[$i];
-                $client_id  = $account_info["account_id"];
-                $first_name = $account_info["first_name"];
-                $last_name  = $account_info["last_name"];
-                $client_ids[] = $client_id;
-
-                if ($i != 0 && $i % 3 == 0) {
-                    $client_links_table .= "</tr>\n<tr>";
-                }
-
-                $client_links_table .= "<td width=\"33%\">&bull;&nbsp;<a href=\"$root_url/admin/clients/edit.php?page=settings&client_id=$client_id\" target=\"_blank\">$first_name $last_name</a></td>\n";
-            }
-            $client_id_str = join(",", $client_ids);
-
-            // close the table
-            if ($num_affected_clients % 3 == 1) {
-                $client_links_table .= "<td colspan=\"2\" width=\"66%\"> </td>";
-            } else if ($num_affected_clients % 3 == 2) {
-                $client_links_table .= "<td width=\"33%\"> </td>";
-            }
-
-            $client_links_table .= "</tr></table>";
-
-            $submit_button = "<input type=\"button\" value=\"{$LANG["phrase_update_accounts"]}\" onclick=\"window.location='index.php?page=themes&mass_assign=1&accounts=$client_id_str&theme_id=' + $('#mass_update_client_theme').val()\" />";
-
-            $placeholders = array(
-                "theme_dropdown" => $dd,
-                "submit_button" => $submit_button
-            );
-
-            $mass_assign_html = "<div class=\"margin_top_large margin_bottom_large\">" . General::evalSmartyString($placeholder_str, $placeholders) . "</div>";
-            $html = $message . $mass_assign_html . $client_links_table;
-
-            return array(false, $html);
-        }
-
-        // hoorah! Validation complete, let's update the bloomin' database at last
+        // now check the
+        list($success, $message) = self::getAccountsWithDisabledThemes($enabled_themes);
+        if (!$success) {
+        	return array($success, $message);
+		}
 
         // update the admin settings
         $admin_id = Sessions::get("account.account_id");
@@ -540,4 +467,92 @@ class Settings {
 
         return array($success, $message);
     }
+
+
+	/**
+	 * If there are already client accounts assigned to disabled themes, we need to sort it out. We handle it
+	 * the same way as deleting the client menus: if anyone is assigned to this theme, we generate a list of their
+	 * names, each a link to their account page (in a _blank link). We then inform the user of what's going on, and
+	 * underneath the name list, give them the option of assigning ALL affected accounts to another (enabled) theme.
+	 *
+	 * @param array theme folders
+	 * @return array
+	 */
+	public static function getAccountsWithDisabledThemes($enabled_themes)
+	{
+		$db = Core::$db;
+		$LANG = Core::$L;
+		$root_url = Core::getRootUrl();
+
+		$theme_clauses = array();
+		foreach ($enabled_themes as $theme) {
+			$theme_clauses[] = "theme != '$theme'";
+		}
+		$theme_clause = join(" AND ", $theme_clauses);
+
+		$db->query("
+            SELECT account_id, first_name, last_name
+            FROM   {PREFIX}accounts
+            WHERE  $theme_clause
+        ");
+		$db->execute();
+		$client_info = $db->fetchAll();
+
+		if (empty($client_info)) {
+			return array(true, "");
+		}
+
+		$message = $LANG["notify_disabled_theme_already_assigned"];
+		$placeholder_str = $LANG["phrase_assign_all_listed_client_accounts_to_theme"];
+		$themes = Themes::getList(true);
+		$dd = "<select id=\"mass_update_client_theme\">";
+
+		foreach ($themes as $theme) {
+			$dd .= "<option value=\"{$theme["theme_id"]}\">{$theme["theme_name"]}</option>";
+		}
+		$dd .= "</select>";
+
+		// a bit bad (hardcoded HTML!), but organize the account list in 3 columns
+		$client_links_table = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n<tr>";
+		$num_affected_clients = count($client_info);
+
+		$client_ids = array();
+		for ($i=0; $i<$num_affected_clients; $i++) {
+			$account_info = $client_info[$i];
+			$client_id  = $account_info["account_id"];
+			$first_name = $account_info["first_name"];
+			$last_name  = $account_info["last_name"];
+			$client_ids[] = $client_id;
+
+			if ($i != 0 && $i % 3 == 0) {
+				$client_links_table .= "</tr>\n<tr>";
+			}
+
+			$client_links_table .= "<td width=\"33%\">&bull;&nbsp;<a href=\"$root_url/admin/clients/edit.php?page=settings&client_id=$client_id\" target=\"_blank\">$first_name $last_name</a></td>\n";
+		}
+		$client_id_str = join(",", $client_ids);
+
+		// close the table
+		if ($num_affected_clients % 3 == 1) {
+			$client_links_table .= "<td colspan=\"2\" width=\"66%\"> </td>";
+		} else if ($num_affected_clients % 3 == 2) {
+			$client_links_table .= "<td width=\"33%\"> </td>";
+		}
+
+		$client_links_table .= "</tr></table>";
+
+		$submit_button = "<input type=\"button\" value=\"{$LANG["phrase_update_accounts"]}\" onclick=\"window.location='index.php?page=themes&mass_assign=1&accounts=$client_id_str&theme_id=' + $('#mass_update_client_theme').val()\" />";
+
+		$placeholders = array(
+			"theme_dropdown" => $dd,
+			"submit_button" => $submit_button
+		);
+
+		$mass_assign_html = "<div class=\"margin_top_large margin_bottom_large\">" . General::evalSmartyString($placeholder_str, $placeholders) . "</div>";
+		$html = $message . $mass_assign_html . $client_links_table;
+
+		return array(false, $html);
+	}
+
 }
+

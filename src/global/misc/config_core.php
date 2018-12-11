@@ -2812,7 +2812,6 @@ $FILES = array(
 	"global/scripts/manage_client_forms.js",
 	"global/scripts/manage_email_templates.js",
 	"global/scripts/manage_fields.js",
-	"global/scripts/manage_fields.min.js",
 	"global/scripts/manage_forms.js",
 	"global/scripts/manage_menus.js",
 	"global/scripts/manage_modules.js",

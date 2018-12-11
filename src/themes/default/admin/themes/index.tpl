@@ -65,11 +65,11 @@
                         {if $theme_info.description}<p>{$theme_info.description}</p>{/if}
                     </td>
                     <td valign="top" align="center" class="check_area">
-                        <input type="checkbox" name="is_enabled[]" value="{$theme_info.theme_folder}"
+                        <input type="checkbox" name="enabled_themes[]" value="{$theme_info.theme_folder}"
                                {if $theme_info.is_enabled == 'yes'}checked="checked"{/if} />
                     </td>
                     <td valign="top" align="center" {if $theme_info.theme_folder !== "default"}class="del"{/if}>
-                        <a href="#" onclick="return mt.uninstall_theme({$module.theme_id})" title="{$LANG.word_uninstall}"></a>
+                        <a href="#" onclick="return mt.uninstall_theme({$theme_info.theme_id})" title="{$LANG.word_uninstall}"></a>
                     </td>
                 </tr>
             {/foreach}
@@ -79,7 +79,7 @@
 
     <p>
         <input type="submit" name="update" value="{$LANG.word_update}"/>
-        <input type="button" onclick="window.location='../update.php?section=theme'" class="blue" value="Add / Upgrade Themes" />
+        <input type="button" onclick="window.location='../update.php?section=theme'" class="blue" value="{$LANG.phrase_add_upgrade_themes}" />
     </p>
 </form>
 

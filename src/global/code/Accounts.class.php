@@ -33,6 +33,22 @@ class Accounts
         return $db->fetch();
     }
 
+
+    public static function getAccountsByTheme($theme_folder)
+	{
+		$db = Core::$db;
+		$db->query("
+            SELECT *
+            FROM   {PREFIX}accounts
+            WHERE  theme = :theme
+        ");
+		$db->bind("theme", $theme_folder);
+		$db->execute();
+
+		return $db->fetchAll();
+	}
+
+
     /**
      * Returns all custom account settings for a user account. This merely queries the
      * account_settings table, nothing more; it doesn't trickle up the inheritance

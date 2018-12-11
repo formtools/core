@@ -8,6 +8,8 @@ use FormTools\Themes;
 
 $LANG = Core::$L;
 
+General::updateApiVersion();
+
 $success = true;
 $message = "";
 if (isset($request["update_main"])) {

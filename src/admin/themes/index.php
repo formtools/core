@@ -18,6 +18,9 @@ $message = "";
 
 Themes::updateThemeList();
 
+if (isset($request["uninstall"])) {
+	list($success, $message) = Themes::uninstallTheme($request["uninstall"]);
+}
 if (isset($request["theme_override"])) {
 	list($success, $message) = Themes::resetAdminTheme($request["theme_override"]);
 }
@@ -88,7 +91,8 @@ $page = array(
 	"themes" => $updated_themes,
 	"js_messages" => array(
 		"validation_modules_search_no_status", "word_yes", "word_no", "phrase_please_confirm",
-		"confirm_uninstall_module", "word_close", "word_verify", "notify_unknown_error"
+		"confirm_uninstall_module", "word_close", "word_verify", "notify_unknown_error",
+		"confirm_uninstall_theme"
 	),
 	"admin_theme" => Sessions::get("account.theme"),
 	"admin_theme_swatch" => Sessions::get("account.swatch"),
