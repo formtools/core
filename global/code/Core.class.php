@@ -454,7 +454,7 @@ class Core
 	public static function loadConfigFile()
 	{
 		if (self::checkConfigFileExists()) {
-			require_once(self::getConfigFilePath());
+			require(self::getConfigFilePath());
 		}
 
 		self::$rootURL = (isset($g_root_url)) ? $g_root_url : null;
