@@ -42,6 +42,10 @@ class Upgrade
 				Settings::set(array("installation_complete" => "yes"), "core");
 			}
 
+			if (General::isVersionEarlierThan($last_version_in_db, "3.0.10")) {
+				self::addViewMappingViewId();
+			}
+
             if ($success) {
                 Settings::set(array(
                     "release_date" => $current_version_date,
@@ -162,4 +166,22 @@ class Upgrade
 			}
 		}
 	}
+
+	// fix for https://github.com/formtools/core/issues/371
+	public static function addViewMappingViewId()
+	{
+		$db = Core::$db;
+
+		if (!General::checkDbTableFieldExists("email_templates", "view_mapping_view_id")) {
+			try {
+				$db->query("
+					ALTER TABLE {PREFIX}email_templates
+					ADD view_mapping_view_id MEDIUMINT(9) AFTER view_mapping_type
+				");
+				$db->execute();
+			} catch (Exception $e) {
+			}
+		}
+	}
+
 }
