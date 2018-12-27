@@ -44,6 +44,7 @@ class Upgrade
 
 			if (General::isVersionEarlierThan($last_version_in_db, "3.0.10")) {
 				self::addViewMappingViewId();
+				self::setCoreFieldsAsNotEditable();
 			}
 
             if ($success) {
@@ -181,6 +182,31 @@ class Upgrade
 				$db->execute();
 			} catch (Exception $e) {
 			}
+		}
+	}
+
+
+	public static function setCoreFieldsAsNotEditable()
+	{
+		$db = Core::$db;
+
+		try {
+			$db->query("
+				UPDATE {PREFIX}field_types
+				SET    is_editable = 'no',
+					   non_editable_info = '{\$LANG.text_non_deletable_fields}'
+				WHERE field_type_identifier IN ('textbox', 'textarea', 'password', 'dropdown', 'multi_select_dropdown',
+					'radio_buttons', 'checkboxes', 'date', 'time', 'phone', 'code_markup')
+			");
+			$db->execute();
+
+			$db->query("
+				ALTER TABLE {PREFIX}field_types
+				ADD is_enabled ENUM('yes','no') NOT NULL DEFAULT 'yes' AFTER is_editable
+			");
+			$db->execute();
+
+		} catch (Exception $e) {
 		}
 	}
 

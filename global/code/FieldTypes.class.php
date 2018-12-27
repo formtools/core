@@ -57,6 +57,7 @@ class FieldTypes
 		Core::$db->query("
             SELECT field_type_id, field_type_name
             FROM   {PREFIX}field_types
+            WHERE  is_enabled = 'yes'
         ");
 		Core::$db->execute();
 
@@ -81,7 +82,7 @@ class FieldTypes
 	 *   ...
 	 * ]
 	 */
-	public static function getGroupedFieldTypes()
+	public static function getGroupedFieldTypes($enabled_only = true)
 	{
 		$db = Core::$db;
 
@@ -96,12 +97,14 @@ class FieldTypes
 		$info = array();
 		foreach ($db->fetchAll() as $row) {
 			$group_id = $row["group_id"];
+			$enabled_clause = ($enabled_only) ? "AND is_enabled = 'yes'" : "";
 			$db->query("
-                SELECT *
-                FROM   {PREFIX}field_types
-                WHERE  group_id = :group_id
-                ORDER BY list_order
-            ");
+				SELECT *
+				FROM   {PREFIX}field_types
+				WHERE  group_id = :group_id
+				$enabled_clause
+				ORDER BY list_order
+			");
 			$db->bind("group_id", $group_id);
 			$db->execute();
 
@@ -1778,9 +1781,7 @@ END;
 	}
 
 	/**
-	 * Updates an existing field type in the database. Used in upgrading to ensure a field type is up to the latest
-	 * specs. Note: this only updates the field_types record in the DB right now and not the settings & setting options.
-	 * That can be added as need be.
+	 * Used in upgrading/Custom Fields module to ensure a field type has the latest and greatest settings.
 	 * @param $identifier
 	 */
 	public static function resetFieldTypeByIdentifier($identifier)
@@ -1847,5 +1848,13 @@ END;
 			"field_type_identifier" => $identifier
 		));
 		$db->execute();
+
+		self::resetFieldTypeSettings($field_type);
+	}
+
+
+	public static function resetFieldTypeSettings ($field_type)
+	{
+
 	}
 }

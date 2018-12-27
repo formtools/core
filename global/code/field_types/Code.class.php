@@ -10,8 +10,8 @@ class Code
     {
         return array(
             "field_type" => array(
-                "is_editable"                    => "yes",
-                "non_editable_info"              => null,
+                "is_editable"                    => "no",
+                "non_editable_info"              => "{\$LANG.text_non_deletable_fields}",
                 "managed_by_module_id"           => null,
                 "field_type_name"                => "{\$LANG.phrase_code_markup_field}",
                 "field_type_identifier"          => "code_markup",
