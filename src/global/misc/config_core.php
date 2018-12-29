@@ -628,6 +628,13 @@ $STRUCTURE["tables"]["field_types"] = array(
         "Key"     => "",
         "Default" => ""
     ),
+	array(
+		"Field"   => "is_enabled",
+		"Type"    => "enum('yes','no')",
+		"Null"    => "NO",
+		"Key"     => "",
+		"Default" => "yes"
+	),
     array(
         "Field"   => "non_editable_info",
         "Type"    => "mediumtext",

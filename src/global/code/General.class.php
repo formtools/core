@@ -96,7 +96,7 @@ class General
 		$db_name = Core::getDbName();
 
 		$found = false;
-		$db->query("SHOW TABLES FROM $db_name");
+		$db->query("SHOW TABLES FROM `$db_name`");
 		$db->execute();
 		foreach ($db->fetchAll(PDO::FETCH_COLUMN) as $curr_table) {
 			if ($curr_table == $table) {
@@ -961,7 +961,7 @@ END;
 		$core_tables = Core::getCoreTables();
 		$db_name = General::getCleanDbEntity(Core::getDbName());
 
-		$db->query("SHOW TABLES FROM $db_name");
+		$db->query("SHOW TABLES FROM `$db_name`");
 		$db->execute();
 
 		$found_tables = array();

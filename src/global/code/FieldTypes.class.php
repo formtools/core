@@ -57,6 +57,7 @@ class FieldTypes
 		Core::$db->query("
             SELECT field_type_id, field_type_name
             FROM   {PREFIX}field_types
+            WHERE  is_enabled = 'yes'
         ");
 		Core::$db->execute();
 
@@ -81,7 +82,7 @@ class FieldTypes
 	 *   ...
 	 * ]
 	 */
-	public static function getGroupedFieldTypes()
+	public static function getGroupedFieldTypes($enabled_only = true)
 	{
 		$db = Core::$db;
 
@@ -96,12 +97,14 @@ class FieldTypes
 		$info = array();
 		foreach ($db->fetchAll() as $row) {
 			$group_id = $row["group_id"];
+			$enabled_clause = ($enabled_only) ? "AND is_enabled = 'yes'" : "";
 			$db->query("
-                SELECT *
-                FROM   {PREFIX}field_types
-                WHERE  group_id = :group_id
-                ORDER BY list_order
-            ");
+				SELECT *
+				FROM   {PREFIX}field_types
+				WHERE  group_id = :group_id
+				$enabled_clause
+				ORDER BY list_order
+			");
 			$db->bind("group_id", $group_id);
 			$db->execute();
 
@@ -1569,9 +1572,7 @@ END;
 	/**
 	 * Deletes a field type setting. It also updates all existing form fields that were referencing
 	 * this setting to remove the dependant data.
-	 *
-	 * @param integer $field_type_id
-	 * @param string $setting_id_list comma delimited list of setting IDs
+	 * @param array $setting_ids
 	 */
 	public static function deleteFieldTypeSettings($setting_ids = array())
 	{
@@ -1590,16 +1591,16 @@ END;
 			$db->bind("setting_id", $setting_id);
 			$db->execute();
 
-			$db->query("DELETE FROM {PREFIX}field_type_setting_options WHERE setting_id = :setting_id");
-			$db->bind("setting_id", $setting_id);
-			$db->execute();
+			self::deleteFieldTypeSettingOptions($setting_id);
 		}
 	}
+
 
 	/**
 	 * Deletes a field type and resets any fields that were set to that type to a different one.
 	 * @param $field_type_identifier_to_delete
 	 * @param $field_type_identifier_replacement
+	 * @return bool
 	 */
 	public static function deleteFieldType($field_type_identifier_to_delete, $field_type_identifier_replacement)
 	{
@@ -1778,9 +1779,7 @@ END;
 	}
 
 	/**
-	 * Updates an existing field type in the database. Used in upgrading to ensure a field type is up to the latest
-	 * specs. Note: this only updates the field_types record in the DB right now and not the settings & setting options.
-	 * That can be added as need be.
+	 * Used in upgrading/Custom Fields module to ensure a field type has the latest and greatest settings.
 	 * @param $identifier
 	 */
 	public static function resetFieldTypeByIdentifier($identifier)
@@ -1810,6 +1809,7 @@ END;
 		$db->query("
             UPDATE {PREFIX}field_types
             SET    is_editable = :is_editable,
+            	   is_enabled = :is_enabled,
                    non_editable_info = :non_editable_info,
                    managed_by_module_id = :managed_by_module_id,
                    field_type_name = :field_type_name,
@@ -1829,6 +1829,7 @@ END;
         ");
 		$db->bindAll(array(
 			"is_editable" => $field_type["is_editable"],
+			"is_enabled" => $field_type["is_enabled"],
 			"non_editable_info" => $field_type["non_editable_info"],
 			"managed_by_module_id" => $field_type["managed_by_module_id"],
 			"field_type_name" => $field_type["field_type_name"],
@@ -1845,6 +1846,127 @@ END;
 			"resources_css" => $field_type["resources_css"],
 			"resources_js" => $field_type["resources_js"],
 			"field_type_identifier" => $identifier
+		));
+		$db->execute();
+
+		self::resetFieldTypeSettings($field_type_data);
+	}
+
+
+	public static function resetFieldTypeSettings ($field_type_data)
+	{
+		$db = Core::$db;
+
+		$existing_field_type = self::getFieldTypeByIdentifier($field_type_data["field_type"]["field_type_identifier"]);
+		$existing_settings = $existing_field_type["settings"];
+
+		// a field types' settings are referenced by ID in the database (e.g. field_settings table) so we can't just
+		// wipe them out and recreate them. Instead, update each in place
+
+		$setting_order = 1;
+		$new_setting_ids = array();
+		foreach ($field_type_data["settings"] as $clean_setting_info) {
+			$setting_identifier = $clean_setting_info["field_setting_identifier"];
+
+			$found_setting = null;
+			foreach ($existing_settings as $existing_setting_info) {
+				if ($existing_setting_info["field_setting_identifier"] == $setting_identifier) {
+					$found_setting = $existing_setting_info;
+					break;
+				}
+			}
+
+			// here, this is a new setting added to the field type that the users installation doesn't have
+			if ($found_setting === null) {
+				$db->query("
+					INSERT INTO {PREFIX}field_type_settings (field_label, field_type, field_orientation, default_value_type, 
+						default_value, list_order)
+					VALUES (:field_label, :field_type, :field_orientation, :default_value_type, :default_value, :list_order)
+				");
+				$db->bindAll(array(
+					"field_label" => $clean_setting_info["field_label"],
+					"field_type" => $clean_setting_info["field_type"],
+					"field_orientation" => $clean_setting_info["field_orientation"],
+					"default_value_type" => $clean_setting_info["default_value_type"],
+					"default_value" => $clean_setting_info["default_value"],
+					"list_order" => $setting_order,
+					"setting_id" => $found_setting["setting_id"]
+				));
+				$db->execute();
+				$setting_id = $db->getInsertId();
+			} else {
+				$db->query("
+					UPDATE {PREFIX}field_type_settings
+					SET    field_label = :field_label,
+						   field_type = :field_type,
+						   field_orientation = :field_orientation,
+						   default_value_type = :default_value_type,
+						   default_value = :default_value,
+						   list_order = :list_order
+					WHERE  setting_id = :setting_id
+				");
+				$db->bindAll(array(
+					"field_label" => $clean_setting_info["field_label"],
+					"field_type" => $clean_setting_info["field_type"],
+					"field_orientation" => $clean_setting_info["field_orientation"],
+					"default_value_type" => $clean_setting_info["default_value_type"],
+					"default_value" => $clean_setting_info["default_value"],
+					"list_order" => $setting_order,
+					"setting_id" => $found_setting["setting_id"]
+				));
+				$db->execute();
+
+				$setting_id = $found_setting["setting_id"];
+			}
+
+			// wipe out the setting options. Options are only ever referred to in the field_settings table, storing their
+			// exact value. So technically a new set of option settings may orphan data in the field_settings table. But
+			// I don't think it's the end of the world - nor do I think we can ward against it. All that would happen is
+			// the form field referring to a particular field type setting would no longer work until they updated it
+			self::deleteFieldTypeSettingOptions($setting_id);
+
+			$option_order = 1;
+			foreach ($clean_setting_info["options"] as $option_info) {
+				self::addFieldTypeSettingOption($setting_id, $option_info["option_text"], $option_info["option_value"],
+					$option_order, $option_info["is_new_sort_group"]);
+				$option_order++;
+			}
+
+			$setting_order++;
+			$new_setting_ids[] = $setting_id;
+		}
+
+		// if any settings have been removed, clean up the database to remove any fields associated with that setting
+		$existing_setting_ids = array_column($existing_settings, "setting_id");
+		$old_setting_ids = array_diff($existing_setting_ids, $new_setting_ids);
+		self::deleteFieldTypeSettings($old_setting_ids);
+	}
+
+
+	public static function deleteFieldTypeSettingOptions ($setting_id)
+	{
+		$db = Core::$db;
+
+		$db->query("DELETE FROM {PREFIX}field_type_setting_options WHERE setting_id = :setting_id");
+		$db->bind("setting_id", $setting_id);
+		$db->execute();
+	}
+
+
+	public static function addFieldTypeSettingOption($setting_id, $option_text, $option_value, $option_order, $is_new_sort_group)
+	{
+		$db = Core::$db;
+
+		$db->query("
+			INSERT INTO {PREFIX}field_type_setting_options (setting_id, option_text, option_value, option_order, is_new_sort_group)
+			VALUES (:setting_id, :option_text, :option_value, :option_order, :is_new_sort_group)
+		");
+		$db->bindAll(array(
+			"setting_id" => $setting_id,
+			"option_text" => $option_text,
+			"option_value" => $option_value,
+			"option_order" => $option_order,
+			"is_new_sort_group" => $is_new_sort_group
 		));
 		$db->execute();
 	}

@@ -491,6 +491,7 @@ END;
                 CREATE TABLE {PREFIX}field_types (
                   field_type_id mediumint(8) unsigned NOT NULL auto_increment,
                   is_editable enum('yes','no') NOT NULL,
+                  is_enabled enum('yes','no') NOT NULL default 'yes',
                   non_editable_info mediumtext,
                   managed_by_module_id mediumint(9) default NULL,
                   field_type_name varchar(255) NOT NULL,

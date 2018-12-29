@@ -6,9 +6,9 @@ namespace FormTools\FieldTypes;
 
 class Radio
 {
-    public static function get()
-    {
-        $radio_view_field =<<< END
+	public static function get()
+	{
+		$radio_view_field = <<< END
 {strip}{if \$contents != ""}
   {foreach from=\$contents.options item=curr_group_info name=group}
     {assign var=options value=\$curr_group_info.options}
@@ -19,7 +19,7 @@ class Radio
 {/if}{/strip}
 END;
 
-        $radio_edit_field =<<< END
+		$radio_edit_field = <<< END
 {if \$contents == ""}
   <div class="cf_field_comments">{\$LANG.phrase_not_assigned_to_option_list}</div>
 {else}
@@ -56,101 +56,102 @@ END;
 {/if}
 END;
 
-        return array(
-            "field_type" => array(
-                "is_editable"                    => "yes",
-                "non_editable_info"              => null,
-                "managed_by_module_id"           => null,
-                "field_type_name"                => "{\$LANG.phrase_radio_buttons}",
-                "field_type_identifier"          => "radio_buttons",
-                "is_file_field"                  => "no",
-                "is_date_field"                  => "no",
-                "raw_field_type_map"             => "radio-buttons",
-                "compatible_field_sizes"         => "1char,2chars,tiny,small,medium,large",
-                "view_field_rendering_type"      => "php",
-                "view_field_php_function_source" => "core",
-                "view_field_php_function"        => "FormTools\\FieldTypes::displayFieldTypeRadios",
-                "view_field_smarty_markup"       => $radio_view_field,
-                "edit_field_smarty_markup"       => $radio_edit_field,
-                "php_processing"                 => "",
-                "resources_css"                  => "/* All CSS styles for this field type are found in Shared Resources */",
-                "resources_js"                   => ""
-            ),
+		return array(
+			"field_type" => array(
+				"is_editable" => "no",
+                "is_enabled" => "yes",
+				"non_editable_info" => "{\$LANG.text_non_deletable_fields}",
+				"managed_by_module_id" => null,
+				"field_type_name" => "{\$LANG.phrase_radio_buttons}",
+				"field_type_identifier" => "radio_buttons",
+				"is_file_field" => "no",
+				"is_date_field" => "no",
+				"raw_field_type_map" => "radio-buttons",
+				"compatible_field_sizes" => "1char,2chars,tiny,small,medium,large",
+				"view_field_rendering_type" => "php",
+				"view_field_php_function_source" => "core",
+				"view_field_php_function" => "FormTools\\FieldTypes::displayFieldTypeRadios",
+				"view_field_smarty_markup" => $radio_view_field,
+				"edit_field_smarty_markup" => $radio_edit_field,
+				"php_processing" => "",
+				"resources_css" => "/* All CSS styles for this field type are found in Shared Resources */",
+				"resources_js" => ""
+			),
 
-            "settings" => array(
+			"settings" => array(
 
-                // Option List / Contents
-                array(
-                    "use_for_option_list_map"  => true,
-                    "field_label"              => "{\$LANG.phrase_option_list_or_contents}",
-                    "field_setting_identifier" => "contents",
-                    "field_type"               => "option_list_or_form_field",
-                    "field_orientation"        => "na",
-                    "default_value_type"       => "static",
-                    "default_value"            => "",
-                    "options"                  => array()
-                ),
+				// Option List / Contents
+				array(
+					"use_for_option_list_map" => true,
+					"field_label" => "{\$LANG.phrase_option_list_or_contents}",
+					"field_setting_identifier" => "contents",
+					"field_type" => "option_list_or_form_field",
+					"field_orientation" => "na",
+					"default_value_type" => "static",
+					"default_value" => "",
+					"options" => array()
+				),
 
-                // Formatting
-                array(
-                    "field_label"              => "{\$LANG.word_formatting}",
-                    "field_setting_identifier" => "formatting",
-                    "field_type"               => "select",
-                    "field_orientation"        => "na",
-                    "default_value_type"       => "static",
-                    "default_value"            => "horizontal",
+				// Formatting
+				array(
+					"field_label" => "{\$LANG.word_formatting}",
+					"field_setting_identifier" => "formatting",
+					"field_type" => "select",
+					"field_orientation" => "na",
+					"default_value_type" => "static",
+					"default_value" => "horizontal",
 
-                    "options" => array(
-                        array(
-                            "option_text"       => "{\$LANG.word_horizontal}",
-                            "option_value"      => "horizontal",
-                            "is_new_sort_group" => "yes"
-                        ),
-                        array(
-                            "option_text"       => "{\$LANG.word_vertical}",
-                            "option_value"      => "vertical",
-                            "is_new_sort_group" => "yes"
-                        ),
-                        array(
-                            "option_text"       => "{\$LANG.phrase_2_columns}",
-                            "option_value"      => "cf_option_list_2cols",
-                            "is_new_sort_group" => "yes"
-                        ),
-                        array(
-                            "option_text"       => "{\$LANG.phrase_3_columns}",
-                            "option_value"      => "cf_option_list_3cols",
-                            "is_new_sort_group" => "yes"
-                        ),
-                        array(
-                            "option_text"       => "{\$LANG.phrase_4_columns}",
-                            "option_value"      => "cf_option_list_4cols",
-                            "is_new_sort_group" => "yes"
-                        )
-                    )
-                ),
+					"options" => array(
+						array(
+							"option_text" => "{\$LANG.word_horizontal}",
+							"option_value" => "horizontal",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.word_vertical}",
+							"option_value" => "vertical",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.phrase_2_columns}",
+							"option_value" => "cf_option_list_2cols",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.phrase_3_columns}",
+							"option_value" => "cf_option_list_3cols",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.phrase_4_columns}",
+							"option_value" => "cf_option_list_4cols",
+							"is_new_sort_group" => "yes"
+						)
+					)
+				),
 
-                // Field Comments
-                array(
-                    "field_label"              => "{\$LANG.phrase_field_comments}",
-                    "field_setting_identifier" => "comments",
-                    "field_type"               => "textarea",
-                    "field_orientation"        => "na",
-                    "default_value_type"       => "static",
-                    "default_value"            => "",
-                    "options"                  => array()
-                )
-            ),
+				// Field Comments
+				array(
+					"field_label" => "{\$LANG.phrase_field_comments}",
+					"field_setting_identifier" => "comments",
+					"field_type" => "textarea",
+					"field_orientation" => "na",
+					"default_value_type" => "static",
+					"default_value" => "",
+					"options" => array()
+				)
+			),
 
-            "validation" => array(
-                array(
-                    "rsv_rule"                 => "required",
-                    "rule_label"               => "{\$LANG.word_required}",
-                    "rsv_field_name"           => "{\$field_name}",
-                    "custom_function"          => "",
-                    "custom_function_required" => "na",
-                    "default_error_message"    => "{\$LANG.validation_default_rule_required}"
-                )
-            )
-        );
-    }
+			"validation" => array(
+				array(
+					"rsv_rule" => "required",
+					"rule_label" => "{\$LANG.word_required}",
+					"rsv_field_name" => "{\$field_name}",
+					"custom_function" => "",
+					"custom_function_required" => "na",
+					"default_error_message" => "{\$LANG.validation_default_rule_required}"
+				)
+			)
+		);
+	}
 }

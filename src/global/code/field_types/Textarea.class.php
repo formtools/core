@@ -6,9 +6,10 @@ namespace FormTools\FieldTypes;
 
 class Textarea
 {
-    public static function get() {
+	public static function get()
+	{
 
-        $textarea_view_field =<<< END
+		$textarea_view_field = <<< END
 {if \$CONTEXTPAGE == "edit_submission"}  
   {\$VALUE|nl2br}
 {else}
@@ -16,7 +17,7 @@ class Textarea
 {/if}
 END;
 
-        $textarea_edit_field =<<< END
+		$textarea_edit_field = <<< END
 {* figure out all the classes *}
 {assign var=classes value=\$height}
 {if \$highlight_colour}
@@ -45,7 +46,7 @@ END;
 {/if}
 END;
 
-        $textarea_css =<<< END
+		$textarea_css = <<< END
 .cf_counter span {
   font-weight: bold;
 }
@@ -66,7 +67,7 @@ textarea.cf_size_large {
 }
 END;
 
-        $textarea_js =<<< END
+		$textarea_js = <<< END
 /**
  * The following code provides a simple text/word counter option for any 
  * textarea. It either just keeps counting up, or limits the results to a
@@ -126,168 +127,169 @@ $(function() {
 });
 END;
 
-        return array(
-            "field_type" => array(
-                "is_editable"                    => "yes",
-                "non_editable_info"              => null,
-                "managed_by_module_id"           => null,
-                "field_type_name"                => "{\$LANG.word_textarea}",
-                "field_type_identifier"          => "textarea",
-                "is_file_field"                  => "no",
-                "is_date_field"                  => "no",
-                "raw_field_type_map"             => "textarea",
-                "compatible_field_sizes"         => "medium,large,very_large",
-                "view_field_rendering_type"      => "smarty",
-                "view_field_php_function_source" => "core",
-                "view_field_php_function"        => "",
-                "view_field_smarty_markup"       => $textarea_view_field,
-                "edit_field_smarty_markup"       => $textarea_edit_field,
-                "php_processing"                 => "",
-                "resources_css"                  => $textarea_css,
-                "resources_js"                   => $textarea_js
-            ),
+		return array(
+			"field_type" => array(
+				"is_editable" => "no",
+                "is_enabled" => "yes",
+				"non_editable_info" => "{\$LANG.text_non_deletable_fields}",
+				"managed_by_module_id" => null,
+				"field_type_name" => "{\$LANG.word_textarea}",
+				"field_type_identifier" => "textarea",
+				"is_file_field" => "no",
+				"is_date_field" => "no",
+				"raw_field_type_map" => "textarea",
+				"compatible_field_sizes" => "medium,large,very_large",
+				"view_field_rendering_type" => "smarty",
+				"view_field_php_function_source" => "core",
+				"view_field_php_function" => "",
+				"view_field_smarty_markup" => $textarea_view_field,
+				"edit_field_smarty_markup" => $textarea_edit_field,
+				"php_processing" => "",
+				"resources_css" => $textarea_css,
+				"resources_js" => $textarea_js
+			),
 
-        "settings" => array(
+			"settings" => array(
 
-            // Height
-            array(
-                "field_label"              => "{\$LANG.word_height}",
-                "field_setting_identifier" => "height",
-                "field_type"               => "select",
-                "field_orientation"        => "na",
-                "default_value_type"       => "static",
-                "default_value"            => "cf_size_small",
+				// Height
+				array(
+					"field_label" => "{\$LANG.word_height}",
+					"field_setting_identifier" => "height",
+					"field_type" => "select",
+					"field_orientation" => "na",
+					"default_value_type" => "static",
+					"default_value" => "cf_size_small",
 
-        "options" => array(
-        array(
-        "option_text"       => "{\$LANG.phrase_tiny_30px}",
-        "option_value"      => "cf_size_tiny",
-        "is_new_sort_group" => "yes"
-        ),
-        array(
-        "option_text"       => "{\$LANG.phrase_small_80px}",
-        "option_value"      => "cf_size_small",
-        "is_new_sort_group" => "yes"
-        ),
-        array(
-        "option_text"       => "{\$LANG.phrase_medium_150px}",
-        "option_value"      => "cf_size_medium",
-        "is_new_sort_group" => "yes"
-        ),
-        array(
-        "option_text"       => "{\$LANG.phrase_large_300px}",
-        "option_value"      => "cf_size_large",
-        "is_new_sort_group" => "yes"
-        )
-        )
-        ),
+					"options" => array(
+						array(
+							"option_text" => "{\$LANG.phrase_tiny_30px}",
+							"option_value" => "cf_size_tiny",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.phrase_small_80px}",
+							"option_value" => "cf_size_small",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.phrase_medium_150px}",
+							"option_value" => "cf_size_medium",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.phrase_large_300px}",
+							"option_value" => "cf_size_large",
+							"is_new_sort_group" => "yes"
+						)
+					)
+				),
 
-            // Highlight
-        array(
-        "field_label"              => "{\$LANG.phrase_highlight_colour}",
-        "field_setting_identifier" => "highlight_colour",
-        "field_type"               => "select",
-        "field_orientation"        => "na",
-        "default_value_type"       => "static",
-        "default_value"            => "",
+				// Highlight
+				array(
+					"field_label" => "{\$LANG.phrase_highlight_colour}",
+					"field_setting_identifier" => "highlight_colour",
+					"field_type" => "select",
+					"field_orientation" => "na",
+					"default_value_type" => "static",
+					"default_value" => "",
 
-        "options" => array(
-        array(
-        "option_text"       => "{\$LANG.word_none}",
-        "option_value"      => "",
-        "is_new_sort_group" => "yes"
-        ),
-        array(
-        "option_text"       => "{\$LANG.word_red}",
-        "option_value"      => "cf_colour_red",
-        "is_new_sort_group" => "yes"
-        ),
-        array(
-        "option_text"       => "{\$LANG.word_orange}",
-        "option_value"      => "cf_colour_orange",
-        "is_new_sort_group" => "yes"
-        ),
-        array(
-        "option_text"       => "{\$LANG.word_yellow}",
-        "option_value"      => "cf_colour_yellow",
-        "is_new_sort_group" => "yes"
-        ),
-        array(
-        "option_text"       => "{\$LANG.word_green}",
-        "option_value"      => "cf_colour_green",
-        "is_new_sort_group" => "yes"
-        ),
-        array(
-        "option_text"       => "{\$LANG.word_blue}",
-        "option_value"      => "cf_colour_blue",
-        "is_new_sort_group" => "yes"
-        )
-        )
-        ),
+					"options" => array(
+						array(
+							"option_text" => "{\$LANG.word_none}",
+							"option_value" => "",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.word_red}",
+							"option_value" => "cf_colour_red",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.word_orange}",
+							"option_value" => "cf_colour_orange",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.word_yellow}",
+							"option_value" => "cf_colour_yellow",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.word_green}",
+							"option_value" => "cf_colour_green",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.word_blue}",
+							"option_value" => "cf_colour_blue",
+							"is_new_sort_group" => "yes"
+						)
+					)
+				),
 
-            // Input Length
-        array(
-        "field_label"              => "{\$LANG.phrase_input_length}",
-        "field_setting_identifier" => "input_length",
-        "field_type"               => "radios",
-        "field_orientation"        => "horizontal",
-        "default_value_type"       => "static",
-        "default_value"            => "",
+				// Input Length
+				array(
+					"field_label" => "{\$LANG.phrase_input_length}",
+					"field_setting_identifier" => "input_length",
+					"field_type" => "radios",
+					"field_orientation" => "horizontal",
+					"default_value_type" => "static",
+					"default_value" => "",
 
-        "options" => array(
-        array(
-        "option_text"       => "{\$LANG.phrase_no_limit}",
-        "option_value"      => "",
-        "is_new_sort_group" => "yes"
-        ),
-        array(
-        "option_text"       => "{\$LANG.word_words}",
-        "option_value"      => "words",
-        "is_new_sort_group" => "yes"
-        ),
-        array(
-        "option_text"       => "{\$LANG.word_characters}",
-        "option_value"      => "chars",
-        "is_new_sort_group" => "yes"
-        )
-        )
-        ),
+					"options" => array(
+						array(
+							"option_text" => "{\$LANG.phrase_no_limit}",
+							"option_value" => "",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.word_words}",
+							"option_value" => "words",
+							"is_new_sort_group" => "yes"
+						),
+						array(
+							"option_text" => "{\$LANG.word_characters}",
+							"option_value" => "chars",
+							"is_new_sort_group" => "yes"
+						)
+					)
+				),
 
-            // - Max length (words / chars)
-        array(
-        "field_label"              => "{\$LANG.phrase_max_length_words_chars}",
-        "field_setting_identifier" => "maxlength",
-        "field_type"               => "textbox",
-        "field_orientation"        => "na",
-        "default_value_type"       => "static",
-        "default_value"            => "",
-        "options"                  => array()
-        ),
+				// - Max length (words / chars)
+				array(
+					"field_label" => "{\$LANG.phrase_max_length_words_chars}",
+					"field_setting_identifier" => "maxlength",
+					"field_type" => "textbox",
+					"field_orientation" => "na",
+					"default_value_type" => "static",
+					"default_value" => "",
+					"options" => array()
+				),
 
-            // Field Comments
-        array(
-        "field_label"              => "{\$LANG.phrase_field_comments}",
-        "field_setting_identifier" => "comments",
-        "field_type"               => "textarea",
-        "field_orientation"        => "na",
-        "default_value_type"       => "static",
-        "default_value"            => "",
-        "options"                  => array()
-        )
-        ),
+				// Field Comments
+				array(
+					"field_label" => "{\$LANG.phrase_field_comments}",
+					"field_setting_identifier" => "comments",
+					"field_type" => "textarea",
+					"field_orientation" => "na",
+					"default_value_type" => "static",
+					"default_value" => "",
+					"options" => array()
+				)
+			),
 
-        "validation" => array(
-        array(
-        "rsv_rule"                 => "required",
-        "rule_label"               => "{\$LANG.word_required}",
-        "rsv_field_name"           => "{\$field_name}",
-        "custom_function"          => "",
-        "custom_function_required" => "na",
-        "default_error_message"    => "{\$LANG.validation_default_rule_required}"
-        )
-        )
-        );
-    }
+			"validation" => array(
+				array(
+					"rsv_rule" => "required",
+					"rule_label" => "{\$LANG.word_required}",
+					"rsv_field_name" => "{\$field_name}",
+					"custom_function" => "",
+					"custom_function_required" => "na",
+					"default_error_message" => "{\$LANG.validation_default_rule_required}"
+				)
+			)
+		);
+	}
 
 
 }

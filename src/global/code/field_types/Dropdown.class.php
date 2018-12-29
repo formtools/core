@@ -49,8 +49,9 @@ END;
 
         return array(
             "field_type" => array(
-                "is_editable"                    => "yes",
-                "non_editable_info"              => null,
+                "is_editable"                    => "no",
+                "is_enabled"                     => "yes",
+                "non_editable_info"              => "{\$LANG.text_non_deletable_fields}",
                 "managed_by_module_id"           => null,
                 "field_type_name"                => "{\$LANG.word_dropdown}",
                 "field_type_identifier"          => "dropdown",
