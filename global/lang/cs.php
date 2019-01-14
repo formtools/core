@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Krok 2";
 $LANG["phrase_step_3"] = "Krok 3";
 $LANG["phrase_step_4"] = "Krok 4";
 $LANG["phrase_step_5"] = "Krok 5";
+$LANG["phrase_step_6"] = "Krok 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Pásy značky v podobě příspěvků";
 $LANG["phrase_subject_line"] = "Předmět Line";
 $LANG["phrase_submission_date"] = "Datum podání žádosti";

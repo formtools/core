@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Skref 2";
 $LANG["phrase_step_3"] = "Skref 3";
 $LANG["phrase_step_4"] = "Skref 4";
 $LANG["phrase_step_5"] = "Skref 5";
+$LANG["phrase_step_6"] = "Skref 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip tags í uppgjöf mynd";
 $LANG["phrase_subject_line"] = "Efnislínuna";
 $LANG["phrase_submission_date"] = "Skil dagsetningu";

@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Paso 2";
 $LANG["phrase_step_3"] = "Paso 3";
 $LANG["phrase_step_4"] = "Paso 4";
 $LANG["phrase_step_5"] = "Paso 5";
+$LANG["phrase_step_6"] = "Paso 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Tags Strip en submissões do formulario";
 $LANG["phrase_subject_line"] = "Asunto Line";
 $LANG["phrase_submission_date"] = "Data de presentación";

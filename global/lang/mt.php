@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Pass 2";
 $LANG["phrase_step_3"] = "Stadju 3";
 $LANG["phrase_step_4"] = "Pass 4";
 $LANG["phrase_step_5"] = "Pass 5";
+$LANG["phrase_step_6"] = "Pass 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Istrixxa ta &#39;widnejn fil-sottomissjonijiet forma";
 $LANG["phrase_subject_line"] = "Suġġett Line";
 $LANG["phrase_submission_date"] = "Data Sottomissjoni";

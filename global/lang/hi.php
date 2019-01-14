@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "चरण 2";
 $LANG["phrase_step_3"] = "चरण 3";
 $LANG["phrase_step_4"] = "चरण 4";
 $LANG["phrase_step_5"] = "चरण 5";
+$LANG["phrase_step_6"] = "चरण 6";
 $LANG["phrase_strip_tags_in_submissions"] = "प्रस्तुतियाँ रूप में पट्टी टैग";
 $LANG["phrase_subject_line"] = "विषय पंक्ति";
 $LANG["phrase_submission_date"] = "प्रस्तुत करने की तारीख";

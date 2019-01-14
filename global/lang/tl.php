@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Hakbang 2";
 $LANG["phrase_step_3"] = "Hakbang 3";
 $LANG["phrase_step_4"] = "Hakbang 4";
 $LANG["phrase_step_5"] = "Hakbang 5";
+$LANG["phrase_step_6"] = "Hakbang 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip tags sa pagsusumite ng form";
 $LANG["phrase_subject_line"] = "Paksa Line";
 $LANG["phrase_submission_date"] = "Submission ng petsa";

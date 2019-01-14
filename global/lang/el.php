@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Βήμα 2";
 $LANG["phrase_step_3"] = "Βήμα 3";
 $LANG["phrase_step_4"] = "Βήμα 4";
 $LANG["phrase_step_5"] = "Βήμα 5";
+$LANG["phrase_step_6"] = "Βήμα 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Γάζας ετικέτες στις παρατηρήσεις μορφή";
 $LANG["phrase_subject_line"] = "Θέμα Line";
 $LANG["phrase_submission_date"] = "Υποβολή ημερομηνία";

@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "2 pakopa";
 $LANG["phrase_step_3"] = "Step 3";
 $LANG["phrase_step_4"] = "Žingsnis 4";
 $LANG["phrase_step_5"] = "5 etapas";
+$LANG["phrase_step_6"] = "6 etapas";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip Tags formos pastabose";
 $LANG["phrase_subject_line"] = "Antraštė";
 $LANG["phrase_submission_date"] = "Pateikimo";

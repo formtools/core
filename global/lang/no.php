@@ -685,6 +685,7 @@ $LANG["phrase_step_2"] = "Trinn 2";
 $LANG["phrase_step_3"] = "Trinn 3";
 $LANG["phrase_step_4"] = "Trinn 4";
 $LANG["phrase_step_5"] = "Trinn 5";
+$LANG["phrase_step_6"] = "Trinn 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip koder i form innleveringer";
 $LANG["phrase_subject_line"] = "Subject Line";
 $LANG["phrase_submission_date"] = "Innsendings dato";

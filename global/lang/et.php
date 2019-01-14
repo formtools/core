@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Samm 2";
 $LANG["phrase_step_3"] = "Step 3";
 $LANG["phrase_step_4"] = "Samm 4";
 $LANG["phrase_step_5"] = "Samm 5";
+$LANG["phrase_step_6"] = "Samm 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip sildid vormis esildised";
 $LANG["phrase_subject_line"] = "Teema Line";
 $LANG["phrase_submission_date"] = "Esitamise kuupäev";

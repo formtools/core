@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Korak 2";
 $LANG["phrase_step_3"] = "Korak 3";
 $LANG["phrase_step_4"] = "Korak 4";
 $LANG["phrase_step_5"] = "Korak 5";
+$LANG["phrase_step_6"] = "Korak 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip oznake v obliki vlog";
 $LANG["phrase_subject_line"] = "Predmet Line";
 $LANG["phrase_submission_date"] = "Datum vnosa";

@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Steg 2";
 $LANG["phrase_step_3"] = "Steg 3";
 $LANG["phrase_step_4"] = "Steg 4";
 $LANG["phrase_step_5"] = "Steg 5";
+$LANG["phrase_step_6"] = "Steg 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Rensa taggar i inskick från formulär";
 $LANG["phrase_subject_line"] = "Ärenderad";
 $LANG["phrase_submission_date"] = "Inskickningsdatum";

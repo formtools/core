@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Vaihe 2";
 $LANG["phrase_step_3"] = "Vaihe 3";
 $LANG["phrase_step_4"] = "Vaihe 4";
 $LANG["phrase_step_5"] = "Vaihe 5";
+$LANG["phrase_step_6"] = "Vaihe 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip tageja muodossa huomautukset";
 $LANG["phrase_subject_line"] = "Aiherivi";
 $LANG["phrase_submission_date"] = "Jättöpäivän";

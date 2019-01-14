@@ -683,6 +683,7 @@ $LANG["phrase_step_2"] = "Korak 2";
 $LANG["phrase_step_3"] = "Korak 3";
 $LANG["phrase_step_4"] = "Korak 4";
 $LANG["phrase_step_5"] = "Korak 5";
+$LANG["phrase_step_6"] = "Korak 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip oznaka u obliku podnesci";
 $LANG["phrase_subject_line"] = "Subject Line";
 $LANG["phrase_submission_date"] = "Podnošenje datum";

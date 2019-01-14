@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Шаг 2";
 $LANG["phrase_step_3"] = "Шаг 3";
 $LANG["phrase_step_4"] = "Шаг 4";
 $LANG["phrase_step_5"] = "Шаг 5";
+$LANG["phrase_step_6"] = "Шаг 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Газ-теги в форме представления";
 $LANG["phrase_subject_line"] = "Заглавие";
 $LANG["phrase_submission_date"] = "Дата представления";

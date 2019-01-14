@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Stap 2";
 $LANG["phrase_step_3"] = "Stap 3";
 $LANG["phrase_step_4"] = "Stap 4";
 $LANG["phrase_step_5"] = "Stap 5";
+$LANG["phrase_step_6"] = "Stap 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip etikette in die vorm voorleggings";
 $LANG["phrase_subject_line"] = "Subject line";
 $LANG["phrase_submission_date"] = "Inleweringsdatum";

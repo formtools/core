@@ -680,6 +680,7 @@ $LANG["phrase_step_2"] = "Стъпка 2";
 $LANG["phrase_step_3"] = "Стъпка 3";
 $LANG["phrase_step_4"] = "Стъпка 4";
 $LANG["phrase_step_5"] = "Стъпка 5";
+$LANG["phrase_step_6"] = "Стъпка 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Газа тагове във форма на заявления";
 $LANG["phrase_subject_line"] = "Сюжетната линия";
 $LANG["phrase_submission_date"] = "Дата на попълване";
