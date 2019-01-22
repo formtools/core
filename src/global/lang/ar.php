@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "الخطوة 2";
 $LANG["phrase_step_3"] = "الخطوة 3";
 $LANG["phrase_step_4"] = "الخطوة 4";
 $LANG["phrase_step_5"] = "الخطوة 5";
+$LANG["phrase_step_6"] = "الخطوة 6";
 $LANG["phrase_strip_tags_in_submissions"] = "الشريط السمات في شكل عروض";
 $LANG["phrase_subject_line"] = "موضوع الخط";
 $LANG["phrase_submission_date"] = "تقديم موعد";

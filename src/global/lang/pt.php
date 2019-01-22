@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Etapa 2";
 $LANG["phrase_step_3"] = "Passo 3";
 $LANG["phrase_step_4"] = "Passo 4";
 $LANG["phrase_step_5"] = "Passo 5";
+$LANG["phrase_step_6"] = "Passo 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Remover <i>tags</i> nos envios de formulários";
 $LANG["phrase_subject_line"] = "Assunto Line";
 $LANG["phrase_submission_date"] = "Data de Envio";

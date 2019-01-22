@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Чекор 2";
 $LANG["phrase_step_3"] = "Чекор 3";
 $LANG["phrase_step_4"] = "Чекор 4";
 $LANG["phrase_step_5"] = "Чекор 5";
+$LANG["phrase_step_6"] = "Чекор 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Стрип етикети во форма поднесоци";
 $LANG["phrase_subject_line"] = "Тема линија";
 $LANG["phrase_submission_date"] = "Датум на поднесување";

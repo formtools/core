@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "ステップ2";
 $LANG["phrase_step_3"] = "ステップ3";
 $LANG["phrase_step_4"] = "ステップ4";
 $LANG["phrase_step_5"] = "ステップ5";
+$LANG["phrase_step_6"] = "ステップ6";
 $LANG["phrase_strip_tags_in_submissions"] = "フォームの送信にあるストリップタグ";
 $LANG["phrase_subject_line"] = "件名行";
 $LANG["phrase_submission_date"] = "発表日";

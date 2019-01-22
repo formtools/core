@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Langkah 2";
 $LANG["phrase_step_3"] = "Langkah 3";
 $LANG["phrase_step_4"] = "Langkah 4";
 $LANG["phrase_step_5"] = "Langkah 5";
+$LANG["phrase_step_6"] = "Langkah 6";
 $LANG["phrase_strip_tags_in_submissions"] = "String tag pada form masukan";
 $LANG["phrase_subject_line"] = "Perihal Line";
 $LANG["phrase_submission_date"] = "Tanggal penyerahan";

@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Hatua ya 2";
 $LANG["phrase_step_3"] = "Hatua ya 3";
 $LANG["phrase_step_4"] = "Hatua ya 4";
 $LANG["phrase_step_5"] = "Hatua ya 5";
+$LANG["phrase_step_6"] = "Hatua ya 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip tags katika fomu redovisningar";
 $LANG["phrase_subject_line"] = "Subject Line";
 $LANG["phrase_submission_date"] = "Submission tarehe";

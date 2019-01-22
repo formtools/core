@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Bước 2";
 $LANG["phrase_step_3"] = "Bước 3";
 $LANG["phrase_step_4"] = "Bước 4";
 $LANG["phrase_step_5"] = "Bước 5";
+$LANG["phrase_step_6"] = "Bước 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Dải thẻ trong bản đệ trình mẫu";
 $LANG["phrase_subject_line"] = "Tiêu đề Line";
 $LANG["phrase_submission_date"] = "Nộp ngày";

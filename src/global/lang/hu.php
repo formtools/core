@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "2. lépés";
 $LANG["phrase_step_3"] = "3. lépés";
 $LANG["phrase_step_4"] = "4. lépés";
 $LANG["phrase_step_5"] = "5. lépés";
+$LANG["phrase_step_6"] = "6. lépés";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip címkék formában benyújtott";
 $LANG["phrase_subject_line"] = "Tárgy Line";
 $LANG["phrase_submission_date"] = "Benyújtás dátuma";

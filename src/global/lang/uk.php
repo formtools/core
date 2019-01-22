@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Крок 2";
 $LANG["phrase_step_3"] = "Крок 3";
 $LANG["phrase_step_4"] = "Крок 4";
 $LANG["phrase_step_5"] = "Крок 5";
+$LANG["phrase_step_6"] = "Крок 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Газ-теги у формі подання";
 $LANG["phrase_subject_line"] = "Заголовок";
 $LANG["phrase_submission_date"] = "Дата подання";

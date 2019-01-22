@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "ขั้น ที่ 2";
 $LANG["phrase_step_3"] = "ขั้น ที่ 3";
 $LANG["phrase_step_4"] = "ขั้น ที่ 4";
 $LANG["phrase_step_5"] = "ขั้น ที่ 5";
+$LANG["phrase_step_6"] = "ขั้น ที่ 6";
 $LANG["phrase_strip_tags_in_submissions"] = "แท็ ก Strip ใน การ ส่ง แบบ ฟอร์ม";
 $LANG["phrase_subject_line"] = "หัวเรื่อง";
 $LANG["phrase_submission_date"] = "วัน ที่ ส่ง";

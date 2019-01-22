@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Step 2";
 $LANG["phrase_step_3"] = "Step 3";
 $LANG["phrase_step_4"] = "Step 4";
 $LANG["phrase_step_5"] = "Solis 5";
+$LANG["phrase_step_6"] = "Solis 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip tags formas iesniegumu";
 $LANG["phrase_subject_line"] = "Subject Line";
 $LANG["phrase_submission_date"] = "Iesniegšanas datums";

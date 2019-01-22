@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "第2步";
 $LANG["phrase_step_3"] = "第3步";
 $LANG["phrase_step_4"] = "第4步";
 $LANG["phrase_step_5"] = "第5步";
+$LANG["phrase_step_6"] = "第6步";
 $LANG["phrase_strip_tags_in_submissions"] = "去除表格提交的标签";
 $LANG["phrase_subject_line"] = "主题行";
 $LANG["phrase_submission_date"] = "提交日期";

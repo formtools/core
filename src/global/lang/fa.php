@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "مرحله 2";
 $LANG["phrase_step_3"] = "مرحله 3";
 $LANG["phrase_step_4"] = "گام 4";
 $LANG["phrase_step_5"] = "گام 5";
+$LANG["phrase_step_6"] = "گام 6";
 $LANG["phrase_strip_tags_in_submissions"] = "برچسب نوار در فرمهای";
 $LANG["phrase_subject_line"] = "موضوع خط";
 $LANG["phrase_submission_date"] = "تاریخ ارسال مقاله";

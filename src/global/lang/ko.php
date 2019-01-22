@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "2 단계";
 $LANG["phrase_step_3"] = "3 단계";
 $LANG["phrase_step_4"] = "4 단계";
 $LANG["phrase_step_5"] = "5 단계";
+$LANG["phrase_step_6"] = "6 단계";
 $LANG["phrase_strip_tags_in_submissions"] = "양식 제출에 스트립 태그";
 $LANG["phrase_subject_line"] = "제목 선";
 $LANG["phrase_submission_date"] = "제출 일자";

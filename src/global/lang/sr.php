@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Корак 2";
 $LANG["phrase_step_3"] = "Корак 3";
 $LANG["phrase_step_4"] = "Корак 4";
 $LANG["phrase_step_5"] = "Корак 5";
+$LANG["phrase_step_6"] = "Корак 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Ознаке у облику трака поднесака";
 $LANG["phrase_subject_line"] = "Наслов линија";
 $LANG["phrase_submission_date"] = "Датум подношења";

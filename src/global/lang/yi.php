@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "טרעטן 2";
 $LANG["phrase_step_3"] = "טרעטן 3";
 $LANG["phrase_step_4"] = "טרעטן 4";
 $LANG["phrase_step_5"] = "טרעטן 5";
+$LANG["phrase_step_6"] = "טרעטן 6";
 $LANG["phrase_strip_tags_in_submissions"] = "פּאַס טאַגס אין פאָרעם סאַבמישאַנז";
 $LANG["phrase_subject_line"] = "ענין ליניע";
 $LANG["phrase_submission_date"] = "סובמיססיאָן טאָג";

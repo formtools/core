@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Adım 2";
 $LANG["phrase_step_3"] = "Adım 3";
 $LANG["phrase_step_4"] = "Adım 4";
 $LANG["phrase_step_5"] = "Adım 5";
+$LANG["phrase_step_6"] = "Adım 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Form gönderiminde etiketleri kaldır";
 $LANG["phrase_subject_line"] = "Konu Hattı";
 $LANG["phrase_submission_date"] = "Gönderim tarihi";

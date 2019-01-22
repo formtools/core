@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Trin 2";
 $LANG["phrase_step_3"] = "Trin 3";
 $LANG["phrase_step_4"] = "Trin 4";
 $LANG["phrase_step_5"] = "Trin 5";
+$LANG["phrase_step_6"] = "Trin 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Strip tags i form indlæg";
 $LANG["phrase_subject_line"] = "Om Line";
 $LANG["phrase_submission_date"] = "Henvendelses dato";

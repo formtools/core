@@ -69,8 +69,7 @@ class Files
         $success = true;
         $problems = array();
 
-        extract(Hooks::processHookCalls("start", compact("form_id", "file_field_info"), array("success", "problems")),
-        EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("start", compact("form_id", "file_field_info"), array("success", "problems")), EXTR_OVERWRITE);
 
         return array($success, $problems);
     }

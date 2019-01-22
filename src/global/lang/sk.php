@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Krok 2";
 $LANG["phrase_step_3"] = "Krok 3";
 $LANG["phrase_step_4"] = "Krok 4";
 $LANG["phrase_step_5"] = "Krok 5";
+$LANG["phrase_step_6"] = "Krok 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Očistiť tagy v zaslanom formulári";
 $LANG["phrase_subject_line"] = "Predmet Line";
 $LANG["phrase_submission_date"] = "Dátum podania žiadosti";

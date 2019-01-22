@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Pas 2";
 $LANG["phrase_step_3"] = "Pas 3";
 $LANG["phrase_step_4"] = "Pas 4";
 $LANG["phrase_step_5"] = "Pas 5";
+$LANG["phrase_step_6"] = "Pas 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Franja d&#39;etiquetes en els enviaments de formularis";
 $LANG["phrase_subject_line"] = "Línia d&#39;assumpte";
 $LANG["phrase_submission_date"] = "Data de presentació";

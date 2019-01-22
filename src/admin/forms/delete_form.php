@@ -56,8 +56,6 @@ if (isset($_POST["delete_form"]) && $_POST["delete_form"] == "yes") {
 	exit;
 }
 
-// ------------------------------------------------------------------------------------------------
-
 // compile the header information
 $page_vars = array(
     "head_title" => $LANG["phrase_delete_form"],

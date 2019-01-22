@@ -597,6 +597,7 @@ $LANG["phrase_step_2"] = "Pasul 2";
 $LANG["phrase_step_3"] = "Pasul 3";
 $LANG["phrase_step_4"] = "Pasul 4";
 $LANG["phrase_step_5"] = "Pasul 5";
+$LANG["phrase_step_6"] = "Pasul 6";
 $LANG["phrase_strip_tags_in_submissions"] = "Tag-uri Gaza în completarea de formulare";
 $LANG["phrase_subject_line"] = "Subiect Line";
 $LANG["phrase_submission_date"] = "Data Submission";
