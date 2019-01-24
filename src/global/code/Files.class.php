@@ -277,7 +277,6 @@ class Files
                         $filename = $image_info["search_results_thumb"];
                         break;
                     default:
-                        continue;
                         break;
                 }
             }
