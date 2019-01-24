@@ -1194,3 +1194,4 @@ $LANG["word_width_c"] = "leithead:";
 $LANG["word_words"] = "Focail";
 $LANG["word_yellow"] = "Buí";
 $LANG["word_yes"] = "Is ea";
+$LANG["notify_form_deleted"] = "The form has been deleted.";

@@ -1194,3 +1194,4 @@ $LANG["word_width_c"] = "चौड़ाई:";
 $LANG["word_words"] = "शब्द";
 $LANG["word_yellow"] = "पीला";
 $LANG["word_yes"] = "हाँ";
+$LANG["notify_form_deleted"] = "The form has been deleted.";

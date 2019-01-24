@@ -1194,3 +1194,4 @@ $LANG["word_width_c"] = "寬度：";
 $LANG["word_words"] = "字";
 $LANG["word_yellow"] = "黃河";
 $LANG["word_yes"] = "是";
+$LANG["notify_form_deleted"] = "The form has been deleted.";

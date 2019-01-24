@@ -1194,3 +1194,4 @@ $LANG["word_width_c"] = "กว้าง :";
 $LANG["word_words"] = "คำ";
 $LANG["word_yellow"] = "สีเหลือง";
 $LANG["word_yes"] = "ใช่";
+$LANG["notify_form_deleted"] = "The form has been deleted.";

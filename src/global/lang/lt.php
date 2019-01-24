@@ -1194,3 +1194,4 @@ $LANG["word_width_c"] = "plotis:";
 $LANG["word_words"] = "Žodžiai";
 $LANG["word_yellow"] = "Geltonas";
 $LANG["word_yes"] = "Taip";
+$LANG["notify_form_deleted"] = "The form has been deleted.";

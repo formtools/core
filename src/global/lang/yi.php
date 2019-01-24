@@ -1194,3 +1194,4 @@ $LANG["word_width_c"] = "ברייט:";
 $LANG["word_words"] = "ווערטער";
 $LANG["word_yellow"] = "געל";
 $LANG["word_yes"] = "יאָ";
+$LANG["notify_form_deleted"] = "The form has been deleted.";

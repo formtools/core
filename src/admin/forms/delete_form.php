@@ -52,7 +52,7 @@ if (isset($_POST["delete_form"]) && $_POST["delete_form"] == "yes") {
 	list($success, $message) = Forms::deleteForm($form_id, $delete_files);
 
 	// redirect back to the form list page
-    General::redirect("$root_url/admin/forms/");
+    General::redirect("$root_url/admin/forms/?message=form_deleted");
 	exit;
 }
 

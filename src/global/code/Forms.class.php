@@ -1144,8 +1144,6 @@ class Forms
 			$file_delete_problems = Files::removeFormFiles($form_id, $form_fields);
 		}
 
-		// TODO use transaction
-
 		$db->query("DROP TABLE IF EXISTS {PREFIX}form_$form_id");
 		$db->execute();
 

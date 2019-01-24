@@ -1194,3 +1194,4 @@ $LANG["word_width_c"] = "ширина:";
 $LANG["word_words"] = "Слова";
 $LANG["word_yellow"] = "Жовтий";
 $LANG["word_yes"] = "Так";
+$LANG["notify_form_deleted"] = "The form has been deleted.";

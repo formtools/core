@@ -1194,3 +1194,4 @@ $LANG["word_width_c"] = "bredd:";
 $LANG["word_words"] = "Ord";
 $LANG["word_yellow"] = "Gul";
 $LANG["word_yes"] = "Ja";
+$LANG["notify_form_deleted"] = "The form has been deleted.";

@@ -1194,3 +1194,4 @@ $LANG["word_width_c"] = "폭 :";
 $LANG["word_words"] = "말";
 $LANG["word_yellow"] = "황색";
 $LANG["word_yes"] = "예";
+$LANG["notify_form_deleted"] = "The form has been deleted.";

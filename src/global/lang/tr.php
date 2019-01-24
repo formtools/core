@@ -1194,3 +1194,4 @@ $LANG["word_width_c"] = "genişlik:";
 $LANG["word_words"] = "Sözler";
 $LANG["word_yellow"] = "Sarı";
 $LANG["word_yes"] = "Evet";
+$LANG["notify_form_deleted"] = "The form has been deleted.";
