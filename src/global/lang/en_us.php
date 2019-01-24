@@ -214,6 +214,7 @@ $LANG["phrase_add_new_group_rightarrow"] = "Add New Group &raquo;";
 $LANG["phrase_add_num_rows"] = "Add {\$number} Row(s)";
 $LANG["phrase_add_row"] = "Add Row &raquo;";
 $LANG["phrase_add_submission_button"] = "Add Submission Button";
+$LANG["phrase_add_upgrade_themes"] = "Add / Upgrade Themes";
 $LANG["phrase_add_view_rightarrow"] = "Add View &raquo;";
 $LANG["phrase_adding_multi_page_form"] = "Adding a multi-page form with the API";
 $LANG["phrase_adding_single_page_form"] = "Adding a single-page form with the API";
@@ -255,6 +256,7 @@ $LANG["phrase_base_view_on"] = "Base View on...";
 $LANG["phrase_change_login_info"] = "Change Login Information";
 $LANG["phrase_characters_limit_p"] = "characters limit.";
 $LANG["phrase_check_db_settings_try_again"] = "Please double-check your database settings and click the Continue button again.";
+$LANG["phrase_check_for_updates"] = "Check for updates";
 $LANG["phrase_check_url"] = "Check URL";
 $LANG["phrase_choose_components"] = "Choose Components";
 $LANG["phrase_clean_up"] = "Clean Up";
@@ -1192,7 +1194,3 @@ $LANG["word_width_c"] = "width:";
 $LANG["word_words"] = "Words";
 $LANG["word_yellow"] = "Yellow";
 $LANG["word_yes"] = "Yes";
-
-
-$LANG["phrase_check_for_updates"] = "Check for updates";
-$LANG["phrase_add_upgrade_themes"] = "Add / Upgrade Themes";
