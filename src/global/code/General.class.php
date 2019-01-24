@@ -416,17 +416,22 @@ END;
 	 */
 	public static function updateApiVersion()
 	{
+		$api_version = Settings::get("api_version");
+
 		if (!Core::isAPIAvailable()) {
-			Settings::set(array("api_version" => ""));
+			if (!empty($api_version)) {
+				Settings::set(array("api_version" => ""));
+				Hooks::updateAvailableHooks();
+			}
 			return;
 		}
 
-		$version = General::getApiVersion();
-		if (!$version) {
-			return;
-		}
+		include_once(Core::getAPIPath());
+		Settings::set(array("api_version" => API::getVersion()));
 
-		Settings::set(array("api_version" => $version));
+		if (empty($api_version)) {
+			Hooks::updateAvailableHooks();
+		}
 	}
 
 
