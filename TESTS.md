@@ -18,6 +18,7 @@ libraries, hence why it was committed (and in the main releases). However, this 
 dependencies, not dev dependencies. So to get phpunit you'll need to run a `composer install` without the `--no-dev` 
 option (see below).
 
+
 #### Travis 
 
 Right now only the unit tests are running on travis. But the goal is to add in selenium tests as well.
@@ -30,7 +31,7 @@ Requirements: PHP 7 has to be running on your machine's command line.
 
 - Check out the repo and navigate to the root.
 - Run `composer install`  
-- Run `vendor/bin/phpunit`
+- Run `src/vendor/bin/phpunit tests`
 
 
 #### Test lang file content 

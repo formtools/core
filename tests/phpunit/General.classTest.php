@@ -136,5 +136,14 @@ class GeneralTest extends TestCase
 			"why", "hello", "world"
 		));
 	}
+
+	// General::getErrorListHTML
+	public function testGetErrorListHTML() {
+		$errors = array(
+			"error 1",
+			"error 2"
+		);
+		$this->assertEquals(General::getErrorListHTML($errors), "...");
+	}
 }
 
