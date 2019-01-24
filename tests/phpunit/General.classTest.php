@@ -148,7 +148,7 @@ class GeneralTest extends TestCase
 	public function testGetErrorListHTML_MultipleErrors() {
 		$errors = array(
 			"error 1",
-			"error 22"
+			"error 2"
 		);
 		$this->assertEquals(General::getErrorListHTML($errors), '&bull;&nbsp; error 1<br />&bull;&nbsp; error 2');
 	}
