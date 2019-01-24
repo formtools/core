@@ -138,12 +138,20 @@ class GeneralTest extends TestCase
 	}
 
 	// General::getErrorListHTML
-	public function testGetErrorListHTML() {
+	public function testGetErrorListHTML_SingleError() {
+		$errors = array(
+			"error 1"
+		);
+		$this->assertEquals(General::getErrorListHTML($errors), '&bull;&nbsp; error 1');
+	}
+
+	public function testGetErrorListHTML_MultipleErrors() {
 		$errors = array(
 			"error 1",
-			"error 2"
+			"error 22"
 		);
-		$this->assertEquals(General::getErrorListHTML($errors), "...");
+		$this->assertEquals(General::getErrorListHTML($errors), '&bull;&nbsp; error 1<br />&bull;&nbsp; error 2');
 	}
+
 }
 
