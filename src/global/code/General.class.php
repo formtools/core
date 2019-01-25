@@ -58,12 +58,16 @@ class General
 
 	/**
 	 * Helper method to convert an array to rows of HTML in bullet points.
-	 * @return array
+	 * @param array $errors
+	 * @return string
 	 */
 	public static function getErrorListHTML(array $errors)
 	{
-		array_walk($errors, create_function('&$el', '$el = "&bull;&nbsp; " . $el;'));
-		return join("<br />", $errors);
+		$rows = array();
+		foreach ($errors as $error) {
+			$rows[] = "&bull;&nbsp; $error";
+		}
+		return join("<br />", $rows);
 	}
 
 	/**
