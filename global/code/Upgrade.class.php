@@ -33,11 +33,6 @@ class Upgrade
             	self::addCopySubmissionField();
 			}
 
-			// Fix for https://github.com/formtools/core/issues/272
-			if (General::isVersionEarlierThan($last_version_in_db, "3.0.5")) {
-				FieldTypes::resetFieldTypes();
-			}
-
 			if (General::isVersionEarlierThan($last_version_in_db, "3.0.8")) {
 				Settings::set(array("installation_complete" => "yes"), "core");
 			}
@@ -46,6 +41,8 @@ class Upgrade
 				self::addViewMappingViewId();
 				self::setCoreFieldsAsNotEditable();
 			}
+
+			FieldTypes::resetFieldTypes();
 
             if ($success) {
                 Settings::set(array(
