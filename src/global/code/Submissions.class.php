@@ -294,16 +294,17 @@ class Submissions {
     }
 
 
-    /**
-     * Creates a new blank submission in the database and returns the unique submission ID. If the
-     * operation fails for whatever reason (e.g. the form doesn't exist), it just returns the empty
-     * string.
-     *
-     * @param integer $form_id
-     * @param integer $view_id
-     * @param boolean $is_finalized whether the submission is finalized or not.
-     */
-    public static function createBlankSubmission($form_id, $view_id, $is_finalized = false)
+	/**
+	 * Creates a new blank submission in the database and returns the unique submission ID. If the
+	 * operation fails for whatever reason (e.g. the form doesn't exist), it just returns the empty
+	 * string.
+	 * @param $form_id
+	 * @param $view_id
+	 * @param bool $is_finalized
+	 * @param array $account_placeholders
+	 * @return string
+	 */
+    public static function createBlankSubmission($form_id, $view_id, $is_finalized = false, $account_placeholders = array())
     {
         $db = Core::$db;
 
@@ -350,10 +351,14 @@ class Submissions {
             $field_id_to_column_name_map = Fields::getFieldColByFieldId($form_id, $field_ids);
 
             foreach ($field_id_to_column_name_map as $field_id => $col_name) {
+
+            	// used to convert Client Map placeholders (user data + Extended Client Fields data)
+				$value = General::evalSmartyString($field_id_to_value_map[$field_id], $account_placeholders);
+
                 $default_insert_pairs[] = array(
                     "placeholder" => ":{$col_name}",
                     "col_name" => $col_name,
-                    "value" => $field_id_to_value_map[$field_id]
+                    "value" => $value
                 );
             }
         }

@@ -53,7 +53,8 @@ $form_info = Forms::getForm($form_id);
 $view_info = Views::getView($view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes") {
-	$submission_id = Submissions::createBlankSubmission($form_id, $view_id, true);
+	$account_placeholders = Core::$user->getAccountPlaceholders();
+	$submission_id = Submissions::createBlankSubmission($form_id, $view_id, true, $account_placeholders);
 	General::redirect("edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id");
 }
 

@@ -273,7 +273,7 @@ class Hooks {
         // extract the var passed from the calling function into the current scope
         foreach ($hooks as $hook_info) {
             $module_folder = $hook_info["module_folder"];
-            if (!Modules::checkModuleEnabled($module_folder)) {
+            if (!Modules::isValidModule($module_folder) || !Modules::checkModuleEnabled($module_folder)) {
                 continue;
             }
 
