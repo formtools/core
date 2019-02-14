@@ -24,7 +24,7 @@ $LANG = Core::$L;
 // if the form ID is specified in GET or POST, store it in sessions as curr_form_id
 $form_id = General::loadField("form_id", "curr_form_id");
 if (empty($form_id) || !is_numeric($form_id)) {
-    General::redirect("./");
+	General::redirect("./");
 }
 
 // check this is a valid form
@@ -37,14 +37,14 @@ if (!Forms::checkFormExists($form_id)) {
 // (ordered) list of Views for this form. If THAT doesn't exist, the user has deleted all Views (doh!), so
 // there's nothing to show. In that case, just redirect them to the Views tab, where an error / warning message
 // will appear in the page
-$view_id       = General::loadField("view_id", "form_{$form_id}_view_id");
+$view_id = General::loadField("view_id", "form_{$form_id}_view_id");
 $grouped_views = Views::getGroupedViews($form_id, array("omit_hidden_views" => true, "omit_empty_groups" => true));
 
 if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
 
-    // no Views defined for this form! redirect to the Views page and display a message
+	// no Views defined for this form! redirect to the Views page and display a message
 	if (count($grouped_views) == 0 || count($grouped_views[0]["views"]) == 0) {
-        General::redirect("edit/?page=views&form_id=$form_id&message=no_views");
+		General::redirect("edit/?page=views&form_id=$form_id&message=no_views");
 	} else {
 		$view_id = $grouped_views[0]["views"][0]["view_id"];
 	}
@@ -53,31 +53,32 @@ if (empty($view_id) || !Views::checkViewExists($view_id, true)) {
 Sessions::set("form_{$form_id}_view_id", $view_id);
 Sessions::set("last_link_page_{$form_id}", "submissions");
 
-$form_info   = Forms::getForm($form_id);
+$form_info = Forms::getForm($form_id);
 $form_fields = Fields::getFormFields($form_id, array("include_field_type_info" => true, "include_field_settings" => true));
-$view_info   = Views::getView($view_id);
+$view_info = Views::getView($view_id);
 
 if (isset($_GET["add_submission"]) && $view_info["may_add_submissions"] == "yes") {
-	$submission_id = Submissions::createBlankSubmission($form_id, $view_id, true);
-    General::redirect("edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id&message=new_submission");
+	$account_placeholders = Core::$user->getAccountPlaceholders();
+	$submission_id = Submissions::createBlankSubmission($form_id, $view_id, true, $account_placeholders);
+	General::redirect("edit_submission.php?form_id=$form_id&view_id=$view_id&submission_id=$submission_id&message=new_submission");
 }
 
 // if the View just changed (i.e. it was just selected by the user), deselect any form rows
 if (isset($request["view_id"])) {
-    Sessions::set("form_{$form_id}_selected_submissions", array());
-    Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
-    Sessions::set("form_{$form_id}_select_all_submissions", "");
+	Sessions::set("form_{$form_id}_selected_submissions", array());
+	Sessions::set("form_{$form_id}_all_submissions_selected_omit_list", array());
+	Sessions::set("form_{$form_id}_select_all_submissions", "");
 }
 
 // Fix for bug #174
 $has_search_info_for_other_form = (Sessions::exists("current_search") && Sessions::get("current_search.form_id") != $form_id);
-$is_resetting_search            = (isset($_GET["reset"]) && $_GET["reset"] == "1");
+$is_resetting_search = (isset($_GET["reset"]) && $_GET["reset"] == "1");
 
 if ($is_resetting_search || $has_search_info_for_other_form) {
-    Sessions::clear("search_field");
-    Sessions::clear("search_keyword");
-    Sessions::clear("search_date");
-    Sessions::clear("current_search");
+	Sessions::clear("search_field");
+	Sessions::clear("search_keyword");
+	Sessions::clear("search_date");
+	Sessions::clear("current_search");
 
 	// only empty the memory of selected submission ID info if the user just reset the search
 	if ($is_resetting_search) {
@@ -85,8 +86,8 @@ if ($is_resetting_search || $has_search_info_for_other_form) {
 	}
 }
 $search_fields = array(
-	"search_field"   => General::loadField("search_field", "search_field", ""),
-	"search_date"    => General::loadField("search_date", "search_date", ""),
+	"search_field" => General::loadField("search_field", "search_field", ""),
+	"search_date" => General::loadField("search_date", "search_date", ""),
 	"search_keyword" => General::loadField("search_keyword", "search_keyword", "")
 );
 
@@ -118,19 +119,19 @@ if (isset($_GET["delete"])) {
 // figure out the current page
 $current_page = General::loadField("page", "view_{$view_id}_page", 1);
 if (isset($_POST["search"])) {
-    $current_page = 1;
+	$current_page = 1;
 }
 
 // make a map of field_id => col_name for use in determining the search cols. This contains
 // all the fields in the View
 $all_view_field_columns = array();
-$searchable_columns  = array();
+$searchable_columns = array();
 
 foreach ($view_info["fields"] as $field_info) {
 	$all_view_field_columns[$field_info["field_id"]] = $field_info["col_name"];
 	if ($field_info["is_searchable"] == "yes") {
-        $searchable_columns[] = $field_info["col_name"];
-    }
+		$searchable_columns[] = $field_info["col_name"];
+	}
 }
 $db_columns = array_values($all_view_field_columns); // used for the search query
 
@@ -163,15 +164,15 @@ foreach ($view_info["columns"] as $col_info) {
 	$data_to_merge = $col_info;
 	foreach ($view_info["fields"] as $view_field_info) {
 		if ($view_field_info["field_id"] != $curr_field_id) {
-            continue;
-        }
+			continue;
+		}
 		$data_to_merge = array_merge($view_field_info, $data_to_merge);
 	}
 
 	foreach ($form_fields as $form_field_info) {
 		if ($form_field_info["field_id"] != $curr_field_id) {
-            continue;
-        }
+			continue;
+		}
 		$data_to_merge = array_merge($form_field_info, $data_to_merge);
 	}
 
@@ -180,10 +181,10 @@ foreach ($view_info["columns"] as $col_info) {
 
 // determine the sort order
 if (isset($_GET["order"])) {
-    Sessions::set("view_{$view_id}_sort_order", $_GET["order"]);
+	Sessions::set("view_{$view_id}_sort_order", $_GET["order"]);
 	$order = $_GET["order"];
 } else {
-    $order = Sessions::getWithFallback("view_{$view_id}_sort_order", "{$view_info['default_sort_field']}-{$view_info['default_sort_field_order']}");
+	$order = Sessions::getWithFallback("view_{$view_id}_sort_order", "{$view_info['default_sort_field']}-{$view_info['default_sort_field_order']}");
 }
 
 $results_per_page = $view_info["num_submissions_per_page"];
@@ -192,18 +193,18 @@ $results_per_page = $view_info["num_submissions_per_page"];
 $results_info = Submissions::searchSubmissions($form_id, $view_id, $results_per_page, $current_page, $order, $db_columns,
 	$search_fields, array(), $searchable_columns);
 
-$search_rows        = $results_info["search_rows"];
+$search_rows = $results_info["search_rows"];
 $search_num_results = $results_info["search_num_results"];
-$view_num_results   = $results_info["view_num_results"];
+$view_num_results = $results_info["view_num_results"];
 
 // store the current search settings. This information is used on the item details page to provide
 // "<< previous  next >>" links that only apply to the CURRENT search result set
 Sessions::set("new_search", "yes");
 Sessions::set("current_search", array(
-	"form_id"          => $form_id,
+	"form_id" => $form_id,
 	"results_per_page" => $results_per_page,
-	"order"            => $order,
-	"search_fields"    => $search_fields
+	"order" => $order,
+	"search_fields" => $search_fields
 ));
 
 // check that the current page is stored in sessions is, in fact, a valid page. e.g. if the person
@@ -215,7 +216,7 @@ $total_pages = ceil($search_num_results / $results_per_page);
 $session_key = "view_{$view_id}_page";
 if (Sessions::exists($session_key) && Sessions::get($session_key) > $total_pages) {
 	Sessions::set($session_key, $total_pages);
-    General::redirect("submissions.php");
+	General::redirect("submissions.php");
 }
 
 // this sets the total number of submissions that the admin can see in this form and View in the form_X_num_submissions
@@ -227,8 +228,8 @@ Sessions::setIfNotExists("form_{$form_id}_select_all_submissions", "");
 
 // get a list of all submission IDs in this page
 $submission_ids = array();
-for ($i=0; $i<count($search_rows); $i++) {
-    $submission_ids[] = $search_rows[$i]["submission_id"];
+for ($i = 0; $i < count($search_rows); $i++) {
+	$submission_ids[] = $search_rows[$i]["submission_id"];
 }
 $submission_id_str = implode(",", $submission_ids);
 
@@ -243,7 +244,7 @@ if ($select_all_submissions_returned == "true") {
 	$all_submissions_selected_omit_list_str = implode(",", $all_submissions_selected_omit_list);
 	$preselected_subids = array_diff($submission_ids, $all_submissions_selected_omit_list);
 } else {
-    $preselected_subids = Sessions::getWithFallback("form_{$form_id}_selected_submissions", array());
+	$preselected_subids = Sessions::getWithFallback("form_{$form_id}_selected_submissions", array());
 }
 
 $preselected_subids_str = implode(",", $preselected_subids);
@@ -262,7 +263,7 @@ foreach ($view_info["fields"] as $field_info) {
 $settings = Settings::get("", "core");
 $date_picker_info = FieldTypes::getDefaultDateFieldSearchValue($settings["default_date_field_search_value"]);
 $default_date_field_search_value = $date_picker_info["default_date_field_search_value"];
-$date_field_search_js_format     = $date_picker_info["date_field_search_js_format"];
+$date_field_search_js_format = $date_picker_info["date_field_search_js_format"];
 
 // get all the shared resources
 $shared_resources_list = Settings::get("edit_submission_onload_resources");
@@ -274,39 +275,39 @@ foreach ($shared_resources_array as $resource) {
 
 // compile the header information
 $page_vars = array(
-    "page"    => "admin_forms",
-    "g_success" => $success,
-    "g_message" => $message,
-    "page_url" => Pages::getPageUrl("form_submissions", array("form_id" => $form_id)),
-    "head_title"  => $LANG["word_submissions"],
-    "form_info"   => $form_info,
-    "form_id"     => $form_id,
-    "view_id"     => $view_id,
-    "default_date_field_search_value" => $default_date_field_search_value,
-    "search_rows" => $search_rows,
-    "search_num_results" => $search_num_results,
-    "view_num_results" => $view_num_results,
-    "total_form_submissions" => Sessions::get("form_{$form_id}_num_submissions"),
-    "grouped_views" => $grouped_views,
-    "view_info"     => $view_info,
-    "settings"      => $settings,
-    "pass_along_str" => "", // TODO
-    "preselected_subids" => $preselected_subids,
-    "results_per_page"   => $results_per_page,
-    "display_fields"     => $display_fields,
-    "page_submission_ids" => $submission_id_str,
-    "order" => $order,
-    "field_types" => $field_types,
-    "has_searchable_field" => $has_searchable_field,
-    "notify_view_missing_columns_admin_fix" => General::evalSmartyString($LANG["notify_view_missing_columns_admin_fix"], array(
-    	"LINK" => "edit/?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2"
+	"page" => "admin_forms",
+	"g_success" => $success,
+	"g_message" => $message,
+	"page_url" => Pages::getPageUrl("form_submissions", array("form_id" => $form_id)),
+	"head_title" => $LANG["word_submissions"],
+	"form_info" => $form_info,
+	"form_id" => $form_id,
+	"view_id" => $view_id,
+	"default_date_field_search_value" => $default_date_field_search_value,
+	"search_rows" => $search_rows,
+	"search_num_results" => $search_num_results,
+	"view_num_results" => $view_num_results,
+	"total_form_submissions" => Sessions::get("form_{$form_id}_num_submissions"),
+	"grouped_views" => $grouped_views,
+	"view_info" => $view_info,
+	"settings" => $settings,
+	"pass_along_str" => "", // TODO
+	"preselected_subids" => $preselected_subids,
+	"results_per_page" => $results_per_page,
+	"display_fields" => $display_fields,
+	"page_submission_ids" => $submission_id_str,
+	"order" => $order,
+	"field_types" => $field_types,
+	"has_searchable_field" => $has_searchable_field,
+	"notify_view_missing_columns_admin_fix" => General::evalSmartyString($LANG["notify_view_missing_columns_admin_fix"], array(
+		"LINK" => "edit/?form_id={$form_id}&view_id={$view_id}&page=edit_view&edit_view_tab=2"
 	)),
-    "curr_search_fields" => Sessions::get("current_search.search_fields"),
-    "pagination" => General::getPageNav($search_num_results, $results_per_page, $current_page, "")
+	"curr_search_fields" => Sessions::get("current_search.search_fields"),
+	"pagination" => General::getPageNav($search_num_results, $results_per_page, $current_page, "")
 );
 
 $page_vars["js_messages"] = array(
-    "validation_select_rows_to_view", "validation_select_rows_to_download",
+	"validation_select_rows_to_view", "validation_select_rows_to_download",
 	"validation_select_submissions_to_delete", "confirm_delete_submission", "confirm_delete_submissions",
 	"phrase_select_all_X_results", "phrase_select_all_on_page", "phrase_all_X_results_selected",
 	"phrase_row_selected", "phrase_rows_selected", "confirm_delete_submissions_on_other_pages",
@@ -314,7 +315,7 @@ $page_vars["js_messages"] = array(
 	"validation_please_enter_search_keyword", "notify_invalid_search_dates",
 	"validation_select_submissions_to_copy"
 );
-$page_vars["head_string"] =<<< END
+$page_vars["head_string"] = <<< END
 <link rel="stylesheet" href="../../global/css/ui.daterangepicker.css" type="text/css" />
 <script src="../../global/scripts/manage_submissions.js"></script>
 <script src="../../global/scripts/daterangepicker.jquery.js"></script>
@@ -323,7 +324,7 @@ $page_vars["head_string"] =<<< END
 $shared_resources
 END;
 
-$page_vars["head_js"] =<<< END
+$page_vars["head_js"] = <<< END
 var rules = [];
 rules.push("function,ms.check_search_keyword");
 rules.push("function,ms.check_valid_date");
