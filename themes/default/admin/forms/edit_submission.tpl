@@ -74,6 +74,8 @@
                 </table>
             {/foreach}
 
+            <input type="hidden" name="field_ids" value="{$page_field_ids_str}"/>
+
             <p>
                 <input type="submit" name="reconcile_fields" value="{$LANG.word_update}" />
             </p>

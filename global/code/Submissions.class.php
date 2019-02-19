@@ -868,9 +868,12 @@ class Submissions {
     /**
      * Updates an individual form submission.
      *
+	 * @param int
+	 * @param int
      * @param array $infohash This parameter should be a hash (e.g. $_POST or $_GET) containing the
      *             various fields from the update submission page. The contents of it change for each
      *             form and form View, of course.
+	 * @param bool
      * @return array Returns array with indexes:<br/>
      *               [0]: true/false (success / failure)<br/>
      *               [1]: message string<br/>
@@ -993,6 +996,12 @@ class Submissions {
         $statements = join(",\n", $set_statements);
 
         try {
+//        	echo "                UPDATE {PREFIX}form_{$form_id}
+//                SET    $statements
+//                WHERE  submission_id = :submission_id
+//";
+//        	exit;
+
             $db->query("
                 UPDATE {PREFIX}form_{$form_id}
                 SET    $statements

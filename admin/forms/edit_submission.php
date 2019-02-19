@@ -72,7 +72,7 @@ if (isset($_POST) && !empty($_POST)) {
 				$fields_to_update[] = $field_name;
 				$request[$field_name] = $user_values[$field_name]["user_value"];
 			} else {
-				unset($request[$field_name]);
+				$request[$field_name] = $user_values[$field_name]["db_value"];
 			}
 		}
 
