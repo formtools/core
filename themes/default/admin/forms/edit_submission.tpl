@@ -44,6 +44,42 @@
         <input type="hidden" name="submission_id" id="submission_id" value="{$submission_id}"/>
         <input type="hidden" name="tab" id="tab" value="{$tab_number}"/>
 
+        {if $changed_fields}
+
+            <input type="hidden" name="core__reconcile_changed_fields" value="1" />
+
+            {foreach from=$changed_fields key=k item=field}
+                <table class="list_table" cellpadding="1" cellspacing="1" border="0" width="100%">
+                <tr>
+                    <td width="160" rowspan="2" class="pad_left_small" valign="top">{$field.field_title}</td>
+                    <td width="160" class="pad_left">
+                        <input type="radio" name="{$field.field_name}" id="field_{$field.field_id}_db_value" value="db_value" />
+                            <label for="field_{$field.field_id}_db_value">Value in database</label>
+                    </td>
+                    <td class="pad_left" valign="top">
+                        {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$field.db_value
+                            field_types=$field_types settings=$settings}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="pad_left">
+                        <input type="radio" name="{$field.field_name}" id="field_{$field.field_id}_user_value" value="user_value" checked="checked" />
+                            <label for="field_{$field.field_id}_user_value">Your value</label>
+                    </td>
+                    <td class="pad_left" valign="top">
+                        {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$field.user_value
+                            field_types=$field_types settings=$settings}
+                    </td>
+                </tr>
+                </table>
+            {/foreach}
+
+            <p>
+                <input type="submit" name="reconcile_fields" value="{$LANG.word_update}" />
+            </p>
+
+        {else}
+
         {foreach from=$grouped_fields key=k item=curr_group}
             {assign var=group value=$curr_group.group}
             {assign var=fields value=$curr_group.fields}
@@ -64,7 +100,7 @@
                     </td>
                     <td valign="top">
                         {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$curr_field
-                        field_types=$field_types settings=$settings}
+                            field_types=$field_types settings=$settings}
                     </td>
                 </tr>
             {/foreach}
@@ -106,6 +142,9 @@
                        onclick="window.location='?form_id={$form_id}&amp;copy_submission={$submission_id}'" />
             {/if}
         </div>
+
+        {/if}
+
     </form>
 
     {if $tabs|@count > 0}

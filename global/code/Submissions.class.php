@@ -715,7 +715,7 @@ class Submissions {
 
 
     /**
-     * Retrieves ONLY the submission data itself. If you require "meta" information about the submision
+     * Retrieves ONLY the submission data itself. If you require "meta" information about the submission
      * such as it's field type, size, database table name etc, use ft_get_submision().
      *
      * @param integer $form_id The unique form ID.
@@ -741,6 +741,18 @@ class Submissions {
 
         return $submission;
     }
+
+
+    public static function getSubmissionByField($form_id, $submission_id, $view_id)
+	{
+		$submission = self::getSubmission($form_id, $submission_id, $view_id);
+		$data = array();
+		foreach ($submission as $field) {
+			$data[$field["field_name"]] = $field["content"];
+		}
+
+		return $data;
+	}
 
 
     /**
@@ -863,7 +875,7 @@ class Submissions {
      *               [0]: true/false (success / failure)<br/>
      *               [1]: message string<br/>
      */
-    public static function updateSubmission($form_id, $submission_id, $infohash)
+    public static function updateSubmission($form_id, $submission_id, $infohash, $no_validation = false)
     {
         $db = Core::$db;
         $LANG = Core::$L;
@@ -876,13 +888,15 @@ class Submissions {
 
         $field_ids = (!empty($infohash["field_ids"])) ? explode(",", $infohash["field_ids"]) : array();
 
-        // perform any server-side validation
-        $errors = FieldValidation::validateSubmission($infohash["editable_field_ids"], $infohash);
+        if (!$no_validation) {
+			// perform any server-side validation
+			$errors = FieldValidation::validateSubmission($infohash["editable_field_ids"], $infohash);
 
-        // if there are any problems, return right away
-        if (!empty($errors)) {
-            return array(false, General::getErrorListHTML($errors));
-        }
+			// if there are any problems, return right away
+			if (!empty($errors)) {
+				return array(false, General::getErrorListHTML($errors));
+			}
+		}
 
         $form_fields = Fields::getFormFields($form_id);
         $field_types_processing_info = FieldTypes::getFieldTypeProcessingInfo();
@@ -917,7 +931,7 @@ class Submissions {
 
             // if this is a FILE field that doesn't have any overridden PHP processing code, just store the info
             // about the field. Presumably, the module / field type has registered the appropriate hooks for
-            // processing the file. Without it, the module wouldn't work. We pass that field + file into to the hook.
+            // processing the file. Without it, the module wouldn't work. We pass that field + file info to the hook.
             if ($field_types_processing_info[$row["field_type_id"]]["is_file_field"] == "yes") {
                 $file_data = array(
                     "field_id"   => $field_id,
@@ -1517,6 +1531,86 @@ class Submissions {
 		}
 
 		return array($success, $message, $new_submission_id);
+	}
+
+
+	/**
+	 * Added in 3.0.13. This is called every time a user edits a field. It tracks the current values they're about to
+	 * edit (specific to the View) so we can detect changes that occur to those fields while they are editing and
+	 * present them with a UI to reconcile the differences.
+	 *
+	 * We stash the submission, view & tab so we can do a quick check before updating the data that the info being
+	 * updated corresponds to the actual submission. If a user had opened a new tab and edited a different submission
+	 * this data would be incorrect if the user then updated the FIRST tab submission. For that scenario we simply
+	 * update the submission and don't try to reconcile differences. If and when we actually properly support running
+	 * FT in multiple tabs this can be revisited. https://github.com/formtools/core/issues/479
+	 *
+	 * @param $grouped_fields
+	 * @param $submission_id
+	 * @param $view_id
+	 * @param $tab_number
+	 */
+	public static function trackCurrentEditSubmissionFields($grouped_fields, $submission_id, $view_id, $tab_number)
+	{
+		$core_fields = array(
+			"core__submission_id",
+			"core__submission_date",
+			"core__last_modified",
+			"core__ip_address"
+		);
+    	$data = array();
+    	foreach ($grouped_fields as $group) {
+    		foreach ($group["fields"] as $field) {
+    			if (!in_array($field["field_name"], $core_fields)) {
+					$data[$field["field_name"]] = $field["submission_value"];
+				}
+			}
+		}
+    	Sessions::set("last_edit_submission_state", array(
+    		"submission_id" => $submission_id,
+			"view_id" => $view_id,
+			"tab_number" => $tab_number,
+			"data" => $data
+		));
+	}
+
+
+	public static function getChangedFieldsSinceLastRender($form_id, $view_id, $submission_id, $tab_number, $post)
+	{
+		$view_fields = Submissions::getSubmissionByField($form_id, $submission_id, $view_id);
+		unset($view_fields["core__submission_id"]);
+		unset($view_fields["core__submission_date"]);
+		unset($view_fields["core__last_modified"]);
+		unset($view_fields["core__ip_address"]);
+
+		$last_edit_submission_state = Sessions::get("last_edit_submission_state");
+
+		// in case the last submission data is NOT the one being updated, just abort. This can happen if the user
+		// opened another tab and edited a different submission
+		if ($last_edit_submission_state["submission_id"] != $submission_id ||
+			$last_edit_submission_state["view_id"] != $view_id ||
+			$last_edit_submission_state["tab_number"] != $tab_number) {
+			return array();
+		}
+
+		$changed = array();
+		foreach ($view_fields as $field_name => $value) {
+
+			// ignore any fields that aren't in the POST request
+			if (!isset($post[$field_name])) {
+				continue;
+			}
+
+			// if the data in the database changed. TODO also check value isn't changed to NEW value in the db!
+			if ($last_edit_submission_state["data"][$field_name] !== $value) {
+				$changed[$field_name] = array(
+					"db_value" => $value,
+					"user_value" => $post[$field_name]
+				);
+			}
+		}
+
+		return $changed;
 	}
 
 

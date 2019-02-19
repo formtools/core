@@ -52,26 +52,88 @@ Sessions::set("last_link_page_{$form_id}",  "edit");
 // determine whether the page contains any editable fields
 $editable_field_ids = ViewFields::getEditableViewFields($view_id);
 
-
 // update the submission
 $failed_validation = false;
-if (isset($_POST) && !empty($_POST)) {
-    Sessions::set("new_search", "yes");
-	$request["view_id"] = $view_id;
-	$request["editable_field_ids"] = $editable_field_ids;
-	list($success, $message) = Submissions::updateSubmission($form_id, $submission_id, $request);
+$changed_fields = array();
 
-	// if there was any problem updating this submission, make a special note of it: we'll use that info to merge the
-    // current POST request info with the original field values to ensure the page contains the latest data (i.e. for
-    // cases where they fail server-side validation)
-	if (!$success) {
-		$failed_validation = true;
+if (isset($_POST) && !empty($_POST)) {
+
+	if (isset($_POST["core__reconcile_changed_fields"])) {
+		$state = Sessions::get("last_edit_submission_state");
+
+		// filter out anything with "db value" - we don't care about them any more: the user has indicated they want the
+		// value from the DB, so even if it's changed again, just use it
+		$new_values = array();
+		$keys = array_keys($state["data"]);
+		$fields_to_update = array();
+		$user_values = Sessions::get("conflicted_user_values");
+		foreach ($keys as $field_name) {
+			if (isset($_POST[$field_name]) && $_POST[$field_name] == "user_value") {
+				$fields_to_update[] = $field_name;
+				$request[$field_name] = $user_values[$field_name]["user_value"];
+			} else {
+				unset($request[$field_name]);
+			}
+		}
+
+		if (empty($fields_to_update)) {
+			$success = true;
+			$message = "The differences have been resolved.";
+		} else {
+			$changed_fields = Submissions::getChangedFieldsSinceLastRender($form_id, $view_id, $submission_id, $request["tab"], $request);
+
+			// now if the old DB values are the same as what they already reviewed, that's fine, we can just update the record.
+			// But if it changed again, display the conflict resolution page with the latest info.
+			$db_values_same = true;
+			foreach ($changed_fields as $field_name => $changes) {
+				if ($user_values[$field_name]["db_value"] !== $changes["db_value"]) {
+					$db_values_same = false;
+				} else {
+					$request[$field_name] = $changes["user_value"];
+				}
+			}
+
+			if ($db_values_same) {
+				$changed_fields = array();
+				Sessions::set("new_search", "yes");
+				$request["view_id"] = $view_id;
+				$request["editable_field_ids"] = $editable_field_ids;
+				list($success, $message) = Submissions::updateSubmission($form_id, $submission_id, $request, true);
+			}
+		}
+
+	} else {
+		// see if any of the fields have been already updated
+		$changed_fields = Submissions::getChangedFieldsSinceLastRender($form_id, $view_id, $submission_id, $_POST["tab"], $_POST);
+		Sessions::set("new_search", "yes");
+		$request["view_id"] = $view_id;
+		$request["editable_field_ids"] = $editable_field_ids;
+
+		// if the DB had more recent values, reset all the conflicting fields to use the last value in the DB before updating
+		// the database. We'll then present the information to the user
+		if (!empty($changed_fields)) {
+			foreach ($changed_fields as $field_name => $value) {
+				$request[$field_name] = $changed_fields[$field_name]["db_value"];
+			}
+		}
+		list($success, $message) = Submissions::updateSubmission($form_id, $submission_id, $request);
+
+		if (!empty($changed_fields)) {
+			$success = false;
+			$message = "The data for these fields changed while you were editing the submission. Please select the value you would like to use.";
+		}
+
+		// if there was any problem updating this submission, make a special note of it: we'll use that info to merge the
+		// current POST request info with the original field values to ensure the page contains the latest data (i.e. for
+		// cases where they fail server-side validation)
+		if (!$success) {
+			$failed_validation = true;
+		}
 	}
 }
 
 $form_info = Forms::getForm($form_id);
 
-// this is crumby
 $has_tabs = false;
 foreach ($view_info["tabs"] as $tab_info) {
 	if (!empty($tab_info["tab_label"])) {
@@ -84,6 +146,46 @@ $grouped_fields = ViewFields::getGroupedViewFields($view_id, $tab_number, $form_
 
 if ($failed_validation) {
 	$grouped_fields = FieldValidation::mergeFormSubmission($grouped_fields, $_POST);
+}
+
+$reconcile_changed_fields = array();
+if (empty($changed_fields)) {
+	Sessions::clear("conflicted_user_values");
+	Submissions::trackCurrentEditSubmissionFields($grouped_fields, $submission_id, $view_id, $tab_number);
+} else {
+
+	$user_values = array();
+	foreach ($changed_fields as $changed_field_name => $changed_info) {
+		foreach ($grouped_fields as $group) {
+			foreach ($group["fields"] as $field) {
+				if ($field["field_name"] !== $changed_field_name) {
+					continue;
+				}
+
+				$db_value = $field;
+				$db_value["is_editable"] = "no";
+				$db_value["submission_value"] = $changed_info["db_value"];
+
+				$user_value = $field;
+				$user_value["is_editable"] = "no";
+				$user_value["submission_value"] = $changed_info["user_value"];
+
+				$reconcile_changed_fields[] = array(
+					"field_name" => $changed_field_name,
+					"field_id" => $field["field_id"],
+					"field_title" => $field["field_title"],
+					"db_value" => $db_value,
+					"user_value" => $user_value
+				);
+				$user_values[$changed_field_name] = array(
+					"db_value" => $changed_info["db_value"],
+					"user_value" => $changed_info["user_value"]
+				);
+			}
+		}
+	}
+
+	Sessions::set("conflicted_user_values", $user_values);
 }
 
 $page_field_ids      = array();
@@ -162,6 +264,7 @@ $page_vars = array(
     "settings" => $settings,
     "tab_number" => $tab_number,
     "grouped_fields" => $grouped_fields,
+    "changed_fields" => $reconcile_changed_fields,
     "field_types" => $page_field_types,
     "previous_link_html" => $prev_link_html,
     "page_has_required_fields" => $page_has_required_fields,
