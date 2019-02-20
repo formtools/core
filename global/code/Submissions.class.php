@@ -1560,9 +1560,15 @@ class Submissions {
 
 			if ($last_edit_submission_state["data"][$field_name] !== $value &&
 				$value !== $post[$field_name]) {
+
+				// TODO here we need to construct a new user_value (i.e. what's going to be stored in the database for the users
+				// current submission). There, the field type rendering method will handle displaying it appropriately. This
+				// should work for all field types.
+				// list ($value, $file_field) = self::getSaveFieldValueFromUpdateRequest($post, $form_field, $field_settings, $field_types_processing_info);
+
 				$changed[$field_name] = array(
 					"db_value" => $value,
-					"user_value" => $post[$field_name] // TODO here. This needs to change.
+					"user_value" => $post[$field_name] // TODO this is what changes
 				);
 			}
 		}
@@ -1688,7 +1694,7 @@ class Submissions {
 
 
 	/**
-     * Used in the ft_search_submissions function to abstract away a few minor details.
+     * Used in the searchSubmissions() method to abstract away a few minor details.
      *
      * @param array $columns
      * @return string

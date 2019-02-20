@@ -171,8 +171,6 @@ if (empty($changed_fields)) {
 
 				$user_value = $field;
 				$user_value["is_editable"] = "no";
-
-				// TODO this is wrong. This needs to be converted into whatever would have been saved after the update request
 				$user_value["submission_value"] = $changed_info["user_value"];
 
 				$reconcile_changed_fields[] = array(
