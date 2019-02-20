@@ -67,12 +67,14 @@ if (isset($_POST) && !empty($_POST)) {
 		$keys = array_keys($state["data"]);
 		$fields_to_update = array();
 		$user_values = Sessions::get("conflicted_user_values");
+
+		$view_fields = Submissions::getSubmissionByField($form_id, $submission_id, $view_id);
 		foreach ($keys as $field_name) {
-			if (isset($_POST[$field_name]) && $_POST[$field_name] == "user_value") {
+			if ($request[$field_name] == "user_value") {
 				$fields_to_update[] = $field_name;
 				$request[$field_name] = $user_values[$field_name]["user_value"];
 			} else {
-				$request[$field_name] = $user_values[$field_name]["db_value"];
+				$request[$field_name] = $view_fields[$field_name];
 			}
 		}
 
@@ -98,7 +100,7 @@ if (isset($_POST) && !empty($_POST)) {
 				Sessions::set("new_search", "yes");
 				$request["view_id"] = $view_id;
 				$request["editable_field_ids"] = $editable_field_ids;
-				list($success, $message) = Submissions::updateSubmission($form_id, $submission_id, $request, true);
+				list($success, $message) = Submissions::updateSubmission($form_id, $submission_id, $request, false);
 			}
 		}
 
@@ -109,8 +111,9 @@ if (isset($_POST) && !empty($_POST)) {
 		$request["view_id"] = $view_id;
 		$request["editable_field_ids"] = $editable_field_ids;
 
-		// if the DB had more recent values, reset all the conflicting fields to use the last value in the DB before updating
-		// the database. We'll then present the information to the user
+		// if the DB had more up-to-date values, reset all the conflicting fields to save the last value in the DB before updating
+		// the database. We'll then present the conflicts to the user to choose whether to pick their new values or the existing
+		// ones
 		if (!empty($changed_fields)) {
 			foreach ($changed_fields as $field_name => $value) {
 				$request[$field_name] = $changed_fields[$field_name]["db_value"];
@@ -168,6 +171,8 @@ if (empty($changed_fields)) {
 
 				$user_value = $field;
 				$user_value["is_editable"] = "no";
+
+				// TODO this is wrong. This needs to be converted into whatever would have been saved after the update request
 				$user_value["submission_value"] = $changed_info["user_value"];
 
 				$reconcile_changed_fields[] = array(

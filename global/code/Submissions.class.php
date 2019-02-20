@@ -878,11 +878,10 @@ class Submissions {
      *               [0]: true/false (success / failure)<br/>
      *               [1]: message string<br/>
      */
-    public static function updateSubmission($form_id, $submission_id, $infohash, $no_validation = false)
+    public static function updateSubmission($form_id, $submission_id, $infohash, $validate = true)
     {
         $db = Core::$db;
         $LANG = Core::$L;
-        $multi_val_delimiter = Core::getMultiFieldValDelimiter();
 
         $success = true;
         $message = $LANG["notify_form_submission_updated"];
@@ -891,7 +890,7 @@ class Submissions {
 
         $field_ids = (!empty($infohash["field_ids"])) ? explode(",", $infohash["field_ids"]) : array();
 
-        if (!$no_validation) {
+        if ($validate) {
 			// perform any server-side validation
 			$errors = FieldValidation::validateSubmission($infohash["editable_field_ids"], $infohash);
 
@@ -916,92 +915,41 @@ class Submissions {
             "submission_id" => $submission_id,
             "last_modified_date" => $now
         );
-        $counter = 1;
 
+        $counter = 1;
         $file_fields = array();
-        foreach ($form_fields as $row) {
-            $field_id = $row["field_id"];
+        foreach ($form_fields as $form_field) {
 
             // if the field ID isn't in the page's tab, ignore it
-            if (!in_array($field_id, $field_ids)) {
+            if (!in_array($form_field["field_id"], $field_ids)) {
                 continue;
             }
 
             // if the field ID isn't editable, the person's being BAD and trying to hack a field value. Ignore it.
-            if (!in_array($field_id, $infohash["editable_field_ids"])) {
+            if (!in_array($form_field["field_id"], $infohash["editable_field_ids"])) {
                 continue;
             }
 
-            // if this is a FILE field that doesn't have any overridden PHP processing code, just store the info
-            // about the field. Presumably, the module / field type has registered the appropriate hooks for
-            // processing the file. Without it, the module wouldn't work. We pass that field + file info to the hook.
-            if ($field_types_processing_info[$row["field_type_id"]]["is_file_field"] == "yes") {
-                $file_data = array(
-                    "field_id"   => $field_id,
-                    "field_info" => $row,
-                    "data"       => $infohash,
-                    "code"       => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
-                    "settings"   => $field_settings[$field_id]
-                );
+			if ($form_field["field_name"] == "core__submission_date" || $form_field["col_name"] == "core__last_modified") {
+				if (!isset($infohash[$form_field["field_name"]]) || empty($infohash[$form_field["field_name"]])) {
+					continue;
+				}
+			}
 
-                if (empty($field_types_processing_info[$row["field_type_id"]]["php_processing"])) {
-                    $file_fields[] = $file_data;
-                    continue;
-                } else {
-                    $value = Submissions::processFormField($file_data);
-
-                    $set_statements[] = "{$row["col_name"]} = :col_{$counter}";
-                    $bindings["col_{$counter}"] = $value;
-                    $counter++;
-                }
-            }
-
-            if ($row["field_name"] == "core__submission_date" || $row["col_name"] == "core__last_modified") {
-                if (!isset($infohash[$row["field_name"]]) || empty($infohash[$row["field_name"]])) {
-                    continue;
-                }
-            }
-
-            // see if this field type has any special PHP processing to do
-            if (!empty($field_types_processing_info[$row["field_type_id"]]["php_processing"])) {
-                $data = array(
-                    "field_info"   => $row,
-                    "data"         => $infohash,
-                    "code"         => $field_types_processing_info[$row["field_type_id"]]["php_processing"],
-                    "settings"     => $field_settings[$field_id],
-                    "account_info" => Sessions::getWithFallback("account", array())
-                );
-                $value = Submissions::processFormField($data);
-
-                $set_statements[] = "{$row["col_name"]} = :col_{$counter}";
-                $bindings["col_{$counter}"] = $value;
-                $counter++;
-            } else {
-                if (isset($infohash[$row["field_name"]])) {
-                    if (is_array($infohash[$row["field_name"]])) {
-                        $value = implode("$multi_val_delimiter", $infohash[$row["field_name"]]);
-                    } else {
-                        $value = $infohash[$row["field_name"]];
-                    }
-                } else {
-                    $value = "";
-                }
-
-                $set_statements[] = "{$row["col_name"]} = :col_{$counter}";
-                $bindings["col_{$counter}"] = $value;
-                $counter++;
-            }
+			list ($value, $file_field) = self::getSaveFieldValueFromUpdateRequest($infohash, $form_field, $field_settings, $field_types_processing_info);
+			if (!is_null($value)) {
+				$set_statements[] = "{$form_field["col_name"]} = :col_{$counter}";
+				$bindings["col_{$counter}"] = $value;
+				$counter++;
+			}
+			if (!empty($file_field)) {
+				$file_fields[] = $file_field;
+			}
         }
 
         $statements = join(",\n", $set_statements);
 
         try {
-//        	echo "                UPDATE {PREFIX}form_{$form_id}
-//                SET    $statements
-//                WHERE  submission_id = :submission_id
-//";
-//        	exit;
-
             $db->query("
                 UPDATE {PREFIX}form_{$form_id}
                 SET    $statements
@@ -1610,11 +1558,11 @@ class Submissions {
 				continue;
 			}
 
-			// if the data in the database changed. TODO also check value isn't changed to NEW value in the db!
-			if ($last_edit_submission_state["data"][$field_name] !== $value) {
+			if ($last_edit_submission_state["data"][$field_name] !== $value &&
+				$value !== $post[$field_name]) {
 				$changed[$field_name] = array(
 					"db_value" => $value,
-					"user_value" => $post[$field_name]
+					"user_value" => $post[$field_name] // TODO here. This needs to change.
 				);
 			}
 		}
@@ -1626,7 +1574,7 @@ class Submissions {
     // -----------------------------------------------------------------------------------------------------------------
 
 
-    /**
+	/**
      * Used in the ft_search_submissions function to abstract away a few minor details.
      *
      * @param $form_id integer
@@ -1672,7 +1620,74 @@ class Submissions {
     }
 
 
-    /**
+	/**
+	 * This magical function looks at a form field in the database and if the POST request contains a value for that
+	 * field, it determines what the actual saved value should be for the field. It takes into account how the field
+	 * type is configured - having PHP processing applied to it, or just blankly allowing the POST request to contain
+	 * the content & save as-is. It also takes into account how the individual FIELD has been configured - whether
+	 * there have been overridden settings via the UI.
+	 *
+	 * This works for all field types.
+	 *
+	 * @param $request
+	 * @param $form_field
+	 * @param $field_settings
+	 * @param $field_types_processing_info
+	 * @return array
+	 */
+	private static function getSaveFieldValueFromUpdateRequest($request, $form_field, $field_settings, $field_types_processing_info)
+	{
+		$value = null;
+		$file_field = null;
+		$multi_val_delimiter = Core::getMultiFieldValDelimiter();
+
+		// if this is a FILE field that doesn't have any overridden PHP processing code, just store the info
+		// about the field. Presumably, the module / field type has registered the appropriate hooks for
+		// processing the file. Without it, the module wouldn't work. We pass that field + file info to the hook.
+		if ($field_types_processing_info[$form_field["field_type_id"]]["is_file_field"] == "yes") {
+			$file_data = array(
+				"field_id"   => $form_field["field_id"],
+				"field_info" => $form_field,
+				"data"       => $request,
+				"code"       => $field_types_processing_info[$form_field["field_type_id"]]["php_processing"],
+				"settings"   => $field_settings[$form_field["field_id"]]
+			);
+
+			if (empty($field_types_processing_info[$form_field["field_type_id"]]["php_processing"])) {
+				$file_field = $file_data;
+
+			// No actual field types execute this chunk of code here, but it's possible that a user could configure
+			// a really lightweight file upload field to upload a file and return the value to store in the DB
+			} else {
+				$value = Submissions::processFormField($file_data);
+			}
+
+		} else if (!empty($field_types_processing_info[$form_field["field_type_id"]]["php_processing"])) {
+			$data = array(
+				"field_info" => $form_field,
+				"data" => $request,
+				"code" => $field_types_processing_info[$form_field["field_type_id"]]["php_processing"],
+				"settings" => $field_settings[$form_field["field_id"]],
+				"account_info" => Sessions::getWithFallback("account", array())
+			);
+			$value = Submissions::processFormField($data);
+		} else {
+			if (isset($request[$form_field["field_name"]])) {
+				if (is_array($request[$form_field["field_name"]])) {
+					$value = implode("$multi_val_delimiter", $request[$form_field["field_name"]]);
+				} else {
+					$value = $request[$form_field["field_name"]];
+				}
+			} else {
+				$value = "";
+			}
+		}
+
+		return array($value, $file_field);
+	}
+
+
+	/**
      * Used in the ft_search_submissions function to abstract away a few minor details.
      *
      * @param array $columns
