@@ -56,6 +56,7 @@ $editable_field_ids = ViewFields::getEditableViewFields($view_id);
 $failed_validation = false;
 $changed_fields = array();
 
+
 if (isset($_POST) && !empty($_POST)) {
 
 	if (isset($_POST["core__reconcile_changed_fields"])) {
@@ -156,7 +157,6 @@ if (empty($changed_fields)) {
 	Sessions::clear("conflicted_user_values");
 	Submissions::trackCurrentEditSubmissionFields($grouped_fields, $submission_id, $view_id, $tab_number);
 } else {
-
 	$user_values = array();
 	foreach ($changed_fields as $changed_field_name => $changed_info) {
 		foreach ($grouped_fields as $group) {
@@ -187,11 +187,10 @@ if (empty($changed_fields)) {
 			}
 		}
 	}
-
 	Sessions::set("conflicted_user_values", $user_values);
 }
 
-$page_field_ids      = array();
+$page_field_ids = array();
 $page_field_type_ids = array();
 $page_has_required_fields = false;
 foreach ($grouped_fields as $group) {
@@ -283,12 +282,12 @@ $page_vars = array(
         "phrase_please_confirm", "word_no", "word_yes", "word_close", "phrase_validation_error"
     )
 );
-$page_vars["head_string"] =<<< EOF
+$page_vars["head_string"] =<<< END
     <script src="$root_url/global/scripts/manage_submissions.js"></script>
     <script src="$root_url/global/scripts/field_types.php"></script>
     <link rel="stylesheet" href="$root_url/global/css/field_types.php" type="text/css" />
 $shared_resources
-EOF;
+END;
 $page_vars["head_js"] =<<< END
 $validation_js
 END;

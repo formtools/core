@@ -705,8 +705,7 @@ END;
 
 
 	/**
-	 * Used in the ft_update_submission function. This retrieves all setting information for a
-	 * field - including the field type settings that weren't overridden.
+	 * This retrieves all setting information for a field - including the field type settings that weren't overridden.
 	 *
 	 * @param $field_ids
 	 * @return array a hash of [field_id][identifier] = values
