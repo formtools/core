@@ -74,7 +74,7 @@ $editable_field_ids = ViewFields::getEditableViewFields($view_id);
 // handle POST requests
 $failed_validation = false;
 if (isset($_POST) && !empty($_POST)) {
-	// add the view ID to the request hash, for use by the ft_update_submission function
+	// add the view ID to the request hash, for use by the Submissions::updateSubmission method
 	$request["view_id"] = $view_id;
 	$request["editable_field_ids"] = $editable_field_ids;
 	list($success, $message) = Submissions::updateSubmission($form_id, $submission_id, $request);

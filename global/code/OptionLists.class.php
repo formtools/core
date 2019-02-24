@@ -320,7 +320,7 @@ class OptionLists {
      *   [1] => ...
      *
      * Whether or not the option list is grouped is found in the "is_grouped" field in the ft_option_lists
-     * table. That info is not returned by this function - only by ft_get_option_list().
+     * table. That info is not returned by this function - only by OptionsLists::getOptionList().
      *
      * @param integer $list_id the option list ID
      * @return array

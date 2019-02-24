@@ -1511,7 +1511,7 @@ class Emails {
 
 
     /**
-     * This function is tightly coupled with ft_get_email_components and has gotten increasingly more awful as
+     * This function is tightly coupled with Emails::getEmailComponents and has gotten increasingly more awful as
      * time passed. It examines the content of an email template and detects any field and file attachments.
      * Field attachments are files that have been uploaded through a form field; file attachments are just files
      * on the server that want to be sent out. It then returns the updated email template (i.e. minus the
@@ -1521,6 +1521,7 @@ class Emails {
      * @param string $template_str the email template (HTML or text)
      * @param integer $form_id
      * @param array $submission_placeholders
+	 * @return array
      */
     private static function extractEmailAttachmentInfo($template_str, $form_id, $submission_placeholders)
     {
@@ -1605,7 +1606,7 @@ class Emails {
 
 
     /**
-     * Strongly coupled with the ft_get_email_components function, this does the legwork to find out exactly what
+     * Strongly coupled with the Emails::getEmailComponents method, this does the legwork to find out exactly what
      * text and HTML (Smarty) content should be in the emails. Returns BOTH, regardless of whether the template is
      * only using one.
      *
@@ -1614,6 +1615,7 @@ class Emails {
      * @param array $email_template
      * @param boolean $is_test
      * @param array $test_settings
+	 * @return array
      */
     private static function getEmailTemplateContent($form_id, $submission_id, $email_template, $is_test, $test_settings)
     {

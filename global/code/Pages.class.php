@@ -98,12 +98,13 @@ class Pages
      * function, to redirect to whatever custom login page the admin/client has selected. The
      * page identifier is stored in the login_page field (rename to login_page_identifier?).
      *
-     * There seems to be some cross-over between this function and ft_get_page_url. Think about!
+     * There seems to be some cross-over between this function and Pages::getPageUrl. Think about!
      *
      * @param string $page_identifier special strings that have meaning to Form Tools, used to identify
      *                  pages within its interface. See the top of /global/code/menus.php for a list.
      * @param string $custom_options again used by Form Tools
      * @param array $args an arbitrary hash of key-value pairs to be passed in the query string
+	 * @return string
      */
     public static function constructPageURL($page_identifier, $custom_options = "", $args = array())
     {

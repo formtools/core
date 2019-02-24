@@ -912,7 +912,7 @@ END;
 	 *                     anything else you want
 	 *                field_types - all, or any that are relevant. But it should be an array, anyway
 	 *                value - the actual value stored in the field
-	 *                settings - (from ft_get_settings())
+	 *                settings - (from Settings::get())
 	 * @return string
 	 */
 	public static function generateViewableField($params)

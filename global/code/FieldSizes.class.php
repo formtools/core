@@ -74,10 +74,11 @@ class FieldSizes {
 
 
     /**
-     * The counterpart function to ft_generate_field_type_sizes_map_js: this generate a hash of field size keys (1char, tiny, etc)
+     * The counterpart function to FieldSizes::generateFieldTypeSizesMapJs: this generate a hash of field size keys (1char, tiny, etc)
      * to their label (in the appropriate language).
      *
      * @param string $namespace
+	 * @return string
      */
     public static function generateFieldTypeSizeLabels($namespace = "page_ns")
     {

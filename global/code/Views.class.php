@@ -718,7 +718,7 @@ class Views
 
 
     /**
-     * Called by the ft_update_view function; updates the main settings of the View (found on the
+     * Called by the Views::updateView function; updates the main settings of the View (found on the
      * first tab). Also updates the may_edit_submissions setting found on the second tab.
      *
      * @param integer $view_id

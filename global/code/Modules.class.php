@@ -776,10 +776,10 @@ class Modules
     }
 
     /**
-     * Sets one or more module settings. This basically acts as a wrapper function for ft_set_settings,
+     * Sets one or more module settings. This basically acts as a wrapper function for Settings::set(),
      * which ensures that the module field is set appropriately.
      *
-     * @param array $setting_name a hash of "setting_name" => "setting_value"
+     * @param array hash of "setting_name" => "setting_value"
      */
     public static function setModuleSettings($settings)
     {

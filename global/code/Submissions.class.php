@@ -716,7 +716,7 @@ class Submissions {
 
     /**
      * Retrieves ONLY the submission data itself. If you require "meta" information about the submission
-     * such as it's field type, size, database table name etc, use ft_get_submision().
+     * such as it's field type, size, database table name etc, use Submissions::getSubmission().
      *
      * @param integer $form_id The unique form ID.
      * @param integer $submission_id The unique submission ID.
@@ -1598,7 +1598,7 @@ class Submissions {
 
 
 	/**
-     * Used in the ft_search_submissions function to abstract away a few minor details.
+     * Used in the searchSubmissions function to abstract away a few minor details.
      *
      * @param $form_id integer
      * @param $order string
@@ -1739,7 +1739,7 @@ class Submissions {
 
 
     /**
-     * Used in the ft_search_submissions function to abstract away a few minor details.
+     * Used in the Submissions::searchSubmissions() method to abstract away a few minor details.
      *
      * @param integer $view_id
      * @return string
@@ -1757,7 +1757,7 @@ class Submissions {
 
 
     /**
-     * Used in the ft_search_submissions function. This figures out the additional SQL clauses required for
+     * Used in the Submissions::searchSubmissions() function. This figures out the additional SQL clauses required for
      * a custom search. Note: as of the Dec 2009 build, this function properly only searches those fields
      * marked as "is_searchable" in the database.
      *
@@ -1886,7 +1886,7 @@ class Submissions {
 
 
     /**
-     * Used in the ft_search_submissions function to abstract away a few minor details.
+     * Used in the Submissions::searchSubmissions() function to abstract away a few minor details.
      *
      * @param array $submission_ids
      * @return string

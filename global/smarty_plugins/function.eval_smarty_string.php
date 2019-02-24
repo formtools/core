@@ -9,7 +9,7 @@ use FormTools\Templates;
  * File:     function.eval_smarty_string
  * Type:     function
  * Name:     eval_smarty_string
- * Purpose:  a Smarty wrapper for ft_eval_smarty_string, for use in the templates.
+ * Purpose:  a Smarty wrapper for General::evalSmartyString, for use in the templates.
  *           To use this function, just pass the main placeholder string through
  *           the placeholder_str="" attribute, and any placeholders as their own
  *           attributes, e.g.

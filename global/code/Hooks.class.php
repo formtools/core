@@ -257,7 +257,7 @@ class Hooks {
 
     /**
      * This processes all template hooks for a particular template location (e.g. edit client page, at the top).
-     * It works similarly to the ft_process_hooks function, except there are no options to override values in the
+     * It works similarly to the Hooks::processHooks function, except there are no options to override values in the
      * template. This is used purely to insert content into the templates.
      *
      * @param string $location

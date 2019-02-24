@@ -78,7 +78,7 @@ class ViewTabs
 
 
     /**
-     * Called by the ft_update_view function; updates the tabs available in the View.
+     * Called by the Views::updateView function; updates the tabs available in the View.
      *
      * @param integer $view_id
      * @param array $info

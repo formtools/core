@@ -3,7 +3,7 @@
 use FormTools\General;
 
 /**
- * Smarty custom format plugin. This is the Smarty-friendly version of ft_get_date, allowing
+ * Smarty custom format plugin. This is the Smarty-friendly version of General::getDate, allowing
  * access to that function within the Smarty templates.
  *
  * Type:     modifier<br>

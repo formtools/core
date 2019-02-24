@@ -937,7 +937,7 @@ class Fields {
 
     /**
      * A getter function to retrieve everything about a form field from the database column name. This is used in
-     * the ft_search_submissions function.
+     * the Submissions::searchSubmissions method.
      *
      * @param integer $form_id
      * @param string $col_name

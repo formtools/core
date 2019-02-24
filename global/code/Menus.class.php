@@ -539,9 +539,8 @@ class Menus
     }
 
     /**
-     * A wrapper function for ft_get_client_menu (and getAdminMenu). Returns all info
-     * about a menu, regardless of type. If it's an admin menu, it'll be returned with an empty "clients"
-     * hash key.
+     * A wrapper function for Menus::getClientMenu (and getAdminMenu). Returns all info about a menu, regardless of
+	 * type. If it's an admin menu, it'll be returned with an empty "clients" hash key.
      *
      * @param integer $menu_id
      * @return
@@ -627,7 +626,7 @@ class Menus
     /**
      * Called whenever an item is removed from a menu - OUTSIDE of the main administrator update menu
      * pages (client & admin). This updates the order to ensure its consistent (i.e. no gaps). Note:
-     * this doesn't update the cached menu. If that's needed, you need to call the ft_cache_account_menu
+     * this doesn't update the cached menu. If that's needed, you need to call the Menus::cacheAccountMenu
      * function separately
      *
      * @param integer $menu_id

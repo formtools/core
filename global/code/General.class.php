@@ -1142,8 +1142,8 @@ END;
 
 
 	/**
-	 * This was added in 2.1.0. and replaces ft_build_and_cache_upgrade_info() which really wasn't necessary.
-	 * It returns a hash of information to pass in a hidden form when the user clicks "Update".
+	 * Returns a hash of information to pass in a hidden form when the user clicks "Update".
+	 * @return array
 	 */
 	public static function getFormtoolsInstalledComponents()
 	{

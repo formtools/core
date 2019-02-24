@@ -30,7 +30,7 @@ class ViewFilters
 {
 
     /**
-     * Retrieves all filters for a View. If you just want the SQL, use ft_get_view_filter_sql instead, which
+     * Retrieves all filters for a View. If you just want the SQL, use ViewFilters::getViewFilterSql instead, which
      * returns an array of the SQL needed to query the form table. This function returns all info about the
      * filter.
      *
@@ -129,10 +129,11 @@ class ViewFilters
 
 
     /**
-     * Called by the ft_update_view function; updates the filters assigned to the View.
+     * Called by the Views::updateView function; updates the filters assigned to the View.
      *
      * @param integer $view_id
      * @param array $info
+	 * @return array
      */
     public static function updateViewFilters($view_id, $info)
     {

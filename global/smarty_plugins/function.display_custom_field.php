@@ -10,7 +10,7 @@ use FormTools\Templates;
  * File:     function.display_custom_field
  * Type:     function
  * Name:     display_custom_field
- * Purpose:  A smarty wrapper for ft_generate_viewable_field.
+ * Purpose:  A smarty wrapper for FieldTypes::generateViewableField
  * -------------------------------------------------------------
  */
 function smarty_function_display_custom_field($params, &$smarty)

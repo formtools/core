@@ -1,5 +1,5 @@
 {*
-  This file was repurposed in 2.1.0 to display the old ft_handle_error() errors but also the
+  This file was repurposed in 2.1.0 to display the old Errors::handleError() errors but also the
   old messages from the Add Form processes. It's a little klutzy, in that it uses an if-else
   to determine the context, but it's much better having it in a single location.
 *}

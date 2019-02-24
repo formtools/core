@@ -162,7 +162,7 @@ class ViewFields
 
 
     /**
-     * Called by the ft_update_view function; updates the field settings of the View. This covers things like
+     * Called by the Views::updateView function; updates the field settings of the View. This covers things like
      * which fields are included in the view, which appear as a column, which are editable and so on.
      *
      * @param integer $view_id

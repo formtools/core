@@ -261,7 +261,7 @@ class Themes {
         Sessions::setIfNotExists("account.account_type", "");
 
         // this contains the custom language content of the module, in the language required. It's populated by
-        // ft_init_module_page(), called on every module page
+        // Modules::initModulePage(), called on every module page
         $module_lang_strings = Modules::getModuleLangFile($module_folder, Core::$user->getLang());
         $LANG[$module_folder] = $module_lang_strings;
         $smarty->assign("L", $module_lang_strings);
