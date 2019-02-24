@@ -71,23 +71,10 @@ Sessions::set("last_submission_id", $submission_id);
 // for the update function and to determine whether the page contains any editable fields
 $editable_field_ids = ViewFields::getEditableViewFields($view_id);
 
-// handle POST requests
 $failed_validation = false;
+$changed_fields = array();
 if (isset($_POST) && !empty($_POST)) {
-	// add the view ID to the request hash, for use by the Submissions::updateSubmission method
-	$request["view_id"] = $view_id;
-	$request["editable_field_ids"] = $editable_field_ids;
-	list($success, $message) = Submissions::updateSubmission($form_id, $submission_id, $request);
-
-	// if there was any problem udpating this submission, make a special note of it: we'll use that info to merge the current POST request
-	// info with the original field values to ensure the page contains the latest data (i.e. for cases where they fail server-side validation)
-	if (!$success) {
-		$failed_validation = true;
-	}
-
-	// required. The reason being, this setting determines whether the submission IDs in the current form-view-search
-	// are cached. Any time the data changes, the submission may then belong to different Views, so we need to re-cache it
-    Sessions::set("new_search", "yes");
+	list($success, $message, $changed_fields, $failed_validation) = Submissions::updateSubmissionWithConflictDetection($form_id, $submission_id, $view_id, $editable_field_ids, $request);
 }
 
 // this is crumby
@@ -107,6 +94,14 @@ if ($has_tabs) {
 $grouped_fields = ViewFields::getGroupedViewFields($view_id, $tab_number, $form_id, $submission_id);
 if ($failed_validation) {
 	$grouped_fields = FieldValidation::mergeFormSubmission($grouped_fields, $_POST);
+}
+
+$reconcile_changed_fields = array();
+if (empty($changed_fields)) {
+	Sessions::clear("conflicted_user_values");
+	Submissions::trackCurrentEditSubmissionFields($grouped_fields, $submission_id, $view_id, $tab_number);
+} else {
+	$reconcile_changed_fields = Submissions::getChangedFieldsToReconcile($grouped_fields, $changed_fields);
 }
 
 $page_field_ids      = array();
@@ -186,6 +181,7 @@ $page_vars = array(
     "settings" => $settings,
     "page_field_ids" => $page_field_ids,
     "grouped_fields" => $grouped_fields,
+	"changed_fields" => $reconcile_changed_fields,
     "field_types" => $page_field_types,
     "head_title" => $edit_submission_page_label,
     "submission_id" => $submission_id,

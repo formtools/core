@@ -35,72 +35,112 @@
         <input type="hidden" name="submission_id" id="submission_id" value="{$submission_id}"/>
         <input type="hidden" name="tab" id="tab" value="{$tab_number}"/>
 
-        {foreach from=$grouped_fields key=k item=curr_group}
-            {assign var=group value=$curr_group.group}
-            {assign var=fields value=$curr_group.fields}
+        {if $changed_fields}
 
-            {if $group.group_name}
-                <h3>{$group.group_name|upper}</h3>
-            {/if}
+            <input type="hidden" name="core__reconcile_changed_fields" value="1" />
 
-            {if $fields|@count > 0}
+            {foreach from=$changed_fields key=k item=field}
                 <table class="list_table" cellpadding="1" cellspacing="1" border="0" width="100%">
-            {/if}
-
-            {foreach from=$fields item=curr_field}
-                {assign var=field_id value=$curr_field.field_id}
-                <tr>
-                    <td width="160" class="pad_left_small" valign="top">
-                        {$curr_field.field_title}
-                        {if $curr_field.is_required && $curr_field.is_editable == "yes"}<span class="req">*</span>{/if}
-                    </td>
-                    <td valign="top">
-                        {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$curr_field
-                        field_types=$field_types settings=$settings}
-                    </td>
-                </tr>
+                    <tr>
+                        <td width="160" rowspan="2" class="pad_left_small" valign="top">{$field.field_title}</td>
+                        <td width="160" class="pad_left">
+                            <input type="radio" name="{$field.field_name}" id="field_{$field.field_id}_db_value" value="db_value" />
+                            <label for="field_{$field.field_id}_db_value">Value in database</label>
+                        </td>
+                        <td class="pad_left" valign="top">
+                            {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$field.db_value
+                            field_types=$field_types settings=$settings}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="pad_left">
+                            <input type="radio" name="{$field.field_name}" id="field_{$field.field_id}_user_value" value="user_value" checked="checked" />
+                            <label for="field_{$field.field_id}_user_value">Your value</label>
+                        </td>
+                        <td class="pad_left" valign="top">
+                            {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$field.user_value
+                            field_types=$field_types settings=$settings}
+                        </td>
+                    </tr>
+                </table>
             {/foreach}
 
-            {if $fields|@count > 0}
-                </table>
-            {/if}
-        {/foreach}
+            <input type="hidden" name="field_ids" value="{$page_field_ids_str}"/>
 
-        <input type="hidden" name="field_ids" value="{$page_field_ids_str}"/>
+            <p>
+                <input type="submit" name="reconcile_fields" value="{$LANG.word_update}" />
+            </p>
 
-        {* if there are no fields in this tab, display a message to let the user know *}
-        {if $page_field_ids|@count == 0}
-            <div class="margin_bottom_large">{$LANG.notify_no_fields_in_tab}</div>
-        {/if}
+        {else}
 
-        <div style="position:relative">
-        <span style="float:right">
-          {* show the list of whatever email templates can be send from this page *}
-            {display_email_template_dropdown form_id=$form_id view_id=$view_id submission_id=$submission_id}
-        </span>
-            {* only show the update button if there are editable fields in the tab *}
-            {if $page_field_ids|@count > 0 && $tab_has_editable_fields}
-                <input type="submit" name="update" value="{$LANG.word_update}"/>
-            {/if}
-            {if $view_info.may_delete_submissions == "yes"}
-                <input type="button" name="delete" value="{$LANG.word_delete}" class="red"
-                       onclick="return ms.delete_submission({$submission_id}, 'index.php')"/>
-            {/if}
-            {if $view_info.may_add_submissions == "yes" && $form_info.is_active == "yes"}
-                <span class="button_separator">|</span>
-                <input type="button" value="{eval var=$form_info.add_submission_button_label}"
-                       onclick="window.location='index.php?form_id={$form_id}&add_submission'"/>
-            {/if}
+            {foreach from=$grouped_fields key=k item=curr_group}
+                {assign var=group value=$curr_group.group}
+                {assign var=fields value=$curr_group.fields}
 
-            {if $view_info.may_copy_submissions == "yes"}
-                {if !($view_info.may_add_submissions == "yes" && $form_info.is_active == "yes")}
-                <span class="button_separator">|</span>
+                {if $group.group_name}
+                    <h3>{$group.group_name|upper}</h3>
                 {/if}
-                <input type="button" value="{$LANG.word_copy}"
-                       onclick="window.location='?form_id={$form_id}&amp;copy_submission={$submission_id}'" />
+
+                {if $fields|@count > 0}
+                    <table class="list_table" cellpadding="1" cellspacing="1" border="0" width="100%">
+                {/if}
+
+                {foreach from=$fields item=curr_field}
+                    {assign var=field_id value=$curr_field.field_id}
+                    <tr>
+                        <td width="160" class="pad_left_small" valign="top">
+                            {$curr_field.field_title}
+                            {if $curr_field.is_required && $curr_field.is_editable == "yes"}<span class="req">*</span>{/if}
+                        </td>
+                        <td valign="top">
+                            {edit_custom_field form_id=$form_id submission_id=$submission_id field_info=$curr_field
+                            field_types=$field_types settings=$settings}
+                        </td>
+                    </tr>
+                {/foreach}
+
+                {if $fields|@count > 0}
+                    </table>
+                {/if}
+            {/foreach}
+
+            <input type="hidden" name="field_ids" value="{$page_field_ids_str}"/>
+
+            {* if there are no fields in this tab, display a message to let the user know *}
+            {if $page_field_ids|@count == 0}
+                <div class="margin_bottom_large">{$LANG.notify_no_fields_in_tab}</div>
             {/if}
 
-        </div>
+            <div style="position:relative">
+            <span style="float:right">
+              {* show the list of whatever email templates can be send from this page *}
+                {display_email_template_dropdown form_id=$form_id view_id=$view_id submission_id=$submission_id}
+            </span>
+                {* only show the update button if there are editable fields in the tab *}
+                {if $page_field_ids|@count > 0 && $tab_has_editable_fields}
+                    <input type="submit" name="update" value="{$LANG.word_update}"/>
+                {/if}
+                {if $view_info.may_delete_submissions == "yes"}
+                    <input type="button" name="delete" value="{$LANG.word_delete}" class="red"
+                           onclick="return ms.delete_submission({$submission_id}, 'index.php')"/>
+                {/if}
+                {if $view_info.may_add_submissions == "yes" && $form_info.is_active == "yes"}
+                    <span class="button_separator">|</span>
+                    <input type="button" value="{eval var=$form_info.add_submission_button_label}"
+                           onclick="window.location='index.php?form_id={$form_id}&add_submission'"/>
+                {/if}
+
+                {if $view_info.may_copy_submissions == "yes"}
+                    {if !($view_info.may_add_submissions == "yes" && $form_info.is_active == "yes")}
+                    <span class="button_separator">|</span>
+                    {/if}
+                    <input type="button" value="{$LANG.word_copy}"
+                           onclick="window.location='?form_id={$form_id}&amp;copy_submission={$submission_id}'" />
+                {/if}
+
+            </div>
+
+        {/if}
     </form>
 
     {if $tabs|@count > 0}
