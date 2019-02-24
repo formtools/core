@@ -188,15 +188,6 @@ class Core
 	 */
 	private static $maxFormFields = "";
 
-	/**
-	 * Data conflict resolution. Added in 3.0.13. In case multiple accounts edit the same submission at the same time,
-	 * Form Tools will show a conflict resolution page to the user in the interface letting them see which fields
-	 * are conflicted, and allow them to choose one value over the other. If you want to rely on the Submission History
-	 * module to just log all changes to a field and not present this resolution page to the user, set this to false.
-	 */
-	private static $dataConflictResolutionEnabled = true;
-
-
 	// -------------------------------------------------------------------------------------------------
 
 	// API settings.
@@ -489,7 +480,6 @@ class Core
 		self::$sessionType = isset($g_session_type) && in_array($g_session_type, array("php", "database")) ? $g_session_type : "php";
 		self::$sessionSavePath = isset($g_session_save_path) ? $g_session_save_path : "";
 		self::$useSmartyBC = isset($g_use_smarty_bc) ? $g_use_smarty_bc : false;
-		self::$dataConflictResolutionEnabled = isset($g_data_conflict_resolution_enabled) ? $g_data_conflict_resolution_enabled : true;
 
 		// API settings
 		self::$apiDebug = isset($g_api_debug) ? $g_api_debug : false;
@@ -815,11 +805,6 @@ class Core
 	public static function setTempCacheHash($value)
 	{
 		self::$tempCache = $value;
-	}
-
-	public static function isDataConflictResolutionEnabled()
-	{
-		return self::$dataConflictResolutionEnabled;
 	}
 
 
