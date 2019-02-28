@@ -1269,4 +1269,5 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Muoto Tools ei pysty päättäm
 $LANG["processing_no_post_vars"] = "process.php ei saa mitään tietoja. Huomaa: Tämä komentosarja ei voi ladata suoraan selaimessa. <br /> Varmista, että lomake lähettää postin kautta.";
 $LANG["processing_no_redirect_url"] = "Mukaan oli käsitelty oikein, mutta et ole määritetty URL-osoitteen on tässä muodossa! Muokkaa lomake muoto Työkalut käyttöliittymän ja lisää URL-osoitteen.";
 
-?>
+
+$LANG["notify_form_deleted"] = "The form has been deleted.";

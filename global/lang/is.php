@@ -1269,4 +1269,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Form Tools er ekki að ákvarð
 $LANG["processing_no_post_vars"] = "process.php er ekki að fá nein gögn. Ath: Þessi handrit geta ekki verið hlaðinn beint í vafranum þínum. <br /> Gakktu mynd þína viss um er að senda með pósti.";
 $LANG["processing_no_redirect_url"] = "The uppgjöf var unnið rétt, en þú hefur ekki skilgreint redirect URL fyrir þessa mynd! Breyta mynd þína í formi Verkfæri HÍ og bæta redirect URL.";
 
-?>
+$LANG["notify_form_deleted"] = "The form has been deleted.";

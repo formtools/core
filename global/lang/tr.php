@@ -1277,4 +1277,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Form Araçlar nerede ne zaman d
 $LANG["processing_no_post_vars"] = "process.php herhangi bir veri almıyordur. Not: Bu komut dosyası, tarayıcınızdan direkt olarak yüklenemez. <br /> Form POST üzerinden gönderme olduğundan emin olun.";
 $LANG["processing_no_redirect_url"] = "Sunulması doğru bir şekilde işlenmiş, ancak bu form için bir yönlendirme URL belirtilen! Form Araçları UI formu düzenleyin ve yönlendirme URL&#39;sini ekleyin.";
 
-?>
+$LANG["notify_form_deleted"] = "The form has been deleted.";

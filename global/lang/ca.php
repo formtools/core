@@ -1269,4 +1269,5 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Formulari d&#39;eines és incap
 $LANG["processing_no_post_vars"] = "process.php no està rebent les dades. Nota: Aquest script no es pot carregar directament al vostre navegador. <br /> Assegureu-vos que la seva forma és l&#39;enviament per correu.";
 $LANG["processing_no_redirect_url"] = "La presentació va ser processat correctament, però no ha especificat una URL de redireccionament d&#39;aquesta manera! Modificar el formulari en la interfície d&#39;usuari d&#39;eines de formulari i afegir la URL de redireccionament.";
 
-?>
+
+$LANG["notify_form_deleted"] = "The form has been deleted.";

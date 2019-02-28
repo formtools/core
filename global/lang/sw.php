@@ -1270,4 +1270,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Fomu Tools hawawezi kuamua ni w
 $LANG["processing_no_post_vars"] = "process.php si kupokea data yoyote. Note: this script hayawezi kubeba moja kwa moja katika browser yako. <br /> Hakikisha fomu yako ni kutuma via POST.";
 $LANG["processing_no_redirect_url"] = "Mara ya kuwasilisha processed usahihi, lakini una si a redirect URL maalum kwa ajili ya fomu hii! Edit fomu yako katika Fomu Tools UI na kuongeza redirect URL.";
 
-?>
+$LANG["notify_form_deleted"] = "The form has been deleted.";

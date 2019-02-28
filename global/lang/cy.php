@@ -1269,4 +1269,5 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Ffurflen Offer yn methu i bende
 $LANG["processing_no_post_vars"] = "Nid process.php yn derbyn unrhyw ddata. Noder: mae&#39;r sgript na ellir llwytho uniongyrchol yn eich porwr. <br /> Gwnewch yn siŵr eich ffurflen yn cael ei anfon drwy SWYDD.";
 $LANG["processing_no_redirect_url"] = "Mae&#39;r cyflwyniad yn prosesu yn gywir, ond nid ydych wedi penodedig URL ailgyfeirio gyfer y ffurflen hon! Golygu eich ffurflen yn y Ffurflen Offer UI ac ychwanegu&#39;r URL ailgyfeirio.";
 
-?>
+
+$LANG["notify_form_deleted"] = "The form has been deleted.";

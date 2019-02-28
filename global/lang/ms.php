@@ -1269,4 +1269,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Borang Tools ini tidak dapat me
 $LANG["processing_no_post_vars"] = "process.php tidak menerima data apapun. Nota: script ini tidak boleh diambil secara langsung di pelayar anda. <br /> Pastikan borang anda menghantar melalui POST.";
 $LANG["processing_no_redirect_url"] = "Pengajuan itu diproses dengan benar, tetapi anda tidak menentukan sebuah URL redirect borang ini! Edit borang di borang Alatan UI dan tambah URL redirect.";
 
-?>
+$LANG["notify_form_deleted"] = "The form has been deleted.";

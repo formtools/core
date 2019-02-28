@@ -1277,4 +1277,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Skjema Tools er ikke å finne u
 $LANG["processing_no_post_vars"] = "process.php mottar ikke data. Merk: Dette skriptet kan ikke lastes direkte i nettleseren din. <br /> Sørg for at formen er sending via POST.";
 $LANG["processing_no_redirect_url"] = "Innsending ble behandlet riktig, men du har ikke spesifisert en omdirigering URL for dette skjemaet! Rediger skjema i form Tools UI og legge til omdirigere URL.";
 
-?>
+$LANG["notify_form_deleted"] = "The form has been deleted.";

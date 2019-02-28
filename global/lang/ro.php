@@ -827,7 +827,7 @@ $LANG["text_error_message_to_show"] = "Mesaj de eroare pentru a afişa în cazul
 $LANG["text_external_form_desc"] = "Formele exterioare sunt forme care exista deja pe site-ul dvs., sau undeva pe web. Selectaţi această opţiune dacă aveţi formularul ta pe care doriţi să se integreze cu instrumente formular.";
 $LANG["text_fields_tab_summary"] = "Această pagină listează toate câmpurile din formular. Pentru a controla modul în care acestea apar atunci când observaţiile navigare, a se vedea <a href=\"{\$views_tab_link}\">fila Vizualizări</a> . Ştergerea unui câmp de pe aceasta pagina va şterge din toate observaţiile, vă rugăm să fii atent!";
 $LANG["text_file_extension_info"] = "Introduceti dosar extensii separate prin virgule (de exemplu, JPG, GIF, PNG) sau lăsaţi gol pentru a permite oricărui tip de fişier.";
-$LANG["text_file_field_placeholders_info"] = "Domeniile de fişiere au două substituenţi speciale: FILEURL şi numele fişierului. FILEURL este URL-ul complet la dosar, astfel încât să puteţi link-ul direct la ea în mesajele de poştă electronică; FILENAME este doar numele fişierului.";
+$LANG["text_file_field_placeholders_info"] = "Domeniile de fişiere au două substituenţi speciale: =FILEURL şi numele fişierului. FILEURL este URL-ul complet la dosar, astfel încât să puteţi link-ul direct la ea în mesajele de poştă electronică; FILENAME este doar numele fişierului.";
 $LANG["text_filters_page"] = "Numai acele propunerile care îndeplinesc normele pe care o definiţi mai jos vor apărea în această vizualizare.";
 $LANG["text_filters_tips"] = "Pentru sfaturi privind modul de utilizare filtre de depunere, a se vedea <a href=\"{\$user_doc_link}\" target=\"_blank\">documentaţia pentru utilizator.</a>";
 $LANG["text_forgot_password"] = "Nici o problemă. Doar introduceţi numele dvs. de utilizator de mai jos şi informaţiile dvs. de conectare va fi trimis la adresa dvs. de email pe dosar. Dacă v-aţi uitat numele de utilizator, vă rugăm să e-mail administratorul site-ului de la {\$site_admin_email}.";
@@ -1269,4 +1269,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Formular de Instrumente nu este
 $LANG["processing_no_post_vars"] = "prelucrare.php nu primeşte nici de date. Notă: acest script nu pot fi încărcate direct în browser-ul dumneavoastră. <br /> Asiguraţi-vă că formularul este de a trimite prin posta.";
 $LANG["processing_no_redirect_url"] = "Prezentarea a fost procesat corect, dar nu aţi specificat o adresă URL de redirecţionare pentru acest formular! Editare forma dvs. în Instrumente Forma UI şi adăugaţi adresa URL de redirecţionare.";
 
-?>
+$LANG["notify_form_deleted"] = "The form has been deleted.";

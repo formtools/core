@@ -1272,4 +1272,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Oblik Alat je ne može odrediti
 $LANG["processing_no_post_vars"] = "process.php ne prima nikakve podatke. Napomena: ova skripta ne može se učitati izravno u browseru. <br /> Provjerite je li vaš obrazac šalje se poštom.";
 $LANG["processing_no_redirect_url"] = "Podnošenje je obrađen korektno, ali niste naveli preusmjeriti URL za ovaj obrazac! Uredite svoj oblik u oblik Alati UI i dodajte URL za preusmjeravanje.";
 
-?>
+$LANG["notify_form_deleted"] = "The form has been deleted.";

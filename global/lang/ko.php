@@ -1269,4 +1269,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "양식 도구를 어디에 그�
 $LANG["processing_no_post_vars"] = "process.php 모든 데이터를 수신하지 않습니다. 참고 : 귀하의 브라우저에서 직접 로드할 수없습니다이 스크립트. <br /> 물론 양식 POST를 통해 전송되어 있는지 확인합니다.";
 $LANG["processing_no_redirect_url"] = "접수가 제대로 처리했습니다,하지만 당신은이 양식에 대한 리디렉션 URL을 지정하지 않았습니다! 양식 도구 UI에서 양식을 수정하고 리디렉션 URL을 추가할 수있습니다.";
 
-?>
+$LANG["notify_form_deleted"] = "The form has been deleted.";

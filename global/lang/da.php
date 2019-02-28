@@ -1277,4 +1277,5 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Form Tools er i stand til at af
 $LANG["processing_no_post_vars"] = "process.php modtager ikke noget data. Bemærk: Dette script kan ikke indlæses direkte i din browser. <br /> Sørg for, at din formular sender via POST.";
 $LANG["processing_no_redirect_url"] = "Indsendelsen blev behandlet korrekt, men du ikke har angivet en omdirigering URL for denne form! Rediger dine form i Formværktøj UI og tilsæt omdirigering af webadressen.";
 
-?>
+
+$LANG["notify_form_deleted"] = "The form has been deleted.";

@@ -1269,4 +1269,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Form Kasangkapan ay hindi upang
 $LANG["processing_no_post_vars"] = "process.php ay hindi makatanggap ng anumang data. Tandaan: Ang script na ito ay hindi maaaring puno ng direkta sa iyong browser. <br /> Siguraduhin na ang iyong form ay sa pamamagitan ng pagpapadala ng POST.";
 $LANG["processing_no_redirect_url"] = "Pagsumite Ang proseso ay tama, ngunit hindi na tinukoy mo ang isang redirect na URL para sa form na ito! I-edit ang iyong form sa Form Tools UI at idagdag ang redirect na URL.";
 
-?>
+$LANG["notify_form_deleted"] = "The form has been deleted.";

@@ -1269,4 +1269,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Formola Għodod mhix f&#39;poż
 $LANG["processing_no_post_vars"] = "process.php mhux qed jirċievi xi data. Nota: din l-iskrittura ma jistax ikun imgħobbi direttament fil-browser tiegħek. <br /> Kun ċert li l-formola tiegħek hija li jibgħat permezz POST.";
 $LANG["processing_no_redirect_url"] = "Il-preżentazzjoni ġiet ipproċessata korrettement, imma int ma speċifikaw URL rindirizz għal din il-formola! Edit-formola tiegħek fil-UI Tools Formola u żid il-URL direzzjoni ġdida.";
 
-?>
+$LANG["notify_form_deleted"] = "The form has been deleted.";

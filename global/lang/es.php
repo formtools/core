@@ -1277,4 +1277,4 @@ $LANG["processing_no_form_url_for_recaptcha"] = "Form Tools es incapaz de determ
 $LANG["processing_no_post_vars"] = "process.php no está recibiendo información alguna. Nota: este programa no funciona si se carga directamente en el navegador. Asegurate de que el formulario esté enviando la información vía POST.";
 $LANG["processing_no_redirect_url"] = "El envío fue procesado correctamente, pero no has especificado un URL de salida para este formulario. Puedes establecer un URL de salida para tu formulario desde la Interfaz de Usuario de Form Tools.";
 
-?>
+$LANG["notify_form_deleted"] = "The form has been deleted.";

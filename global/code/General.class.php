@@ -320,7 +320,8 @@ END;
 			"new_submission" => array(true, $LANG["notify_new_submission_created"]),
 			"notify_sessions_timeout" => array(true, $LANG["notify_sessions_timeout"]),
 			"notify_no_views_assigned_to_client_form" => array(false, $LANG["notify_no_views_assigned_to_client_form"]),
-			"notify_no_account_id_in_sessions" => array(true, $LANG["notify_no_account_id_in_sessions"])
+			"notify_no_account_id_in_sessions" => array(true, $LANG["notify_no_account_id_in_sessions"]),
+			"form_deleted" => array(true, $LANG["notify_form_deleted"])
 		);
 
 		$found = false;
@@ -1206,7 +1207,7 @@ END;
 	 * @param integer $form_id
 	 * @param integer $submission_id
 	 * @param string $context
-	 * @param array $client_info a hash of information about the appropriate user (optional)
+	 * @param string $client_info a hash of information about the appropriate user (optional)
 	 * @return array a hash of placeholders and their replacement values (e.g. $arr["FORMURL"] => 17)
 	 */
 	public static function getSubmissionPlaceholders($form_id, $submission_id, $context, $client_info = "")
