@@ -168,8 +168,11 @@ class ViewFilters
 
             $errors = array_merge($standard_filter_errors, $client_map_filter_errors);
             if ($debug_enabled) {
-                array_walk($errors, create_function('&$el','$el = "&bull;&nbsp; " . $el;'));
-                $message .= "<br /><br />" . join("<br />", $errors);
+				$rows = array();
+				foreach ($errors as $error) {
+					$rows[] = "&bull;&nbsp; $error";
+				}
+				$message .= "<br /><br />" . join("<br />", $rows);
             }
             return array($success, $message);
         }
