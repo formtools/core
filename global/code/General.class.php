@@ -23,6 +23,7 @@ class General
 	 * Helper function that's used on Step 2 to confirm that the Core Field Types module folder exists.
 	 *
 	 * @param string $module_folder
+	 * @return bool
 	 */
 	public static function checkModuleAvailable($module_folder)
 	{
@@ -407,7 +408,8 @@ END;
 
 	/**
 	 * Currently used for encoding passwords. This will be updated in future versions for proper encryption.
-	 * @param $password
+	 * @param string $string
+	 * @return string
 	 */
 	public static function encode($string)
 	{
@@ -423,11 +425,22 @@ END;
 	 */
 	public static function updateApiVersion()
 	{
+		$api_version = Settings::get("api_version");
+
 		if (!Core::isAPIAvailable()) {
+			if (!empty($api_version)) {
+				Settings::set(array("api_version" => ""));
+				Hooks::updateAvailableHooks();
+			}
 			return;
 		}
+
 		include_once(Core::getAPIPath());
 		Settings::set(array("api_version" => API::getVersion()));
+
+		if (empty($api_version)) {
+			Hooks::updateAvailableHooks();
+		}
 	}
 
 
