@@ -25,3 +25,7 @@ src/vendor/*
 !src/vendor/ramsey
 !src/vendor/smarty
 !src/vendor/autoload.php
+node_modules/
+
+dist/
+dist/global/config.php

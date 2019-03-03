@@ -5,7 +5,7 @@
 This repo contains the source code for the Form Tools Core. The Core provides the minimal code needed to run Form Tools
 on your server. 
 
-### Branches, Tags & Releases
+### Branches and releases
 
 - The `master` branch contains the current ongoing work. Never assume it's stable, and never use code from this 
 branch on your production environments - only for development.
