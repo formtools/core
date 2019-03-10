@@ -48,5 +48,5 @@ features.
 - [Upgrading](https://docs.formtools.org/userdoc/modules/upgrading/)
 
 Development:
-- (Tests)[TESTS.md]. Still in its infancy, but we're getting there.
-- (Local Form Tools development)[DEVELOPMENT.md]. Learn about how to develop Form Tools locally here.
+- (Tests)[./TESTS.md]. Still in its infancy, but we're getting there.
+- (Local Form Tools development)[./DEVELOPMENT.md]. Learn about how to develop Form Tools locally here.
