@@ -1,31 +1,17 @@
-.idea*
-src/themes/default/cache/*.tpl.php
-src/themes/classic_grey
-src/themes/classic_grey/cache/*.tpl.php
-src/themes/deepblue
-src/themes/deepblue/cache/*.tpl.php
-src/themes/ohcanada
-src/themes/ohcanada/cache/*.tpl.php
+themes/default/cache/*.tpl.php
+themes/classic_grey
+themes/classic_grey/cache/*.tpl.php
+themes/deepblue
+themes/deepblue/cache/*.tpl.php
+themes/ohcanada
+themes/ohcanada/cache/*.tpl.php
 .DS_Store
-src/global/config.php
+global/config.php
 
-src/upload/*
-!src/upload/index.html
-src/modules/*
-!src/modules/index.html
-src/global/api/*
-!src/global/api/index.html
+upload/*
+!upload/index.html
+modules/*
+!modules/index.html
+global/api/*
+!global/api/index.html
 
-# vendor folder dev dependencies. Only whitelist specific dependencies
-src/vendor/*
-!src/vendor/bin/validate-json
-!src/vendor/composer
-!src/vendor/justinrainbow
-!src/vendor/myclabs
-!src/vendor/ramsey
-!src/vendor/smarty
-!src/vendor/autoload.php
-node_modules/
-
-dist/
-dist/global/config.php

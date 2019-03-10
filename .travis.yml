@@ -1,9 +1,0 @@
-language: php
-php:
-    - 7.1.9
-
-before_install:
-  - travis_retry composer self-update
-  - composer install --ignore-platform-reqs
-
-scripts: phpunit
