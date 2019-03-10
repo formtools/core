@@ -354,6 +354,8 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('sortI18nFiles', sortI18nFiles);
 
+	grunt.registerTask('publish', () => { console.log('coming soon.'); });
+
 	// for local dev work. All you need to do is run `grunt`: that creates a dist/ folder containing all the built code,
 	// plus sets up watchers to copy over changed files and generate the CSS from Sass. Be sure to load up the dist/
 	// folder in your browser
