@@ -39,7 +39,7 @@ Grunt has a few commands to simplify dealing with all the localization.
 grunt addI18nKey --key=word_hello 
 
 # removes a key from all files
-grunt removeI18nKey --key=word_hello
+grunt removeI18nKey --key=word_goodbye
 
 # sort the keys
 grunt sortI18nKeys
@@ -55,7 +55,7 @@ Since github doesn't provide options to only publish the contents of a subfolder
  
 - Check out second repo. Give the folder the name `formtools_releases`.
 - Check out the `releases` branch. 
-- In the first repo, run `grunt publish x.y.z`: that (will) generate the `dist/` folder, copy it into the other repo
+- In the first repo, run `grunt publish`: that generates the `dist/` folder, copy it into the other repo
 and create a tag with the name specified. 
 
 Please note:

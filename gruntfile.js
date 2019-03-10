@@ -1,8 +1,11 @@
 const fs = require('fs');
+const path = require('path');
 const lineByLine = require('n-readlines');
 const sass = require('node-sass');
 const pkg = require('./package.json');
+const child_process = require('child_process');
 
+const formtools_releases_folder = path.resolve(__dirname, '..', 'formtools_releases');
 
 const walk = (dir) => {
 	let results = [];
@@ -207,6 +210,7 @@ module.exports = function (grunt) {
 		return map;
 	};
 
+
 	const findStringsInEnFileMissingFromOtherLangFiles = (results, stringsByLocale) => {
 		const langs = Object.keys(stringsByLocale);
 
@@ -234,6 +238,7 @@ module.exports = function (grunt) {
 
 		return results;
 	};
+
 
 	const findStringsInOtherFilesNotInEnFile = (results, stringsByLocale) => {
 		const langs = Object.keys(stringsByLocale);
@@ -311,6 +316,16 @@ module.exports = function (grunt) {
 		}
 	};
 
+	const checkoutEmptyReleaseFolder = () => {
+		child_process.execSync('git checkout releases', { cwd: formtools_releases_folder });
+	};
+
+	const copyDistToRelease = () => {
+
+	};
+
+	grunt.registerTask('checkoutEmptyReleaseFolder', checkoutEmptyReleaseFolder);
+
 	grunt.registerTask('i18n', () => {
 		const stringsByLocale = {};
 		pkg.locales.forEach((locale) => {
@@ -354,7 +369,13 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('sortI18nFiles', sortI18nFiles);
 
-	grunt.registerTask('publish', () => { console.log('coming soon.'); });
+	// grunt publish --version=1.2.3
+	grunt.registerTask('publish', [
+		//'prod', 
+		'checkoutEmptyReleaseFolder',
+		// 'copyDistToRelease',
+		// 'createTag'
+	]);
 
 	// for local dev work. All you need to do is run `grunt`: that creates a dist/ folder containing all the built code,
 	// plus sets up watchers to copy over changed files and generate the CSS from Sass. Be sure to load up the dist/
