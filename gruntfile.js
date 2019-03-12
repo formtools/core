@@ -5,7 +5,8 @@ const sass = require('node-sass');
 const pkg = require('./package.json');
 const child_process = require('child_process');
 
-const formtools_releases_folder = path.resolve(__dirname, '..', 'formtools_releases');
+const release_folder = 'formtools_releases';
+const formtools_releases_folder = path.resolve(__dirname, '..', release_folder);
 
 const walk = (dir) => {
 	let results = [];
@@ -316,15 +317,24 @@ module.exports = function (grunt) {
 		}
 	};
 
-	const checkoutEmptyReleaseFolder = () => {
+	const publishReleaseBranch = () => {
+		const version = grunt.option('release') || null;
+		if (!version) {
+			console.log('Missing `release` param. Usage: `grunt publish --release=1.2.3`');
+			return;
+		}
+
 		child_process.execSync('git checkout releases', { cwd: formtools_releases_folder });
+		child_process.execSync(`cp -R . ../../${release_folder}`, { cwd: path.resolve(__dirname, 'dist') });
+		child_process.execSync(`git checkout -b auto_${version}`, { cwd: formtools_releases_folder });
+		child_process.execSync(`git add -A`, { cwd: formtools_releases_folder });
+		child_process.execSync(`git commit -m "auto publishing ${version}"`, { cwd: formtools_releases_folder });
+		child_process.execSync(`git push origin head`, { cwd: formtools_releases_folder });
+
+		console.log(`${version} branch published on github. Now need to manually publish release.`);
 	};
 
-	const copyDistToRelease = () => {
-
-	};
-
-	grunt.registerTask('checkoutEmptyReleaseFolder', checkoutEmptyReleaseFolder);
+	grunt.registerTask('publishReleaseBranch', publishReleaseBranch);
 
 	grunt.registerTask('i18n', () => {
 		const stringsByLocale = {};
@@ -369,12 +379,10 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('sortI18nFiles', sortI18nFiles);
 
-	// grunt publish --version=1.2.3
+	// grunt publish --release=1.2.3
 	grunt.registerTask('publish', [
 		//'prod', 
-		'checkoutEmptyReleaseFolder',
-		// 'copyDistToRelease',
-		// 'createTag'
+		'publishReleaseBranch'
 	]);
 
 	// for local dev work. All you need to do is run `grunt`: that creates a dist/ folder containing all the built code,
