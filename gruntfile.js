@@ -8,6 +8,12 @@ const child_process = require('child_process');
 const release_folder = 'formtools_releases';
 const formtools_releases_folder = path.resolve(__dirname, '..', release_folder);
 
+let active_modules = [];
+if (fs.existsSync('./local.dev.js')) {
+	const local_dev = require('./local.dev.js');
+	active_modules = local_dev.modules;
+}
+
 const walk = (dir) => {
 	let results = [];
 	const list = fs.readdirSync(dir);
@@ -23,98 +29,108 @@ const walk = (dir) => {
 	return results;
 };
 
-
-module.exports = function (grunt) {
-
-	const config = {
-		sass: {
-			options: {
-				implementation: sass,
-				sourceMap: true
-			},
-			dist: {
-				files: {
-					'dist/themes/default/css/styles.css': 'src/themes/default/sass/index.scss',
-				}
-			}
+const config = {
+	sass: {
+		options: {
+			implementation: sass,
+			sourceMap: true
 		},
-
-		watch: {
-			css: {
-				files: ['**/*.scss'],
-				tasks: ['sass']
-			},
-			src: {
-				files: ['src/**'],
-				tasks: ['sync']
-			}
-		},
-
-		sync: {
-			main: {
-				files: [{
-					cwd: 'src',
-					src: [
-						'**',
-						'!**/*.scss', // sass files are built separately
-						'!react/**',
-						'!themes/default/sass/**'
-					],
-					dest: 'dist',
-				}],
-				verbose: true
-			}
-		},
-
-		uglify: {
-			installation_bundles: {
-				files: {
-					'dist/global/scripts/installation-bundle.js': [
-						'src/global/scripts/jquery.js',
-						'src/global/scripts/general.js',
-						'src/global/scripts/rsv.js',
-						'src/global/scripts/jquery-ui-1.8.6.custom.min.js'
-					]
-				}
-			}
-		},
-
-		cssmin: {
-			target: {
-				files: {
-					'dist/themes/default/css/installation-bundle.css': [
-						'src/themes/default/css/smoothness/jquery-ui-1.8.6.custom.css',
-						'dist/themes/default/css/styles.css'
-					]
-				}
-			}
-		},
-
-		// run: {
-		// 	webpack_dev: {
-		// 		cmd: 'npm',
-		// 		args: [
-		// 			'start'
-		// 		]
-		// 	},
-		// 	webpack_prod: {
-		// 		cmd: 'npm',
-		// 		args: [
-		// 			'build'
-		// 		]
-		// 	}
-		// },
-
-		concurrent: {
-			watchers: {
-				options: {
-					logConcurrentOutput: true
-				},
-				tasks: ['watch']
+		dist: {
+			files: {
+				'dist/themes/default/css/styles.css': 'src/themes/default/sass/index.scss',
 			}
 		}
-	};
+	},
 
+	watch: {
+		css: {
+			files: ['**/*.scss'],
+			tasks: ['sass']
+		},
+		src: {
+			files: ['src/**'],
+			tasks: ['sync']
+		},
+		modules: {
+			files: active_modules.map((folder) => path.resolve(__dirname, '..', folder) + '/**'),
+			tasks: ['sync']
+		}
+	},
+
+	sync: {
+		main: {
+			files: [{
+				cwd: 'src',
+				src: [
+					'**',
+					'!**/*.scss', // sass files are built separately
+					'!react/**',
+					'!themes/default/sass/**'
+				],
+				dest: 'dist',
+			}],
+			verbose: true
+		},
+		modules: {
+			files: active_modules.map((folder) => ({
+				cwd: path.resolve(__dirname, '..', folder),
+				src: ['**'],
+				dest: `dist/modules/${folder.replace(/^module-/, '')}`,
+			}))
+		}
+	},
+
+	uglify: {
+		installation_bundles: {
+			files: {
+				'dist/global/scripts/installation-bundle.js': [
+					'src/global/scripts/jquery.js',
+					'src/global/scripts/general.js',
+					'src/global/scripts/rsv.js',
+					'src/global/scripts/jquery-ui-1.8.6.custom.min.js'
+				]
+			}
+		}
+	},
+
+	cssmin: {
+		target: {
+			files: {
+				'dist/themes/default/css/installation-bundle.css': [
+					'src/themes/default/css/smoothness/jquery-ui-1.8.6.custom.css',
+					'dist/themes/default/css/styles.css'
+				]
+			}
+		}
+	},
+
+	// run: {
+	// 	webpack_dev: {
+	// 		cmd: 'npm',
+	// 		args: [
+	// 			'start'
+	// 		]
+	// 	},
+	// 	webpack_prod: {
+	// 		cmd: 'npm',
+	// 		args: [
+	// 			'build'
+	// 		]
+	// 	}
+	// },
+
+	concurrent: {
+		watchers: {
+			options: {
+				logConcurrentOutput: true
+			},
+			tasks: ['watch']
+		}
+	}
+};
+
+
+module.exports = function (grunt) {
 	grunt.initConfig(config);
 
 	require('load-grunt-tasks')(grunt);
@@ -279,7 +295,6 @@ module.exports = function (grunt) {
 
 		const files = walk('./src');
 		files.forEach((file) => {
-
 			for (let i=0; i<ignoreFolders.length; i++) {
 				const re = new RegExp(ignoreFolders[i]);
 				if (re.test(file)) {

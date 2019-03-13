@@ -27,7 +27,26 @@ accidentally find yourself editing those files.
 
 ### Linking modules for local development 
 
-TODO.
+Each module is in it's own repo, but for seeing the modules in your local dev environment it needs to be copied over
+into the dist/modules folder.
+
+To work on modules locally, check the module out into the same folder as the core repo, and create a `local.dev.js` file 
+with the following content:
+
+```
+module.exports = {
+	modules: [
+		'module-custom_fields',
+		'module-data_visualization',
+		'module-export_manager'
+	]
+};
+```
+
+Just add whatever module folders you want. 
+
+Now when you boot up grunt it'll automatically copy over the modules content to your dist folder - and set up watchers to 
+copy the files as well. 
 
 
 ### Localization 

@@ -29,3 +29,5 @@ node_modules/
 
 dist/
 dist/global/config.php
+
+local.dev.js
