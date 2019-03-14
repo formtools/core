@@ -94,19 +94,15 @@ $LANG["word_from_c"] = ":من";
 $LANG["word_general"] = "عام";
 $LANG["word_green"] = "أخضر";
 $LANG["word_grey"] = "غراي";
-$LANG["word_headers"] = "رؤوس";
 $LANG["word_height"] = "ارتفاع";
 $LANG["word_help"] = "مساعدة";
 $LANG["word_hidden"] = "مخفي";
-$LANG["word_hide"] = "إخفاء";
 $LANG["word_highlight"] = "تسليط الضوء";
 $LANG["word_horizontal"] = "أفقي";
 $LANG["word_hour"] = "ساعة";
 $LANG["word_hours"] = "ساعات";
 $LANG["word_html"] = "أتش تي أم أل";
 $LANG["word_id"] = "الهوية ";
-$LANG["word_ignore"] = "تجاهل";
-$LANG["word_ignore"] = "تجاهل";
 $LANG["word_image"] = "الصور";
 $LANG["word_incomplete"] = "غير مكتمل";
 $LANG["word_install"] = "تثبيت";
@@ -114,7 +110,6 @@ $LANG["word_installation"] = "تركيب";
 $LANG["word_internal"] = "داخلي";
 $LANG["word_language"] = "لغة";
 $LANG["word_large"] = "كبير";
-$LANG["word_left"] = "يسار";
 $LANG["word_like"] = "مثل";
 $LANG["word_login"] = "الدخول";
 $LANG["word_logo"] = "الشعار";
@@ -173,7 +168,6 @@ $LANG["word_reply_to_c"] = ":رد الى";
 $LANG["word_required"] = "مطلوب";
 $LANG["word_reset"] = "اعادة";
 $LANG["word_resolved"] = "حل";
-$LANG["word_right"] = "صحيح";
 $LANG["word_row"] = "صف";
 $LANG["word_search"] = "بحث";
 $LANG["word_searchable"] = "بحث";
@@ -211,8 +205,6 @@ $LANG["word_time"] = "مرة";
 $LANG["word_tiny"] = "صغير";
 $LANG["word_tips"] = "نصائح";
 $LANG["word_today"] = "اليوم";
-$LANG["word_toolbar"] = "شريط الأدوات";
-$LANG["word_top"] = "أعلى";
 $LANG["word_truncate_q"] = "اقتطاع؟";
 $LANG["word_uninstall"] = "إلغاء";
 $LANG["word_unknown"] = "غير معروف";
@@ -341,7 +333,6 @@ $LANG["phrase_confirm_folder_url_match"] = "تأكيد مجلد - رابط ال�
 $LANG["phrase_connect_rows"] = "ربط الصفوف";
 $LANG["phrase_copy_email_settings_from"] = "نسخة من إعدادات البريد الإلكتروني...";
 $LANG["phrase_copy_settings_from"] = "نسخة من إعدادات...";
-$LANG["phrase_core_field_types"] = "أنواع الحقول الأساسية";
 $LANG["phrase_core_fields"] = "الحقول الأساسية";
 $LANG["phrase_core_version"] = "النسخة الأساسية";
 $LANG["phrase_create_account"] = "إنشاء حساب";
@@ -385,7 +376,6 @@ $LANG["phrase_default_value"] = "القيمة الافتراضية";
 $LANG["phrase_default_values"] = "القيم الافتراضية";
 $LANG["phrase_default_values_new_submissions"] = "القيم الافتراضية لتقديم الطلبات الجديدة";
 $LANG["phrase_delete_field"] = "حذف حقل";
-$LANG["phrase_delete_file"] = "حذف ملف";
 $LANG["phrase_delete_form"] = "حذف النموذج";
 $LANG["phrase_delete_row"] = "حذف صف";
 $LANG["phrase_delete_uploaded_fields_with_submission"] = "حذف الملفات المقترنة عند حذف تقديم";
@@ -548,7 +538,6 @@ $LANG["phrase_no_views"] = "لا المشاهدات";
 $LANG["phrase_no_views_with_filters_p"] = "(لا يوجد عدد محدد مع الفلاتر)";
 $LANG["phrase_none_not_recommended"] = "لا شيء (غير مستحسن)";
 $LANG["phrase_not_assigned_to_option_list"] = "لم يتم تعيين هذا الحقل إلى قائمة الخيار.";
-$LANG["phrase_not_entered_yet"] = "لم تدخل بعد";
 $LANG["phrase_not_equal"] = "لا تكافؤ";
 $LANG["phrase_not_found"] = "غير موجود!";
 $LANG["phrase_not_like"] = "لا تحب";
@@ -565,7 +554,6 @@ $LANG["phrase_num_rows"] = "صفوف الأسطوانات";
 $LANG["phrase_numbers_only"] = "أرقام فقط";
 $LANG["phrase_often_localhost"] = "(في كثير من الأحيان &quot;مضيف محلي&quot;)";
 $LANG["phrase_on_form_submission"] = "على استمارة التقديم";
-$LANG["phrase_one_by_one"] = "واحدا تلو الآخر";
 $LANG["phrase_one_char_number"] = "على الأقل حرف واحد هو رقم (0-9)";
 $LANG["phrase_one_char_upper"] = "حرف واحد على الأقل هو كبيرة";
 $LANG["phrase_one_special_char"] = "واحد على الأقل من <b>{\$chars}</b>";
@@ -586,7 +574,6 @@ $LANG["phrase_password_one_uppercase"] = "ويجب أن تحتوي على ما �
 $LANG["phrase_password_requirements_c"] = "متطلبات كلمة المرور :";
 $LANG["phrase_password_reset"] = "إعادة تعيين كلمة المرور";
 $LANG["phrase_password_special_char"] = "ويجب أن تحتوي على واحد على الأقل من الأحرف التالية : <b>{\$chars}</b>";
-$LANG["phrase_path_info_location"] = "المسار معلومات الموقع";
 $LANG["phrase_permissions_other_settings"] = "أذونات / إعدادات أخرى";
 $LANG["phrase_permitted_file_types"] = "أنواع الملفات المسموح بها";
 $LANG["phrase_phone_number"] = "رقم الهاتف";
@@ -620,7 +607,6 @@ $LANG["phrase_register_new_email"] = "تسجيل البريد الإلكترون
 $LANG["phrase_remaining_characters"] = "الأحرف المتبقية";
 $LANG["phrase_remaining_words"] = "تبقى الكلمات";
 $LANG["phrase_remove_tabs"] = "إزالة علامات الجدولة";
-$LANG["phrase_required_field"] = "الحقل المطلوب";
 $LANG["phrase_required_password_chars"] = "أحرف كلمة المرور المطلوبة";
 $LANG["phrase_resend_test_submission"] = "إرسال اختبار التقديم";
 $LANG["phrase_return_form_list"] = "العودة إلى نموذج قائمة";
@@ -645,7 +631,6 @@ $LANG["phrase_setting_value"] = "تحديد قيمة";
 $LANG["phrase_setup_options"] = "خيارات الإعداد";
 $LANG["phrase_show_all"] = "وتظهر جميع";
 $LANG["phrase_show_form"] = "عرض نموذج";
-$LANG["phrase_show_path_information"] = "وتظهر معلومات مسار";
 $LANG["phrase_size_large"] = "كبير (نص)";
 $LANG["phrase_size_medium"] = "المتوسطة (&lt;= 256 حرف)";
 $LANG["phrase_size_small"] = "الصغيرة (&lt;= 20 حرف)";
@@ -1100,11 +1085,8 @@ $LANG["notify_field_options_smart_filled"] = "وقد خيارات الحقل ا�
 $LANG["notify_field_selected"] = "الميدان تم اختيارها. <a href=\"#\" onclick=\"{\$onclick}\">اضغط هنا</a> للعودة إلى القائمة الرئيسية للحقل.";
 $LANG["notify_field_updated"] = "هذا الحقل قد تم تحديثه.";
 $LANG["notify_file_deleted"] = "الملف قد تم حذفه.";
-$LANG["notify_file_not_deleted_no_exist"] = "الملف لم يتم حذفه لأنه لا وجود له في الموقع المتوقع. <a href=\"#\" onclick=\"{\$js_link}\">اضغط هنا</a> لتجاهل هذه الرسالة خطأ ومجرد إزالة الإشارة من قاعدة البيانات.";
-$LANG["notify_file_not_deleted_permissions"] = "الملف لم يتم حذفه لأنه لديه الأذونات خاطئ. <a href=\"#\" onclick=\"{\$js_link}\">اضغط هنا</a> لتجاهل هذه الرسالة خطأ ومجرد إزالة الإشارة من قاعدة البيانات.";
 $LANG["notify_file_not_deleted_unknown_error"] = "كان هناك خطأ مجهول عند محاولة حذف هذا الملف. <a href=\"#\" onclick=\"{\$js_link}\">اضغط هنا</a> لتجاهل هذه الرسالة خطأ ومجرد إزالة الإشارة من قاعدة البيانات.";
 $LANG["notify_file_not_uploaded"] = "ويمكن أن الملف لا يمكن تحميلها.";
-$LANG["notify_file_too_large"] = "هذا الملف كبير جدا. وكان ملف { \$ حجم الملف} كيلوبايت ، لكن الحد الأقصى المسموح حجم تحميل الملف هو { \$ MAXFILESIZE} كيلو بايت.";
 $LANG["notify_file_uploaded"] = "الملف تم تحميلها بنجاح.";
 $LANG["notify_filters_not_updated"] = "كان هناك خطأ استكمال هذا العميل تقديم مرشحات.";
 $LANG["notify_filters_updated"] = "تقديم المرشحات قد تم تحديثها لهذا العميل.";

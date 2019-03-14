@@ -95,19 +95,15 @@ $LANG["word_from_c"] = "از :";
 $LANG["word_general"] = "عمومی";
 $LANG["word_green"] = "سبز";
 $LANG["word_grey"] = "خاکستری";
-$LANG["word_headers"] = "سرآیندها";
 $LANG["word_height"] = "ارتفاع";
 $LANG["word_help"] = "کمک";
 $LANG["word_hidden"] = "پنهان";
-$LANG["word_hide"] = "مخفی";
 $LANG["word_highlight"] = "نماد";
 $LANG["word_horizontal"] = "افقی";
 $LANG["word_hour"] = "ساعت";
 $LANG["word_hours"] = "ساعت قبل";
 $LANG["word_html"] = "HTML";
 $LANG["word_id"] = "شناسه";
-$LANG["word_ignore"] = "نادیده گرفتن";
-$LANG["word_ignore"] = "نادیده گرفتن";
 $LANG["word_image"] = "تصویر";
 $LANG["word_incomplete"] = "ناقص";
 $LANG["word_install"] = "نصب";
@@ -115,7 +111,6 @@ $LANG["word_installation"] = "نصب";
 $LANG["word_internal"] = "داخلی";
 $LANG["word_language"] = "زبان";
 $LANG["word_large"] = "بزرگ";
-$LANG["word_left"] = "چپ";
 $LANG["word_like"] = "شبیه";
 $LANG["word_login"] = "ورود";
 $LANG["word_logo"] = "نشان";
@@ -174,7 +169,6 @@ $LANG["word_reply_to_c"] = "پاسخ به :";
 $LANG["word_required"] = "ضروری";
 $LANG["word_reset"] = "بازنشانی";
 $LANG["word_resolved"] = "حل و فصل";
-$LANG["word_right"] = "حق";
 $LANG["word_row"] = "ردیف";
 $LANG["word_search"] = "جستجو";
 $LANG["word_searchable"] = "جستجو";
@@ -212,8 +206,6 @@ $LANG["word_time"] = "زمان";
 $LANG["word_tiny"] = "کوچک";
 $LANG["word_tips"] = "راهنمایی";
 $LANG["word_today"] = "امروز";
-$LANG["word_toolbar"] = "نوار ابزار";
-$LANG["word_top"] = "بالا";
 $LANG["word_truncate_q"] = "کوتاه؟";
 $LANG["word_uninstall"] = "عزل";
 $LANG["word_unknown"] = "ناشناخته";
@@ -342,7 +334,6 @@ $LANG["phrase_confirm_folder_url_match"] = "تکرار آدرس پوشه - تط�
 $LANG["phrase_connect_rows"] = "اتصال ردیف";
 $LANG["phrase_copy_email_settings_from"] = "تنظیمات ایمیل کپی از...";
 $LANG["phrase_copy_settings_from"] = "کپی برداری از تنظیمات...";
-$LANG["phrase_core_field_types"] = "هسته انواع رشته";
 $LANG["phrase_core_fields"] = "زمینه های اصلی";
 $LANG["phrase_core_version"] = "هسته نسخه";
 $LANG["phrase_create_account"] = "ایجاد حساب کاربری";
@@ -386,7 +377,6 @@ $LANG["phrase_default_value"] = "مقدار پیش فرض";
 $LANG["phrase_default_values"] = "مقادیر پیش فرض";
 $LANG["phrase_default_values_new_submissions"] = "مقادیر پیش فرض برای ارسالی جدید";
 $LANG["phrase_delete_field"] = "حذف فیلد";
-$LANG["phrase_delete_file"] = "حذف فایل";
 $LANG["phrase_delete_form"] = "حذف فرم";
 $LANG["phrase_delete_row"] = "حذفسطر";
 $LANG["phrase_delete_uploaded_fields_with_submission"] = "پاک کردن فایل های مربوط به زمانی که ارسال حذف";
@@ -549,7 +539,6 @@ $LANG["phrase_no_views"] = "بدون پروفایل";
 $LANG["phrase_no_views_with_filters_p"] = "(بدون نمایش ها تعریف شده با فیلتر)";
 $LANG["phrase_none_not_recommended"] = "هیچ کدام (توصیه نمی شود)";
 $LANG["phrase_not_assigned_to_option_list"] = "این فیلد به لیست انتخاب قرار گرفتند.";
-$LANG["phrase_not_entered_yet"] = "وارد نشده هنوز";
 $LANG["phrase_not_equal"] = "ندارد برابر";
 $LANG["phrase_not_found"] = "یافت نشد!";
 $LANG["phrase_not_like"] = "دوست ندارد";
@@ -566,7 +555,6 @@ $LANG["phrase_num_rows"] = "سطرها #";
 $LANG["phrase_numbers_only"] = "تعداد فقط";
 $LANG["phrase_often_localhost"] = "(که اغلب به &quot;localhost&quot;)";
 $LANG["phrase_on_form_submission"] = "در فرم ارسال مقاله";
-$LANG["phrase_one_by_one"] = "یک به یک";
 $LANG["phrase_one_char_number"] = "حداقل یکی از شخصیت ها شماره (0-9) است";
 $LANG["phrase_one_char_upper"] = "حداقل یکی از شخصیت ها بزرگ است";
 $LANG["phrase_one_special_char"] = "حداقل یکی از <b>{\$chars}</b>";
@@ -587,7 +575,6 @@ $LANG["phrase_password_one_uppercase"] = "باید حداقل یک حرف بزر
 $LANG["phrase_password_requirements_c"] = "الزامات رمز عبور :";
 $LANG["phrase_password_reset"] = "بازیابی کلمه عبور";
 $LANG["phrase_password_special_char"] = "باید حداقل یکی از شخصیت های زیر است : <b>{\$chars}</b> شامل";
-$LANG["phrase_path_info_location"] = "مسیر اطلاعات مکان";
 $LANG["phrase_permissions_other_settings"] = "ویرایش / تنظیمات دیگر";
 $LANG["phrase_permitted_file_types"] = "نوع فایل های مجاز";
 $LANG["phrase_phone_number"] = "شماره تلفن";
@@ -621,7 +608,6 @@ $LANG["phrase_register_new_email"] = "ثبت نام جدید ایمیل";
 $LANG["phrase_remaining_characters"] = "باقی مانده کاراکتر";
 $LANG["phrase_remaining_words"] = "باقی مانده کلمات";
 $LANG["phrase_remove_tabs"] = "چوبالفها حذف";
-$LANG["phrase_required_field"] = "اجباری";
 $LANG["phrase_required_password_chars"] = "شخصیت های مورد نیاز رمز عبور";
 $LANG["phrase_resend_test_submission"] = "ارسال نامه تست ارسال مقاله";
 $LANG["phrase_return_form_list"] = "بازگشت به فرم فهرست";
@@ -646,7 +632,6 @@ $LANG["phrase_setting_value"] = "تعیین ارزش";
 $LANG["phrase_setup_options"] = "گزینه های راه اندازی";
 $LANG["phrase_show_all"] = "نمایش همه";
 $LANG["phrase_show_form"] = "نمایش فرم";
-$LANG["phrase_show_path_information"] = "نشان دادن مسیر اطلاعات";
 $LANG["phrase_size_large"] = "بزرگ (متن)";
 $LANG["phrase_size_medium"] = "متوسط (&lt;= 256 کاراکتر)";
 $LANG["phrase_size_small"] = "کوچک (&lt;= 20 کاراکتر)";
@@ -1101,11 +1086,8 @@ $LANG["notify_field_options_smart_filled"] = "گزینه های این زمین�
 $LANG["notify_field_selected"] = "زمینه بوده است انتخاب شده است. <a href=\"#\" onclick=\"{\$onclick}\">اینجا را کلیک کنید</a> برای بازگشت به لیست رشته اصلی.";
 $LANG["notify_field_updated"] = "این فیلد به روز شده است.";
 $LANG["notify_file_deleted"] = "فایل حذف شده است.";
-$LANG["notify_file_not_deleted_no_exist"] = "فایل پاک نشده است زیرا در آن نشانی از مکان انتظار می رود وجود ندارد. <a href=\"#\" onclick=\"{\$js_link}\">اینجا را کلیک کنید</a> جهت نادیده گرفتن این خطا را حذف و تنها مرجع از پایگاه داده باشد.";
-$LANG["notify_file_not_deleted_permissions"] = "فایل پاک نشده است زیرا دارای مجوز اشتباه است. <a href=\"#\" onclick=\"{\$js_link}\">اینجا را کلیک کنید</a> جهت نادیده گرفتن این خطا را حذف و تنها مرجع از پایگاه داده باشد.";
 $LANG["notify_file_not_deleted_unknown_error"] = "خطای ناشناخته بود که سعی در حذف این فایل وجود دارد. <a href=\"#\" onclick=\"{\$js_link}\">اینجا را کلیک کنید</a> جهت نادیده گرفتن این خطا را حذف و تنها مرجع از پایگاه داده باشد.";
 $LANG["notify_file_not_uploaded"] = "نمی تواند فایل ارسال شده.";
-$LANG["notify_file_too_large"] = "این فایل بیش از حد بزرگ است. فایل بود { \$ اندازه فایل} کیلو بایت ، اما حداکثر مجاز اندازه فایل آپلود { \$ MAXFILESIZE} KB.";
 $LANG["notify_file_uploaded"] = "فایل با موفقیت ارسال شد.";
 $LANG["notify_filters_not_updated"] = "خطا بود به روز رسانی این فیلتر تسلیم مشتری وجود دارد.";
 $LANG["notify_filters_updated"] = "فیلتر تسلیم را برای این مشتری به روز شده است.";
