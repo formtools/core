@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... andmebaasi ...&quot;</span> tähendab, et kuigi oma kasutajanimi ja parool, mida tarnitakse on õige, ei suuda ta ühendada, et eelkõige andmebaasi kontoga. See võib tähendada, et kas teie andmebaasi nimi on vale, või et selle kasutaja konto ei ole seotud andmebaasi.";
 $LANG["text_install_email_content_text"] = "Meie veebisaidil on palju ressursse, mis aitavad teil alustada, sh meie veebidokumentide (https://docs.formtools.org) ja õpetuste (https://docs.formtools.org/tutorials). Kui leiate, et olete kinni või teil on küsimus, küsige githubist (https://github.com/formtools/core/issues/) küsimust.";
 $LANG["text_install_form_tools_server_not_supported"] = "Vabandust, vorm Tools ei saa sõita oma server. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Palun kliki siia,</a> et miinimumnõuetele.";
-$LANG["text_install_intro"] = "Tere tulemast vorm Vahendid paigaldamise skript! Palun valige oma keel.";
 $LANG["text_install_system_check"] = "See leht jookseb mõned katsed oma süsteemi, et tagada see on võimelised sõitma vorm tööriistad.";
 $LANG["text_internal_form_desc"] = "Internal vorme ainult vorm Tools - mujal saidil. Ainult vormi Tools kasutajakontod on juurdepääs vormis. Valige see, kui sul ei ole olemasoleva vormi.";
 $LANG["text_internal_form_intro"] = "Kasutage allpool olevat vormi, et luua uus Internal vormis. Kõik seadistused, kaasaarvatud arv ja sisu väljad saab muuta ja seadistada hiljem.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Vabandust, me ei suutnud ühendada an
 $LANG["notify_install_no_db_connection"] = "Palun kontrollige oma andmebaasi nime ja logini informatsioonile. Kuigi oleme suutnud ühendada andmebaasi serveri, me ei saanud ühendust andmebaasiga. Veateate andmebaasi tagastatud: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Teie vorm on valmis! Saate konfigureerida oma vormi kaudu neid sakke.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Kontole salvestatud teave istungid on kehtetu. Palun logige uuesti alla.";
-$LANG["notify_invalid_field_upload_folder"] = "See väli on upload kaust on kas vigane või ei ole kirjutatav.";
 $LANG["notify_invalid_license_key"] = "Vabandust, see ei paista olema kehtiv võti. Palun proovige uuesti sisestama.";
 $LANG["notify_invalid_permissions"] = "Sul ei ole õigusi sellele lehele. You have been logitud.";
 $LANG["notify_invalid_search_dates"] = "Palun kasutage datepicker sisestada kehtiv kuupäev või kuupäevad.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Tundub, et teie kasutaja kon
 $LANG["notify_no_views_defined"] = "Sa ei pea kõik seisukohad määratletud. Sa ei saa vaadata seda vormi väidetele kui vähemalt üks View on loodud. Klikka allolevale nupule, et luua vaikimisi View.";
 $LANG["notify_option_list_deleted"] = "Valikloendist on kustutatud.";
 $LANG["notify_option_list_updated"] = "Valikloendist on uuendatud.";
-$LANG["notify_page_added"] = "Leht on lisatud.";
-$LANG["notify_page_not_added"] = "Ei saanud lisada.";
 $LANG["notify_page_updated"] = "Leht on uuendatud.";
 $LANG["notify_public_form_omit_list_updated"] = "Kliendile jätta nimekirja selles vormis on uuendatud.";
 $LANG["notify_public_view_omit_list_updated"] = "Kliendile jätta nimekirja selles Vaade on uuendatud.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Esitamine on kopeeritud. Saate seda al
 $LANG["notify_submission_deleted"] = "Esitamine on edukalt kustutatud.";
 $LANG["notify_submission_deleted_with_problems"] = "Esitamise kustutatud, kuid järgmised probleemid tekkisid, kui üritatakse kustutada fail (id):";
 $LANG["notify_submission_id_not_found"] = "Esitamise ID ei leitud.";
-$LANG["notify_submission_no_field_id"] = "See esitamise väli ID ei leitud.";
 $LANG["notify_submission_not_updated"] = "Esitamist ei saa uuendada.";
-$LANG["notify_submission_updated_file_problems"] = "Teie esitamiseks on uuendatud, aga fail (id) oli probleeme:";
 $LANG["notify_submissions_and_files_deleted"] = "Ettepanekud ning mis tahes faili (d) nendega on edukalt kustutatud.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> esitust on kopeeritud.";
 $LANG["notify_submissions_deleted"] = "Märkused olid edukalt kustutatud.";

@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Dosto
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Dostop zavrnjen za uporabnika: ... do baze podatkov ...&quot;</span> pomeni, da čeprav je vaše uporabniško ime in geslo, ki ste, ki je pravilen, ni mogla povezati z bazo podatkov, da zlasti s tem računom. To lahko pomeni, da bodisi vaše ime podatkovne baze je nepravilna, ali da je to uporabniški račun, ni povezana s to bazo podatkov.";
 $LANG["text_install_email_content_text"] = "Na naši spletni strani je na voljo veliko virov, ki vam pomagajo pri zagonu, vključno z našo spletno dokumentacijo (https://docs.formtools.org) in vadnicami (https://docs.formtools.org/tutorials). Če ugotovite, da ste zaljubljeni ali imate vprašanje, zastavite vprašanje o githubu (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Oprostite, obrazec Tools ne bo mogel teči na strežniku. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Prosimo, kliknite tukaj</a> za minimalne zahteve.";
-$LANG["text_install_intro"] = "Dobrodošli v Form Tools namestitveni skripti! Prosim izberi svoj jezik.";
 $LANG["text_install_system_check"] = "Ta stran izvede nekaj testov na vašem sistemu, da preveri če se na njej Form Tools aplikacija lahko izvaja.";
 $LANG["text_internal_form_desc"] = "Notranja oblike obstajajo samo v obrazec Tools - ne drugje na vaši strani. Le Obrazec Tools uporabniški računi bodo imeli dostop do obrazca. Izberite to možnost, če nimate obstoječi obliki.";
 $LANG["text_internal_form_intro"] = "Uporabite spodnji obrazec za ustvarjanje nove notranji obliki. Vse nastavitve, vključno s številom in vsebino obrazca polj je mogoče spremeniti in nastavljen kasneje.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Oprostite, nismo mogli povezati z baz
 $LANG["notify_install_no_db_connection"] = "Prosimo, preverite vaše ime zbirke podatkov in podatke za prijavo. Čeprav smo lahko povežete z bazo podatkov gostitelja, nismo mogli povezati z bazo podatkov. Napaki zbirke je vrnil: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Vaš obrazec je bil ustvarjen! Lahko nastavite svoj obrazec s pomočjo teh kartic.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Računu informacije, shranjene na sejah, je neveljavna. Znova se prijavite spodaj.";
-$LANG["notify_invalid_field_upload_folder"] = "To polje je upload mapa je neveljaven ali ni mogoče pisati.";
 $LANG["notify_invalid_license_key"] = "Žal mi je, da ne kaže, da je veljaven licenčni ključ. Prosimo, poskusite znova vnesete.";
 $LANG["notify_invalid_permissions"] = "Nimate dovoljenja za dostop do te strani. Ste bili odjavljeni.";
 $LANG["notify_invalid_search_dates"] = "Prosimo, uporabite datepicker vnesti veljaven datum ali datume.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Zdi se, da je vaš uporabni�
 $LANG["notify_no_views_defined"] = "Nimate vsa mnenja, opredeljene. Ne boste mogli ogledati ta obrazec za vloge, razen če se ustvari vsaj en pogled. Kliknite na gumb spodaj za privzeti pogled.";
 $LANG["notify_option_list_deleted"] = "Možnost seznama je bila izbrisana.";
 $LANG["notify_option_list_updated"] = "Možnost seznam je bil posodobljen.";
-$LANG["notify_page_added"] = "Stran je bila dodana.";
-$LANG["notify_page_not_added"] = "Napaka pri dodajanju strani.";
 $LANG["notify_page_updated"] = "Stran je bila posodobljena.";
 $LANG["notify_public_form_omit_list_updated"] = "Odjemalec izpustiti seznam za to obliko je bil posodobljen.";
 $LANG["notify_public_view_omit_list_updated"] = "Odjemalec izpustiti seznam za to si je bil posodobljen.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Predložitev je bila kopirana. Spodaj 
 $LANG["notify_submission_deleted"] = "Vnos izbrisan uspešno.";
 $LANG["notify_submission_deleted_with_problems"] = "Oddajo je bil izbrisan, ampak so se pojavile naslednje težave, ko se je poskušalo izbrisati datoteko (-a):";
 $LANG["notify_submission_id_not_found"] = "Predložitev ID ni bilo mogoče najti.";
-$LANG["notify_submission_no_field_id"] = "To oddajo polje ID ni bilo mogoče najti.";
 $LANG["notify_submission_not_updated"] = "Oddajo ni bilo treba posodobiti.";
-$LANG["notify_submission_updated_file_problems"] = "Vaš oddajo je bil posodobljen, vendar naslednji file (s) imeli težave:";
 $LANG["notify_submissions_and_files_deleted"] = "Vloge in vseh datotek (e) v zvezi z njimi je bilo uspešno zbrisan.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> prispevkov je bilo kopiranih.";
 $LANG["notify_submissions_deleted"] = "Predlogi so bili črtani uspešno.";

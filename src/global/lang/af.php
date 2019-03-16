@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... to database ...&quot;</span> beteken dat alhoewel jy jou gebruikersnaam en wagwoord wat jy verskaf is korrek, dit was nie in staat om konneksie te maak dat die name databasis met die rekening. Dit kan beteken dat óf jou databasis naam verkeerd is, of dat hierdie gebruiker rekening is nie gekoppel aan dat die databasis.";
 $LANG["text_install_email_content_text"] = "Daar is baie hulpbronne op ons webwerf om u te help om te begin, insluitend ons aanlyn dokumentasie (https://docs.formtools.org) en tutoriale (https://docs.formtools.org/tutorials). As jy vasgekom het of 'n vraag het, stel 'n vraag op github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Jammer, sal Vorm Tools nie in staat wees om uit te voer op jou bediener <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Klik hier</a> vir die minimum vereistes voldoen .";
-$LANG["text_install_intro"] = "Welkom by die Vorm Tools installasie script! Kies jou taal.";
 $LANG["text_install_system_check"] = "Hierdie bladsy loop &#39;n paar toetse op jou stelsel om te verseker dat dit in staat te hardloop Vorm Tools.";
 $LANG["text_internal_form_desc"] = "Interne vorms bestaan ​​slegs binne Vorm Tools - nie elders op jou werf. Die enigste vorm Tools gebruiker rekeninge sal toegang hê tot die vorm. Kies hierdie opsie as jy nie &#39;n bestaande vorm.";
 $LANG["text_internal_form_intro"] = "Gebruik die vorm hier onder om &#39;n nuwe interne vorm te skep. Alle instellings, insluitend die hoeveelheid en die inhoud van die vorm velde kan word verander en later geconfigureerd.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Jammer, kon ons nie &#39;n verbinding
 $LANG["notify_install_no_db_connection"] = "Maak seker jou naam databasis en teken inligting. Hoewel ons in staat was om verbinding met die databasis gasheer, kan ons verbinding met die databasis nie. Die boodskap van die databasis teruggestuur word: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Jou vorm is geskep! Jy kan die vorm instel deur hierdie tabs.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Die rekening inligting gestoor in sessies is ongeldig. Teken asseblief weer hieronder.";
-$LANG["notify_invalid_field_upload_folder"] = "Hierdie veld se oplaai gids is ongeldig of kan nie verander word.";
 $LANG["notify_invalid_license_key"] = "Jammer, beteken dit nie &#39;n geldige lisensie sleutel te wees. Probeer betree dit weer.";
 $LANG["notify_invalid_permissions"] = "Jy het nie die toestemming om hierdie bladsy toegang het nie. Jy is uitgeteken.";
 $LANG["notify_invalid_search_dates"] = "Asseblief die datepicker gebruik van &#39;n geldige datum of datums in te voer.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Dit blyk dat jou rekening is
 $LANG["notify_no_views_defined"] = "Jy het nie &#39;n databasis gedefinieer. Jy sal nie in staat wees om hierdie vorm se voorleggings te sien nie, tensy daar ten minste een View is geskep. Klik op die knoppie hieronder om die standaard te skep.";
 $LANG["notify_option_list_deleted"] = "Die opsie lys is verwyder.";
 $LANG["notify_option_list_updated"] = "Die opsie lys is opgedateer.";
-$LANG["notify_page_added"] = "Die bladsy is bygevoeg.";
-$LANG["notify_page_not_added"] = "Die bladsy kon nie bygevoeg word nie.";
 $LANG["notify_page_updated"] = "Die bladsy is opgedateer.";
 $LANG["notify_public_form_omit_list_updated"] = "Die kliënt weg te laat lys vir hierdie vorm is opgedateer.";
 $LANG["notify_public_view_omit_list_updated"] = "Die kliënt weg te laat lys vir hierdie vertoning is opgedateer.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Die voorlegging is gekopieer. U kan di
 $LANG["notify_submission_deleted"] = "Die voorlegging was suksesvol verwyder.";
 $LANG["notify_submission_deleted_with_problems"] = "Die voorlegging is verwyder, maar die volgende probleme is ondervind toe probeer om te verwyder die volgende lêer (s):";
 $LANG["notify_submission_id_not_found"] = "Die voorlegging-ID is nie gevind nie.";
-$LANG["notify_submission_no_field_id"] = "Hierdie voorlegging se ID-veld is nie gevind nie.";
 $LANG["notify_submission_not_updated"] = "Die voorlegging kan nie verander word nie.";
-$LANG["notify_submission_updated_file_problems"] = "Jou inskrywing is opgedateer, maar die volgende lêer (s) probleme gehad:";
 $LANG["notify_submissions_and_files_deleted"] = "Die voorleggings en enige lêer (s) met hulle verbonde is suksesvol verwyder.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> voorleggings is gekopieer.";
 $LANG["notify_submissions_deleted"] = "Die voorleggings was suksesvol verwyder.";

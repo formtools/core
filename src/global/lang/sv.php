@@ -811,7 +811,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">\"Access de
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">\"Access denied for user: ... to database ...\"</span> innebär att även om ditt användarnamn och lösenord är korrekt så kunde inte systemet koppla upp sig mot just den specifika databasen med det kontot. Detta kan bero på att antingen databasnamnet är felaktigt eller att detta konto inte är associerat med denna databas.";
 $LANG["text_install_email_content_text"] = "Det finns många resurser på vår hemsida för att hjälpa dig att komma igång, inklusive vår online dokumentation (https://docs.formtools.org) och handledning (https://docs.formtools.org/tutorials). Om du tycker att du fastnar eller har en fråga, ställ en fråga på github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Tyvärr så kommer inte Form Tools att kunna köras på din server. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Läs om minimikraven här</a>.";
-$LANG["text_install_intro"] = "Välkommen till Form Tools installationsmanus! Börja med att välja ditt språk.";
 $LANG["text_install_system_check"] = "Den här sidan kör några tester av ditt system för att försäkra att det kan använda sig av Form Tools.";
 $LANG["text_internal_form_desc"] = "Interna formulär existerar endast inom Form Tools - inte någon annanstans på din webbplats. Endast Form Tools användarkonton kommer att ha tillgång till formuläret. Välj detta alternativ om du inte har ett befintligt formulär.";
 $LANG["text_internal_form_intro"] = "Använd formuläret nedan för att skapa ett nytt internt formulär. Alla inställningar, inklusive antalet och innehållet i formulärfälten kan ändras och konfigureras senare.";
@@ -1099,7 +1098,6 @@ $LANG["notify_install_invalid_db_info"] = "Tyvärr så kunde vi inte koppla upp 
 $LANG["notify_install_no_db_connection"] = "Kontrollera databasnamnet och inloggningsinformationen. Även om vi kunde koppla upp oss mot databasens värd så kunde vi inte etablera en koppling till själva databasen. Felmeddelandet som databasen skickade tillbaka var: <em>{\$db_select_error}</em>";
 $LANG["notify_internal_form_created"] = "Formuläret har skapats! Du kan konfigurera ditt formulär genom dessa flikar.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Kontoinformationen som lagrats i sessioner är ogiltig. Vänligen logga in igen här nedan.";
-$LANG["notify_invalid_field_upload_folder"] = "Det här fältets uppladdningskatalog är antingen ogiltig eller så är den inte skrivbar.";
 $LANG["notify_invalid_license_key"] = "Tyvärr verkar det inte vara en giltig licensnyckel. Försök skriva in den igen.";
 $LANG["notify_invalid_permissions"] = "Du har inte tillräckliga rättigheter för att komma åt denna sida. Du har därför loggats ut!";
 $LANG["notify_invalid_search_dates"] = "Använd datumväljaren för att ange ett giltigt datum.";
@@ -1132,8 +1130,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Det verkar inte som att ditt
 $LANG["notify_no_views_defined"] = "Du har inga Vyer definierade. Du kommer inte att kunna se detta formulärs inskick om inte minst en vy skapas. Klicka på knappen här nere för att skapa standardvyn.";
 $LANG["notify_option_list_deleted"] = "Alternativlistan har tagits bort.";
 $LANG["notify_option_list_updated"] = "Alternativlistan har uppdaterats.";
-$LANG["notify_page_added"] = "Sidan har lagts till.";
-$LANG["notify_page_not_added"] = "Sidan kunde inte läggas till.";
 $LANG["notify_page_updated"] = "Sidan har uppdaterats.";
 $LANG["notify_public_form_omit_list_updated"] = "Listan över utelämnade klienter för detta formulär har uppdaterats.";
 $LANG["notify_public_view_omit_list_updated"] = "Listan över utelämnade klienter för denna vy har uppdaterats.";
@@ -1150,9 +1146,7 @@ $LANG["notify_submission_copied_edit"] = "Inlämningen har kopierats. Du kan red
 $LANG["notify_submission_deleted"] = "Inskicket har tagits bort.";
 $LANG["notify_submission_deleted_with_problems"] = "Inskicket togs bort, men följande problem uppstod vid försöket att ta bort de här filerna:";
 $LANG["notify_submission_id_not_found"] = "Inskicknings-ID:t kunde inte hittas.";
-$LANG["notify_submission_no_field_id"] = "Fält-ID för det inskickade kunde inte hittas.";
 $LANG["notify_submission_not_updated"] = "Inskicket kunde inte uppdateras.";
-$LANG["notify_submission_updated_file_problems"] = "Ditt inskick uppdaterades men följande filer fick problem:";
 $LANG["notify_submissions_and_files_deleted"] = "Inskicken och de eventuella filer som associeras med dem har tagits bort.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> inlagor har kopierats.";
 $LANG["notify_submissions_deleted"] = "Inskicken har tagits bort.";

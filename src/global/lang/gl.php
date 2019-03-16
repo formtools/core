@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Ingre
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Ingreso para o usuario: ... a base de datos ...&quot;</span> significa que, aínda que o seu nome de usuario eo contrasinal dada está correcta, non foi quen de se conectar a esta base de datos específica con esa conta. Isto pode significar que o nome é o seu banco de datos incorrectos, ou que esta conta de usuario non está asociado a esta base de datos.";
 $LANG["text_install_email_content_text"] = "Hai moitos recursos no noso sitio web para axudarche a comezar, incluída a nosa documentación en liña (https://docs.formtools.org) e tutoriais (https://docs.formtools.org/tutorials). Se pensas que estás atrapado ou tes unha pregunta, fai unha pregunta sobre github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Sentímolo, ferramentas de formulario non será capaz de executar no seu servidor. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Por favor, prema aquí</a> para a requisitos mínimos.";
-$LANG["text_install_intro"] = "Benvido ao script de instalación Form Tools! Seleccione o seu idioma.";
 $LANG["text_install_system_check"] = "Esta páxina é executado algunhas probas no seu sistema para garantir que é capaz de executar ferramentas de formulario.";
 $LANG["text_internal_form_desc"] = "Formas internas só existen dentro Tools Form - non especificados no seu sitio web. Ferramentas só a Solicitude de contas de usuario pode acceder ao formulario. Seleccione esta opción se non ten un formulario existente.";
 $LANG["text_internal_form_intro"] = "Use o seguinte formulario para crear unha nova forma interna. Todos os axustes, incluíndo o número e contido dos campos do formulario pode ser ser modificados e configurados máis tarde.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Sentímolo, non se pode conectar á b
 $LANG["notify_install_no_db_connection"] = "Por favor, verifique o nome da base de datos e información de login. Aínda que nós fomos capaces de conectarse a hospedar o banco de datos, que non puido conectar á base de datos. A mensaxe de erro da base de datos de retorno é: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "O seu formulario foi creado! Pode configurar o formulario a través destas guías.";
 $LANG["notify_invalid_account_information_in_sessions"] = "A información de conta almacenadas en sesións non é válido. Faga o login de novo embaixo.";
-$LANG["notify_invalid_field_upload_folder"] = "Cartafol de subida Este campo non é válido ou non é gravadora.";
 $LANG["notify_invalid_license_key"] = "Sentímolo, iso non parece ser unha clave de licenza válida. Por favor, inténteo entrar de novo.";
 $LANG["notify_invalid_permissions"] = "Non tes permiso para acceder a esta páxina. Vostede foi desconectado.";
 $LANG["notify_invalid_search_dates"] = "Por favor, use o datepicker para introducir unha data válida ou datas.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Semella que a súa conta de 
 $LANG["notify_no_views_defined"] = "Non ten ningún Views definido. Non será capaz de ver presentacións deste xeito, a non ser que, polo menos, unha View é creado. Prema no botón de abaixo para crear a vista por defecto.";
 $LANG["notify_option_list_deleted"] = "A lista de opción non está presente.";
 $LANG["notify_option_list_updated"] = "A lista de opcións foi actualizado.";
-$LANG["notify_page_added"] = "A páxina foi engadida.";
-$LANG["notify_page_not_added"] = "A páxina non se pode engadir.";
 $LANG["notify_page_updated"] = "A páxina foi actualizada.";
 $LANG["notify_public_form_omit_list_updated"] = "O cliente omitir lista para este formulario foi actualizado.";
 $LANG["notify_public_view_omit_list_updated"] = "O cliente omitir a esta lista foi actualizada.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Enviouse o envío. Podes editalo a con
 $LANG["notify_submission_deleted"] = "A presentación foi eliminado correctamente.";
 $LANG["notify_submission_deleted_with_problems"] = "A presentación foi eliminado, pero os seguintes problemas foron atopados ao intentar eliminar o arquivo (s):";
 $LANG["notify_submission_id_not_found"] = "A presentación ID non se atopou.";
-$LANG["notify_submission_no_field_id"] = "Este campo submisión ID non se atopou.";
 $LANG["notify_submission_not_updated"] = "A presentación non puido ser actualizado.";
-$LANG["notify_submission_updated_file_problems"] = "A súa presentación foi actualizado, pero o seguinte ficheiro (s) tiveron problemas:";
 $LANG["notify_submissions_and_files_deleted"] = "As declaracións e calquera ficheiro (s) que lles están asociados foron eliminados correctamente.";
 $LANG["notify_submissions_copied"] = "Enviouse <b>{\$num_submissions}</b> envíos.";
 $LANG["notify_submissions_deleted"] = "As notas foron borrado con éxito.";

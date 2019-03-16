@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Aċċ
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Aċċess miċħuda għall-utent: ... għad-database ...&quot;</span> tfisser li għalkemm l-username u password inti fornuti hija korretta, kien kapaċi li jgħaqqdu l-imsemmija database partikolari ma &#39;dak il-kont. Dan jista &#39;jfisser li jew isem id-database tiegħek hija żbaljata, jew li dan il-kont l-utent ma jkunx assoċjat ma&#39; dik id-database.";
 $LANG["text_install_email_content_text"] = "Hemm ħafna riżorsi fuq il-websajt tagħna biex jgħinuk tibda, inkluża d-dokumentazzjoni onlajn tagħna (https://docs.formtools.org) u tutorials (https://docs.formtools.org/tutorials). Jekk issib li tħossok mwaħħal jew ikollok xi mistoqsija, staqsi mistoqsija dwar github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Jiddispjacini, Għodda Formola mhux se jkunu kapaċi li jimxu fuq server tiegħek. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Jekk jogħġbok ikklikkja hawn</a> il-ħtiġiet minimi.";
-$LANG["text_install_intro"] = "Merħba lill-iskrittura Formola installazzjoni Tools! Jekk jogħġbok agħżel il-lingwa tiegħek.";
 $LANG["text_install_system_check"] = "Din il-paġna imexxi testijiet ftit fis-sistema tiegħek biex tiżgura huwa kapaċi li jimxu Tools Form.";
 $LANG["text_internal_form_desc"] = "Forom interna jeżistu biss fil Għodda Formola - ma humiex x&#39;imkien ieħor fuq is-sit tiegħek. Biss kontijiet Formola utent għodod se jkollhom aċċess għall-formola. Agħżel din l-għażla jekk inti ma jkollhom forma eżistenti.";
 $LANG["text_internal_form_intro"] = "Uża l-formola t&#39;hawn taħt li joħloq forma ġdida Intern. Settings kollha, inkluż in-numru u l-kontenut ta &#39;l-oqsma formola tista&#39; tiġi mibdula u konfigurati aktar tard.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Jiddispjacini, konna kapaċi li jgħa
 $LANG["notify_install_no_db_connection"] = "Jekk jogħġbok iċċekkja database ismek u login informazzjoni. Għalkemm konna kapaċi li jgħaqqdu lill-ospitanti database, aħna ma stajniex tikkonnettja mal-database. Il-messaġġ ta &#39;żball-database huwa ritornat: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Formola tiegħek ġie maħluq! Tista &#39;jiġi kkonfigurat l-formola tiegħek permezz ta&#39; dawn tabs.";
 $LANG["notify_invalid_account_information_in_sessions"] = "L-informazzjoni maħżuna fil-kont sessjonijiet huwa invalidu. Jekk jogħġbok login għal darb&#39;oħra &#39;l isfel.";
-$LANG["notify_invalid_field_upload_folder"] = "Upload folder Dan il-qasam huwa jew hija invalida jew ma writable.";
 $LANG["notify_invalid_license_key"] = "Jiddispjacini, li ma jidhirx li tkun essenzjali liċenzja valida. Jekk jogħġbok jippruvaw jidħlu mill-ġdid.";
 $LANG["notify_invalid_permissions"] = "Inti ma għandekx il-permessi għall-aċċess din il-paġna. Ġejt logged out.";
 $LANG["notify_invalid_search_dates"] = "Jekk jogħġbok uża l datepicker li jidħlu data valida jew dati.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Jidher li l-kont ta &#39;ute
 $LANG["notify_no_views_defined"] = "Inti ma għandekx xi Views definiti. Inti mhux se jkunu jistgħu jaraw din il-formola ta &#39;sottomissjonijiet sakemm mill-inqas wieħed Ara hija maħluqa. Ikklikkja l-buttuna hawn taħt biex joħolqu l-Ara default.";
 $LANG["notify_option_list_deleted"] = "Il-lista għażla ġiet imħassra.";
 $LANG["notify_option_list_updated"] = "Il-lista għażla ġiet aġġornata.";
-$LANG["notify_page_added"] = "Il-paġna ġiet miżjuda.";
-$LANG["notify_page_not_added"] = "Il-paġna ma setgħux jiġu miżjuda.";
 $LANG["notify_page_updated"] = "Il-paġna ġiet aġġornata.";
 $LANG["notify_public_form_omit_list_updated"] = "Il-klijent iħallu barra l-lista għal din il-formola ġiet aġġornata.";
 $LANG["notify_public_view_omit_list_updated"] = "Il-klijent iħallu barra l-lista għal dan View ġiet aġġornata.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Is-sottomissjoni ġiet ikkupjata. Tist
 $LANG["notify_submission_deleted"] = "Is-sottomissjoni tħassret b&#39;suċċess.";
 $LANG["notify_submission_deleted_with_problems"] = "Is-sottomissjoni kienet imħassra, imma l-problemi li ġejjin kienu jiltaqgħu magħhom meta jippruvaw li jitħassar il-fajls li ġejjin (i):";
 $LANG["notify_submission_id_not_found"] = "Is-sottomissjoni ID ma nstabx.";
-$LANG["notify_submission_no_field_id"] = "Qasam Din is-sottomissjoni ta &#39;l-identità ma nstabx.";
 $LANG["notify_submission_not_updated"] = "Is-sottomissjoni ma jista &#39;jiġi aġġornat.";
-$LANG["notify_submission_updated_file_problems"] = "Sottomissjoni tiegħek ġie aġġornat, iżda l-fajl (jiet) li kellhom problemi:";
 $LANG["notify_submissions_and_files_deleted"] = "Is-sottomissjonijiet u kull fajl (s) assoċjati magħhom ġew imħassra b&#39;suċċess.";
 $LANG["notify_submissions_copied"] = "Ġew ikkupjati <b>{\$num_submissions}</b> sottomissjonijiet.";
 $LANG["notify_submissions_deleted"] = "Is-sottomissjonijiet kienu mħassra b&#39;suċċess.";

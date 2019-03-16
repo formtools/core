@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... to database ...&quot;</span> bererti bahawa walaupun username dan password yang anda berikan sudah benar, maka tidak dapat terhubung ke database tertentu dengan akaun tersebut. Hal ini boleh bermakna bahawa salah satu nama database anda tidak benar, atau bahawa akaun ini tidak berkaitan dengan database tersebut.";
 $LANG["text_install_email_content_text"] = "Terdapat banyak sumber di laman web kami untuk membantu anda memulakan, termasuk dokumentasi dalam talian kami (https://docs.formtools.org) dan tutorial (https://docs.formtools.org/tutorials). Jika anda mendapati anda terjebak atau mempunyai soalan, tanyakan pada github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Maaf, Peralatan Borang tidak akan dapat berjalan pada pelayan anda. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Sila klik di sini</a> untuk keperluan minimum.";
-$LANG["text_install_intro"] = "Selamat datang di borang Alatan pemasangan skrip! Sila pilih bahasa anda.";
 $LANG["text_install_system_check"] = "Laman ini menjalankan beberapa tes pada sistem anda untuk memastikan itu dapat menjalankan Borang Tools.";
 $LANG["text_internal_form_desc"] = "Bentuk dalaman wujud hanya dalam tempoh Tools Borang - tidak di tempat lain di laman web anda. Hanya akaun Borang Tools pengguna akan mempunyai akses kepada borang. Pilih pilihan ini jika anda tidak mempunyai borang yang sedia ada.";
 $LANG["text_internal_form_intro"] = "Gunakan borang di bawah untuk mewujudkan satu bentuk Dalaman yang baru. Semua setting, termasuk nombor dan kandungan medan borang boleh diubah dan ditetapkan kemudian.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Maaf, kami tidak dapat melakukan kone
 $LANG["notify_install_no_db_connection"] = "Sila semak nama database anda dan login. Walaupun kami dapat terhubung ke database tuan rumah, kami tidak bisa koneksi ke database. Mesej kesalahan database semula adalah: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Borang anda telah dibuka! Anda boleh mengkonfigurasi borang anda melalui tab ini.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Maklumat akaun yang disimpan dalam sesi tidak sah. Sila log in lagi di bawah ini.";
-$LANG["notify_invalid_field_upload_folder"] = "Bidang ini yang meng-upload folder entah sah atau tidak boleh ditulis.";
 $LANG["notify_invalid_license_key"] = "Maaf, yang tidak kelihatan menjadi kunci lesen yang sah. Sila cuba memasukkannya sekali lagi.";
 $LANG["notify_invalid_permissions"] = "Anda tidak memiliki izin untuk mengakses halaman ini. Anda telah log out.";
 $LANG["notify_invalid_search_dates"] = "Sila gunakan datepicker masukkan tarikh yang sah atau tarikh.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Nampaknya akaun pengguna and
 $LANG["notify_no_views_defined"] = "Anda tidak mempunyai apa-apa Views ditakrifkan. Anda tidak akan dapat melihat penyerahan borang ini melainkan jika sekurang-kurangnya satu View diwujudkan. Klik butang di bawah untuk mencipta View lalai.";
 $LANG["notify_option_list_deleted"] = "Senarai opsyen telah dipadam.";
 $LANG["notify_option_list_updated"] = "Senarai opsyen telah dikemaskini.";
-$LANG["notify_page_added"] = "Laman yang telah ditambah.";
-$LANG["notify_page_not_added"] = "Laman tidak bisa ditambah.";
 $LANG["notify_page_updated"] = "Laman yang telah dikemaskini.";
 $LANG["notify_public_form_omit_list_updated"] = "Senarai pelanggan untuk menghilangkan borang ini telah dikemaskini.";
 $LANG["notify_public_view_omit_list_updated"] = "Senarai menghilangkan pelanggan ini Lihat telah dikemaskini.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Penyerahan telah disalin. Anda boleh m
 $LANG["notify_submission_deleted"] = "Penyerahan telah dihapuskan dengan sukses.";
 $LANG["notify_submission_deleted_with_problems"] = "Penyerahan telah dihapuskan, tetapi masalah-masalah berikut ditemui saat mencoba untuk memadam fail seterusnya (s):";
 $LANG["notify_submission_id_not_found"] = "Penyerahan ID tidak dijumpai.";
-$LANG["notify_submission_no_field_id"] = "Penyerahan gelanggang ini ID tidak dijumpai.";
 $LANG["notify_submission_not_updated"] = "Penyerahan tidak dapat dikemaskini.";
-$LANG["notify_submission_updated_file_problems"] = "Kiriman anda telah diupdate, tapi fail seterusnya (s) punya masalah:";
 $LANG["notify_submissions_and_files_deleted"] = "The pengajuan dan setiap file (s) yang berkaitan dengan mereka berjaya dihapuskan.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> penyerahan telah disalin.";
 $LANG["notify_submissions_deleted"] = "Para pengajuan itu berjaya dihapuskan.";

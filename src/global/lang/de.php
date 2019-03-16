@@ -814,7 +814,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... to database ...&quot;</span> bedeutet, dass wenn Sie Ihren Benutzernamen und Passwort, das Sie versorgt richtig ist, nicht in der Lage war, dass bestimmte Datenbank mit diesem Konto in Verbindung zu treten. Dies kann bedeuten, dass entweder die Datenbank nicht korrekt ist, oder dass dieses Benutzerkonto nicht mit der Datenbank verbunden.";
 $LANG["text_install_email_content_text"] = "Auf unserer Website finden Sie zahlreiche Ressourcen, die Ihnen den Einstieg erleichtern, einschließlich unserer Online-Dokumentation (https://docs.formtools.org) und Tutorials (https://docs.formtools.org/tutorials). Wenn Sie feststellen, dass Sie stecken bleiben oder eine Frage haben, stellen Sie eine Frage zu github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Sorry, Formular-Tools nicht in der Lage sein auf dem Server ausgeführt werden. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Bitte klicken Sie hier</a> für die Mindestanforderungen.";
-$LANG["text_install_intro"] = "Willkommen in der Form Tools Installations-Skript! Bitte wählen Sie Ihre Sprache.";
 $LANG["text_install_system_check"] = "Diese Seite läuft ein paar Tests auf Ihrem System zu gewährleisten, ist es in der Lage, Form Tools ausgeführt werden.";
 $LANG["text_internal_form_desc"] = "Interne Formen existieren nur innerhalb Formular Tools - nicht an anderer Stelle auf Ihrer Website. Nur Formwerkzeuge Benutzerkonten haben Zugriff auf das Formular. Wählen Sie diese Option, wenn Sie nicht über ein bestehendes Formular.";
 $LANG["text_internal_form_intro"] = "Verwenden Sie das untenstehende Formular, um eine neue interne Formular zu erstellen. Alle Einstellungen, einschließlich der Anzahl und der Inhalt der Formularfelder können geändert werden und konfiguriert werden später.";
@@ -1101,7 +1100,6 @@ $LANG["notify_install_invalid_db_info"] = "Leider konnten wir nicht auf die Date
 $LANG["notify_install_no_db_connection"] = "Bitte überprüfen Sie Ihre Datenbank-und Login-Informationen. Obwohl wir in der Lage, auf dem Datenbank-Host verbinden, dann könnten wir keine Verbindung zu der Datenbank. Die Fehlermeldung der Datenbank zurückgegeben wird: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Das Formular wurde erstellt! Sie können Ihre Form durch diesen Registerkarten konfigurieren.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Das Konto gespeicherten Informationen in den Sitzungen ist ungültig. Bitte loggen Sie sich wieder unter.";
-$LANG["notify_invalid_field_upload_folder"] = "Dieses Feld ist Upload-Ordner ist ungültig oder nicht beschreibbar ist.";
 $LANG["notify_invalid_license_key"] = "Sorry, heißt das nicht, scheinen einen gültigen Lizenzschlüssel werden. Bitte versuchen Sie es erneut.";
 $LANG["notify_invalid_permissions"] = "Sie haben nicht die Berechtigungen für den Zugriff zu dieser Seite. Sie haben sich abgemeldet.";
 $LANG["notify_invalid_search_dates"] = "Bitte benutzen Sie den datepicker eine gültige Datum oder die Daten eingeben.";
@@ -1134,8 +1132,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Es scheint, dass Ihr Benutze
 $LANG["notify_no_views_defined"] = "Sie haben noch keine Views definiert. Sie werden nicht in der Lage sein, diese Form des Vorbringens nur anzeigen, wenn mindestens eine Ansicht erstellt wird. Klicken Sie auf die Schaltfläche unten, um die Standard-Ansicht erstellen.";
 $LANG["notify_option_list_deleted"] = "Die Liste der Optionen wurde gelöscht.";
 $LANG["notify_option_list_updated"] = "Die Liste der Optionen ist aktualisiert worden.";
-$LANG["notify_page_added"] = "Die Seite wurde hinzugefügt.";
-$LANG["notify_page_not_added"] = "Die Seite konnte nicht hinzugefügt werden.";
 $LANG["notify_page_updated"] = "Die Seite wurde aktualisiert.";
 $LANG["notify_public_form_omit_list_updated"] = "Der Kunde unterlassen Liste für diese Form ist aktualisiert worden.";
 $LANG["notify_public_view_omit_list_updated"] = "Der Kunde unterlassen Liste für dieses Profil wurde aktualisiert.";
@@ -1152,9 +1148,7 @@ $LANG["notify_submission_copied_edit"] = "Die Einreichung wurde kopiert. Sie kö
 $LANG["notify_submission_deleted"] = "Eingaben erfolgreich gelöscht.";
 $LANG["notify_submission_deleted_with_problems"] = "Die Vorlage wurde gelöscht, aber die folgenden Probleme wurden beim Versuch, die folgende Datei (en) zu löschen:";
 $LANG["notify_submission_id_not_found"] = "Die Vorlage ID wurde nicht gefunden.";
-$LANG["notify_submission_no_field_id"] = "Diese Vorlage das Feld ID wurde nicht gefunden.";
 $LANG["notify_submission_not_updated"] = "Die Eingabe konnte nicht gespeichert werden.";
-$LANG["notify_submission_updated_file_problems"] = "Ihre Eingabe wurde gespeichert, aber bei folgenden Dateien sind Probleme aufgetreten:";
 $LANG["notify_submissions_and_files_deleted"] = "Die Eingaben und alle dazugehörigen Dateien wurden gelöscht.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> Einreichungen wurden kopiert.";
 $LANG["notify_submissions_deleted"] = "Eingaben gelöscht.";

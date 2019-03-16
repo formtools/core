@@ -815,7 +815,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... do bazy danych ...&quot;</span> oznacza, że chociaż nazwę użytkownika i hasło podane są prawdziwe, to nie może połączyć się do konkretnej bazy danych, z tego konta. Może to oznaczać, że albo Nazwa bazy danych jest nieprawidłowa, lub, że konto użytkownika nie jest związany z tą bazą danych.";
 $LANG["text_install_email_content_text"] = "Na naszej stronie znajdziesz mnóstwo zasobów, które pomogą Ci zacząć, w tym naszą dokumentację online (https://docs.formtools.org) i samouczki (https://docs.formtools.org/tutorials). Jeśli zauważysz, że utknąłeś lub masz pytanie, zadaj pytanie na github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Przykro nam, Narzędzia Formularz nie będzie w stanie uruchomić na serwerze. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Proszę kliknąć tutaj</a> na minimalne wymagania.";
-$LANG["text_install_intro"] = "Zapraszamy do skryptu Narzędzia Rodzaj instalacji! Wybierz swój język.";
 $LANG["text_install_system_check"] = "Ta strona jest kilka testów na komputerze w celu zapewnienia, to nic nie stanie uruchomić Narzędzia formularza.";
 $LANG["text_internal_form_desc"] = "Wewnętrzne formy istnieją tylko wewnątrz Narzędzia Form - gdzie indziej nie na miejscu. Tylko konta, Narzędzia formularza użytkownik będzie miał dostęp do formularza. Wybierz tę opcję, jeśli nie masz istniejącego formularza.";
 $LANG["text_internal_form_intro"] = "Skorzystaj z poniższego formularza, aby utworzyć nowy wewnętrzne postaci. Wszystkie ustawienia, w tym liczby i zawartości pól formularza można zmienić i skonfigurować później.";
@@ -1101,7 +1100,6 @@ $LANG["notify_install_invalid_db_info"] = "Niestety, nie udało nam się połąc
 $LANG["notify_install_no_db_connection"] = "Proszę sprawdzić nazwę bazy danych i informacji logowania. Mimo że byliśmy w stanie połączyć się z hostem bazy danych, nie może połączyć się z bazą danych. Komunikat o błędzie w bazie zwróciło to: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Formularz został stworzony! Możesz skonfigurować formularz za pośrednictwem tych kart.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Informacje o kontach przechowywane w sesji jest nieprawidłowy. Zaloguj się ponownie poniżej.";
-$LANG["notify_invalid_field_upload_folder"] = "To pole jest upload folderu jest nieprawidłowa lub nie jest zapisywalny.";
 $LANG["notify_invalid_license_key"] = "Przykro nam, że nie wydaje się być klucz licencyjny. Prosimy spróbować wprowadzić go ponownie.";
 $LANG["notify_invalid_permissions"] = "Nie masz uprawnień dostępu do tej strony. Zostałeś wylogowany.";
 $LANG["notify_invalid_search_dates"] = "Proszę używać datepicker, aby wprowadzić poprawną datę lub daty.";
@@ -1134,8 +1132,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Wydaje się, że konto użyt
 $LANG["notify_no_views_defined"] = "Nie masz żadnych Wyświetleń zdefiniowane. Nie będziesz mógł zobaczyć formularza zgłoszenia, chyba że co najmniej jeden View jest tworzone. Kliknij przycisk, aby utworzyć widok domyślny.";
 $LANG["notify_option_list_deleted"] = "Lista opcja została usunięta.";
 $LANG["notify_option_list_updated"] = "Lista opcji została zaktualizowana.";
-$LANG["notify_page_added"] = "Strona została dodana.";
-$LANG["notify_page_not_added"] = "Strony nie można dodać.";
 $LANG["notify_page_updated"] = "Strona została zaktualizowana.";
 $LANG["notify_public_form_omit_list_updated"] = "Klient pominąć lista ta forma została zaktualizowana.";
 $LANG["notify_public_view_omit_list_updated"] = "Klient pominąć lista ta została zaktualizowana.";
@@ -1152,9 +1148,7 @@ $LANG["notify_submission_copied_edit"] = "Zgłoszenie zostało skopiowane. Może
 $LANG["notify_submission_deleted"] = "Usunięto przesłanie danych.";
 $LANG["notify_submission_deleted_with_problems"] = "Składania został usunięty, ale następujące problemy napotkane podczas próby usunąć plik (ów):";
 $LANG["notify_submission_id_not_found"] = "Nie odnaleziono ID-u przesłania danych.";
-$LANG["notify_submission_no_field_id"] = "Wniosek ten w polu ID nie został znaleziony.";
 $LANG["notify_submission_not_updated"] = "Nie można zaktualizować przesłania danych.";
-$LANG["notify_submission_updated_file_problems"] = "Twoje zgłoszenie zostało zaktualizowane, ale plik (ów) miał problemy:";
 $LANG["notify_submissions_and_files_deleted"] = "Zgłoszenia oraz wszelkie file (s) związane z nich została usunięta.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> zgłoszeń zostało skopiowanych.";
 $LANG["notify_submissions_deleted"] = "Usunięto przesłania danych.";

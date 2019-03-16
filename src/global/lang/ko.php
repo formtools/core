@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;사�
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;사용자에 대한 액세스가 거부되었습니다 : ... 데이터베이스에 ...&quot;비록</span> 귀하의 사용자 이름과 비밀 번호가 정확한지 공급 즉, 그 계정에 특정 데이터베이스에 연결하지 못했습니다 의미합니다. 이것도 당신의 데이터베이스 이름, 또는 올바르지 않습니다이 사용자 계정은 데이터베이스와 연결되어 있지 않습니다 의미할 수있습니다.";
 $LANG["text_install_email_content_text"] = "온라인 문서 (https://docs.formtools.org) 및 자습서 (https://docs.formtools.org/tutorials)를 비롯하여 시작에 도움이되는 많은 정보가 웹 사이트에 있습니다. 문제가 있거나 질문이있는 경우 github (https://github.com/formtools/core/issues/)에서 질문하십시오.";
 $LANG["text_install_form_tools_server_not_supported"] = "죄송합니다, 양식 도구는 서버에서 실행하실 수 없습니다. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">여기를 클릭하십시오</a> 최소 요구 사항.";
-$LANG["text_install_intro"] = "에 오신 것을 환영 폼 도구를 설치하는 스크립트! 언어를 선택해주십시오.";
 $LANG["text_install_system_check"] = "이 페이지는 귀하의 시스템을 사용하면 양식 도구를 실행할 수의 보장에 관한 몇 가지 검사를 실행합니다.";
 $LANG["text_internal_form_desc"] = "아니라 다른 사이트에서 - 내부 양식은 양식 도구에서만 존재합니다. 전용 양식 도구 사용자 계정 양식에 액세스할 수 있습니다. 당신이 기존의 양식을 가지고 있지 않다면이 옵션을 선택합니다.";
 $LANG["text_internal_form_intro"] = "새로운 내부 양식을 작성하려면 아래의 양식을 사용하십시오. 양식 필드의 수와 내용을 포함한 모든 설정, 변경 나중에 구성할 수 있습니다.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "죄송합니다, 우리는 데이터�
 $LANG["notify_install_no_db_connection"] = "귀하의 데이터베이스 이름과 로그인 정보를 확인하시기 바랍니다. 비록 우리가 데이터베이스를 호스트에 연결할 수있다면, 우리는 데이터베이스에 연결하지 못했습니다. 데이터베이스 오류 메시지가 반환됩니다 : <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "당신의 양식이 만들어졌습니다! 당신은이 탭을 통해 양식을 구성할 수 있습니다.";
 $LANG["notify_invalid_account_information_in_sessions"] = "계정 정보를 세션에 저장이 잘못되었습니다. 잠시 후 다시 아래에서 로그 인해주세요.";
-$LANG["notify_invalid_field_upload_folder"] = "이 필드의 업로드 폴더 중 하나가 잘못되었거나 쓰기 권한이없습니다.";
 $LANG["notify_invalid_license_key"] = "죄송합니다, 그렇게 유효한 라이센스 키가으로 나타나지 않습니다. 다시 입력 시도해 보시기 바랍니다.";
 $LANG["notify_invalid_permissions"] = "이 페이지에 액세스하는 권한을 가지고 있지 않습니다. 로그아웃되었습니다.";
 $LANG["notify_invalid_search_dates"] = "유효한 날짜 또는 날짜를 입력 datepicker를 사용하십시오.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "그것은 사용자 계정�
 $LANG["notify_no_views_defined"] = "당신은 어떤보기가 정의한하지 않습니다. 하나 이상의보기가 생성하지 않는 한이 양식의 제출을​​ 볼 수 없습니다. 기본보기를 생성하려면 아래 버튼을 클릭하십시오.";
 $LANG["notify_option_list_deleted"] = "옵션 목록은 삭제되었습니다.";
 $LANG["notify_option_list_updated"] = "옵션 목록은 업데이 트되었습니다.";
-$LANG["notify_page_added"] = "페이지가 추가되었습니다.";
-$LANG["notify_page_not_added"] = "페이지에 추가할 수없습니다.";
 $LANG["notify_page_updated"] = "페이지가 업데이 트되었습니다.";
 $LANG["notify_public_form_omit_list_updated"] = "클라이언트가 업데이 트되었습니다이 양식에 대한 목록을 생략하면됩니다.";
 $LANG["notify_public_view_omit_list_updated"] = "클라이언트가 업데이 트되었습니다이보기에 대한 목록을 생략하면됩니다.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "제출이 복사되었습니다. 아�
 $LANG["notify_submission_deleted"] = "제출이 성공적으로 삭제되었습니다.";
 $LANG["notify_submission_deleted_with_problems"] = "제출하지만, 삭제되었다 다음과 같은 문제는 다음과 같은 파일 (들)을 삭제하려고 시도하는가 발생했습니다 :";
 $LANG["notify_submission_id_not_found"] = "제출 ID를 찾을 수없습니다.";
-$LANG["notify_submission_no_field_id"] = "이것은 복종의 입력란에 ID를 찾을 수없습니다.";
 $LANG["notify_submission_not_updated"] = "제출 업데이 트되지 않을 수있습니다.";
-$LANG["notify_submission_updated_file_problems"] = "귀하의 제출,하지만이 업데이 트되었습니다들) 문제가 다음과 같은 파일 (:";
 $LANG["notify_submissions_and_files_deleted"] = "제출 및 기타 (들)와 관련된 파일이 성공적으로 삭제되었습니다.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> 개의 제출물이 복사되었습니다.";
 $LANG["notify_submissions_deleted"] = "제출이 성공적으로 삭제되었습니다.";

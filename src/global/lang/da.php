@@ -814,7 +814,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... til database ...&quot;</span> betyder, at selv om dit brugernavn og adgangskode, du leverede er korrekt, det ikke var i stand til at forbinde til, at særlig database med denne konto. Dette kan betyde, at enten din database navn er forkert, eller at denne brugerkonto ikke er forbundet med denne database.";
 $LANG["text_install_email_content_text"] = "Der er masser af ressourcer på vores hjemmeside for at hjælpe dig med at komme i gang, herunder vores online dokumentation (https://docs.formtools.org) og selvstudier (https://docs.formtools.org/tutorials). Hvis du finder dig fast eller har et spørgsmål, still et spørgsmål på github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Beklager, vil Formværktøj ikke være i stand til at køre på din server. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Klik her</a> for minimumskravene.";
-$LANG["text_install_intro"] = "Velkommen til den formular Tools installationsscript! Vælg venligst dit sprog.";
 $LANG["text_install_system_check"] = "Denne side kører et par test på dit system for at sikre, at det er i stand til at køre Form Tools.";
 $LANG["text_internal_form_desc"] = "Intern former eksisterer kun inden Formværktøj - ikke andre steder på dit websted. Kun Formværktøj brugerkonti vil have adgang til formularen. Vælg denne mulighed, hvis du ikke har en eksisterende formular.";
 $LANG["text_internal_form_intro"] = "Brug formularen nedenfor for at oprette en ny intern formular. Alle indstillinger, herunder antallet og indholdet af formularfelterne kan ændres og konfigureres senere.";
@@ -1100,7 +1099,6 @@ $LANG["notify_install_invalid_db_info"] = "Beklager, men vi var ude af stand til
 $LANG["notify_install_no_db_connection"] = "Tjek venligst din database navn og login-oplysninger. Selv om vi var i stand til at forbinde til databasen vært, kunne vi ikke forbinde til databasen. Fejlmeddelelsen databasen tilbage er: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Din form er blevet oprettet! Du kan konfigurere din form gennem disse faner.";
 $LANG["notify_invalid_account_information_in_sessions"] = "De kontooplysninger opbevares i sessioner er ugyldig. Log ind igen nedenfor.";
-$LANG["notify_invalid_field_upload_folder"] = "Dette felt er upload mappe er enten ugyldig eller ikke skrivbar.";
 $LANG["notify_invalid_license_key"] = "Beklager, betyder det ikke ud til at være en gyldig licens nøgle. Prøv at indtaste den igen.";
 $LANG["notify_invalid_permissions"] = "Du har ikke tilladelser til at se denne side. Du er blevet logget ud.";
 $LANG["notify_invalid_search_dates"] = "Brug venligst datepicker at indtaste en gyldig dato eller datoer.";
@@ -1133,8 +1131,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Det ser ud til, at din bruge
 $LANG["notify_no_views_defined"] = "Du behøver ikke have nogen Visninger defineret. Du vil ikke være i stand til at se denne form, har hævdet, medmindre mindst en View er oprettet. Klik på knappen nedenfor for at oprette standard-visning.";
 $LANG["notify_option_list_deleted"] = "Valglisten er blevet slettet.";
 $LANG["notify_option_list_updated"] = "Valglisten er blevet opdateret.";
-$LANG["notify_page_added"] = "Den side er blevet tilføjet.";
-$LANG["notify_page_not_added"] = "Den side kunne ikke tilføjes.";
 $LANG["notify_page_updated"] = "Den side er blevet opdateret.";
 $LANG["notify_public_form_omit_list_updated"] = "Kunden udelade listen for denne form er blevet opdateret.";
 $LANG["notify_public_view_omit_list_updated"] = "Kunden udelade listen for denne opfattelse er blevet opdateret.";
@@ -1151,9 +1147,7 @@ $LANG["notify_submission_copied_edit"] = "Indsendelsen er blevet kopieret. Du ka
 $LANG["notify_submission_deleted"] = "Fremlæggelse blev slettet med succes.";
 $LANG["notify_submission_deleted_with_problems"] = "Fremlæggelse blev slettet, men de følgende problemer opstod under forsøg på at slette følgende fil (er):";
 $LANG["notify_submission_id_not_found"] = "Henvendelses ID blev ikke fundet.";
-$LANG["notify_submission_no_field_id"] = "Dette anbringende mark ID blev ikke fundet.";
 $LANG["notify_submission_not_updated"] = "Henvendelsen kunne ikke opdateres.";
-$LANG["notify_submission_updated_file_problems"] = "Din indsendelse blev opdateret, men følgende fil (er) havde problemer:";
 $LANG["notify_submissions_and_files_deleted"] = "Anbringender og enhver fil (er) i forbindelse med dem blev slettet.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> indlæg er blevet kopieret.";
 $LANG["notify_submissions_deleted"] = "Henvendelsen er nu slettet.";

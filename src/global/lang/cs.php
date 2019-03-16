@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... do databáze ...&quot;</span> znamená, že i když vaše uživatelské jméno a vámi zadané heslo správné, nebylo možné se připojit ke konkrétní databázi, s tímto účtem. To může znamenat, že buď Vaše jméno databáze je nesprávné, nebo že tento uživatelský účet, není spojená s touto databází.";
 $LANG["text_install_email_content_text"] = "Na našich webových stránkách najdete spoustu zdrojů, které vám pomohou začít, včetně naší online dokumentace (https://docs.formtools.org) a výukových programů (https://docs.formtools.org/tutorials). Pokud zjistíte, že uvíznete nebo máte nějakou otázku, zeptejte se na otázku github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Omlouváme se, ale budou tvořit nástroje nebude moci běžet na serveru. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Prosím, klikněte zde</a> pro minimální požadavky.";
-$LANG["text_install_intro"] = "Vítejte na instalační formulář Nástroje script! Prosím, zvolte si jazyk.";
 $LANG["text_install_system_check"] = "Na této stránce probíhá několik testů na vašem systému, aby bylo zajištěno, že je schopen běžet Form Nástroje.";
 $LANG["text_internal_form_desc"] = "Vnitřní formy existují pouze v rámci tvarové nástroje - jinde na webu. Jediná forma nástroje uživatelské účty budou mít přístup k formuláři. Vyberte tuto možnost, pokud nemáte stávající podobě.";
 $LANG["text_internal_form_intro"] = "Použijte níže uvedený formulář pro vytvoření nové vnitřní forma. Všechna nastavení, včetně počtu a obsah polí formuláře je možné měnit a konfigurovat později.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Omlouváme se, nebyli jsme schopni se
 $LANG["notify_install_no_db_connection"] = "Zkontrolujte prosím jméno své databáze a přihlašovací informace. I když jsme byli schopni se připojit k hostiteli databáze, nemohli jsme se připojit k databázi. Chyba vrácená databází je: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Formulář byl vytvořen! Můžete si nastavit podobě prostřednictvím těchto karet.";
 $LANG["notify_invalid_account_information_in_sessions"] = "V úvahu informace uložené v sezení je neplatný. Přihlaste se znovu níže.";
-$LANG["notify_invalid_field_upload_folder"] = "Toto pole je přesouvat složky je buď neplatné, nebo nelze zapisovat.";
 $LANG["notify_invalid_license_key"] = "Je nám líto, že se nezdá být platný licenční klíč. Prosím, zkuste zadat znovu.";
 $LANG["notify_invalid_permissions"] = "Nemáte oprávnění pro přístup k této stránce. Byli jste odhlášeni.";
 $LANG["notify_invalid_search_dates"] = "Použijte prosím DatePicker uvést platnou termíny.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Zdá se, že váš uživatel
 $LANG["notify_no_views_defined"] = "Nemáte nějaké názory, definované. Nebudete moci prohlížet tuto formu tvrzení, pokud alespoň jeden pohled je vytvořen. Klikněte na tlačítko níže pro vytvoření výchozí zobrazení.";
 $LANG["notify_option_list_deleted"] = "Seznam volby byl vymazán.";
 $LANG["notify_option_list_updated"] = "Možnost seznam byl aktualizován.";
-$LANG["notify_page_added"] = "Stránka byla přidána.";
-$LANG["notify_page_not_added"] = "Stránka se nepodařilo přidat.";
 $LANG["notify_page_updated"] = "Stránka byla aktualizována.";
 $LANG["notify_public_form_omit_list_updated"] = "Klient vynechat seznamu tohoto formuláře byl aktualizován.";
 $LANG["notify_public_view_omit_list_updated"] = "Klient vynechat seznam pro tento názor byl aktualizován.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Podání bylo zkopírováno. Můžete 
 $LANG["notify_submission_deleted"] = "Podání bylo úspěšně smazána.";
 $LANG["notify_submission_deleted_with_problems"] = "Odevzdání byl zrušen, ale tyto problémy nastaly při pokusu smazat následující soubor (y):";
 $LANG["notify_submission_id_not_found"] = "Předložení ID nebyl nalezen.";
-$LANG["notify_submission_no_field_id"] = "Tento argument je pole ID nebyl nalezen.";
 $LANG["notify_submission_not_updated"] = "Podání nelze aktualizovat.";
-$LANG["notify_submission_updated_file_problems"] = "Váš argument byl aktualizován, ale následující soubor (y) měl problémy:";
 $LANG["notify_submissions_and_files_deleted"] = "Podání a jakýkoliv soubor (y), které jsou s nimi byla úspěšně smazána.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> podání byly zkopírovány.";
 $LANG["notify_submissions_deleted"] = "Příspěvky byly úspěšně smazána.";

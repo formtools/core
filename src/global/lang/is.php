@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Aðga
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Aðgangur neitun fyrir notandi: ... gagnagrunni ...&quot;</span> þýðir að þótt notendanafn þitt og lykilorð sem þú staðar er rétt, það var ófær til tengja til að sérstakur gagnagrunnur með þessi reikningur. Þetta getur þýtt að annað hvort gagnasafn nafn þitt er rangt, eða að þessi notandi sé ekki tengd við þessi gagnasafn.";
 $LANG["text_install_email_content_text"] = "Það er nóg af fjármagni á heimasíðu okkar til að hjálpa þér að byrja, þ.mt online skjöl okkar (https://docs.formtools.org) og námskeið (https://docs.formtools.org/tutorials). Ef þú finnur að þú setur eða hefur spurningu skaltu spyrja spurningu um github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Því miður, Form Tools vilja ekki vera fær til að keyra á vefþjóninum þínum. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Vinsamlegast smelltu hér</a> til að lágmarkskröfur.";
-$LANG["text_install_intro"] = "Velkomin á eyðublað Verkfæri uppsetningu skrifta! Veldu tungumál þitt.";
 $LANG["text_install_system_check"] = "Þessi síða keyrir nokkrar prófanir á kerfinu til að tryggja að það fær að hlaupa Form Tools.";
 $LANG["text_internal_form_desc"] = "Innri eyðublöð eru aðeins innan Tools Form - ekki annars staðar á síðuna þína. Aðeins Form Verkfæri notandi reikningur vilja hafa aðgang að mynda. Veldu þennan valkost ef þú ert ekki með núverandi mynd.";
 $LANG["text_internal_form_intro"] = "Notaðu formið hér fyrir neðan til að búa til nýjan innri mynd. Allar stillingar, þ.mt fjöldi og innihald formi sviðum sem hægt er að breyta og stilla síðar.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Því miður gátum við ekki að ten
 $LANG["notify_install_no_db_connection"] = "Athugaðu gagnasafn nafn og tenging upplýsingar. Þó við gátum til að tengja við gagnagrunn gestgjafi var ekki hægt að tengja við gagnagrunn. The villuboð gagnagrunn sem skilað er: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Mynd þín hefur verið búið til! Hægt er að stilla mynd í gegnum þessa flipa.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Reikningurinn upplýsingar sem geymdar eru á fundum er ógilt. Vinsamlegast skráðu þig inn aftur hér að neðan.";
-$LANG["notify_invalid_field_upload_folder"] = "Senda möppu Þessi reitur er annað hvort öryrki eða ekki skrifanleg.";
 $LANG["notify_invalid_license_key"] = "Því miður, það virðist ekki vera gilt leyfi lykill. Vinsamlegast reyndu að slá aftur.";
 $LANG["notify_invalid_permissions"] = "Þú hefur ekki réttindi til að opna þessa síðu. Þú hefur skráð þig út.";
 $LANG["notify_invalid_search_dates"] = "Vinsamlegast notaðu datepicker að slá inn gilda dagsetningu eða dagsetningar.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Það virðist sem notandi h
 $LANG["notify_no_views_defined"] = "Þú ert ekki með neina Views skilgreind. Þú munt ekki hægt að skoða skráningar þetta eyðublað er nema að minnsta kosti eitt View er stofnaður. Smelltu á hnappinn hér fyrir neðan til að búa til the vanræksla Skoða.";
 $LANG["notify_option_list_deleted"] = "Þessi valkostur skrá hefur verið eytt.";
 $LANG["notify_option_list_updated"] = "Þessi valkostur listi hefur verið uppfærð.";
-$LANG["notify_page_added"] = "Síðan hefur verið bætt við.";
-$LANG["notify_page_not_added"] = "Síðan gæti ekki bætt við.";
 $LANG["notify_page_updated"] = "Síðan hefur verið uppfærð.";
 $LANG["notify_public_form_omit_list_updated"] = "The viðskiptavinur sleppt listanum fyrir þetta form hefur verið uppfærður.";
 $LANG["notify_public_view_omit_list_updated"] = "The viðskiptavinur sleppt listanum fyrir View hefur verið uppfærður.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Uppgjöf hefur verið afrituð. Þú g
 $LANG["notify_submission_deleted"] = "The uppgjöf var eytt.";
 $LANG["notify_submission_deleted_with_problems"] = "The uppgjöf var eytt, en eftirfarandi vandamál var komið upp þegar reynt er að eyða eftirfarandi skrá (s):";
 $LANG["notify_submission_id_not_found"] = "Í uppgjöf auðkenni fannst ekki.";
-$LANG["notify_submission_no_field_id"] = "Sviði Þessi undirgefni auðkenni fannst ekki.";
 $LANG["notify_submission_not_updated"] = "The uppgjöf gæti ekki verið uppfærð.";
-$LANG["notify_submission_updated_file_problems"] = "Uppgjöf þín var uppfærð, en eftirfarandi skrá (s) höfðu vandamál:";
 $LANG["notify_submissions_and_files_deleted"] = "Í innsendingar og hvaða skrá (r) í tengslum við þau var eytt.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> skjöl hafa verið afrituð.";
 $LANG["notify_submissions_deleted"] = "Í innsendingar var eytt.";

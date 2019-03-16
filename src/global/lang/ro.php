@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... la baza de date ...&quot;</span> înseamnă că, deşi numele de utilizator şi parola furnizate sunt corecte, nu a putut să se conecteze la baza de date special cu acel cont. Acest lucru poate însemna că, fie numele tău în baza de date este incorect, sau că acest cont de utilizator nu este asociată cu faptul că în baza de date.";
 $LANG["text_install_email_content_text"] = "Există o mulțime de resurse pe site-ul nostru pentru a vă ajuta să începeți, inclusiv documentația noastră online (https://docs.formtools.org) și tutoriale (https://docs.formtools.org/tutorials). Dacă găsiți că vă blocați sau aveți o întrebare, adresați-vă o întrebare despre github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Ne pare rău, Instrumente formular nu vor fi capabile să ruleze pe server. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Vă rugăm daţi click aici</a> pentru cerinţele minime.";
-$LANG["text_install_intro"] = "Bine aţi venit la Tools Formular de script-ul de instalare! Vă rugăm să selectaţi limba dumneavoastră.";
 $LANG["text_install_system_check"] = "Această pagină opereaza un teste de câteva în sistemul dvs. pentru a se asigura este capabil să ruleze Instrumente formular.";
 $LANG["text_internal_form_desc"] = "Forme de interne există doar în cadrul Unelte Formă - nu în altă parte pe site-ul dvs.. Numai Instrumente Formular conturi de utilizator va avea acces la formularul. Selectaţi această opţiune dacă nu aveţi un formular existent.";
 $LANG["text_internal_form_intro"] = "Folosiţi formularul de mai jos pentru a crea o noua forma internă. Toate setările, inclusiv numărul şi conţinutul câmpurilor de formular poate fi configurat fi schimbat şi mai târziu.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Ne pare rău, nu am putut să se cone
 $LANG["notify_install_no_db_connection"] = "Vă rugăm să verificaţi numele dvs. în baza de date şi de autentificare. Cu toate că noi am fost capabil să se conecteze la baza de date gazdă, nu am putut conecta la baza de date. Mesaj de eroare returnat în baza de date este: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Formularul dvs. a fost creat! Puteţi configura formularul prin intermediul acestor file.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Informaţii de cont stocate în sesiuni este invalid. Vă rugăm să vă conecta din nou de mai jos.";
-$LANG["notify_invalid_field_upload_folder"] = "Pliant Acest câmp a lui încărcaţi este fie invalid sau nu este de inscripţionare.";
 $LANG["notify_invalid_license_key"] = "Ne pare rău, că nu pare a fi o cheie de licenţă valabilă. Vă rugăm să încercaţi să introduceţi-l din nou.";
 $LANG["notify_invalid_permissions"] = "Nu aveţi permisiunile pentru a accesa această pagină. Aţi fost deconectat.";
 $LANG["notify_invalid_search_dates"] = "Vă rugăm să folosiţi datepicker pentru a introduce o dată validă sau datele.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Se pare că contul dvs. de u
 $LANG["notify_no_views_defined"] = "Nu aveţi nici Vizualizari definit. Nu veţi putea vedea observaţiile acest formular cu excepţia cazului în cel puţin una View este creat. Faceţi clic pe butonul de mai jos pentru a crea vizualizarea implicită.";
 $LANG["notify_option_list_deleted"] = "Lista de optiuni a fost ştearsă.";
 $LANG["notify_option_list_updated"] = "Lista opţiune a fost actualizat.";
-$LANG["notify_page_added"] = "Pagina a fost adăugată.";
-$LANG["notify_page_not_added"] = "Pagina nu a putut fi adăugată.";
 $LANG["notify_page_updated"] = "Pagina a fost actualizat.";
 $LANG["notify_public_form_omit_list_updated"] = "Clientul a omite lista pentru acest formular a fost actualizat.";
 $LANG["notify_public_view_omit_list_updated"] = "Clientul a omite lista pentru acest punct de vedere a fost actualizat.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Trimiterea a fost copiată. Puteți s�
 $LANG["notify_submission_deleted"] = "Prezentarea a fost şters cu succes.";
 $LANG["notify_submission_deleted_with_problems"] = "Prezentarea a fost şters, dar următoarele probleme au fost întâmpinate în încercarea de a şterge următorul fişier (e):";
 $LANG["notify_submission_id_not_found"] = "Depunerea ID-ul nu a fost găsit.";
-$LANG["notify_submission_no_field_id"] = "Acest domeniu prezentarea lui ID-ul nu a fost găsit.";
 $LANG["notify_submission_not_updated"] = "Depunere nu a putut fi actualizat.";
-$LANG["notify_submission_updated_file_problems"] = "Prezentarea dvs. a fost actualizat, dar urmatorul fisier (e) au avut probleme:";
 $LANG["notify_submissions_and_files_deleted"] = "Observaţiile şi orice fişier (e) asociate cu acestea au fost şterse cu succes.";
 $LANG["notify_submissions_copied"] = "Au fost copiate <b>{\$num_submissions}</b> trimiteri.";
 $LANG["notify_submissions_deleted"] = "Observaţiile au fost şterse cu succes.";

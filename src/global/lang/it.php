@@ -814,7 +814,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... al database ...&quot;</span> significa che, anche se il tuo nome utente e la password fornita è corretta, è stato in grado di connettersi a tale database particolare con l&#39;account. Questo può significare che o il nome del vostro database non è corretto, o che questo account utente non è associato a tale database.";
 $LANG["text_install_email_content_text"] = "Sul sito Web sono disponibili numerose risorse per aiutarti a iniziare, tra cui la nostra documentazione online (https://docs.formtools.org) e le esercitazioni (https://docs.formtools.org/tutorials). Se trovi di rimanere bloccato o di fare una domanda, fai una domanda su github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Ci dispiace, strumenti Form non sarà in grado di funzionare sul vostro server. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Clicca qui</a> per i requisiti minimi.";
-$LANG["text_install_intro"] = "Welcome to the script modulo di installazione Tools! Si prega di selezionare la lingua.";
 $LANG["text_install_system_check"] = "Questa pagina viene eseguito alcuni test sul vostro sistema per assicurarsi che sia in grado di eseguire strumenti modulo.";
 $LANG["text_internal_form_desc"] = "Forme interne esistere solo all&#39;interno di Strumenti Form - non altrove sul tuo sito. Solo Strumenti Form account utente avrà accesso al modulo. Selezionare questa opzione se non si dispone di un modulo esistente.";
 $LANG["text_internal_form_intro"] = "Utilizza il modulo qui sotto per creare una nuova forma interna. Tutte le impostazioni, compreso il numero e il contenuto dei campi del modulo può essere essere modificato e configurato più tardi.";
@@ -1100,7 +1099,6 @@ $LANG["notify_install_invalid_db_info"] = "Ci dispiace, non siamo riusciti a con
 $LANG["notify_install_no_db_connection"] = "Si prega di controllare il nome del database e le informazioni di login. Anche se siamo stati in grado di connettersi al database host, non siamo riusciti a connettersi al database. Il messaggio di errore del database restituito è: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Il modulo è stato creato! È possibile configurare il modulo attraverso queste schede.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Le informazioni sull&#39;account memorizzate in sessioni non è valido. Si prega di accedere nuovamente al di sotto.";
-$LANG["notify_invalid_field_upload_folder"] = "Cartella upload Questo campo è valido o non è scrivibile.";
 $LANG["notify_invalid_license_key"] = "Ci dispiace, che non sembra essere una chiave di licenza valida. Prova a entrare di nuovo.";
 $LANG["notify_invalid_permissions"] = "Non hai i permessi per accedere a questa pagina. Sei stato disconnesso.";
 $LANG["notify_invalid_search_dates"] = "Si prega di utilizzare il DatePicker di inserire una data valida o date.";
@@ -1133,8 +1131,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Sembra che l&#39;account ute
 $LANG["notify_no_views_defined"] = "Non è necessario alcun Visto definito. Non sarà in grado di visualizzare affermazioni di tale modulo, a meno che almeno uno View è creato. Clicca sul bottone qui sotto per creare la visualizzazione di default.";
 $LANG["notify_option_list_deleted"] = "L&#39;elenco delle opzioni è stato eliminato.";
 $LANG["notify_option_list_updated"] = "L&#39;elenco delle opzioni è stato aggiornato.";
-$LANG["notify_page_added"] = "È stata aggiunta una pagina.";
-$LANG["notify_page_not_added"] = "Non è stato possibile aggiungere una pagina.";
 $LANG["notify_page_updated"] = "La pagina è stata aggiornata.";
 $LANG["notify_public_form_omit_list_updated"] = "Il client omettere lista per questo modulo è stato aggiornato.";
 $LANG["notify_public_view_omit_list_updated"] = "Il client omettere lista per questo Vista è stato aggiornato.";
@@ -1151,9 +1147,7 @@ $LANG["notify_submission_copied_edit"] = "L'invio è stato copiato. Puoi modific
 $LANG["notify_submission_deleted"] = "La cancellazione dell'invio ha avuto successo.";
 $LANG["notify_submission_deleted_with_problems"] = "L'invio è stato cancllato, ma si sono verificati i seguenti problemi nel corso della cancellazione del/dei seguenti file:";
 $LANG["notify_submission_id_not_found"] = "L'ID di invio non è stato trovato.";
-$LANG["notify_submission_no_field_id"] = "Questo campo submission ID non è stato trovato.";
 $LANG["notify_submission_not_updated"] = "Non è stato possibile aggiornare l'invio.";
-$LANG["notify_submission_updated_file_problems"] = "L'invio è stato aggiornato, ma ci sono stati problemi con il/i seguenti file:";
 $LANG["notify_submissions_and_files_deleted"] = "La cancellazione degli invii e di ogni file ad esso associato ha avuto successo.";
 $LANG["	notify_submissions_copied"] = "<b>{\$num_submissions}</b> invii sono stati copiati.";
 $LANG["notify_submissions_deleted"] = "La cancellazione degli invii ha avuto successo.";

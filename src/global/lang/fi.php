@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... tietokantaan ...&quot;</span> tarkoittaa, että vaikka käyttäjätunnus ja salasana toimitetaan on oikea, se voi muodostaa, että erityisesti tietokannan kanssa huomioon. Tämä voi tarkoittaa, että joko tietokannan nimi on virheellinen, tai että kyseinen käyttäjä ei ole liitetty kyseiseen tietokantaan.";
 $LANG["text_install_email_content_text"] = "Verkkosivustossamme on paljon resursseja, joiden avulla pääset alkuun, mukaan lukien verkko-ohjeet (https://docs.formtools.org) ja opetusohjelmat (https://docs.formtools.org/tutorials). Jos huomaat, että jumissa on kysymys, kysy kysymys githubista (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Anteeksi, muoto Tools ei voi ajaa palvelimella. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Klikkaa tästä</a> ja vähimmäisvaatimukset.";
-$LANG["text_install_intro"] = "Tervetuloa lomakkeen Tools asennus script! Valitse kieli.";
 $LANG["text_install_system_check"] = "Tämä sivu toimii muutamia testit järjestelmän, jotta se voi suorittaa Form Tools.";
 $LANG["text_internal_form_desc"] = "Sisäinen muotoja on olemassa vain muoto Työkalut - muualle sivustossasi. Ainoa Työkalut käyttäjätunnukset pääsevät muodossa. Valitse tämä vaihtoehto, jos sinulla ei ole nykyisessä muodossaan.";
 $LANG["text_internal_form_intro"] = "Käytä alla olevaa lomaketta luodaksesi uuden sisäisen muodon. Kaikki asetukset, mukaan lukien määrä ja sisältö lomakkeen kenttiä voi muuttaa ja määrittää myöhemmin.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Valitettavasti emme voineet muodostaa
 $LANG["notify_install_no_db_connection"] = "Tarkista tietokannan nimi ja kirjautumistiedot. Vaikka saimme yhteyden tietokantaan isäntä, emme voineet yhteyttä tietokantaan. Virheilmoitus tietokanta palautettujen: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Lomake on luotu! Voit määrittää lomakkeen kautta näihin välilehtiin.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Tilin tiedot tallennetaan istunnoissa ei kelpaa. Kirjaudu uudelleen alla.";
-$LANG["notify_invalid_field_upload_folder"] = "Tämän kentän ladata kansio on joko virheellinen tai ei ole kirjoitettavissa.";
 $LANG["notify_invalid_license_key"] = "Anteeksi, että ei näytä olevan voimassa lisenssiavain. Yritä kirjoittamalla se uudelleen.";
 $LANG["notify_invalid_permissions"] = "Sinulla ei ole oikeuksia käyttää tätä sivua. Olet kirjautunut ulos.";
 $LANG["notify_invalid_search_dates"] = "Käytä datepicker syöttää kelvollinen päivämäärä tai päivämäärät.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Näyttää siltä, että kä
 $LANG["notify_no_views_defined"] = "Sinulla ei ole mitään mielipidettä määritelty. Et voi katsella tätä lomaketta väittää, ellei vähintään yksi näkymä on luotu. Klikkaa alla olevaa painiketta luoda oletusnäkymään.";
 $LANG["notify_option_list_deleted"] = "Vaihtoehto luettelosta on poistettu.";
 $LANG["notify_option_list_updated"] = "Vaihtoehto luettelo on päivitetty.";
-$LANG["notify_page_added"] = "Sivu on lisätty.";
-$LANG["notify_page_not_added"] = "Sivua ei voida lisätä.";
 $LANG["notify_page_updated"] = "Sivu on päivitetty.";
 $LANG["notify_public_form_omit_list_updated"] = "Lomakkeen käyttäjäestolista on päivitetty.";
 $LANG["notify_public_view_omit_list_updated"] = "Näkymän käyttäjäestolista on päivitetty.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Hakemus on kopioitu. Voit muokata sit�
 $LANG["notify_submission_deleted"] = "Näkökanta deleted successfully.";
 $LANG["notify_submission_deleted_with_problems"] = "Mukaan poistettu, mutta seuraavat ongelmat havaittiin, kun yrität poistaa seuraavan tiedoston (t):";
 $LANG["notify_submission_id_not_found"] = "Esittämisen tunnus ei löytynyt.";
-$LANG["notify_submission_no_field_id"] = "Tämä väite on kenttä tunnus ei löytynyt.";
 $LANG["notify_submission_not_updated"] = "Jättämistä ei voi päivittää.";
-$LANG["notify_submission_updated_file_problems"] = "Lähettämistä on päivitetty, mutta seuraava tiedosto (t) oli ongelmia:";
 $LANG["notify_submissions_and_files_deleted"] = "Huomautukset ja mahdolliset tiedosto (t) niihin liittyvät poistettiin onnistuneesti.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> asiakirjaa on kopioitu.";
 $LANG["notify_submissions_deleted"] = "Huomautuksensa poistettiin onnistuneesti.";

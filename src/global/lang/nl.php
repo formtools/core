@@ -816,7 +816,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... naar de database ...&quot;</span> betekent dat, hoewel uw gebruikersnaam en wachtwoord dat u heeft opgegeven juist is, niet in staat was om verbinding te maken met die specifieke database met die account. Dit kan betekenen dat uw database naam onjuist is, of dat dit account niet is gekoppeld aan die database.";
 $LANG["text_install_email_content_text"] = "Er zijn voldoende bronnen op onze website om u op weg te helpen, inclusief onze online documentatie (https://docs.formtools.org) en tutorials (https://docs.formtools.org/tutorials). Als je merkt dat je vastloopt of een vraag hebt, stel een vraag op github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Sorry, Vorm Tools niet te kunnen draaien op je server. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">U kunt hier klikken</a> voor de minimale vereisten.";
-$LANG["text_install_intro"] = "Welkom op het formulier Tools installatie script! Selecteer uw taal.";
 $LANG["text_install_system_check"] = "Deze pagina draait een paar tests op uw systeem om ervoor te zorgen dat het in staat om Form Tools lopen.";
 $LANG["text_internal_form_desc"] = "Interne vormen bestaan ​​alleen in Form Tools - niet elders op uw site. Enige vorm Extra user accounts hebben toegang tot het formulier. Selecteer deze optie als u niet beschikt over een bestaand formulier.";
 $LANG["text_internal_form_intro"] = "Gebruik het formulier hieronder in om een ​​nieuwe interne vorm te creëren. Alle instellingen, inclusief het aantal en de inhoud van de formuliervelden kunnen worden gewijzigd en later geconfigureerd.";
@@ -1102,7 +1101,6 @@ $LANG["notify_install_invalid_db_info"] = "Sorry, we waren niet in staat om verb
 $LANG["notify_install_no_db_connection"] = "Controleer uw database naam en login informatie. Hoewel we in staat waren om verbinding met de database host, konden we geen verbinding met de database. De foutmelding de database terug is: <i>{\$db_select_error})</i>";
 $LANG["notify_internal_form_created"] = "Uw formulier is gemaakt! U kunt uw formulier door middel van deze tabbladen.";
 $LANG["notify_invalid_account_information_in_sessions"] = "De account informatie die is opgeslagen in sessies is ongeldig. Gelieve in te loggen opnieuw hieronder.";
-$LANG["notify_invalid_field_upload_folder"] = "Upload map Dit veld is ongeldig of is niet beschrijfbaar.";
 $LANG["notify_invalid_license_key"] = "Sorry, betekent dat niet om een ​​geldige licentie sleutel. Probeer het nogmaals intoetsen.";
 $LANG["notify_invalid_permissions"] = "Je hebt niet de rechten om deze pagina te bezoeken. U bent afgemeld.";
 $LANG["notify_invalid_search_dates"] = "Gebruik de datepicker om een ​​geldige datum of data in te voeren.";
@@ -1135,8 +1133,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Het lijkt erop dat uw gebrui
 $LANG["notify_no_views_defined"] = "Je hebt geen Bekeken gedefinieerd. U zult niet in staat zijn om dit formulier betoog te bekijken, tenzij ten minste een View wordt gemaakt. Klik op de onderstaande knop om de standaardweergave te creëren.";
 $LANG["notify_option_list_deleted"] = "De optie lijst is verwijderd.";
 $LANG["notify_option_list_updated"] = "De optie lijst is bijgewerkt.";
-$LANG["notify_page_added"] = "De pagina is toegevoegd.";
-$LANG["notify_page_not_added"] = "De pagina kan niet worden toegevoegd.";
 $LANG["notify_page_updated"] = "De pagina is bijgewerkt.";
 $LANG["notify_public_form_omit_list_updated"] = "De klant weglaten lijst voor deze vorm is bijgewerkt.";
 $LANG["notify_public_view_omit_list_updated"] = "De klant weglaten lijst voor deze visie is bijgewerkt.";
@@ -1153,9 +1149,7 @@ $LANG["notify_submission_copied_edit"] = "De inzending is gekopieerd. Je kunt he
 $LANG["notify_submission_deleted"] = "De inzending is succesvol verwijderd";
 $LANG["notify_submission_deleted_with_problems"] = "De inzending is verwijderd, maar de volgende problemen zijn opgetreden bij het verwijderen van de volgende bestand(en):";
 $LANG["notify_submission_id_not_found"] = "Het inzending-ID is niet gevonden.";
-$LANG["notify_submission_no_field_id"] = "Dit middel veld-id is niet gevonden.";
 $LANG["notify_submission_not_updated"] = "De inzending kon niet worden bijgewerkt";
-$LANG["notify_submission_updated_file_problems"] = "Uw inzending is bijgewerkt, maar de volgende bestand(en) hadden problemen:";
 $LANG["notify_submissions_and_files_deleted"] = "De inzendingen en gekoppelde bestand(en) zijn succesvol verwijderd.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> inzendingen zijn gekopieerd.";
 $LANG["notify_submissions_deleted"] = "De inzendingen zijn succesvol verwijderd";

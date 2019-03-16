@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "Ciallaíonn <span class=\"green\"
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Cead rochtana diúltaithe don úsáideoir: ... chun bunachar sonraí ... ciallaíonn&quot;</span> cé go bhfuil d&#39;ainm úsáideora agus do phasfhocal a sholáthair tú i gceart é, bhí sé in ann ceangal leis an mbunachar sonraí áirithe leis an áireamh. Is féidir Ciallaíonn sé seo go bhfuil ceachtar d&#39;ainm mbunachar sonraí mícheart, nó nach bhfuil an cuntas úsáideora a bhaineann leis an mbunachar sonraí.";
 $LANG["text_install_email_content_text"] = "Tá go leor acmhainní ar ár suíomh gréasáin chun cabhrú leat tosú, lena n-áirítear ár gcáipéisíocht ar líne (https://docs.formtools.org) agus ranganna teagaisc (https://docs.formtools.org/tutorials). Má aimsíonn tú go bhfuil tú ceangailte nó má tá ceist agat, cuir ceist ar github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Tá brón orm, ní bheidh Uirlisí Foirm bheith in ann a reáchtáil ar do fhreastalaí. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Cliceáil anseo</a> le haghaidh na ceanglais íosta.";
-$LANG["text_install_intro"] = "Fáilte chuig an script a shuiteáil Foirm Uirlisí! Roghnaigh do theanga.";
 $LANG["text_install_system_check"] = "Ritheann an leathanach seo tá roinnt tástálacha ar do chórais a chinntiú sé in ann a reáchtáil Foirm Uirlisí.";
 $LANG["text_internal_form_desc"] = "Foirmeacha inmheánach ann ach amháin laistigh de Uirlisí Foirm - nach bhfuil aon áit eile ar do shuíomh. Ní bheidh ach Foirm cuntais úsáideora Uirlisí rochtain a fháil ar an fhoirm. Roghnaigh an rogha seo más rud é nach bhfuil tú an fhoirm atá ann cheana féin.";
 $LANG["text_internal_form_intro"] = "Bain úsáid as an bhfoirm thíos a chruthú foirm nua Inmheánach. Is féidir le gach suímh, lena n-áirítear líon agus ábhar an fhoirm a réimsí a athrú agus a chumrú níos déanaí.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Tá brón orainn, bhí muid in ann ce
 $LANG["notify_install_no_db_connection"] = "Déan seiceáil ar do ainm mbunachar sonraí agus faisnéis logáil isteach. Cé go raibh muid ábalta le ceangal leis an ósta bunachar sonraí, ní raibh muid ábalta ceangal a dhéanamh leis an mbunachar sonraí. Is é an teachtaireacht earráide an bunachar sonraí ar ais: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Tá d&#39;fhoirm cruthaithe! Is féidir leat a chumrú d&#39;fhoirm trí na tabs.";
 $LANG["notify_invalid_account_information_in_sessions"] = "An fhaisnéis arna stóráil áireamh i seisiúin a neamhbhailí. Le do thoil, logáil isteach arís thíos.";
-$LANG["notify_invalid_field_upload_folder"] = "Tá an réimse seo ar fhillteán upload neamhbhailí ceachtar bhfuil nó nach bhfuil inscríofa.";
 $LANG["notify_invalid_license_key"] = "Tá brón orainn, nach dealraitheach a bheith ina eochair ceadúnas bailí. Bain triail as ag dul isteach arís.";
 $LANG["notify_invalid_permissions"] = "Ní gá duit na ceadanna a leathanach seo a rochtain. Tú curtha amach tú logáilte isteach.";
 $LANG["notify_invalid_search_dates"] = "Bain úsáid as an datepicker a chur isteach le dáta nó dátaí bailí.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Dealraíonn sé nach bhfuil 
 $LANG["notify_no_views_defined"] = "Ní gá duit aon Radhairc sainithe. Ní bheidh tú in ann féachaint ar an bhfoirm seo mura gcuirtear in aighneachtaí amháin ar a laghad View cruthaithe. Cliceáil ar an gcnaipe seo thíos a chruthú ar an Féach ar réamhshocraithe.";
 $LANG["notify_option_list_deleted"] = "Tá an liosta rogha been deleted.";
 $LANG["notify_option_list_updated"] = "Tá an liosta rogha tugtha cothrom le dáta.";
-$LANG["notify_page_added"] = "Tá an leathanach seo leis.";
-$LANG["notify_page_not_added"] = "Níorbh fhéidir an leathanach seo a leanas.";
 $LANG["notify_page_updated"] = "Tá an leathanach seo cothrom le dáta.";
 $LANG["notify_public_form_omit_list_updated"] = "Ag an gcliant liosta fhágáil ar lár as an bhfoirm seo curtha suas chun dáta.";
 $LANG["notify_public_view_omit_list_updated"] = "Ag an gcliant fhágáil ar lár as liosta seo Féach Tá suas chun dáta.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Tá an aighneacht cóipeáilte. Is fé
 $LANG["notify_submission_deleted"] = "Bhí scriosadh an aighneacht go rathúil.";
 $LANG["notify_submission_deleted_with_problems"] = "Bhí scriosadh an aighneacht, ach bhí a dtagtar ar na fadhbanna seo a leanas nuair a iarraidh a scriosadh na comhaid seo a leanas (s):";
 $LANG["notify_submission_id_not_found"] = "Ní raibh an aighneacht ID bhí aimsithe.";
-$LANG["notify_submission_no_field_id"] = "Níl an aighneacht seo i réimse ID bhí aimsithe.";
 $LANG["notify_submission_not_updated"] = "Níorbh fhéidir an aighneacht a thabhairt suas chun dáta.";
-$LANG["notify_submission_updated_file_problems"] = "Bhí suas chun dáta do aighneacht, ach na comhaid seo a leanas (a bhí s) fadhbanna:";
 $LANG["notify_submissions_and_files_deleted"] = "Bhí scriostar na haighneachtaí agus aon chomhad (í) a bhaineann leo go rathúil.";
 $LANG["notify_submissions_copied"] = "Cóipeáil <b>{\$num_submissions}</b> aighneacht.";
 $LANG["notify_submissions_deleted"] = "Bhí scriosadh na haighneachtaí go rathúil.";

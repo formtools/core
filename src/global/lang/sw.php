@@ -810,7 +810,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access kukataliwa kwa user: ... na database ...&quot;</span> inamaanisha kuwa ingawa username na password yako wewe waliopata ni sahihi, ilikuwa kushindwa kuwaunganisha na kwamba database hasa kwa kuwa akaunti. Hii inaweza kumaanisha kwamba aidha jina Mbegu yako ni sahihi, au kwamba user akaunti hii si yanayohusiana na kwamba database.";
 $LANG["text_install_email_content_text"] = "Kuna rasilimali nyingi kwenye tovuti yetu ili kukusaidia kuanza, ikiwa ni pamoja na nyaraka zetu za mtandaoni (https://docs.formtools.org) na mafunzo (https://docs.formtools.org/tutorials). Ikiwa utakuta kukataa au kuwa na swali, uulize swali kwenye github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Sorry, Form Tools will not be able to run on your server. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Please click here</a> for the minimum requirements.";
-$LANG["text_install_intro"] = "Karibu kwenye Fomu Tools ufungaji script! Tafadhali chagua lugha yako.";
 $LANG["text_install_system_check"] = "This page anaendesha vipimo chache mfumo wako kuhakikisha ni kuweza kukimbia Fomu Tools.";
 $LANG["text_internal_form_desc"] = "Internal forms exist only within Form Tools - not elsewhere on your site. Only Form Tools user accounts will have access to the form. Select this option if you don't have an existing form.";
 $LANG["text_internal_form_intro"] = "Use the form below to create a new Internal form. All settings, including the number and content of the form fields can be be changed and configured later.";
@@ -1096,7 +1095,6 @@ $LANG["notify_install_invalid_db_info"] = "Sorry, sisi hawakuweza kuwaunganisha 
 $LANG["notify_install_no_db_connection"] = "Please check your database login jina na habari. Ingawa tuliweza kuwaunganisha kwa mwenyeji Mbegu, sisi hawakuweza kuwaunganisha na database. Ujumbe wa kosa database akarudi ni: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Your form has been created! You can configure your form through these tabs.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Akaunti kuhifadhiwa katika vikao vya habari ni invalid. Please log in tena chini.";
-$LANG["notify_invalid_field_upload_folder"] = "Uwanja huu&#39;s upload folder aidha ni batili au si writable.";
 $LANG["notify_invalid_license_key"] = "Sorry, that does not appear to be a valid license key. Please try entering it again.";
 $LANG["notify_invalid_permissions"] = "Huna ya permissions kupata ukurasa huu. Umekuwa watumiaji nje.";
 $LANG["notify_invalid_search_dates"] = "Please use the datepicker to enter a valid date or dates.";
@@ -1129,8 +1127,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Inaonekana kwamba user akaun
 $LANG["notify_no_views_defined"] = "You don't have any Views defined. You will not be able to view this form's submissions unless at least one View is created. Click the button below to create the default View.";
 $LANG["notify_option_list_deleted"] = "The option list has been deleted.";
 $LANG["notify_option_list_updated"] = "The option list has been updated.";
-$LANG["notify_page_added"] = "Ukurasa imekuwa aliongeza.";
-$LANG["notify_page_not_added"] = "Ukurasa usingeweza aliongeza.";
 $LANG["notify_page_updated"] = "Ukurasa imekuwa updated.";
 $LANG["notify_public_form_omit_list_updated"] = "Omit mteja orodha ya fomu hii imekuwa updated.";
 $LANG["notify_public_view_omit_list_updated"] = "Omit orodha ya mteja kwa mtazamo huu umekuwa updated.";
@@ -1147,9 +1143,7 @@ $LANG["notify_submission_copied_edit"] = "Uwasilishaji umechapishwa. Unaweza kuh
 $LANG["notify_submission_deleted"] = "Ilifutwa mara ya kuwasilisha mafanikio.";
 $LANG["notify_submission_deleted_with_problems"] = "Ilifutwa mara ya utii, lakini matatizo yafuatayo walikuwa wamekutana alipojaribu kufuta zifuatazo file (s):";
 $LANG["notify_submission_id_not_found"] = "ID ya utii hakuonekana.";
-$LANG["notify_submission_no_field_id"] = "Hii shamba utii ID hakuonekana.";
 $LANG["notify_submission_not_updated"] = "Ya utii hakuweza uppdateras.";
-$LANG["notify_submission_updated_file_problems"] = "Utii wako mara updated, lakini zifuatazo file (s) alikuwa na matatizo:";
 $LANG["notify_submissions_and_files_deleted"] = "Na yeyote ya redovisningar file (s) yanayohusiana na mafanikio yao walikuwa ilifutwa.";
 $LANG["notify_submissions_copied"] = "Mawasilisho <b>{\$num_submissions}</b> yamekosa.";
 $LANG["notify_submissions_deleted"] = "Redovisningar walikuwa ilifutwa ya mafanikio.";

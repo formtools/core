@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Piek�
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Piekļuve liegta lietotāju: ... datubāzei ...&quot;</span> nozīmē, ka, lai gan savu lietotājvārdu un paroli sniegto ir pareizs, tā nevar izveidot savienojumu ar šo konkrēto datu bāzi ar šo kontu. Tas var nozīmēt, ka vai nu Jūsu datu bāzes nosaukums ir nepareizs, vai šī lietotāja konts nav saistīts ar šo datu bāzi.";
 $LANG["text_install_email_content_text"] = "Mūsu vietnē ir daudz resursu, lai palīdzētu jums sākt darbu, tostarp mūsu tiešsaistes dokumentāciju (https://docs.formtools.org) un apmācības (https://docs.formtools.org/tutorials). Ja konstatējat, ka jums ir iestrēdzis vai jums rodas jautājums, uzdodiet jautājumu par github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Atvainojiet, forma Tools nevarēs palaist uz jūsu servera. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Lūdzu, klikšķiniet šeit</a> , lai minimālās prasības.";
-$LANG["text_install_intro"] = "Laipni lūgti Form Tools uzstādīšana skriptu! Lūdzu, izvēlieties savu valodu.";
 $LANG["text_install_system_check"] = "Šī lapa darbojas daži testi Jūsu sistēmu, lai nodrošinātu, ka tas ir spējīgs darboties Form Tools.";
 $LANG["text_internal_form_desc"] = "Iekšējā veidlapas pastāv tikai forma Tools - citur jūsu vietnē. Tikai Form Tools lietotāju kontiem būs piekļuve formā. Atlasiet šo opciju, ja jums nav esošo formu.";
 $LANG["text_internal_form_intro"] = "Izmantojiet šo veidlapu, lai izveidotu jaunu iekšējo formu. Visi iestatījumi, ieskaitot skaitu un saturu, veidlapas laukus var mainīt un konfigurēt vēlāk.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Atvainojiet, mēs nevarējām izveido
 $LANG["notify_install_no_db_connection"] = "Lūdzu, pārbaudiet savu datu bāzes nosaukumu un pieteikšanās informāciju. Kaut gan mēs varējām izveidot savienojumu ar datu bāzi, uzņēmējas, mēs nevarējām izveidot savienojumu ar datu bāzi. Kļūdas ziņojums datu bāzē atpakaļ, ir: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Jūsu veidlapa ir izveidots! Jūs varat konfigurēt veidā, izmantojot šīs cilnes.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Konta informācija glabājas sesijām ir nederīgs. Lūdzu, piesakieties atkal tālāk.";
-$LANG["notify_invalid_field_upload_folder"] = "Šī lauka upload mape ir vai nu par spēkā neesošu, vai tas nav rakstāms.";
 $LANG["notify_invalid_license_key"] = "Atvainojiet, ka nav, šķiet, ir derīgas licences atslēgu. Lūdzu, mēģiniet ievadot to vēlreiz.";
 $LANG["notify_invalid_permissions"] = "Jums nav atļaujas piekļūt šai lapai. Jūs esat izgājis.";
 $LANG["notify_invalid_search_dates"] = "Lūdzu, izmantojiet datepicker ievadīt derīgu datumu vai datumus.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Šķiet, ka Jūsu lietotāja
 $LANG["notify_no_views_defined"] = "Jums nav neviena Views definēti. Jūs nevarēsiet Lai skatītu šo veidlapu apgalvojumiem, ja vismaz viens skats ir izveidots. Noklikšķiniet pogu zemāk, lai izveidotu noklusējuma skatu.";
 $LANG["notify_option_list_deleted"] = "Izvēles sarakstā ir dzēsta.";
 $LANG["notify_option_list_updated"] = "Variants saraksts ir atjaunināts.";
-$LANG["notify_page_added"] = "Lapa ir pievienots.";
-$LANG["notify_page_not_added"] = "Lapa nav pievienotas.";
 $LANG["notify_page_updated"] = "Lapa ir tikusi atjaunota.";
 $LANG["notify_public_form_omit_list_updated"] = "Klients neiekļaut sarakstā šīs veidlapas ir atjaunota.";
 $LANG["notify_public_view_omit_list_updated"] = "Klientu izlaist saraksts šo skatu ir atjaunota.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Iesniegums ir ticis nokopēts. Jūs va
 $LANG["notify_submission_deleted"] = "Iesniegums tika svītrots veiksmīgi.";
 $LANG["notify_submission_deleted_with_problems"] = "Iesniegums tika svītrots, taču šādas problēmas radās, mēģinot izdzēst šādu failu (s):";
 $LANG["notify_submission_id_not_found"] = "Iesniegšana ID netika atrasta.";
-$LANG["notify_submission_no_field_id"] = "Šī iesniegšana lauka ID netika atrasta.";
 $LANG["notify_submission_not_updated"] = "Iesniegšana nevar tikt atjaunota.";
-$LANG["notify_submission_updated_file_problems"] = "Jūsu iesniegums tika atjaunota, bet šādu failu (s) bija problēmas:";
 $LANG["notify_submissions_and_files_deleted"] = "Iesniegumus un citus dokumentus (-i) saistībā ar tiem tika svītrots veiksmīgi.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> iesniegumi ir nokopēti.";
 $LANG["notify_submissions_deleted"] = "Iesniegumi tika svītroti veiksmīgi.";

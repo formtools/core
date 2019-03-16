@@ -813,7 +813,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... to database ...&quot;</span> berarti bahwa walaupun username dan password yang Anda berikan sudah benar, maka tidak dapat terhubung ke database tertentu dengan account tersebut. Hal ini dapat berarti bahwa salah satu nama database Anda tidak benar, atau account pengguna ini tidak terkait dengan database tersebut.";
 $LANG["text_install_email_content_text"] = "Ada banyak sumber daya di situs web kami untuk membantu Anda memulai, termasuk dokumentasi online kami (https://docs.formtools.org) dan tutorial (https://docs.formtools.org/tutorials). Jika Anda menemukan Anda terjebak atau memiliki pertanyaan, ajukan pertanyaan di github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Maaf, Alat Formulir tidak akan dapat menjalankan pada server Anda. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Silahkan klik di sini</a> untuk persyaratan minimum.";
-$LANG["text_install_intro"] = "Selamat datang di Formulir Peralatan instalasi skrip! Silahkan pilih bahasa Anda.";
 $LANG["text_install_system_check"] = "Halaman ini menjalankan beberapa tes pada sistem anda untuk memastikan itu dapat menjalankan Formulir Tools.";
 $LANG["text_internal_form_desc"] = "Bentuk internal hanya ada dalam Peralatan Formulir - tidak di tempat lain di situs Anda. Alat Formulir Hanya account pengguna akan memiliki akses untuk membentuk. Pilih opsi ini jika Anda tidak memiliki bentuk yang ada.";
 $LANG["text_internal_form_intro"] = "Gunakan formulir di bawah untuk membuat bentuk internal baru. Semua pengaturan, termasuk jumlah dan isi kolom formulir dapat diubah dan dikonfigurasi kemudian.";
@@ -1099,7 +1098,6 @@ $LANG["notify_install_invalid_db_info"] = "Maaf, kami tidak dapat melakukan kone
 $LANG["notify_install_no_db_connection"] = "Silahkan periksa nama database Anda dan login. Meskipun kami dapat terhubung ke database tuan rumah, kami tidak bisa koneksi ke database. Pesan kesalahan database kembali adalah: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Formulir Anda telah diciptakan! Anda dapat mengkonfigurasi formulir Anda melalui tab.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Informasi account yang disimpan dalam sesi tidak valid. Silakan log in lagi di bawah ini.";
-$LANG["notify_invalid_field_upload_folder"] = "Bidang ini yang meng-upload folder entah valid atau tidak dapat ditulis.";
 $LANG["notify_invalid_license_key"] = "Maaf, yang tidak muncul menjadi kunci lisensi yang valid. Silakan coba masukkan lagi.";
 $LANG["notify_invalid_permissions"] = "Anda tidak memiliki izin untuk mengakses halaman ini. Anda telah log out.";
 $LANG["notify_invalid_search_dates"] = "Harap menggunakan datepicker untuk memasukkan tanggal yang valid atau tanggal.";
@@ -1132,8 +1130,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Tampaknya account pengguna A
 $LANG["notify_no_views_defined"] = "Anda tidak memiliki Dilihat didefinisikan. Anda tidak akan dapat melihat kiriman ini form kecuali setidaknya satu Lihat dibuat. Klik tombol di bawah ini untuk membuat View default.";
 $LANG["notify_option_list_deleted"] = "Daftar pilihan telah dihapus.";
 $LANG["notify_option_list_updated"] = "Daftar pilihan telah diperbarui.";
-$LANG["notify_page_added"] = "Halaman yang telah ditambahkan.";
-$LANG["notify_page_not_added"] = "Halaman tidak bisa ditambahkan.";
 $LANG["notify_page_updated"] = "Halaman yang telah diperbarui.";
 $LANG["notify_public_form_omit_list_updated"] = "Daftar klien untuk menghilangkan formulir ini telah diperbarui.";
 $LANG["notify_public_view_omit_list_updated"] = "Daftar menghilangkan klien ini Lihat telah diperbarui.";
@@ -1150,9 +1146,7 @@ $LANG["notify_submission_copied_edit"] = "Pengajuan telah disalin. Anda dapat me
 $LANG["notify_submission_deleted"] = "Penyerahan telah dihapus dengan sukses.";
 $LANG["notify_submission_deleted_with_problems"] = "Penyerahan telah dihapus, tetapi masalah-masalah berikut ditemui saat mencoba untuk menghapus file berikut (s):";
 $LANG["notify_submission_id_not_found"] = "Penyerahan ID tidak ditemukan.";
-$LANG["notify_submission_no_field_id"] = "Penyerahan lapangan ini ID tidak ditemukan.";
 $LANG["notify_submission_not_updated"] = "Penyerahan tidak dapat diperbarui.";
-$LANG["notify_submission_updated_file_problems"] = "Kiriman Anda telah diupdate, tapi file berikut (s) punya masalah:";
 $LANG["notify_submissions_and_files_deleted"] = "The pengajuan dan setiap file (s) yang berhubungan dengan mereka berhasil dihapus.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> pengiriman telah disalin.";
 $LANG["notify_submissions_deleted"] = "Para pengajuan itu berhasil dihapus.";

@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;A hoz
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;A hozzáférés megtagadva felhasználó: ... az adatbázis ...&quot;</span> azt jelenti, hogy bár a felhasználónevet és jelszót, helyes, hogy nem tudott kapcsolódni az adott adatbázist, hogy figyelembe. Ez azt jelenti, hogy sem az adatbázis neve helytelen, vagy hogy ez a felhasználói fiók nem kapcsolódik az adatbázis.";
 $LANG["text_install_email_content_text"] = "Rengeteg erőforrás van a honlapunkon, hogy segítsen neked elkezdeni, beleértve az online dokumentációt (https://docs.formtools.org) és az oktatóanyagokat (https://docs.formtools.org/tutorials). Ha úgy találja, hogy elakadt vagy kérdésed van, kérdezze meg a github-ot (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Sajnálom, Form eszközök nem lesz képes futtatni a szerveren. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Kattintson ide</a> a minimális követelményeknek.";
-$LANG["text_install_intro"] = "Üdvözöljük a Forma Eszközök telepítő parancsfájl! Válassza ki a nyelvet.";
 $LANG["text_install_system_check"] = "Ezen az oldalon fut egy pár vizsgálatokat a rendszer annak érdekében, hogy az képes-hoz fuss Forma eszközök.";
 $LANG["text_internal_form_desc"] = "A belső formák léteznek kizárólag Form Tools - máshol nem a webhelyen. Csak Form eszközök felhasználói fiókok férhetnek hozzá az űrlapot. Válassza ezt az opciót, ha nincs egy meglévő űrlapot.";
 $LANG["text_internal_form_intro"] = "Használd az alábbi űrlapot, hogy hozzon létre egy új belső űrlapot. Minden beállítás, beleértve a számát és tartalmát űrlapmezők lehet változtatni, és konfigurálni később.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Sajnáljuk, nem tudtuk, hogy csatlako
 $LANG["notify_install_no_db_connection"] = "Kérjük, ellenőrizze az adatbázis nevét és a bejelentkezési adatokat. Bár tudtunk csatlakozni az adatbázis befogadó, nem tudtunk csatlakozni az adatbázishoz. A hibaüzenet az adatbázis visszaadott: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "A forma jött létre! Beállíthatja a formában ezeken a lapokon.";
 $LANG["notify_invalid_account_information_in_sessions"] = "A fiók tárolt információ ülés érvénytelen. Kérjük, jelentkezzen be újra az alábbiakban.";
-$LANG["notify_invalid_field_upload_folder"] = "Ez a mező a feltöltési mappa érvénytelen vagy nem írható.";
 $LANG["notify_invalid_license_key"] = "Sajnálom, hogy nem tűnik egy érvényes licensz kulcsot. Kérjük, próbálja be újra.";
 $LANG["notify_invalid_permissions"] = "Önnek nincs jogosultsága erre a lapra. Ön már kijelentkezett.";
 $LANG["notify_invalid_search_dates"] = "Kérjük, használja a datepicker, hogy adjon meg egy érvényes napon vagy napokon.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Úgy tűnik, hogy a felhaszn
 $LANG["notify_no_views_defined"] = "Ön nincs Views meg. Ön nem tudja megtekinteni az alábbi űrlapot állításaival, ha legalább az egyik nézet jön létre. Kattintson az alábbi gombra létre az alapértelmezett nézet.";
 $LANG["notify_option_list_deleted"] = "Az opció lista törlésre került.";
 $LANG["notify_option_list_updated"] = "Az opció lista frissítésre került.";
-$LANG["notify_page_added"] = "Az oldal bővült.";
-$LANG["notify_page_not_added"] = "Az oldalt nem sikerült hozzáadni.";
 $LANG["notify_page_updated"] = "Az oldal frissítve lett.";
 $LANG["notify_public_form_omit_list_updated"] = "Az ügyfél kihagyja listája ezen az űrlapon frissült.";
 $LANG["notify_public_view_omit_list_updated"] = "Az ügyfél kihagyja ezt a lista megtekintése frissült.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "A beadványt másolták. Az alábbiakb
 $LANG["notify_submission_deleted"] = "Benyújtásának sikeresen törlésre került.";
 $LANG["notify_submission_deleted_with_problems"] = "Benyújtásának törölve lett, de a következő problémák merültek fel, amikor megpróbálja törölni a következő fájl (ok):";
 $LANG["notify_submission_id_not_found"] = "Benyújtásának ID nem található.";
-$LANG["notify_submission_no_field_id"] = "Ez az érv az ID mező nem található.";
 $LANG["notify_submission_not_updated"] = "Benyújtása nem lehet frissíteni.";
-$LANG["notify_submission_updated_file_problems"] = "A beküldött frissítve lett, de a következő fájl (ok) voltak problémák:";
 $LANG["notify_submissions_and_files_deleted"] = "A beadványok és minden fájl (ok) a velük kapcsolatban is sikeresen törölve.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> beadványt másolt.";
 $LANG["notify_submissions_deleted"] = "A beadványt sikeresen törölve.";

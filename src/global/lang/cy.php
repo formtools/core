@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Myned
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Gwrthodwyd mynediad ar gyfer defnyddwyr: cronfa ddata ... i ...&quot; yn</span> golygu, er bod eich enw defnyddiwr a chyfrinair i chi a gyflenwir yn gywir, ei fod yn gallu er mwyn cysylltu at y gronfa ddata penodol gyda&#39;r cyfrif. Gall hyn olygu fod naill ai eich enw cronfa ddata yn anghywir, neu nad yw hyn cyfrif defnyddiwr yn gysylltiedig gyda&#39;r gronfa ddata.";
 $LANG["text_install_email_content_text"] = "Mae digon o adnoddau ar ein gwefan i'ch helpu i ddechrau, gan gynnwys ein dogfennau ar-lein (https://docs.formtools.org) a thiwtorialau (https://docs.formtools.org/tutorials). Os byddwch chi'n canfod eich bod chi'n sownd neu fod gennych gwestiwn, gofynnwch gwestiwn ar github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Mae&#39;n ddrwg gennym, ni fydd Tools ffurflen yn gallu rhedeg ar eich gweinydd. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Cliciwch yma</a> ar gyfer y gofynion lleiaf.";
-$LANG["text_install_intro"] = "Croeso i Ffurflen sgript gosod Offer! Dewiswch eich iaith.";
 $LANG["text_install_system_check"] = "Mae&#39;r dudalen hon yn rhedeg ychydig o brofion ar eich system er mwyn sicrhau ei fod yn gallu cynnal Offer Ffurflen.";
 $LANG["text_internal_form_desc"] = "Ffurflenni mewnol yn bodoli yn unig o fewn Offer Ffurflen - nid mewn mannau eraill ar eich safle. Dim ond Tools defnyddiwr Ffurflen cyfrifon yn cael mynediad at y ffurflen. Dewiswch yr opsiwn hwn os nad oes gennych ffurflen sy&#39;n bodoli eisoes.";
 $LANG["text_internal_form_intro"] = "Defnyddiwch y ffurflen isod i greu ffurflen Mewnol newydd. Gall pob leoliadau, gan gynnwys y nifer a chynnwys y meysydd ffurflen gael eu newid a&#39;u ffurfweddu yn ddiweddarach.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Mae&#39;n ddrwg gennym, nid oeddem yn
 $LANG["notify_install_no_db_connection"] = "Gwiriwch eich enw mewngofnodi cronfa ddata a gwybodaeth. Er ein bod yn gallu er mwyn cysylltu i&#39;r gwesteiwr gronfa ddata, nid oeddem yn gallu cysylltu at y gronfa ddata. Mae&#39;r neges gwall y gronfa ddata wedi dod o hyd yn: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Mae eich ffurflen wedi cael ei greu! Gallwch ffurfweddu eich ffurflen drwy&#39;r tabiau.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Mae&#39;r wybodaeth cyfrif ei storio mewn sesiynau yn annilys. Mewngofnodwch eto isod.";
-$LANG["notify_invalid_field_upload_folder"] = "Folder maes hwn yn lanlwytho naill ai yn annilys neu os nad yw&#39;n Ysgrifenadwy.";
 $LANG["notify_invalid_license_key"] = "Mae&#39;n ddrwg gennym, nid yw&#39;n ymddangos i fod yn allweddol drwydded ddilys. Os gwelwch yn dda rhowch gynnig mynd i mewn eto.";
 $LANG["notify_invalid_permissions"] = "Nid oes gennych yr hawliau i gael mynediad at y dudalen hon. Rydych wedi allgofnodi.";
 $LANG["notify_invalid_search_dates"] = "Defnyddiwch y datepicker i fynd i mewn yn ddyddiad dilys neu ddyddiadau.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Mae&#39;n ymddangos nad yw e
 $LANG["notify_no_views_defined"] = "Nid oes gennych unrhyw sylwadau diffiniedig. Ni fyddwch yn gallu gweld cyflwyniadau ffurflen hon oni bai o leiaf un View cael ei chreu. Cliciwch ar y botwm isod i greu&#39;r View diofyn.";
 $LANG["notify_option_list_deleted"] = "Mae&#39;r rhestr opsiwn wedi cael ei ddileu.";
 $LANG["notify_option_list_updated"] = "Mae&#39;r rhestr opsiwn wedi cael ei ddiweddaru.";
-$LANG["notify_page_added"] = "Mae&#39;r dudalen wedi ei ychwanegu.";
-$LANG["notify_page_not_added"] = "Nid oedd y dudalen yn cael ei ychwanegu.";
 $LANG["notify_page_updated"] = "Mae&#39;r dudalen wedi ei ddiweddaru.";
 $LANG["notify_public_form_omit_list_updated"] = "Y cleient hepgor rhestr ar gyfer y ffurflen hon wedi ei diweddaru.";
 $LANG["notify_public_view_omit_list_updated"] = "Hepgor y cleient ar gyfer y rhestr Edrychwch wedi ei ddiweddaru.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Mae'r copi wedi'i gyflwyno. Gallwch ei
 $LANG["notify_submission_deleted"] = "Cyflwyno ei ddileu yn llwyddiannus.";
 $LANG["notify_submission_deleted_with_problems"] = "Cyflwyno ei ddileu, ond y problemau canlynol yn codi wrth geisio dileu y ffeil canlynol (au):";
 $LANG["notify_submission_id_not_found"] = "Ni chafodd y ID cyflwyno.";
-$LANG["notify_submission_no_field_id"] = "Ni chafodd y maes hwn yn gyflwyniad Adnabod.";
 $LANG["notify_submission_not_updated"] = "Nid oedd y cyflwyniad yn cael ei ddiweddaru.";
-$LANG["notify_submission_updated_file_problems"] = "Eich cyflwyniad ei ddiweddaru, ond y ffeil canlynol (au) wedi broblemau:";
 $LANG["notify_submissions_and_files_deleted"] = "Cyflwyniadau ac unrhyw ffeil (au) sy&#39;n gysylltiedig â hwy eu dileu yn llwyddiannus.";
 $LANG["notify_submissions_copied"] = "Mae <b>{\$num_submissions}</b> o gyflwyniadau wedi'u copïo.";
 $LANG["notify_submissions_deleted"] = "Cyflwyniadau eu dileu yn llwyddiannus.";

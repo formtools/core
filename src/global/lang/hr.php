@@ -812,7 +812,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... to database ...&quot;</span> znači da, iako svoje korisničko ime i zaporku koje ste dobili ispravan, to nije bio u mogućnosti to povezivanje to da određenu bazu podataka s tom računu. To može značiti da je bilo vaše naziv baze podataka nije ispravan, ili da je ovaj korisnički račun nije povezan sa tom bazom podataka.";
 $LANG["text_install_email_content_text"] = "Na našoj web stranici ima mnogo resursa koji će vam pomoći da započnete, uključujući našu online dokumentaciju (https://docs.formtools.org) i vodiče (https://docs.formtools.org/tutorials). Ako smatrate da ste zaglavili ili imate pitanje, postavite pitanje o githubu (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Nažalost, obrazac Alati neće biti u mogućnosti to trčanje na vašem poslužitelju. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Molimo kliknite ovdje</a> za minimalne zahtjeve.";
-$LANG["text_install_intro"] = "Dobro došli u instalacijski Obrazac Alati pismo! Molimo odaberite svoj jezik.";
 $LANG["text_install_system_check"] = "Ova stranica radi nekoliko testova na vašem sustavu kako bi se osiguralo da je u mogućnosti to trčanje Form Alat.";
 $LANG["text_internal_form_desc"] = "Unutarnja oblici postoje samo u Obrazac Alati - nisu drugdje na vašim stranicama. Jedini oblik Alati korisničke račune će imati pristup obrascu. Odaberite ovu opciju ako nemate postojeći obrazac.";
 $LANG["text_internal_form_intro"] = "Koristite donji obrazac za stvaranje nove unutarnje obliku. Sve postavke, uključujući broj i sadržaj polja obrasca može se promijeniti i konfigurirati kasnije.";
@@ -1098,7 +1097,6 @@ $LANG["notify_install_invalid_db_info"] = "Nažalost, nismo mogli spojiti na baz
 $LANG["notify_install_no_db_connection"] = "Molim Vas provjerite tvoj naziv baze podataka i podatke za prijavu. Iako nismo bili u mogućnosti spojiti na bazu podataka domaćin, nismo mogli spojiti na bazu podataka. Poruka o pogrešci baze podataka vraćen je: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Tvoj oblik je stvoren! Možete konfigurirati svoj oblik kroz ove kartice.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Obzir podatke pohranjene na sjednicama je neispravno. Molimo, prijavite se opet ispod.";
-$LANG["notify_invalid_field_upload_folder"] = "Ovo polje je učitati mapu ili je neispravna ili nije writable.";
 $LANG["notify_invalid_license_key"] = "Nažalost, to ne izgleda kao valjani ključ licence. Molimo pokušajte ga ponovno ulazi.";
 $LANG["notify_invalid_permissions"] = "Nemate ovlasti za pristup ovoj stranici. Vi ste odjavljeni.";
 $LANG["notify_invalid_search_dates"] = "Molimo koristite datepicker da unesete valjani datum ili datume.";
@@ -1131,8 +1129,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Čini se da je Vaš korisni�
 $LANG["notify_no_views_defined"] = "Vi nemate Pregleda definirani. Nećete moći vidjeti ovaj oblik tvrdnje osim ako barem jedan Pregled je stvorio. Kliknite gumb ispod kako bi stvorili zadani prikaz.";
 $LANG["notify_option_list_deleted"] = "Opcija Popis je obrisana.";
 $LANG["notify_option_list_updated"] = "Opcija Popis je ažuriran.";
-$LANG["notify_page_added"] = "Stranica je dodana.";
-$LANG["notify_page_not_added"] = "Stranica nije mogla biti dodan.";
 $LANG["notify_page_updated"] = "Stranica je bila obnovljeno.";
 $LANG["notify_public_form_omit_list_updated"] = "Klijent ispustiti lista za ovaj oblik je obnovljeno.";
 $LANG["notify_public_view_omit_list_updated"] = "Klijent ispustiti liste za ovaj prikaz je obnovljeno.";
@@ -1149,9 +1145,7 @@ $LANG["notify_submission_copied_edit"] = "Podnesak je kopiran. Možete ga uredit
 $LANG["notify_submission_deleted"] = "Podnošenje je uspješno izbrisana.";
 $LANG["notify_submission_deleted_with_problems"] = "Podnošenje je izbrisan, ali problemi su slijedeći naišao našto pokus to izbrisati sljedeću datoteku (e):";
 $LANG["notify_submission_id_not_found"] = "Podnošenje ID nije pronađen.";
-$LANG["notify_submission_no_field_id"] = "Ovaj podnošenje polje ID nije pronađen.";
 $LANG["notify_submission_not_updated"] = "Podnošenje nije mogao biti ažuriran.";
-$LANG["notify_submission_updated_file_problems"] = "Vaš doprinos je ažuriran, ali sljedeći file (s) je imao problema:";
 $LANG["notify_submissions_and_files_deleted"] = "Podneske i bilo koju datoteku (e) povezane s njima bili su uspješno izbrisan.";
 $LANG["notify_submissions_copied"] = "Kopirane su <b>{\$num_submissions}</b> podnesaka.";
 $LANG["notify_submissions_deleted"] = "Podnesci je uspješno izbrisana.";

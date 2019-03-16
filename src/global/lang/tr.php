@@ -814,7 +814,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access kullanıcı için reddedildi: ... veritabanına ...&quot;</span> rağmen kullanıcı adınızı ve doğru olduğunu verilen şifre, bu hesapla o veritabanına bağlanamıyor anlamına gelir. Bu ya sizin veritabanı adı, veya yanlıştır, bu kullanıcı hesabını veritabanı ile ilişkili değildir anlamına gelebilir.";
 $LANG["text_install_email_content_text"] = "İnternet sitemizde (https://docs.formtools.org) ve derslerimiz (https://docs.formtools.org/tutorials) dahil olmak üzere, web sitemize başlamanıza yardımcı olacak birçok kaynak var. Eğer takılıp kaldığınızı veya bir sorunuz varsa, github (https://github.com/formtools/core/issues/) adresinden bir soru sorun.";
 $LANG["text_install_form_tools_server_not_supported"] = "Üzgünüz, Form Araçları sunucu üzerinde çalıştırmak mümkün olmaz. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">lütfen tıklayınız</a> minimum gereksinimleri için.";
-$LANG["text_install_intro"] = "Welcome Formu Araçlar kurulum betiği için! Lütfen dilinizi seçin.";
 $LANG["text_install_system_check"] = "Bu sayfa sistem o Formu Araçlar çalıştırabilir emin olmak için birkaç test eder.";
 $LANG["text_internal_form_desc"] = "Başka yerde sitenizde - İç formları Form Araçları içinde bulunmaktadır. Form Araçları kullanıcı hesapları oluşturmak için erişim olacaktır. Varolan bir form yoksa, bu seçeneği seçin.";
 $LANG["text_internal_form_intro"] = "İç yeni bir form oluşturmak için aşağıdaki formu kullanın. Form alanlarının sayısı ve içerik dahil olmak üzere tüm ayarları değişti ve daha sonra yapılandırılmış olması olabilir.";
@@ -1100,7 +1099,6 @@ $LANG["notify_install_invalid_db_info"] = "Üzgünüz, veritabanı size verilen 
 $LANG["notify_install_no_db_connection"] = "Lütfen veritabanı adını ve giriş bilgilerinizi kontrol edin. Her ne kadar veritabanı ana bilgisayara bağlanmak için başardık, biz veritabanına bağlanamadı. Veritabanı geri hata mesajı: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Formunuz yaratıldı! Bu sekmeler aracılığıyla formu yapılandırabilirsiniz.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Hesap bilgileri oturumları saklanır geçersiz. Lütfen tekrar aşağıda giriş yapın.";
-$LANG["notify_invalid_field_upload_folder"] = "Bu alanın yükleme klasöründe ya geçersiz ya da yazılabilir değil.";
 $LANG["notify_invalid_license_key"] = "Üzgünüz, geçerli bir lisans anahtarı görünmüyor. Lütfen tekrar girmeyi deneyin.";
 $LANG["notify_invalid_permissions"] = "Bu sayfaya erişmek için izinleri yok. Dışarı çıktınız.";
 $LANG["notify_invalid_search_dates"] = "Lütfen geçerli bir tarih veya tarihler girmek için datepicker.";
@@ -1133,8 +1131,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Bu kullanıcı hesabını he
 $LANG["notify_no_views_defined"] = "Herhangi bir Görüntüleme tanımlanan sahip değilsiniz. Bu sürece en az bir Görünüm oluşturulan bu formu görüşleri görüntülemek mümkün olmayacaktır. Varsayılan Görünümü oluşturmak için aşağıdaki butona tıklayın.";
 $LANG["notify_option_list_deleted"] = "Seçenek listesi silindi.";
 $LANG["notify_option_list_updated"] = "Seçenek listesi güncellendi.";
-$LANG["notify_page_added"] = "Sayfası eklendi.";
-$LANG["notify_page_not_added"] = "Sayfa yüklenemedi.";
 $LANG["notify_page_updated"] = "Sayfası güncellendi.";
 $LANG["notify_public_form_omit_list_updated"] = "Istemci güncellendi bu form listesini çıkarabilirsiniz.";
 $LANG["notify_public_view_omit_list_updated"] = "Istemci güncellendi bu iş için listesini çıkarabilirsiniz.";
@@ -1151,9 +1147,7 @@ $LANG["notify_submission_copied_edit"] = "Gönderme kopyalandı. Aşağıda düz
 $LANG["notify_submission_deleted"] = "Başvuru başarılı bir şekilde silinmiştir.";
 $LANG["notify_submission_deleted_with_problems"] = "Gönderme, ancak silindi aşağıdaki sorunları Aşağıdaki dosya (lar) silmek için çalışırken karşılaşıldı:";
 $LANG["notify_submission_id_not_found"] = "Kayıt ID'si bulunamadı.";
-$LANG["notify_submission_no_field_id"] = "Bu gönderme&#39;s alan numarası bulunamadı.";
 $LANG["notify_submission_not_updated"] = "Kayıt güncellenememiştir.";
-$LANG["notify_submission_updated_file_problems"] = "Başvurularınızı, ama güncellendi ler) sorunları vardı aşağıdaki dosyayı (:";
 $LANG["notify_submissions_and_files_deleted"] = "Gönderimler ve herhangi bir (lar) onlarla ilişkili dosya başarıyla silindi.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> başvuru kopyalandı.";
 $LANG["notify_submissions_deleted"] = "Başvurular başarılı bir şekilde silinmiştir.";

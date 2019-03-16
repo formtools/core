@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... a la base de dades ...&quot;</span> vol dir que, encara que el seu nom d&#39;usuari i contrasenya que va proporcionar és correcta, no es va poder connectar a la base de dades especial amb què compta. Això pot significar que o bé el seu nom de base de dades és incorrecte, o que aquest compte d&#39;usuari no està associat amb la base de dades.";
 $LANG["text_install_email_content_text"] = "Hi ha molts recursos al nostre lloc web per ajudar-vos a començar, inclosa la nostra documentació en línia (https://docs.formtools.org) i tutorials (https://docs.formtools.org/tutorials). Si us trobeu atrapat o teniu una pregunta, feu una pregunta sobre github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Ho sentim, eines de manera que no serà capaç d&#39;executar al servidor. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Si us plau, feu clic aquí</a> per als requisits mínims.";
-$LANG["text_install_intro"] = "Benvingut a la seqüència de comandaments de la instal lació de les eines Forma! Si us plau seleccioneu el vostre idioma.";
 $LANG["text_install_system_check"] = "Aquesta pàgina s&#39;executa algunes proves en el seu sistema per assegurar-se que és capaç d&#39;executar eines de formulari.";
 $LANG["text_internal_form_desc"] = "Formes internes només existeixen en eines de forma - no en altres parts del seu lloc. Només eines Formulari comptes d&#39;usuari tindrà accés a la forma. Seleccioneu aquesta opció si vostè no té un formulari existent.";
 $LANG["text_internal_form_intro"] = "Utilitzeu el formulari a continuació per crear una forma interna. Tots els àmbits, incloent-hi el nombre i el contingut dels camps del formulari es pot modificar i configurar més tard.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Ho sentim, no hem pogut connectar amb
 $LANG["notify_install_no_db_connection"] = "Si us plau, comproveu el nom de base de dades i la informació d&#39;accés. Tot i que van ser capaços de connectar amb el host de base de dades, no es podria connectar a la base de dades. El missatge d&#39;error de la base de dades retornat és: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "El seu formulari ha estat creat! Vostè pot configurar la seva forma a través d&#39;aquestes fitxes.";
 $LANG["notify_invalid_account_information_in_sessions"] = "La informació de compte emmagatzemada en les sessions no és vàlid. Registreu-vos-ho més endavant.";
-$LANG["notify_invalid_field_upload_folder"] = "Carpeta de càrrega d&#39;aquest camp no és vàlida o no pot escriure.";
 $LANG["notify_invalid_license_key"] = "Ho sento, això no sembla ser una clau de llicència vàlida. Si us plau, intenteu ingressar de nou.";
 $LANG["notify_invalid_permissions"] = "Vostè no té els permisos per accedir a aquesta pàgina. Se li ha tancat la sessió.";
 $LANG["notify_invalid_search_dates"] = "Si us plau, utilitzeu el selector de dates per entrar en una data vàlida o dates.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Sembla que al teu compte d&#
 $LANG["notify_no_views_defined"] = "No té els punts de vista definit. No serà capaç de veure les presentacions d&#39;aquest formulari a menys que una vista es crea. Feu clic al botó de sota per crear la vista per defecte.";
 $LANG["notify_option_list_deleted"] = "La llista d&#39;opcions s&#39;ha eliminat.";
 $LANG["notify_option_list_updated"] = "La llista d&#39;opcions s&#39;ha actualitzat.";
-$LANG["notify_page_added"] = "La pàgina ha estat afegit.";
-$LANG["notify_page_not_added"] = "La pàgina no pot ser afegit.";
 $LANG["notify_page_updated"] = "La pàgina ha estat actualitzada.";
 $LANG["notify_public_form_omit_list_updated"] = "El client d&#39;ometre la llista d&#39;aquesta manera ha estat actualitzada.";
 $LANG["notify_public_view_omit_list_updated"] = "El client d&#39;ometre la llista per aquesta vista ha estat actualitzat.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "S'ha copiat l'enviament. Podeu editar-
 $LANG["notify_submission_deleted"] = "La presentació s&#39;ha eliminat amb èxit.";
 $LANG["notify_submission_deleted_with_problems"] = "La presentació s&#39;ha eliminat, però els problemes següents quan s&#39;intenta eliminar el següent fitxer (s):";
 $LANG["notify_submission_id_not_found"] = "La presentació d&#39;identificació no va ser trobada.";
-$LANG["notify_submission_no_field_id"] = "Aquest camp de la presentació d&#39;identificació no va ser trobada.";
 $LANG["notify_submission_not_updated"] = "La presentació no va poder ser actualitzat.";
-$LANG["notify_submission_updated_file_problems"] = "La seva presentació s&#39;ha actualitzat, però el següent fitxer (s) va tenir problemes:";
 $LANG["notify_submissions_and_files_deleted"] = "Les presentacions i qualsevol fitxer (s) associats a ells s&#39;han suprimit amb èxit.";
 $LANG["notify_submissions_copied"] = "S'han copiat <b>{\$num_submissions}</b> enviaments.";
 $LANG["notify_submissions_deleted"] = "Les presentacions s&#39;han suprimit amb èxit.";

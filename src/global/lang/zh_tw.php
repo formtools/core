@@ -810,7 +810,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">“拒絕�
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">“拒絕訪問用戶：數據庫... ...”</span>的意思是，雖然您的用戶名和密碼，您提供的是正確的，它無法連接到特定的數據庫，該帳戶。這意味著，要么你的數據庫的名稱不正確，或該用戶帳戶不關聯的數據庫。";
 $LANG["text_install_email_content_text"] = "我們的網站上有大量資源可以幫助您入門，包括我們的在線文檔（https://docs.formtools.org）和教程（https://docs.formtools.org/tutorials）。 如果您發現卡住或有疑問，請在github上提問（https://github.com/formtools/core/issues/）。";
 $LANG["text_install_form_tools_server_not_supported"] = "對不起，表格工具將無法在服務器上運行。 <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">請點擊這裡</a>的最低要求。";
-$LANG["text_install_intro"] = "歡迎表格工具安裝腳本！請選擇您的語言。";
 $LANG["text_install_system_check"] = "本頁面運行幾個測試你的系統，以確保它能夠運行表格工具。";
 $LANG["text_internal_form_desc"] = "內部形式只存在於表工具 - 其他未在您的網站。唯一的形式工具的用戶帳戶將有機會獲得的形式。選擇此選項，如果您沒有現有的形式。";
 $LANG["text_internal_form_intro"] = "使用下面的表格來創建一個新的內部形式。所有設置，包括數量和內容的表格字段，可以改變和配置以後。";
@@ -1096,7 +1095,6 @@ $LANG["notify_install_invalid_db_info"] = "很抱歉，我們無法連接到數�
 $LANG["notify_install_no_db_connection"] = "請檢查您的數據庫的名稱和登錄信息。雖然我們能夠連接到數據庫的東道主，我們無法連接到數據庫。此錯誤信息的數據庫返回的是<i>：{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "你的形式已建立！您可以配置形式，通過這些選項卡。";
 $LANG["notify_invalid_account_information_in_sessions"] = "該帳戶的信息存儲在會議上是無效的。請再次登錄以下。";
-$LANG["notify_invalid_field_upload_folder"] = "此字段的上傳文件夾是無效或不可寫。";
 $LANG["notify_invalid_license_key"] = "對不起，這似乎不是一個有效的許可證密鑰。請嘗試再次輸入。";
 $LANG["notify_invalid_permissions"] = "您沒有權限訪問此頁面。您已登出。";
 $LANG["notify_invalid_search_dates"] = "請使用日期選擇器輸入一個有效的日期或日期。";
@@ -1129,8 +1127,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "看來，您的用戶帳戶�
 $LANG["notify_no_views_defined"] = "您沒有任何意見確定。您將無法查看這種形式的意見，除非至少有一個創建視圖。點擊下面的按鈕創建默認視圖。";
 $LANG["notify_option_list_deleted"] = "選項列表已被刪除。";
 $LANG["notify_option_list_updated"] = "選項列表已更新。";
-$LANG["notify_page_added"] = "該網頁已添加。";
-$LANG["notify_page_not_added"] = "該網頁無法添加。";
 $LANG["notify_page_updated"] = "此網頁已被更新。";
 $LANG["notify_public_form_omit_list_updated"] = "客戶端忽略列表這種形式已被更新。";
 $LANG["notify_public_view_omit_list_updated"] = "客戶端忽略列表這種觀點已被更新。";
@@ -1147,9 +1143,7 @@ $LANG["notify_submission_copied_edit"] = "提交已被複製。 您可以在下�
 $LANG["notify_submission_deleted"] = "這些意見是刪除成功。";
 $LANG["notify_submission_deleted_with_problems"] = "這些意見是刪除，但遇到下列問題時，試圖刪除以下文件（補）：";
 $LANG["notify_submission_id_not_found"] = "該意見書編號沒有找到。";
-$LANG["notify_submission_no_field_id"] = "這次提交的外地身份證沒有找到。";
 $LANG["notify_submission_not_updated"] = "該意見書無法更新。";
-$LANG["notify_submission_updated_file_problems"] = "您的提交更新，但下面的文件（擰）有問題：";
 $LANG["notify_submissions_and_files_deleted"] = "提交的材料和任何文件（擰）與他們被刪除成功。";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b>份意見書已被複製。";
 $LANG["notify_submissions_deleted"] = "提交的材料被成功刪除。";

@@ -810,7 +810,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Accessのユーザーが拒否さ：...データベースに...&quot;</span>ただし、ユーザー名とパスワードが正しいこと指定されたパスワードは、そのアカウントでは、特定のデータベースに接続することができなかったということです。これは、いずれかのデータベース名、または間違っていますが、このユーザアカウントは、データベースに関連付けられていないことを意味することができます。";
 $LANG["text_install_email_content_text"] = "Googleのオンラインドキュメント（https://docs.formtools.org）やチュートリアル（https://docs.formtools.org/tutorials）をはじめ、弊社のWebサイトには多くのリソースが用意されています。 立ち往生したり、質問がある場合は、github（https://github.com/formtools/core/issues/）で質問してください。";
 $LANG["text_install_form_tools_server_not_supported"] = "申し訳ありませんが、フォームツールは、サーバ上で実行することができなくなります。 <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">こちらをクリックしてください</a>最小要件のために。";
-$LANG["text_install_intro"] = "ようこそフォームツールのインストールスクリプトに！あなたの言語を選択します。";
 $LANG["text_install_system_check"] = "このページはあなたのシステムは、フォームツールを実行することができるのを確保するためにいくつかのテストを実行します。";
 $LANG["text_internal_form_desc"] = "ではない別の場所であなたのサイトに - 内部のフォームは、フォームのツール内にのみ存在します。フォームツールのユーザーアカウントのみがフォームにアクセスできるようになります。既存のフォームを持っていない場合は、このオプションを選択します。";
 $LANG["text_internal_form_intro"] = "新しい内部フォームを作成するには、以下のフォームを使用してください。フォームフィールドの数と内容を含むすべての設定は、変更し、後で設定することができます。";
@@ -1096,7 +1095,6 @@ $LANG["notify_install_invalid_db_info"] = "申し訳ありませんが、デー�
 $LANG["notify_install_no_db_connection"] = "あなたのデータベース名とログイン情報をご確認ください。ただし、我々はデータベースのホストに接続することができた、我々のデータベースに接続できませんでした。データベースに返されるエラーメッセージが表示されます<i>：{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "フォームが作成されました！あなたがこれらのタブを使用してフォームを構成することができます。";
 $LANG["notify_invalid_account_information_in_sessions"] = "アカウント情報をセッションに格納さが無効です。もう一度下でログインします。";
-$LANG["notify_invalid_field_upload_folder"] = "このフィールドのロード先のフォルダのいずれかが無効であるか、または書き込めません。";
 $LANG["notify_invalid_license_key"] = "申し訳ありませんが、それは有効なライセンスキーではないようです。もう一度入力してみてください。";
 $LANG["notify_invalid_permissions"] = "このページにアクセスする権限がありません。ログアウトしています。";
 $LANG["notify_invalid_search_dates"] = "有効な日付または日付を入力するDatePickerを使用してください。";
@@ -1129,8 +1127,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "これは、ユーザーア�
 $LANG["notify_no_views_defined"] = "任意のビューが定義されていません。あなたは、少なくとも1つのビューが作成されていない限り、このフォームの送信を表示することができなくなります。デフォルトのビューを作成するには下のボタンをクリックしてください。";
 $LANG["notify_option_list_deleted"] = "オプションのリストが削除されました。";
 $LANG["notify_option_list_updated"] = "オプションのリストが更新されました。";
-$LANG["notify_page_added"] = "ページが追加されています。";
-$LANG["notify_page_not_added"] = "ページを追加することができませんでした。";
 $LANG["notify_page_updated"] = "ページが更新されています。";
 $LANG["notify_public_form_omit_list_updated"] = "クライアントが更新されている、このフォームのリストを省略する。";
 $LANG["notify_public_view_omit_list_updated"] = "クライアントが更新されている、このビューのリストは省略します。";
@@ -1147,9 +1143,7 @@ $LANG["notify_submission_copied_edit"] = "提出がコピーされました。 �
 $LANG["notify_submission_deleted"] = "送信が正常に削除されました。";
 $LANG["notify_submission_deleted_with_problems"] = "提出は、削除された以下の問題は、以下のファイル（秒）を削除しようとすると発生しました：";
 $LANG["notify_submission_id_not_found"] = "提出番号が見つかりませんでした。";
-$LANG["notify_submission_no_field_id"] = "この送信フォームのIDフィールドは見つかりませんでした。";
 $LANG["notify_submission_not_updated"] = "提出は更新されませんでした。";
-$LANG["notify_submission_updated_file_problems"] = "あなたの投稿が、更新された掲載）問題を抱えて、次のファイル（：";
 $LANG["notify_submissions_and_files_deleted"] = "提出し、任意の（秒）に関連付けられたファイルが正常に削除されました。";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b>件の投稿がコピーされています。";
 $LANG["notify_submissions_deleted"] = "応募が正常に削除されました。";

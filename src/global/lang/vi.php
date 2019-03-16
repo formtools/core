@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Truy 
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Truy cập bị từ chối cho người sử dụng: ... đến cơ sở dữ liệu ...&quot;</span> có nghĩa là mặc dù tên đăng nhập và mật khẩu bạn cung cấp là chính xác, nó đã không thể kết nối với cơ sở dữ liệu mà cụ thể với tài khoản đó. Điều này có nghĩa là một trong hai tên cơ sở dữ liệu của bạn là không chính xác, hoặc là tài khoản người dùng này không phải là liên kết với cơ sở dữ liệu đó.";
 $LANG["text_install_email_content_text"] = "Có rất nhiều tài nguyên trên trang web của chúng tôi để giúp bạn bắt đầu, bao gồm tài liệu trực tuyến của chúng tôi (https://docs.formtools.org) và hướng dẫn (https://docs.formtools.org/tutorials). Nếu bạn thấy bạn gặp khó khăn hoặc có câu hỏi, hãy đặt câu hỏi về github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Xin lỗi, công cụ Form không sẽ có thể chạy trên máy chủ của bạn <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">. Xin vui lòng bấm vào đây</a> để yêu cầu tối thiểu .";
-$LANG["text_install_intro"] = "Chào mừng đến với kịch bản mẫu cài đặt cụ! Hãy chọn ngôn ngữ của bạn.";
 $LANG["text_install_system_check"] = "Trang này chạy một vài thử nghiệm trên hệ thống của bạn để đảm bảo nó có thể chạy cụ Form.";
 $LANG["text_internal_form_desc"] = "Hình thức nội bộ chỉ tồn tại trong Công cụ Form - không phải ở đâu đó trên trang web của bạn. Chỉ Mẫu Công cụ tài khoản người dùng sẽ có quyền truy cập để hình thành. Chọn tùy chọn này nếu bạn không có một hình thức hiện tại.";
 $LANG["text_internal_form_intro"] = "Sử dụng mẫu dưới đây để tạo ra một hình thức mới nội bộ. Tất cả các thiết lập, bao gồm cả số lượng và nội dung của các lĩnh vực hình thức có thể được thay đổi và cấu hình sau.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Xin lỗi, chúng tôi không thể k
 $LANG["notify_install_no_db_connection"] = "Vui lòng kiểm tra tên cơ sở dữ liệu và thông tin đăng nhập của bạn. Mặc dù chúng tôi đã có thể kết nối với máy chủ cơ sở dữ liệu, chúng tôi không thể kết nối với cơ sở dữ liệu. Các thông báo lỗi cơ sở dữ liệu trả về là: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Hình thức của bạn đã được tạo ra! Bạn có thể cấu hình mẫu của bạn thông qua các tab này.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Các thông tin tài khoản được lưu giữ trong các buổi là không hợp lệ. Xin đăng nhập ngay dưới đây.";
-$LANG["notify_invalid_field_upload_folder"] = "Thư mục tải lên của lĩnh vực này là hoặc không hợp lệ hoặc không ghi.";
 $LANG["notify_invalid_license_key"] = "Xin lỗi, không xuất hiện để được một key bản quyền hợp lệ. Xin hãy thử nhập lại một lần nữa.";
 $LANG["notify_invalid_permissions"] = "Bạn không có quyền truy cập trang này. Bạn đã được đăng xuất.";
 $LANG["notify_invalid_search_dates"] = "Xin vui lòng sử dụng datepicker để nhập một ngày hợp lệ hoặc ngày.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Nó xuất hiện rằng tà
 $LANG["notify_no_views_defined"] = "Bạn không có bất kỳ Xem được xác định. Bạn sẽ không thể xem bản đệ trình này dưới hình thức trừ khi Xem ít nhất một được tạo ra. Nhấp vào nút bên dưới để tạo ra xem mặc định.";
 $LANG["notify_option_list_deleted"] = "Danh sách tùy chọn đã được xóa.";
 $LANG["notify_option_list_updated"] = "Danh sách tùy chọn đã được cập nhật.";
-$LANG["notify_page_added"] = "Trang này đã được thêm vào.";
-$LANG["notify_page_not_added"] = "Trang nay không thể được thêm vào.";
 $LANG["notify_page_updated"] = "Trang này đã được cập nhật.";
 $LANG["notify_public_form_omit_list_updated"] = "Các khách hàng bỏ qua danh sách cho mẫu này đã được cập nhật.";
 $LANG["notify_public_view_omit_list_updated"] = "Các khách hàng bỏ qua danh sách này xem đã được cập nhật.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Nội dung gửi đã được sao ch�
 $LANG["notify_submission_deleted"] = "Trình đã được xóa thành công.";
 $LANG["notify_submission_deleted_with_problems"] = "Trình đã được xoá, nhưng những vấn đề sau đây đã gặp phải khi cố gắng xóa các tập tin sau đây (s):";
 $LANG["notify_submission_id_not_found"] = "ID trình không tìm thấy.";
-$LANG["notify_submission_no_field_id"] = "Đây là lĩnh vực trình ID không tìm thấy.";
 $LANG["notify_submission_not_updated"] = "Trình này có thể không được cập nhật.";
-$LANG["notify_submission_updated_file_problems"] = "Trình của bạn đã được cập nhật, nhưng các tập tin sau đây (s) có vấn đề:";
 $LANG["notify_submissions_and_files_deleted"] = "Các bài nộp và bất kỳ file (s) liên kết với chúng đã được xóa thành công.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> bản đệ trình đã được sao chép.";
 $LANG["notify_submissions_deleted"] = "Các bài nộp đã được xóa thành công.";

@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... prie duomenų bazės ...&quot;</span> reiškia, kad nors savo vartotojo vardą ir slaptažodį pateikta teisinga, ji negali prisijungti prie duomenų bazės, kad ypač su ta sąskaita. Tai gali reikšti, kad arba savo duomenų bazės pavadinimas yra neteisingas, arba kad šis naudotojas yra ne susijusi su duomenų bazės.";
 $LANG["text_install_email_content_text"] = "Mūsų svetainėje yra daug išteklių, kad padėtų jums pradėti, įskaitant mūsų internetinę dokumentaciją (https://docs.formtools.org) ir vadovėlius (https://docs.formtools.org/tutorials). Jei pastebėjote, kad įstrigo arba turite klausimą, paklauskite apie \"github\" (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Atsiprašome, įrankiai gali paleisti savo serverį. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Prašome spausti čia,</a> minimalius reikalavimus.";
-$LANG["text_install_intro"] = "Sveiki atvykę į formą priemonės diegimo scenarijų! Prašome pasirinkti savo kalbą.";
 $LANG["text_install_system_check"] = "Šis puslapis veikia kelios bandymų sistemos, siekiant užtikrinti tai galima paleisti forma Priemonės.";
 $LANG["text_internal_form_desc"] = "Vidaus formų egzistuoja tik per formą Įrankiai - ne kitoje svetainės vietoje. Tik forma Įrankiai vartotojo sąskaitas turės prieigą prie formos. Pasirinkite šią parinktį, jei jūs neturite esamą formą.";
 $LANG["text_internal_form_intro"] = "Naudokite formą žemiau, norėdami sukurti naują Vidaus forma. Visi nustatymai, įskaitant formos laukų skaičius ir turinys gali būti pakeistas ir sukonfigūruota vėliau.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Deja, mums nepavyko prisijungti prie 
 $LANG["notify_install_no_db_connection"] = "Prašome patikrinti savo duomenų bazės pavadinimą ir prisijungimo informacija. Nors mums pavyko prisijungti prie duomenų bazės šeimininke, mums nepavyko prisijungti prie duomenų bazės. Klaidos pranešimas yra grąžinama bazėje: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Savo forma buvo sukurta! Jūs galite sukonfigūruoti savo formos per šiuos skirtukus.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Sąskaitos informacija saugoma sesija yra neteisingas. Prašome prisijungti iš naujo žemiau.";
-$LANG["notify_invalid_field_upload_folder"] = "Šis laukas yra įkėlimo kataloge yra neteisingi arba nėra įrašomas.";
 $LANG["notify_invalid_license_key"] = "Atsiprašome, kad neatrodo, kad būti galiojančios licencijos raktą. Bandykite įvesdami jį dar kartą.";
 $LANG["notify_invalid_permissions"] = "Jūs neturite teisių patekti į šį puslapį. You have been logged out.";
 $LANG["notify_invalid_search_dates"] = "Prašome naudoti datepicker įvesti teisingą datą arba datas.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Atrodo, kad jūsų vartotojo
 $LANG["notify_no_views_defined"] = "Jūs neturite, bet Peržiūrėjo apibrėžta. Jūs negalėsite peržiūrėti šios formos pateikimo, išskyrus atvejus, kai yra sukurta bent viena Peržiūrėti. Norėdami sukurti numatytąjį rodinį, spustelėkite žemiau esantį mygtuką.";
 $LANG["notify_option_list_deleted"] = "Parinktį sąrašo buvo išbraukta.";
 $LANG["notify_option_list_updated"] = "Galimybė sąrašas buvo atnaujintas.";
-$LANG["notify_page_added"] = "Puslapis buvo pridėta.";
-$LANG["notify_page_not_added"] = "Puslapis negali būti pridėta.";
 $LANG["notify_page_updated"] = "Puslapis buvo atnaujintas.";
 $LANG["notify_public_form_omit_list_updated"] = "Klientų praleisti už šią formą, buvo atnaujinta.";
 $LANG["notify_public_view_omit_list_updated"] = "Klientų praleisti už tai vaizdas buvo atnaujintas.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Pateikimas buvo nukopijuotas. Galite j
 $LANG["notify_submission_deleted"] = "Pateikimo buvo sėkmingai ištrintas.";
 $LANG["notify_submission_deleted_with_problems"] = "Pateikimo buvo panaikinta, tačiau šių problemų iškilo bandant ištrinti šį failą (-us):";
 $LANG["notify_submission_id_not_found"] = "Pateikimo ID nerastas.";
-$LANG["notify_submission_no_field_id"] = "Ši pateikimo lauko ID nerastas.";
 $LANG["notify_submission_not_updated"] = "Pateikimas negali būti atnaujintas.";
-$LANG["notify_submission_updated_file_problems"] = "Jūsų nuomone, buvo atnaujinta, tačiau šį failą (-us) turėjo problemų:";
 $LANG["notify_submissions_and_files_deleted"] = "Pareiškimus ir bet kokį failą (-ų) su jais buvo sėkmingai ištrintas.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> paraiška buvo nukopijuoti.";
 $LANG["notify_submissions_deleted"] = "Pareiškimai buvo sėkmingai ištrintas.";

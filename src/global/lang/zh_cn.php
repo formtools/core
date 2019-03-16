@@ -814,7 +814,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">“访问�
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">“访问用户被拒绝：数据库... ...”</span>的意思是，虽然您的用户名和密码，您提供的是正确的，它无法连接到该帐户与特定的数据库。这意味着，要么你的数据库的名称不正确，或该用户帐户不与该数据库关联的。";
 $LANG["text_install_email_content_text"] = "我们的网站上有大量资源可以帮助您入门，包括我们的在线文档（https://docs.formtools.org）和教程（https://docs.formtools.org/tutorials）。 如果您发现卡住或有疑问，请在github上提问（https://github.com/formtools/core/issues/）。";
 $LANG["text_install_form_tools_server_not_supported"] = "对不起，表格工具将不能够运行您的服务器上<a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">，请点击</a>这里的最低要求。";
-$LANG["text_install_intro"] = "欢迎表格工具安装脚本！请选择您的语言。";
 $LANG["text_install_system_check"] = "这页你的系统上运行，以确保它能够运行中一些测试工具。";
 $LANG["text_internal_form_desc"] = "内部形式只存在于表工具 - 而不是在您网站上的其他地方。唯一的形式工具的用户帐户将访问的形式。选择此选项，如果你没有现成的形式。";
 $LANG["text_internal_form_intro"] = "使用下面的表格，以创建一个新的内部形式。所有设置，包括表单字段的数量和内容，可以改变和配置后。";
@@ -1100,7 +1099,6 @@ $LANG["notify_install_invalid_db_info"] = "很抱歉，我们无法连接到数�
 $LANG["notify_install_no_db_connection"] = "请检查您的数据库的名称和登录信息。虽然我们能够连接到数据库的东道主，我们无法连接到数据库。此错误信息的数据库返回的是<i>：{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "你的形式已建立！通过这些选项卡，您可以配置您的表单。";
 $LANG["notify_invalid_account_information_in_sessions"] = "该帐户的信息存储在会议上是无效的。请再次登录以下。";
-$LANG["notify_invalid_field_upload_folder"] = "此字段的上传文件夹是无效或不可写。";
 $LANG["notify_invalid_license_key"] = "很抱歉，这似乎并没有被有效的许可证密钥。请尝试再次输入。";
 $LANG["notify_invalid_permissions"] = "您没有权限访问此页面。您已登出。";
 $LANG["notify_invalid_search_dates"] = "请使用日期选择器输入一个有效的日期或日期。";
@@ -1133,8 +1131,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "看来，您的用户帐户�
 $LANG["notify_no_views_defined"] = "您没有定义任何意见。您将无法查看这种形式的意见书，除非至少有一个视图创建。点击下面的按钮来创建默认视图。";
 $LANG["notify_option_list_deleted"] = "选项​​列表中已被删除。";
 $LANG["notify_option_list_updated"] = "已更新的选项列表。";
-$LANG["notify_page_added"] = "该网页已添加。";
-$LANG["notify_page_not_added"] = "该网页无法添加。";
 $LANG["notify_page_updated"] = "此网页已被更新。";
 $LANG["notify_public_form_omit_list_updated"] = "客户端省略此表的名单已更新。";
 $LANG["notify_public_view_omit_list_updated"] = "客户端省略这种看法的名单已更新。";
@@ -1151,9 +1147,7 @@ $LANG["notify_submission_copied_edit"] = "提交已被复制。 您可以在下�
 $LANG["notify_submission_deleted"] = "提交已经成功删除。";
 $LANG["notify_submission_deleted_with_problems"] = "提交已被删除，但在删除相关的文件时遇到以下的问题：";
 $LANG["notify_submission_id_not_found"] = "提交 ID 未被找到。";
-$LANG["notify_submission_no_field_id"] = "这次提交的外地身份证没有找到。";
 $LANG["notify_submission_not_updated"] = "提交不能被更新。";
-$LANG["notify_submission_updated_file_problems"] = "您的提交已经更新，但以下文件有些问题：";
 $LANG["notify_submissions_and_files_deleted"] = "提交和相关的文件已经成功删除。";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b>份意见书已被复制。";
 $LANG["notify_submissions_deleted"] = "提交已经成功移除。";

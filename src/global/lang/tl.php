@@ -809,7 +809,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access tinanggihan para sa user: ... sa database ...&quot;</span> ay nangangahulugan na bagaman ang iyong username at password na iyong ibinigay ay tama, ito ay hindi makakonekta sa mga partikular na database sa account na iyon. Ito ay maaaring nangangahulugan na ang database ng alinman sa iyong pangalan ay hindi tama, o ang user na ito account ay hindi kaugnay na database.";
 $LANG["text_install_email_content_text"] = "Mayroong maraming mga mapagkukunan sa aming website upang matulungan kang makapagsimula, kabilang ang aming online na dokumentasyon (https://docs.formtools.org) at mga tutorial (https://docs.formtools.org/tutorials). Kung natuklasan kang natigil o may tanong, magtanong sa github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Paumanhin, ang Form Tools ay hindi mapapatakbo sa iyong server <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">. Paki-click</a> dito para sa minimum na mga kinakailangan .";
-$LANG["text_install_intro"] = "Maligayang pagdating sa Form script Kasangkapan sa pag-install! Mangyaring piliin ang iyong wika.";
 $LANG["text_install_system_check"] = "Ang pahinang ito ay nagpapatakbo ng ilang pagsusulit sa inyong sistema upang matiyak na ito ay mapapatakbo Tools Form.";
 $LANG["text_internal_form_desc"] = "Panloob na mga form umiiral lamang sa loob ng Tools Form - hindi sa ibang lugar sa iyong site. Lamang Form Tools account ng gumagamit ay may access sa form. Piliin ang pagpipiliang ito kung wala kang isang umiiral na form.";
 $LANG["text_internal_form_intro"] = "Gamitin ang form sa ibaba upang lumikha ng isang bagong Internal form. Lahat ng mga setting, kabilang ang numero at nilalaman ng form ang mga patlang ay maaaring nagbago at isinaayos mamaya.";
@@ -1095,7 +1094,6 @@ $LANG["notify_install_invalid_db_info"] = "Paumanhin, hindi namin nagawang kumon
 $LANG["notify_install_no_db_connection"] = "Mangyaring suriin ang iyong database ng pangalan at impormasyon sa login. Kahit na kami ay makakapag-kumonekta sa host ng database, hindi namin maaaring kumonekta sa database. Ang mensahe ng error ang database ng bumalik ay: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Ang iyong form ay nagawa na! Maaari mong i-configure ang iyong form sa pamamagitan ng mga tab na ito.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Ang impormasyon sa account na naka-imbak sa mga sesyon ay hindi wasto. Mangyaring mag-log in muli sa ibaba.";
-$LANG["notify_invalid_field_upload_folder"] = "Mag-upload ng folder na ito patlang na ito ay alinman sa mga hindi balidong o hindi writable.";
 $LANG["notify_invalid_license_key"] = "Paumanhin, iyon ay hindi lumitaw na maging isang wastong license key. Mangyaring subukan ang pagpasok ng ito muli.";
 $LANG["notify_invalid_permissions"] = "Hindi mo ay may pahintulot upang ma-access ang pahina na ito. Ikaw ay nakapag-log out na.";
 $LANG["notify_invalid_search_dates"] = "Mangyaring gamitin ang datepicker upang magpasok ng isang may-bisang petsa o mga petsa.";
@@ -1128,8 +1126,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Lumalabas na ang iyong user 
 $LANG["notify_no_views_defined"] = "Wala kang anumang Views tinukoy. Ikaw ay hindi magagawang upang tingnan ang mga submissions ang form na ito maliban kung hindi bababa sa isa View ay nilikha. I-click ang pindutan sa ibaba upang lumikha ng default Tingnan.";
 $LANG["notify_option_list_deleted"] = "Ang opsyon list ay tinanggal na.";
 $LANG["notify_option_list_updated"] = "Ang listahan ng pagpipilian ay na-update.";
-$LANG["notify_page_added"] = "Ang pahina ay naidagdag na.";
-$LANG["notify_page_not_added"] = "Ang pahina ay hindi naidagdag.";
 $LANG["notify_page_updated"] = "Ang pahina ay nai-update.";
 $LANG["notify_public_form_omit_list_updated"] = "Ang client ligtaan listahan para sa mga form na ito ay nai-update.";
 $LANG["notify_public_view_omit_list_updated"] = "Client ligtaan Ang listahan na ito para Tingnan ay na-update.";
@@ -1146,9 +1142,7 @@ $LANG["notify_submission_copied_edit"] = "Ang pagsumite ay kinopya. Maaari mo it
 $LANG["notify_submission_deleted"] = "Ang pagsumite ay tinanggal matagumpay.";
 $LANG["notify_submission_deleted_with_problems"] = "Submission ay nabura na, ngunit ang mga sumusunod na problema ay nakaranas kapag sinusubukang tanggalin ang mga sumusunod na file (s):";
 $LANG["notify_submission_id_not_found"] = "Ang pagsumite ng ID ay hindi natagpuan.";
-$LANG["notify_submission_no_field_id"] = "Ang patlang na ito ang pagsumite ng ID ay hindi natagpuan.";
 $LANG["notify_submission_not_updated"] = "Submission ay hindi na-update.";
-$LANG["notify_submission_updated_file_problems"] = "Ang iyong submission ay na-update, ngunit ang mga sumusunod na file (s) ay nagkaroon ng problema:";
 $LANG["notify_submissions_and_files_deleted"] = "Ang mga submissions at ang anumang mga file (s) na kaugnay sa mga ito ay tinanggal na matagumpay.";
 $LANG["notify_submissions_copied"] = "Ang <b>{\$num_submissions}</b> pagsusumite ay kinopya.";
 $LANG["notify_submissions_deleted"] = "Ang pagsusumite ay Matagumpay na nabura.";

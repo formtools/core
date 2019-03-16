@@ -816,7 +816,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">\"Access de
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">\"Access denied for user: ... to database ...\"</span> means that although your username and password you supplied is correct, it was unable to connect to that particular database with that account. This can mean that either your database name is incorrect, or that this user account is not associated with that database.";
 $LANG["text_install_email_content_text"] = "Há muitos recursos em nosso site para ajudá-lo a começar, incluindo nossa documentação on-line (https://docs.formtools.org) e tutoriais (https://docs.formtools.org/tutorials). Se você achar que ficou preso ou tiver uma pergunta, faça uma pergunta no github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Sorry, Form Tools will not be able to run on your server. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Please click here</a> for the minimum requirements.";
-$LANG["text_install_intro"] = "Welcome to the Form Tools installation script! Please select your language.";
 $LANG["text_install_system_check"] = "This page runs a few tests on your system to ensure it's able to run Form Tools.";
 $LANG["text_internal_form_desc"] = "Internal forms exist only within Form Tools - not elsewhere on your site. Only Form Tools user accounts will have access to the form. Select this option if you don't have an existing form.";
 $LANG["text_internal_form_intro"] = "Use the form below to create a new Internal form. All settings, including the number and content of the form fields can be be changed and configured later.";
@@ -1102,7 +1101,6 @@ $LANG["notify_install_invalid_db_info"] = "Desculpe, não foi possível se conec
 $LANG["notify_install_no_db_connection"] = "Verifique o nome do banco de dados e informações de login. Embora nós fomos capazes de se conectar ao host do banco de dados, não pôde se conectar ao banco de dados. A mensagem de erro do banco de dados retornou: {\$db_select_error}";
 $LANG["notify_internal_form_created"] = "Your form has been created! You can configure your form through these tabs.";
 $LANG["notify_invalid_account_information_in_sessions"] = "As informações da conta guardados em sessões não é válido. Faça o login novamente abaixo.";
-$LANG["notify_invalid_field_upload_folder"] = "A pasta de upload deste campo é inválido ou não é gravável.";
 $LANG["notify_invalid_license_key"] = "Sorry, that does not appear to be a valid license key. Please try entering it again.";
 $LANG["notify_invalid_permissions"] = "Você não tem permissão para acessar esta página. Você foi desconectado.";
 $LANG["notify_invalid_search_dates"] = "Please use the datepicker to enter a valid date or dates.";
@@ -1135,8 +1133,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Parece que a sua conta de us
 $LANG["notify_no_views_defined"] = "You don't have any Views defined. You will not be able to view this form's submissions unless at least one View is created. Click the button below to create the default View.";
 $LANG["notify_option_list_deleted"] = "The option list has been deleted.";
 $LANG["notify_option_list_updated"] = "The option list has been updated.";
-$LANG["notify_page_added"] = "A página foi adicionada.";
-$LANG["notify_page_not_added"] = "A página não pode ser adicionada.";
 $LANG["notify_page_updated"] = "A página foi atualizada.";
 $LANG["notify_public_form_omit_list_updated"] = "O cliente omitir lista para este formulário foi atualizado.";
 $LANG["notify_public_view_omit_list_updated"] = "The client omit list for this View has been updated.";
@@ -1153,9 +1149,7 @@ $LANG["notify_submission_copied_edit"] = "O envio foi copiado. Você pode editá
 $LANG["notify_submission_deleted"] = "A inscrição foi excluída com sucesso.";
 $LANG["notify_submission_deleted_with_problems"] = "A inscrição foi excluída, mas os seguintes problemas foram encontrados quando tentava excluir o(s) seguinte(s) arquivo(s):";
 $LANG["notify_submission_id_not_found"] = "O ID da inscrição não foi encontrado.";
-$LANG["notify_submission_no_field_id"] = "This submission's field ID was not found.";
 $LANG["notify_submission_not_updated"] = "A inscrição não pôde ser atualizada.";
-$LANG["notify_submission_updated_file_problems"] = "Sua inscrição foi atualizada, mas o(s) seguinte(s) arquivo(s) tiveram problemas:";
 $LANG["notify_submissions_and_files_deleted"] = "As inscrições e quaisquer arquivos associadas a elas foram excluídas com sucesso.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> submissões foram copiadas.";
 $LANG["notify_submissions_deleted"] = "As inscrições foram excluídas com sucesso.";

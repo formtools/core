@@ -814,7 +814,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... til databasen ...&quot;</span> betyr at selv om ditt brukernavn og passord du har gitt er riktig, det var ikke koble til en bestemt database med denne kontoen. Dette kan bety at enten databasen er feil, eller at denne brukerkontoen ikke er knyttet til denne databasen.";
 $LANG["text_install_email_content_text"] = "Det er mange ressurser på nettstedet vårt for å hjelpe deg med å komme i gang, inkludert vår online dokumentasjon (https://docs.formtools.org) og opplæringsprogrammer (https://docs.formtools.org/tutorials). Hvis du finner deg fast eller har spørsmål, still et spørsmål på github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Beklager, vil Form Verktøy ikke kunne kjøres på serveren din. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">Vennligst klikk her</a> for minstekravene.";
-$LANG["text_install_intro"] = "Velkommen til Form Verktøy installasjon scriptet! Velg ditt språk.";
 $LANG["text_install_system_check"] = "Denne siden kjører et par tester på systemet for å sikre at det er i stand til å kjøre Form Tools.";
 $LANG["text_internal_form_desc"] = "Intern former eksisterer bare innenfor Form Verktøy - ikke andre steder på nettstedet ditt. Kun Form Verktøy brukerkontoer vil ha tilgang til skjemaet. Velg dette alternativet hvis du ikke har et eksisterende skjema.";
 $LANG["text_internal_form_intro"] = "Bruk skjemaet nedenfor for å opprette en ny intern form. Alle innstillinger, inkludert antallet og innholdet i skjemafelt kan endres og konfigureres senere.";
@@ -1100,7 +1099,6 @@ $LANG["notify_install_invalid_db_info"] = "Beklager, men vi kan ikke koble til d
 $LANG["notify_install_no_db_connection"] = "Vennligst sjekk database navn og påloggingsinformasjon. Selv om vi var i stand til å koble til databasen vert, vi kunne ikke koble til databasen. Feilmeldingen databasen tilbake er: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Skjemaet har blitt opprettet! Du kan konfigurere form gjennom disse kategoriene.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Kontoen informasjon lagret i økter er ugyldig. Logg inn på nytt under.";
-$LANG["notify_invalid_field_upload_folder"] = "Dette feltet er upload mappe enten er ugyldig eller ikke er skrivbar.";
 $LANG["notify_invalid_license_key"] = "Beklager, som ikke synes å være en gyldig lisensnøkkel. Prøv å legge inn det igjen.";
 $LANG["notify_invalid_permissions"] = "Du har ikke tillatelse til å få tilgang til denne siden. Du er blitt logget ut.";
 $LANG["notify_invalid_search_dates"] = "Vennligst bruk datepicker å skrive inn en gyldig dato eller datoer.";
@@ -1133,8 +1131,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Det ser ut til at din bruker
 $LANG["notify_no_views_defined"] = "Du har ingen Views definert. Du vil ikke kunne se dette skjemaet anførsler mindre minst én View er opprettet. Klikk på knappen nedenfor for å opprette standard View.";
 $LANG["notify_option_list_deleted"] = "Alternativet Listen har blitt slettet.";
 $LANG["notify_option_list_updated"] = "Alternativet listen har blitt oppdatert.";
-$LANG["notify_page_added"] = "Siden er lagt til.";
-$LANG["notify_page_not_added"] = "Siden kunne ikke legges til.";
 $LANG["notify_page_updated"] = "Denne siden har blitt oppdatert.";
 $LANG["notify_public_form_omit_list_updated"] = "Klienten utelate listen for dette skjemaet har blitt oppdatert.";
 $LANG["notify_public_view_omit_list_updated"] = "Klienten utelate listen for dette synet har blitt oppdatert.";
@@ -1151,9 +1147,7 @@ $LANG["notify_submission_copied_edit"] = "Innleveringen er kopiert. Du kan redig
 $LANG["notify_submission_deleted"] = "Innleveringen ble slettet.";
 $LANG["notify_submission_deleted_with_problems"] = "Innleveringen ble slettet, men følgende problemer oppstod under forsøk på å slette følgende fil (er):";
 $LANG["notify_submission_id_not_found"] = "Innleveringen ID ble ikke funnet.";
-$LANG["notify_submission_no_field_id"] = "Dette brevet i feltet ID ble ikke funnet.";
 $LANG["notify_submission_not_updated"] = "Innleveringen kunne ikke bli oppdatert.";
-$LANG["notify_submission_updated_file_problems"] = "Deres materiale ble oppdatert, men følgende filen (e) hadde problemer:";
 $LANG["notify_submissions_and_files_deleted"] = "Den innleveringer og enhver fil (er) forbundet med dem var slettet.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> innlegg har blitt kopiert.";
 $LANG["notify_submissions_deleted"] = "Materialet var slettet.";

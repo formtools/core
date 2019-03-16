@@ -814,7 +814,6 @@ $LANG["text_install_db_tables_error_tip_3"] = "<span class=\"green\">&quot;Acces
 $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;Access denied for user: ... à la base de données ...&quot;</span> signifie que même si votre nom d&#39;utilisateur et mot de passe fourni est correct, il a été incapable de se connecter à cette base de données avec ce compte. Cela peut signifier que soit le nom de votre base de données est incorrect, ou que ce compte d&#39;utilisateur n&#39;est pas associé à cette base de données.";
 $LANG["text_install_email_content_text"] = "Notre site Web contient de nombreuses ressources pour vous aider à démarrer, notamment notre documentation en ligne (https://docs.formtools.org) et nos didacticiels (https://docs.formtools.org/tutorials). Si vous trouvez que vous êtes bloqué ou avez une question, posez une question sur github (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "Désolé, Outils de formulaire ne sera pas en mesure de s&#39;exécuter sur votre serveur. <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">S&#39;il vous plaît cliquez ici</a> pour les exigences minimales.";
-$LANG["text_install_intro"] = "Bienvenue sur le script d&#39;installation Outils Form! S&#39;il vous plaît choisissez votre langue.";
 $LANG["text_install_system_check"] = "Cette page s&#39;exécute quelques tests sur votre système afin de s&#39;assurer qu&#39;il est capable d&#39;exécuter des outils de formulaire.";
 $LANG["text_internal_form_desc"] = "Formes internes existent seulement dans Outils Formulaire - pas ailleurs sur votre site. Seuls les comptes de formulaire utilisateur Outils auront accès au formulaire. Sélectionnez cette option si vous n&#39;avez pas un formulaire existant.";
 $LANG["text_internal_form_intro"] = "Utilisez le formulaire ci-dessous pour créer une nouvelle forme interne. Tous les paramètres, y compris le nombre et le contenu des champs de formulaire peut être être modifiée et configurée ultérieurement.";
@@ -1100,7 +1099,6 @@ $LANG["notify_install_invalid_db_info"] = "Désolé, nous n&#39;avons pas pu vou
 $LANG["notify_install_no_db_connection"] = "S&#39;il vous plaît vérifiez votre nom base de données et informations de connexion. Même si nous étions capable de se connecter à l&#39;hôte de base de données, nous n&#39;avons pas pu vous connecter à la base de données. Le message d&#39;erreur renvoyé est la base de données: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Votre formulaire a été créé! Vous pouvez configurer votre formulaire par le biais de ces onglets.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Les informations de compte stockés dans les sessions n&#39;est pas valide. S&#39;il vous plaît vous connecter à nouveau ci-dessous.";
-$LANG["notify_invalid_field_upload_folder"] = "Dossier de téléchargement de ce champ n&#39;est pas valide ou n&#39;est pas inscriptible.";
 $LANG["notify_invalid_license_key"] = "Désolé, cela ne semble pas être une clé de licence valide. S&#39;il vous plaît essayer d&#39;entrer à nouveau.";
 $LANG["notify_invalid_permissions"] = "Vous n&#39;avez pas les autorisations pour accéder à cette page. Vous avez été déconnecté.";
 $LANG["notify_invalid_search_dates"] = "S&#39;il vous plaît utiliser le sélecteur de date pour entrer une date valide ou des dates.";
@@ -1133,8 +1131,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Il semble que votre compte d
 $LANG["notify_no_views_defined"] = "Vous n&#39;avez pas vues définies. Vous ne serez pas en mesure de consulter les mémoires ce formulaire, sauf si au moins une vue est créée. Cliquez sur le bouton ci-dessous pour créer la vue par défaut.";
 $LANG["notify_option_list_deleted"] = "La liste des options a été supprimé.";
 $LANG["notify_option_list_updated"] = "La liste des options a été mis à jour.";
-$LANG["notify_page_added"] = "La page a été ajoutée.";
-$LANG["notify_page_not_added"] = "La page n&#39;a pas pu être ajouté.";
 $LANG["notify_page_updated"] = "La page a été mise à jour.";
 $LANG["notify_public_form_omit_list_updated"] = "Le client omettre liste pour ce formulaire a été mis à jour.";
 $LANG["notify_public_view_omit_list_updated"] = "Le client omettre la liste pour cette vue a été mis à jour.";
@@ -1151,9 +1147,7 @@ $LANG["notify_submission_copied_edit"] = "La soumission a été copiée. Vous po
 $LANG["notify_submission_deleted"] = "La soumission a été supprimée.";
 $LANG["notify_submission_deleted_with_problems"] = "Lasoumission aété supprimée, mais il y a un problème avec le(s) fichier(s) suivant(s):";
 $LANG["notify_submission_id_not_found"] = "L'ID de soumission n'a pas été trouvé.";
-$LANG["notify_submission_no_field_id"] = "Cette soumission domaine de l&#39;ID n&#39;a pas été trouvé.";
 $LANG["notify_submission_not_updated"] = "La soumission ne peut pas être mise à jour.";
-$LANG["notify_submission_updated_file_problems"] = "Votre soumission a été mise à jour, mais il y un problème aves le(s) fichier(s) suivant(s):";
 $LANG["notify_submissions_and_files_deleted"] = "Les soumissions ainsi que le(s) fichier(s) associé(s) ont été supprimés.";
 $LANG["notify_submissions_copied"] = "<b>{\$num_submissions}</b> soumissions ont été copiées.";
 $LANG["notify_submissions_deleted"] = "Les soumissions ont été supprimées.";
