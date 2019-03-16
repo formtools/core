@@ -147,7 +147,6 @@ $LANG["word_other"] = "سایر";
 $LANG["word_other_c"] = "دیگر :";
 $LANG["word_page"] = "صفحه";
 $LANG["word_page_c"] = "صفحه :";
-$LANG["word_pages"] = "تعداد صفحات";
 $LANG["word_pass"] = "رمز عبور";
 $LANG["word_password"] = "گذر واژه";
 $LANG["word_password_c"] = "گذر واژه:";
@@ -473,7 +472,6 @@ $LANG["phrase_last_modified"] = "آخرین تغییر";
 $LANG["phrase_last_modified_date"] = "تاریخ و زمان آخرین تاریخ تغییر";
 $LANG["phrase_last_name"] = "نام خانوادگی";
 $LANG["phrase_letters_only"] = "فقط حروف";
-$LANG["phrase_license_key"] = "مجوز های کلیدی";
 $LANG["phrase_limit_email_content"] = "محتوای ایمیل به این حد در زمینه های نمایش";
 $LANG["phrase_loading_ellipsis"] = "در حال بارگذاری...";
 $LANG["phrase_log_in"] = "ورود به سیستم";
@@ -668,8 +666,6 @@ $LANG["phrase_theme_description"] = "توضیحات تم";
 $LANG["phrase_theme_info"] = "تم اطلاعات";
 $LANG["phrase_tiny_30px"] = "کوچک (30px)";
 $LANG["phrase_tiny_50px"] = "کوچک (50px)";
-$LANG["phrase_toolbar_alignment"] = "نوارابزار تراز";
-$LANG["phrase_toolbar_location"] = "نوارابزار محل سکونت";
 $LANG["phrase_total_results_c"] = "نتایج : مجموع :";
 $LANG["phrase_type_c"] = "نوع خطا :";
 $LANG["phrase_unselect_all"] = "عدمگزینشهمه";
@@ -784,7 +780,6 @@ $LANG["text_email_template_tab"] = "در این بخش به شما امکان ت
 $LANG["text_email_template_text_1"] = "شده است وجود دارد ساخته شده را از طریق فرم ارسال مقالات خود ، {\$FORMNAME}.";
 $LANG["text_email_template_text_1_c"] = "شده است وجود دارد ساخته شده را از طریق فرم ارسال مقالات خود ، {\$FORMNAME} :";
 $LANG["text_email_template_thanks"] = "برای تشکر از ارسال شما!";
-$LANG["text_enter_license_key"] = "به منظور نصب این ماژول ، شما باید کلید مجوز خود را وارد کنید. شما باید این کلید را پس از خرید ماژول ایمیل فرستاده شده است. اگر شما آن را دریافت نمی ، شما همیشه می <a href=\"http://accounts.formtools.org\" target=\"_blank\">توانید به صورت حساب خود را ابزارهای ورود</a> به آن را پیگیری کردن.";
 $LANG["text_error_message_to_show"] = "پیام خطا نشان می دهد اگر زمینه با شکست مواجه اعتبار";
 $LANG["text_external_form_desc"] = "فرم های خارج از اشکال که در حال حاضر در وب سایت خود را ، و یا در جایی بر روی وب وجود دارد. این گزینه را انتخاب کنید اگر شما از شکل خود را که شما می خواهم برای ادغام با ابزار فرم.";
 $LANG["text_fields_tab_summary"] = "این صفحه لیست تمام فرم شما است. برای کنترل آنها ظاهر می شود زمانی که ارسالی مرور ، نگاه <a href=\"{\$views_tab_link}\">کنید به زبانه</a> نمایش ها. حذف یک فیلد را در این صفحه آن را از تمام ارسالی حذف ، بنابراین مراقب باشید!";
@@ -1093,7 +1088,6 @@ $LANG["notify_form_tabs_updated"] = "زبانه ها به روز شدهاند.";
 $LANG["notify_form_updated"] = "این فرم با موفقیت به روزآوری شده است.";
 $LANG["notify_form_views_updated"] = "نمایش ها فرم به روز شده اند.";
 $LANG["notify_install_invalid_db_info"] = "با عرض پوزش ، ما نتوانستیم برای اتصال به پایگاه داده با استفاده از اطلاعات شما می شوند. پیغام خطا پایگاه برگردانده می شود : <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "لطفا نام پایگاه داده ها و اطلاعات خود وارد شوید. اگر چه ما قادر به اتصال به میزبان پایگاه داده ، ما نمی تواند اتصال به پایگاه داده باشد. پیغام خطا پایگاه برگردانده می شود : <i>(\$ db_select_error)</i>";
 $LANG["notify_internal_form_created"] = "فرم شما ساخته شد! شما می توانید فرم خود را از طریق این زبانه پیکربندی کنید.";
 $LANG["notify_invalid_account_information_in_sessions"] = "اطلاعات حساب ذخیره شده در جلسات نامعتبر است. لطفا در زیر را دوباره وارد شوید.";
 $LANG["notify_invalid_license_key"] = "با عرض پوزش ، به نظر نمی رسد به یک کلید مجوز معتبر. لطفا وارد کردن دوباره آن را امتحان کنید.";
@@ -1128,7 +1122,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "به نظر می رسد که
 $LANG["notify_no_views_defined"] = "شما لازم نیست که هر گونه نمایش ها تعریف شده است. شما نمی قادر خواهد بود برای دیدن ارسالی این فرم ، مگر اینکه حداقل یک مشاهده ایجاد شده است. روی دکمه زیر کلیک کنید مشاهده پیش فرض برای ایجاد کنید.";
 $LANG["notify_option_list_deleted"] = "فهرست اختیار (Options) حذف شده است.";
 $LANG["notify_option_list_updated"] = "فهرست اختیار (Options) به روز شده است.";
-$LANG["notify_page_updated"] = "صفحه به روز شده است.";
 $LANG["notify_public_form_omit_list_updated"] = "حذف کردن لیست مشتری برای این فرم به روز شده است.";
 $LANG["notify_public_view_omit_list_updated"] = "حذف کردن لیست مشتری برای این نمایش به روز شده است.";
 $LANG["notify_required_admin_pages"] = "صفحات زیر را در منوی مدیر سایت مورد نیاز هستند : <b>{\$remaining_pages}.</b>";
@@ -1218,3 +1211,14 @@ $LANG["processing_no_redirect_url"] = "پردازش به درستی ارسال �
 
 
 $LANG["notify_form_deleted"] = "The form has been deleted.";
+$LANG["word_characters"] = "Characters";
+$LANG["word_continue"] = "Continue";
+$LANG["notify_create_form_failure"] = "The SQL query to create the form has failed. The most common cause is that your form has exceeded the maximum row size permitted by MySQL for VARCHAR fields. If the database error displayed below indicates this, try changing some of your \"Medium\" fields to \"Large\". On most environments, you can have no more than 50 or so fields with \"Medium\" size.";
+$LANG["notify_conflicts_detected"] = "The data for these fields changed while you were editing the submission. Please select the value you would like to use.";
+$LANG["word_invalid"] = "Invalid";
+$LANG["word_port"] = "Port";
+$LANG["phrase_view_field_group"] = "View Field Group";
+$LANG["text_error_installing"] = "There was a problem installing this module.";
+$LANG["text_limit_fields_info"] = "You have used <span id=\"curr_field_count\" class=\"medium_grey italic bold\"></span> of <span id=\"max_field_count\" class=\"medium_grey italic bold\"></span> permitted fields.";
+$LANG["notify_suhosin_installed"] = "Warning: the <b>Suhosin PHP extension</b> is installed on your server. This may cause problems with your forms on your site. <a href=\"https://docs.formtools.org/installation/suhosin/\" target=\"_blank\">Click here</a> for more information.";
+$LANG["notify_differences_resolved"] = "The differences have been resolved.";

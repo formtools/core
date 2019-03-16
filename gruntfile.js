@@ -8,6 +8,17 @@ const child_process = require('child_process');
 const release_folder = 'formtools_releases';
 const formtools_releases_folder = path.resolve(__dirname, '..', release_folder);
 
+
+// i18n string keys that aren't used in the Core, but useful for multiple other modules, so placed here. These allow
+// the `grunt i18n` task to pass
+const globalI18nStrings = [
+	'word_help',
+	'word_wysiwyg',
+	'phrase_update_order',
+	'phrase_access_type',
+	'notify_module_already_installed'
+];
+
 let active_modules = [];
 if (fs.existsSync('./local.dev.js')) {
 	const local_dev = require('./local.dev.js');
@@ -279,7 +290,7 @@ module.exports = function (grunt) {
 	};
 
 
-	const parseCodebaseToFindUnusedStrings = (results, en) => {
+	const parseCoreToFindUnusedStrings = (results, en) => {
 		let missingKeys = Object.keys(en);
 
 		const ignoreFolders = [
@@ -316,8 +327,9 @@ module.exports = function (grunt) {
 				missingKeys.forEach((key) => {
 					const regex = new RegExp(key);
 
-					// very kludgy, but the only place Form Tools uses dynamic keys is for dates: ignore all those keys
-					if (!(/^date_/.test(key)) && !regex.test(line)) {
+					// very kludgy, but the only place Form Tools uses dynamic keys is for dates: ignore all those keys.
+					// We also ignore any i18n keys flagged for global use across FT modules
+					if (!(/^date_/.test(key)) && !regex.test(line) && globalI18nStrings.indexOf(key) === -1) {
 						updatedKeys.push(key);
 					}
 				});
@@ -363,7 +375,7 @@ module.exports = function (grunt) {
 		};
 		findStringsInEnFileMissingFromOtherLangFiles(results, stringsByLocale);
 		findStringsInOtherFilesNotInEnFile(results, stringsByLocale);
-		parseCodebaseToFindUnusedStrings(results, stringsByLocale['en_us']);
+		parseCoreToFindUnusedStrings(results, stringsByLocale['en_us']);
 
 		// actually halt the grunt process if there are errors
 		const output = results.lines.join('\n');
@@ -396,7 +408,7 @@ module.exports = function (grunt) {
 
 	// grunt publish --release=1.2.3
 	grunt.registerTask('publish', [
-		//'prod', 
+		//'prod',
 		'publishReleaseBranch'
 	]);
 

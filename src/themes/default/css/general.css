@@ -594,21 +594,6 @@ a.show_form {
     margin-right: 16px;
 }
 
-#premium_module_dialog input {
-    width: 50px;
-    font-size: 11pt;
-}
-
-.license_key_panel {
-    padding: 5px;
-    background-color: #f2f2f2;
-    border: 1px solid #dddddd;
-    border-radius: 3px;
-    -moz-border-radius: 3px;
-    -webkit-border-radius: 3px;
-    text-align: center;
-}
-
 .desc {
     font-style: italic;
     color: #999999;

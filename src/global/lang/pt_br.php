@@ -148,7 +148,6 @@ $LANG["word_other"] = "Outro";
 $LANG["word_other_c"] = "Outro:";
 $LANG["word_page"] = "Página";
 $LANG["word_page_c"] = "Página:";
-$LANG["word_pages"] = "Páginas";
 $LANG["word_pass"] = "Passar";
 $LANG["word_password"] = "Senha";
 $LANG["word_password_c"] = "Senha:";
@@ -476,7 +475,6 @@ $LANG["phrase_last_modified"] = "Última modificação";
 $LANG["phrase_last_modified_date"] = "Última data de modificação";
 $LANG["phrase_last_name"] = "Sobrenome";
 $LANG["phrase_letters_only"] = "Letters Only";
-$LANG["phrase_license_key"] = "License Key";
 $LANG["phrase_limit_email_content"] = "Limitar conteúdo de email aos campos na visualização";
 $LANG["phrase_loading_ellipsis"] = "Loading...";
 $LANG["phrase_log_in"] = "ENTRAR";
@@ -671,8 +669,6 @@ $LANG["phrase_theme_description"] = "Theme Description";
 $LANG["phrase_theme_info"] = "Informação do Tema";
 $LANG["phrase_tiny_30px"] = "Tiny (30px)";
 $LANG["phrase_tiny_50px"] = "Tiny (50px)";
-$LANG["phrase_toolbar_alignment"] = "Alinhamento da barra de ferramentas";
-$LANG["phrase_toolbar_location"] = "Localização da barra de ferramentas";
 $LANG["phrase_total_results_c"] = "Resultados Totais:";
 $LANG["phrase_type_c"] = "Tipo do Erro:";
 $LANG["phrase_unselect_all"] = "Desmarcar Todos";
@@ -758,8 +754,7 @@ $LANG["text_add_form_step_5_para_3"] = "Se quiser ajustar as opções de formul�
 $LANG["text_add_form_step_5_para_4"] = "Desde o formulário contém campos de upload de arquivo, você precisará configurar cada campo para especificar o upload do arquivo da pasta, os formatos de arquivo que são permitidos. Isto pode ser encontrado na guia Exibir da página de edição de formulário.";
 $LANG["text_add_form_step_5_para_5"] = "Se a apresentação foi enviada através da API, altere a linha ft_api_init_form_page na primeira página de seu formulário para:";
 $LANG["text_add_submission_button"] = "The Add Submission button only appears for Views that have the \"May add submissions\" option set to \"yes\".";
-$LANG["text_admin_email_placeholder_info"] = "Este é o endereço de email do administrador do Form Tools, definido nas configurações da sua conta. Isso só gera o endereço de email, por isso, se você deseja usar como um link em HTML, você precisará envolvê-la em uma tag &lt;a&gt;, assim:
-&lt;a href=\"mailto:{\$ADMINEMAIL}\"&gt;{\$ADMINEMAIL}&lt;/a&gt;";
+$LANG["text_admin_email_placeholder_info"] = "Este é o endereço de email do administrador do Form Tools, definido nas configurações da sua conta. Isso só gera o endereço de email, por isso, se você deseja usar como um link em HTML, você precisará envolvê-la em uma tag &lt;a&gt;, assim: &lt;a href=\"mailto:{\$ADMINEMAIL}\"&gt;{\$ADMINEMAIL}&lt;/a&gt;";
 $LANG["text_also_default_login_page_theme"] = "(Também o tema padrão página de login)";
 $LANG["text_choose_form_type"] = "First, please choose your form type.";
 $LANG["text_client_form_page"] = "Esta página lista todas as formas e modos de exibição atribuídos a este cliente. Dica: para eles verem as visualizações de um formulário, eles precisam ser atribuídos a pelo menos uma Visualização.";
@@ -780,8 +775,7 @@ $LANG["text_delete_all_forms"] = "Eu quero excluir todos os arquivos que foram e
 $LANG["text_delete_form_warning"] = "Você tem certeza que deseja apagar este formulário? Esta ação não poderá ser desfeita. Todos os dados serão perdidos permanentemente!";
 $LANG["text_edit_admin_menu_page"] = "You may edit your menu below. To ensure you always have access to all functionality available within Form Tools, the following pages are required: Forms, Clients, Your Account, Modules, Settings and Logout.";
 $LANG["text_edit_client_menu_page"] = "This section lets you customize the left navigation column for each user. You may create as many client menus as you wish and assign any account to one of them. By default there are two menus: one for you, the administrator, and one for all client accounts. The administrator account may be modified but not removed.";
-$LANG["text_edit_tab_summary"] = "If you wish to group this View's fields into tabs, just enter the tab names below. After you're done, select the appropriate tab for each field group in the <a href=\"#\" onclick=\"return ft.change_inner_tab(2, 5)\">Fields tab</a>.
-";
+$LANG["text_edit_tab_summary"] = "If you wish to group this View's fields into tabs, just enter the tab names below. After you're done, select the appropriate tab for each field group in the <a href=\"#\" onclick=\"return ft.change_inner_tab(2, 5)\">Fields tab</a>.";
 $LANG["text_edit_view_list_page"] = "This tab controls which fields appear as columns on the Submission Listing page, and a few additional settings for those fields. Note: we recommend you add no more than 4 or 5 of the most important fields in the View.";
 $LANG["text_email_settings_intro"] = "Esta página permite identificar quais campos do formulário contém emails e o nome do campo. Uma vez identificados você pode usá-los em seus templates como destinatários de e-mails. Esta seção é opcional.";
 $LANG["text_email_tab_summary"] = "This section lets you construct any number of emails to be sent whenever your form is submitted, and other triggers.";
@@ -789,7 +783,6 @@ $LANG["text_email_template_tab"] = "This section lets you determine what content
 $LANG["text_email_template_text_1"] = "There has been a submission made through your form, {\$FORMNAME}.";
 $LANG["text_email_template_text_1_c"] = "There has been a submission made through your form, {\$FORMNAME}:";
 $LANG["text_email_template_thanks"] = "Obrigado pelo envio das informações!";
-$LANG["text_enter_license_key"] = "In order to install this module, you must enter your license key. You should have been emailed this key after purchasing the module. If you didn't receive it, you can always <a href=\"http://accounts.formtools.org\" target=\"_blank\">log into your Form Tools account</a> to track it down.";
 $LANG["text_error_message_to_show"] = "Error message to show if the field fails the validation";
 $LANG["text_external_form_desc"] = "External forms are forms that already exist on your website, or somewhere on the web. Select this option if you have your own form which you'd like to integrate with Form Tools.";
 $LANG["text_fields_tab_summary"] = "This page lists all of your form fields. To control how they appear when browsing submissions, see the <a href=\"{\$views_tab_link}\">Views tab</a>. Deleting a field on this page will delete it from all submissions, so please be careful!";
@@ -1098,7 +1091,6 @@ $LANG["notify_form_tabs_updated"] = "As guias foram atualizadas.";
 $LANG["notify_form_updated"] = "O formulário foi atualizado com sucesso.";
 $LANG["notify_form_views_updated"] = "The form Views have been updated.";
 $LANG["notify_install_invalid_db_info"] = "Desculpe, não foi possível se conectar ao banco de dados usando as informações fornecidas. A mensagem de erro do banco de dados retornou {\$db_connection_error}";
-$LANG["notify_install_no_db_connection"] = "Verifique o nome do banco de dados e informações de login. Embora nós fomos capazes de se conectar ao host do banco de dados, não pôde se conectar ao banco de dados. A mensagem de erro do banco de dados retornou: {\$db_select_error}";
 $LANG["notify_internal_form_created"] = "Your form has been created! You can configure your form through these tabs.";
 $LANG["notify_invalid_account_information_in_sessions"] = "As informações da conta guardados em sessões não é válido. Faça o login novamente abaixo.";
 $LANG["notify_invalid_license_key"] = "Sorry, that does not appear to be a valid license key. Please try entering it again.";
@@ -1133,7 +1125,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Parece que a sua conta de us
 $LANG["notify_no_views_defined"] = "You don't have any Views defined. You will not be able to view this form's submissions unless at least one View is created. Click the button below to create the default View.";
 $LANG["notify_option_list_deleted"] = "The option list has been deleted.";
 $LANG["notify_option_list_updated"] = "The option list has been updated.";
-$LANG["notify_page_updated"] = "A página foi atualizada.";
 $LANG["notify_public_form_omit_list_updated"] = "O cliente omitir lista para este formulário foi atualizado.";
 $LANG["notify_public_view_omit_list_updated"] = "The client omit list for this View has been updated.";
 $LANG["notify_required_admin_pages"] = "The following pages are required in the administrator menu: <b>{\$remaining_pages}</b>.";
@@ -1225,3 +1216,14 @@ $LANG["processing_no_post_vars"] = "process.php is not receiving any data. Note:
 $LANG["processing_no_redirect_url"] = "The submission was processed correctly, but you haven't specified a redirect URL for this form! Edit your form in the Form Tools UI and add the redirect URL.";
 
 $LANG["notify_form_deleted"] = "The form has been deleted.";
+$LANG["word_characters"] = "Characters";
+$LANG["word_continue"] = "Continue";
+$LANG["notify_create_form_failure"] = "The SQL query to create the form has failed. The most common cause is that your form has exceeded the maximum row size permitted by MySQL for VARCHAR fields. If the database error displayed below indicates this, try changing some of your \"Medium\" fields to \"Large\". On most environments, you can have no more than 50 or so fields with \"Medium\" size.";
+$LANG["notify_conflicts_detected"] = "The data for these fields changed while you were editing the submission. Please select the value you would like to use.";
+$LANG["word_invalid"] = "Invalid";
+$LANG["word_port"] = "Port";
+$LANG["phrase_view_field_group"] = "View Field Group";
+$LANG["text_error_installing"] = "There was a problem installing this module.";
+$LANG["text_limit_fields_info"] = "You have used <span id=\"curr_field_count\" class=\"medium_grey italic bold\"></span> of <span id=\"max_field_count\" class=\"medium_grey italic bold\"></span> permitted fields.";
+$LANG["notify_suhosin_installed"] = "Warning: the <b>Suhosin PHP extension</b> is installed on your server. This may cause problems with your forms on your site. <a href=\"https://docs.formtools.org/installation/suhosin/\" target=\"_blank\">Click here</a> for more information.";
+$LANG["notify_differences_resolved"] = "The differences have been resolved.";

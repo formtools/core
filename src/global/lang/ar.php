@@ -146,7 +146,6 @@ $LANG["word_other"] = "أخرى";
 $LANG["word_other_c"] = "الأخرى :";
 $LANG["word_page"] = "الصفحة";
 $LANG["word_page_c"] = ":صفحة";
-$LANG["word_pages"] = "صفحات";
 $LANG["word_pass"] = "تمرير";
 $LANG["word_password"] = "كلمة السر";
 $LANG["word_password_c"] = ":كلمة السر";
@@ -472,7 +471,6 @@ $LANG["phrase_last_modified"] = "آخر تعديل";
 $LANG["phrase_last_modified_date"] = "تاريخ آخر تعديل";
 $LANG["phrase_last_name"] = "اسم العائلة";
 $LANG["phrase_letters_only"] = "رسائل فقط";
-$LANG["phrase_license_key"] = "مفتاح الترخيص";
 $LANG["phrase_limit_email_content"] = "الحد من محتوى البريد الإلكتروني لحقول في عرض";
 $LANG["phrase_loading_ellipsis"] = "تحميل...";
 $LANG["phrase_log_in"] = "سجل في";
@@ -667,8 +665,6 @@ $LANG["phrase_theme_description"] = "موضوع الوصف";
 $LANG["phrase_theme_info"] = "موضوع معلومات";
 $LANG["phrase_tiny_30px"] = "صغيرة (30px)";
 $LANG["phrase_tiny_50px"] = "صغيرة (50px)";
-$LANG["phrase_toolbar_alignment"] = "شريط الأدوات محاذاة";
-$LANG["phrase_toolbar_location"] = "شريط أدوات الموقع.";
 $LANG["phrase_total_results_c"] = "نتائج المجموع :";
 $LANG["phrase_type_c"] = "نوع خطأ :";
 $LANG["phrase_unselect_all"] = "إلغاء تحديد الكل";
@@ -783,7 +779,6 @@ $LANG["text_email_template_tab"] = "هذا القسم يتيح لك تحديد �
 $LANG["text_email_template_text_1"] = "كان هناك تقدم من خلال تقديم النموذج الخاص اسم النموذج {\$FORMNAME}.";
 $LANG["text_email_template_text_1_c"] = "كان هناك تقدم من خلال تقديم النموذج الخاص {\$FORMNAME} اسم النموذج :";
 $LANG["text_email_template_thanks"] = "شكرا على مقالك!";
-$LANG["text_enter_license_key"] = "من أجل تثبيت هذه الوحدة ، يجب عليك إدخال مفتاح الترخيص الخاص بك. كان ينبغي أن يكون لك بالبريد الالكتروني هذا المفتاح بعد شراء الوحدة. إذا لم تحصل عليه ، يمكنك دائما <a href=\"http://accounts.formtools.org\" target=\"_blank\">الدخول إلى حساب أدوات النموذج الخاص بك</a> لتعقب عليه.";
 $LANG["text_error_message_to_show"] = "رسالة الخطأ لإظهار إذا كان الحقل فشل التحقق من صحة";
 $LANG["text_external_form_desc"] = "الأشكال الخارجية هي النماذج التي توجد بالفعل على موقع الويب الخاص بك ، أو في مكان ما على شبكة الإنترنت. حدد هذا الخيار إذا كان لديك شكل الخاصة بك التي ترغب في الاندماج مع أدوات النموذج.";
 $LANG["text_fields_tab_summary"] = "هذه الصفحة يسرد كافة حقول النموذج الخاص بك. للتحكم في كيفية ظهورها عند تصفح البيانات ، راجع <a href=\"{\$views_tab_link}\">علامة التبويب طرق</a> . حذف حقل في هذه الصفحة سوف حذفها من جميع الطلبات ، لذا يرجى توخي الحذر!";
@@ -1092,7 +1087,6 @@ $LANG["notify_form_tabs_updated"] = "التبويبات قد تم تحديثها
 $LANG["notify_form_updated"] = "النموذج قد تم تحديثها بنجاح.";
 $LANG["notify_form_views_updated"] = "وقد تم تحديث عدد النموذج.";
 $LANG["notify_install_invalid_db_info"] = "آسف ، لأننا لم نتمكن من الاتصال بقاعدة البيانات باستخدام المعلومات التي قمت بتوفيرها. رسالة الخطأ في قاعدة بيانات عاد هو : <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "الرجاء التحقق من اسم قاعدة بيانات ومعلومات تسجيل الدخول. على الرغم من أننا تمكنا من ربط لاستضافة قاعدة البيانات ، لم نتمكن من الاتصال بقاعدة البيانات. رسالة الخطأ في قاعدة بيانات عاد هو : <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "تم إنشاء النموذج الخاص بك! يمكنك تكوين النموذج الخاص بك من خلال هذه علامات التبويب.";
 $LANG["notify_invalid_account_information_in_sessions"] = "معلومات الحساب المخزنة في دورات غير صالحة. يرجى تسجيل الدخول مرة أخرى أدناه.";
 $LANG["notify_invalid_license_key"] = "آسف ، لا يبدو أن مفتاح ترخيص ساري المفعول. الرجاء محاولة الدخول إليها مرة أخرى.";
@@ -1127,7 +1121,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "يبدو أن حساب ال�
 $LANG["notify_no_views_defined"] = "ليس لديك أي عدد محدد. فلن تكون قادرا على عرض بيانات هذا النموذج ما لم يتم إنشاء واحدة على الأقل عرض. انقر فوق الزر أدناه لإنشاء عرض افتراضي.";
 $LANG["notify_option_list_deleted"] = "تم حذف قائمة الخيار.";
 $LANG["notify_option_list_updated"] = "تم تحديث قائمة الخيارات.";
-$LANG["notify_page_updated"] = "الصفحة قد تم تحديثه.";
 $LANG["notify_public_form_omit_list_updated"] = "العميل بحذف قائمة لهذا النموذج قد تم تحديثه.";
 $LANG["notify_public_view_omit_list_updated"] = "العميل بحذف قائمة لهذا الملف قد تم تحديثها.";
 $LANG["notify_required_admin_pages"] = "في الصفحات التالية مطلوبة في القائمة المسؤول : <b>{\$remaining_pages}.</b>";
@@ -1216,3 +1209,14 @@ $LANG["processing_no_post_vars"] = "process.php لا يتلقى أية بيان�
 $LANG["processing_no_redirect_url"] = "تقديم ومعالجتها بشكل صحيح ، ولكن لم تكن قد قمت بتحديد عنوان إعادة توجيه لهذا الشكل! تحرير النموذج الخاص بك في شكل أدوات واجهة المستخدم وإضافة رابط توجيه.";
 
 $LANG["notify_form_deleted"] = "The form has been deleted.";
+$LANG["word_characters"] = "Characters";
+$LANG["word_continue"] = "Continue";
+$LANG["notify_create_form_failure"] = "The SQL query to create the form has failed. The most common cause is that your form has exceeded the maximum row size permitted by MySQL for VARCHAR fields. If the database error displayed below indicates this, try changing some of your \"Medium\" fields to \"Large\". On most environments, you can have no more than 50 or so fields with \"Medium\" size.";
+$LANG["notify_conflicts_detected"] = "The data for these fields changed while you were editing the submission. Please select the value you would like to use.";
+$LANG["word_invalid"] = "Invalid";
+$LANG["word_port"] = "Port";
+$LANG["phrase_view_field_group"] = "View Field Group";
+$LANG["text_error_installing"] = "There was a problem installing this module.";
+$LANG["text_limit_fields_info"] = "You have used <span id=\"curr_field_count\" class=\"medium_grey italic bold\"></span> of <span id=\"max_field_count\" class=\"medium_grey italic bold\"></span> permitted fields.";
+$LANG["notify_suhosin_installed"] = "Warning: the <b>Suhosin PHP extension</b> is installed on your server. This may cause problems with your forms on your site. <a href=\"https://docs.formtools.org/installation/suhosin/\" target=\"_blank\">Click here</a> for more information.";
+$LANG["notify_differences_resolved"] = "The differences have been resolved.";

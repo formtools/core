@@ -146,7 +146,6 @@ $LANG["word_other"] = "Άλλος";
 $LANG["word_other_c"] = "Άλλα:";
 $LANG["word_page"] = "Σελίδα";
 $LANG["word_page_c"] = "Σελίδα:";
-$LANG["word_pages"] = "Σελίδες";
 $LANG["word_pass"] = "Pass";
 $LANG["word_password"] = "Κωδικός πρόσβασης";
 $LANG["word_password_c"] = "Κωδικός πρόσβασης:";
@@ -471,7 +470,6 @@ $LANG["phrase_last_modified"] = "Τελευταία τροποποίηση";
 $LANG["phrase_last_modified_date"] = "Τελευταία τροποποίηση";
 $LANG["phrase_last_name"] = "Επώνυμο";
 $LANG["phrase_letters_only"] = "Επιστολές Μόνο";
-$LANG["phrase_license_key"] = "Άδεια Βασικά";
 $LANG["phrase_limit_email_content"] = "Όριο ηλεκτρονικό περιεχόμενο σε τομείς Προβολή";
 $LANG["phrase_loading_ellipsis"] = "Φόρτωση ...";
 $LANG["phrase_log_in"] = "Σύνδεση";
@@ -666,8 +664,6 @@ $LANG["phrase_theme_description"] = "Περιγραφή Θέμα";
 $LANG["phrase_theme_info"] = "Θέμα Info";
 $LANG["phrase_tiny_30px"] = "Tiny (30px)";
 $LANG["phrase_tiny_50px"] = "Tiny (50px)";
-$LANG["phrase_toolbar_alignment"] = "Toolbar Προσανατολισμός";
-$LANG["phrase_toolbar_location"] = "Toolbar Τοποθεσία";
 $LANG["phrase_total_results_c"] = "Συνολικά Αποτελέσματα:";
 $LANG["phrase_type_c"] = "Τύπος λάθους:";
 $LANG["phrase_unselect_all"] = "Κανένας";
@@ -782,7 +778,6 @@ $LANG["text_email_template_tab"] = "Αυτή η ενότητα σας επιτρ
 $LANG["text_email_template_text_1"] = "Υπήρξε μια κατάθεση πραγματοποιηθεί μέσω της φόρμας σας, {\$FORMNAME}.";
 $LANG["text_email_template_text_1_c"] = "Υπήρξε μια κατάθεση πραγματοποιηθεί μέσω της φόρμας σας, {\$FORMNAME}:";
 $LANG["text_email_template_thanks"] = "Ευχαριστώ για την υποβολή σας!";
-$LANG["text_enter_license_key"] = "Για να εγκαταστήσετε αυτή την ενότητα, πρέπει να πληκτρολογήσετε το κλειδί άδειας. Θα πρέπει να έχουν αποσταλεί αυτό το κλειδί μετά την αγορά της μονάδας. Εάν δεν το λάβετε, μπορείτε πάντα να <a href=\"http://accounts.formtools.org\" target=\"_blank\">συνδεθείτε στο έντυπο λογαριασμό σας Εργαλεία</a> για να το εντοπίσουμε.";
 $LANG["text_error_message_to_show"] = "Μήνυμα σφάλματος για να δείξει αν το πεδίο αποτύχει η επικύρωση";
 $LANG["text_external_form_desc"] = "Εξωτερικές μορφές είναι μορφές που υπάρχουν ήδη στην ιστοσελίδα σας, ή κάπου στο διαδίκτυο. Επιλέξτε αυτήν την επιλογή αν έχετε δική σας φόρμα που θέλετε να ενσωματωθούν με Εργαλεία φόρμας.";
 $LANG["text_fields_tab_summary"] = "Αυτή η σελίδα περιέχει όλα τα πεδία της φόρμας σας. Για να ελέγξετε τον τρόπο που εμφανίζονται κατά την περιήγηση υποβολές, δείτε την <a href=\"{\$views_tab_link}\">καρτέλα Προβολές</a> . Διαγραφή ενός πεδίου σε αυτή τη σελίδα θα διαγραφεί και από όλες τις υποβολές, γι &#39;αυτό παρακαλώ να είστε προσεκτικοί!";
@@ -1091,7 +1086,6 @@ $LANG["notify_form_tabs_updated"] = "Έχουν ενημερωθεί από τι
 $LANG["notify_form_updated"] = "Το έντυπο έχει ενημερωθεί με επιτυχία.";
 $LANG["notify_form_views_updated"] = "Οι απόψεις μορφή έχουν ενημερωθεί.";
 $LANG["notify_install_invalid_db_info"] = "Λυπούμαστε, ήμαστε σε θέση να συνδεθεί με τη βάση δεδομένων με τις πληροφορίες που παρέχονται. Το μήνυμα λάθους στη βάση δεδομένων επέστρεψε είναι: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Ελέγξτε όνομα της βάσης και η σύνδεσή σας πληροφορίες. Παρά το γεγονός ότι ήμασταν σε θέση να συνδεθείτε στον κεντρικό υπολογιστή βάσεων δεδομένων, δεν θα μπορούσαμε να συνδεθεί με τη βάση δεδομένων. Το μήνυμα λάθους στη βάση δεδομένων επέστρεψε είναι: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Φόρμα σας έχει δημιουργηθεί! Μπορείτε να ρυθμίσετε τη φόρμα σας με αυτές τις καρτέλες.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Οι πληροφορίες λογαριασμού αποθηκεύονται σε συνεδρίες είναι άκυρη. Παρακαλώ συνδεθείτε ξανά κάτω.";
 $LANG["notify_invalid_license_key"] = "Συγνώμη, αυτό δεν φαίνεται να είναι ένα έγκυρο κλειδί άδειας. Παρακαλώ δοκιμάστε να εισαγάγετε ξανά.";
@@ -1126,7 +1120,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Φαίνεται ότι ο �
 $LANG["notify_no_views_defined"] = "Δεν έχετε κανένα Εμφανίσεις ορίζεται. Δεν θα μπορείτε να δείτε υποβολές αυτής της μορφής, εκτός εάν μία τουλάχιστον Προβολή δημιουργείται. Κάντε κλικ στο κουμπί παρακάτω για να δημιουργήσετε την προεπιλεγμένη προβολή.";
 $LANG["notify_option_list_deleted"] = "Η λίστα επιλογών έχει διαγραφεί.";
 $LANG["notify_option_list_updated"] = "Η λίστα επιλογών έχει ενημερωθεί.";
-$LANG["notify_page_updated"] = "Η σελίδα έχει ενημερωθεί.";
 $LANG["notify_public_form_omit_list_updated"] = "Ο πελάτης παραλείπουν λίστα για αυτό το έντυπο έχει ενημερωθεί.";
 $LANG["notify_public_view_omit_list_updated"] = "Ο πελάτης παραλείπουν λίστα για την άποψη αυτή έχει ενημερωθεί.";
 $LANG["notify_required_admin_pages"] = "Οι ακόλουθες σελίδες που απαιτούνται στο μενού διαχειριστή: <b>{\$remaining_pages}.</b>";
@@ -1216,3 +1209,14 @@ $LANG["processing_no_redirect_url"] = "Η υποβολή των μεταποιη
 
 
 $LANG["notify_form_deleted"] = "The form has been deleted.";
+$LANG["word_characters"] = "Characters";
+$LANG["word_continue"] = "Continue";
+$LANG["notify_create_form_failure"] = "The SQL query to create the form has failed. The most common cause is that your form has exceeded the maximum row size permitted by MySQL for VARCHAR fields. If the database error displayed below indicates this, try changing some of your \"Medium\" fields to \"Large\". On most environments, you can have no more than 50 or so fields with \"Medium\" size.";
+$LANG["notify_conflicts_detected"] = "The data for these fields changed while you were editing the submission. Please select the value you would like to use.";
+$LANG["word_invalid"] = "Invalid";
+$LANG["word_port"] = "Port";
+$LANG["phrase_view_field_group"] = "View Field Group";
+$LANG["text_error_installing"] = "There was a problem installing this module.";
+$LANG["text_limit_fields_info"] = "You have used <span id=\"curr_field_count\" class=\"medium_grey italic bold\"></span> of <span id=\"max_field_count\" class=\"medium_grey italic bold\"></span> permitted fields.";
+$LANG["notify_suhosin_installed"] = "Warning: the <b>Suhosin PHP extension</b> is installed on your server. This may cause problems with your forms on your site. <a href=\"https://docs.formtools.org/installation/suhosin/\" target=\"_blank\">Click here</a> for more information.";
+$LANG["notify_differences_resolved"] = "The differences have been resolved.";

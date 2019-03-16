@@ -146,7 +146,6 @@ $LANG["word_other"] = "Annan";
 $LANG["word_other_c"] = "Annan:";
 $LANG["word_page"] = "Sida";
 $LANG["word_page_c"] = "Sida:";
-$LANG["word_pages"] = "Sidor";
 $LANG["word_pass"] = "Släppa igenom";
 $LANG["word_password"] = "Lösenord";
 $LANG["word_password_c"] = "Lösenord:";
@@ -471,7 +470,6 @@ $LANG["phrase_last_modified"] = "Senast ändrad";
 $LANG["phrase_last_modified_date"] = "Senaste ändringsdatum";
 $LANG["phrase_last_name"] = "Efternamn";
 $LANG["phrase_letters_only"] = "Endast bokstäver";
-$LANG["phrase_license_key"] = "Licensnyckel";
 $LANG["phrase_limit_email_content"] = "Begränsa e-postinnehåll till fält i vyn";
 $LANG["phrase_loading_ellipsis"] = "Laddar...";
 $LANG["phrase_log_in"] = "Logga in";
@@ -666,8 +664,6 @@ $LANG["phrase_theme_description"] = "Temabeskrivning";
 $LANG["phrase_theme_info"] = "Temainfo";
 $LANG["phrase_tiny_30px"] = "Pytteliten (30px)";
 $LANG["phrase_tiny_50px"] = "Pytteliten (50px)";
-$LANG["phrase_toolbar_alignment"] = "Linjering av verktygsrad";
-$LANG["phrase_toolbar_location"] = "Placering av verktygsrad";
 $LANG["phrase_total_results_c"] = "Totalt resultat:";
 $LANG["phrase_type_c"] = "Feltyp:";
 $LANG["phrase_unselect_all"] = "Välj bort alla";
@@ -753,9 +749,7 @@ $LANG["text_add_form_step_5_para_3"] = "Om du vill finjustera ditt formulär med
 $LANG["text_add_form_step_5_para_4"] = "Eftersom ditt formulär innehåller filuppladdningsfält så behöver du ställa in varje fält för att specificera uppladdningskatalogen, vilka filer som tillåts och maxstorleken. Detta kan göras via e <a href=\"{\$editformlink}\"><strong>Visningsfliken</strong></a> på formulärets redigeringssida.";
 $LANG["text_add_form_step_5_para_5"] = "Om inskicket gjordes med hjälp av API:et så ska du nu ändra raden <strong>ft_api_init_form_page</strong> på första sidan av ditt formulär till:";
 $LANG["text_add_submission_button"] = "Knappen Lägg till inskick visas bara i vyer som har alternativet \"Kan lägga till inskick\" angivet som  \"Ja \".";
-$LANG["text_admin_email_placeholder_info"] = "Detta är e-postadressen till Form Tools administratör som definierats i kontoinställningarna. E-postadressen visas bara som text så om du vill göra en HTML-länk av den behöver du baka in den i en <a>-tagg på det här viset:<br />
-<strong>&lt;a href=\"mailto:{\$ADMINEMAIL}\"&gt;{\$ADMINEMAIL}&lt;/a&gt;</strong>
-";
+$LANG["text_admin_email_placeholder_info"] = "Detta är e-postadressen till Form Tools administratör som definierats i kontoinställningarna. E-postadressen visas bara som text så om du vill göra en HTML-länk av den behöver du baka in den i en <a>-tagg på det här viset:<br /><strong>&lt;a href=\"mailto:{\$ADMINEMAIL}\"&gt;{\$ADMINEMAIL}&lt;/a&gt;</strong>";
 $LANG["text_also_default_login_page_theme"] = "(också förvalt tema för inloggningssidan)";
 $LANG["text_choose_form_type"] = "Först, välj din formulärtyp.";
 $LANG["text_client_form_page"] = "Den här sidan listar alla formulär och vyer som associeras till denna klient. Ett tips: för att klienten ska kunna se inskicken från ett formulär så måste de associeras till minst en vy.";
@@ -784,7 +778,6 @@ $LANG["text_email_template_tab"] = "Den här sektionen låter dig bestämma vad 
 $LANG["text_email_template_text_1"] = "Det har kommit ett inskick via ditt formulär {\$FORMNAME}.";
 $LANG["text_email_template_text_1_c"] = "Det har kommit ett inskick via ditt formulär {\$FORMNAME}:";
 $LANG["text_email_template_thanks"] = "Tack för ditt inskick! ";
-$LANG["text_enter_license_key"] = "För att kunna installera den här modulen måste du ange din licensnyckel. Du bör ha fått ett e-brev med nyckeln efter att du köpt modulen. Om du inte fick det, kan du alltid <a href=\"http://accounts.formtools.org\" target=\"_blank\">logga in på ditt Form Tools-konto</a> för att spåra den.";
 $LANG["text_error_message_to_show"] = "Felmeddelande att visa om fältets validering misslyckas";
 $LANG["text_external_form_desc"] = "Externa formulär är formulär som redan finns på din webbplats, eller någon annanstans på webben. Välj detta alternativ om du har ett eget formulär som du vill integrera med Form Tools.";
 $LANG["text_fields_tab_summary"] = "Denna sida listar alla dina formulärfält. För att kontrollera hur de visas när du bläddrar runt bland inskicken, <a href=\"{\$views_tab_link}\">se Vyfliken</a> . Att ta bort ett fält på denna sida kommer att ta bort det från alla inskick, så var försiktig!";
@@ -1025,8 +1018,7 @@ $LANG["confirm_delete_submission"] = "Är du säker på att du vill ta bort dett
 $LANG["confirm_delete_submission_file"] = "Är du säker på att du vill ta bort denna fil?";
 $LANG["confirm_delete_submissions"] = "Är du säker på att du vill ta bort dessa inskick?";
 $LANG["confirm_delete_submissions_on_other_pages"] = "<strong>Varning!</strong>Du har valt <strong>{\$num_selected_on_page}</strong>  inskick på den här sidan och <strong>{\$num_selected_on_other_pages}</strong> på andra sidor. Välj ett av följande alternativ:<div class=\"margin_top_large\"><input type=\"button\" value=\"Ta bort alla valda inskick\" {\$delete_all_submissions_onclick} /> <input type=\"button\" value=\"Ta bara bort valda inskick på denna sida\" {\$delete_submissions_on_page_onclick} /> <input type=\"button\" value=\"Avbryt\" onclick=\"return ft.hide_message('ft_message')\" /></div>";
-$LANG["confirm_delete_submissions_on_other_pages2"] = "<strong>Varning!</strong> Du har inte valt några inskick på den här sidan, men du har valt {\$num_selected_on_other_pages} på andra sidor. Du behöver bekräfta att du vill ta bort dessa inskick.
-<div class=\"margin_top_large\"><input type=\"button\" value=\"Ta bort alla valda inskick\" {\$delete_all_submissions_onclick} /> <input type=\"button\" value=\"Avbryt\" onclick=\"return ft.hide_message('ft_message')\" /></div>";
+$LANG["confirm_delete_submissions_on_other_pages2"] = "<strong>Varning!</strong> Du har inte valt några inskick på den här sidan, men du har valt {\$num_selected_on_other_pages} på andra sidor. Du behöver bekräfta att du vill ta bort dessa inskick. <div class=\"margin_top_large\"><input type=\"button\" value=\"Ta bort alla valda inskick\" {\$delete_all_submissions_onclick} /> <input type=\"button\" value=\"Avbryt\" onclick=\"return ft.hide_message('ft_message')\" /></div>";
 $LANG["confirm_delete_view"] = "Är du säker på att du vill ta bort denna vy?";
 $LANG["confirm_refresh_page"] = "Är du säker på att du vill ladda om sidan? Detta innebär att du tappar bort alla ev ändringar som du har gjort på sidan.";
 $LANG["confirm_save_change_before_redirect"] = "Ett eller flera fält har uppdaterats. Vill du spara ändringarna innan omdirigering?";
@@ -1072,7 +1064,6 @@ $LANG["notify_field_changes_saved"] = "Ändringarna i dina fält har sparats.";
 $LANG["notify_field_options_smart_filled"] = "Dina fältalternativ har fyllts i med hjälp av Smart ifyllning.";
 $LANG["notify_field_selected"] = "Fältet har valts. <a href=\"#\" onclick=\"{\$onclick}\">Klicka här</a> för att återgå till fältlistan.";
 $LANG["notify_field_updated"] = "Fältet har uppdaterats.";
-<a href=\"#\" onclick=\"{\$js_link}\">Klicka här</a> för att strunta i det här meddelandet och bara ta bort referensen till filen i databasen.";
 $LANG["notify_file_not_uploaded"] = "Filen kunde inte laddas upp.";
 $LANG["notify_file_uploaded"] = "Filen har laddats upp!";
 $LANG["notify_filters_not_updated"] = "Ett fel uppstod när vi försökte uppdatera den här klientens inskicksfilter.";
@@ -1095,7 +1086,6 @@ $LANG["notify_form_tabs_updated"] = "Flikarna har uppdaterats.";
 $LANG["notify_form_updated"] = "Formuläret har uppdaterats!";
 $LANG["notify_form_views_updated"] = "Formulärvyerna har uppdaterats.";
 $LANG["notify_install_invalid_db_info"] = "Tyvärr så kunde vi inte koppla upp oss mot databasen med den information du angav. Felmeddelandet vi fick tillbaka var: <em>{\$db_connection_error}</em>";
-$LANG["notify_install_no_db_connection"] = "Kontrollera databasnamnet och inloggningsinformationen. Även om vi kunde koppla upp oss mot databasens värd så kunde vi inte etablera en koppling till själva databasen. Felmeddelandet som databasen skickade tillbaka var: <em>{\$db_select_error}</em>";
 $LANG["notify_internal_form_created"] = "Formuläret har skapats! Du kan konfigurera ditt formulär genom dessa flikar.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Kontoinformationen som lagrats i sessioner är ogiltig. Vänligen logga in igen här nedan.";
 $LANG["notify_invalid_license_key"] = "Tyvärr verkar det inte vara en giltig licensnyckel. Försök skriva in den igen.";
@@ -1130,7 +1120,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Det verkar inte som att ditt
 $LANG["notify_no_views_defined"] = "Du har inga Vyer definierade. Du kommer inte att kunna se detta formulärs inskick om inte minst en vy skapas. Klicka på knappen här nere för att skapa standardvyn.";
 $LANG["notify_option_list_deleted"] = "Alternativlistan har tagits bort.";
 $LANG["notify_option_list_updated"] = "Alternativlistan har uppdaterats.";
-$LANG["notify_page_updated"] = "Sidan har uppdaterats.";
 $LANG["notify_public_form_omit_list_updated"] = "Listan över utelämnade klienter för detta formulär har uppdaterats.";
 $LANG["notify_public_view_omit_list_updated"] = "Listan över utelämnade klienter för denna vy har uppdaterats.";
 $LANG["notify_required_admin_pages"] = "Följande sidor krävs i adminstratörsmenyn: <strong>{\$remaining_pages}</strong>";
@@ -1219,3 +1208,14 @@ $LANG["processing_no_post_vars"] = "process.php tar inte emot någon data. Obser
 $LANG["processing_no_redirect_url"] = "Inskicket processades som det skulle men du har inte angett ett omdirigerings-URL för formuläret! Ändra ditt formulär i Form Tools gränssnitt och lägg till en omdirigeringsadress.";
 
 $LANG["notify_form_deleted"] = "The form has been deleted.";
+$LANG["word_characters"] = "Characters";
+$LANG["word_continue"] = "Continue";
+$LANG["notify_create_form_failure"] = "The SQL query to create the form has failed. The most common cause is that your form has exceeded the maximum row size permitted by MySQL for VARCHAR fields. If the database error displayed below indicates this, try changing some of your \"Medium\" fields to \"Large\". On most environments, you can have no more than 50 or so fields with \"Medium\" size.";
+$LANG["notify_conflicts_detected"] = "The data for these fields changed while you were editing the submission. Please select the value you would like to use.";
+$LANG["word_invalid"] = "Invalid";
+$LANG["word_port"] = "Port";
+$LANG["phrase_view_field_group"] = "View Field Group";
+$LANG["text_error_installing"] = "There was a problem installing this module.";
+$LANG["text_limit_fields_info"] = "You have used <span id=\"curr_field_count\" class=\"medium_grey italic bold\"></span> of <span id=\"max_field_count\" class=\"medium_grey italic bold\"></span> permitted fields.";
+$LANG["notify_suhosin_installed"] = "Warning: the <b>Suhosin PHP extension</b> is installed on your server. This may cause problems with your forms on your site. <a href=\"https://docs.formtools.org/installation/suhosin/\" target=\"_blank\">Click here</a> for more information.";
+$LANG["notify_differences_resolved"] = "The differences have been resolved.";

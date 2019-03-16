@@ -146,7 +146,6 @@ $LANG["word_other"] = "Друг";
 $LANG["word_other_c"] = "Други:";
 $LANG["word_page"] = "Страница";
 $LANG["word_page_c"] = "Страница:";
-$LANG["word_pages"] = "Страници";
 $LANG["word_pass"] = "Проход";
 $LANG["word_password"] = "Парола";
 $LANG["word_password_c"] = "Парола:";
@@ -471,7 +470,6 @@ $LANG["phrase_last_modified"] = "Последна промяна";
 $LANG["phrase_last_modified_date"] = "Последна дата на промяна";
 $LANG["phrase_last_name"] = "Фамилно име";
 $LANG["phrase_letters_only"] = "Писма Само";
-$LANG["phrase_license_key"] = "Лицензионен ключ";
 $LANG["phrase_limit_email_content"] = "Лимит емайл съдържание в области, с оглед";
 $LANG["phrase_loading_ellipsis"] = "Зареждане ...";
 $LANG["phrase_log_in"] = "Вход";
@@ -666,8 +664,6 @@ $LANG["phrase_theme_description"] = "Тема Описание";
 $LANG["phrase_theme_info"] = "Тема информация";
 $LANG["phrase_tiny_30px"] = "Tiny (30px)";
 $LANG["phrase_tiny_50px"] = "Tiny (50px)";
-$LANG["phrase_toolbar_alignment"] = "Регулирането Toolbar";
-$LANG["phrase_toolbar_location"] = "Toolbar Местоположение";
 $LANG["phrase_total_results_c"] = "Общо резултати:";
 $LANG["phrase_type_c"] = "Грешка Тип:";
 $LANG["phrase_unselect_all"] = "Всички Unselect";
@@ -782,7 +778,6 @@ $LANG["text_email_template_tab"] = "Този раздел ви позволяв�
 $LANG["text_email_template_text_1"] = "Налице е искането, направено чрез вашата форма, {\$FORMNAME}.";
 $LANG["text_email_template_text_1_c"] = "Налице е искането, направено чрез вашата форма, {\$FORMNAME}:";
 $LANG["text_email_template_thanks"] = "Благодаря за вашето представяне!";
-$LANG["text_enter_license_key"] = "За да инсталирате този модул, трябва да въведете вашия лицензен ключ. Вие е трябвало да бъде изпратен по електронната поща този ключ, след закупуване на модула. Ако не са я получили, винаги можете да <a href=\"http://accounts.formtools.org\" target=\"_blank\">влезете в профила си в Form</a> Инструменти, за да я проследите.";
 $LANG["text_error_message_to_show"] = "Съобщение за грешка, за да се покаже, ако полето не успее валидиране";
 $LANG["text_external_form_desc"] = "Външните форми са форми, които вече съществуват на вашия сайт, или някъде в интернет. Изберете тази опция, ако имате собствен форма, която бихте искали да се интегрират с формата Инструменти.";
 $LANG["text_fields_tab_summary"] = "Тази страница показва всички на вашите полета на формуляра. За да контролирате как те се появяват, когато разглеждащи твърдения, <a href=\"{\$views_tab_link}\">вижте раздела</a> Изгледи . Изтриването поле на тази страница ще го изтриете от всички мнения са, така че, моля, бъдете внимателни!";
@@ -1091,7 +1086,6 @@ $LANG["notify_form_tabs_updated"] = "Разделите са били обнов
 $LANG["notify_form_updated"] = "Формулярът е успешно обновен.";
 $LANG["notify_form_views_updated"] = "Формата изгледи са били актуализирани.";
 $LANG["notify_install_invalid_db_info"] = "За съжаление, ние не успяхме да се свърже с базата данни се използва информацията, предоставена ви. Съобщението за грешка в базата данни се връща: <i>{\$db_connection_error}</i>";
-$LANG["notify_install_no_db_connection"] = "Моля, проверете името на базата данни и данни за вход. Въпреки, че бяхме в състояние да се свърже с базата данни домакин, ние не може да се свърже с базата данни. Съобщението за грешка в базата данни се връща: <i>{\$db_select_error}</i>";
 $LANG["notify_internal_form_created"] = "Вашият формуляр е създаден! Можете да конфигурирате вашия форма чрез тези раздели.";
 $LANG["notify_invalid_account_information_in_sessions"] = "Сметката информация, съхранявана в сесии е невалиден. Моля, влезте отново по-долу.";
 $LANG["notify_invalid_license_key"] = "Съжаляваме, че не изглежда да е валиден лицензен ключ. Моля, опитайте да го въведете отново.";
@@ -1126,7 +1120,6 @@ $LANG["notify_no_views_assigned_to_client_form"] = "Оказва се, че ва
 $LANG["notify_no_views_defined"] = "Не е нужно всички мнения определени. Вие няма да можете да видите твърденията тази форма, освен ако най-малко една View е създаден. Щракнете върху бутона по-долу, за да се създаде Изглед по подразбиране.";
 $LANG["notify_option_list_deleted"] = "Опцията списък е била изтрита.";
 $LANG["notify_option_list_updated"] = "Опцията списък е актуализиран.";
-$LANG["notify_page_updated"] = "Страницата е била актуализирана.";
 $LANG["notify_public_form_omit_list_updated"] = "Клиентът пропуснат списъка за тази форма е била актуализирана.";
 $LANG["notify_public_view_omit_list_updated"] = "Клиентът пропуснат списъка за тази позиция е била актуализирана.";
 $LANG["notify_required_admin_pages"] = "Следващите страници са задължителни в менюто на администратора: <b>{\$remaining_pages}.</b>";
@@ -1216,3 +1209,14 @@ $LANG["processing_no_redirect_url"] = "Представянето е било о
 
 
 $LANG["notify_form_deleted"] = "The form has been deleted.";
+$LANG["word_characters"] = "Characters";
+$LANG["word_continue"] = "Continue";
+$LANG["notify_create_form_failure"] = "The SQL query to create the form has failed. The most common cause is that your form has exceeded the maximum row size permitted by MySQL for VARCHAR fields. If the database error displayed below indicates this, try changing some of your \"Medium\" fields to \"Large\". On most environments, you can have no more than 50 or so fields with \"Medium\" size.";
+$LANG["notify_conflicts_detected"] = "The data for these fields changed while you were editing the submission. Please select the value you would like to use.";
+$LANG["word_invalid"] = "Invalid";
+$LANG["word_port"] = "Port";
+$LANG["phrase_view_field_group"] = "View Field Group";
+$LANG["text_error_installing"] = "There was a problem installing this module.";
+$LANG["text_limit_fields_info"] = "You have used <span id=\"curr_field_count\" class=\"medium_grey italic bold\"></span> of <span id=\"max_field_count\" class=\"medium_grey italic bold\"></span> permitted fields.";
+$LANG["notify_suhosin_installed"] = "Warning: the <b>Suhosin PHP extension</b> is installed on your server. This may cause problems with your forms on your site. <a href=\"https://docs.formtools.org/installation/suhosin/\" target=\"_blank\">Click here</a> for more information.";
+$LANG["notify_differences_resolved"] = "The differences have been resolved.";
