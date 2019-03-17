@@ -43,8 +43,9 @@ const walk = (dir) => {
 const config = {
 	sass: {
 		options: {
+			outputStyle: 'compressed',
 			implementation: sass,
-			sourceMap: true
+			sourceMap: false
 		},
 		dist: {
 			files: [
