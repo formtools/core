@@ -8,8 +8,6 @@ $LANG["special_language"] = "Afrikaans";
 $LANG["special_language_locale"] = "Afrikaans";
 $LANG["special_text_direction"] = "ltr";
 
-$LANG["bug"] = "yup!";
-
 // Category: Words
 $LANG["phrase_light_brown"] = "Ligtebruin";
 $LANG["word_about"] = "Oor";
