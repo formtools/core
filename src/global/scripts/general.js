@@ -5,74 +5,74 @@
  * library, which contains a few handy functions not included in jQuery.
  */
 
-$(function() {
+$(function () {
 
-  // for non-sortable, standard list tables
-  $("td.del").live("mouseover", function(e) {
-    $(e.target).closest("tr").addClass("delete_row_hover");
-    $(this).attr("title", g.messages["word_remove"]);
-  });
-  $("td.del").live("mouseout", function(e) {
-    $(e.target).closest("tr").removeClass("delete_row_hover");
-  });
-  $("td.edit").live("mouseover", function(e) {
-    $(e.target).closest("tr").addClass("edit_row_hover");
-    $(this).attr("title", g.messages["word_edit"]);
-  });
-  $("td.edit").live("mouseout", function(e) {
-    $(e.target).closest("tr").removeClass("edit_row_hover");
-  });
+	// for non-sortable, standard list tables
+	$("td.del").live("mouseover", function (e) {
+		$(e.target).closest("tr").addClass("delete_row_hover");
+		$(this).attr("title", g.messages["word_remove"]);
+	});
+	$("td.del").live("mouseout", function (e) {
+		$(e.target).closest("tr").removeClass("delete_row_hover");
+	});
+	$("td.edit").live("mouseover", function (e) {
+		$(e.target).closest("tr").addClass("edit_row_hover");
+		$(this).attr("title", g.messages["word_edit"]);
+	});
+	$("td.edit").live("mouseout", function (e) {
+		$(e.target).closest("tr").removeClass("edit_row_hover");
+	});
 
-  $(".check_areas").live("click", function(e) {
-    if (!$(e.target).hasClass("check_area")) {
-      return;
-    }
-    var field = $(e.target).find("input");
-    var field_type = field.attr("type");
+	$(".check_areas").live("click", function (e) {
+		if (!$(e.target).hasClass("check_area")) {
+			return;
+		}
+		var field = $(e.target).find("input");
+		var field_type = field.attr("type");
 
-    if (field[0].disabled) {
-      return;
-    }
+		if (field[0].disabled) {
+			return;
+		}
 
-    // for radios, we only check the fields - not uncheck them
-    if (field_type == "radio") {
-      if (!field[0].checked) {
-        field[0].checked = true;
-      }
-    } else {
-      field[0].checked = !field[0].checked;
-    }
-  });
+		// for radios, we only check the fields - not uncheck them
+		if (field_type == "radio") {
+			if (!field[0].checked) {
+				field[0].checked = true;
+			}
+		} else {
+			field[0].checked = !field[0].checked;
+		}
+	});
 
-  $(".ft_themes_dropdown").bind("change", function() {
-    var id = $(this).attr("id");
-    $("." + id + "_swatches").hide();
-    $("#" + this.value + "_" + id + "_swatches").show();
-  });
+	$(".ft_themes_dropdown").bind("change", function () {
+		var id = $(this).attr("id");
+		$("." + id + "_swatches").hide();
+		$("#" + this.value + "_" + id + "_swatches").show();
+	});
 
-  // this adds the functionality so that when a user clicks on the language placeholder icon, it opens
-  // the dialog window containing the available placeholder list. This was a LOT simpler before I had
-  // to make it work with IE. The iframe was needed to hover the element above the textboxes. *sigh*
-  // Pre-requisites: there's a hidden field (id=form_id) in the page
-  var counter = 1;
-  $(".lang_placeholder_field").each(function() {
-    var pos   = $(this).position();
-    var width = pos.left + $(this).width();
-    var iframe = $("<iframe src=\"\" id=\"placeholder_field_overlay" + counter + "\" class=\"placeholder_field_overlay\" marginwidth=\"0\" marginheight=\"0\" allowtransparency=\"true\"></iframe>").css({ "left": width })
-    $(this).before(iframe);
+	// this adds the functionality so that when a user clicks on the language placeholder icon, it opens
+	// the dialog window containing the available placeholder list. This was a LOT simpler before I had
+	// to make it work with IE. The iframe was needed to hover the element above the textboxes. *sigh*
+	// Pre-requisites: there's a hidden field (id=form_id) in the page
+	var counter = 1;
+	$(".lang_placeholder_field").each(function () {
+		var pos = $(this).position();
+		var width = pos.left + $(this).width();
+		var iframe = $("<iframe src=\"\" id=\"placeholder_field_overlay" + counter + "\" class=\"placeholder_field_overlay\" marginwidth=\"0\" marginheight=\"0\" allowtransparency=\"true\"></iframe>").css({ "left": width })
+		$(this).before(iframe);
 
-    var form_id = $("#form_id").val();
-    var ifrm = $("#placeholder_field_overlay" + counter)[0];
-    ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
-    ifrm.document.open();
-    ifrm.document.write('<img src="' + g.root_url + '/global/images/lang_placeholder_field_icon.png" style="cursor: pointer" onclick="parent.ft.show_form_field_placeholders_dialog({ form_id: ' + form_id + ' });" />');
-    ifrm.document.close();
-    counter++;
-  });
+		var form_id = $("#form_id").val();
+		var ifrm = $("#placeholder_field_overlay" + counter)[0];
+		ifrm = (ifrm.contentWindow) ? ifrm.contentWindow : (ifrm.contentDocument.document) ? ifrm.contentDocument.document : ifrm.contentDocument;
+		ifrm.document.open();
+		ifrm.document.write('<img src="' + g.root_url + '/global/images/lang_placeholder_field_icon.png" style="cursor: pointer" onclick="parent.ft.show_form_field_placeholders_dialog({ form_id: ' + form_id + ' });" />');
+		ifrm.document.close();
+		counter++;
+	});
 
-  $(window).resize(function() {
-    ft.re_init_placeholder_field_overlays();
-  });
+	$(window).resize(function () {
+		ft.re_init_placeholder_field_overlays();
+	});
 });
 
 
@@ -81,10 +81,10 @@ $(function() {
 
 // the main Form Tools namespace
 var ft = {
-  urls: [],
-  check_url_dialog: $("<div></div>"),
-  show_form_dialog: $("<div></div>"),
-  form_field_placeholders_dialog: $("<div></div>")
+	urls: [],
+	check_url_dialog: $("<div></div>"),
+	show_form_dialog: $("<div></div>"),
+	form_field_placeholders_dialog: $("<div></div>")
 }
 
 
@@ -100,70 +100,70 @@ var ft = {
  * @param integer num_per_page the number of listings that should appear per page
  * @param integer current_page the current page
  */
-ft.display_dhtml_page_nav = function(num_results, num_per_page, current_page) {
-  total_pages = Math.ceil(num_results / num_per_page);
+ft.display_dhtml_page_nav = function (num_results, num_per_page, current_page) {
+	total_pages = Math.ceil(num_results / num_per_page);
 
-  // hide/show the appropriate pages
-  for (var i=1; i<=total_pages; i++) {
-    if (current_page == i) {
-      if (!$("#page_" + i)) {
-        alert("#page " + i + " doesn't exist");
-      }
-      $("#page_" + i).show();
-      $("#nav_page_" + i).html("<span id=\"list_current_page\">" + i + "</span> ");
-    } else {
-      $("#page_" + i).hide();
-      $("#nav_page_" + i).html("<a href='javascript:ft.display_dhtml_page_nav("
-        + num_results + ", " + num_per_page + ", " + i + ")'>" + i + "</a> ");
-    }
-  }
+	// hide/show the appropriate pages
+	for (var i = 1; i <= total_pages; i++) {
+		if (current_page == i) {
+			if (!$("#page_" + i)) {
+				alert("#page " + i + " doesn't exist");
+			}
+			$("#page_" + i).show();
+			$("#nav_page_" + i).html("<span id=\"list_current_page\">" + i + "</span> ");
+		} else {
+			$("#page_" + i).hide();
+			$("#nav_page_" + i).html("<a href='javascript:ft.display_dhtml_page_nav("
+				+ num_results + ", " + num_per_page + ", " + i + ")'>" + i + "</a> ");
+		}
+	}
 
-  // update the "Viewing X-Y" text
-  var tmp = (current_page - 1) * num_per_page;
-  var max_end = tmp + num_per_page;
-  var end = (max_end > num_results) ? num_results : max_end;
-  var start = tmp + 1;
+	// update the "Viewing X-Y" text
+	var tmp = (current_page - 1) * num_per_page;
+	var max_end = tmp + num_per_page;
+	var end = (max_end > num_results) ? num_results : max_end;
+	var start = tmp + 1;
 
-  $("#nav_viewing_num_start").html(start);
-  $("#nav_viewing_num_end").html(end);
+	$("#nav_viewing_num_start").html(start);
+	$("#nav_viewing_num_end").html(end);
 
-  // update the navigation links: <<
-  if (current_page > 1) {
-    previous_page = current_page - 1;
-    $("#nav_previous_page").html("<a href='javascript:ft.display_dhtml_page_nav("
-      + num_results + ", " + num_per_page + ", " + previous_page + ")'>&laquo;</a> ");
-  } else {
-    $("#nav_previous_page").html("&laquo;");
-  }
+	// update the navigation links: <<
+	if (current_page > 1) {
+		previous_page = current_page - 1;
+		$("#nav_previous_page").html("<a href='javascript:ft.display_dhtml_page_nav("
+			+ num_results + ", " + num_per_page + ", " + previous_page + ")'>&laquo;</a> ");
+	} else {
+		$("#nav_previous_page").html("&laquo;");
+	}
 
-  // >>
-  if (current_page < total_pages) {
-    next_page = current_page + 1;
-    $("#nav_next_page").html("<a href='javascript:ft.display_dhtml_page_nav("
-      + num_results + ", " + num_per_page + ", " + next_page + ")'>&raquo;</a> ");
-  } else {
-    $("#nav_next_page").html("&raquo;");
-  }
+	// >>
+	if (current_page < total_pages) {
+		next_page = current_page + 1;
+		$("#nav_next_page").html("<a href='javascript:ft.display_dhtml_page_nav("
+			+ num_results + ", " + num_per_page + ", " + next_page + ")'>&raquo;</a> ");
+	} else {
+		$("#nav_next_page").html("&raquo;");
+	}
 }
 
 
 /**
  * Selects all options in a multi-select dropdown field.
  */
-ft.select_all_multi_dropdown_options = function(dd_field_id) {
-  for (var i=0, len = $(dd_field_id).options.length; i<len; i++) {
-    $(dd_field_id).options[i].selected = true;
-  }
+ft.select_all_multi_dropdown_options = function (dd_field_id) {
+	for (var i = 0, len = $(dd_field_id).options.length; i < len; i++) {
+		$(dd_field_id).options[i].selected = true;
+	}
 }
 
 
 /**
  * Selects all options in a multi-select dropdown field.
  */
-ft.unselect_all_multi_dropdown_options = function(dd_field_id) {
-  for (var i=0, len = $(dd_field_id).options.length; i<len; i++) {
-    $(dd_field_id).options[i].selected = false;
-  }
+ft.unselect_all_multi_dropdown_options = function (dd_field_id) {
+	for (var i = 0, len = $(dd_field_id).options.length; i < len; i++) {
+		$(dd_field_id).options[i].selected = false;
+	}
 }
 
 
@@ -174,10 +174,10 @@ ft.unselect_all_multi_dropdown_options = function(dd_field_id) {
  * @param string text_val the display text of the select box
  * @param string value the value of the select box
  */
-ft.add_option = function(selectbox, text_val, value) {
-  var new_option = new Option(text_val, value);
-  var sel_length = selectbox.length;
-  selectbox.options[sel_length] = new_option;
+ft.add_option = function (selectbox, text_val, value) {
+	var new_option = new Option(text_val, value);
+	var sel_length = selectbox.length;
+	selectbox.options[sel_length] = new_option;
 }
 
 
@@ -187,11 +187,11 @@ ft.add_option = function(selectbox, text_val, value) {
  * @param object selectbox the select box element
  * @param integer ind the index of the item to remove
  */
-ft.delete_option = function(selectbox, ind) {
-  var sel_length = selectbox.length;
-  if (sel_length > 0) {
-    selectbox.options[ind] = null;
-  }
+ft.delete_option = function (selectbox, ind) {
+	var sel_length = selectbox.length;
+	if (sel_length > 0) {
+		selectbox.options[ind] = null;
+	}
 }
 
 
@@ -202,34 +202,34 @@ ft.delete_option = function(selectbox, ind) {
  * @param object sel_from the source select box element, it's ID or a jQuery element
  * @param object sel_to the target select box element, it's ID or a jQuery element
  */
-ft.move_options = function(sel_from, sel_to) {
-  sel_from = ft.get_dom_el(sel_from);
-  sel_to   = ft.get_dom_el(sel_to);
+ft.move_options = function (sel_from, sel_to) {
+	sel_from = ft.get_dom_el(sel_from);
+	sel_to = ft.get_dom_el(sel_to);
 
-  var sel_length = sel_from.length;
-  var sel_texts  = [];
-  var sel_vals   = [];
-  var sel_count  = 0;
+	var sel_length = sel_from.length;
+	var sel_texts = [];
+	var sel_vals = [];
+	var sel_count = 0;
 
-  // find the selected Options in reverse order and delete them from the 'from' Select
-  for (var i=sel_length-1; i>=0; i--) {
-    if (sel_from.options[i].selected) {
-      // if there's no value, that means the lawyer is away. Don't move them.
-      if (sel_from.options[i].value == "") {
-        continue;
-      }
-      sel_texts[sel_count] = sel_from.options[i].text;
-      sel_vals[sel_count]  = sel_from.options[i].value;
-      ft.delete_option(sel_from, i);
-      sel_count++;
-    }
-  }
+	// find the selected Options in reverse order and delete them from the 'from' Select
+	for (var i = sel_length - 1; i >= 0; i--) {
+		if (sel_from.options[i].selected) {
+			// if there's no value, that means the lawyer is away. Don't move them.
+			if (sel_from.options[i].value == "") {
+				continue;
+			}
+			sel_texts[sel_count] = sel_from.options[i].text;
+			sel_vals[sel_count] = sel_from.options[i].value;
+			ft.delete_option(sel_from, i);
+			sel_count++;
+		}
+	}
 
-  // add the selected text/values in reverse order. This will add the Options to the 'to' Select
-  // in the same order as they were in the 'from' Select
-  for (var i=sel_count-1; i>=0; i--) {
-    ft.add_option(sel_to, sel_texts[i], sel_vals[i]);
-  }
+	// add the selected text/values in reverse order. This will add the Options to the 'to' Select
+	// in the same order as they were in the 'from' Select
+	for (var i = sel_count - 1; i >= 0; i--) {
+		ft.add_option(sel_to, sel_texts[i], sel_vals[i]);
+	}
 }
 
 
@@ -237,12 +237,12 @@ ft.move_options = function(sel_from, sel_to) {
  * Helper function used to select all options in a multi-select dropdown. This is used on form submit
  * to ensure the contents are passed along to the server.
  */
-ft.select_all = function(el) {
-  el = ft.get_dom_el(el);
-  for (var i=0; i<el.length; i++) {
-    el[i].selected = true;
-  }
-  return true;
+ft.select_all = function (el) {
+	el = ft.get_dom_el(el);
+	for (var i = 0; i < el.length; i++) {
+		el[i].selected = true;
+	}
+	return true;
 }
 
 
@@ -253,18 +253,16 @@ ft.select_all = function(el) {
  *
  * @param mixed string/DOM element/jQuery element
  */
-ft.get_dom_el = function(mixed) {
-  var el = null;
-  if (typeof mixed == "string") {
-    el = document.getElementById(mixed);
-  }
-  else if (typeof mixed.jquery != 'undefined') {
-    el = mixed[0];
-  }
-  else {
-    el = mixed;
-  }
-  return el;
+ft.get_dom_el = function (mixed) {
+	var el = null;
+	if (typeof mixed == "string") {
+		el = document.getElementById(mixed);
+	} else if (typeof mixed.jquery != 'undefined') {
+		el = mixed[0];
+	} else {
+		el = mixed;
+	}
+	return el;
 }
 
 
@@ -272,26 +270,26 @@ ft.get_dom_el = function(mixed) {
  * Changes the currently displayed tab. Used for "inner-tabs" - tabs within a particular page / tab.
  * It also makes an Ajax call to pass the tabset name and current tab values to the server.
  */
-ft.change_inner_tab = function(tab, tabset_name) {
-  $("#" + tabset_name + " .tab_row div").removeClass("selected");
-  $("#" + tabset_name + " .tab_row div.inner_tab" + tab).addClass("selected");
-  $("#" + tabset_name + " .inner_tab_content>div").hide();
-  $("#" + tabset_name + " .inner_tab_content>div.inner_tab_content" + tab).show();
+ft.change_inner_tab = function (tab, tabset_name) {
+	$("#" + tabset_name + " .tab_row div").removeClass("selected");
+	$("#" + tabset_name + " .tab_row div.inner_tab" + tab).addClass("selected");
+	$("#" + tabset_name + " .inner_tab_content>div").hide();
+	$("#" + tabset_name + " .inner_tab_content>div.inner_tab_content" + tab).show();
 
-  // store the value in memory on the server
-  if (tabset_name) {
-    var page_url = g.root_url + "/global/code/actions.php";
-    $.ajax({
-      url:   page_url,
-      data:  { action: "remember_inner_tab", tabset: tabset_name, tab: tab },
-      type:  "POST",
-      error: ft.error_handler
-    });
-  }
+	// store the value in memory on the server
+	if (tabset_name) {
+		var page_url = g.root_url + "/global/code/actions.php";
+		$.ajax({
+			url: page_url,
+			data: { action: "remember_inner_tab", tabset: tabset_name, tab: tab },
+			type: "POST",
+			error: ft.error_handler
+		});
+	}
 
-  ft.re_init_placeholder_field_overlays();
+	ft.re_init_placeholder_field_overlays();
 
-  return false;
+	return false;
 }
 
 
@@ -299,54 +297,54 @@ ft.change_inner_tab = function(tab, tabset_name) {
  * This should be explicitly called on any page that uses JS inner tabs. It initializes the
  * components, adding the appropriate JS events.
  */
-ft.init_inner_tabs = function(callback) {
-  $(".inner_tabset").each(function() {
-    var tabset_name = $(this).attr("id");
-    var row = 1;
-    $(this).find(".tab_row div").each(function() {
-      $(this).bind("click", { tab: row, tabset_name: tabset_name }, function(e) {
-        var tab = e.data.tab;
-        ft.change_inner_tab(e.data.tab, e.data.tabset_name);
-        if (callback) {
-          callback(tab);
-        }
-      });
-      row++;
-    });
-  });
+ft.init_inner_tabs = function (callback) {
+	$(".inner_tabset").each(function () {
+		var tabset_name = $(this).attr("id");
+		var row = 1;
+		$(this).find(".tab_row div").each(function () {
+			$(this).bind("click", { tab: row, tabset_name: tabset_name }, function (e) {
+				var tab = e.data.tab;
+				ft.change_inner_tab(e.data.tab, e.data.tabset_name);
+				if (callback) {
+					callback(tab);
+				}
+			});
+			row++;
+		});
+	});
 }
 
 
 /**
  * Can be used whenever you want to open up a form in a dialog window. Just add a show_form class to the link.
  */
-ft.init_show_form_links = function() {
-  $(".show_form").each(function() {
-    var url = $(this).attr("href");
-    $(this).bind("click", { url: url }, function(e) {
-      ft.create_dialog({
-        dialog:     ft.show_form_dialog,
-        title:      g.messages["phrase_show_form"],
-        min_width:  800,
-        min_height: 500,
-        content: "<iframe class=\"check_url_iframe\" src=\"" + e.data.url + "\"></iframe>",
-        buttons: [{
-          text:  g.messages["phrase_open_form_in_new_tab_or_win"],
-          click: function() {
-            window.open(url);
-            $(this).dialog("close");
-          }
-        },
-        {
-          text:  g.messages["word_close"],
-          click: function() {
-            $(this).dialog("close");
-          }
-        }]
-      });
-      return false;
-    });
-  });
+ft.init_show_form_links = function () {
+	$(".show_form").each(function () {
+		var url = $(this).attr("href");
+		$(this).bind("click", { url: url }, function (e) {
+			ft.create_dialog({
+				dialog: ft.show_form_dialog,
+				title: g.messages["phrase_show_form"],
+				min_width: 800,
+				min_height: 500,
+				content: "<iframe class=\"check_url_iframe\" src=\"" + e.data.url + "\"></iframe>",
+				buttons: [{
+					text: g.messages["phrase_open_form_in_new_tab_or_win"],
+					click: function () {
+						window.open(url);
+						$(this).dialog("close");
+					}
+				},
+					{
+						text: g.messages["word_close"],
+						click: function () {
+							$(this).dialog("close");
+						}
+					}]
+			});
+			return false;
+		});
+	});
 }
 
 
@@ -369,74 +367,76 @@ ft.init_show_form_links = function() {
  *    }
  * @param object options. Right now this object may contain a single property: "event" (defaults to click).
  */
-ft.click = function(info) {
-  $(function() {
-    for (var i=0, j=info.length; i<j; i++) {
-      var el = ft.get_dom_el(info[i].el);
+ft.click = function (info) {
+	$(function () {
+		for (var i = 0, j = info.length; i < j; i++) {
+			var el = ft.get_dom_el(info[i].el);
 
-      $(el).bind("click", { targets: info[i].targets }, function(e) {
-        for (var m=0, n=e.data.targets.length; m<n; m++) {
-        var curr_target = e.data.targets[m];
-        var target_el   = ft.get_dom_el(curr_target.el);
-          if (curr_target.action == "show") {
-          $(target_el).show();
-          } else if (curr_target.action == "hide") {
-            $(target_el).hide();
-          } else if (curr_target.action == "disable") {
-            $(target_el).attr("disabled", "disabled")
-          } else if (curr_target.action == "enable") {
-            $(target_el).attr("disabled", "");
-          }
-        }
-      });
-    }
-  });
+			$(el).bind("click", { targets: info[i].targets }, function (e) {
+				for (var m = 0, n = e.data.targets.length; m < n; m++) {
+					var curr_target = e.data.targets[m];
+					var target_el = ft.get_dom_el(curr_target.el);
+					if (curr_target.action == "show") {
+						$(target_el).show();
+					} else if (curr_target.action == "hide") {
+						$(target_el).hide();
+					} else if (curr_target.action == "disable") {
+						$(target_el).attr("disabled", "disabled")
+					} else if (curr_target.action == "enable") {
+						$(target_el).attr("disabled", "");
+					}
+				}
+			});
+		}
+	});
 }
 
 
 /**
  * The error handler for the RSV validation library. This overrides the built-in error handler.
  */
-function g_rsvErrors(f, errorInfo) {
-  var errorHTML = "";
-  var problemFields = [];
-  var problemStrings = [];
+function g_rsvErrors (f, errorInfo) {
+	var errorHTML = "";
+	var problemFields = [];
+	var problemStrings = [];
 
-  for (var i=0; i<errorInfo.length; i++) {
-    if ($.inArray(errorInfo[i][1], problemStrings) == -1) {
-      errorHTML += rsv.errorHTMLItemBullet + errorInfo[i][1] + "<br />";
-      problemStrings.push(errorInfo[i][1]);
-    }
-    if (errorInfo[i][0].length) {
-      $(errorInfo[i][0][0]).addClass("rsvErrorField");
-      if (i == 0) {
-        try {
-          $(errorInfo[i][0][0]).focus();
-        } catch(e) { }
-      }
-    } else {
-      $(errorInfo[i][0]).addClass("rsvErrorField");
-      if (i==0) {
-        try {
-          $(errorInfo[i][0]).focus();
-        } catch(e) { }
-      }
-    }
-    problemFields.push(errorInfo[i][0]);
-  }
+	for (var i = 0; i < errorInfo.length; i++) {
+		if ($.inArray(errorInfo[i][1], problemStrings) == -1) {
+			errorHTML += rsv.errorHTMLItemBullet + errorInfo[i][1] + "<br />";
+			problemStrings.push(errorInfo[i][1]);
+		}
+		if (errorInfo[i][0].length) {
+			$(errorInfo[i][0][0]).addClass("rsvErrorField");
+			if (i == 0) {
+				try {
+					$(errorInfo[i][0][0]).focus();
+				} catch (e) {
+				}
+			}
+		} else {
+			$(errorInfo[i][0]).addClass("rsvErrorField");
+			if (i == 0) {
+				try {
+					$(errorInfo[i][0]).focus();
+				} catch (e) {
+				}
+			}
+		}
+		problemFields.push(errorInfo[i][0]);
+	}
 
-  if (errorInfo.length > 0) {
-    ft.display_message(rsv.errorTargetElementId, 0, errorHTML);
-    return false;
-  }
+	if (errorInfo.length > 0) {
+		ft.display_message(rsv.errorTargetElementId, 0, errorHTML);
+		return false;
+	}
 
-  // a hack-like solution to get around the fact that by overriding RSV's built-in error handler
-  // any defined onCompleteHandler will be ignored
-  if (rsv.onCompleteHandler) {
-    return rsv.onCompleteHandler();
-  }
+	// a hack-like solution to get around the fact that by overriding RSV's built-in error handler
+	// any defined onCompleteHandler will be ignored
+	if (rsv.onCompleteHandler) {
+		return rsv.onCompleteHandler();
+	}
 
-  return true;
+	return true;
 }
 
 
@@ -455,35 +455,37 @@ function g_rsvErrors(f, errorInfo) {
  * @param boolean success whether this is an error or a notification: 1 or 0
  * @param string message the message to display
  */
-ft.display_message = function(target_id, success, message) {
+ft.display_message = function (target_id, success, message) {
 
-  // TODO. What on EARTH was I thinking here? I think I may need to lay off the smack.
-  success = parseInt(success);
-  var messageClass = (success == 1) ? "notify" : "error";
+	// TODO. What on EARTH was I thinking here? I think I may need to lay off the smack.
+	success = parseInt(success);
+	var messageClass = (success == 1) ? "notify" : "error";
 
-  // if target_id is the main "ft_message" id string, we do something a little special
-  var inner_target_id = (target_id == "ft_message") ? "ft_message_inner" : target_id;
+	// if target_id is the main "ft_message" id string, we do something a little special
+	var inner_target_id = (target_id == "ft_message") ? "ft_message_inner" : target_id;
 
-  // remove all old class names and add the new one
-  var colour;
-  if (success == 1) {
-    $("#" + inner_target_id).removeClass("error");
-    colour = g.notify_colours[1];
-  } else {
-    $("#" + inner_target_id).removeClass("notify");
-    colour = g.error_colours[1];
-  }
+	// remove all old class names and add the new one
+	var colour;
+	if (success == 1) {
+		$("#" + inner_target_id).removeClass("error");
+		colour = g.notify_colours[1];
+	} else {
+		$("#" + inner_target_id).removeClass("notify");
+		colour = g.error_colours[1];
+	}
 
-  if ($("#" + target_id).length) {
-    $("#" + inner_target_id).addClass(messageClass);
-    $("#" + inner_target_id).html("<div style=\"padding:8px\">"
-      + "<a href=\"#\" onclick=\"return ft.hide_message('" + target_id + "')\" style=\"float:right\" class=\"pad_left_large\">X</a>"
-      + message + "</div>");
-    $("#" + target_id).show();
+	if ($("#" + target_id).length) {
+		$("#" + inner_target_id).addClass(messageClass);
+		$("#" + inner_target_id).html("<div style=\"padding:8px\">"
+			+ "<a href=\"#\" onclick=\"return ft.hide_message('" + target_id + "')\" style=\"float:right\" class=\"pad_left_large\">X</a>"
+			+ message + "</div>");
+		$("#" + target_id).show();
 
-    // add the nice highlight effect for the notification message
-    $(function() { $("#" + inner_target_id).effect("highlight", { color: "#" + colour }, 1200); });
-  }
+		// add the nice highlight effect for the notification message
+		$(function () {
+			$("#" + inner_target_id).effect("highlight", { color: "#" + colour }, 1200);
+		});
+	}
 }
 
 
@@ -494,40 +496,40 @@ ft.display_message = function(target_id, success, message) {
  *
  * This function needs to be called on page load. It maps all Check URL buttons to the corresponding
  */
-ft.init_check_url_buttons = function() {
-  $(".check_url").live("click", function() {
-    var check_url_id = $(this).attr("id");
-    var url_field_id = check_url_id.replace(/^check_url__/, "");
+ft.init_check_url_buttons = function () {
+	$(".check_url").live("click", function () {
+		var check_url_id = $(this).attr("id");
+		var url_field_id = check_url_id.replace(/^check_url__/, "");
 
-    // if there's no URL, just output a message
-    var url = $.trim($("#" + url_field_id).val());
-    if (url == "") {
-      ft.display_message("ft_message", false, g.messages["validation_no_url"]);
-      $("#" + url_field_id).focus();
-      return false;
-    }
+		// if there's no URL, just output a message
+		var url = $.trim($("#" + url_field_id).val());
+		if (url == "") {
+			ft.display_message("ft_message", false, g.messages["validation_no_url"]);
+			$("#" + url_field_id).focus();
+			return false;
+		}
 
-    if (!ft.is_valid_url(url)) {
-      ft.display_message("ft_message", false, g.messages["validation_invalid_url"]);
-      $("#" + url_field_id).select().focus();
-      return false;
-    }
+		if (!ft.is_valid_url(url)) {
+			ft.display_message("ft_message", false, g.messages["validation_invalid_url"]);
+			$("#" + url_field_id).select().focus();
+			return false;
+		}
 
-    ft.create_dialog({
-      dialog:     ft.check_url_dialog,
-      title:      g.messages["phrase_check_url"] + " - <i>" + url + "</i>",
-      min_width:  800,
-      min_height: 500,
-      content: "<iframe class=\"check_url_iframe\" src=\"" + url + "\"></iframe>",
-      buttons: [{
-        text: g.messages["word_close"],
-        click: function() {
-          $(this).dialog("close");
-          $("#" + url_field_id).focus();
-        }
-      }]
-    });
-  });
+		ft.create_dialog({
+			dialog: ft.check_url_dialog,
+			title: g.messages["phrase_check_url"] + " - <i>" + url + "</i>",
+			min_width: 800,
+			min_height: 500,
+			content: "<iframe class=\"check_url_iframe\" src=\"" + url + "\"></iframe>",
+			buttons: [{
+				text: g.messages["word_close"],
+				click: function () {
+					$(this).dialog("close");
+					$("#" + url_field_id).focus();
+				}
+			}]
+		});
+	});
 }
 
 /**
@@ -541,173 +543,182 @@ ft.init_check_url_buttons = function() {
  *
  * [jQuery settings like to be in camel; Form Tools uses underscore. Hence the oddity of switching here]
  */
-ft.create_dialog = function(info) {
-  var settings = $.extend({
+ft.create_dialog = function (info) {
+	var settings = $.extend({
 
-    // a reference to the dialog window itself. If this isn't included, the dialog is a one-off
-    dialog:      "<div></div>",
+		// a reference to the dialog window itself. If this isn't included, the dialog is a one-off
+		dialog: "<div></div>",
 
-    // there are two ways to create a dialog. Either specify the ID of the element in the page
-    // containing the markup, or just pass the HTML here.
-    content:     "",
-    title:       "",
-    auto_open:   true,
-    modal:       true,
-    min_width:   400,
-    min_height:  100,
-    buttons:     [],
-    popup_type:  null,
-    open:        function() {},
-    close:       function() { $(this).dialog("destroy"); },
-    resize:      function() {},
-    resize_stop: function() {}
-  }, info);
+		// there are two ways to create a dialog. Either specify the ID of the element in the page
+		// containing the markup, or just pass the HTML here.
+		content: "",
+		title: "",
+		auto_open: true,
+		modal: true,
+		min_width: 400,
+		min_height: 100,
+		buttons: [],
+		popup_type: null,
+		open: function () {
+		},
+		close: function () {
+			$(this).dialog("destroy");
+		},
+		resize: function () {
+		},
+		resize_stop: function () {
+		}
+	}, info);
 
-  // if there's a popup_type specified and we want to add in an icon
-  if (settings.popup_type) {
-    var content = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\"><tr>";
-    switch (settings.popup_type) {
-      case "warning":
-        content += "<td valign=\"top\"><span class=\"popup_icon popup_type_warning\"></span></td>";
-        break;
-      case "error":
-        content += "<td valign=\"top\"><span class=\"popup_icon popup_type_error\"></span></td>";
-        break;
-      case "info":
-        content += "<td valign=\"top\"><span class=\"popup_icon popup_type_info\"></span></td>";
-        break;
-    }
-    content += "<td>" + settings.content + "</td></tr></table>";
-  } else {
-    content = settings.content;
-  }
+	// if there's a popup_type specified and we want to add in an icon
+	if (settings.popup_type) {
+		var content = "<table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\"><tr>";
+		switch (settings.popup_type) {
+			case "warning":
+				content += "<td valign=\"top\"><span class=\"popup_icon popup_type_warning\"></span></td>";
+				break;
+			case "error":
+				content += "<td valign=\"top\"><span class=\"popup_icon popup_type_error\"></span></td>";
+				break;
+			case "info":
+				content += "<td valign=\"top\"><span class=\"popup_icon popup_type_info\"></span></td>";
+				break;
+		}
+		content += "<td>" + settings.content + "</td></tr></table>";
+	} else {
+		content = settings.content;
+	}
 
-  var dialog_content = "";
-  if (settings.content) {
-    dialog_content = $(settings.dialog).html(content);
-  } else {
-    dialog_content = $(settings.dialog);
-  }
+	var dialog_content = "";
+	if (settings.content) {
+		dialog_content = $(settings.dialog).html(content);
+	} else {
+		dialog_content = $(settings.dialog);
+	}
 
-  var final_settings = {
-    title:      settings.title,
-    modal:      settings.modal,
-    autoOpen:   settings.auto_open,
-    minWidth:   settings.min_width,
-    minHeight:  settings.min_height,
-    maxHeight:  settings.max_height,
-    buttons:    settings.buttons,
-    open:       settings.open,
-    close:      settings.close,
-    resize:     settings.resize,
-    resizeStop: settings.resize_stop
-  };
+	var final_settings = {
+		title: settings.title,
+		modal: settings.modal,
+		autoOpen: settings.auto_open,
+		minWidth: settings.min_width,
+		minHeight: settings.min_height,
+		maxHeight: settings.max_height,
+		buttons: settings.buttons,
+		open: settings.open,
+		close: settings.close,
+		resize: settings.resize,
+		resizeStop: settings.resize_stop
+	};
 
-  if (settings.width) {
-    final_settings.width = settings.width;
-  }
-  if (settings.width) {
-    final_settings.height = settings.height;
-  }
+	if (settings.width) {
+		final_settings.width = settings.width;
+	}
+	if (settings.width) {
+		final_settings.height = settings.height;
+	}
 
-  dialog_content.dialog(final_settings);
+	dialog_content.dialog(final_settings);
 }
 
 
 /**
  * Simple helper function to show / hide an Ajax loading icon.
  */
-ft.dialog_activity_icon = function(popup, action) {
-  var dialog = $(popup).closest(".ui-dialog");
-  if (action == "show") {
-    if ($(dialog).find(".ajax_activity").length == 0) {
-      $(dialog).find(".ui-dialog-buttonpane").append("<div class=\"ajax_activity\"></div>");
-    }
-  } else {
-    $(dialog).find(".ajax_activity").remove();
-  }
+ft.dialog_activity_icon = function (popup, action) {
+	var dialog = $(popup).closest(".ui-dialog");
+	if (action == "show") {
+		if ($(dialog).find(".ajax_activity").length == 0) {
+			$(dialog).find(".ui-dialog-buttonpane").append("<div class=\"ajax_activity\"></div>");
+		}
+	} else {
+		$(dialog).find(".ajax_activity").remove();
+	}
 }
 
 
 /**
  * Disables a button (by label) in a dialog window.
  */
-ft.dialog_disable_button = function(popup, label) {
-  $(popup).closest(".ui-dialog").find(".ui-dialog-buttonpane button:contains(" + label + ")").button("disable");
+ft.dialog_disable_button = function (popup, label) {
+	$(popup).closest(".ui-dialog").find(".ui-dialog-buttonpane button:contains(" + label + ")").button("disable");
 }
 
 
 /**
  * Hides a message on the screen by by blinding it up.
  */
-ft.hide_message = function(target_id) {
-  $("#" + target_id).hide("blind");
-  return false;
+ft.hide_message = function (target_id) {
+	$("#" + target_id).hide("blind");
+	return false;
 }
 
 
 /**
  * Used in any pages that need to display the placeholder page.
  */
-ft.show_form_field_placeholders_dialog = function(options) {
-  ft.create_dialog({
-    title:  g.messages["phrase_form_field_placeholders"],
-    dialog: ft.form_field_placeholders_dialog,
-    min_width:  800,
-    min_height: 500,
-    max_height: 500,
-    content: "<div id=\"placeholders_dialog_content\"><div style=\"text-align: center; margin: 50px\"><img src=\"" + g.root_url + "/global/images/loading.gif /></div></div>",
-    open: function() {
-      $.ajax({
-        url: g.root_url + "/global/code/actions.php",
-        data: {
-          action:  "get_form_field_placeholders",
-          form_id: options.form_id
-        },
-        dataType: "html",
-        success: function(result) {
-          $("#placeholders_dialog_content").html(result);
-        }
-      })
-    },
-    buttons: { "Close": function() { $(this).dialog("close"); } }
-  });
+ft.show_form_field_placeholders_dialog = function (options) {
+	ft.create_dialog({
+		title: g.messages["phrase_form_field_placeholders"],
+		dialog: ft.form_field_placeholders_dialog,
+		min_width: 800,
+		min_height: 500,
+		max_height: 500,
+		content: "<div id=\"placeholders_dialog_content\"><div style=\"text-align: center; margin: 50px\"><img src=\"" + g.root_url + "/global/images/loading.gif /></div></div>",
+		open: function () {
+			$.ajax({
+				url: g.root_url + "/global/code/actions.php",
+				data: {
+					action: "get_form_field_placeholders",
+					form_id: options.form_id
+				},
+				dataType: "html",
+				success: function (result) {
+					$("#placeholders_dialog_content").html(result);
+				}
+			})
+		},
+		buttons: {
+			"Close": function () {
+				$(this).dialog("close");
+			}
+		}
+	});
 }
 
 /**
  * Checks that a folder has both read and write permissions, and displays the result in an element
  * in the page.
  */
-ft.test_folder_permissions = function(folder, target_message_id) {
-  $.ajax({
-    url: g.root_url + "/global/code/actions.php",
-    data: {
-      action: 'test_folder_permissions',
-      file_upload_dir: folder,
-      return_vars: {
-        target_message_id: target_message_id
-      }
-    },
-    dataType: "json",
-    type:     "POST",
-    success:  ft.response_handler,
-    error:    ft.error_handler
-  });
+ft.test_folder_permissions = function (folder, target_message_id) {
+	$.ajax({
+		url: g.root_url + "/global/code/actions.php",
+		data: {
+			action: 'test_folder_permissions',
+			file_upload_dir: folder,
+			return_vars: {
+				target_message_id: target_message_id
+			}
+		},
+		dataType: "json",
+		type: "POST",
+		success: ft.response_handler,
+		error: ft.error_handler
+	});
 };
 
 
 /**
  * Checks that a folder and a URL are both referring to the same location.
  */
-ft.test_folder_url_match = function(folder, url, target_message_id) {
-  $.ajax({
-    url:      g.root_url + "/global/code/actions.php",
-    data:     "file_upload_dir=" + folder + "&file_upload_url=" + url + "&action=test_folder_url_match" + "&return_vals[]=target_message_id:" + target_message_id,
-    dataType: "json",
-    type:     "POST",
-    success:  ft.response_handler,
-    error:    ft.error_handler
-  });
+ft.test_folder_url_match = function (folder, url, target_message_id) {
+	$.ajax({
+		url: g.root_url + "/global/code/actions.php",
+		data: "file_upload_dir=" + folder + "&file_upload_url=" + url + "&action=test_folder_url_match" + "&return_vals[]=target_message_id:" + target_message_id,
+		dataType: "json",
+		type: "POST",
+		success: ft.response_handler,
+		error: ft.error_handler
+	});
 }
 
 
@@ -725,62 +736,62 @@ ft.test_folder_url_match = function(folder, url, target_message_id) {
  * @param string the ID of the element where the new field size dropdown will be updated
  * @param object options assorted, configurable options
  */
-ft.update_field_size_dropdown = function(el, target_el, options) {
-  var field_type_id = $(el).val();
+ft.update_field_size_dropdown = function (el, target_el, options) {
+	var field_type_id = $(el).val();
 
-  var opts = $.extend({
-    name:                 null,
-    id:                   null,
-    selected:             null,
-    html_class:           null,
-    field_type_size_list: page_ns.field_types["field_type_" + field_type_id],
-    field_size_labels:    page_ns.field_sizes
-  }, options);
+	var opts = $.extend({
+		name: null,
+		id: null,
+		selected: null,
+		html_class: null,
+		field_type_size_list: page_ns.field_types["field_type_" + field_type_id],
+		field_size_labels: page_ns.field_sizes
+	}, options);
 
-  var field_type_sizes = opts.field_type_size_list.split(",");
-  var dd_options = [];
-  for (var i=0; i<field_type_sizes.length; i++) {
-    dd_options.push({
-      value:    field_type_sizes[i],
-      text:     opts.field_size_labels[field_type_sizes[i]],
-      selected: (field_type_sizes[i] == opts.selected) ? " selected" : ""
-    });
-  }
+	var field_type_sizes = opts.field_type_size_list.split(",");
+	var dd_options = [];
+	for (var i = 0; i < field_type_sizes.length; i++) {
+		dd_options.push({
+			value: field_type_sizes[i],
+			text: opts.field_size_labels[field_type_sizes[i]],
+			selected: (field_type_sizes[i] == opts.selected) ? " selected" : ""
+		});
+	}
 
-  var html = "";
+	var html = "";
 
-  // if there are no options, the admin made a boo-boo and didn't assign any field sizes to the field type
-  if (dd_options.length == 0) {
+	// if there are no options, the admin made a boo-boo and didn't assign any field sizes to the field type
+	if (dd_options.length == 0) {
 
-  } else if (dd_options.length == 1) {
-    html = "<input type=\"hidden\"";
-    if (opts.name) {
-      html += " name=\"" + opts.name + "\"";
-    }
-    if (opts.id) {
-      html += " id=\"" + opts.id + "\"";
-    }
-    html += " value=\"" + dd_options[0].value + "\" />" + dd_options[0].text;
-  } else {
-    html = "<select";
-    if (opts.name) {
-      html += " name=\"" + opts.name + "\"";
-    }
-    if (opts.id) {
-      html += " id=\"" + opts.id + "\"";
-    }
-    if (opts.html_class) {
-      html += " class=\"" + opts.html_class + "\"";
-    }
-    html += ">\n";
+	} else if (dd_options.length == 1) {
+		html = "<input type=\"hidden\"";
+		if (opts.name) {
+			html += " name=\"" + opts.name + "\"";
+		}
+		if (opts.id) {
+			html += " id=\"" + opts.id + "\"";
+		}
+		html += " value=\"" + dd_options[0].value + "\" />" + dd_options[0].text;
+	} else {
+		html = "<select";
+		if (opts.name) {
+			html += " name=\"" + opts.name + "\"";
+		}
+		if (opts.id) {
+			html += " id=\"" + opts.id + "\"";
+		}
+		if (opts.html_class) {
+			html += " class=\"" + opts.html_class + "\"";
+		}
+		html += ">\n";
 
-    for (var i=0; i<dd_options.length; i++) {
-      html += "<option value=\"" + dd_options[i].value + "\"" + dd_options[i].selected + ">" + dd_options[i].text + "</option>\n";
-    }
-    html += "</select>";
-  }
+		for (var i = 0; i < dd_options.length; i++) {
+			html += "<option value=\"" + dd_options[i].value + "\"" + dd_options[i].selected + ">" + dd_options[i].text + "</option>\n";
+		}
+		html += "</select>";
+	}
 
-  $(target_el).html(html);
+	$(target_el).html(html);
 }
 
 
@@ -790,14 +801,14 @@ ft.update_field_size_dropdown = function(el, target_el, options) {
  * actions.php script - which is passed back to here - identifying the page element ID to insert the
  * error/success message.
  */
-ft.response_handler = function(data) {
+ft.response_handler = function (data) {
 
-  // check the user wasn't logged out / denied permissions
-  if (!ft.check_ajax_response_permissions(data)) {
-    return;
-  }
+	// check the user wasn't logged out / denied permissions
+	if (!ft.check_ajax_response_permissions(data)) {
+		return;
+	}
 
-  ft.display_message(data.target_message_id, data.success, data.message);
+	ft.display_message(data.target_message_id, data.success, data.message);
 }
 
 
@@ -805,8 +816,8 @@ ft.response_handler = function(data) {
  * TODO expand this to work with dialogs. It should close all open dialogs and hide their loading
  * images, if shown.
  */
-ft.error_handler = function(xml_http_request, text_status, error_thrown) {
-  ft.display_message("ft_message", false, "Error: " + error_thrown);
+ft.error_handler = function (xml_http_request, text_status, error_thrown) {
+	ft.display_message("ft_message", false, "Error: " + error_thrown);
 }
 
 
@@ -814,39 +825,43 @@ ft.error_handler = function(xml_http_request, text_status, error_thrown) {
  * Called when the administrator clicks on the "Update" link - it gets the upgrade info form
  * from the server, inserts it into the page and submits it.
  */
-ft.check_updates = function() {
-  if ($("#upgrade_form").length) {
-    $("#upgrade_form").submit();
-  } else {
-    $.ajax({
-      url:      g.root_url + "/global/code/actions.php",
-      data:     "action=get_upgrade_form_html",
-      dataType: "html",
-      type:     "POST",
-      success:  ft.embed_and_submit_upgrade_form,
+ft.check_updates = function () {
+	if ($("#upgrade_form").length) {
+		$("#upgrade_form").submit();
+	} else {
+		$.ajax({
+			url: g.root_url + "/global/code/actions.php",
+			data: "action=get_upgrade_form_html",
+			dataType: "html",
+			type: "POST",
+			success: ft.embed_and_submit_upgrade_form,
 
-      // bit of an assumption here: it assumes that every page has the default ft_message notification
-      // element. If it doesn't, the error just won't show
-      error:    ft.error_handler
-    });
-  }
+			// bit of an assumption here: it assumes that every page has the default ft_message notification
+			// element. If it doesn't, the error just won't show
+			error: ft.error_handler
+		});
+	}
 
-  return false;
+	return false;
 }
 
 
-ft.embed_and_submit_upgrade_form = function(data) {
-  // check the user wasn't logged out / denied permissions
-  if (!ft.check_ajax_response_permissions(data)) {
-    return;
-  }
+ft.embed_and_submit_upgrade_form = function (data) {
+	// check the user wasn't logged out / denied permissions
+	if (!ft.check_ajax_response_permissions(data)) {
+		return;
+	}
 
-  $("body").append(data);
-  ft.queue.push([
-    function() { $("#upgrade_form").submit(); },
-    function() { return ($("#upgrade_form").length > 0); }
-  ]);
-  ft.process_queue();
+	$("body").append(data);
+	ft.queue.push([
+		function () {
+			$("#upgrade_form").submit();
+		},
+		function () {
+			return ($("#upgrade_form").length > 0);
+		}
+	]);
+	ft.process_queue();
 }
 
 
@@ -859,13 +874,13 @@ ft.embed_and_submit_upgrade_form = function(data) {
  * @param string class the class name to apply
  * @param array all_classes. All class that may
  */
-ft.toggle_unique_class = function(el, new_class, all_classes) {
-  for (var i=0; i<all_classes.length; i++) {
-    if ($(el).hasClass(all_classes[i])) {
-      $(el).removeClass(all_classes[i]);
-    }
-  }
-  $(el).addClass(new_class);
+ft.toggle_unique_class = function (el, new_class, all_classes) {
+	for (var i = 0; i < all_classes.length; i++) {
+		if ($(el).hasClass(all_classes[i])) {
+			$(el).removeClass(all_classes[i]);
+		}
+	}
+	$(el).addClass(new_class);
 }
 
 
@@ -877,12 +892,12 @@ ft.toggle_unique_class = function(el, new_class, all_classes) {
  * @param array node_list
  * @return node a document fragment
  */
-ft.group_nodes = function(node_list) {
-  var fragment = document.createDocumentFragment();
-  for (var i=0, j=node_list.length; i<j; i++) {
-    fragment.appendChild(node_list[i][0]);
-  }
-  return fragment;
+ft.group_nodes = function (node_list) {
+	var fragment = document.createDocumentFragment();
+	for (var i = 0, j = node_list.length; i < j; i++) {
+		fragment.appendChild(node_list[i][0]);
+	}
+	return fragment;
 }
 
 /**
@@ -894,56 +909,55 @@ ft.group_nodes = function(node_list) {
  * [2] : interval ID (managed internally by script) - (integer)
  */
 ft.queue = [];
-ft.process_queue = function() {
-  if (!ft.queue.length)
-    return;
+ft.process_queue = function () {
+	if (!ft.queue.length)
+		return;
 
-  // if this code hasn't begun being executed, start 'er up
-  if (!ft.queue[0][2]) {
-    ft.queue[0][0]();
-    timeout_id = window.setInterval("ft.check_queue_item_complete()", 50);
-    ft.queue[0][2] = timeout_id;
-  }
+	// if this code hasn't begun being executed, start 'er up
+	if (!ft.queue[0][2]) {
+		ft.queue[0][0]();
+		timeout_id = window.setInterval("ft.check_queue_item_complete()", 50);
+		ft.queue[0][2] = timeout_id;
+	}
 }
 
-ft.check_queue_item_complete = function() {
-  if (ft.queue[0][1]()) {
-    window.clearInterval(ft.queue[0][2]);
-    ft.queue.shift();
-    ft.process_queue();
-  }
+ft.check_queue_item_complete = function () {
+	if (ft.queue[0][1]()) {
+		window.clearInterval(ft.queue[0][2]);
+		ft.queue.shift();
+		ft.process_queue();
+	}
 }
 
-ft.is_valid_url = function(url) {
-  var RegExp = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
-  return RegExp.test(url);
+ft.is_valid_url = function (url) {
+	var RegExp = /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
+	return RegExp.test(url);
 }
 
 
-ft.check_ajax_response_permissions = function(json) {
-  try {
-    json = JSON.parse(json);
-    if (typeof json.ft_logout != undefined && json.ft_logout == 1) {
-      ft.create_dialog({
-        title:      "Sessions expired",
-        content:    "Sorry, your session has expired. Please click the button below to log back in.",
-        popup_type: "error",
-        buttons: [
-          {
-            text:  "Return to login screen",
-            click: function() {
-              window.location = g.root_url;
-            }
-          }
-        ]
-      });
-      return false;
-    }
-  }
-  catch (e) {
-  }
+ft.check_ajax_response_permissions = function (json) {
+	try {
+		json = JSON.parse(json);
+		if (typeof json.ft_logout != undefined && json.ft_logout == 1) {
+			ft.create_dialog({
+				title: "Sessions expired",
+				content: "Sorry, your session has expired. Please click the button below to log back in.",
+				popup_type: "error",
+				buttons: [
+					{
+						text: "Return to login screen",
+						click: function () {
+							window.location = g.root_url;
+						}
+					}
+				]
+			});
+			return false;
+		}
+	} catch (e) {
+	}
 
-  return true;
+	return true;
 }
 
 
@@ -953,22 +967,22 @@ ft.check_ajax_response_permissions = function(json) {
  * @param array arr each index is a hash with two keys: name and value
  * @param string name
  */
-ft._extract_array_val = function(arr, name) {
-  var value = "";
-  for (var i=0, j=arr.length; i<j; i++) {
-    if (arr[i].name == name) {
-      value = arr[i].value;
-      break;
-    }
-  }
-  return value;
+ft._extract_array_val = function (arr, name) {
+	var value = "";
+	for (var i = 0, j = arr.length; i < j; i++) {
+		if (arr[i].name == name) {
+			value = arr[i].value;
+			break;
+		}
+	}
+	return value;
 }
 
-ft.re_init_placeholder_field_overlays = function() {
-  $(".lang_placeholder_field").each(function() {
-    var pos   = $(this).offset();
-    var width = pos.left + $(this).width();
-    $(this).parent().find(".placeholder_field_overlay").css({ "left": width })
-  });
+ft.re_init_placeholder_field_overlays = function () {
+	$(".lang_placeholder_field").each(function () {
+		var pos = $(this).offset();
+		var width = pos.left + $(this).width();
+		$(this).parent().find(".placeholder_field_overlay").css({ "left": width })
+	});
 }
 
