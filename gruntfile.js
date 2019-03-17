@@ -47,16 +47,32 @@ const config = {
 			sourceMap: true
 		},
 		dist: {
-			files: {
-				'dist/themes/default/css/styles.css': 'src/themes/default/sass/index.scss',
-			}
+			files: [
+				{
+					src: 'src/themes/default/sass/index.scss',
+					dest: 'dist/themes/default/css/styles.css'
+				},
+				{
+					src: ['swatch_*.scss'],
+					expand: true,
+					cwd: "src/themes/default/sass/",
+					dest: 'dist/themes/default/css/',
+					ext: '.css'
+				}
+			]
 		}
+	},
+
+	sasslint: {
+		target: [
+			'src/themes/default/sass/\*.scss'
+		]
 	},
 
 	watch: {
 		css: {
 			files: ['**/*.scss'],
-			tasks: ['sass']
+			tasks: ['sass', 'sasslint']
 		},
 		src: {
 			files: ['src/**'],
@@ -415,7 +431,7 @@ module.exports = function (grunt) {
 	// for local dev work. All you need to do is run `grunt`: that creates a dist/ folder containing all the built code,
 	// plus sets up watchers to copy over changed files and generate the CSS from Sass. Be sure to load up the dist/
 	// folder in your browser
-	grunt.registerTask('default', ['sync', 'sass', 'concurrent:watchers']);
+	grunt.registerTask('default', ['sync', 'sasslint', 'sass', 'concurrent:watchers']);
 
 	// builds everything into the dist folder
 	grunt.registerTask('prod', ['i18n', 'sync', 'sass']);

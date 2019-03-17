@@ -98,6 +98,7 @@
     "grunt-contrib-watch": "^1.1.0",
     "grunt-run": "^0.8.1",
     "grunt-sass": "^3.0.1",
+    "grunt-sass-lint": "^0.2.4",
     "grunt-sync": "^0.8.0",
     "jest": "^23.6.0",
     "line-reader": "^0.4.0",

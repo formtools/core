@@ -2,24 +2,29 @@ div.nav_heading {
   font-weight: bold;
   padding-left: 4px;
   color: #444444;
-  padding-top:2px;
-  padding-bottom:2px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 }
+
 div#nav_separator {
   border-bottom: 1px solid #efefef;
   margin-top: 12px;
   margin-bottom: 8px;
   width: 94%;
 }
+
 div#left_nav {
   border-right: 1px dotted #dddddd;
   margin-right: 20px;
 }
+
 .nav_link {
   width: 150px;
   font-size: 8.6pt;
 }
-.nav_link a:link, .nav_link a:visited {
+
+.nav_link a:link,
+.nav_link a:visited {
   width: 156px;
   display: block;
   vertical-align: center;
@@ -29,7 +34,9 @@ div#left_nav {
   padding-bottom: 2px;
   color: #555555;
 }
-.nav_link_submenu a:link, .nav_link_submenu a:visited {
+
+.nav_link_submenu a:link,
+.nav_link_submenu a:visited {
   width: 150px;
   display: block;
   vertical-align: center;
@@ -38,35 +45,42 @@ div#left_nav {
   padding-top: 2px;
   padding-bottom: 2px;
 }
+
 .nav_link_selected {
   text-decoration: none;
   padding-left: 20px;
   padding-top: 2px;
   padding-bottom: 2px;
   color: black;
-  background-color: #D2E0EF;
+  background-color: #d2e0ef;
 }
+
 .nav_link_selected a {
   color: black;
   text-decoration: none;
 }
+
 table.add_form_nav td {
   width: 16%;
   text-align: center;
   line-height: 15px;
 }
+
 table.add_form_nav td.selected {
   background-color: #007700;
   color: white;
   border-right: 1px solid #cccccc;
 }
-table.add_form_nav td.selected a:link,table.add_form_nav td.selected a:visited {
+
+table.add_form_nav td.selected a:link,
+table.add_form_nav td.selected a:visited {
   text-decoration: none;
   width: 100%;
   color: white;
   display: block;
   padding: 1px;
 }
+
 table.add_form_nav td.unselected {
   background-color: #ffffff;
   color: #999999;
@@ -75,32 +89,49 @@ table.add_form_nav td.unselected {
   border-right: 1px solid #cccccc;
 }
 
-/* previous / next links */
+// previous / next links
 .prevnext_links {
   text-align: right;
   margin-top: 4px;
 }
+
 .prevnext_links span {
   color: #cccccc;
 }
+
 .prevnext_links span.no_link {
   padding: 2px 8px;
 }
+
 .prevnext_links span a {
   padding: 2px 8px;
   background-color: #efefef;
-  -moz-border-radius: 3px;
   border-radius: 3px;
   color: #333333;
 }
+
 .prevnext_links span a:hover {
   background-color: #0b4a04;
   color: white;
   text-decoration: none;
 }
 
-/* for nav pagination */
-div#list_nav { line-height: 19px; margin-top: 2px; }
-div#list_nav span { font-size: 11pt; }
-#list_nav a:visited, #list_nav a:link { text-decoration: none }
-#list_nav a:hover { text-decoration: underline; color: orange; }
+// for nav pagination
+div#list_nav {
+  line-height: 19px;
+  margin-top: 2px;
+}
+
+div#list_nav span {
+  font-size: 11pt;
+}
+
+#list_nav a:visited,
+#list_nav a:link {
+  text-decoration: none;
+}
+
+#list_nav a:hover {
+  text-decoration: underline;
+  color: orange;
+}

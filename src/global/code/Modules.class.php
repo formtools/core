@@ -854,7 +854,7 @@ class Modules
         $module = self::getModuleInstance($module_folder);
 
         // include the smarty resources
-        if (is_dir("$root_dir/modules/$module_folder/smarty")) {
+        if (is_dir("$root_dir/modules/$module_folder/smarty_plugins")) {
             $smarty->setPluginsDir("$root_dir/modules/$module_folder/smarty_plugins");
         }
 
