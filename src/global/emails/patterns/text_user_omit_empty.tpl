@@ -10,7 +10,7 @@
 {$LANG.phrase_ip_address}: {literal}{$IPADDRESS}{/literal}
 {/if}
 {elseif $field.is_file_field == "yes"}
-{literal}{if $FILENAME_{/literal}{$field.field_name}{literal}}{/literal}{$field.field_title}: {literal}{$FILEURL_{/literal}{$field.field_name}{literal}}{/literal}{literal}
+{literal}{if $FILENAME_{/literal}{$field.field_name}{literal}}{/literal}{$field.field_title}: {literal}{display_files files=$FILENAMES_{/literal}{$field.field_name}{literal} folder=$FOLDERURL_{/literal}{$field.field_name}{literal} delim="\n"}{/literal}{literal}
 {/if}{/literal}
 {else}
 {literal}{if $ANSWER_{/literal}{$field.field_name}{literal}}{/literal}{$field.field_title}: {literal}{$ANSWER_{/literal}{$field.field_name}{literal}}{/literal}{literal}

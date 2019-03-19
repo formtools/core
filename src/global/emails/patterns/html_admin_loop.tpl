@@ -8,7 +8,7 @@
   {if $field.is_file_field == "yes"}
     <tr>
       <td style="font-weight: bold">{$field.field_title}</td>
-      <td><a href="{$field.folder_url}/{$field.answer}">{$field.answer}</a></td>
+      <td>{display_files format="html" files=$FILENAMES_{$field.field_name} folder=$FOLDERURL_{$field.field_name}}</td>
     </tr>
   {else}
     <tr>

@@ -25,7 +25,7 @@
 {literal}{if $FILENAME_{/literal}{$field.field_name}{literal}}{/literal}
   <tr>
     <td style="font-weight: bold">{$field.field_title}</td>
-    <td><a href="{literal}{$FILEURL_{/literal}{$field.field_name}{literal}}{/literal}">{literal}{$FILENAME_{/literal}{$field.field_name}{literal}}{/literal}</a></td>
+    <td>{literal}{display_files format="html" files=$FILENAMES_{/literal}{$field.field_name}{literal} folder=$FOLDERURL_{/literal}{$field.field_name}{literal}}{/literal}</td>
   </tr>
 {literal}{/if}{/literal}
 {else}

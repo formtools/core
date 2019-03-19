@@ -474,12 +474,14 @@ class Emails {
         $smarty = Core::useSmartyBC() ? new SmartyBC() : new Smarty();
         $smarty->setTemplateDir("$root_dir/global/smarty_plugins/");
         $smarty->setCompileDir("$root_dir/themes/$default_theme/cache/");
+		$smarty->setPluginsDir(array(
+			"$root_dir/global/smarty_plugins"
+		));
         $smarty->assign("LANG", $LANG);
         $smarty->assign("fields", $fields_for_email_template);
 
         if (!empty($templates["text"])) {
-            list($templates["text"], $attachments) = self::extractEmailAttachmentInfo($templates["text"], $form_id,
-                $submission_placeholders);
+            list($templates["text"], $attachments) = self::extractEmailAttachmentInfo($templates["text"], $form_id, $submission_placeholders);
 
             foreach ($attachments as $attachment_info) {
                 if (!in_array($attachment_info, $return_info["attachments"])) {
@@ -512,9 +514,9 @@ class Emails {
                 }
                 $smarty->assign($key, $value);
             }
+
             $return_info["html_content"] = $smarty->fetch("eval.tpl");
         }
-
 
         // compile the "to" / "from" / "reply-to" recipient list, based on this form submission. Virtually
         // everything is already stored in $email_template["recipients"], but needs to be extracted.
@@ -1586,7 +1588,8 @@ class Emails {
         $file_attachments_regexp = '/\{\$attachment\s+fieldvalue=("|\')(.+)("|\')\}/';
         if (preg_match_all($file_attachments_regexp, $template_str, $matches)) {
             foreach ($matches[2] as $file_and_relative_path) {
-                $file_and_relative_path = General::evalSmartyString("{\$" . $file_and_relative_path . "}", $submission_placeholders);
+            	$file_and_relative_path = General::evalSmartyString("{\$" . $file_and_relative_path . "}", $submission_placeholders);
+
                 if (is_file("$root_dir/$file_and_relative_path")) {
                     $pathinfo = pathinfo($file_and_relative_path);
                     $file_name = $pathinfo["basename"];

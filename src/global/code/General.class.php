@@ -1264,12 +1264,22 @@ END;
 
 			if (in_array($field_type_id, $file_field_type_ids)) {
 				$field_settings = Fields::getFieldSettings($field_id);
+
+				// for single file
 				$placeholders["FILENAME_$field_name"] = $field_info["content"];
+
+				// for multiple files
+				$placeholders["FILENAMES_$field_name"] = explode(":", $field_info["content"]);
 
 				// not sure under what condition this value isn't set but it was throwing a notice on the edit submission page
 				if (isset($field_settings["folder_url"])) {
+					// this placeholder only works for single upload fields
 					$placeholders["FILEURL_$field_name"] = "{$field_settings["folder_url"]}/{$field_info["content"]}";
+
+					// for mu;l
+					$placeholders["FOLDERURL_$field_name"] = $field_settings["folder_url"];
 				}
+
 			} else {
 				$detailed_field_info = array();
 				foreach ($form_fields as $curr_field_info) {

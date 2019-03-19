@@ -21,6 +21,7 @@
       </div>
       <script>
         var html_editor = new CodeMirror.fromTextArea($("#html_template")[0], {literal}{{/literal}
+          lineWrapping: true,
           mode: {
             name: "smarty",
             baseMode: "text/html",
@@ -44,6 +45,7 @@
       </div>
       <script>
         var text_editor = new CodeMirror.fromTextArea($("#text_template")[0], {literal}{{/literal}
+          lineWrapping: true,
           mode: {
             name: "smarty",
             baseMode: "text/html",
