@@ -1,0 +1,295 @@
+/**
+ * This file contains styles that are accessible by ALL themes. Module developers can then rely on these
+ * being available, to provide a little consistency to their UIs.
+ */
+
+/* Eric Meyer's reset CSS (tweaked) */
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 100%;
+    font-family: inherit;
+}
+
+/* remember to define focus styles! */
+:focus {
+    outline: 0;
+}
+
+body {
+    line-height: 1;
+    color: black;
+    background: white;
+}
+
+/* tables still need 'cellspacing="0"' in the markup */
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+caption, th, td {
+    font-weight: normal;
+}
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: "";
+}
+
+blockquote, q {
+    quotes: "" "";
+}
+
+/* END reset CSS */
+
+ol, ul {
+    margin-left: 20px;
+}
+
+.pad_right_small {
+    padding-right: 2px;
+}
+
+.pad_left_small {
+    padding-left: 2px;
+}
+
+.pad_top_small {
+    padding-top: 2px;
+}
+
+.pad_bottom_small {
+    padding-bottom: 2px;
+}
+
+.pad_right {
+    padding-right: 4px;
+}
+
+.pad_left {
+    padding-left: 4px;
+}
+
+.pad_top {
+    padding-top: 4px;
+}
+
+.pad_bottom {
+    padding-bottom: 4px;
+}
+
+.pad_right_large {
+    padding-right: 6px;
+}
+
+.pad_left_large {
+    padding-left: 6px;
+}
+
+.pad_top_large {
+    padding-top: 6px;
+}
+
+.pad_bottom_large {
+    padding-bottom: 6px;
+}
+
+.margin_right_small {
+    margin-right: 2px;
+}
+
+.margin_left_small {
+    margin-left: 2px;
+}
+
+.margin_top_small {
+    margin-top: 2px;
+}
+
+.margin_bottom_small {
+    margin-bottom: 2px;
+}
+
+.margin_right {
+    margin-right: 6px;
+}
+
+.margin_left {
+    margin-left: 6px;
+}
+
+.margin_top {
+    margin-top: 6px;
+}
+
+.margin_bottom {
+    margin-bottom: 6px;
+}
+
+.margin_right_large {
+    margin-right: 10px;
+}
+
+.margin_left_large {
+    margin-left: 10px;
+}
+
+.margin_top_large {
+    margin-top: 10px;
+}
+
+.margin_bottom_large {
+    margin-bottom: 10px;
+}
+
+.nowrap {
+    white-space: nowrap;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.red, a.red:link, a.red:visited {
+    color: #cc0000;
+}
+
+.orange, a.orange:link, a.orange:visited {
+    color: orange;
+}
+
+.burgundy, a.burgundy:link, a.burgundy:visited {
+    color: #660000;
+}
+
+.brown, a.brown:link, a.brown:visited {
+    color: brown;
+}
+
+.purple, a.purple:link, a.purple:visited {
+    color: purple;
+}
+
+.blue, a.blue:link, a.blue:visited {
+    color: #336699;
+}
+
+.green, a.green:link, a.green:visited {
+    color: green;
+}
+
+.light_green, a.light_green:link, a.light_green:visited {
+    color: #00cc00;
+}
+
+.black, a.black:link, a.black:visited {
+    color: #000000;
+}
+
+.light_grey, a.light_grey:link, a.light_grey:visited {
+    color: #999999;
+}
+
+.medium_grey, a.medium_grey:link, a.medium_grey:visited {
+    color: #666666;
+}
+
+.hidden, .no_js_hide {
+    display: none;
+}
+
+.center_align {
+    text-align: center;
+}
+
+/* this is hardcoded here for backwards compatibility. New themes can override it */
+.list_table tr.row_highlight {
+    background-color: #c6f1c9;
+}
+
+.hidden {
+    display: none;
+}
+
+.editor {
+    border: 1px solid #666666;
+    padding: 3px;
+    background-color: white;
+}
+
+.editor .CodeMirror {
+    max-height: 150px;
+}
+
+/* jQuery modal dialog style override */
+body .ui-widget-overlay {
+    opacity: 0.4;
+}
+
+body .ui-dialog .ui-dialog-content {
+    text-align: left;
+}
+
+body .ui-dialog .ui-dialog-title {
+    font-weight: bold;
+}
+
+.ajax_activity {
+    width: 32px;
+    height: 32px;
+    background-image: url(../images/loading.gif);
+}
+
+.ui-dialog-buttonpane .ajax_activity {
+    margin: 4px 0 0 4px;
+}
+
+body .ui-dialog .tabbed_dialog {
+    padding: 3px 1px 0 1px;
+}
+
+.right {
+    float: right;
+}
+
+.left {
+    float: left;
+}
+
+input[type=text].lang_placeholder_field {
+    background-repeat: no-repeat;
+    background-position: right;
+    padding-right: 18px;
+}
+
+table.padded_table td {
+    padding: 6px;
+}
+
+.check_url_iframe {
+    width: 100%;
+    height: 480px;
+}
+
+.ellipsis {
+    overflow: hidden;
+}
+
+.req {
+    color: red;
+}
+
+.highlight-code .CodeMirror {
+    height: auto;
+}
