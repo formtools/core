@@ -368,7 +368,12 @@ module.exports = function (grunt) {
 			return;
 		}
 
+		// git branch -D auto_3.0.14
+		//git push origin --delete auto_3.0.14
+
 		child_process.execSync('git checkout releases', { cwd: formtools_releases_folder });
+		child_process.execSync('git rm -rf .', { cwd: formtools_releases_folder });
+		child_process.execSync('git reset --hard origin/releases', { cwd: formtools_releases_folder });
 		child_process.execSync(`cp -R . ../../${release_folder}`, { cwd: path.resolve(__dirname, 'dist') });
 		child_process.execSync(`git checkout -b auto_${version}`, { cwd: formtools_releases_folder });
 		child_process.execSync(`git add -A`, { cwd: formtools_releases_folder });
