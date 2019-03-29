@@ -20,10 +20,13 @@ const globalI18nStrings = [
 ];
 
 let active_modules = [];
+let active_themes = [];
 if (fs.existsSync('./local.dev.js')) {
 	const local_dev = require('./local.dev.js');
 	active_modules = local_dev.modules;
+	active_themes = local_dev.themes;
 }
+
 
 const walk = (dir) => {
 	let results = [];
@@ -105,6 +108,13 @@ const config = {
 				src: ['**'],
 				dest: `dist/modules/${folder.replace(/^module-/, '')}`,
 			}))
+		},
+		themes: {
+			files: active_themes.map((folder) => ({
+				cwd: path.resolve(__dirname, '..', folder),
+				src: ['**'],
+				dest: `dist/themes/${folder.replace(/^theme-/, '')}`,
+			}))
 		}
 	},
 
@@ -162,7 +172,6 @@ module.exports = function (grunt) {
 	grunt.initConfig(config);
 
 	require('load-grunt-tasks')(grunt);
-
 
 	const removeKeyFromI18nFiles = (key) => {
 		pkg.locales.forEach((locale) => {
@@ -369,7 +378,7 @@ module.exports = function (grunt) {
 		}
 
 		// git branch -D auto_3.0.14
-		//git push origin --delete auto_3.0.14
+		// git push origin --delete auto_3.0.14
 
 		child_process.execSync('git checkout releases', { cwd: formtools_releases_folder });
 		child_process.execSync('git rm -rf .', { cwd: formtools_releases_folder });
