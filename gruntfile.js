@@ -43,6 +43,47 @@ const walk = (dir) => {
 	return results;
 };
 
+
+// files that get copied over when they change.
+const syncSrc = [
+	'**',
+	'!**/*.scss', // sass files are built separately
+	'!react/**',
+	'!themes/default/sass/**',
+];
+
+// contains the task details for sass for
+const sassFiles = [
+	{
+		src: 'src/themes/default/sass/index.scss',
+		dest: 'dist/themes/default/css/styles.css'
+	},
+	{
+		src: ['swatch_*.scss'],
+		expand: true,
+		cwd: "src/themes/default/sass/",
+		dest: 'dist/themes/default/css/',
+		ext: '.css'
+	}
+];
+active_themes.forEach((theme) => {
+	syncSrc.push('!' + path.resolve(__dirname, '..', theme, 'sass'));
+
+	// sassFiles.push({
+	// 	src: 'src/themes/default/sass/index.scss',
+	// 	dest: 'dist/themes/default/css/styles.css'
+	// },
+	// {
+	// 	src: ['swatch_*.scss'],
+	// 		expand: true,
+	// 	cwd: "src/themes/default/sass/",
+	// 	dest: 'dist/themes/default/css/',
+	// 	ext: '.css'
+	//
+	// })
+});
+
+
 const config = {
 	sass: {
 		options: {
@@ -51,19 +92,7 @@ const config = {
 			sourceMap: false
 		},
 		dist: {
-			files: [
-				{
-					src: 'src/themes/default/sass/index.scss',
-					dest: 'dist/themes/default/css/styles.css'
-				},
-				{
-					src: ['swatch_*.scss'],
-					expand: true,
-					cwd: "src/themes/default/sass/",
-					dest: 'dist/themes/default/css/',
-					ext: '.css'
-				}
-			]
+			files: sassFiles
 		}
 	},
 
@@ -92,12 +121,7 @@ const config = {
 		main: {
 			files: [{
 				cwd: 'src',
-				src: [
-					'**',
-					'!**/*.scss', // sass files are built separately
-					'!react/**',
-					'!themes/default/sass/**'
-				],
+				src: syncSrc,
 				dest: 'dist',
 			}],
 			verbose: true
