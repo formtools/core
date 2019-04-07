@@ -1298,6 +1298,9 @@ class Submissions {
 
             $results = array();
             foreach ($db->fetchAll() as $row) {
+            	if (empty($row[$col_name])) {
+            		continue;
+				}
                 $results[] = array(
                     "option_value" => $row["submission_id"],
                     "option_name"  => $row[$col_name]

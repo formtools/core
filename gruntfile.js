@@ -61,26 +61,26 @@ const sassFiles = [
 	{
 		src: ['swatch_*.scss'],
 		expand: true,
-		cwd: "src/themes/default/sass/",
+		cwd: 'src/themes/default/sass/',
 		dest: 'dist/themes/default/css/',
 		ext: '.css'
 	}
 ];
-active_themes.forEach((theme) => {
-	syncSrc.push('!' + path.resolve(__dirname, '..', theme, 'sass'));
+const sassLint = [
+	'src/themes/default/sass/\*.scss'
+];
 
-	// sassFiles.push({
-	// 	src: 'src/themes/default/sass/index.scss',
-	// 	dest: 'dist/themes/default/css/styles.css'
-	// },
-	// {
-	// 	src: ['swatch_*.scss'],
-	// 		expand: true,
-	// 	cwd: "src/themes/default/sass/",
-	// 	dest: 'dist/themes/default/css/',
-	// 	ext: '.css'
-	//
-	// })
+const sassFileWatchers = [
+	'**/*.scss'
+];
+
+active_themes.forEach((folder) => {
+	sassFiles.push({
+		src: `../${folder}/sass/index.scss`,
+		dest: `../${folder}/css/styles.css`
+	});
+	sassLint.push(`../${folder}/sass/\*.scss`);
+	sassFileWatchers.push(`../${folder}/sass/\*.scss`);
 });
 
 
@@ -97,14 +97,12 @@ const config = {
 	},
 
 	sasslint: {
-		target: [
-			'src/themes/default/sass/\*.scss'
-		]
+		target: sassLint
 	},
 
 	watch: {
 		css: {
-			files: ['**/*.scss'],
+			files: sassFileWatchers,
 			tasks: ['sass', 'sasslint']
 		},
 		src: {
