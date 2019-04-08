@@ -42,7 +42,8 @@ class Upgrade
 				self::setCoreFieldsAsNotEditable();
 			}
 
-			self::removeModuleTableDescCol();
+			self::removeModulesTableDescCol();
+			self::removeModulesTableModuleKeyCol();
 
 			FieldTypes::resetFieldTypes();
 
@@ -209,9 +210,14 @@ class Upgrade
 		}
 	}
 
-	public static function removeModuleTableDescCol()
+	public static function removeModulesTableDescCol()
 	{
 		General::deleteColumnIfExists("modules", "description");
+	}
+
+	public static function removeModulesTableModuleKeyCol()
+	{
+		General::deleteColumnIfExists("modules", "module_key");
 	}
 
 }

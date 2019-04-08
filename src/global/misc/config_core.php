@@ -1358,13 +1358,6 @@ $STRUCTURE["tables"]["modules"] = array(
         "Default" => "no"
     ),
     array(
-        "Field"   => "module_key",
-        "Type"    => "varchar(15)",
-        "Null"    => "YES",
-        "Key"     => "",
-        "Default" => ""
-    ),
-    array(
         "Field"   => "origin_language",
         "Type"    => "varchar(50)",
         "Null"    => "NO",
