@@ -42,6 +42,8 @@ class Upgrade
 				self::setCoreFieldsAsNotEditable();
 			}
 
+			self::removeModuleTableDescCol();
+
 			FieldTypes::resetFieldTypes();
 
             if ($success) {
@@ -205,6 +207,11 @@ class Upgrade
 
 		} catch (Exception $e) {
 		}
+	}
+
+	public static function removeModuleTableDescCol()
+	{
+		General::deleteColumnIfExists("modules", "description");
 	}
 
 }

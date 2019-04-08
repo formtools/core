@@ -68,9 +68,9 @@ class Modules
 
             $db->query("
                 INSERT INTO {PREFIX}modules (is_installed, is_enabled, origin_language, module_name,
-                  module_folder, version, author, author_email, author_link, description, module_date)
+                  module_folder, version, author, author_email, author_link, module_date)
                 VALUES (:is_installed, :is_enabled, :origin_language, :module_name, :folder, :module_version,
-                  :author, :author_email, :author_link, :module_description, :module_date)
+                  :author, :author_email, :author_link, :module_date)
             ");
             $db->bindAll(array(
                 "is_installed" => "no",
@@ -82,7 +82,6 @@ class Modules
                 "author"             => $module->getAuthor(),
                 "author_email"       => $module->getAuthorEmail(),
                 "author_link"        => $module->getAuthorLink(),
-                "module_description" => $module->getModuleDesc(),
                 "module_date"        => $module_date
             ));
             $db->execute();
@@ -229,7 +228,6 @@ class Modules
                    author = :author,
                    author_email = :author_email,
                    author_link = :author_link,
-                   description = :module_description,
                    module_date = :module_datetime
             WHERE  module_id = :module_id
         ");
@@ -240,7 +238,6 @@ class Modules
             "author" => $module->getAuthor(),
             "author_email" => $module->getAuthorEmail(),
             "author_link" => $module->getAuthorLink(),
-            "module_description" => $module->getModuleDesc(),
             "module_datetime" => $module_datetime,
             "module_id" => $module_id
         ));
@@ -468,7 +465,7 @@ class Modules
         $keyword_clause = "";
         if (!empty($search_criteria["keyword"])) {
             $string = $search_criteria["keyword"];
-            $fields = array("module_name", "module_folder", "description");
+            $fields = array("module_name", "module_folder");
 
             $clauses = array();
             foreach ($fields as $field) {

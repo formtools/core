@@ -1414,13 +1414,6 @@ $STRUCTURE["tables"]["modules"] = array(
         "Default" => ""
     ),
     array(
-        "Field"   => "description",
-        "Type"    => "mediumtext",
-        "Null"    => "NO",
-        "Key"     => "",
-        "Default" => ""
-    ),
-    array(
         "Field"   => "module_date",
         "Type"    => "datetime",
         "Null"    => "NO",

@@ -732,7 +732,6 @@ END;
                   author varchar(200) default NULL,
                   author_email varchar(200) default NULL,
                   author_link varchar(255) default NULL,
-                  description mediumtext NOT NULL,
                   module_date datetime NOT NULL,
                   PRIMARY KEY  (module_id)
                 ) ENGINE=InnoDB DEFAULT CHARSET=$charset

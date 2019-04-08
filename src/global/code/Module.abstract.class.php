@@ -16,7 +16,6 @@ abstract class Module {
 
     // REQUIRED
     protected $moduleName;
-    protected $moduleDesc;
     protected $author;
     protected $authorEmail;
     protected $authorLink;
