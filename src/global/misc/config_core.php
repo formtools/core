@@ -2794,7 +2794,6 @@ $FILES = array(
 	"global/library.php",
 	"global/misc/config_core.php",
 	"global/misc/index.php",
-	"global/misc/mysql_reserved_words.txt",
 	"global/scripts/daterangepicker.jquery.js",
 	"global/scripts/external_form_smart_fill.js",
 	"global/scripts/field_types.php",
