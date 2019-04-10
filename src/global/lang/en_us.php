@@ -1220,3 +1220,7 @@ $LANG["processing_no_redirect_url"] = "The submission was processed correctly, b
 $LANG["notify_differences_resolved"] = "The differences have been resolved.";
 $LANG["notify_conflicts_detected"] = "The data for these fields changed while you were editing the submission. Please select the value you would like to use.";
 $LANG["notify_form_deleted"] = "The form has been deleted.";
+
+// 3.0.15
+$LANG["phrase_upload_folder"] = "Upload folder";
+$LANG["phrase_cache_folder"] = "Cache folder";

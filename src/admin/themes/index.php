@@ -16,16 +16,16 @@ Core::$user->checkAuth("client");
 $success = true;
 $message = "";
 if (isset($request["theme_override"])) {
-    list($success, $message) = Themes::resetAdminTheme($request["theme_override"]);
+	list($success, $message) = Themes::resetAdminTheme($request["theme_override"]);
 }
 if (isset($request["update"])) {
-    list($success, $message) = Settings::updateThemeSettings($_POST);
+	list($success, $message) = Settings::updateThemeSettings($_POST);
 }
 if (isset($_POST["refresh_theme_list"])) {
-    list($success, $message) = Themes::updateThemeList();
+	list($success, $message) = Themes::updateThemeList();
 }
 if (isset($_GET["mass_assign"])) {
-    list($success, $message) = Clients::updateClientThemes($_GET["accounts"], $_GET["theme_id"]);
+	list($success, $message) = Clients::updateClientThemes($_GET["accounts"], $_GET["theme_id"]);
 }
 
 $themes = Themes::getList();
@@ -37,7 +37,6 @@ $LANG = Core::$L;
 $updated_themes = array();
 foreach ($themes as $theme_info) {
 	$cache_folder = "$root_dir/themes/{$theme_info["theme_folder"]}/cache";
-	$theme_info["cache_folder_writable"] = is_writable($cache_folder);
 
 	// if this theme uses swatches, generate a list
 	if ($theme_info["uses_swatches"] == "yes") {
@@ -47,7 +46,7 @@ foreach ($themes as $theme_info) {
 	$updated_themes[] = $theme_info;
 }
 
-$head_js =<<< EOF
+$head_js = <<< EOF
 var rules = [];
 rules.push("required,admin_theme,{$LANG["validation_no_admin_theme"]}");
 rules.push("function,validate_admin_swatch");
@@ -76,26 +75,26 @@ $(function() {
 });
 EOF;
 
-$head_string =<<< END
+$head_string = <<< END
 <script src="$root_url/global/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
 <link rel="stylesheet" href="$root_url/global/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen" />
 END;
 
 $page = array(
-    "page" => "themes",
-    "g_success" => $success,
-    "g_message" => $message,
-    "page_url" => Pages::getPageUrl("settings_themes"),
-    "head_title" => "{$LANG["word_settings"]} - {$LANG["word_themes"]}",
-    "nav_page" => "program_settings",
-    "themes" => $updated_themes,
-    "js_messages" => "",
-    "admin_theme" => Sessions::get("account.theme"),
-    "admin_theme_swatch" => Sessions::get("account.swatch"),
-    "client_theme" => Sessions::get("settings.default_theme"),
-    "client_theme_swatch" => Sessions::get("settings.default_client_swatch"),
-    "head_js" => $head_js,
-    "head_string" => $head_string
+	"page" => "themes",
+	"g_success" => $success,
+	"g_message" => $message,
+	"page_url" => Pages::getPageUrl("settings_themes"),
+	"head_title" => "{$LANG["word_settings"]} - {$LANG["word_themes"]}",
+	"nav_page" => "program_settings",
+	"themes" => $updated_themes,
+	"js_messages" => "",
+	"admin_theme" => Sessions::get("account.theme"),
+	"admin_theme_swatch" => Sessions::get("account.swatch"),
+	"client_theme" => Sessions::get("settings.default_theme"),
+	"client_theme_swatch" => Sessions::get("settings.default_client_swatch"),
+	"head_js" => $head_js,
+	"head_string" => $head_string
 );
 
 Themes::displayPage("admin/themes/index.tpl", $page);

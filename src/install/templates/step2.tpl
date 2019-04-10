@@ -64,10 +64,8 @@
 		</td>
 	</tr>
 	<tr>
-		<td rowspan="2" valign="top">{$LANG.phrase_write_permissions}</td>
-		<td class="bold">
-			/upload/
-		</td>
+		<td valign="top">{$LANG.phrase_upload_folder}</td>
+        <td class="bold">/upload/</td>
 		<td align="center">
 			{if $upload_folder_writable}
 				<span class="green">{$LANG.word_pass|upper}</span>
@@ -77,11 +75,12 @@
 		</td>
 	</tr>
 	<tr>
-		<td class="bold">
-			/themes/{$g_default_theme}/cache/
+        <td>{$LANG.phrase_cache_folder}</td>
+        <td class="bold">
+            <input type="text" value="{$cache_folder}" style="width: 100%" />
 		</td>
 		<td align="center">
-			{if $default_theme_cache_dir_writable}
+			{if $cache_dir_writable}
 				<span class="green">{$LANG.word_pass|upper}</span>
 			{else}
 				<span class="red">{$LANG.word_fail|upper}</span>
@@ -96,7 +95,7 @@
 		{$LANG.text_install_form_tools_server_not_supported}
 	</p>
 
-{elseif !$upload_folder_writable || !$default_theme_cache_dir_writable}
+{elseif !$upload_folder_writable || !$cache_dir_writable}
 
 	<p class="error" style="padding: 6px">
         Please ensure the required folders have write permissions. See the
@@ -115,6 +114,7 @@
 
 		<div id="continue_block">
 			<p>
+                <input type="submit" name="update" value="{$LANG.word_update}" />
 				<input type="submit" name="next" value="{$LANG.word_continue_rightarrow}" />
 			</p>
 		</div>
