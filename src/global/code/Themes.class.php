@@ -89,37 +89,32 @@ class Themes {
         $db = Core::$db;
         $LANG = Core::$L;
 
-        // get the existing themes
-//        $current_themes = self::getList();
-
         // empty the themes table
         self::emptyThemesTable();
 
         $themes = self::getUninstalledThemes();
 
-        $db->beginTransaction();
-        foreach ($themes as $theme_info) {
-            $db->query("
-                INSERT INTO {PREFIX}themes (theme_folder, theme_name, uses_swatches, swatches, author, theme_link, 
-                  description, is_enabled, theme_version)
-                VALUES (:folder, :theme_name, :theme_uses_swatches, :swatches, :theme_author, :theme_link, 
-                  :theme_description, :theme_version)
-            ");
-            $db->bindAll(array(
-                "folder" => $theme_info["theme_folder"],
-                "theme_name" => $theme_info["theme_name"],
-                "theme_uses_swatches" => $theme_info["theme_uses_swatches"],
-                "swatches" => $theme_info["swatches"],
-                "theme_author" => $theme_info["theme_author"],
-                "theme_link" => $theme_info["theme_link"],
-                "theme_description" => $theme_info["theme_description"],
-                "theme_version" => $theme_info["theme_version"]
-            ));
-            $db->execute();
-        }
-
-        try {
-            $db->processTransaction();
+		try {
+			foreach ($themes as $theme_info) {
+				$db->query("
+					INSERT INTO {PREFIX}themes (theme_folder, theme_name, uses_swatches, swatches, author, theme_link, 
+					  description, is_enabled, theme_version)
+					VALUES (:folder, :theme_name, :theme_uses_swatches, :swatches, :theme_author, :theme_link, 
+					  :theme_description, :is_enabled, :theme_version)
+				");
+				$db->bindAll(array(
+					"folder" => $theme_info["theme_folder"],
+					"theme_name" => $theme_info["theme_name"],
+					"theme_uses_swatches" => $theme_info["theme_uses_swatches"],
+					"swatches" => $theme_info["swatches"],
+					"theme_author" => $theme_info["theme_author"],
+					"theme_link" => $theme_info["theme_link"],
+					"theme_description" => $theme_info["theme_description"],
+					"is_enabled" => "yes",
+					"theme_version" => $theme_info["theme_version"]
+				));
+				$db->execute();
+			}
         } catch (Exception $e) {
             return array(false, $e->getMessage());
         }
