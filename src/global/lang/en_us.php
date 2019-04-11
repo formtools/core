@@ -1222,5 +1222,5 @@ $LANG["notify_conflicts_detected"] = "The data for these fields changed while yo
 $LANG["notify_form_deleted"] = "The form has been deleted.";
 
 // 3.0.15
-$LANG["phrase_upload_folder"] = "Upload folder";
-$LANG["phrase_cache_folder"] = "Cache folder";
+$LANG["phrase_upload_folder_writable"] = "Upload folder writable";
+$LANG["phrase_cache_folder_writable"] = "Cache folder writable";

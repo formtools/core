@@ -108,7 +108,8 @@ a:hover {
     border-bottom: 1px solid #bb0000;
 }
 
-a.no_border:link, a.no_border:visited {
+a.no_border:link,
+a.no_border:visited {
     border-bottom: none;
     outline: none;
 }
@@ -168,6 +169,7 @@ a.no_border:link, a.no_border:visited {
 
 table.info td {
     border-bottom: 1px solid #efefef;
+    padding: 2px;
 }
 
 .error {
@@ -320,14 +322,6 @@ body .CodeMirror {
     float: left;
 }
 
-#verify_license_key_loading {
-    display: none;
-    float: right;
-    width: 32px;
-    height: 32px;
-    background-image: url(../../global/images/loading.gif);
-}
-
 span.fail {
     margin-left: 10px;
     background-color: #aa0000;
@@ -342,4 +336,13 @@ span.pass {
     padding: 1px 10px;
     color: white;
     border-radius: 4px;
+}
+
+.cache_folder_writable_block {
+    margin-top: 1px;
+    color: #999999;
+}
+
+.grey {
+    color: #999999;
 }

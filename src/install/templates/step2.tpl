@@ -64,7 +64,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td valign="top">{$LANG.phrase_upload_folder}</td>
+		<td valign="top">{$LANG.phrase_upload_folder_writable}</td>
         <td class="bold">/upload/</td>
 		<td align="center">
 			{if $upload_folder_writable}
@@ -75,18 +75,35 @@
 		</td>
 	</tr>
 	<tr>
-        <td>{$LANG.phrase_cache_folder}</td>
-        <td class="bold">
-            <input type="text" value="{$cache_folder}" style="width: 100%" />
-		</td>
-		<td align="center">
-			{if $cache_dir_writable}
-				<span class="green">{$LANG.word_pass|upper}</span>
-			{else}
-				<span class="red">{$LANG.word_fail|upper}</span>
-			{/if}
-		</td>
-	</tr>
+        <td valign="top">
+            {$LANG.phrase_cache_folder_writable}
+            <div class="cache_folder_writable_block">
+                <input type="checkbox" id="use_custom_cache_folder" />
+                <label for="use_custom_cache_folder">Use custom cache folder</label>
+            </div>
+        </td>
+        <td valign="top">
+            <div id="cache_folder_default">
+                <span class="bold">{$cache_folder}</span>
+            </div>
+            <div id="cache_folder_custom" style="display: none">
+                <form action="step2.php" method="post">
+                    <input type="text" name="custom_cache_folder" value="{$cache_folder}" style="width: 100%" />
+                    <input type="submit" name="check_permissions" value="Check Permissions" />
+                </form>
+            </div>
+        </td>
+		<td align="center" valign="top">
+            <div id="cache_folder_default_result">
+                {if $cache_dir_writable}
+                    <span class="green">{$LANG.word_pass|upper}</span>
+                {else}
+                    <span class="red">{$LANG.word_fail|upper}</span>
+                {/if}
+            </div>
+            <div id="cache_folder_custom_result" class="grey" style="display:none">&#8212;</div>
+        </td>
+    </tr>
 </table>
 
 {if !$valid_php_version || !$pdo_available || !$pdo_mysql_available || !$sessions_loaded}
@@ -114,8 +131,7 @@
 
 		<div id="continue_block">
 			<p>
-                <input type="submit" name="update" value="{$LANG.word_update}" />
-				<input type="submit" name="next" value="{$LANG.word_continue_rightarrow}" />
+				<input type="submit" name="next" id="next" value="{$LANG.word_continue_rightarrow}" />
 			</p>
 		</div>
 
