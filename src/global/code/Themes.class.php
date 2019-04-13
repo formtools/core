@@ -170,11 +170,6 @@ class Themes {
                 $swatches = implode("|", $swatch_info);
             }
 
-            // try to set the cache folder as writable
-            if (!is_writable("$themes_folder/$folder/cache/")) {
-                @chmod("$themes_folder/$folder/cache/", 0777);
-            }
-
             $theme_data[] = array(
                 "theme_folder" => $folder,
                 "theme_name" => $info["theme_name"],

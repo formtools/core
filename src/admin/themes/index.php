@@ -36,7 +36,6 @@ $LANG = Core::$L;
 // check permissions on all the themes
 $updated_themes = array();
 foreach ($themes as $theme_info) {
-	$cache_folder = "$root_dir/themes/{$theme_info["theme_folder"]}/cache";
 
 	// if this theme uses swatches, generate a list
 	if ($theme_info["uses_swatches"] == "yes") {

@@ -513,8 +513,7 @@ class Settings {
         Settings::set($new_settings);
 
 
-        // finally, update the enabled themes list. Only set the theme as enabled if the
-        // cache folder is writable
+        // finally, update the enabled themes list
         $db->query("
             UPDATE {PREFIX}themes
             SET is_enabled = 'no'
@@ -522,16 +521,6 @@ class Settings {
         $db->execute();
 
         foreach ($enabled_themes as $theme) {
-            $cache_folder = "$root_dir/themes/$theme/cache";
-
-            // try and set the cache folder as writable
-            if (!is_writable($cache_folder)) {
-                @chmod($cache_folder, 0777);
-            }
-            if (!is_writable($cache_folder)) {
-                continue;
-            }
-
             $db->query("
                 UPDATE {PREFIX}themes
                 SET    is_enabled = 'yes'

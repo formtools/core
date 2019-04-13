@@ -81,6 +81,11 @@ class Core
 	private static $dbTablePrefix = "ft_";
 
 	/**
+	 * Added in 3.0.15, lets users override the default cache folder location.
+	 */
+	private static $cacheFolder = "";
+
+	/**
 	 * This controls the maximum number of pagination links that appear in the Form Tools UI (e.g. for
 	 * viewing the submission listings page).
 	 */
@@ -187,6 +192,7 @@ class Core
 	 * Limits the number of fields that can be stored for a form.
 	 */
 	private static $maxFormFields = "";
+
 
 	// -------------------------------------------------------------------------------------------------
 
@@ -467,6 +473,7 @@ class Core
 		self::$setSqlMode = (isset($g_set_sql_mode)) ? $g_set_sql_mode : null;
 		self::$sqlStrictMode = (isset($g_sql_strict_mode)) ? $g_sql_strict_mode : "off";
 		self::$hideUpgradeLink = (isset($g_hide_upgrade_link)) ? $g_hide_upgrade_link : false;
+		self::$cacheFolder = isset($g_custom_cache_folder) ? $g_custom_cache_folder : realpath("../../cache/");
 		self::$enableBenchmarking = (isset($g_enable_benchmarking)) ? $g_enable_benchmarking : false;
 		self::$jsDebugEnabled = isset($g_js_debug) ? $g_js_debug : false;
 		self::$maxForms = isset($g_max_forms) ? $g_max_forms : "";
@@ -807,6 +814,10 @@ class Core
 		self::$tempCache = $value;
 	}
 
+	public static function getCacheFolder ()
+	{
+		return self::$cacheFolder;
+	}
 
 	// private methods
 
