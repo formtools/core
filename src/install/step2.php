@@ -5,28 +5,58 @@ require_once("../global/library.php");
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Installation;
+use FormTools\Sessions;
 
 Core::setHooksEnabled(false);
 Core::startSessions();
 
 Installation::checkInstallationComplete();
 
+$success = true;
+$message = "";
+$custom_cache_folder = "";
+if (isset($request["next"])) {
+
+	if (isset($request["use_custom_cache_folder"])) {
+		$custom_cache_folder = $request["custom_cache_folder"];
+		$custom_cache_folder_exists = is_dir($custom_cache_folder);
+
+		if ($custom_cache_folder_exists) {
+			$custom_cache_folder_writable = is_writable($custom_cache_folder);
+
+			if ($custom_cache_folder_writable) {
+				Sessions::set("g_custom_cache_folder", $custom_cache_folder);
+			} else {
+				$success = false;
+				$message = "The custom cache folder you entered needs to have full read-write permissions.";
+			}
+		} else {
+			$success = false;
+			$message = "The custom cache folder you entered does not exist.";
+		}
+	} else {
+		Sessions::set("g_custom_cache_folder", "");
+	}
+
+	if ($success) {
+		header("location: step3.php");
+		exit;
+	}
+}
+
 Core::initSmarty();
 Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));
 
-// folder permissions
 $upload_folder_writable = is_writable(realpath("../upload"));
-
-if (isset($request["check_permissions"])) {
-	$cache_folder = $request["custom_cache_folder"];
-} else {
-	$cache_folder = realpath("../cache/");
-}
-$cache_dir_writable = is_writable($cache_folder);
+$cache_dir_writable = is_writable(realpath("../cache/"));
 
 $page = array(
+	"g_success" => $success,
+    "g_message" => $message,
     "step" => 2,
-    "cache_folder" => $cache_folder,
+    "cache_folder" => "/cache/",
+    "custom_cache_folder" => !empty($custom_cache_folder) ? $custom_cache_folder : realpath("../cache/"),
+	"use_custom_cache_folder" => !empty($custom_cache_folder),
     "phpversion" => phpversion(),
     "valid_php_version" => Core::isValidPHPVersion(),
     "pdo_available" => extension_loaded("PDO"),
@@ -36,8 +66,7 @@ $page = array(
     "upload_folder_writable" => $upload_folder_writable,
     "cache_dir_writable" => $cache_dir_writable,
     "js_messages" => array(
-        "word_error", "validation_incomplete_license_keys", "notify_invalid_license_keys",
-        "word_close", "word_invalid", "word_verified", "word_continue"
+        "word_error", "word_close", "word_continue"
     )
 );
 

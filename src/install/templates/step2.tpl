@@ -2,9 +2,13 @@
 
 <h2>{$LANG.phrase_system_check}</h2>
 
-<p>
+{include file='messages.tpl'}
+
+<div class="margin_bottom_large">
 	{$LANG.text_install_system_check}
-</p>
+</div>
+
+<form action="step2.php" method="post">
 
 <table cellspacing="0" cellpadding="2" width="600" class="info">
 	<tr>
@@ -19,15 +23,15 @@
 		</td>
 	</tr>
 	<tr>
-		<td valign="top">PDO available</td>
-		<td valign="top" class="bold">
+		<td>PDO available</td>
+		<td class="bold">
             {if $pdo_available}
 				{$LANG.word_yes}
 			{else}
                 {$LANG.word_no}
 			{/if}
 		</td>
-		<td valign="top" align="center">
+		<td align="center">
             {if $pdo_available}
 				<span class="green">{$LANG.word_pass|upper}</span>
             {else}
@@ -36,9 +40,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td valign="top">MySQL available</td>
-		<td valign="top" class="bold">{$LANG.word_yes}</td>
-		<td valign="top" align="center">
+		<td>MySQL available</td>
+		<td class="bold">{$LANG.word_yes}</td>
+		<td align="center">
             {if $pdo_mysql_available}
 				<span class="green">{$LANG.word_pass|upper}</span>
 			{else}
@@ -50,9 +54,9 @@
 		<td>PHP Sessions</td>
 		<td class="bold">
 			{if $sessions_loaded == 1}
-				Available
+				{$LANG.word_available}
 			{else}
-				Not Available
+                {$LANG.phrase_not_available}
 			{/if}
 		</td>
 		<td width="100" align="center">
@@ -64,7 +68,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td valign="top">{$LANG.phrase_upload_folder_writable}</td>
+		<td>{$LANG.phrase_upload_folder}</td>
         <td class="bold">/upload/</td>
 		<td align="center">
 			{if $upload_folder_writable}
@@ -75,33 +79,27 @@
 		</td>
 	</tr>
 	<tr>
-        <td valign="top">
-            {$LANG.phrase_cache_folder_writable}
-            <div class="cache_folder_writable_block">
-                <input type="checkbox" id="use_custom_cache_folder" />
-                <label for="use_custom_cache_folder">Use custom cache folder</label>
-            </div>
+        <td>{$LANG.phrase_cache_folder}</td>
+        <td class="bold">{$cache_folder}</td>
+		<td align="center">
+            {if $cache_dir_writable}
+                <span class="green">{$LANG.word_pass|upper}</span>
+            {else}
+                <span class="red">{$LANG.word_fail|upper}</span>
+            {/if}
         </td>
-        <td valign="top">
-            <div id="cache_folder_default">
-                <span class="bold">{$cache_folder}</span>
-            </div>
-            <div id="cache_folder_custom" style="display: none">
-                <form action="step2.php" method="post">
-                    <input type="text" name="custom_cache_folder" value="{$cache_folder}" style="width: 100%" />
-                    <input type="submit" name="check_permissions" value="Check Permissions" />
-                </form>
-            </div>
+    </tr>
+    <tr>
+        <td class="cache_folder_writable_block">
+            &#8212;
+                <input type="checkbox" id="use_custom_cache_folder" name="use_custom_cache_folder"
+                {if $use_custom_cache_folder}checked="checked"{/if}/>
+                <label for="use_custom_cache_folder">{$LANG.phrase_use_custom_cache_folder}</label>
         </td>
-		<td align="center" valign="top">
-            <div id="cache_folder_default_result">
-                {if $cache_dir_writable}
-                    <span class="green">{$LANG.word_pass|upper}</span>
-                {else}
-                    <span class="red">{$LANG.word_fail|upper}</span>
-                {/if}
+        <td colspan="2">
+            <div id="cache_folder_custom" {if !$use_custom_cache_folder}style="display:none"{/if}>
+                <input type="text" name="custom_cache_folder" value="{$custom_cache_folder}" style="width: 100%;" />
             </div>
-            <div id="cache_folder_custom_result" class="grey" style="display:none">&#8212;</div>
         </td>
     </tr>
 </table>
@@ -115,27 +113,25 @@
 {elseif !$upload_folder_writable || !$cache_dir_writable}
 
 	<p class="error" style="padding: 6px">
-        Please ensure the required folders have write permissions. See the
-		<a href="https://docs.formtools.org/installation/step2/">help documentation</a> for further information.
+        {$text_required_folders_need_write_permissions}
 	</p>
 
 {else}
 
-	<form action="step3.php" method="post">
+    {if $suhosin_loaded}
+        <div class="warning">
+            {$LANG.notify_suhosin_installed}
+        </div>
+    {/if}
 
-		{if $suhosin_loaded}
-			<div class="warning">
-				{$LANG.notify_suhosin_installed}
-			</div>
-		{/if}
+    <div id="continue_block">
+        <p>
+            <input type="submit" name="next" id="next" value="{$LANG.word_continue_rightarrow}" />
+        </p>
+    </div>
 
-		<div id="continue_block">
-			<p>
-				<input type="submit" name="next" id="next" value="{$LANG.word_continue_rightarrow}" />
-			</p>
-		</div>
-
-	</form>
 {/if}
+
+</form>
 
 {include file="../../install/templates/install_footer.tpl"}

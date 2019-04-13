@@ -1104,6 +1104,11 @@ END;
             . "\$g_db_password = \"$password\";\n"
             . "\$g_table_prefix = \"$table_prefix\";\n";
 
+		$custom_cache_folder = Sessions::get("g_custom_cache_folder");
+		if ($custom_cache_folder) {
+			$content .= "\$g_custom_cache_folder = \"$custom_cache_folder\";\n";
+		}
+
         $content .= "\n?" . ">";
 
         return $content;
