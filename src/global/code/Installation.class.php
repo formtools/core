@@ -116,7 +116,7 @@ class Installation
 
         $smarty = new Smarty();
         $smarty->setTemplateDir("../global/smarty_plugins/");
-        $smarty->setCompileDir(Core::getCacheFolder());
+        $smarty->setCompileDir(self::getCacheFolder());
 
         $smarty->assign("eval_str", $placeholder_str);
         if (!empty($placeholders)) {
@@ -1340,5 +1340,6 @@ END;
 
 		return realpath(__DIR__ . "/../../cache");
 	}
+
 }
 

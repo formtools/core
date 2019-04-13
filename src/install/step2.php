@@ -24,7 +24,13 @@ if (isset($request["next"])) {
 		if ($custom_cache_folder_exists) {
 			$custom_cache_folder_writable = is_writable($custom_cache_folder);
 
+			// if the custom cache folder is writable, great - create a blank index.html file in it just to prevent
+			// servers configured to list the contents
 			if ($custom_cache_folder_writable) {
+				$index_file = "$custom_cache_folder/index.html";
+				if (!file_exists($index_file)) {
+					fopen($index_file, "w");
+				}
 				Sessions::set("g_custom_cache_folder", $custom_cache_folder);
 			} else {
 				$success = false;
