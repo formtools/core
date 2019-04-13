@@ -142,7 +142,7 @@ class Installation
 
         clearstatcache();
         $theme_folder = realpath(__DIR__ . "/../../themes/default/");
-        $cache_folder = "$theme_folder/cache/";
+        $cache_folder = self::getCacheFolder();
 
         // always try to set the cache folder to 777
         @chmod($cache_folder, 0777);
@@ -213,18 +213,19 @@ class Installation
         <div style="float:right">
             <table cellspacing="0" cellpadding="0" height="25">
             <tr>
-                <td><img src="../themes/default/images/account_section_left_green.jpg" border="0" /></td>
+                <td><img src="../themes/default/images/account_section_left_green2x.png" border="0" height="25" width="8" /></td>
                 <td id="account_section">
                     <b>{$version}</b>
                 </td>
-                <td><img src="../themes/default/images/account_section_right_green.jpg" border="0" /></td>
+                <td><img src="../themes/default/images/account_section_right_green2x.png" border="0" height="25" width="8" /></td>
             </tr>
             </table>
         </div>
     
-        <span style="float:left; padding-top: 8px; padding-right: 10px">
-            <a href="https://formtools.org" class="no_border"><img src="../themes/default/images/logo_green.jpg" border="0" height="61" /></a>
+        <span style="float:left; padding-top: 4px; padding-right: 10px">
+            <a href="https://formtools.org" class="no_border"><img src="../themes/default/images/logo_green2x.png" border="0" height="67" /></a>
         </span>
+
     </div>
     <div id="content">    
         <div class="notify">
@@ -1324,6 +1325,20 @@ END;
 			header("location: ../");
 			exit;
 		}
+	}
+
+
+	// 3.0.15 moved to a single cache folder for all themes/usages. You can now set it via the installation UI. This
+	// method is used on each page of the installation script to return the selected location. For people first arriving
+	// on the installation script, they'll see an error thrown if the default location (../../cache) isn't writable
+	public static function getCacheFolder()
+	{
+    	$custom_cache_folder = Sessions::get("g_custom_cache_folder");
+    	if (isset($custom_cache_folder) && !empty($custom_cache_folder)) {
+    		return $custom_cache_folder;
+		}
+
+		return realpath(__DIR__ . "/../../cache");
 	}
 }
 
