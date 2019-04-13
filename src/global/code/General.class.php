@@ -1431,4 +1431,37 @@ END;
 		$db->execute();
 	}
 
+	/**
+	 * Added in 3.0.15. Lets admins clear the contents of their Smarty cache folder via the FT UI.
+	 * @return array
+	 */
+	public static function clearCacheFolder ()
+	{
+		$LANG = Core::$L;
+		$folder = Core::getCacheFolder();
+
+		if (!is_dir($folder) || !is_writable($folder)) {
+			return array(false, $LANG["text_cache_folder_not_writable"]);
+		}
+
+		$error_deleting_file = false;
+		$handle = opendir($folder);
+		while (false !== ($item = readdir($handle))) {
+			if ($item != '.' && $item != '..' && $item != 'index.html') {
+				$path = $folder . '/' . $item;
+				if (is_file($path)) {
+					if (!@unlink($path)) {
+						$error_deleting_file = true;
+					}
+				}
+			}
+		}
+		closedir($handle);
+
+		if ($error_deleting_file) {
+			return array(false, $LANG["text_cannot_clear_cache_folder"]);
+		}
+		return array(true, $LANG["text_cache_folder_cleared"]);
+	}
+
 }

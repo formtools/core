@@ -719,8 +719,18 @@ ft.test_folder_url_match = function (folder, url, target_message_id) {
 		success: ft.response_handler,
 		error: ft.error_handler
 	});
-}
+};
 
+ft.clear_cache_folder = function (target_message_id) {
+	$.ajax({
+		url: g.root_url + "/global/code/actions.php",
+		data: "action=clear_cache_folder&return_vals[]=target_message_id:" + target_message_id,
+		dataType: "json",
+		type: "POST",
+		success: ft.response_handler,
+		error: ft.error_handler
+	});
+};
 
 /**
  * Different field types allow different field sizes. It wouldn't make sense for textareas or file fields, for

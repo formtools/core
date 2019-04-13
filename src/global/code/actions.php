@@ -67,6 +67,12 @@ switch ($action) {
         echo constructReturnValue(array("success" => $success, "message" => $message));
 		break;
 
+	case "clear_cache_folder":
+		list($success, $message) = General::clearCacheFolder();
+		$success = ($success) ? 1 : 0;
+		echo constructReturnValue(array("success" => $success, "message" => $message));
+		break;
+
 	// expects the tabset name and inner_tab to contain an alphanumeric string only
 	case "remember_inner_tab":
 		$tabset = strip_tags($request["tabset"]);
@@ -469,7 +475,7 @@ switch ($action) {
  * - pass a return_vals string with a `:` delimited key/value pairs
  * - pass a return_vars object
  */
-function constructReturnValue ($data)
+function constructReturnValue($data)
 {
     global $request;
 

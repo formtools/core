@@ -41,6 +41,7 @@ $page_vars = array(
     "g_message" => $message,
     "page_url" => Pages::getPageUrl("settings_main"),
     "tabs" => $tabs,
+    "cache_folder" => Core::getCacheFolder(),
     "head_title" => "{$LANG["word_settings"]} - {$LANG["word_main"]}",
     "text_date_formatting_link" => $text_date_formatting_link,
     "head_js" => $head_js

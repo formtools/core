@@ -1228,3 +1228,8 @@ $LANG["phrase_use_custom_cache_folder"] = "Use custom cache folder";
 $LANG["word_available"] = "Available";
 $LANG["phrase_not_available"] = "Not Available";
 $LANG["text_required_folders_need_write_permissions"] = "Please ensure the required folders have write permissions. See the <a href=\"https://docs.formtools.org/installation/step2/\">help documentation</a> for further information.";
+$LANG["phrase_clear_cache_folder"] = "Clear cache folder";
+$LANG["text_cache_folder_not_writable"] = "Cache folder is not valid or writable.";
+$LANG["text_cannot_clear_cache_folder"] = "We were unable to delete all files in your cache folder.";
+$LANG["text_cache_folder_cleared"] = "Cache folder cleared.";
+
