@@ -617,8 +617,8 @@ ft.create_dialog = function (info) {
 		final_settings.height = settings.height;
 	}
 
-	dialog_content.dialog(final_settings);
-}
+	return dialog_content.dialog(final_settings);
+};
 
 
 /**
@@ -650,14 +650,14 @@ ft.dialog_disable_button = function (popup, label) {
 ft.hide_message = function (target_id) {
 	$("#" + target_id).hide("blind");
 	return false;
-}
+};
 
 
 /**
  * Used in any pages that need to display the placeholder page.
  */
 ft.show_form_field_placeholders_dialog = function (options) {
-	ft.create_dialog({
+	var dialog = ft.create_dialog({
 		title: g.messages["phrase_form_field_placeholders"],
 		dialog: ft.form_field_placeholders_dialog,
 		min_width: 800,
@@ -671,9 +671,14 @@ ft.show_form_field_placeholders_dialog = function (options) {
 					action: "get_form_field_placeholders",
 					form_id: options.form_id
 				},
-				dataType: "html",
+				dataType: "json",
 				success: function (result) {
-					$("#placeholders_dialog_content").html(result);
+					if (result.success) {
+						$("#placeholders_dialog_content").html(result.html);
+					} else {
+						dialog.dialog("close");
+						ft.show_logout_dialog();
+					}
 				}
 			})
 		},
@@ -949,26 +954,14 @@ ft.check_ajax_response_permissions = function (json) {
 	try {
 		json = JSON.parse(json);
 		if (typeof json.ft_logout != undefined && json.ft_logout == 1) {
-			ft.create_dialog({
-				title: "Sessions expired",
-				content: "Sorry, your session has expired. Please click the button below to log back in.",
-				popup_type: "error",
-				buttons: [
-					{
-						text: "Return to login screen",
-						click: function () {
-							window.location = g.root_url;
-						}
-					}
-				]
-			});
+			ft.show_logout_dialog();
 			return false;
 		}
 	} catch (e) {
 	}
 
 	return true;
-}
+};
 
 
 /**
@@ -986,7 +979,7 @@ ft._extract_array_val = function (arr, name) {
 		}
 	}
 	return value;
-}
+};
 
 ft.re_init_placeholder_field_overlays = function () {
 	$(".lang_placeholder_field").each(function () {
@@ -994,5 +987,20 @@ ft.re_init_placeholder_field_overlays = function () {
 		var width = pos.left + $(this).width();
 		$(this).parent().find(".placeholder_field_overlay").css({ "left": width })
 	});
-}
+};
 
+ft.show_logout_dialog = function () {
+	ft.create_dialog({
+		title: "Sessions expired",
+		content: "Sorry, your session has expired. Please click the button below to log back in.",
+		popup_type: "error",
+		buttons: [
+			{
+				text: "Return to login screen",
+				click: function () {
+					window.location = g.root_url;
+				}
+			}
+		]
+	});
+};

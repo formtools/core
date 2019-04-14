@@ -465,7 +465,10 @@ switch ($action) {
 		$page_vars["form_fields"] = Fields::getFormFields($form_id, array("include_field_type_info" => true));
 		$page_vars["text_reference_tab_info"] = $text_reference_tab_info;
 
-		Themes::displayPage("admin/forms/form_placeholders.tpl", $page_vars);
+		echo constructReturnValue(array(
+			"success" => true,
+			"html" => Themes::getPage("admin/forms/form_placeholders.tpl", $page_vars)
+		));
 		break;
 }
 

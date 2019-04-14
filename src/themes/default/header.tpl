@@ -22,8 +22,8 @@
     <link href="{$theme_url}/css/smoothness/jquery-ui-1.8.6.custom.css" rel="stylesheet" type="text/css"/>
     <script src="{$g_root_url}/global/scripts/jquery.js"></script>
     <script src="{$theme_url}/scripts/jquery-ui.js"></script>
-    <script src="{$g_root_url}/global/scripts/general.js?v=3_0_3"></script>
-    <script src="{$g_root_url}/global/scripts/rsv.js?v=3_0_3"></script>
+    <script src="{$g_root_url}/global/scripts/general.js?v=3_0_15"></script>
+    <script src="{$g_root_url}/global/scripts/rsv.js?v=3_0_15"></script>
     {$head_string}
     {$head_js}
     {$head_css}
