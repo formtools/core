@@ -25,13 +25,12 @@ That generates the `dist/` folder and sets up watchers to copy over any edited f
 edit files in your `src/` folder. You'll probably want to tell your IDE to ignore the dist folder contents so you don't
 accidentally find yourself editing those files.
 
-### Linking modules for local development 
+### Linking components (modules, themes, API) for local development 
 
-Each module is in it's own repo, but for seeing the modules in your local dev environment it needs to be copied over
-into the dist/modules folder.
+Each component is in its own repo, but for seeing them in your local dev environment they needs to be copied over
+into the dist/ folder.
 
-To work on modules locally, check the module out into the same folder as the core repo, and create a `local.dev.js` file 
-with the following content:
+To work on components locally, _check the module out into the same folder as the core repo_, and create a `local.dev.js` file with the following content:
 
 ```
 module.exports = {
@@ -39,14 +38,18 @@ module.exports = {
 		'module-custom_fields',
 		'module-data_visualization',
 		'module-export_manager'
-	]
+	],
+	themes: [
+		'theme_classicgrey',
+	],
+	api: 'api'
 };
 ```
 
-Just add whatever module folders you want. 
+Just add whatever module, theme folders you want. The api is a singleton: so just enter a string value for the API folde rname.
 
-Now when you boot up grunt it'll automatically copy over the modules content to your dist folder - and set up watchers to 
-copy the files as well. 
+Now when you boot up grunt it'll automatically copy over the components to your dist folder - and set up watchers to 
+copy the files as you edit them in the original repo.
 
 
 ### Localization 

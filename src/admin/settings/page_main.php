@@ -8,6 +8,8 @@ use FormTools\Themes;
 
 $LANG = Core::$L;
 
+General::updateApiVersion();
+
 $success = true;
 $message = "";
 if (isset($request["update_main"])) {
@@ -15,7 +17,7 @@ if (isset($request["update_main"])) {
 }
 
 $text_date_formatting_link = General::evalSmartyString($LANG["text_date_formatting_link"], array(
-    "datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>'
+    "datefunctionlink" => '<a href="https://www.php.net/manual/en/function.date.php" target="_blank">date()</a>'
 ));
 
 $head_js =<<<END

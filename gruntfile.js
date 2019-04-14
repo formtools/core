@@ -21,10 +21,12 @@ const globalI18nStrings = [
 
 let active_modules = [];
 let active_themes = [];
+let active_api = null;
 if (fs.existsSync('./local.dev.js')) {
 	const local_dev = require('./local.dev.js');
 	active_modules = local_dev.modules;
 	active_themes = local_dev.themes;
+	active_api = local_dev.hasOwnProperty('api') ? local_dev.api : null;
 }
 
 
@@ -137,6 +139,15 @@ const config = {
 				src: ['**'],
 				dest: `dist/themes/${folder.replace(/^theme-/, '')}`,
 			}))
+		},
+
+		api: {
+			// there's actually only a single folder, but convenient to return empty array
+			files: active_api !== null ? [{
+				cwd: path.resolve(__dirname, '..', active_api),
+				src: ['**'],
+				dest: `dist/global/api/`
+			}] : []
 		}
 	},
 
