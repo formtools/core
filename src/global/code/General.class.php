@@ -595,7 +595,7 @@ END;
 
 	/**
 	 * For handling all server-side redirects.
-	 * @param $pageS
+	 * @param $page
 	 */
 	public static function redirect($page)
 	{
