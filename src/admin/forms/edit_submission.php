@@ -56,6 +56,8 @@ $failed_validation = false;
 $changed_fields = array();
 if (isset($_POST) && !empty($_POST)) {
 	list($success, $message, $changed_fields, $failed_validation) = Submissions::updateSubmissionWithConflictDetection($form_id, $submission_id, $view_id, $editable_field_ids, $request);
+	echo $success;
+	echo $message;
 }
 
 $form_info = Forms::getForm($form_id);
