@@ -836,7 +836,7 @@ class Core
 	// the 3.0.15 upgrade tries to create a cache/ folder in the Form Tools root and switch the installation over to use
 	// that. In case of problems Form Tools downgrades to using the old default theme's cache folder. This method is
 	// used to notify the admin to remedy the situation
-	public static function usingDeprecatedCacheFolder()
+	public static function hasInvalidCacheFolder()
 	{
 		return self::getCacheFolder() !== self::$cacheFolder;
 	}

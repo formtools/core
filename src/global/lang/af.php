@@ -1226,3 +1226,4 @@ $LANG["phrase_clear_cache_folder"] = "Clear cache folder";
 $LANG["text_cache_folder_not_writable"] = "Cache folder is not valid or writable.";
 $LANG["text_cache_folder_cleared"] = "Cache folder cleared.";
 $LANG["text_cannot_clear_cache_folder"] = "We were unable to delete all files in your cache folder.";
+$LANG["text_cache_folder_problem"] = "<b>Warning</b>: your cache folder is not writable. To remove this message, please follow the <a href=\"https://docs.formtools.org/upgrading/3_1_5/\">instructions here</a>.";

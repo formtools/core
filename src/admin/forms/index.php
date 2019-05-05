@@ -43,6 +43,7 @@ $LANG = Core::$L;
 $page = array(
 	"page" => "admin_forms",
 	"page_url" => Pages::getPageUrl("admin_forms"),
+	"hasInvalidCacheFolder" => Core::hasInvalidCacheFolder(),
 	"head_title" => $LANG["word_forms"],
 	"has_client" => count($clients) > 0,
 	"num_forms" => $num_forms,
