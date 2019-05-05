@@ -964,6 +964,9 @@ class Submissions
 			return array(false, $LANG["notify_submission_not_updated"]);
 		}
 
+		// track whether the update from the core was successful
+		$core_update_success = $success;
+
 		// now process any file fields
 		extract(Hooks::processHookCalls("manage_files", compact("form_id", "submission_id", "file_fields"), array("success", "message")), EXTR_OVERWRITE);
 
@@ -972,7 +975,15 @@ class Submissions
 
 		extract(Hooks::processHookCalls("end", compact("form_id", "submission_id", "infohash"), array("success", "message")), EXTR_OVERWRITE);
 
-		return array($success, $message);
+		// very ugly, but refactoring was a little too impactful at this stage. The first two params are the overall success and
+		// error message; the third tells the calling code whether the core update action was successful. This allows the
+		// calling code to know if the error that occurred was a file upload / external module. This is needed due to
+		// this issue: https://github.com/formtools/core/issues/475
+		return array(
+			$success,
+			$message,
+			$core_update_success
+		);
 	}
 
 
@@ -1617,6 +1628,7 @@ class Submissions
 		$L = Core::$L;
 
 		$success = true;
+		$core_update_success = true;
 		$message = "";
 		$changed_fields = array();
 		$failed_validation = false;
@@ -1681,7 +1693,7 @@ class Submissions
 					$request[$field_name] = $changed_fields[$field_name]["db_value"];
 				}
 			}
-			list($success, $message) = Submissions::updateSubmission($form_id, $submission_id, $request);
+			list($success, $message, $core_update_success) = Submissions::updateSubmission($form_id, $submission_id, $request);
 
 			if (!empty($changed_fields)) {
 				$success = false;
@@ -1700,7 +1712,8 @@ class Submissions
 			$success,
 			$message,
 			$changed_fields,
-			$failed_validation
+			$failed_validation,
+			$core_update_success
 		);
 	}
 

@@ -72,9 +72,10 @@ Sessions::set("last_submission_id", $submission_id);
 $editable_field_ids = ViewFields::getEditableViewFields($view_id);
 
 $failed_validation = false;
+$core_update_success = true;
 $changed_fields = array();
 if (isset($_POST) && !empty($_POST)) {
-	list($success, $message, $changed_fields, $failed_validation) = Submissions::updateSubmissionWithConflictDetection($form_id, $submission_id, $view_id, $editable_field_ids, $request);
+	list($success, $message, $changed_fields, $failed_validation, $core_update_success) = Submissions::updateSubmissionWithConflictDetection($form_id, $submission_id, $view_id, $editable_field_ids, $request);
 }
 
 // this is crumby
@@ -92,7 +93,7 @@ if ($has_tabs) {
 }
 
 $grouped_fields = ViewFields::getGroupedViewFields($view_id, $tab_number, $form_id, $submission_id);
-if ($failed_validation) {
+if ($failed_validation && !$core_update_success) {
 	$grouped_fields = FieldValidation::mergeFormSubmission($grouped_fields, $_POST);
 }
 

@@ -477,7 +477,7 @@ class Core
 		if (isset($g_custom_cache_folder)) {
 			self::$cacheFolder = $g_custom_cache_folder;
 		} else {
-			self::$cacheFolder = realpath("../../cache/");
+			self::$cacheFolder = realpath(__DIR__ . "/../../cache/");
 		}
 
 		self::$enableBenchmarking = (isset($g_enable_benchmarking)) ? $g_enable_benchmarking : false;
