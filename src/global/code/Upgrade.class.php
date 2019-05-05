@@ -47,6 +47,10 @@ class Upgrade
 
 			FieldTypes::resetFieldTypes();
 
+			if (General::isVersionEarlierThan($last_version_in_db, "3.0.15")) {
+				General::createCacheFolder();
+			}
+
             if ($success) {
                 Settings::set(array(
                     "release_date" => $current_version_date,
@@ -185,7 +189,6 @@ class Upgrade
 		}
 	}
 
-
 	public static function setCoreFieldsAsNotEditable()
 	{
 		$db = Core::$db;
@@ -219,5 +222,5 @@ class Upgrade
 	{
 		General::deleteColumnIfExists("modules", "module_key");
 	}
-
 }
+

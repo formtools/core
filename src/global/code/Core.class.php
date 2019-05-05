@@ -83,7 +83,7 @@ class Core
 	/**
 	 * Added in 3.0.15, lets users override the default cache folder location.
 	 */
-	private static $cacheFolder = "";
+	private static $cacheFolder;
 
 	/**
 	 * This controls the maximum number of pagination links that appear in the Form Tools UI (e.g. for
@@ -473,7 +473,13 @@ class Core
 		self::$setSqlMode = (isset($g_set_sql_mode)) ? $g_set_sql_mode : null;
 		self::$sqlStrictMode = (isset($g_sql_strict_mode)) ? $g_sql_strict_mode : "off";
 		self::$hideUpgradeLink = (isset($g_hide_upgrade_link)) ? $g_hide_upgrade_link : false;
-		self::$cacheFolder = isset($g_custom_cache_folder) ? $g_custom_cache_folder : realpath("../../cache/");
+
+		if (isset($g_custom_cache_folder)) {
+			self::$cacheFolder = $g_custom_cache_folder;
+		} else {
+			self::$cacheFolder = realpath("../../cache/");
+		}
+
 		self::$enableBenchmarking = (isset($g_enable_benchmarking)) ? $g_enable_benchmarking : false;
 		self::$jsDebugEnabled = isset($g_js_debug) ? $g_js_debug : false;
 		self::$maxForms = isset($g_max_forms) ? $g_max_forms : "";
@@ -814,10 +820,27 @@ class Core
 		self::$tempCache = $value;
 	}
 
-	public static function getCacheFolder ()
+	/**
+	 * N.B. this returns the *available* cache folder, not whatever is defined. It checks to see if the default
+	 * cache folder exists and is writable, otherwise
+	 */
+	public static function getCacheFolder()
 	{
-		return self::$cacheFolder;
+		if (is_dir(self::$cacheFolder) && is_writable(self::$cacheFolder)) {
+			return self::$cacheFolder;
+		}
+
+		return realpath("../../themes/default/cache");
 	}
+
+	// the 3.0.15 upgrade tries to create a cache/ folder in the Form Tools root and switch the installation over to use
+	// that. In case of problems Form Tools downgrades to using the old default theme's cache folder. This method is
+	// used to notify the admin to remedy the situation
+	public static function usingDeprecatedCacheFolder()
+	{
+		return self::getCacheFolder() !== self::$cacheFolder;
+	}
+
 
 	// private methods
 

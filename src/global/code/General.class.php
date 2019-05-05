@@ -1435,7 +1435,7 @@ END;
 	 * Added in 3.0.15. Lets admins clear the contents of their Smarty cache folder via the FT UI.
 	 * @return array
 	 */
-	public static function clearCacheFolder ()
+	public static function clearCacheFolder()
 	{
 		$LANG = Core::$L;
 		$folder = Core::getCacheFolder();
@@ -1464,4 +1464,16 @@ END;
 		return array(true, $LANG["text_cache_folder_cleared"]);
 	}
 
+	/**
+	 * Called when upgrading to 3.0.15 or any later version. It checks that the default cache folder exists and if not,
+	 * tries to create it. Note: this may not succeed. If it fails, the system fallbacks to the existing cache folder
+	 * and displays a warning in the UI for the administrator to fix it.
+	 */
+	public static function createCacheFolder()
+	{
+		$cache_folder = Core::getCacheFolder();
+		if (!file_exists($cache_folder)) {
+			@mkdir($cache_folder, 0777, true);
+		}
+	}
 }

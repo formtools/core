@@ -1587,7 +1587,7 @@ class Submissions
 					}
 				}
 
-				// currently file conficts are ignored: the latest file is always overridden
+				// currently file conflicts are ignored: the latest file is always overridden
 				list ($user_value, $file_field) = self::getSaveFieldValueFromUpdateRequest($post, $form_field, $field_settings, $field_types_processing_info);
 
 				$changed[$field_name] = array(
