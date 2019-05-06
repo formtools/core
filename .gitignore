@@ -1,10 +1,7 @@
-themes/default/cache/*.tpl.php
 themes/classic_grey
-themes/classic_grey/cache/*.tpl.php
 themes/deepblue
-themes/deepblue/cache/*.tpl.php
 themes/ohcanada
-themes/ohcanada/cache/*.tpl.php
+cache/*.tpl.php
 .DS_Store
 global/config.php
 
