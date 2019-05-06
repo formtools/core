@@ -14,7 +14,6 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("client");
 
-
 Forms::cacheFormStats();
 
 $LANG = Core::$L;
