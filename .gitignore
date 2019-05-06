@@ -2,6 +2,7 @@
 themes/classicgrey
 themes/deepblue
 themes/ohcanada
+themes/default/cache
 cache/*.tpl.php
 .DS_Store
 global/config.php
