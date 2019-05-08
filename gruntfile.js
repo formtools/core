@@ -175,20 +175,20 @@ const config = {
 		}
 	},
 
-	// run: {
-	// 	webpack_dev: {
-	// 		cmd: 'npm',
-	// 		args: [
-	// 			'start'
-	// 		]
-	// 	},
-	// 	webpack_prod: {
-	// 		cmd: 'npm',
-	// 		args: [
-	// 			'build'
-	// 		]
-	// 	}
-	// },
+	run: {
+		webpack_dev: {
+			cmd: 'npm',
+			args: [
+				'start'
+			]
+		},
+		webpack_prod: {
+			cmd: 'npm',
+			args: [
+				'build'
+			]
+		}
+	},
 
 	concurrent: {
 		watchers: {
