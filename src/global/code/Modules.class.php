@@ -852,7 +852,7 @@ class Modules
 
         // include the smarty resources
         if (is_dir("$root_dir/modules/$module_folder/smarty_plugins")) {
-            $smarty->setPluginsDir("$root_dir/modules/$module_folder/smarty_plugins");
+            $smarty->addPluginsDir("$root_dir/modules/$module_folder/smarty_plugins");
         }
 
         extract(Hooks::processHookCalls("end", compact("module_folder"), array()), EXTR_OVERWRITE);

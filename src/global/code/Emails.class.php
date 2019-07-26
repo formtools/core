@@ -475,7 +475,7 @@ class Emails
 		$smarty = Core::useSmartyBC() ? new SmartyBC() : new Smarty();
 		$smarty->setTemplateDir("$root_dir/global/smarty_plugins/");
 		$smarty->setCompileDir(Core::getCacheFolder());
-		$smarty->setPluginsDir(array(
+		$smarty->addPluginsDir(array(
 			"$root_dir/global/smarty_plugins"
 		));
 		$smarty->assign("LANG", $LANG);
