@@ -33,7 +33,14 @@ const config = (env) => {
 								modules: {
 									localIdentName: '[name]_[local]_[hash:base64:5]',
 								},
+								url: false,
 								sourceMap: isDev
+							}
+						},
+						{
+							loader: 'resolve-url-loader',
+							options: {
+								silent: true
 							}
 						},
 						{
