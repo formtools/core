@@ -64,7 +64,8 @@
     "zh_tw"
   ],
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "dev": "webpack --config webpack.config.js --env development -p --progress"
   },
   "repository": {
     "type": "git",
@@ -82,13 +83,12 @@
   },
   "homepage": "https://github.com/formtools/core#readme",
   "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-react": "^7.0.0",
     "autoprefixer": "^9.1.0",
-    "babel-core": "^6.26.3",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "css-loader": "^1.0.0",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.2.0",
     "exec": "^0.2.1",
     "grunt": "^1.0.3",
     "grunt-cli": "^1.2.0",
@@ -103,25 +103,26 @@
     "jest": "^23.6.0",
     "line-reader": "^0.4.0",
     "load-grunt-tasks": "^4.0.0",
-    "mini-css-extract-plugin": "^0.4.1",
+    "mini-css-extract-plugin": "^0.8.0",
     "moment": "^2.22.2",
     "n-readlines": "^1.0.0",
-    "node-sass": "^4.9.3",
+    "node-sass": "^4.12.0",
     "postcss-loader": "^3.0.0",
     "prop-types": "^15.6.1",
     "reselect": "^3.0.1",
-    "sass-loader": "^7.1.0",
-    "style-loader": "^0.22.1",
-    "webpack": "^4.20.2",
-    "webpack-cli": "^3.1.1"
+    "sass-loader": "^7.2.0",
+    "style-loader": "^1.0.0",
+    "webpack": "^4.39.2",
+    "webpack-cli": "^3.3.7"
   },
   "dependencies": {
     "@material-ui/core": "^3.0.0",
     "@material-ui/icons": "^3.0.1",
-    "react": "16.7.0",
-    "react-dom": "16.7.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "react-redux": "^5.0.7",
     "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.1",
     "redux": "^4.0.0",
     "redux-actions": "^2.3.2",
     "redux-thunk": "^2.2.0"

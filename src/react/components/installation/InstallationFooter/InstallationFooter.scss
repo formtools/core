@@ -1,0 +1,33 @@
+#footer {
+  margin-top: 30px;
+  border-top: 1px dotted #cccccc;
+  padding: 6px 0;
+  text-align: justify;
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      float: left;
+      padding: 0 20px;
+      border-right: 1px solid #cccccc;
+    }
+  }
+}
+
+
+#footer ul li.colN {
+  border-right: 0;
+}
+
+#footer ul li a {
+  color: #0066cc;
+  display: block;
+}
+
+#footer ul li a:hover {
+  border-bottom: 0;
+  color: #990000;
+}

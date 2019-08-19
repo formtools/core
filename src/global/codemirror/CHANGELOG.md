@@ -358,7 +358,7 @@ The [`refresh`](http://codemirror.net/doc/manual.html#event_refresh) event is no
 
 xml-fold addon: Fix a null-dereference bug.
 
-Page up and page down now do something even in single-line documents.
+InstallationPage up and page down now do something even in single-line documents.
 
 Fix an issue where the cursor position could be off in really long (~8000 character) tokens.
 

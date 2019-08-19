@@ -31,3 +31,4 @@ dist/
 dist/global/config.php
 
 local.dev.js
+yarn-error.log

@@ -177,13 +177,13 @@ const config = {
 
 	run: {
 		webpack_dev: {
-			cmd: 'npm',
+			cmd: 'yarn',
 			args: [
-				'start'
+				'dev'
 			]
 		},
 		webpack_prod: {
-			cmd: 'npm',
+			cmd: 'yarn',
 			args: [
 				'build'
 			]
@@ -195,7 +195,10 @@ const config = {
 			options: {
 				logConcurrentOutput: true
 			},
-			tasks: ['watch']
+			tasks: [
+				'watch',
+				'run:webpack_dev'
+			]
 		}
 	}
 };
@@ -477,8 +480,8 @@ module.exports = function (grunt) {
 	]);
 
 	// for local dev work. All you need to do is run `grunt`: that creates a dist/ folder containing all the built code,
-	// plus sets up watchers to copy over changed files and generate the CSS from Sass. Be sure to load up the dist/
-	// folder in your browser
+	// sets up watchers to copy over changed files and generate the CSS from Sass. It also boots up webpack to handle
+	// any JS conversion. Be sure to load up the dist/ subfolder in your browser
 	grunt.registerTask('default', ['sync', 'sasslint', 'sass', 'concurrent:watchers']);
 
 	// builds everything into the dist folder

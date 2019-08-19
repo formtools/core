@@ -124,16 +124,16 @@ exten => 600,n,Playback(demo-echodone)	; Let them know it's over
 exten => 600,n,Goto(s,6)		; Start over
 
 ;
-;	You can use the Macro Page to intercom a individual user
+;	You can use the Macro InstallationPage to intercom a individual user
 exten => 76245,1,Macro(page,SIP/Grandstream1)
 ; or if your peernames are the same as extensions
 exten => _7XXX,1,Macro(page,SIP/${EXTEN})
 ;
 ;
-; System Wide Page at extension 7999
+; System Wide InstallationPage at extension 7999
 ;
 exten => 7999,1,Set(TIMEOUT(absolute)=60)
-exten => 7999,2,Page(Local/Grandstream1@page&Local/Xlite1@page&Local/1234@page/n,d)
+exten => 7999,2,InstallationPage(Local/Grandstream1@page&Local/Xlite1@page&Local/1234@page/n,d)
 
 ; Give voicemail at extension 8500
 ;

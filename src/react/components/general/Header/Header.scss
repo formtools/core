@@ -1,0 +1,18 @@
+.header {
+  height: 72px;
+  position: relative;
+  text-align: center;
+  width: 950px;
+}
+
+.version {
+  float: right;
+  display: flex;
+
+  div {
+    color: white;
+    font-weight: bold;
+    padding: 2px 12px 0;
+  }
+}
+
