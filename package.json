@@ -65,7 +65,7 @@
   ],
   "scripts": {
     "test": "jest",
-    "dev": "webpack --config webpack.config.js --env development -p --progress"
+    "dev": "webpack --config webpack.config.js --env development"
   },
   "repository": {
     "type": "git",

@@ -17,12 +17,16 @@ Sessions::clearAll();
 
 Core::initSmarty();
 Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));
-
+$root_url = Core::getRootUrl();
 ?>
 <!doctype html>
 <html>
 <head>
     <title>Form Tools installation</title>
+    <script>
+    var g = {};
+    g.root_url = "$g_root_url";
+    </script>
 </head>
 <body>
     <div id="root"></div>
