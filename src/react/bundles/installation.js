@@ -8,9 +8,7 @@ import store from '../store';
 actionCreators.getInitializationData(store);
 
 const App = () => (
-	<PageContainer>
-		<div>Content here.</div>
-	</PageContainer>
+	<div>Content here.</div>
 );
 
 ReactDOM.render(

@@ -27,7 +27,7 @@ const ConnectedPageContainer = connect(
 	mapStateToProps
 )(PageContainer);
 
-export default (
+export default () => (
 	<Provider store={store}>
 		<ConnectedPageContainer />
 	</Provider>

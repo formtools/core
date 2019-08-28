@@ -25,7 +25,7 @@ $root_url = Core::getRootUrl();
     <title>Form Tools installation</title>
     <script>
     var g = {};
-    g.root_url = "$g_root_url";
+    g.root_url = '..';
     </script>
 </head>
 <body>
@@ -33,3 +33,29 @@ $root_url = Core::getRootUrl();
     <script src="../react/main.bundle.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
