@@ -1,4 +1,4 @@
-#footer {
+.footer {
   margin-top: 30px;
   border-top: 1px dotted #cccccc;
   padding: 6px 0;
@@ -15,19 +15,19 @@
       border-right: 1px solid #cccccc;
     }
   }
+
+  ul li.colN {
+    border-right: 0;
+  }
+
+  ul li a {
+    color: #0066cc;
+    display: block;
+  }
+
+  ul li a:hover {
+    border-bottom: 0;
+    color: #990000;
+  }
 }
 
-
-#footer ul li.colN {
-  border-right: 0;
-}
-
-#footer ul li a {
-  color: #0066cc;
-  display: block;
-}
-
-#footer ul li a:hover {
-  border-bottom: 0;
-  color: #990000;
-}

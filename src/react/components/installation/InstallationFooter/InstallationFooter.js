@@ -1,8 +1,8 @@
 import React from 'react';
-
+import styles from './InstallationFooter.scss';
 
 const Footer = ({ i18n }) => (
-	<div id="footer">
+	<div className={styles.footer}>
 		<ul>
 			<li><a href="https://formtools.org" target="_blank">formtools.org</a></li>
 			<li><a href="https://docs.formtools.org/installation/" target="_blank">{i18n.phrase_installation_help}</a></li>

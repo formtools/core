@@ -23,10 +23,6 @@ $root_url = Core::getRootUrl();
 <html>
 <head>
     <title>Form Tools installation</title>
-    <script>
-    var g = {};
-    g.root_url = '..';
-    </script>
 </head>
 <body>
     <div id="root"></div>

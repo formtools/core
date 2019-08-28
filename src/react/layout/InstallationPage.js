@@ -4,11 +4,15 @@ import Footer from '../components/installation/InstallationFooter/InstallationFo
 import styles from './Page.scss';
 
 
-const InstallationPage = ({ children }) => (
+const InstallationPage = ({ children, i18n, constants, rootUrl }) => (
 	<div className={styles.page}>
-		<Header />
+		<Header
+			i18n={i18n}
+			rootUrl={rootUrl}
+			constants={constants}
+		/>
 		<section>{children}</section>
-		<Footer />
+		<Footer i18n={i18n} />
 	</div>
 );
 

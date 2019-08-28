@@ -26,8 +26,24 @@ const reducer = (state = {
 };
 
 
-export const getInitializationData = (store) => {
-	fetch(`${g.root_url}/global/code/actions-react.php?action=init`)
+// export const getInitializationData = (store) => {
+// 	fetch(`${g.root_url}/global/code/actions-react.php?action=init`)
+// 		.then((response) => response.json())
+// 		.then((json) => {
+// 			store.dispatch({
+// 				type: actions.INIT_DATA_LOADED,
+// 				...json
+// 			});
+// 		}).catch((e) => {
+// 			store.dispatch({
+// 				type: actions.INIT_DATA_ERROR_LOADING,
+// 				error: e
+// 			});
+// 		});
+// };
+
+export const getInstallationInitData = (store) => {
+	fetch('./actions-installation.php?action=init')
 		.then((response) => response.json())
 		.then((json) => {
 			store.dispatch({
@@ -35,16 +51,17 @@ export const getInitializationData = (store) => {
 				...json
 			});
 		}).catch((e) => {
-			store.dispatch({
-				type: actions.INIT_DATA_ERROR_LOADING,
-				error: e
-			});
+		store.dispatch({
+			type: actions.INIT_DATA_ERROR_LOADING,
+			error: e
 		});
+	});
 };
 
 
 const actionCreators = {
-	getInitializationData
+	// getInitializationData,
+	getInstallationInitData
 };
 
 
