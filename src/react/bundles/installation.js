@@ -9,7 +9,7 @@ actionCreators.getInstallationInitData(store);
 
 const App = () => (
 	<Page>
-		<div>Content here...</div>
+		<h1>CONTENT HERE</h1>
 	</Page>
 );
 

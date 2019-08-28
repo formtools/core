@@ -25,7 +25,6 @@ const reducer = (state = {
 	}
 };
 
-
 // export const getInitializationData = (store) => {
 // 	fetch(`${g.root_url}/global/code/actions-react.php?action=init`)
 // 		.then((response) => response.json())

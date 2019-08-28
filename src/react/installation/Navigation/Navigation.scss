@@ -1,0 +1,30 @@
+.delim {
+  color: #aaaaaa;
+}
+
+.nav_current .delim {
+  color: #999999;
+}
+
+.nav_items {
+  border-right: 1px dotted #dddddd;
+  margin: 0 5px 0 12px;
+  float: left;
+  width: 192px;
+
+  div {
+    line-height: 24px;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    padding-left: 2px;
+  }
+
+  div.nav_current {
+    font-weight: bold;
+    color: green;
+    border-top: 1px solid #cccccc;
+    border-bottom: 1px solid #cccccc;
+    background-color: #efefef;
+  }
+}
+

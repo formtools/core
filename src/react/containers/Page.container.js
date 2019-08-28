@@ -4,7 +4,7 @@ import store from '../store';
 import { selectors as initSelectors } from '../store/init';
 import { selectors as i18nSelectors } from '../store/i18n';
 import { selectors as constantSelectors } from '../store/constants';
-import InstallationPage from '../layout/InstallationPage';
+import Page from '../installation/Page/Page';
 
 class PageContainer extends Component {
 
@@ -20,7 +20,7 @@ class PageContainer extends Component {
 			return null;
 		}
 		return (
-			<InstallationPage {...this.props} />
+			<Page {...this.props} />
 		);
 	}
 }

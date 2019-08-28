@@ -91,17 +91,6 @@ a.no_border:visited {
     color: #aaaaaa;
 }
 
-#nav_items div.nav_current {
-    font-weight: bold;
-    color: green;
-    border-top: 1px solid #cccccc;
-    border-bottom: 1px solid #cccccc;
-    background-color: #efefef;
-}
-
-.nav_current .delim {
-    color: #999999;
-}
 
 .nav_remaining {
     color: #777777;
@@ -179,12 +168,6 @@ ul.tips li {
     margin: 0 5px 0 12px;
     float: left;
     width: 192px;
-}
-
-#main {
-    float: right;
-    width: 690px;
-    margin-right: 10px;
 }
 
 #nav_items div {

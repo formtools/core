@@ -54,9 +54,16 @@ ul {
   margin: 0 auto;
 }
 
-#content {
+.content {
   margin: 24px 10px 0 10px;
 }
+
+.main {
+  float: right;
+  width: 690px;
+  margin-right: 10px;
+}
+
 
 a:link, a:visited {
   color: #008800;
@@ -155,32 +162,6 @@ ul.tips li {
   line-height: 16px;
 }
 
-#account_section {
-  background-color: #1f4f26;
-  padding: 0 8px;
-  color: white;
-}
-
-#nav_items {
-  border-right: 1px dotted #dddddd;
-  margin: 0 5px 0 12px;
-  float: left;
-  width: 192px;
-}
-
-#main {
-  float: right;
-  width: 690px;
-  margin-right: 10px;
-}
-
-#nav_items div {
-  line-height: 24px;
-  border-top: 1px solid transparent;
-  border-bottom: 1px solid transparent;
-  padding-left: 2px;
-}
-
 .margin_right {
   margin-right: 6px;
 }
@@ -236,10 +217,6 @@ body .CodeMirror {
 
 .clear {
   clear: both;
-}
-
-.delim {
-  color: #aaaaaa;
 }
 
 .divider {
