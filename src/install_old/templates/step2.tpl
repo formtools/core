@@ -104,6 +104,7 @@
     </tr>
 </table>
 
+{if !$valid_php_version || !$pdo_available || !$sessions_loaded}
 {if !$valid_php_version || !$pdo_available || !$pdo_mysql_available || !$sessions_loaded}
 
 	<p class="error" style="padding: 6px">

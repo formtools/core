@@ -16,6 +16,7 @@ const Page = ({ children, i18n, constants, rootUrl }) => (
 			<h1>{i18n.word_installation}</h1>
 
 			<Navigation i18n={i18n} />
+
 			<div className={styles.main}>
 				{children}
 			</div>
