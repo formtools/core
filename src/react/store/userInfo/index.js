@@ -4,7 +4,7 @@ import { actions } from '../init';
 
 const reducer = (state = {}, action) => {
 	if (action.type === actions.INIT_DATA_LOADED) {
-		return action.userInfo ? action.userInfo : {};
+		return action.payload.userInfo ? action.payload.userInfo : {};
 	}
 	return state;
 };

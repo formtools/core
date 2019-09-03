@@ -119,10 +119,10 @@
   "dependencies": {
     "@material-ui/core": "^3.0.0",
     "@material-ui/icons": "^3.0.1",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0",
     "react-redux": "^5.0.7",
-    "react-router": "^5.0.0",
+    "react-router": "^5.0.1",
     "react-router-dom": "^5.0.1",
     "redux": "^4.0.0",
     "redux-actions": "^2.3.2",

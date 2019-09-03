@@ -1,10 +1,19 @@
 import thunk from 'redux-thunk';
+import reducerRegistry from './reducerRegistry';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import * as compatibleComponents from './components';
-import * as constants from './constants';
-import * as userInfo from './userInfo';
-import * as i18n from './i18n';
-import * as init from './init';
+
+const initialState = {};
+
+// preserve initial state for not-yet-loaded reducers
+const combine = (reducers) => {
+	const reducerNames = Object.keys(reducers);
+	Object.keys(initialState).forEach(item => {
+		if (reducerNames.indexOf(item) === -1) {
+			reducers[item] = (state = null) => state;
+		}
+	});
+	return combineReducers(reducers);
+};
 
 
 function initStore (initialState) {
@@ -19,16 +28,9 @@ function initStore (initialState) {
 		}
 	}
 
-	const allReducers = Object.assign({},
-		{ components: compatibleComponents.reducer },
-		{ constants: constants.reducer },
-		{ i18n: i18n.reducer },
-		{ userInfo: userInfo.reducer },
-		{ init: init.reducer }
-	);
-
+	const topLevelReducer = combine(reducerRegistry.getReducers());
 	const store = createStore(
-		combineReducers(allReducers),
+		topLevelReducer,
 		initialState,
 		composeEnhancers(
 			applyMiddleware(...middleware),
@@ -42,5 +44,8 @@ function initStore (initialState) {
 
 
 const store = initStore({});
+
+// allows dynamically changing the redux store
+reducerRegistry.setChangeListener(reducers => store.replaceReducer(combine(reducers)));
 
 export default store;

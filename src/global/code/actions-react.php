@@ -16,18 +16,18 @@ $data = array(
 switch ($_GET["action"]) {
 	case "init":
 		$data = array(
-			"is_logged_in" => Core::$user->isLoggedIn(),
+			"isAuthenticated" => Core::$user->isLoggedIn(),
 			"i18n" => Core::$L,
 			"constants" => array(
-				"root_dir" => Core::getRootDir(),
-				"root_url" => Core::getRootUrl(),
-				"data_source_url" => Core::getFormToolsDataSource(),
-				"core_version" => Core::getCoreVersion()
+				"rootDir" => Core::getRootDir(),
+				"rootUrl" => Core::getRootUrl(),
+				"dataSourceUrl" => Core::getFormToolsDataSource(),
+				"coreVersion" => Core::getCoreVersion()
 			)
 		);
 		if ($data["is_logged_in"]) {
 			$data["user"] = array(
-				"account_id" => Core::$user->getAccountId(),
+				"accountId" => Core::$user->getAccountId(),
 				"username" => Core::$user->getUsername()
 			);
 		}

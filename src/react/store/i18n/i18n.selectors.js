@@ -1,0 +1,1 @@
+export const getI18n = (state) => state.i18n;

@@ -20,12 +20,13 @@ $data = array(
 switch ($_GET["action"]) {
 	case "init":
 		$data = array(
-			"is_logged_in" => false,
+			"isAuthenticated" => false,
 			"i18n" => Core::$L,
+			"availableLanguages" => Core::$translations->getList(),
 			"constants" => array(
-				"root_dir" => Core::getRootDir(),
-				"root_url" => "../",
-				"core_version" => Core::getCoreVersion()
+				"rootDir" => Core::getRootDir(),
+				"rootUrl" => "../",
+				"coreVersion" => Core::getCoreVersion()
 			)
 		);
 		break;
