@@ -13,12 +13,12 @@ actions.getInstallationInitData(store);
 const App = () => (
 	<Provider store={store}>
 		<Router>
-			<PageLayout path="/" component={Step1} />
-			<Route path="/step2/" component={Step2} />
-			<Route path="/step3/" component={Step3} />
-			<Route path="/step4/" component={Step4} />
-			<Route path="/step5/" component={Step5} />
-			<Route path="/step6/" component={Step6} />
+			<PageLayout exact path="/" component={Step1} />
+			<PageLayout path="/step2/" component={Step2} />
+			<PageLayout path="/step3/" component={Step3} />
+			<PageLayout path="/step4/" component={Step4} />
+			<PageLayout path="/step5/" component={Step5} />
+			<PageLayout path="/step6/" component={Step6} />
 		</Router>
 	</Provider>
 );
