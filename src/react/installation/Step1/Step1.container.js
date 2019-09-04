@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { selectors as i18nSelectors } from '../../store/i18n';
-import { selectors as initSelectors } from '../../store/init';
+import { actions as initActions, selectors as initSelectors } from '../../store/init';
 import { selectors as constantSelectors } from '../../store/constants';
-import { actions, selectors } from '../store/';
+import { selectors } from '../store/';
 import Step1 from './Step1.component';
 
 const mapStateToProps = (state) => ({
@@ -14,7 +14,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	onSelectLanguage: (lang) => dispatch(actions.selectLanguage(lang))
+	onSelectLanguage: ({ value }) => dispatch(initActions.selectLanguage(value))
 });
 
 export default connect(

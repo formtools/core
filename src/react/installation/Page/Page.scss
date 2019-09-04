@@ -58,12 +58,18 @@ ul {
   margin: 24px 10px 0 10px;
 }
 
-.main {
-  float: right;
-  width: 690px;
-  margin-right: 10px;
+.pageContent {
+  display: flex;
+  .nav {
+    flex: 0 0 auto;
+    min-width: 192px;
+    padding-right: 15px;
+  }
+  .body {
+    flex: 1;
+    padding-left: 15px;
+  }
 }
-
 
 a:link, a:visited {
   color: #008800;

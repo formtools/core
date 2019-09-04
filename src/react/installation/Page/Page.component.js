@@ -23,11 +23,13 @@ const Page = ({ component: Component, ...otherProps }) => {
 				<div className={styles.content}>
 					<h1>{i18n.word_installation}</h1>
 
-					<Navigation i18n={i18n}/>
+					<section className={styles.pageContent}>
+						<Navigation i18n={i18n} className={styles.nav} />
 
-					<div className={styles.main}>
-						<Component {...matchProps} />
-					</div>
+						<div className={styles.body}>
+							<Component {...matchProps} />
+						</div>
+					</section>
 				</div>
 				<div className={styles.clear}/>
 				<Footer i18n={i18n}/>

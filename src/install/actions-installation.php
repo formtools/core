@@ -9,6 +9,7 @@ use FormTools\Core;
 use FormTools\General;
 
 Core::setHooksEnabled(false);
+Core::startSessions();
 
 Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));
 $root_url = Core::getRootUrl();
@@ -28,6 +29,14 @@ switch ($_GET["action"]) {
 				"rootUrl" => "../",
 				"coreVersion" => Core::getCoreVersion()
 			)
+		);
+		break;
+
+	case "selectLanguage":
+		// check the lang is valid
+		Core::setCurrLang($_GET["lang"]);
+		$data = array(
+			"i18n" => Core::$L
 		);
 		break;
 }

@@ -26,3 +26,29 @@ export const getInstallationInitData = (store) => {
 		});
 	});
 };
+
+export const LANGUAGE_UPDATED = 'LANGUAGE_UPDATED';
+export const ERROR_UPDATING_LANGUAGE = 'ERROR_UPDATING_LANGUAGE';
+
+export const selectLanguage = (lang) => {
+	return (dispatch) => {
+		fetch(`./actions-installation.php?action=selectLanguage&lang=${lang}`)
+			.then((response) => response.json())
+			.then((json) => {
+				const { i18n } = json;
+				dispatch({
+					type: LANGUAGE_UPDATED,
+					payload: {
+						i18n
+					}
+				});
+			}).catch((e) => {
+			dispatch({
+				type: ERROR_UPDATING_LANGUAGE,
+				payload: {
+					error: e
+				}
+			});
+		});
+	}
+};

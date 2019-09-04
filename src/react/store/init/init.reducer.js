@@ -7,20 +7,24 @@ const reducer = (state = {
 	isAuthenticated: false,
 	availableLanguages: []
 }, action) => {
-	if (action.type === actions.INIT_DATA_LOADED) {
-		const { isAuthenticated, availableLanguages } = action.payload;
-		return Object.assign({}, state, {
-			initialized: true,
-			isAuthenticated,
-			availableLanguages
-		});
-	} else if (action.type === actions.INIT_DATA_ERROR_LOADING) {
-		return Object.assign({}, state, {
-			initialized: true,
-			errorInitializing: false
-		});
-	} else {
-		return state;
+	switch (action.type) {
+		case actions.INIT_DATA_LOADED: {
+			const { isAuthenticated, availableLanguages } = action.payload;
+			return {
+				...state,
+				initialized: true,
+				isAuthenticated,
+				availableLanguages
+			};
+		}
+		case actions.INIT_DATA_ERROR_LOADING:
+			return {
+				...state,
+				initialized: true,
+				errorInitializing: false
+			};
+		default:
+			return state;
 	}
 };
 

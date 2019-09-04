@@ -13,22 +13,20 @@ const Step1 = ({ i18n, language, availableLanguages, onSelectLanguage, history }
 
 	return (
 		<form method="post" onSubmit={onSubmit}>
-			<table cellSpacing="0" cellPadding="0">
-				<tbody>
-				<tr>
-					<td width="100" className="label">{i18n.word_language}</td>
-					<td>
-						<Dropdown data={availableLanguages} selected={language} onChange={onSelectLanguage} />
-					</td>
-					<td>
-						<input type="submit" name="select_language" value={i18n.word_select}/>
-					</td>
-				</tr>
-				</tbody>
-			</table>
+			<p>
+				Select your language and let's get started.
+			</p>
+
+			<section style={{ width: 300 }}>
+				<Dropdown
+					data={availableLanguages}
+					defaultValue={language}
+					onChange={onSelectLanguage}
+				/>
+			</section>
 
 			<p>
-				<input type="submit" name="next" value={submitBtnLabel}/>
+				<input type="submit" value={submitBtnLabel} />
 			</p>
 		</form>
 	);
