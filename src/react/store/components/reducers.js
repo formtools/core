@@ -1,6 +1,6 @@
 import { actions } from './actions';
 import * as helpers from './helpers';
-import { convertHashToArray, removeFromArray } from '../../helpers';
+import { arrayUtils } from '../../utils';
 
 
 export default function reducer (state = {
@@ -154,7 +154,7 @@ export default function reducer (state = {
 			const moduleList = state.compatibleComponents[state.coreVersion].modules;
 			return {
 				...state,
-				selectedModuleFolders: convertHashToArray(moduleList).map((module) => module.folder)
+				selectedModuleFolders: arrayUtils.convertHashToArray(moduleList).map((module) => module.folder)
 			};
 
 		case actions.DESELECT_ALL_MODULES:
@@ -289,7 +289,7 @@ export default function reducer (state = {
 
 const selectedComponentsReducer = (state = [], folder) => {
 	if (state.includes(folder)) {
-		return removeFromArray(state, folder);
+		return arrayUtils.removeFromArray(state, folder);
 	} else {
 		return [...state, folder];
 	}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { decodeEntities } from '../../helpers';
+import { generalUtils } from '../../utils';
 
 const Step2 = ({ i18n, language, availableLanguages, onSelectLanguage, history }) => {
 	const onSubmit = (e) => {
@@ -8,7 +8,7 @@ const Step2 = ({ i18n, language, availableLanguages, onSelectLanguage, history }
 		history.push('/step4');
 	};
 
-	const submitBtnLabel = decodeEntities(i18n.word_continue_rightarrow);
+	const submitBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
 
 	return (
 		<form method="post" onSubmit={onSubmit}>

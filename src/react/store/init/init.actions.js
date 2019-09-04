@@ -7,7 +7,7 @@ export const getInstallationInitData = (store) => {
 	fetch('./actions-installation.php?action=init')
 		.then((response) => response.json())
 		.then((json) => {
-			const { isAuthenticated, availableLanguages, constants, i18n, userInfo } = json;
+			const { isAuthenticated, availableLanguages, constants, i18n, language, userInfo } = json;
 
 			// sort by the language string label
 			arrayUtils.sortBy(availableLanguages, 'lang');
@@ -18,6 +18,7 @@ export const getInstallationInitData = (store) => {
 					isAuthenticated,
 					i18n,
 					userInfo,
+					language,
 					availableLanguages,
 					constants
 				}

@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { convertHashToArray } from '../../helpers';
+import { arrayUtils } from '../../utils';
 import { selectors as constantSelectors } from '../constants';
 import { getComponentNameFromIdentifier } from './helpers';
 
@@ -98,12 +98,12 @@ export const getDownloadLog = (state) => {
 // converts the hash of modules to an array
 export const getCompatibleModulesArray = createSelector(
 	getCompatibleModules,
-    convertHashToArray
+    arrayUtils.convertHashToArray
 );
 
 export const getCompatibleThemesArray = createSelector(
 	getCompatibleThemes,
-    convertHashToArray
+	arrayUtils.convertHashToArray
 );
 
 const getSelectedModules = createSelector(
@@ -216,7 +216,7 @@ export const getComponentInfoModalInfo = createSelector(
             };
 
             if (listMap.hasOwnProperty(selectedComponentTypeSections[0])) {
-                list = convertHashToArray(listMap[selectedComponentTypeSections[0]]);
+                list = arrayUtils.convertHashToArray(listMap[selectedComponentTypeSections[0]]);
             } else {
                 list = [{ folder: 'api'}];
             }

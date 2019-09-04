@@ -1,8 +1,8 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import { decodeEntities } from '../../helpers';
+import { generalUtils } from '../../utils';
 
-const showResult = (passed) => {
+const showResult = (passed, i18n) => {
 	let className = 'red';
 	let label = i18n.word_fail;
 	if (passed) {
@@ -21,7 +21,7 @@ const Step2 = ({ i18n, history, results }) => {
 		history.push('/step3');
 	};
 
-	const submitBtnLabel = decodeEntities(i18n.word_continue_rightarrow);
+	const submitBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
 
 	return (
 		<form method="post" onSubmit={onSubmit}>
@@ -37,7 +37,7 @@ const Step2 = ({ i18n, history, results }) => {
 						<td width="220">{i18n.phrase_php_version}</td>
 						<td className="bold">{results.phpVersion}</td>
 						<td width="100" align="center">
-							{showResult(results.hasValidPhpVersion)}
+							{showResult(results.hasValidPhpVersion, i18n)}
 						</td>
 					</tr>
 					<tr>
@@ -46,14 +46,14 @@ const Step2 = ({ i18n, history, results }) => {
 							{results.pdo_available ? i18n.word_yes : i18n.word_no}
 						</td>
 						<td align="center">
-							{showResult(results.pdo_available)}
+							{showResult(results.pdo_available, i18n)}
 						</td>
 					</tr>
 					<tr>
 						<td>MySQL available</td>
 						<td className="bold">{$LANG.word_yes}</td>
 						<td align="center">
-							{showResult(results.pdo_mysql_available)}
+							{showResult(results.pdo_mysql_available, i18n)}
 						</td>
 					</tr>
 					<tr>
@@ -62,21 +62,21 @@ const Step2 = ({ i18n, history, results }) => {
 							{results.sessions_loaded === 1 ? i18n.word_available : i18n.phrase_not_available}
 						</td>
 						<td width="100" align="center">
-							{showResult(results.sessions_loaded === 1)}
+							{showResult(results.sessions_loaded === 1, i18n)}
 						</td>
 					</tr>
 					<tr>
 						<td>{$LANG.phrase_upload_folder}</td>
 						<td className="bold">/upload/</td>
 						<td align="center">
-							{showResult(results.upload_folder_writable)}
+							{showResult(results.upload_folder_writable, i18n)}
 						</td>
 					</tr>
 					<tr>
 						<td>{$LANG.phrase_cache_folder}</td>
 						<td className="bold">{$cache_folder}</td>
 						<td align="center">
-							{showResult(results.cache_dir_writable)}
+							{showResult(results.cache_dir_writable, i18n)}
 						</td>
 					</tr>
 					<tr>

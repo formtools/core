@@ -37,13 +37,48 @@ switch ($_GET["action"]) {
 
 	case "selectLanguage":
 		// check the lang is valid
+		$list = Core::$translations->getList();
+		$found = false;
+		foreach ($list as $item) {
+			if ($item->code === $_GET["lang"]) {
+				$found = true;
+				break;
+			}
+		}
+		if (!$found) {
 
-		Core::setCurrLang($_GET["lang"]);
-		Sessions::set("lang", $_GET["lang"]);
+			// TODO throw rest error
+			// header()
+
+		} else {
+			Core::setCurrLang($_GET["lang"]);
+			Sessions::set("lang", $_GET["lang"]);
+			$data = array(
+				"i18n" => Core::$L
+			);
+		}
+		break;
+
+	case "getSystemCheckResults":
+		$upload_folder_writable = is_writable(realpath("../upload"));
+		$cache_dir_writable = is_writable(realpath("../cache/"));
 
 		$data = array(
-			"i18n" => Core::$L
+			"cacheFolder" => "/cache/",
+			"customCacheFolder" => realpath("../cache"), // !empty($customCache_folder) ? $custom_cache_folder : realpath("../cache/"),
+			"useCustomCacheFolder" => true, // !empty($custom_cache_folder),
+			"phpVersion" => phpversion(),
+			"validPhpVersion" => Core::isValidPHPVersion(),
+			"pdoAvailable" => extension_loaded("PDO"),
+			"pdoMysqlAvailable" => extension_loaded("pdo_mysql"),
+			"suhosinLoaded" => extension_loaded("suhosin"),
+			"sessionsLoaded" => extension_loaded("session"),
+			"uploadFolderWritable" => $upload_folder_writable,
+			"cacheDirWritable" => $cache_dir_writable
 		);
+		break;
+
+	case "setCacheFolder":
 		break;
 }
 
@@ -51,3 +86,9 @@ header("Content-Type: text/javascript");
 header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 
 echo json_encode($data);
+
+
+
+
+
+
