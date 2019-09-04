@@ -20,7 +20,7 @@ const Step1 = ({ i18n, language, availableLanguages, onSelectLanguage, history }
 			<section style={{ width: 300 }}>
 				<Dropdown
 					data={availableLanguages}
-					defaultValue={language}
+					selected={language}
 					onChange={onSelectLanguage}
 				/>
 			</section>

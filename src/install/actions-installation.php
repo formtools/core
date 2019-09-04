@@ -7,11 +7,13 @@ require_once("../global/library.php");
 
 use FormTools\Core;
 use FormTools\General;
+use FormTools\Sessions;
 
 Core::setHooksEnabled(false);
 Core::startSessions();
 
-Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));
+$currentLang = General::loadField("lang", "lang", Core::getDefaultLang());
+Core::setCurrLang($currentLang);
 $root_url = Core::getRootUrl();
 
 $data = array(
@@ -24,6 +26,7 @@ switch ($_GET["action"]) {
 			"isAuthenticated" => false,
 			"i18n" => Core::$L,
 			"availableLanguages" => Core::$translations->getList(),
+			"language" => $currentLang,
 			"constants" => array(
 				"rootDir" => Core::getRootDir(),
 				"rootUrl" => "../",
@@ -34,7 +37,10 @@ switch ($_GET["action"]) {
 
 	case "selectLanguage":
 		// check the lang is valid
+
 		Core::setCurrLang($_GET["lang"]);
+		Sessions::set("lang", $_GET["lang"]);
+
 		$data = array(
 			"i18n" => Core::$L
 		);

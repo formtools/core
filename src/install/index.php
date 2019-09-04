@@ -13,10 +13,10 @@ Installation::checkInstallationComplete();
 
 // note we reset sessions here. This prevents weird things happening when a new installation is taking place
 // while an old orphaned FT session exists, containing who-knows-what
-Sessions::clearAll();
+//Sessions::clearAll();
 
 Core::initSmarty();
-Core::setCurrLang(General::loadField("lang_file", "lang_file", Core::getDefaultLang()));
+Core::setCurrLang(General::loadField("lang", "lang", Core::getDefaultLang()));
 $root_url = Core::getRootUrl();
 ?>
 <!doctype html>

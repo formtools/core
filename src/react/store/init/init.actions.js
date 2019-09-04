@@ -1,3 +1,5 @@
+import { arrayUtils } from '../../utils';
+
 export const INIT_DATA_LOADED = 'INIT_DATA_LOADED';
 export const INIT_DATA_ERROR_LOADING = 'INIT_DATA_ERROR_LOADING';
 
@@ -6,6 +8,9 @@ export const getInstallationInitData = (store) => {
 		.then((response) => response.json())
 		.then((json) => {
 			const { isAuthenticated, availableLanguages, constants, i18n, userInfo } = json;
+
+			// sort by the language string label
+			arrayUtils.sortBy(availableLanguages, 'lang');
 
 			store.dispatch({
 				type: INIT_DATA_LOADED,
