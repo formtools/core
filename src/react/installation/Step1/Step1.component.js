@@ -3,9 +3,10 @@ import { withRouter } from 'react-router-dom';
 import Dropdown from '../../components/general/Dropdown';
 import { generalUtils } from '../../utils';
 
-const Step1 = ({ i18n, language, availableLanguages, onSelectLanguage, history }) => {
+const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage, getSystemCheckResults }) => {
 	const onSubmit = (e) => {
 		e.preventDefault();
+		getSystemCheckResults();
 		history.push('/step2');
 	};
 

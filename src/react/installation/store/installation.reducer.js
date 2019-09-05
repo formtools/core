@@ -13,6 +13,12 @@ const reducer = (state = {
 				loading: true
 			};
 		}
+		case actions.SYSTEM_CHECK_DATA_RETURNED: {
+			return {
+				...state,
+				loading: false
+			};
+		}
 		case initActions.INIT_DATA_LOADED: {
 			return {
 				...state,

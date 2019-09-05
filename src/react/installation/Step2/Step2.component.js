@@ -15,13 +15,17 @@ const showResult = (passed, i18n) => {
 };
 
 
-const Step2 = ({ i18n, history, results }) => {
+const Step2 = ({ i18n, isLoading, history, results }) => {
 	const onSubmit = (e) => {
 		e.preventDefault();
 		history.push('/step3');
 	};
 
 	const submitBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
+
+	if (isLoading) {
+		return "loading...";
+	}
 
 	return (
 		<form method="post" onSubmit={onSubmit}>
