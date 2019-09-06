@@ -19,6 +19,7 @@ const showResult = (passed, i18n) => {
 class Step2 extends Component {
 	constructor(props) {
 		super(props);
+		this.onSubmit = this.onSubmit.bind(this);
 	}
 
 	componentWillMount () {
@@ -64,9 +65,7 @@ class Step2 extends Component {
 	}
 
 	getCustomCacheFolderField () {
-		const { i18n, results, customCacheFolder, useCustomCacheFolder, updateCustomCacheFolder } = this.props;
-
-		console.log(customCacheFolder);
+		const { customCacheFolder, useCustomCacheFolder, updateCustomCacheFolder } = this.props;
 
 		if (useCustomCacheFolder) {
 			return (
