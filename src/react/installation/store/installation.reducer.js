@@ -4,7 +4,10 @@ import { actions as initActions } from '../../store/init';
 
 const reducer = (state = {
 	language: 'en_us',
-	loading: false
+	loading: false,
+	systemCheckResults: null,
+	useCustomCacheFolder: false,
+	customCacheFolder: ''
 }, action) => {
 	switch (action.type) {
 		case actions.START_REQUEST: {
@@ -14,9 +17,12 @@ const reducer = (state = {
 			};
 		}
 		case actions.SYSTEM_CHECK_DATA_RETURNED: {
+			console.log(action.payload);
 			return {
 				...state,
-				loading: false
+				loading: false,
+				systemCheckResults: { ...action.payload },
+				customCacheFolder: action.payload.customCacheFolder
 			};
 		}
 		case initActions.INIT_DATA_LOADED: {
@@ -29,6 +35,18 @@ const reducer = (state = {
 			return {
 				...state,
 				language: action.payload.language
+			};
+		}
+		case actions.TOGGLE_CUSTOM_CACHE_FOLDER: {
+			return {
+				...state,
+				useCustomCacheFolder: !state.useCustomCacheFolder
+			};
+		}
+		case actions.UPDATE_CUSTOM_CACHE_FOLDER: {
+			return {
+				...state,
+				customCacheFolder: action.payload.value
 			};
 		}
 	}

@@ -14,8 +14,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	onSelectLanguage: ({ value }) => dispatch(initActions.selectLanguage(value)),
-	getSystemCheckResults: () => dispatch(actions.getSystemCheckResults())
+	onSelectLanguage: ({ value }) => dispatch(initActions.selectLanguage(value))
 });
 
 export default connect(

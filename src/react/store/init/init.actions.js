@@ -7,7 +7,7 @@ export const getInstallationInitData = (store) => {
 	fetch('./actions-installation.php?action=init')
 		.then((response) => response.json())
 		.then((json) => {
-			const { isAuthenticated, availableLanguages, constants, i18n, language, userInfo } = json;
+			const { isAuthenticated, availableLanguages, constants, i18n, language } = json;
 
 			// sort by the language string label
 			arrayUtils.sortBy(availableLanguages, 'lang');
@@ -17,20 +17,20 @@ export const getInstallationInitData = (store) => {
 				payload: {
 					isAuthenticated,
 					i18n,
-					userInfo,
 					language,
 					availableLanguages,
 					constants
 				}
 			});
-		}).catch((e) => {
-		store.dispatch({
-			type: INIT_DATA_ERROR_LOADING,
-			payload: {
-				error: e
-			}
+		})
+		.catch((e) => {
+			store.dispatch({
+				type: INIT_DATA_ERROR_LOADING,
+				payload: {
+					error: e
+				}
+			});
 		});
-	});
 };
 
 export const LANGUAGE_UPDATED = 'LANGUAGE_UPDATED';

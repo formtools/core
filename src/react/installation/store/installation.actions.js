@@ -27,3 +27,14 @@ export const getSystemCheckResults = () => {
 			});
 	}
 };
+
+export const TOGGLE_CUSTOM_CACHE_FOLDER = 'TOGGLE_CUSTOM_CACHE_FOLDER';
+export const toggleCustomCacheFolder = () => ({ type: TOGGLE_CUSTOM_CACHE_FOLDER });
+
+export const UPDATE_CUSTOM_CACHE_FOLDER = 'UPDATE_CUSTOM_CACHE_FOLDER';
+export const updateCustomCacheFolder = (value) => ({
+	type: UPDATE_CUSTOM_CACHE_FOLDER,
+	payload: {
+		value
+	}
+});
