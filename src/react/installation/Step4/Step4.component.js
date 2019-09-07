@@ -8,7 +8,7 @@ import Button from '../../components/Buttons';
 import styles from '../Page/Page.scss';
 
 const Step4 = ({ i18n, history, configFileGenerated, errorCreatingConfigFile, configFile }) => {
-	const onSubmit = (e) => {
+	const createConfigFile = (e) => {
 		e.preventDefault();
 		history.push('/step5');
 	};
@@ -29,11 +29,9 @@ $three = "three";
 
 					<CodeMirror value={fake} className={styles.configFileContents} options={{ mode: 'php' }} readOnly />
 
-					<form name="display_config_content_form" action="" method="post">
-						<p>
-							<Button type="submit">{i18n.phrase_create_file}</Button>
-						</p>
-					</form>
+					<p>
+						<Button type="submit" onClick={createConfigFile}>{i18n.phrase_create_file}</Button>
+					</p>
 				</>
 			);
 		}
