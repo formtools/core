@@ -117,9 +117,10 @@
     "webpack-cli": "^3.3.7"
   },
   "dependencies": {
-    "@material-ui/core": "^3.0.0",
-    "@material-ui/icons": "^3.0.1",
+    "@material-ui/core": "^4.4.0",
+    "@material-ui/icons": "^4.2.1",
     "react": "^16.8.0",
+    "react-codemirror": "^1.0.0",
     "react-dom": "^16.8.0",
     "react-redux": "^5.0.7",
     "react-router": "^5.0.1",

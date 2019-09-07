@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { generalUtils } from '../../utils';
 import styles from '../Page/Page.scss';
+import Button from '../../components/Buttons';
+
 
 const showResult = (passed, i18n) => {
 	let className = styles.red;
@@ -59,7 +61,7 @@ class Step2 extends Component {
 
 		return (
 			<p>
-				<input type="submit" name="next" id="next" value={submitBtnLabel} />
+				<Button type="submit">{submitBtnLabel}</Button>
 			</p>
 		);
 	}

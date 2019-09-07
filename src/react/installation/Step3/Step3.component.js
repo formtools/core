@@ -1,22 +1,23 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import styles from '../Page/Page.scss';
+import Button from '../../components/Buttons';
 
 
-class Step2 extends Component {
+class Step3 extends Component {
 	constructor (props) {
 		super(props);
 		this.onSubmit = this.onSubmit.bind(this);
-		this.setState({
+		this.state = {
 			msgType: null,
 			msg: ''
-		});
+		};
 	}
 
 	onSubmit (e) {
 		e.preventDefault();
 
-		const { i18n, dbHostname, dbName, dbUsername, dbTablePrefix } = this.props;
+		const { i18n, history, dbHostname, dbName, dbUsername, dbTablePrefix } = this.props;
 
 		const errors = [];
 		if (!dbHostname) {
@@ -36,14 +37,16 @@ class Step2 extends Component {
 			errors.push(i18n.validation_invalid_table_prefix);
 		}
 
-		if (errors.length) {
-			this.setState({
-				msgIntro: i18n.phrase_error_text_intro,
-				errors
-			});
-		} else {
-			this.props.history.push('/step4');
-		}
+		console.log('!!!');
+
+		// if (errors.length) {
+		// 	this.setState({
+		// 		msgIntro: i18n.phrase_error_text_intro,
+		// 		errors
+		// 	});
+		// } else {
+			history.push('/step4');
+		// }
 	};
 
 	getTablesAlreadyExistContent () {
@@ -169,8 +172,9 @@ class Step2 extends Component {
 					</table>
 
 					<p>
-						<input type="submit" value={i18n.phrase_create_database_tables}/>
+						<Button type="submit">{i18n.phrase_create_database_tables}</Button>
 					</p>
+
 				</form>
 			</div>
 		);
@@ -191,4 +195,4 @@ class Step2 extends Component {
 }
 
 
-export default withRouter(Step2);
+export default withRouter(Step3);

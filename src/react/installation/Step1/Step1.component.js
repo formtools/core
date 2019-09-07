@@ -1,6 +1,8 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import Dropdown from '../../components/Dropdown';
+import Button from '../../components/Buttons';
+
 import { generalUtils } from '../../utils';
 
 const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage }) => {
@@ -13,7 +15,7 @@ const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage }
 
 	return (
 		<form method="post" onSubmit={onSubmit}>
-			<h2>Hey there!</h2>
+			<h2>{i18n.word_welcome}</h2>
 			<p>
 				Select your language and let's get started.
 			</p>
@@ -27,7 +29,7 @@ const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage }
 			</section>
 
 			<p>
-				<input type="submit" value={submitBtnLabel} />
+				<Button type="submit">{submitBtnLabel}</Button>
 			</p>
 		</form>
 	);

@@ -24,4 +24,4 @@ const Footer = ({ i18n }) => (
 	</div>
 );
 
-export default Footer;
+export default Footer;``

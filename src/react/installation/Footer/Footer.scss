@@ -1,7 +1,6 @@
 .footer {
   flex: 0 0 auto;
   width: 100%;
-
   padding: 25px 0;
   border-top: 1px dotted #cccccc;
   text-align: justify;
@@ -9,7 +8,6 @@
   ul {
     display: flex;
     flex-direction: row;
-    align-items: center;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -17,32 +15,30 @@
     li {
       border-right: 1px solid #cccccc;
       flex: 0 0 auto;
+
+      &:last-child {
+        border-right: 0;
+      }
+
+      &:hover {
+        a {
+          border-bottom: 0;
+          color: #990000;
+        }
+        svg {
+          fill: #990000;
+        }
+      }
     }
-  }
 
-  ul li:last-child {
-    border-right: 0;
-  }
-
-  ul li {
     a {
       color: #0066cc;
-      padding: 20px;
+      padding: 0 20px;
+      display: flex;
     }
     svg {
       fill: #0066cc;
       margin-right: 10px;
     }
   }
-
-  ul li:hover {
-    a {
-      border-bottom: 0;
-      color: #990000;
-    }
-    svg {
-      fill: #990000;
-    }
-  }
 }
-

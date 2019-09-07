@@ -51,6 +51,13 @@ const config = (env) => {
 						}
 					]
 				},
+				{
+					test: /\.css$/,
+					use: [
+						isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+						'css-loader'
+					]
+				}
 			]
 		},
 		resolve: {

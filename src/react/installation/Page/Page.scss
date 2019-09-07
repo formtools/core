@@ -196,12 +196,14 @@ h3 {
   overflow-y: scroll;
 }
 
-.config_file_contents {
+
+.configFileContents {
   width: 100%;
   background-color: #ffffff;
   color: #555555;
   line-height: 12pt;
   padding: 5px;
+  border: 1px solid #dddddd;
 }
 
 body .CodeMirror {
