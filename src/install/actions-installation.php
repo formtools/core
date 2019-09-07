@@ -21,6 +21,7 @@ $data = array(
 );
 
 switch ($_GET["action"]) {
+
 	case "init":
 		$data = array(
 			"isAuthenticated" => false,
@@ -31,6 +32,14 @@ switch ($_GET["action"]) {
 				"rootDir" => Core::getRootDir(),
 				"rootUrl" => "../",
 				"coreVersion" => Core::getCoreVersion()
+			),
+			"installation" => array(
+				"dbHostname" => Sessions::getWithFallback("dbHostname", "localhost"),
+				"dbName" => Sessions::getWithFallback("dbName", ""),
+				"dbPort" => Sessions::getWithFallback("dbPort", "3306"),
+				"dbUsername" => Sessions::getWithFallback("dbUsername", ""),
+				"dbPassword" => Sessions::getWithFallback("dbPassword", ""),
+				"dbTablePrefix" => Sessions::getWithFallback("dbTablePrefix", "ft_")
 			)
 		);
 		break;

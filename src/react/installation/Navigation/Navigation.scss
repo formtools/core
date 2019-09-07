@@ -2,11 +2,11 @@
   color: #aaaaaa;
 }
 
-.nav_current .delim {
+.navCurrent .delim {
   color: #999999;
 }
 
-.nav_items {
+.navItems {
   border-right: 1px dotted #dddddd;
   margin: 0 5px 0 12px;
 
@@ -17,12 +17,25 @@
     padding-left: 2px;
   }
 
-  div.nav_current {
+  div.navCurrent {
     font-weight: bold;
     color: green;
     border-top: 1px solid #cccccc;
     border-bottom: 1px solid #cccccc;
     background-color: #efefef;
   }
+}
+
+
+.navVisited {
+  color: #aaaaaa;
+  cursor: pointer;
+  &:hover {
+    color: #a1d5ab;
+  }
+}
+
+.navRemaining {
+  color: #777777;
 }
 

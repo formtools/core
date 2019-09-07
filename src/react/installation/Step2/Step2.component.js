@@ -88,9 +88,7 @@ class Step2 extends Component {
 			<form method="post" onSubmit={this.onSubmit}>
 				<h2>{i18n.phrase_system_check}</h2>
 
-				<p>
-					{i18n.text_install_system_check}
-				</p>
+				<p dangerouslySetInnerHTML={{ __html: i18n.text_install_system_check }} />
 
 				<table cellSpacing="0" cellPadding="2" width="600" className={styles.info}>
 					<tbody>

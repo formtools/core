@@ -38,3 +38,13 @@ export const updateCustomCacheFolder = (value) => ({
 		value
 	}
 });
+
+export const UPDATE_DATABASE_FIELD = 'UPDATE_DATABASE_FIELD';
+export const updateDatabaseField = (field, value) => ({
+	type: UPDATE_DATABASE_FIELD,
+	payload: {
+		field,
+		value
+	}
+});
+

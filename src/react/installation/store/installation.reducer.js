@@ -7,7 +7,15 @@ const reducer = (state = {
 	loading: false,
 	systemCheckResults: null,
 	useCustomCacheFolder: false,
-	customCacheFolder: ''
+	customCacheFolder: '',
+
+	// config.php values
+	dbHostname: '',
+	dbName: '',
+	dbPort: '',
+	dbUsername: '',
+	dbPassword: '',
+	dbTablePrefix: ''
 }, action) => {
 	switch (action.type) {
 		case actions.START_REQUEST: {
@@ -47,6 +55,14 @@ const reducer = (state = {
 			return {
 				...state,
 				customCacheFolder: action.payload.value
+			};
+		}
+
+		case actions.UPDATE_DATABASE_FIELD: {
+			const { field, value } = action.payload;
+			return {
+				...state,
+				[field]: value
 			};
 		}
 	}

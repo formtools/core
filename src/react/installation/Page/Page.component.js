@@ -1,9 +1,9 @@
 import React from 'react';
 import Header from '../../components/general/Header/Header';
+import { Route } from 'react-router';
 import Footer from '../Footer/Footer';
 import Navigation from '../Navigation/Navigation';
 import styles from './Page.scss';
-import { Route } from "react-router";
 
 
 const Page = ({ component: Component, ...otherProps }) => {
@@ -14,7 +14,7 @@ const Page = ({ component: Component, ...otherProps }) => {
 	}
 
 	return (
-		<Route {...otherProps} render={matchProps => (
+		<Route {...otherProps} render={(matchProps) => (
 			<div className={styles.page}>
 				<Header
 					i18n={i18n}
@@ -24,7 +24,7 @@ const Page = ({ component: Component, ...otherProps }) => {
 					<h1>{i18n.word_installation}</h1>
 
 					<section className={styles.pageContent}>
-						<Navigation i18n={i18n} className={styles.nav} />
+						<Navigation i18n={i18n} className={styles.nav} history={history} />
 
 						<div className={styles.body}>
 							<Component {...matchProps} />

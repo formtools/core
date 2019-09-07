@@ -3,7 +3,7 @@ import { arrayUtils } from '../../utils';
 export const INIT_DATA_LOADED = 'INIT_DATA_LOADED';
 export const INIT_DATA_ERROR_LOADING = 'INIT_DATA_ERROR_LOADING';
 
-export const getInstallationInitData = (store) => {
+export const getInstallationData = (store) => {
 	fetch('./actions-installation.php?action=init')
 		.then((response) => response.json())
 		.then((json) => {
