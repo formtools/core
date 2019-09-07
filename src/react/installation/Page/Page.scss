@@ -48,15 +48,24 @@ ul {
   padding-left: 16px;
 }
 
+:global(#root) {
+  height: 100%;
+}
+
 .page {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
   width: 950px;
   text-align: left;
   margin: 0 auto;
 }
 
 .content {
-  margin: 24px 10px 0 10px;
+  flex: 1;
+  margin: 15px 10px 0 10px;
 }
+
 
 .pageContent {
   display: flex;

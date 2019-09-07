@@ -1,8 +1,8 @@
 .header {
-  height: 72px;
   position: relative;
   text-align: center;
   width: 950px;
+  flex: 0 0 auto;
 }
 
 .version {
@@ -16,7 +16,7 @@
   }
 }
 
-.account_section {
+.accountSection {
   background-color: #1f4f26;
   padding: 0 8px;
   color: white;

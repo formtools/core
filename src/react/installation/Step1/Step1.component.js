@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
-import Dropdown from '../../components/general/Dropdown';
+import Dropdown from '../../components/Dropdown';
 import { generalUtils } from '../../utils';
 
 const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage }) => {
@@ -13,6 +13,7 @@ const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage }
 
 	return (
 		<form method="post" onSubmit={onSubmit}>
+			<h2>Hey there!</h2>
 			<p>
 				Select your language and let's get started.
 			</p>

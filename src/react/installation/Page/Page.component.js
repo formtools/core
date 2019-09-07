@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '../../components/general/Header/Header';
+import Header from '../../components/Header/Header';
 import { Route } from 'react-router';
 import Footer from '../Footer/Footer';
 import Navigation from '../Navigation/Navigation';
@@ -31,7 +31,6 @@ const Page = ({ component: Component, ...otherProps }) => {
 						</div>
 					</section>
 				</div>
-				<div className={styles.clear}/>
 				<Footer i18n={i18n}/>
 			</div>
 		)} />

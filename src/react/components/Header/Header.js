@@ -5,7 +5,7 @@ const Header = ({ i18n, version, constants }) => (
 	<section className={styles.header}>
 		<div className={styles.version}>
 			<img src={`${constants.rootUrl}/themes/default/images/account_section_left_green2x.png`} border="0" width="8" height="25" />
-			<div className={styles.account_section}>{constants.coreVersion}</div>
+			<div className={styles.accountSection}>{constants.coreVersion}</div>
 			<img src={`${constants.rootUrl}/themes/default/images/account_section_right_green2x.png`} border="0" width="8" height="25" />
 		</div>
 		<span style={{ float: 'left', paddingTop: 4 }}>

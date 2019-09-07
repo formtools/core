@@ -1,33 +1,48 @@
 .footer {
-  margin-top: 30px;
+  flex: 0 0 auto;
+  width: 100%;
+
+  padding: 25px 0;
   border-top: 1px dotted #cccccc;
-  padding: 6px 0;
   text-align: justify;
 
   ul {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     list-style: none;
     margin: 0;
     padding: 0;
 
     li {
-      float: left;
-      padding: 0 20px;
       border-right: 1px solid #cccccc;
+      flex: 0 0 auto;
     }
   }
 
-  ul li.colN {
+  ul li:last-child {
     border-right: 0;
   }
 
-  ul li a {
-    color: #0066cc;
-    display: block;
+  ul li {
+    a {
+      color: #0066cc;
+      padding: 20px;
+    }
+    svg {
+      fill: #0066cc;
+      margin-right: 10px;
+    }
   }
 
-  ul li a:hover {
-    border-bottom: 0;
-    color: #990000;
+  ul li:hover {
+    a {
+      border-bottom: 0;
+      color: #990000;
+    }
+    svg {
+      fill: #990000;
+    }
   }
 }
 
