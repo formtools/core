@@ -174,7 +174,6 @@ class Step3 extends Component {
 					<p>
 						<Button type="submit">{i18n.phrase_create_database_tables}</Button>
 					</p>
-
 				</form>
 			</div>
 		);

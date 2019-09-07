@@ -1,12 +1,22 @@
 .header {
   position: relative;
   text-align: center;
-  width: 950px;
   flex: 0 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin: 0 10px;
+}
+
+.logo {
+  padding-top: 4px;
+  a:hover {
+    border: 0;
+  }
 }
 
 .version {
-  float: right;
+  flex: 0 0 auto;
   display: flex;
 
   div {

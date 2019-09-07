@@ -9,7 +9,7 @@ const config = (env) => {
 	return {
 		mode: env, // development | production
 		entry: [
-			'./src/react/bundles/installation.js'
+			'./src/react/installation-bundle.js'
 		],
 		output: {
 			path: path.resolve(__dirname, 'dist/react'),

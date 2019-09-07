@@ -40,3 +40,11 @@
   color: #777777;
 }
 
+@media (max-width: 800px) {
+  .navVisited, .navRemaining {
+    display: none;
+  }
+  .navItems div.navCurrent {
+    border: 0;
+  }
+}
