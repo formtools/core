@@ -1,0 +1,28 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: black;
+  opacity: 0.5;
+  z-index: 2;
+}
+
+.fadeIn {
+  animation: fadein .6s;
+}
+
+.fadeOut {
+  animation: fadeout .6s;
+}
+
+@keyframes fadein {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeout {
+  from { opacity: 0.5; }
+  to   { opacity: 0; }
+}

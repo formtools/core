@@ -77,7 +77,7 @@ ul {
   }
   .body {
     flex: 1;
-    padding-left: 15px;
+    padding: 0 15px;
   }
 }
 
@@ -212,7 +212,6 @@ h3 {
 
 
 .configFileContents {
-  width: 100%;
   background-color: #ffffff;
   border-radius: 3px;
   color: #555555;
@@ -221,11 +220,11 @@ h3 {
   border: 1px solid #dddddd;
 }
 
-body .CodeMirror {
-  border: 1px solid #aaaaaa;
-  height: 310px;
-  padding: 6px;
-}
+//body .CodeMirror {
+//  border: 1px solid #aaaaaa;
+//  height: 310px;
+//  padding: 6px;
+//}
 
 .clear {
   clear: both;

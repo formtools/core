@@ -79,11 +79,10 @@ class Step2 extends Component {
 	}
 
 	render () {
-		const { i18n, isLoading, results, useCustomCacheFolder, toggleCustomCacheFolder } = this.props;
+		const { i18n, loading, results, useCustomCacheFolder, toggleCustomCacheFolder } = this.props;
 
-		// TODO
-		if (isLoading || results === null) {
-			return "loading...";
+		if (loading || results === null) {
+			return null;
 		}
 
 		return (
@@ -120,7 +119,7 @@ class Step2 extends Component {
 					<tr>
 						<td>PHP Sessions</td>
 						<td className={styles.bold}>
-							{results.sessions_loaded === 1 ? i18n.word_available : i18n.phrase_not_available}
+							{results.sessionsLoaded ? i18n.word_available : i18n.phrase_not_available}
 						</td>
 						<td width="100" align="center">
 							{showResult(results.sessionsLoaded, i18n)}

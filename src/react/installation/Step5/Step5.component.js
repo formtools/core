@@ -27,7 +27,7 @@ const Step2 = ({ i18n, language, availableLanguages, onSelectLanguage, history }
 				<tr>
 					<td width="160">{i18n.phrase_first_name}</td>
 					<td className="answer">
-						<input type="text" name="first_name" value="" style={{ width: 200 }} />
+						<input type="text" name="first_name" value="" style={{ width: 200 }} autoFocus />
 					</td>
 				</tr>
 				<tr>

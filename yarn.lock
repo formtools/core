@@ -787,7 +787,7 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.2.3.tgz#dfa0c92efe44a1d1a7974fb49ffeb40ef2da5a27"
   integrity sha512-zVgvPwGK7c1aVdUVc9Qv7SqepOGRDrqCw7KZPSZziWGxSlbII3gmvGLPzLX4d0n0BMbamBacUrN22zOMyFFEkQ==
 
-"@material-ui/core@^4.4.1":
+"@material-ui/core@^4.4.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.4.0.tgz#820b6ee91da9eaf4018ff9e87e6ca04fc985e35a"
   integrity sha512-p6yDcLYYHzJD0A6im+prcCahZBdlhh2OrTGQ4W1XN1X5uiMIg4niJ8FYBpgV0ssaluO+EYlaAKp2qGeMNRr/bA==
@@ -809,7 +809,7 @@
     react-transition-group "^4.0.0"
     warning "^4.0.1"
 
-"@material-ui/icons@^4.4.1":
+"@material-ui/icons@^4.2.1":
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-4.2.1.tgz#fe2f1c4f60c24256d244a69d86d0c00e8ed4037e"
   integrity sha512-FvSD5lUBJ66frI4l4AYAPy2CH14Zs2Dgm0o3oOMr33BdQtOAjCgbdOcvPBeaD1w6OQl31uNW3CKOE8xfPNxvUQ==

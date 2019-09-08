@@ -27,7 +27,7 @@ $three = "three";
 				<>
 					<p dangerouslySetInnerHTML={{ __html: i18n.text_install_create_config_file }} />
 
-					<CodeMirror value={fake} className={styles.configFileContents} options={{ mode: 'php' }} readOnly />
+					<CodeMirror value={fake} className={styles.configFileContents} options={{ mode: 'php', readOnly: 'nocursor' }} />
 
 					<p>
 						<Button type="submit" onClick={createConfigFile}>{i18n.phrase_create_file}</Button>
@@ -76,8 +76,6 @@ $three = "three";
 	return (
 		<>
 			<h2>{i18n.phrase_create_config_file}</h2>
-
-			include file='messages.tpl'
 
 			{getContent()}
 		</>

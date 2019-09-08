@@ -37,8 +37,6 @@ class Step3 extends Component {
 			errors.push(i18n.validation_invalid_table_prefix);
 		}
 
-		console.log('!!!');
-
 		// if (errors.length) {
 		// 	this.setState({
 		// 		msgIntro: i18n.phrase_error_text_intro,

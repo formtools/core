@@ -25,7 +25,6 @@ const reducer = (state = {
 			};
 		}
 		case actions.SYSTEM_CHECK_DATA_RETURNED: {
-			console.log(action.payload);
 			return {
 				...state,
 				loading: false,
