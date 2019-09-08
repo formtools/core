@@ -1,5 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
+import { navUtils } from '../../utils';
 import styles from './navigation.scss';
 
 
@@ -18,8 +19,9 @@ const getRowProps = (history, link, currentPage, targetPage) => {
 
 
 const Navigation = ({ i18n, history, location, className }) => {
-	const navMatch = location.pathname.match(/step(\d)/);
-	const currentPage = (navMatch && navMatch.length > 1) ? parseInt(navMatch[1], 10) : 1;
+	const currentPage = navUtils.getCurrentInstallationPage();
+
+	console.log(currentPage);
 
 	const Row = ({ page, label }) => {
 		const link = (page === 1) ? '/' : `/step${page}`;

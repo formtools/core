@@ -15,7 +15,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	getSystemCheckResults: () => dispatch(actions.getSystemCheckResults()),
 	toggleCustomCacheFolder: () => dispatch(actions.toggleCustomCacheFolder()),
-	updateCustomCacheFolder: (value) => dispatch(actions.updateCustomCacheFolder(value))
+	updateCustomCacheFolder: (value) => dispatch(actions.updateCustomCacheFolder(value)),
+	saveCacheFolderSetting: (onSuccess, onError) => dispatch(actions.saveCacheFolderSetting(onSuccess, onError))
 });
 
 export default connect(

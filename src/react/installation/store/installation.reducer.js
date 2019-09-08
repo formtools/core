@@ -24,6 +24,12 @@ const reducer = (state = {
 				loading: true
 			};
 		}
+		case actions.REQUEST_RETURNED: {
+			return {
+				...state,
+				loading: false
+			};
+		}
 		case actions.SYSTEM_CHECK_DATA_RETURNED: {
 			return {
 				...state,

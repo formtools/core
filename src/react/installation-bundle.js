@@ -6,11 +6,12 @@ import { actions } from './store/init';
 import store from './store';
 import InstallationPage from './installation/Page/Page.container';
 import { Step1, Step2, Step3, Step4, Step5, Step6 } from './installation';
+import { navUtils } from './utils';
 
 // boot 'er up. The initialization data is requested on every page (i18n, user info, etc). This request loads as much
 // info as has been inputted so far for the user in their installation process. This lets them refresh the page on any
 // page and not lose anything
-actions.getInstallationData(store);
+actions.getInstallationData(store, navUtils.getCurrentInstallationPage());
 
 const App = () => (
 	<Provider store={store}>

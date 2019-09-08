@@ -22,6 +22,7 @@ class Step2 extends Component {
 	constructor(props) {
 		super(props);
 		this.onSubmit = this.onSubmit.bind(this);
+		this.onSuccess = this.onSuccess.bind(this);
 	}
 
 	componentWillMount () {
@@ -30,7 +31,22 @@ class Step2 extends Component {
 
 	onSubmit (e) {
 		e.preventDefault();
+
+		// update the server
+		this.props.saveCacheFolderSetting(this.onSuccess, this.onError)
+	}
+
+	onSuccess () {
 		this.props.history.push('/step3');
+	}
+
+	// an error can occur when the custom cache folder isn't valid and we need to prompt the user to re-enter.
+
+	// also need to handle in a more general fashion:
+	// - general request errors
+	// - auto-redirect back to step1 if sessions aren't set.
+	onError () {
+
 	}
 
 	getResultsSection () {

@@ -19,14 +19,14 @@ class LoadingOverlay extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-			hidden: props.loading
+			hidden: true
 		};
 	}
 
 	componentDidUpdate (prevProps, prevState, snapshot) {
 
 		// remove element after the a fade out is complete
-		if (prevProps.visible && !this.props.visible) {
+		if (prevProps.visible === true && !this.props.visible) {
 			setTimeout(() => {
 				this.setState({ hidden: true });
 			}, fadeOutTime);

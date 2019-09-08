@@ -3,8 +3,11 @@ import { arrayUtils } from '../../utils';
 export const INIT_DATA_LOADED = 'INIT_DATA_LOADED';
 export const INIT_DATA_ERROR_LOADING = 'INIT_DATA_ERROR_LOADING';
 
-export const getInstallationData = (store) => {
-	fetch('./actions-installation.php?action=init')
+// Used during the installation script. It kinda made more sense leaving it here rather than moving the the installation
+// actions, since the store needed to listen to those actions anyway & we want to keep the installation code into a
+// separate bundle
+export const getInstallationData = (store, page) => {
+	fetch(`./actions-installation.php?action=init&page=${page}`)
 		.then((response) => response.json())
 		.then((json) => {
 			const { isAuthenticated, availableLanguages, constants, i18n, language } = json;

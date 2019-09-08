@@ -7,6 +7,7 @@ require_once("../global/library.php");
 
 use FormTools\Core;
 use FormTools\General;
+use FormTools\Installation;
 use FormTools\Sessions;
 
 Core::setHooksEnabled(false);
@@ -14,7 +15,11 @@ Core::startSessions();
 
 $currentLang = General::loadField("lang", "lang", Core::getDefaultLang());
 Core::setCurrLang($currentLang);
-$root_url = Core::getRootUrl();
+
+// the methods in this file are only available for incomplete installations
+if (Installation::checkInstallationComplete(false)) {
+	return;
+}
 
 $data = array(
 	"error" => "unknown_action"
@@ -23,7 +28,17 @@ $data = array(
 switch ($_GET["action"]) {
 
 	case "init":
+		// if the user isn't on the first page and they don't have sessions, we init the sessions but tell the client
+		// to send them back to the start
+		$page = $_GET["page"];
+		$restartInstallation = false;
+
+		if (!Sessions::exists("installing") && $page != 1) {
+			$restartInstallation = true;
+		}
+
 		$data = array(
+			"restartInstallation" => $restartInstallation,
 			"isAuthenticated" => false,
 			"i18n" => Core::$L,
 			"availableLanguages" => Core::$translations->getList(),
@@ -42,6 +57,7 @@ switch ($_GET["action"]) {
 				"dbTablePrefix" => Sessions::getWithFallback("dbTablePrefix", "ft_")
 			)
 		);
+		Sessions::set("installing", true);
 		break;
 
 	case "selectLanguage":
@@ -68,6 +84,7 @@ switch ($_GET["action"]) {
 		}
 		break;
 
+	// Step 2
 	case "getSystemCheckResults":
 		$upload_folder_writable = is_writable(realpath("../upload"));
 		$cache_dir_writable = is_writable(realpath("../cache/"));
@@ -85,6 +102,38 @@ switch ($_GET["action"]) {
 			"uploadFolderWritable" => $upload_folder_writable,
 			"cacheDirWritable" => $cache_dir_writable
 		);
+		break;
+
+	// Step 2 when the user clicks continue. This checks any custom cache folder settings the user entered are valid
+	case "saveCacheFolderSettings":
+
+		if (isset($request["useCustomCacheFolder"])) {
+			$custom_cache_folder = $request["custom_cache_folder"];
+			$custom_cache_folder_exists = is_dir($custom_cache_folder);
+
+			if ($custom_cache_folder_exists) {
+				$custom_cache_folder_writable = is_writable($custom_cache_folder);
+
+				// if the custom cache folder is writable, great - create a blank index.html file in it just to prevent
+				// servers configured to list the contents
+				if ($custom_cache_folder_writable) {
+					$index_file = "$custom_cache_folder/index.html";
+					if (!file_exists($index_file)) {
+						fopen($index_file, "w");
+					}
+					Sessions::set("g_custom_cache_folder", $custom_cache_folder);
+				} else {
+					$success = false;
+					$message = "The custom cache folder you entered needs to have full read-write permissions.";
+				}
+			} else {
+				$success = false;
+				$message = "The custom cache folder you entered does not exist.";
+			}
+		} else {
+			Sessions::set("g_custom_cache_folder", "");
+		}
+
 		break;
 
 	case "setCacheFolder":

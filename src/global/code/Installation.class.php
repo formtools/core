@@ -1302,10 +1302,13 @@ END;
     }
 
 
-    /**
-     * Helper method to determine if the installation has already been completed and redirect to the login page if so.
-     */
-    public static function checkInstallationComplete()
+	/**
+	 * Helper method to determine if the installation has already been completed and (optionall) redirect to the login
+	 * page if so.
+	 * @param bool $redirect
+	 * @return bool
+	 */
+    public static function checkInstallationComplete($redirect = true)
 	{
 		$config_file_exists = Core::checkConfigFileExists();
 		$installation_complete = false;
@@ -1321,10 +1324,14 @@ END;
 			} catch (Exception $e) {}
 		}
 
-		if ($config_file_exists && $installation_complete) {
+		$complete = $config_file_exists && $installation_complete;
+
+		if ($complete && $redirect) {
 			header("location: ../");
 			exit;
 		}
+
+		return $complete;
 	}
 
 

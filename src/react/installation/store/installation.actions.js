@@ -1,8 +1,10 @@
 export const SYSTEM_CHECK_DATA_RETURNED = 'SYSTEM_CHECK_DATA_RETURNED';
 export const START_REQUEST = 'START_REQUEST';
 export const REQUEST_ERROR = 'REQUEST_ERROR';
+export const REQUEST_RETURNED = 'REQUEST_RETURNED';
 
 export const startRequest = () => ({ type: START_REQUEST });
+export const requestReturned = () => ({ type: REQUEST_RETURNED });
 
 export const getSystemCheckResults = () => {
 	return (dispatch) => {
@@ -48,3 +50,17 @@ export const updateDatabaseField = (field, value) => ({
 	}
 });
 
+export const saveCacheFolderSetting = (onSuccess, onError) => {
+	return (dispatch) => {
+		dispatch(startRequest());
+		fetch('./actions-installation.php?action=saveCacheFolderSettings')
+			.then(() => {
+				dispatch(requestReturned());
+				onSuccess();
+			})
+			.catch((e) => {
+				dispatch(requestReturned());
+				onError(e);
+			});
+	};
+}
