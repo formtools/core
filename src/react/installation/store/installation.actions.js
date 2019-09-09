@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const SYSTEM_CHECK_DATA_RETURNED = 'SYSTEM_CHECK_DATA_RETURNED';
 export const START_REQUEST = 'START_REQUEST';
 export const REQUEST_ERROR = 'REQUEST_ERROR';
@@ -10,13 +12,12 @@ export const getSystemCheckResults = () => {
 	return (dispatch) => {
 		dispatch(startRequest());
 
-		fetch('./actions-installation.php?action=getSystemCheckResults')
-			.then((response) => response.json())
-			.then((json) => {
+		axios.get(`./actions-installation.php?action=getSystemCheckResults`)
+			.then(({ data }) => {
 				dispatch({
 					type: SYSTEM_CHECK_DATA_RETURNED,
 					payload: {
-						...json
+						...data
 					}
 				});
 			}).catch((e) => {
@@ -53,7 +54,7 @@ export const updateDatabaseField = (field, value) => ({
 export const saveCacheFolderSetting = (onSuccess, onError) => {
 	return (dispatch) => {
 		dispatch(startRequest());
-		fetch('./actions-installation.php?action=saveCacheFolderSettings')
+		axios.get('./actions-installation.php?action=saveCacheFolderSettings')
 			.then(() => {
 				dispatch(requestReturned());
 				onSuccess();
@@ -63,4 +64,5 @@ export const saveCacheFolderSetting = (onSuccess, onError) => {
 				onError(e);
 			});
 	};
-}
+};
+

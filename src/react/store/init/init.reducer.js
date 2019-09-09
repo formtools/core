@@ -5,6 +5,7 @@ const reducer = (state = {
 	initialized: false,
 	errorInitializing: false,
 	isAuthenticated: false,
+	globalError: '',
 	availableLanguages: []
 }, action) => {
 	switch (action.type) {
@@ -22,6 +23,11 @@ const reducer = (state = {
 				...state,
 				initialized: true,
 				errorInitializing: false
+			};
+		case actions.SET_GLOBAL_ERROR:
+			return {
+				...state,
+				globalError: action.payload.globalError
 			};
 		default:
 			return state;

@@ -1476,4 +1476,14 @@ END;
 			@mkdir($cache_folder, 0777, true);
 		}
 	}
+
+	public static function returnJsonResponse($data, $response_code)
+	{
+		header("Content-Type: text/javascript");
+		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+
+		http_response_code($response_code);
+
+		echo json_encode($data);
+	}
 }

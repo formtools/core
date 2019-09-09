@@ -21,8 +21,6 @@ const getRowProps = (history, link, currentPage, targetPage) => {
 const Navigation = ({ i18n, history, location, className }) => {
 	const currentPage = navUtils.getCurrentInstallationPage();
 
-	console.log(currentPage);
-
 	const Row = ({ page, label }) => {
 		const link = (page === 1) ? '/' : `/step${page}`;
 		return (

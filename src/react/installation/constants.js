@@ -1,0 +1,3 @@
+export const ERRORS = {
+	SESSIONS_EXPIRED: 'SESSIONS_EXPIRED'
+};
