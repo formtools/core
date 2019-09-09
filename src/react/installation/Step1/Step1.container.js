@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { selectors as i18nSelectors } from '../../store/i18n';
 import { actions as initActions, selectors as initSelectors } from '../../store/init';
 import { selectors as constantSelectors } from '../../store/constants';
-import { actions, selectors } from '../store/';
+import { selectors } from '../store/';
 import Step1 from './Step1.component';
 
 const mapStateToProps = (state) => ({
@@ -11,6 +11,7 @@ const mapStateToProps = (state) => ({
 	constants: constantSelectors.getConstants(state),
 	availableLanguages: initSelectors.getLanguageList(state),
 	language: selectors.getLanguage(state)
+	// globalError: initSelectors.getGlobalError(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

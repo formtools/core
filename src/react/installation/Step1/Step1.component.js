@@ -5,11 +5,13 @@ import Button from '../../components/Buttons';
 
 import { generalUtils } from '../../utils';
 
-const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage }) => {
+const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage, ...otherProps }) => {
 	const onSubmit = (e) => {
 		e.preventDefault();
 		history.push('/step2');
 	};
+
+	console.log(otherProps);
 
 	const submitBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
 

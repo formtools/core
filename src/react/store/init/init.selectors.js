@@ -8,3 +8,5 @@ export const getLanguageList = createSelector(
 	getAvailableLanguages,
 	(list) => list.map(({ code, lang }) => ({ value: code, label: lang }))
 );
+
+export const getGlobalError = (state) => state.init.globalError;
