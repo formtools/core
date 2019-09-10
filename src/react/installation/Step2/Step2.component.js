@@ -149,7 +149,7 @@ class Step2 extends Component {
 						</td>
 					</tr>
 					<tr>
-						<td>{i18n.phraseCacheFolder}</td>
+						<td>{i18n.phrase_cache_folder}</td>
 						<td className={styles.bold}>{results.cacheFolder}</td>
 						<td align="center">
 							{showResult(results.cacheDirWritable, i18n)}

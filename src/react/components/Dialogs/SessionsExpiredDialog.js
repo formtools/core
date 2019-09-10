@@ -38,7 +38,7 @@ const SessionsExpiredDialog = ({ onClose, open, i18n }) => (
 		</DialogContent>
 		<MuiDialogActions>
 			<Button onClick={onClose}>
-				{i18n.word_continue}
+				{i18n.word_restart}
 			</Button>
 		</MuiDialogActions>
 	</Dialog>

@@ -26,11 +26,8 @@ $data = array(
 );
 
 // if the user isn't on hitting the first page and they don't have sessions, we
-$restartInstallation = false;
 $missingPageParam = !isset($_GET["page"]) || !is_numeric($_GET["page"]);
 if ($missingPageParam || (!Sessions::exists("installing") && $_GET["page"] != 1)) {
-	$restartInstallation = true;
-	$data["restartInstallation"] = $restartInstallation;
 	General::returnJsonResponse($data, 403);
 	exit;
 }

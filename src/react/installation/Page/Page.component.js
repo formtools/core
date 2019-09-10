@@ -15,8 +15,6 @@ const Page = ({ component: Component, ...otherProps }) => {
 		return null;
 	}
 
-	console.log(initialized);
-
 	return (
 		<Route {...otherProps} render={(matchProps) => {
 			return (
