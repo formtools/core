@@ -38,6 +38,12 @@ const reducer = (state = {
 				customCacheFolder: action.payload.customCacheFolder
 			};
 		}
+		case actions.REQUEST_ERROR: {
+			return {
+				...state,
+				loading: false
+			};
+		}
 		case initActions.INIT_DATA_LOADED: {
 			return {
 				...state,

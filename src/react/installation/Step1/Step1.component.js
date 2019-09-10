@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
 import Dropdown from '../../components/Dropdown';
 import Button from '../../components/Buttons';
 
@@ -10,8 +9,6 @@ const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage, 
 		e.preventDefault();
 		history.push('/step2');
 	};
-
-	console.log(otherProps);
 
 	const submitBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
 
@@ -37,7 +34,7 @@ const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage, 
 	);
 };
 
-export default withRouter(Step1);
+export default Step1;
 
 
 

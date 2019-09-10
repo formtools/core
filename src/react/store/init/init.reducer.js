@@ -21,13 +21,17 @@ const reducer = (state = {
 		case actions.INIT_DATA_ERROR_LOADING:
 			return {
 				...state,
-				initialized: true,
 				errorInitializing: false
 			};
 		case actions.SET_GLOBAL_ERROR:
 			return {
 				...state,
-				globalError: action.payload.globalError
+				globalError: action.payload.error
+			};
+		case actions.CLEAR_GLOBAL_ERROR:
+			return {
+				...state,
+				globalError: ''
 			};
 		default:
 			return state;

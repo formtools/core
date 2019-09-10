@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { actions as initActions } from '../../store/init';
+import { navUtils } from '../../utils';
 
 export const SYSTEM_CHECK_DATA_RETURNED = 'SYSTEM_CHECK_DATA_RETURNED';
 export const START_REQUEST = 'START_REQUEST';
@@ -66,3 +68,14 @@ export const saveCacheFolderSetting = (onSuccess, onError) => {
 	};
 };
 
+export const restartInstallation = (history) => {
+	return (dispatch) => {
+		dispatch(initActions.clearGlobalError());
+
+		// this shouldn't occur, but...
+		console.log(navUtils.getCurrentInstallationPage());
+		if (navUtils.getCurrentInstallationPage() !== 1) {
+			history.push('/');
+		}
+	};
+};

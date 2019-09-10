@@ -1198,3 +1198,6 @@ $LANG["word_words"] = "Words";
 $LANG["word_wysiwyg"] = "WYSIWYG";
 $LANG["word_yellow"] = "Yellow";
 $LANG["word_yes"] = "Yes";
+
+$LANG["phrase_session_expired"] = "Session expired";
+$LANG["text_installation_session_expired"] = "Sorry, your session has expired. You will need to begin the installation process again. Click the button below.";

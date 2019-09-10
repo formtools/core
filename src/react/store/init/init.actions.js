@@ -45,6 +45,9 @@ export const setGlobalError = (error) => ({
 	}
 });
 
+export const CLEAR_GLOBAL_ERROR = 'CLEAR_GLOBAL_ERROR';
+export const clearGlobalError = () => ({ type: CLEAR_GLOBAL_ERROR });
+
 
 export const LANGUAGE_UPDATED = 'LANGUAGE_UPDATED';
 export const ERROR_UPDATING_LANGUAGE = 'ERROR_UPDATING_LANGUAGE';
