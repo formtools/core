@@ -25,9 +25,10 @@ $data = array(
 	"error" => "unknown_action"
 );
 
-// if the user isn't on hitting the first page and they don't have sessions, we
+// if the user isn't on hitting the first or second page and they don't have sessions. The reason we allow the second
+// page is that it contains important info about their environment and what
 $missingPageParam = !isset($_GET["page"]) || !is_numeric($_GET["page"]);
-if ($missingPageParam || (!Sessions::exists("installing") && $_GET["page"] != 1)) {
+if ($missingPageParam || (!Sessions::exists("installing") && $_GET["page"] > 1)) {
 	General::returnJsonResponse($data, 403);
 	exit;
 }

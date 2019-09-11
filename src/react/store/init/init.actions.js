@@ -55,8 +55,8 @@ export const ERROR_UPDATING_LANGUAGE = 'ERROR_UPDATING_LANGUAGE';
 export const selectLanguage = (lang) => {
 	return (dispatch) => {
 		axios.get(`./actions-installation.php?action=selectLanguage&lang=${lang}`)
-			.then((json) => {
-				const { i18n } = json;
+			.then(({ data }) => {
+				const { i18n } = data;
 				dispatch({
 					type: LANGUAGE_UPDATED,
 					payload: {
