@@ -56,20 +56,20 @@ class Step2 extends Component {
 		if (!results.validPhpVersion || !results.pdoAvailable || results.sessionsLoaded) {
 			if (!results.validPhpVersion || !results.pdoAvailable || !results.pdoMysqlAvailable || !results.sessionsLoaded) {
 				return (
-					<p className="error" style="padding: 6px">
+					<p className="error" style={{ padding: 6 }}>
 						{i18n.text_install_form_tools_server_not_supported}
 					</p>
 				);
 			} else if (!results.uploadFolderWritable || !results.cacheDirWritable) {
 				return (
-					<p className="error" style="padding: 6px">
-						{$text_required_folders_need_write_permissions}
+					<p className="error" style={{ padding: 6 }}>
+						{i18n.text_required_folders_need_write_permissions}
 					</p>
 				);
 			} else if (results.suhosinLoaded) {
 				return (
 					<div className="warning">
-						{$LANG.notify_suhosin_installed}
+						{i18n.notify_suhosin_installed}
 					</div>
 				);
 			}

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { actions as initActions } from '../../store/init';
 import { navUtils } from '../../utils';
+import { selectors } from '../store';
 
 export const SYSTEM_CHECK_DATA_RETURNED = 'SYSTEM_CHECK_DATA_RETURNED';
 export const START_REQUEST = 'START_REQUEST';
@@ -54,9 +55,13 @@ export const updateDatabaseField = (field, value) => ({
 });
 
 export const saveCacheFolderSetting = (onSuccess, onError) => {
-	return (dispatch) => {
+	return (dispatch, getState) => {
+		const state = getState();
 		dispatch(startRequest());
-		axios.get('./actions-installation.php?action=saveCacheFolderSettings')
+		axios.post('./actions-installation.php?action=saveCacheFolderSettings', {
+				useCustomCacheFolder: selectors.shouldUseCustomCacheFolder(state),
+				customCacheFolder: selectors.getCustomCacheFolder(state)
+			})
 			.then(() => {
 				dispatch(requestReturned());
 				onSuccess();

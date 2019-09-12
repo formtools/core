@@ -14,6 +14,7 @@ Core::setHooksEnabled(false);
 Core::startSessions();
 
 $currentLang = General::loadField("lang", "lang", Core::getDefaultLang());
+$request = array_merge($_GET, $_POST);
 Core::setCurrLang($currentLang);
 
 // the methods in this file are only available for incomplete installations
@@ -33,8 +34,7 @@ if ($missingPageParam || (!Sessions::exists("installing") && $_GET["page"] > 1))
 	exit;
 }
 
-switch ($_GET["action"]) {
-
+switch ($request["action"]) {
 	case "init":
 		$data = array(
 			"isAuthenticated" => false,
@@ -83,13 +83,13 @@ switch ($_GET["action"]) {
 
 	// Step 2
 	case "getSystemCheckResults":
-		$upload_folder_writable = is_writable(realpath("../upload"));
-		$cache_dir_writable = is_writable(realpath("../cache/"));
+		$uploadFolderWritable = is_writable(realpath("../upload"));
+		$cacheDirWritable = is_writable(realpath("../cache/"));
 
 		$data = array(
 			"cacheFolder" => "/cache/",
-			"customCacheFolder" => realpath("../cache"), // !empty($customCache_folder) ? $custom_cache_folder : realpath("../cache/"),
-			"useCustomCacheFolder" => true, // !empty($custom_cache_folder),
+			"customCacheFolder" => !empty($customCacheFolder) ? $customCacheFolder : realpath("../cache/"),
+			"useCustomCacheFolder" => !empty($customCacheFolder),
 			"phpVersion" => phpversion(),
 			"validPhpVersion" => Core::isValidPHPVersion(),
 			"pdoAvailable" => extension_loaded("PDO"),
@@ -104,32 +104,32 @@ switch ($_GET["action"]) {
 	// Step 2 when the user clicks continue. This checks any custom cache folder settings the user entered are valid
 	case "saveCacheFolderSettings":
 
-//		if (isset($request["useCustomCacheFolder"])) {
-//			$custom_cache_folder = $request["custom_cache_folder"];
-//			$custom_cache_folder_exists = is_dir($custom_cache_folder);
-//
-//			if ($custom_cache_folder_exists) {
-//				$custom_cache_folder_writable = is_writable($custom_cache_folder);
-//
-//				// if the custom cache folder is writable, great - create a blank index.html file in it just to prevent
-//				// servers configured to list the contents
-//				if ($custom_cache_folder_writable) {
-//					$index_file = "$custom_cache_folder/index.html";
-//					if (!file_exists($index_file)) {
-//						fopen($index_file, "w");
-//					}
-//					Sessions::set("g_custom_cache_folder", $custom_cache_folder);
-//				} else {
-//					$success = false;
-//					$message = "The custom cache folder you entered needs to have full read-write permissions.";
-//				}
-//			} else {
-//				$success = false;
-//				$message = "The custom cache folder you entered does not exist.";
-//			}
-//		} else {
-//			Sessions::set("g_custom_cache_folder", "");
-//		}
+		if (isset($request["useCustomCacheFolder"])) {
+			$customCacheFolder = $request["customCacheFolder"];
+			$customCacheFolderExists = is_dir($customCacheFolder);
+
+			if ($customCacheFolderExists) {
+				$customCacheFolderWritable = is_writable($customCacheFolder);
+
+				// if the custom cache folder is writable, great - create a blank index.html file in it just to prevent
+				// servers configured to list the contents
+				if ($customCacheFolderWritable) {
+					$indexFile = "$customCacheFolder/index.html";
+					if (!file_exists($indexFile)) {
+						fopen($indexFile, "w");
+					}
+					Sessions::set("g_custom_cache_folder", $customCacheFolder);
+				} else {
+					$data["success"] = false;
+					$data["message"] = "The custom cache folder you entered needs to have full read-write permissions.";
+				}
+			} else {
+				$data["success"] = false;
+				$data["message"] = "The custom cache folder you entered does not exist.";
+			}
+		} else {
+			Sessions::set("g_custom_cache_folder", "");
+		}
 
 		break;
 
