@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { generalUtils } from '../../utils';
 import styles from '../Page/Page.scss';
 import Button from '../../components/Buttons';
+import { NotificationPanel } from '../../components';
 
 
 const showResult = (passed, i18n) => {
@@ -23,6 +24,8 @@ class Step2 extends Component {
 		super(props);
 		this.onSubmit = this.onSubmit.bind(this);
 		this.onSuccess = this.onSuccess.bind(this);
+
+		this.notificationPanel = React.createRef();
 	}
 
 	onSubmit (e) {
@@ -102,6 +105,11 @@ class Step2 extends Component {
 				<h2>{i18n.phrase_system_check}</h2>
 
 				<p dangerouslySetInnerHTML={{ __html: i18n.text_install_system_check }} />
+
+				<NotificationPanel ref={this.notificationPanel} />
+				<input type="button"
+				       onClick={() => { this.notificationPanel.current.add({ msg: 'Test!', msgType: 'notify' })}}
+				       value="Add notification" />
 
 				<table cellSpacing="0" cellPadding="2" width="600" className={styles.info}>
 					<tbody>

@@ -1,0 +1,29 @@
+.notify {
+  border: 1px solid #0058db;
+  background-color: #f2f8ff;
+  div {
+    color: #0058db;
+    padding: 8px;
+  }
+  svg {
+    float: right;
+  }
+}
+
+.error {
+  border: 1px solid #cc0000;
+  background-color: #ffeded;
+
+  div {
+    color: #aa0000;
+  }
+}
+
+/*
+//<![CDATA[
+var g = {literal}{}{/literal};
+g.root_url = "{$g_root_url|default:""}";
+g.error_colours = ["ffbfbf", "ffeded"];
+g.notify_colours = ["c6e2ff", "f2f8ff"];
+//]]>
+*/
