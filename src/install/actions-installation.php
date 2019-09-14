@@ -36,23 +36,54 @@ if ($missingPageParam || (!Sessions::exists("installing") && $_GET["page"] > 1))
 
 switch ($request["action"]) {
 	case "init":
+
+		// the init request is called on every page refresh, returning all data in sessions. We store everything we need to
+		// track for the whole installation process here. Individual page requests to update this info are handled
+		// separately
 		$data = array(
 			"isAuthenticated" => false,
 			"i18n" => Core::$L,
 			"availableLanguages" => Core::$translations->getList(),
 			"language" => $currentLang,
+
 			"constants" => array(
 				"rootDir" => Core::getRootDir(),
 				"rootUrl" => "../",
 				"coreVersion" => Core::getCoreVersion()
 			),
-			"installation" => array(
+
+			"dbSettings" => array(
 				"dbHostname" => Sessions::getWithFallback("dbHostname", "localhost"),
 				"dbName" => Sessions::getWithFallback("dbName", ""),
 				"dbPort" => Sessions::getWithFallback("dbPort", "3306"),
 				"dbUsername" => Sessions::getWithFallback("dbUsername", ""),
 				"dbPassword" => Sessions::getWithFallback("dbPassword", ""),
 				"dbTablePrefix" => Sessions::getWithFallback("dbTablePrefix", "ft_")
+			),
+
+			"folderSettings" => array(
+				"useCustomCacheFolder" => !empty($customCacheFolder),
+				"customCacheFolder" => !empty($customCacheFolder) ? $customCacheFolder : realpath("../cache/"),
+				"cacheFolder" => "/cache/"
+			),
+
+			"systemInfo" => array(
+				"phpVersion" => phpversion(),
+				"validPhpVersion" => Core::isValidPHPVersion(),
+				"pdoAvailable" => extension_loaded("PDO"),
+				"pdoMysqlAvailable" => extension_loaded("pdo_mysql"),
+				"suhosinLoaded" => extension_loaded("suhosin"),
+				"sessionsLoaded" => extension_loaded("session"),
+				"uploadFolderWritable" => is_writable(realpath("../upload")),
+				"cacheDirWritable" => is_writable(realpath("../cache/"))
+			),
+
+			"adminAccount" => array(
+				"firstName" => Sessions::getWithFallback("firstName", ""),
+				"lastName" => Sessions::getWithFallback("lastName", ""),
+				"email" => Sessions::getWithFallback("email", ""),
+				"username" => Sessions::getWithFallback("username", ""),
+				"password" => Sessions::getWithFallback("password", "")
 			)
 		);
 		break;
@@ -81,27 +112,10 @@ switch ($request["action"]) {
 		}
 		break;
 
-	// Step 2
-	case "getSystemCheckResults":
-		$uploadFolderWritable = is_writable(realpath("../upload"));
-		$cacheDirWritable = is_writable(realpath("../cache/"));
+	// remove: getSystemCheckResults
 
-		$data = array(
-			"cacheFolder" => "/cache/",
-			"customCacheFolder" => !empty($customCacheFolder) ? $customCacheFolder : realpath("../cache/"),
-			"useCustomCacheFolder" => !empty($customCacheFolder),
-			"phpVersion" => phpversion(),
-			"validPhpVersion" => Core::isValidPHPVersion(),
-			"pdoAvailable" => extension_loaded("PDO"),
-			"pdoMysqlAvailable" => extension_loaded("pdo_mysql"),
-			"suhosinLoaded" => extension_loaded("suhosin"),
-			"sessionsLoaded" => extension_loaded("session"),
-			"uploadFolderWritable" => $upload_folder_writable,
-			"cacheDirWritable" => $cache_dir_writable
-		);
-		break;
 
-	// Step 2 when the user clicks continue. This checks any custom cache folder settings the user entered are valid
+	// Step 2: when the user clicks continue. This validates the page
 	case "saveCacheFolderSettings":
 
 		if (isset($request["useCustomCacheFolder"])) {

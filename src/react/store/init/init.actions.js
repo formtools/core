@@ -10,7 +10,8 @@ export const INIT_DATA_ERROR_LOADING = 'INIT_DATA_ERROR_LOADING';
 export const getInstallationData = (store) => {
 	axios.get(`./actions-installation.php?action=init`)
 		.then(({ data }) => {
-			const { isAuthenticated, availableLanguages, constants, i18n, language } = data;
+			const { isAuthenticated, availableLanguages, constants, i18n, language,
+				dbSettings, systemInfo, adminInfo } = data;
 
 			// sort by the language name
 			arrayUtils.sortBy(availableLanguages, 'lang');
@@ -22,7 +23,10 @@ export const getInstallationData = (store) => {
 					i18n,
 					language,
 					availableLanguages,
-					constants
+					constants,
+					dbSettings,
+					systemInfo,
+					adminInfo
 				}
 			});
 		})

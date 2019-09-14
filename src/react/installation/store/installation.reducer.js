@@ -5,19 +5,23 @@ import { actions as initActions } from '../../store/init';
 const reducer = (state = {
 	language: 'en_us',
 	loading: false,
-	systemCheckResults: null,
-	useCustomCacheFolder: false,
-	customCacheFolder: '',
-
-	// config.php values
-	dbHostname: '',
-	dbName: '',
-	dbPort: '',
-	dbUsername: '',
-	dbPassword: '',
-	dbTablePrefix: ''
+	dbSettings: null,
+	systemInfo: null,
+	folderSettings: null,
+	adminInfo: null
 }, action) => {
 	switch (action.type) {
+		case initActions.INIT_DATA_LOADED: {
+			const { language, dbSettings, folderSettings, systemInfo, adminInfo } = action.payload;
+			return {
+				...state,
+				language,
+				dbSettings,
+				systemInfo,
+				folderSettings,
+				adminInfo
+			};
+		}
 		case actions.START_REQUEST: {
 			return {
 				...state,
@@ -30,24 +34,10 @@ const reducer = (state = {
 				loading: false
 			};
 		}
-		case actions.SYSTEM_CHECK_DATA_RETURNED: {
-			return {
-				...state,
-				loading: false,
-				systemCheckResults: { ...action.payload },
-				customCacheFolder: action.payload.customCacheFolder
-			};
-		}
 		case actions.REQUEST_ERROR: {
 			return {
 				...state,
 				loading: false
-			};
-		}
-		case initActions.INIT_DATA_LOADED: {
-			return {
-				...state,
-				language: action.payload.language
 			};
 		}
 		case initActions.LANGUAGE_UPDATED: {

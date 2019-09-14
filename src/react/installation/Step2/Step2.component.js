@@ -25,10 +25,6 @@ class Step2 extends Component {
 		this.onSuccess = this.onSuccess.bind(this);
 	}
 
-	componentWillMount () {
-		this.props.getSystemCheckResults();
-	}
-
 	onSubmit (e) {
 		e.preventDefault();
 
