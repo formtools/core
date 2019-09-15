@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import styles from './NotificationPanel.scss';
 import { HighlightOff } from '@material-ui/icons';
 import Collapse from '@material-ui/core/Collapse';
 import { C } from '../../constants';
+import styles from './NotificationPanel.scss';
 
 
 // a self-contained notification panel. Consumers just always output this to the rendered output and use a ref to
@@ -31,6 +31,7 @@ class NotificationPanel extends Component {
 
 	closePanel () {
 		this.setState({ closing: true });
+
 		setTimeout(() => {
 			this.setState({
 				closing: false,
@@ -55,7 +56,7 @@ class NotificationPanel extends Component {
 						<span onClick={this.closePanel}>
 							<HighlightOff fontSize="small" />
 						</span>
-						{msg}
+						<div dangerouslySetInnerHTML={{ __html: msg }} />
 					</div>
 				</div>
 			</Collapse>
@@ -64,3 +65,21 @@ class NotificationPanel extends Component {
 }
 
 export default NotificationPanel;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

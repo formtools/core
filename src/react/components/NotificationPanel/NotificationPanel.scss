@@ -1,12 +1,12 @@
 .notification {
-  div {
+  & > div {
     padding: 8px;
   }
   svg {
     float: right;
     cursor: pointer;
+    margin-left: 10px;
   }
-  margin-bottom: 10px;
 }
 
 .notify {

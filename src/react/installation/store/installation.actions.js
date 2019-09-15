@@ -55,9 +55,6 @@ export const saveCacheFolderSetting = (onSuccess, onError) => {
 export const restartInstallation = (history) => {
 	return (dispatch) => {
 		dispatch(initActions.clearGlobalError());
-
-		// this shouldn't occur, but...
-		console.log(navUtils.getCurrentInstallationPage());
 		if (navUtils.getCurrentInstallationPage() !== 1) {
 			history.push('/');
 		}

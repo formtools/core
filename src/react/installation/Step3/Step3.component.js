@@ -2,21 +2,20 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import styles from '../Page/Page.scss';
 import Button from '../../components/Buttons';
+import { NotificationPanel } from '../../components';
 
 
 class Step3 extends Component {
 	constructor (props) {
 		super(props);
 		this.onSubmit = this.onSubmit.bind(this);
-		this.state = {
-			msgType: null,
-			msg: ''
-		};
+
+		this.notificationPanel = React.createRef();
 	}
 
+	// we'll have to determine a better way to validate forms going forward
 	onSubmit (e) {
 		e.preventDefault();
-
 		const { i18n, history, dbHostname, dbName, dbUsername, dbTablePrefix } = this.props;
 
 		const errors = [];
@@ -37,14 +36,13 @@ class Step3 extends Component {
 			errors.push(i18n.validation_invalid_table_prefix);
 		}
 
-		// if (errors.length) {
-		// 	this.setState({
-		// 		msgIntro: i18n.phrase_error_text_intro,
-		// 		errors
-		// 	});
-		// } else {
+		if (errors.length) {
+			const error = `${i18n.phrase_error_text_intro}<br />&bull; ` + errors.join('<br />&bull; ');
+			this.notificationPanel.current.add({ msg: error, msgType: 'error' });
+
+		} else {
 			history.push('/step4');
-		// }
+		}
 	};
 
 	getTablesAlreadyExistContent () {
@@ -116,7 +114,7 @@ class Step3 extends Component {
 
 				<p dangerouslySetInnerHTML={{ __html: i18n.text_install_create_database_tables}} />
 
-				{this.getMessage()}
+				<NotificationPanel ref={this.notificationPanel} />
 
 				<form method="post" onSubmit={this.onSubmit}>
 
