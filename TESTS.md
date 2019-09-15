@@ -4,11 +4,8 @@ Alrighty! Test time.
 
 It's very early days with testing Form Tools, but the ball is now rolling. 
 
-Form Tools comes with PHPUnit tests which can be ran locally. The _Selenium_ tests are currently just being added 
-and _only intended for automated testing on the main Core repo via Travis_. Down the road I'll open them up for local 
-execution, but not yet. One thing at a time.
+Form Tools comes with PHPUnit tests for the PHP and jest tests for the FE code. 
 
-Only the Core currently has tests. I'll be adding them to modules later. 
 
 
 #### Tags/Releases
@@ -38,8 +35,9 @@ Requirements: PHP 7 has to be running on your machine's command line.
 - Run `composer install`  
 - Run `vendor/bin/phpunit`
 
-----------------
+### Jest
 
-### Selenium
-
-Coming soon. 
+```
+yarn install
+yarn test
+```

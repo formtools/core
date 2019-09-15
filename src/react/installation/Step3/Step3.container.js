@@ -18,7 +18,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	updateField: (field, value) => dispatch(actions.updateDatabaseField(field, value))
+	updateField: (field, value) => dispatch(actions.updateDatabaseField(field, value)),
+	saveDbSettings: (onSuccess, onError) => dispatch(actions.saveDbSettings(onSuccess, onError))
 });
 
 export default connect(

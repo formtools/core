@@ -52,6 +52,33 @@ export const saveCacheFolderSetting = (onSuccess, onError) => {
 	};
 };
 
+export const saveDbSettings = (onSuccess, onError) => {
+	return (dispatch, getState) => {
+		const state = getState();
+		dispatch(startRequest());
+
+		const payload = new FormData();
+		payload.append('action', 'saveDbSettings');
+		payload.append('dbHostname', selectors.getDbHostname(state));
+		payload.append('dbName', selectors.getDbName(state));
+		payload.append('dbPort', selectors.getDbPort(state));
+		payload.append('dbUsername', selectors.getDbUsername(state));
+		payload.append('dbPassword', selectors.getDbPassword(state));
+		payload.append('dbTablePrefix', selectors.getDbTablePrefix(state));
+
+		axios.post('./actions-installation.php', payload)
+			.then(() => {
+				dispatch(requestReturned());
+				onSuccess();
+			})
+			.catch((e) => {
+				console.log(e.response);
+				dispatch(requestReturned());
+				onError(e.response.data);
+			});
+	};
+};
+
 export const restartInstallation = (history) => {
 	return (dispatch) => {
 		dispatch(initActions.clearGlobalError());

@@ -31,8 +31,6 @@ class Step2 extends Component {
 
 	onSubmit (e) {
 		e.preventDefault();
-
-		// update the server
 		this.props.saveCacheFolderSetting(this.onSuccess, this.onError)
 	}
 

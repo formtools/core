@@ -69,7 +69,10 @@ const reducer = (state = {
 			const { field, value } = action.payload;
 			return {
 				...state,
-				[field]: value
+				dbSettings: {
+					...state.dbSettings,
+					[field]: value
+				}
 			};
 		}
 	}

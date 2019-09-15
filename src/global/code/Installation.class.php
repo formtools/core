@@ -95,15 +95,11 @@ class Installation
      */
     public static function checkConnection($hostname, $db_name, $port, $username, $password)
     {
-        $LANG = Core::$L;
-
         try {
             $dsn = sprintf("mysql:host=%s;port=%s;dbname=%s;charset=utf8", $hostname, $port, $db_name);
             new PDO($dsn, $username, $password, array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
         } catch (Exception $e) {
-            $placeholders = array("db_connection_error" => $e->getMessage());
-            $error = self::evalSmartyString($LANG["notify_install_invalid_db_info"], $placeholders);
-            return array(false, $error);
+            return array(false, $e->getMessage());
         }
 
         return array(true, "");

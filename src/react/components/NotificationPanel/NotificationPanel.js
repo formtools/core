@@ -29,6 +29,11 @@ class NotificationPanel extends Component {
 		}));
 	}
 
+	// hard clear
+	clear () {
+		this.setState({ visible: false });
+	}
+
 	closePanel () {
 		this.setState({ closing: true });
 

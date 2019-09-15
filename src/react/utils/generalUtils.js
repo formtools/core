@@ -32,3 +32,23 @@ export const replacePlaceholders = (str, replacementStrings) => {
 	});
 	return updatedStr;
 };
+
+
+/**
+ * Similar function to the previous, only for the Smarty i18n strings. JS counterpart to General::evalSmartyString().
+ * This is basic and just used to switch out placeholder strings; no her Smarty code is evaluated
+ *
+ * @param string
+ * @param placeholders
+ * @return {*}
+ */
+export const evalI18nString = (string, placeholders) => {
+	let newString = string;
+
+	Object.keys(placeholders).forEach((placeholder) => {
+		const placeholderString = new RegExp('{\\$' + placeholder + '}', 'g');
+		newString = newString.replace(placeholderString, placeholders[placeholder]);
+	});
+
+	return newString;
+};

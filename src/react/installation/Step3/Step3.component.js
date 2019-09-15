@@ -3,47 +3,75 @@ import { withRouter } from 'react-router-dom';
 import styles from '../Page/Page.scss';
 import Button from '../../components/Buttons';
 import { NotificationPanel } from '../../components';
+import { generalUtils } from '../../utils';
 
 
 class Step3 extends Component {
 	constructor (props) {
 		super(props);
 		this.onSubmit = this.onSubmit.bind(this);
+		this.onSuccess = this.onSuccess.bind(this);
+		this.onError = this.onError.bind(this);
 
 		this.notificationPanel = React.createRef();
+
+		// we'll have to determine a better way to validate forms going forward. Formik?
+		this.dbHostname = React.createRef();
+		this.dbName = React.createRef();
+		this.dbPort = React.createRef();
+		this.dbUsername = React.createRef();
+		this.dbPassword = React.createRef();
+		this.dbTablePrefix = React.createRef();
 	}
 
-	// we'll have to determine a better way to validate forms going forward
 	onSubmit (e) {
 		e.preventDefault();
-		const { i18n, history, dbHostname, dbName, dbUsername, dbTablePrefix } = this.props;
+		const { i18n, dbHostname, dbName, dbUsername, dbTablePrefix, saveDbSettings } = this.props;
 
 		const errors = [];
+		const fields = [];
 		if (!dbHostname) {
+			fields.push('dbHostname');
 			errors.push(i18n.validation_no_db_hostname);
 		}
 		if (!dbName) {
+			fields.push('dbName');
 			errors.push(i18n.validation_no_db_name);
 		} else if (/[.\\/\\\\]/.test(dbName)) {
+			fields.push('dbName');
 			errors.push(i18n.validation_db_name);
 		}
 		if (!dbUsername) {
+			fields.push('dbUsername');
 			errors.push(i18n.validation_no_db_username);
 		}
 		if (!dbTablePrefix) {
+			fields.push('dbTablePrefix');
 			errors.push(i18n.validation_no_table_prefix);
-		} else if (!(/^[0-9a-z]+$/.test(dbTablePrefix))) {
+		} else if (!(/^[0-9a-z_]+$/.test(dbTablePrefix))) {
+			fields.push('dbTablePrefix');
 			errors.push(i18n.validation_invalid_table_prefix);
 		}
 
 		if (errors.length) {
 			const error = `${i18n.phrase_error_text_intro}<br />&bull; ` + errors.join('<br />&bull; ');
 			this.notificationPanel.current.add({ msg: error, msgType: 'error' });
-
+			this[fields[0]].current.focus();
 		} else {
-			history.push('/step4');
+			saveDbSettings(this.onSuccess, this.onError);
 		}
 	};
+
+	onSuccess () {
+		this.props.history.push('/step4');
+	}
+
+	onError ({ error, response }) {
+		const { i18n } = this.props;
+		this.notificationPanel.current.clear();
+		const msg = generalUtils.evalI18nString(i18n.notify_install_invalid_db_info, { db_connection_error: response });
+		this.notificationPanel.current.add({ msg, msgType: 'error' });
+	}
 
 	getTablesAlreadyExistContent () {
 		const { existingTables } = this.props;
@@ -125,42 +153,42 @@ class Step3 extends Component {
 						<tr>
 							<td className="label" width="140">{i18n.phrase_database_hostname}</td>
 							<td>
-								<input type="text" size="20" value={dbHostname} autoFocus
-								       onChange={(e) => updateField('dbHostname', e.target.value)}/> {i18n.phrase_often_localhost}
+								<input type="text" size="20" value={dbHostname} autoFocus ref={this.dbHostname}
+							       onChange={(e) => updateField('dbHostname', e.target.value)}/> {i18n.phrase_often_localhost}
 							</td>
 						</tr>
 						<tr>
 							<td className="label">{i18n.phrase_database_name}</td>
 							<td>
-								<input type="text" size="20" value={dbName} maxLength="64"
+								<input type="text" size="20" value={dbName} maxLength="64" ref={this.dbName}
 								       onChange={(e) => updateField('dbName', e.target.value)}/>
 							</td>
 						</tr>
 						<tr>
 							<td className="label">{i18n.word_port}</td>
 							<td>
-								<input type="text" size="10" value={dbPort}
+								<input type="text" size="10" value={dbPort} ref={this.dbPort}
 								       onChange={(e) => updateField('dbPort', e.target.value)}/>
 							</td>
 						</tr>
 						<tr>
 							<td className="label">{i18n.phrase_database_username}</td>
 							<td>
-								<input type="text" size="20" value={dbUsername}
+								<input type="text" size="20" value={dbUsername} ref={this.dbUsername}
 								       onChange={(e) => updateField('dbUsername', e.target.value)}/>
 							</td>
 						</tr>
 						<tr>
 							<td className="label">{i18n.phrase_database_password}</td>
 							<td>
-								<input type="text" size="20" value={dbPassword}
-								       onChange={(e) => updateField('dbUsername', e.target.value)}/>
+								<input type="text" size="20" value={dbPassword} ref={this.dbPassword}
+								       onChange={(e) => updateField('dbPassword', e.target.value)}/>
 							</td>
 						</tr>
 						<tr>
 							<td className="label">{i18n.phrase_database_table_prefix}</td>
 							<td>
-								<input type="text" size="20" maxLength="10" value={dbTablePrefix}
+								<input type="text" size="20" maxLength="10" value={dbTablePrefix} ref={this.dbTablePrefix}
 								       onChange={(e) => updateField('dbTablePrefix', e.target.value)}/>
 							</td>
 						</tr>

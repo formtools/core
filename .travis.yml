@@ -11,4 +11,6 @@ before_install:
 install:
   - grunt prod
 
-scripts: phpunit
+scripts:
+  - phpunit
+  - yarn test

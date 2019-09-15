@@ -6,6 +6,7 @@
 require_once("../global/library.php");
 
 use FormTools\Core;
+use FormTools\Database;
 use FormTools\General;
 use FormTools\Installation;
 use FormTools\Sessions;
@@ -144,7 +145,48 @@ switch ($request["action"]) {
 		}
 		break;
 
-	case "setCacheFolder":
+	case "saveDbSettings":
+		$dbHostname = $request["dbHostname"];
+		$dbName = $request["dbName"];
+		$dbPort = $request["dbPort"];
+		$dbUsername = $request["dbUsername"];
+		$dbPassword = $request["dbPassword"];
+		$dbTablePrefix = $request["dbTablePrefix"];
+
+		Sessions::set("dbSettings.dbHostname", $dbHostname);
+		Sessions::set("dbSettings.dbName", $dbName);
+		Sessions::set("dbSettings.dbPort", $dbPort);
+		Sessions::set("dbSettings.dbUsername", $dbUsername);
+		Sessions::set("dbSettings.dbPassword", $dbPassword);
+		Sessions::set("dbSettings.dbTablePrefix", $dbTablePrefix);
+
+		list($success, $errorMsg) = Installation::checkConnection($dbHostname, $dbName, $dbPort, $dbUsername, $dbPassword);
+		if ($success) {
+		} else {
+			$data = array(
+				"error" => "db_connection_error",
+				"response" => $errorMsg
+			);
+			General::returnJsonResponse($data, 400);
+			exit;
+//		} else {
+//			if ($success) {
+//				$db = new Database($hostname, $db_name, $port, $username, $password, $table_prefix);
+//
+//				$existing_tables = General::getExistingTables($db, Core::getCoreTables(), $table_prefix);
+//				if (empty($existing_tables)) {
+//					list($success, $error) = Installation::createDatabase($db);
+//					if ($success) {
+//						$data = array();
+//					}
+//				} else {
+//					$success = false;
+//					$tables_already_exist = true;
+//				}
+//			} else {
+//
+//			$data["error"] = "";
+		}
 		break;
 }
 
