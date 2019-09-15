@@ -5,7 +5,7 @@ import { selectors as i18nSelectors } from '../../store/i18n';
 import { selectors as constantSelectors } from '../../store/constants';
 import { selectors, actions } from '../store';
 import PageComponent from './Page.component';
-import { ERRORS } from '../constants';
+import { ERRORS } from '../../constants';
 
 const mapStateToProps = (state) => ({
 	initialized: initSelectors.isInitialized(state),

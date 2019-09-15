@@ -34,17 +34,20 @@ export const saveCacheFolderSetting = (onSuccess, onError) => {
 	return (dispatch, getState) => {
 		const state = getState();
 		dispatch(startRequest());
-		axios.post('./actions-installation.php?action=saveCacheFolderSettings', {
-				useCustomCacheFolder: selectors.shouldUseCustomCacheFolder(state),
-				customCacheFolder: selectors.getCustomCacheFolder(state)
-			})
+
+		const payload = new FormData();
+		payload.append('action', 'saveCacheFolderSettings');
+		payload.append('useCustomCacheFolder', selectors.shouldUseCustomCacheFolder(state));
+		payload.append('customCacheFolder', selectors.getCustomCacheFolder(state));
+
+		axios.post('./actions-installation.php', payload)
 			.then(() => {
 				dispatch(requestReturned());
 				onSuccess();
 			})
 			.catch((e) => {
 				dispatch(requestReturned());
-				onError(e);
+				onError(e.response.data.error);
 			});
 	};
 };

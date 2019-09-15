@@ -1,29 +1,62 @@
-.notify {
-  border: 1px solid #0058db;
-  background-color: #f2f8ff;
+.notification {
   div {
-    color: #0058db;
     padding: 8px;
   }
   svg {
     float: right;
+    cursor: pointer;
+  }
+  margin-bottom: 10px;
+}
+
+.notify {
+  border: 1px solid #0058db;
+  animation: notifyFadeIn 1.2s ease-in-out forwards;
+
+  div {
+    color: #0058db;
+  }
+  svg {
+    color: #0058db;
+    transition-duration: .5s;
+    transition-property: color;
+    &:hover {
+      color: #003e91;
+    }
   }
 }
 
 .error {
   border: 1px solid #cc0000;
-  background-color: #ffeded;
+  animation: errorFadeIn 1.2s ease-in-out forwards;
 
   div {
     color: #aa0000;
   }
+  svg {
+    color: #aa0000;
+    transition-duration: .5s;
+    transition-property: color;
+    &:hover {
+      color: #660000;
+    }
+  }
 }
 
-/*
-//<![CDATA[
-var g = {literal}{}{/literal};
-g.root_url = "{$g_root_url|default:""}";
-g.error_colours = ["ffbfbf", "ffeded"];
-g.notify_colours = ["c6e2ff", "f2f8ff"];
-//]]>
-*/
+@keyframes notifyFadeIn {
+  from {
+    background-color: #c6e2ff;
+  }
+  to {
+    background-color: #f2f8ff;
+  }
+}
+
+@keyframes errorFadeIn {
+  from {
+    background-color: #ffbfbf;
+  }
+  to {
+    background-color: #ffeded;
+  }
+}

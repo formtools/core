@@ -1202,3 +1202,6 @@ $LANG["word_yes"] = "Yes";
 $LANG["phrase_session_expired"] = "Session expired";
 $LANG["text_installation_session_expired"] = "Sorry, your session has expired. You will need to begin the installation process again. Click the button below.";
 $LANG["word_restart"] = "Restart";
+$LANG["text_invalid_cache_folder"] = "The custom cache folder you entered does not exist.";
+$LANG["text_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
+

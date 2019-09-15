@@ -49,13 +49,19 @@ const reducer = (state = {
 		case actions.TOGGLE_CUSTOM_CACHE_FOLDER: {
 			return {
 				...state,
-				useCustomCacheFolder: !state.useCustomCacheFolder
+				folderSettings: {
+					...state.folderSettings,
+					useCustomCacheFolder: !state.useCustomCacheFolder
+				}
 			};
 		}
 		case actions.UPDATE_CUSTOM_CACHE_FOLDER: {
 			return {
 				...state,
-				customCacheFolder: action.payload.value
+				folderSettings: {
+					...state.folderSettings,
+					customCacheFolder: action.payload.value
+				}
 			};
 		}
 

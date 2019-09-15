@@ -28,8 +28,8 @@ $data = array(
 
 // if the user isn't on hitting the first or second page and they don't have sessions. The reason we allow the second
 // page is that it contains important info about their environment and what
-$missingPageParam = !isset($_GET["page"]) || !is_numeric($_GET["page"]);
-if ($missingPageParam || (!Sessions::exists("installing") && $_GET["page"] > 1)) {
+$missingPageParam = !isset($request["page"]) || !is_numeric($request["page"]);
+if ($missingPageParam || (!Sessions::exists("installing") && $request["page"] > 1)) {
 	General::returnJsonResponse($data, 403);
 	exit;
 }
@@ -62,9 +62,8 @@ switch ($request["action"]) {
 			),
 
 			"folderSettings" => array(
-				"useCustomCacheFolder" => !empty($customCacheFolder),
-				"customCacheFolder" => !empty($customCacheFolder) ? $customCacheFolder : realpath("../cache/"),
-				"cacheFolder" => "/cache/"
+				"useCustomCacheFolder" => Sessions::getWithFallback("folderSettings.useCustomCacheFolder", false),
+				"customCacheFolder" => Sessions::getWithFallback("folderSettings.customCacheFolder", realpath("../cache/"))
 			),
 
 			"systemInfo" => array(
@@ -89,7 +88,6 @@ switch ($request["action"]) {
 		break;
 
 	case "selectLanguage":
-		// check the lang is valid
 		$list = Core::$translations->getList();
 		$found = false;
 		foreach ($list as $item) {
@@ -99,10 +97,9 @@ switch ($request["action"]) {
 			}
 		}
 		if (!$found) {
-
-			// TODO throw rest error
-			// header()
-
+			$data["error"] = "invalid_language";
+			General::returnJsonResponse($data, 500);
+			exit;
 		} else {
 			Core::setCurrLang($_GET["lang"]);
 			Sessions::set("lang", $_GET["lang"]);
@@ -112,13 +109,9 @@ switch ($request["action"]) {
 		}
 		break;
 
-	// remove: getSystemCheckResults
-
-
-	// Step 2: when the user clicks continue. This validates the page
 	case "saveCacheFolderSettings":
-
 		if (isset($request["useCustomCacheFolder"])) {
+			Sessions::set("folderSettings.useCustomCacheFolder", true);
 			$customCacheFolder = $request["customCacheFolder"];
 			$customCacheFolderExists = is_dir($customCacheFolder);
 
@@ -132,19 +125,23 @@ switch ($request["action"]) {
 					if (!file_exists($indexFile)) {
 						fopen($indexFile, "w");
 					}
-					Sessions::set("g_custom_cache_folder", $customCacheFolder);
+					$data = array();
+					Sessions::set("folderSettings.customCacheFolder", $customCacheFolder);
 				} else {
-					$data["success"] = false;
-					$data["message"] = "The custom cache folder you entered needs to have full read-write permissions.";
+					$data["error"] = "invalid_folder_permissions";
+					General::returnJsonResponse($data, 400);
+					exit;
 				}
 			} else {
-				$data["success"] = false;
-				$data["message"] = "The custom cache folder you entered does not exist.";
+				$data["error"] = "invalid_folder";
+				General::returnJsonResponse($data, 400);
+				exit;
 			}
 		} else {
-			Sessions::set("g_custom_cache_folder", "");
+			Sessions::set("folderSettings.useCustomCacheFolder", false);
+			Sessions::set("folderSettings.customCacheFolder", "");
+			$data = array();
 		}
-
 		break;
 
 	case "setCacheFolder":

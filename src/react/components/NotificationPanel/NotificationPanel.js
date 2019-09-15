@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 import styles from './NotificationPanel.scss';
 import { HighlightOff } from '@material-ui/icons';
+import Collapse from '@material-ui/core/Collapse';
+import { C } from '../../constants';
 
-// rather than force ever consumer to have to handle the removal scenario (onClose), this removes itself when the user
-// clicks "x". So consumers always output just <Notification /> and use a ref to push to the content imperatively
+
+// a self-contained notification panel. Consumers just always output this to the rendered output and use a ref to
+// push messages to it. This keeps things as simple as possible & not require every consumer have to handle the show/hide
+// logic
 class NotificationPanel extends Component {
 	constructor(props) {
 		super(props);
@@ -12,6 +16,7 @@ class NotificationPanel extends Component {
 			closing: false,
 			messages: []
 		};
+		this.closePanel = this.closePanel.bind(this);
 	}
 
 	add (message) {
@@ -24,8 +29,18 @@ class NotificationPanel extends Component {
 		}));
 	}
 
+	closePanel () {
+		this.setState({ closing: true });
+		setTimeout(() => {
+			this.setState({
+				closing: false,
+				visible: false
+			});
+		}, C.NOTIFICATION_SPEED);
+	}
+
 	render () {
-		const { visible, messages } = this.state;
+		const { visible, closing, messages } = this.state;
 
 		if (!visible || !messages.length) {
 			return null;
@@ -34,12 +49,16 @@ class NotificationPanel extends Component {
 		const { msg, msgType } = messages[messages.length-1];
 
 		return (
-			<div className={styles[msgType]}>
-				<div>
-					<HighlightOff fontSize="small" htmlColor="#0058db" />
-					{msg}
+			<Collapse in={!closing} timeout={C.NOTIFICATION_SPEED}>
+				<div className={`${styles.notification} ${styles[msgType]}`}>
+					<div>
+						<span onClick={this.closePanel}>
+							<HighlightOff fontSize="small" />
+						</span>
+						{msg}
+					</div>
 				</div>
-			</div>
+			</Collapse>
 		);
 	}
 }

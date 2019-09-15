@@ -24,6 +24,7 @@ class Step2 extends Component {
 		super(props);
 		this.onSubmit = this.onSubmit.bind(this);
 		this.onSuccess = this.onSuccess.bind(this);
+		this.onError = this.onError.bind(this);
 
 		this.notificationPanel = React.createRef();
 	}
@@ -39,13 +40,14 @@ class Step2 extends Component {
 		this.props.history.push('/step3');
 	}
 
-	// an error can occur when the custom cache folder isn't valid and we need to prompt the user to re-enter.
+	onError (errorCode) {
+		const { i18n } = this.props;
 
-	// also need to handle in a more general fashion:
-	// - general request errors
-	// - auto-redirect back to step1 if sessions aren't set.
-	onError () {
-
+		if (errorCode === 'invalid_folder') {
+			this.notificationPanel.current.add({ msg: i18n.text_invalid_cache_folder, msgType: 'error' });
+		} else if (errorCode === 'invalid_folder_permissions') {
+			this.notificationPanel.current.add({ msg: i18n.text_cache_folder_invalid_permissions, msgType: 'error' });
+		}
 	}
 
 	getResultsSection () {
@@ -107,9 +109,6 @@ class Step2 extends Component {
 				<p dangerouslySetInnerHTML={{ __html: i18n.text_install_system_check }} />
 
 				<NotificationPanel ref={this.notificationPanel} />
-				<input type="button"
-				       onClick={() => { this.notificationPanel.current.add({ msg: 'Test!', msgType: 'notify' })}}
-				       value="Add notification" />
 
 				<table cellSpacing="0" cellPadding="2" width="600" className={styles.info}>
 					<tbody>
@@ -154,7 +153,7 @@ class Step2 extends Component {
 					</tr>
 					<tr>
 						<td>{i18n.phrase_cache_folder}</td>
-						<td className={styles.bold}>{results.cacheFolder}</td>
+						<td className={styles.bold}>/cache/</td>
 						<td align="center">
 							{showResult(results.cacheDirWritable, i18n)}
 						</td>

@@ -7,14 +7,20 @@ import { actions, selectors } from './store/init';
 import store from './store';
 import InstallationPage from './installation/Page/Page.container';
 import { Step1, Step2, Step3, Step4, Step5, Step6 } from './installation';
-import { ERRORS } from './installation/constants';
+import { ERRORS } from './constants';
 import { navUtils } from './utils';
 
 
 const initInitializationBundle = () => {
+
 	// append the current page number to all requests
 	axios.interceptors.request.use((config) => {
-		config.url += `&page=${navUtils.getCurrentInstallationPage()}`;
+		const page = navUtils.getCurrentInstallationPage();
+		if (config.method === 'get') {
+			config.url += `&page=${page}`;
+		} else {
+			config.url += `?page=${page}`;
+		}
 		return config;
 	}, (error) => Promise.reject(error));
 
