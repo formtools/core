@@ -52,7 +52,15 @@ export const saveCacheFolderSetting = (onSuccess, onError) => {
 	};
 };
 
-export const saveDbSettings = (onSuccess, onError) => {
+export const DATABASE_TABLES_CREATED = 'DATABASE_TABLES_CREATED';
+export const databaseTablesCreated = (configFile) => ({
+	type: DATABASE_TABLES_CREATED,
+	payload: {
+		configFile
+	}
+});
+
+export const saveDbSettings = (onSuccess, onError, overwrite) => {
 	return (dispatch, getState) => {
 		const state = getState();
 		dispatch(startRequest());
@@ -65,14 +73,15 @@ export const saveDbSettings = (onSuccess, onError) => {
 		payload.append('dbUsername', selectors.getDbUsername(state));
 		payload.append('dbPassword', selectors.getDbPassword(state));
 		payload.append('dbTablePrefix', selectors.getDbTablePrefix(state));
+		payload.append('overwrite', overwrite);
 
 		axios.post('./actions-installation.php', payload)
-			.then(() => {
+			.then(({ data }) => {
+				dispatch(databaseTablesCreated(data.configFile));
 				dispatch(requestReturned());
 				onSuccess();
 			})
 			.catch((e) => {
-				console.log(e.response);
 				dispatch(requestReturned());
 				onError(e.response.data);
 			});

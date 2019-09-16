@@ -1075,19 +1075,19 @@ END;
 
         $protocol = General::isSecure() ? "https" : "http";
 
-        $root_url = preg_replace("/\/install\/step4\.php$/", "", "$protocol://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
+        $root_url = preg_replace("/\/install\/actions-installation\.php\?page=3$/", "", "$protocol://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}");
         $root_dir = preg_replace("/.install$/", "", $installationFolder);
         $root_dir = preg_replace("/\\\/", "\\\\\\", $root_dir);
 
         $_SESSION["ft_install"]["g_root_dir"] = $installationFolder;
         $_SESSION["ft_install"]["g_root_url"] = $root_url;
 
-        $username = preg_replace('/\$/', '\\\$', Sessions::get("g_db_username"));
-        $password = preg_replace('/\$/', '\\\$', Sessions::get("g_db_password"));
-        $hostname = Sessions::get("g_db_hostname");
-        $port     = Sessions::get("g_db_port");
-        $db_name  = Sessions::get("g_db_name");
-        $table_prefix = Sessions::get("g_table_prefix");
+        $username = preg_replace('/\$/', '\\\$', Sessions::get("dbSettings.dbUsername"));
+        $password = preg_replace('/\$/', '\\\$', Sessions::get("dbSettings.dbPassword"));
+        $hostname = Sessions::get("dbSettings.dbHostname");
+        $port     = Sessions::get("dbSettings.dbPort");
+        $db_name  = Sessions::get("dbSettings.dbName");
+        $table_prefix = Sessions::get("dbSettings.dbTablePrefix");
 
         $content = "<" . "?php\n\n"
             . "// main program paths - no trailing slashes!\n"
@@ -1101,7 +1101,7 @@ END;
             . "\$g_db_password = \"$password\";\n"
             . "\$g_table_prefix = \"$table_prefix\";\n";
 
-		$custom_cache_folder = Sessions::get("g_custom_cache_folder");
+		$custom_cache_folder = Sessions::get("folderSettings.customCacheFolder");
 		if ($custom_cache_folder) {
 			$content .= "\$g_custom_cache_folder = \"$custom_cache_folder\";\n";
 		}

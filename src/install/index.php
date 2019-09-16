@@ -4,6 +4,7 @@ require_once("../global/library.php");
 use FormTools\Core;
 use FormTools\General;
 use FormTools\Installation;
+use FormTools\Sessions;
 
 Core::setHooksEnabled(false);
 Core::startSessions();
@@ -18,14 +19,15 @@ Installation::checkInstallationComplete();
 Core::initSmarty();
 Core::setCurrLang(General::loadField("lang", "lang", Core::getDefaultLang()));
 $root_url = Core::getRootUrl();
+$LANG = Core::$L;
 ?>
 <!doctype html>
 <html>
 <head>
-    <title>Form Tools installation</title>
+    <title><?php echo $LANG["phrase_ft_installation"]; ?></title>
 </head>
 <body>
     <div id="root"></div>
-    <script src="../react/main.bundle.js"></script>
+    <script src="../react/main.bundle.js?v=<?php Core::getVersionString(); ?>"></script>
 </body>
 </html>

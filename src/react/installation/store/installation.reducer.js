@@ -8,7 +8,8 @@ const reducer = (state = {
 	dbSettings: null,
 	systemInfo: null,
 	folderSettings: null,
-	adminInfo: null
+	adminInfo: null,
+	configFile: null
 }, action) => {
 	switch (action.type) {
 		case initActions.INIT_DATA_LOADED: {
@@ -51,7 +52,7 @@ const reducer = (state = {
 				...state,
 				folderSettings: {
 					...state.folderSettings,
-					useCustomCacheFolder: !state.useCustomCacheFolder
+					useCustomCacheFolder: !state.folderSettings.useCustomCacheFolder
 				}
 			};
 		}
@@ -73,6 +74,19 @@ const reducer = (state = {
 					...state.dbSettings,
 					[field]: value
 				}
+			};
+		}
+
+		case actions.DATABASE_TABLES_CREATED: {
+			const { configFile } = action.payload;
+			return {
+				...state,
+				dbSettings: {
+					...state.dbSettings,
+					dbTablesCreated: true,
+					dbTablesExist: true
+				},
+				configFile
 			};
 		}
 	}

@@ -38,6 +38,7 @@ class General
 	public static function getExistingTables(Database $db, array $all_tables, $table_prefix)
 	{
 		$db->query("SHOW TABLES");
+		$db->execute();
 
 		$prefixed_tables = array();
 		foreach ($all_tables as $table_name) {
@@ -47,6 +48,7 @@ class General
 		$existing_tables = array();
 		foreach ($db->fetchAll(PDO::FETCH_NUM) as $row) {
 			$curr_table = $row[0];
+
 			if (in_array($curr_table, $prefixed_tables)) {
 				$existing_tables[] = $curr_table;
 			}

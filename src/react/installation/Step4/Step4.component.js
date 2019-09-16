@@ -14,20 +14,12 @@ const Step4 = ({ i18n, history, configFileGenerated, errorCreatingConfigFile, co
 	};
 
 	const getContent = () => {
-		let fake = `<?php
-
-$one = 1;
-$two = 2;
-$three = "three";
-
-`;
-
 		if (!configFileGenerated) {
 			return (
 				<>
 					<p dangerouslySetInnerHTML={{ __html: i18n.text_install_create_config_file }} />
 
-					<CodeMirror value={fake} className={styles.configFileContents} options={{ mode: 'php', readOnly: 'nocursor' }} />
+					<CodeMirror value={configFile} className={styles.configFileContents} options={{ mode: 'php', readOnly: 'nocursor' }} />
 
 					<p>
 						<Button type="submit" onClick={createConfigFile}>{i18n.phrase_create_file}</Button>

@@ -9,3 +9,5 @@ export const getDbPort = (state) => state.installation.dbSettings.dbPort;
 export const getDbUsername = (state) => state.installation.dbSettings.dbUsername;
 export const getDbPassword = (state) => state.installation.dbSettings.dbPassword;
 export const getDbTablePrefix = (state) => state.installation.dbSettings.dbTablePrefix;
+export const isTablesCreated = (state) => state.installation.dbSettings.dbTablesCreated;
+export const getConfigFileContent = (state) => state.installation.configFile;

@@ -142,16 +142,6 @@ table.info td {
     padding: 5px;
 }
 
-ul.tips {
-    padding-left: 16px;
-    margin-left: 0;
-}
-
-ul.tips li {
-    font-size: 8pt;
-    line-height: 16px;
-}
-
 #version-block {
     float: right;
     display: flex;

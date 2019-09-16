@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
-import styles from '../Page/Page.scss';
 import Button from '../../components/Buttons';
 import { NotificationPanel } from '../../components';
 import { generalUtils } from '../../utils';
+import styles from '../Page/Page.scss';
 
 
 class Step3 extends Component {
 	constructor (props) {
 		super(props);
-		this.onSubmit = this.onSubmit.bind(this);
-		this.onSuccess = this.onSuccess.bind(this);
-		this.onError = this.onError.bind(this);
+
+		this.state = {
+			tablesAlreadyExist: false, // temporary error state after an update request.
+			existingTables: [],
+			dbConnectionError: false
+		};
+
+		generalUtils.bindMethods([
+			'onSubmit', 'onSuccess', 'onError', 'getTips', 'overwriteTables', 'chooseNewTablePrefix', 'nextPage'
+		], this);
 
 		this.notificationPanel = React.createRef();
 
@@ -63,74 +70,94 @@ class Step3 extends Component {
 	};
 
 	onSuccess () {
+		this.setState({ dbConnectionError: false });
+		this.nextPage();
+	}
+
+	nextPage () {
 		this.props.history.push('/step4');
 	}
 
-	onError ({ error, response }) {
+	onError (data) {
 		const { i18n } = this.props;
+		const { error, response } = data;
 		this.notificationPanel.current.clear();
-		const msg = generalUtils.evalI18nString(i18n.notify_install_invalid_db_info, { db_connection_error: response });
-		this.notificationPanel.current.add({ msg, msgType: 'error' });
+
+		if (error === 'db_connection_error') {
+			let msg = generalUtils.evalI18nString(i18n.notify_install_invalid_db_info, { db_connection_error: response });
+			msg += `<br /><br />${i18n.phrase_check_db_settings_try_again}`;
+
+			this.notificationPanel.current.add({ msg, msgType: 'error' });
+			this.setState({ dbConnectionError: true });
+		} else if (error === 'db_tables_already_exist') {
+			this.setState({
+				tablesAlreadyExist: true,
+				existingTables: data.tables,
+				dbConnectionError: false
+			});
+		}
+	}
+
+	chooseNewTablePrefix() {
+		this.setState({
+			tablesAlreadyExist: false
+		}, () => {
+			this.dbTablePrefix.current.focus();
+		});
+	}
+
+	overwriteTables() {
+		this.props.saveDbSettings(this.onSuccess, this.onError, true);
 	}
 
 	getTablesAlreadyExistContent () {
-		const { existingTables } = this.props;
+		const { existingTables } = this.state;
+		const { i18n } = this.props;
 
 		return (
-			<div>
-				<h2>Tables already exist!</h2>
+			<>
+				<h2>{i18n.phrase_tables_already_exist}</h2>
 
-				include file='messages.tpl'
-
-				<div className="error margin_bottom_large">
-					<div style="padding: 6px">
-						<b>Warning!</b> It appears that some tables already exist with the table prefix that you
-						specified
-						(see list below). You can either choose to overwrite these tables or pick a new table prefix.
-					</div>
-				</div>
+				<p>
+					{i18n.text_tables_exist_desc}
+				</p>
 
 				<div className={styles.existingTables}>
 					<blockquote>
-						<pre>{existingTables}</pre>
+						<pre>
+							{existingTables.join('\n')}
+						</pre>
 					</blockquote>
 				</div>
 
-				<form action="" method="post">
-					<p>
-						<input type="submit" name="overwrite_tables" value="Overwrite Tables" className={styles.red} />
-						<input type="submit" name="pick_new_table_prefix" value="Pick New Table Prefix"/>
-					</p>
-				</form>
-			</div>
+				<p>
+					<Button buttonType="danger" onClick={this.overwriteTables}>{i18n.phrase_overwrite_tables}</Button>
+					<Button onClick={this.chooseNewTablePrefix}>{i18n.phrase_choose_new_table_prefix}</Button>
+				</p>
+			</>
 		);
 	}
 
-	getMessage () {
-		const { msgType, msg } = this.props;
+	getTips () {
+		const { dbConnectionError  } = this.state;
+		const { i18n } = this.props;
 
+		if (!dbConnectionError) {
+			return null;
+		}
 
-		/*
-		{if $error != ""}
+		return (
+			<>
+				<p><b>{i18n.word_tips}</b></p>
 
-		<div class="error" style="padding: 5px; margin-top: 8px">
-			{i18n.phrase_error_occurred_c}<br />
-			<br />
-			<div class="red">{$error}</div>
-			<br/>
-			{i18n.phrase_check_db_settings_try_again}
-		</div>
-
-		<p><b>{$LANG.word_tips}</b></p>
-
-		<ul class="tips">
-			<li><div>{i18n.text_install_db_tables_error_tip_1}</div></li>
-			<li><div>{i18n.text_install_db_tables_error_tip_2}</div></li>
-			<li><div>{i18n.text_install_db_tables_error_tip_3}</div></li>
-			<li><div>{i18n.text_install_db_tables_error_tip_4}</div></li>
-		</ul>
-     	{/if}
-		*/
+				<ul className={styles.tips}>
+					<li dangerouslySetInnerHTML={{ __html: i18n.text_install_db_tables_error_tip_1 }} />
+					<li dangerouslySetInnerHTML={{ __html: i18n.text_install_db_tables_error_tip_2 }} />
+					<li dangerouslySetInnerHTML={{ __html: i18n.text_install_db_tables_error_tip_3 }} />
+					<li dangerouslySetInnerHTML={{ __html: i18n.text_install_db_tables_error_tip_4 }} />
+				</ul>
+			</>
+		);
 	}
 
 	getContent () {
@@ -144,6 +171,8 @@ class Step3 extends Component {
 
 				<NotificationPanel ref={this.notificationPanel} />
 
+				{this.getTips()}
+
 				<form method="post" onSubmit={this.onSubmit}>
 
 					<p><b>{i18n.phrase_database_settings}</b></p>
@@ -151,42 +180,42 @@ class Step3 extends Component {
 					<table cellPadding="1" cellSpacing="0" className={styles.info}>
 						<tbody>
 						<tr>
-							<td className="label" width="140">{i18n.phrase_database_hostname}</td>
+							<td className={styles.label} width="140">{i18n.phrase_database_hostname}</td>
 							<td>
 								<input type="text" size="20" value={dbHostname} autoFocus ref={this.dbHostname}
 							       onChange={(e) => updateField('dbHostname', e.target.value)}/> {i18n.phrase_often_localhost}
 							</td>
 						</tr>
 						<tr>
-							<td className="label">{i18n.phrase_database_name}</td>
+							<td className={styles.label}>{i18n.phrase_database_name}</td>
 							<td>
 								<input type="text" size="20" value={dbName} maxLength="64" ref={this.dbName}
 								       onChange={(e) => updateField('dbName', e.target.value)}/>
 							</td>
 						</tr>
 						<tr>
-							<td className="label">{i18n.word_port}</td>
+							<td className={styles.label}>{i18n.word_port}</td>
 							<td>
 								<input type="text" size="10" value={dbPort} ref={this.dbPort}
 								       onChange={(e) => updateField('dbPort', e.target.value)}/>
 							</td>
 						</tr>
 						<tr>
-							<td className="label">{i18n.phrase_database_username}</td>
+							<td className={styles.label}>{i18n.phrase_database_username}</td>
 							<td>
 								<input type="text" size="20" value={dbUsername} ref={this.dbUsername}
 								       onChange={(e) => updateField('dbUsername', e.target.value)}/>
 							</td>
 						</tr>
 						<tr>
-							<td className="label">{i18n.phrase_database_password}</td>
+							<td className={styles.label}>{i18n.phrase_database_password}</td>
 							<td>
 								<input type="text" size="20" value={dbPassword} ref={this.dbPassword}
 								       onChange={(e) => updateField('dbPassword', e.target.value)}/>
 							</td>
 						</tr>
 						<tr>
-							<td className="label">{i18n.phrase_database_table_prefix}</td>
+							<td className={styles.label}>{i18n.phrase_database_table_prefix}</td>
 							<td>
 								<input type="text" size="20" maxLength="10" value={dbTablePrefix} ref={this.dbTablePrefix}
 								       onChange={(e) => updateField('dbTablePrefix', e.target.value)}/>
@@ -203,12 +232,63 @@ class Step3 extends Component {
 		);
 	}
 
+	getTablesCreatedContent () {
+		const { i18n, dbHostname, dbName, dbPort, dbUsername, dbPassword, dbTablePrefix } = this.props;
+		const submitBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
+
+		return (
+			<>
+				<h2>Database Tables</h2>
+
+				<p>
+					Your database tables have been created.
+				</p>
+
+				<table cellPadding="1" cellSpacing="0" className={styles.info}>
+					<tbody>
+					<tr>
+						<td className={styles.label} width="140">{i18n.phrase_database_hostname}</td>
+						<td>{dbHostname}</td>
+					</tr>
+					<tr>
+						<td className={styles.label}>{i18n.phrase_database_name}</td>
+						<td>{dbName}</td>
+					</tr>
+					<tr>
+						<td className={styles.label}>{i18n.word_port}</td>
+						<td>{dbPort}</td>
+					</tr>
+					<tr>
+						<td className={styles.label}>{i18n.phrase_database_username}</td>
+						<td>{dbUsername}</td>
+					</tr>
+					<tr>
+						<td className={styles.label}>{i18n.phrase_database_password}</td>
+						<td>{dbPassword}</td>
+					</tr>
+					<tr>
+						<td className={styles.label}>{i18n.phrase_database_table_prefix}</td>
+						<td>{dbTablePrefix}</td>
+					</tr>
+					</tbody>
+				</table>
+
+				<p>
+					<Button onClick={this.nextPage}>{submitBtnLabel}</Button>
+				</p>
+			</>
+		);
+	}
+
 	render () {
-		const { tablesAlreadyExist } = this.props;
+		const { tablesAlreadyExist } = this.state;
+		const { tablesCreated } = this.props;
 		let content;
 
 		if (tablesAlreadyExist) {
 			content = this.getTablesAlreadyExistContent();
+		} else if (tablesCreated) {
+			content = this.getTablesCreatedContent();
 		} else {
 			content = this.getContent();
 		}

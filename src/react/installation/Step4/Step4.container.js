@@ -8,7 +8,8 @@ import Step2 from './Step4.component';
 const mapStateToProps = (state) => ({
 	i18n: i18nSelectors.getI18n(state),
 	constants: constantSelectors.getConstants(state),
-	language: selectors.getLanguage(state)
+	language: selectors.getLanguage(state),
+	configFile: selectors.getConfigFileContent(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({

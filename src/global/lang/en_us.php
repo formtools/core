@@ -1204,4 +1204,7 @@ $LANG["text_installation_session_expired"] = "Sorry, your session has expired. Y
 $LANG["word_restart"] = "Restart";
 $LANG["text_invalid_cache_folder"] = "The custom cache folder you entered does not exist.";
 $LANG["text_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
-
+$LANG["phrase_tables_already_exist"] = "Tables already exist!";
+$LANG["text_tables_exist_desc"] = "Sorry, it appears that some tables already exist with the table prefix that you entered. You can either choose to overwrite these tables or pick a new table prefix.";
+$LANG["phrase_overwrite_tables"] = "Overwrite Tables";
+$LANG["phrase_choose_new_table_prefix"] = "Choose New Table Prefix";

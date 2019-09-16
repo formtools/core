@@ -14,12 +14,13 @@ const mapStateToProps = (state) => ({
 	dbPort: selectors.getDbPort(state),
 	dbUsername: selectors.getDbUsername(state),
 	dbPassword: selectors.getDbPassword(state),
-	dbTablePrefix: selectors.getDbTablePrefix(state)
+	dbTablePrefix: selectors.getDbTablePrefix(state),
+	tablesCreated: selectors.isTablesCreated(state)
 });
 
 const mapDispatchToProps = (dispatch) => ({
 	updateField: (field, value) => dispatch(actions.updateDatabaseField(field, value)),
-	saveDbSettings: (onSuccess, onError) => dispatch(actions.saveDbSettings(onSuccess, onError))
+	saveDbSettings: (onSuccess, onError, overwrite = false) => dispatch(actions.saveDbSettings(onSuccess, onError, overwrite))
 });
 
 export default connect(

@@ -52,3 +52,10 @@ export const evalI18nString = (string, placeholders) => {
 
 	return newString;
 };
+
+
+export const bindMethods = (methods, ref) => {
+	methods.forEach((method) => {
+		ref[method] = ref[method].bind(ref);
+	});
+};

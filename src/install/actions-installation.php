@@ -35,6 +35,9 @@ if ($missingPageParam || (!Sessions::exists("installing") && $request["page"] > 
 	exit;
 }
 
+$coreTables = Core::getCoreTables();
+
+$statusCode = 200;
 switch ($request["action"]) {
 	case "init":
 
@@ -54,12 +57,14 @@ switch ($request["action"]) {
 			),
 
 			"dbSettings" => array(
-				"dbHostname" => Sessions::getWithFallback("dbHostname", "localhost"),
-				"dbName" => Sessions::getWithFallback("dbName", ""),
-				"dbPort" => Sessions::getWithFallback("dbPort", "3306"),
-				"dbUsername" => Sessions::getWithFallback("dbUsername", ""),
-				"dbPassword" => Sessions::getWithFallback("dbPassword", ""),
-				"dbTablePrefix" => Sessions::getWithFallback("dbTablePrefix", "ft_")
+				"dbHostname" => Sessions::getWithFallback("dbSettings.dbHostname", "localhost"),
+				"dbName" => Sessions::getWithFallback("dbSettings.dbName", ""),
+				"dbPort" => Sessions::getWithFallback("dbSettings.dbPort", "3306"),
+				"dbUsername" => Sessions::getWithFallback("dbSettings.dbUsername", ""),
+				"dbPassword" => Sessions::getWithFallback("dbSettings.dbPassword", ""),
+				"dbTablePrefix" => Sessions::getWithFallback("dbSettings.dbTablePrefix", "ft_"),
+				"dbTablesCreated" => Sessions::getWithFallback("dbSettings.dbTablesCreated", false),
+				"dbTablesExist" => Sessions::getWithFallback("dbSettings.dbTablesExist", falsaveDbSettingsse)
 			),
 
 			"folderSettings" => array(
@@ -79,12 +84,14 @@ switch ($request["action"]) {
 			),
 
 			"adminAccount" => array(
-				"firstName" => Sessions::getWithFallback("firstName", ""),
-				"lastName" => Sessions::getWithFallback("lastName", ""),
-				"email" => Sessions::getWithFallback("email", ""),
-				"username" => Sessions::getWithFallback("username", ""),
-				"password" => Sessions::getWithFallback("password", "")
-			)
+				"firstName" => Sessions::getWithFallback("adminAccount.firstName", ""),
+				"lastName" => Sessions::getWithFallback("adminAccount.lastName", ""),
+				"email" => Sessions::getWithFallback("adminAccount.email", ""),
+				"username" => Sessions::getWithFallback("adminAccount.username", ""),
+				"password" => Sessions::getWithFallback("adminAccount.password", "")
+			),
+
+			"configFile" => Sessions::getWithFallback("configFile", "")
 		);
 		break;
 
@@ -99,8 +106,7 @@ switch ($request["action"]) {
 		}
 		if (!$found) {
 			$data["error"] = "invalid_language";
-			General::returnJsonResponse($data, 500);
-			exit;
+			$statusCode = 500;
 		} else {
 			Core::setCurrLang($_GET["lang"]);
 			Sessions::set("lang", $_GET["lang"]);
@@ -130,13 +136,11 @@ switch ($request["action"]) {
 					Sessions::set("folderSettings.customCacheFolder", $customCacheFolder);
 				} else {
 					$data["error"] = "invalid_folder_permissions";
-					General::returnJsonResponse($data, 400);
-					exit;
+					$statusCode = 400;
 				}
 			} else {
 				$data["error"] = "invalid_folder";
-				General::returnJsonResponse($data, 400);
-				exit;
+				$statusCode = 400;
 			}
 		} else {
 			Sessions::set("folderSettings.useCustomCacheFolder", false);
@@ -152,6 +156,7 @@ switch ($request["action"]) {
 		$dbUsername = $request["dbUsername"];
 		$dbPassword = $request["dbPassword"];
 		$dbTablePrefix = $request["dbTablePrefix"];
+		$overwriteExistingTables = $request["overwrite"];
 
 		Sessions::set("dbSettings.dbHostname", $dbHostname);
 		Sessions::set("dbSettings.dbName", $dbName);
@@ -162,37 +167,51 @@ switch ($request["action"]) {
 
 		list($success, $errorMsg) = Installation::checkConnection($dbHostname, $dbName, $dbPort, $dbUsername, $dbPassword);
 		if ($success) {
+			$db = new Database($dbHostname, $dbName, $dbPort, $dbUsername, $dbPassword, $dbTablePrefix);
+
+			if ($overwriteExistingTables == "true") {
+				Installation::deleteTables($db, $coreTables);
+			}
+
+			$existingTables = General::getExistingTables($db, $coreTables, $dbTablePrefix);
+
+			if (empty($existingTables)) {
+				list($success, $error) = Installation::createDatabase($db);
+
+				// any time the user progresses from this step dole up the latest
+				if ($success) {
+					$configFile = Installation::getConfigFileContents();
+					$data = array("configFile" => $configFile);
+					Sessions::set("configFile", $configFile);
+					Sessions::set("dbSettings.dbTablesCreated", true);
+					Sessions::set("dbSettings.dbTablesExist", true);
+				} else {
+					$data = array(
+						"error" => "db_creation_error",
+						"response" => $error
+					);
+					$statusCode = 400;
+				}
+			} else {
+				$data = array(
+					"error" => "db_tables_already_exist",
+					"tables" => $existingTables
+				);
+				$statusCode = 400;
+			}
 		} else {
 			$data = array(
 				"error" => "db_connection_error",
 				"response" => $errorMsg
 			);
-			General::returnJsonResponse($data, 400);
-			exit;
-//		} else {
-//			if ($success) {
-//				$db = new Database($hostname, $db_name, $port, $username, $password, $table_prefix);
-//
-//				$existing_tables = General::getExistingTables($db, Core::getCoreTables(), $table_prefix);
-//				if (empty($existing_tables)) {
-//					list($success, $error) = Installation::createDatabase($db);
-//					if ($success) {
-//						$data = array();
-//					}
-//				} else {
-//					$success = false;
-//					$tables_already_exist = true;
-//				}
-//			} else {
-//
-//			$data["error"] = "";
+			$statusCode = 400;
 		}
 		break;
 }
 
 Sessions::set("installing", true);
 
-General::returnJsonResponse($data, 200);
+General::returnJsonResponse($data, $statusCode);
 
 
 
