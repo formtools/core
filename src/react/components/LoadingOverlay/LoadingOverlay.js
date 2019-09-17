@@ -23,18 +23,30 @@ class LoadingOverlay extends Component {
 		};
 	}
 
+	componentDidMount() {
+		this._isMounted = true;
+	}
+
+	componentWillUnmount() {
+		this._isMounted = false;
+	}
+
 	componentDidUpdate (prevProps, prevState, snapshot) {
 
 		// remove element after the a fade out is complete
 		if (prevProps.visible === true && !this.props.visible) {
 			setTimeout(() => {
-				this.setState({ hidden: true });
+				if (this._isMounted) {
+					this.setState({ hidden: true });
+				}
 			}, fadeOutTime);
 			return;
 		}
 
 		if (!prevProps.visible && this.props.visible) {
-			this.setState({ hidden: false });
+			if (this._isMounted) {
+				this.setState({ hidden: false });
+			}
 		}
 	}
 

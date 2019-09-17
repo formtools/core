@@ -66,7 +66,7 @@ const Button = ({ children, buttonType, ...otherProps }) => {
 	);
 };
 Button.defaultProps = {
-	buttonType: 'primary' // 'primary', 'error'
+	buttonType: 'primary' // 'primary', 'error', 'info'
 };
 
 export default Button;

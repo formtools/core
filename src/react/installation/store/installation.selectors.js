@@ -1,3 +1,5 @@
+import { selectors as constantSelectors } from '../../store/constants';
+
 export const getLanguage = (state) => state.installation.language;
 export const isLoading = (state) => state.installation.loading;
 export const getSystemInfo = (state) => state.installation.systemInfo;
@@ -10,4 +12,36 @@ export const getDbUsername = (state) => state.installation.dbSettings.dbUsername
 export const getDbPassword = (state) => state.installation.dbSettings.dbPassword;
 export const getDbTablePrefix = (state) => state.installation.dbSettings.dbTablePrefix;
 export const isTablesCreated = (state) => state.installation.dbSettings.dbTablesCreated;
-export const getConfigFileContent = (state) => state.installation.configFile;
+
+
+export const getConfigFileContent = (state) => {
+	const { dbHostname, dbName, dbPort, dbUsername, dbPassword, dbTablePrefix } = state.installation.dbSettings;
+	const { rootDir } = constantSelectors.getConstants(state);
+
+	const result = window.location.href.match(/(.*)(\/install\/#\/step\d)/);
+	const rootUrl = result[1];
+	const username = dbUsername.replace(/\$/, '\\$');
+	const password = dbPassword.replace(/\$/, '\\$');
+
+	let customCacheFolderRow = '';
+	if (shouldUseCustomCacheFolder(state)) {
+		customCacheFolderRow = `$g_custom_cache_folder = "${getCustomCacheFolder(state)}";\n`;
+	}
+
+	return `<?php
+
+// main program paths - no trailing slashes!
+$g_root_url = "${rootUrl}";
+$g_root_dir = "${rootDir}";
+
+// database settings
+$g_db_hostname = "${dbHostname}";
+$g_db_port = "${dbPort}";
+$g_db_name = "${dbName}";
+$g_db_username = "${username}";
+$g_db_password = "${password}";
+$g_table_prefix = "${dbTablePrefix}";
+${customCacheFolderRow}
+?>`;
+};
+

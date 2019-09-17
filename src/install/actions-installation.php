@@ -51,7 +51,7 @@ switch ($request["action"]) {
 			"language" => $currentLang,
 
 			"constants" => array(
-				"rootDir" => Core::getRootDir(),
+				"rootDir" => realpath(__DIR__ . "/../"),
 				"rootUrl" => "../",
 				"coreVersion" => Core::getCoreVersion()
 			),
@@ -64,7 +64,7 @@ switch ($request["action"]) {
 				"dbPassword" => Sessions::getWithFallback("dbSettings.dbPassword", ""),
 				"dbTablePrefix" => Sessions::getWithFallback("dbSettings.dbTablePrefix", "ft_"),
 				"dbTablesCreated" => Sessions::getWithFallback("dbSettings.dbTablesCreated", false),
-				"dbTablesExist" => Sessions::getWithFallback("dbSettings.dbTablesExist", falsaveDbSettingsse)
+				"dbTablesExist" => Sessions::getWithFallback("dbSettings.dbTablesExist", false)
 			),
 
 			"folderSettings" => array(
@@ -89,9 +89,7 @@ switch ($request["action"]) {
 				"email" => Sessions::getWithFallback("adminAccount.email", ""),
 				"username" => Sessions::getWithFallback("adminAccount.username", ""),
 				"password" => Sessions::getWithFallback("adminAccount.password", "")
-			),
-
-			"configFile" => Sessions::getWithFallback("configFile", "")
+			)
 		);
 		break;
 
@@ -180,9 +178,7 @@ switch ($request["action"]) {
 
 				// any time the user progresses from this step dole up the latest
 				if ($success) {
-					$configFile = Installation::getConfigFileContents();
-					$data = array("configFile" => $configFile);
-					Sessions::set("configFile", $configFile);
+					$data = array();
 					Sessions::set("dbSettings.dbTablesCreated", true);
 					Sessions::set("dbSettings.dbTablesExist", true);
 				} else {

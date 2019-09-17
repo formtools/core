@@ -8,8 +8,7 @@ const reducer = (state = {
 	dbSettings: null,
 	systemInfo: null,
 	folderSettings: null,
-	adminInfo: null,
-	configFile: null
+	adminInfo: null
 }, action) => {
 	switch (action.type) {
 		case initActions.INIT_DATA_LOADED: {
@@ -78,15 +77,13 @@ const reducer = (state = {
 		}
 
 		case actions.DATABASE_TABLES_CREATED: {
-			const { configFile } = action.payload;
 			return {
 				...state,
 				dbSettings: {
 					...state.dbSettings,
 					dbTablesCreated: true,
 					dbTablesExist: true
-				},
-				configFile
+				}
 			};
 		}
 	}
