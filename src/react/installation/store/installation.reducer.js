@@ -8,18 +8,18 @@ const reducer = (state = {
 	dbSettings: null,
 	systemInfo: null,
 	folderSettings: null,
-	adminInfo: null
+	adminAccount: null
 }, action) => {
 	switch (action.type) {
 		case initActions.INIT_DATA_LOADED: {
-			const { language, dbSettings, folderSettings, systemInfo, adminInfo } = action.payload;
+			const { language, dbSettings, folderSettings, systemInfo, adminAccount } = action.payload;
 			return {
 				...state,
 				language,
 				dbSettings,
 				systemInfo,
 				folderSettings,
-				adminInfo
+				adminAccount
 			};
 		}
 		case actions.START_REQUEST: {

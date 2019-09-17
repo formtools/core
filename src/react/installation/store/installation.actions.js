@@ -96,3 +96,13 @@ export const restartInstallation = (history) => {
 		}
 	};
 };
+
+
+export const UPDATE_ACCOUNT_FIELD = 'UPDATE_ACCOUNT_FIELD';
+export const updateAccountField = (field, value) => ({
+	type: UPDATE_ACCOUNT_FIELD,
+	payload: {
+		field,
+		value
+	}
+});

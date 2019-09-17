@@ -11,7 +11,7 @@ export const getInstallationData = (store) => {
 	axios.get(`./actions-installation.php?action=init`)
 		.then(({ data }) => {
 			const { isAuthenticated, availableLanguages, constants, i18n, language,
-				dbSettings, folderSettings, systemInfo, adminInfo } = data;
+				dbSettings, folderSettings, systemInfo, adminAccount } = data;
 
 			// sort by the language name
 			arrayUtils.sortBy(availableLanguages, 'lang');
@@ -27,7 +27,7 @@ export const getInstallationData = (store) => {
 					constants,
 					dbSettings,
 					systemInfo,
-					adminInfo
+					adminAccount
 				}
 			});
 		})
