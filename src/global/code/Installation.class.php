@@ -1120,23 +1120,6 @@ END;
     public static function setAdminAccount(array $info)
     {
         $db = Core::$db;
-        $LANG = Core::$L;
-
-        $rules = array();
-        $rules[] = "required,first_name,{$LANG["validation_no_first_name"]}";
-        $rules[] = "required,last_name,{$LANG["validation_no_last_name"]}";
-        $rules[] = "required,email,{$LANG["validation_no_admin_email"]}";
-        $rules[] = "valid_email,email,Please enter a valid administrator email address.";
-        $rules[] = "required,username,{$LANG["validation_no_username"]}";
-        $rules[] = "required,password,{$LANG["validation_no_password"]}";
-        $rules[] = "required,password_2,{$LANG["validation_no_second_password"]}";
-        $rules[] = "same_as,password,password_2,{$LANG["validation_passwords_different"]}";
-        $errors = validate_fields($info, $rules);
-
-        if (!empty($errors)) {
-            return array(false, General::getErrorListHTML($errors));
-        }
-
         $db->query("
             UPDATE {PREFIX}accounts
             SET   first_name = :first_name,

@@ -8,7 +8,14 @@ const reducer = (state = {
 	dbSettings: null,
 	systemInfo: null,
 	folderSettings: null,
-	adminAccount: null
+	adminAccount: {
+		firstName: '',
+		lastName: '',
+		email: '',
+		username: '',
+		password: '',
+		password2: ''
+	}
 }, action) => {
 	switch (action.type) {
 		case initActions.INIT_DATA_LOADED: {
@@ -19,7 +26,10 @@ const reducer = (state = {
 				dbSettings,
 				systemInfo,
 				folderSettings,
-				adminAccount
+				adminAccount: {
+					...state.adminAccount,
+					...adminAccount
+				}
 			};
 		}
 		case actions.START_REQUEST: {
@@ -83,6 +93,17 @@ const reducer = (state = {
 					...state.dbSettings,
 					dbTablesCreated: true,
 					dbTablesExist: true
+				}
+			};
+		}
+
+		case actions.UPDATE_ACCOUNT_FIELD: {
+			const { field, value } = action.payload;
+			return {
+				...state,
+				adminAccount: {
+					...state.adminAccount,
+					[field]: value
 				}
 			};
 		}

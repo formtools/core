@@ -106,3 +106,36 @@ export const updateAccountField = (field, value) => ({
 		value
 	}
 });
+
+//export const SAVE_ADMIN_ACCOUNT = 'SAVE_ADMIN_ACCOUNT';
+
+
+export const saveAdminAccount = (onSuccess, onError) => {
+	return (dispatch, getState) => {
+		const state = getState();
+		dispatch(startRequest());
+
+		const payload = new FormData();
+		payload.append('action', 'saveAdminAccount');
+		payload.append('firstName', selectors.getFirstName(state));
+		payload.append('lastName', selectors.getLastName(state));
+		payload.append('email', selectors.getEmail(state));
+		payload.append('username', selectors.getUsername(state));
+		payload.append('password', selectors.getPassword(state));
+
+		axios.post('./actions-installation.php', payload)
+			.then(({ data }) => {
+				dispatch(databaseTablesCreated(data.configFile));
+				dispatch(requestReturned());
+				onSuccess();
+			})
+			.catch((e) => {
+				dispatch(requestReturned());
+				onError(e.response.data);
+			});
+	};
+};
+
+
+
+

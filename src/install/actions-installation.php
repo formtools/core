@@ -203,6 +203,21 @@ switch ($request["action"]) {
 			$statusCode = 400;
 		}
 		break;
+
+	case "createConfigFile":
+		break;
+
+	case "saveAdminAccount":
+		Core::initDatabase();
+		list($success, $error) = Installation::setAdminAccount($request);
+		if ($success) {
+			$data = array();
+		} else {
+			$data = array(
+				"error" => $error
+			);
+		}
+		break;
 }
 
 Sessions::set("installing", true);

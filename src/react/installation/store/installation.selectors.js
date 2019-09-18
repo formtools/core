@@ -12,12 +12,12 @@ export const getDbUsername = (state) => state.installation.dbSettings.dbUsername
 export const getDbPassword = (state) => state.installation.dbSettings.dbPassword;
 export const getDbTablePrefix = (state) => state.installation.dbSettings.dbTablePrefix;
 export const isTablesCreated = (state) => state.installation.dbSettings.dbTablesCreated;
-
 export const getFirstName = (state) => state.installation.adminAccount.firstName;
 export const getLastName = (state) => state.installation.adminAccount.lastName;
 export const getEmail = (state) => state.installation.adminAccount.email;
 export const getUsername = (state) => state.installation.adminAccount.username;
 export const getPassword = (state) => state.installation.adminAccount.password;
+export const getPassword2 = (state) => state.installation.adminAccount.password2;
 
 export const getConfigFileContent = (state) => {
 	const { dbHostname, dbName, dbPort, dbUsername, dbPassword, dbTablePrefix } = state.installation.dbSettings;
