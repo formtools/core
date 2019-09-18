@@ -107,7 +107,31 @@ export const updateAccountField = (field, value) => ({
 	}
 });
 
-//export const SAVE_ADMIN_ACCOUNT = 'SAVE_ADMIN_ACCOUNT';
+export const CONFIG_FILE_CREATED = 'CONFIG_FILE_CREATED';
+export const configFileCreated = () => ({ type: CONFIG_FILE_CREATED });
+
+
+export const createConfigFile = (onSuccess, onError) => {
+	return (dispatch, getState) => {
+		const state = getState();
+		dispatch(startRequest());
+
+		const payload = new FormData();
+		payload.append('action', 'createConfigFile');
+		payload.append('configFile', selectors.getConfigFileContent(state));
+
+		axios.post('./actions-installation.php', payload)
+			.then(() => {
+				dispatch(configFileCreated());
+				dispatch(requestReturned());
+				onSuccess();
+			})
+			.catch((e) => {
+				dispatch(requestReturned());
+				onError(e.response.data);
+			});
+	};
+};
 
 
 export const saveAdminAccount = (onSuccess, onError) => {

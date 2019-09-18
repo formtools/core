@@ -15,7 +15,8 @@ const reducer = (state = {
 		username: '',
 		password: '',
 		password2: ''
-	}
+	},
+	configFileCreated: false
 }, action) => {
 	switch (action.type) {
 		case initActions.INIT_DATA_LOADED: {
@@ -83,6 +84,13 @@ const reducer = (state = {
 					...state.dbSettings,
 					[field]: value
 				}
+			};
+		}
+
+		case actions.CONFIG_FILE_CREATED: {
+			return {
+				...state,
+				configFileCreated: true
 			};
 		}
 

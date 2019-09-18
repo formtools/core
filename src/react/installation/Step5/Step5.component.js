@@ -11,6 +11,7 @@ class Step5 extends Component {
 		super(props);
 		this.onSubmit = this.onSubmit.bind(this);
 		this.onSuccess = this.onSuccess.bind(this);
+		this.onError = this.onError.bind(this);
 
 		this.notificationPanel = React.createRef();
 		this.firstName = React.createRef();

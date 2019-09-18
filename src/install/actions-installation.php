@@ -89,7 +89,9 @@ switch ($request["action"]) {
 				"email" => Sessions::getWithFallback("adminAccount.email", ""),
 				"username" => Sessions::getWithFallback("adminAccount.username", ""),
 				"password" => Sessions::getWithFallback("adminAccount.password", "")
-			)
+			),
+
+			"configFileCreated" => Sessions::getWithFallback("configFileCreated", true)
 		);
 		break;
 
@@ -115,7 +117,7 @@ switch ($request["action"]) {
 		break;
 
 	case "saveCacheFolderSettings":
-		if (isset($request["useCustomCacheFolder"])) {
+		if ($request["useCustomCacheFolder"] == "true") {
 			Sessions::set("folderSettings.useCustomCacheFolder", true);
 			$customCacheFolder = $request["customCacheFolder"];
 			$customCacheFolderExists = is_dir($customCacheFolder);
@@ -205,6 +207,15 @@ switch ($request["action"]) {
 		break;
 
 	case "createConfigFile":
+//		$configFileGenerated = Installation::generateConfigFile($request["configFile"]);
+//		if ($configFileGenerated) {
+//			$data = array();
+//		} else {
+			$data = array(
+				"error" => "error_creating_config_file"
+			);
+			$statusCode = 400;
+//		}
 		break;
 
 	case "saveAdminAccount":
