@@ -43,6 +43,10 @@ body, table, td, span, div, p {
   line-height: 20px;
 }
 
+p {
+  margin-top: 0;
+}
+
 ul {
   margin: 0;
   padding-left: 16px;
@@ -116,6 +120,7 @@ a:link, a:visited {
 
 table.info {
   min-width: 300px;
+  margin-bottom: 5px;
   td {
     border-bottom: 1px solid #efefef;
     padding: 2px;
@@ -138,7 +143,7 @@ h1 {
 h2 {
   color: #006600;
   font: 15px Verdana, sans-serif;
-  margin: 0;
+  margin: 0 0 10px;
   padding: 0;
 }
 
@@ -168,10 +173,12 @@ h3 {
   line-height: 12pt;
   padding: 5px;
   border: 1px solid #dddddd;
+  margin-bottom: 5px;
 }
 
 .divider {
   border-bottom: 1px dotted #cccccc;
+  margin-bottom: 10px;
 }
 
 span.fail {

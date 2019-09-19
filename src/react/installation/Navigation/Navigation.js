@@ -6,13 +6,16 @@ import styles from './navigation.scss';
 
 const getRowProps = (history, link, currentPage, targetPage) => {
 	let rowProps = {};
+	const isFinalPage = currentPage === 6;
 	if (currentPage === targetPage) {
 		rowProps.className = styles.navCurrent;
 	} else if (currentPage < targetPage) {
 		rowProps.className = styles.navRemaining;
 	} else {
-		rowProps.className = styles.navVisited;
-		rowProps.onClick = () => history.push(link);
+		rowProps.className = isFinalPage ? styles.navVisitedUnclickable : styles.navVisited;
+		if (!isFinalPage) {
+			rowProps.onClick = () => history.push(link);
+		}
 	}
 	return rowProps;
 };

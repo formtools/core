@@ -20,11 +20,12 @@ class NotificationPanel extends Component {
 	}
 
 	add (message) {
+		const msg = Object.assign({ msg: '', msgType: 'notify', showCloseIcon: true }, message);
 		this.setState((state) => ({
 			visible: true,
 			messages: [
 				...state.messages,
-				message
+				msg
 			]
 		}));
 	}
@@ -52,15 +53,13 @@ class NotificationPanel extends Component {
 			return null;
 		}
 
-		const { msg, msgType } = messages[messages.length-1];
+		const { msg, msgType, showCloseIcon } = messages[messages.length-1];
 
 		return (
 			<Collapse in={!closing} timeout={C.NOTIFICATION_SPEED}>
 				<div className={`${styles.notification} ${styles[msgType]}`}>
 					<div>
-						<span onClick={this.closePanel}>
-							<HighlightOff fontSize="small" />
-						</span>
+						{showCloseIcon && <span onClick={this.closePanel}><HighlightOff fontSize="small" /></span>}
 						<div dangerouslySetInnerHTML={{ __html: msg }} />
 					</div>
 				</div>

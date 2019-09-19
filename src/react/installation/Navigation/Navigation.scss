@@ -27,13 +27,16 @@
   }
 }
 
-
 .navVisited {
   color: #aaaaaa;
   cursor: pointer;
   &:hover {
     color: #a1d5ab;
   }
+}
+
+.navVisitedUnclickable {
+  color: #aaaaaa;
 }
 
 .navRemaining {

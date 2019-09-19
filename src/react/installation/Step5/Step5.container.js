@@ -16,7 +16,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	updateField: (field, value) => dispatch(actions.updateAccountField(field, value)),
-	saveAdminAccount: () => dispatch(actions.saveAdminAccount())
+	saveAdminAccount: (onSuccess, onError) => dispatch(actions.saveAdminAccount(onSuccess, onError))
 });
 
 export default connect(

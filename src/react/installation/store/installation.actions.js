@@ -111,7 +111,7 @@ export const CONFIG_FILE_CREATED = 'CONFIG_FILE_CREATED';
 export const configFileCreated = () => ({ type: CONFIG_FILE_CREATED });
 
 
-export const createConfigFile = (onSuccess, onError) => {
+export const createConfigFile = (onError) => {
 	return (dispatch, getState) => {
 		const state = getState();
 		dispatch(startRequest());
@@ -124,7 +124,6 @@ export const createConfigFile = (onSuccess, onError) => {
 			.then(() => {
 				dispatch(configFileCreated());
 				dispatch(requestReturned());
-				onSuccess();
 			})
 			.catch((e) => {
 				dispatch(requestReturned());
@@ -132,6 +131,10 @@ export const createConfigFile = (onSuccess, onError) => {
 			});
 	};
 };
+
+
+export const ACCOUNT_CREATED = 'ACCOUNT_CREATED';
+export const accountCreated = () => ({ type: ACCOUNT_CREATED });
 
 
 export const saveAdminAccount = (onSuccess, onError) => {
@@ -148,14 +151,14 @@ export const saveAdminAccount = (onSuccess, onError) => {
 		payload.append('password', selectors.getPassword(state));
 
 		axios.post('./actions-installation.php', payload)
-			.then(({ data }) => {
-				dispatch(databaseTablesCreated(data.configFile));
+			.then(() => {
+				dispatch(accountCreated());
 				dispatch(requestReturned());
 				onSuccess();
 			})
-			.catch((e) => {
+			.catch(() => {
 				dispatch(requestReturned());
-				onError(e.response.data);
+				onError();
 			});
 	};
 };

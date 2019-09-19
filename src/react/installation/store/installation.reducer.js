@@ -16,11 +16,12 @@ const reducer = (state = {
 		password: '',
 		password2: ''
 	},
-	configFileCreated: false
+	configFileCreated: false,
+	accountCreated: false
 }, action) => {
 	switch (action.type) {
 		case initActions.INIT_DATA_LOADED: {
-			const { language, dbSettings, folderSettings, systemInfo, adminAccount } = action.payload;
+			const { language, dbSettings, folderSettings, systemInfo, adminAccount, configFileCreated } = action.payload;
 			return {
 				...state,
 				language,
@@ -30,7 +31,8 @@ const reducer = (state = {
 				adminAccount: {
 					...state.adminAccount,
 					...adminAccount
-				}
+				},
+				configFileCreated
 			};
 		}
 		case actions.START_REQUEST: {

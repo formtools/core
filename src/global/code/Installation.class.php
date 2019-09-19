@@ -1132,8 +1132,8 @@ END;
         ");
 
         $db->bindAll(array(
-            "first_name" => $info["first_name"],
-            "last_name" => $info["last_name"],
+            "first_name" => $info["firstName"],
+            "last_name" => $info["lastName"],
             "email" => $info["email"],
             "username" => $info["username"],
             "password" => General::encode($info["password"]),

@@ -4,8 +4,10 @@ import CodeMirror from 'react-codemirror';
 require('codemirror/mode/php/php');
 require('codemirror/lib/codemirror.css');
 import Button from '../../components/Buttons';
+import { NotificationPanel } from '../../components';
 
 import styles from '../Page/Page.scss';
+import { generalUtils } from "../../utils";
 
 class Step4 extends Component {
 
@@ -16,76 +18,70 @@ class Step4 extends Component {
 			errorCreatingConfigFile: false
 		};
 
-		this.onSuccess = this.onSuccess.bind(this);
+		this.notificationPanel = React.createRef();
+
 		this.onError = this.onError.bind(this);
+		this.nextPage = this.nextPage.bind(this);
 		this.createFile = this.createFile.bind(this);
 	}
 
 	createFile () {
-		this.props.createConfigFile(this.onSuccess, this.onError);
+		this.props.createConfigFile(this.onError);
 	}
 
-	onSuccess () {
+	checkFileExists () {
 
+	}
+
+	nextPage () {
+		this.props.history.push('/step5');
 	}
 
 	onError (e) {
+		const { i18n } = this.props;
+
 		if (e.error === 'error_creating_config_file') {
 			this.setState({
 				errorCreatingConfigFile: true
 			});
+			this.notificationPanel.current.add({ msg: i18n.text_config_file_not_created, msgType: 'error' });
 		}
 	}
 
 	getContent () {
-//		({ history, errorCreatingConfigFile, createConfigFile })
+		const { i18n, configFile, configFileCreated } = this.props;
 
-		const { i18n, configFile, configFileGenerated } = this.props;
+		const continueBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
 
 		if (this.state.errorCreatingConfigFile) {
 			return (
 				<>
-					<div className="margin_bottom_large notify">
-						{i18n.text_config_file_not_created}
-					</div>
+					<p dangerouslySetInnerHTML={{ __html: i18n.text_config_file_not_created_instructions }} />
+					<CodeMirror value={configFile} className={styles.configFileContents} options={{ mode: 'php', readOnly: 'nocursor' }} />
 					<p>
-						{i18n.text_config_file_not_created_instructions}
-					</p>
-
-					<textarea name="content" className={styles.configFileContents}>{configFile}</textarea>
-					<p>
-						<input type="submit" value={i18n.word_continue_rightarrow} />
+						<Button onClick={this.checkFileExists}>{i18n.phrase_check_file_exists}</Button>
 					</p>
 				</>
 			);
 		}
 
-		if (!configFileGenerated) {
+		if (!configFileCreated) {
 			return (
 				<>
 					<p dangerouslySetInnerHTML={{ __html: i18n.text_install_create_config_file }} />
-
 					<CodeMirror value={configFile} className={styles.configFileContents} options={{ mode: 'php', readOnly: 'nocursor' }} />
-
 					<p>
 						<Button onClick={this.createFile}>{i18n.phrase_create_file}</Button>
 					</p>
 				</>
 			);
-		}
-
-		if (configFileGenerated) {
+		} else {
 			return (
 				<>
-					<p className="margin_bottom_large notify">
-						{i18n.text_config_file_created}
+					<p dangerouslySetInnerHTML={{ __html: i18n.text_config_file_created }} />
+					<p>
+						<Button onClick={this.nextPage}>{continueBtnLabel}</Button>
 					</p>
-
-					<form action="" method="post">
-						<p>
-							<input type="submit" name="next" value={i18n.word_continue_rightarrow} />
-						</p>
-					</form>
 				</>
 			);
 		}
@@ -96,6 +92,7 @@ class Step4 extends Component {
 		return (
 			<>
 				<h2>{i18n.phrase_create_config_file}</h2>
+				<NotificationPanel ref={this.notificationPanel} />
 				{this.getContent()}
 			</>
 		);

@@ -19,6 +19,8 @@ export const getUsername = (state) => state.installation.adminAccount.username;
 export const getPassword = (state) => state.installation.adminAccount.password;
 export const getPassword2 = (state) => state.installation.adminAccount.password2;
 
+export const isConfigFileCreated = (state) => state.installation.configFileCreated;
+
 export const getConfigFileContent = (state) => {
 	const { dbHostname, dbName, dbPort, dbUsername, dbPassword, dbTablePrefix } = state.installation.dbSettings;
 	const { rootDir } = constantSelectors.getConstants(state);

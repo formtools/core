@@ -91,7 +91,8 @@ switch ($request["action"]) {
 				"password" => Sessions::getWithFallback("adminAccount.password", "")
 			),
 
-			"configFileCreated" => Sessions::getWithFallback("configFileCreated", true)
+			"configFileCreated" => Sessions::getWithFallback("configFileCreated", false),
+			"accountCreated" => Sessions::getWithFallback("accountCreated", false)
 		);
 		break;
 
@@ -207,15 +208,16 @@ switch ($request["action"]) {
 		break;
 
 	case "createConfigFile":
-//		$configFileGenerated = Installation::generateConfigFile($request["configFile"]);
-//		if ($configFileGenerated) {
-//			$data = array();
-//		} else {
+		$configFileGenerated = Installation::generateConfigFile($request["configFile"]);
+		if ($configFileGenerated) {
+			$data = array();
+			Sessions::set("configFileCreated", true);
+		} else {
 			$data = array(
 				"error" => "error_creating_config_file"
 			);
 			$statusCode = 400;
-//		}
+		}
 		break;
 
 	case "saveAdminAccount":
@@ -223,6 +225,7 @@ switch ($request["action"]) {
 		list($success, $error) = Installation::setAdminAccount($request);
 		if ($success) {
 			$data = array();
+			Sessions::set("accountCreated", true);
 		} else {
 			$data = array(
 				"error" => $error

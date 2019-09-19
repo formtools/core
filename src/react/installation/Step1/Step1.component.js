@@ -4,7 +4,7 @@ import Button from '../../components/Buttons';
 
 import { generalUtils } from '../../utils';
 
-const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage, ...otherProps }) => {
+const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage }) => {
 	const onSubmit = (e) => {
 		e.preventDefault();
 		history.push('/step2');
@@ -19,7 +19,7 @@ const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage, 
 				Select your language and let's get started.
 			</p>
 
-			<section style={{ width: 300 }}>
+			<section style={{ width: 300, marginBottom: 5 }}>
 				<Dropdown
 					data={availableLanguages}
 					selected={language}
