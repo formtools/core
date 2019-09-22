@@ -8,6 +8,7 @@ const mapStateToProps = (state) => ({
 	i18n: i18nSelectors.getI18n(state),
 	isLoading: selectors.isLoading(state),
 	results: selectors.getSystemInfo(state),
+	systemCheckPassed: selectors.isSystemCheckPassed(state),
 	useCustomCacheFolder: selectors.shouldUseCustomCacheFolder(state),
 	customCacheFolder: selectors.getCustomCacheFolder(state)
 });

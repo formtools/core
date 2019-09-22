@@ -1,6 +1,7 @@
 import reducerRegistry from '../../store/reducerRegistry';
 import * as actions from './installation.actions';
 import { actions as initActions } from '../../store/init';
+import { SET_SYSTEM_CHECK_PASSED } from "./installation.actions";
 
 const reducer = (state = {
 	language: 'en_us',
@@ -16,12 +17,14 @@ const reducer = (state = {
 		password: '',
 		password2: ''
 	},
+	systemCheckPassed: false,
 	configFileCreated: false,
 	accountCreated: false
 }, action) => {
 	switch (action.type) {
 		case initActions.INIT_DATA_LOADED: {
-			const { language, dbSettings, folderSettings, systemInfo, adminAccount, configFileCreated } = action.payload;
+			const { language, dbSettings, folderSettings, systemInfo, adminAccount, systemCheckPassed,
+				configFileCreated } = action.payload;
 			return {
 				...state,
 				language,
@@ -32,6 +35,7 @@ const reducer = (state = {
 					...state.adminAccount,
 					...adminAccount
 				},
+				systemCheckPassed,
 				configFileCreated
 			};
 		}
@@ -51,6 +55,12 @@ const reducer = (state = {
 			return {
 				...state,
 				loading: false
+			};
+		}
+		case actions.SET_SYSTEM_CHECK_PASSED: {
+			return {
+				...state,
+				systemCheckPassed: true
 			};
 		}
 		case initActions.LANGUAGE_UPDATED: {

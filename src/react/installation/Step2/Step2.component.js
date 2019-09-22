@@ -4,6 +4,7 @@ import { generalUtils } from '../../utils';
 import styles from '../Page/Page.scss';
 import Button from '../../components/Buttons';
 import { NotificationPanel } from '../../components';
+import Tooltip from '@material-ui/core/Tooltip';
 
 
 const showResult = (passed, i18n) => {
@@ -93,32 +94,64 @@ class Step2 extends Component {
 		return null;
 	}
 
+	getCustomCacheFolderRow () {
+		const { i18n, systemCheckPassed, useCustomCacheFolder, toggleCustomCacheFolder } = this.props;
+
+		if (systemCheckPassed) {
+			return null;
+		}
+
+		return (
+			<tr>
+				<td>
+					&#8212;
+					<input type="checkbox" id="useCustomCacheFolder"
+					       checked={useCustomCacheFolder} onChange={toggleCustomCacheFolder} />
+					<label htmlFor="useCustomCacheFolder">{i18n.phrase_use_custom_cache_folder}</label>
+				</td>
+				<td colSpan="2">
+					{this.getCustomCacheFolderField()}
+				</td>
+			</tr>
+		);
+	}
+
+	getCacheFolder () {
+		const { useCustomCacheFolder, customCacheFolder } = this.props;
+		let folder = (useCustomCacheFolder) ? customCacheFolder : '/cache/';
+		return (
+			<td className={styles.bold}>{folder}</td>
+		);
+	}
+
 	render () {
-		const { i18n, loading, results, useCustomCacheFolder, toggleCustomCacheFolder } = this.props;
+		const { i18n, loading, systemCheckPassed, results } = this.props;
 
 		if (loading || results === null) {
 			return null;
 		}
 
+		const text = (systemCheckPassed) ? i18n.text_system_check_passed : i18n.text_install_system_check;
+
 		return (
 			<form method="post" onSubmit={this.onSubmit}>
 				<h2>{i18n.phrase_system_check}</h2>
 
-				<p dangerouslySetInnerHTML={{ __html: i18n.text_install_system_check }} />
+				<p dangerouslySetInnerHTML={{ __html: text }} />
 
 				<NotificationPanel ref={this.notificationPanel} />
 
 				<table cellSpacing="0" cellPadding="2" width="600" className={styles.info}>
 					<tbody>
 					<tr>
-						<td width="220">{i18n.phrase_php_version}</td>
+						<td width="220" className={styles.label}>{i18n.phrase_php_version}</td>
 						<td className={styles.bold}>{results.phpVersion}</td>
 						<td width="100" align="center">
 							{showResult(results.validPhpVersion, i18n)}
 						</td>
 					</tr>
 					<tr>
-						<td>PDO available</td>
+						<td className={styles.label}>PDO available</td>
 						<td className={styles.bold}>
 							{results.pdoAvailable ? i18n.word_yes : i18n.word_no}
 						</td>
@@ -127,14 +160,14 @@ class Step2 extends Component {
 						</td>
 					</tr>
 					<tr>
-						<td>MySQL available</td>
+						<td className={styles.label}>MySQL available</td>
 						<td className={styles.bold}>{i18n.word_yes}</td>
 						<td align="center">
 							{showResult(results.pdoMysqlAvailable, i18n)}
 						</td>
 					</tr>
 					<tr>
-						<td>PHP Sessions</td>
+						<td className={styles.label}>PHP Sessions</td>
 						<td className={styles.bold}>
 							{results.sessionsLoaded ? i18n.word_available : i18n.phrase_not_available}
 						</td>
@@ -143,30 +176,20 @@ class Step2 extends Component {
 						</td>
 					</tr>
 					<tr>
-						<td>{i18n.phrase_upload_folder}</td>
+						<td className={styles.label}>{i18n.phrase_upload_folder}</td>
 						<td className={styles.bold}>/upload/</td>
 						<td align="center">
 							{showResult(results.uploadFolderWritable, i18n)}
 						</td>
 					</tr>
 					<tr>
-						<td>{i18n.phrase_cache_folder}</td>
-						<td className={styles.bold}>/cache/</td>
+						<td className={styles.label}>{i18n.phrase_cache_folder}</td>
+						{this.getCacheFolder()}
 						<td align="center">
 							{showResult(results.cacheDirWritable, i18n)}
 						</td>
 					</tr>
-					<tr>
-						<td>
-							&#8212;
-							<input type="checkbox" id="useCustomCacheFolder"
-							       checked={useCustomCacheFolder} onChange={toggleCustomCacheFolder} />
-							<label htmlFor="useCustomCacheFolder">{i18n.phrase_use_custom_cache_folder}</label>
-						</td>
-						<td colSpan="2">
-							{this.getCustomCacheFolderField()}
-						</td>
-					</tr>
+					{this.getCustomCacheFolderRow()}
 					</tbody>
 				</table>
 

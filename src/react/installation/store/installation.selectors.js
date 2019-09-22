@@ -3,6 +3,7 @@ import { selectors as constantSelectors } from '../../store/constants';
 export const getLanguage = (state) => state.installation.language;
 export const isLoading = (state) => state.installation.loading;
 export const getSystemInfo = (state) => state.installation.systemInfo;
+export const isSystemCheckPassed = (state) => state.installation.systemCheckPassed;
 export const shouldUseCustomCacheFolder = (state) => state.installation.folderSettings.useCustomCacheFolder;
 export const getCustomCacheFolder = (state) => state.installation.folderSettings.customCacheFolder;
 export const getDbHostname = (state) => state.installation.dbSettings.dbHostname;

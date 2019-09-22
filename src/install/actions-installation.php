@@ -95,6 +95,7 @@ switch ($request["action"]) {
 				"password" => Sessions::getWithFallback("fti.adminAccount.password", "")
 			),
 
+			"systemCheckPassed" => Sessions::getWithFallback("fti.systemCheckPassed", false),
 			"configFileCreated" => Sessions::getWithFallback("fti.configFileCreated", false),
 			"accountCreated" => Sessions::getWithFallback("fti.accountCreated", false)
 		);
@@ -138,6 +139,7 @@ switch ($request["action"]) {
 						fopen($indexFile, "w");
 					}
 					$data = array();
+					Sessions::set("fti.systemCheckPassed", true);
 					Sessions::set("fti.folderSettings.customCacheFolder", $customCacheFolder);
 				} else {
 					$data["error"] = "invalid_folder_permissions";
@@ -148,6 +150,7 @@ switch ($request["action"]) {
 				$statusCode = 400;
 			}
 		} else {
+			Sessions::set("fti.systemCheckPassed", true);
 			Sessions::set("fti.folderSettings.useCustomCacheFolder", false);
 			Sessions::set("fti.folderSettings.customCacheFolder", "");
 			$data = array();
@@ -163,12 +166,12 @@ switch ($request["action"]) {
 		$dbTablePrefix = $request["dbTablePrefix"];
 		$overwriteExistingTables = $request["overwrite"];
 
-		Sessions::set("dbSettings.dbHostname", $dbHostname);
-		Sessions::set("dbSettings.dbName", $dbName);
-		Sessions::set("dbSettings.dbPort", $dbPort);
-		Sessions::set("dbSettings.dbUsername", $dbUsername);
-		Sessions::set("dbSettings.dbPassword", $dbPassword);
-		Sessions::set("dbSettings.dbTablePrefix", $dbTablePrefix);
+		Sessions::set("fti.dbSettings.dbHostname", $dbHostname);
+		Sessions::set("fti.dbSettings.dbName", $dbName);
+		Sessions::set("fti.dbSettings.dbPort", $dbPort);
+		Sessions::set("fti.dbSettings.dbUsername", $dbUsername);
+		Sessions::set("fti.dbSettings.dbPassword", $dbPassword);
+		Sessions::set("fti.dbSettings.dbTablePrefix", $dbTablePrefix);
 
 		list($success, $errorMsg) = Installation::checkConnection($dbHostname, $dbName, $dbPort, $dbUsername, $dbPassword);
 		if ($success) {

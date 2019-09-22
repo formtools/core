@@ -30,6 +30,9 @@ export const updateDatabaseField = (field, value) => ({
 	}
 });
 
+export const SET_SYSTEM_CHECK_PASSED = 'SET_SYSTEM_CHECK_PASSED';
+export const setSystemCheckPassed = () => ({ type: SET_SYSTEM_CHECK_PASSED });
+
 export const saveCacheFolderSetting = (onSuccess, onError) => {
 	return (dispatch, getState) => {
 		const state = getState();
@@ -42,6 +45,7 @@ export const saveCacheFolderSetting = (onSuccess, onError) => {
 
 		axios.post('./actions-installation.php', payload)
 			.then(() => {
+				dispatch(setSystemCheckPassed());
 				dispatch(requestReturned());
 				onSuccess();
 			})
