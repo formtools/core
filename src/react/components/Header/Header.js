@@ -4,7 +4,7 @@ import styles from './Header.scss';
 const Header = ({ i18n, version, constants }) => (
 	<section className={styles.header}>
 		<div className={styles.logo}>
-	        <a href="http://www.formtools.org">
+	        <a href="https://formtools.org">
 	            <img src={`${constants.rootUrl}/themes/default/images/logo_green2x.png`} border="0" width="220" height="67" />
 	        </a>
 		</div>

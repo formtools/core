@@ -21,6 +21,13 @@ use Smarty, PDO, Exception;
 class Installation
 {
 
+	/**
+	 * All installation sessions are scoped to an "fti" key. This clears it.
+	 */
+	public static function clearSessions () {
+		Sessions::clear("fti");
+	}
+
     /**
      * This function attempts to create the config file for the user.
      * @return bool
@@ -236,15 +243,16 @@ END;
         exit;
     }
 
-    /**
-     * This is sent at the very last step. It emails the administrator a short welcome email containing their
-     * login information, with a few links to resources on our site.
-     *
-     * Note: this is ALWAYS sent with mail(), since the Swift Mailer plugin won't have been configured yet.
-     *
-     * @param string $password the unencrypted password
-     */
-    public static function sendWelcomeEmail($email, $username, $password)
+	/**
+	 * This is sent at the very last step. It emails the administrator a short welcome email containing their
+	 * login information, with a few links to resources on our site.
+	 *
+	 * Note: this is ALWAYS sent with mail(), since the Swift Mailer plugin won't have been configured yet.
+	 *
+	 * @param $email
+	 * @param $username
+	 */
+    public static function sendWelcomeEmail($email, $username)
     {
         $root_dir = Core::getRootDir();
         $root_url = Core::getRootUrl();
@@ -252,8 +260,7 @@ END;
         // 1. build the email content
         $placeholders = array(
             "login_url" => $root_url,
-            "username" => $username,
-            "password" => $password
+            "username" => $username
         );
         $smarty_template_email_content = file_get_contents("$root_dir/global/emails/installed.tpl");
         $email_content = General::evalSmartyString($smarty_template_email_content, $placeholders);

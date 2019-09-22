@@ -8,8 +8,12 @@ require_once("../global/library.php");
 use FormTools\Core;
 use FormTools\Database;
 use FormTools\General;
+use FormTools\Hooks;
 use FormTools\Installation;
+use FormTools\Modules;
 use FormTools\Sessions;
+use FormTools\Settings;
+use FormTools\Themes;
 
 Core::setHooksEnabled(false);
 Core::startSessions();
@@ -30,7 +34,7 @@ $data = array(
 // if the user isn't on hitting the first or second page and they don't have sessions. The reason we allow the second
 // page is that it contains important info about their environment and what
 $missingPageParam = !isset($request["page"]) || !is_numeric($request["page"]);
-if ($missingPageParam || (!Sessions::exists("installing") && $request["page"] > 1)) {
+if ($missingPageParam || (!Sessions::exists("fti.installing") && $request["page"] > 1)) {
 	General::returnJsonResponse($data, 403);
 	exit;
 }
@@ -57,19 +61,19 @@ switch ($request["action"]) {
 			),
 
 			"dbSettings" => array(
-				"dbHostname" => Sessions::getWithFallback("dbSettings.dbHostname", "localhost"),
-				"dbName" => Sessions::getWithFallback("dbSettings.dbName", ""),
-				"dbPort" => Sessions::getWithFallback("dbSettings.dbPort", "3306"),
-				"dbUsername" => Sessions::getWithFallback("dbSettings.dbUsername", ""),
-				"dbPassword" => Sessions::getWithFallback("dbSettings.dbPassword", ""),
-				"dbTablePrefix" => Sessions::getWithFallback("dbSettings.dbTablePrefix", "ft_"),
-				"dbTablesCreated" => Sessions::getWithFallback("dbSettings.dbTablesCreated", false),
-				"dbTablesExist" => Sessions::getWithFallback("dbSettings.dbTablesExist", false)
+				"dbHostname" => Sessions::getWithFallback("fti.dbSettings.dbHostname", "localhost"),
+				"dbName" => Sessions::getWithFallback("fti.dbSettings.dbName", ""),
+				"dbPort" => Sessions::getWithFallback("fti.dbSettings.dbPort", "3306"),
+				"dbUsername" => Sessions::getWithFallback("fti.dbSettings.dbUsername", ""),
+				"dbPassword" => Sessions::getWithFallback("fti.dbSettings.dbPassword", ""),
+				"dbTablePrefix" => Sessions::getWithFallback("fti.dbSettings.dbTablePrefix", "ft_"),
+				"dbTablesCreated" => Sessions::getWithFallback("fti.dbSettings.dbTablesCreated", false),
+				"dbTablesExist" => Sessions::getWithFallback("fti.dbSettings.dbTablesExist", false)
 			),
 
 			"folderSettings" => array(
-				"useCustomCacheFolder" => Sessions::getWithFallback("folderSettings.useCustomCacheFolder", false),
-				"customCacheFolder" => Sessions::getWithFallback("folderSettings.customCacheFolder", realpath("../cache/"))
+				"useCustomCacheFolder" => Sessions::getWithFallback("fti.folderSettings.useCustomCacheFolder", false),
+				"customCacheFolder" => Sessions::getWithFallback("fti.folderSettings.customCacheFolder", realpath("../cache/"))
 			),
 
 			"systemInfo" => array(
@@ -84,15 +88,15 @@ switch ($request["action"]) {
 			),
 
 			"adminAccount" => array(
-				"firstName" => Sessions::getWithFallback("adminAccount.firstName", ""),
-				"lastName" => Sessions::getWithFallback("adminAccount.lastName", ""),
-				"email" => Sessions::getWithFallback("adminAccount.email", ""),
-				"username" => Sessions::getWithFallback("adminAccount.username", ""),
-				"password" => Sessions::getWithFallback("adminAccount.password", "")
+				"firstName" => Sessions::getWithFallback("fti.adminAccount.firstName", ""),
+				"lastName" => Sessions::getWithFallback("fti.adminAccount.lastName", ""),
+				"email" => Sessions::getWithFallback("fti.adminAccount.email", ""),
+				"username" => Sessions::getWithFallback("fti.adminAccount.username", ""),
+				"password" => Sessions::getWithFallback("fti.adminAccount.password", "")
 			),
 
-			"configFileCreated" => Sessions::getWithFallback("configFileCreated", false),
-			"accountCreated" => Sessions::getWithFallback("accountCreated", false)
+			"configFileCreated" => Sessions::getWithFallback("fti.configFileCreated", false),
+			"accountCreated" => Sessions::getWithFallback("fti.accountCreated", false)
 		);
 		break;
 
@@ -119,7 +123,7 @@ switch ($request["action"]) {
 
 	case "saveCacheFolderSettings":
 		if ($request["useCustomCacheFolder"] == "true") {
-			Sessions::set("folderSettings.useCustomCacheFolder", true);
+			Sessions::set("fti.folderSettings.useCustomCacheFolder", true);
 			$customCacheFolder = $request["customCacheFolder"];
 			$customCacheFolderExists = is_dir($customCacheFolder);
 
@@ -134,7 +138,7 @@ switch ($request["action"]) {
 						fopen($indexFile, "w");
 					}
 					$data = array();
-					Sessions::set("folderSettings.customCacheFolder", $customCacheFolder);
+					Sessions::set("fti.folderSettings.customCacheFolder", $customCacheFolder);
 				} else {
 					$data["error"] = "invalid_folder_permissions";
 					$statusCode = 400;
@@ -144,8 +148,8 @@ switch ($request["action"]) {
 				$statusCode = 400;
 			}
 		} else {
-			Sessions::set("folderSettings.useCustomCacheFolder", false);
-			Sessions::set("folderSettings.customCacheFolder", "");
+			Sessions::set("fti.folderSettings.useCustomCacheFolder", false);
+			Sessions::set("fti.folderSettings.customCacheFolder", "");
 			$data = array();
 		}
 		break;
@@ -182,8 +186,8 @@ switch ($request["action"]) {
 				// any time the user progresses from this step dole up the latest
 				if ($success) {
 					$data = array();
-					Sessions::set("dbSettings.dbTablesCreated", true);
-					Sessions::set("dbSettings.dbTablesExist", true);
+					Sessions::set("fti.dbSettings.dbTablesCreated", true);
+					Sessions::set("fti.dbSettings.dbTablesExist", true);
 				} else {
 					$data = array(
 						"error" => "db_creation_error",
@@ -211,7 +215,7 @@ switch ($request["action"]) {
 		$configFileGenerated = Installation::generateConfigFile($request["configFile"]);
 		if ($configFileGenerated) {
 			$data = array();
-			Sessions::set("configFileCreated", true);
+			Sessions::set("fti.configFileCreated", true);
 		} else {
 			$data = array(
 				"error" => "error_creating_config_file"
@@ -225,7 +229,20 @@ switch ($request["action"]) {
 		list($success, $error) = Installation::setAdminAccount($request);
 		if ($success) {
 			$data = array();
-			Sessions::set("accountCreated", true);
+			Sessions::set("fti.accountCreated", true);
+
+			// now set up the remainder of the script
+			Hooks::updateAvailableHooks();
+			Modules::updateModuleList();
+			Themes::updateThemeList();
+			Installation::installCoreFieldTypes();
+			Modules::installModules();
+			Settings::set(array("installation_complete" => "yes"), "core");
+
+			// send "Welcome to Form Tools!" email
+			$email    = Sessions::get("fti.adminAccount.email");
+			$username = Sessions::get("fti.adminAccount.username");
+			Installation::sendWelcomeEmail($email, $username);
 		} else {
 			$data = array(
 				"error" => $error
@@ -234,7 +251,7 @@ switch ($request["action"]) {
 		break;
 }
 
-Sessions::set("installing", true);
+Sessions::set("fti.installing", true);
 
 General::returnJsonResponse($data, $statusCode);
 

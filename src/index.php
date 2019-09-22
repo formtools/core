@@ -4,6 +4,7 @@ require_once("global/library.php");
 
 use FormTools\Core;
 use FormTools\General;
+use FormTools\Installation;
 use FormTools\Pages;
 use FormTools\Settings;
 use FormTools\Themes;
@@ -11,6 +12,8 @@ use FormTools\Upgrade;
 
 if (!Core::checkConfigFileExists()) {
     General::redirect("install/");
+} else {
+	Installation::clearSessions();
 }
 Core::init();
 $LANG = Core::$L;

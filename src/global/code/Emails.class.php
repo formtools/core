@@ -1378,7 +1378,7 @@ class Emails
 
 	/**
 	 * Pieces together the main email content from the text and HTML content, generated separately by
-	 * {@link http://www.formtools.org/developerdoc/1-4-6/Emails/_code---emails.php.html#function_parse_template
+	 * {@link https://formtools.org/developerdoc/1-4-6/Emails/_code---emails.php.html#function_parse_template
 	 * _parse_template}.
 	 *
 	 * @param string $HTML_content The HTML section of the email.

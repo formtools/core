@@ -1209,3 +1209,4 @@ $LANG["text_tables_exist_desc"] = "Sorry, it appears that some tables already ex
 $LANG["phrase_overwrite_tables"] = "Overwrite Tables";
 $LANG["phrase_choose_new_table_prefix"] = "Choose New Table Prefix";
 $LANG["phrase_check_file_exists"] = "Check file exists";
+$LANG["phrase_pwd_installation_script_created"] = "(as you created in the installation script)";
