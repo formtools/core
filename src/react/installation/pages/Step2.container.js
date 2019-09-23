@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { selectors as i18nSelectors } from '../../store/i18n';
-import { actions, selectors } from '../store/';
+import { actions, selectors } from '../store';
 import Step2 from './Step2.component';
 
 const mapStateToProps = (state) => ({

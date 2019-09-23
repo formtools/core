@@ -4,7 +4,7 @@ import { selectors as initSelectors } from '../../store/init';
 import { selectors as i18nSelectors } from '../../store/i18n';
 import { selectors as constantSelectors } from '../../store/constants';
 import { selectors, actions } from '../store';
-import PageComponent from './Page.component';
+import Layout from './Layout.component';
 import { ERRORS } from '../../constants';
 
 const mapStateToProps = (state) => ({
@@ -22,4 +22,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(PageComponent);
+)(Layout);

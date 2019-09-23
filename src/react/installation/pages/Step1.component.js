@@ -1,13 +1,16 @@
 import React from 'react';
 import Dropdown from '../../components/Dropdown';
 import Button from '../../components/Buttons';
-
 import { generalUtils } from '../../utils';
 
 const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage }) => {
 	const onSubmit = (e) => {
 		e.preventDefault();
 		history.push('/step2');
+	};
+
+	const updatePageTitle = (i18n) => {
+		document.title = i18n.phrase_ft_installation;
 	};
 
 	const submitBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
@@ -22,7 +25,7 @@ const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage }
 				<Dropdown
 					data={availableLanguages}
 					selected={language}
-					onChange={onSelectLanguage}
+					onChange={({ value }) => onSelectLanguage(value, updatePageTitle)}
 				/>
 			</section>
 

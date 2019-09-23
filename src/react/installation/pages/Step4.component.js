@@ -5,9 +5,8 @@ require('codemirror/mode/php/php');
 require('codemirror/lib/codemirror.css');
 import Button from '../../components/Buttons';
 import { NotificationPanel } from '../../components';
-
-import styles from '../Page/Page.scss';
-import { generalUtils } from "../../utils";
+import styles from '../Layout/Layout.scss';
+import { generalUtils } from '../../utils';
 
 class Step4 extends Component {
 

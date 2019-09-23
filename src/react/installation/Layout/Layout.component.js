@@ -3,7 +3,7 @@ import Header from '../../components/Header/Header';
 import { Route } from 'react-router';
 import Footer from '../Footer/Footer';
 import Navigation from '../Navigation/Navigation';
-import styles from './Page.scss';
+import styles from './Layout.scss';
 import SessionsExpiredDialog from '../../components/Dialogs/SessionsExpiredDialog';
 import LoadingOverlay from '../../components/LoadingOverlay/LoadingOverlay';
 

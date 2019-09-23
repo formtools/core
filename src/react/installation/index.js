@@ -1,10 +1,10 @@
 import './store';
-import Step1 from './Step1/Step1.container';
-import Step2 from './Step2/Step2.container';
-import Step3 from './Step3/Step3.container';
-import Step4 from './Step4/Step4.container';
-import Step5 from './Step5/Step5.container';
-import Step6 from './Step6/Step6.container';
+import Step1 from './pages/Step1.container';
+import Step2 from './pages/Step2.container';
+import Step3 from './pages/Step3.container';
+import Step4 from './pages/Step4.container';
+import Step5 from './pages/Step5.container';
+import Step6 from './pages/Step6.container';
 
 export {
 	Step1,

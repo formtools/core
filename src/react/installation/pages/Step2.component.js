@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { generalUtils } from '../../utils';
-import styles from '../Page/Page.scss';
+import styles from '../Layout/Layout.scss';
 import Button from '../../components/Buttons';
 import { NotificationPanel, OverflowTip } from '../../components';
 

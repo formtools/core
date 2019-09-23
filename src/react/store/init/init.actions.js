@@ -59,11 +59,12 @@ export const clearGlobalError = () => ({ type: CLEAR_GLOBAL_ERROR });
 export const LANGUAGE_UPDATED = 'LANGUAGE_UPDATED';
 export const ERROR_UPDATING_LANGUAGE = 'ERROR_UPDATING_LANGUAGE';
 
-export const selectLanguage = (lang) => {
+export const selectLanguage = (lang, onSuccess) => {
 	return (dispatch) => {
 		axios.get(`./actions-installation.php?action=selectLanguage&lang=${lang}`)
 			.then(({ data }) => {
 				const { i18n } = data;
+				onSuccess(i18n);
 				dispatch({
 					type: LANGUAGE_UPDATED,
 					payload: {

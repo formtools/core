@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import Button from '../../components/Buttons';
 import { NotificationPanel } from '../../components';
 import { generalUtils } from '../../utils';
-import styles from '../Page/Page.scss';
+import styles from '../Layout/Layout.scss';
 
 
 class Step3 extends Component {

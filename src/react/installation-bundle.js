@@ -5,7 +5,7 @@ import { HashRouter as Router } from 'react-router-dom';
 import axios from 'axios';
 import { actions, selectors } from './store/init';
 import store from './store';
-import InstallationPage from './installation/Page/Page.container';
+import Page from './installation/Layout/Layout.container';
 import { Step1, Step2, Step3, Step4, Step5, Step6 } from './installation';
 import { ERRORS } from './constants';
 import { navUtils } from './utils';
@@ -57,12 +57,12 @@ initInitializationBundle();
 const App = () => (
 	<Provider store={store}>
 		<Router>
-			<InstallationPage exact path="/" component={Step1} />
-			<InstallationPage path="/step2/" component={Step2} />
-			<InstallationPage path="/step3/" component={Step3} />
-			<InstallationPage path="/step4/" component={Step4} />
-			<InstallationPage path="/step5/" component={Step5} />
-			<InstallationPage path="/step6/" component={Step6} />
+			<Page exact path="/" component={Step1} />
+			<Page path="/step2/" component={Step2} />
+			<Page path="/step3/" component={Step3} />
+			<Page path="/step4/" component={Step4} />
+			<Page path="/step5/" component={Step5} />
+			<Page path="/step6/" component={Step6} />
 		</Router>
 	</Provider>
 );
