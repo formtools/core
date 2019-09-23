@@ -5,6 +5,8 @@ export const isLoading = (state) => state.installation.loading;
 export const getSystemInfo = (state) => state.installation.systemInfo;
 export const isSystemCheckPassed = (state) => state.installation.systemCheckPassed;
 export const shouldUseCustomCacheFolder = (state) => state.installation.folderSettings.useCustomCacheFolder;
+export const getUploadFolder = (state) => state.installation.folderSettings.uploadFolder;
+export const getDefaultCacheFolder = (state) => state.installation.folderSettings.defaultCacheFolder;
 export const getCustomCacheFolder = (state) => state.installation.folderSettings.customCacheFolder;
 export const getDbHostname = (state) => state.installation.dbSettings.dbHostname;
 export const getDbName = (state) => state.installation.dbSettings.dbName;

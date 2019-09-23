@@ -72,6 +72,7 @@ ul {
 
 .pageContent {
   display: flex;
+  flex-direction: row;
 
   .nav {
     flex: 0 0 auto;
@@ -80,6 +81,11 @@ ul {
   }
   .body {
     flex: 1;
+
+    // this allows child content to contain long truncated text without exceeding available space, see:
+    // https://css-tricks.com/flexbox-truncated-text/
+    min-width: 0;
+    max-width: 100%;
     padding: 0 15px;
   }
 }
@@ -210,3 +216,28 @@ ul.tips {
   }
 }
 
+.table {
+  .row {
+    display: flex;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #efefef;
+    padding: 1px;
+  }
+}
+
+.systemCheckTable {
+  .label {
+    flex: 0 0 180px;
+  }
+  .value {
+    flex: 1 1 auto;
+    overflow: hidden;
+  }
+  .result {
+    flex: 0 0 100px;
+    text-align: center;
+  }
+  .fullValue {
+    flex: 1 1 auto;
+  }
+}

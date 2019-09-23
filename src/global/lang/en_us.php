@@ -1211,3 +1211,7 @@ $LANG["phrase_choose_new_table_prefix"] = "Choose New Table Prefix";
 $LANG["phrase_check_file_exists"] = "Check file exists";
 $LANG["phrase_pwd_installation_script_created"] = "(as you created in the installation script)";
 $LANG["text_system_check_passed"] = "Your system is able to run Form Tools.";
+$LANG["text_installation_intro"] = "Select your language and let's get started.";
+$LANG["phrase_pdo_available"] = "PDO available";
+$LANG["phrase_mysql_available"] = "MySQL available";
+$LANG["phrase_php_sessions"] = "PHP Sessions";

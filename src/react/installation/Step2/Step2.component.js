@@ -3,8 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { generalUtils } from '../../utils';
 import styles from '../Page/Page.scss';
 import Button from '../../components/Buttons';
-import { NotificationPanel } from '../../components';
-import Tooltip from '@material-ui/core/Tooltip';
+import { NotificationPanel, OverflowTip } from '../../components';
 
 
 const showResult = (passed, i18n) => {
@@ -84,7 +83,6 @@ class Step2 extends Component {
 
 	getCustomCacheFolderField () {
 		const { customCacheFolder, useCustomCacheFolder, updateCustomCacheFolder } = this.props;
-
 		if (useCustomCacheFolder) {
 			return (
 				<input type="text" value={customCacheFolder} onChange={(e) => updateCustomCacheFolder(e.target.value)}
@@ -102,31 +100,32 @@ class Step2 extends Component {
 		}
 
 		return (
-			<tr>
-				<td>
+			<div className={styles.row}>
+				<div className={styles.label}>
 					&#8212;
 					<input type="checkbox" id="useCustomCacheFolder"
 					       checked={useCustomCacheFolder} onChange={toggleCustomCacheFolder} />
 					<label htmlFor="useCustomCacheFolder">{i18n.phrase_use_custom_cache_folder}</label>
-				</td>
-				<td colSpan="2">
+				</div>
+				<div className={styles.fullValue}>
 					{this.getCustomCacheFolderField()}
-				</td>
-			</tr>
+				</div>
+			</div>
 		);
 	}
 
 	getCacheFolder () {
-		const { useCustomCacheFolder, customCacheFolder } = this.props;
-		let folder = (useCustomCacheFolder) ? customCacheFolder : '/cache/';
+		const { useCustomCacheFolder, customCacheFolder, defaultCacheFolder } = this.props;
+		let folder = (useCustomCacheFolder) ? customCacheFolder : defaultCacheFolder;
 		return (
-			<td className={styles.bold}>{folder}</td>
+			<div className={styles.value}>
+				<OverflowTip>{folder}</OverflowTip>
+			</div>
 		);
 	}
 
 	render () {
-		const { i18n, loading, systemCheckPassed, results } = this.props;
-
+		const { i18n, loading, systemCheckPassed, uploadFolder, results } = this.props;
 		if (loading || results === null) {
 			return null;
 		}
@@ -141,57 +140,57 @@ class Step2 extends Component {
 
 				<NotificationPanel ref={this.notificationPanel} />
 
-				<table cellSpacing="0" cellPadding="2" width="600" className={styles.info}>
-					<tbody>
-					<tr>
-						<td width="220" className={styles.label}>{i18n.phrase_php_version}</td>
-						<td className={styles.bold}>{results.phpVersion}</td>
-						<td width="100" align="center">
+				<div className={`${styles.table} ${styles.systemCheckTable}`}>
+					<div className={styles.row}>
+						<div className={styles.label}>{i18n.phrase_php_version}</div>
+						<div className={styles.value}>{results.phpVersion}</div>
+						<div className={styles.result}>
 							{showResult(results.validPhpVersion, i18n)}
-						</td>
-					</tr>
-					<tr>
-						<td className={styles.label}>PDO available</td>
-						<td className={styles.bold}>
+						</div>
+					</div>
+					<div className={styles.row}>
+						<div className={styles.label}>{i18n.phrase_pdo_available}</div>
+						<div className={styles.value}>
 							{results.pdoAvailable ? i18n.word_yes : i18n.word_no}
-						</td>
-						<td align="center">
+						</div>
+						<div className={styles.result}>
 							{showResult(results.pdoAvailable, i18n)}
-						</td>
-					</tr>
-					<tr>
-						<td className={styles.label}>MySQL available</td>
-						<td className={styles.bold}>{i18n.word_yes}</td>
-						<td align="center">
+						</div>
+					</div>
+					<div className={styles.row}>
+						<div className={styles.label}>{i18n.phrase_mysql_available}</div>
+						<div className={styles.value}>{i18n.word_yes}</div>
+						<div className={styles.result}>
 							{showResult(results.pdoMysqlAvailable, i18n)}
-						</td>
-					</tr>
-					<tr>
-						<td className={styles.label}>PHP Sessions</td>
-						<td className={styles.bold}>
+						</div>
+					</div>
+					<div className={styles.row}>
+						<div className={styles.label}>{i18n.phrase_php_sessions}</div>
+						<div className={styles.value}>
 							{results.sessionsLoaded ? i18n.word_available : i18n.phrase_not_available}
-						</td>
-						<td width="100" align="center">
+						</div>
+						<div className={styles.result}>
 							{showResult(results.sessionsLoaded, i18n)}
-						</td>
-					</tr>
-					<tr>
-						<td className={styles.label}>{i18n.phrase_upload_folder}</td>
-						<td className={styles.bold}>/upload/</td>
-						<td align="center">
-							{showResult(results.uploadFolderWritable, i18n)}
-						</td>
-					</tr>
-					<tr>
-						<td className={styles.label}>{i18n.phrase_cache_folder}</td>
+						</div>
+					</div>
+					<div className={styles.row}>
+						<div className={styles.label}>{i18n.phrase_upload_folder}</div>
+						<div className={styles.value}>
+							<OverflowTip>{uploadFolder}</OverflowTip>
+						</div>
+						<div className={styles.result}>
+							{showResult(results.sessionsLoaded, i18n)}
+						</div>
+					</div>
+					<div className={styles.row}>
+						<div className={styles.label}>{i18n.phrase_cache_folder}</div>
 						{this.getCacheFolder()}
-						<td align="center">
+						<div className={styles.result}>
 							{showResult(results.cacheDirWritable, i18n)}
-						</td>
-					</tr>
+						</div>
+					</div>
 					{this.getCustomCacheFolderRow()}
-					</tbody>
-				</table>
+				</div>
 
 				{this.getResultsSection()}
 			</form>

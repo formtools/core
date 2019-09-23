@@ -72,7 +72,9 @@ switch ($request["action"]) {
 			),
 
 			"folderSettings" => array(
+				"uploadFolder" => realpath("../upload/"),
 				"useCustomCacheFolder" => Sessions::getWithFallback("fti.folderSettings.useCustomCacheFolder", false),
+				"defaultCacheFolder" => realpath("../cache/"),
 				"customCacheFolder" => Sessions::getWithFallback("fti.folderSettings.customCacheFolder", realpath("../cache/"))
 			),
 

@@ -9,7 +9,9 @@ const mapStateToProps = (state) => ({
 	isLoading: selectors.isLoading(state),
 	results: selectors.getSystemInfo(state),
 	systemCheckPassed: selectors.isSystemCheckPassed(state),
+	uploadFolder: selectors.getUploadFolder(state),
 	useCustomCacheFolder: selectors.shouldUseCustomCacheFolder(state),
+	defaultCacheFolder: selectors.getDefaultCacheFolder(state),
 	customCacheFolder: selectors.getCustomCacheFolder(state)
 });
 

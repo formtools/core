@@ -15,9 +15,8 @@ const Step1 = ({ i18n, history, language, availableLanguages, onSelectLanguage }
 	return (
 		<form method="post" onSubmit={onSubmit}>
 			<h2>{i18n.word_welcome}</h2>
-			<p>
-				Select your language and let's get started.
-			</p>
+
+			<p dangerouslySetInnerHTML={{ __html: i18n.text_installation_intro }} />
 
 			<section style={{ width: 300, marginBottom: 5 }}>
 				<Dropdown
