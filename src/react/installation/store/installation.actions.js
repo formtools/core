@@ -115,7 +115,7 @@ export const CONFIG_FILE_CREATED = 'CONFIG_FILE_CREATED';
 export const configFileCreated = () => ({ type: CONFIG_FILE_CREATED });
 
 
-export const createConfigFile = (onError) => {
+export const createConfigFile = (onSuccess, onError) => {
 	return (dispatch, getState) => {
 		const state = getState();
 		dispatch(startRequest());

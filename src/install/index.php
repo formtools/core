@@ -10,6 +10,8 @@ Core::startSessions();
 
 Installation::checkInstallationComplete();
 
+//FormTools\Sessions::clearAll();
+
 Core::initSmarty();
 Core::setCurrLang(General::loadField("lang", "lang", Core::getDefaultLang()));
 $root_url = Core::getRootUrl();

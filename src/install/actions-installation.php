@@ -230,7 +230,7 @@ switch ($request["action"]) {
 		break;
 
 	case "saveAdminAccount":
-		Core::initDatabase();
+		Core::init();
 		list($success, $error) = Installation::setAdminAccount($request);
 		if ($success) {
 			$data = array();

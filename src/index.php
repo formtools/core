@@ -12,11 +12,13 @@ use FormTools\Upgrade;
 
 if (!Core::checkConfigFileExists()) {
     General::redirect("install/");
-} else {
-	Installation::clearSessions();
 }
 Core::init();
 $LANG = Core::$L;
+
+if (Core::checkConfigFileExists()) {
+	Installation::clearSessions();
+}
 
 $upgrade_info = Upgrade::upgrade();
 

@@ -35,7 +35,11 @@ export const getConfigFileContent = (state) => {
 
 	let customCacheFolderRow = '';
 	if (shouldUseCustomCacheFolder(state)) {
-		customCacheFolderRow = `$g_custom_cache_folder = "${getCustomCacheFolder(state)}";\n`;
+		const customCacheFolder = getCustomCacheFolder(state);
+		const defaultCacheFolder = getDefaultCacheFolder(state);
+		if (customCacheFolder !== defaultCacheFolder) {
+			customCacheFolderRow = `$g_custom_cache_folder = "${getCustomCacheFolder(state)}";\n`;
+		}
 	}
 
 	return `<?php

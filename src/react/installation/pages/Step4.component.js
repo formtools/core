@@ -25,7 +25,7 @@ class Step4 extends Component {
 	}
 
 	createFile () {
-		this.props.createConfigFile(this.onError);
+		this.props.createConfigFile(this.onSuccess, this.onError);
 	}
 
 	checkFileExists () {
@@ -77,7 +77,7 @@ class Step4 extends Component {
 		} else {
 			return (
 				<>
-					<p dangerouslySetInnerHTML={{ __html: i18n.text_config_file_created }} />
+					<p style={{ marginBottom: 0 }} dangerouslySetInnerHTML={{ __html: i18n.text_config_file_created }} />
 					<p>
 						<Button onClick={this.nextPage}>{continueBtnLabel}</Button>
 					</p>
