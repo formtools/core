@@ -10,8 +10,9 @@
 
 .logo {
   padding-top: 4px;
-  a:hover {
+  a:link:hover, a:visited:hover {
     border: 0;
+    text-decoration: none;
   }
 }
 

@@ -128,6 +128,7 @@ export const createConfigFile = (onSuccess, onError) => {
 			.then(() => {
 				dispatch(configFileCreated());
 				dispatch(requestReturned());
+				onSuccess();
 			})
 			.catch((e) => {
 				dispatch(requestReturned());

@@ -20,7 +20,7 @@ Core::startSessions();
 
 $currentLang = General::loadField("lang", "lang", Core::getDefaultLang());
 $request = array_merge($_GET, $_POST);
-Core::setCurrLang($currentLang);
+Core::setCurrentLang($currentLang);
 
 // the methods in this file are only available for incomplete installations
 if (Installation::checkInstallationComplete(false)) {
@@ -116,7 +116,7 @@ switch ($request["action"]) {
 			$data["error"] = "invalid_language";
 			$statusCode = 500;
 		} else {
-			Core::setCurrLang($_GET["lang"]);
+			Core::setCurrentLang($_GET["lang"]);
 			Sessions::set("lang", $_GET["lang"]);
 			$data = array(
 				"i18n" => Core::$L
@@ -230,8 +230,10 @@ switch ($request["action"]) {
 		break;
 
 	case "saveAdminAccount":
-		Core::init();
-		list($success, $error) = Installation::setAdminAccount($request);
+		$lang = Core::getCurrentLang();
+		Core::init(); // this resets the language
+
+		list($success, $error) = Installation::setAdminAccount($request, $lang);
 		if ($success) {
 			$data = array();
 			Sessions::set("fti.accountCreated", true);
@@ -242,7 +244,10 @@ switch ($request["action"]) {
 			Themes::updateThemeList();
 			Installation::installCoreFieldTypes();
 			Modules::installModules();
-			Settings::set(array("installation_complete" => "yes"), "core");
+			Settings::set(array(
+				"installation_complete" => "yes",
+				"default_language" => $lang,
+			), "core");
 
 			// send "Welcome to Form Tools!" email
 			$email    = Sessions::get("fti.adminAccount.email");

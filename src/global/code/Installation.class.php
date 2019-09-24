@@ -1124,7 +1124,7 @@ END;
      * @param array $info
      * @return array
      */
-    public static function setAdminAccount(array $info)
+    public static function setAdminAccount(array $info, $lang)
     {
         $db = Core::$db;
         $db->query("
@@ -1134,7 +1134,8 @@ END;
                   email = :email,
                   username = :username,
                   password = :password,
-                  logout_url = :logout_url
+                  logout_url = :logout_url,
+                  ui_language = :ui_language
             WHERE account_id = :account_id
         ");
 
@@ -1145,6 +1146,7 @@ END;
             "username" => $info["username"],
             "password" => General::encode($info["password"]),
             "logout_url" => Core::getRootUrl(),
+            "ui_language" => $lang,
             "account_id" => 1 // the admin account is always ID 1
         ));
 

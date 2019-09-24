@@ -621,7 +621,7 @@ class Clients
 		// TODO
 		if ($client_info["settings"]["may_edit_language"] == "yes") {
 			Core::$user->setLang($info["ui_language"]);
-			Core::setCurrLang($info["ui_language"]);
+			Core::setCurrentLang($info["ui_language"]);
 		}
 
 		// separate

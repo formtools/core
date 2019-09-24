@@ -623,7 +623,7 @@ class Core
 		return self::$hooksEnabled;
 	}
 
-	public static function setCurrLang($lang)
+	public static function setCurrentLang($lang)
 	{
 		self::$currLang = $lang;
 		self::$translations = new Translations(self::$currLang);
@@ -746,7 +746,7 @@ class Core
 		self::$user->setTheme($theme);
 		self::$user->setSwatch($swatch);
 
-		self::setCurrLang($language);
+		self::setCurrentLang($language);
 	}
 
 
@@ -848,7 +848,7 @@ class Core
 	{
 		self::$user = new User();
 		self::$currLang = self::$user->getLang();
-		self::setCurrLang(self::$currLang);
+		self::setCurrentLang(self::$currLang);
 		self::$userInitialized = true;
 	}
 }
