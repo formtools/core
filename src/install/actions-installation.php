@@ -86,7 +86,7 @@ switch ($request["action"]) {
 				"suhosinLoaded" => extension_loaded("suhosin"),
 				"sessionsLoaded" => extension_loaded("session"),
 				"uploadFolderWritable" => is_writable(realpath("../upload")),
-				"cacheDirWritable" => is_writable(realpath("../cache/"))
+				"cacheFolderWritable" => false // is_writable(realpath("../cache/"))
 			),
 
 			"adminAccount" => array(

@@ -7,16 +7,24 @@ import styles from './NotificationPanel.scss';
 
 // a self-contained notification panel. Consumers just always output this to the rendered output and use a ref to
 // push messages to it. This keeps things as simple as possible & not require every consumer have to handle the show/hide
-// logic
+// logic. Users can also just pass a msg, msgType props to pass a static method.
 class NotificationPanel extends Component {
 	constructor(props) {
 		super(props);
+		let messages = [];
 		this.state = {
 			visible: false,
 			closing: false,
-			messages: []
+			messages
 		};
 		this.closePanel = this.closePanel.bind(this);
+	}
+
+	componentDidMount () {
+		const { msg, msgType, showCloseIcon } = this.props;
+		if (msg && msgType) {
+			this.add({ msg, msgType, showCloseIcon });
+		}
 	}
 
 	add (message) {

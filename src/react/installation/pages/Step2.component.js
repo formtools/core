@@ -52,26 +52,8 @@ class Step2 extends Component {
 		const { results, i18n } = this.props;
 		const submitBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
 
-		if (!results.validPhpVersion || !results.pdoAvailable || results.sessionsLoaded) {
-			if (!results.validPhpVersion || !results.pdoAvailable || !results.pdoMysqlAvailable || !results.sessionsLoaded) {
-				return (
-					<p className="error" style={{ padding: 6 }}>
-						{i18n.text_install_form_tools_server_not_supported}
-					</p>
-				);
-			} else if (!results.uploadFolderWritable || !results.cacheDirWritable) {
-				return (
-					<p className="error" style={{ padding: 6 }}>
-						{i18n.text_required_folders_need_write_permissions}
-					</p>
-				);
-			} else if (results.suhosinLoaded) {
-				return (
-					<div className="warning">
-						{i18n.notify_suhosin_installed}
-					</div>
-				);
-			}
+		if (!results.validPhpVersion || !results.pdoAvailable || !results.sessionsLoaded) {
+			return null;
 		}
 
 		return (
@@ -79,6 +61,19 @@ class Step2 extends Component {
 				<Button type="submit">{submitBtnLabel}</Button>
 			</p>
 		);
+	}
+
+	getErrorMessage () {
+		const { results, i18n } = this.props;
+		let msg = null;
+		if (!results.validPhpVersion || !results.pdoAvailable || !results.pdoMysqlAvailable || !results.sessionsLoaded) {
+			msg = i18n.text_install_form_tools_server_not_supported;
+		} else if (!results.uploadFolderWritable || !results.cacheFolderWritable) {
+			msg = i18n.text_required_folders_need_write_permissions;
+		} else if (results.suhosinLoaded) {
+			msg = i18n.notify_suhosin_installed;
+		}
+		return (msg) ? <NotificationPanel msg={msg} msgType="error" showCloseIcon={false} /> : null;
 	}
 
 	getCustomCacheFolderField () {
@@ -179,19 +174,20 @@ class Step2 extends Component {
 							<OverflowTip>{uploadFolder}</OverflowTip>
 						</div>
 						<div className={styles.result}>
-							{showResult(results.sessionsLoaded, i18n)}
+							{showResult(results.uploadFolderWritable, i18n)}
 						</div>
 					</div>
 					<div className={styles.row}>
 						<div className={styles.label}>{i18n.phrase_cache_folder}</div>
 						{this.getCacheFolder()}
 						<div className={styles.result}>
-							{showResult(results.cacheDirWritable, i18n)}
+							{showResult(results.cacheFolderWritable, i18n)}
 						</div>
 					</div>
 					{this.getCustomCacheFolderRow()}
 				</div>
 
+				{this.getErrorMessage()}
 				{this.getResultsSection()}
 			</form>
 		);

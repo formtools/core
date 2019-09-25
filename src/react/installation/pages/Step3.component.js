@@ -177,52 +177,50 @@ class Step3 extends Component {
 
 					<p><b>{i18n.phrase_database_settings}</b></p>
 
-					<table cellPadding="1" cellSpacing="0" className={styles.info}>
-						<tbody>
-						<tr>
-							<td className={styles.label} width="140">{i18n.phrase_database_hostname}</td>
-							<td>
+					<div className={`${styles.table} ${styles.dbSettingsTable}`}>
+						<div className={styles.row}>
+							<div className={styles.label}>{i18n.phrase_database_hostname}</div>
+							<div className={styles.value}>
 								<input type="text" size="20" value={dbHostname} autoFocus ref={this.dbHostname}
-							       onChange={(e) => updateField('dbHostname', e.target.value)}/> {i18n.phrase_often_localhost}
-							</td>
-						</tr>
-						<tr>
-							<td className={styles.label}>{i18n.phrase_database_name}</td>
-							<td>
+								       onChange={(e) => updateField('dbHostname', e.target.value)}/> {i18n.phrase_often_localhost}
+							</div>
+						</div>
+						<div className={styles.row}>
+							<div className={styles.label}>{i18n.phrase_database_name}</div>
+							<div className={styles.value}>
 								<input type="text" size="20" value={dbName} maxLength="64" ref={this.dbName}
 								       onChange={(e) => updateField('dbName', e.target.value)}/>
-							</td>
-						</tr>
-						<tr>
-							<td className={styles.label}>{i18n.word_port}</td>
-							<td>
+							</div>
+						</div>
+						<div className={styles.row}>
+							<div className={styles.label}>{i18n.word_port}</div>
+							<div className={styles.value}>
 								<input type="text" size="10" value={dbPort} ref={this.dbPort}
 								       onChange={(e) => updateField('dbPort', e.target.value)}/>
-							</td>
-						</tr>
-						<tr>
-							<td className={styles.label}>{i18n.phrase_database_username}</td>
-							<td>
+							</div>
+						</div>
+						<div className={styles.row}>
+							<div className={styles.label}>{i18n.phrase_database_username}</div>
+							<div className={styles.value}>
 								<input type="text" size="20" value={dbUsername} ref={this.dbUsername}
 								       onChange={(e) => updateField('dbUsername', e.target.value)}/>
-							</td>
-						</tr>
-						<tr>
-							<td className={styles.label}>{i18n.phrase_database_password}</td>
-							<td>
+							</div>
+						</div>
+						<div className={styles.row}>
+							<div className={styles.label}>{i18n.phrase_database_password}</div>
+							<div className={styles.value}>
 								<input type="text" size="20" value={dbPassword} ref={this.dbPassword}
 								       onChange={(e) => updateField('dbPassword', e.target.value)}/>
-							</td>
-						</tr>
-						<tr>
-							<td className={styles.label}>{i18n.phrase_database_table_prefix}</td>
-							<td>
+							</div>
+						</div>
+						<div className={styles.row}>
+							<div className={styles.label}>{i18n.phrase_database_table_prefix}</div>
+							<div className={styles.value}>
 								<input type="text" size="20" maxLength="10" value={dbTablePrefix} ref={this.dbTablePrefix}
 								       onChange={(e) => updateField('dbTablePrefix', e.target.value)}/>
-							</td>
-						</tr>
-						</tbody>
-					</table>
+							</div>
+						</div>
+					</div>
 
 					<p>
 						<Button type="submit">{i18n.phrase_create_database_tables}</Button>

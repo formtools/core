@@ -1129,7 +1129,6 @@ END;
         $db = Core::$db;
 
 		try {
-
 			$db->query("
 				UPDATE {PREFIX}accounts
 				SET   first_name = :first_name,
