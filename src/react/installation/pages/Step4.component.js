@@ -12,13 +12,10 @@ class Step4 extends Component {
 
 	constructor (props) {
 		super(props);
-
 		this.state = {
 			errorCreatingConfigFile: false
 		};
-
 		this.notificationPanel = React.createRef();
-
 		this.onError = this.onError.bind(this);
 		this.nextPage = this.nextPage.bind(this);
 		this.createFile = this.createFile.bind(this);

@@ -370,6 +370,7 @@ class Core
 	{
 		$options = array_merge(array(
 			"start_sessions" => true,
+			"init_user" => true,
 
 			// if the users session has expired, or if ?logout=1 is set in the query string, this logs the user out
 			"auto_logout" => true
@@ -389,7 +390,9 @@ class Core
 			self::startSessions();
 		}
 
-		self::initUser();
+		if ($options["init_user"]) {
+			self::initUser();
+		}
 
 		if (self::$debugEnabled) {
 			self::enableDebugging();

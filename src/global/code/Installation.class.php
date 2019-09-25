@@ -1127,30 +1127,30 @@ END;
     public static function setAdminAccount(array $info, $lang)
     {
         $db = Core::$db;
-        $db->query("
-            UPDATE {PREFIX}accounts
-            SET   first_name = :first_name,
-                  last_name = :last_name,
-                  email = :email,
-                  username = :username,
-                  password = :password,
-                  logout_url = :logout_url,
-                  ui_language = :ui_language
-            WHERE account_id = :account_id
-        ");
 
-        $db->bindAll(array(
-            "first_name" => $info["firstName"],
-            "last_name" => $info["lastName"],
-            "email" => $info["email"],
-            "username" => $info["username"],
-            "password" => General::encode($info["password"]),
-            "logout_url" => Core::getRootUrl(),
-            "ui_language" => $lang,
-            "account_id" => 1 // the admin account is always ID 1
-        ));
+		try {
 
-        try {
+			$db->query("
+				UPDATE {PREFIX}accounts
+				SET   first_name = :first_name,
+					  last_name = :last_name,
+					  email = :email,
+					  username = :username,
+					  password = :password,
+					  logout_url = :logout_url,
+					  ui_language = :ui_language
+				WHERE account_id = :account_id
+			");
+			$db->bindAll(array(
+				"first_name" => $info["firstName"],
+				"last_name" => $info["lastName"],
+				"email" => $info["email"],
+				"username" => $info["username"],
+				"password" => General::encode($info["password"]),
+				"logout_url" => Core::getRootUrl(),
+				"ui_language" => $lang,
+				"account_id" => 1 // the admin account is always ID 1
+			));
             $db->execute();
         } catch (Exception $e) {
             return array(false, $e->getMessage());

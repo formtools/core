@@ -231,9 +231,12 @@ switch ($request["action"]) {
 
 	case "saveAdminAccount":
 		$lang = Core::getCurrentLang();
-		Core::init(); // this resets the language
-
+		Core::init(array(
+			"init_user" => false,
+			"auto_logout" => false
+		));
 		list($success, $error) = Installation::setAdminAccount($request, $lang);
+
 		if ($success) {
 			$data = array();
 			Sessions::set("fti.accountCreated", true);
@@ -246,7 +249,7 @@ switch ($request["action"]) {
 			Modules::installModules();
 			Settings::set(array(
 				"installation_complete" => "yes",
-				"default_language" => $lang,
+				"default_language" => $lang
 			), "core");
 
 			// send "Welcome to Form Tools!" email

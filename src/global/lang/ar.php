@@ -788,7 +788,7 @@ $LANG["text_limit_email_content_desc"] = "هذا الخيار يعمل فقط ع
 $LANG["text_limit_fields_info"] = "You have used <span id=\"curr_field_count\" class=\"medium_grey italic bold\"></span> of <span id=\"max_field_count\" class=\"medium_grey italic bold\"></span> permitted fields.";
 $LANG["text_list_views_with_filters"] = "(فقط قوائم المشاهدات مع واحد أو أكثر المرشحات تعريف)";
 $LANG["text_log_in_to_ft"] = "سجل في نموذج لأدوات";
-$LANG["text_login"] = "يرجى تسجيل الدخول أدناه للوصول إلى \$ () program_name ادارة الفريق. إذا كنت قد نسيت كلمة المرور ، <a href=\"{\$forgot_password_link}\">انقر هنا.</a>";
+$LANG["text_login"] = "يرجى تسجيل الدخول أدناه للوصول إلى program_name\\$ ادارة الفريق. إذا كنت قد نسيت كلمة المرور ، <a href=\"{\$forgot_password_link}\">انقر هنا.</a>";
 $LANG["text_login_info"] = "على النحو المطلوب ، ومن هنا معلومات تسجيل الدخول.";
 $LANG["text_name_of_form"] = "اسم النموذج.";
 $LANG["text_no_clients"] = "لا توجد حاليا للعملاء في قاعدة البيانات. إضافة جديدة لحساب العميل ، انقر فوق الزر إضافة عميل أدناه.";

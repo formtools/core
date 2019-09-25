@@ -46,11 +46,12 @@ class User
 		if (empty($account_id)) {
 			$this->isLoggedIn = false;
 
-			// the installation process tracks the UI lang
-			$lang = Sessions::get("ui_language");
-			$this->lang = ($lang) ? $lang : Core::getDefaultLang();
-
-			$settings = Settings::get(array("default_theme", "default_client_swatch"));
+			$settings = Settings::get(array(
+				"default_language",
+				"default_theme",
+				"default_client_swatch"
+			));
+			$this->lang = $settings["default_language"];
 			$this->theme = $settings["default_theme"];
 			$this->swatch = $settings["default_client_swatch"];
 		} else {
