@@ -33,6 +33,12 @@ export const updateDatabaseField = (field, value) => ({
 export const SET_SYSTEM_CHECK_PASSED = 'SET_SYSTEM_CHECK_PASSED';
 export const setSystemCheckPassed = () => ({ type: SET_SYSTEM_CHECK_PASSED });
 
+export const UPDATE_WRITABLE_FOLDER_SETTINGS = 'UPDATE_WRITABLE_FOLDER_SETTINGS';
+export const updateWritableFolderSettings = (payload) => ({
+	type: UPDATE_WRITABLE_FOLDER_SETTINGS,
+	payload
+});
+
 export const saveCacheFolderSetting = (onSuccess, onError) => {
 	return (dispatch, getState) => {
 		const state = getState();
@@ -44,14 +50,18 @@ export const saveCacheFolderSetting = (onSuccess, onError) => {
 		payload.append('customCacheFolder', selectors.getCustomCacheFolder(state));
 
 		axios.post('./actions-installation.php', payload)
-			.then(() => {
+			.then(({ data }) => {
+				const { cacheFolderWritable, uploadFolderWritable } = data;
+				dispatch(updateWritableFolderSettings({ cacheFolderWritable, uploadFolderWritable }));
 				dispatch(setSystemCheckPassed());
 				dispatch(requestReturned());
 				onSuccess();
 			})
 			.catch((e) => {
+				const { error, cacheFolderWritable, uploadFolderWritable } = e.response.data;
+				dispatch(updateWritableFolderSettings({ cacheFolderWritable, uploadFolderWritable }));
 				dispatch(requestReturned());
-				onError(e.response.data.error);
+				onError(error);
 			});
 	};
 };

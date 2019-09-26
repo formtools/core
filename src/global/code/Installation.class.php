@@ -1335,5 +1335,39 @@ END;
 		return realpath(__DIR__ . "/../../cache");
 	}
 
+
+	public static function verifyCustomCacheFolder($customCacheFolder)
+	{
+    	$data = array();
+    	$statusCode = 200;
+
+		$customCacheFolderExists = is_dir($customCacheFolder);
+		if ($customCacheFolderExists) {
+			$customCacheFolderWritable = is_writable($customCacheFolder);
+
+			// if the custom cache folder is writable, great - create a blank index.html file in it just to prevent
+			// servers configured to list the contents
+			if ($customCacheFolderWritable) {
+				$indexFile = "$customCacheFolder/index.html";
+				if (!file_exists($indexFile)) {
+					fopen($indexFile, "w");
+				}
+				$data["cacheFolderWritable"] = true;
+				Sessions::set("fti.systemCheckPassed", true);
+				Sessions::set("fti.folderSettings.customCacheFolder", $customCacheFolder);
+			} else {
+				$data["error"] = "invalid_custom_cache_folder_permissions";
+				$data["cacheFolderWritable"] = false;
+				$statusCode = 400;
+			}
+		} else {
+			$data["cacheFolderWritable"] = false;
+			$data["error"] = "invalid_folder";
+			$statusCode = 400;
+		}
+
+		return array($data, $statusCode);
+	}
+
 }
 

@@ -45,14 +45,22 @@ class Step2 extends Component {
 
 		if (errorCode === 'invalid_folder') {
 			this.notificationPanel.current.add({ msg: i18n.text_invalid_cache_folder, msgType: 'error' });
-		} else if (errorCode === 'invalid_folder_permissions') {
+		} else if (errorCode === 'invalid_upload_folder_permissions') {
+			this.notificationPanel.current.add({ msg: i18n.text_upload_folder_invalid_permissions, msgType: 'error' });
+		} else if (errorCode === 'invalid_custom_cache_folder_permissions') {
+			this.notificationPanel.current.add({ msg: i18n.text_custom_cache_folder_invalid_permissions, msgType: 'error' });
+		} else if (errorCode === 'invalid_cache_folder_permissions') {
 			this.notificationPanel.current.add({ msg: i18n.text_cache_folder_invalid_permissions, msgType: 'error' });
 		}
 	}
 
 	getResultsSection () {
 		const { results, i18n } = this.props;
-		const submitBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
+		let submitBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
+
+		if (!results.cacheFolderWritable || !results.uploadFolderWritable) {
+			submitBtnLabel = i18n.word_refresh;
+		}
 
 		if (!results.validPhpVersion || !results.pdoAvailable || !results.sessionsLoaded) {
 			return null;
@@ -132,7 +140,14 @@ class Step2 extends Component {
 			return null;
 		}
 
-		const text = (systemCheckPassed) ? i18n.text_system_check_passed : i18n.text_install_system_check;
+		let text = i18n.text_install_system_check;
+
+		// technically a user could have passed this step, changed the permissions on the folder then returned
+		if (!results.uploadFolderWritable || !results.cacheFolderWritable) {
+			text = '';
+		} else if (systemCheckPassed) {
+			text = i18n.text_system_check_passed;
+		}
 
 		return (
 			<form method="post" onSubmit={this.onSubmit}>

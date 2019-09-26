@@ -86,7 +86,7 @@ switch ($request["action"]) {
 				"suhosinLoaded" => extension_loaded("suhosin"),
 				"sessionsLoaded" => extension_loaded("session"),
 				"uploadFolderWritable" => is_writable(realpath("../upload")),
-				"cacheFolderWritable" => false // is_writable(realpath("../cache/"))
+				"cacheFolderWritable" => is_writable(realpath("../cache/"))
 			),
 
 			"adminAccount" => array(
@@ -127,37 +127,28 @@ switch ($request["action"]) {
 	case "saveCacheFolderSettings":
 		if ($request["useCustomCacheFolder"] == "true") {
 			Sessions::set("fti.folderSettings.useCustomCacheFolder", true);
-			$customCacheFolder = $request["customCacheFolder"];
-			$customCacheFolderExists = is_dir($customCacheFolder);
-
-			if ($customCacheFolderExists) {
-				$customCacheFolderWritable = is_writable($customCacheFolder);
-
-				// if the custom cache folder is writable, great - create a blank index.html file in it just to prevent
-				// servers configured to list the contents
-				if ($customCacheFolderWritable) {
-					$indexFile = "$customCacheFolder/index.html";
-					if (!file_exists($indexFile)) {
-						fopen($indexFile, "w");
-					}
-					$data = array();
-					Sessions::set("fti.systemCheckPassed", true);
-					Sessions::set("fti.folderSettings.customCacheFolder", $customCacheFolder);
-				} else {
-					$data["error"] = "invalid_folder_permissions";
-					$statusCode = 400;
-				}
-			} else {
-				$data["error"] = "invalid_folder";
-				$statusCode = 400;
-			}
+			list($data, $statusCode) = Installation::verifyCustomCacheFolder($request["customCacheFolder"]);
 		} else {
+			if (!is_writable(realpath("../cache/"))) {
+				$data["error"] = "invalid_cache_folder_permissions";
+				$data["cacheFolderWritable"] = false;
+				$statusCode = 400;
+			} else {
+				Sessions::set("fti.systemCheckPassed", true);
+				Sessions::set("fti.folderSettings.useCustomCacheFolder", false);
+				Sessions::set("fti.folderSettings.customCacheFolder", "");
+				$data = array(
+					"cacheFolderWritable" => true
+				);
+			}
+		}
 
-
-			Sessions::set("fti.systemCheckPassed", true);
-			Sessions::set("fti.folderSettings.useCustomCacheFolder", false);
-			Sessions::set("fti.folderSettings.customCacheFolder", "");
-			$data = array();
+		if (!is_writable(realpath("../upload"))) {
+			$data["error"] = "invalid_upload_folder_permissions";
+			$data["uploadFolderWritable"] = false;
+			$statusCode = 400;
+		} else {
+			$data["uploadFolderWritable"] = true;
 		}
 		break;
 

@@ -1,7 +1,6 @@
 import reducerRegistry from '../../store/reducerRegistry';
 import * as actions from './installation.actions';
 import { actions as initActions } from '../../store/init';
-import { SET_SYSTEM_CHECK_PASSED } from "./installation.actions";
 
 const reducer = (state = {
 	language: 'en_us',
@@ -87,7 +86,16 @@ const reducer = (state = {
 				}
 			};
 		}
-
+		case actions.UPDATE_WRITABLE_FOLDER_SETTINGS: {
+			return {
+				...state,
+				systemInfo: {
+					...state.systemInfo,
+					uploadFolderWritable: action.payload.uploadFolderWritable,
+					cacheFolderWritable: action.payload.cacheFolderWritable
+				}
+			};
+		}
 		case actions.UPDATE_DATABASE_FIELD: {
 			const { field, value } = action.payload;
 			return {
