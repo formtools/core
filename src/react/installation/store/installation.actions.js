@@ -56,6 +56,10 @@ export const saveCacheFolderSetting = (onSuccess, onError) => {
 	};
 };
 
+export const refreshSystemCheckPage = () => {
+
+};
+
 export const DATABASE_TABLES_CREATED = 'DATABASE_TABLES_CREATED';
 export const databaseTablesCreated = (configFile) => ({
 	type: DATABASE_TABLES_CREATED,

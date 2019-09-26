@@ -152,6 +152,8 @@ switch ($request["action"]) {
 				$statusCode = 400;
 			}
 		} else {
+
+
 			Sessions::set("fti.systemCheckPassed", true);
 			Sessions::set("fti.folderSettings.useCustomCacheFolder", false);
 			Sessions::set("fti.folderSettings.customCacheFolder", "");

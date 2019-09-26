@@ -31,7 +31,9 @@ class Step2 extends Component {
 
 	onSubmit (e) {
 		e.preventDefault();
-		this.props.saveCacheFolderSetting(this.onSuccess, this.onError)
+		const { saveCacheFolderSetting } = this.props;
+
+		saveCacheFolderSetting(this.onSuccess, this.onError)
 	}
 
 	onSuccess () {
@@ -110,8 +112,13 @@ class Step2 extends Component {
 	}
 
 	getCacheFolder () {
-		const { useCustomCacheFolder, customCacheFolder, defaultCacheFolder } = this.props;
-		let folder = (useCustomCacheFolder) ? customCacheFolder : defaultCacheFolder;
+		const { useCustomCacheFolder, customCacheFolder, systemCheckPassed, defaultCacheFolder } = this.props;
+		let folder = defaultCacheFolder;
+
+		if (useCustomCacheFolder && systemCheckPassed) {
+			folder = customCacheFolder;
+		}
+
 		return (
 			<div className={styles.value}>
 				<OverflowTip>{folder}</OverflowTip>
