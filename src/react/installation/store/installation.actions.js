@@ -2,6 +2,7 @@ import axios from 'axios';
 import { actions as initActions } from '../../store/init';
 import { navUtils } from '../../utils';
 import { selectors } from '../store';
+import { ERROR_UPDATING_LANGUAGE, LANGUAGE_UPDATED } from "../../store/init/init.actions";
 
 export const START_REQUEST = 'START_REQUEST';
 export const REQUEST_ERROR = 'REQUEST_ERROR';
@@ -66,8 +67,18 @@ export const saveCacheFolderSetting = (onSuccess, onError) => {
 	};
 };
 
-export const refreshSystemCheckPage = () => {
-
+export const checkConfigFileExists = (onSuccess, onError) => {
+	return (dispatch) => {
+		axios.get(`./actions-installation.php?action=checkConfigFileExists`)
+			.then(() => {
+				dispatch(configFileCreated());
+				dispatch(requestReturned());
+				onSuccess();
+			}).catch(() => {
+				dispatch(requestReturned());
+				onError();
+			});
+	};
 };
 
 export const DATABASE_TABLES_CREATED = 'DATABASE_TABLES_CREATED';

@@ -19,6 +19,7 @@ class Step4 extends Component {
 		this.onError = this.onError.bind(this);
 		this.nextPage = this.nextPage.bind(this);
 		this.createFile = this.createFile.bind(this);
+		this.checkFileExists = this.checkFileExists.bind(this);
 	}
 
 	createFile () {
@@ -26,7 +27,11 @@ class Step4 extends Component {
 	}
 
 	checkFileExists () {
-
+		const { i18n } = this.props;
+		this.props.checkFileExists(this.nextPage, () => {
+			this.setState({ errorCreatingConfigFile: true });
+			this.notificationPanel.current.add({ msg: i18n.text_error_still_no_exists, msgType: 'error' });
+		});
 	}
 
 	nextPage () {
@@ -37,9 +42,7 @@ class Step4 extends Component {
 		const { i18n } = this.props;
 
 		if (e.error === 'error_creating_config_file') {
-			this.setState({
-				errorCreatingConfigFile: true
-			});
+			this.setState({ errorCreatingConfigFile: true });
 			this.notificationPanel.current.add({ msg: i18n.text_config_file_not_created, msgType: 'error' });
 		}
 	}

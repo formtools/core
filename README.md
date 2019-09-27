@@ -10,7 +10,7 @@ on your server.
 - The `master` branch contains the current ongoing work. Never assume it's stable, and never use code from this 
 branch on your production environments - it's only for development.
 - Code for specific versions have a branch by that name (e.g. `3.0.13`), but again, this isn't for consumption. The
-releases section of githug contains code that's ready for use:
+releases section of github contains code that's ready for use:
 (https://github.com/formtools/core/releases)[https://github.com/formtools/core/releases]
 
 ### Form Tools 2 and 3

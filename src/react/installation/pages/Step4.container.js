@@ -11,7 +11,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	createConfigFile: (onSuccess, onError) => dispatch(actions.createConfigFile(onSuccess, onError))
+	createConfigFile: (onSuccess, onError) => dispatch(actions.createConfigFile(onSuccess, onError)),
+	checkFileExists: (onSuccess, onError) => dispatch(actions.checkConfigFileExists(onSuccess, onError))
 });
 
 export default connect(

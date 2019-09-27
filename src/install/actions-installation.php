@@ -98,7 +98,7 @@ switch ($request["action"]) {
 			),
 
 			"systemCheckPassed" => Sessions::getWithFallback("fti.systemCheckPassed", false),
-			"configFileCreated" => Sessions::getWithFallback("fti.configFileCreated", false),
+			"configFileCreated" => file_exists(realpath("../global/config.php")),
 			"accountCreated" => Sessions::getWithFallback("fti.accountCreated", false)
 		);
 		break;
@@ -218,6 +218,17 @@ switch ($request["action"]) {
 			$data = array(
 				"error" => "error_creating_config_file"
 			);
+			$statusCode = 400;
+		}
+		break;
+
+	case "checkConfigFileExists":
+		echo "...?" . realpath("../global/config.php");
+
+		if (file_exists(realpath("../global/config.php"))) {
+			Sessions::set("fti.configFileCreated", true);
+		} else {
+			$data["error"] = "config_file_still_no_exists";
 			$statusCode = 400;
 		}
 		break;

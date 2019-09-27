@@ -261,7 +261,9 @@ $LANG["phrase_cache_folder"] = "Cache folder";
 $LANG["phrase_change_login_info"] = "تغییر اطلاعات ورود";
 $LANG["phrase_characters_limit_p"] = "کاراکتر محدود است.";
 $LANG["phrase_check_db_settings_try_again"] = "لطفا دو بررسی تنظیمات پایگاه داده شما و با کلیک بر روی دکمه ادامه دوباره.";
+$LANG["phrase_check_file_exists"] = "Check file exists";
 $LANG["phrase_check_url"] = "چک URL";
+$LANG["phrase_choose_new_table_prefix"] = "Choose New Table Prefix";
 $LANG["phrase_clean_up"] = "تمیز کردن";
 $LANG["phrase_clear_cache_folder"] = "Clear cache folder";
 $LANG["phrase_clear_omit_list"] = "پاک کردن لیست از قلم انداختن";
@@ -463,6 +465,7 @@ $LANG["phrase_month_to_date"] = "ماه تا به امروز";
 $LANG["phrase_multi_select"] = "چند را انتخاب کنید";
 $LANG["phrase_multi_select_dropdown"] = "چند کشویی را انتخاب کنید";
 $LANG["phrase_multiple_fields_found"] = "چندگانه زمینه پیدا نشد!";
+$LANG["phrase_mysql_available"] = "MySQL available";
 $LANG["phrase_name_or_last_name"] = "نام / نام خانوادگی";
 $LANG["phrase_new_blank_email"] = "جدید خالی ایمیل";
 $LANG["phrase_new_blank_option_list"] = "فهرست گزینه خالی جدید";
@@ -512,6 +515,7 @@ $LANG["phrase_option_list"] = "فهرست انتخاب";
 $LANG["phrase_option_list_name"] = "لیست انتخاب نام";
 $LANG["phrase_option_list_or_contents"] = "فهرست انتخاب / مطالب";
 $LANG["phrase_option_lists"] = "لیست انتخابهای";
+$LANG["phrase_overwrite_tables"] = "Overwrite Tables";
 $LANG["phrase_page_titles"] = "عنوان صفحه";
 $LANG["phrase_pass_on"] = "در رمز عبور";
 $LANG["phrase_password_min"] = "باید حداقل<b>{\$length}</b> را وارد نمایید ب کاراکتر.";
@@ -520,11 +524,13 @@ $LANG["phrase_password_one_uppercase"] = "باید حداقل یک حرف بزر
 $LANG["phrase_password_requirements_c"] = "الزامات رمز عبور :";
 $LANG["phrase_password_reset"] = "بازیابی کلمه عبور";
 $LANG["phrase_password_special_char"] = "باید حداقل یکی از شخصیت های زیر است : <b>{\$chars}</b> شامل";
+$LANG["phrase_pdo_available"] = "PDO available";
 $LANG["phrase_permissions_other_settings"] = "ویرایش / تنظیمات دیگر";
 $LANG["phrase_permitted_file_types"] = "نوع فایل های مجاز";
 $LANG["phrase_phone_number"] = "شماره تلفن";
 $LANG["phrase_phone_number_format"] = "قالب شماره تلفن";
 $LANG["phrase_php_ini_max_allowed_upload_size_c"] = "php.ini حداکثر مجاز حجم فایل آپلود :";
+$LANG["phrase_php_sessions"] = "PHP Sessions";
 $LANG["phrase_php_version"] = "نسخه پی اچ پی";
 $LANG["phrase_please_confirm"] = "لطفا تأیید کنید";
 $LANG["phrase_please_enter_license_key"] = "لطفا کلید مجوز خود را وارد کنید";
@@ -539,6 +545,7 @@ $LANG["phrase_previous_view"] = "«قبلی نمایش";
 $LANG["phrase_program_name"] = "نام برنامه";
 $LANG["phrase_public_form_omit_list"] = "عمومی فرم لیست از قلم انداختن";
 $LANG["phrase_public_view_omit_list"] = "مشاهده اطلاعات عمومی از قلم انداختن فهرست";
+$LANG["phrase_pwd_installation_script_created"] = "(as you created in the installation script)";
 $LANG["phrase_query_problem"] = "مشکل با پرس و جو زیر وجود دارد :";
 $LANG["phrase_radio_buttons"] = "دکمه های رادیویی";
 $LANG["phrase_random_form_submission"] = "تصادفی فرم ارسال مقاله";
@@ -572,6 +579,7 @@ $LANG["phrase_selected_clients"] = "مشتریان منتخب";
 $LANG["phrase_selected_views"] = "مشاهدات برگزیده";
 $LANG["phrase_send_email"] = "ارسال ایمیل";
 $LANG["phrase_send_test_email"] = "تست ارسال پست الکترونیکی";
+$LANG["phrase_session_expired"] = "Session expired";
 $LANG["phrase_sessions_timeout"] = "جلسات اتماموقت";
 $LANG["phrase_setting_value"] = "تعیین ارزش";
 $LANG["phrase_setup_options"] = "گزینه های راه اندازی";
@@ -610,6 +618,7 @@ $LANG["phrase_system_check"] = "سیستم چک";
 $LANG["phrase_system_fields_no_validation"] = "شما ممکن است اعتبار سنجی در زمینه های سیستم اضافه نمی کند.";
 $LANG["phrase_system_time_offset"] = "سیستم انحراف زمانی";
 $LANG["phrase_tab_label"] = "برگه لیبل";
+$LANG["phrase_tables_already_exist"] = "Tables already exist!";
 $LANG["phrase_test_folder_permissions"] = "تست مجوزها پوشه";
 $LANG["phrase_test_submission"] = "تست ارسال مقاله";
 $LANG["phrase_test_submission_3"] = "3. تست ارسال مقاله";
@@ -721,6 +730,7 @@ $LANG["text_add_submission_button"] = "اضافه کردن دکمه ثبت تن�
 $LANG["text_admin_email_placeholder_info"] = "این آدرس ایمیل از فرم مدیر ابزار ، تعریف شده را در قسمت تنظیمات حساب شما است. این فقط آدرس ایمیل در خروجی ، بنابراین اگر می خواهید به عنوان یک لینک متنی استفاده کنید ، شما باید آن را در تگ &lt;a&gt;بسته بندی کردن ، صورت : <br /> <b>&lt;ahref=&quot;mailto:{\$ADMINEMAIL}&quot;&gt; (\$ ADMINEMAIL) &lt;/&gt;</b>";
 $LANG["text_also_default_login_page_theme"] = "(همچنین این تم پیش فرض صفحه ورود به سایت)";
 $LANG["text_cache_folder_cleared"] = "Cache folder cleared.";
+$LANG["text_cache_folder_invalid_permissions"] = "The cache folder needs to have full read-write permissions.";
 $LANG["text_cache_folder_not_writable"] = "Cache folder is not valid or writable.";
 $LANG["text_cache_folder_problem"] = "<b>Warning</b>: your cache folder is not writable. To remove this message, please follow the <a href=\"https://docs.formtools.org/upgrading/3_1_5/\">instructions here</a>.";
 $LANG["text_cannot_clear_cache_folder"] = "We were unable to delete all files in your cache folder.";
@@ -735,6 +745,7 @@ $LANG["text_config_file_not_created_instructions"] = "کپی کنید و آن م
 $LANG["text_confirm_delete_form"] = "بله ، من می خواهم این فرم را پاک کنید";
 $LANG["text_create_admin_account"] = "حالا ما قصد ایجاد حساب مدیر است. این برای مدیریت تمام جنبه های فرم ابزار ، مانند اضافه نمودن فرم و ایجاد حساب های مشتری مورد استفاده قرار میگیرد.";
 $LANG["text_create_new_client_account"] = "با استفاده از فرم زیر برای ایجاد یک حساب مشتری جدید است. تمام اطلاعاتی که مورد نیاز است.";
+$LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "پی اچ پی مراجعه کنید {\$datefunctionlink} تابع برای گزینه های قالب بندی";
 $LANG["text_default_file_settings_page"] = "این صفحه را تعریف می کند فایل تنظیمات فرم های فرستاده شده برای نصب شما ابزار ها باشد. این قوانین درخواست برای ورود به آپلود همه فایل ها را از طریق فرم ابزار ، مگر آن که صریحا برای زمینه فرم فردی overridden. توجه : اگر شما پوشه را تغییر دهید بعد از آپلود فایل آپلود شده اند ، آنها را به صورت خودکار به پوشه جدید منتقل شد.";
 $LANG["text_default_theme_cache_folder_not_writable"] = "قبل از ادامه ، شما باید خود را برای به روز رسانی <b>/ تم ها / پیش فرض /</b> پوشه <b>کش</b> که اجازه کامل دسترسی خواندن و نوشتن. به محض این که انجام شده است ، این پیام را محو نخواهد شد و شما می توانید اسکریپت را نصب کنید.";
@@ -753,6 +764,7 @@ $LANG["text_email_template_text_1_c"] = "شده است وجود دارد ساخ�
 $LANG["text_email_template_thanks"] = "برای تشکر از ارسال شما!";
 $LANG["text_error_installing"] = "There was a problem installing this module.";
 $LANG["text_error_message_to_show"] = "پیام خطا نشان می دهد اگر زمینه با شکست مواجه اعتبار";
+$LANG["text_error_still_no_exists"] = "Sorry, the config.php file still does not exist.";
 $LANG["text_external_form_desc"] = "فرم های خارج از اشکال که در حال حاضر در وب سایت خود را ، و یا در جایی بر روی وب وجود دارد. این گزینه را انتخاب کنید اگر شما از شکل خود را که شما می خواهم برای ادغام با ابزار فرم.";
 $LANG["text_fields_tab_summary"] = "این صفحه لیست تمام فرم شما است. برای کنترل آنها ظاهر می شود زمانی که ارسالی مرور ، نگاه <a href=\"{\$views_tab_link}\">کنید به زبانه</a> نمایش ها. حذف یک فیلد را در این صفحه آن را از تمام ارسالی حذف ، بنابراین مراقب باشید!";
 $LANG["text_file_extension_info"] = "را وارد کنید پسوند فایل را با کاما از هم جدا (به عنوان مثال jpg ، قاب ، فعلی) خالی بگذارید و یا هر نوع فایل را داده باشد.";
@@ -779,8 +791,11 @@ $LANG["text_install_db_tables_error_tip_4"] = "<span class=\"green\">&quot;دس�
 $LANG["text_install_email_content_text"] = "منابع زیادی در وب سایت ما برای کمک به شما برای شروع کار، از جمله مستندات آنلاین ما (https://docs.formtools.org) و آموزش (https://docs.formtools.org/tutorials) وجود دارد. اگر متوجه شدید که گیر کرده یا سوال دارید، از github سوال کنید (https://github.com/formtools/core/issues/).";
 $LANG["text_install_form_tools_server_not_supported"] = "با عرض پوزش ، ابزار فرم خواهد شد قادر به بر روی سرور خود اجرا <a href=\"https://docs.formtools.org/userdoc/form_management/adding_external_forms/\" target=\"_blank\">کنید ، لطفا اینجا را</a> کلیک کنید برای حداقل مورد نیاز.";
 $LANG["text_install_system_check"] = "این صفحه اجرا می شود چند آزمایش بر روی سیستم شما برای اطمینان از آن قادر به اجرای ابزار فرم.";
+$LANG["text_installation_intro"] = "Select your language and let's get started.";
+$LANG["text_installation_session_expired"] = "Sorry, your session has expired. You will need to begin the installation process again. Click the button below.";
 $LANG["text_internal_form_desc"] = "فرم های داخلی وجود دارد تنها در داخل ابزار فرم -- و نه در جای دیگر در سایت شما. تنها ابزار فرم حساب های کاربری به فرم دسترسی داشته باشد. این گزینه را انتخاب کنید اگر شما یک فرم های موجود را ندارد.";
 $LANG["text_internal_form_intro"] = "با استفاده از فرم زیر برای ایجاد یک فرم جدید داخلی. تمام تنظیمات مربوط به ، از جمله تعداد و محتوای فیلد های فرم را می توان بعد از تغییر و پیکربندی.";
+$LANG["text_invalid_cache_folder"] = "The custom cache folder you entered does not exist.";
 $LANG["text_js_required"] = "به منظور ورود به سیستم و استفاده از ابزار فرم ، شما باید فعال کردن جاوا اسکریپت در مرورگر شما داشته باشد. لطفا آن را در حال حاضر ، بازآوری کلیک کنید و در مرورگر خود فعال کنید.";
 $LANG["text_last_modified_date_explanation_c"] = "زمان این ارسال آخرین تغییر یافتهاست. برای مطلب و مقاله جدید ، این همان است :";
 $LANG["text_limit_email_content_desc"] = "این گزینه فقط برای HTML و محتوای متن تولید شده با حلقه های ناقلا کار می کند.";
@@ -813,6 +828,8 @@ $LANG["text_review_user_doc"] = "بررسی اسناد کاربر";
 $LANG["text_send_email_from_edit_submission_page"] = "گزینه شامل ارسال این ایمیل را از صفحه ویرایش ارسال مقاله";
 $LANG["text_smart_fill_option_list_problem"] = "ما قادر به پر کردن گزینه های این زمینه خود های هوشمند شد. با این حال ، به عنوان جایگزین ، شما می توانید آپلود یک کپی از صفحه فرم خود را در زمینه زیر را امتحان کنید. توجه : صفحات اولیه PHP (یا سایر کد سمت سرور) <b>را</b> آپلود کنید -- نسخه HTML آپلود . برای دریافت این ، مشاهده و صرفه جویی در صفحه را از مرورگر خود فعال کنید.";
 $LANG["text_submission_ip_address"] = "آدرس اینترنتی کاربر است که ساخته شده تسلیم.";
+$LANG["text_system_check_passed"] = "Your system is able to run Form Tools.";
+$LANG["text_tables_exist_desc"] = "Sorry, it appears that some tables already exist with the table prefix that you entered. You can either choose to overwrite these tables or pick a new table prefix.";
 $LANG["text_test_email"] = "با استفاده از فرم زیر به هر یک نمایش و یا ارسال خود از این ایمیل را ایجاد ایمیل الگو. ایمیل <b>فقط</b> به ایمیل مشخص شده در زیر خبر ؛ اصلی ، سی سی و رنم آدرس ایمیل گیرندگان را نادیده گرفته اند در حالی که آزمایش.";
 $LANG["text_test_email_templates_no_submissions"] = "به منظور تست ایمیل خود الگوها ، باید ابتدا آن را از طریق فرم ارسال مقاله حداقل یک قرار داده است.";
 $LANG["text_theme_page_intro"] = "این صفحه حاوی تمام تم ها کنید. کلیک بر روی تصویر بند انگشتی برای دیدن یک مثال بزرگتر از سبکهای موضوع است. &quot;فعال&quot; چک باکس تعیین یا نه موضوع که ممکن است توسط مشتری انتخاب خواهد شد. تمام تم ها به فهرست موجود ، دنیا را از <a href=\"http://themes.formtools.org\" target=\"_blank\">فرم وب ابزار.</a>";
@@ -820,6 +837,7 @@ $LANG["text_tutorial_adding_first_form"] = "آموزش : افزودن فرم ا�
 $LANG["text_unique_submission_id"] = "ارسال شناسه منحصر به فرد.";
 $LANG["text_unused_option_list"] = "این لیست گزینه با هر فرم استفاده نمی شود.";
 $LANG["text_upgraded"] = "نصب ، شما به <b>{\$version}</b> ارتقاء داده شده <b>است)</b>";
+$LANG["text_upload_folder_invalid_permissions"] = "The upload folder needs to have full read-write permissions.";
 $LANG["text_used_option_list"] = "این لیست گزینه است زمینه های زیر مورد استفاده قرار می گیرد.";
 $LANG["text_view_fields_info"] = "این تب را کنترل کدام زمینه نشان می دهد تا زمانی که در حال ویرایش تسلیم در این دیدگاه ، سفارش خود را و اینکه آیا آنها هستند قابل ویرایش است یا نه.";
 $LANG["text_view_tab_summary"] = "این برگه به ​​شما اجازه می دهد تا روش های مختلف به گروه ایجاد کنید و داده های خود را را ترتیب. نمایش ها اجازه می دهد تا به زیر مجموعه های سفارشی از داده های فرم شما ایجاد شما آن را به تکه های قابل کنترل تقسیم ، و به منظور محدود کردن آنچه مشتریان ممکن است مراجعه کنید و یا ویرایش است.";
@@ -1129,6 +1147,7 @@ $LANG["word_purple"] = "رنگ ارغوانی";
 $LANG["word_recipient"] = "گیرنده";
 $LANG["word_recipient_sp"] = "دریافت کننده (ها)";
 $LANG["word_red"] = "قرمز";
+$LANG["word_refresh"] = "Refresh";
 $LANG["word_remove"] = "حذف";
 $LANG["word_remove_uc_leftarrow"] = "«حذف";
 $LANG["word_reply_to"] = "پاسخ به";
@@ -1136,6 +1155,7 @@ $LANG["word_reply_to_c"] = "پاسخ به :";
 $LANG["word_required"] = "ضروری";
 $LANG["word_reset"] = "بازنشانی";
 $LANG["word_resolved"] = "حل و فصل";
+$LANG["word_restart"] = "Restart";
 $LANG["word_row"] = "ردیف";
 $LANG["word_search"] = "جستجو";
 $LANG["word_searchable"] = "جستجو";
@@ -1197,22 +1217,3 @@ $LANG["word_words"] = "واژه ها";
 $LANG["word_wysiwyg"] = "WYSIWYG";
 $LANG["word_yellow"] = "زرد";
 $LANG["word_yes"] = "بله";
-$LANG["word_restart"] = "Restart";
-$LANG["phrase_check_file_exists"] = "Check file exists";
-$LANG["word_refresh"] = "Refresh";
-$LANG["text_upload_folder_invalid_permissions"] = "The upload folder needs to have full read-write permissions.";
-$LANG["phrase_choose_new_table_prefix"] = "Choose New Table Prefix";
-$LANG["phrase_mysql_available"] = "MySQL available";
-$LANG["phrase_session_expired"] = "Session expired";
-$LANG["phrase_overwrite_tables"] = "Overwrite Tables";
-$LANG["phrase_pdo_available"] = "PDO available";
-$LANG["text_tables_exist_desc"] = "Sorry, it appears that some tables already exist with the table prefix that you entered. You can either choose to overwrite these tables or pick a new table prefix.";
-$LANG["phrase_php_sessions"] = "PHP Sessions";
-$LANG["phrase_pwd_installation_script_created"] = "(as you created in the installation script)";
-$LANG["phrase_tables_already_exist"] = "Tables already exist!";
-$LANG["text_cache_folder_invalid_permissions"] = "The cache folder needs to have full read-write permissions.";
-$LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
-$LANG["text_installation_session_expired"] = "Sorry, your session has expired. You will need to begin the installation process again. Click the button below.";
-$LANG["text_installation_intro"] = "Select your language and let's get started.";
-$LANG["text_invalid_cache_folder"] = "The custom cache folder you entered does not exist.";
-$LANG["text_system_check_passed"] = "Your system is able to run Form Tools.";
