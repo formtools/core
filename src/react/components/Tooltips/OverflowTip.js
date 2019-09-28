@@ -8,7 +8,7 @@ const StyledTooltip = withStyles(() => ({
 		fontSize: 12,
 		backgroundColor: '#505951',
 		maxWidth: 'none'
-	},
+	}
 }))(Tooltip);
 
 // known issue is that this doesn't automatically recompute whether the div is currently overflowed. The material UI

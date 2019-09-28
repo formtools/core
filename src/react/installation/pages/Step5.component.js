@@ -72,7 +72,7 @@ class Step5 extends Component {
 		} else {
 			saveAdminAccount(this.onSuccess, this.onError);
 		}
-	};
+	}
 
 	onSuccess () {
 		this.props.history.push('/step6');

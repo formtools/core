@@ -86,7 +86,8 @@ switch ($request["action"]) {
 				"suhosinLoaded" => extension_loaded("suhosin"),
 				"sessionsLoaded" => extension_loaded("session"),
 				"uploadFolderWritable" => is_writable(realpath("../upload")),
-				"cacheFolderWritable" => is_writable(realpath("../cache/"))
+				"defaultCacheFolderWritable" => is_writable(realpath("../cache/")),
+				"cacheFolderWritable" => is_writable(realpath("../cache/")) // just lays down the default
 			),
 
 			"adminAccount" => array(

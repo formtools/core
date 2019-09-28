@@ -32,8 +32,7 @@ class Step2 extends Component {
 	onSubmit (e) {
 		e.preventDefault();
 		const { saveCacheFolderSetting } = this.props;
-
-		saveCacheFolderSetting(this.onSuccess, this.onError)
+		saveCacheFolderSetting(this.onSuccess, this.onError);
 	}
 
 	onSuccess () {
@@ -58,7 +57,7 @@ class Step2 extends Component {
 		const { results, i18n } = this.props;
 		let submitBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
 
-		if (!results.cacheFolderWritable || !results.uploadFolderWritable) {
+		if (!results.defaultCacheFolderWritable || !results.uploadFolderWritable) {
 			submitBtnLabel = i18n.word_refresh;
 		}
 
@@ -78,7 +77,7 @@ class Step2 extends Component {
 		let msg = null;
 		if (!results.validPhpVersion || !results.pdoAvailable || !results.pdoMysqlAvailable || !results.sessionsLoaded) {
 			msg = i18n.text_install_form_tools_server_not_supported;
-		} else if (!results.uploadFolderWritable || !results.cacheFolderWritable) {
+		} else if (!results.uploadFolderWritable || !results.defaultCacheFolderWritable) {
 			msg = i18n.text_required_folders_need_write_permissions;
 		} else if (results.suhosinLoaded) {
 			msg = i18n.notify_suhosin_installed;
@@ -91,7 +90,7 @@ class Step2 extends Component {
 		if (useCustomCacheFolder) {
 			return (
 				<input type="text" value={customCacheFolder} onChange={(e) => updateCustomCacheFolder(e.target.value)}
-				       style={{ width: '100%' }} />
+					style={{ width: '100%' }} />
 			);
 		}
 		return null;
@@ -109,7 +108,7 @@ class Step2 extends Component {
 				<div className={styles.label}>
 					&#8212;
 					<input type="checkbox" id="useCustomCacheFolder"
-					       checked={useCustomCacheFolder} onChange={toggleCustomCacheFolder} />
+						checked={useCustomCacheFolder} onChange={toggleCustomCacheFolder} />
 					<label htmlFor="useCustomCacheFolder">{i18n.phrase_use_custom_cache_folder}</label>
 				</div>
 				<div className={styles.fullValue}>
@@ -143,7 +142,7 @@ class Step2 extends Component {
 		let text = i18n.text_install_system_check;
 
 		// technically a user could have passed this step, changed the permissions on the folder then returned
-		if (!results.uploadFolderWritable || !results.cacheFolderWritable) {
+		if (!results.uploadFolderWritable || !results.defaultCacheFolderWritable) {
 			text = '';
 		} else if (systemCheckPassed) {
 			text = i18n.text_system_check_passed;
@@ -203,7 +202,7 @@ class Step2 extends Component {
 						<div className={styles.label}>{i18n.phrase_cache_folder}</div>
 						{this.getCacheFolder()}
 						<div className={styles.result}>
-							{showResult(results.cacheFolderWritable, i18n)}
+							{showResult(results.defaultCacheFolderWritable, i18n)}
 						</div>
 					</div>
 					{this.getCustomCacheFolderRow()}
@@ -214,7 +213,7 @@ class Step2 extends Component {
 			</form>
 		);
 	}
-};
+}
 
 
 export default withRouter(Step2);

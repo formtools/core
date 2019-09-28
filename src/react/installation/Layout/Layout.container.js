@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { selectors as initSelectors } from '../../store/init';
 import { selectors as i18nSelectors } from '../../store/i18n';

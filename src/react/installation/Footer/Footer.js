@@ -5,17 +5,17 @@ import { Github } from '../../components/Icons';
 const Footer = ({ i18n }) => (
 	<div className={styles.footer}>
 		<ul>
-			<li><a href="https://formtools.org" target="_blank">formtools.org</a></li>
+			<li><a href="https://formtools.org" target="_blank" rel="noopener noreferrer">formtools.org</a></li>
 			<li>
-				<a href="https://docs.formtools.org/installation/" target="_blank"
-				   dangerouslySetInnerHTML={{ __html: i18n.phrase_installation_help }} />
+				<a href="https://docs.formtools.org/installation/" target="_blank" rel="noopener noreferrer"
+					dangerouslySetInnerHTML={{ __html: i18n.phrase_installation_help }} />
 			</li>
 			<li>
-				<a href="https://docs.formtools.org" target="_blank"
-				   dangerouslySetInnerHTML={{ __html: i18n.word_documentation}} />
+				<a href="https://docs.formtools.org" target="_blank" rel="noopener noreferrer"
+					dangerouslySetInnerHTML={{ __html: i18n.word_documentation }} />
 			</li>
 			<li>
-				<a href="https://github.com/formtools/core/" target="_blank">
+				<a href="https://github.com/formtools/core/" target="_blank" rel="noopener noreferrer">
 					<Github size={16} />
 					Github
 				</a>
@@ -24,4 +24,4 @@ const Footer = ({ i18n }) => (
 	</div>
 );
 
-export default Footer;``
+export default Footer;

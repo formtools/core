@@ -1,5 +1,5 @@
 export const ERRORS = {
-	SESSIONS_EXPIRED: 'SESSIONS_EXPIRED',
+	SESSIONS_EXPIRED: 'SESSIONS_EXPIRED'
 };
 
 export const C = {

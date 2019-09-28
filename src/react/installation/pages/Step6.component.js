@@ -42,15 +42,15 @@ class Step6 extends Component {
 				<p><b>{i18n.phrase_getting_started.toUpperCase()}</b></p>
 				<ul>
 					<li>
-						<a href="https://docs.formtools.org/tutorials/adding_first_form/" target="_blank">{i18n.text_tutorial_adding_first_form}</a>
+						<a href="https://docs.formtools.org/tutorials/adding_first_form/" target="_blank" rel="noopener noreferrer">{i18n.text_tutorial_adding_first_form}</a>
 					</li>
 					<li>
-						<a href="https://docs.formtools.org/" target="_blank">{i18n.text_review_user_doc}</a>
+						<a href="https://docs.formtools.org/" target="_blank" rel="noopener noreferrer">{i18n.text_review_user_doc}</a>
 					</li>
 				</ul>
 			</>
 		);
 	}
-};
+}
 
 export default withRouter(Step6);

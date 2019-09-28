@@ -84,7 +84,7 @@ class Step4 extends Component {
 				</>
 			);
 		}
-	};
+	}
 
 	render () {
 		const { i18n } = this.props;

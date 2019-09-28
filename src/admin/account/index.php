@@ -35,7 +35,7 @@ if (isset($_GET["updated"])) {
 
 $admin_info = Administrator::getAdminInfo();
 
-$replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank">date()</a>');
+$replacement_info = array("datefunctionlink" => '<a href="http://ca3.php.net/manual/en/function.date.php" target="_blank" rel="noopener noreferrer">date()</a>');
 $LANG = Core::$L;
 
 // compile the theme variables

@@ -7,7 +7,7 @@ const spinnerSize = 50;
 const fadeOutTime = 600;
 
 // primary buttons styles for default green theme only
-const spinnerStyles = (theme) => ({
+const spinnerStyles = () => ({
 	colorPrimary: {
 		color: '#ffffff',
 		opacity: 0.5
@@ -31,7 +31,7 @@ class LoadingOverlay extends Component {
 		this._isMounted = false;
 	}
 
-	componentDidUpdate (prevProps, prevState, snapshot) {
+	componentDidUpdate (prevProps) {
 
 		// remove element after the a fade out is complete
 		if (prevProps.visible === true && !this.props.visible) {

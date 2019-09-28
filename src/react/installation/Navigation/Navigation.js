@@ -21,7 +21,7 @@ const getRowProps = (history, link, currentPage, targetPage) => {
 };
 
 
-const Navigation = ({ i18n, history, location, className }) => {
+const Navigation = ({ i18n, history, className }) => {
 	const currentPage = navUtils.getCurrentInstallationPage();
 
 	const Row = ({ page, label }) => {

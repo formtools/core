@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import MButton from '@material-ui/core/Button';
 
 // primary buttons styles for default green theme only
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
 	primary: {
 		margin: '8px 4px 8px 0',
 		boxShadow: 'none',
@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme) => ({
 			background: 'linear-gradient(80deg, #b70707 30%, #ad0606 90%)'
 		}
 	},
-
 	info: {
 		margin: '8px 4px 8px 0',
 		boxShadow: 'none',
@@ -39,11 +38,9 @@ const useStyles = makeStyles((theme) => ({
 			background: 'linear-gradient(80deg, #ccdee2 30%, #c3d4d8 90%)'
 		}
 	},
-
 	label: {
-		color: 'white',
+		color: 'white'
 	},
-
 	labelDark: {
 		color: '#3d4344'
 	}

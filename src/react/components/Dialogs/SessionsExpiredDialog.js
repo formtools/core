@@ -6,7 +6,7 @@ import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import Button from '../../components/Buttons';
 
-const styles = (theme) => ({
+const styles = () => ({
 	root: {
 		margin: 0,
 		padding: 0,
