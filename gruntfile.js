@@ -151,30 +151,6 @@ const config = {
 		}
 	},
 
-	uglify: {
-		installation_bundles: {
-			files: {
-				'dist/global/scripts/installation-bundle.js': [
-					'src/global/scripts/jquery.js',
-					'src/global/scripts/general.js',
-					'src/global/scripts/rsv.js',
-					'src/global/scripts/jquery-ui-1.8.6.custom.min.js'
-				]
-			}
-		}
-	},
-
-	cssmin: {
-		target: {
-			files: {
-				'dist/themes/default/css/installation-bundle.css': [
-					'src/themes/default/css/smoothness/jquery-ui-1.8.6.custom.css',
-					'dist/themes/default/css/styles.css'
-				]
-			}
-		}
-	},
-
 	run: {
 		webpack_dev: {
 			cmd: 'yarn',

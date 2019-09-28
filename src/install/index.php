@@ -22,6 +22,7 @@ $LANG = Core::$L;
 <html>
 <head>
     <title><?php echo $LANG["phrase_ft_installation"]; ?></title>
+    <link rel="shortcut icon" href="../themes/default/images/favicon.ico">
 </head>
 <body>
     <div id="root"></div>
