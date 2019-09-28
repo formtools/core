@@ -75,9 +75,6 @@
   "jest": {
     "roots": [
       "src/react"
-    ],
-    "testPathIgnorePatterns": [
-      "*.test.js"
     ]
   },
   "author": "Ben Keen <ben.keen@gmail.com>",
