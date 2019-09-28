@@ -72,12 +72,12 @@ export const selectLanguage = (lang, onSuccess) => {
 					}
 				});
 			}).catch((e) => {
-			dispatch({
-				type: ERROR_UPDATING_LANGUAGE,
-				payload: {
-					error: e
-				}
+				dispatch({
+					type: ERROR_UPDATING_LANGUAGE,
+					payload: {
+						error: e
+					}
+				});
 			});
-		});
-	}
+	};
 };

@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { actions, selectors } from '../store';
 import Step2 from './Step5.component';

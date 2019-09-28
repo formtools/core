@@ -1,5 +1,5 @@
 // userInfo may or may not be defined, depending on if the user is logged in or not
-import { actions } from '../init';
+// import { actions } from '../init';
 
 
 const reducer = (state = {}, action) => {

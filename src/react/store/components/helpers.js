@@ -22,7 +22,7 @@ export const getComponentIdentifier = (folder, componentType) => {
 export const getComponentNameFromIdentifier = (identifier, modules, themes) => {
 	let name = '';
 	if (identifier === 'api') {
-		name = 'API'
+		name = 'API';
 	} else if (/^module_/.test(identifier)) {
 		const module_folder = identifier.replace(/^module_/, '');
 		name = modules[module_folder].name;

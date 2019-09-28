@@ -21,7 +21,7 @@ export const getCompatibleModules = createSelector(
 		if (!coreVersion || !compatibleComponents.hasOwnProperty(coreVersion)) {
 			return {};
 		}
-		return compatibleComponents[coreVersion].modules
+		return compatibleComponents[coreVersion].modules;
 	}
 );
 
@@ -32,7 +32,7 @@ export const getCompatibleThemes = createSelector(
 		if (!coreVersion || !compatibleComponents.hasOwnProperty(coreVersion)) {
 			return {};
 		}
-		return compatibleComponents[coreVersion].themes
+		return compatibleComponents[coreVersion].themes;
 	}
 );
 
@@ -43,7 +43,7 @@ export const getCompatibleAPI = createSelector(
 		if (!coreVersion || !compatibleComponents.hasOwnProperty(coreVersion)) {
 			return {};
 		}
-		return compatibleComponents[coreVersion].api
+		return compatibleComponents[coreVersion].api;
 	}
 );
 
@@ -98,7 +98,7 @@ export const getDownloadLog = (state) => {
 // converts the hash of modules to an array
 export const getCompatibleModulesArray = createSelector(
 	getCompatibleModules,
-    arrayUtils.convertHashToArray
+	arrayUtils.convertHashToArray
 );
 
 export const getCompatibleThemesArray = createSelector(
@@ -109,40 +109,40 @@ export const getCompatibleThemesArray = createSelector(
 const getSelectedModules = createSelector(
 	getSelectedModuleFolders,
 	getCompatibleModules,
-    (folders, modules) => folders.map((folder) => modules[folder])
+	(folders, modules) => folders.map((folder) => modules[folder])
 );
 
 const getSelectedThemes = createSelector(
-    getSelectedThemeFolders,
+	getSelectedThemeFolders,
 	getCompatibleThemes,
-    (folders, themes) => folders.map((folder) => themes[folder])
+	(folders, themes) => folders.map((folder) => themes[folder])
 );
 
 // convenience method to return a flat, ordered array of all selected components in a standardized structure. Used on
 // the non-editable list
 export const getSelectedComponents = (state) => {
-    var constants = constantSelectors.getConstants(state);
+	var constants = constantSelectors.getConstants(state);
 	const components = [{
-	    folder: 'core',
-        name: 'Core',
-        version: constants.core_version,
-        type: 'core'
-    }];
+		folder: 'core',
+		name: 'Core',
+		version: constants.core_version,
+		type: 'core'
+	}];
 
-    if (isAPISelected(state)) {
+	if (isAPISelected(state)) {
 		components.push({
-            ...getCompatibleAPI(state),
-            type: 'api'
-        });
+			...getCompatibleAPI(state),
+			type: 'api'
+		});
 	}
 
 	getSelectedModules(state).forEach((module) => {
 		components.push({ ...module, type: 'module' });
 	});
 
-    getSelectedThemes(state).forEach((theme) => {
-        components.push({ ...theme, type: 'theme' });
-    });
+	getSelectedThemes(state).forEach((theme) => {
+		components.push({ ...theme, type: 'theme' });
+	});
 
 	return components;
 };
@@ -154,9 +154,9 @@ export const getSelectedComponentForSelectedSections = createSelector(
 );
 
 export const allModulesSelected = createSelector(
-    getCompatibleModulesArray,
-    getSelectedModuleFolders,
-    (modules, folders) => modules.length === folders.length
+	getCompatibleModulesArray,
+	getSelectedModuleFolders,
+	(modules, folders) => modules.length === folders.length
 );
 
 
@@ -171,122 +171,122 @@ export const allModulesSelected = createSelector(
  * }
  */
 export const getComponentInfoModalInfo = createSelector(
-    getInfoModal,
-    getCoreDesc,
-    getCompatibleAPI,
+	getInfoModal,
+	getCoreDesc,
+	getCompatibleAPI,
 	getCompatibleModules,
 	getCompatibleThemes,
-    getChangelogs,
-    isEditing,
-    getSelectedComponentTypeSections,
-    getSelectedComponents,
-    (infoModal, coreDesc, api, modules, themes, changelogs, isEditing, selectedComponentTypeSections, selectedComponents) => {
-        const { componentType, folder } = infoModal;
-        const changelogLoaded = changelogs.hasOwnProperty(folder);
+	getChangelogs,
+	isEditing,
+	getSelectedComponentTypeSections,
+	getSelectedComponents,
+	(infoModal, coreDesc, api, modules, themes, changelogs, isEditing, selectedComponentTypeSections, selectedComponents) => {
+		const { componentType, folder } = infoModal;
+		const changelogLoaded = changelogs.hasOwnProperty(folder);
 
-        const modalInfo = {
-            title: '',
-            type: componentType,
-            folder,
-            loaded: changelogLoaded,
-	        isSelected: selectedComponents.find((row) => row.folder === folder) !== undefined,
-            prevLinkEnabled: true,
-            nextLinkEnabled: true
-        };
+		const modalInfo = {
+			title: '',
+			type: componentType,
+			folder,
+			loaded: changelogLoaded,
+			isSelected: selectedComponents.find((row) => row.folder === folder) !== undefined,
+			prevLinkEnabled: true,
+			nextLinkEnabled: true
+		};
 
-        if (componentType === 'module') {
-            modalInfo.title = modules[folder].name;
-            modalInfo.desc = modules[folder].desc;
-        } else if (componentType === 'theme') {
-            modalInfo.title = themes[folder].name;
-            modalInfo.desc = themes[folder].desc;
-        } else if (componentType === 'api') {
-            modalInfo.title = 'API';
-            modalInfo.desc = api.desc;
-        } else if (componentType === 'core') {
-            modalInfo.title = 'Form Tools Core'; // TODO
-            modalInfo.desc = coreDesc;
-        }
+		if (componentType === 'module') {
+			modalInfo.title = modules[folder].name;
+			modalInfo.desc = modules[folder].desc;
+		} else if (componentType === 'theme') {
+			modalInfo.title = themes[folder].name;
+			modalInfo.desc = themes[folder].desc;
+		} else if (componentType === 'api') {
+			modalInfo.title = 'API';
+			modalInfo.desc = api.desc;
+		} else if (componentType === 'core') {
+			modalInfo.title = 'Form Tools Core'; // TODO
+			modalInfo.desc = coreDesc;
+		}
 
-        let list = [];
-        if (isEditing) {
-            let listMap = {
-                modules: modules,
-                themes: themes
-            };
+		let list = [];
+		if (isEditing) {
+			let listMap = {
+				modules: modules,
+				themes: themes
+			};
 
-            if (listMap.hasOwnProperty(selectedComponentTypeSections[0])) {
-                list = arrayUtils.convertHashToArray(listMap[selectedComponentTypeSections[0]]);
-            } else {
-                list = [{ folder: 'api'}];
-            }
-        } else {
-            list = selectedComponents;
-        }
+			if (listMap.hasOwnProperty(selectedComponentTypeSections[0])) {
+				list = arrayUtils.convertHashToArray(listMap[selectedComponentTypeSections[0]]);
+			} else {
+				list = [{ folder: 'api' }];
+			}
+		} else {
+			list = selectedComponents;
+		}
 
-        const index = list.findIndex(i => i.folder === folder);
-        if (index === 0) {
-            modalInfo.prevLinkEnabled = false;
-        }
-        if (list.length === 1 || list[list.length-1].folder === folder) {
-            modalInfo.nextLinkEnabled = false;
-        }
+		const index = list.findIndex(i => i.folder === folder);
+		if (index === 0) {
+			modalInfo.prevLinkEnabled = false;
+		}
+		if (list.length === 1 || list[list.length - 1].folder === folder) {
+			modalInfo.nextLinkEnabled = false;
+		}
 
-        modalInfo.data = changelogLoaded ? changelogs[folder] : [];
+		modalInfo.data = changelogLoaded ? changelogs[folder] : [];
 
-        return modalInfo;
-    }
+		return modalInfo;
+	}
 );
 
 
 export const getPrevNextComponent = createSelector(
-    getInfoModal,
-    getSelectedComponentTypeSections,
-    getCompatibleAPI,
-    getCompatibleModulesArray,
+	getInfoModal,
+	getSelectedComponentTypeSections,
+	getCompatibleAPI,
+	getCompatibleModulesArray,
 	getCompatibleThemesArray,
-    isEditing,
-    getSelectedComponents,
-    (infoModal, editingComponentTypeSections, api, modules, themes, isEditing, selectedComponents) => {
-        const prevNext = {
-            prev: null,
-            next: null
-        };
+	isEditing,
+	getSelectedComponents,
+	(infoModal, editingComponentTypeSections, api, modules, themes, isEditing, selectedComponents) => {
+		const prevNext = {
+			prev: null,
+			next: null
+		};
 
-        let list = [];
-        if (isEditing) {
-            let listMap = {
-                modules: modules,
-                themes: themes
-            };
-            if (listMap.hasOwnProperty(editingComponentTypeSections[0])) {
-                list = listMap[editingComponentTypeSections[0]];
-            } else {
-                list = [{ folder: 'api' }];
-            }
-        } else {
-            list = selectedComponents;
-        }
+		let list = [];
+		if (isEditing) {
+			let listMap = {
+				modules: modules,
+				themes: themes
+			};
+			if (listMap.hasOwnProperty(editingComponentTypeSections[0])) {
+				list = listMap[editingComponentTypeSections[0]];
+			} else {
+				list = [{ folder: 'api' }];
+			}
+		} else {
+			list = selectedComponents;
+		}
 
-        const index = list.findIndex(i => i.folder === infoModal.folder);
+		const index = list.findIndex(i => i.folder === infoModal.folder);
 
-        if (index > 0) {
-            const prev = list[index-1];
-            prevNext.prev = {
-                componentType: prev.type,
-                folder: prev.folder
-            };
-        }
-        if (index < list.length - 1) {
-            const next = list[index+1];
-            prevNext.next = {
-                componentType: next.type,
-                folder: next.folder
-            };
-        }
+		if (index > 0) {
+			const prev = list[index - 1];
+				prevNext.prev = {
+				componentType: prev.type,
+				folder: prev.folder
+			};
+		}
+		if (index < list.length - 1) {
+			const next = list[index + 1];
+			prevNext.next = {
+				componentType: next.type,
+				folder: next.folder
+			};
+		}
 
-        return prevNext;
-    }
+		return prevNext;
+	}
 );
 
 

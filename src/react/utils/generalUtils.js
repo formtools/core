@@ -1,4 +1,3 @@
-
 export const decodeEntities = (() => {
 
 	// this prevents any overhead from creating the object each time

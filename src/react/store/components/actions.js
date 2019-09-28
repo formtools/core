@@ -84,7 +84,6 @@ const getInstallationComponentList = () => {
 						selectedThemeFolders
 					}
 				});
-
 			}).catch((e) => {
 				dispatch(compatibleComponentsLoadError(e));
 			});
@@ -108,7 +107,6 @@ const getManageComponentsList = () => {
 		fetch(`${base_url}/feeds/core/${coreVersion}.json`)
 			.then((response) => response.json())
 			.then((json) => {
-
 				// first log the full list of compatible components in the store
 				dispatch({
 					type: actions.COMPATIBLE_COMPONENTS_LOADED,
@@ -119,10 +117,9 @@ const getManageComponentsList = () => {
 						themes: json.themes
 					}
 				});
-
 			}).catch((e) => {
-			dispatch(compatibleComponentsLoadError(e));
-		});
+				dispatch(compatibleComponentsLoadError(e));
+			});
 	};
 };
 
@@ -131,16 +128,19 @@ const compatibleComponentsLoadError = () => ({ type: actions.COMPATIBLE_COMPONEN
 const toggleAPI = () => ({ type: actions.TOGGLE_API });
 const toggleModule = (folder) => ({ type: actions.TOGGLE_MODULE, folder });
 const toggleTheme = (folder) => ({ type: actions.TOGGLE_THEME, folder });
-const setCoreVersion = (coreVersion) => ({ type: actions.SET_CORE_VERSION, payload: { coreVersion }});
+const setCoreVersion = (coreVersion) => ({
+	type: actions.SET_CORE_VERSION,
+	payload: { coreVersion }
+});
 
 const toggleComponent = (componentTypeSection, folder) => {
-    if (componentTypeSection === 'module') {
-        return toggleModule(folder);
-    } else if (componentTypeSection === 'theme') {
-        return toggleTheme(folder);
-    } else {
-        return toggleAPI();
-    }
+	if (componentTypeSection === 'module') {
+		return toggleModule(folder);
+	} else if (componentTypeSection === 'theme') {
+		return toggleTheme(folder);
+	} else {
+		return toggleAPI();
+	}
 };
 
 const editSelectedComponentList = () => ({ type: actions.EDIT_SELECTED_COMPONENT_LIST });
@@ -150,7 +150,7 @@ const saveSelectedComponentList = () => ({ type: actions.SAVE_SELECTED_COMPONENT
 const cancelEditSelectedComponentList = () => ({ type: actions.CANCEL_EDIT_SELECTED_COMPONENT_LIST });
 
 const selectComponentTypeSection = (section) => ({
-    type: actions.SELECT_COMPONENT_TYPE_SECTION,
+	type: actions.SELECT_COMPONENT_TYPE_SECTION,
 	payload: {
 		section
 	}
@@ -171,82 +171,81 @@ const toggleComponentTypeSection = (section) => ({
 });
 
 const toggleAllModulesSelected = () => {
-    return (dispatch, getState) => {
-        const allSelected = selectors.allModulesSelected(getState());
-        dispatch({
-            type: allSelected ? actions.DESELECT_ALL_MODULES : actions.SELECT_ALL_MODULES
-        });
-    };
+	return (dispatch, getState) => {
+		const allSelected = selectors.allModulesSelected(getState());
+		dispatch({
+			type: allSelected ? actions.DESELECT_ALL_MODULES : actions.SELECT_ALL_MODULES
+		});
+	};
 };
 
 
 // folder is the theme/module folder, or "core" or "api"
 const showInfoModal = ({ componentType, folder }) => {
-    return (dispatch, getState) => {
-        const changelogs = selectors.getChangelogs(getState());
+	return (dispatch, getState) => {
+		const changelogs = selectors.getChangelogs(getState());
 
-        if (!changelogs.hasOwnProperty(folder)) {
-            queryComponentInfo(componentType, folder);
-        }
+		if (!changelogs.hasOwnProperty(folder)) {
+			queryComponentInfo(componentType, folder);
+		}
 
-        dispatch({
-            type: actions.SHOW_COMPONENT_CHANGELOG_MODAL,
-            payload: {
-                componentType,
-                folder
-            }
-        });
-    }
+		dispatch({
+			type: actions.SHOW_COMPONENT_CHANGELOG_MODAL,
+			payload: {
+				componentType,
+				folder
+			}
+		});
+	};
 };
 
 
 // pings the server to get the component history for the Core, API, module or theme
 const queryComponentInfo = (componentType, folder) => {
-    const url = `../global/code/actions-react.php?action=get_component_info&type=${componentType}&component=${folder}`;
+	const url = `../global/code/actions-react.php?action=get_component_info&type=${componentType}&component=${folder}`;
 
-    fetch(url)
-        .then((response) => response.json())
-        .then((json) => {
-        	let desc = null, versions = [];
-        	if (json.success) {
-        		desc = json.data.hasOwnProperty('desc') ? json.data.desc : null;
-        		versions = json.data.versions;
-	        }
-	        store.dispatch({
-		        type: actions.COMPONENT_HISTORY_LOADED,
-		        payload: {
-			        folder,
-			        loadSuccess: json.success,
-			        desc,
-			        versions
-		        }
-	        });
-        }).catch((e) => {
-            // store.dispatch({
-            //     type: INIT_DATA_ERROR_LOADING,
-            //     error: e
-            // });
-        });
+	fetch(url)
+		.then((response) => response.json())
+		.then((json) => {
+			let desc = null, versions = [];
+			if (json.success) {
+				desc = json.data.hasOwnProperty('desc') ? json.data.desc : null;
+				versions = json.data.versions;
+			}
+			store.dispatch({
+				type: actions.COMPONENT_HISTORY_LOADED,
+				payload: {
+					folder,
+					loadSuccess: json.success,
+					desc,
+					versions
+				}
+			});
+		}).catch(() => {
+			// store.dispatch({
+			//     type: INIT_DATA_ERROR_LOADING,
+			//     error: e
+			// });
+		});
 };
 
 const closeInfoModal = () => ({ type: actions.CLOSE_COMPONENT_CHANGELOG_MODAL });
 
 
 const onPrevNext = (dir) => {
-    return (dispatch, getState) => {
-        const prevNext = selectors.getPrevNextComponent(getState());
+	return (dispatch, getState) => {
+		const prevNext = selectors.getPrevNextComponent(getState());
 
-        if ((dir === 'prev' && prevNext.prev === null) ||
-            (dir === 'next' && prevNext.next === null)) {
-            return;
-        }
+		if ((dir === 'prev' && prevNext.prev === null) || (dir === 'next' && prevNext.next === null)) {
+			return;
+		}
 
-        if (dir === 'prev') {
-            dispatch(showInfoModal({ ...prevNext.prev }));
-        } else {
-            dispatch(showInfoModal({ ...prevNext.next }));
-        }
-    };
+		if (dir === 'prev') {
+			dispatch(showInfoModal({ ...prevNext.prev }));
+		} else {
+			dispatch(showInfoModal({ ...prevNext.next }));
+		}
+	};
 };
 
 
@@ -309,10 +308,10 @@ const downloadAndUnpackComponent = (item, data_source_url) => {
 				}
 			});
 		}).catch((e) => {
-		// store.dispatch({
-		//     type: INIT_DATA_ERROR_LOADING,
-		//     error: e
-		// });
+			// store.dispatch({
+			//     type: INIT_DATA_ERROR_LOADING,
+			//     error: e
+			// });
 		});
 };
 
@@ -322,31 +321,31 @@ const toggleShowDetailedDownloadLog = () => ({ type: actions.TOGGLE_SHOW_DETAILE
 
 const getInstalledComponents = () => {
 	fetch(`${g.root_url}/global/code/actions-react.php?action=get_installed_components`)
-		.then((response) => response.json())
-		.then((json) => {
-			store.dispatch({
-				type: actions.INSTALLED_COMPONENTS_LOADED,
-				payload: {
-					components: json
-				}
-			});
+	  .then((response) => response.json())
+	  .then((json) => {
+		  store.dispatch({
+			  type: actions.INSTALLED_COMPONENTS_LOADED,
+			  payload: {
+				  components: json
+			  }
+		  });
 
-			store.dispatch({
-				type: actions.INIT_SELECTED_COMPONENTS,
-				payload: {
-					coreSelected: true,
-					apiSelected: json.api.installed,
-					selectedModuleFolders: json.modules.map((row) => row.module_folder),
-					selectedThemeFolders: json.themes.filter((row) => row.theme_folder !== 'default').map((row) => row.theme_folder)
-				}
-			});
+		  store.dispatch({
+			  type: actions.INIT_SELECTED_COMPONENTS,
+			  payload: {
+				  coreSelected: true,
+				  apiSelected: json.api.installed,
+				  selectedModuleFolders: json.modules.map((row) => row.module_folder),
+				  selectedThemeFolders: json.themes.filter((row) => row.theme_folder !== 'default').map((row) => row.theme_folder)
+			  }
+		  });
 
-		}).catch((e) => {
-			// store.dispatch({
-			// 	type: actions.INSTALLED_MODULES_ERROR_LOADING, // TODO
-			// 	error: e
-			// });
-		});
+	  }).catch((e) => {
+		// store.dispatch({
+		// 	type: actions.INSTALLED_MODULES_ERROR_LOADING, // TODO
+		// 	error: e
+		// });
+	});
 };
 
 export const actionCreators = {

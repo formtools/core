@@ -2,7 +2,6 @@ import axios from 'axios';
 import { actions as initActions } from '../../store/init';
 import { navUtils } from '../../utils';
 import { selectors } from '../store';
-import { ERROR_UPDATING_LANGUAGE, LANGUAGE_UPDATED } from "../../store/init/init.actions";
 
 export const START_REQUEST = 'START_REQUEST';
 export const REQUEST_ERROR = 'REQUEST_ERROR';
