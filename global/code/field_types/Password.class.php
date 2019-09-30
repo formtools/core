@@ -7,10 +7,20 @@ namespace FormTools\FieldTypes;
 class Password
 {
 
+    private static function getPhpProcessing()
+    {
+        $content =<<< END
+\$field_name     = \$vars["field_info"]["field_name"];
+\$password           = \$vars["data"][\$field_name];
+\$encryptedPassword = \$General.encode(\$password);
+return \$encryptedPassword;
+END;
+        return $content;
+    }
     public static function get()
     {
         $password_edit_field =<<< END
-<input type="password" name="{\$NAME}" value="{\$VALUE|escape}" class="cf_password" />
+<input type="password" name="{\$NAME}" value="{\$VALUE|escape}" class="cf_password" placeholder="password"/>
 {if \$comments}
   <div class="cf_field_comments">{\$comments}</div>
 {/if}
@@ -33,7 +43,7 @@ END;
                 "view_field_php_function"        => "",
                 "view_field_smarty_markup"       => "",
                 "edit_field_smarty_markup"       => $password_edit_field,
-                "php_processing"                 => "",
+                "php_processing"                 => getPhpProcessing(),
                 "resources_css"                  => "input.cf_password {\r\n  width: 120px;\r\n}",
                 "resources_js"                   => ""
             ),
