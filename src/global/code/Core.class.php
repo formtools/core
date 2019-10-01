@@ -257,7 +257,7 @@ class Core
 	/**
 	 * The current version of the Form Tools Core.
 	 */
-	private static $version = "3.0.15";
+	private static $version = "3.0.16";
 
 	/**
 	 * The release type: alpha, beta or main

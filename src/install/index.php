@@ -10,7 +10,9 @@ Core::startSessions();
 
 Installation::checkInstallationComplete();
 
-//FormTools\Sessions::clearAll();
+if (isset($_GET["clear"])) {
+    FormTools\Sessions::clearAll();
+}
 
 Core::initSmarty();
 Core::setCurrentLang(General::loadField("lang", "lang", Core::getDefaultLang()));

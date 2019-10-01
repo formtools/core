@@ -53,11 +53,11 @@ class Step2 extends Component {
 		}
 	}
 
-	getResultsSection () {
+	getContinueBlock () {
 		const { results, i18n } = this.props;
 		let submitBtnLabel = generalUtils.decodeEntities(i18n.word_continue_rightarrow);
 
-		if (!results.defaultCacheFolderWritable || !results.uploadFolderWritable) {
+		if (!results.cacheFolderWritable || !results.uploadFolderWritable) {
 			submitBtnLabel = i18n.word_refresh;
 		}
 
@@ -73,11 +73,11 @@ class Step2 extends Component {
 	}
 
 	getErrorMessage () {
-		const { results, i18n } = this.props;
+		const { results, useCustomCacheFolder, i18n } = this.props;
 		let msg = null;
 		if (!results.validPhpVersion || !results.pdoAvailable || !results.pdoMysqlAvailable || !results.sessionsLoaded) {
 			msg = i18n.text_install_form_tools_server_not_supported;
-		} else if (!results.uploadFolderWritable || !results.defaultCacheFolderWritable) {
+		} else if (!results.uploadFolderWritable || (!results.defaultCacheFolderWritable && !useCustomCacheFolder)) {
 			msg = i18n.text_required_folders_need_write_permissions;
 		} else if (results.suhosinLoaded) {
 			msg = i18n.notify_suhosin_installed;
@@ -202,14 +202,14 @@ class Step2 extends Component {
 						<div className={styles.label}>{i18n.phrase_cache_folder}</div>
 						{this.getCacheFolder()}
 						<div className={styles.result}>
-							{showResult(results.defaultCacheFolderWritable, i18n)}
+							{showResult(systemCheckPassed ? results.cacheFolderWritable : results.defaultCacheFolderWritable, i18n)}
 						</div>
 					</div>
 					{this.getCustomCacheFolderRow()}
 				</div>
 
 				{this.getErrorMessage()}
-				{this.getResultsSection()}
+				{this.getContinueBlock()}
 			</form>
 		);
 	}

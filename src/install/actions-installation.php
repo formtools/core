@@ -45,6 +45,9 @@ $statusCode = 200;
 switch ($request["action"]) {
 	case "init":
 
+		$defaultCacheFolder = realpath("../cache/");
+		$selectedCacheFolder = Sessions::getWithFallback("fti.folderSettings.customCacheFolder", $defaultCacheFolder);
+
 		// the init request is called on every page refresh, returning all data in sessions. We store everything we need to
 		// track for the whole installation process here. Individual page requests to update this info are handled
 		// separately
@@ -74,8 +77,8 @@ switch ($request["action"]) {
 			"folderSettings" => array(
 				"uploadFolder" => realpath("../upload/"),
 				"useCustomCacheFolder" => Sessions::getWithFallback("fti.folderSettings.useCustomCacheFolder", false),
-				"defaultCacheFolder" => realpath("../cache/"),
-				"customCacheFolder" => Sessions::getWithFallback("fti.folderSettings.customCacheFolder", realpath("../cache/"))
+				"defaultCacheFolder" => $defaultCacheFolder,
+				"customCacheFolder" => $selectedCacheFolder
 			),
 
 			"systemInfo" => array(
@@ -86,8 +89,8 @@ switch ($request["action"]) {
 				"suhosinLoaded" => extension_loaded("suhosin"),
 				"sessionsLoaded" => extension_loaded("session"),
 				"uploadFolderWritable" => is_writable(realpath("../upload")),
-				"defaultCacheFolderWritable" => is_writable(realpath("../cache/")),
-				"cacheFolderWritable" => is_writable(realpath("../cache/")) // just lays down the default
+				"defaultCacheFolderWritable" => is_writable($defaultCacheFolder),
+				"cacheFolderWritable" => is_writable($selectedCacheFolder)
 			),
 
 			"adminAccount" => array(
