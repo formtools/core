@@ -39,7 +39,11 @@ function smarty_function_edit_custom_field($params, &$smarty)
 
             // TODO make sense of this. Both are required in different contexts
             // - in form builder, review page - the latter is needed.
-            if (isset($field_info["submission_value"]) || is_null($field_info["submission_value"])) {
+            
+            // hide password
+            if($field_type_info["field_type_identifier"] == "password")
+                echo "********";
+            else if (isset($field_info["submission_value"]) || is_null($field_info["submission_value"])) {
                 echo $field_info["submission_value"];
             } else {
                 echo $field_info["submission_info"]["value"];
@@ -51,6 +55,7 @@ function smarty_function_edit_custom_field($params, &$smarty)
     }
 
     // now construct all available placeholders
+    // note that we don't send the encrypted value of password, instead "********" is sent
     $placeholders = array(
         "FORM_ID" => $form_id,
         "VIEW_ID" => $field_info["view_id"],
@@ -58,7 +63,9 @@ function smarty_function_edit_custom_field($params, &$smarty)
         "FIELD_ID" => $field_info["field_id"],
         "NAME" => $field_info["field_name"],
         "COLNAME" => $field_info["col_name"],
-        "VALUE" => isset($field_info["submission_value"]) ? $field_info["submission_value"] : "",
+        "VALUE" => $curr_field_type["field_type_identifier"] != "password" ?
+                    (isset($field_info["submission_value"]) ? $field_info["submission_value"] : "")
+                    : "********",
         "SETTINGS" => $settings,
         "CONTEXTPAGE" => "edit_submission",
         "ACCOUNT_INFO" => Sessions::getWithFallback("account", array()),
