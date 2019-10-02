@@ -161,7 +161,7 @@ const config = {
 		webpack_prod: {
 			cmd: 'yarn',
 			args: [
-				'build'
+				'prod'
 			]
 		}
 	},
@@ -389,6 +389,7 @@ module.exports = function (grunt) {
 			return;
 		}
 
+		// git co master
 		// git branch -D auto_3.0.14
 		// git push origin --delete auto_3.0.14
 
@@ -449,7 +450,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('sortI18nFiles', sortI18nFiles);
 
-	// grunt publish --release=1.2.3
+	// grunt publish --release=3.0.17
 	grunt.registerTask('publish', [
 		//'prod',
 		'publishReleaseBranch'
@@ -461,6 +462,6 @@ module.exports = function (grunt) {
 	grunt.registerTask('default', ['sync', 'sasslint', 'sass', 'concurrent:watchers']);
 
 	// builds everything into the dist folder
-	grunt.registerTask('prod', ['i18n', 'sync', 'sass']);
+	grunt.registerTask('prod', ['i18n', 'sync', 'sass', 'run:webpack_prod']);
 
 };

@@ -1,6 +1,5 @@
 var webpack = require('webpack');
 var path = require('path');
-var MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 
 const config = (env) => {
@@ -21,12 +20,12 @@ const config = (env) => {
 				{
 					test: /\.(js|jsx)$/,
 					exclude: /node_modules/,
-					use: ['babel-loader', 'eslint-loader']
+					use: ['babel-loader']
 				},
 				{
 					test: /\.scss$/,
 					use: [
-						isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+						'style-loader',
 						{
 							loader: 'css-loader',
 							options: {
@@ -54,7 +53,7 @@ const config = (env) => {
 				{
 					test: /\.css$/,
 					use: [
-						isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+						'style-loader',
 						'css-loader'
 					]
 				}

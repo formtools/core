@@ -66,6 +66,7 @@
   "scripts": {
     "test": "jest",
     "dev": "webpack --config webpack.config.js --env development",
+    "prod": "webpack --config webpack.config.js --env production",
     "lint": "eslint ./src/react/**/*.js"
   },
   "repository": {
