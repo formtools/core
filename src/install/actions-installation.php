@@ -227,8 +227,6 @@ switch ($request["action"]) {
 		break;
 
 	case "checkConfigFileExists":
-		echo "...?" . realpath("../global/config.php");
-
 		if (file_exists(realpath("../global/config.php"))) {
 			Sessions::set("fti.configFileCreated", true);
 		} else {
@@ -246,6 +244,8 @@ switch ($request["action"]) {
 		list($success, $error) = Installation::setAdminAccount($request, $lang);
 
 		if ($success) {
+			Core::init(array("auto_logout" => false));
+
 			$data = array();
 			Sessions::set("fti.accountCreated", true);
 
