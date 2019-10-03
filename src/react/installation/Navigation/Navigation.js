@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import { navUtils } from '../../utils';
-import styles from './navigation.scss';
+import styles from './Navigation.scss';
 
 
 const getRowProps = (history, link, currentPage, targetPage) => {
