@@ -1217,3 +1217,6 @@ $LANG["word_words"] = "Words";
 $LANG["word_wysiwyg"] = "WYSIWYG";
 $LANG["word_yellow"] = "Yellow";
 $LANG["word_yes"] = "Yes";
+
+// 3.1
+$LANG["phrase_choose_components"] = "Choose Components";

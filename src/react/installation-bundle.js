@@ -6,7 +6,7 @@ import axios from 'axios';
 import { actions, selectors } from './store/init';
 import store from './store';
 import Page from './installation/Layout/Layout.container';
-import { Step1, Step2, Step3, Step4, Step5, Step6 } from './installation';
+import { Step1, Step2, Step3, Step4, Step5, Step6, Step7 } from './installation';
 import { ERRORS } from './constants';
 import { navUtils } from './utils';
 
@@ -63,6 +63,7 @@ const App = () => (
 			<Page path="/step4/" component={Step4} />
 			<Page path="/step5/" component={Step5} />
 			<Page path="/step6/" component={Step6} />
+			<Page path="/step7/" component={Step7} />
 		</Router>
 	</Provider>
 );

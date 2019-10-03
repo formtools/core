@@ -1,0 +1,41 @@
+.changelog {
+  width: 100%;
+
+  .row {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #efefef;
+  }
+
+  .rowHeader div {
+    font-weight: bold;
+    padding: 6px 0;
+  }
+
+  .colVersion {
+    white-space: nowrap;
+    flex: 0 0 80px;
+    padding: 8px 0 10px;
+  }
+
+  .colReleaseDate {
+    white-space: nowrap;
+    flex: 0 0 120px;
+    padding: 8px 0 10px;
+  }
+
+  .colDesc {
+    flex: 1;
+    padding: 8px 0 10px;
+  }
+
+  .colGithubLink {
+    flex: 0 0 40px;
+    padding-top: 3px;
+  }
+}
+
+
+.githubIcon {
+  float: right;
+}

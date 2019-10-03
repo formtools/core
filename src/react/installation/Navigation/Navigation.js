@@ -39,8 +39,9 @@ const Navigation = ({ i18n, history, className }) => {
 			<Row page={2} label={i18n.phrase_system_check} currentPage={currentPage} />
 			<Row page={3} label={i18n.phrase_create_database_tables} currentPage={currentPage} />
 			<Row page={4} label={i18n.phrase_create_config_file} currentPage={currentPage} />
-			<Row page={5} label={i18n.phrase_create_admin_account} currentPage={currentPage} />
-			<Row page={6} label={i18n.phrase_clean_up} currentPage={currentPage} />
+			<Row page={5} label={i18n.phrase_choose_components} currentPage={currentPage} />
+			<Row page={6} label={i18n.phrase_create_admin_account} currentPage={currentPage} />
+			<Row page={7} label={i18n.phrase_clean_up} currentPage={currentPage} />
 		</div>
 	);
 };

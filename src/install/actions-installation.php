@@ -60,6 +60,7 @@ switch ($request["action"]) {
 			"constants" => array(
 				"rootDir" => realpath(__DIR__ . "/../"),
 				"rootUrl" => "../",
+				"dataSourceUrl" => Core::getFormToolsDataSource(),
 				"coreVersion" => Core::getCoreVersion()
 			),
 
@@ -269,6 +270,41 @@ switch ($request["action"]) {
 				"error" => $error
 			);
 		}
+		break;
+
+	case "getComponentInfo":
+		if (!in_array($_GET["type"], array("core", "api", "module", "theme")) || empty($_GET["component"]) || !is_string($_GET["component"])) {
+			break;
+		}
+
+		$url = Core::getFormToolsDataSource();
+		switch ($_GET["type"]) {
+			case "core":
+				$url .= "/feeds/core/core.json";
+				break;
+			case "api":
+				$url .= "/feeds/api/api.json";
+				break;
+			case "module":
+				$url .= "/feeds/modules/{$_GET["component"]}.json";
+				break;
+			case "theme":
+				$url .= "/feeds/themes/{$_GET["component"]}.json";
+				break;
+		}
+
+		$data = Request::getJsonFileFromUrl($url);
+		break;
+
+	case "installation_download_single_component":
+		$url = urldecode($_GET["url"]);
+		$component_type = $_GET["type"];
+
+		$data = array(
+			"url" => $url,
+			"type" => $component_type
+		);
+		$data = Packages::downloadAndUnpack($url, $component_type);
 		break;
 }
 

@@ -3,83 +3,12 @@ import { withRouter } from 'react-router-dom';
 import styles from '../Layout/Layout.scss';
 import Button from '../../components/Buttons';
 import { NotificationPanel } from '../../components';
-import { validationUtils } from '../../utils';
+import InstallationComponents from '../InstallationComponents/InstallationComponents';
 
 
 class Step5 extends Component {
 	constructor (props) {
-		super(props);
-		this.onSubmit = this.onSubmit.bind(this);
-		this.onSuccess = this.onSuccess.bind(this);
-		this.onError = this.onError.bind(this);
-
-		this.notificationPanel = React.createRef();
-		this.firstName = React.createRef();
-		this.lastName = React.createRef();
-		this.email = React.createRef();
-		this.username = React.createRef();
-		this.password = React.createRef();
-		this.password2 = React.createRef();
-	}
-
-	onSubmit (e) {
-		e.preventDefault();
-		const { i18n, firstName, lastName, email, username, password, password2, saveAdminAccount } = this.props;
-
-		const errors = [];
-		const fields = [];
-		if (!firstName) {
-			fields.push('firstName');
-			errors.push(i18n.validation_no_first_name);
-		}
-		if (!lastName) {
-			fields.push('lastName');
-			errors.push(i18n.validation_no_last_name);
-		}
-		if (!email) {
-			fields.push('email');
-			errors.push(i18n.validation_no_admin_email);
-		} else if (!validationUtils.validateEmail(email)) {
-			fields.push('email');
-			errors.push(i18n.validation_invalid_admin_email);
-		}
-
-		if (!username) {
-			fields.push('username');
-			errors.push(i18n.validation_no_username);
-		} else if (!(/^[0-9a-z_]+$/.test(username))) { // is alpha
-			fields.push('username');
-			errors.push(i18n.validation_invalid_admin_username);
-		}
-
-		if (!password) {
-			fields.push('password');
-			errors.push(i18n.validation_no_password);
-		}
-		if (!password2) {
-			fields.push('password2');
-			errors.push(i18n.validation_no_second_password);
-		}
-		if (password !== password2) {
-			fields.push('password2');
-			errors.push(i18n.validation_passwords_different);
-		}
-
-		if (errors.length) {
-			const error = `${i18n.phrase_error_text_intro}<br />&bull; ` + errors.join('<br />&bull; ');
-			this.notificationPanel.current.add({ msg: error, msgType: 'error' });
-			this[fields[0]].current.focus();
-		} else {
-			saveAdminAccount(this.onSuccess, this.onError);
-		}
-	}
-
-	onSuccess () {
-		this.props.history.push('/step6');
-	}
-
-	onError () {
-
+		super(props);;
 	}
 
 	render () {

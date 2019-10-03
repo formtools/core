@@ -355,6 +355,12 @@ class Core
 	private static $upgradeUrl = "https://formtools.org/upgrade.php";
 
 	/**
+	 * @var string
+	 */
+	private static $formToolsDataSource = "http://localhost:8888/formtools-site/cdn.formtools.org";
+
+
+	/**
 	 * Simple mechanism to provide a global storage hash for pages, added for performance reasons.
 	 */
 	public static $tempCache = array();
@@ -844,6 +850,10 @@ class Core
 		return self::getCacheFolder() !== self::$cacheFolder;
 	}
 
+	public static function getFormToolsDataSource()
+	{
+		return self::$formToolsDataSource;
+	}
 
 	// private methods
 
