@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import * as helpers from '../../helpers';
-import ComponentList from '../ComponentList/ComponentList';
-import EditableComponentList from '../EditableComponentList/EditableComponentList';
+import ComponentList from '../../components/ComponentList/ComponentList';
+import EditableComponentList from '../../components/EditableComponentList/EditableComponentList.component';
 import styles from './InstallationComponents.scss';
-import ComponentDialog from '../Dialogs/ComponentDialog';
+import ComponentDialog from '../../components/Dialogs/ComponentDialog.component';
 import Changelog from './Changelog';
+import { generalUtils } from '../../utils';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
@@ -68,7 +68,7 @@ class InstallationComponents extends Component {
 				<p>
 					<input type="button" onClick={onEditComponentList} value={i18n.word_customize} />
                     <span className={styles.delimiter}>|</span>
-					<input type="button" onClick={onSubmit} value={helpers.decodeEntities(i18n.word_continue_rightarrow)} />
+					<input type="button" onClick={onSubmit} value={generalUtils.decodeEntities(i18n.word_continue_rightarrow)} />
 				</p>
 			</div>
 		);

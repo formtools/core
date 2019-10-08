@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Changelog.scss';
-import { formatDatetime } from '../../helpers';
-import { Github } from '../Icons/Icons';
+import { dateUtils } from '../../utils';
+import { Github } from '../../components/Icons';
 import { withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -53,7 +53,7 @@ const Changelog = ({ data, loadSuccess, i18n }) => {
                     <div className={styles.colVersion}>
                         <VersionBadge label={version}/>
                     </div>
-                    <div className={styles.colReleaseDate}>{formatDatetime(release_date, 'MMM D, YYYY')}</div>
+                    <div className={styles.colReleaseDate}>{dateUtils.formatDatetime(release_date, 'MMM D, YYYY')}</div>
                     <div className={styles.colDesc}>{desc}</div>
 	                <div className={styles.colGithubLink}>{getGithubIcon(github_milestone)}</div>
                 </div>

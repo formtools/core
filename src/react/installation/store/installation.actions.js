@@ -2,6 +2,8 @@ import axios from 'axios';
 import { actions as initActions } from '../../store/init';
 import { navUtils } from '../../utils';
 import { selectors } from '../store';
+import { actions as componentActions } from '../../store/components';
+
 
 export const START_REQUEST = 'START_REQUEST';
 export const REQUEST_ERROR = 'REQUEST_ERROR';
@@ -139,7 +141,7 @@ export const CONFIG_FILE_CREATED = 'CONFIG_FILE_CREATED';
 export const configFileCreated = () => ({ type: CONFIG_FILE_CREATED });
 
 
-export const createConfigFile = (onSuccess, onError) => {
+export const createConfigFile = (onError) => {
 	return (dispatch, getState) => {
 		const state = getState();
 		dispatch(startRequest());
@@ -151,8 +153,7 @@ export const createConfigFile = (onSuccess, onError) => {
 		axios.post('./actions-installation.php', payload)
 			.then(() => {
 				dispatch(configFileCreated());
-				dispatch(requestReturned());
-				onSuccess();
+				dispatch(componentActions.getInstallationComponentList());
 			})
 			.catch((e) => {
 				dispatch(requestReturned());

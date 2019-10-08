@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { selectors as constantSelectors } from '../../store/constants';
 import * as helpers from './helpers';
 import * as selectors from './selectors';
@@ -36,11 +37,11 @@ export const actions = {
  * the store into a state ready to view + manage the data.
  * @return {Function}
  */
-const getInstallationComponentList = () => {
-	return function (dispatch, getState) {
+export const getInstallationComponentList = () => {
+	return (dispatch, getState) => {
 		const state = getState();
 		const base_url = state.constants.data_source_url;
-		const coreVersion = state.constants.core_version; // TODO convert to camel
+		const coreVersion = state.constants.core_version;
 
 		dispatch(setCoreVersion(coreVersion));
 
@@ -51,8 +52,7 @@ const getInstallationComponentList = () => {
 			}
 		});
 
-		fetch(`${base_url}/feeds/core/${coreVersion}.json`)
-			.then((response) => response.json())
+		axios.get(`${base_url}/feeds/core/${coreVersion}.json`)
 			.then((json) => {
 
 				// first log the full list of compatible components in the store
@@ -346,25 +346,4 @@ const getInstalledComponents = () => {
 		// 	error: e
 		// });
 	});
-};
-
-export const actionCreators = {
-	getInstallationComponentList,
-	getManageComponentsList,
-	setCoreVersion,
-	//compatibleComponentsLoadError,
-	toggleComponent,
-	editSelectedComponentList,
-	saveSelectedComponentList,
-	cancelEditSelectedComponentList,
-	selectComponentTypeSection,
-	selectComponentTypeSections,
-	toggleComponentTypeSection,
-	toggleAllModulesSelected,
-	showInfoModal,
-	closeInfoModal,
-	onPrevNext,
-	downloadCompatibleComponents,
-	toggleShowDetailedDownloadLog,
-	getInstalledComponents
 };

@@ -23,7 +23,7 @@ class Step4 extends Component {
 	}
 
 	createFile () {
-		this.props.createConfigFile(this.nextPage, this.onError);
+		this.props.createConfigFile(this.onError);
 	}
 
 	checkFileExists () {

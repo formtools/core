@@ -11,6 +11,8 @@ use FormTools\General;
 use FormTools\Hooks;
 use FormTools\Installation;
 use FormTools\Modules;
+use FormTools\Packages;
+use FormTools\Request;
 use FormTools\Sessions;
 use FormTools\Settings;
 use FormTools\Themes;
@@ -276,7 +278,6 @@ switch ($request["action"]) {
 		if (!in_array($_GET["type"], array("core", "api", "module", "theme")) || empty($_GET["component"]) || !is_string($_GET["component"])) {
 			break;
 		}
-
 		$url = Core::getFormToolsDataSource();
 		switch ($_GET["type"]) {
 			case "core":
@@ -292,11 +293,10 @@ switch ($request["action"]) {
 				$url .= "/feeds/themes/{$_GET["component"]}.json";
 				break;
 		}
-
 		$data = Request::getJsonFileFromUrl($url);
 		break;
 
-	case "installation_download_single_component":
+	case "installationDownloadSingleComponent":
 		$url = urldecode($_GET["url"]);
 		$component_type = $_GET["type"];
 

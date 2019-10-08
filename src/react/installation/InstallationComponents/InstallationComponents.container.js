@@ -1,32 +1,10 @@
-import React, { Component } from 'react';
-import { Provider, connect } from 'react-redux';
-import store from '../../store';
-import { selectors as initSelectors } from '../../store/init';
-import { selectors as i18nSelectors } from '../../store/i18n';
+import React from 'react';
+import { connect } from 'react-redux';
 import { actionCreators, selectors } from '../../store/components';
-import InstallationComponents from '../../components/InstallationComponents/InstallationComponents';
+import InstallationComponents from './InstallationComponents.component';
 
-
-class InstallationComponentsContainer extends Component {
-	componentWillUpdate (nextProps) {
-		if (nextProps.initialized && !this.props.initialized) {
-			this.props.getInstallationComponentList();
-		}
-	}
-	render () {
-		return (
-			<InstallationComponents {...this.props} />
-		);
-	}
-}
 
 const mapStateToProps = (state) => ({
-
-	// init
-	initialized: initSelectors.getInitialized(state),
-	i18n: i18nSelectors.getI18n(state),
-
-	// compatible components
 	dataLoaded: selectors.isCompatibleComponentsDataLoaded(state),
 	isEditing: selectors.isEditing(state),
 	isDownloading: selectors.isDownloading(state),
@@ -49,7 +27,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-	getInstallationComponentList: () => dispatch(actionCreators.getInstallationComponentList()),
 	onEditComponentList: () => dispatch(actionCreators.editSelectedComponentList()),
     onCancelEditComponentList: () => dispatch(actionCreators.cancelEditSelectedComponentList()),
 	saveSelectedComponentList: () => dispatch(actionCreators.saveSelectedComponentList()),
@@ -66,4 +43,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(InstallationComponentsContainer);
+)(InstallationComponents);
