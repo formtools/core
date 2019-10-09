@@ -140,6 +140,14 @@ export const updateAccountField = (field, value) => ({
 export const CONFIG_FILE_CREATED = 'CONFIG_FILE_CREATED';
 export const configFileCreated = () => ({ type: CONFIG_FILE_CREATED });
 
+export const continueToStep = (step) => {
+	return (dispatch) => {
+		if (step === 5) {
+			dispatch(startRequest());
+			dispatch(componentActions.getInstallationComponentList());
+		}
+	};
+};
 
 export const createConfigFile = (onError) => {
 	return (dispatch, getState) => {
@@ -153,7 +161,7 @@ export const createConfigFile = (onError) => {
 		axios.post('./actions-installation.php', payload)
 			.then(() => {
 				dispatch(configFileCreated());
-				dispatch(componentActions.getInstallationComponentList());
+				dispatch(continueToStep(5));
 			})
 			.catch((e) => {
 				dispatch(requestReturned());

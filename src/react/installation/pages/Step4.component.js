@@ -35,7 +35,9 @@ class Step4 extends Component {
 	}
 
 	nextPage () {
-		this.props.history.push('/step5');
+		const { continueToNextStep, history } = this.props;
+		continueToNextStep();
+		history.push('/step5');
 	}
 
 	onError (e) {

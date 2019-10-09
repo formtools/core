@@ -5,31 +5,32 @@ import * as selectors from './selectors';
 import store from '../../store';
 
 
-export const actions = {
-	SET_CORE_VERSION: 'SET_CORE_VERSION',
-	COMPATIBLE_COMPONENTS_LOADED: 'COMPATIBLE_COMPONENTS_LOADED',
-	COMPATIBLE_COMPONENTS_LOAD_ERROR: 'COMPATIBLE_COMPONENTS_LOAD_ERROR',
-	TOGGLE_API: 'TOGGLE_API',
-	TOGGLE_MODULE: 'TOGGLE_MODULE',
-	TOGGLE_THEME: 'TOGGLE_THEME',
-	EDIT_SELECTED_COMPONENT_LIST: 'EDIT_SELECTED_COMPONENT_LIST',
-	SAVE_SELECTED_COMPONENT_LIST: 'SAVE_SELECTED_COMPONENT_LIST',
-	CANCEL_EDIT_SELECTED_COMPONENT_LIST: 'CANCEL_EDIT_SELECTED_COMPONENT_LIST',
-	SELECT_COMPONENT_TYPE_SECTION: 'SELECT_COMPONENT_TYPE_SECTION',
-	SELECT_COMPONENT_TYPE_SECTIONS: 'SELECT_COMPONENT_TYPE_SECTIONS',
-	TOGGLE_COMPONENT_TYPE_SECTION: 'TOGGLE_COMPONENT_TYPE_SECTION',
-	SELECT_ALL_MODULES: 'SELECT_ALL_MODULES',
-	DESELECT_ALL_MODULES: 'DESELECT_ALL_MODULES',
-	INIT_SELECTED_COMPONENTS: 'INIT_SELECTED_COMPONENTS',
-	SHOW_COMPONENT_CHANGELOG_MODAL: 'SHOW_COMPONENT_CHANGELOG_MODAL',
-	COMPONENT_HISTORY_LOADED: 'COMPONENT_HISTORY_LOADED',
-	CLOSE_COMPONENT_CHANGELOG_MODAL: 'CLOSE_COMPONENT_CHANGELOG_MODAL',
-	START_DOWNLOAD_COMPATIBLE_COMPONENTS: 'START_DOWNLOAD_COMPATIBLE_COMPONENTS',
-	COMPONENT_DOWNLOAD_UNPACK_RESPONSE: 'COMPONENT_DOWNLOAD_UNPACK_RESPONSE', // TODO rename: SUCCESS/ERROR ?
-	TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG: 'TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG',
-	INSTALLED_COMPONENTS_LOADED: 'INSTALLED_COMPONENTS_LOADED',
-	INSTALLED_COMPONENTS_ERROR_LOADING: 'INSTALLED_COMPONENTS_ERROR_LOADING'
-};
+export const TOGGLE_API = 'TOGGLE_API';
+export const TOGGLE_MODULE = 'TOGGLE_MODULE';
+export const TOGGLE_THEME = 'TOGGLE_THEME';
+export const EDIT_SELECTED_COMPONENT_LIST = 'EDIT_SELECTED_COMPONENT_LIST';
+export const SAVE_SELECTED_COMPONENT_LIST = 'SAVE_SELECTED_COMPONENT_LIST';
+export const CANCEL_EDIT_SELECTED_COMPONENT_LIST = 'CANCEL_EDIT_SELECTED_COMPONENT_LIST';
+export const SELECT_COMPONENT_TYPE_SECTION = 'SELECT_COMPONENT_TYPE_SECTION';
+export const TOGGLE_COMPONENT_TYPE_SECTION = 'TOGGLE_COMPONENT_TYPE_SECTION';
+export const SELECT_ALL_MODULES = 'SELECT_ALL_MODULES';
+export const DESELECT_ALL_MODULES = 'DESELECT_ALL_MODULES';
+export const SHOW_COMPONENT_CHANGELOG_MODAL = 'SHOW_COMPONENT_CHANGELOG_MODAL';
+export const COMPONENT_HISTORY_LOADED = 'COMPONENT_HISTORY_LOADED';
+export const CLOSE_COMPONENT_CHANGELOG_MODAL = 'CLOSE_COMPONENT_CHANGELOG_MODAL';
+export const START_DOWNLOAD_COMPATIBLE_COMPONENTS = 'START_DOWNLOAD_COMPATIBLE_COMPONENTS';
+export const COMPONENT_DOWNLOAD_UNPACK_RESPONSE = 'COMPONENT_DOWNLOAD_UNPACK_RESPONSE'; // TODO rename: SUCCESS/ERROR ?
+export const TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG = 'TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG';
+export const INSTALLED_COMPONENTS_LOADED = 'INSTALLED_COMPONENTS_LOADED';
+export const INSTALLED_COMPONENTS_ERROR_LOADING = 'INSTALLED_COMPONENTS_ERROR_LOADING';
+
+
+export const SELECT_COMPONENT_TYPE_SECTIONS = 'SELECT_COMPONENT_TYPE_SECTIONS';
+const selectComponentTypeSections = (sections) => ({
+	type: SELECT_COMPONENT_TYPE_SECTIONS,
+	payload: { sections }
+});
+
 
 
 /**
@@ -37,49 +38,36 @@ export const actions = {
  * the store into a state ready to view + manage the data.
  * @return {Function}
  */
+export const INIT_SELECTED_COMPONENTS = 'INIT_SELECTED_COMPONENTS';
 export const getInstallationComponentList = () => {
 	return (dispatch, getState) => {
 		const state = getState();
-		const base_url = state.constants.data_source_url;
-		const coreVersion = state.constants.core_version;
+		const baseUrl = state.constants.dataSourceUrl;
+		const coreVersion = state.constants.coreVersion;
 
 		dispatch(setCoreVersion(coreVersion));
+		dispatch(selectComponentTypeSections(['module']));
 
-		dispatch({
-			type: actions.SELECT_COMPONENT_TYPE_SECTIONS,
-			payload: {
-				sections: ['module']
-			}
-		});
-
-		axios.get(`${base_url}/feeds/core/${coreVersion}.json`)
-			.then((json) => {
+		axios.get(`${baseUrl}/feeds/core/core-${coreVersion}.json`)
+			.then(({ data }) => {
 
 				// first log the full list of compatible components in the store
-				dispatch({
-					type: actions.COMPATIBLE_COMPONENTS_LOADED,
-					payload: {
-						coreVersion: coreVersion,
-						api: json.api,
-						modules: json.modules,
-						themes: json.themes
-					}
-				});
+				dispatch(compatibleComponentsLoaded(coreVersion, data.api, data.modules, data.themes));
 
 				// next, flag specific components as being selected by default. These are defined per Core version
 				// in the Form Tools CMS, providing the user with some default recommendations
-				const selectedModuleFolders = json.default_components.modules.filter((module) => {
-					return json.modules.find((row) => module === row.folder) !== undefined;
+				const selectedModuleFolders = data.default_components.modules.filter((module) => {
+					return data.modules.find((row) => module === row.folder) !== undefined;
 				});
-				const selectedThemeFolders = json.default_components.themes.filter((theme) => {
-					return json.themes.find((row) => theme === row.folder) !== undefined;
+				const selectedThemeFolders = data.default_components.themes.filter((theme) => {
+					return data.themes.find((row) => theme === row.folder) !== undefined;
 				});
 
 				dispatch({
-					type: actions.INIT_SELECTED_COMPONENTS,
+					type: INIT_SELECTED_COMPONENTS,
 					payload: {
 						coreSelected: false,
-						apiSelected: json.default_components.api,
+						apiSelected: data.default_components.api,
 						selectedModuleFolders,
 						selectedThemeFolders
 					}
@@ -90,6 +78,20 @@ export const getInstallationComponentList = () => {
 	};
 };
 
+export const COMPATIBLE_COMPONENTS_LOADED = 'COMPATIBLE_COMPONENTS_LOADED';
+export const compatibleComponentsLoaded = (coreVersion, api, modules, themes) => ({
+	type: COMPATIBLE_COMPONENTS_LOADED,
+	payload: {
+		coreVersion,
+		api,
+		modules,
+		themes
+	}
+});
+
+export const COMPATIBLE_COMPONENTS_LOAD_ERROR = 'COMPATIBLE_COMPONENTS_LOAD_ERROR';
+const compatibleComponentsLoadError = () => ({ type: COMPATIBLE_COMPONENTS_LOAD_ERROR });
+
 
 /**
  * Used during installation. Gets the list of components compatible with the current core version and initializes
@@ -99,39 +101,32 @@ export const getInstallationComponentList = () => {
 const getManageComponentsList = () => {
 	return function (dispatch, getState) {
 		const state = getState();
-		const base_url = state.constants.data_source_url;
-		const coreVersion = state.constants.core_version;
+		const base_url = state.constants.dataSourceUrl;
+		const coreVersion = state.constants.coreVersion;
 
 		dispatch(setCoreVersion(coreVersion));
 
 		fetch(`${base_url}/feeds/core/${coreVersion}.json`)
 			.then((response) => response.json())
 			.then((json) => {
-				// first log the full list of compatible components in the store
-				dispatch({
-					type: actions.COMPATIBLE_COMPONENTS_LOADED,
-					payload: {
-						coreVersion: coreVersion,
-						api: json.api,
-						modules: json.modules,
-						themes: json.themes
-					}
-				});
+				dispatch(compatibleComponentsLoaded(coreVersion, json.api, json.modules, json.themes);
 			}).catch((e) => {
 				dispatch(compatibleComponentsLoadError(e));
 			});
 	};
 };
 
-
-const compatibleComponentsLoadError = () => ({ type: actions.COMPATIBLE_COMPONENTS_LOAD_ERROR });
 const toggleAPI = () => ({ type: actions.TOGGLE_API });
 const toggleModule = (folder) => ({ type: actions.TOGGLE_MODULE, folder });
 const toggleTheme = (folder) => ({ type: actions.TOGGLE_THEME, folder });
+
+
+export const SET_CORE_VERSION = 'SET_CORE_VERSION';
 const setCoreVersion = (coreVersion) => ({
-	type: actions.SET_CORE_VERSION,
+	type: SET_CORE_VERSION,
 	payload: { coreVersion }
 });
+
 
 const toggleComponent = (componentTypeSection, folder) => {
 	if (componentTypeSection === 'module') {
@@ -144,22 +139,13 @@ const toggleComponent = (componentTypeSection, folder) => {
 };
 
 const editSelectedComponentList = () => ({ type: actions.EDIT_SELECTED_COMPONENT_LIST });
-
 const saveSelectedComponentList = () => ({ type: actions.SAVE_SELECTED_COMPONENT_LIST });
-
 const cancelEditSelectedComponentList = () => ({ type: actions.CANCEL_EDIT_SELECTED_COMPONENT_LIST });
 
 const selectComponentTypeSection = (section) => ({
 	type: actions.SELECT_COMPONENT_TYPE_SECTION,
 	payload: {
 		section
-	}
-});
-
-const selectComponentTypeSections = (sections) => ({
-	type: actions.SELECT_COMPONENT_TYPE_SECTIONS,
-	payload: {
-		sections
 	}
 });
 
@@ -319,31 +305,31 @@ const downloadAndUnpackComponent = (item, data_source_url) => {
 const toggleShowDetailedDownloadLog = () => ({ type: actions.TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG });
 
 
-const getInstalledComponents = () => {
-	fetch(`${g.root_url}/global/code/actions-react.php?action=get_installed_components`)
-	  .then((response) => response.json())
-	  .then((json) => {
-		  store.dispatch({
-			  type: actions.INSTALLED_COMPONENTS_LOADED,
-			  payload: {
-				  components: json
-			  }
-		  });
-
-		  store.dispatch({
-			  type: actions.INIT_SELECTED_COMPONENTS,
-			  payload: {
-				  coreSelected: true,
-				  apiSelected: json.api.installed,
-				  selectedModuleFolders: json.modules.map((row) => row.module_folder),
-				  selectedThemeFolders: json.themes.filter((row) => row.theme_folder !== 'default').map((row) => row.theme_folder)
-			  }
-		  });
-
-	  }).catch((e) => {
-		// store.dispatch({
-		// 	type: actions.INSTALLED_MODULES_ERROR_LOADING, // TODO
-		// 	error: e
-		// });
-	});
-};
+// const getInstalledComponents = () => {
+// 	fetch(`${g.root_url}/global/code/actions-react.php?action=get_installed_components`)
+// 	  .then((response) => response.json())
+// 	  .then((json) => {
+// 		  store.dispatch({
+// 			  type: actions.INSTALLED_COMPONENTS_LOADED,
+// 			  payload: {
+// 				  components: json
+// 			  }
+// 		  });
+//
+// 		  store.dispatch({
+// 			  type: actions.INIT_SELECTED_COMPONENTS,
+// 			  payload: {
+// 				  coreSelected: true,
+// 				  apiSelected: json.api.installed,
+// 				  selectedModuleFolders: json.modules.map((row) => row.module_folder),
+// 				  selectedThemeFolders: json.themes.filter((row) => row.theme_folder !== 'default').map((row) => row.theme_folder)
+// 			  }
+// 		  });
+//
+// 	  }).catch((e) => {
+// 		// store.dispatch({
+// 		// 	type: actions.INSTALLED_MODULES_ERROR_LOADING, // TODO
+// 		// 	error: e
+// 		// });
+// 	});
+// };

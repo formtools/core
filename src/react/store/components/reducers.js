@@ -1,9 +1,10 @@
-import { actions } from './actions';
+import * as actions from './actions';
 import * as helpers from './helpers';
 import { arrayUtils } from '../../utils';
+import reducerRegistry from '../reducerRegistry';
 
 
-export default function reducer (state = {
+const reducer = (state = {
 	compatibleComponentsLoaded: false,
 	installedComponentsLoaded: false,
 	errorLoading: false,
@@ -55,7 +56,7 @@ export default function reducer (state = {
 	// want to revert
 	lastSavedComponents: {}
 
-}, action) {
+}, action) => {
 
 	const payload = action.payload;
 	switch (action.type) {
@@ -286,6 +287,9 @@ export default function reducer (state = {
 
 	return state;
 };
+
+reducerRegistry.register('components', reducer);
+
 
 const selectedComponentsReducer = (state = [], folder) => {
 	if (state.includes(folder)) {
