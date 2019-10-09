@@ -123,15 +123,15 @@ const reducer = (state = {
 				coreVersion: payload.coreVersion
 			};
 
-		case actions.INSTALLED_COMPONENTS_LOADED:
-			return {
-				...state,
-				installedComponentsLoaded: true,
-				installedCore: payload.components.core,
-				installedAPI: payload.components.api,
-				installedModules: payload.components.modules,
-				installedThemes: payload.components.themes
-			};
+		// case actions.INSTALLED_COMPONENTS_LOADED:
+		// 	return {
+		// 		...state,
+		// 		installedComponentsLoaded: true,
+		// 		installedCore: payload.components.core,
+		// 		installedAPI: payload.components.api,
+		// 		installedModules: payload.components.modules,
+		// 		installedThemes: payload.components.themes
+		// 	};
 
 		case actions.TOGGLE_API:
 			return {

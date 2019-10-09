@@ -5,32 +5,11 @@ import * as selectors from './selectors';
 import store from '../../store';
 
 
-export const TOGGLE_API = 'TOGGLE_API';
-export const TOGGLE_MODULE = 'TOGGLE_MODULE';
-export const TOGGLE_THEME = 'TOGGLE_THEME';
-export const EDIT_SELECTED_COMPONENT_LIST = 'EDIT_SELECTED_COMPONENT_LIST';
-export const SAVE_SELECTED_COMPONENT_LIST = 'SAVE_SELECTED_COMPONENT_LIST';
-export const CANCEL_EDIT_SELECTED_COMPONENT_LIST = 'CANCEL_EDIT_SELECTED_COMPONENT_LIST';
-export const SELECT_COMPONENT_TYPE_SECTION = 'SELECT_COMPONENT_TYPE_SECTION';
-export const TOGGLE_COMPONENT_TYPE_SECTION = 'TOGGLE_COMPONENT_TYPE_SECTION';
-export const SELECT_ALL_MODULES = 'SELECT_ALL_MODULES';
-export const DESELECT_ALL_MODULES = 'DESELECT_ALL_MODULES';
-export const SHOW_COMPONENT_CHANGELOG_MODAL = 'SHOW_COMPONENT_CHANGELOG_MODAL';
-export const COMPONENT_HISTORY_LOADED = 'COMPONENT_HISTORY_LOADED';
-export const CLOSE_COMPONENT_CHANGELOG_MODAL = 'CLOSE_COMPONENT_CHANGELOG_MODAL';
-export const START_DOWNLOAD_COMPATIBLE_COMPONENTS = 'START_DOWNLOAD_COMPATIBLE_COMPONENTS';
-export const COMPONENT_DOWNLOAD_UNPACK_RESPONSE = 'COMPONENT_DOWNLOAD_UNPACK_RESPONSE'; // TODO rename: SUCCESS/ERROR ?
-export const TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG = 'TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG';
-export const INSTALLED_COMPONENTS_LOADED = 'INSTALLED_COMPONENTS_LOADED';
-export const INSTALLED_COMPONENTS_ERROR_LOADING = 'INSTALLED_COMPONENTS_ERROR_LOADING';
-
-
 export const SELECT_COMPONENT_TYPE_SECTIONS = 'SELECT_COMPONENT_TYPE_SECTIONS';
 const selectComponentTypeSections = (sections) => ({
 	type: SELECT_COMPONENT_TYPE_SECTIONS,
 	payload: { sections }
 });
-
 
 
 /**
@@ -109,16 +88,21 @@ const getManageComponentsList = () => {
 		fetch(`${base_url}/feeds/core/${coreVersion}.json`)
 			.then((response) => response.json())
 			.then((json) => {
-				dispatch(compatibleComponentsLoaded(coreVersion, json.api, json.modules, json.themes);
+				dispatch(compatibleComponentsLoaded(coreVersion, json.api, json.modules, json.themes));
 			}).catch((e) => {
 				dispatch(compatibleComponentsLoadError(e));
 			});
 	};
 };
 
-const toggleAPI = () => ({ type: actions.TOGGLE_API });
-const toggleModule = (folder) => ({ type: actions.TOGGLE_MODULE, folder });
-const toggleTheme = (folder) => ({ type: actions.TOGGLE_THEME, folder });
+export const TOGGLE_API = 'TOGGLE_API';
+const toggleAPI = () => ({ type: TOGGLE_API });
+
+export const TOGGLE_MODULE = 'TOGGLE_MODULE';
+const toggleModule = (folder) => ({ type: TOGGLE_MODULE, folder });
+
+export const TOGGLE_THEME = 'TOGGLE_THEME';
+const toggleTheme = (folder) => ({ type: TOGGLE_THEME, folder });
 
 
 export const SET_CORE_VERSION = 'SET_CORE_VERSION';
@@ -138,35 +122,45 @@ const toggleComponent = (componentTypeSection, folder) => {
 	}
 };
 
-const editSelectedComponentList = () => ({ type: actions.EDIT_SELECTED_COMPONENT_LIST });
-const saveSelectedComponentList = () => ({ type: actions.SAVE_SELECTED_COMPONENT_LIST });
-const cancelEditSelectedComponentList = () => ({ type: actions.CANCEL_EDIT_SELECTED_COMPONENT_LIST });
+export const EDIT_SELECTED_COMPONENT_LIST = 'EDIT_SELECTED_COMPONENT_LIST';
+const editSelectedComponentList = () => ({ type: EDIT_SELECTED_COMPONENT_LIST });
 
+export const SAVE_SELECTED_COMPONENT_LIST = 'SAVE_SELECTED_COMPONENT_LIST';
+const saveSelectedComponentList = () => ({ type: SAVE_SELECTED_COMPONENT_LIST });
+
+export const CANCEL_EDIT_SELECTED_COMPONENT_LIST = 'CANCEL_EDIT_SELECTED_COMPONENT_LIST';
+const cancelEditSelectedComponentList = () => ({ type: CANCEL_EDIT_SELECTED_COMPONENT_LIST });
+
+export const SELECT_COMPONENT_TYPE_SECTION = 'SELECT_COMPONENT_TYPE_SECTION';
 const selectComponentTypeSection = (section) => ({
-	type: actions.SELECT_COMPONENT_TYPE_SECTION,
+	type: SELECT_COMPONENT_TYPE_SECTION,
 	payload: {
 		section
 	}
 });
 
+export const TOGGLE_COMPONENT_TYPE_SECTION = 'TOGGLE_COMPONENT_TYPE_SECTION';
 const toggleComponentTypeSection = (section) => ({
-	type: actions.TOGGLE_COMPONENT_TYPE_SECTION,
+	type: TOGGLE_COMPONENT_TYPE_SECTION,
 	payload: {
 		section
 	}
 });
 
+export const SELECT_ALL_MODULES = 'SELECT_ALL_MODULES';
+export const DESELECT_ALL_MODULES = 'DESELECT_ALL_MODULES';
 const toggleAllModulesSelected = () => {
 	return (dispatch, getState) => {
 		const allSelected = selectors.allModulesSelected(getState());
 		dispatch({
-			type: allSelected ? actions.DESELECT_ALL_MODULES : actions.SELECT_ALL_MODULES
+			type: allSelected ? DESELECT_ALL_MODULES : SELECT_ALL_MODULES
 		});
 	};
 };
 
 
 // folder is the theme/module folder, or "core" or "api"
+export const SHOW_COMPONENT_CHANGELOG_MODAL = 'SHOW_COMPONENT_CHANGELOG_MODAL';
 const showInfoModal = ({ componentType, folder }) => {
 	return (dispatch, getState) => {
 		const changelogs = selectors.getChangelogs(getState());
@@ -176,7 +170,7 @@ const showInfoModal = ({ componentType, folder }) => {
 		}
 
 		dispatch({
-			type: actions.SHOW_COMPONENT_CHANGELOG_MODAL,
+			type: SHOW_COMPONENT_CHANGELOG_MODAL,
 			payload: {
 				componentType,
 				folder
@@ -187,6 +181,7 @@ const showInfoModal = ({ componentType, folder }) => {
 
 
 // pings the server to get the component history for the Core, API, module or theme
+export const COMPONENT_HISTORY_LOADED = 'COMPONENT_HISTORY_LOADED';
 const queryComponentInfo = (componentType, folder) => {
 	const url = `../global/code/actions-react.php?action=get_component_info&type=${componentType}&component=${folder}`;
 
@@ -199,7 +194,7 @@ const queryComponentInfo = (componentType, folder) => {
 				versions = json.data.versions;
 			}
 			store.dispatch({
-				type: actions.COMPONENT_HISTORY_LOADED,
+				type: COMPONENT_HISTORY_LOADED,
 				payload: {
 					folder,
 					loadSuccess: json.success,
@@ -215,7 +210,8 @@ const queryComponentInfo = (componentType, folder) => {
 		});
 };
 
-const closeInfoModal = () => ({ type: actions.CLOSE_COMPONENT_CHANGELOG_MODAL });
+export const CLOSE_COMPONENT_CHANGELOG_MODAL = 'CLOSE_COMPONENT_CHANGELOG_MODAL';
+const closeInfoModal = () => ({ type: CLOSE_COMPONENT_CHANGELOG_MODAL });
 
 
 const onPrevNext = (dir) => {
@@ -235,6 +231,7 @@ const onPrevNext = (dir) => {
 };
 
 
+export const START_DOWNLOAD_COMPATIBLE_COMPONENTS = 'START_DOWNLOAD_COMPATIBLE_COMPONENTS';
 const downloadCompatibleComponents = () => {
 	return (dispatch, getState) => {
 		const state = getState();
@@ -253,7 +250,7 @@ const downloadCompatibleComponents = () => {
 		});
 
 		dispatch({
-			type: actions.START_DOWNLOAD_COMPATIBLE_COMPONENTS,
+			type: START_DOWNLOAD_COMPATIBLE_COMPONENTS,
 			payload: { componentList }
 		});
 
@@ -267,6 +264,7 @@ const downloadCompatibleComponents = () => {
 };
 
 
+export const COMPONENT_DOWNLOAD_UNPACK_RESPONSE = 'COMPONENT_DOWNLOAD_UNPACK_RESPONSE'; // TODO rename: SUCCESS/ERROR ?
 const downloadAndUnpackComponent = (item, data_source_url) => {
 	let folder = '';
 
@@ -286,7 +284,7 @@ const downloadAndUnpackComponent = (item, data_source_url) => {
 		.then((response) => response.json())
 		.then((json) => {
 			store.dispatch({
-				type: actions.COMPONENT_DOWNLOAD_UNPACK_RESPONSE,
+				type: COMPONENT_DOWNLOAD_UNPACK_RESPONSE,
 				payload: {
 					...json,
 					folder: item.folder,
@@ -302,9 +300,12 @@ const downloadAndUnpackComponent = (item, data_source_url) => {
 };
 
 
-const toggleShowDetailedDownloadLog = () => ({ type: actions.TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG });
+export const TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG = 'TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG';
+const toggleShowDetailedDownloadLog = () => ({ type: TOGGLE_SHOW_DETAILED_DOWNLOAD_LOG });
 
 
+// export const INSTALLED_COMPONENTS_LOADED = 'INSTALLED_COMPONENTS_LOADED';
+// export const INSTALLED_COMPONENTS_ERROR_LOADING = 'INSTALLED_COMPONENTS_ERROR_LOADING';
 // const getInstalledComponents = () => {
 // 	fetch(`${g.root_url}/global/code/actions-react.php?action=get_installed_components`)
 // 	  .then((response) => response.json())
