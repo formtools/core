@@ -1,4 +1,5 @@
 import { selectors as constantSelectors } from '../../store/constants';
+import { generalUtils } from '../../utils';
 
 export const getLanguage = (state) => state.installation.language;
 export const isLoading = (state) => state.installation.loading;
@@ -28,17 +29,19 @@ export const getConfigFileContent = (state) => {
 	const { dbHostname, dbName, dbPort, dbUsername, dbPassword, dbTablePrefix } = state.installation.dbSettings;
 	const { rootDir } = constantSelectors.getConstants(state);
 
-	const result = window.location.href.match(/(.*)(\/install\/#\/step\d)/);
+	const result = generalUtils.getCurrentUrl().match(/(.*)(\/install\/#\/step\d)/);
 	const rootUrl = result[1];
-	const username = dbUsername.replace(/\$/, '\\$');
-	const password = dbPassword.replace(/\$/, '\\$');
+	const username = dbUsername.replace(/\$/g, '\\$');
+	const password = dbPassword.replace(/\$/g, '\\$');
+	const cleanRootDir = rootDir.replace(/\\/g, '\\\\');
 
 	let customCacheFolderRow = '';
 	if (shouldUseCustomCacheFolder(state)) {
 		const customCacheFolder = getCustomCacheFolder(state);
 		const defaultCacheFolder = getDefaultCacheFolder(state);
 		if (customCacheFolder !== defaultCacheFolder) {
-			customCacheFolderRow = `$g_custom_cache_folder = "${getCustomCacheFolder(state)}";\n`;
+			const cleanCustomCacheFolder = getCustomCacheFolder(state).replace(/\\/g, '\\\\');
+			customCacheFolderRow = `$g_custom_cache_folder = "${cleanCustomCacheFolder}";\n`;
 		}
 	}
 
@@ -46,7 +49,7 @@ export const getConfigFileContent = (state) => {
 
 // main program paths - no trailing slashes!
 $g_root_url = "${rootUrl}";
-$g_root_dir = "${rootDir}";
+$g_root_dir = "${cleanRootDir}";
 
 // database settings
 $g_db_hostname = "${dbHostname}";
@@ -56,6 +59,7 @@ $g_db_username = "${username}";
 $g_db_password = "${password}";
 $g_table_prefix = "${dbTablePrefix}";
 ${customCacheFolderRow}
-?>`;
+?>
+`;
 };
 

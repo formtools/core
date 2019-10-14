@@ -58,3 +58,7 @@ export const bindMethods = (methods, ref) => {
 		ref[method] = ref[method].bind(ref);
 	});
 };
+
+export const getCurrentUrl = () => window.location.href;
+
+export const deepCopy = (obj) => JSON.parse(JSON.stringify(obj));
