@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Folosiţi formularul de mai jos pentr
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "a se vedea PHP {\$datefunctionlink} funcţie de opţiuni de formatare a";
 $LANG["text_default_file_settings_page"] = "Această pagină defineşte setările de încărcare de fişiere pentru instalarea dvs. Formular de Instrumente. Aceste norme se aplică la toate fişierele încărcate prin intermediul formularului de Instrumente, cu excepţia cazului în mod explicit suprascrisă pentru un câmp formular individuale. Notă: dacă modificaţi folderul de încărcare după ce fişierele au fost încărcate, acestea vor fi mutate automat în noul folder.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Înainte de a continua, va trebui să actualizaţi <b>teme</b> dvs. <b>/ / default /</b> folderul <b>cache</b> pentru a permite plin citească şi să scrie permisiunile. Odată ce se face acest lucru, acest mesaj va dispărea şi puteţi instala script-ul.";
 $LANG["text_default_values_in_view"] = "Această secţiune este opţională. Toate observaţiile create cu această Vezi va conţine valorile implicite specificate aici.";
 $LANG["text_delete_all_forms"] = "Vreau să ştergeţi toate fişierele care au fost încărcate prin intermediul acestui formular";
 $LANG["text_delete_form_warning"] = "Sunteţi sigur că doriţi să ştergeţi acest formular? Această acţiune nu poate fi anulată. Toate datele vor fi pierdute definitiv!";

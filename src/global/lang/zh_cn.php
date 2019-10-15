@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "使用下面的表单创建一个新�
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "看到PHP的格式化选项 {\$datefunctionlink} 功能";
 $LANG["text_default_file_settings_page"] = "本页面为表单定义工具安装文件上传设置。本规则适用于通过表格工具上载的所有文件，除非明确为个人窗体域覆盖。注意：如果您更改上载文件夹后，文件已被上传，他们将自动移到新文件夹。";
-$LANG["text_default_theme_cache_folder_not_writable"] = "在继续之前，您需要更新您的<b>/主题/默认/缓存</b>文件夹，以便充分读写权限。一旦这样做，该消息便会消失，你可以安装脚本。";
 $LANG["text_default_values_in_view"] = "这部分是可选的的。与此视图中创建的所有参赛作品将包含此处指定的默认​​值。";
 $LANG["text_delete_all_forms"] = "我要删除所有在此表格上传的文件";
 $LANG["text_delete_form_warning"] = "您确定要删除此表格？一旦删除，所有相关数据将被彻底删除！";

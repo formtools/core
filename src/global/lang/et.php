@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Kasutage allpool olevat vormi luua uu
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "vt PHP {\$datefunctionlink} funktsiooni vormingusuvandid";
 $LANG["text_default_file_settings_page"] = "See leht määratleb faili üleslaadimise seadeid vorm Vahendid paigaldus. Need eeskirjad kehtivad kõigi faile alla laadinud kaudu vorm Tööriistad, kui ei ole otseselt kaalu üksiku vormi väli. Märkus: kui te muudate upload kausta pärast failid on saadetud, on nad automaatselt kolis uude kausta.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Enne jätkamist peate uuenda <b>/ themes / default / cache</b> kataloogi, et võimaldada täielikult lugeda ja kirjutada õigused. Kui see on tehtud, see sõnum kaob ja saab paigaldada skript.";
 $LANG["text_default_values_in_view"] = "See osa on vabatahtlik. Kõiki ettepanekuid loodud selle seisukohaga sisaldavad vaikeväärtused siin määratud.";
 $LANG["text_delete_all_forms"] = "Ma tahan kustutada kõik failid, mis olid laadinud selle vormi kaudu";
 $LANG["text_delete_form_warning"] = "Kas olete kindel, et soovite kustutada selle vormi? Seda toimingut ei saa tagasi võtta. Kõik andmed jäädavalt kadunud!";

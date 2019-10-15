@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Aşağıdaki formu kullanarak yeni bi
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "biçimlendirme seçenekleri PHP {\$datefunctionlink} işlevi görmek";
 $LANG["text_default_file_settings_page"] = "Bu sayfa Formu Araçlar kurulum için dosya yükleme ayarlarını tanımlar. Bu kurallar tüm dosyaları Formu Araçları aracılığıyla yüklenen için, açıkça bağımsız bir form alanı için geçersiz geçerlidir. Not: Eğer yüklemek klasör sonra dosyalar yüklendikten değiştirdiğinizde, otomatik olarak yeni klasöre taşınır.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Devam etmeden önce, <b>/ default / cache</b> klasörüne <b>/ temalar</b> güncellemek için tam okuma ve yazma izinleri izin gerekir. Bu kez, bu mesajı kaybolur yapılır ve komut dosyası yükleyebilirsiniz.";
 $LANG["text_default_values_in_view"] = "Bu bölüm isteğe bağlıdır. Bu Görünümü ile oluşturulan tüm gönderimler burada belirtilen varsayılan değerleri içerir.";
 $LANG["text_delete_all_forms"] = "Ben bu formu aracılığıyla yüklenmiş olan tüm dosyaları silmek istiyorum";
 $LANG["text_delete_form_warning"] = "Sen bu formu silmek istediğinizden emin misiniz? Bu eylem geri alınamaz. Tüm veriler kalıcı olarak kaybolur!";

@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Naudokite šią formą, norėdami suk
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "rodyti PHP {\$datefunctionlink} funkcija formatavimą";
 $LANG["text_default_file_settings_page"] = "Šis puslapis apibrėžia file upload nustatymus savo forma priemonių įdiegimą. Šios taisyklės taikomos visiems failai įkeliami per formą įrankiai, nebent aiškiai viršesni už atskirų formos lauką. Pastaba: jei jūs keičiate įkėlimo aplanką po failai nebuvo įkelti, jie bus automatiškai perkeltas į naują katalogą.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Prieš tęsdami, jums reikia atnaujinti savo <b>/ themes / default / talpyklos</b> aplanką, kad būtų galima visiškai skaityti ir rašyti leidimus. Kai tai bus padaryta, tai žinutė dings, ir jūs galite įdiegti scenarijų.";
 $LANG["text_default_values_in_view"] = "Ši dalis yra neprivaloma. Visi su šia nuomone pastabas, sukurta, yra numatytosios vertės, nurodytos čia.";
 $LANG["text_delete_all_forms"] = "Noriu ištrinti visus failus, kurie buvo įkeltas per šią formą";
 $LANG["text_delete_form_warning"] = "Ar tikrai norite ištrinti šią formą? Šis veiksmas negali būti atšauktas. Visi duomenys bus prarasti visam laikui!";

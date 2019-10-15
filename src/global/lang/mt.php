@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Uża l-formola t&#39;hawn taħt biex 
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "ara PHP {\$datefunctionlink} funzjoni għall-ifformattjar għażliet";
 $LANG["text_default_file_settings_page"] = "Din il-paġna jiddefinixxi s-settings upload file għall-installazzjoni tiegħek Għodod Form. Dawn ir-regoli japplikaw għall-fajls kollha jittellgħu permezz ta &#39;Formola Għodod, sakemm ma jiġix megħluba għal qasam formola individwali. Nota: jekk tibdel il-folder ta &#39;upload wara fajls ġew imtella&#39;, dawn se jkunu awtomatikament trasferita għall-folder ġodda.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Qabel ma tkompli, ser ikollok bżonn li taġġorna <b>/ temi</b> tiegħek <b>/ default cache</b> folder <b>/</b> sabiex jippermettu sħiħ jaqraw u jiktbu l-permessi. Ladarba dan isir, dan il-messaġġ se jisparixxi u inti tista &#39;tinstalla l-iskrittura.";
 $LANG["text_default_values_in_view"] = "Din is-sezzjoni hija fakultattiva. Is-sottomissjonijiet kollha maħluqa ma &#39;dan Ara se jkun fiha l-valuri awtomatiċi speċifikati hawn.";
 $LANG["text_delete_all_forms"] = "Irrid li titħassar kull fajls li ġew imtella &#39;permezz ta&#39; din il-formola";
 $LANG["text_delete_form_warning"] = "Inti żgur li trid tneħħi din il-formola? This action cannot be undone. Id-data kollha ser ikunu mitlufa għal dejjem!";

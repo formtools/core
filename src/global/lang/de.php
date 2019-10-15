@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Verwenden Sie das untenstehende Formu
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "siehe PHP {\$datefunctionlink} Funktion für die Formatierung Optionen";
 $LANG["text_default_file_settings_page"] = "Diese Seite definiert die Datei-Upload-Einstellungen für Ihre Form Tools Installation. Diese Regeln gelten für alle in Form Tools hochgeladenen Dateien, falls es nicht explizit für ein einzelnes Feld anders festgelegt worden ist. Hinweis: Wenn Sie den Upload-Ordner nachdem Dateien hochgeladen wurden ändern, werden sie automatisch in den neuen Ordner verschoben.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Bevor wir fortfahren, müssen Sie Ihre <b>/ themes</b> Update <b>/ default / Cache-Ordner</b> auf, vollständigen Lese-und Schreibrechte. Sobald dies erledigt ist, wird diese Meldung verschwinden und Sie können das Skript zu installieren.";
 $LANG["text_default_values_in_view"] = "Dieser Abschnitt ist optional. Alle Einreichungen mit dieser Ansicht erstellt werden, enthalten die Standardwerte hier angegebenen.";
 $LANG["text_delete_all_forms"] = "Ich möchte alle Dateien die via diesem Formular hochgeladen wurden löschen.";
 $LANG["text_delete_form_warning"] = "Sind Sie sicher, dass Sie das Formular löschen wollen? Diese Aktion kann nicht rückgängig gemacht werden. Alle Data wir für immer verloren gehen!";

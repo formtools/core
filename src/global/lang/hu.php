@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Az alábbi űrlap segítségével hoz
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "lásd a PHP {\$datefunctionlink} funkció formázási lehetőségek";
 $LANG["text_default_file_settings_page"] = "Az oldal határozza meg a feltöltés beállításait Form eszközök telepítését. Ezek a szabályok vonatkoznak az összes feltöltött fájlok révén forma eszközök, kivéve, ha kifejezetten felülírja az egyedi formába. Megjegyzés: Ha megváltoztatjuk a feltöltés után a mappa fájl lett feltöltve, akkor automatikusan átkerül az új mappába.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Mielőtt folytatnád, meg kell frissíteni a <b>/ themes / default / cache</b> mappát, hogy lehetővé tegye a teljes olvasási és írási. Ha ez megtörtént, ez az üzenet eltűnik, és telepítheti a szkriptet.";
 $LANG["text_default_values_in_view"] = "Ez a rész nem kötelező. Minden beadványt készített a nézet tartalmazza az alapértelmezett értékek az itt megadott.";
 $LANG["text_delete_all_forms"] = "Azt akarom, hogy törölje az összes fájlt, hogy volt feltöltött keresztül az alábbi űrlapot";
 $LANG["text_delete_form_warning"] = "Biztos benne, hogy törölni kívánja ezt az űrlapot? Ez a művelet nem vonható vissza. Minden adat véglegesen elveszik!";

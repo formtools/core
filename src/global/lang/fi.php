@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Alla olevan lomakkeen avulla voit luo
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "Katso PHP {\$datefunctionlink} toiminto muotoiluvaihtoehtoja";
 $LANG["text_default_file_settings_page"] = "Sivua määritellään tiedoston lataa tallentaminen muoto Tools asennus. Näitä sääntöjä sovelletaan kaikkiin ladatut tiedostot kautta muoto Työkalut, ellei nimenomaisesti ohittaa yksittäisen lomakkeen kenttään. Huomautus: Jos muutat Siirrä kansioon, kun tiedostoja ei ole ladattu, ne siirretään automaattisesti uuteen kansioon.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Ennen kuin jatkat, sinun täytyy päivittää <b>/ themes / default / cache</b> kansio, jotta täydet luku-ja kirjoitusoikeudet. Kun tämä on tehty, viesti katoaa, ja voit asentaa script.";
 $LANG["text_default_values_in_view"] = "Tämä osio on valinnainen. Kaikki näkökannat luotu tähän näkemykseen sisältää oletusarvot tässä määritetty.";
 $LANG["text_delete_all_forms"] = "Haluan poistaa kaikki tiedostot, jotka on ladattu tällä lomakkeella";
 $LANG["text_delete_form_warning"] = "Oletko varma että haluat poistaa tämän lomakkeen? Tätä toimintoa ei voi kumota. Kaikki tiedot menetetään pysyvästi!";

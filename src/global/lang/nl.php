@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Gebruik het onderstaande formulier om
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "zie de PHP {\$datefunctionlink} functie voor het formatteren van opties";
 $LANG["text_default_file_settings_page"] = "Deze pagina wordt het bestand uploaden instellingen voor uw formulier Tools installatie. Deze regels gelden voor alle bestanden geupload via Vorm Tools, tenzij uitdrukkelijk overschreven voor een individuele vorm veld. Opmerking: als u de upload map na de bestanden zijn geüpload veranderen, worden ze automatisch verplaatst naar de nieuwe map.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Voordat u verdergaat, moet u uw <b>/ thema</b> update <b>/ default / cache</b> map om volledige lees en schrijf permissies. Zodra dit gedaan is, zal dit bericht verdwijnen en u kunt installeren het script.";
 $LANG["text_default_values_in_view"] = "Deze sectie is optioneel. Alle inzendingen die met dit View bevat de hier genoemde standaardwaarden.";
 $LANG["text_delete_all_forms"] = "Ik wil alle bestanden verwijderen die zijn geupload via dit formulier";
 $LANG["text_delete_form_warning"] = "Weet u zeker dat u dit formulier wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt. Alle gegevens zijn dan voorgoed verloren!";

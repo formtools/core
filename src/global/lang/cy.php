@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Defnyddiwch y ffurflen isod i greu cy
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "gweld PHP {\$datefunctionlink} swyddogaeth ar gyfer fformatio opsiynau";
 $LANG["text_default_file_settings_page"] = "Mae&#39;r dudalen hon yn diffinio&#39;r gosodiadau llwytho ffeil ar gyfer eich gosodiad Offer Ffurflen. Mae&#39;r rheolau hyn yn berthnasol i bob lanlwytho ffeiliau trwy Ffurflen Offer, oni bai diystyru&#39;r yn benodol ar gyfer maes ffurflen unigol. Sylwer: os byddwch yn newid y ffolder ar ôl lanlwytho ffeiliau wedi eu lanlwytho, byddant yn cael eu symud yn awtomatig i&#39;r ffolder newydd.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Cyn parhau, bydd angen i chi ddiweddaru eich <b>/ themâu / cache</b> folder <b>ball /</b> i ganiatáu llawn darllen ac ysgrifennu hawliau. Unwaith y bydd hyn yn cael ei wneud, bydd y neges hon yn diflannu a gallwch osod y sgript.";
 $LANG["text_default_values_in_view"] = "Mae&#39;r adran hon yn ddewisol. Bydd yr holl gyflwyniadau a grëwyd gyda hyn View gynnwys y gwerthoedd diofyn a nodir yma.";
 $LANG["text_delete_all_forms"] = "Rwyf am i dileu pob ffeil a oedd yn lanlwytho trwy gyfrwng y ffurflen hon";
 $LANG["text_delete_form_warning"] = "A ydych yn sicr eich bod am ddileu y ffurflen hon? Ni all hyn fod yn dadwneud gweithredu. Bydd yr holl ddata yn cael ei golli am byth!";

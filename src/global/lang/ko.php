@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "아래의 양식을 사용하여 새 
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "서식 옵션에 대한 PHP는 {\$datefunctionlink} 함수를 참조하십시오";
 $LANG["text_default_file_settings_page"] = "이 페이지는 귀하의 양식 도구를 설치하기 위해 파일을 업로드 설정을 정의합니다. 이러한 규칙은 모든 파일을 양식 도구를 통해 업로드하려면 명시적으로 개별 양식 필드에 대한 재정의에 적용됩니다. 참고 : 만약 여러분이 폴더에 업로드 후 파일을 업로드되었습니다 변화, 그들은 자동으로 새 폴더로 이동됩니다.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "계속하기 전에, 당신은 <b>/ 기본 / 캐시</b> 폴더 <b>/ 테마</b> 업데이 트의 전체 읽기 및 쓰기 권한을 허용하도록해야합니다. 이렇게되면,이 메시지가 사라집니다 이루어집니다 당신 스크립트를 설치할 수있습니다.";
 $LANG["text_default_values_in_view"] = "이 섹션은 선택 사항입니다. 이보기로 만든 모든 작품이 여기에 지정된 기본값을 포함합니다.";
 $LANG["text_delete_all_forms"] = "나는이 양식을 통해 업로드된 모든 파일을 삭제하려면";
 $LANG["text_delete_form_warning"] = "당신이이 양식을 삭제하시겠습니까? 이 작업은 취소할 수없습니다. 모든 데이터가 영구적으로 손실됩니다!";

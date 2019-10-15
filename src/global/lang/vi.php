@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Sử dụng mẫu dưới đây để
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "xem PHP {\$datefunctionlink} chức năng cho các tùy chọn định dạng";
 $LANG["text_default_file_settings_page"] = "Sửa đổi định nghĩa các thiết lập tải lên tập tin để cài đặt cụ mẫu của bạn. Những quy tắc áp dụng cho tất cả các tập tin được tải lên thông qua mẫu cụ, trừ khi rõ ràng ghi đe đối với một lĩnh vực hình thức cá nhân. Lưu ý: nếu bạn thay đổi thư mục tải lên sau khi các tập tin đã tải lên, chúng sẽ được tự động chuyển vào thư mục mới.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Trước khi tiếp tục, bạn sẽ cần phải cập nhật thông <b>tin / themes / default</b> thư mục <b>cache /</b> đầy đủ để cho phép đọc và ghi các điều khoản. Một khi điều này được thực hiện, thông báo này sẽ biến mất và bạn có thể cài đặt các tập lệnh.";
 $LANG["text_default_values_in_view"] = "Phần này là tùy chọn. Các bài nộp được tạo ra bằng cách View này sẽ chứa các giá trị mặc định quy định ở đây.";
 $LANG["text_delete_all_forms"] = "Tôi muốn xóa tất cả các tập tin được tải lên thông qua hình thức này";
 $LANG["text_delete_form_warning"] = "Bạn có chắc chắn muốn xoá mẫu này? Hành động này không thể được hoàn tác. Tất cả dữ liệu sẽ vĩnh viễn mất!";

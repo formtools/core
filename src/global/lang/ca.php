@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Utilitzeu el següent formulari per c
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "veure PHP {\$datefunctionlink} funció de les opcions de format";
 $LANG["text_default_file_settings_page"] = "Aquesta pàgina defineix la configuració de la càrrega d&#39;arxius per a la instal.lació de la seva Formulari d&#39;Eines. Aquestes normes s&#39;apliquen a tots els fitxers enviats mitjançant el formulari d&#39;eines, a menys que explícitament es reemplaça per un camp un per un. Nota: Si canvia la carpeta després de pujar arxius han estat pujats, que passaran automàticament a la nova carpeta.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Abans de continuar, haurà d&#39;actualitzar el fitxer <b>/ temes / /</b> carpeta de <b>memòria cau per defecte</b> per a permetre accés total de lectura i escriptura. Un cop fet això, el missatge desapareixerà i es pot instal lar la seqüència de comandaments.";
 $LANG["text_default_values_in_view"] = "Aquesta secció és opcional. Totes les presentacions creades amb aquesta opinió contindrà els valors predeterminats especificats aquí.";
 $LANG["text_delete_all_forms"] = "Vull esborrar tots els arxius que van ser enviats a través d&#39;aquest formulari de";
 $LANG["text_delete_form_warning"] = "Estàs segur que vols eliminar aquesta manera? Aquesta acció no es pot desfer. Totes les dades es perdran permanentment!";

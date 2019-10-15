@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Gunakan borang di bawah ini untuk mem
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "lihat PHP {\$datefunctionlink} fungsi untuk pilihan pemformatan";
 $LANG["text_default_file_settings_page"] = "Laman ini mentakrif tatacara upload fail untuk Borang Alatan pemasangan. Peraturan-Peraturan ini berlaku untuk semua file di-upload melalui Form Tools, kecuali secara eksplisit ditolak untuk setiap bidang bentuk. Nota: jika anda menukar folder upload selepas fail sudah di-upload, mereka akan dipindahkan secara automatik ke folder baru.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Sebelum meneruskan, anda perlu mengemas <b>/ themes / default / cache</b> folder untuk membolehkan membaca dan menulis penuh permissions. Setelah ini dilakukan, mesej ini akan hilang dan anda boleh memasang script.";
 $LANG["text_default_values_in_view"] = "Seksyen ini adalah pilihan. Semua penyertaan yang dicipta dengan Paparan ini akan mengandungi nilai-nilai lalai yang dinyatakan di sini.";
 $LANG["text_delete_all_forms"] = "Saya ingin memadam semua fail-fail yang di-upload melalui borang ini";
 $LANG["text_delete_form_warning"] = "Adakah anda pasti hendak memadam bentuk ini? Tindakan ini tidak boleh dibatalkan. Semua data akan hilang secara kekal!";

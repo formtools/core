@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Use o seguinte formulario para crear 
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "ver PHP {\$datefunctionlink} función das opcións de formato";
 $LANG["text_default_file_settings_page"] = "Esta páxina define as opcións de subida de arquivos para a súa instalación Ferramentas de formulario. Estas normas son aplicables a todos os ficheiros enviados a través de formulario de ferramentas, a menos que explicitamente substituída por un campo de formulário individual. Nota: se cambiar a carpeta de subida despois os arquivos teren sido carregados, eles serán automaticamente movidos para a nova carpeta.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Antes de continuar, terá de actualizar o seu <b>/ themes / default</b> cartafol <b>/ caché</b> para permitir a plena lectura e escritura permisos. Unha vez feito isto, esta mensaxe desaparecerá e pode instalar o script.";
 $LANG["text_default_values_in_view"] = "Esta sección é opcional. Todas as submissões creado con esa visión contén os valores estándar especifique aquí.";
 $LANG["text_delete_all_forms"] = "Quero borrar todos os ficheiros que foron enviados a través deste formulario";
 $LANG["text_delete_form_warning"] = "Está seguro de querer eliminar esta forma? Esta acción non se pode desfacer. Tódolos datos serán perdidos!";

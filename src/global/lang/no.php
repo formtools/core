@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Bruk skjemaet nedenfor til å opprett
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "se PHP {\$datefunctionlink} funksjon for formatering alternativer";
 $LANG["text_default_file_settings_page"] = "Denne siden definerer filopplasting innstillingene for Form Tools installasjonen. Disse reglene gjelder for alle filer lastet opp via skjema Verktøy, med mindre eksplisitt overstyres for en individuell form feltet. Merk: Hvis du endrer laster opp mappen etter filer har blitt lastet opp, vil de automatisk bli flyttet til den nye mappen.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Før du fortsetter, må du oppdatere <b>/ themes / default / hurtigbuffermappen</b> å tillate full lese og skrive rettigheter. Når dette er gjort, vil denne meldingen forsvinne og du kan installere skriptet.";
 $LANG["text_default_values_in_view"] = "Denne delen er valgfri. Alle innleveringer opprettet med denne visningen skal inneholde standard verdiene angitt her.";
 $LANG["text_delete_all_forms"] = "Jeg ønsker å slette alle filene som ble lastet opp via dette skjemaet";
 $LANG["text_delete_form_warning"] = "Er du sikker på at du vil slette denne formen? Denne handlingen kan ikke angres. Alle data vil bli tapt!";

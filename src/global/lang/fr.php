@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Utilisez le formulaire ci-dessous pou
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "voir PHP {\$datefunctionlink} fonction pour les options de formatage";
 $LANG["text_default_file_settings_page"] = "Cette page définit les paramètres de transfert de fichier pour votre installation des outils de formulaire. Ces règles s'appliquent à tous les fichiers téléchargés par le biais Form Tools, sauf si explicitement spécifié pour un champ de formulaire individuel. Note: si vous modifiez le dossier de téléchargement après que des fichiers ont été téléchargés, ils seront automatiquement déplacés vers le nouveau dossier.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Avant de continuer, vous devrez mettre à jour votre fichier <b>/ themes / /</b> dossier <b>du cache par défaut</b> pour permettre total en lecture et en écriture. Une fois cela fait, ce message disparaît et vous pouvez installer le script.";
 $LANG["text_default_values_in_view"] = "Cette section est facultative. Toutes les soumissions créé avec cette vue contient les valeurs par défaut spécifiées ici.";
 $LANG["text_delete_all_forms"] = "Je veux supprimer tous les fichiers qui ont été envoyés via ce formulaire ";
 $LANG["text_delete_form_warning"] = "Êtes-vous sûr de vouloir supprimer ce formulaire? Cette action ne peut pas être annulée. Toutes les données seront définitivement perdues!";

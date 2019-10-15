@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Gebruik die vorm hier onder om &#39;n
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "sien PHP {\$datefunctionlink} funksie vir die opmaak opsies";
 $LANG["text_default_file_settings_page"] = "Hierdie bladsy beskryf die lêer oplaai instellings vir jou Vorm Tools installasie. Hierdie reëls van toepassing op alle lêers opgelaai deur Vorm Tools, tensy dit uitdruklik geneutraliseer word vir &#39;n afsonderlike vorm veld. Let wel: as jy verander die oplaai gids na lêers opgelaai het, sal hulle outomaties word verskuif na die nuwe gids.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Voordat jy voortgaan, sal jy te werk <b>/ default / cachemap</b> jou <b>/ temas</b> moet toelaat dat die volle lees en skryf permissies. Sodra dit gedoen is, sal hierdie boodskap verdwyn en jy kan die installering van die draaiboek.";
 $LANG["text_default_values_in_view"] = "Hierdie afdeling is opsioneel. Alle voorleggings wat gemaak is met hierdie siening sal ook die standaard waardes.";
 $LANG["text_delete_all_forms"] = "Ek wil verwyder al die lêers wat via hierdie vorm was opgelaai nie";
 $LANG["text_delete_form_warning"] = "Is jy seker jy wil verwyder hierdie vorm? Hierdie aksie kan nie ongedaan gemaak word. Alle inligting sal permanent verloor het!";

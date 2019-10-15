@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Use o formulário abaixo para criar u
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "veja a função PHP {\$datefunctionlink} para opções de formatação";
 $LANG["text_default_file_settings_page"] = "Esta página define as opções de envio de arquivos de sua instalação do Form Tools. As regras se aplicam a todos os arquivos enviados através do Form Tools, exceto quando modificadas para um campo de formulário individual. Nota: se você mudar a pasta de envio depois de ter enviado arquivos, eles serão automaticamente movidos para a nova pasta.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Antes de continuar, atualize a pasta /themes/default/cache com permissão para leitura e escrita total. Feito isto esta mensagem irá desaparecer e você poderá instalar o script";
 $LANG["text_default_values_in_view"] = "This section is optional. All submissions created with this View will contain the default values specified here.";
 $LANG["text_delete_all_forms"] = "Eu quero excluir todos os arquivos que foram enviados através deste formulário";
 $LANG["text_delete_form_warning"] = "Você tem certeza que deseja apagar este formulário? Esta ação não poderá ser desfeita. Todos os dados serão perdidos permanentemente!";

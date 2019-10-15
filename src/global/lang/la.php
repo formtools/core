@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Izmantojiet zemāk esošo formu, lai 
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "skatīt PHP {\$datefunctionlink} funkciju formatēšanas iespējām";
 $LANG["text_default_file_settings_page"] = "Šī lapa nosaka failu augšupielāde iestatījumus Form Tools uzstādīšana. Šie noteikumi attiecas uz visām faili augšupielādēti caur Form Tools, ja nav skaidri ignorē par atsevišķu veidlapu jomā. Piezīme: ja maināt upload mape pēc faili ir augšupielādēts, tie tiks automātiski pārvietota uz jaunu mapi.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Pirms turpināt, jums vajadzēs atjaunināt jūsu <b>/ themes / default / cache</b> mapi, lai varētu pilnībā lasīt un rakstīt atļaujas. Kad tas ir izdarīts, šī ziņa izzudīs, un jūs varat instalēt skriptu.";
 $LANG["text_default_values_in_view"] = "Šī sadaļa nav obligāta. Visa informācija radīts ar šo View saturēs noklusējuma vērtības, kas norādītas šeit.";
 $LANG["text_delete_all_forms"] = "Es vēlos izdzēst visus failus, kas tika augšupielādēti, izmantojot šo veidlapu";
 $LANG["text_delete_form_warning"] = "Vai jūs tiešām vēlaties izdzēst šo veidlapu? This action cannot be undone. Visi dati tiks neatgriezeniski zaudēti!";

@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Za dodajanje uporabnika uporabi spodn
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "Poglej PHP {\$datefunctionlink} funkcijo za možnosti formatiranja";
 $LANG["text_default_file_settings_page"] = "Ta stran določa nastavitve naložite datoteko za svojo namestitev Form Tools. Ta pravila veljajo za vse datoteke, preko obrazca Tools, razen če ni izrecno nastavljivi za posamezno polje obrazca. Opomba: če spremenite upload mapo, potem ko so bile naložene datoteke, bodo samodejno premakne v novo mapo.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Preden nadaljujete, boste morali posodobiti <b>/ themes / default / cache</b> mapo, da se omogoči polno brati in pisati dovoljenja. Ko je to storjeno, bo to sporočilo izginejo in lahko namestite skript.";
 $LANG["text_default_values_in_view"] = "Ta oddelek je obvezen. Vse vloge, ustvarjene s tem View bo vseboval privzete vrednosti, določene tukaj.";
 $LANG["text_delete_all_forms"] = "Izbrisati hočem vse datoteke, ki so bile naložene preko tega obrazca.";
 $LANG["text_delete_form_warning"] = "Si prepričan, da želiš izbrisati ta obrazec? Podatki bodo izgubljeni!";

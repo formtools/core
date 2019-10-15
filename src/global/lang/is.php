@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Notaðu eyðublaðið hér fyrir neð
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "Sjá PHP {\$datefunctionlink} virka fyrir stílsnið";
 $LANG["text_default_file_settings_page"] = "Þessari síðu skilgreinir Innhlaða stillingar þínar Form Verkfæri uppsetningu. Þessar reglur gilda um allar skrár hlaðið gegnum Form Tools, nema sérstaklega overridden fyrir einstaka mynd sviði. Ath: Ef þú breytir senda möppu eftir að skrá hefur verið hlaðið upp, munu þau verða sjálfkrafa færð í nýja möppu.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Áður en haldið er áfram, þarftu að uppfæra <b>/ þema</b> á <b>/ default / Cache</b> möppu til að leyfa fullt lesa og skrifa leyfi. Þegar þetta er gert, þessi skilaboð munu hverfa og þú getur sett á handriti.";
 $LANG["text_default_values_in_view"] = "Þessi hluti er valfrjáls. Allar tillögur til með þessu View mun innihalda sjálfgefið gildi sem hér eru tilgreind.";
 $LANG["text_delete_all_forms"] = "Mig langar að eyða öllum skrám sem var hlaðið upp í gegnum þetta form";
 $LANG["text_delete_form_warning"] = "Ertu viss um að þú viljir eyða þessari mynd? This action cannot be undone. Öll gögn verða varanlega!";

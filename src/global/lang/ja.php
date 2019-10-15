@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "下記のフォームを使用して�
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "オプションの書式設定用のPHP {\$datefunctionlink} 関数を参照してください";
 $LANG["text_default_file_settings_page"] = "このページでは、フォームツールのインストール用のファイルをアップロードの設定を定義します。これらの規則はすべてのファイルをフォームツールを介してアップロードする場合を除き、明示的に個々のフォームフィールドのオーバーライドを適用します。注：場合は、アップロードするフォルダの後にファイルをアップロードされている変更は、自動的に新しいフォルダに移動されます。";
-$LANG["text_default_theme_cache_folder_not_writable"] = "続行する前には<b>、/デフォルトでは/キャッシュ</b>フォルダを<b>/テーマを</b>更新するために完全な読み取りと書き込みのアクセス許可を許可する必要があります。一度この、このメッセージが表示されなくなります行われ、このスクリプトをインストールすることができます。";
 $LANG["text_default_values_in_view"] = "このセクションは省略可​​能です。このビューで作成されたすべての提出物は、ここで指定したデフォルト値が含まれます。";
 $LANG["text_delete_all_forms"] = "私は、このフォームを使ってアップロードされたすべてのファイルを削除する";
 $LANG["text_delete_form_warning"] = "あなたは、このフォームを削除してもよろしいですか？この操作を元に戻すことはできません。すべてのデータが永久に失われてしまいます！";

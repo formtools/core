@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Use the form below to create a new cl
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "see PHP {\$datefunctionlink} function for formatting options";
 $LANG["text_default_file_settings_page"] = "This page defines the file upload settings for your Form Tools installation. These rules apply to all files uploaded through Form Tools, unless explicitly overridden for an individual form field. Note: if you change the upload folder after files have been uploaded, they will be automatically moved to the new folder.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Before continuing, you will need to update your <b>[form tools folder]/cache</b> folder to allow full read and write permissions. Once this is done, this message will disappear and you can install the script.";
 $LANG["text_default_values_in_view"] = "This section is optional. All submissions created with this View will contain the default values specified here.";
 $LANG["text_delete_all_forms"] = "I want to delete all files that were uploaded via this form";
 $LANG["text_delete_form_warning"] = "Are you sure you want to delete this form? This action cannot be undone. All data will be permanently lost!";

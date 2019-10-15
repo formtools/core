@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Koristite donji obrazac za stvaranje 
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "vidi PHP {\$datefunctionlink} funkcija za formatiranje opcije";
 $LANG["text_default_file_settings_page"] = "Ova stranica se definira postavke datoteka za upload vaš oblik Alati instalacije. Ova pravila primjenjuju se na sve učitane datoteke putem obrasca Alati, osim ako nije izričito nadjačati za pojedine polje obrasca. Napomena: Ako promijenite mapu nakon upload kartoteka imati bio upload, oni će automatski biti premještena u novu mapu.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Prije nastavka, morat ćete ažurirati <b>/ themes / default / predmemorija</b> mapu kako bi se omogućilo puno čitati i pisati dozvolama. Nakon što je to učinjeno, ova poruka nestati, a vi možete instalirati skriptu.";
 $LANG["text_default_values_in_view"] = "Ovaj dio nije obavezan. Svi podnesci stvoren s tom Pregled će sadržavati zadane vrijednosti navedene ovdje.";
 $LANG["text_delete_all_forms"] = "Želim izbrisati sve datoteke koje su učitali putem ovog obrasca";
 $LANG["text_delete_form_warning"] = "Jeste li sigurni da želite izbrisati ovaj obrazac? This action cannot be undone. Svi podaci će biti trajno izgubljen!";

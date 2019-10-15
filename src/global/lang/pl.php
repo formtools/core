@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Skorzystaj z poniższego formularza, 
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "zobacz PHP {\$datefunctionlink} funkcji formatowania";
 $LANG["text_default_file_settings_page"] = "Tę stronę definiuje ustawienia przesłać plik do instalacji Narzędzia formularza. Zasady te mają zastosowanie do wszystkich plików przesłanych za pośrednictwem formularza Narzędzia, chyba że wyraźnie przeważa na poszczególne pola formularza. Uwaga: jeśli zmienisz upload folderu po akta zostały przesłane, zostaną one automatycznie przeniesione do nowego folderu.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Zanim przejdziemy dalej, trzeba będzie zaktualizować <b>/ themes / default /</b> folder <b>pamięci podręcznej</b> w celu umożliwienia pełnego odczytu i zapisu. Gdy to nastąpi, to zniknie i będzie można zainstalować skrypt.";
 $LANG["text_default_values_in_view"] = "Ta sekcja jest opcjonalna. Wszystkie zgłoszenia utworzone tę będzie zawierać wartości domyślne podane tutaj.";
 $LANG["text_delete_all_forms"] = "Chcę usunąć wszystkie pliki przesłane poprzez ten formularz";
 $LANG["text_delete_form_warning"] = "Jesteś pewien, że chcesz usunąć ten formularz? To działanie jest nieodwracalne. Wszystkie dane zostaną definitywnie utracone.";

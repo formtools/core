@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Úsáid an foirm anseo thíos chun a 
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "féach PHP {\$datefunctionlink} feidhm do roghanna fhormáidiú";
 $LANG["text_default_file_settings_page"] = "Sainmhínítear an leathanach seo na socruithe file upload do shuiteáil do Foirm Uirlisí. Feidhm ag na rialacha go léir a uaslódáil comhad trí Foirm Uirlisí, mura shárú go sainráite do réimse foirm ar leith. Nóta: má athraíonn tú an fillteán tar éis upload files have been uploaded, déanfar iad a bhogadh go huathoibríoch chuig an fillteán nua.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Sula leanúint ar aghaidh, beidh ort thabhairt suas chun dáta do <b>/ themes / default</b> fillteán <b>taisce /</b> chun cead a thabhairt iomlán a léamh agus a scríobh cead. Nuair a dhéantar seo, beidh an teachtaireacht seo thiachóga agus is féidir leat a shuiteáil script.";
 $LANG["text_default_values_in_view"] = "Tá an rannóg seo roghnach. Beidh gach aighneacht a cruthaíodh leis seo go bhfuil na luachanna réamhshocraithe Féach shonraítear anseo.";
 $LANG["text_delete_all_forms"] = "Is mian liom a scriosadh na comhaid a uaslódáil a bhí go tríd an fhoirm seo";
 $LANG["text_delete_form_warning"] = "An bhfuil tú cinnte gur mian leat é a scrios an fhoirm seo? Ní féidir an gníomh seo a undone. Beidh na sonraí uile a chailliúint buan!";

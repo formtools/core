@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Brug formularen nedenfor for at opret
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "se PHP {\$datefunctionlink} funktion for inddataformater";
 $LANG["text_default_file_settings_page"] = "Denne side definerer fil sende indstillingerne for din formular Tools installation. Disse regler gælder for alle filer, der uploades via formularen Tools, medmindre der udtrykkeligt vige for en individuel form felt. Bemærk: Hvis du ændrer upload mappe efter filer er blevet uploadet, vil de automatisk flyttet til den nye mappe.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Før du fortsætter, skal du opdatere din <b>/ themes / default / cachemappen</b> at tillade fuld læse-og skriverettigheder. Når dette er gjort, vil denne besked forsvinder, og du kan installere scriptet.";
 $LANG["text_default_values_in_view"] = "Denne sektion er valgfri. Alle indlæg oprettes med denne visning vil indeholde standardværdierne er angivet her.";
 $LANG["text_delete_all_forms"] = "Jeg vil slette alle filer som var uploadet sammen med denne formular";
 $LANG["text_delete_form_warning"] = "Er du sikker på at du vil slette denne formular? Denne handling kan ikke fortrydes. Alle data vil være permanent slettet!";

@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Použijte níže uvedený formulář 
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "viz PHP {\$datefunctionlink} funkce pro možnosti formátování";
 $LANG["text_default_file_settings_page"] = "Tato stránka je určen soubor nastavení pro svoje Form instalace nástrojů. Tato pravidla platí pro všechny soubory nahrané přes formulář nástroje, pokud nejsou explicitně změněny na jednotlivé pole formuláře. Poznámka: Pokud změníte složku po nahrání souborů které byly nahrány, budou automaticky přesunuty do nové složky.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Než budeme pokračovat, budete muset aktualizovat <b>/ themes / default / cache</b> složky povolit plný čtení a zápis. Jakmile máte hotovo, bude tato zpráva zmizí a můžete nainstalovat skript.";
 $LANG["text_default_values_in_view"] = "Tato sekce je nepovinná. Všechny návrhy vytvořené s tímto názorem bude obsahovat výchozí hodnoty uvedené zde.";
 $LANG["text_delete_all_forms"] = "Chci smazat všechny soubory, které byly nahrané pomocí tohoto formuláře";
 $LANG["text_delete_form_warning"] = "Jste si jisti, že chcete smazat tento formulář? Tuto akci nelze vrátit zpět. Všechny údaje budou trvale ztracena!";

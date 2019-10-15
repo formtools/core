@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Gunakan formulir di bawah ini untuk m
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "lihat PHP {\$datefunctionlink} fungsi untuk pilihan pemformatan";
 $LANG["text_default_file_settings_page"] = "Halaman ini mendefinisikan pengaturan upload file untuk Formulir Peralatan instalasi. Aturan-aturan ini berlaku untuk semua file di-upload melalui Form Tools, kecuali secara eksplisit ditolak untuk setiap bidang bentuk. Catatan: jika Anda mengubah folder upload setelah file sudah di-upload, mereka akan dipindahkan secara otomatis ke folder baru.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Sebelum melanjutkan, anda perlu memperbarui <b>/ themes / default / cache</b> folder untuk memungkinkan membaca dan menulis penuh permissions. Setelah ini dilakukan, pesan ini akan hilang dan anda dapat menginstal script.";
 $LANG["text_default_values_in_view"] = "Bagian ini adalah opsional. Semua pengajuan yang dibuat dengan Lihat ini akan mengandung nilai-nilai default yang ditentukan di sini.";
 $LANG["text_delete_all_forms"] = "Saya ingin menghapus semua file-file yang di-upload melalui formulir ini";
 $LANG["text_delete_form_warning"] = "Apakah Anda yakin ingin menghapus bentuk ini? Tindakan ini tidak bisa dibatalkan. Semua data akan hilang secara permanen!";

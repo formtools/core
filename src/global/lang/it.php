@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Usa il modulo qui sotto per creare un
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "vedi PHP {\$datefunctionlink} funzione per le opzioni di formattazione";
 $LANG["text_default_file_settings_page"] = "Questa pagina definisce le impostazioni di upload di file per il modulo di installazione Tools. Queste regole valgono per tutti i file caricati tramite form Strumenti, se non esplicitamente ignorato per un singolo campo modulo. Nota: se si modifica la cartella upload dopo che i file sono stati caricati, saranno automaticamente spostati nella nuova cartella.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Prima di continuare, è necessario aggiornare il file <b>/ themes / /</b> cartella <b>predefinita di cache</b> per consentire la piena lettura e scrittura. Una volta fatto questo, questo messaggio scomparirà e sarà possibile installare lo script.";
 $LANG["text_default_values_in_view"] = "Questa sezione è facoltativa. Tutte le presentazioni create con questo Vista conterrà i valori predefiniti specificati qui.";
 $LANG["text_delete_all_forms"] = "Voglio cancellare tutti i file che sono stati inviati attraverso questo modulo";
 $LANG["text_delete_form_warning"] = "Siete sicuri di voler cancellare questo modulo? Se approvata, questa operazione non può essere annullata e tutti i dati saranno persi per sempre!";

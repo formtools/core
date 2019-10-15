@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "Tumia fomu hapo chini ili kujenga mte
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "se PHP {\$datefunctionlink} kazi formatting options";
 $LANG["text_default_file_settings_page"] = "This page amefafanua faili upload settings Fomu yako Tools installation. Hizi zinahusu all files uploaded kupitia Fomu Tools, isipokuwa uttryckligen overridden fomu kwa mtu binafsi shamba. Angalia: ikiwa kubadilisha baada files upload folder wamekuwa uploaded watakuwa automatiskt walihamia folder mpya.";
-$LANG["text_default_theme_cache_folder_not_writable"] = "Kabla ya kuendelea, utahitaji update yako <b>/ themes / default / cache</b> folder kuruhusu full permissions kusoma na kuandika. Mara hii ni kufanyika, ujumbe huu kutoweka mapenzi na unaweza kufunga ya script.";
 $LANG["text_default_values_in_view"] = "This section is optional. All submissions created with this View will contain the default values specified here.";
 $LANG["text_delete_all_forms"] = "Nataka delete all files kwamba walikuwa uploaded via fomu hii";
 $LANG["text_delete_form_warning"] = "Una uhakika unataka kufuta fomu hii? Hii action cannot be undone. Data zote itakuwa permanent waliopotea!";

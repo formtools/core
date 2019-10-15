@@ -748,7 +748,6 @@ $LANG["text_create_new_client_account"] = "使用以下表格，以創建一個�
 $LANG["text_custom_cache_folder_invalid_permissions"] = "The custom cache folder you entered needs to have full read-write permissions.";
 $LANG["text_date_formatting_link"] = "參見 PHP {\$datefunctionlink} 函數格式化選項";
 $LANG["text_default_file_settings_page"] = "本頁面定義文件上傳設置為您的表格工具的安裝。這些規則適用於所有文件上傳通過表格工具，除非明確覆蓋為個人窗體域。注意：如果您更改上載文件夾後，文件已被上傳，他們將自動移到新文件夾。";
-$LANG["text_default_theme_cache_folder_not_writable"] = "在繼續之前，您需要更新您的<b>/主題/默認/緩存</b>文件夾，以便充分讀寫權限。一旦這樣做，該消息便會消失，你可以安裝腳本。";
 $LANG["text_default_values_in_view"] = "這部分是可選的。所有參賽作品創造了這種觀點將包含此處指定的默認值。";
 $LANG["text_delete_all_forms"] = "我要刪除的所有文件，上傳通過這種形式";
 $LANG["text_delete_form_warning"] = "您確定要刪除此表格？此操作無法撤消。所有數據都將永久丟失！";
