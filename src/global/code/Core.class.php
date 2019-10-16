@@ -98,6 +98,12 @@ class Core
 	private static $unicode = true;
 
 	/**
+	 * Used for local development mode. Added in 3.0.20.
+	 * @var bool
+	 */
+	private static $devMode = false;
+
+	/**
 	 * This is set to 1 by default (genuine errors only). Crank it up to 2047 to list every
 	 * last error/warning/notice that occurs.
 	 */
@@ -490,6 +496,7 @@ class Core
 		}
 
 		self::$enableBenchmarking = (isset($g_enable_benchmarking)) ? $g_enable_benchmarking : false;
+		self::$devMode = (isset($g_dev_mode)) ? $g_dev_mode : false;
 		self::$jsDebugEnabled = isset($g_js_debug) ? $g_js_debug : false;
 		self::$maxForms = isset($g_max_forms) ? $g_max_forms : "";
 		self::$maxFormFields = isset($g_max_ft_form_fields) ? $g_max_ft_form_fields : "";
@@ -602,6 +609,11 @@ class Core
 	public static function isUnicode()
 	{
 		return self::$unicode;
+	}
+
+	public static function isDevMode()
+	{
+		return self::$devMode;
 	}
 
 	public static function getSqlStrictMode()
