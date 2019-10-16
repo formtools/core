@@ -566,6 +566,11 @@ class Forms
 	 */
 	public static function checkFormExists($form_id, $allow_incompleted_forms = false)
 	{
+		// catch-all for security purposes
+		if (!is_numeric($form_id)) {
+			return false;
+		}
+
 		$form = Forms::getFormRow($form_id);
 
 		$is_valid_form_id = false;
