@@ -31,7 +31,7 @@ class Submissions
 		$query_str_multi_val_separator = Core::getQueryStrMultiValSeparator();
 
 		// ensure the incoming values are escaped
-		$form_id = $form_data["form_tools_form_id"];
+		$form_id = is_numeric($form_data["form_tools_form_id"]) ? $form_data["form_tools_form_id"] : 0;
 		$form_info = Forms::getForm($form_id);
 
 		// do we have a form for this id?
