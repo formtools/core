@@ -54,32 +54,25 @@
                     {if $max_filesize >= 50}
                         <option value="50"   {if $settings.file_upload_max_size == 50}selected{/if}>50 KB</option>{/if}
                     {if $max_filesize >= 100}
-                        <option value="100"  {if $settings.file_upload_max_size == 100}selected{/if}>100
-                        KB</option>{/if}
+                        <option value="100"  {if $settings.file_upload_max_size == 100}selected{/if}>100 KB</option>{/if}
                     {if $max_filesize >= 200}
-                        <option value="200"  {if $settings.file_upload_max_size == 200}selected{/if}>200
-                        KB</option>{/if}
+                        <option value="200"  {if $settings.file_upload_max_size == 200}selected{/if}>200 KB</option>{/if}
                     {if $max_filesize >= 300}
-                        <option value="300"  {if $settings.file_upload_max_size == 300}selected{/if}>300
-                        KB</option>{/if}
+                        <option value="300"  {if $settings.file_upload_max_size == 300}selected{/if}>300 KB</option>{/if}
                     {if $max_filesize >= 500}
-                        <option value="500"  {if $settings.file_upload_max_size == 500}selected{/if}>1/2
-                        MB</option>{/if}
+                        <option value="500"  {if $settings.file_upload_max_size == 500}selected{/if}>1/2 MB</option>{/if}
                     {if $max_filesize >= 1000}
                         <option value="1000" {if $settings.file_upload_max_size == 1000}selected{/if}>1 MB</option>{/if}
                     {if $max_filesize >= 2000}
                         <option value="2000" {if $settings.file_upload_max_size == 2000}selected{/if}>2 MB</option>{/if}
                     {if $max_filesize >= 3000}
-                        <option value="3000" {if $settings.file_upload_max_size == 2000}selected{/if}>3 MB</option>{/if}
+                        <option value="3000" {if $settings.file_upload_max_size == 3000}selected{/if}>3 MB</option>{/if}
                     {if $max_filesize >= 5000}
                         <option value="5000" {if $settings.file_upload_max_size == 5000}selected{/if}>5 MB</option>{/if}
                     {if $max_filesize >= 10000}
-                        <option value="10000" {if $settings.file_upload_max_size == 10000}selected{/if}>10
-                        MB</option>{/if}
+                        <option value="10000" {if $settings.file_upload_max_size == 10000}selected{/if}>10 MB</option>{/if}
                     {if $max_filesize > 5000}
-                        <option value="{$max_filesize}"
-                                {if $settings.file_upload_max_size == $max_filesize}selected{/if}>{$max_filesize/1000}
-                        MB</option>{/if}
+                        <option value="{$max_filesize}" {if $settings.file_upload_max_size == $max_filesize}selected{/if}>{$max_filesize/1000} MB</option>{/if}
                 </select>
                 <span class="pad_left light_grey">{$LANG.phrase_php_ini_max_allowed_upload_size_c} {$max_filesize/1000} MB</span>
 
