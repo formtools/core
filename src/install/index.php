@@ -24,10 +24,13 @@ $LANG = Core::$L;
 <html>
 <head>
     <title><?php echo $LANG["phrase_ft_installation"]; ?></title>
-    <link rel="shortcut icon" href="../themes/default/images/favicon.ico">
+    <link rel="Form Tools icon" href="../themes/default/images/favicon.ico">
+	<?php if (!Core::isDevMode()) { ?>
+        <link rel="stylesheet" href="../react/main.css">
+	<?php } ?>
 </head>
 <body>
     <div id="root"></div>
-    <script src="../react/main.bundle.js?v=<?php Core::getVersionString(); ?>"></script>
+    <script src="../react/main.bundle.js"></script>
 </body>
 </html>

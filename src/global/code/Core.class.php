@@ -98,6 +98,12 @@ class Core
 	private static $unicode = true;
 
 	/**
+	 * Used for local development mode. Added in 3.0.20.
+	 * @var bool
+	 */
+	private static $devMode = false;
+
+	/**
 	 * This is set to 1 by default (genuine errors only). Crank it up to 2047 to list every
 	 * last error/warning/notice that occurs.
 	 */
@@ -492,6 +498,7 @@ class Core
 		self::$multiFieldValDelimiter = isset($g_multi_val_delimiter) ? $g_multi_val_delimiter : ", ";
 		self::$queryStrMultiValSeparator = isset($g_query_str_multi_val_separator) ? $g_query_str_multi_val_separator : ",";
 		self::$errorReporting = isset($g_default_error_reporting) ? $g_default_error_reporting : 1;
+		self::$devMode = (isset($g_dev_mode)) ? $g_dev_mode : false;
 		self::$debugEnabled = isset($g_debug) ? $g_debug : false;
 		self::$sessionType = isset($g_session_type) && in_array($g_session_type, array("php", "database")) ? $g_session_type : "php";
 		self::$sessionSavePath = isset($g_session_save_path) ? $g_session_save_path : "";
@@ -596,6 +603,11 @@ class Core
 	public static function isUnicode()
 	{
 		return self::$unicode;
+	}
+
+	public static function isDevMode()
+	{
+		return self::$devMode;
 	}
 
 	public static function getSqlStrictMode()

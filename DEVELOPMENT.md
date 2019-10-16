@@ -1,13 +1,14 @@
 # Development
 
 A few notes regarding developing Form Tools. Up until 3.0.14 it was just a question of cloning the repo and loading it 
-up in your browser, but now we're finally adding a proper build process.
+up in your browser, but now we've finally added a proper build process.
 
 
 ### Technologies
 
 - grunt
 - yarn
+- webpack
 
 ### Local development
 
@@ -24,6 +25,14 @@ grunt
 That generates the `dist/` folder and sets up watchers to copy over any edited files to your `dist/` folder. Only ever
 edit files in your `src/` folder. You'll probably want to tell your IDE to ignore the dist folder contents so you don't
 accidentally find yourself editing those files.
+
+Also, add the following line to the generated `config.php` file in `dist/global` folder.
+
+```php
+$g_dev_mode = true;
+```
+
+That is used to load local resources rather than bundled ones.
 
 ### Linking components (modules, themes, API) for local development 
 
