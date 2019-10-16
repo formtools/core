@@ -805,7 +805,7 @@ END;
                 array("file_upload_dir", ""),
                 array("file_upload_filetypes", "bmp,gif,jpg,jpeg,png,avi,mp3,mp4,doc,txt,pdf,xml,csv,swf,fla,xls,tif"),
                 array("file_upload_url", ""),
-                array("file_upload_max_size", 500),
+                array("file_upload_max_size", 2000),
                 array("forms_page_default_message", $LANG["text_client_welcome"]),
                 array("logo_link", "https://formtools.org"),
                 array("min_password_length", ""),
