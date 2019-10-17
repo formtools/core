@@ -50,7 +50,11 @@ $modules     = Modules::searchModules($search_criteria);
 // Hacky patch. Longer term plan, see: https://github.com/formtools/core/issues/82
 $localized_modules = array();
 foreach ($modules as $module_info) {
-	$module = Modules::getModuleInstance($module_info["module_folder"]);
+	$module_folder = $module_info["module_folder"];
+	if (!Modules::isValidModule($module_folder)) {
+		continue;
+	}
+	$module = Modules::getModuleInstance($module_folder);
 	$module_info["module_name"] = $module->getModuleName();
 	$module_info["description"] = $module->getModuleDesc();
 	$localized_modules[] = $module_info;
