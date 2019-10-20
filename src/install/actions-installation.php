@@ -253,6 +253,7 @@ switch ($request["action"]) {
 			Sessions::set("fti.accountCreated", true);
 
 			// now set up the remainder of the script
+			Installation::updateDatabaseSettings();
 			Hooks::updateAvailableHooks();
 			Modules::updateModuleList();
 			Themes::updateThemeList();

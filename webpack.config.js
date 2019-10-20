@@ -26,7 +26,7 @@ const config = (env) => {
 				{
 					test: /\.scss$/,
 					use: [
-						isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+						MiniCssExtractPlugin.loader,
 						{
 							loader: 'css-loader',
 							options: {

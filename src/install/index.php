@@ -24,9 +24,7 @@ $LANG = Core::$L;
 <head>
     <title><?php echo $LANG["phrase_ft_installation"]; ?></title>
     <link rel="Form Tools icon" href="../themes/default/images/favicon.ico">
-    <?php if (!Core::isDevMode()) { ?>
     <link rel="stylesheet" href="../react/main.css">
-    <?php } ?>
 </head>
 <body>
     <div id="root"></div>
