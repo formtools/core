@@ -106,6 +106,14 @@ const reducer = (state = {
 				}
 			});
 
+		// triggered when the request to CDN feeds/core/core-x.y.z.json fails to load for whatever reason
+		case actions.COMPATIBLE_COMPONENTS_LOAD_ERROR: {
+			return {
+				...state,
+				errorLoading: true
+			};
+		}
+
 		case actions.INIT_SELECTED_COMPONENTS:
 			return {
 				...state,

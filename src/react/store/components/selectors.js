@@ -5,12 +5,14 @@ import { getComponentNameFromIdentifier } from './helpers';
 
 export const isCompatibleComponentsDataLoaded = (state) => state.components.compatibleComponentsLoaded;
 export const isInstalledComponentsLoaded = (state) => state.components.installedComponentsLoaded;
+export const isErrorLoading = (state) => state.components.errorLoading;
 export const isEditing = (state) => state.components.isEditing;
 export const showInfoModal = (state) => state.components.showInfoModal; // TODO rename
 export const getInfoModal = (state) => state.components.infoModal;
 export const getChangelogs = (state) => state.components.changelogs;
 export const getCoreVersion = (state) => state.components.coreVersion;
 export const getCoreDesc = (state) => state.components.coreDesc;
+
 const getCompatibleComponents = (state) => state.components.compatibleComponents;
 
 

@@ -15,11 +15,15 @@ const initInitializationBundle = () => {
 
 	// append the current page number to all requests
 	axios.interceptors.request.use((config) => {
-		const page = navUtils.getCurrentInstallationPage();
-		if (config.method === 'get') {
-			config.url += `&page=${page}`;
-		} else {
-			config.url += `?page=${page}`;
+
+		// if the URL is local (no full path), append the page - it's an internal link within the
+		if (!(/http/.test(config.url))) {
+			const page = navUtils.getCurrentInstallationPage();
+			if (config.method === 'get') {
+				config.url += `&page=${page}`;
+			} else {
+				config.url += `?page=${page}`;
+			}
 		}
 		return config;
 	}, (error) => Promise.reject(error));
@@ -42,7 +46,7 @@ const initInitializationBundle = () => {
 			}
 
 			return Promise.reject(error);
-		},
+		}
 	);
 
 	// boot 'er up. The initialization data is requested on every page (i18n, user info, etc). This request loads as much

@@ -9,6 +9,14 @@ class Step5 extends Component {
 	}
 
 	render () {
+		const { errorLoading } = this.props;
+
+		if (errorLoading) {
+			return (
+				<div>blah.</div>
+			);
+		}
+
 		return (
 			<InstallationComponents />
 		);

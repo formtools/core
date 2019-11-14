@@ -114,6 +114,10 @@ const config = {
 		modules: {
 			files: active_modules.map((folder) => path.resolve(__dirname, '..', folder) + '/**'),
 			tasks: ['sync']
+		},
+		api: {
+			files: [path.resolve(__dirname, '..', active_api) + '/**'],
+			tasks: ['sync']
 		}
 	},
 
