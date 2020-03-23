@@ -2,14 +2,14 @@
 
 $LANG = array();
 
-$LANG["confirm_delete_email_field_config"] = "Sind Sie sicher, dass Sie diese E-Mail-Feld-Konfiguration löschen?";
-$LANG["confirm_delete_email_template"] = "Sind Sie sicher, dass Sie diese E-Mail-Vorlage löschen?";
-$LANG["confirm_delete_group"] = "Sind Sie sicher, dass Sie diese Gruppe löschen?";
-$LANG["confirm_delete_menu"] = "Sind Sie sicher, dass Sie diesen Client-Menü zu löschen?";
-$LANG["confirm_delete_option_list"] = "Sind Sie sicher, dass Sie diese Option Liste löschen?";
-$LANG["confirm_delete_submission"] = "Sind Sie sicher, dass Sie diese Vorlage wirklich löschen?";
-$LANG["confirm_delete_submission_file"] = "Sind Sie sicher, dass Sie diese Datei löschen?";
-$LANG["confirm_delete_submissions"] = "Sind Sie sicher, dass Sie zu diesen Beiträgen löschen?";
+$LANG["confirm_delete_email_field_config"] = "Sind Sie sicher, dass Sie diese E-Mail-Feld-Konfiguration löschen möchten?";
+$LANG["confirm_delete_email_template"] = "Sind Sie sicher, dass Sie diese E-Mail-Vorlage löschen möchten?";
+$LANG["confirm_delete_group"] = "Sind Sie sicher, dass Sie diese Gruppe löschen möchten?";
+$LANG["confirm_delete_menu"] = "Sind Sie sicher, dass Sie dieses Client-Menü löschen möchten?";
+$LANG["confirm_delete_option_list"] = "Sind Sie sicher, dass Sie diese Options-Liste löschen möchten?";
+$LANG["confirm_delete_submission"] = "Sind Sie sicher, dass Sie diese Vorlage wirklich löschen möchten?";
+$LANG["confirm_delete_submission_file"] = "Sind Sie sicher, dass Sie diese Datei löschen möchten?";
+$LANG["confirm_delete_submissions"] = "Sind Sie sicher, dass Sie diese Beiträge löschen möchten?";
 $LANG["confirm_delete_submissions_on_other_pages"] = "<b>Achtung!</b> Sie ausgewählt haben <b>{\$num_selected_on_page}</b> Beiträge auf dieser Seite und <b>{\$num_selected_on_other_pages}</b> auf anderen Seiten. Bitte wählen Sie eine der folgenden Optionen: <div class=\"margin_top_large\"><input type=\"button\" value=\"Delete All Selected Submissions\" {\$delete_all_submissions_onclick} /><input type=\"button\" value=\"Only Delete Submissions Selected on this Page\" {\$delete_submissions_on_page_onclick} /><input type=\"button\" value=\"Cancel\" onclick=\"return ft.hide_message('ft_message')\" /></div>";
 $LANG["confirm_delete_submissions_on_other_pages2"] = "<b>Achtung!</b> Sie haben keine Anträge auf dieser Seite die Sie gewählt haben, sondern <b>{\$num_selected_on_other_pages}</b> auf anderen Seiten. Bitte bestätigen Sie diese Eingaben zu löschen. <div class=\"margin_top_large\"><input type=\"button\" value=\"Delete All Selected Submissions\" {\$delete_all_submissions_onclick} /><input type=\"button\" value=\"Cancel\" onclick=\"return ft.hide_message('ft_message')\" /></div>";
 $LANG["confirm_delete_view"] = "Sind Sie sicher, dass Sie dieses Profil löschen?";
