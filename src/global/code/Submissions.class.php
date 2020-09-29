@@ -80,10 +80,9 @@ class Submissions
 			exit;
 		}
 
-		// was there a reCAPTCHA response? If so, a recaptcha was just submitted. This generally implies the
-		// form page included the API, so check it was entered correctly. If not, return the user to the webpage
-		if (isset($api_enabled) && isset($form_data["g-recaptcha-response"])) {
-
+		// Are the reCaptcha config variables set? If so, a recaptcha is required so check it is valid. 
+		// If not, return the user to the webpage.
+		if (isset($api_enabled) && ! empty(Core::getAPIRecaptchaSecretKey()) && ! empty(Core::getApiRecaptchaSiteKey())) {
 			$api = new API(array("init_core" => false));
 			$api->includeRecaptchaLib();
 			$resp = $api->validateRecaptcha($form_data["g-recaptcha-response"]);
