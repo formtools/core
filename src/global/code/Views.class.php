@@ -908,7 +908,7 @@ class Views
             $db->query("
                 SELECT *
                 FROM   {PREFIX}views v, {PREFIX}list_groups lg
-                WHERE  v.form_id = $form_id AND
+                WHERE  v.form_id = :form_id AND
                        v.group_id = lg.group_id
                 ORDER BY lg.list_order, v.view_order
             ");
