@@ -171,7 +171,7 @@ switch ($action) {
 	case "display_test_email":
 		$form_id  = Sessions::get("form_id");
 		$email_id = Sessions::get("email_id");
-		$info = Emails::getEmailComponents($form_id, "", $email_id, true, $request);
+		$info = Emails::getEmailComponents($form_id, $email_id, "", true, $request);
 		echo returnJSON($info);
 		break;
 

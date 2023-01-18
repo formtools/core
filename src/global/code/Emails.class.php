@@ -301,7 +301,7 @@ class Emails
 		$email_id = Sessions::get("email_id");
 		$submission_id = (isset($info["submission_id"]) && !empty($info["submission_id"])) ? $info["submission_id"] : "";
 
-		list ($success, $email_info) = self::getEmailComponents($form_id, $submission_id, $email_id, true, $info);
+		list ($success, $email_info) = self::getEmailComponents($form_id, $email_id, $submission_id, true, $info);
 		if (!$success) {
 			return array(false, $email_info);
 		}
@@ -386,7 +386,7 @@ class Emails
 	 * @param integer $email_id
 	 * @return array
 	 */
-	public static function getEmailComponents($form_id, $submission_id = "", $email_id, $is_test = false, $test_settings = array())
+	public static function getEmailComponents($form_id, $email_id, $submission_id = "", $is_test = false, $test_settings = array())
 	{
 		$LANG = Core::$L;
 		$root_dir = Core::getRootDir();
@@ -1282,7 +1282,7 @@ class Emails
 	 */
 	public static function processEmailTemplate($form_id, $submission_id, $email_id)
 	{
-		list($success, $email_components) = self::getEmailComponents($form_id, $submission_id, $email_id);
+		list($success, $email_components) = self::getEmailComponents($form_id, $email_id, $submission_id);
 
 		if (!$success) {
 			return array(false, "Email components not returned properly (Emails::getEmailComponents).");

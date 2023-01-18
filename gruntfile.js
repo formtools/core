@@ -1,13 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const lineByLine = require('n-readlines');
-const sass = require('node-sass');
+const sass = require('sass');
 const pkg = require('./package.json');
 const child_process = require('child_process');
 
 const release_folder = 'formtools_releases';
 const formtools_releases_folder = path.resolve(__dirname, '..', release_folder);
-
 
 // i18n string keys that aren't used in the Core, but useful for multiple other modules, so placed here. These allow
 // the `grunt i18n` task to pass
@@ -116,7 +115,7 @@ const config = {
 			tasks: ['sync']
 		},
 		api: {
-			files: [path.resolve(__dirname, '..', active_api) + '/**'],
+			files: [path.resolve(__dirname, '..', active_api || '') + '/**'],
 			tasks: ['sync']
 		}
 	},
@@ -467,5 +466,4 @@ module.exports = function (grunt) {
 
 	// builds everything into the dist folder
 	grunt.registerTask('prod', ['i18n', 'sync', 'sass', 'run:webpack_prod']);
-
 };

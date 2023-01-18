@@ -13,7 +13,7 @@ class Step5 extends Component {
 
 		if (errorLoading) {
 			return (
-				<div>blah.</div>
+				<div>Error: {errorLoading}</div>
 			);
 		}
 
