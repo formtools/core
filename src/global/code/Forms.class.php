@@ -986,7 +986,7 @@ class Forms
 
 		$query .= "submission_date DATETIME NOT NULL,
             last_modified_date DATETIME NOT NULL,
-            ip_address VARCHAR(15),
+            ip_address VARCHAR(39),
             is_finalized ENUM('yes','no') default 'yes')
             Engine=InnoDB DEFAULT CHARSET = $db_table_charset";
 
