@@ -32,7 +32,7 @@
     <table width="100%">
       <tr>
         <td width="49%" valign="top">
-          <div id="direct_box" class="{if $form_info.submission_type == "direct"}blue_box{else}grey_box{/if}">
+          <div id="direct_box" class="{if array_key_exists("submission_type", $form_info) && $form_info.submission_type == "direct"}blue_box{else}grey_box{/if}">
             <span style="float:right"><input type="submit" class="blue bold" value="{$LANG.word_select|upper}" name="direct" /></span>
             <div class="bold">{$LANG.phrase_1_direct}</div>
             <div class="medium_grey">&#8212; {$LANG.text_add_form_step_3_text_2}</div>
@@ -46,7 +46,7 @@
         {if $has_api}
         <td width="2%"> </td>
         <td width="49%" valign="top">
-          <div id="select_box" class="{if $form_info.submission_type == "code"}blue_box{else}grey_box{/if}">
+          <div id="select_box" class="{if array_key_exists("submission_type", $form_info) && $form_info.submission_type == "code"}blue_box{else}grey_box{/if}">
             <span style="float:right"><input type="submit" class="blue bold" value="{$LANG.word_select|upper}" name="code" /></span>
             <div class="bold">{$LANG.phrase_2_code}</div>
             <div class="medium_grey">&#8212; {$LANG.text_add_form_step_3_text_3}</div>

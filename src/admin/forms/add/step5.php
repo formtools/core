@@ -14,7 +14,6 @@ use FormTools\Themes;
 Core::init();
 Core::$user->checkAuth("admin");
 
-
 $sortable_id = "review_field_options";
 $form_id = General::loadField("form_id", "add_form_form_id", "");
 $form_info = Forms::getForm($form_id);

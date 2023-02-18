@@ -72,7 +72,7 @@
         {assign var=field_id value=$field.field_id}
 
         {if $field.is_system_field == "no"}
-          <tr style="{$style}">
+          <tr>
             <td class="blue pad_left_small" width="180" id="field_{$field_id}_title">{$field.field_title}</td>
             <td class="pad_left_small">
               {* why are we passing this as a hidden field? Is it really necessary? Kind of bloats the POST request... *}
