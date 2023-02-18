@@ -13,9 +13,9 @@ up in your browser, but now we've finally added a proper build process.
 ### Local development
 
 With 3.0.14 Form Tools source code was moved to a `src/` folder in the repo and all build artifacts are generated
-into a `dist/` folder. 
+into a `dist/` folder.
 
-After checking out the repo run these commands. 
+After checking out the repo run these commands.
 
 ```
 yarn install

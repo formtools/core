@@ -710,7 +710,7 @@ END;
 	 * @param $field_ids
 	 * @return array a hash of [field_id][identifier] = values
 	 */
-	public static function getFormFieldFieldTypeSettings($field_ids = array(), $form_fields)
+	public static function getFormFieldFieldTypeSettings($field_ids = array(), $form_fields = array())
 	{
 		$db = Core::$db;
 
@@ -1439,7 +1439,7 @@ END;
                 SELECT *, g.list_order as group_list_order, ft.list_order as field_type_list_order
                 FROM   {PREFIX}field_types ft, {PREFIX}list_groups g
                 WHERE  g.group_type = :field_types AND
-                       ft.group_id = g.group_id AND 
+                       ft.group_id = g.group_id AND
                        ft.field_type_id IN ($field_type_id_str)
                 ORDER BY g.list_order, ft.list_order
             ");
@@ -1534,7 +1534,7 @@ END;
 	{
 		$db = Core::$db;
 
-		$query = "INSERT INTO {PREFIX}field_type_setting_options (setting_id, option_text, option_value, option_order, 
+		$query = "INSERT INTO {PREFIX}field_type_setting_options (setting_id, option_text, option_value, option_order,
             is_new_sort_group) VALUES (:setting_id, :option_text, :option_value, :option_order, :is_new_sort_group)";
 
 		foreach ($options as $option) {
@@ -1558,7 +1558,7 @@ END;
 		$db->query("
             SELECT setting_id
             FROM   {PREFIX}field_type_settings
-            WHERE  field_type_id = :field_type_id 
+            WHERE  field_type_id = :field_type_id
         ");
 		$db->bind("field_type_id", $field_type_id);
 		$db->execute();
@@ -1878,7 +1878,7 @@ END;
 			// here, this is a new setting added to the field type that the users installation doesn't have
 			if ($found_setting === null) {
 				$db->query("
-					INSERT INTO {PREFIX}field_type_settings (field_label, field_type, field_orientation, default_value_type, 
+					INSERT INTO {PREFIX}field_type_settings (field_label, field_type, field_orientation, default_value_type,
 						default_value, list_order)
 					VALUES (:field_label, :field_type, :field_orientation, :default_value_type, :default_value, :list_order)
 				");

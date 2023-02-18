@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const lineByLine = require('n-readlines');
-const sass = require('node-sass');
+const sass = require('sass');
 const pkg = require('./package.json');
 const child_process = require('child_process');
 
