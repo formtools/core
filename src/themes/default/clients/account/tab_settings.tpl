@@ -21,7 +21,6 @@
     {else}
 
       <form method="post" action="{$same_page}" onsubmit="return rsv.validate(this, rules)">
-        <input type="hidden" name="client_id" value="{$client_id}" />
         <input type="hidden" name="page" value="settings" />
 
         {template_hook location="edit_client_settings_top"}

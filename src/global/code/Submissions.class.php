@@ -3,9 +3,9 @@
 /**
  * This file defines all functions related to managing form submissions.
  *
- * @copyright Benjamin Keen 2018
+ * @copyright Benjamin Keen 2023
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @package 3-0-x
+ * @package 3-1-x
  * @subpackage Submissions
  */
 
@@ -529,7 +529,7 @@ class Submissions
 			return array(false, "");
 		}
 
-		extract(Hooks::processHookCalls("start", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("submission_ids")), EXTR_OVERWRITE);
+		extract(Hooks::processHookCalls("start", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields"), array("submission_ids")), EXTR_OVERWRITE);
 
 		$form_info = Forms::getForm($form_id);
 		$form_fields = Fields::getFormFields($form_id);
@@ -627,7 +627,7 @@ class Submissions
 		}
 
 		$submissions_to_delete = $submission_ids;
-		extract(Hooks::processHookCalls("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields", "is_admin"), array("success", "message")), EXTR_OVERWRITE);
+		extract(Hooks::processHookCalls("end", compact("form_id", "view_id", "submissions_to_delete", "omit_list", "search_fields"), array("success", "message")), EXTR_OVERWRITE);
 
 		return array($success, $message);
 	}
@@ -1129,7 +1129,7 @@ class Submissions
 		$return_hash["search_num_results"] = $search_num_results;
 		$return_hash["view_num_results"] = $view_num_results;
 
-		extract(Hooks::processHookCalls("end", compact("form_id", "submission_id", "view_id", "results_per_page", "page_num", "order", "columns", "search_fields", "submission_ids", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
+		extract(Hooks::processHookCalls("end", compact("form_id", "view_id", "results_per_page", "page_num", "order", "search_fields", "submission_ids", "return_hash"), array("return_hash")), EXTR_OVERWRITE);
 
 		return $return_hash;
 	}

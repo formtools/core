@@ -45,7 +45,8 @@ if (isset($request["add_option_list"])) {
 // visible page should be now be 1
 $total_num_option_lists = OptionLists::getNumOptionLists();
 $total_pages = ceil($total_num_option_lists / $num_option_lists_per_page);
-if ($option_list_page > $total_pages) {
+
+if ($total_pages > 0 && $option_list_page > $total_pages) {
     $option_list_page = $total_pages;
 }
 
@@ -54,7 +55,6 @@ $list_info = OptionLists::getList(array(
     "order" => $order,
     "per_page" => Sessions::get("settings.num_option_lists_per_page")
 ));
-
 
 $num_option_lists = $list_info["num_results"];
 $option_lists     = $list_info["results"];

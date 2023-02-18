@@ -3,9 +3,9 @@
 /**
  * General methods. Added in 2.3.0 - will replace the older genera.php file.
  *
- * @copyright Benjamin Keen 2018
+ * @copyright Benjamin Keen 2023
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @package 2-3-x
+ * @package 3-1-x
  * @subpackage Database
  */
 
@@ -376,7 +376,7 @@ END;
 
 		$output = $smarty->fetch(realpath(__DIR__ . "/../smarty_plugins/eval.tpl"));
 
-		extract(Hooks::processHookCalls("end", compact("output", "placeholder_str", "placeholders", "theme"), array("output")), EXTR_OVERWRITE);
+		extract(Hooks::processHookCalls("end", compact("output", "placeholder_str", "placeholders"), array("output")), EXTR_OVERWRITE);
 
 		return $output;
 	}
@@ -1426,7 +1426,7 @@ END;
 		$col_name_str = implode(", ", $col_names);
 
 		$db->query("INSERT INTO $table_name ($col_name_str)
-			SELECT $col_name_str FROM $table_name 
+			SELECT $col_name_str FROM $table_name
 			WHERE $primary_key_col_name = :primary_key
 		");
 		$db->bind("primary_key", $primary_key_value);

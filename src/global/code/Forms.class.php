@@ -57,7 +57,7 @@ class Forms
 		foreach ($form_ids as $form_id) {
 			try {
 				$db->query("
-                    SELECT count(*) 
+                    SELECT count(*)
                     FROM   {PREFIX}form_$form_id
                     WHERE  is_finalized = 'yes'
                 ");
@@ -102,7 +102,7 @@ class Forms
 			"order" => "form_id-DESC"
 		), $params);
 
-		extract(Hooks::processHookCalls("start", compact("account_id", "is_admin", "search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
+		extract(Hooks::processHookCalls("start", compact("search_criteria"), array("search_criteria")), EXTR_OVERWRITE);
 
 		$results = self::getSearchFormSqlClauses($search_criteria);
 
@@ -130,7 +130,7 @@ class Forms
 			$form_info[] = Forms::getForm($form_id);
 		}
 
-		extract(Hooks::processHookCalls("end", compact("account_id", "is_admin", "search_criteria", "form_info"), array("form_info")), EXTR_OVERWRITE);
+		extract(Hooks::processHookCalls("end", compact("search_criteria", "form_info"), array("form_info")), EXTR_OVERWRITE);
 
 		return $form_info;
 	}

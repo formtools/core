@@ -4,9 +4,9 @@
  * Contains methods for the current logged in user: admin or client. Submission Accounts are handled entirely
  * via that module.
  *
- * @copyright Benjamin Keen 2018
+ * @copyright Benjamin Keen 2023
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @package 3-0-x
+ * @package 3-1-x
  * @subpackage User
  */
 
@@ -360,7 +360,7 @@ class User
 		$boot_out_user = false;
 		$message_flag = "";
 
-		extract(Hooks::processHookCalls("start", compact("account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
+		extract(Hooks::processHookCalls("start", compact("required_account_type"), array("boot_out_user", "message_flag")), EXTR_OVERWRITE);
 
 		$account_id = $this->accountId;
 		$account_type = $this->accountType;

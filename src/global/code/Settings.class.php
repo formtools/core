@@ -3,9 +3,9 @@
 /**
  * The installation class. Added in 2.3.0.
  *
- * @copyright Benjamin Keen 2018
+ * @copyright Benjamin Keen 2023
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @package 3-0-x
+ * @package 3-1-x
  * @subpackage Templates
  */
 
@@ -42,7 +42,7 @@ class Settings {
         $where_module_clause = (!empty($module)) ? "WHERE module = :module" : "";
         $and_module_clause   = (!empty($module)) ? "AND module = :module" : "";
 
-        $result = "";
+        $result = array();
         if (empty($settings)) {
             $db->query("
                 SELECT setting_name, setting_value
@@ -71,7 +71,10 @@ class Settings {
             }
             $db->execute();
             $info = $db->fetch();
-            $result = $info["setting_value"];
+
+            if ($info) {
+                $result = $info["setting_value"];
+            }
 
         } else if (is_array($settings)) {
             $result = array();

@@ -3,9 +3,9 @@
 /**
  * Omit Lists are a handy way to fine-tune access to Form and Views by essentially blacklisting particular users.
  *
- * @copyright Benjamin Keen 2018
+ * @copyright Benjamin Keen 2023
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @package 3-0-x
+ * @package 3-1-x
  * @subpackage OmitLists
  */
 
@@ -42,7 +42,7 @@ class OmitLists
             $client_ids[] = $row["account_id"];
         }
 
-        extract(Hooks::processHookCalls("end", compact("clients_id", "form_id"), array("client_ids")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("client_ids", "form_id"), array("client_ids")), EXTR_OVERWRITE);
 
         return $client_ids;
     }

@@ -39,7 +39,6 @@
 
             <form action="{$same_page}" method="post" name="search_form" onsubmit="return rsv.validate(this, rules)">
                 <input type="hidden" name="search" value="1"/>
-                <input type="hidden" name="select_all" value="{if $curr_view_select_all == "yes"}1{/if}"/>
 
                 <table cellspacing="0" cellpadding="0" id="search_form_table">
                     <tr>
@@ -120,7 +119,7 @@
                             {/if}
                             <th{if $i.custom_width} width="{$i.custom_width}"{/if}
                                     class="sortable_col {if $up_down}over{/if}">
-                                <a href="{$same_page}?{$pass_along_str}{$order_col}">{$i.field_title} {$up_down}</a>
+                                <a href="{$same_page}?{$order_col}">{$i.field_title} {$up_down}</a>
                             </th>
                         {else}
                             <th{if $i.custom_width} width="{$i.custom_width}"{/if}>{$i.field_title}</th>

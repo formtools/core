@@ -473,7 +473,7 @@ class Fields {
             $message = $LANG["notify_form_field_removed"];
         }
 
-        extract(Hooks::processHookCalls("end", compact("removed_fields", "form_id", "field_ids", "success", "message"), array("success", "message")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("removed_fields", "form_id", "field_ids", "message"), array("success", "message")), EXTR_OVERWRITE);
 
         return array(true, $message);
     }
@@ -600,7 +600,7 @@ class Fields {
             }
         }
 
-        extract(Hooks::processHookCalls("end", compact("infohash", "form_id"), array("success", "message")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("form_id"), array("success", "message")), EXTR_OVERWRITE);
 
         return array($success, $message);
     }
@@ -1034,7 +1034,7 @@ class Fields {
             );
         }
 
-        extract(Hooks::processHookCalls("end", compact("field_id", "setting_name"), array("settings")), EXTR_OVERWRITE);
+        extract(Hooks::processHookCalls("end", compact("field_id", "settings"), array("settings")), EXTR_OVERWRITE);
 
         return $settings;
     }

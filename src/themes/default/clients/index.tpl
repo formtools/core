@@ -16,7 +16,7 @@
   {/if}
 
   {* here, there are no forms assigned to this client *}
-  {if count($num_client_forms) == 0}
+  {if $num_client_forms == 0}
     <b>{$LANG.text_client_no_forms}</b>
   {else}
 
