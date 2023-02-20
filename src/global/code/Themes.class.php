@@ -5,9 +5,9 @@
  * This file defines all methods relating to Form Tools themes. Note: the Theme setting tab/page
  * is updated via Settings::updateThemeSettings.
  *
- * @copyright Benjamin Keen 2018
+ * @copyright Benjamin Keen 2023
  * @author Benjamin Keen <ben.keen@gmail.com>
- * @package 3-0-x
+ * @package 3-1-x
  * @subpackage Themes
  */
 
@@ -25,7 +25,7 @@ class Themes
 		$enabled_only_clause = ($enabled_only) ? "WHERE is_enabled = 'yes'" : "";
 
 		$db->query("
-            SELECT * 
+            SELECT *
             FROM {PREFIX}themes
             $enabled_only_clause
             ORDER BY theme_name
@@ -99,9 +99,9 @@ class Themes
 		try {
 			foreach ($themes as $theme_info) {
 				$db->query("
-					INSERT INTO {PREFIX}themes (theme_folder, theme_name, uses_swatches, swatches, author, theme_link, 
+					INSERT INTO {PREFIX}themes (theme_folder, theme_name, uses_swatches, swatches, author, theme_link,
 					  description, is_enabled, theme_version)
-					VALUES (:folder, :theme_name, :theme_uses_swatches, :swatches, :theme_author, :theme_link, 
+					VALUES (:folder, :theme_name, :theme_uses_swatches, :swatches, :theme_author, :theme_link,
 					  :theme_description, :is_enabled, :theme_version)
 				");
 				$db->bindAll(array(
@@ -261,7 +261,7 @@ class Themes
 		$LANG[$module_folder] = $module_lang_strings;
 		$smarty->assign("L", $module_lang_strings);
 
-		extract(Hooks::processHookCalls("end", compact("account_type", "module_folder"), array()), EXTR_OVERWRITE);
+		extract(Hooks::processHookCalls("end", compact("module_folder"), array()), EXTR_OVERWRITE);
 
 		$settings = Sessions::getWithFallback("settings", array());
 		$smarty->assign("settings", $settings);
@@ -316,7 +316,7 @@ class Themes
 
 		$smarty->assign("module_folder", $module_folder);
 
-		extract(Hooks::processHookCalls("main", compact("g_smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
+		extract(Hooks::processHookCalls("main", compact("smarty", "template", "page_vars"), array("g_smarty")), EXTR_OVERWRITE);
 
 		$smarty->display("$root_dir/modules/$module_folder/$template");
 	}
