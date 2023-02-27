@@ -1,0 +1,1 @@
+{$program_name} - {$LANG.phrase_password_reset}
