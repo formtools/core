@@ -1007,7 +1007,7 @@ class Submissions
 		$db->query("
             UPDATE {PREFIX}form_$form_id
             SET    is_finalized = 'yes'
-            WHERE  submission_id = $submission_id
+            WHERE  submission_id = :submission_id
         ");
 		$db->bind("submission_id", $submission_id);
 		$db->execute();
