@@ -16,7 +16,7 @@
   },
   "require": {
     "php": "^5.3.2 || ^7",
-    "smarty/smarty": "3.1.31",
+    "smarty/smarty": "3.1.48",
     "ramsey/array_column": "^1.1",
     "justinrainbow/json-schema": "^5.2"
   },
