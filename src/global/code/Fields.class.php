@@ -1512,10 +1512,6 @@ class Fields {
                     ViewFields::deleteViewField($view_id, $field_id);
                 }
 
-                // now actually remove the column from the table
-                $db->query("ALTER TABLE {PREFIX}form_$form_id DROP $drop_column");
-                $db->execute();
-
                 // if any Views had this field as the default sort order, reset them to having the submission_date
                 // field as the default sort order
                 $db->query("
@@ -1534,6 +1530,13 @@ class Fields {
             }
 
             $db->processTransaction();
+
+            // Some queries can't be included in transactions, so this is placed after
+            // https://github.com/formtools/core/issues/911
+            if (General::checkDbTableFieldExists("form_$form_id", $drop_column)) {
+                $db->query("ALTER TABLE {PREFIX}form_$form_id DROP COLUMN $drop_column");
+                $db->execute();
+            }
 
         } catch (Exception $e) {
             $db->rollbackTransaction();
